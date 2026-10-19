@@ -14,6 +14,7 @@ test("loads native ODS data and edits/saves the same real document in page and W
     { module: "src/editeng/inc/colritem.ts", names: ["SvxColorItem"] },
     { module: "src/editeng/inc/brushitem.ts", names: ["SvxBrushItem"] },
     { module: "src/tools/inc/color.ts", names: ["Color"] },
+    { module: "src/editeng/inc/justifyitem.ts", names: ["SvxHorJustifyItem", "SvxVerJustifyItem"] },
     { module: "src/formula/inc/grammar.ts", names: ["FormulaGrammar"] },
     {
       module: "src/sc/source/filter/xml/xmlwrap.ts",
@@ -35,6 +36,7 @@ test("loads native ODS data and edits/saves the same real document in page and W
               typeof import("../../src/editeng/inc/colritem") &
               typeof import("../../src/editeng/inc/brushitem") &
               typeof import("../../src/tools/inc/color") &
+              typeof import("../../src/editeng/inc/justifyitem") &
               typeof import("../../src/formula/inc/grammar") &
               typeof import("../../src/sc/source/filter/xml/xmlwrap") &
               typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
@@ -59,6 +61,8 @@ test("loads native ODS data and edits/saves the same real document in page and W
         const pattern = new n.ScPatternAttr(doc.getCellAttributeHelper());
         pattern.ItemSetPut(new n.SvxColorItem(new n.Color(0x123456), 109));
         pattern.ItemSetPut(new n.SvxBrushItem(new n.Color(0xfedcba), 148));
+        pattern.ItemSetPut(new n.SvxHorJustifyItem(2, 129));
+        pattern.ItemSetPut(new n.SvxVerJustifyItem(1, 132));
         doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
         pattern.Dispose();
         const loaded = await n.readOdsDocument(n.writeOdsDocument(doc)),
@@ -73,6 +77,12 @@ test("loads native ODS data and edits/saves the same real document in page and W
           nativeText: n.text(native.GetSharedString(new n.ScAddress(1, 1, 0)).getString()),
           nativeNumber: native.GetValue(new n.ScAddress(1, 2, 0)),
           diagnosed: diagnostics.length > 0,
+          horizontal: (
+            again.GetPattern(a)?.GetItem(129) as InstanceType<typeof n.SvxHorJustifyItem>
+          ).GetValue(),
+          vertical: (
+            again.GetPattern(a)?.GetItem(132) as InstanceType<typeof n.SvxVerJustifyItem>
+          ).GetValue(),
           fontColor: (again.GetPattern(a)?.GetItem(109) as InstanceType<typeof n.SvxColorItem>)
             .GetValue()
             .toUInt32(),
@@ -132,6 +142,8 @@ test("loads native ODS data and edits/saves the same real document in page and W
     nativeText: "LibreOffice Calc",
     nativeNumber: 12345,
     diagnosed: true,
+    horizontal: 2,
+    vertical: 1,
     fontColor: 0x123456,
     backgroundColor: 0xfedcba,
   };

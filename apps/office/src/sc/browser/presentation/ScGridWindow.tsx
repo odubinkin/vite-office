@@ -1,4 +1,5 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels } from "./row-geometry";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
@@ -304,7 +305,19 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             ? undefined
                             : browserColor((pattern.GetItem(148) as SvxBrushItem).GetColor()),
                         fontFamily: (pattern.GetItem(100) as SvxFontItem).GetFamilyName(),
-                        textAlign: cell.alignment,
+                        textAlign:
+                          ([undefined, "left", "center", "right", "justify", "left"] as const)[
+                            (pattern.GetItem(129) as SvxHorJustifyItem).GetValue()
+                          ] ?? cell.alignment,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: [
+                          "safe flex-end",
+                          "flex-start",
+                          "center",
+                          "flex-end",
+                          "flex-start",
+                        ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
                         fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],
                         fontStyle: ["normal", "oblique", "italic"][posture],
                         textDecorationColor:
@@ -319,7 +332,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         left: 48 + col * viewport.columnWidth,
                         width: viewport.columnWidth,
                         height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
-                        lineHeight: `${NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15)}px`,
+                        lineHeight: "normal",
                       }}
                     >
                       {editing && active ? (
@@ -336,7 +349,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           className="absolute inset-0 h-full w-full border-0 bg-white px-1 text-left outline-none"
                         />
                       ) : (
-                        <ScCellText text={cell.text} pattern={pattern} />
+                        <div className="w-full shrink-0">
+                          <ScCellText text={cell.text} pattern={pattern} />
+                        </div>
                       )}
                     </div>
                   );

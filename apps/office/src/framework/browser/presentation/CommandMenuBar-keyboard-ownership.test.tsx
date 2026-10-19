@@ -18,7 +18,10 @@ function renderOwnedMenu(semantics: MenuCommandResource["semantics"] = "action")
       /** Creates a stable app-owned bindings snapshot. @param id - Command identity. @returns Controller item. */ (
         id,
       ) => {
-        const state = { enabled: id !== "disabled", checked: false };
+        const state = {
+          enabled: id !== "disabled",
+          ...(semantics === "action" ? {} : { checked: false }),
+        };
         return {
           Dispose: /** Releases no fixture resources. @returns Nothing. */ () => undefined,
           GetState: /** Returns the stable snapshot. @returns State. */ () => state,

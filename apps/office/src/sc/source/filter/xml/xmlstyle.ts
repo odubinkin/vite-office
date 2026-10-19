@@ -1,4 +1,10 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
+import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
+import {
+  CellHoriJustify as HJ,
+  cppu_detail_getUnoType_CellHoriJustify as horiType,
+} from "../../../../offapi/com/sun/star/table/CellHoriJustify";
+import { CellVertJustify2 as VJ } from "../../../../offapi/com/sun/star/table/CellVertJustify2";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
@@ -87,7 +93,7 @@ const lines = [
 ] as const;
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
-  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 109, 148,
+  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 109, 129, 132, 148,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -269,7 +275,27 @@ export function importCellTextProperties(
 
 /** Emits the original table-cell background property group. @param pattern - Native pattern. @returns Cell-property attributes. */
 export function exportCellProperties(pattern: ScPatternAttr): string {
-  if (pattern.GetItemSet().GetItemState(148, false) !== SfxItemState.SET) return "";
+  let result = "";
+  const alignmentValue = new Any(),
+    alignmentOutput: [string] = [""];
+  try {
+    if (pattern.GetItemSet().GetItemState(129, false) === SfxItemState.SET) {
+      (pattern.GetItem(129) as SvxHorJustifyItem).QueryValue(alignmentValue);
+      horiSource.exportXML(alignmentOutput, alignmentValue, unitConverter);
+      result += ` style:text-align-source="${alignmentOutput[0]}"`;
+      horiRepeat.exportXML(alignmentOutput, alignmentValue, unitConverter);
+      result += ` style:repeat-content="${alignmentOutput[0]}"`;
+    }
+    if (pattern.GetItemSet().GetItemState(132, false) === SfxItemState.SET) {
+      (pattern.GetItem(132) as SvxVerJustifyItem).QueryValue(alignmentValue);
+      // Native QueryValue always supplies a mapped CellVertJustify2 signed32 value here.
+      vertJustify.exportXML(alignmentOutput, alignmentValue, unitConverter);
+      result += ` style:vertical-align="${alignmentOutput[0]}"`;
+    }
+  } finally {
+    alignmentValue.dispose();
+  }
+  if (pattern.GetItemSet().GetItemState(148, false) !== SfxItemState.SET) return result;
   const brush = pattern.GetItem(148) as SvxBrushItem,
     value = new Any(),
     output: [string] = [""];
@@ -278,18 +304,49 @@ export function exportCellProperties(pattern: ScPatternAttr): string {
     backgroundTransparent.exportXML(output, value, unitConverter);
     brush.QueryValue(value, MID_BACK_COLOR);
     backgroundColor.exportXML(output, value, unitConverter);
-    return ` fo:background-color="${output[0]}"`;
+    return result + ` fo:background-color="${output[0]}"`;
   } finally {
     value.dispose();
   }
 }
-/** Imports original background color and transparency as separate merged properties. @param pattern - Actual item destination. @param attributes - SAX attributes. @param unsupported - Diagnostic port. @returns Nothing. */
+/** Imports original background and alignment properties into real items/shared Any. @param pattern - Actual item destination. @param attributes - SAX attributes. @param unsupported - Diagnostic port. @param horizontal - Style-owned merged horizontal property. @returns Nothing. */
 export function importCellProperties(
   pattern: ScPatternAttr,
   attributes: FastAttributeList,
   unsupported: (name: string) => void,
+  horizontal: Any,
 ): void {
-  attributes.assertOnly([XMLToken.FO_BACKGROUND_COLOR], "Calc cell properties");
+  attributes.assertOnly(
+    [
+      XMLToken.FO_BACKGROUND_COLOR,
+      XMLToken.STYLE_TEXT_ALIGN_SOURCE,
+      XMLToken.STYLE_REPEAT_CONTENT,
+      XMLToken.STYLE_VERTICAL_ALIGN,
+    ],
+    "Calc cell properties",
+  );
+  for (const [token, source] of attributes) {
+    const handler =
+      token === XMLToken.STYLE_TEXT_ALIGN_SOURCE
+        ? horiSource
+        : token === XMLToken.STYLE_REPEAT_CONTENT
+          ? horiRepeat
+          : undefined;
+    if (handler && !handler.importXML(source, horizontal, unitConverter))
+      unsupported("invalid cell horizontal alignment");
+    if (token === XMLToken.STYLE_VERTICAL_ALIGN) {
+      const value = new Any();
+      try {
+        if (vertJustify.importXML(source, value, unitConverter)) {
+          const item = new SvxVerJustifyItem(132);
+          item.PutValue(value);
+          pattern.ItemSetPut(item);
+        } else unsupported("invalid cell vertical alignment");
+      } finally {
+        value.dispose();
+      }
+    }
+  }
   const source = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
   if (source === null) return;
   const brush = (pattern.GetItem(148) as SvxBrushItem).Clone(),
@@ -304,4 +361,180 @@ export function importCellProperties(
   } finally {
     value.dispose();
   }
+}
+
+/** Shared original horizontal enum Any equality. @param left - First property. @param right - Second property. @returns Typed equality. */
+function equalHori(left: Any, right: Any): boolean {
+  const a: [number] = [0],
+    b: [number] = [0];
+  return left.extract(a, horiType) && right.extract(b, horiType) && a[0] === b[0];
+}
+/** Original paragraph horizontal-alignment handler,including REPEAT precedence. */
+export class XmlScPropHdl_HoriJustify {
+  /** Compares real enum Any values. @param left - First. @param right - Second. @returns Equality. */
+  equals(left: Any, right: Any): boolean {
+    return equalHori(left, right);
+  }
+  /** Imports native start/end/center/justify with original repeat guard. @param input - XML. @param value - Merged property. @param converter - Unused source converter. @returns Native success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [number] = [HJ.LEFT];
+    value.extract(current, horiType);
+    if (current[0] === HJ.REPEAT) return true;
+    let selected: HJ;
+    if (input === "start") selected = HJ.LEFT;
+    else if (input === "end") selected = HJ.RIGHT;
+    else if (input === "center") selected = HJ.CENTER;
+    else if (input === "justify") selected = HJ.BLOCK;
+    else return false;
+    value.insert([selected], horiType);
+    return true;
+  }
+  /** Exports original lexical mapping without modifying failed output. @param output - XML destination. @param value - Enum Any. @param converter - Unused source converter. @returns Success. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [number] = [0];
+    if (!value.extract(current, horiType)) return false;
+    switch (current[0]) {
+      case HJ.REPEAT:
+      case HJ.LEFT:
+        output[0] = "start";
+        break;
+      case HJ.RIGHT:
+        output[0] = "end";
+        break;
+      case HJ.CENTER:
+        output[0] = "center";
+        break;
+      case HJ.BLOCK:
+        output[0] = "justify";
+        break;
+      default:
+        return false;
+    }
+    return true;
+  }
+}
+/** Original horizontal source property handler. */
+export class XmlScPropHdl_HoriJustifySource {
+  /** Original typed enum equality. @param left - First. @param right - Second. @returns Equality. */
+  equals(left: Any, right: Any): boolean {
+    return equalHori(left, right);
+  }
+  /** Fix preserves even a void Any;value-type writes Standard. @param input - XML. @param value - Merged property. @param converter - Unused source converter. @returns Success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    if (input === "fix") return true;
+    if (input !== "value-type") return false;
+    value.insert([HJ.STANDARD], horiType);
+    return true;
+  }
+  /** Exports original value-type/fix distinction. @param output - XML. @param value - Typed enum. @param converter - Unused source converter. @returns Success. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [number] = [0];
+    if (!value.extract(current, horiType)) return false;
+    output[0] = current[0] === HJ.STANDARD ? "value-type" : "fix";
+    return true;
+  }
+}
+/** Original horizontal repeat property handler. */
+export class XmlScPropHdl_HoriJustifyRepeat {
+  /** Original typed enum equality. @param left - First. @param right - Second. @returns Equality. */
+  equals(left: Any, right: Any): boolean {
+    return equalHori(left, right);
+  }
+  /** False preserves the existing Any;true sets REPEAT. @param input - XML. @param value - Merged property. @param converter - Unused converter. @returns Success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    if (input === "false") return true;
+    if (input !== "true") return false;
+    value.insert([HJ.REPEAT], horiType);
+    return true;
+  }
+  /** Exports source repeat test. @param output - XML. @param value - Native enum. @param converter - Unused converter. @returns Success. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [number] = [0];
+    if (!value.extract(current, horiType)) return false;
+    output[0] = current[0] === HJ.REPEAT ? "true" : "false";
+    return true;
+  }
+}
+/** Original vertical alignment property handler over signed32 Any. */
+export class XmlScPropHdl_VertJustify {
+  /** Original signed32 equality. @param left - First. @param right - Second. @returns Equality. */
+  equals(left: Any, right: Any): boolean {
+    const a: [number] = [0],
+      b: [number] = [0];
+    return left.extract(a, "sal_Int32") && right.extract(b, "sal_Int32") && a[0] === b[0];
+  }
+  /** Imports exact native XML values. @param input - XML. @param value - Destination. @param converter - Unused converter. @returns Success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    let selected: number;
+    if (input === "automatic") selected = VJ.STANDARD;
+    else if (input === "bottom") selected = VJ.BOTTOM;
+    else if (input === "top") selected = VJ.TOP;
+    else if (input === "middle") selected = VJ.CENTER;
+    else if (input === "justify") selected = VJ.BLOCK;
+    else return false;
+    value.insert([selected], "sal_Int32");
+    return true;
+  }
+  /** Exports the native lexical switch. @param output - XML. @param value - Signed32 Any. @param converter - Unused converter. @returns Success. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [number] = [0];
+    if (!value.extract(current, "sal_Int32")) return false;
+    switch (current[0]) {
+      case VJ.BOTTOM:
+        output[0] = "bottom";
+        break;
+      case VJ.CENTER:
+        output[0] = "middle";
+        break;
+      case VJ.STANDARD:
+        output[0] = "automatic";
+        break;
+      case VJ.TOP:
+        output[0] = "top";
+        break;
+      case VJ.BLOCK:
+        output[0] = "justify";
+        break;
+      default:
+        return false;
+    }
+    return true;
+  }
+}
+const horiJustify = new XmlScPropHdl_HoriJustify(),
+  horiSource = new XmlScPropHdl_HoriJustifySource(),
+  horiRepeat = new XmlScPropHdl_HoriJustifyRepeat(),
+  vertJustify = new XmlScPropHdl_VertJustify();
+/** Exports the original paragraph-property group. @param pattern - Actual native pattern. @returns XML attributes. */
+export function exportCellParagraphProperties(pattern: ScPatternAttr): string {
+  if (pattern.GetItemSet().GetItemState(129, false) !== SfxItemState.SET) return "";
+  const value = new Any(),
+    output: [string] = [""];
+  try {
+    (pattern.GetItem(129) as SvxHorJustifyItem).QueryValue(value);
+    return horiJustify.exportXML(output, value, unitConverter)
+      ? ` fo:text-align="${output[0]}"`
+      : "";
+  } finally {
+    value.dispose();
+  }
+}
+/** Imports the native paragraph side of the merged horizontal property. @param attributes - Actual SAX attributes. @param horizontal - Style-owned shared merged Any. @param unsupported - Import diagnostic. @returns Nothing. */
+export function importCellParagraphProperties(
+  attributes: FastAttributeList,
+  horizontal: Any,
+  unsupported: (name: string) => void,
+): void {
+  attributes.assertOnly([XMLToken.FO_TEXT_ALIGN], "Calc paragraph properties");
+  const source = attributes.get(XMLToken.FO_TEXT_ALIGN);
+  if (source !== null && !horiJustify.importXML(source, horizontal, unitConverter))
+    unsupported("invalid cell paragraph alignment");
 }

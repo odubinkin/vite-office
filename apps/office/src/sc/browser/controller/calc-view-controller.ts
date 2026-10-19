@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { CalcAlignmentAxis } from "../../source/ui/view/formatsh";
+import type { SvxCellHorJustify, SvxCellVerJustify } from "../../../editeng/inc/svxenum";
 import { FontLineStyle } from "../../../tools/inc/fontenum";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
@@ -45,6 +47,22 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
+  GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetAlignment(axis);
+  }
+  /** Commits native input before original explicit/toggle alignment application. @param axis - Native axis. @param value - Original enum. @param toggle - Toolbar radio-toggle path. @returns Changed. */
+  SetAlignment(
+    axis: CalcAlignmentAxis,
+    value: SvxCellHorJustify | SvxCellVerJustify,
+    toggle: boolean,
+  ): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetAlignment(axis, value, toggle);
+    this.Changed();
+    return changed;
+  }
+
   /** Reads genuine source color state. @param kind - Native slot kind. @returns Native item or mixed. */
   GetColor(kind: CalcColorKind): SvxColorItem | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetColor(kind);

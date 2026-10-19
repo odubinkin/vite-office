@@ -1,5 +1,11 @@
 /** @fileoverview Consumed XMLTableStylesContext cell-font and row-geometry automatic styles; named styles,parent inheritance and remaining format properties stay explicit unsupported metadata. */
-import { importCellTextProperties, importCellProperties } from "./xmlstyle";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import {
+  importCellTextProperties,
+  importCellProperties,
+  importCellParagraphProperties,
+} from "./xmlstyle";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
 import {
@@ -44,6 +50,7 @@ export class XMLTableStylesContext extends ScXMLImportContext {
 /** Native cell style holds a real ScPatternAttr, rather than a browser formatting object. */
 class XMLTableStyleContext extends ScXMLImportContext {
   private readonly pattern: ScPatternAttr;
+  private readonly horizontal = new Any();
   /** Creates genuine native item state. @param owner - Importer. @param name - Automatic-style name. @returns Context. */
   constructor(
     private readonly owner: ScXMLImport,
@@ -57,6 +64,16 @@ class XMLTableStyleContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES) {
+      importCellParagraphProperties(
+        attributes,
+        this.horizontal,
+        /** Reports actual import diagnostics. @param name - Failed property. @returns Nothing. */ (
+          name,
+        ) => this.owner.unsupported(name),
+      );
+      return new XMLTableStylePropertyContext(this.owner);
+    }
     if (element === XMLToken.STYLE_TABLE_CELL_PROPERTIES) {
       importCellProperties(
         this.pattern,
@@ -64,6 +81,7 @@ class XMLTableStyleContext extends ScXMLImportContext {
         /** Retains actual importer diagnostics. @param name - Unsupported property. @returns Nothing. */ (
           name,
         ) => this.owner.unsupported(name),
+        this.horizontal,
       );
       return new XMLTableStylePropertyContext(this.owner);
     }
@@ -83,7 +101,13 @@ class XMLTableStyleContext extends ScXMLImportContext {
   }
   /** Transfers the style into the importer's real pattern pool. @returns Nothing. */
   override endFastElement(): void {
-    this.owner.AddAutoStyle(this.name, this.pattern);
+    try {
+      const item = new SvxHorJustifyItem(129);
+      if (item.PutValue(this.horizontal)) this.pattern.ItemSetPut(item);
+      this.owner.AddAutoStyle(this.name, this.pattern);
+    } finally {
+      this.horizontal.dispose();
+    }
   }
 }
 

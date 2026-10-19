@@ -228,9 +228,19 @@ it("renders native formatting placements with the bound shared font-size control
       button.getAttribute("aria-label") as string,
     );
     if (
-      ["Bold", "Italic", "Underline", "Font Color", "Background Color"].includes(
-        button.getAttribute("aria-label") as string,
-      )
+      [
+        "Bold",
+        "Italic",
+        "Underline",
+        "Font Color",
+        "Background Color",
+        "Align Left",
+        "Align Center",
+        "Align Right",
+        "Align Top",
+        "Center Vertically",
+        "Align Bottom",
+      ].includes(button.getAttribute("aria-label") as string)
     )
       expect(button).toBeEnabled();
     else expect(button).toBeDisabled();

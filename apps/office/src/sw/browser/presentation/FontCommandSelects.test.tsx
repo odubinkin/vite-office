@@ -162,6 +162,7 @@ it("retains embedded font presentation and caller-owned fallback messages withou
     expect(screen.queryByRole("status")).toBeNull();
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "Liberation Serif" } });
     expect(source.QueryCommand(".uno:CharFontName")).toBeDefined();
+    expect(source.QueryCommand(".uno:Missing")).toBeUndefined();
     mounted.unmount();
     await act(
       /** Resolves after cleanup. @returns Completion. */ async () => {

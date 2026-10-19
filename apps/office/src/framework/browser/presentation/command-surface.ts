@@ -90,13 +90,19 @@ export function useBrowserCommandPresentation<Resource extends BrowserCommandPre
   resource: Resource;
   enabled: boolean;
   checked: boolean;
+  checkable: boolean;
+  mixed: boolean;
   selectedValue: CommandState["value"];
   pending: boolean;
   error: CommandState["error"];
 }> {
   const state = useBrowserCommandState(commandSource, commandUrl);
+  const resource = getCommandResource(commandUrl);
   return {
-    resource: getCommandResource(commandUrl),
+    resource,
+    checkable:
+      resource.semantics !== "action" || typeof state.checked === "boolean" || state.mixed === true,
+    mixed: state.mixed === true,
     enabled: state.enabled && state.pending !== true,
     checked: state.checked === true,
     selectedValue: state.value,

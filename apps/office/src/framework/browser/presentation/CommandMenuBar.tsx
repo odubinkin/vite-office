@@ -781,10 +781,10 @@ export function BindingsMenuCommand({
   );
   const resource = presentation.resource;
   const role =
-    resource.semantics === "check"
-      ? "menuitemcheckbox"
-      : resource.semantics === "radio"
-        ? "menuitemradio"
+    resource.semantics === "radio"
+      ? "menuitemradio"
+      : presentation.checkable
+        ? "menuitemcheckbox"
         : "menuitem";
   const isCheckable = role !== "menuitem";
   const isChecked = presentation.checked;

@@ -1,4 +1,6 @@
 /** @fileoverview ScFormatShell consumed font-height state/application over original document patterns, simple marks and attribute undo. Full native format slots,script selection,dialogs and device-dependent row layout remain unported. */
+import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -23,6 +25,8 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScRange } from "../../../inc/address";
 import type { ScViewData } from "../inc/viewdata";
 import type { ScDocShell } from "../docshell/docsh";
+/** Native cell-alignment axes. */
+export type CalcAlignmentAxis = "horizontal" | "vertical";
 /** Consumed source character slots; browser code carries no attribute values. */
 export type CalcCharacterFormat = "bold" | "italic" | "underline";
 /** Consumed original color slots and cell item identities. */
@@ -33,6 +37,29 @@ export const calcColorSlots = { font: 10017, background: 10186 } as const;
 const formatIds = { bold: [102, 113, 118], italic: [103, 114, 119], underline: [104] } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Reads original uniform selected alignment;INVALID is represented by undefined. @param axis - Native axis. @returns Actual enum or mixed state. */
+  GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
+    return (
+      this.SelectionItem([axis === "horizontal" ? 129 : 132]) as
+        SvxHorJustifyItem | SvxVerJustifyItem | undefined
+    )?.GetValue();
+  }
+  /** Applies original ExecuteAlignment;toolbar ExecuteTextAttr toggles an equal value to Standard. @param axis - Native axis. @param value - Original enum. @param toggle - Toolbar radio-toggle path. @returns Changed. */
+  SetAlignment(
+    axis: CalcAlignmentAxis,
+    value: SvxCellHorJustify | SvxCellVerJustify,
+    toggle: boolean,
+  ): boolean {
+    const selected = toggle && this.GetAlignment(axis) === value ? 0 : value;
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
+    delta.ItemSetPut(
+      axis === "horizontal"
+        ? new SvxHorJustifyItem(selected as SvxCellHorJustify, 129)
+        : new SvxVerJustifyItem(selected as SvxCellVerJustify, 132),
+    );
+    return this.ApplySelectionPattern(delta);
+  }
+
   /** Gets actual uniform font-color or source background-color state. @param kind - Source slot kind. @returns Native state or mixed. */
   GetColor(kind: CalcColorKind): SvxColorItem | undefined {
     const item = this.SelectionItem([kind === "font" ? 109 : 148]);

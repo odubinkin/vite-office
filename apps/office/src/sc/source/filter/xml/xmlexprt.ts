@@ -1,7 +1,12 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
-import { cellTextWhichIds, exportCellTextProperties, exportCellProperties } from "./xmlstyle";
+import {
+  cellTextWhichIds,
+  exportCellTextProperties,
+  exportCellProperties,
+  exportCellParagraphProperties,
+} from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
@@ -48,7 +53,8 @@ export class ScXMLExport {
       return "";
     const text = exportCellTextProperties(pattern, this.fontPool),
       cell = exportCellProperties(pattern),
-      key = `${text ? `<style:text-properties${text}/>` : ""}${cell ? `<style:table-cell-properties${cell}/>` : ""}`;
+      paragraph = exportCellParagraphProperties(pattern),
+      key = `${text ? `<style:text-properties${text}/>` : ""}${cell ? `<style:table-cell-properties${cell}/>` : ""}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
     let name = this.styles.get(key);
     if (name === undefined) {
       name = `ce${this.styles.size + 1}`;

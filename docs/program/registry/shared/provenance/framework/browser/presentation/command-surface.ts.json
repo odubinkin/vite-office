@@ -14,7 +14,8 @@
     "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
     "rationale": "Adapts frame-owned Sfx bindings to persistent browser controller items and React external-store subscriptions.",
     "responsibilities": [
-      "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries."
+      "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries.",
+      "Task5G2DBD connects original Calc horizontal/vertical toolbar toggles and explicit Format-menu pseudo slots to actual129/132 native items,uniform/mixed/default selection and attribute history. The actual common Writer toolbar/menu presentation now derives checkability from live boolean or mixed bindings as original Sfx toolbox state does,while keeping resource metadata. Real ODS paragraph/cell groups use original typed horizontal/source/repeat and signed32 vertical handlers with shared style-owned Any merging. Plain browser cell painting uses native alignment values;full native layout and service parity remain unverified. Bounded task39 acceptance:Calc372cases and23fresh browser cases pass. Initial related graph467files8582cases is reconciled by fresh26files213cases including every modified Writer expectation file;all4complete shared owners and all11changed executable application owners have current source-matched raw S/B/F/L100. No broad parity flags promoted."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

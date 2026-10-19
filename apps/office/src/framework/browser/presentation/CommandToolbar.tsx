@@ -41,7 +41,11 @@ export function CommandButton({
 }: CommandButtonProps): React.JSX.Element {
   const presentation = useBrowserCommandPresentation(commandSource, commandId, getCommandResource);
   const resource = presentation.resource;
-  const pressed = resource.semantics === "action" ? undefined : presentation.checked;
+  const pressed = !presentation.checkable
+    ? undefined
+    : presentation.mixed
+      ? "mixed"
+      : presentation.checked;
   return (
     <button
       aria-label={resource.label}

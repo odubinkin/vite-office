@@ -1,4 +1,6 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
+import { SvxCellHorJustify as H, SvxCellVerJustify as V } from "../../editeng/inc/svxenum";
+import type { CalcAlignmentAxis } from "../source/ui/view/formatsh";
 import { FontLineStyle } from "../../tools/inc/fontenum";
 import { SvxFontItem } from "../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../editeng/inc/colritem";
@@ -9,6 +11,8 @@ import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
 export interface CalcCommandTarget {
+  GetAlignment(axis: CalcAlignmentAxis): H | V | undefined;
+  SetAlignment(axis: CalcAlignmentAxis, value: H | V, toggle: boolean): boolean;
   GetColor(kind: CalcColorKind): SvxColorItem | undefined;
   SetColor(kind: CalcColorKind, color?: SvxColorItem): boolean;
   GetFontFamily(): string | undefined;
@@ -142,6 +146,137 @@ export const calcUnderlineCommands = [
     line: FontLineStyle.LINESTYLE_DOUBLE,
   },
 ] as const;
+/** Native toolbar toggle slots and shared explicit Format-menu pseudo slots. */
+export const calcAlignmentCommands = [
+  {
+    id: ".uno:AlignLeft",
+    slotId: 26384,
+    label: "Align Left",
+    axis: "horizontal",
+    value: H.Left,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignRight",
+    slotId: 26385,
+    label: "Align Right",
+    axis: "horizontal",
+    value: H.Right,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignHorizontalCenter",
+    slotId: 26386,
+    label: "Align Center",
+    axis: "horizontal",
+    value: H.Center,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignBlock",
+    slotId: 26387,
+    label: "Justified",
+    axis: "horizontal",
+    value: H.Block,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignTop",
+    slotId: 26388,
+    label: "Align Top",
+    axis: "vertical",
+    value: V.Top,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignBottom",
+    slotId: 26389,
+    label: "Align Bottom",
+    axis: "vertical",
+    value: V.Bottom,
+    toggle: true,
+  },
+  {
+    id: ".uno:AlignVCenter",
+    slotId: 26390,
+    label: "Center Vertically",
+    axis: "vertical",
+    value: V.Center,
+    toggle: true,
+  },
+  {
+    id: ".uno:CommonAlignLeft",
+    slotId: 11002,
+    label: "Left",
+    axis: "horizontal",
+    value: H.Left,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignHorizontalCenter",
+    slotId: 11003,
+    label: "Centered",
+    axis: "horizontal",
+    value: H.Center,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignRight",
+    slotId: 11004,
+    label: "Right",
+    axis: "horizontal",
+    value: H.Right,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignJustified",
+    slotId: 11005,
+    label: "Justified",
+    axis: "horizontal",
+    value: H.Block,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignTop",
+    slotId: 11006,
+    label: "Top",
+    axis: "vertical",
+    value: V.Top,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignVerticalCenter",
+    slotId: 11007,
+    label: "Center",
+    axis: "vertical",
+    value: V.Center,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignBottom",
+    slotId: 11008,
+    label: "Bottom",
+    axis: "vertical",
+    value: V.Bottom,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignHorizontalDefault",
+    slotId: 11009,
+    label: "Default",
+    axis: "horizontal",
+    value: H.Standard,
+    toggle: false,
+  },
+  {
+    id: ".uno:CommonAlignVerticalDefault",
+    slotId: 11010,
+    label: "Default",
+    axis: "vertical",
+    value: V.Standard,
+    toggle: false,
+  },
+] as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcColorCommands = [
   { id: ".uno:Color", slotId: calcColorSlots.font, label: "Font Color", colorKind: "font" },
@@ -154,6 +289,7 @@ export const calcColorCommands = [
 ] as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcUserCommands = [
+  ...calcAlignmentCommands,
   ...calcColorCommands,
   { id: ".uno:CharFontName", slotId: 10007, label: "Font Name" },
   { id: ".uno:FontHeight", slotId: 10015, label: "Font Size" },
@@ -172,25 +308,27 @@ export const calcUserCommands = [
     id: item.id,
     label: item.label,
     capabilityId:
-      "colorKind" in item
-        ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
-        : "format" in item || "line" in item
-          ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
-          : item.id === ".uno:CharFontName"
-            ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
-            : item.id === ".uno:FontHeight"
-              ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-              : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
-                ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
-                : item.id === ".uno:JumpToTable"
-                  ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-                  : "direction" in item ||
-                      item.id === ".uno:TableSelectAll" ||
-                      item.id === ".uno:TableDeselectAll"
-                    ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-                    : "kind" in item
-                      ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-                      : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      "axis" in item
+        ? ("CAP-0bb796a3-9483-445d-aef3-1deeb40f990a" as const)
+        : "colorKind" in item
+          ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
+          : "format" in item || "line" in item
+            ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
+            : item.id === ".uno:CharFontName"
+              ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
+              : item.id === ".uno:FontHeight"
+                ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
+                : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+                  ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+                  : item.id === ".uno:JumpToTable"
+                    ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+                    : "direction" in item ||
+                        item.id === ".uno:TableSelectAll" ||
+                        item.id === ".uno:TableDeselectAll"
+                      ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+                      : "kind" in item
+                        ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+                        : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @param resolveShortcuts - Optional host configuration projection; native slot handlers remain unchanged. @returns Interface. */
@@ -198,6 +336,29 @@ export function createCalcInterface(
   resolveShortcuts?: (command: string) => readonly string[] | undefined,
 ): SfxInterface<CalcCommandTarget> {
   const definitions: SfxSlotDefinition<CalcCommandTarget>[] = [
+    ...calcAlignmentCommands.map(
+      /** Binds actual native alignment operations to shared command widgets. @param resource - Original slot and radio behavior. @returns Slot. */
+      (resource) => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        getState:
+          /** Publishes native radio or mixed selection state. @param target - Actual view. @returns State. */ (
+            target: CalcCommandTarget,
+          ) => {
+            const value = target.GetAlignment(resource.axis);
+            return {
+              enabled: true,
+              checked: value === resource.value,
+              mixed: resource.toggle && value === undefined,
+            };
+          },
+        execute:
+          /** Executes original toolbar toggle or explicit menu operation. @param target - Actual view. @returns Changed. */ (
+            target: CalcCommandTarget,
+          ) => target.SetAlignment(resource.axis, resource.value, resource.toggle),
+      }),
+    ),
     ...calcColorCommands.map(
       /** Binds original typed color slots to actual model state. @param resource - Source slot. @returns Slot definition. */ (
         resource,

@@ -89,9 +89,11 @@ function fixture(
 it("standalone native popup starts unselected and includes disabled entries by source default", /** Checks source standalone no-first-preselection and wrap/boundaries. @returns Nothing. */ () => {
   const f = fixture(),
     menu = screen.getByRole("menu", { name: "Original popup" }),
-    a = within(menu).getByRole("menuitem", { name: "Alpha" }),
-    b = within(menu).getByRole("menuitem", { name: "Beta" });
+    a = within(menu).getByRole("menuitemcheckbox", { name: "Alpha" }),
+    b = within(menu).getByRole("menuitemcheckbox", { name: "Beta" });
   expect(menu).toHaveFocus();
+  expect(a).toHaveAttribute("aria-checked", "false");
+  expect(b).toHaveAttribute("aria-checked", "false");
   expect(screen.getByRole("menuitem", { name: "Disabled" })).toBeDisabled();
   fireEvent.keyDown(menu, { key: "ArrowUp" });
   expect(b).toHaveFocus();
@@ -137,13 +139,13 @@ it("actual command dispatch observes completed popup teardown and restored focus
         return execute(id, args);
       },
     );
-  fireEvent.keyDown(screen.getByRole("menuitem", { name: "Alpha" }), { key: "Enter" });
+  fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Alpha" }), { key: "Enter" });
   expect(observer).toHaveBeenCalledOnce();
   expect(f.s.view.QueryState(ids.bold).checked).toBe(true);
 });
 it("native popup Space does not replace the explicit Return command route", /** Checks source keyboard default handling cannot invent a command execution. @returns Nothing. */ () => {
   const f = fixture(),
-    item = screen.getByRole("menuitem", { name: "Alpha" }),
+    item = screen.getByRole("menuitemcheckbox", { name: "Alpha" }),
     execute = vi.spyOn(f.s.view.GetViewFrame().GetDispatcher(), "Execute");
   act(/** Highlights an actual enabled entry. @returns Nothing. */ () => item.focus());
   expect(fireEvent.keyDown(item, { key: " " })).toBe(false);
@@ -156,11 +158,11 @@ it("keyboard children retain parent ownership and close one level at a time", /*
     child = screen.getByRole("menuitem", { name: "Child" });
   fireEvent.keyDown(child, { key: "ArrowRight" });
   const sub = screen.getByRole("menu", { name: "Child menu" });
-  expect(within(sub).getByRole("menuitem", { name: "Beta" })).toHaveFocus();
+  expect(within(sub).getByRole("menuitemcheckbox", { name: "Beta" })).toHaveFocus();
   const deep = within(sub).getByRole("menuitem", { name: "Deep" });
   fireEvent.keyDown(deep, { key: "Enter" });
   const leaf = screen.getByRole("menu", { name: "Deep menu" });
-  expect(within(leaf).getByRole("menuitem", { name: "Alpha" })).toHaveFocus();
+  expect(within(leaf).getByRole("menuitemcheckbox", { name: "Alpha" })).toHaveFocus();
   fireEvent.keyDown(leaf, { key: "Escape" });
   expect(deep).toHaveFocus();
   expect(screen.queryByRole("menu", { name: "Deep menu" })).not.toBeInTheDocument();
@@ -181,11 +183,13 @@ it("pointer child opens after native delay and stays while its owner is highligh
   fireEvent.mouseEnter(child.parentElement as HTMLElement);
   expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
   const menu = await screen.findByRole("menu", { name: "Localized Child menu" });
-  expect(within(menu).getByRole("menuitem", { name: "Beta" })).not.toHaveFocus();
+  expect(within(menu).getByRole("menuitemcheckbox", { name: "Beta" })).not.toHaveFocus();
   fireEvent.mouseLeave(child.parentElement as HTMLElement);
   expect(menu).toBeVisible();
   const root = screen.getByRole("menu", { name: "Original popup" });
-  const command = within(root).getAllByRole("menuitem", { name: "Beta" }).at(-1) as HTMLElement;
+  const command = within(root)
+    .getAllByRole("menuitemcheckbox", { name: "Beta" })
+    .at(-1) as HTMLElement;
   fireEvent.mouseEnter(command.parentElement as HTMLElement);
   await waitFor(
     /** Waits for the native delayed replacement. @returns Nothing. */ () =>
@@ -261,7 +265,7 @@ it("reusing an active child retains its current selected entry", /** Prevents re
   const trigger = screen.getByRole("menuitem", { name: "Child" });
   fireEvent.keyDown(trigger, { key: "ArrowRight" });
   const child = screen.getByRole("menu", { name: "Child menu" }),
-    entry = within(child).getByRole("menuitem", { name: "Beta" });
+    entry = within(child).getByRole("menuitemcheckbox", { name: "Beta" });
   expect(entry).toHaveFocus();
   fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
   expect(entry).toHaveFocus();
