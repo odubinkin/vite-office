@@ -4,7 +4,7 @@ title: "Connect available Calc row and column selection to shared menus and keyb
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Connected actual SelectRow/SelectColumn UI slots,menus and native platform grid keys over canonical marks,with proper block anchor and input ownership.112files314Calc cases pass raw100 S/B/F/L;all four changed owners100;2desktop/mobile real browser cases pass;17paths and all declared gates pass. Full UI goal/font-style priority remain active;nextfull40."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T12:28:06.953Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewedc8d000e400bf:first concrete user-prioritized UI batch connects actual normal row/column selection through existing shared menus and canonical model/view owners."
+  evaluated_sha: "c8d000e400bf789a000f9d8d0f51c82cbe107b76"
+  blueprint_digest: "fd9e06030ae54b46a1ae4ad97822c9c2098bed614b04553751cc2edb836cdf56"
+  evidence_refs:
+    - ".agentplane/tasks/202610191206-ZXWXQ8/README.md"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/quality/20261019-122806953-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/quality/20261019-122806953-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/quality/20261019-122806953-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/verification.md"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/evidence/changed-owner-coverage-final.json"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/evidence/browser-selection.log"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/evidence/source-audit.json"
+    - ".agentplane/tasks/202610191206-ZXWXQ8/evidence/ui-action-audit.json"
+  findings:
+    - "Four changed owners preserve actual no-argument native axis boundaries,cursor and selected-sheet ownership;browser block anchor follows original InitBlockMode start. Real SDI26547/26548 and platform-specific grid keys route through the same Sfx target as menus,without a duplicate model or fabricated formatting state.112files314cases pass wholeCalc raw100;four complete changed owners all counters positive;two real desktop/mobile browser cases pass with inspected screenshots.17paths within25;463resource audit identifies15registered/12default-enabled commands and concrete missing font/style cell pipeline. Readiness prioritizes all available UI and concrete consumed dependencies rather than broad codec preparation."
 commit: null
 comments:
   -
