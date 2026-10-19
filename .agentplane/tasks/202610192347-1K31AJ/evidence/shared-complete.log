@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:shared
+> npm run test:coverage:shared --workspace @vite-office/office -- src/sfx2/source/control src/xmloff/source/core src/sw/source/filter/xml/odt-span-roundtrip.test.ts --coverage.include=src/sfx2/source/control/bindings.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task42-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task42-shared-final-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:shared
+> vitest run --config vitest.shared-coverage.config.ts --coverage src/sfx2/source/control src/xmloff/source/core src/sw/source/filter/xml/odt-span-roundtrip.test.ts --coverage.include=src/sfx2/source/control/bindings.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task42-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task42-shared-final-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task42-shared-final-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 260/260 )
+Branches     : 100% ( 29/29 )
+Functions    : 100% ( 10/10 )
+Lines        : 100% ( 258/258 )
+================================================================================
