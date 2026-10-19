@@ -1,0 +1,40 @@
+{
+  "inventory-calc-final": {
+    "scope": "calc",
+    "runtime": {
+      "commandCount": 16,
+      "exportedOperationCount": 776,
+      "internalOperationCount": 12,
+      "placeholderSuiteCount": 5,
+      "schemaVersion": 3,
+      "semanticViolationCount": 0,
+      "uiBehaviorCount": 0
+    },
+    "provenance": {
+      "browserAdaptationCount": 55,
+      "localInfrastructureCount": 8,
+      "mappedCount": 599,
+      "moduleCount": 662
+    },
+    "parityReady": false
+  },
+  "inventory-shared-final": {
+    "scope": "shared",
+    "runtime": {
+      "commandCount": 0,
+      "exportedOperationCount": 727,
+      "internalOperationCount": 12,
+      "placeholderSuiteCount": 5,
+      "schemaVersion": 3,
+      "semanticViolationCount": 0,
+      "uiBehaviorCount": 0
+    },
+    "provenance": {
+      "browserAdaptationCount": 42,
+      "localInfrastructureCount": 8,
+      "mappedCount": 487,
+      "moduleCount": 537
+    },
+    "parityReady": false
+  }
+}

@@ -1,0 +1,2801 @@
+{
+  "scope": "Actual fresh default Calc frame with no browser IndexedDB injected;default-disabled history and unavailable browser storage are state-dependent,not missing implementations.",
+  "commands": [
+    {
+      "id": ".uno:About",
+      "label": "About %PRODUCTNAME",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Accent1CellStyles",
+      "label": "Accent 1",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Accent2CellStyles",
+      "label": "Accent 2",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Accent3CellStyles",
+      "label": "Accent 3",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AcceptChanges",
+      "label": "Manage",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Add",
+      "label": "Insert Sheet at End",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AddField",
+      "label": "Add Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AddName",
+      "label": "Define Name",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignBlock",
+      "label": "Justified",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignBottom",
+      "label": "Align Bottom",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignHorizontalCenter",
+      "label": "Align Center",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignLeft",
+      "label": "Align Left",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignRight",
+      "label": "Align Right",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignTop",
+      "label": "Align Top",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AlignVCenter",
+      "label": "Center Vertically",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AnchorMenu",
+      "label": "Anchor Menu",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ArrowShapes",
+      "label": "Arrow Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AuditingFillMode",
+      "label": "Fill Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoComplete",
+      "label": "AutoInput",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoControlFocus",
+      "label": "Automatic Control Focus",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoCorrectDlg",
+      "label": "AutoCorrect Options",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoFormat",
+      "label": "Table Styles",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoOutline",
+      "label": "AutoOutline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoPilotMenu",
+      "label": "Wizards",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoRedactDoc",
+      "label": "Auto-Redact",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutoRefreshArrows",
+      "label": "AutoRefresh Traces",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AutomaticCalculation",
+      "label": "AutoCalculate",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:AvailableToolbars",
+      "label": "Toolbars",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BackgroundColor",
+      "label": "Background Color",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BadCellStyles",
+      "label": "Bad",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BasicIDEAppear",
+      "label": "Edit Macros",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BasicShapes",
+      "label": "Basic Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BezierFill",
+      "label": "Curve, Filled",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Bezier_Unfilled",
+      "label": "Curve",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Bold",
+      "label": "Bold",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:BringToFront",
+      "label": "Bring to Front",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Calculate",
+      "label": "Recalculate",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CalculateHard",
+      "label": "Recalculate Hard",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CalloutShapes",
+      "label": "Callout Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CancelCheckOut",
+      "label": "Cancel Checkout",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CellProtection",
+      "label": "Cell Protection",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CellVertBottom",
+      "label": "Bottom",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CellVertCenter",
+      "label": "Center",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CellVertTop",
+      "label": "Top",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseRotateCase",
+      "label": "Cycle Case",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToFullWidth",
+      "label": "Full-width",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToHalfWidth",
+      "label": "Half-width",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToHiragana",
+      "label": "Hiragana",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToKatakana",
+      "label": "Katakana",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToLower",
+      "label": "lowercase",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToSentenceCase",
+      "label": "Sentence case",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToTitleCase",
+      "label": "Capitalize Every Word",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToToggleCase",
+      "label": "tOGGLE cASE",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangeCaseToUpper",
+      "label": "UPPERCASE",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChangePicture",
+      "label": "Replace Image",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CharBackColor",
+      "label": "Character Highlighting Color",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CharFontName",
+      "label": "Font Name",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CharmapControl",
+      "label": "Symbol",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CheckBox",
+      "label": "Check Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CheckIn",
+      "label": "Check In",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CheckOut",
+      "label": "Check Out",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChineseConversion",
+      "label": "Chinese Conversion",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ChooseDesign",
+      "label": "Spreadsheet Theme",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ClearArrowDependents",
+      "label": "Remove Dependents",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ClearArrowPrecedents",
+      "label": "Remove Precedents",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ClearArrows",
+      "label": "Remove All Traces",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ClearAutoFilter",
+      "label": "Clear AutoFilter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ClearOutline",
+      "label": "Remove Outline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CloseWin",
+      "label": "Close Window",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Color",
+      "label": "Font Color",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ColumnOperations",
+      "label": "Column",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ColumnWidth",
+      "label": "Column Width",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ComboBox",
+      "label": "Combo Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommandPopup",
+      "label": "Search Commands",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommentChange",
+      "label": "Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignBottom",
+      "label": "Bottom",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignHorizontalCenter",
+      "label": "Centered",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignJustified",
+      "label": "Justified",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignLeft",
+      "label": "Left",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignRight",
+      "label": "Right",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignTop",
+      "label": "Top",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CommonAlignVerticalCenter",
+      "label": "Center",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CompareDocuments",
+      "label": "Compare",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CompressGraphic",
+      "label": "Compress Image",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ConditionalFormatMenu",
+      "label": "Conditional",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ConfigureDialog",
+      "label": "Customize",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ConnectorToolbox",
+      "label": "Connectors",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ControlProperties",
+      "label": "Control Properties",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ConvertFormulaToValue",
+      "label": "Formula to Value",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Copy",
+      "label": "Copy",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CreateNames",
+      "label": "Create Names",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Crop",
+      "label": "Crop",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:CurrencyField",
+      "label": "Currency Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Cut",
+      "label": "Cut",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataAreaRefresh",
+      "label": "Refresh Range",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataConsolidate",
+      "label": "Consolidate",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataDataPilotRun",
+      "label": "Pivot Table",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataFilterAutoFilter",
+      "label": "AutoFilter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataFilterHideAutoFilter",
+      "label": "Hide AutoFilter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataFilterRemoveFilter",
+      "label": "Reset Filter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataFilterSpecialFilter",
+      "label": "Advanced Filter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataFilterStandardFilter",
+      "label": "Standard Filter",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataForm",
+      "label": "Form",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataProvider",
+      "label": "Data Provider",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataProviderRefresh",
+      "label": "Refresh Data Provider",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataSort",
+      "label": "Sort",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataStreams",
+      "label": "Streams",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DataSubTotals",
+      "label": "Subtotals",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DateField",
+      "label": "Date Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DecrementIndent",
+      "label": "Decrease",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DefaultCellStyles",
+      "label": "Default",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DefineDBName",
+      "label": "Define Range",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DefineLabelRange",
+      "label": "Define Labels",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DefineName",
+      "label": "Manage Names",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DefinePrintArea",
+      "label": "Print Area",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Delete",
+      "label": "Clear Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteAllNotes",
+      "label": "Delete All Comments",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteCell",
+      "label": "Delete Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteColumnbreak",
+      "label": "Remove Column Break",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteColumns",
+      "label": "Delete Columns",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteNote",
+      "label": "Delete Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeletePivotTable",
+      "label": "Delete Pivot Table",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeletePrintArea",
+      "label": "Clear",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteRowbreak",
+      "label": "Remove Row Break",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DeleteRows",
+      "label": "Delete Rows",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DesignerDialog",
+      "label": "Styles",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DevelopmentToolsDockingWindow",
+      "label": "Development Tools",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Documentation",
+      "label": "User Guides",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Donation",
+      "label": "Donate to LibreOffice",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DrawText",
+      "label": "Text Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:DuplicateSheet",
+      "label": "Duplicate Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Edit",
+      "label": "Text Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EditAnnotation",
+      "label": "Edit Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EditDoc",
+      "label": "Edit Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EditHeaderAndFooter",
+      "label": "Headers and Footers",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EditLinks",
+      "label": "Links to External Files",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EditPrintArea",
+      "label": "Edit",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:EnterGroup",
+      "label": "Enter Group",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ErrorCellStyles",
+      "label": "Error",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExportAsGraphic",
+      "label": "Export as Image",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExportDirectToPDF",
+      "label": "Export Directly as PDF",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExportTo",
+      "label": "Export",
+      "registered": true,
+      "enabled": true,
+      "slotId": 5829
+    },
+    {
+      "id": ".uno:ExportToPDF",
+      "label": "Export as PDF",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExtendedHelp",
+      "label": "What's This?",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExtensionManager",
+      "label": "Extensions",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ExternalEdit",
+      "label": "Edit with External Tool",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FileControl",
+      "label": "File Selection",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillDown",
+      "label": "Fill Down",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillLeft",
+      "label": "Fill Left",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillRight",
+      "label": "Fill Right",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillSeries",
+      "label": "Fill Series",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillTable",
+      "label": "Fill Sheets",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FillUp",
+      "label": "Fill Up",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FitCellSize",
+      "label": "Fit to Cell Size",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FlowChartShapes",
+      "label": "Flowchart Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FontDialog",
+      "label": "Character",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FontHeight",
+      "label": "Font Size",
+      "registered": true,
+      "enabled": true,
+      "slotId": 10015
+    },
+    {
+      "id": ".uno:FontworkGalleryFloater",
+      "label": "Insert Fontwork",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FootnoteCellStyles",
+      "label": "Footnote",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormProperties",
+      "label": "Form Properties",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatArea",
+      "label": "Area",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatCellDialog",
+      "label": "Format Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatGroup",
+      "label": "Group",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatLine",
+      "label": "Line",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatPaintbrush",
+      "label": "Clone Formatting",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormatUngroup",
+      "label": "Ungroup",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FormattedField",
+      "label": "Formatted Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FrameLineColor",
+      "label": "Border Color",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Freeline",
+      "label": "Freeform Line, Filled",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Freeline_Unfilled",
+      "label": "Freeform Line",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FreezePanes",
+      "label": "Freeze Panes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FreezePanesColumn",
+      "label": "Freeze First Column",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FreezePanesRow",
+      "label": "Freeze First Row",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FullScreen",
+      "label": "Full Screen",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FunctionBox",
+      "label": "Function List",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:FunctionDialog",
+      "label": "Function",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Gallery",
+      "label": "Gallery",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GetInvolved",
+      "label": "Get Involved",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GoalSeekDialog",
+      "label": "Goal Seek",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GoodCellStyles",
+      "label": "Good",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Grid",
+      "label": "Table Control",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GridUse",
+      "label": "Snap to Grid",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GridVisible",
+      "label": "Grid",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Group",
+      "label": "Group",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:GroupBox",
+      "label": "Group Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Grow",
+      "label": "Increase",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HandleDuplicateRecords",
+      "label": "Duplicates",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HangulHanjaConversion",
+      "label": "Hangul/Hanja Conversion",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Heading1CellStyles",
+      "label": "Heading 1",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Heading2CellStyles",
+      "label": "Heading 2",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HelpIndex",
+      "label": "%PRODUCTNAME Help",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HelplinesMove",
+      "label": "Helplines While Moving",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Hide",
+      "label": "Hide Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HideColumn",
+      "label": "Hide Columns",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HideDetail",
+      "label": "Hide Details",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HideNote",
+      "label": "Hide Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HideRow",
+      "label": "Hide Rows",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:HyperlinkDialog",
+      "label": "Hyperlink",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Hyphenate",
+      "label": "Hyphenation",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ImageControl",
+      "label": "Image Control",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ImageMapDialog",
+      "label": "ImageMap",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Imagebutton",
+      "label": "Image Button",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:IncrementIndent",
+      "label": "Increase",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InputLineVisible",
+      "label": "Formula Bar",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Insert",
+      "label": "Insert Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertAVMedia",
+      "label": "Media",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertAnnotation",
+      "label": "Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertCalcTable",
+      "label": "Table",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertCalculation",
+      "label": "Calculated Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertCell",
+      "label": "Insert Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertColumnBreak",
+      "label": "Insert Column Break",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertColumnsAfter",
+      "label": "Insert Columns After",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertColumnsBefore",
+      "label": "Insert Columns Before",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertCurrentDate",
+      "label": "Insert Current Date",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertCurrentTime",
+      "label": "Insert Current Time",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertDraw",
+      "label": "Draw Functions",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertExternalDataSource",
+      "label": "External Links",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertFieldDateVariable",
+      "label": "Date",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertFieldDocTitle",
+      "label": "Document Title",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertFieldSheet",
+      "label": "Sheet Name",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertGraphic",
+      "label": "Image",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertHardHyphen",
+      "label": "Insert Non-breaking Hyphen",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertLRM",
+      "label": "Insert Left-to-Right Mark",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertName",
+      "label": "Insert Named Range or Expression",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertNarrowNobreakSpace",
+      "label": "Insert Narrow No-break Space",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertNonBreakingSpace",
+      "label": "Insert No-break Space",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertObject",
+      "label": "Insert OLE Object",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertObjectChart",
+      "label": "Chart",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertObjectStarMath",
+      "label": "Formula Object",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertPivotTable",
+      "label": "Insert or Edit",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertQrCode",
+      "label": "QR and Barcode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertRLM",
+      "label": "Insert Right-to-Left Mark",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertRowBreak",
+      "label": "Insert Row Break",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertRowsAfter",
+      "label": "Insert Rows Below",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertRowsBefore",
+      "label": "Insert Rows Above",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertSheetFromFile",
+      "label": "Insert Sheet from File",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertSignatureLine",
+      "label": "Signature Line",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertSoftHyphen",
+      "label": "Insert Soft Hyphen",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertSparkline",
+      "label": "Sparkline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertSymbol",
+      "label": "Symbol",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertWJ",
+      "label": "Insert Word Joiner",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:InsertZWSP",
+      "label": "Insert Zero-width Space",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Italic",
+      "label": "Italic",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:JumpToNextTable",
+      "label": "To Next Sheet",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26543
+    },
+    {
+      "id": ".uno:JumpToNextTableSel",
+      "label": "Select to Next Sheet",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26561
+    },
+    {
+      "id": ".uno:JumpToPrevTable",
+      "label": "To Previous Sheet",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26544
+    },
+    {
+      "id": ".uno:JumpToPrevTableSel",
+      "label": "Select to Previous Sheet",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26562
+    },
+    {
+      "id": ".uno:JumpToTable",
+      "label": "Go to Sheet",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26042
+    },
+    {
+      "id": ".uno:Label",
+      "label": "Label",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:LeaveGroup",
+      "label": "Exit Group",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Line",
+      "label": "Line",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:LineSpacing",
+      "label": "Line Spacing",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:LineStyle",
+      "label": "Border Style",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ListBox",
+      "label": "List Box",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MacroManager",
+      "label": "Macro Manager",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MacroOrganizer?TabId:short=1",
+      "label": "Organize Dialogs",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MacroRecorder",
+      "label": "Record Macro",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MacroSignature",
+      "label": "Digital Signature",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ManageXMLSource",
+      "label": "XML Source",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MergeCells",
+      "label": "Merge Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MergeDocuments",
+      "label": "Merge",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:MoreDictionaries",
+      "label": "More Dictionaries Online",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Move",
+      "label": "Move or Copy Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NavigationBar",
+      "label": "Navigation Bar",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Navigator",
+      "label": "Navigator",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NeutralCellStyles",
+      "label": "Neutral",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NewDoc",
+      "label": "Templates",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NewWindow",
+      "label": "New Window",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NormalViewMode",
+      "label": "Normal View",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NoteCellStyles",
+      "label": "Note",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatCurrency",
+      "label": "Currency",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatDate",
+      "label": "Date",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatDecDecimals",
+      "label": "Delete Decimal Place",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatDecimal",
+      "label": "Number",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatIncDecimals",
+      "label": "Add Decimal Place",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatPercent",
+      "label": "Percent",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatScientific",
+      "label": "Scientific",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatStandard",
+      "label": "General",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatThousands",
+      "label": "Thousands Separator",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumberFormatTime",
+      "label": "Time",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:NumericField",
+      "label": "Numerical Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectBackOne",
+      "label": "Back One",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectForwardOne",
+      "label": "Forward One",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectMenue",
+      "label": "OLE Object",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectMirrorHorizontal",
+      "label": "Flip Horizontally",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectMirrorVertical",
+      "label": "Flip Vertically",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ObjectTitleDescription",
+      "label": "Alt Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OpenFromCalc",
+      "label": "Open",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26204
+    },
+    {
+      "id": ".uno:OpenReadOnly",
+      "label": "Open in Design Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OpenTemplate",
+      "label": "Edit Template",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OpenUrl",
+      "label": "Load URL",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OpenXMLFilterSettings",
+      "label": "XML Filter Settings",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OptionsTreeDialog",
+      "label": "Options",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OriginalSize",
+      "label": "Original Size",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:OutlineFont",
+      "label": "Outline Font Effect",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Overline",
+      "label": "Overline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PageFormatDialog",
+      "label": "Format Page",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PagebreakMode",
+      "label": "Page Break",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ParaLeftToRight",
+      "label": "Left-To-Right",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ParaRightToLeft",
+      "label": "Right-To-Left",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ParagraphDialog",
+      "label": "Paragraph",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ParaspaceDecrease",
+      "label": "Decrease",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ParaspaceIncrease",
+      "label": "Increase",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Paste",
+      "label": "Paste",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteOnlyFormula",
+      "label": "Paste Only Formula",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteOnlyText",
+      "label": "Paste Only Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteOnlyValue",
+      "label": "Paste Only Numbers",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteSpecial",
+      "label": "Paste Special",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteTransposed",
+      "label": "Paste Transposed",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PasteUnformatted",
+      "label": "Paste Unformatted Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PatternField",
+      "label": "Pattern Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Polygon_Diagonal",
+      "label": "Polygon (45°), Filled",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Polygon_Diagonal_Unfilled",
+      "label": "Polygon (45°)",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Polygon_Unfilled",
+      "label": "Polygon",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Print",
+      "label": "Print",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PrintDefault",
+      "label": "Print Directly",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PrintPreview",
+      "label": "Print Preview",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PrintRangesMenu",
+      "label": "Print Ranges",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:PrinterSetup",
+      "label": "Printer Settings",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Protect",
+      "label": "Protect Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ProtectTraceChangeMode",
+      "label": "Protect",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Pushbutton",
+      "label": "Push Button",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:QuestionAnswers",
+      "label": "Get Help Online",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RadioButton",
+      "label": "Option Button",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RandomNumberGeneratorDialog",
+      "label": "Fill Random Number",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RecalcPivotTable",
+      "label": "Refresh Pivot Table",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RedactDoc",
+      "label": "Redact",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Redo",
+      "label": "Redo",
+      "registered": true,
+      "enabled": false,
+      "slotId": 5700
+    },
+    {
+      "id": ".uno:RefreshArrows",
+      "label": "Refresh Traces",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Remove",
+      "label": "Delete Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RenameObject",
+      "label": "Name",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RenameTable",
+      "label": "Rename Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Repeat",
+      "label": "Repeat",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ResetAttributes",
+      "label": "Clear",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RowHeight",
+      "label": "Row Height",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RowOperations",
+      "label": "Row",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:RunMacro",
+      "label": "Run Macro",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SafeMode",
+      "label": "Restart in Troubleshoot Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SaveAs",
+      "label": "Save As",
+      "registered": true,
+      "enabled": true,
+      "slotId": 5502
+    },
+    {
+      "id": ".uno:SaveAsTemplate",
+      "label": "Save as Template",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SaveGraphic",
+      "label": "Save Image",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ScenarioManager",
+      "label": "Scenarios",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ScriptOrganizer",
+      "label": "Organize Macros",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ScrollBar",
+      "label": "Scrollbar",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SearchDialog",
+      "label": "Find and Replace",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectAll",
+      "label": "Select All",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectArrayFormula",
+      "label": "Select Array Formula",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectColumn",
+      "label": "Select Column",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26547
+    },
+    {
+      "id": ".uno:SelectDB",
+      "label": "Select Range",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectData",
+      "label": "Select Data Area",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectRow",
+      "label": "Select Row",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26548
+    },
+    {
+      "id": ".uno:SelectTables",
+      "label": "Select Sheets",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectUnprotectedCells",
+      "label": "Select Unprotected Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectVisibleColumns",
+      "label": "Select Visible Columns Only",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SelectVisibleRows",
+      "label": "Select Visible Rows Only",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendFeedback",
+      "label": "Send Feedback",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendMail",
+      "label": "Email",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendMailDocAsMS",
+      "label": "Email as Microsoft Excel",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendMailDocAsOOo",
+      "label": "Email as OpenDocument Spreadsheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendMailDocAsPDF",
+      "label": "Email as PDF",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendToBack",
+      "label": "Send to Back",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SendViaBluetooth",
+      "label": "Send via Bluetooth",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetBorderStyle",
+      "label": "Borders (Shift to overwrite)",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetDocumentProperties",
+      "label": "Properties",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetInputMode",
+      "label": "Cell Edit Mode",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26552
+    },
+    {
+      "id": ".uno:SetLanguageAllTextMenu",
+      "label": "For All Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetObjectToBackground",
+      "label": "To Background",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetObjectToForeground",
+      "label": "To Foreground",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetOptimalColumnWidth",
+      "label": "Optimal Column Width",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetOptimalRowHeight",
+      "label": "Optimal Row Height",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SetTabBgColor",
+      "label": "Sheet Tab Color",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Shadowed",
+      "label": "Shadow",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShareDocument",
+      "label": "Share Spreadsheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SheetInsertName",
+      "label": "Insert",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SheetRightToLeft",
+      "label": "Sheet Right-To-Left",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Show",
+      "label": "Show Sheet",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowAnnotations",
+      "label": "Show Comments",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowChanges",
+      "label": "Show",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowColumn",
+      "label": "Show Columns",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowDependents",
+      "label": "Trace Dependents",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowDetail",
+      "label": "Show Details",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowErrors",
+      "label": "Trace Error",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowFmExplorer",
+      "label": "Form Navigator",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowInvalid",
+      "label": "Mark Invalid Data",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowLicense",
+      "label": "License Information",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowNote",
+      "label": "Show Comment",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowPrecedents",
+      "label": "Trace Precedents",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ShowRow",
+      "label": "Show Rows",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Shrink",
+      "label": "Decrease",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Shuffle",
+      "label": "Shuffle",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Sidebar",
+      "label": "Sidebar",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SignPDF",
+      "label": "Sign Existing PDF",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Signature",
+      "label": "Digital Signatures",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SmallCaps",
+      "label": "Small capitals",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SolverDialog",
+      "label": "Solver",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SortAscending",
+      "label": "Sort Ascending",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SortDescending",
+      "label": "Sort Descending",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Spacing",
+      "label": "Character Spacing",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SpellDialog",
+      "label": "Spelling",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SpellOnline",
+      "label": "Auto Spellcheck",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SpinButton",
+      "label": "Spin Button",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SplitCell",
+      "label": "Unmerge Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SplitWindow",
+      "label": "Split Window",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:StarShapes",
+      "label": "Star Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:StatusBarVisible",
+      "label": "Status Bar",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Strikeout",
+      "label": "Strikethrough",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:StyleApply",
+      "label": "Apply Style",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:StyleNewByExample",
+      "label": "New Style from Selection",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:StyleUpdateByExample",
+      "label": "Update",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SubScript",
+      "label": "Subscript",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SuperScript",
+      "label": "Superscript",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SwitchControlDesignMode",
+      "label": "Toggle Design Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:SymbolShapes",
+      "label": "Symbol Shapes",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TabDialog",
+      "label": "Activation Order",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TableDeselectAll",
+      "label": "Deselect All Sheets",
+      "registered": true,
+      "enabled": false,
+      "slotId": 26365
+    },
+    {
+      "id": ".uno:TableEvents",
+      "label": "Sheet Events",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TableOperationDialog",
+      "label": "Multiple Operations",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TableSelectAll",
+      "label": "Select All Sheets",
+      "registered": true,
+      "enabled": true,
+      "slotId": 26361
+    },
+    {
+      "id": ".uno:TextAttributes",
+      "label": "Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TextToColumns",
+      "label": "Text to Columns",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TextdirectionLeftToRight",
+      "label": "Text direction from left to right",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TextdirectionTopToBottom",
+      "label": "Text direction from top to bottom",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ThemeDialog",
+      "label": "Theme",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ThesaurusDialog",
+      "label": "Thesaurus",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TimeField",
+      "label": "Time Field",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TipOfTheDay",
+      "label": "Tip of the day",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToggleFormula",
+      "label": "Show Formulas",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToggleMergeCells",
+      "label": "Merge and Center Cells",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToggleObjectBezierMode",
+      "label": "Toggle Point Edit Mode",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToggleRelative",
+      "label": "Cycle Cell Reference Types",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToggleSheetGrid",
+      "label": "View Grid Lines",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ToolProtectionDocument",
+      "label": "Protect Spreadsheet Structure",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TraceChangeMode",
+      "label": "Record",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TransformDialog",
+      "label": "Position and Size",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TwainSelect",
+      "label": "Select Source",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:TwainTransfer",
+      "label": "Request",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:UIPicker",
+      "label": "User Interface",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Underline",
+      "label": "Underline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:UnderlineDouble",
+      "label": "Double Underline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:UnderlineSingle",
+      "label": "Single Underline",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Undo",
+      "label": "Undo",
+      "registered": true,
+      "enabled": false,
+      "slotId": 5701
+    },
+    {
+      "id": ".uno:Ungroup",
+      "label": "Ungroup",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:UseWizards",
+      "label": "Form Control Wizards",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Validation",
+      "label": "Validity",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewColumnRowHighlighting",
+      "label": "Column/Row Highlighting",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewDataSourceBrowser",
+      "label": "Data Sources",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewHiddenColRow",
+      "label": "Show Hidden Row/Column Indicator",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewRowColumnHeaders",
+      "label": "View Headers",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewSidebarStyles",
+      "label": "Styles",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ViewValueHighlighting",
+      "label": "Value Highlighting",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:WarningCellStyles",
+      "label": "Warning",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:WebHtml",
+      "label": "Preview in Web Browser",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:WrapText",
+      "label": "Wrap Text",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom",
+      "label": "Zoom",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom100Percent",
+      "label": "100%",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom150Percent",
+      "label": "150%",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom200Percent",
+      "label": "200%",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom50Percent",
+      "label": "50%",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:Zoom75Percent",
+      "label": "75%",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ZoomOptimal",
+      "label": "Optimal",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ZoomPage",
+      "label": "Entire Page",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": ".uno:ZoomPageWidth",
+      "label": "Page Width",
+      "registered": false,
+      "enabled": false
+    },
+    {
+      "id": "vnd.sun.star.findbar:FocusToFindbar",
+      "label": "Find",
+      "registered": false,
+      "enabled": false
+    }
+  ],
+  "registered": 16,
+  "enabled": 13
+}

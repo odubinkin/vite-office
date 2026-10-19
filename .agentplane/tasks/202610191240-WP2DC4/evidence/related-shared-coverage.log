@@ -1,0 +1,22 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  5 passed (5)
+      Tests  33 passed (33)
+   Start at  20:04:34
+   Duration  3.49s (transform 1.19s, setup 451ms, import 1.41s, tests 25ms, environment 3.71s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 278/278 )
+Branches     : 100% ( 61/61 )
+Functions    : 100% ( 11/11 )
+Lines        : 100% ( 271/271 )
+================================================================================

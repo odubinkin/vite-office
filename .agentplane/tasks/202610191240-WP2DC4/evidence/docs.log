@@ -1,0 +1,27 @@
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237
+    throw new Error(`JSDoc validation failed:\n${errors.join("\n")}`);
+          ^
+
+Error: JSDoc validation failed:
+apps/office/src/i18nlangtag/source/isolang/mslangid.script.test.ts:21 function is missing JSDoc
+apps/office/src/i18nlangtag/source/isolang/mslangid.script.test.ts:22 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:42 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:47 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:56 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:63 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:113 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:116 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:150 function is missing JSDoc
+apps/office/src/sc/browser/presentation/calc-font-size.test.tsx:153 function is missing JSDoc
+apps/office/src/sc/source/core/data/docpool.test.ts:31 function is missing JSDoc
+apps/office/src/sc/source/filter/xml/ods.test.ts:437 function is missing JSDoc
+apps/office/src/sc/source/filter/xml/ods.test.ts:446 function is missing JSDoc
+apps/office/src/vcl/source/outdev/font.test.ts:22 function is missing JSDoc
+    at main (file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237:11)
+    at async file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:243:1
+
+Node.js v24.13.1

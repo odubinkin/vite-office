@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  115 passed (115)
+      Tests  326 passed (326)
+   Start at  20:23:32
+   Duration  59.11s (transform 15.18s, setup 7.06s, import 30.24s, tests 24.63s, environment 38.88s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 7281/7281 )
+Branches     : 100% ( 4632/4632 )
+Functions    : 100% ( 1481/1481 )
+Lines        : 100% ( 6527/6527 )
+================================================================================

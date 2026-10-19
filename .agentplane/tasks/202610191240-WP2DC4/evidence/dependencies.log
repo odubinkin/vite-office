@@ -1,0 +1,10 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check failed:
+- apps/office/src/sc/source/core/data/docpool.ts: non-allowlisted module edge sc -> tools
+- apps/office/src/sc/source/core/data/docpool.ts: domain core must receive browser adapters through an injected contract
+- apps/office/src/sc/source/core/data/docpool.ts: non-allowlisted module edge sc -> tools
+- apps/office/src/sc/source/core/data/docpool.ts: domain core must receive browser adapters through an injected contract
+- apps/office/src/vcl/source/outdev/font.ts: non-allowlisted module edge vcl -> i18nlangtag

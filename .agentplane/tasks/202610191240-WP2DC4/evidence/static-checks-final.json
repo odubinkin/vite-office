@@ -1,0 +1,116 @@
+[
+  {
+    "check": "format-final",
+    "exitCode": 0,
+    "command": [
+      "npx",
+      "prettier",
+      "explicit changed-path allowlist in changed-paths.json"
+    ]
+  },
+  {
+    "check": "lint-final",
+    "exitCode": 0,
+    "command": [
+      "npx",
+      "eslint",
+      "explicit changed-path allowlist in changed-paths.json"
+    ]
+  },
+  {
+    "check": "types-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ]
+  },
+  {
+    "check": "static-final",
+    "exitCode": 0,
+    "command": [
+      "node",
+      "scripts/check-static-build.mjs"
+    ]
+  },
+  {
+    "check": "docs-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:docs"
+    ]
+  },
+  {
+    "check": "size-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:file-size"
+    ]
+  },
+  {
+    "check": "tree-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:source-tree"
+    ]
+  },
+  {
+    "check": "dependencies-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:dependencies"
+    ]
+  },
+  {
+    "check": "provenance-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:source-provenance"
+    ]
+  },
+  {
+    "check": "resources-final",
+    "exitCode": 0,
+    "command": [
+      "npm",
+      "run",
+      "check:calc-resources"
+    ]
+  },
+  {
+    "check": "doctor-final",
+    "exitCode": 0,
+    "command": [
+      "ap",
+      "doctor"
+    ]
+  },
+  {
+    "check": "routing-final",
+    "exitCode": 0,
+    "command": [
+      "node",
+      ".agentplane/policy/check-routing.mjs"
+    ]
+  },
+  {
+    "check": "diff-final",
+    "exitCode": 0,
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ]
+  }
+]
