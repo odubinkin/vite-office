@@ -1,10 +1,11 @@
 ---
 id: "202610191952-9SF7RJ"
 title: "Connect shared color palettes to Calc font and cell-background attributes"
-status: "DOING"
+result_summary: "verified-202610191952-9SF7RJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T21:04:00.815Z"
+  updated_at: "2026-10-19T21:04:52.158Z"
   updated_by: "CODER"
-  note: "Calc363 and related11891 cases pass;source-matched raw S/B/F/L100 for all25changed executable owners;21browser cases across19existing and2corrected color scenarios,1280/390 visual review;all declared static/source/resource/inventory gates pass. Source audit pinned9bc445;native gaps retained;all-app next40."
+  note: "verified-202610191952-9SF7RJ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610191952-9SF7RJ/evidence/color-source-baseline.json"
   findings:
     - "Actual Writer palette implementation and data now have shared SVX ownership;Calc binds real native color/brush/recent values,original defaults and source-shaped broadcaster lifetime. Sparse/grouped selection,history,automatic contrast and ODS byte roundtrips are exercised. Calc363 and related11891cases pass with current raw S/B/F/L100;all25 changed executable owners have source hashes and100 coverage,Writer facade is a pure re-export. Browser19existing cases plus2corrected color scenarios pass at1280/390;test-only palette/OKLCH expectation errors were corrected without production changes. All declared build/static/type/lint/docs/source/resource/scoped inventory gates passed."
-commit: null
+commit:
+  hash: "5c7361428abc4aacce727ae6746bdcae086c5f7f"
+  message: "🧩 9SF7RJ task: record native color quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement the authorized shared color palette/native Calc color and background UI slice with genuine item,history,recent-color and ODS ownership;scoped raw100 gates and fresh browser evidence,calc checkout only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610191952-9SF7RJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc363 and related11891 cases pass;source-matched raw S/B/F/L100 for all25changed executable owners;21browser cases across19existing and2corrected color scenarios,1280/390 visual review;all declared static/source/resource/inventory gates pass. Source audit pinned9bc445;native gaps retained;all-app next40."
+  -
+    type: "verify"
+    at: "2026-10-19T21:04:52.158Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610191952-9SF7RJ"
+  -
+    type: "status"
+    at: "2026-10-19T21:04:52.286Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610191952-9SF7RJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T21:04:00.867Z"
+doc_updated_at: "2026-10-19T21:04:52.287Z"
 doc_updated_by: "CODER"
 description: "Task38 of the active Calc UI goal. Reuse the actual Writer color palette in shared SVX; implement source-shaped color/background command state and application, document-owned recent-color values, native item/history ownership, cell painting and real ODS properties. Correct simplified common owners as authorized by the user. Work only in vite-office-calc on calc; no merges or network. Scoped Calc100 and related complete changed-owner100; full all-app next task40."
 sections:
@@ -112,6 +131,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-19T21:04:52.158Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610191952-9SF7RJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:04:00.867Z, excerpt_hash=sha256:257ba77da7865173391cf7d2a5720453a2926e117faeb1a93ac6eda62657a9b5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191952-9SF7RJ/blueprint/resolved-snapshot.json
+    - old_digest: adad3ca8737df5bd0edf0a00a911a50a3555c015a808d750e5bad6eeb813b36b
+    - current_digest: adad3ca8737df5bd0edf0a00a911a50a3555c015a808d750e5bad6eeb813b36b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191952-9SF7RJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191952-9SF7RJ --result verified-202610191952-9SF7RJ --commit 5c7361428abc4aacce727ae6746bdcae086c5f7f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commit(s) on calc if needed;retain task evidence and preserve other tasks. Do not merge/reset other branches or change primary-save/recovery deviations."
   Findings: |-
@@ -124,6 +173,10 @@ sections:
     The required automatic-color owner refinement adds4paths beyond the original95-path target:patattr implementation/test and its two canonical records. Total99non-task paths stays inside the policy allowance of five additional files;functional scope and all verification gates are unchanged. This is the concrete automatic-font UI behavior already included in approved scope. Refresh Calc coverage after these production changes. Related non-Calc raw source hashes remain current. Root/app types,changed-path lint before the last automatic-color refinement,boundaries,JSDoc/source provenance and all scoped inventories passed;fresh final lint/docs/build/browser/quality checks remain pending. No full all-app run before task40.
 
     Final acceptance:Calc122files363cases raw S7955/B5009/F1578/L7137 all100;related268files11891cases raw S568/B349/F117/L508 all100,all source hashes current. Combined changed-owner proof25executable owners100 plus pure Writer facade. Browser19existing cases and2corrected color scenarios pass;1280/390screenshots visually inspected. All declared static/type/lint/docs/source/resource/scoped inventory/doctor/routing gates passed. No production correction was made for the browser test-only nonexistent green swatch/old RGB expectation;actual Writer palette and Tailwind OKLCH token are retained. Automatic contrast uses original patattr modes. The earlier second Calc report is historical;final-proof is authoritative. Global palette preference persistence,complete native ambient view/config services,theme ODF,graphics and full styles/rich layout remain unported. Overall UI goal continues;next full all-app regression at task40.
+extensions:
+  implementation_commit:
+    hash: "c83f70943eb373434075a6d60992fd1701ae9894"
+    message: "🎨 9SF7RJ calc: share native font and background color controls"
 id_source: "generated"
 ---
 ## Summary
@@ -183,6 +236,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T21:04:52.158Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610191952-9SF7RJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:04:00.867Z, excerpt_hash=sha256:257ba77da7865173391cf7d2a5720453a2926e117faeb1a93ac6eda62657a9b5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191952-9SF7RJ/blueprint/resolved-snapshot.json
+- old_digest: adad3ca8737df5bd0edf0a00a911a50a3555c015a808d750e5bad6eeb813b36b
+- current_digest: adad3ca8737df5bd0edf0a00a911a50a3555c015a808d750e5bad6eeb813b36b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191952-9SF7RJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191952-9SF7RJ --result verified-202610191952-9SF7RJ --commit 5c7361428abc4aacce727ae6746bdcae086c5f7f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
