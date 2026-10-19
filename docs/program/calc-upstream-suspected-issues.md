@@ -2736,3 +2736,59 @@ responsibility. Do not silently add a per-character destination check as an upst
 valid caller/storage preconditions and keep undefined memory effects outside native output
 certification. The explicitly documented `ASCII_US` import compatibility with MS-1252 in
 `textenc.cxx` is intentional source behavior, and is not classified as a defect by this entry.
+
+## CALC-192: reverse replacement table contains an out-of-order registered-sign entry
+
+Status: source/table inconsistency with genuine normal and ASan/UBSan conversion witnesses;
+intent and all affected callers remain unverified.
+
+The pinned [replacement string table](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L370)
+places `0x0AE0` with comment `REGISTERED SIGN` between `0x00AB` and `0x00BB`. The expected
+registered-sign code point is `0x00AE`; the literal entry also breaks the ordering required by the
+following [binary search](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L416).
+This is not merely a mislabeled successful lookup: the out-of-order entry can prevent nearby
+replacement rows from being reached.
+
+The [original native caller](../../scripts/rtl-singlebyte-reverse-native-probe.mjs) invokes the unchanged
+full converter with actual `ASCII_US` data, destination capacity seven and both replacement flags
+(`0x300`). `U+00A9` writes `(c)` and `U+00AB` writes `<<`, with no undefined status. `U+00AE`,
+`U+00BB`, `U+00BC` and `U+0AE0` instead write `?`, consume one UTF-16 unit and report undefined
+status `8`. The `U+00BB` and `U+00BC` replacement rows are present in the source. Both genuine
+native graphs return identical bytes; initialized sentinel storage is retained after the output.
+
+Evidence: [authenticated native observations](../../apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json),
+[bounded extracted witnesses](../../.agentplane/tasks/202610191146-5W55E9/evidence/native-suspect-witnesses.json)
+and the [managed original owner](../../apps/office/src/sal/textenc/convertsimple.ts).
+
+Decision: keep the literal `0x0AE0`, original table order and original binary search. Do not substitute
+`0x00AE`, sort the table or add a special registered-sign fallback as a compatibility fix. The current
+port does not claim complete caller intent or a native public-codec integration certificate.
+
+## CALC-193: private Unicode byte mapping writes before checking destination capacity
+
+Status: original logical destination-capacity overrun reproduced with initialized oversized backing
+storage; no native physical allocation overflow experiment has been performed.
+
+The pinned [undefined-character handler](../../vendor/libreoffice-reference/sal/textenc/handleundefinedunicodetotextchar.cxx#L82)
+handles `U+F100..U+F1FF` plus `RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0` before any destination-end
+comparison. It writes the mapped byte, advances both pointers and returns success. The
+[reverse converter](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L580) calls that handler
+before its normal temporary-buffer capacity check.
+
+A genuine full native call with `ASCII_US` data, source `U+F100`, logical destination capacity zero
+and flag `0x400` writes byte zero into an initialized sentinel backing array. It returns one written
+byte, one consumed unit and status zero, despite the advertised capacity being zero. The independently
+called handler similarly advances a nonzero initial destination offset beyond its supplied end.
+Normal and ASan/UBSan observations agree. This experiment deliberately provides physical backing
+storage for the observed write; it does not demonstrate a sanitizer failure for a zero-sized allocation.
+Whether all production callers reserve a sufficient byte-per-unit backing allocation remains unproved.
+
+Evidence: [original native probe](../../scripts/rtl-singlebyte-reverse-native-probe.mjs),
+[authenticated fixture](../../apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json),
+[bounded witness](../../.agentplane/tasks/202610191146-5W55E9/evidence/native-suspect-witnesses.json)
+and [managed handler](../../apps/office/src/sal/textenc/handleundefinedunicodetotextchar.ts).
+
+Decision: preserve the original private-mapping order, logical write and returned counters. Do not
+insert a destination-capacity guard or clamp the count. Borrowed typed storage binds initialized
+native buffer views; its handling of writes outside the physical allocation does not certify native
+undefined-memory behavior.

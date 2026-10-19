@@ -1,0 +1,14 @@
+npx prettier --write pps/office/src/sal/inc/rtl/textcvt.h.ts apps/office/src/sal/textenc/convertsimple.hxx.ts apps/office/src/sal/textenc/convertsimple.ts apps/office/src/sal/textenc/singlebyte.test.ts apps/office/src/sal/textenc/unichars.hxx.ts docs/program/calc-upstream-suspected-issues.md docs/program/registry/shared/provenance/sal/inc/rtl/textcvt.h.ts.json docs/program/registry/shared/provenance/sal/textenc/convertsimple.hxx.ts.json docs/program/registry/shared/provenance/sal/textenc/convertsimple.ts.json docs/program/registry/shared/provenance/sal/textenc/unichars.hxx.ts.json docs/program/registry/shared/runtime/sal/inc/rtl/textcvt.h.ts.json docs/program/registry/shared/runtime/sal/textenc/convertsimple.hxx.ts.json docs/program/registry/shared/runtime/sal/textenc/convertsimple.ts.json docs/program/registry/shared/runtime/sal/textenc/unichars.hxx.ts.json apps/office/src/sal/textenc/handleundefinedunicodetotextchar.hxx.ts apps/office/src/sal/textenc/handleundefinedunicodetotextchar.ts apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json apps/office/src/sal/textenc/singlebyte-reverse.test.ts apps/office/src/sal/textenc/unichars.ts docs/program/registry/shared/provenance/sal/textenc/handleundefinedunicodetotextchar.hxx.ts.json docs/program/registry/shared/provenance/sal/textenc/handleundefinedunicodetotextchar.ts.json docs/program/registry/shared/provenance/sal/textenc/unichars.ts.json docs/program/registry/shared/runtime/sal/textenc/handleundefinedunicodetotextchar.hxx.ts.json docs/program/registry/shared/runtime/sal/textenc/handleundefinedunicodetotextchar.ts.json docs/program/registry/shared/runtime/sal/textenc/unichars.ts.json scripts/rtl-singlebyte-reverse-native-probe.mjs
+apps/office/src/sal/textenc/convertsimple.hxx.ts 278ms (unchanged)
+apps/office/src/sal/textenc/convertsimple.ts 496ms (unchanged)
+apps/office/src/sal/textenc/singlebyte.test.ts 84ms (unchanged)
+apps/office/src/sal/textenc/unichars.hxx.ts 4ms (unchanged)
+apps/office/src/sal/textenc/handleundefinedunicodetotextchar.hxx.ts 2ms (unchanged)
+apps/office/src/sal/textenc/handleundefinedunicodetotextchar.ts 36ms (unchanged)
+apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json 151ms (unchanged)
+apps/office/src/sal/textenc/singlebyte-reverse.test.ts 45ms (unchanged)
+apps/office/src/sal/textenc/unichars.ts 69ms (unchanged)
+scripts/rtl-singlebyte-reverse-native-probe.mjs 147ms (unchanged)
+[error] No files matching the pattern were found: "pps/office/src/sal/inc/rtl/textcvt.h.ts".
+
+exit=2

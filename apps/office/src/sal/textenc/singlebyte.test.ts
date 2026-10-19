@@ -54,7 +54,14 @@ it("matches original descriptor fields,null pointers,shared tables and flags", /
     RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER,
   ]).toEqual(rows("aliases")[0]);
   const native = rows("constants") as [keyof typeof constants, number][];
-  expect(Object.keys(constants).sort()).toEqual(
+  expect(
+    Object.keys(constants)
+      .filter(
+        /** Keeps this original exhaustive direction-specific header contract independent of the newly added reverse direction. @param name - Exported macro. @returns Whether original text-to-Unicode macro. */
+        (name) => name.startsWith("RTL_TEXTTOUNICODE_"),
+      )
+      .sort(),
+  ).toEqual(
     native
       .map(
         /** Reads the original macro name. @param entry - Native name/value pair. @returns Macro name. */ ([

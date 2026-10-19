@@ -1,0 +1,78 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/textenc/convertsimple.ts --coverage.include=src/sal/textenc/unichars.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.ts --coverage.reportsDirectory=coverage/task32-reverse src/sal/textenc/singlebyte.test.ts src/sal/textenc/singlebyte-reverse.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |shared| src/sal/textenc/singlebyte.test.ts (3 tests | 1 failed) 1252ms
+   × matches original descriptor fields,null pointers,shared tables and flags 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/sal/textenc/singlebyte.test.ts > matches original descriptor fields,null pointers,shared tables and flags
+AssertionError: expected [ …(51) ] to deeply equal [ …(23) ]
+
+- Expected
++ Received
+
+@@ -20,6 +20,34 @@
+    "RTL_TEXTTOUNICODE_INFO_INVALID",
+    "RTL_TEXTTOUNICODE_INFO_MBUNDEFINED",
+    "RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL",
+    "RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL",
+    "RTL_TEXTTOUNICODE_INFO_UNDEFINED",
++   "RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE",
++   "RTL_UNICODETOTEXT_FLAGS_FLUSH",
++   "RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_0",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_MASK",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK",
++   "RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE",
++   "RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE",
++   "RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE",
++   "RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE",
++   "RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR",
++   "RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE",
++   "RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL",
++   "RTL_UNICODETOTEXT_INFO_ERROR",
++   "RTL_UNICODETOTEXT_INFO_INVALID",
++   "RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL",
++   "RTL_UNICODETOTEXT_INFO_UNDEFINED",
+  ]
+
+ ❯ src/sal/textenc/singlebyte.test.ts:57:41
+     55|   ]).toEqual(rows("aliases")[0]);
+     56|   const native = rows("constants") as [keyof typeof constants, number]…
+     57|   expect(Object.keys(constants).sort()).toEqual(
+       |                                         ^
+     58|     native
+     59|       .map(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 6 passed (7)
+   Start at  18:53:00
+   Duration  5.87s (transform 1.00s, setup 314ms, import 1.07s, tests 5.43s, environment 1.51s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/sal/textenc/convertsimple.ts --coverage.include=src/sal/textenc/unichars.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.ts --coverage.reportsDirectory=coverage/task32-reverse src/sal/textenc/singlebyte.test.ts src/sal/textenc/singlebyte-reverse.test.ts

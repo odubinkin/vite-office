@@ -1,0 +1,14 @@
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:161
+        throw new Error(
+              ^
+
+Error: Source provenance for apps/office/src/sal/textenc/handleundefinedunicodetotextchar.hxx.ts relies only on upstream basename similarity.
+    at validateSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:161:15)
+    at async main (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:699:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:716:57)
+
+Node.js v24.13.1

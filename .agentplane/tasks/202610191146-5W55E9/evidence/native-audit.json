@@ -1,0 +1,116 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "driverSha256": "822e91822651104e48b39a41015d099d277ef9104b62f3bc591476199caca240",
+  "originalSources": 346,
+  "originalObjects": 138,
+  "captures": {
+    "descriptors": {
+      "bytes": 195774,
+      "sha256": "417f13383f4cda5bebeb4a78e6c6aaf5db2051af966fc146ea9a3dcf45b8f5ad",
+      "observations": 55
+    },
+    "values": {
+      "bytes": 41090443,
+      "sha256": "50bb945b1e719bd55f5ce5d9f2d646bc7f3d74ea7f08719d2d772512e8c5aeb4",
+      "observations": 564697
+    },
+    "handlers": {
+      "bytes": 124076,
+      "sha256": "90482e73bf0e6f9f7125d929151d3e85ca15a06ddc0833afc162b3898f2b8cf2",
+      "observations": 1980
+    },
+    "classifiers": {
+      "bytes": 1114117,
+      "sha256": "e5967436496599789f096fc7387cb032e42fb2a5d3939bd7830214e91a931cc0",
+      "observations": 1114117
+    },
+    "constants": {
+      "bytes": 1297,
+      "sha256": "da0d477ecd379d1b1ec23252332f69524021d3423cbccea97c046d48e876a5fc",
+      "observations": 28
+    }
+  },
+  "nativeCallerRuns": [
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/normal-caller",
+      "argv": [
+        "descriptors"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/asan-caller",
+      "argv": [
+        "descriptors"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/normal-caller",
+      "argv": [
+        "values"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/asan-caller",
+      "argv": [
+        "values"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/normal-caller",
+      "argv": [
+        "handlers"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/asan-caller",
+      "argv": [
+        "handlers"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/normal-caller",
+      "argv": [
+        "classifiers"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/asan-caller",
+      "argv": [
+        "classifiers"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/normal-caller",
+      "argv": [
+        "constants"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-reverse-native/asan-caller",
+      "argv": [
+        "constants"
+      ],
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "interpretation": "All five modes produced identical normal and ASan/UBSan bytes;all actual executed caller statuses0/no signal. Core/extras use55actual original registry descriptors;id1000is one valid explicitly caller-owned ISO88591copy with a second-range zero sentinel,not a registered encoding. Full original object hashes are checked before and after execution. No original function replacement. Physical underallocation and complete registry/OUString/VCL/UI integration remain unverified."
+}
