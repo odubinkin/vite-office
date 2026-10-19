@@ -1,0 +1,24 @@
+[WebServer] (node:56274) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 13 tests using 2 workers
+
+(node:56277) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:56276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [shared] › apps/office/e2e/shared/font-values.spec.ts:4:1 › uses native stored font colors alignment and size in Chromium (1.5s)
+  ✓   1 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 1280px (1.6s)
+  ✓   3 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 1280px (2.5s)
+  ✓   5 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 390px (2.6s)
+  ✓   4 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px (5.3s)
+  ✓   7 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px (885ms)
+  ✓   6 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 1280px (2.2s)
+  ✓   9 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 390px (2.0s)
+  ✓  10 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 1280px (1.7s)
+  ✓   8 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px (5.4s)
+  ✓  11 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 390px (1.8s)
+  ✓  12 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 1280px (2.2s)
+  ✓  13 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 390px (2.4s)
+
+  13 passed (22.6s)

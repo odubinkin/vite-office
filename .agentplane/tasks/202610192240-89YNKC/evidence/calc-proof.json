@@ -1,30 +1,30 @@
 {
   "result": "pass",
   "files": 127,
-  "tests": 384,
-  "passed": 384,
+  "tests": 386,
+  "passed": 386,
   "summary": {
     "lines": {
-      "total": 7394,
-      "covered": 7394,
+      "total": 7451,
+      "covered": 7451,
       "skipped": 0,
       "pct": 100
     },
     "statements": {
-      "total": 8253,
-      "covered": 8253,
+      "total": 8327,
+      "covered": 8327,
       "skipped": 0,
       "pct": 100
     },
     "functions": {
-      "total": 1616,
-      "covered": 1616,
+      "total": 1624,
+      "covered": 1624,
       "skipped": 0,
       "pct": 100
     },
     "branches": {
-      "total": 5220,
-      "covered": 5220,
+      "total": 5274,
+      "covered": 5274,
       "skipped": 0,
       "pct": 100
     },
@@ -35,8 +35,8 @@
       "pct": "Unknown"
     }
   },
-  "rawSha256": "444c7e8d2ab276e1e218b1be8c393d0c309e0784a4d75db7fad921beeda1b016",
-  "ownerHashes": {
+  "rawSha256": "691dc5931964347be4d3e12e7ff9441170d746999f01985b76954bef9efed82d",
+  "sourceHashes": {
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/composition/calc-module.tsx": "cd00570b51d56ac655dc7244db13021e296dd35cd49aa5969c148145c03fb6f1",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-selection-script.ts": "e17d63f8fbfcf05da54c7f07be2bfa5c606e102999878a5ad43e370fb09c3b1b",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-view-controller.ts": "e22c67a9a45912d6716310c9470d75bbc31e8b84dbd6dc881b3bac7d60d1a72c",
@@ -67,20 +67,20 @@
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/sheetlimits.ts": "636f2f56677906ab15e98fb641f68b84a5ae2ed87519b21c57e9e87101b68a1b",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/types.ts": "8db885355a27484124b7b7339e57a0b38c8c47ac6a3c9b7a1bc82903476a03ce",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts": "05c7c0d882e3816c8c75958b8781069a5e878095461a52a3880f42da6733899a",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.ts": "1b7fba6f08b3af5e1a1f4f3967825003072fda5dd164221a62170ed8af7dd92e",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.ts": "a76f3da8a886f46e0a663ed48a7935efc550f16d658ffd7830c2b01790a6adc6",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attrib.ts": "6fdf1fcf50a8936c50fbdf0c01757894f0f97a14c5d6598cdaba892960693779",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attrib.values.ts": "00ca45037c3c06fd47bced11d7f04edb12879e08f1a21fd11329c51220363db8",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/bigrange.ts": "02fef6a08ca4e38b29712ec75da5efdeea3f85c01ae8487ac075d3d4514d0c51",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/celltextattr.ts": "8ba2ded4a2bd451dd9b81440c877a4836d163059b522e28de9bfac73b7028230",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cellvalue.ts": "6752b4257a036eb9afb65b4e6f5cd0742cde753ea84da80a8bc4be625d886a31",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/column.ts": "a554e93d733cf49845f2af1b01e288b5fc9933cc39ab9ddee38f45b4bf3e311a",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/column.ts": "b277279adeb0334e04da230a5095053de8445f15123f887c81fa424b25305215",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/column2.ts": "42bab2d6fca29aa50b8dcccce33d7097d9846ed08f15ba076999e54ebb5e8b60",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/columnspanset.ts": "a8b3b05af537883979df5314cc7657757dbdf2f88fc2df7ff72de5afe17e8a28",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/compressedarray.ts": "6bfaed10e661423fb3a754107bd7d54533c6a179b118162dd3948edff0e0a696",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/dociter.ts": "881c5071d2ae2b17ceed1369e22a61bd0ca2b4c6cf25f82fe3203dff64717340",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.ts": "537d3b64df5f52342ce5a125d0a0544a4db6610d06b7bbbd7552d9fe5e69cbc1",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/documen6.ts": "535405dfd07b51194632e51afc4fe4941fc0fba182861f461b7dec8ecea8ebc4",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.ts": "506f4a9cc9f9cc8dd80a23d2dc90193aede0cf75436dd59969b2b98cae213ac4",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.ts": "a94dd3cd9916cb3a12f731cf48b04ec562d0ff91c58cb109dc5fdb791d2d0a1a",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/documentimport.ts": "a7d38903037b924349d4efe7c824ebcc3a6e889ab8fd6112fe0721443c0cb78b",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/formulacell.ts": "266b03f9852bb1fc5e6a794f9ddbe2fc574fc8f0b3d346fb92fae3dfe870b1c6",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/global.ts": "8fe578a842b6415b31e57687c1d7aaedca4726ecfd76e9745c8c48721bfb9dc6",
@@ -92,7 +92,7 @@
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/refupdatecontext.ts": "d7fea0b38ce2731168c3b275160af651c21406f8826b138d59993e1378539a47",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/rowheightcontext.ts": "836d524c5f7e345b8edc70c3610e63b2c5d15266332810b55ae1988e6838743e",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/segmenttree.ts": "0dac56616de6f197b050791154721d006ca97dec86186fa583ca15ea8704793e",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/table.ts": "a4da585f7dd1fd56bb98a7150df66e515b7d974862fefece9dcdf341d0ef2983",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/table.ts": "4ec796f1ae3f160f5e60c634081b453a7a7806f06e5b3858c4e521d87f4561a2",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/table1.ts": "ac35f927c5a57a09607423a213cae3f677519b31dda00879816670df853b084d",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/types.ts": "2595121a0283b5d63f3b104eac334dff05c0545f6ca55c5d2ab95831f57cae00",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/inc/refupdat.ts": "58e7acd18730125f703b828e4c87323c784f9de71c85cef7fc7d3a98fe271f7f",
@@ -129,10 +129,11 @@
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/docshell/docsh.ts": "652d2c143f2fa6a3c5653d990afa94d9d72bd952ddfcec5f337855b7d76e8f1e",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/undo/undoblk3.ts": "ecf40ce3c056b3bc7602cfe6fc9a39a7e30281d6b5c330710fe89c80b1681601",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/undo/undocell.ts": "4768b0f06f1855f0ba6298a5d1e23b143cb2996990eb18e96ec46fd0b892d15f",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/formatsh.ts": "f9e110f23384ad6c9bcc0caad07cea16c790286e918f80cd2e4552380df74c27",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/formatsh.ts": "b1e8b312082f86c6fcaf7cf17b264c8ca16236659c2f068b435c1ce9c5e176bf",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/tabview3.ts": "31e952007cd093b1db0700b6df31c82a0ec93ec909f8cb7e984f4f7d86989454",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/viewdata.ts": "5088dd2a8dcac2bf0e60eb59ce7f8c182ce68eb244e7fc48fd4155891f16a883",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/viewfun2.ts": "e68e550e89638b96452035ffb12e86364020b3b79a06aff2909c8f59a108830b",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/viewfunc.ts": "11921afe698e582d794853ee8df1558096ff6594d4195309206bb4bbdf9ab391",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts": "b72605b8e75e7201fac34f7933d28aeabb492ed9295abb6ad64432b5eb00528c",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/popupmenu/sheettab.ts": "3a9ae9af64ddb19544b4960474c9373fc689bf79b4a000249a376aee2a0de8fc",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/toolbar/formatobjectbar.ts": "cae77006af3c94e7f96d192e2d901b3055f3eec1769c2bfee9fdcf2fb75fecb3",

@@ -1,12 +1,12 @@
 
 > vite-office@0.1.0 test:coverage:shared
-> npm run test:coverage:shared --workspace @vite-office/office -- src/svl/source/items src/editeng/source/items/native-script-set-item.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts --coverage.include=src/svl/source/items/itemset.ts --coverage.include=src/editeng/source/items/textitem.scriptset.ts --coverage.reportsDirectory=coverage/task41-shared-complete --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task41-shared-complete-results.json
+> npm run test:coverage:shared --workspace @vite-office/office -- src/svl/source/items src/editeng/source/items/native-script-set-item.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts --coverage.include=src/svl/source/items/itemset.ts --coverage.include=src/editeng/source/items/textitem.scriptset.ts --coverage.reportsDirectory=coverage/task41-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task41-shared-final-results.json
 
 
 > @vite-office/office@0.1.0 test:coverage:shared
-> vitest run --config vitest.shared-coverage.config.ts --coverage src/svl/source/items src/editeng/source/items/native-script-set-item.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts --coverage.include=src/svl/source/items/itemset.ts --coverage.include=src/editeng/source/items/textitem.scriptset.ts --coverage.reportsDirectory=coverage/task41-shared-complete --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task41-shared-complete-results.json
+> vitest run --config vitest.shared-coverage.config.ts --coverage src/svl/source/items src/editeng/source/items/native-script-set-item.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts --coverage.include=src/svl/source/items/itemset.ts --coverage.include=src/editeng/source/items/textitem.scriptset.ts --coverage.reportsDirectory=coverage/task41-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task41-shared-final-results.json
 
-JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task41-shared-complete-results.json
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task41-shared-final-results.json
  % Coverage report from istanbul
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
