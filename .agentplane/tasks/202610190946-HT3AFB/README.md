@@ -1,10 +1,11 @@
 ---
 id: "202610190946-HT3AFB"
 title: "Implement original RTL single-byte to Unicode conversion and core mapping data"
-status: "DOING"
+result_summary: "Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T10:02:05.083Z"
+  updated_at: "2026-10-19T10:03:15.162Z"
   updated_by: "CODER"
-  note: "Genuine unchanged full69normal+69ASanUBSan source graphs,138verified objects and93760conversion/4096helper observations match. Entire new owners raw100 S67 B22 F2 L65;19related files49cases pass. Separate wholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass;verification.md records transient concurrent timeout and successful same-command rerun. No broad parity promotion,nextfull30."
+  note: "Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending."
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Original converter ordering and outputs match93760genuine native records from unchanged full normal+ASanUBSan SAL/CPPU objects;undefined helper,all23macros,complete fourteen-field core aggregates,null pointers and actual shared table identities are checked. Additional test descriptor17 comes from the real source registry,not a fabricated coverage provider."
     - "Entire new converter/helper/data/constant scopes raw100 S67 B22 F2 L65;related19files49cases pass. WholeCalc final separate111files299cases raw100 S6823 B4390 F1410 L6112. Initial single unchanged compressedarray timeout under concurrent checks is documented and did not recur with the same command separately;no threshold,timeout or source-body workaround."
     - "Twenty-one non-task paths preserve canonical source boundaries with foundation/unverified provenance records. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. Intentional ASCII_US/MS1252 import compatibility remains intact;no new suspected upstream bug or ledger change. No network,other checkout or merge."
-commit: null
+commit:
+  hash: "4a9ac5bd2d13c9ebd01f988bbc7c5c5f3ad54fcd"
+  message: "🧩 HT3AFB core: preserve original single-byte Unicode conversion"
 comments:
   -
     author: "CODER"
     body: "Start:port original complete single-byte Unicode conversion and core mapping data with genuine native descriptor/flag/count/buffer observations."
+  -
+    author: "CODER"
+    body: "Verified: Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Genuine unchanged full69normal+69ASanUBSan source graphs,138verified objects and93760conversion/4096helper observations match. Entire new owners raw100 S67 B22 F2 L65;19related files49cases pass. Separate wholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass;verification.md records transient concurrent timeout and successful same-command rerun. No broad parity promotion,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-19T10:03:15.162Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending."
+  -
+    type: "status"
+    at: "2026-10-19T10:03:15.308Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T10:02:05.165Z"
+doc_updated_at: "2026-10-19T10:03:15.309Z"
 doc_updated_by: "CODER"
 description: "Task28 of approved Calc goal:port complete convertsimple.cxx convertCharToUnicode,original undefined-byte helper and public flag/info constants,actual full ImplByteConvertData declarations and genuine core ASCII/MS1252/ISO88591 tables. Preserve range/flag/error/FLUSH/ignore/map-to-private ordering,capacity checks,counts and no automatic terminator. Verify real descriptors from original encoding registry,all byte values/bounded capacities/prefixes/flags under full genuine normal+ASanUBSan graphs. No TextDecoder substitution or fake generic converter/factory;higher-level codec registry/OStringToOUString and VCL serializer remain subsequent real dependencies. Only calc branch/checkout,offline,no merge."
 sections:
@@ -121,6 +140,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610190946-HT3AFB -m 🧩 HT3AFB task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T10:03:15.162Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T10:02:05.165Z, excerpt_hash=sha256:ede2b0f8de4b3d9dfc650813bd5f0c4bcbb155a8b0645b696a281a7d552488e5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190946-HT3AFB/blueprint/resolved-snapshot.json
+    - old_digest: 09beaa3439f85228634950f6d7b5b87aa563c28b7b10c27b1289b8fc7691daa5
+    - current_digest: 09beaa3439f85228634950f6d7b5b87aa563c28b7b10c27b1289b8fc7691daa5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610190946-HT3AFB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610190946-HT3AFB --result verified-202610190946-HT3AFB --commit bfce79bc6bd3e489de0e0d3a54557335a5d94ee4
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -196,6 +245,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610190946-HT3AFB -m 🧩 HT3AFB task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T10:03:15.162Z — VERIFY — ok
+
+By: CODER
+
+Note: Implemented full original single-byte Unicode conversion and core ASCII/MS1252/ISO88591 tables;93760native conversion observations match full normal+ASanUBSan graphs,entire new scopes and wholeCalc coverage100. Source contracts preserved;broader codec and UI integration remain pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T10:02:05.165Z, excerpt_hash=sha256:ede2b0f8de4b3d9dfc650813bd5f0c4bcbb155a8b0645b696a281a7d552488e5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190946-HT3AFB/blueprint/resolved-snapshot.json
+- old_digest: 09beaa3439f85228634950f6d7b5b87aa563c28b7b10c27b1289b8fc7691daa5
+- current_digest: 09beaa3439f85228634950f6d7b5b87aa563c28b7b10c27b1289b8fc7691daa5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610190946-HT3AFB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610190946-HT3AFB --result verified-202610190946-HT3AFB --commit bfce79bc6bd3e489de0e0d3a54557335a5d94ee4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
