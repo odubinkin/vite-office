@@ -453,3 +453,50 @@ it("observes cancellation while traversing an empty sheet's attribute row runs",
       }),
   ).toThrow(/cancelled/);
 });
+it("preserves manual row geometry and recalculates standard automatic font rows through actual ODS", /** Independent ODF input covers row defaults and large empty repeats. @returns Completion. */ async () => {
+  const xml = fontStyles(
+    '<style:style style:name="r" style:family="table-row"><style:table-row-properties style:row-height="30pt" style:use-optimal-row-height="false"/></style:style><style:style style:name="a" style:family="table-row"><style:table-row-properties style:row-height="0pt" style:use-optimal-row-height="true"/></style:style>',
+    '<table:table-row table:style-name="r" table:number-rows-repeated="3"><table:table-cell office:value-type="string"><text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0">Rows</text:p></table:table-cell></table:table-row><table:table-row table:style-name="a"/><table:table-row table:number-rows-repeated="1048572"><table:table-cell/></table:table-row>',
+  );
+  const doc = load(xml),
+    table = doc.FetchTable(0) as ScTable;
+  expect(table.GetRowHeight(0)).toBe(600);
+  expect(table.GetRowHeight(2)).toBe(600);
+  expect(table.GetRowHeight(3)).toBe(256);
+  expect(table.GetRowFlagsRange(0).maValue & 8).toBe(8);
+  const bytes = writeOdsDocument(doc),
+    content = await new ZipFile(bytes).readTextEntry("content.xml");
+  expect(content).toContain('style:row-height="1.058cm"');
+  expect(content).toContain('style:use-optimal-row-height="false"');
+  const reopened = await readOdsDocument(bytes),
+    result = reopened.FetchTable(0) as ScTable;
+  expect(result.GetRowHeight(2)).toBe(600);
+  expect(result.GetRowHeight(3)).toBe(256);
+  expect(result.GetRowFlagsRange(2).maValue & 8).toBe(8);
+  doc.DisposeAttributes();
+  reopened.DisposeAttributes();
+});
+it("diagnoses unsupported row-style children and invalid properties without manufacturing geometry", /** Exercises actual property parser with independent XML. @returns Nothing. */ () => {
+  const diagnostics: string[] = [];
+  const doc = load(
+    fontStyles(
+      '<style:style style:name="empty" style:family="table-row"><style:table-row-properties/></style:style><style:style style:name="r" style:family="table-row"><style:text-properties/><style:table-row-properties style:row-height="bad" style:use-optimal-row-height="bad"/></style:style>',
+      '<table:table-row table:style-name="empty"/><table:table-row table:style-name="r"/>',
+    ),
+    {
+      /** Collects parser diagnostics. @param diagnostic - Unsupported metadata. @returns Nothing. */
+      onDiagnostic: (diagnostic) => {
+        diagnostics.push(diagnostic.name);
+      },
+    },
+  );
+  expect(diagnostics).toEqual(
+    expect.arrayContaining([
+      "row style properties",
+      "invalid row height",
+      "invalid optimal row height",
+    ]),
+  );
+  expect((doc.FetchTable(0) as ScTable).GetRowHeight(0)).toBe(256);
+  doc.DisposeAttributes();
+});

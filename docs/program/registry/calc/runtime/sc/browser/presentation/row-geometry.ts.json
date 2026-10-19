@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/row-geometry.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "spreadsheet-browser-geometry",
+    "capabilityIds": [
+      "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/row-geometry.ts",
+        "apps/office/src/sc/source/core/data/rowheight.test.ts"
+      ],
+      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rowPixels"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

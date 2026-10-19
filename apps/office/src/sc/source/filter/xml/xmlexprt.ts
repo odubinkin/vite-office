@@ -5,10 +5,12 @@ import type { SharedStringConstReference } from "../../../../svl/inc/sharedstrin
 import type { ScDocument } from "../../../inc/document";
 import { MAXCOL, MAXROW } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
+import { CRFlags } from "../../../inc/global";
 import { CellType } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
+import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -26,6 +28,7 @@ export interface ScXMLExportOptions {
 /** Native spreadsheet content traversal plus consumed automatic font-height styles. Other styles/objects remain unported. */
 export class ScXMLExport {
   private readonly styles = new Map<string, string>();
+  private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
   constructor(
     private readonly document: ScDocument,
@@ -57,6 +60,7 @@ export class ScXMLExport {
   /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
   exportContent(): string {
     this.styles.clear();
+    this.rowStyles.clear();
     let body = "";
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
@@ -83,20 +87,37 @@ export class ScXMLExport {
           if (this.styleName(pattern)) maxRow = Math.max(maxRow, last[0]);
           row = last[0] + 1;
         }
+      for (let r = 0; r <= MAXROW;) {
+        const h = table.GetRowHeightRange(r),
+          f = table.GetRowFlagsRange(r),
+          end = Math.min(h.mnRow2, f.mnRow2);
+        if (h.mnValue !== table.GetOptimalMinRowHeight() || f.maValue & CRFlags.ManualSize)
+          maxRow = Math.max(maxRow, end);
+        r = end + 1;
+      }
       const iterator = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
         col: [number] = [0],
         row: [number] = [0];
       let cell = iterator.GetNext(col, row);
       for (let currentRow = 0; currentRow <= maxRow;) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
-        let endRow = maxRow;
+        const heightRun = table.GetRowHeightRange(currentRow),
+          flagsRun = table.GetRowFlagsRange(currentRow);
+        let endRow = Math.min(maxRow, heightRun.mnRow2, flagsRun.mnRow2);
+        const key =
+          heightRun.mnValue + "," + (flagsRun.maValue & CRFlags.ManualSize ? "false" : "true");
+        let rowStyle = this.rowStyles.get(key);
+        if (rowStyle === undefined) {
+          rowStyle = "ro" + (this.rowStyles.size + 1);
+          this.rowStyles.set(key, rowStyle);
+        }
         for (let column = 0; column <= allocated; column++) {
           table.GetColumnData(column).GetPatternRange(first, last, currentRow);
           endRow = Math.min(endRow, last[0]);
         }
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
         const repeat = endRow - currentRow + 1;
-        body += `<table:table-row${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
+        body += `<table:table-row table:style-name="${rowStyle}"${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
         const defaultPattern = table.GetDefaultColumnData().GetPattern(currentRow) as ScPatternAttr;
         const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
         for (let column = 0; column <= endColumn;) {
@@ -127,6 +148,10 @@ export class ScXMLExport {
     for (const [key, name] of this.styles) {
       const heights = key.split(",").map(Number);
       automatic += `<style:style style:name="${name}" style:family="table-cell"><style:text-properties fo:font-size="${(heights[0] as number) / 20}pt" style:font-size-asian="${(heights[1] as number) / 20}pt" style:font-size-complex="${(heights[2] as number) / 20}pt"/></style:style>`;
+    }
+    for (const [key, name] of this.rowStyles) {
+      const [height, optimal] = key.split(",");
+      automatic += `<style:style style:name="${name}" style:family="table-row"><style:table-row-properties style:row-height="${new SvXMLUnitConverter("twip").convertMeasureToXML(Number(height))}" style:use-optimal-row-height="${optimal}"/></style:style>`;
     }
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" office:version="1.3"><office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }

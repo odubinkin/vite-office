@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { ScTable } from "../../inc/table";
+import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
 import { ScUndoSelectionAttr } from "../../source/ui/undo/undoblk3";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import type { ScCellValue } from "../../inc/cellvalue";
@@ -55,9 +57,11 @@ export class CalcViewController {
     columnWidth: 96,
     rowHeight: 22,
     scrollTop: 0,
+    rowOffset: 0,
     scrollHeight: 1_000_000,
   };
   private revision = 0;
+  private client: { left: number; top: number; width: number; height: number } | undefined;
   private readonly listeners = new Set<() => void>();
   private anchor = new ScAddress();
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
@@ -90,6 +94,7 @@ export class CalcViewController {
     };
   /** Publishes source/controller changes once per input operation. @returns Nothing. */
   private Changed(): void {
+    this.UpdateViewport();
     this.revision++;
     for (const listener of this.listeners) listener();
   }
@@ -414,15 +419,25 @@ export class CalcViewController {
   }
   /** Maps browser scroll geometry to logical sheet coordinates without CSS-size overflow. @param left - Horizontal pixels. @param top - Physical vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
   Scroll(left: number, top: number, width: number, height: number): void {
-    const rows = Math.max(
-        1,
-        Math.floor((height - this.viewport.rowHeight) / this.viewport.rowHeight),
-      ),
+    this.client = { left, top, width, height };
+    this.Changed();
+  }
+  /** Refreshes visible geometry after model changes using the last actual browser measurement. @returns Nothing. */
+  private UpdateViewport(): void {
+    if (!this.client) return;
+    const { left, top, width, height } = this.client;
+    const doc = this.shell.GetDocument(),
+      table = doc.FetchTable(this.viewData.GetTabNumber());
+    // Shell history emits before the controller restores a deleted active sheet.
+    if (!table) return;
+    const bodyHeight = Math.max(1, height - this.viewport.rowHeight);
+    const logicalTop =
+      Math.min(1, Math.max(0, top) / Math.max(1, this.viewport.scrollHeight - height)) *
+      Math.max(0, rowPixels(table, 0, doc.MaxRow()) - bodyHeight);
+    const firstRow = rowAtPixel(table, logicalTop, doc.MaxRow());
+    const lastRow = rowAtPixel(table, logicalTop + bodyHeight, doc.MaxRow());
+    const rows = lastRow - firstRow + 1,
       columns = Math.max(1, Math.floor((width - 48) / this.viewport.columnWidth));
-    const firstRow = Math.floor(
-      (Math.max(0, top) / Math.max(1, this.viewport.scrollHeight - height)) *
-        Math.max(0, this.shell.GetDocument().MaxRow() + 1 - rows),
-    );
     this.viewport = {
       ...this.viewport,
       firstColumn: Math.min(
@@ -433,8 +448,21 @@ export class CalcViewController {
       columns: columns + 1,
       rows: rows + 1,
       scrollTop: top,
+      rowOffset: logicalTop - rowPixels(table, 0, firstRow - 1),
     };
-    this.Changed();
+  }
+  /** Projects a logical row to the bounded browser scroll track. @param row - Target first row. @param clientHeight - Measured viewport. @returns Physical offset. */
+  ScrollTopForRow(row: number, clientHeight: number): number {
+    const doc = this.shell.GetDocument(),
+      table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable;
+    const maximum = Math.max(
+      1,
+      rowPixels(table, 0, doc.MaxRow()) - Math.max(1, clientHeight - this.viewport.rowHeight),
+    );
+    return (
+      Math.min(1, rowPixels(table, 0, row - 1) / maximum) *
+      Math.max(0, this.viewport.scrollHeight - clientHeight)
+    );
   }
   /** Releases shell/frame subscriber resources on workspace closure. @returns Nothing. */
   Close(): void {

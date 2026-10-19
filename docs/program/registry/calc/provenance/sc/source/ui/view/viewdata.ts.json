@@ -15,7 +15,8 @@
       "ScViewDataTable"
     ],
     "preservedResponsibilities": [
-      "Task4XSBZ5 implements the native document-bound ScViewData cursor subset, with actual borrowed ScDocument and ScMarkData. Per-sheet ScViewDataTable fields start at zero, old-cursor validity starts false, active pane starts SC_SPLIT_BOTTOMLEFT. SetTabNo keeps native ValidTab guard and lazily creates only the requested slot, independently of selected-sheet marks. Cursor accessors, old-cursor fallback/reset and absent-tab sentinel follow source. Coordinate setters retain caller validity preconditions rather than inventing clamping. JS GC replaces physical per-table ownership only; no cell data, document projection, allocator or window service is created. Header declarations are reexported from the TypeScript implementation as existing Calc boundaries do. Geometry,hidden/alternate sheet-view,zoom/window/configuration services are outside this cursor subset."
+      "Task4XSBZ5 implements the native document-bound ScViewData cursor subset, with actual borrowed ScDocument and ScMarkData. Per-sheet ScViewDataTable fields start at zero, old-cursor validity starts false, active pane starts SC_SPLIT_BOTTOMLEFT. SetTabNo keeps native ValidTab guard and lazily creates only the requested slot, independently of selected-sheet marks. Cursor accessors, old-cursor fallback/reset and absent-tab sentinel follow source. Coordinate setters retain caller validity preconditions rather than inventing clamping. JS GC replaces physical per-table ownership only; no cell data, document projection, allocator or window service is created. Header declarations are reexported from the TypeScript implementation as existing Calc boundaries do. Geometry,hidden/alternate sheet-view,zoom/window/configuration services are outside this cursor subset.",
+      "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified."
     ],
     "omittedResponsibilities": [
       "Only document-bound visible-sheet cursor/mark operations are ported; full ScViewData construction, geometry, scroll-position calculations, zoom, windows, hidden and alternate sheet views, persistence and view commands remain outside this slice.",
@@ -30,6 +31,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.test.ts",
           "marker": "retains native per-sheet cursor state"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/rowheight.test.ts",
+          "marker": "retains source 256-twip minimum"
         }
       ],
       "upstream": [

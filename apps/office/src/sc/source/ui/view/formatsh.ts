@@ -1,4 +1,5 @@
-/** @fileoverview ScFormatShell consumed font-height state/application over original document patterns, simple marks and attribute undo. Full native format slots,script selection,dialogs and automatic row layout remain unported. */
+/** @fileoverview ScFormatShell consumed font-height state/application over original document patterns, simple marks and attribute undo. Full native format slots,script selection,dialogs and device-dependent row layout remain unported. */
+import { AdjustBlockHeight } from "./viewfun2";
 import type { ScTable } from "../../../inc/table";
 import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
@@ -97,6 +98,7 @@ export class ScFormatShell {
           delta,
         ) || changed;
     if (changed) {
+      AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
       this.shell
         .GetUndoManager()
         .AddUndoAction(new ScUndoSelectionAttr(this.shell, marks, range, undo, delta));

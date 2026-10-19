@@ -1,4 +1,5 @@
 /** @fileoverview ScUndoSelectionAttr consumed simple-pattern path over a real attribute-only undo document; rich text, borders, merge and VCL painting remain unported. */
+import { AdjustBlockHeight } from "../view/viewfun2";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScDocument } from "../../../inc/document";
@@ -36,6 +37,12 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
       this.shell.GetDocument(),
       this.aMarkData,
     );
+    AdjustBlockHeight(
+      this.shell.GetDocument(),
+      this.aMarkData,
+      this.aRange.aStart.Row(),
+      this.aRange.aEnd.Row(),
+    );
   }
   /** Reapplies the source delta while retaining unrelated values and attributes. @returns Nothing. */
   override RedoWithContext(): void {
@@ -52,6 +59,7 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
           tab,
           this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
         );
+    AdjustBlockHeight(this.shell.GetDocument(), this.aMarkData, start.Row(), end.Row());
   }
   /** Borrows the original native mark data for the browser view restoration. @returns Marks. */
   GetMarkData(): ScMarkData {

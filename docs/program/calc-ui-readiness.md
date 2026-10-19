@@ -848,3 +848,18 @@ policy remain. Styled empty cells round-trip within saved documents;format-only 
 retain the same visible-content save exclusion as Writer. Further font/style/formatting/menu UI
 remains active work. The task34 actual463-resource audit records16registered and13default-enabled
 commands; these counts are an implementation inventory,not a completion percentage.
+
+### Task35: standard automatic row geometry
+
+The current font-height action now calculates standard row heights from actual pattern runs,
+including attributes in other columns of the affected rows. Source margin/emphasis arithmetic,
+256-twip startup minimum,23-twip correction,manual-size flags,shared selected-sheet context and
+pixel-change conditions are represented. Undo/Redo repeats automatic adjustment. The browser
+uses native height segments for visible rows and bounded scroll projection;the shared Writer
+font-size widget and chrome remain unchanged. ODS row styles use actual sheet height/flag storage.
+
+This is the plain,unwrapped,unrotated,uniform-script-height path. Device initialization of the
+process minimum,script scanning,wrapped/rich/rotated/merged layout,drawing/hidden rows and
+standalone manual/optimal-height dialogs remain unported. Unequal script-height attribute profiles decline adjustment. Mixed-script text,unsupported foreign
+layout properties and device measurements remain unverified;this is not full text-layout parity. Full UI/core parity remains unverified.
+Next UI delivery remains row-height actions and shared Writer font/format controls.

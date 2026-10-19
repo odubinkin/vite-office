@@ -23,6 +23,11 @@ class ScViewDataTable {
 }
 /** Native document-bound cursor/selection ownership, shared by browser view consumers. Only the declared cursor operations are ported. */
 export class ScViewData {
+  /** Original viewdata.hxx pixel conversion, preserving a nonzero twip extent. @param twips - Native extent. @param factor - Pixels per twip. @returns Pixels. */
+  static ToPixel(twips: number, factor: number): number {
+    const result = Math.trunc(twips * factor);
+    return !result && twips ? 1 : result;
+  }
   private readonly maMarkData: ScMarkData;
   private readonly maTabData: (ScViewDataTable | undefined)[] = [new ScViewDataTable()];
   private mnTabNumber = 0;

@@ -1,4 +1,6 @@
-/** @fileoverview Basic Calc content importer over shared fast XML contexts;styles/layout/objects remain outside the supported content subset. */
+/** @fileoverview Calc scalar,cell-font and row-geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import type { ScTable } from "../../../inc/table";
+import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { XMLTableStylesContext } from "./xmlstyli";
 import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
@@ -26,6 +28,25 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   private cells = 0;
   private readonly autoStyles = new Map<string, CellAttributeHolder>();
   private body = false;
+  private readonly rowStyles = new Map<
+    string,
+    { height: number | null; optimal: boolean | null }
+  >();
+  /** Registers consumed native row-style properties. @param name - Style. @param height - Twips. @param optimal - Automatic flag. @returns Nothing. */
+  AddRowStyle(name: string, height: number | null, optimal: boolean | null): void {
+    this.rowStyles.set(name, { height, optimal });
+  }
+  /** Applies row style directly to actual sheet storage. @param name - Style. @param tab - Sheet. @param first - First row. @param last - Last row. @returns Nothing. */
+  ApplyRowStyle(name: string, tab: number, first: number, last: number): void {
+    const style = this.rowStyles.get(name);
+    if (!style) {
+      this.unsupported("row style");
+      return;
+    }
+    const table = this.document.FetchTable(tab) as ScTable;
+    if (style.height !== null) table.SetRowHeightOnly(first, last, style.height);
+    if (style.optimal !== null) table.SetManualHeight(first, last, !style.optimal);
+  }
   /** Binds actual document and parser controls. @param document - Target. @param options - Controls. @returns Importer. */
   constructor(
     private readonly document: ScDocument,
@@ -106,10 +127,18 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     try {
       parseOdfXmlStream(xml, this, this.options);
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
+      for (let tab = 0; tab < this.document.GetTableCount(); tab++)
+        (this.document.FetchTable(tab) as ScTable).SetOptimalHeight(
+          new RowHeightContext(this.document.MaxRow(), 1 / 15),
+          0,
+          this.document.MaxRow(),
+          true,
+        );
     } finally {
       this.document.SetAutoCalc(auto);
       for (const holder of this.autoStyles.values()) holder.Dispose();
       this.autoStyles.clear();
+      this.rowStyles.clear();
     }
   }
   /** Marks the unique spreadsheet body. @returns Context. */

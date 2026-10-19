@@ -1,4 +1,6 @@
 /** @fileoverview Production Calc workbench over canonical model/view/input owners,shared Sfx controls and Writer visual resources. */
+import type { ScTable } from "../../inc/table";
+import { rowAtPixel, rowPixels } from "./row-geometry";
 import { ScInputMode } from "../../inc/global";
 import {
   useEffect,
@@ -79,6 +81,7 @@ export function CalcWorkbench({
     cursorRow = view.GetCurY(),
     activeTab = view.GetTabNumber(),
     inputMode = controller.mode;
+  const cursorRowHeight = (doc.FetchTable(activeTab) as ScTable).GetRowHeight(cursorRow);
   const source = useMemo(
     /** Binds presenters to the active frame. @returns Command source. */ () =>
       createBrowserCommandSource(frame),
@@ -117,9 +120,15 @@ export function CalcWorkbench({
       const client = grid(),
         viewport = controller.viewport;
       if (!client.clientHeight) return;
+      const table = doc.FetchTable(activeTab) as ScTable;
+      const firstPixel = rowPixels(table, 0, viewport.firstRow - 1);
       const visibleRows = Math.max(
           1,
-          Math.floor((client.clientHeight - viewport.rowHeight) / viewport.rowHeight),
+          rowAtPixel(
+            table,
+            firstPixel + Math.max(1, client.clientHeight - viewport.rowHeight),
+            doc.MaxRow(),
+          ) - viewport.firstRow,
         ),
         col = cursorColumn,
         row = cursorRow;
@@ -130,9 +139,7 @@ export function CalcWorkbench({
         col >= viewport.firstColumn + viewport.columns - 1
       ) {
         const first = Math.max(0, row - visibleRows + 1);
-        client.scrollTop =
-          (first / Math.max(1, doc.MaxRow() + 1 - visibleRows)) *
-          (viewport.scrollHeight - client.clientHeight);
+        client.scrollTop = controller.ScrollTopForRow(first, client.clientHeight);
         client.scrollLeft = Math.max(0, col - viewport.columns + 2) * viewport.columnWidth;
         controller.Scroll(
           client.scrollLeft,
@@ -142,7 +149,7 @@ export function CalcWorkbench({
         );
       }
     },
-    [controller, doc, cursorColumn, cursorRow, activeTab, inputMode],
+    [controller, doc, cursorColumn, cursorRow, activeTab, inputMode, cursorRowHeight],
   );
   /** Routes one input key while retaining IME ownership until composition completes. @param event - Input key. @returns Nothing. */
   function inputKey(event: KeyboardEvent<HTMLInputElement>): void {

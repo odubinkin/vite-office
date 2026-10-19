@@ -1,4 +1,4 @@
-/** @fileoverview Consumed ScDocumentPool character-item package (ATTR_FONT..ATTR_FONT_RELIEF); remaining cell/page defaults and native pool services are unported. */
+/** @fileoverview Consumed ScDocumentPool character-item package (ATTR_FONT..ATTR_MARGIN); remaining cell/page defaults and native pool services are unported. */
 import {
   SfxItemPool,
   ItemInfoPackage,
@@ -44,6 +44,33 @@ import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DefaultFontType } from "../../../../unotools/inc/fontdefs";
 import { getDefaultFontWithoutDevice } from "../../../../vcl/source/outdev/font";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import {
+  ScHyphenateCell,
+  ScIndentItem,
+  ScVerticalStackCell,
+  ScRotateValueItem,
+  ScLineBreakCell,
+  ScShrinkToFitCell,
+} from "../../../inc/attrib";
+import { SvxScriptSpaceItem } from "../../../../editeng/inc/scriptspaceitem";
+import { SvxHangingPunctuationItem } from "../../../../editeng/inc/hngpnctitem";
+import { SvxForbiddenRuleItem } from "../../../../editeng/inc/forbiddenruleitem";
+import {
+  SvxHorJustifyItem,
+  SvxVerJustifyItem,
+  SvxJustifyMethodItem,
+} from "../../../../editeng/inc/justifyitem";
+import {
+  SvxCellHorJustify,
+  SvxCellVerJustify,
+  SvxCellJustifyMethod,
+} from "../../../../editeng/inc/svxenum";
+import { SvxRotateModeItem, SvxRotateMode } from "../../../../svx/inc/rotmodit";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SvxLineItem } from "../../../../editeng/inc/lineitem";
+import { SvxMarginItem } from "../../../../svx/inc/algitem";
 /** Builds the native logical default using configured script resolution and the source no-VCL-device branch. Linguistic preference editing is not exposed by this browser slice. @param script - Native script. @param role - Spreadsheet role. @param which - Native identity. @returns Default font item. */
 function getDefaultFontItem(script: number, role: DefaultFontType, which: number): SvxFontItem {
   const language = resolveSystemLanguageByScriptType(LANGUAGE_SYSTEM, script);
@@ -61,7 +88,7 @@ function getDefaultFontItem(script: number, role: DefaultFontType, which: number
     which,
   );
 }
-/** Original static metadata for the consumed contiguous character prefix. Unsupported IDs are not given fabricated defaults. */
+/** Original static metadata for the consumed contiguous cell-attribute prefix. Unsupported IDs are not given fabricated defaults. */
 class ItemInfoPackageScDocument extends ItemInfoPackage {
   private readonly maItemInfos: ItemInfoStatic[];
   /** Constructs original item values, slot mappings and surrogate flags. @returns Package. */
@@ -93,6 +120,25 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
       [new SvXMLAttrContainerItem(122), 0, 1],
       [new SvxWordLineModeItem(false, 123), 10011, 0],
       [new SvxCharReliefItem(FontRelief.NONE, 124), 10920, 0],
+      [new ScHyphenateCell(), 10931, 0],
+      [new SvxScriptSpaceItem(false, 126), 0, 0],
+      [new SvxHangingPunctuationItem(false, 127), 0, 0],
+      [new SvxForbiddenRuleItem(false, 128), 10903, 0],
+      [new SvxHorJustifyItem(SvxCellHorJustify.Standard, 129), 11571, 0],
+      [new SvxJustifyMethodItem(SvxCellJustifyMethod.Auto, 130), 11569, 0],
+      [new ScIndentItem(0), 10460, 0],
+      [new SvxVerJustifyItem(SvxCellVerJustify.Standard, 132), 11572, 0],
+      [new SvxJustifyMethodItem(SvxCellJustifyMethod.Auto, 133), 11570, 0],
+      [new ScVerticalStackCell(false), 10229, 0],
+      [new ScRotateValueItem(0), 10577, 0],
+      [new SvxRotateModeItem(SvxRotateMode.SVX_ROTATE_MODE_BOTTOM, 136), 10578, 0],
+      [new SfxBoolItem(137), 10949, 0],
+      [new SvxFrameDirectionItem(SvxFrameDirection.Environment, 138), 10944, 0],
+      [new ScLineBreakCell(), 10230, 0],
+      [new ScShrinkToFitCell(), 11015, 0],
+      [new SvxLineItem(141), 11013, 0],
+      [new SvxLineItem(142), 11014, 0],
+      [new SvxMarginItem(143), 10228, 0],
     ];
     this.maItemInfos = values.map(
       /** Constructs native static metadata. @param value - Item, slot and flags. @returns Entry. */ ([
@@ -117,9 +163,9 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
   }
 }
 let packageScDocument: ItemInfoPackageScDocument | undefined;
-/** Original named pool construction over real Sfx metadata and item defaults. This slice exports character attributes only. */
+/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through margins. */
 export class ScDocumentPool extends SfxItemPool {
-  /** Registers the shared original character prefix. @returns Pool. */
+  /** Registers the shared original cell-attribute prefix. @returns Pool. */
   constructor() {
     super(unicode("ScDocumentPool"));
     packageScDocument ??= new ItemInfoPackageScDocument();

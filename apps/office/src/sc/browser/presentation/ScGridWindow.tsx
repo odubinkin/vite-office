@@ -1,4 +1,7 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import type { ScTable } from "../../inc/table";
+import { rowPixels } from "./row-geometry";
+import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
 import type { ScPatternAttr } from "../../inc/patattr";
 import {
   useLayoutEffect,
@@ -20,9 +23,12 @@ export interface CalcGridViewport {
   readonly columns: number;
   readonly rows: number;
   readonly columnWidth: number;
+  /** Column-header height only; body rows use actual native sheet geometry. */
   readonly rowHeight: number;
   /** Physical browser scroll offset; kept distinct from the native logical first row. */
   readonly scrollTop: number;
+  /** Native pixel displacement within the first visible row. */
+  readonly rowOffset: number;
   /** Physical scroll-track extent supplied by the viewport owner; large logical sheets must not exceed browser CSS geometry limits. */
   readonly scrollHeight: number;
 }
@@ -69,6 +75,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     row = viewData.GetCurY(),
     tab = viewData.GetTabNumber();
   const document = viewData.GetDocument();
+  const table = document.FetchTable(tab) as ScTable;
   const columns = Array.from(
     { length: Math.min(viewport.columns, document.MaxCol() - viewport.firstColumn + 1) },
     /** Projects one visible column coordinate. @param unused - Unused entry. @param offset - Visible index. @returns Native column. */ (
@@ -192,15 +199,19 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
               aria-rowindex={r + 2}
               className="absolute left-0 w-full"
               style={{
-                top: viewport.scrollTop + (r - viewport.firstRow + 1) * viewport.rowHeight,
-                height: viewport.rowHeight,
+                top:
+                  viewport.scrollTop +
+                  viewport.rowHeight -
+                  viewport.rowOffset +
+                  rowPixels(table, viewport.firstRow, r - 1),
+                height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
               }}
             >
               <div
                 role="rowheader"
                 aria-colindex={1}
                 aria-label={`Row ${r + 1}`}
-                style={{ width: 48, height: viewport.rowHeight }}
+                style={{ width: 48, height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15) }}
                 className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
               >
                 <button
@@ -254,8 +265,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
                         left: 48 + col * viewport.columnWidth,
                         width: viewport.columnWidth,
-                        height: viewport.rowHeight,
-                        lineHeight: `${viewport.rowHeight}px`,
+                        height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
+                        lineHeight: `${NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15)}px`,
                       }}
                     >
                       {editing && active ? (

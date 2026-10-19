@@ -1,4 +1,4 @@
-/** @fileoverview Consumed XMLTableStylesContext cell automatic-style and text font-height import; named styles, parent inheritance and other format properties remain explicit unsupported metadata. */
+/** @fileoverview Consumed XMLTableStylesContext cell-font and row-geometry automatic styles; named styles,parent inheritance and remaining format properties stay explicit unsupported metadata. */
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
 import {
@@ -22,6 +22,11 @@ export class XMLTableStylesContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_STYLE && attributes.get(XMLToken.STYLE_FAMILY) === "table-row")
+      return new XMLTableRowStyleContext(
+        this.owner,
+        attributes.require(XMLToken.STYLE_NAME, "row style name"),
+      );
     if (
       element !== XMLToken.STYLE_STYLE ||
       attributes.get(XMLToken.STYLE_FAMILY) !== "table-cell"
@@ -86,5 +91,47 @@ class XMLTableStyleContext extends ScXMLImportContext {
   /** Transfers the style into the importer's real pattern pool. @returns Nothing. */
   override endFastElement(): void {
     this.owner.AddAutoStyle(this.name, this.pattern);
+  }
+}
+
+/** Native row style property context; properties are applied directly to ScTable row storage. */
+class XMLTableRowStyleContext extends ScXMLImportContext {
+  private height: number | null = null;
+  private optimal: boolean | null = null;
+  /** Binds importer and style name. @param owner - Importer. @param name - Style. @returns Context. */
+  constructor(
+    private readonly owner: ScXMLImport,
+    private readonly name: string,
+  ) {
+    super(owner);
+  }
+  /** Converts native row-height properties in twips. @param element - Child token. @param attributes - Properties. @returns Ignored leaf. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element !== XMLToken.STYLE_TABLE_ROW_PROPERTIES) {
+      this.owner.unsupported("row style properties");
+      return new SvXMLIgnoreContext(true);
+    }
+    attributes.assertOnly(
+      [XMLToken.STYLE_ROW_HEIGHT, XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT],
+      "Calc row geometry",
+    );
+    const height = attributes.get(XMLToken.STYLE_ROW_HEIGHT),
+      optimal = attributes.get(XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT);
+    if (height !== null) {
+      this.height = new SvXMLUnitConverter("twip").convertMeasureToCore(height, 0, 65535);
+      if (this.height === null) this.owner.unsupported("invalid row height");
+    }
+    if (optimal !== null) {
+      if (optimal === "true" || optimal === "false") this.optimal = optimal === "true";
+      else this.owner.unsupported("invalid optimal row height");
+    }
+    return new SvXMLIgnoreContext(true);
+  }
+  /** Transfers parsed row properties. @returns Nothing. */
+  override endFastElement(): void {
+    this.owner.AddRowStyle(this.name, this.height, this.optimal);
   }
 }

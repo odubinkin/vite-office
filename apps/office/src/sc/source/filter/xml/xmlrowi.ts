@@ -21,7 +21,14 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
     super(table.owner);
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_REPEATED);
     this.start = table.row;
-    if (attributes.get(XMLToken.TABLE_STYLE_NAME) !== null) table.owner.unsupported("row style");
+    const style = attributes.get(XMLToken.TABLE_STYLE_NAME);
+    if (style !== null)
+      table.owner.ApplyRowStyle(
+        style,
+        table.tab,
+        this.start,
+        Math.min(table.owner.GetDocument().MaxRow(), this.start + this.repeat - 1),
+      );
   }
   /** Creates normal/covered cells on the actual row. @param element - Token. @param attributes - Attributes. @returns Context. */
   override createFastChildContext(

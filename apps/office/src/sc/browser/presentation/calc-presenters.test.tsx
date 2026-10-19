@@ -33,6 +33,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
       columnWidth: 90,
       rowHeight: 22,
       scrollTop: 0,
+      rowOffset: 0,
       scrollHeight: 1_000_000,
     },
     inputMode: ScInputMode.SC_INPUT_NONE,

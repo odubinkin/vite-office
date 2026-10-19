@@ -152,7 +152,9 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   expect(c.viewport.firstColumn).toBe(0);
   c.Scroll(1e10, 1e10, 960, 400);
   expect(c.viewport.firstColumn).toBe(MAXCOL);
-  expect(c.viewport.firstRow).toBe(MAXROW);
+  expect(c.viewport.firstRow + c.viewport.rows).toBeGreaterThan(MAXROW);
+  expect(c.viewport.rowOffset).toBeGreaterThanOrEqual(0);
+  expect(c.viewport.rowOffset).toBeLessThan(17);
   c.Close();
 });
 it("keeps bounded cell input/display semantics and shell save-position ownership", /** Covers real stored formula/string/error alternatives and literal apostrophes. @returns Nothing. */ () => {

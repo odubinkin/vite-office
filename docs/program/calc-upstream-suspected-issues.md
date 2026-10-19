@@ -2811,3 +2811,34 @@ Decision: preserve these source branches in the managed
 [regression](../../apps/office/src/sc/source/core/data/attarray.test.ts) explicitly distinguishes empty,
 single-run and multiple-run results. Normal document/table UI boundaries validate coordinates.
 Do not silently normalize this source behavior while implementing font-size UI.
+
+## CALC-195: standard row height narrows before multiplying a font height
+
+Status: pinned source inspection only; no compiled native reproduction or undefined-behavior claim.
+
+[lcl_GetAttribHeight](../../vendor/libreoffice-reference/sc/source/core/data/column2.cxx#L866)
+assigns the UInt32 font height to UInt16, then performs `nHeight *= 1.18`. Large font heights
+therefore first narrow modulo 65536. A floating result outside the UInt16 range has no certified
+conversion in this port. Emphasis and margin additions also store back into UInt16. The current
+normal UI sizes use the defined representable range.
+
+Decision: retain source field widths, truncation, emphasis, margins and the 23-twip correction in
+[column2.ts](../../apps/office/src/sc/source/core/data/column2.ts). Do not silently widen the
+algorithm or certify extreme native floating conversions from managed tests.
+
+## CALC-196: automatic height context accumulates across selected sheets
+
+Status: source inspection and managed logical regression; no compiled native reproduction.
+Whether this cross-sheet height policy is intentional remains unproved.
+
+[AdjustBlockHeight](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L151)
+constructs one RowHeightContext before walking the selected sheets.
+[GetOptimalHeightsInColumn](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx#L89)
+passes its existing array to the column calculation, whose standard path only raises values when
+its attribute height is larger. There is no reset between sheets. Consequently a later selected
+sheet can retain an earlier sheet's larger calculated row height even when its own fonts are smaller.
+
+Decision: preserve shared context ordering in
+[AdjustBlockHeight](../../apps/office/src/sc/source/ui/view/viewfun2.ts) and exercise it with real
+selected sheets in [rowheight.test.ts](../../apps/office/src/sc/source/core/data/rowheight.test.ts).
+Do not add an independent per-sheet reset as an unrequested upstream fix.

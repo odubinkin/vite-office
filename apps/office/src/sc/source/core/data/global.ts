@@ -4,4 +4,6 @@
 export class ScGlobal {
   /** Original mutable process calculation state, initialized false in global.cxx. */
   public static bThreadedGroupCalcInProgress = false;
+  /** Native startup minimum before device-dependent InitTextHeight. */
+  public static nStdRowHeight = 256;
 }

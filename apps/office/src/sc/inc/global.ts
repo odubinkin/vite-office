@@ -45,3 +45,6 @@ export enum InsertDeleteFlags {
   STYLES = 0x0040,
   ATTRIB = 0x0060,
 }
+
+/** Original standard row-height correction in twips. */
+export const STD_ROWHEIGHT_DIFF = 23;
