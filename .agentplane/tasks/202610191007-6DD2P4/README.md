@@ -4,7 +4,7 @@ title: "Implement shared native popup pointer admission and submenu timers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: "CODER"
   note: "Original pinned pointer/timer/default source audit passes;actual shared renderer and new pointer owner raw100 S337 B284 F78 L302 with20files191cases. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Expanded related UI cases accounted across951passes and repaired native-chain10case replay;all21targeted browser cases accounted,plus final4case visual/disabled acceptance and four persisted screenshots. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. Nineteen intentional non-task paths,no guard or threshold weakening;full regression30."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T10:33:53.171Z"
+  updated_by: "EVALUATOR"
+  note: "Revieweda2a56060ded0:approved shared menubar popup pointer/timer scope preserves original default and source ordering,real resource/focus owners and browser style,with complete raw100new/touched owners and wholeCalc evidence."
+  evaluated_sha: "a2a56060ded00d6f47c68551ea856c47a5852500"
+  blueprint_digest: "f36cf1407d8b6f5e45e22677dbb54455d239888469b85e6d522cd46d4c47fecb"
+  evidence_refs:
+    - ".agentplane/tasks/202610191007-6DD2P4/README.md"
+    - ".agentplane/tasks/202610191007-6DD2P4/quality/20261019-103353171-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191007-6DD2P4/quality/20261019-103353171-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191007-6DD2P4/quality/20261019-103353171-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191007-6DD2P4/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191007-6DD2P4/verification.md"
+    - ".agentplane/tasks/202610191007-6DD2P4/source-audit.json"
+    - ".agentplane/tasks/202610191007-6DD2P4/coverage-summary.json"
+    - ".agentplane/tasks/202610191007-6DD2P4/calc-coverage-summary.json"
+    - ".agentplane/tasks/202610191007-6DD2P4/visual-evidence.json"
+  findings:
+    - "Original pinned MenuFloatingWindow and MouseSettings source audit checks10anchors and2source hashes. Browser adaptation correctly distinguishes enter/first motion,current highlight,150ms admission,matching-child leave retention,different-child delayed close,reentry cancellation and parent-window focus restoration. Full VCL GUI execution/platform configuration is explicitly unclaimed;no source-body fixture or fake model/provider."
+    - "Entire new pointer module and full touched shared renderer raw100 S337 B284 F78 L302;20files191cases pass. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Related expanded951passes and repaired10case native-chain replay account for all952cases without claiming one clean952case command. Final overflow type-only option repair passes all4cases and final app types."
+    - "All21targeted browser cases are accounted across initial17passes and clean10case affected-spec replay;separate4case real disabled-item/visual runs pass for Writer/Calc1280/390. Four actual screenshots inspected and persisted. Style/accelerators remain shared;original command state and core-unimplemented disabled actions are preserved."
+    - "Exactly19intentional non-task paths,including exhaustive registration of moved DOM highlight mutation. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. No validator,threshold,timeout,policy,source ledger,network,other checkout or merge changes. Existing hook/bundle warnings remain."
 commit: null
 comments:
   -
