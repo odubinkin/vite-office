@@ -1,10 +1,11 @@
 ---
 id: "202610192347-1K31AJ"
 title: "Implement Calc overline UI with canonical shared attribute toggle and ODS properties"
-status: "DOING"
+result_summary: "verified-202610192347-1K31AJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T23:58:45.015Z"
+  updated_at: "2026-10-19T23:58:52.082Z"
   updated_by: "CODER"
-  note: "Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50."
+  note: "verified-202610192347-1K31AJ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Calc128files390cases and related shared/Writer12files58cases pass;raw S/B/F/L100 for all7changed executable owners and Calc,current hashes. No tests,coverage thresholds or exclusions weakened."
     - "Fresh rebuilt Calc6case browser suite plus8shared Writer/Calc menu-pointer cases pass at1280/390;actual menu checked state,line painting,Undo/Redo,primary ODS reopen and DOM-free Worker metadata verified. Initial screenshots and their initial-build scope are explicit."
     - "Initial failures are reconciled:source precondition removed a redundant consumer guard,typing/JSDoc corrected,disabled popup sample moved to genuinely unsupported Strikethrough with all assertions retained.27non-task paths stay within approved50;static/source/resource/inventory/routing checks pass."
-commit: null
+commit:
+  hash: "f658d5ac318923eb73a6e74c97d45b2c4cbde547"
+  message: "🧩 1K31AJ task: preserve verified overline quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement native Overline UI and source shared toggle preparation with actual selection/history/ODS owners;keep approved calc scope and raw100 validation."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192347-1K31AJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50."
+  -
+    type: "verify"
+    at: "2026-10-19T23:58:52.082Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192347-1K31AJ"
+  -
+    type: "status"
+    at: "2026-10-19T23:58:52.234Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192347-1K31AJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T23:58:45.071Z"
+doc_updated_at: "2026-10-19T23:58:52.234Z"
 doc_updated_by: "CODER"
 description: "Task42 of the authorized Calc UI goal after verified task41. Implement native Overline11568/Which105 through shared source toggle semantics,actual font items,selection/history and existing Writer menu components;preserve complete line metadata in native ODS and browser painting. Only calc checkout/branch;Calc100 plus related/current-owner100 checks,next full checkpoint50."
 sections:
@@ -120,6 +139,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-19T23:58:52.082Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192347-1K31AJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:58:45.071Z, excerpt_hash=sha256:e467cb2edf2b51e376bcccd0f4aa07e5527f0b0e38ec54576e55145f916f687d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192347-1K31AJ/blueprint/resolved-snapshot.json
+    - old_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+    - current_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192347-1K31AJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192347-1K31AJ --result verified-202610192347-1K31AJ --commit f658d5ac318923eb73a6e74c97d45b2c4cbde547
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task42 implementation commits if required;retain task source/evidence and unrelated task state. User owns branch integration."
   Findings: |-
@@ -134,6 +183,10 @@ sections:
     Native mixed INVALID toggle creates a new default item and resets independent line color;uniform toggling clones and retains that color. Preserve both and document CALC211. Native overline maps to the same type/style/width/color handlers as underline;independent per-group Any values and real Which105automatic-style registration are used. Tokens append to the existing stable browser token enum without renumbering existing identities. Existing Writer controls/storage/no-recovery policy remain. Browser plain-cell painting represents NONE/SINGLE/DOUBLE and independent color;device-specific dash/wave/thickness,theme-color XML,rich edit,line modes,filtered/alternate sheet views and full native service parity remain unverified. Native rich-text QA is a source reference,not an executed full EditEngine certificate. Broad parity flags remain false.
 
     Scope stays within approved50non-task paths (27actual). No network,external writes,branch changes,merges or outside-repo access. Full checkpoint cadence remains next50. All declared acceptance evidence passes;overall Calc UI goal remains active after bounded task42 closure.
+extensions:
+  implementation_commit:
+    hash: "3cd98e2f9edd209159f16585ef63301f7a94feea"
+    message: "✨ 1K31AJ calc: enable native overline menu and shared attribute toggles"
 id_source: "generated"
 ---
 ## Summary
@@ -198,6 +251,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T23:58:52.082Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192347-1K31AJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:58:45.071Z, excerpt_hash=sha256:e467cb2edf2b51e376bcccd0f4aa07e5527f0b0e38ec54576e55145f916f687d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192347-1K31AJ/blueprint/resolved-snapshot.json
+- old_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+- current_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192347-1K31AJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192347-1K31AJ --result verified-202610192347-1K31AJ --commit f658d5ac318923eb73a6e74c97d45b2c4cbde547
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
