@@ -283,6 +283,34 @@
           "line": 250
         }
       ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
+      "sha256": "6393c66b1c33946c0b8c05a72d2b0386a9986b5aa4f9e85b923a23b3d98e0cde",
+      "markers": [
+        {
+          "marker": "lcl_populateresult",
+          "line": 574
+        },
+        {
+          "marker": "ScPatternAttr::fillColor",
+          "line": 567
+        },
+        {
+          "marker": "if (SfxViewShell::Current())",
+          "line": 858
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/patattr.hxx",
+      "sha256": "7f3209d1fb4d58eb5e9ba91f30fed7bf85352ced80997942f3c92432437dd15b",
+      "markers": [
+        {
+          "marker": "enum class ScAutoFontColorMode",
+          "line": 46
+        }
+      ]
     }
   ]
 }
