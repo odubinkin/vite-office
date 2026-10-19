@@ -4,7 +4,7 @@ title: "Connect Calc font-family UI with native script attributes and ODS font d
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: connect native font-family UI and real ODS font values using shared Writer controls and pinned consumed script semantics in the calc branch."
 doc_version: 3
-doc_updated_at: "2026-10-19T17:55:11.036Z"
+doc_updated_at: "2026-10-19T18:08:58.286Z"
 doc_updated_by: "CODER"
 description: "Task37: connect the existing shared Writer font-family widget to real Calc script-specific SvxFontItem attributes,source selection scripts,attribute-only history,cell painting and native ODS declarations. Reuse shared Writer font/ODF owners;correct simplified common selection metadata where required by source. Port only consumed pinned ICU script/block and native script-selection paths needed for this concrete UI action,using existing local ICU78.3 sources/data;no approximate Unicode regex classifier or shadow workbook model. All changes stay in calc checkout/branch with no network or merges."
 sections:
@@ -56,6 +56,10 @@ sections:
     - Observation: Native font preservation now uses the actual shared XMLFontAutoStylePool/XMLFontStylesContext with independent Which100/111/116 items. The ODS wrapper reads optional styles.xml declarations before content. Two new package cases plus existing ODS regressions pass19cases2files;root/app typecheck passes. Pinned local ICU78.3 and LibreOffice font/script sources have byte-identity evidence.
       Impact: Real font-family selection can retain represented native metadata through ODS;this does not yet implement the font selector or certify task37 coverage/native script behavior.
       Resolution: Continue the same approved task with exact consumed script/block classification,source selection-script application,shared font UI/native item requests and full declared verification. Do not close task37 or claim whole Calc100 on these focused results.
+
+    - Observation: First script-class typecheck found two boolean-to-number casts introduced while translating the bounded tuple lookup. The generated Unicode data itself retains original pinned arrays and offsets.
+      Impact: The first typecheck is failed evidence and does not support an acceptance claim.
+      Resolution: Use bounded native tuple indexes without boolean casts,then rerun types and compare scalar properties/classification with scoped original C++ computations before wiring the UI.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +97,7 @@ Inspection confirms source ScFormatShell uses GetSelectionScriptType for font-fa
 - Observation: Native font preservation now uses the actual shared XMLFontAutoStylePool/XMLFontStylesContext with independent Which100/111/116 items. The ODS wrapper reads optional styles.xml declarations before content. Two new package cases plus existing ODS regressions pass19cases2files;root/app typecheck passes. Pinned local ICU78.3 and LibreOffice font/script sources have byte-identity evidence.
   Impact: Real font-family selection can retain represented native metadata through ODS;this does not yet implement the font selector or certify task37 coverage/native script behavior.
   Resolution: Continue the same approved task with exact consumed script/block classification,source selection-script application,shared font UI/native item requests and full declared verification. Do not close task37 or claim whole Calc100 on these focused results.
+
+- Observation: First script-class typecheck found two boolean-to-number casts introduced while translating the bounded tuple lookup. The generated Unicode data itself retains original pinned arrays and offsets.
+  Impact: The first typecheck is failed evidence and does not support an acceptance claim.
+  Resolution: Use bounded native tuple indexes without boolean casts,then rerun types and compare scalar properties/classification with scoped original C++ computations before wiring the UI.
