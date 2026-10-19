@@ -31,6 +31,7 @@ import {
   RTL_USTR_MAX_VALUEOFINT64,
 } from "./ustring.h";
 import { SAL_NO_ACQUIRE } from "../types";
+import { ConstCharArrayDetector } from "./stringutils";
 import type { __sal_NoAcquire } from "../types";
 
 /** Original literal's overlapping str/more storage; native template/layout/constant-expression checks remain compiler responsibilities. */
@@ -138,18 +139,9 @@ export class OUString {
     } else if (value instanceof StringNumber) {
       rtl_uString_newFromStr_WithLength(this.slot, value.buf, value.length);
     } else if (value instanceof Uint8Array) {
-      // Erased const char[N] witnesses use native JS array operations for the original ConstCharArrayDetector::isValid predicate.
+      // The shared original trait binds the erased const char[N] extent and literal validity.
       const length = value.length - 1;
-      if (
-        !value
-          .subarray(0, length)
-          .every(
-            /** Original no-embedded-zero predicate. @param unit - Original char byte. @returns Whether this unit is nonzero. */ (
-              unit,
-            ) => unit !== 0,
-          ) ||
-        value[length] !== 0
-      )
+      if (!ConstCharArrayDetector.isValid(value))
         throw new Error(
           "assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal))",
         );

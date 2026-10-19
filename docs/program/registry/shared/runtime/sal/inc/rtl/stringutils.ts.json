@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/stringutils.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-034020c1-ac77-41ea-9133-58d073df32bf",
+      "CAP-2d99a5e0-3192-43dd-8a66-f217d357c44f",
+      "CAP-7158764f-ce40-4523-8452-c1ccebf90380",
+      "CAP-80b63117-2df4-4a21-9591-08cb9de6a6af",
+      "CAP-8d4d87a5-1018-4cb5-9197-71e6d74203b5",
+      "CAP-93d45659-e3cb-402d-b2c3-93e3a3f5eb6b",
+      "CAP-99e34fca-9b19-4d91-a0ca-d71183555333",
+      "CAP-aa1f8676-fe0a-4360-b258-2b80e620a62f",
+      "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad",
+      "CAP-d7dd2ed7-e3dc-435a-b637-8a39eb7c672c",
+      "CAP-20d5c31d-598e-444e-b968-1431c43403ed",
+      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/stringutils.ts",
+        "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+        "vendor/libreoffice-reference/include/rtl/stringutils.hxx"
+      ],
+      "justification": "TaskCMHQFZ introduces actual rtl/stringutils.hxx IsValidStrLen/ThrowIfInvalidStrLen and ConstCharArrayDetector::isValid responsibilities. Runtime number/bigint parameters bind original integral templates;native signed32 margin/default0 and maxLen bound,negative length and margin assertion,bad_alloc,final-zero/no-embedded-zero predicate are preserved. OUString reuses this exact predicate without changing its constructor ownership/exception expression. Full C++ SFINAE,constexpr/type enforcement/trait fields and unrelated stringutils services remain unported. Native source observations and checked boundary evidence are bounded,not full ABI/template certification.",
+      "knownViolations": [],
+      "localSymbols": [
+        "IsValidStrLen",
+        "ThrowIfInvalidStrLen",
+        "ConstCharArrayDetector"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/rtl/stringutils.hxx",
+      "upstreamSymbols": [
+        "IsValidStrLen",
+        "ThrowIfInvalidStrLen",
+        "ConstCharArrayDetector"
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/inc/rtl/ustrbuf.ts --coverage.include=src/sal/inc/rtl/stringutils.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.include=src/sal/inc/rtl/string.h.ts --coverage.include=src/sal/inc/rtl/ustring.h.ts --coverage.reportsDirectory=coverage/task26-buffer-final src/sal/rtl src/sal/inc/rtl src/svl/source/misc/sharedstring.test.ts src/svl/source/misc/sharedstringpool.test.ts src/cppu/source/typelib/typelib-lookup.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  21 passed (21)
+      Tests  57 passed (57)
+   Start at  07:20:35
+   Duration  19.07s (transform 7.23s, setup 2.17s, import 11.45s, tests 10.91s, environment 9.95s)
+
+ % Coverage report from istanbul
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 265/265 )
+Branches     : 100% ( 162/162 )
+Functions    : 100% ( 71/71 )
+Lines        : 100% ( 235/235 )
+================================================================================

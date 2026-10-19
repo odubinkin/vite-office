@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/ustrbuf.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/ustrbuf.hxx",
+    "localSymbols": [
+      "OUStringBuffer"
+    ],
+    "upstreamSymbols": [
+      "OUStringBuffer"
+    ],
+    "preservedResponsibilities": [
+      "TaskCMHQFZ ports original fundamental OUStringBuffer constructors,copy/move assignment,lifetime,actual data/capacity address cells,borrowed UTF16 access,reserve/checked length mutation,view/literal/lazy concat/number insertion and append,explicit float/double/int/char type bindings,UTF32,initialized reservation,remove/truncate,independent toString copy and no-copy makeStringAndClear adoption. JS number append selects native double;named float/int/char methods bind erased C++ overload types. All storage,refs,allocation,copy and transfer use existing genuine SAL C,OUString,StringConcat and numeric owners. Source setLength does not zero-fill new logical cells;only initialized native payload is observed. Valid full original normal+ASanUBSan headers and69object SAL/CPPU graphs provide bounded logical-unit/capacity/ref/relative-identity/borrow/lifetime and checked-boundary evidence. Concat overflow is exercised with128valid views over one real32MiB backing allocation,not fabricated source lengths. This does not port all search/replace/substring/scalar/template specializations,certify uninitialized spare memory/undefined alias/ABI behavior,or complete VCL tag encoding/axis serialization,item/pool/UI integration. Broad parity remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Unported members/template/compiler/ABI responsibilities and complete downstream item,pool,model and UI behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustrbuf.ts",
+          "marker": "OUStringBuffer"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+          "marker": "matches original buffer construction"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustrbuf.hxx",
+          "marker": "OUStringBuffer"
+        }
+      ]
+    }
+  }
+}

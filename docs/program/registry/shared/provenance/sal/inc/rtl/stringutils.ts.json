@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/stringutils.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/stringutils.hxx",
+    "localSymbols": [
+      "IsValidStrLen",
+      "ThrowIfInvalidStrLen",
+      "ConstCharArrayDetector"
+    ],
+    "upstreamSymbols": [
+      "IsValidStrLen",
+      "ThrowIfInvalidStrLen",
+      "ConstCharArrayDetector"
+    ],
+    "preservedResponsibilities": [
+      "TaskCMHQFZ introduces actual rtl/stringutils.hxx IsValidStrLen/ThrowIfInvalidStrLen and ConstCharArrayDetector::isValid responsibilities. Runtime number/bigint parameters bind original integral templates;native signed32 margin/default0 and maxLen bound,negative length and margin assertion,bad_alloc,final-zero/no-embedded-zero predicate are preserved. OUString reuses this exact predicate without changing its constructor ownership/exception expression. Full C++ SFINAE,constexpr/type enforcement/trait fields and unrelated stringutils services remain unported. Native source observations and checked boundary evidence are bounded,not full ABI/template certification."
+    ],
+    "omittedResponsibilities": [
+      "Unported members/template/compiler/ABI responsibilities and complete downstream item,pool,model and UI behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/stringutils.ts",
+          "marker": "IsValidStrLen"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+          "marker": "matches original buffer construction"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/stringutils.hxx",
+          "marker": "IsValidStrLen"
+        }
+      ]
+    }
+  }
+}

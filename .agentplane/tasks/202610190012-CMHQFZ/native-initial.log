@@ -1,0 +1,101 @@
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/casefolding-native-build.mjs:50
+    if (result.status !== 0) throw new Error(result.error?.message ?? result.stderr);
+                                   ^
+
+Error: output/playwright/rtl-oustringbuffer-native/driver.cpp:16:273: warning: 'charAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   16 | void state(OUStringBuffer&b,rtl_uString*before){std::printf("[%d,%d,%d,%d,%d,",b.getCapacity(),b.getLength(),data(b)->refCount,int(b.isEmpty()),int(data(b)==before));units(b.getStr(),b.getLength());std::u16string_view v=b;std::printf(",%u,%d,%d]",b.isEmpty()?0:unsigned(b.charAt(0)),int(b.getMutableStr()==b.getStr()),int(v.data()==b.getStr()&&v.size()==unsigned(b.getLength())));}
+      |                                                                                                                                                                                                                                                                                 ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:492:5: note: 'charAt' has been explicitly marked deprecated here
+  492 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:21:75: warning: 'sprintf' is deprecated: This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use snprintf(3) instead. [-Wdeprecated-declarations]
+   21 | std::string hex(double d){uint64_t u;std::memcpy(&u,&d,8);char s[32];std::sprintf(s,"[\"%016llx\"]",(unsigned long long)u);return s;}
+      |                                                                           ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_stdio.h:278:1: note: 'sprintf' has been explicitly marked deprecated here
+  278 | __deprecated_msg("This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.")
+      | ^
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:227:48: note: expanded from macro '__deprecated_msg'
+  227 |         #define __deprecated_msg(_msg) __attribute__((__deprecated__(_msg)))
+      |                                                       ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:50:15: error: deduced conflicting types ('double' vs 'float') for initializer list element type
+   50 |  for(double x:{0.,-0.,0.1234567890123456,999999.9999999,1e-40,1e38,INFINITY,-INFINITY,NAN}){
+      |               ^~~                                                  ~~~~~~~~
+output/playwright/rtl-oustringbuffer-native/driver.cpp:65:21: warning: 'setCharAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   65 |  before=data(*b);b->setCharAt(0,0x1234);record(39,"[]",*b,before);
+      |                     ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:509:5: note: 'setCharAt' has been explicitly marked deprecated here
+  509 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:79:163: error: use of undeclared identifier 'libreoffice_internal'; did you mean 'rtl::libreoffice_internal'?
+   79 |  for(long long value:{-9223372036854775807LL,-1LL,0LL,1LL,2147483631LL,2147483647LL,2147483648LL,9223372036854775807LL})for(int margin:{0,16,2147483647}){bool ok=libreoffice_internal::IsValidStrLen(value,margin);int out=-1;try{out=libreoffice_internal::ThrowIfInvalidStrLen(value,margin);}catch(const std::bad_alloc&){}std::printf("[47,[\"%lld\",%d],[%d,%d]]\n",value,margin,int(ok),out);}
+      |                                                                                                                                                                   ^~~~~~~~~~~~~~~~~~~~
+      |                                                                                                                                                                   rtl::libreoffice_internal
+vendor/libreoffice-reference/include/rtl/stringutils.hxx:118:11: note: 'rtl::libreoffice_internal' declared here
+  118 | namespace libreoffice_internal
+      |           ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:79:232: error: use of undeclared identifier 'libreoffice_internal'; did you mean 'rtl::libreoffice_internal'?
+   79 |  for(long long value:{-9223372036854775807LL,-1LL,0LL,1LL,2147483631LL,2147483647LL,2147483648LL,9223372036854775807LL})for(int margin:{0,16,2147483647}){bool ok=libreoffice_internal::IsValidStrLen(value,margin);int out=-1;try{out=libreoffice_internal::ThrowIfInvalidStrLen(value,margin);}catch(const std::bad_alloc&){}std::printf("[47,[\"%lld\",%d],[%d,%d]]\n",value,margin,int(ok),out);}
+      |                                                                                                                                                                                                                                        ^~~~~~~~~~~~~~~~~~~~
+      |                                                                                                                                                                                                                                        rtl::libreoffice_internal
+vendor/libreoffice-reference/include/rtl/stringutils.hxx:118:11: note: 'rtl::libreoffice_internal' declared here
+  118 | namespace libreoffice_internal
+      |           ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:86:11: warning: 'charAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   86 |  case 2:b.charAt(-1);break;
+      |           ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:492:5: note: 'charAt' has been explicitly marked deprecated here
+  492 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:87:11: warning: 'charAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   87 |  case 3:b.charAt(3);break;
+      |           ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:492:5: note: 'charAt' has been explicitly marked deprecated here
+  492 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:88:11: warning: 'setCharAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   88 |  case 4:b.setCharAt(-1,1);break;
+      |           ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:509:5: note: 'setCharAt' has been explicitly marked deprecated here
+  509 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:89:11: warning: 'setCharAt' is deprecated: use rtl::OUStringBuffer::operator [] instead [-Wdeprecated-declarations]
+   89 |  case 5:b.setCharAt(3,1);break;
+      |           ^
+vendor/libreoffice-reference/include/rtl/ustrbuf.hxx:509:5: note: 'setCharAt' has been explicitly marked deprecated here
+  509 |     SAL_DEPRECATED("use rtl::OUStringBuffer::operator [] instead")
+      |     ^
+vendor/libreoffice-reference/include/sal/types.h:485:52: note: expanded from macro 'SAL_DEPRECATED'
+  485 | #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+      |                                                    ^
+output/playwright/rtl-oustringbuffer-native/driver.cpp:94:10: error: use of undeclared identifier 'libreoffice_internal'; did you mean 'rtl::libreoffice_internal'?
+   94 |  case 10:libreoffice_internal::IsValidStrLen(0,-1);break;
+      |          ^~~~~~~~~~~~~~~~~~~~
+      |          rtl::libreoffice_internal
+vendor/libreoffice-reference/include/rtl/stringutils.hxx:118:11: note: 'rtl::libreoffice_internal' declared here
+  118 | namespace libreoffice_internal
+      |           ^
+7 warnings and 4 errors generated.
+
+    at Object.run (file:///Users/odubinkin/Projects/vite-office-calc/scripts/casefolding-native-build.mjs:50:36)
+    at build (file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-oustringbuffer-native-probe.mjs:163:10)
+    at file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-oustringbuffer-native-probe.mjs:202:14
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

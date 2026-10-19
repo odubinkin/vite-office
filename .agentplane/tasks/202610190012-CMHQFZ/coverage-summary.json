@@ -1,0 +1,61 @@
+{
+  "related": {
+    "statements": {
+      "total": 265,
+      "covered": 265,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 162,
+      "covered": 162,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 71,
+      "covered": 71,
+      "skipped": 0,
+      "pct": 100
+    },
+    "lines": {
+      "total": 235,
+      "covered": 235,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "calc": {
+    "statements": {
+      "total": 6823,
+      "covered": 6823,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 4390,
+      "covered": 4390,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 1410,
+      "covered": 1410,
+      "skipped": 0,
+      "pct": 100
+    },
+    "lines": {
+      "total": 6112,
+      "covered": 6112,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "currentSourceHashes": {
+    "apps/office/src/sal/inc/rtl/ustrbuf.ts": "b4de786eb54c09ee1885fc8f9d86bfff33818817a1b0fa3e77a1a6e36bc7f8a7",
+    "apps/office/src/sal/inc/rtl/stringutils.ts": "e39712bdeb1fd4f1e63d2e01ecd7b61e3c3d8b34f8300b72260aa4d286b83bfd",
+    "apps/office/src/sal/inc/rtl/ustring.ts": "7e6f5b6422ee473a95d44b5e4e437e33ad601fe18779b150fa6374516527165c",
+    "apps/office/src/sal/inc/rtl/string.h.ts": "4a14dc71718773dc192c8805195aa1ec9f1111b247330bf2c624e77206e82be6",
+    "apps/office/src/sal/inc/rtl/ustring.h.ts": "31aa456d646332355bd1f6e855677118ab87f7b3f439a8b89743ede29ea0d687"
+  }
+}
