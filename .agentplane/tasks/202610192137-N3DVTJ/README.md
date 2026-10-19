@@ -1,10 +1,11 @@
 ---
 id: "202610192137-N3DVTJ"
 title: "Validate integrated Calc and Writer UI at the task40 regression checkpoint"
-status: "DOING"
+result_summary: "verified-202610192137-N3DVTJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T22:37:56.257Z"
+  updated_at: "2026-10-19T22:38:35.471Z"
   updated_by: "CODER"
-  note: "Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50."
+  note: "verified-202610192137-N3DVTJ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "Independently decoded application/inventory raw gzip and recalculated all four100metrics;validated current2729file hashes,exact1040file test accounting,17215current passed cases,Calc125/372,and complete changed config coverage. Batches require identical source/maps;partial threshold exits are preserved and not accepted standalone."
     - "Inventory fixture corrections match pinned binary digests and six Asian/four complex size attributes;normalization fixes only marker-only test dependencies. Full inventory123/tooling128 and402distinct browser cases pass;fresh menu screenshots and unchanged1114runtime hashes justify reuse."
     - "All declared source/type/lint/format/resource/build/static gates have retained evidence;no rule,threshold,exclusion,timeout,production behavior or parity claim is weakened. This closes checkpoint40;overall Calc UI implementation remains active and next full checkpoint50."
-commit: null
+commit:
+  hash: "c1febb023701e499be07b20001fb4359d669eaa7"
+  message: "🧩 N3DVTJ task: persist canonical task artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: execute the authorized task40 full integrated regression checkpoint,repair proven native/UI contract regressions without weakening gates,and retain current-source raw100/browser evidence;calc checkout only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192137-N3DVTJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50."
+  -
+    type: "verify"
+    at: "2026-10-19T22:38:35.471Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192137-N3DVTJ"
+  -
+    type: "status"
+    at: "2026-10-19T22:38:35.602Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192137-N3DVTJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T22:37:56.775Z"
+doc_updated_at: "2026-10-19T22:38:35.602Z"
 doc_updated_by: "CODER"
 description: "Task40 of the active authorized Calc UI goal:execute the full all-application regression cadence after tasks31-39,repair source-backed regressions in the integrated Calc/shared/Writer UI and contracts,retain current-source raw100 evidence and fresh all-project browser checks. Only vite-office-calc branch calc;next full checkpoint50."
 sections:
@@ -132,6 +151,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-19T22:38:35.471Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192137-N3DVTJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T22:37:56.775Z, excerpt_hash=sha256:49925c441377a61a6951ac1037df3b6a4df6cc90a54ee77ea7a829a3741b13c5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192137-N3DVTJ/blueprint/resolved-snapshot.json
+    - old_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+    - current_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192137-N3DVTJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192137-N3DVTJ --result verified-202610192137-N3DVTJ --commit c1febb023701e499be07b20001fb4359d669eaa7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task40 repair commits if needed,preserving evidence and unrelated tasks. Keep user-owned merge/branch decisions and existing save/recovery deviations untouched."
   Findings: |-
@@ -154,6 +203,10 @@ sections:
     The inventory run initially passes119of123cases. Three old assertions still expect font-size-asian/complex diagnostics after the native multi-script size implementation;the pinned files each contain six Asian and four complex size attributes. Exact local/pinned fixture SHA256 matches and actual-parser diagnostics are preserved in font-diagnostics-audit.json;the expected warning totals become70/82 and recognized names must produce no warnings. Pinned txtprmap.cxx maps these properties at211/231. The fourth failure is test-owned registry dependencies:the symbol table appended upstreamSymbols under a vendor-prefixed key although its reader strips that prefix. Apply the same existing normalization before adding symbols;symbol validation itself remains strict. Fresh complete inventory38files123cases and raw S1734/B1292/F436/L1668 all100 now pass. No inventory production source or provenance claim changes.
 
     The initial local Unicode declaration expectation used literal apostrophes;the real XML exporter correctly emits &apos; and the test expectation is corrected. Narrow font-only subsets retain an unrelated hyperlink-hint branch gap;the final existing hyperlink roundtrip cases cover that owner completely. These diagnostic attempts are preserved and are not accepted standalone. All eight non-task changed paths remain within approved scope;the only executable owner changed is test-projects.ts,with separate complete raw100. No test removal,source/coverage exclusions,threshold changes,timeout increases,network,other worktrees or merges.
+extensions:
+  implementation_commit:
+    hash: "f7ecba6fabe5d6cd395eea920af4869f86944fec"
+    message: "🧩 N3DVTJ calc: reconcile native UI and font regression contracts"
 id_source: "generated"
 ---
 ## Summary
@@ -228,6 +281,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T22:38:35.471Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192137-N3DVTJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T22:37:56.775Z, excerpt_hash=sha256:49925c441377a61a6951ac1037df3b6a4df6cc90a54ee77ea7a829a3741b13c5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192137-N3DVTJ/blueprint/resolved-snapshot.json
+- old_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+- current_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192137-N3DVTJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192137-N3DVTJ --result verified-202610192137-N3DVTJ --commit c1febb023701e499be07b20001fb4359d669eaa7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
