@@ -4,7 +4,7 @@ title: "Connect Calc alignment controls to native items and ODS properties"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-19T21:35:18.906Z"
+  updated_by: "CODER"
+  note: "Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T21:35:40.341Z"
+  updated_by: "EVALUATOR"
+  note: "Native Calc alignment UI and ODS slice on40360f375e1c meets its approved bounded contract."
+  evaluated_sha: "40360f375e1c7d79e671d6dd8890b192f98da659"
+  blueprint_digest: "b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c"
+  evidence_refs:
+    - ".agentplane/tasks/202610192106-5G2DBD/README.md"
+    - ".agentplane/tasks/202610192106-5G2DBD/quality/20261019-213540341-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610192106-5G2DBD/quality/20261019-213540341-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610192106-5G2DBD/quality/20261019-213540341-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610192106-5G2DBD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610192106-5G2DBD/evidence/changed-alignment-owners-proof.json"
+    - ".agentplane/tasks/202610192106-5G2DBD/evidence/calc-alignment-final-proof.json"
+    - ".agentplane/tasks/202610192106-5G2DBD/evidence/related-alignment-final-proof.json"
+    - ".agentplane/tasks/202610192106-5G2DBD/evidence/task39-browser-initial.log"
+    - ".agentplane/tasks/202610192106-5G2DBD/evidence/alignment-source-baseline.json"
+  findings:
+    - "Actual shared Writer command controls preserve original seven toolbar toggles and explicit menu operations over native129/132items,sparse/grouped/full-axis selections and history. Common checkability follows live boolean/INVALID state rather than only resource flags,matching pinned Sfx toolbox and menu manager. Native ODS handlers use original typed Any,source/repeat merge and lexical/default semantics. Calc372cases and all11changed executable owners have source-matched raw S/B/F/L100. Fresh23browser cases verify1280/390physical text geometry,menu/keyboard/history and page/Worker ODS. Initial467file8582case related graph found9stale Writer expectations;all3modified Writer test files pass in the fresh26file213case run with all4complete shared owners raw100,unchanged production hashes and no removed test cases. All declared type/lint/docs/source/resource/inventory/static gates pass;46non-task paths remain within80approved."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the authorized native alignment toolbar/menu and ODS slice,using shared Writer controls,original item/history ownership and scoped raw100 checks;calc checkout only."
+  -
+    type: "verify"
+    at: "2026-10-19T21:35:18.906Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40."
 doc_version: 3
-doc_updated_at: "2026-10-19T21:33:12.211Z"
+doc_updated_at: "2026-10-19T21:35:18.960Z"
 doc_updated_by: "CODER"
 description: "Task39 of the authorized Calc UI goal:actual shared Writer command buttons and Format menu use original horizontal/vertical alignment slots,toggle versus explicit semantics,native selection/history and ODS property handlers. Work only vite-office-calc on calc. Full Calc and changed executable owner raw100,related tests,fresh1280/390browser evidence;next all-app task40."
 sections:
@@ -54,6 +80,39 @@ sections:
     Command:npm run typecheck;changed-path ESLint/Prettier;npm run check:docs;npm run check:dependencies;npm run check:file-size;npm run check:source-tree;npm run check:source-provenance;npm run inventory:parity:calc/shared/writer;npm run check:calc-resources;npm run check:writer-resources;npx vitest run scripts/check-module-boundaries.test.ts;node .agentplane/policy/check-routing.mjs;ap doctor;git diff --check. Result:pass,with final post-test-expectation lint/type refresh recorded before closure. Evidence:task39logs,89boundary/tooling cases and2Writerresource cases;12native source owners anchored at pinned9bc445578031fecf56086729d8e4940c77e14d65. Scope:approved changed paths and complete declared gates. Full all-app remains scheduled for task40,last done30,under user cadence;no mandatory gate skipped.
 
     Limitations:bounded source audit and actual managed/browser evidence are not a compiled full-native parity certificate. Full native request redispatch/service/context lifecycle,rich/wrapped/bidirectional/rotation/repeated-content/device layout,named styles and complete UNO filter graph remain unported or unverified. No broad parity flags promoted. Overall goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T21:35:18.906Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:33:12.211Z, excerpt_hash=sha256:c3c7b91ed2a38729453f1d8761b808f784df415035ec2a084b77ec286419b00d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192106-5G2DBD/blueprint/resolved-snapshot.json
+    - old_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+    - current_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192106-5G2DBD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610192106-5G2DBD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task39 implementation commits if necessary;preserve task evidence and unrelated active tasks. No merge/reset or save/recovery-policy changes."
   Findings: |-
     Preflight:direct workflow;branch calc;clean tree. No nested source AGENTS or .agentplane/user-instructions.md found. Network approval required and unused. Existing native SvxHorJustifyItem/SvxVerJustifyItem and contiguous pool defaults129/132 are available. Native toolbar ExecuteTextAttr toggles matching alignment to Standard;Format-menu ExecuteAlignment applies explicit values. Actual source XML mapping merges paragraph fo:text-align and cell style:text-align-source/style:repeat-content into one horizontal UNO property;vertical is a typed32cell property. Existing browser grid paints only scalar-derived left/right;new UI must consume actual native attributes. Full RTL/rich/wrapped/device rendering is not assumed.
@@ -94,6 +153,39 @@ Command:npm run build;npx playwright test --config apps/office/playwright.config
 Command:npm run typecheck;changed-path ESLint/Prettier;npm run check:docs;npm run check:dependencies;npm run check:file-size;npm run check:source-tree;npm run check:source-provenance;npm run inventory:parity:calc/shared/writer;npm run check:calc-resources;npm run check:writer-resources;npx vitest run scripts/check-module-boundaries.test.ts;node .agentplane/policy/check-routing.mjs;ap doctor;git diff --check. Result:pass,with final post-test-expectation lint/type refresh recorded before closure. Evidence:task39logs,89boundary/tooling cases and2Writerresource cases;12native source owners anchored at pinned9bc445578031fecf56086729d8e4940c77e14d65. Scope:approved changed paths and complete declared gates. Full all-app remains scheduled for task40,last done30,under user cadence;no mandatory gate skipped.
 
 Limitations:bounded source audit and actual managed/browser evidence are not a compiled full-native parity certificate. Full native request redispatch/service/context lifecycle,rich/wrapped/bidirectional/rotation/repeated-content/device layout,named styles and complete UNO filter graph remain unported or unverified. No broad parity flags promoted. Overall goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T21:35:18.906Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:33:12.211Z, excerpt_hash=sha256:c3c7b91ed2a38729453f1d8761b808f784df415035ec2a084b77ec286419b00d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192106-5G2DBD/blueprint/resolved-snapshot.json
+- old_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+- current_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192106-5G2DBD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610192106-5G2DBD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
