@@ -4,7 +4,7 @@ title: "Implement native shared menubar pointer rollover and first-move admissio
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Source-backed common root menubar motion/highlight lifetime implemented;20files196related tests and111files299Calc tests pass with raw100 S/B/F/L;25browser cases pass at1280/390;all declared deterministic checks pass. See task verification.md and evidence. Full native GUI/platform and broader goal remain unverified;next full40."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T11:43:38.193Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed681b1333a4a8:approved shared-root pointer scope implemented and independently checked against pinned native ordering,complete raw owner coverage and actual browser consumers."
+  evaluated_sha: "681b1333a4a8426395d1b9a8c0521129426336a0"
+  blueprint_digest: "76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8"
+  evidence_refs:
+    - ".agentplane/tasks/202610191130-1V60C3/README.md"
+    - ".agentplane/tasks/202610191130-1V60C3/quality/20261019-114338193-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191130-1V60C3/quality/20261019-114338193-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191130-1V60C3/quality/20261019-114338193-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191130-1V60C3/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191130-1V60C3/verification.md"
+    - ".agentplane/tasks/202610191130-1V60C3/evidence/source-audit.json"
+    - ".agentplane/tasks/202610191130-1V60C3/evidence/menu-coverage-final.json"
+    - ".agentplane/tasks/202610191130-1V60C3/evidence/browser-final.log"
+  findings:
+    - "Actual common Writer/Calc component owns constructor/creation first-move lifetime,separate rollover/highlight and floating-window filtering;no duplicate presenter or fabricated command state. Source Paint priority and unopened keyboard selection are represented. Existing assertions remain and fixture migrations use actual movement. Complete two-owner raw coverage100,wholeCalc100 and final25browser cases pass.11non-task paths remain within approved20."
 commit: null
 comments:
   -
