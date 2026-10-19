@@ -4,7 +4,7 @@ title: "Connect Calc font-family UI with native script attributes and ODS font d
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: connect native font-family UI and real ODS font values using shared Writer controls and pinned consumed script semantics in the calc branch."
 doc_version: 3
-doc_updated_at: "2026-10-19T18:08:58.286Z"
+doc_updated_at: "2026-10-19T18:30:41.067Z"
 doc_updated_by: "CODER"
 description: "Task37: connect the existing shared Writer font-family widget to real Calc script-specific SvxFontItem attributes,source selection scripts,attribute-only history,cell painting and native ODS declarations. Reuse shared Writer font/ODF owners;correct simplified common selection metadata where required by source. Port only consumed pinned ICU script/block and native script-selection paths needed for this concrete UI action,using existing local ICU78.3 sources/data;no approximate Unicode regex classifier or shadow workbook model. All changes stay in calc checkout/branch with no network or merges."
 sections:
@@ -60,6 +60,18 @@ sections:
     - Observation: First script-class typecheck found two boolean-to-number casts introduced while translating the bounded tuple lookup. The generated Unicode data itself retains original pinned arrays and offsets.
       Impact: The first typecheck is failed evidence and does not support an acceptance claim.
       Resolution: Use bounded native tuple indexes without boolean casts,then rerun types and compare scalar properties/classification with scoped original C++ computations before wiring the UI.
+
+    - Observation: The original consumed ICU78.3 scalar scopes and LibreOffice i18nutil scopes compiled after adding the actual uassert.h include. Every codepoint0..0x10ffff matches block,UScript and uncached compatibility editing class. Evidence: evidence/script-native-source-report.json,evidence/native-script-scalars.bin.gz and the checked-in native-script-cases.json replay. The witness explicitly constrains the unused property dispatcher to SCRIPT and does not certify full ICU or UNO services.
+      Impact: Script selection uses pinned data rather than host Unicode regexes. Original BreakIteratorImpl initial-NUL cache behavior is retained and tested as source behavior,not claimed as part of the uncached compiled witness.
+      Resolution: Complete remaining owner coverage and registration before acceptance.
+
+    - Observation: The real shared SVX selector now emits a complete SvxFontItem. Calc executes CharFontName10007 against actual selected-script Which100/111/116 items,attributes,history and real ODS. The plain-cell browser adapter borrows the actual XBreakIterator script-query producer and source GetStringScriptType loop;the unported native formatted-cell cache and UNO factory are not emulated. Browser rendering reads independent script font items. Actual FontList missing-metric values are retained without guessing native family/pitch;known native symbol-recode names retain SYMBOL charset.
+      Impact: Fonts can be selected through the actual Writer component. Scope remains the existing plain-cell display boundary;this is not full device or rich-text layout parity.
+      Resolution: Keep the approved task open through full Calc100,complete changed-owner100,fresh browser evidence and canonical inventories.
+
+    - Observation: Writer's previous family path flattened native font values and unrelated attributes through browser projections. Family application,pending items and caret attribute query now use actual SfxItemSet/hints and real automatic-style interning. A new real-shell case verifies all five font fields,unchanged semibold weight,idempotence and undo/redo. Related Writer/shared/font cases pass27cases4files;script replay/run cases pass5cases3files;Calc font UI cases pass4cases1file. Root and app typecheck pass;JSDoc and dependency boundaries pass after adding only exact witnessed header/service-binding imports. These focused results do not establish final coverage.
+      Impact: The user's explicit authorization to correct simplified shared/Writer owners has been applied. Initial failed Writer metadata/idempotence tests were corrected at native item query/interning boundaries.
+      Resolution: Continue full declared checks. Whole Calc initially ran352cases120files with one outdated resource expectation that the now-implemented family selector stays disabled;the second attempt exposed its additional obsolete empty-value assertion. Neither failed run is acceptance evidence. Correct the expected binding state,run the focused resource case first,and only then rerun whole Calc with coverage.
 id_source: "generated"
 ---
 ## Summary
@@ -101,3 +113,15 @@ Inspection confirms source ScFormatShell uses GetSelectionScriptType for font-fa
 - Observation: First script-class typecheck found two boolean-to-number casts introduced while translating the bounded tuple lookup. The generated Unicode data itself retains original pinned arrays and offsets.
   Impact: The first typecheck is failed evidence and does not support an acceptance claim.
   Resolution: Use bounded native tuple indexes without boolean casts,then rerun types and compare scalar properties/classification with scoped original C++ computations before wiring the UI.
+
+- Observation: The original consumed ICU78.3 scalar scopes and LibreOffice i18nutil scopes compiled after adding the actual uassert.h include. Every codepoint0..0x10ffff matches block,UScript and uncached compatibility editing class. Evidence: evidence/script-native-source-report.json,evidence/native-script-scalars.bin.gz and the checked-in native-script-cases.json replay. The witness explicitly constrains the unused property dispatcher to SCRIPT and does not certify full ICU or UNO services.
+  Impact: Script selection uses pinned data rather than host Unicode regexes. Original BreakIteratorImpl initial-NUL cache behavior is retained and tested as source behavior,not claimed as part of the uncached compiled witness.
+  Resolution: Complete remaining owner coverage and registration before acceptance.
+
+- Observation: The real shared SVX selector now emits a complete SvxFontItem. Calc executes CharFontName10007 against actual selected-script Which100/111/116 items,attributes,history and real ODS. The plain-cell browser adapter borrows the actual XBreakIterator script-query producer and source GetStringScriptType loop;the unported native formatted-cell cache and UNO factory are not emulated. Browser rendering reads independent script font items. Actual FontList missing-metric values are retained without guessing native family/pitch;known native symbol-recode names retain SYMBOL charset.
+  Impact: Fonts can be selected through the actual Writer component. Scope remains the existing plain-cell display boundary;this is not full device or rich-text layout parity.
+  Resolution: Keep the approved task open through full Calc100,complete changed-owner100,fresh browser evidence and canonical inventories.
+
+- Observation: Writer's previous family path flattened native font values and unrelated attributes through browser projections. Family application,pending items and caret attribute query now use actual SfxItemSet/hints and real automatic-style interning. A new real-shell case verifies all five font fields,unchanged semibold weight,idempotence and undo/redo. Related Writer/shared/font cases pass27cases4files;script replay/run cases pass5cases3files;Calc font UI cases pass4cases1file. Root and app typecheck pass;JSDoc and dependency boundaries pass after adding only exact witnessed header/service-binding imports. These focused results do not establish final coverage.
+  Impact: The user's explicit authorization to correct simplified shared/Writer owners has been applied. Initial failed Writer metadata/idempotence tests were corrected at native item query/interning boundaries.
+  Resolution: Continue full declared checks. Whole Calc initially ran352cases120files with one outdated resource expectation that the now-implemented family selector stays disabled;the second attempt exposed its additional obsolete empty-value assertion. Neither failed run is acceptance evidence. Correct the expected binding state,run the focused resource case first,and only then rerun whole Calc with coverage.
