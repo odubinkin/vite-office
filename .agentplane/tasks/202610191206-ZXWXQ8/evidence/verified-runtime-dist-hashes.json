@@ -1,0 +1,8 @@
+{
+  "apps/office/src/sc/browser/controller/calc-view-controller.ts": "fcf15370d738e356512881894c94a304c92388a2ff987b706a3a7a41dd83733f",
+  "apps/office/src/sc/browser/presentation/calc-workbench.tsx": "90393deb0661a42170fddc2a305bb28ef84afb5af771fd6535e7dde03399b6cd",
+  "apps/office/src/sc/sdi/scalc.ts": "4812334e3dd5b0c49e3ff4b456036da1d9facbd7a10b37645cd57ce84f310807",
+  "apps/office/src/sc/source/ui/view/tabview3.ts": "31e952007cd093b1db0700b6df31c82a0ec93ec909f8cb7e984f4f7d86989454",
+  "apps/office/dist/assets/index-6zgC0Eya.js": "a1eeaf501c0979bfababc5aa7d9d6b7abc108cbe26a9fdc10be84379498dd573",
+  "apps/office/dist/assets/odt-worker-CbmizSGq.js": "87cc7913f1fbdb20b5977b1893b31ce472caf5e288e4485ec4eebd23a484b38a"
+}

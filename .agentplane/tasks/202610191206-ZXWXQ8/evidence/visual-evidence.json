@@ -1,0 +1,13 @@
+{
+  "images": [
+    {
+      "path": ".agentplane/tasks/202610191206-ZXWXQ8/evidence/visual/task33-cell-selection-1280.png",
+      "sha256": "a473ba4f4ec43b0bc9d6f358f8719429104fb754f1c61866fb9868df180495d1"
+    },
+    {
+      "path": ".agentplane/tasks/202610191206-ZXWXQ8/evidence/visual/task33-cell-selection-390.png",
+      "sha256": "0092894bc10f47ca2466907ac8c33927ad6c0248662451d73c0f6cd3d90c2d27"
+    }
+  ],
+  "inspection": "Both actual desktop/mobile screenshots inspected. Canonical full-column mark renders indigo selection through visible rows;B2active-cell outline,name box and status remain consistent. Shared Writer menu/header/toolbar presentation is unchanged. No new font/style enablement is claimed."
+}

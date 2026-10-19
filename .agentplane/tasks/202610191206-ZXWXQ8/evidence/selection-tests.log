@@ -1,0 +1,31 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/browser/presentation/calc-cell-selection.test.tsx (12 tests | 1 failed) 6035ms
+   × connects Edit Select row and column to the actual shared menu and visible grid marks 4048ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-cell-selection.test.tsx > connects Edit Select row and column to the actual shared menu and visible grid marks
+Error: expect(element).toHaveAttribute("aria-selected", "false") // element.getAttribute("aria-selected") === "false"
+
+Expected the element to have attribute:
+  aria-selected="false"
+Received:
+  aria-selected="true"
+ ❯ src/sc/browser/presentation/calc-cell-selection.test.tsx:88:69
+     86|     "true",
+     87|   );
+     88|   expect(screen.getByRole("gridcell", { name: "D1", exact: true })).to…
+       |                                                                     ^
+     89|     "aria-selected",
+     90|     "false",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 14 passed (15)
+   Start at  19:11:51
+   Duration  11.43s (transform 5.20s, setup 512ms, import 6.50s, tests 6.05s, environment 2.68s)
+

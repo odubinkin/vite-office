@@ -157,6 +157,24 @@ export class CalcViewController {
       );
     this.Changed();
   }
+  /** Executes original no-argument row selection after accepting the current input. @returns Whether selection was admitted. */
+  MarkRows(): boolean {
+    if (!this.Commit()) return false;
+    new ScTabView(this.viewData).MarkRows();
+    const start = this.viewData.GetMarkData().GetMarkArea().aStart;
+    this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
+    this.Changed();
+    return true;
+  }
+  /** Executes original no-argument column selection after accepting the current input. @returns Whether selection was admitted. */
+  MarkColumns(): boolean {
+    if (!this.Commit()) return false;
+    new ScTabView(this.viewData).MarkColumns();
+    const start = this.viewData.GetMarkData().GetMarkArea().aStart;
+    this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
+    this.Changed();
+    return true;
+  }
   /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
   StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {
     this.shell.EnsureOpen();

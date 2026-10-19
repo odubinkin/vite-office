@@ -1,0 +1,19 @@
+[
+  "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+  "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+  "apps/office/src/sc/sdi/scalc.ts",
+  "apps/office/src/sc/source/ui/view/tabview3.test.ts",
+  "apps/office/src/sc/source/ui/view/tabview3.ts",
+  "docs/program/calc-ui-readiness.md",
+  "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+  "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+  "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json",
+  "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+  "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+  "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+  "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json",
+  "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+  "apps/office/e2e/calc/cell-selection.spec.ts",
+  "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+  "docs/program/registry/calc/capabilities/CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f.json"
+]

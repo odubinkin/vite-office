@@ -1,5 +1,5 @@
 /** @fileoverview ScTabView sheet navigation/selection subset from tabview3.cxx and tabview2.cxx over canonical ScViewData. The current document slice has only visible sheets;hidden-sheet,reference-mode,VCL drawing and window services remain unported. */
-import { ValidTab } from "../../../inc/address";
+import { ScRange, ValidTab } from "../../../inc/address";
 import type { ScViewData } from "../inc/viewdata";
 /** Native sheet navigation/grouping owner for the existing all-visible document slice. */
 export class ScTabView {
@@ -41,6 +41,30 @@ export class ScTabView {
     if (bExtendSelection) rMark.SelectTable(nTab, true);
     else rMark.SelectOneTable(nTab);
     this.aViewData.ResetOldCursor();
+  }
+  /** Expands the simple selection to complete columns using original no-argument MarkColumns rules. Browser notifications stay with the owning controller;reference/window block services remain outside this slice. @returns Nothing. */
+  MarkColumns(): void {
+    const mark = this.aViewData.GetMarkData(),
+      tab = this.aViewData.GetTabNumber();
+    let start: number, end: number;
+    if (mark.IsMarked()) {
+      const range = mark.GetMarkArea();
+      start = range.aStart.Col();
+      end = range.aEnd.Col();
+    } else start = end = this.aViewData.GetCurX();
+    mark.SetMarkArea(new ScRange(start, 0, tab, end, this.aViewData.GetDocument().MaxRow(), tab));
+  }
+  /** Expands the simple selection to complete rows using original no-argument MarkRows rules,without moving the native cursor. @returns Nothing. */
+  MarkRows(): void {
+    const mark = this.aViewData.GetMarkData(),
+      tab = this.aViewData.GetTabNumber();
+    let start: number, end: number;
+    if (mark.IsMarked()) {
+      const range = mark.GetMarkArea();
+      start = range.aStart.Row();
+      end = range.aEnd.Row();
+    } else start = end = this.aViewData.GetCurY();
+    mark.SetMarkArea(new ScRange(0, start, tab, this.aViewData.GetDocument().MaxCol(), end, tab));
   }
   /** Selects every actual sheet without moving the cursor or changing cell marks. @returns Nothing. */
   SelectAllTables(): void {

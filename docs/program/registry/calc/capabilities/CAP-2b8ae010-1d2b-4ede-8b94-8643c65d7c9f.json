@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f",
+    "capabilityId": "CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f",
+    "suite": "calc",
+    "subsystem": "cell-selection",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskZXWXQ8 connects original no-argument SelectRow/SelectColumn slots26548/26547 to normal-grid ScTabView MarkRows/MarkColumns over actual ScViewData/ScMarkData. Existing simple selection endpoints expand to full axis extents;unmarked selection uses current normal cursor. Cursor and selected sheets remain;selection alone changes neither cells,dirty state nor history. Existing browser input owner commits or rejects pending drafts before selection and publishes real changes. Original ShiftSpace selects rows;column selection uses CtrlSpace on nonMac and AltSpace on Mac,only from the actual grid,not nested editors,composition or modal input. Actual shared Writer menus/resources/dispatch remain reused. Native reference-mode,end-block/window callbacks,parameterized Col/Row/Modifier automation and full native UI/core parity remain unverified.",
+      "The existing browser selection anchor now follows original InitBlockMode start independently of the active cursor,so subsequent shift extension starts at the newly selected axis origin. Source window/ref-mode lifecycle and parameterized APIs remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Native normal-grid row and column UI selection",
+    "gaps": [
+      "Only normal simple marks and current scalar input/view owners are supported;native reference-mode/window block lifecycle and parameterized automation remain unverified.",
+      "All remaining available UI actions,especially font/style/formatting integration,remain part of the active goal;this leaf does not certify full UI readiness."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview3.cxx",
+          "marker": "void ScTabView::MarkRows()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh4.cxx",
+          "marker": "case SID_SELECT_COL:"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests/rows.py",
+          "marker": ".uno:SelectRow"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxVoidItem SelectRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+          "marker": "SPACE_SHIFT"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+          "marker": "MarkRows"
+        },
+        {
+          "path": "apps/office/src/sc/sdi/scalc.ts",
+          "marker": "calcCellSelectionCommands"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+          "marker": "executes real axis slots"
+        },
+        {
+          "path": "apps/office/e2e/calc/cell-selection.spec.ts",
+          "marker": "Calc row and column selection"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Current UI delivery priority"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-normal-cell-axis-selection",
+    "scopeLimitations": [
+      "Only normal simple marks and current scalar input/view owners are supported;native reference-mode/window block lifecycle and parameterized automation remain unverified.",
+      "All remaining available UI actions,especially font/style/formatting integration,remain part of the active goal;this leaf does not certify full UI readiness."
+    ]
+  }
+}

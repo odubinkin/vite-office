@@ -1,0 +1,22 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "sc/source/ui/view/tabview3.cxx": "eddbf3185fec9cae35c7d190a3831f4270f3f7571ef6d30a97951dc6b40ecb59",
+    "sc/source/ui/view/tabview2.cxx": "d57641c53aee363fd4c13258f7d61ac616b6f4a54a9b08a3523d0e067db1f03d",
+    "sc/source/ui/view/cellsh4.cxx": "92f1d183b30d6a592cc3abb03091e6e502ae17888ebaea41f6756d6553919b6a",
+    "sc/sdi/scalc.sdi": "7b24b601115cda9adf8a1ed805c3f9a8ff45dc654603b4e8f1d1d79d0619dcc0",
+    "sc/inc/sc.hrc": "2c9a5abad256793695d3e7b2d9e60913ff6e6e011c2c172ee82a415f631bc670",
+    "include/sfx2/sfxsids.hrc": "1bdf55f8f93136e6700c879ef1dfac3ada472ef1a8aeba3b74df945baf323afc",
+    "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu": "c1441749f6a4f52c6d64ff38f0f851a309659d4c2a0bc70d9630c86b5de5471f",
+    "sc/qa/uitest/calc_tests/rows.py": "106db02304e6cd61cb0610419f7dfc7ce1743045ceec29d1cbe8ad422aeaaca2"
+  },
+  "contracts": [
+    "SID_KEYFUNC_START26521plus26column26547and27row26548",
+    "no-argument MarkRows/MarkColumns use current simple mark axis boundaries or normal move cursor when unmarked",
+    "MarkRows/Columns do not call SetCursor;selected sheets survive",
+    "InitBlockMode stores independent block start for subsequent extension",
+    "ShiftSpaceSelectRow;SPACE_MOD1SelectColumnonunxwnt;SPACE_MOD3onmacosx",
+    "browser owns commit/rejection and DOM publication;native ref/block/window/parameterized behavior remains unverified"
+  ],
+  "nativeGUIExecuted": false
+}

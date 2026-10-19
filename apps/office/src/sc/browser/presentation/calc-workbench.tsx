@@ -193,6 +193,19 @@ export function CalcWorkbench({
         .Execute(event.key.toLowerCase() === "y" || event.shiftKey ? ".uno:Redo" : ".uno:Undo");
       return;
     }
+    if ((event.key === " " || event.code === "Space") && !event.metaKey) {
+      const rowSelection = event.shiftKey && !event.ctrlKey && !event.altKey;
+      const columnSelection =
+        !event.shiftKey &&
+        (/Mac/.test(navigator.platform)
+          ? event.altKey && !event.ctrlKey
+          : event.ctrlKey && !event.altKey);
+      if (rowSelection || columnSelection) {
+        event.preventDefault();
+        frame.GetDispatcher().Execute(rowSelection ? ".uno:SelectRow" : ".uno:SelectColumn");
+        return;
+      }
+    }
     const moves: Readonly<Record<string, readonly [number, number]>> = {
       ArrowLeft: [-1, 0],
       ArrowRight: [1, 0],

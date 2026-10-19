@@ -11,7 +11,8 @@
       "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
       "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50",
       "CAP-3315316f-31e4-478e-b359-0cd714f0db20",
-      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256"
+      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256",
+      "CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -25,9 +26,11 @@
         "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
         "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
         "apps/office/e2e/foundation.spec.ts",
-        "apps/office/e2e/shared/launcher.spec.ts"
+        "apps/office/e2e/shared/launcher.spec.ts",
+        "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+        "apps/office/e2e/calc/cell-selection.spec.ts"
       ],
-      "justification": "Renders the current Calc editing slice using shared Writer office header,menus,complete visible source standard toolbar with common icons,popup and file dialogs. Native Sfx state owns availability; no fake unsupported command handlers. Full formatting toolbar and whole Calc UI remain unported. Task98VCB0 mounts the complete pinned native formatobjectbar cell-context resource using actual shared Writer selectors,format glyphs,icons and styles. Source-visible unported formatting commands are disabled through real Sfx state;unknown font name/height remain blank. No fake formatting slots,document attributes or defaults are introduced.",
+      "justification": "Renders the current Calc editing slice using shared Writer office header,menus,complete visible source standard toolbar with common icons,popup and file dialogs. Native Sfx state owns availability; no fake unsupported command handlers. Full formatting toolbar and whole Calc UI remain unported. Task98VCB0 mounts the complete pinned native formatobjectbar cell-context resource using actual shared Writer selectors,format glyphs,icons and styles. Source-visible unported formatting commands are disabled through real Sfx state;unknown font name/height remain blank. No fake formatting slots,document attributes or defaults are introduced. TaskZXWXQ8 connects original no-argument SelectRow/SelectColumn slots26548/26547 to normal-grid ScTabView MarkRows/MarkColumns over actual ScViewData/ScMarkData. Existing simple selection endpoints expand to full axis extents;unmarked selection uses current normal cursor. Cursor and selected sheets remain;selection alone changes neither cells,dirty state nor history. Existing browser input owner commits or rejects pending drafts before selection and publishes real changes. Original ShiftSpace selects rows;column selection uses CtrlSpace on nonMac and AltSpace on Mac,only from the actual grid,not nested editors,composition or modal input. Actual shared Writer menus/resources/dispatch remain reused. Native reference-mode,end-block/window callbacks,parameterized Col/Row/Modifier automation and full native UI/core parity remain unverified. TaskZXWXQ8 also projects the original InitBlockMode start to the existing browser anchor independently of the active cell,so subsequent shift extension uses the selected axis origin. No additional model or native window service is fabricated.",
       "knownViolations": [],
       "localSymbols": [
         "CalcWorkbench"

@@ -1,13 +1,23 @@
 # Calc UI and ODS implementation critical path
 
-Priority correction (task198, explicit user direction): deliver a minimal
-canonical core ready for a separate editable UI task and basic ODS import/export
-before pursuing broad kernel parity. UI implementation is outside this stage.
-Source fidelity applies to supported operations and
-module boundaries; it does not require completing every dependency's entire
-API or the full native constructor graph before UI work can begin. The
-language/font prerequisite ordering below is superseded by the implementation
-order in this document. Task197 normal LanguageTag expansion is deferred.
+## Current UI delivery priority
+
+Explicit user direction (task33):connect every UI action already supported by the current
+Calc kernel,with fonts,styles and formatting as priority. Reuse the actual Writer browser
+components and shared command bindings. New core work must close a concrete visible action
+gap;do not continue a broad codec,language or constructor prerequisite programme first.
+Source fidelity applies to the supported operations and their real model ownership;it does not
+require completing every dependency API or the complete native constructor graph before UI work.
+
+Historical evidence anchor: `Priority correction (task198, explicit user direction)`
+introduced the minimal editable-core/basic-ODS delivery stage. That stage has since produced
+the current workspace;its earlier restriction on UI scheduling is superseded by the active
+UI delivery priority above. Historical capability records retain this anchor as evidence.
+
+The current editable workspace and same-model basic ODS load/save already exist. The historical
+constructor and font-dependency audit below is background,not a mandatory scheduling checklist.
+The complete UI/core goal remains active;neither all generated menu entries nor full formatting
+behavior has been implemented.
 
 Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166 and actual shared string pool by task167 and the eager shared named-style index by task168.
 Reference: local LibreOffice commit
@@ -29,14 +39,27 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 ## Current conclusion
 
-An editable Calc UI and same-model ODS import/export are not ready. This is a
-delivery gap,not a reason to postpone starting their minimal implementation.
-The document/sheet/column chain and scalar/numeric formula operations now
-exist. Local cell references and dependency updates are implemented in task201.
-Formula serialization and basic same-model ODS remain the next delivery gap.
-Full functions/ranges, localization and native constructor services belong to
-later scope unless a supported basic operation directly requires them. No meaningful percentage, task count or delivery date
-follows from the number of ported declarations.
+The current actual frame registers15user-visible generated command identities out of463source
+resource identities. This is an implementation inventory,not a completion percentage. The fresh
+session audit in task33 records all registrations and default enabled states;empty history and a
+single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
+
+| UI action group | Current path | Next concrete work |
+| --- | --- | --- |
+| Scalar/formula input and history | Canonical ScDocument/ScColumn stores,input handler and shared undo actions;editable grid/formula line | Expand only actual supported cell editing operations and preserve same-model undo/ODS |
+| Open,Save As,Export | Existing Calc file workflows over shared browser storage/dialog and same-model basic ODS | Continue Writer browser save/recovery policy;do not restore native recovery UI |
+| Sheet navigation,grouping,Go to Sheet | Real Sfx slots and current ScTabView/ScMarkData;shared menus and tab popup | Connect further sheet actions only to actual document operations |
+| Select Row,Select Column | Task33 connects normal simple range expansion to shared Edit/Select and native grid accelerators | Preserve active cell/group and independent input ownership;parameterized/reference-mode APIs remain pending |
+| Font name and size | Exact shared Writer FontNameSelect/FontSizeSelect already rendered;Calc slots currently unregistered | Connect cell pattern storage/readback,actual attribute application/history/rendering and existing shared bindings for these concrete actions |
+| Cell styles | ScPatternAttr and shared itemset/value owners exist;document/column style application and Calc style-command owner remain missing | Implement the consumed cell-style path,then reuse the shared style-control presentation;do not substitute browser-only style state |
+| Other formatting/menu actions | Native resource composition is generated;unimplemented commands remain disabled | Audit each action against existing document/view operations and implement the available UI paths before broader prerequisite work |
+
+For font/style work,the immediate gap is the consumed cell-attribute path:the current ScColumn
+cell-content chain has no connected cell-pattern attribute storage or document font/style apply/read
+operations,and the active Calc interface has no CharFontName,FontHeight or StyleApply handlers.
+Standalone font/item/value classes do not make those UI actions functional. Conversely,this is not
+permission to finish every default item,codec or native constructor service first:implement only
+the real subset required by each concrete UI action and document unsupported services honestly.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not

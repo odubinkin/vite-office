@@ -77,3 +77,22 @@ it("retains a partial group when entering a selected sheet and collapses an all-
   view.SetTabNo(2);
   expect([...marks.GetSelectedTabs()]).toEqual([2]);
 });
+it("expands normal simple marks to full rows and columns without moving the cursor or changing sheet membership", /** Source no-argument MarkRows/MarkColumns preserve current axis endpoints and selected sheet owners. @returns Nothing. */ () => {
+  const { doc, data, view, marks } = fixture();
+  data.SetCurX(4);
+  data.SetCurY(7);
+  marks.SelectTable(1, true);
+  view.MarkRows();
+  expect(marks.GetMarkArea()).toEqual(new ScRange(0, 7, 0, doc.MaxCol(), 7, 0));
+  marks.ResetMark();
+  view.MarkColumns();
+  expect(marks.GetMarkArea()).toEqual(new ScRange(4, 0, 0, 4, doc.MaxRow(), 0));
+  marks.SetMarkArea(new ScRange(2, 3, 0, 6, 9, 0));
+  view.MarkRows();
+  expect(marks.GetMarkArea()).toEqual(new ScRange(0, 3, 0, doc.MaxCol(), 9, 0));
+  marks.SetMarkArea(new ScRange(2, 3, 0, 6, 9, 0));
+  view.MarkColumns();
+  expect(marks.GetMarkArea()).toEqual(new ScRange(2, 0, 0, 6, doc.MaxRow(), 0));
+  expect([data.GetCurX(), data.GetCurY()]).toEqual([4, 7]);
+  expect([...marks.GetSelectedTabs()]).toEqual([0, 1]);
+});

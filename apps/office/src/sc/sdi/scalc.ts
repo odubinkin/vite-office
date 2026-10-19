@@ -10,6 +10,8 @@ export interface CalcCommandTarget {
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
   SetInputMode(): boolean;
+  MarkRows(): boolean;
+  MarkColumns(): boolean;
   SelectNextTab(direction: number, extend?: boolean): void;
   SelectAllTables(): void;
   DeselectAllTables(): void;
@@ -78,6 +80,11 @@ export const calcSheetSelectionCommands = [
   { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
   { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
 ] as const;
+/** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
+export const calcCellSelectionCommands = [
+  { id: ".uno:SelectColumn", slotId: 26547, label: "Select Column" },
+  { id: ".uno:SelectRow", slotId: 26548, label: "Select Row" },
+] as const;
 /** Native asynchronous Go to Sheet slot and public Nr contract. */
 export const calcGoToSheetCommand = {
   id: ".uno:JumpToTable",
@@ -97,6 +104,7 @@ export const calcUserCommands = [
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
+  ...calcCellSelectionCommands,
   calcGoToSheetCommand,
 ].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
@@ -104,15 +112,17 @@ export const calcUserCommands = [
     id: item.id,
     label: item.label,
     capabilityId:
-      item.id === ".uno:JumpToTable"
-        ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-        : "direction" in item ||
-            item.id === ".uno:TableSelectAll" ||
-            item.id === ".uno:TableDeselectAll"
-          ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-          : "kind" in item
-            ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-            : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+        ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+        : item.id === ".uno:JumpToTable"
+          ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+          : "direction" in item ||
+              item.id === ".uno:TableSelectAll" ||
+              item.id === ".uno:TableDeselectAll"
+            ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+            : "kind" in item
+              ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+              : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */
@@ -180,6 +190,18 @@ export function createCalcInterface(): SfxInterface<CalcCommandTarget> {
             resource.id === ".uno:TableSelectAll"
               ? target.SelectAllTables()
               : target.DeselectAllTables(),
+      }),
+    ),
+    ...calcCellSelectionCommands.map(
+      /** Binds original cell-shell selection slots to the actual current view and mark owner. @param resource - Native slot. @returns Slot definition. */
+      (resource) => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        execute:
+          /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @returns Whether admitted. */
+          (target: CalcCommandTarget) =>
+            resource.id === ".uno:SelectRow" ? target.MarkRows() : target.MarkColumns(),
       }),
     ),
     {
