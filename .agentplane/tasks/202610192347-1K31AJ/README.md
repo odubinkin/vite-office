@@ -4,7 +4,7 @@ title: "Implement Calc overline UI with canonical shared attribute toggle and OD
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-19T23:58:45.015Z"
+  updated_by: "CODER"
+  note: "Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T23:58:45.607Z"
+  updated_by: "EVALUATOR"
+  note: "Source-shaped Overline UI and shared native toggle value preparation satisfy approved bounded task42 on implementation3cd98e2f9edd;acceptance evidence is complete and source-current."
+  evaluated_sha: "3cd98e2f9edd209159f16585ef63301f7a94feea"
+  blueprint_digest: "1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a"
+  evidence_refs:
+    - ".agentplane/tasks/202610192347-1K31AJ/README.md"
+    - ".agentplane/tasks/202610192347-1K31AJ/quality/20261019-235845607-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/quality/20261019-235845607-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610192347-1K31AJ/quality/20261019-235845607-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610192347-1K31AJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/evidence/source-audit.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/evidence/calc-proof.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/evidence/shared-proof.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/evidence/complete-owner-proof.json"
+    - ".agentplane/tasks/202610192347-1K31AJ/evidence/browser-proof.json"
+  findings:
+    - "Native11568/105 slot/default and source bool/enum/default/INVALID factory decisions are preserved over real itemsets. Source CALC211 mixed line-color reset is documented and tested;typed uniform items retain metadata."
+    - "Calc128files390cases and related shared/Writer12files58cases pass;raw S/B/F/L100 for all7changed executable owners and Calc,current hashes. No tests,coverage thresholds or exclusions weakened."
+    - "Fresh rebuilt Calc6case browser suite plus8shared Writer/Calc menu-pointer cases pass at1280/390;actual menu checked state,line painting,Undo/Redo,primary ODS reopen and DOM-free Worker metadata verified. Initial screenshots and their initial-build scope are explicit."
+    - "Initial failures are reconciled:source precondition removed a redundant consumer guard,typing/JSDoc corrected,disabled popup sample moved to genuinely unsupported Strikethrough with all assertions retained.27non-task paths stay within approved50;static/source/resource/inventory/routing checks pass."
 commit: null
 comments:
   -
@@ -35,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native Overline UI and source shared toggle preparation with actual selection/history/ODS owners;keep approved calc scope and raw100 validation."
+  -
+    type: "verify"
+    at: "2026-10-19T23:58:45.015Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50."
 doc_version: 3
-doc_updated_at: "2026-10-19T23:58:14.295Z"
+doc_updated_at: "2026-10-19T23:58:45.071Z"
 doc_updated_by: "CODER"
 description: "Task42 of the authorized Calc UI goal after verified task41. Implement native Overline11568/Which105 through shared source toggle semantics,actual font items,selection/history and existing Writer menu components;preserve complete line metadata in native ODS and browser painting. Only calc checkout/branch;Calc100 plus related/current-owner100 checks,next full checkpoint50."
 sections:
@@ -59,6 +88,39 @@ sections:
     Result: pass,exit0 for every listed check. Evidence: retained task42-* logs,compressed inventory/scoped parity. Scope:source/resource/static checks;925runtime owners791mapped/115browser/19infrastructure,0semantic violations;Calc463commands/11menus/17policy dispositions;Writer resource1file2cases and matched tooling1file3cases. No source-tree test file matched the optional path pattern and no nonexistent tests are counted. Final changed shared browser fixture separately passes ESLint/Prettier after its label correction.
 
     No mandatory checks skipped. Source-audit.json contains pinned native hashes/line markers and honest consumed-scope boundaries. CALC211 documents original mixed-factory line-color reset. Broad parity flags remain false. No full all-app repeat after checkpoint40;next checkpoint50. Final implementation/quality/closure identifiers are recorded through lifecycle commands.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T23:58:45.015Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:58:14.295Z, excerpt_hash=sha256:e467cb2edf2b51e376bcccd0f4aa07e5527f0b0e38ec54576e55145f916f687d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192347-1K31AJ/blueprint/resolved-snapshot.json
+    - old_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+    - current_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192347-1K31AJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610192347-1K31AJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task42 implementation commits if required;retain task source/evidence and unrelated task state. User owns branch integration."
   Findings: |-
     Task42 follows existing user authorization in vite-office-calc branch calc only. Prior goal turn was progress:task41 implementation7d39aed21bac/closure0b3351f11a50 is authoritative,verified and clean. Unrelated C9TN6M/X6VV8G/Z7BW2Y remain untouched.
@@ -106,6 +168,39 @@ Command: npm run typecheck; npx eslint . --max-warnings 0 --ignore-pattern 'outp
 Result: pass,exit0 for every listed check. Evidence: retained task42-* logs,compressed inventory/scoped parity. Scope:source/resource/static checks;925runtime owners791mapped/115browser/19infrastructure,0semantic violations;Calc463commands/11menus/17policy dispositions;Writer resource1file2cases and matched tooling1file3cases. No source-tree test file matched the optional path pattern and no nonexistent tests are counted. Final changed shared browser fixture separately passes ESLint/Prettier after its label correction.
 
 No mandatory checks skipped. Source-audit.json contains pinned native hashes/line markers and honest consumed-scope boundaries. CALC211 documents original mixed-factory line-color reset. Broad parity flags remain false. No full all-app repeat after checkpoint40;next checkpoint50. Final implementation/quality/closure identifiers are recorded through lifecycle commands.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T23:58:45.015Z — VERIFY — ok
+
+By: CODER
+
+Note: Implementation3cd98e2f9edd accepted:128files390Calc cases and12files58related shared/Writer cases pass;raw S/B/F/L100 for Calc and all7changed executable owners,current hashes.14final browser cases pass;all declared static/source/resource/inventory gates pass. No full suite before checkpoint50.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:58:14.295Z, excerpt_hash=sha256:e467cb2edf2b51e376bcccd0f4aa07e5527f0b0e38ec54576e55145f916f687d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192347-1K31AJ/blueprint/resolved-snapshot.json
+- old_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+- current_digest: 1454a7cbfbb29c48f5255beeb425c9a9b015a79e649aac55fda0080f43d4c94a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192347-1K31AJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610192347-1K31AJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
