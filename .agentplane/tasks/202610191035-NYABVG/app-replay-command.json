@@ -1,0 +1,29 @@
+{
+  "command": "npm",
+  "argv": [
+    "run",
+    "test:coverage",
+    "--",
+    "--coverage.reportOnFailure",
+    "--coverage.reportsDirectory=coverage/task30-replay",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile=../../.agentplane/tasks/202610191035-NYABVG/app-replay-results.json",
+    "src/framework/browser/app/desktop.test.tsx",
+    "src/sw/browser/editor/native-cell-list-level.test.tsx",
+    "src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+    "src/sw/browser/editor/native-independent-table-selection.test.tsx",
+    "src/sw/browser/editor/native-list-context.test.tsx",
+    "src/sw/browser/editor/native-none-numbering.test.tsx",
+    "src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+    "src/sw/browser/editor/native-row-frame-size.test.tsx",
+    "src/sw/browser/editor/native-table-column-commands.test.tsx",
+    "src/sw/browser/editor/native-table-row-commands.test.tsx",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx",
+    "src/sw/browser/editor/native-table-selection.test.tsx"
+  ],
+  "cwd": "apps/office",
+  "exitCode": 1,
+  "signal": null,
+  "note": "Exact affected-file replay with unchanged full-app100thresholds. Its subset profile is combined only with verified same-source/same-map actual full-run counters;no threshold is weakened."
+}

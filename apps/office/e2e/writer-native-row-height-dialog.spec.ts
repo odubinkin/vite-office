@@ -1,5 +1,6 @@
 /** @fileoverview Checks the source-shaped height dialog and row mode history in real Chromium. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem, openBrowserMenu } from "../test-support/menu-pointer-e2e";
 import { SwFormatFrameSize, SwFrameSize } from "../src/sw/inc/fmtfsize";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -38,8 +39,8 @@ for (const width of [1280, 390])
       await editor.click({ position: { x: 8, y: 8 } });
       /** Opens the source Table > Size > Row Height command. @returns Completion. */
       async function open(): Promise<void> {
-        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
-        await page.getByRole("menuitem", { name: "Size", exact: true }).hover();
+        await openBrowserMenu(page, "Table");
+        await hoverBrowserMenuItem(page, page.getByRole("menuitem", { name: "Size", exact: true }));
         await page.getByRole("menuitem", { name: "Row Height…", exact: true }).click();
       }
       await open();

@@ -1,0 +1,35 @@
+Exact original full-run output retained in .agentplane/tasks/202610191035-NYABVG/app-full.log.raw.json with gzip/base64,byte length andSHA256.
+ FAIL  |writer| src/framework/browser/app/desktop.test.tsx > App > formats same-paragraph text through Writer toolbar, Format Text, shortcuts, pending typing, history, and Copy
+ FAIL  |writer| src/framework/browser/app/desktop.test.tsx > App > does not put structural paragraph actions in the document page
+ FAIL  |writer| src/framework/browser/app/desktop.test.tsx > App > applies and toggles Writer list commands from their pinned toolbar and Format submenu
+ FAIL  |writer| src/sw/browser/editor/native-cell-list-level.test.tsx > native cell list level UI > enables and renders demote,promote and indent on the actual cell with Undo/Redo
+ FAIL  |writer| src/sw/browser/editor/native-independent-column-insertion.test.tsx > mounted independent column menu behind=false
+ FAIL  |writer| src/sw/browser/editor/native-independent-column-insertion.test.tsx > mounted independent column menu behind=true
+ FAIL  |writer| src/sw/browser/editor/native-independent-table-selection.test.tsx > mounted physical column selection paints actual cells and keeps formatting undo native
+ FAIL  |writer| src/sw/browser/editor/native-list-context.test.tsx > native list context UI > dispatches actual level menus through list context and preserves text with native history
+ FAIL  |writer| src/sw/browser/editor/native-list-context.test.tsx > native list context UI > uses captured DOM point rather than all-range availability boundary=false
+ FAIL  |writer| src/sw/browser/editor/native-list-context.test.tsx > native list context UI > uses captured DOM point rather than all-range availability boundary=true
+ FAIL  |writer| src/sw/browser/editor/native-list-context.test.tsx > native list context UI > keeps no-label numbering outside native list shell context
+ FAIL  |writer| src/sw/browser/editor/native-none-numbering.test.tsx > renders imported NONE as a list with an empty marker and native inactive level commands
+ FAIL  |writer| src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=false
+ FAIL  |writer| src/sw/browser/editor/native-numeric-row-insertion.test.tsx > mounted numeric row menu behind=true
+ FAIL  |writer| src/sw/browser/editor/native-row-frame-size.test.tsx > mounted fixed row clips original editable text while minimum row keeps natural content
+ FAIL  |writer| src/sw/browser/editor/native-table-column-commands.test.tsx > renders native column menu geometry behind=false
+ FAIL  |writer| src/sw/browser/editor/native-table-column-commands.test.tsx > renders native column menu geometry behind=true
+ FAIL  |writer| src/sw/browser/editor/native-table-row-commands.test.tsx > renders native selected row insertion behind=false
+ FAIL  |writer| src/sw/browser/editor/native-table-row-commands.test.tsx > renders native selected row insertion behind=true
+ FAIL  |writer| src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Cell
+ FAIL  |writer| src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Row
+ FAIL  |writer| src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Column
+ FAIL  |writer| src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Table
+ FAIL  |writer| src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu standard reset selects current column after a wider row selection
+ FAIL  |writer| src/sw/browser/editor/native-table-selection.test.tsx > table properties use native selected rows and preserve other row geometry
+ FAIL  |writer| src/sw/browser/editor/native-table-selection.test.tsx > row surface delegates to native selection and caret properties apply to its current row
+ Test Files  12 failed | 996 passed (1008)
+      Tests  26 failed | 17062 passed (17088)
+   Duration  2077.94s (transform 190.62s, setup 188.64s, import 1343.51s, tests 1006.93s, environment 967.35s)
+Statements   : 100% ( 47447/47447 )
+Branches     : 99.99% ( 30583/30584 )
+Functions    : 100% ( 9478/9478 )
+Lines        : 100% ( 43116/43116 )
+ERROR: Coverage for branches (99.99%) does not meet global threshold (100%)

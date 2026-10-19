@@ -1,0 +1,96 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+      Coverage enabled with v8
+
+ ❯ scripts/libreoffice-inventory/registry-validation.test.ts (6 tests | 1 failed) 66118ms
+     × checks all and app scopes with complete global discovery and shared references 60037ms
+ ❯ scripts/libreoffice-inventory/cppunit-registration-cli.test.ts (2 tests | 1 failed) 56720ms
+     × runs filesystem readers and writers with owned Git and source fixtures 56694ms
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts (7 tests | 1 failed) 36387ms
+     × keeps the Reader's XML stream byte ceiling before inventory parsing 35279ms
+ ❯ scripts/libreoffice-inventory/parity-mapping-cli.test.ts (3 tests | 2 failed) 35646ms
+     × composes the Writer mapping report with owned upstream marker evidence 30037ms
+     × closes the umbrella ODT compatibility record with pinned fixture evidence 5558ms
+ ❯ scripts/libreoffice-inventory/registry-storage.test.ts (6 tests | 1 failed) 5134ms
+     × retains the exact historical projections and reads them without generated files 5035ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI > runs filesystem readers and writers with owned Git and source fixtures
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineCppunitRegistrationCliTests scripts/libreoffice-inventory/cppunit-registration-cli.test.ts:71:3
+     69|   });
+     70|
+     71|   it("runs filesystem readers and writers with owned Git and source fi…
+       |   ^
+     72|    * Verifies fixture Git executor, physical-source reader, and UTF-8 …
+     73|    *
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  scripts/libreoffice-inventory/odt-import-diagnostics.test.ts > privacy-safe ODT import diagnostics > keeps the Reader's XML stream byte ceiling before inventory parsing
+Error: Test timed out in 20000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts:211:3
+    209|   });
+    210|
+    211|   it("keeps the Reader's XML stream byte ceiling before inventory pars…
+       |   ^
+    212|     const oversized = await replaceFixtureEntry(
+    213|       "content.xml",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI > composes the Writer mapping report with owned upstream marker evidence
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineParityMappingCliTests scripts/libreoffice-inventory/parity-mapping-cli.test.ts:75:3
+     73|   });
+     74|
+     75|   it("composes the Writer mapping report with owned upstream marker ev…
+       |   ^
+     76|    * Verifies CLI report composition and local runtime validation with…
+     77|    *
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI > closes the umbrella ODT compatibility record with pinned fixture evidence
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ defineParityMappingCliTests scripts/libreoffice-inventory/parity-mapping-cli.test.ts:182:3
+    180|   }, 30_000);
+    181|
+    182|   it("closes the umbrella ODT compatibility record with pinned fixture…
+       |   ^
+    183|    * Prevents a package checksum assertion from standing in for the co…
+    184|    * @returns A promise resolving after the production manifest is ins…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  scripts/libreoffice-inventory/registry-storage.test.ts > canonical registry storage > retains the exact historical projections and reads them without generated files
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ scripts/libreoffice-inventory/registry-storage.test.ts:272:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  scripts/libreoffice-inventory/registry-validation.test.ts > global and scoped registry gates > checks all and app scopes with complete global discovery and shared references
+Error: Test timed out in 60000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ scripts/libreoffice-inventory/registry-validation.test.ts:340:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  5 failed | 33 passed (38)
+      Tests  6 failed | 117 passed (123)
+   Start at  17:51:18
+   Duration  255.44s (transform 9.08s, setup 0ms, import 20.31s, tests 212.97s, environment 31ms)
+

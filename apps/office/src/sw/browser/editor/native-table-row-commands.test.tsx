@@ -34,7 +34,7 @@ for (const behind of [false, true])
         doc.GetUndoManager().Clear();
         render(<WriterWorkbench isActive view={session.view} />);
         fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-        fireEvent.mouseEnter(
+        fireEvent.click(
           within(screen.getByRole("menu", { name: "Table menu" })).getByRole("menuitem", {
             name: "Insert",
           }),

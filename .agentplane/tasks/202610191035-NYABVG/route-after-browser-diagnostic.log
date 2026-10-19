@@ -1,0 +1,43 @@
+task next-action: 202610191035-NYABVG
+phase: direct_execution_pending_artifact_persistence
+authoritative_checkout: current_checkout
+authoritative_checkout_path: /Users/odubinkin/Projects/vite-office-calc
+mutation_path_hint: /Users/odubinkin/Projects/vite-office-calc
+safe_to_mutate: true
+operator_action: run_exact_argv
+can_execute_now: true
+source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+repeat_policy: allowed=true recompute=agentplane task next-action 202610191035-NYABVG --explain
+executor_context: executor=current_agent instruction=current_agent_executes_safe_command
+executor_warning: current coding agent must run safe_command itself
+fallback: none
+code: persist_direct_task_artifacts
+summary: persist the canonical task subtree before starting runner work so workspace recreation cannot discard it
+requires_approval: false
+next_command: agentplane commit 202610191035-NYABVG -m "🧩 NYABVG task: persist canonical task artifacts" --allow-tasks
+safe_command: agentplane commit 202610191035-NYABVG -m 🧩 NYABVG task: persist canonical task artifacts --allow-tasks
+diagnostic_command: none
+action_kind: local_command
+recommended_role: CODER
+must_run_from: /Users/odubinkin/Projects/vite-office-calc
+exact_argv: agentplane commit 202610191035-NYABVG -m 🧩 NYABVG task: persist canonical task artifacts --allow-tasks
+return_control_when: after the exact command exits; recompute task next-action before any further step
+stale_state_check: agentplane task next-action 202610191035-NYABVG --explain
+evidence_missing: task_artifact_persistence_commit
+requires_provider_action: false
+human_provider_action: none
+primary_blocker: untracked_task_artifacts: canonical task artifacts are not persisted in git (.agentplane/tasks/202610191035-NYABVG/app-full.log, .agentplane/tasks/202610191035-NYABVG/browser-migration-diagnostic.log, .agentplane/tasks/202610191035-NYABVG/build.log +14 more)
+workflow: direct
+checkout_role: unknown
+branch: calc
+base_branch: unknown
+route_requires_approval: false
+gateway_mutation_policy: true
+effective_mutation_approval: false
+runtime_approval: plan=true network=true verify=true
+blocker: untracked_task_artifacts: canonical task artifacts are not persisted in git (.agentplane/tasks/202610191035-NYABVG/app-full.log, .agentplane/tasks/202610191035-NYABVG/browser-migration-diagnostic.log, .agentplane/tasks/202610191035-NYABVG/build.log +14 more)
+must_not: do not reconstruct branch/worktree/PR state from prose
+must_not: do not widen lifecycle authority beyond this packet
+must_not: do not mutate outside mutationPathHint
+must_not: do not execute raw shell when exactArgv is null
+must_not: do not continue after a non-zero command exit without recomputing the route

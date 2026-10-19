@@ -1,5 +1,6 @@
 /** @fileoverview Checks actual Writer modal geometry, shared styling and reachable actions. */
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
+import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
 // Chromium's headless default hides scrollbars, which would invalidate visual affordance evidence.
 test.use({ launchOptions: { ignoreDefaultArgs: ["--hide-scrollbars"] } });
@@ -11,7 +12,7 @@ async function openCommand(
   command: string,
   submenu?: string,
 ): Promise<void> {
-  await page.getByRole("menuitem", { name: root, exact: true }).click();
+  await openBrowserMenu(page, root);
   if (submenu !== undefined)
     await page.getByRole("menuitem", { name: submenu, exact: true }).press("ArrowRight");
   await page.getByRole("menuitem", { name: command, exact: true }).click();

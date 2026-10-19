@@ -1,5 +1,6 @@
 /** @fileoverview Checks equal, compact insets for Writer command and submenu labels. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem } from "../test-support/menu-pointer-e2e";
 
 test("menu commands and submenus align their labels", /** Checks rendered label positions and submenu interaction. @param fixtures - Browser fixtures. @returns Nothing. */ async ({
   page,
@@ -15,7 +16,7 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
   const rowX = (await paragraph.boundingBox())?.x ?? Number.NaN;
   expect(commandX).toBe(submenuX);
   expect(commandX - rowX).toBeLessThanOrEqual(20);
-  await lists.hover();
+  await hoverBrowserMenuItem(page, lists);
   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
   await page.getByRole("menuitem", { name: "View" }).hover();
   const sidebarX =

@@ -40,7 +40,7 @@ for (const behind of [false, true])
         const element = screen.getByRole("table", { name: "Table1" }),
           width = element.style.width;
         fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-        fireEvent.mouseEnter(
+        fireEvent.click(
           within(screen.getByRole("menu", { name: "Table menu" })).getByRole("menuitem", {
             name: "Insert",
           }),

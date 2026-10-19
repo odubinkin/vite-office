@@ -1,0 +1,3905 @@
+{
+  "selected": 388,
+  "originalPassed": 387,
+  "originalFailed": 1,
+  "replayedPassed": 1,
+  "skipped": 0,
+  "flaky": 0,
+  "allCasesAccounted": true,
+  "oneCleanFullInvocation": false,
+  "repair": "Only legacy dialog test command ingress now opens hidden Tools via actual More;geometry,scroll/accessibility assertions and90s timeout unchanged.",
+  "runtimeDistUnchanged": true,
+  "distFileCount": 137,
+  "replayedCase": {
+    "key": "writer|writer-dialog-layout.spec.ts|Writer dialog layout 390x600",
+    "file": "writer-dialog-layout.spec.ts",
+    "title": "Writer dialog layout 390x600",
+    "project": "writer",
+    "status": "expected",
+    "results": [
+      "passed"
+    ]
+  },
+  "originalCases": [
+    {
+      "key": "writer|foundation.spec.ts|Writer menu keyboard navigation and accessible application chrome",
+      "file": "foundation.spec.ts",
+      "title": "Writer menu keyboard navigation and accessible application chrome",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-bullet-font-roundtrip.spec.ts|native bullet font ODT body cell width=1280",
+      "file": "native-bullet-font-roundtrip.spec.ts",
+      "title": "native bullet font ODT body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-bullet-font-roundtrip.spec.ts|native bullet font ODT body cell width=390",
+      "file": "native-bullet-font-roundtrip.spec.ts",
+      "title": "native bullet font ODT body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-empty-bullet.spec.ts|native zero bullet body cell width=1280",
+      "file": "native-empty-bullet.spec.ts",
+      "title": "native zero bullet body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-empty-bullet.spec.ts|native zero bullet body cell width=390",
+      "file": "native-empty-bullet.spec.ts",
+      "title": "native zero bullet body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-label-affinity.spec.ts|native before-label caret and input body cell width=1280",
+      "file": "native-label-affinity.spec.ts",
+      "title": "native before-label caret and input body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-label-affinity.spec.ts|native before-label caret and input body cell width=390",
+      "file": "native-label-affinity.spec.ts",
+      "title": "native before-label caret and input body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-legacy-bullet-symbol.spec.ts|native legacy bullet symbols body cell width=1280",
+      "file": "native-legacy-bullet-symbol.spec.ts",
+      "title": "native legacy bullet symbols body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-legacy-bullet-symbol.spec.ts|native legacy bullet symbols body cell width=390",
+      "file": "native-legacy-bullet-symbol.spec.ts",
+      "title": "native legacy bullet symbols body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-line-margin.spec.ts|native visual-line Home End and Shift body cell width=1280",
+      "file": "native-line-margin.spec.ts",
+      "title": "native visual-line Home End and Shift body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-line-margin.spec.ts|native visual-line Home End and Shift body cell width=390",
+      "file": "native-line-margin.spec.ts",
+      "title": "native visual-line Home End and Shift body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-marked-list-paint.spec.ts|native marked label paint body cell width=1280",
+      "file": "native-marked-list-paint.spec.ts",
+      "title": "native marked label paint body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-marked-list-paint.spec.ts|native marked label paint body cell width=390",
+      "file": "native-marked-list-paint.spec.ts",
+      "title": "native marked label paint body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-numbering-font.spec.ts|native numbering font body cell width=1280",
+      "file": "native-numbering-font.spec.ts",
+      "title": "native numbering font body cell width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-numbering-font.spec.ts|native numbering font body cell width=390",
+      "file": "native-numbering-font.spec.ts",
+      "title": "native numbering font body cell width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-table-name.spec.ts|native table name validation unique allocation and history width=1280",
+      "file": "native-table-name.spec.ts",
+      "title": "native table name validation unique allocation and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|native-table-name.spec.ts|native table name validation unique allocation and history width=390",
+      "file": "native-table-name.spec.ts",
+      "title": "native table name validation unique allocation and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-accelerator-ownership.spec.ts|Writer consumed accelerator ownership at width 1280",
+      "file": "writer-accelerator-ownership.spec.ts",
+      "title": "Writer consumed accelerator ownership at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-accelerator-ownership.spec.ts|Writer consumed accelerator ownership at width 390",
+      "file": "writer-accelerator-ownership.spec.ts",
+      "title": "Writer consumed accelerator ownership at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-auto-first-layout.spec.ts|Writer automatic body layout width=1280 disregard=true",
+      "file": "writer-auto-first-layout.spec.ts",
+      "title": "Writer automatic body layout width=1280 disregard=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-auto-first-layout.spec.ts|Writer automatic body layout width=1280 disregard=false",
+      "file": "writer-auto-first-layout.spec.ts",
+      "title": "Writer automatic body layout width=1280 disregard=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-auto-first-layout.spec.ts|Writer automatic body layout width=390 disregard=true",
+      "file": "writer-auto-first-layout.spec.ts",
+      "title": "Writer automatic body layout width=390 disregard=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-auto-first-layout.spec.ts|Writer automatic body layout width=390 disregard=false",
+      "file": "writer-auto-first-layout.spec.ts",
+      "title": "Writer automatic body layout width=390 disregard=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-list-backspace.spec.ts|Writer Backspace hides a cell marker and ShiftBackspace restores native numbering",
+      "file": "writer-cell-list-backspace.spec.ts",
+      "title": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-list-continue.spec.ts|Writer Continue Numbering joins a plain table cell to the preceding list",
+      "file": "writer-cell-list-continue.spec.ts",
+      "title": "Writer Continue Numbering joins a plain table cell to the preceding list",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-list-continue.spec.ts|Writer Continue Numbering joins a bullet table cell to the preceding list",
+      "file": "writer-cell-list-continue.spec.ts",
+      "title": "Writer Continue Numbering joins a bullet table cell to the preceding list",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-list-enter.spec.ts|Writer Enter ends an empty cell list without inserting a paragraph",
+      "file": "writer-cell-list-enter.spec.ts",
+      "title": "Writer Enter ends an empty cell list without inserting a paragraph",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-list-level.spec.ts|Writer cell list levels use native commands and survive history and ODT reopen",
+      "file": "writer-cell-list-level.spec.ts",
+      "title": "Writer cell list levels use native commands and survive history and ODT reopen",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cell-paragraph-format.spec.ts|Writer cell paragraph alignment and native list display survive history and ODT reopen",
+      "file": "writer-cell-paragraph-format.spec.ts",
+      "title": "Writer cell paragraph alignment and native list display survive history and ODT reopen",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-character-formatting.spec.ts|Writer direct character formatting",
+      "file": "writer-character-formatting.spec.ts",
+      "title": "Writer direct character formatting",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-clipboard.spec.ts|copies visible formatted Writer content through the native browser copy event",
+      "file": "writer-clipboard.spec.ts",
+      "title": "copies visible formatted Writer content through the native browser copy event",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-clipboard.spec.ts|Writer list clipboard",
+      "file": "writer-clipboard.spec.ts",
+      "title": "Writer list clipboard",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-collapsing-border-arbitration.spec.ts|native shared-border winner and mode history width=1280",
+      "file": "writer-collapsing-border-arbitration.spec.ts",
+      "title": "native shared-border winner and mode history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-collapsing-border-arbitration.spec.ts|native shared-border winner and mode history width=390",
+      "file": "writer-collapsing-border-arbitration.spec.ts",
+      "title": "native shared-border winner and mode history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-counted-list-layout.spec.ts|Writer counted axes stay independent through paragraph history cell=false",
+      "file": "writer-counted-list-layout.spec.ts",
+      "title": "Writer counted axes stay independent through paragraph history cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-counted-list-layout.spec.ts|Writer counted axes stay independent through paragraph history cell=true",
+      "file": "writer-counted-list-layout.spec.ts",
+      "title": "Writer counted axes stay independent through paragraph history cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cut-paste.spec.ts|Writer Cut and Paste",
+      "file": "writer-cut-paste.spec.ts",
+      "title": "Writer Cut and Paste",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-cut-paste.spec.ts|Writer immediate spaces and structured list Paste",
+      "file": "writer-cut-paste.spec.ts",
+      "title": "Writer immediate spaces and structured list Paste",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-dialog-layout.spec.ts|Writer dialog layout 1280x800",
+      "file": "writer-dialog-layout.spec.ts",
+      "title": "Writer dialog layout 1280x800",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-dialog-layout.spec.ts|Writer dialog layout 390x600",
+      "file": "writer-dialog-layout.spec.ts",
+      "title": "Writer dialog layout 390x600",
+      "project": "writer",
+      "status": "unexpected",
+      "results": [
+        "timedOut"
+      ]
+    },
+    {
+      "key": "writer|writer-dialog-layout.spec.ts|Writer dialog layout 640x360",
+      "file": "writer-dialog-layout.spec.ts",
+      "title": "Writer dialog layout 640x360",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-key.spec.ts|Ctrl-F6 from the Writer toolbar focuses the document and retains editing",
+      "file": "writer-document-key.spec.ts",
+      "title": "Ctrl-F6 from the Writer toolbar focuses the document and retains editing",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-key.spec.ts|Ctrl-F6 from the Writer root focuses the document and retains editing",
+      "file": "writer-document-key.spec.ts",
+      "title": "Ctrl-F6 from the Writer root focuses the document and retains editing",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-key.spec.ts|Ctrl-F6 from the Writer child focuses the document and retains editing",
+      "file": "writer-document-key.spec.ts",
+      "title": "Ctrl-F6 from the Writer child focuses the document and retains editing",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-key.spec.ts|Ctrl-F6 retains the Writer Hyperlink modal's input focus",
+      "file": "writer-document-key.spec.ts",
+      "title": "Ctrl-F6 retains the Writer Hyperlink modal's input focus",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-selection.spec.ts|supports document-wide selection through Ctrl/Cmd+A and pointer dragging",
+      "file": "writer-document-selection.spec.ts",
+      "title": "supports document-wide selection through Ctrl/Cmd+A and pointer dragging",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-document-selection.spec.ts|places the caret at the first clicked position in a different paragraph",
+      "file": "writer-document-selection.spec.ts",
+      "title": "places the caret at the first clicked position in a different paragraph",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-headline-selection.spec.ts|Writer native table range excludes repeated headline selection width=1280",
+      "file": "writer-headline-selection.spec.ts",
+      "title": "Writer native table range excludes repeated headline selection width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-headline-selection.spec.ts|Writer native table range excludes repeated headline selection width=390",
+      "file": "writer-headline-selection.spec.ts",
+      "title": "Writer native table range excludes repeated headline selection width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-headline-selection.spec.ts|Writer native cross-cell bold formats the selected original rectangle and all headline text copies",
+      "file": "writer-headline-selection.spec.ts",
+      "title": "Writer native cross-cell bold formats the selected original rectangle and all headline text copies",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-hyperlinks.spec.ts|Writer creates, edits, and round-trips hyperlinks",
+      "file": "writer-hyperlinks.spec.ts",
+      "title": "Writer creates, edits, and round-trips hyperlinks",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-imported-table-lists.spec.ts|Writer imported restarted table row Add to List preserves both starts and atomic selection",
+      "file": "writer-imported-table-lists.spec.ts",
+      "title": "Writer imported restarted table row Add to List preserves both starts and atomic selection",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-imported-table-lists.spec.ts|Writer imported table list Enter edits native cell paragraphs and history",
+      "file": "writer-imported-table-lists.spec.ts",
+      "title": "Writer imported table list Enter edits native cell paragraphs and history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-insert-table-dialog.spec.ts|native Insert Table inputs width=1280",
+      "file": "writer-insert-table-dialog.spec.ts",
+      "title": "native Insert Table inputs width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-insert-table-dialog.spec.ts|native Insert Table inputs width=390",
+      "file": "writer-insert-table-dialog.spec.ts",
+      "title": "native Insert Table inputs width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-layout-ratios.spec.ts|Writer keeps measured page breaks across device pixel ratios",
+      "file": "writer-layout-ratios.spec.ts",
+      "title": "Writer keeps measured page breaks across device pixel ratios",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-list-label-drag.spec.ts|Writer native label document ruler width=1280",
+      "file": "writer-list-label-drag.spec.ts",
+      "title": "Writer native label document ruler width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-list-label-drag.spec.ts|Writer native label document ruler width=390",
+      "file": "writer-list-label-drag.spec.ts",
+      "title": "Writer native label document ruler width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-lists.spec.ts|Writer bullets and numbering",
+      "file": "writer-lists.spec.ts",
+      "title": "Writer bullets and numbering",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-manual-first-layout.spec.ts|Writer manual signed-short layout width=1280 raw=65537",
+      "file": "writer-manual-first-layout.spec.ts",
+      "title": "Writer manual signed-short layout width=1280 raw=65537",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-manual-first-layout.spec.ts|Writer manual signed-short layout width=1280 raw=-65537",
+      "file": "writer-manual-first-layout.spec.ts",
+      "title": "Writer manual signed-short layout width=1280 raw=-65537",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-manual-first-layout.spec.ts|Writer manual signed-short layout width=390 raw=65537",
+      "file": "writer-manual-first-layout.spec.ts",
+      "title": "Writer manual signed-short layout width=390 raw=65537",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-manual-first-layout.spec.ts|Writer manual signed-short layout width=390 raw=-65537",
+      "file": "writer-manual-first-layout.spec.ts",
+      "title": "Writer manual signed-short layout width=390 raw=-65537",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-alignment.spec.ts|menu commands and submenus align their labels",
+      "file": "writer-menu-alignment.spec.ts",
+      "title": "menu commands and submenus align their labels",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-document-focus.spec.ts|unopened menu Escape without a saved owner focuses the Writer document",
+      "file": "writer-menu-document-focus.spec.ts",
+      "title": "unopened menu Escape without a saved owner focuses the Writer document",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-document-focus.spec.ts|unopened menu Escape restores its saved Writer toolbar control",
+      "file": "writer-menu-document-focus.spec.ts",
+      "title": "unopened menu Escape restores its saved Writer toolbar control",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-key.spec.ts|F10 activates the first Writer root without opening and closes its keyboard popup",
+      "file": "writer-menu-key.spec.ts",
+      "title": "F10 activates the first Writer root without opening and closes its keyboard popup",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-key.spec.ts|repeated F10 restores a saved Writer toolbar owner",
+      "file": "writer-menu-key.spec.ts",
+      "title": "repeated F10 restores a saved Writer toolbar owner",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-key.spec.ts|F10 leaves a modal Writer Hyperlink dialog's focus untouched",
+      "file": "writer-menu-key.spec.ts",
+      "title": "F10 leaves a modal Writer Hyperlink dialog's focus untouched",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-saved-focus.spec.ts|root Escape returns focus and typing to the saved Writer editor",
+      "file": "writer-menu-saved-focus.spec.ts",
+      "title": "root Escape returns focus and typing to the saved Writer editor",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-saved-focus.spec.ts|root and nested commands restore the saved editor before dispatch",
+      "file": "writer-menu-saved-focus.spec.ts",
+      "title": "root and nested commands restore the saved editor before dispatch",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-saved-focus.spec.ts|a menu command leaves focus in its newly opened Hyperlink dialog",
+      "file": "writer-menu-saved-focus.spec.ts",
+      "title": "a menu command leaves focus in its newly opened Hyperlink dialog",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-menu-saved-focus.spec.ts|outside pointer focus belongs to the clicked Writer control",
+      "file": "writer-menu-saved-focus.spec.ts",
+      "title": "outside pointer focus belongs to the clicked Writer control",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-named-style-history.spec.ts|Writer named-style history width=1280",
+      "file": "writer-named-style-history.spec.ts",
+      "title": "Writer named-style history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-named-style-history.spec.ts|Writer named-style history width=390",
+      "file": "writer-named-style-history.spec.ts",
+      "title": "Writer named-style history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-attribute-portions.spec.ts|Writer native body and cell portions retain formatting and editing width=1280",
+      "file": "writer-native-attribute-portions.spec.ts",
+      "title": "Writer native body and cell portions retain formatting and editing width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-attribute-portions.spec.ts|Writer native body and cell portions retain formatting and editing width=390",
+      "file": "writer-native-attribute-portions.spec.ts",
+      "title": "Writer native body and cell portions retain formatting and editing width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-border-page.spec.ts|native empty-hit focus and keyboard selection width=1280",
+      "file": "writer-native-border-page.spec.ts",
+      "title": "native empty-hit focus and keyboard selection width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-border-page.spec.ts|native empty-hit focus and keyboard selection width=390",
+      "file": "writer-native-border-page.spec.ts",
+      "title": "native empty-hit focus and keyboard selection width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-border-page.spec.ts|native six-line border page and selected history width=1280",
+      "file": "writer-native-border-page.spec.ts",
+      "title": "native six-line border page and selected history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-border-page.spec.ts|native six-line border page and selected history width=390",
+      "file": "writer-native-border-page.spec.ts",
+      "title": "native six-line border page and selected history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-alignment.spec.ts|native common cell alignment and changed item history width=1280",
+      "file": "writer-native-cell-alignment.spec.ts",
+      "title": "native common cell alignment and changed item history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-alignment.spec.ts|native common cell alignment and changed item history width=390",
+      "file": "writer-native-cell-alignment.spec.ts",
+      "title": "native common cell alignment and changed item history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-alignment.spec.ts|native primitive cell orientation remains numeric across the browser open boundary",
+      "file": "writer-native-cell-alignment.spec.ts",
+      "title": "native primitive cell orientation remains numeric across the browser open boundary",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-box.spec.ts|native four-edge cell paint and text history width=1280 fixed=false",
+      "file": "writer-native-cell-box.spec.ts",
+      "title": "native four-edge cell paint and text history width=1280 fixed=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-box.spec.ts|native four-edge cell paint and text history width=1280 fixed=true",
+      "file": "writer-native-cell-box.spec.ts",
+      "title": "native four-edge cell paint and text history width=1280 fixed=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-box.spec.ts|native four-edge cell paint and text history width=390 fixed=false",
+      "file": "writer-native-cell-box.spec.ts",
+      "title": "native four-edge cell paint and text history width=390 fixed=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cell-box.spec.ts|native four-edge cell paint and text history width=390 fixed=true",
+      "file": "writer-native-cell-box.spec.ts",
+      "title": "native four-edge cell paint and text history width=390 fixed=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=false reverse=false kind=numbered",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=false reverse=false kind=numbered",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=false reverse=false kind=bullet",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=false reverse=false kind=bullet",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=false reverse=true kind=numbered",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=false reverse=true kind=numbered",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=false reverse=true kind=bullet",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=false reverse=true kind=bullet",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=true reverse=false kind=numbered",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=true reverse=false kind=numbered",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=true reverse=false kind=bullet",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=true reverse=false kind=bullet",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=true reverse=true kind=numbered",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=true reverse=true kind=numbered",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-clipboard-lists.spec.ts|Writer native clipboard lists cell=true reverse=true kind=bullet",
+      "file": "writer-native-clipboard-lists.spec.ts",
+      "title": "Writer native clipboard lists cell=true reverse=true kind=bullet",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native coupled border and merging item acceptance width=1280",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native coupled border and merging item acceptance width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native coupled border and merging item acceptance width=390",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native coupled border and merging item acceptance width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=collapsing width=1280",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=collapsing width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=separating width=1280",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=separating width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=undefined width=1280",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=undefined width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=collapsing width=390",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=collapsing width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=separating width=390",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=separating width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-collapsing-borders.spec.ts|native table merging model=undefined width=390",
+      "file": "writer-native-collapsing-borders.spec.ts",
+      "title": "native table merging model=undefined width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-column-commands.spec.ts|native column insertion width=1280",
+      "file": "writer-native-column-commands.spec.ts",
+      "title": "native column insertion width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-column-commands.spec.ts|native column insertion width=390",
+      "file": "writer-native-column-commands.spec.ts",
+      "title": "native column insertion width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-context-menu.spec.ts|Writer native context menu removes actual mixed hyperlinks with one undo and redo",
+      "file": "writer-native-context-menu.spec.ts",
+      "title": "Writer native context menu removes actual mixed hyperlinks with one undo and redo",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-context-menu.spec.ts|Writer native context menu follows the actual table shell and inserts a native row",
+      "file": "writer-native-context-menu.spec.ts",
+      "title": "Writer native context menu follows the actual table shell and inserts a native row",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-context-menu.spec.ts|Writer native context menu keyboard cancellation retains the reversed original range",
+      "file": "writer-native-context-menu.spec.ts",
+      "title": "Writer native context menu keyboard cancellation retains the reversed original range",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-cursor-frame-chain.spec.ts|native body follow Home retains its original model offset and edit history",
+      "file": "writer-native-cursor-frame-chain.spec.ts",
+      "title": "native body follow Home retains its original model offset and edit history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-disabled-menubar.spec.ts|Writer native disabled menubar traversal preserves focus and history width=1280",
+      "file": "writer-native-disabled-menubar.spec.ts",
+      "title": "Writer native disabled menubar traversal preserves focus and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-disabled-menubar.spec.ts|Writer native disabled menubar traversal preserves focus and history width=390",
+      "file": "writer-native-disabled-menubar.spec.ts",
+      "title": "Writer native disabled menubar traversal preserves focus and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-disabled-popup.spec.ts|Writer native disabled popup entries remain selected without executing width=1280",
+      "file": "writer-native-disabled-popup.spec.ts",
+      "title": "Writer native disabled popup entries remain selected without executing width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-disabled-popup.spec.ts|Writer native disabled popup entries remain selected without executing width=390",
+      "file": "writer-native-disabled-popup.spec.ts",
+      "title": "Writer native disabled popup entries remain selected without executing width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-document-row.spec.ts|document-owned styled final-row Tab width=1280",
+      "file": "writer-native-document-row.spec.ts",
+      "title": "document-owned styled final-row Tab width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-document-row.spec.ts|document-owned styled final-row Tab width=390",
+      "file": "writer-native-document-row.spec.ts",
+      "title": "document-owned styled final-row Tab width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-formatted-cursor-frame-reuse.spec.ts|repeated physical follow Home/End retains text and source edit/history boundaries",
+      "file": "writer-native-formatted-cursor-frame-reuse.spec.ts",
+      "title": "repeated physical follow Home/End retains text and source edit/history boundaries",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-hyperlink-begin-edit.spec.ts|Chromium edits from the original link beginning and keeps selection on cancel",
+      "file": "writer-native-hyperlink-begin-edit.spec.ts",
+      "title": "Chromium edits from the original link beginning and keeps selection on cancel",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-hyperlink-mixed-remove.spec.ts|Chromium preserves mixed native dispatch and one undo with pending popup presentation",
+      "file": "writer-native-hyperlink-mixed-remove.spec.ts",
+      "title": "Chromium preserves mixed native dispatch and one undo with pending popup presentation",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-independent-table-properties.spec.ts|native independent properties columns frame-width and history width=1280",
+      "file": "writer-native-independent-table-properties.spec.ts",
+      "title": "native independent properties columns frame-width and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-independent-table-properties.spec.ts|native independent properties columns frame-width and history width=390",
+      "file": "writer-native-independent-table-properties.spec.ts",
+      "title": "native independent properties columns frame-width and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-insert-table-row-history.spec.ts|native inserted table and appended row history width=1280",
+      "file": "writer-native-insert-table-row-history.spec.ts",
+      "title": "native inserted table and appended row history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-insert-table-row-history.spec.ts|native inserted table and appended row history width=390",
+      "file": "writer-native-insert-table-row-history.spec.ts",
+      "title": "native inserted table and appended row history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-insert-table.spec.ts|native table insertion history width=1280",
+      "file": "writer-native-insert-table.spec.ts",
+      "title": "native table insertion history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-insert-table.spec.ts|native table insertion history width=390",
+      "file": "writer-native-insert-table.spec.ts",
+      "title": "native table insertion history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-internet-edit-range.spec.ts|Chromium edits one independent identical hyperlink and replays native history",
+      "file": "writer-native-internet-edit-range.spec.ts",
+      "title": "Chromium edits one independent identical hyperlink and replays native history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-internet-state-query.spec.ts|Chromium hyperlink state distinguishes original interior and non-expanding end",
+      "file": "writer-native-internet-state-query.spec.ts",
+      "title": "Chromium hyperlink state distinguishes original interior and non-expanding end",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-context.spec.ts|Writer native list context and point state width=1280",
+      "file": "writer-native-list-context.spec.ts",
+      "title": "Writer native list context and point state width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-context.spec.ts|Writer native list context and point state width=390",
+      "file": "writer-native-list-context.spec.ts",
+      "title": "Writer native list context and point state width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-marker-width.spec.ts|Writer native label width prevents overlap width=1280 cell=false",
+      "file": "writer-native-list-marker-width.spec.ts",
+      "title": "Writer native label width prevents overlap width=1280 cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-marker-width.spec.ts|Writer native label width prevents overlap width=1280 cell=true",
+      "file": "writer-native-list-marker-width.spec.ts",
+      "title": "Writer native label width prevents overlap width=1280 cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-marker-width.spec.ts|Writer native label width prevents overlap width=390 cell=false",
+      "file": "writer-native-list-marker-width.spec.ts",
+      "title": "Writer native label width prevents overlap width=390 cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-marker-width.spec.ts|Writer native label width prevents overlap width=390 cell=true",
+      "file": "writer-native-list-marker-width.spec.ts",
+      "title": "Writer native label width prevents overlap width=390 cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-tab.spec.ts|Writer body list and table Tab retain editing focus width=1280",
+      "file": "writer-native-list-tab.spec.ts",
+      "title": "Writer body list and table Tab retain editing focus width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-list-tab.spec.ts|Writer body list and table Tab retain editing focus width=390",
+      "file": "writer-native-list-tab.spec.ts",
+      "title": "Writer body list and table Tab retain editing focus width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-margin-admission.spec.ts|Writer ordinary native decrease owns no-op history cell=false",
+      "file": "writer-native-margin-admission.spec.ts",
+      "title": "Writer ordinary native decrease owns no-op history cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-margin-admission.spec.ts|Writer ordinary native decrease owns no-op history cell=true",
+      "file": "writer-native-margin-admission.spec.ts",
+      "title": "Writer ordinary native decrease owns no-op history cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-auxclick.spec.ts|Writer native auxiliary menubar history width=1280 button=middle",
+      "file": "writer-native-menubar-auxclick.spec.ts",
+      "title": "Writer native auxiliary menubar history width=1280 button=middle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-auxclick.spec.ts|Writer native auxiliary menubar history width=1280 button=right",
+      "file": "writer-native-menubar-auxclick.spec.ts",
+      "title": "Writer native auxiliary menubar history width=1280 button=right",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-auxclick.spec.ts|Writer native auxiliary menubar history width=390 button=middle",
+      "file": "writer-native-menubar-auxclick.spec.ts",
+      "title": "Writer native auxiliary menubar history width=390 button=middle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-auxclick.spec.ts|Writer native auxiliary menubar history width=390 button=right",
+      "file": "writer-native-menubar-auxclick.spec.ts",
+      "title": "Writer native auxiliary menubar history width=390 button=right",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-document-key.spec.ts|native root Ctrl-F6 closes the Writer popup and focuses its document",
+      "file": "writer-native-menubar-document-key.spec.ts",
+      "title": "native root Ctrl-F6 closes the Writer popup and focuses its document",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-document-key.spec.ts|native menubar trigger Ctrl-F6 resets the Writer activation cycle",
+      "file": "writer-native-menubar-document-key.spec.ts",
+      "title": "native menubar trigger Ctrl-F6 resets the Writer activation cycle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-menubar-document-key.spec.ts|native child Ctrl-F6 closes only the Writer owning submenu",
+      "file": "writer-native-menubar-document-key.spec.ts",
+      "title": "native child Ctrl-F6 closes only the Writer owning submenu",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-none-numbering.spec.ts|Writer native NONE numbering roundtrip width=1280",
+      "file": "writer-native-none-numbering.spec.ts",
+      "title": "Writer native NONE numbering roundtrip width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-none-numbering.spec.ts|Writer native NONE numbering roundtrip width=390",
+      "file": "writer-native-none-numbering.spec.ts",
+      "title": "Writer native NONE numbering roundtrip width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-numbering-tab.spec.ts|Writer exhausted bullet tab keeps native text gap width=1280 cell=false",
+      "file": "writer-native-numbering-tab.spec.ts",
+      "title": "Writer exhausted bullet tab keeps native text gap width=1280 cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-numbering-tab.spec.ts|Writer exhausted bullet tab keeps native text gap width=1280 cell=true",
+      "file": "writer-native-numbering-tab.spec.ts",
+      "title": "Writer exhausted bullet tab keeps native text gap width=1280 cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-numbering-tab.spec.ts|Writer exhausted bullet tab keeps native text gap width=390 cell=false",
+      "file": "writer-native-numbering-tab.spec.ts",
+      "title": "Writer exhausted bullet tab keeps native text gap width=390 cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-numbering-tab.spec.ts|Writer exhausted bullet tab keeps native text gap width=390 cell=true",
+      "file": "writer-native-numbering-tab.spec.ts",
+      "title": "Writer exhausted bullet tab keeps native text gap width=390 cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-outline-tab.spec.ts|Writer native heading Tab retains styles and history width=1280",
+      "file": "writer-native-outline-tab.spec.ts",
+      "title": "Writer native heading Tab retains styles and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-outline-tab.spec.ts|Writer native heading Tab retains styles and history width=390",
+      "file": "writer-native-outline-tab.spec.ts",
+      "title": "Writer native heading Tab retains styles and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-outline-tab.spec.ts|Writer native tenth heading boundary width=1280",
+      "file": "writer-native-outline-tab.spec.ts",
+      "title": "Writer native tenth heading boundary width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-outline-tab.spec.ts|Writer native tenth heading boundary width=390",
+      "file": "writer-native-outline-tab.spec.ts",
+      "title": "Writer native tenth heading boundary width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-painter-frame-borrow.spec.ts|Writer borrowed native border paint survives history and editing width=1280",
+      "file": "writer-native-painter-frame-borrow.spec.ts",
+      "title": "Writer borrowed native border paint survives history and editing width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-painter-frame-borrow.spec.ts|Writer borrowed native border paint survives history and editing width=390",
+      "file": "writer-native-painter-frame-borrow.spec.ts",
+      "title": "Writer borrowed native border paint survives history and editing width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-paragraph-text-surface.spec.ts|Writer native text surface cell=false reverse=false",
+      "file": "writer-native-paragraph-text-surface.spec.ts",
+      "title": "Writer native text surface cell=false reverse=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-paragraph-text-surface.spec.ts|Writer native text surface cell=false reverse=true",
+      "file": "writer-native-paragraph-text-surface.spec.ts",
+      "title": "Writer native text surface cell=false reverse=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-paragraph-text-surface.spec.ts|Writer native text surface cell=true reverse=false",
+      "file": "writer-native-paragraph-text-surface.spec.ts",
+      "title": "Writer native text surface cell=true reverse=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-paragraph-text-surface.spec.ts|Writer native text surface cell=true reverse=true",
+      "file": "writer-native-paragraph-text-surface.spec.ts",
+      "title": "Writer native text surface cell=true reverse=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-delay.spec.ts|Writer native submenu pointer delay and keyboard activation width=1280",
+      "file": "writer-native-popup-delay.spec.ts",
+      "title": "Writer native submenu pointer delay and keyboard activation width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-delay.spec.ts|Writer native submenu pointer delay and keyboard activation width=390",
+      "file": "writer-native-popup-delay.spec.ts",
+      "title": "Writer native submenu pointer delay and keyboard activation width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-highlight.spec.ts|Writer native popup current parent highlight width=1280",
+      "file": "writer-native-popup-highlight.spec.ts",
+      "title": "Writer native popup current parent highlight width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-highlight.spec.ts|Writer native popup current parent highlight width=390",
+      "file": "writer-native-popup-highlight.spec.ts",
+      "title": "Writer native popup current parent highlight width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-mouse.spec.ts|Writer native popup auxiliary mouse buttons width=1280",
+      "file": "writer-native-popup-mouse.spec.ts",
+      "title": "Writer native popup auxiliary mouse buttons width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-popup-mouse.spec.ts|Writer native popup auxiliary mouse buttons width=390",
+      "file": "writer-native-popup-mouse.spec.ts",
+      "title": "Writer native popup auxiliary mouse buttons width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-properties-height.spec.ts|Writer unrelated properties preserve fixed row height width=1280",
+      "file": "writer-native-properties-height.spec.ts",
+      "title": "Writer unrelated properties preserve fixed row height width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-properties-height.spec.ts|Writer unrelated properties preserve fixed row height width=390",
+      "file": "writer-native-properties-height.spec.ts",
+      "title": "Writer unrelated properties preserve fixed row height width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-commands.spec.ts|native row menu and caret width=1280",
+      "file": "writer-native-row-commands.spec.ts",
+      "title": "native row menu and caret width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-commands.spec.ts|native row menu and caret width=390",
+      "file": "writer-native-row-commands.spec.ts",
+      "title": "native row menu and caret width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-frame-size.spec.ts|Writer native fixed row clipping and minimum growth width=1280",
+      "file": "writer-native-row-frame-size.spec.ts",
+      "title": "Writer native fixed row clipping and minimum growth width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-frame-size.spec.ts|Writer native fixed row clipping and minimum growth width=390",
+      "file": "writer-native-row-frame-size.spec.ts",
+      "title": "Writer native fixed row clipping and minimum growth width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-height-dialog.spec.ts|Writer native row height dialog width=1280",
+      "file": "writer-native-row-height-dialog.spec.ts",
+      "title": "Writer native row height dialog width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-row-height-dialog.spec.ts|Writer native row height dialog width=390",
+      "file": "writer-native-row-height-dialog.spec.ts",
+      "title": "Writer native row height dialog width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-section-navigation.spec.ts|Writer Ctrl Home End follows native cell and table boundaries",
+      "file": "writer-native-section-navigation.spec.ts",
+      "title": "Writer Ctrl Home End follows native cell and table boundaries",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-section-navigation.spec.ts|Writer Shift Ctrl Home selects cell paragraphs through native point and mark",
+      "file": "writer-native-section-navigation.spec.ts",
+      "title": "Writer Shift Ctrl Home selects cell paragraphs through native point and mark",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-section-navigation.spec.ts|Writer inherited table editing host keeps split join and typing history",
+      "file": "writer-native-section-navigation.spec.ts",
+      "title": "Writer inherited table editing host keeps split join and typing history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-select-all.spec.ts|Writer Select All escalates cell table and outer text",
+      "file": "writer-native-select-all.spec.ts",
+      "title": "Writer Select All escalates cell table and outer text",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-select-all.spec.ts|Writer cell Select All replacement retains neighbors and native undo redo",
+      "file": "writer-native-select-all.spec.ts",
+      "title": "Writer cell Select All replacement retains neighbors and native undo redo",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-select-all.spec.ts|Writer empty cell Select All immediately selects the native table",
+      "file": "writer-native-select-all.spec.ts",
+      "title": "Writer empty cell Select All immediately selects the native table",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-tabcols.spec.ts|native physical column draft from relative table width=1280",
+      "file": "writer-native-tabcols.spec.ts",
+      "title": "native physical column draft from relative table width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-tabcols.spec.ts|native physical column draft from relative table width=390",
+      "file": "writer-native-tabcols.spec.ts",
+      "title": "native physical column draft from relative table width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-drag.spec.ts|native mouse column tracking width=1280",
+      "file": "writer-native-table-column-drag.spec.ts",
+      "title": "native mouse column tracking width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-drag.spec.ts|native mouse column tracking width=390",
+      "file": "writer-native-table-column-drag.spec.ts",
+      "title": "native mouse column tracking width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-drag.spec.ts|native outer-left tracking accepts Enter and preserves the editing cursor",
+      "file": "writer-native-table-column-drag.spec.ts",
+      "title": "native outer-left tracking accepts Enter and preserves the editing cursor",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-page.spec.ts|native column page modes and history width=1280",
+      "file": "writer-native-table-column-page.spec.ts",
+      "title": "native column page modes and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-page.spec.ts|native column page window and selection width=1280",
+      "file": "writer-native-table-column-page.spec.ts",
+      "title": "native column page window and selection width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-page.spec.ts|native column page modes and history width=390",
+      "file": "writer-native-table-column-page.spec.ts",
+      "title": "native column page modes and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-column-page.spec.ts|native column page window and selection width=390",
+      "file": "writer-native-table-column-page.spec.ts",
+      "title": "native column page window and selection width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-cursor-rings.spec.ts|Writer selected row character formatting covers full cells and survives Undo Redo",
+      "file": "writer-native-table-cursor-rings.spec.ts",
+      "title": "Writer selected row character formatting covers full cells and survives Undo Redo",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-delete.spec.ts|writer-native-table-delete.spec.ts|Writer selected row Delete preserves table cells and native Undo Redo",
+      "file": "writer-native-table-delete.spec.ts",
+      "title": "Writer selected row Delete preserves table cells and native Undo Redo",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-delete.spec.ts|writer-native-table-delete.spec.ts|Writer selected row Backspace preserves table cells and native Undo Redo",
+      "file": "writer-native-table-delete.spec.ts",
+      "title": "Writer selected row Backspace preserves table cells and native Undo Redo",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-editing.spec.ts|Writer table cell typing, split, join and formatting use document history",
+      "file": "writer-native-table-editing.spec.ts",
+      "title": "Writer table cell typing, split, join and formatting use document history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-format-lifecycle.spec.ts|native format page local metrics cancel and native acceptance width=1280",
+      "file": "writer-native-table-format-lifecycle.spec.ts",
+      "title": "native format page local metrics cancel and native acceptance width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-format-lifecycle.spec.ts|native format page activation consumes Columns width and retains browser input width=1280",
+      "file": "writer-native-table-format-lifecycle.spec.ts",
+      "title": "native format page activation consumes Columns width and retains browser input width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-format-lifecycle.spec.ts|native format page local metrics cancel and native acceptance width=390",
+      "file": "writer-native-table-format-lifecycle.spec.ts",
+      "title": "native format page local metrics cancel and native acceptance width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-format-lifecycle.spec.ts|native format page activation consumes Columns width and retains browser input width=390",
+      "file": "writer-native-table-format-lifecycle.spec.ts",
+      "title": "native format page activation consumes Columns width and retains browser input width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-frame-reuse.spec.ts|Writer retained table devices resize and edit width=1280",
+      "file": "writer-native-table-frame-reuse.spec.ts",
+      "title": "Writer retained table devices resize and edit width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-frame-reuse.spec.ts|Writer retained table devices resize and edit width=390",
+      "file": "writer-native-table-frame-reuse.spec.ts",
+      "title": "Writer retained table devices resize and edit width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-layout-split.spec.ts|native table split policy uses physical page owners width=1280 split=true",
+      "file": "writer-native-table-layout-split.spec.ts",
+      "title": "native table split policy uses physical page owners width=1280 split=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-layout-split.spec.ts|native table split policy uses physical page owners width=1280 split=false",
+      "file": "writer-native-table-layout-split.spec.ts",
+      "title": "native table split policy uses physical page owners width=1280 split=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-layout-split.spec.ts|native table split policy uses physical page owners width=390 split=true",
+      "file": "writer-native-table-layout-split.spec.ts",
+      "title": "native table split policy uses physical page owners width=390 split=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-layout-split.spec.ts|native table split policy uses physical page owners width=390 split=false",
+      "file": "writer-native-table-layout-split.spec.ts",
+      "title": "native table split policy uses physical page owners width=390 split=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-linear-drag.spec.ts|Writer solitary Shift translates following column borders width=1280",
+      "file": "writer-native-table-linear-drag.spec.ts",
+      "title": "Writer solitary Shift translates following column borders width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-linear-drag.spec.ts|Writer solitary Shift translates following column borders width=390",
+      "file": "writer-native-table-linear-drag.spec.ts",
+      "title": "Writer solitary Shift translates following column borders width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-mouse.spec.ts|Writer native table mouse edge and drag width=1280",
+      "file": "writer-native-table-mouse.spec.ts",
+      "title": "Writer native table mouse edge and drag width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-mouse.spec.ts|Writer native table mouse edge and drag width=390",
+      "file": "writer-native-table-mouse.spec.ts",
+      "title": "Writer native table mouse edge and drag width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-paste.spec.ts|Writer selected row paste appends in every cell and retains native Undo selection",
+      "file": "writer-native-table-paste.spec.ts",
+      "title": "Writer selected row paste appends in every cell and retains native Undo selection",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-plain-paste.spec.ts|Writer native plain table clipboard \"X\" preserves cells and inherited bold history",
+      "file": "writer-native-table-plain-paste.spec.ts",
+      "title": "Writer native plain table clipboard \"X\" preserves cells and inherited bold history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-plain-paste.spec.ts|Writer native plain table clipboard \"A\\nB\\n\" preserves cells and inherited bold history",
+      "file": "writer-native-table-plain-paste.spec.ts",
+      "title": "Writer native plain table clipboard \"A\\nB\\n\" preserves cells and inherited bold history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-pointer.spec.ts|Writer native table interior and gutter pointer width=1280",
+      "file": "writer-native-table-pointer.spec.ts",
+      "title": "Writer native table interior and gutter pointer width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-pointer.spec.ts|Writer native table interior and gutter pointer width=390",
+      "file": "writer-native-table-pointer.spec.ts",
+      "title": "Writer native table interior and gutter pointer width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-properties-reset.spec.ts|native current-page table Reset preserves other pages and canonical history width=1280",
+      "file": "writer-native-table-properties-reset.spec.ts",
+      "title": "native current-page table Reset preserves other pages and canonical history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-properties-reset.spec.ts|native current-page table Reset preserves other pages and canonical history width=390",
+      "file": "writer-native-table-properties-reset.spec.ts",
+      "title": "native current-page table Reset preserves other pages and canonical history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-proportional-drag.spec.ts|Writer solitary Control proportionally resizes following columns width=1280",
+      "file": "writer-native-table-proportional-drag.spec.ts",
+      "title": "Writer solitary Control proportionally resizes following columns width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-proportional-drag.spec.ts|Writer solitary Control proportionally resizes following columns width=390",
+      "file": "writer-native-table-proportional-drag.spec.ts",
+      "title": "Writer solitary Control proportionally resizes following columns width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-row-drag.spec.ts|native mouse row tracking width=1280",
+      "file": "writer-native-table-row-drag.spec.ts",
+      "title": "native mouse row tracking width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-row-drag.spec.ts|native mouse row tracking width=390",
+      "file": "writer-native-table-row-drag.spec.ts",
+      "title": "native mouse row tracking width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-selection-commands.spec.ts|native table selection menu width=1280",
+      "file": "writer-native-table-selection-commands.spec.ts",
+      "title": "native table selection menu width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-selection-commands.spec.ts|native table selection menu width=390",
+      "file": "writer-native-table-selection-commands.spec.ts",
+      "title": "native table selection menu width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-selection.spec.ts|Writer row selection paints core boxes and typing after caret kill preserves neighbors",
+      "file": "writer-native-table-selection.spec.ts",
+      "title": "Writer row selection paints core boxes and typing after caret kill preserves neighbors",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-selection.spec.ts|Writer native keyboard box selection and caret properties context agree",
+      "file": "writer-native-table-selection.spec.ts",
+      "title": "Writer native keyboard box selection and caret properties context agree",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-tab.spec.ts|Writer Tab traverses native cell sections and appends one row with history",
+      "file": "writer-native-table-tab.spec.ts",
+      "title": "Writer Tab traverses native cell sections and appends one row with history",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-text-flow-headline.spec.ts|native Table Properties headline defaults and history width=1280",
+      "file": "writer-native-table-text-flow-headline.spec.ts",
+      "title": "native Table Properties headline defaults and history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-text-flow-headline.spec.ts|native Table Properties headline defaults and history width=390",
+      "file": "writer-native-table-text-flow-headline.spec.ts",
+      "title": "native Table Properties headline defaults and history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-text-flow-split.spec.ts|native split properties controls and physical pages width=1280",
+      "file": "writer-native-table-text-flow-split.spec.ts",
+      "title": "native split properties controls and physical pages width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-table-text-flow-split.spec.ts|native split properties controls and physical pages width=390",
+      "file": "writer-native-table-text-flow-split.spec.ts",
+      "title": "native split properties controls and physical pages width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-text-frame-follow.spec.ts|one original bullet has native master/follows through reformat, edit, history and reopen",
+      "file": "writer-native-text-frame-follow.spec.ts",
+      "title": "one original bullet has native master/follows through reformat, edit, history and reopen",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-native-text-frame-owner.spec.ts|native body/cell geometry survives reformat and history before document replacement",
+      "file": "writer-native-text-frame-owner.spec.ts",
+      "title": "native body/cell geometry survives reformat and history before document replacement",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-odt-file.spec.ts|Writer opens and saves a bounded ODT file",
+      "file": "writer-odt-file.spec.ts",
+      "title": "Writer opens and saves a bounded ODT file",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-odt-file.spec.ts|Writer keeps one ODT text node across visible page fragments after reopen",
+      "file": "writer-odt-file.spec.ts",
+      "title": "Writer keeps one ODT text node across visible page fragments after reopen",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-odt-file.spec.ts|Writer types in a table cell and reopens the edited ODT",
+      "file": "writer-odt-file.spec.ts",
+      "title": "Writer types in a table cell and reopens the edited ODT",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-print.spec.ts|Print appears in upstream locations and print media keeps only pages",
+      "file": "writer-print.spec.ts",
+      "title": "Print appears in upstream locations and print media keeps only pages",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-responsive-sidebar.spec.ts|long menus scroll inside the viewport and nested commands stay reachable",
+      "file": "writer-responsive-sidebar.spec.ts",
+      "title": "long menus scroll inside the viewport and nested commands stay reachable",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-responsive-sidebar.spec.ts|sidebar remains reachable and its checked state follows visibility on a touch viewport",
+      "file": "writer-responsive-sidebar.spec.ts",
+      "title": "sidebar remains reachable and its checked state follows visibility on a touch viewport",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-responsive-sidebar.spec.ts|the page stays within the viewport while the document and modal body scroll",
+      "file": "writer-responsive-sidebar.spec.ts",
+      "title": "the page stays within the viewport while the document and modal body scroll",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-responsive-sidebar.spec.ts|the mobile table grid dismisses outside and More Options opens the full dialog",
+      "file": "writer-responsive-sidebar.spec.ts",
+      "title": "the mobile table grid dismisses outside and More Options opens the full dialog",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-boundary.spec.ts|Home replaces the active Writer root popup and returns to editing on Escape",
+      "file": "writer-root-menu-boundary.spec.ts",
+      "title": "Home replaces the active Writer root popup and returns to editing on Escape",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-boundary.spec.ts|End replaces the active Writer root popup and returns to editing on Escape",
+      "file": "writer-root-menu-boundary.spec.ts",
+      "title": "End replaces the active Writer root popup and returns to editing on Escape",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-boundary.spec.ts|Writer F10 boundary navigation stays unopened until an explicit popup key",
+      "file": "writer-root-menu-boundary.spec.ts",
+      "title": "Writer F10 boundary navigation stays unopened until an explicit popup key",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-focus.spec.ts|pointer root popup owns focus and passes keyboard input to its first command",
+      "file": "writer-root-menu-focus.spec.ts",
+      "title": "pointer root popup owns focus and passes keyboard input to its first command",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-focus.spec.ts|root ArrowDown selects the first Writer command and executes one toggle",
+      "file": "writer-root-menu-focus.spec.ts",
+      "title": "root ArrowDown selects the first Writer command and executes one toggle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-focus.spec.ts|root ArrowUp selects the first Writer command and executes one toggle",
+      "file": "writer-root-menu-focus.spec.ts",
+      "title": "root ArrowUp selects the first Writer command and executes one toggle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-focus.spec.ts|root Enter selects the first Writer command and executes one toggle",
+      "file": "writer-root-menu-focus.spec.ts",
+      "title": "root Enter selects the first Writer command and executes one toggle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-root-menu-focus.spec.ts|root Space selects the first Writer command and executes one toggle",
+      "file": "writer-root-menu-focus.spec.ts",
+      "title": "root Space selects the first Writer command and executes one toggle",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-auto-first.spec.ts|Writer automatic first-line ruler at width 1280",
+      "file": "writer-ruler-auto-first.spec.ts",
+      "title": "Writer automatic first-line ruler at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-auto-first.spec.ts|Writer automatic first-line ruler at width 390",
+      "file": "writer-ruler-auto-first.spec.ts",
+      "title": "Writer automatic first-line ruler at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-default-tabs.spec.ts|Writer default ruler tabs at width 1280",
+      "file": "writer-ruler-default-tabs.spec.ts",
+      "title": "Writer default ruler tabs at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-default-tabs.spec.ts|Writer default ruler tabs at width 390",
+      "file": "writer-ruler-default-tabs.spec.ts",
+      "title": "Writer default ruler tabs at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-indent-items.spec.ts|Writer automatic ruler item history at width 1280",
+      "file": "writer-ruler-indent-items.spec.ts",
+      "title": "Writer automatic ruler item history at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-indent-items.spec.ts|Writer automatic ruler item history at width 390",
+      "file": "writer-ruler-indent-items.spec.ts",
+      "title": "Writer automatic ruler item history at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-indent-pixels.spec.ts|Writer rounded paragraph indents at width 1280",
+      "file": "writer-ruler-indent-pixels.spec.ts",
+      "title": "Writer rounded paragraph indents at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-indent-pixels.spec.ts|Writer rounded paragraph indents at width 390",
+      "file": "writer-ruler-indent-pixels.spec.ts",
+      "title": "Writer rounded paragraph indents at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-glyphs.spec.ts|Writer ruler typed glyphs at width 1280",
+      "file": "writer-ruler-tab-glyphs.spec.ts",
+      "title": "Writer ruler typed glyphs at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-glyphs.spec.ts|Writer ruler typed glyphs at width 390",
+      "file": "writer-ruler-tab-glyphs.spec.ts",
+      "title": "Writer ruler typed glyphs at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-identity.spec.ts|Writer ruler tab identity at width 1280",
+      "file": "writer-ruler-tab-identity.spec.ts",
+      "title": "Writer ruler tab identity at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-identity.spec.ts|Writer ruler tab identity at width 390",
+      "file": "writer-ruler-tab-identity.spec.ts",
+      "title": "Writer ruler tab identity at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-insertion.spec.ts|Writer replaces a hidden default ruler tab at width 1280",
+      "file": "writer-ruler-tab-insertion.spec.ts",
+      "title": "Writer replaces a hidden default ruler tab at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-insertion.spec.ts|Writer replaces a hidden default ruler tab at width 390",
+      "file": "writer-ruler-tab-insertion.spec.ts",
+      "title": "Writer replaces a hidden default ruler tab at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-pixels.spec.ts|Writer rounded tab anchors at width 1280",
+      "file": "writer-ruler-tab-pixels.spec.ts",
+      "title": "Writer rounded tab anchors at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tab-pixels.spec.ts|Writer rounded tab anchors at width 390",
+      "file": "writer-ruler-tab-pixels.spec.ts",
+      "title": "Writer rounded tab anchors at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tracking.spec.ts|Writer ruler tracking at width 1280",
+      "file": "writer-ruler-tracking.spec.ts",
+      "title": "Writer ruler tracking at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-ruler-tracking.spec.ts|Writer ruler tracking at width 390",
+      "file": "writer-ruler-tracking.spec.ts",
+      "title": "Writer ruler tracking at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-selected-list-toggle.spec.ts|Writer selected body toggle Ordered List as one list range",
+      "file": "writer-selected-list-toggle.spec.ts",
+      "title": "Writer selected body toggle Ordered List as one list range",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-selected-list-toggle.spec.ts|Writer selected body toggle Unordered List as one list range",
+      "file": "writer-selected-list-toggle.spec.ts",
+      "title": "Writer selected body toggle Unordered List as one list range",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-selected-list-toggle.spec.ts|Writer selected table cells toggle Ordered List as one list range",
+      "file": "writer-selected-list-toggle.spec.ts",
+      "title": "Writer selected table cells toggle Ordered List as one list range",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-selected-list-toggle.spec.ts|Writer selected table cells toggle Unordered List as one list range",
+      "file": "writer-selected-list-toggle.spec.ts",
+      "title": "Writer selected table cells toggle Unordered List as one list range",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-deck.spec.ts|Properties deck closes and reopens with document focus at width 1280",
+      "file": "writer-sidebar-deck.spec.ts",
+      "title": "Properties deck closes and reopens with document focus at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-deck.spec.ts|Properties deck closes and reopens with document focus at width 390",
+      "file": "writer-sidebar-deck.spec.ts",
+      "title": "Properties deck closes and reopens with document focus at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-escape.spec.ts|Paragraph panel Escape returns to title then document at width 1280",
+      "file": "writer-sidebar-escape.spec.ts",
+      "title": "Paragraph panel Escape returns to title then document at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-escape.spec.ts|Paragraph panel Escape returns to title then document at width 390",
+      "file": "writer-sidebar-escape.spec.ts",
+      "title": "Paragraph panel Escape returns to title then document at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-key-isolation.spec.ts|Sidebar docking key isolation at width 1280",
+      "file": "writer-sidebar-key-isolation.spec.ts",
+      "title": "Sidebar docking key isolation at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-key-isolation.spec.ts|Sidebar docking key isolation at width 390",
+      "file": "writer-sidebar-key-isolation.spec.ts",
+      "title": "Sidebar docking key isolation at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-navigation.spec.ts|Sidebar managed Tab and arrow navigation at width 1280",
+      "file": "writer-sidebar-navigation.spec.ts",
+      "title": "Sidebar managed Tab and arrow navigation at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-navigation.spec.ts|Sidebar managed Tab and arrow navigation at width 390",
+      "file": "writer-sidebar-navigation.spec.ts",
+      "title": "Sidebar managed Tab and arrow navigation at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-panel.spec.ts|Paragraph panel expansion and More Options at width 1280",
+      "file": "writer-sidebar-panel.spec.ts",
+      "title": "Paragraph panel expansion and More Options at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-panel.spec.ts|Paragraph panel expansion and More Options at width 390",
+      "file": "writer-sidebar-panel.spec.ts",
+      "title": "Paragraph panel expansion and More Options at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-scroll.spec.ts|Sidebar ShowPanel reveals an oversized Paragraph panel at width 1280",
+      "file": "writer-sidebar-scroll.spec.ts",
+      "title": "Sidebar ShowPanel reveals an oversized Paragraph panel at width 1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-sidebar-scroll.spec.ts|Sidebar ShowPanel reveals an oversized Paragraph panel at width 390",
+      "file": "writer-sidebar-scroll.spec.ts",
+      "title": "Sidebar ShowPanel reveals an oversized Paragraph panel at width 390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-focus.spec.ts|Writer direct style choice focus width=1280",
+      "file": "writer-style-focus.spec.ts",
+      "title": "Writer direct style choice focus width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-focus.spec.ts|Writer keyboard style choice focus width=1280",
+      "file": "writer-style-focus.spec.ts",
+      "title": "Writer keyboard style choice focus width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-focus.spec.ts|Writer direct style choice focus width=390",
+      "file": "writer-style-focus.spec.ts",
+      "title": "Writer direct style choice focus width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-focus.spec.ts|Writer keyboard style choice focus width=390",
+      "file": "writer-style-focus.spec.ts",
+      "title": "Writer keyboard style choice focus width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-redo.spec.ts|Writer native paired style history width=1280",
+      "file": "writer-style-redo.spec.ts",
+      "title": "Writer native paired style history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-redo.spec.ts|Writer native paired style history width=390",
+      "file": "writer-style-redo.spec.ts",
+      "title": "Writer native paired style history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-reset.spec.ts|Writer ordinary native style reset width=1280",
+      "file": "writer-style-reset.spec.ts",
+      "title": "Writer ordinary native style reset width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-reset.spec.ts|Writer ordinary native style reset width=390",
+      "file": "writer-style-reset.spec.ts",
+      "title": "Writer ordinary native style reset width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-selection.spec.ts|Writer inclusive paragraph style range width=1280",
+      "file": "writer-style-selection.spec.ts",
+      "title": "Writer inclusive paragraph style range width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-selection.spec.ts|Writer inclusive paragraph style range width=390",
+      "file": "writer-style-selection.spec.ts",
+      "title": "Writer inclusive paragraph style range width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-selector.spec.ts|Writer live style selector width=1280",
+      "file": "writer-style-selector.spec.ts",
+      "title": "Writer live style selector width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-style-selector.spec.ts|Writer live style selector width=390",
+      "file": "writer-style-selector.spec.ts",
+      "title": "Writer live style selector width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-submenu-keyboard.spec.ts|nested Writer ruler toggles once with Enter",
+      "file": "writer-submenu-keyboard.spec.ts",
+      "title": "nested Writer ruler toggles once with Enter",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-submenu-keyboard.spec.ts|nested Writer ruler toggles once with Space",
+      "file": "writer-submenu-keyboard.spec.ts",
+      "title": "nested Writer ruler toggles once with Space",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-submenu-preselection.spec.ts|pointer submenu owns focus without a selected Writer command",
+      "file": "writer-submenu-preselection.spec.ts",
+      "title": "pointer submenu owns focus without a selected Writer command",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-submenu-preselection.spec.ts|keyboard opening still preselects and executes one Writer command",
+      "file": "writer-submenu-preselection.spec.ts",
+      "title": "keyboard opening still preselects and executes one Writer command",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native automatic restores edited width viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native automatic restores edited width viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native automatic restores edited width viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native automatic restores edited width viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Automatic viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Automatic viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Left viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Left viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table From left viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table From left viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Right viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Right viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Center viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Center viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Manual viewport=1280",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Manual viewport=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Automatic viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Automatic viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Left viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Left viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table From left viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table From left viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Right viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Right viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Center viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Center viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-alignment.spec.ts|native table Manual viewport=390",
+      "file": "writer-table-alignment.spec.ts",
+      "title": "native table Manual viewport=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-border-changed-items.spec.ts|native changed border properties preserve untouched cells width=1280",
+      "file": "writer-table-border-changed-items.spec.ts",
+      "title": "native changed border properties preserve untouched cells width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-border-changed-items.spec.ts|native changed border properties preserve untouched cells width=390",
+      "file": "writer-table-border-changed-items.spec.ts",
+      "title": "native changed border properties preserve untouched cells width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-border-common-state.spec.ts|native common border input and selected four-distance history width=1280",
+      "file": "writer-table-border-common-state.spec.ts",
+      "title": "native common border input and selected four-distance history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-border-common-state.spec.ts|native common border input and selected four-distance history width=390",
+      "file": "writer-table-border-common-state.spec.ts",
+      "title": "native common border input and selected four-distance history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-headlines.spec.ts|Writer headline-adjacent text reflow retains a source caret beyond the old page fragment",
+      "file": "writer-table-headlines.spec.ts",
+      "title": "Writer headline-adjacent text reflow retains a source caret beyond the old page fragment",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-headlines.spec.ts|Writer repeated table headlines edit the original native header width=1280",
+      "file": "writer-table-headlines.spec.ts",
+      "title": "Writer repeated table headlines edit the original native header width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-headlines.spec.ts|Writer repeated table headlines edit the original native header width=390",
+      "file": "writer-table-headlines.spec.ts",
+      "title": "Writer repeated table headlines edit the original native header width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry left width=1280",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry left width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry center width=1280",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry center width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry right width=1280",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry right width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry margins width=1280",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry margins width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry left width=390",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry left width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry center width=390",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry center width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry right width=390",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry right width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-print-area.spec.ts|Writer native table print geometry margins width=390",
+      "file": "writer-table-print-area.spec.ts",
+      "title": "Writer native table print geometry margins width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-properties-history.spec.ts|Writer table properties native history width=1280",
+      "file": "writer-table-properties-history.spec.ts",
+      "title": "Writer table properties native history width=1280",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-properties-history.spec.ts|Writer table properties native history width=390",
+      "file": "writer-table-properties-history.spec.ts",
+      "title": "Writer table properties native history width=390",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-ring-continue.spec.ts|Writer table row Add to List Ordered List/plain",
+      "file": "writer-table-ring-continue.spec.ts",
+      "title": "Writer table row Add to List Ordered List/plain",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-ring-continue.spec.ts|Writer table row Add to List Ordered List/different",
+      "file": "writer-table-ring-continue.spec.ts",
+      "title": "Writer table row Add to List Ordered List/different",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-ring-continue.spec.ts|Writer table row Add to List Unordered List/plain",
+      "file": "writer-table-ring-continue.spec.ts",
+      "title": "Writer table row Add to List Unordered List/plain",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-ring-continue.spec.ts|Writer table row Add to List Unordered List/different",
+      "file": "writer-table-ring-continue.spec.ts",
+      "title": "Writer table row Add to List Unordered List/different",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-ring-continue.spec.ts|Writer table row Add to List continues an imported restarted body list",
+      "file": "writer-table-ring-continue.spec.ts",
+      "title": "Writer table row Add to List continues an imported restarted body list",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-row-lists.spec.ts|Writer table row native list commands Ordered List",
+      "file": "writer-table-row-lists.spec.ts",
+      "title": "Writer table row native list commands Ordered List",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-table-row-lists.spec.ts|Writer table row native list commands Unordered List",
+      "file": "writer-table-row-lists.spec.ts",
+      "title": "Writer table row native list commands Unordered List",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-uncounted-list-layout.spec.ts|Writer uncounted list keeps native text-left through history cell=false",
+      "file": "writer-uncounted-list-layout.spec.ts",
+      "title": "Writer uncounted list keeps native text-left through history cell=false",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "writer|writer-uncounted-list-layout.spec.ts|Writer uncounted list keeps native text-left through history cell=true",
+      "file": "writer-uncounted-list-layout.spec.ts",
+      "title": "Writer uncounted list keeps native text-left through history cell=true",
+      "project": "writer",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/compiler-arithmetic.spec.ts|compiles actual arithmetic tokens in browser and Worker",
+      "file": "calc/compiler-arithmetic.spec.ts",
+      "title": "compiles actual arithmetic tokens in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/dociter.spec.ts|traverses actual sparse cells by row in browser and Worker",
+      "file": "calc/dociter.spec.ts",
+      "title": "traverses actual sparse cells by row in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/document-formulas.spec.ts|edits actual numeric formula cells in browser and Worker",
+      "file": "calc/document-formulas.spec.ts",
+      "title": "edits actual numeric formula cells in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/document-references.spec.ts|propagates actual cell references in browser and Worker",
+      "file": "calc/document-references.spec.ts",
+      "title": "propagates actual cell references in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/document-scalars.spec.ts|edits the same actual scalar document chain in browser and Worker",
+      "file": "calc/document-scalars.spec.ts",
+      "title": "edits the same actual scalar document chain in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/formatting-toolbar.spec.ts|native cell formatting toolbar at 1280x800",
+      "file": "calc/formatting-toolbar.spec.ts",
+      "title": "native cell formatting toolbar at 1280x800",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/formatting-toolbar.spec.ts|native cell formatting toolbar at 390x600",
+      "file": "calc/formatting-toolbar.spec.ts",
+      "title": "native cell formatting toolbar at 390x600",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/formula-output.spec.ts|serializes actual formula tokens in browser and Worker",
+      "file": "calc/formula-output.spec.ts",
+      "title": "serializes actual formula tokens in browser and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/ods.spec.ts|loads native ODS data and edits/saves the same real document in page and Worker",
+      "file": "calc/ods.spec.ts",
+      "title": "loads native ODS data and edits/saves the same real document in page and Worker",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/sheet-context-menu.spec.ts|native sheet context menu at 1280x800",
+      "file": "calc/sheet-context-menu.spec.ts",
+      "title": "native sheet context menu at 1280x800",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/sheet-context-menu.spec.ts|native sheet context menu at 390x600",
+      "file": "calc/sheet-context-menu.spec.ts",
+      "title": "native sheet context menu at 390x600",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/standard-toolbar.spec.ts|complete source standard toolbar at 1280x800",
+      "file": "calc/standard-toolbar.spec.ts",
+      "title": "complete source standard toolbar at 1280x800",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "calc|calc/standard-toolbar.spec.ts|complete source standard toolbar at 390x600",
+      "file": "calc/standard-toolbar.spec.ts",
+      "title": "complete source standard toolbar at 390x600",
+      "project": "calc",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/configured-font-device.spec.ts|prepares Writer fonts before mount and shares native candidate matching with Calc roles",
+      "file": "shared/configured-font-device.spec.ts",
+      "title": "prepares Writer fonts before mount and shares native candidate matching with Calc roles",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/decimal-reader.spec.ts|reads numeric attributes in Chromium and an isolated Worker",
+      "file": "shared/decimal-reader.spec.ts",
+      "title": "reads numeric attributes in Chromium and an isolated Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/document-options.spec.ts|uses actual Calc option defaults and copies in Chromium and a DOM-free Worker",
+      "file": "shared/document-options.spec.ts",
+      "title": "uses actual Calc option defaults and copies in Chromium and a DOM-free Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/font-transport.spec.ts|preserves shared Font values in Chromium and a DOM-free Worker document round trip",
+      "file": "shared/font-transport.spec.ts",
+      "title": "preserves shared Font values in Chromium and a DOM-free Worker document round trip",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/font-values.spec.ts|uses native stored font colors alignment and size in Chromium",
+      "file": "shared/font-values.spec.ts",
+      "title": "uses native stored font colors alignment and size in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/grid-options.spec.ts|uses shared base construction and explicit Calc grid defaults in both browser realms",
+      "file": "shared/grid-options.spec.ts",
+      "title": "uses shared base construction and explicit Calc grid defaults in both browser realms",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/indexed-style-sheets.spec.ts|preserves native style name reindex and Clear family state in Chromium",
+      "file": "shared/indexed-style-sheets.spec.ts",
+      "title": "preserves native style name reindex and Clear family state in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-conversion.spec.ts|uses native language tables and corrected real consumers in both browser realms",
+      "file": "shared/language-conversion.spec.ts",
+      "title": "uses native language tables and corrected real consumers in both browser realms",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-names.spec.ts|uses actual native legacy-name conversion and defined mappings",
+      "file": "shared/language-names.spec.ts",
+      "title": "uses actual native legacy-name conversion and defined mappings",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-conversion.spec.ts|uses actual private LanguageTag conversion state and font tags",
+      "file": "shared/language-tag-conversion.spec.ts",
+      "title": "uses actual private LanguageTag conversion state and font tags",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-extraction.spec.ts|uses actual LanguageTag extraction in shared fallback consumers",
+      "file": "shared/language-tag-extraction.spec.ts",
+      "title": "uses actual LanguageTag extraction in shared fallback consumers",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-intl-audit.spec.ts|audits native JS language tags in Chromium and DOM-free Worker",
+      "file": "shared/language-tag-intl-audit.spec.ts",
+      "title": "audits native JS language tags in Chromium and DOM-free Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-normal.spec.ts|executes actual normal registered grammar and canonicalization in both runtimes",
+      "file": "shared/language-tag-normal.spec.ts",
+      "title": "executes actual normal registered grammar and canonicalization in both runtimes",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-parser-contract.spec.ts|audits pinned parser substitution limits in Chromium and DOM-free Worker",
+      "file": "shared/language-tag-parser-contract.spec.ts",
+      "title": "audits pinned parser substitution limits in Chromium and DOM-free Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-registry.spec.ts|scans source token boundaries and uses pinned registered data in both runtimes",
+      "file": "shared/language-tag-registry.spec.ts",
+      "title": "scans source token boundaries and uses pinned registered data in both runtimes",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/language-tag-unicode-extension.spec.ts|preserves native Unicode extension values in both actual runtimes",
+      "file": "shared/language-tag-unicode-extension.spec.ts",
+      "title": "preserves native Unicode extension values in both actual runtimes",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/launcher.spec.ts|shared launcher routes to Calc without a Writer session",
+      "file": "shared/launcher.spec.ts",
+      "title": "shared launcher routes to Calc without a Writer session",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/launcher.spec.ts|shared launcher handles unknown application routes",
+      "file": "shared/launcher.spec.ts",
+      "title": "shared launcher handles unknown application routes",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/locale-uppercase.spec.ts|preserves native uppercase QA and locale differences in actual Chromium",
+      "file": "shared/locale-uppercase.spec.ts",
+      "title": "preserves native uppercase QA and locale differences in actual Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/manifest-import.spec.ts|reads the same typed ODS manifest in Chromium and a DOM-free Worker",
+      "file": "shared/manifest-import.spec.ts",
+      "title": "reads the same typed ODS manifest in Chromium and a DOM-free Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/manifest.spec.ts|exports the same native ODS manifest in Chromium and a DOM-free Worker",
+      "file": "shared/manifest.spec.ts",
+      "title": "exports the same native ODS manifest in Chromium and a DOM-free Worker",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/menubar-overflow.spec.ts|writer top menus remain reachable at 1280px",
+      "file": "shared/menubar-overflow.spec.ts",
+      "title": "writer top menus remain reachable at 1280px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/menubar-overflow.spec.ts|writer top menus remain reachable at 390px",
+      "file": "shared/menubar-overflow.spec.ts",
+      "title": "writer top menus remain reachable at 390px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/menubar-overflow.spec.ts|calc top menus remain reachable at 1280px",
+      "file": "shared/menubar-overflow.spec.ts",
+      "title": "calc top menus remain reachable at 1280px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/menubar-overflow.spec.ts|calc top menus remain reachable at 390px",
+      "file": "shared/menubar-overflow.spec.ts",
+      "title": "calc top menus remain reachable at 390px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/pool-chain.spec.ts|constructs native pool-only item sets and preserves range cache in Chromium",
+      "file": "shared/pool-chain.spec.ts",
+      "title": "constructs native pool-only item sets and preserves range cache in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/pool-copy.spec.ts|copies native pool metadata and preserves independent shutdown state in Chromium",
+      "file": "shared/pool-copy.spec.ts",
+      "title": "copies native pool metadata and preserves independent shutdown state in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/popup-pointer.spec.ts|writer popup pointer ownership at 1280px",
+      "file": "shared/popup-pointer.spec.ts",
+      "title": "writer popup pointer ownership at 1280px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/popup-pointer.spec.ts|writer popup pointer ownership at 390px",
+      "file": "shared/popup-pointer.spec.ts",
+      "title": "writer popup pointer ownership at 390px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/popup-pointer.spec.ts|calc popup pointer ownership at 1280px",
+      "file": "shared/popup-pointer.spec.ts",
+      "title": "calc popup pointer ownership at 1280px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/popup-pointer.spec.ts|calc popup pointer ownership at 390px",
+      "file": "shared/popup-pointer.spec.ts",
+      "title": "calc popup pointer ownership at 390px",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/sfx-notifications.spec.ts|preserves native duplicate delivery and dying subscription order in Chromium",
+      "file": "shared/sfx-notifications.spec.ts",
+      "title": "preserves native duplicate delivery and dying subscription order in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/shared-string-pool.spec.ts|preserves original shared string mapping and two-pass purge in Chromium",
+      "file": "shared/shared-string-pool.spec.ts",
+      "title": "preserves original shared string mapping and two-pass purge in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/size-item.spec.ts|uses shared native geometry and typed size members in Chromium",
+      "file": "shared/size-item.spec.ts",
+      "title": "uses shared native geometry and typed size members in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/style-iterator.spec.ts|preserves native style filtering and Find Next index behavior in Chromium",
+      "file": "shared/style-iterator.spec.ts",
+      "title": "preserves native style filtering and Find Next index behavior in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/style-model.spec.ts|uses actual native styles for rename, attributes, clear and dying in Chromium",
+      "file": "shared/style-model.spec.ts",
+      "title": "uses actual native styles for rename, attributes, clear and dying in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/style-sheet.spec.ts|preserves actual style role identity, inherited forwarding, copies and destruction in Chromium",
+      "file": "shared/style-sheet.spec.ts",
+      "title": "preserves actual style role identity, inherited forwarding, copies and destruction in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/system-language.spec.ts|resolves system and configured language values through actual shared owners",
+      "file": "shared/system-language.spec.ts",
+      "title": "resolves system and configured language values through actual shared owners",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/text-sections.spec.ts|extracts ordered rich-text sections using actual shared values in Chromium",
+      "file": "shared/text-sections.spec.ts",
+      "title": "extracts ordered rich-text sections using actual shared values in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    },
+    {
+      "key": "shared|shared/user-defaults.spec.ts|separates original and effective native pool defaults and restores them in Chromium",
+      "file": "shared/user-defaults.spec.ts",
+      "title": "separates original and effective native pool defaults and restores them in Chromium",
+      "project": "shared",
+      "status": "expected",
+      "results": [
+        "passed"
+      ]
+    }
+  ]
+}

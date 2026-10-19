@@ -1,0 +1,49 @@
+[WebServer] (node:453) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (6.7s)
+
+
+  1) [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('menuitemradio', { name: 'No List' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('menuitemradio', { name: 'No List' })
+
+
+      17 |   expect(commandX - rowX).toBeLessThanOrEqual(20);
+      18 |   await lists.hover();
+    > 19 |   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
+         |                                                                      ^
+      20 |   await page.getByRole("menuitem", { name: "View" }).hover();
+      21 |   const sidebarX =
+      22 |     (
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/writer-menu-alignment.spec.ts:19:70
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-menu-alignment-menu-ebd52-submenus-align-their-labels-writer/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-menu-alignment-menu-ebd52-submenus-align-their-labels-writer/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-menu-alignment-menu-ebd52-submenus-align-their-labels-writer/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-menu-alignment-menu-ebd52-submenus-align-their-labels-writer/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels 

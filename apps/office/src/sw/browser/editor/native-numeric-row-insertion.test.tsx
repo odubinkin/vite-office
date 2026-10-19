@@ -55,7 +55,7 @@ for (const behind of [false, true])
           index = behind ? 2 : 0,
           source = required(originals[behind ? 1 : 0]);
         fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-        fireEvent.mouseEnter(
+        fireEvent.click(
           within(screen.getByRole("menu", { name: "Table menu" })).getByRole("menuitem", {
             name: "Insert",
           }),

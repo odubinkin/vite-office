@@ -46,7 +46,7 @@ for (const [label, selected] of [
         doc.GetUndoManager().Clear();
         render(<WriterWorkbench isActive view={session.view} />);
         fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-        fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
         const item = screen.getByRole("menuitem", { name: label });
         expect(item).toBeEnabled();
         fireEvent.click(item);
@@ -98,7 +98,7 @@ for (const [label, selected] of [
         );
         expect(element.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(0);
         fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-        fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
         expect(screen.getByRole("menuitem", { name: label })).toBeDisabled();
       } finally {
         cleanup();
@@ -116,7 +116,7 @@ it("native menu standard reset selects current column after a wider row selectio
     shell.SelectTableRow();
     render(<WriterWorkbench isActive view={session.view} />);
     fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
     const submenu = required(
       screen.getByRole("menuitem", { name: "Select Column" }).closest<HTMLElement>('[role="menu"]'),
     );

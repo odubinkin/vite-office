@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+const task='.agentplane/tasks/202610191035-NYABVG';
+function tests(report){const values=[];function visit(suite,parents=[]){for(const spec of suite.specs??[])for(const test of spec.tests??[])values.push({key:[test.projectName,spec.file??suite.file,...parents,spec.title].join('|'),file:spec.file??suite.file,title:spec.title,project:test.projectName,status:test.status,results:test.results.map(r=>r.status)});for(const child of suite.suites??[])visit(child,[...parents,...(suite.title?[suite.title]:[])]);}for(const suite of report.suites)visit(suite);return values;}
+const full=JSON.parse(readFileSync(task+'/browser-full-results.json','utf8')),replay=JSON.parse(readFileSync(task+'/browser-replay-results.json','utf8'));
+const original=tests(full),fresh=tests(replay),unresolved=original.filter(item=>item.status!=='expected');
+assert.equal(original.length,388);assert.equal(full.stats.skipped,0);assert.equal(full.stats.flaky,0);assert.equal(unresolved.length,1);assert.equal(fresh.length,1);assert.equal(fresh[0].key,unresolved[0].key);assert.equal(fresh[0].status,'expected');assert.deepEqual(fresh[0].results,['passed']);
+const dist=JSON.parse(readFileSync(task+'/browser-dist-before.json','utf8'));for(const [file,hash]of Object.entries(dist.files))assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'),hash,'Changed production asset during browser execution:'+file);
+const report={selected:388,originalPassed:full.stats.expected,originalFailed:full.stats.unexpected,replayedPassed:1,skipped:0,flaky:0,allCasesAccounted:true,oneCleanFullInvocation:false,repair:'Only legacy dialog test command ingress now opens hidden Tools via actual More;geometry,scroll/accessibility assertions and90s timeout unchanged.',runtimeDistUnchanged:true,distFileCount:Object.keys(dist.files).length,replayedCase:fresh[0],originalCases:original};
+writeFileSync(task+'/browser-reconciliation.json',JSON.stringify(report,null,2)+'\n');console.log('All388browser cases accounted:387original passes+1successful exact-case replay;no skipped/flaky cases;production assets unchanged.');

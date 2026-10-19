@@ -1,5 +1,6 @@
 /** @fileoverview Chromium checks native Table Insert rows commands, caret ownership and history. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem, openBrowserMenu } from "../test-support/menu-pointer-e2e";
 for (const width of [1280, 390])
   test(
     "native row menu and caret width=" + width,
@@ -13,11 +14,13 @@ for (const width of [1280, 390])
       await page.keyboard.type("Original");
       const table = page.getByRole("table", { name: "Table1" });
       for (const behind of [false, true]) {
-        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
-        await page
-          .getByRole("menu", { name: "Table menu" })
-          .getByRole("menuitem", { name: "Insert", exact: true })
-          .hover();
+        await openBrowserMenu(page, "Table");
+        await hoverBrowserMenuItem(
+          page,
+          page
+            .getByRole("menu", { name: "Table menu" })
+            .getByRole("menuitem", { name: "Insert", exact: true }),
+        );
         await page
           .getByRole("menuitem", {
             name: behind ? "Insert Rows Below" : "Insert Rows Above",

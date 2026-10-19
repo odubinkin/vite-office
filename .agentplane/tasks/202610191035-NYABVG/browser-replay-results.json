@@ -1,0 +1,163 @@
+{
+  "config": {
+    "argv": [
+      "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "/Users/odubinkin/Projects/vite-office-calc/node_modules/.bin/playwright",
+      "test",
+      "writer-dialog-layout.spec.ts",
+      "--config",
+      "apps/office/playwright.config.ts",
+      "--project",
+      "writer",
+      "--grep",
+      "390x600",
+      "--reporter=list,json"
+    ],
+    "configFile": "/Users/odubinkin/Projects/vite-office-calc/apps/office/playwright.config.ts",
+    "rootDir": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "writer",
+        "name": "writer",
+        "testDir": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e",
+        "testIgnore": [
+          "**/shared/**",
+          "**/calc/**"
+        ],
+        "testMatch": [
+          "**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "calc",
+        "name": "calc",
+        "testDir": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/calc/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "shared",
+        "name": "shared",
+        "testDir": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/shared/**/*.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run preview -- --host 127.0.0.1",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "url": "http://127.0.0.1:4173"
+    }
+  },
+  "suites": [
+    {
+      "title": "writer-dialog-layout.spec.ts",
+      "file": "writer-dialog-layout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Writer dialog layout 390x600",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "writer",
+              "projectName": "writer",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26943,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-19T11:05:35.907Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e53bebd201f7f71d396b-e0953adc34112fc66b55",
+          "file": "writer-dialog-layout.spec.ts",
+          "line": 322,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-19T11:05:32.990Z",
+    "duration": 31138.381,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

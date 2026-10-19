@@ -1,5 +1,6 @@
 /** @fileoverview Chromium checks native table selection menus and actual selected-cell editing/history. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem, openBrowserMenu } from "../test-support/menu-pointer-e2e";
 for (const width of [1280, 390])
   test(
     "native table selection menu width=" + width,
@@ -18,8 +19,11 @@ for (const width of [1280, 390])
         ["Select Column", 2],
         ["Select Table", 4],
       ] as const) {
-        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
-        await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
+        await openBrowserMenu(page, "Table");
+        await hoverBrowserMenuItem(
+          page,
+          page.getByRole("menuitem", { name: "Select", exact: true }),
+        );
         await page.getByRole("menuitem", { name: label, exact: true }).click();
         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(count);
         await page.keyboard.type("X");
