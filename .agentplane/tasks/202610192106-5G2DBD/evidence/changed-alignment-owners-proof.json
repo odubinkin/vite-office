@@ -1,0 +1,346 @@
+{
+  "result": "pass",
+  "owners": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "sha256": "a460cc8f32bea493ec20e79a5e3ade6e574e8082766d552720614cc2421b5710",
+      "proof": "related-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 270,
+          "covered": 270,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 302,
+          "covered": 302,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 275,
+          "covered": 275,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+      "sha256": "421c19f6e22a92d5c5ef20ee2903784be50348a3b0753c3ccde5a603aa7981bf",
+      "proof": "related-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/command-surface.ts",
+      "sha256": "0e14e1b20eea87cf93744ba3a2ff1c00baa155c4f6f1ee1adc58786eeae7bd6e",
+      "proof": "related-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "d5be46447e4c2a3bb17eae8bfc5062a9a468ab3af765102f2534ae13bc23337b",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 260,
+          "covered": 260,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 54,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 288,
+          "covered": 288,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 118,
+          "covered": 118,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "bab0c26bbac3ee713fd044510dba4265721b48051473fba30b96254b636a6a78",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 42,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "1a2bd5368ecacd9a4e0e85931477f4ad06456ba81af0dbccdae33815e9ffa7b9",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 78,
+          "covered": 78,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 82,
+          "covered": 82,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 84,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "f288764c1d370fd00e01eaa87b41ee70216fc12c7899887ae2752f7e20ae4ca7",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 120,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 132,
+          "covered": 132,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 60,
+          "covered": 60,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "5f630dc88268dd2b1e4b02521d049640a21801d5cf609e99134b1742e106c162",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 268,
+          "covered": 268,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 303,
+          "covered": 303,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 146,
+          "covered": 146,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "8c56937ee77241b6ef4e37dd012b964f491ef4151e8465863ee6d86ed53b0abd",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 65,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 68,
+          "covered": 68,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "923454a7d9ff30f564f4ab030811c2d91c4b99a00e98b49275f712b1933645be",
+      "proof": "calc-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 124,
+          "covered": 124,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 134,
+          "covered": 134,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 79,
+          "covered": 79,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "f35e06b005773e45b8b3d4ee136d586eee5136b2ee78e368b37e2b6211f7f542",
+      "proof": "related-alignment-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 222,
+          "covered": 222,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 222,
+          "covered": 222,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  ]
+}
