@@ -1,0 +1,178 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "kind": "Source audit/default/contract anchors;not a compiled full-native differential certificate.",
+  "sources": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "markers": [
+        {
+          "marker": "void ScFormatShell::ExecuteAlignment",
+          "line": 556
+        },
+        {
+          "marker": "case SID_ALIGNLEFT:",
+          "line": 818
+        },
+        {
+          "marker": "void ScFormatShell::GetAlignState",
+          "line": 1713
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+      "sha256": "7b24b601115cda9adf8a1ed805c3f9a8ff45dc654603b4e8f1d1d79d0619dcc0",
+      "markers": [
+        {
+          "marker": "SfxVoidItem AlignLeft",
+          "line": 213
+        },
+        {
+          "marker": "SvxHorJustifyItem HorizontalAlignment",
+          "line": 2868
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/sdi/formatsh.sdi",
+      "sha256": "cc19b3bba7fd3a8d2be5b99ca75dc21c986c5fe38f75649d96080014845ee3aa",
+      "markers": [
+        {
+          "marker": "SID_ALIGN_ANY_HDEFAULT",
+          "line": 66
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/sc.hrc",
+      "sha256": "2c9a5abad256793695d3e7b2d9e60913ff6e6e011c2c172ee82a415f631bc670",
+      "markers": [
+        {
+          "marker": "#define SID_ALIGNLEFT",
+          "line": 408
+        },
+        {
+          "marker": "#define SID_H_ALIGNCELL",
+          "line": 418
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svx/svxids.hrc",
+      "sha256": "8490030f09b56de06bba37683b28301900358b4d67aa8fdc7966878f09487d21",
+      "markers": [
+        {
+          "marker": "#define SID_ALIGN_ANY_LEFT",
+          "line": 850
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df",
+      "markers": [
+        {
+          "marker": "XmlScPropHdl_HoriJustify::importXML",
+          "line": 1216
+        },
+        {
+          "marker": "XmlScPropHdl_HoriJustifySource::importXML",
+          "line": 1320
+        },
+        {
+          "marker": "XmlScPropHdl_HoriJustifyRepeat::importXML",
+          "line": 1380
+        },
+        {
+          "marker": "XmlScPropHdl_VertJustify::importXML",
+          "line": 1655
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+      "sha256": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327",
+      "markers": [
+        {
+          "marker": "ATTR_HOR_JUSTIFY",
+          "line": 126
+        },
+        {
+          "marker": "ATTR_VER_JUSTIFY",
+          "line": 129
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/justifyitem.cxx",
+      "sha256": "702eac401615bf39c43a0825dbc770b8d61ab10e3d9a447f3d6e83b00b7d497b",
+      "markers": [
+        {
+          "marker": "SvxHorJustifyItem::QueryValue",
+          "line": 62
+        },
+        {
+          "marker": "SvxVerJustifyItem::PutValue",
+          "line": 233
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/xmlimppr.cxx",
+      "sha256": "50a4cb11e5140cb2d3972c97c099c06d348d2bec23bc14a267aaf6e637f6a71c",
+      "markers": [
+        {
+          "marker": "MID_FLAG_MERGE_PROPERTY",
+          "line": 209
+        },
+        {
+          "marker": "nReference == -1",
+          "line": 283
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/toolbox/tbxitem.cxx",
+      "sha256": "4b455787c5119f7b89715a1331c3798f6cc1d8d3ef6a40b05cf0b1ede4dfc900",
+      "markers": [
+        {
+          "marker": "ToolBoxItemBits::CHECKABLE",
+          "line": 431
+        },
+        {
+          "marker": "TRISTATE_INDET",
+          "line": 465
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/framework/source/uielement/menubarmanager.cxx",
+      "sha256": "f791ef72d4861b6d6498b26e16af5ca92a45b77b5e65942c976db4c801fc2d44",
+      "markers": [
+        {
+          "marker": "Event.State >>= bCheckmark",
+          "line": 296
+        },
+        {
+          "marker": "MenuItemBits::CHECKABLE",
+          "line": 303
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+      "sha256": "6cdeea262b4fcd0aed313a76ebf222142a5e885bed5d6be766e994c2e009d4d3",
+      "markers": [
+        {
+          "marker": "switch (aVars.GetVerJust())",
+          "line": 2064
+        },
+        {
+          "marker": "Standard is normally treated as Bottom",
+          "line": 3287
+        }
+      ]
+    }
+  ]
+}
