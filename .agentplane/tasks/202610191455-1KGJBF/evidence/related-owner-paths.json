@@ -1,0 +1,22 @@
+[
+  "apps/office/src/editeng/browser/text-line-item-codec.ts",
+  "apps/office/src/o3tl/inc/numeric.ts",
+  "apps/office/src/offapi/com/sun/star/awt/FontUnderline.ts",
+  "apps/office/src/sax/source/tools/converter.ts",
+  "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+  "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+  "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+  "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+  "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+  "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+  "apps/office/src/xmloff/source/core/xmltoken.ts",
+  "apps/office/src/xmloff/source/style/postuhdl.ts",
+  "apps/office/src/xmloff/source/style/undlihdl.ts",
+  "apps/office/src/xmloff/source/style/weighhdl.ts",
+  "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+  "apps/office/src/xmloff/source/style/xmlstyle.ts",
+  "apps/office/src/xmloff/source/text/txtparae.ts",
+  "apps/office/src/xmloff/source/text/txtparae.types.ts",
+  "apps/office/src/xmloff/source/text/txtparai.ts",
+  "apps/office/src/xmloff/source/text/txtprmap.ts"
+]
