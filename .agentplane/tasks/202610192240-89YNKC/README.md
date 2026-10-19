@@ -1,10 +1,11 @@
 ---
 id: "202610192240-89YNKC"
 title: "Implement native Calc grow and shrink font UI with shared script-set items"
-status: "DOING"
+result_summary: "verified-202610192240-89YNKC"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T23:44:58.301Z"
+  updated_at: "2026-10-19T23:45:09.710Z"
   updated_by: "CODER"
   note: "verified-202610192240-89YNKC"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - "Calc127files386cases and related shared/Writer28files208cases pass;raw S/B/F/L100 for Calc and every14changed executable owner,source hashes current. Header reexport has no executable owner. Tests/coverage exclusions and thresholds are not weakened."
     - "27unique actual browser cases and3final fresh-build replays pass at1280/390,including page/DOM-free Worker history/ODS and UI primary autosave/reopen. Four screenshot hashes and visual observations retained."
     - "All required static/source/resource/inventory/routing gates pass and56non-task paths stay within approved60. Candidate failures and closeout ordering correction are explicitly reconciled in Findings."
-commit: null
+commit:
+  hash: "abc6c001e5a040685be8e60a0d661dc9ef7ba9f2"
+  message: "🧩 89YNKC task: persist verified implementation and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement native shared script-set items and Calc grow/shrink font UI under existing authorization;retain original selected-script/default/limit behavior and raw100 evidence,calc checkout only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192240-89YNKC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -82,8 +88,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610192240-89YNKC"
+  -
+    type: "verify"
+    at: "2026-10-19T23:45:09.710Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192240-89YNKC"
+  -
+    type: "status"
+    at: "2026-10-19T23:45:09.842Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192240-89YNKC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T23:44:58.358Z"
+doc_updated_at: "2026-10-19T23:45:09.842Z"
 doc_updated_by: "CODER"
 description: "Task41 of the authorized Calc UI goal after verified full checkpoint40. Port the source-shaped consumed SvxScriptSetItem contract and native ScFormatShell grow/shrink size dispatch,wire actual source slots to shared Writer menu/toolbar components and current selection/history/ODS paths;preserve native script/default/limit quirks and document suspected issues. Only vite-office-calc branch calc;targeted Calc100 and related/current-owner100 tests,no full repeat before checkpoint50."
 sections:
@@ -228,6 +247,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-19T23:45:09.710Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192240-89YNKC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:58.358Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+    - old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit abc6c001e5a040685be8e60a0d661dc9ef7ba9f2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task41 implementation commits if necessary;retain source/verification evidence and unrelated tasks. Do not change branches or merge,user owns integration."
   Findings: |-
@@ -242,6 +291,10 @@ sections:
     Residual boundaries: device metrics,rich edit,filtered and alternate sheet views,full native cache/border services and physical allocation order are unported;no broad parity flags are promoted. Existing range application uses actual native itemsets and real attributes;no alternate grid/snapshot or fake document provider. Formatting-only empty cells do not count as data. The browser table can have zero physical columns and reports the native initial empty-column bounds without allocating stores. Writer primary-save/open/no-recovery deviations remain. These limitations do not justify changing source defaults or adding unsupported textobjectbar controls.
 
     Final acceptance supersedes candidate status above:Calc127files386cases raw S8327/B5274/F1624/L7451 all100;shared/Writer28files208cases S311/B255/F57/L257 all100;all14changed executable owners are fully covered and every raw source hash is current. Complete-owner-proof.json verifies the union without excluding any executable changed owner. Final rebuilt3case font browser replay passed after JSDoc/lint corrections;27unique focused browser cases passed in total. Four screenshot bytes/hashes are retained in browser-proof.json and task evidence. Final types,full authored-source ESLint/Prettier,JSDoc,source/resource/inventory/static/routing/doctor gates pass. Closeout verification was temporarily returned to needs_rework solely to persist the implementation commit before binding final verification;no source or acceptance criteria changed. No blockers remain in the bounded task41 scope;the overall Calc UI goal remains active.
+extensions:
+  implementation_commit:
+    hash: "7d39aed21bac7cb193789faa20237d7816b07324"
+    message: "✨ 89YNKC calc: implement native script font sizing and shared selection items"
 id_source: "generated"
 ---
 ## Summary
@@ -391,6 +444,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit 7d39aed21bac7cb193789faa20237d7816b07324
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T23:45:09.710Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192240-89YNKC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:58.358Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+- old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit abc6c001e5a040685be8e60a0d661dc9ef7ba9f2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
