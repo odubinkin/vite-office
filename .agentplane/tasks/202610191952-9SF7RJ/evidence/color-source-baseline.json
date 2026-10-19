@@ -1,0 +1,278 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "kind": "Source audit and native default/contract anchors;not a compiled full-native differential certificate.",
+  "sources": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "markers": [
+        {
+          "marker": "case SID_ATTR_CHAR_COLOR:",
+          "line": 944
+        },
+        {
+          "marker": "case SID_BACKGROUND_COLOR:",
+          "line": 967
+        },
+        {
+          "marker": "GetRecentColor",
+          "line": 950
+        },
+        {
+          "marker": "setComplexColor",
+          "line": 1265
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260",
+      "markers": [
+        {
+          "marker": "void ScViewFunc::ApplyAttr",
+          "line": 1198
+        },
+        {
+          "marker": "if (bAdjustBlockHeight)",
+          "line": 1305
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk3.cxx",
+      "sha256": "0c3d01b6c58b5a895f3e7ea0705417aec67be48450c05c89e298f90e67842daf",
+      "markers": [
+        {
+          "marker": "ScUndoSelectionAttr::DoChange",
+          "line": 396
+        },
+        {
+          "marker": "AdjustBlockHeight",
+          "line": 432
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+      "sha256": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327",
+      "markers": [
+        {
+          "marker": "ATTR_BACKGROUND, new SvxBrushItem",
+          "line": 150
+        },
+        {
+          "marker": "ATTR_LANGUAGE_FORMAT, new SvxLanguageItem",
+          "line": 149
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/global.cxx",
+      "sha256": "8f526d76fb84c65e5c5a78976443bdeee01303876f15beff30220dc2a8a3c2c5",
+      "markers": [
+        {
+          "marker": "ScGlobal::eLnge = LANGUAGE_SYSTEM",
+          "line": 85
+        },
+        {
+          "marker": "eLnge = LANGUAGE_SYSTEM",
+          "line": 85
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/namedcolor.hxx",
+      "sha256": "dcd718cac8315a74321a29e3160c111235f81d898f1c7a6e5f3a7770798ad6b6",
+      "markers": [
+        {
+          "marker": "struct SFX2_DLLPUBLIC NamedColor",
+          "line": 18
+        },
+        {
+          "marker": "m_nThemeIndex = -1",
+          "line": 22
+        },
+        {
+          "marker": "m_nLumMod = 10000",
+          "line": 23
+        },
+        {
+          "marker": "m_nLumOff = 0",
+          "line": 24
+        },
+        {
+          "marker": "getComplexColor() const",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/doc/objcont.cxx",
+      "sha256": "25337b6112fefa628669f97faaede7d0556be208f7d303af822442da52853905",
+      "markers": [
+        {
+          "marker": "SfxObjectShell::GetRecentColor",
+          "line": 337
+        },
+        {
+          "marker": "SfxObjectShell::SetRecentColor",
+          "line": 346
+        },
+        {
+          "marker": "SfxHintId::ColorsChanged",
+          "line": 350
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/objsh.hxx",
+      "sha256": "9613452b1165f360fdc8f6ea1bc4bea6b887006dae88bdcc19f9f3de291473bc",
+      "markers": [
+        {
+          "marker": "public SfxShell",
+          "line": 189
+        },
+        {
+          "marker": "SetRecentColor",
+          "line": 609
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/shell.hxx",
+      "sha256": "7a98354505eb0ad31e794909981083ae0eb253a7d69bd32b0ed10f21d0e99662",
+      "markers": [
+        {
+          "marker": "class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster",
+          "line": 128
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svx/xdef.hxx",
+      "sha256": "240f1cd4aa0a7201f199c4beb7389fee27008b793c5aee11299b2eaa2a35473a",
+      "markers": [
+        {
+          "marker": "COL_DEFAULT_FONT",
+          "line": 82
+        },
+        {
+          "marker": "COL_DEFAULT_HIGHLIGHT",
+          "line": 84
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svx/strings.hrc",
+      "sha256": "2e6ecee19f1f312d46a9db2b53a46b267906e1332060ec2af131acb3d9db01b9",
+      "markers": [
+        {
+          "marker": "RID_SVXSTR_COLOR_DEFAULT_FONT",
+          "line": 575
+        },
+        {
+          "marker": "RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT",
+          "line": 577
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbxcolorupdate.cxx",
+      "sha256": "e82d5cad36ed76b7cf2fdb441524cd7d495c38788ce393191778c2c076cf76aa",
+      "markers": [
+        {
+          "marker": "SetRecentColor(aNamedColor",
+          "line": 124
+        },
+        {
+          "marker": "xModel->GetObjectShell()->SetRecentColor",
+          "line": 156
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/PaletteManager.cxx",
+      "sha256": "e3e705c9a6378d90105991c4a18dcce050b40a5ff0897a74cef2f2fa370a94a6",
+      "markers": [
+        {
+          "marker": "PaletteManager::AddRecentColor",
+          "line": 350
+        },
+        {
+          "marker": "mpBtnUpdater->SetRecentColor",
+          "line": 383
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df",
+      "markers": [
+        {
+          "marker": "SC_UNONAME_CELLBACK",
+          "line": 71
+        },
+        {
+          "marker": "SC_UNONAME_CELLTRAN",
+          "line": 91
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/CommonProperties.hxx",
+      "sha256": "ee4a84ad7898fee0a5d7d38e8348cc6ca103fb6c3cbc33a73d26f9142334fd32",
+      "markers": [
+        {
+          "marker": "CELL_BACKGROUND_COLOR_PROPERTIES",
+          "line": 12
+        },
+        {
+          "marker": "CHAR_COLOR_PROPERTIES",
+          "line": 16
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+      "sha256": "06e707be14bb818761eeb362f71d1e3d47e8938bf952e1ce06fd80cf718c3cdf",
+      "markers": [
+        {
+          "marker": "XML_TYPE_COLORAUTO",
+          "line": 138
+        },
+        {
+          "marker": "XML_TYPE_ISAUTOCOLOR",
+          "line": 139
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+      "sha256": "008d43838ad2bf131230277f3a4dc3e9b5bd2ca4331f83e1778e010ad4b3aefd",
+      "markers": [
+        {
+          "marker": "XMLColorAutoPropHdl::importXML",
+          "line": 795
+        },
+        {
+          "marker": "XMLIsAutoColorPropHdl::importXML",
+          "line": 839
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx",
+      "sha256": "03d4b8f571c9770fcbfa7503d8307c3f4dae0f6e481ee5c7ed6805a3daa19b12",
+      "markers": [
+        {
+          "marker": "Converter::convertBool( bool&",
+          "line": 578
+        },
+        {
+          "marker": "Converter::convertBool( OUStringBuffer&",
+          "line": 594
+        }
+      ]
+    }
+  ]
+}
