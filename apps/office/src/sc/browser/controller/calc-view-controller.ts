@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
 import type { CalcAlignmentAxis } from "../../source/ui/view/formatsh";
 import type { SvxCellHorJustify, SvxCellVerJustify } from "../../../editeng/inc/svxenum";
 import { FontLineStyle } from "../../../tools/inc/fontenum";
@@ -273,6 +274,17 @@ export class CalcViewController {
   /** Reads real selected character state. @param format - Native operation. @returns Uniform state or mixed. */
   GetCharacterState(format: CalcCharacterFormat): boolean | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetCharacterState(format);
+  }
+  /** Queries the native Overline state. @returns Active or mixed. */
+  GetOverlineState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetOverlineState();
+  }
+  /** Commits pending text before the source overline attribute operation. @param item - Optional native argument. @returns Whether attributes changed. */
+  SetOverline(item?: SvxOverlineItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetOverline(item);
+    this.Changed();
+    return changed;
   }
   /** Publishes the native selected line style. @returns Style or mixed. */
   GetUnderlineStyle(): FontLineStyle | undefined {

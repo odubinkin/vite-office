@@ -1,5 +1,49 @@
 /** @fileoverview Ports the bounded SfxBindings state/invalidation boundary from pinned `sfx2/source/control/bindings.cxx`. */
 
+import { SfxItemSet, SfxItemState } from "../../../svl/inc/itemset";
+import { SfxItemPool } from "../../../svl/source/items/itempool";
+import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxEnumItemInterface } from "../../../svl/source/items/cenumitm";
+/** Consumed Execute_Impl toggle-item preparation over the original state set and slot factory. Request routing remains with the owning browser shell. @param state - Actual attribute state. @param which - Mapped native identity. @param createItem - Original concrete slot factory. @returns Prepared item or no executable toggle item. */
+export function createAttributeToggleItem(
+  state: SfxItemSet,
+  which: number,
+  createItem: () => SfxPoolItem,
+): SfxPoolItem | undefined {
+  const status = state.GetItemState(which, true);
+  if (status === SfxItemState.DISABLED) return undefined;
+  let item: SfxPoolItem;
+  if (
+    status === SfxItemState.SET ||
+    (status === SfxItemState.DEFAULT && SfxItemPool.IsWhich(which))
+  )
+    item = state.Get(which);
+  else if (status === SfxItemState.INVALID) {
+    item = createItem();
+    item.SetWhich(which);
+    if (item instanceof SfxBoolItem) {
+      item.SetValue(true);
+      return item;
+    }
+    if (item instanceof SfxEnumItemInterface && item.HasBoolValue()) {
+      item.SetBoolValue(true);
+      return item;
+    }
+    return undefined;
+  } else return undefined;
+  if (item instanceof SfxBoolItem) {
+    const next = item.Clone() as SfxBoolItem;
+    next.SetValue(!item.GetValue());
+    return next;
+  }
+  if (item instanceof SfxEnumItemInterface && item.HasBoolValue()) {
+    const next = item.Clone() as SfxEnumItemInterface;
+    next.SetBoolValue(!item.GetBoolValue());
+    return next;
+  }
+  return undefined;
+}
+
 /** State shape published by the dispatcher to bindings clients. */
 export interface SfxSlotState<Value = unknown> {
   readonly enabled: boolean;

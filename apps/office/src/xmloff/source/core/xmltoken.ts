@@ -234,6 +234,10 @@ export enum XMLToken {
   STYLE_FONT_SIZE_COMPLEX,
   STYLE_USE_OPTIMAL_ROW_HEIGHT,
   STYLE_TEXT_UNDERLINE_TYPE,
+  STYLE_TEXT_OVERLINE_STYLE,
+  STYLE_TEXT_OVERLINE_TYPE,
+  STYLE_TEXT_OVERLINE_WIDTH,
+  STYLE_TEXT_OVERLINE_COLOR,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -437,6 +441,10 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "font-size-complex", XMLToken.STYLE_FONT_SIZE_COMPLEX],
   [ODF_NAMESPACES.style, "use-optimal-row-height", XMLToken.STYLE_USE_OPTIMAL_ROW_HEIGHT],
   [ODF_NAMESPACES.style, "text-underline-type", XMLToken.STYLE_TEXT_UNDERLINE_TYPE],
+  [ODF_NAMESPACES.style, "text-overline-style", XMLToken.STYLE_TEXT_OVERLINE_STYLE],
+  [ODF_NAMESPACES.style, "text-overline-type", XMLToken.STYLE_TEXT_OVERLINE_TYPE],
+  [ODF_NAMESPACES.style, "text-overline-width", XMLToken.STYLE_TEXT_OVERLINE_WIDTH],
+  [ODF_NAMESPACES.style, "text-overline-color", XMLToken.STYLE_TEXT_OVERLINE_COLOR],
   [ODF_NAMESPACES.fo, "color", XMLToken.FO_COLOR],
   [ODF_NAMESPACES.fo, "background-color", XMLToken.FO_BACKGROUND_COLOR],
   [ODF_NAMESPACES.fo, "keep-with-next", XMLToken.FO_KEEP_WITH_NEXT],

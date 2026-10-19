@@ -16,7 +16,7 @@ import type { ScPatternAttr } from "../../../inc/patattr";
 import {
   SvxWeightItem,
   SvxPostureItem,
-  SvxUnderlineItem,
+  SvxTextLineItem,
   SvxFontHeightItem,
 } from "../../../../editeng/source/items/textitem";
 import {
@@ -91,9 +91,35 @@ const lines = [
     new XMLUnderlineWidthPropHdl(),
   ],
 ] as const;
+/** Native Calc chains the same line handlers for independent underline and overline properties. */
+const lineGroups = [
+  { which: 104, name: "underline", color: XMLToken.STYLE_TEXT_UNDERLINE_COLOR, properties: lines },
+  {
+    which: 105,
+    name: "overline",
+    color: XMLToken.STYLE_TEXT_OVERLINE_COLOR,
+    properties: [
+      [
+        XMLToken.STYLE_TEXT_OVERLINE_STYLE,
+        "style:text-overline-style",
+        new XMLUnderlineStylePropHdl(),
+      ],
+      [
+        XMLToken.STYLE_TEXT_OVERLINE_TYPE,
+        "style:text-overline-type",
+        new XMLUnderlineTypePropHdl(),
+      ],
+      [
+        XMLToken.STYLE_TEXT_OVERLINE_WIDTH,
+        "style:text-overline-width",
+        new XMLUnderlineWidthPropHdl(),
+      ],
+    ],
+  },
+] as const;
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
-  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 109, 129, 132, 148,
+  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 109, 129, 132, 148,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -137,17 +163,19 @@ export function exportCellTextProperties(
       (pattern.GetItem(which) as SvxWeightItem | SvxPostureItem).QueryValue(value, member);
       if (handler.exportXML(output, value, unitConverter)) result += ` ${name}="${output[0]}"`;
     }
-    if (pattern.GetItemSet().GetItemState(104, false) !== SfxItemState.SET) return result;
-    const line = pattern.GetItem(104) as SvxUnderlineItem;
-    line.QueryValue(value, MID_TL_STYLE);
-    for (const [, name, handler] of lines)
-      if (handler.exportXML(output, value, unitConverter)) result += ` ${name}="${output[0]}"`;
-    output[0] = "";
-    line.QueryValue(value, MID_TL_HASCOLOR);
-    lineHasColor.exportXML(output, value, unitConverter);
-    line.QueryValue(value, MID_TL_COLOR);
-    lineColor.exportXML(output, value, unitConverter);
-    result += ` style:text-underline-color="${output[0]}"`;
+    for (const group of lineGroups) {
+      if (pattern.GetItemSet().GetItemState(group.which, false) !== SfxItemState.SET) continue;
+      const line = pattern.GetItem(group.which) as SvxTextLineItem;
+      line.QueryValue(value, MID_TL_STYLE);
+      for (const [, name, handler] of group.properties)
+        if (handler.exportXML(output, value, unitConverter)) result += ` ${name}="${output[0]}"`;
+      output[0] = "";
+      line.QueryValue(value, MID_TL_HASCOLOR);
+      lineHasColor.exportXML(output, value, unitConverter);
+      line.QueryValue(value, MID_TL_COLOR);
+      lineColor.exportXML(output, value, unitConverter);
+      result += ` style:text-${group.name}-color="${output[0]}"`;
+    }
     return result;
   } finally {
     value.dispose();
@@ -175,11 +203,18 @@ export function importCellTextProperties(
         /** Selects original character token. @param pair - Property. @returns Token. */
         ([token]) => token,
       ),
-      ...lines.map(
-        /** Selects original line token. @param pair - Property. @returns Token. */
-        ([token]) => token,
+      ...lineGroups.flatMap(
+        /** Collects native property tokens for both line families. @param group - Original property group. @returns Recognized SAX tokens. */ (
+          group,
+        ) => [
+          ...group.properties.map(
+            /** Selects the native line token. @param property - Mapping. @returns Token. */ ([
+              token,
+            ]) => token,
+          ),
+          group.color,
+        ],
       ),
-      XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
     ],
@@ -245,29 +280,31 @@ export function importCellTextProperties(
       item.PutValue(value, member);
       pattern.ItemSetPut(item);
     }
-    value.clear();
-    const line = new SvxUnderlineItem(pattern.GetItem(104) as SvxUnderlineItem);
-    let applied = false;
-    for (const [token, source] of attributes) {
-      const property = lines.find(
-        /** Finds an original line property in actual SAX order. @param entry - Mapping. @returns Token equality. */ ([
-          entry,
-        ]) => entry === token,
-      );
-      if (property !== undefined) {
-        if (property[2].importXML(source, value, unitConverter)) {
-          line.PutValue(value, MID_TL_STYLE);
+    for (const group of lineGroups) {
+      value.clear();
+      const line = (pattern.GetItem(group.which) as SvxTextLineItem).Clone();
+      let applied = false;
+      for (const [token, source] of attributes) {
+        const property = group.properties.find(
+          /** Finds a native line property in actual SAX order. @param property - Mapping. @returns Whether matching. */ ([
+            entry,
+          ]) => entry === token,
+        );
+        if (property !== undefined) {
+          if (property[2].importXML(source, value, unitConverter)) {
+            line.PutValue(value, MID_TL_STYLE);
+            applied = true;
+          } else unsupported(`invalid cell ${group.name} property`);
+        }
+        if (token === group.color) {
+          if (lineColor.importXML(source, value, unitConverter)) line.PutValue(value, MID_TL_COLOR);
+          lineHasColor.importXML(source, value, unitConverter);
+          line.PutValue(value, MID_TL_HASCOLOR);
           applied = true;
-        } else unsupported("invalid cell underline property");
+        }
       }
-      if (token === XMLToken.STYLE_TEXT_UNDERLINE_COLOR) {
-        if (lineColor.importXML(source, value, unitConverter)) line.PutValue(value, MID_TL_COLOR);
-        lineHasColor.importXML(source, value, unitConverter);
-        line.PutValue(value, MID_TL_HASCOLOR);
-        applied = true;
-      }
+      if (applied) pattern.ItemSetPut(line);
     }
-    if (applied) pattern.ItemSetPut(line);
   } finally {
     value.dispose();
   }

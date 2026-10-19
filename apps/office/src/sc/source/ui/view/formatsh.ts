@@ -11,8 +11,10 @@ import {
   SvxWeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxOverlineItem,
 } from "../../../../editeng/source/items/textitem";
 import { FontWeight, FontItalic, FontLineStyle } from "../../../../tools/inc/fontenum";
+import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 import { GetSelectionPattern } from "./viewfunc";
 import { AdjustBlockHeight } from "./viewfun2";
 import { ScDocument } from "../../../inc/document";
@@ -202,6 +204,25 @@ export class ScFormatShell {
     if (format === "italic")
       return (item as SvxPostureItem).GetPosture() !== FontItalic.ITALIC_NONE;
     return (item as SvxUnderlineItem).GetLineStyle() !== FontLineStyle.LINESTYLE_NONE;
+  }
+  /** Reads the source overline bool projection from the native selected item. @returns Active state or mixed. */
+  GetOverlineState(): boolean | undefined {
+    return (this.SelectionItem(105) as SvxOverlineItem | undefined)?.GetBoolValue();
+  }
+  /** Applies the prepared Sfx toggle or original typed ExecuteAttr request,retaining complete line metadata. @param value - Optional complete item. @returns Whether attributes changed. */
+  SetOverline(value?: SvxOverlineItem): boolean {
+    const item =
+      value ??
+      (createAttributeToggleItem(
+        this.SelectionPattern().GetItemSet(),
+        105,
+        SvxOverlineItem.CreateDefault,
+      ) as SvxOverlineItem);
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper()),
+      copy = item.Clone() as SvxOverlineItem;
+    copy.SetWhich(105);
+    delta.ItemSetPut(copy);
+    return this.ApplySelectionPattern(delta);
   }
   /** Reads the native underline item across the current selection. @returns Exact style or mixed. */
   GetUnderlineStyle(): FontLineStyle | undefined {

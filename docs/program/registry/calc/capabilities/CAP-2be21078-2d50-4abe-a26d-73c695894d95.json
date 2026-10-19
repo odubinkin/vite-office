@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2be21078-2d50-4abe-a26d-73c695894d95",
+    "capabilityId": "CAP-2be21078-2d50-4abe-a26d-73c695894d95",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task1K31AJ implements native Overline11568/Which105 through consumed shared SfxBindings toggle preparation using real SfxItemSet states and concrete bool/enum slot factories. Uniform items clone complete metadata;INVALID creates the native default. Actual selection patterns,attribute Undo/Redo and grouped/disjoint marks retain one document model. Existing Writer menu components publish checked/mixed state. Native ODS overline style/type/width/color reuse original shared line handlers with independent property values;plain-cell spans paint overline separately from parent underline. Full native bindings request routing,rich edit,device metrics and full native parity remain unverified;Writer primary-save/open/no-recovery deviations remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native overline toggle and ODS text properties",
+    "gaps": [
+      "Full native SfxBindings execution/UNO transport,rich edit,filtered/alternate sheet views and device line geometry remain unverified. Shared toggle preparation is the source value-state portion;browser dispatch routing stays with its existing owner.",
+      "Plain browser painting represents NONE/SINGLE/DOUBLE with independent line color;native device-specific dash/wave thickness and theme-color serialization are not certified.",
+      "Native testRichTextExportODS is inspected for overlapping underline/overline and double line expectations;its entire EditEngine test is not executed or certified by this plain-cell slice."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx",
+          "marker": "SfxBindings::Execute_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_ATTR_CHAR_OVERLINE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+          "marker": "XML_TYPE_TEXT_OVERLINE_STYLE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharOverline"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testRichTextExportODS"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/udlnitem.hxx",
+          "marker": "SvxOverlineItem"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sfx2/source/control/bindings.ts",
+          "marker": "createAttributeToggleItem"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "SetOverline"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+          "marker": "lineGroups"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/control/native-attribute-toggle.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/overline.spec.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610192347-1K31AJ/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-overline-ui",
+    "scopeLimitations": [
+      "Full native SfxBindings execution/UNO transport,rich edit,filtered/alternate sheet views and device line geometry remain unverified. Shared toggle preparation is the source value-state portion;browser dispatch routing stays with its existing owner.",
+      "Plain browser painting represents NONE/SINGLE/DOUBLE with independent line color;native device-specific dash/wave thickness and theme-color serialization are not certified.",
+      "Native testRichTextExportODS is inspected for overlapping underline/overline and double line expectations;its entire EditEngine test is not executed or certified by this plain-cell slice."
+    ]
+  }
+}

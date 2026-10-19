@@ -45,7 +45,10 @@ for (const suite of ["writer", "calc"] as const)
       await expect(first).toHaveAttribute("data-popup-highlighted", "true");
       await expect(first).toBeEnabled();
       if (suite === "calc") {
-        const disabled = popup.getByRole("menuitemcheckbox", { name: "Overline", exact: true });
+        const disabled = popup.getByRole("menuitemcheckbox", {
+          name: "Strikethrough",
+          exact: true,
+        });
         await expect(disabled).toBeDisabled();
         await disabled.hover();
         const disabledRect = await disabled.boundingBox();

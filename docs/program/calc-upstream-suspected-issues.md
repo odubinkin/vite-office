@@ -3086,3 +3086,18 @@ port derives bounds from the real typed cell blocks, excludes formatting-only ce
 retains the native clipping function's partially mutated outputs on failure. This source
 observation does not certify the unported filtered-cell, alternate sheet-view, operation
 allocation or device-layout services.
+
+## CALC-211: mixed line formatting toggles through a fresh factory item and loses independent line color
+
+Status: pinned `SfxBindings::Execute_Impl` and consumed Calc Overline regression.
+
+For a uniform SET/default toggleable enum, bindings clone the current item and flip its
+boolean projection, retaining line color and other metadata. For INVALID (mixed) state,
+bindings instead create the slot's default item, set its mapped Which and enable it. Thus
+selecting differently formatted cells and toggling Overline can reset an existing explicit
+line color to the fresh item's `font-color` default while setting SINGLE overline.
+
+Decision: preserve the original factory branch. The shared toggle preparation and actual
+Calc selection/history tests check the distinct uniform-color-preserving and mixed-color-
+resetting outcomes. This is a source-based consumed contract, not a full native bindings,
+UNO dispatch or device-painting certificate.
