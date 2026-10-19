@@ -1,10 +1,11 @@
 ---
 id: "202610182355-2WD4TX"
 title: "Implement native RTL general Unicode number formatting and buffer insertion"
-status: "DOING"
+result_summary: "Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T00:06:54.008Z"
+  updated_at: "2026-10-19T00:08:20.865Z"
   updated_by: "CODER"
-  note: "Full8format Unicode formatter and real replace/insert owners match122765genuine normal/ASanUBSan states plus37026prior float buffers;actual upstream negative-F overflow separately reproduced and bounded honestly. Entire changed scope/raw100,wholeCalc299/raw100,formula32 and all declared gates pass.15paths,goalactive,nextfull30."
+  note: "Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "All8native formats and actual enum/28bit sentinel values follow pinned source;pre-round selection,half-up integer rounding,grouping,erase,exponent widths and Dragonbox ignored-zero scale are represented in one existing numeric owner. C facade uses actual SAL allocation/buffer/ref ownership,no synthetic provider."
     - "122765genuine normal/ASanUBSan states and37026prior float buffers pass on verified138actual objects/346original sources. Native negative-F stack-allocation bug is independently reproduced as expected SIGABRT/ASan,retained with exact input and conservatively excluded from returned-output observations without sanitizer weakening."
     - "WholeCalc299/raw100,related16files41cases/raw100 S287 B297 F12 L252,formula32,types/finalbuild/static/style/docs/dependencies/provenance/scopedinventories/doctor/routing pass.15intentional paths,clean implementation commit d6ca1e55634c,no validators or thresholds changed."
-commit: null
+commit:
+  hash: "d6ca1e55634ce53464c92f752b8137ed99b6c0d7"
+  message: "🧩 2WD4TX core: port native Unicode number formatting and buffer insertion"
 comments:
   -
     author: "CODER"
     body: "Start:port full native RTL number formatting and real Unicode replace/insert contracts for the approved Calc buffer and font serialization path."
+  -
+    author: "CODER"
+    body: "Verified: Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full8format Unicode formatter and real replace/insert owners match122765genuine normal/ASanUBSan states plus37026prior float buffers;actual upstream negative-F overflow separately reproduced and bounded honestly. Entire changed scope/raw100,wholeCalc299/raw100,formula32 and all declared gates pass.15paths,goalactive,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-19T00:08:20.865Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage."
+  -
+    type: "status"
+    at: "2026-10-19T00:08:20.962Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T00:06:54.061Z"
+doc_updated_at: "2026-10-19T00:08:20.962Z"
 doc_updated_by: "CODER"
 description: "Task25 of approved Calc goal:port complete E/F/G/Automatic/E1/E2/G1/G2 numeric formatting responsibility and rtl_math_doubleToUString over real SAL allocation/buffer owners. Preserve source enum/constants,precision,rounding,grouping,special values,replace versus insert contracts. Verify full native normal and ASanUBSan observations offline using unchanged source graph. Only calc checkout/branch;no merge/network."
 sections:
@@ -122,6 +141,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182355-2WD4TX -m 🧩 2WD4TX task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T00:08:20.865Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T00:06:54.061Z, excerpt_hash=sha256:3da6d58ff152d0db2db0c89ccd478fb2abc6362fde590c15c45e52e2bee9ec4f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182355-2WD4TX/blueprint/resolved-snapshot.json
+    - old_digest: 0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8
+    - current_digest: 0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182355-2WD4TX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182355-2WD4TX --result verified-202610182355-2WD4TX --commit 63fa7c729c61a878f409376ff815dfcdd36bfe5b
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -199,6 +248,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182355-2WD4TX -m 🧩 2WD4TX task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T00:08:20.865Z — VERIFY — ok
+
+By: CODER
+
+Note: Native eight-format Unicode number output and actual replacement/insertion now match122765source-linked states with100percent changed-module and Calc coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T00:06:54.061Z, excerpt_hash=sha256:3da6d58ff152d0db2db0c89ccd478fb2abc6362fde590c15c45e52e2bee9ec4f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182355-2WD4TX/blueprint/resolved-snapshot.json
+- old_digest: 0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8
+- current_digest: 0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182355-2WD4TX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182355-2WD4TX --result verified-202610182355-2WD4TX --commit 63fa7c729c61a878f409376ff815dfcdd36bfe5b
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
