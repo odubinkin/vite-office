@@ -1,0 +1,52 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  117 passed (117)
+      Tests  338 passed (338)
+   Start at  23:09:41
+   Duration  419.86s (transform 133.87s, setup 57.34s, import 238.79s, tests 137.50s, environment 274.12s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.89 |    99.68 |   99.93 |   99.89 |                   
+ ...ser/controller |   99.61 |    99.03 |     100 |     100 |                   
+  ...controller.ts |   99.61 |    99.03 |     100 |     100 | 204               
+ ...r/presentation |     100 |    99.62 |     100 |     100 |                   
+  ScGridWindow.tsx |     100 |    97.22 |     100 |     100 | 280               
+ sdi               |      92 |    87.27 |   95.65 |   91.66 |                   
+  scalc.ts         |      92 |    87.27 |   95.65 |   91.66 | 175,179-186       
+ source/filter/xml |    99.4 |    98.56 |     100 |   99.33 |                   
+  xmlstyle.ts      |   96.34 |    86.66 |     100 |   95.89 | 138-139,158       
+ source/ui/view    |     100 |     98.3 |     100 |     100 |                   
+  formatsh.ts      |     100 |    95.65 |     100 |     100 | 121-125           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.89% ( 7621/7629 )
+Branches     : 99.68% ( 4802/4817 )
+Functions    : 99.93% ( 1526/1527 )
+Lines        : 99.89% ( 6828/6835 )
+================================================================================
+ERROR: Coverage for lines (99.89%) does not meet global threshold (100%)
+ERROR: Coverage for functions (99.93%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.89%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.68%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage

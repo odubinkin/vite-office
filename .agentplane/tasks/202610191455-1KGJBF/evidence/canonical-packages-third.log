@@ -1,0 +1,27 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |shared| src/editeng/browser/text-line-item-codec.test.ts (2 tests | 1 failed) 12ms
+   × transfers full represented style and packed alpha/color through the actual pool 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/editeng/browser/text-line-item-codec.test.ts > transfers full represented style and packed alpha/color through the actual pool
+Error: Color opaque value is outside RGB24.
+ ❯ new Color src/tools/inc/color.ts:56:15
+     54|       }
+     55|       if (!Number.isInteger(source) || source < 0 || source > 0xffffff)
+     56|         throw new Error("Color opaque value is outside RGB24.");
+       |               ^
+     57|       this.mValue = source;
+     58|       return;
+ ❯ src/editeng/browser/text-line-item-codec.test.ts:13:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 28 passed (29)
+   Start at  23:01:54
+   Duration  7.86s (transform 3.27s, setup 968ms, import 5.31s, tests 815ms, environment 6.96s)
+

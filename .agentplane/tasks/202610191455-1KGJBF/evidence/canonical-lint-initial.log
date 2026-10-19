@@ -1,0 +1,15 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/xmlexp.ts
+   23:3   error  'SvxFontItem' is defined but never used           @typescript-eslint/no-unused-vars
+   24:3   error  'SvxFontHeightItem' is defined but never used     @typescript-eslint/no-unused-vars
+   25:3   error  'SvxPostureItem' is defined but never used        @typescript-eslint/no-unused-vars
+   26:3   error  'SvxUnderlineItem' is defined but never used      @typescript-eslint/no-unused-vars
+   27:3   error  'SvxWeightItem' is defined but never used         @typescript-eslint/no-unused-vars
+   37:10  error  'SfxStringItem' is defined but never used         @typescript-eslint/no-unused-vars
+  116:10  error  'getFontFamilyGeneric' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/xmlimp.ts
+  20:3  error  'FontLineStyle' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 8 problems (8 errors, 0 warnings)
+

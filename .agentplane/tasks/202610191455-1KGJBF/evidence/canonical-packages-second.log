@@ -1,0 +1,547 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |shared| src/xmloff/source/text/txtprmap.test.ts (1 test | 1 failed) 19ms
+   × transports all native independent script values without boolean normalization 18ms
+ ❯ |writer| src/sw/source/filter/xml/odt-roundtrip.test.ts (13 tests | 1 failed) 458ms
+     × rejects malformed style records and unsupported semantic properties 32ms
+ ❯ |writer| src/sw/source/filter/xml/odt-declarations.test.ts (7 tests | 1 failed) 326ms
+     × rejects underline colors that diverge from the font color 29ms
+ ❯ |writer| src/sw/source/filter/xml/odt-import-diagnostics.test.ts (2 tests | 1 failed) 138ms
+     × receives the stream from a pinned upstream ODT through SwXMLReader 133ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/source/filter/xml/odt-declarations.test.ts > ODT declaration import > rejects underline colors that diverge from the font color
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/sw/source/filter/xml/odt-declarations.test.ts:148:7
+    146|           { title: "fixture" },
+    147|         ),
+    148|     ).toThrow("Unsupported ODF underline color");
+       |       ^
+    149|   });
+    150|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |writer| src/sw/source/filter/xml/odt-import-diagnostics.test.ts > ODT structural diagnostic callback > receives the stream from a pinned upstream ODT through SwXMLReader
+AssertionError: expected [ { …(4) }, { …(4) }, { …(4) }, …(72) ] to deep equally contain ObjectContaining{…}
+
+- Expected:
+ObjectContaining {
+  "kind": "unknown-attribute",
+  "name": "style:font-size-asian",
+  "stream": "styles.xml",
+}
+
++ Received:
+[
+  {
+    "kind": "unknown-attribute",
+    "name": "svg:stroke-color",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:fill-color",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:wrap-option",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:shadow-offset-x",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:shadow-offset-y",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:start-line-spacing-horizontal",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:start-line-spacing-vertical",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:end-line-spacing-horizontal",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "draw:end-line-spacing-vertical",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:flow-with-text",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-element",
+    "name": "style:graphic-properties",
+    "path": "office:document-styles/office:styles/style:default-style/style:graphic-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:text-autospace",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:line-break",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:writing-mode",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:language",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:country",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:letter-kerning",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-asian",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-asian",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-complex",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-complex",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:hyphenation-ladder-count",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:text-autospace",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:punctuation-wrap",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:line-break",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:tab-stop-distance",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:writing-mode",
+    "path": "office:document-styles/office:styles/style:default-style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:language",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:country",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:letter-kerning",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-asian",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-asian",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-complex",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-complex",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:hyphenate",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:hyphenation-remain-char-count",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:hyphenation-push-char-count",
+    "path": "office:document-styles/office:styles/style:default-style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-asian",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-generic-asian",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-pitch-asian",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-generic-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-pitch-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unsupported-attribute",
+    "name": "style:font-family-generic",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unsupported-attribute",
+    "name": "style:font-pitch",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-generic-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unsupported-attribute",
+    "name": "style:font-family-generic",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:line-number",
+    "path": "office:document-styles/office:styles/style:style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-generic-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unsupported-attribute",
+    "name": "style:font-family-generic",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:line-number",
+    "path": "office:document-styles/office:styles/style:style/style:paragraph-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:language",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "fo:country",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-asian",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-asian",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:font-family-generic-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:language-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:country-complex",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unsupported-attribute",
+    "name": "style:font-family-generic",
+    "path": "office:document-styles/office:styles/style:style/style:text-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:note-class",
+    "path": "office:document-styles/office:styles/text:notes-configuration",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:footnotes-position",
+    "path": "office:document-styles/office:styles/text:notes-configuration",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:start-numbering-at",
+    "path": "office:document-styles/office:styles/text:notes-configuration",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "text:note-class",
+    "path": "office:document-styles/office:styles/text:notes-configuration",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:writing-mode",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:footnote-max-height",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:distance-before-sep",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties/style:footnote-sep",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:distance-after-sep",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties/style:footnote-sep",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:line-style",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties/style:footnote-sep",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:adjustment",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties/style:footnote-sep",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-attribute",
+    "name": "style:color",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:page-layout-properties/style:footnote-sep",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-element",
+    "name": "style:header-style",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:header-style",
+    "stream": "styles.xml",
+  },
+  {
+    "kind": "unknown-element",
+    "name": "style:footer-style",
+    "path": "office:document-styles/office:automatic-styles/style:page-layout/style:footer-style",
+    "stream": "styles.xml",
+  },
+]
+
+ ❯ src/sw/source/filter/xml/odt-import-diagnostics.test.ts:34:25
+     32|       }),
+     33|     );
+     34|     expect(diagnostics).toContainEqual(
+       |                         ^
+     35|       expect.objectContaining({
+     36|         kind: "unknown-attribute",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |writer| src/sw/source/filter/xml/odt-roundtrip.test.ts > Writer ODF XML filters > rejects malformed style records and unsupported semantic properties
+AssertionError: expected '<?xml version="1.0" encoding="UTF-8"?…' to contain 'fo:font-weight="normal"'
+
+Expected: "fo:font-weight="normal""
+Received: "<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3"><office:font-face-decls><style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;"/><style:font-face style:name="Noto Naskh Arabic" svg:font-family="&apos;Noto Naskh Arabic&apos;"/><style:font-face style:name="Noto Sans CJK" svg:font-family="&apos;Noto Sans CJK&apos;"/></office:font-face-decls><office:automatic-styles></office:automatic-styles><office:body><office:text><text:p text:style-name="Standard">x</text:p></office:text></office:body></office:document-content>"
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts:906:42
+    904|       const imported = importWriterXml(styles, changed, metadata(), me…
+    905|       expect(imported.paragraphs[0]?.GetText()).toBe("x");
+    906|       expect(exportContentXml(imported)).toContain(canonical);
+       |                                          ^
+    907|     }
+    908|     const unknown = styledContent.replace(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |shared| src/xmloff/source/text/txtprmap.test.ts > transports all native independent script values without boolean normalization
+AssertionError: expected ' fo:font-style="italic"' to be '' // Object.is equality
+
+- Expected
++ Received
+
++  fo:font-style="italic"
+
+ ❯ src/xmloff/source/text/txtprmap.test.ts:60:61
+     58|   expect(xml).toContain('style:text-underline-color="#123abc"');
+     59|   expect(exportTextCharacterProperties({})).toBe("");
+     60|   expect(exportTextCharacterProperties({ fontPosture: 5 })).toBe("");
+       |                                                             ^
+     61|   expect(
+     62|     importTextCharacterProperties(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  4 failed | 56 passed (60)
+      Tests  4 failed | 366 passed (370)
+   Start at  22:57:25
+   Duration  87.43s (transform 11.94s, setup 11.27s, import 49.91s, tests 31.37s, environment 64.50s)
+
