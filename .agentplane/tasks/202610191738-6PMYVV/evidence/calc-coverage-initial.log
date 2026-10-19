@@ -1,0 +1,52 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx (3 tests | 1 failed) 778ms
+   × renders native formatting placements with the bound shared font-size control and unavailable actions disabled 115ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > renders native formatting placements with the bound shared font-size control and unavailable actions disabled
+AssertionError: expected "FromBrowser" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st FromBrowser call:
+
+    Array []
+
+
+Number of calls: 1
+
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:209:30
+    207|   const fonts = within(bar).getAllByRole("combobox");
+    208|   expect(fonts).toHaveLength(2);
+    209|   expect(fontsRequested).not.toHaveBeenCalled();
+       |                              ^
+    210|   expect(fonts[0]).toBeDisabled();
+    211|   expect(fonts[0]).toHaveValue("");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 119 passed (120)
+      Tests  1 failed | 351 passed (352)
+   Start at  01:27:49
+   Duration  64.79s (transform 18.55s, setup 9.99s, import 35.33s, tests 29.47s, environment 39.63s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text

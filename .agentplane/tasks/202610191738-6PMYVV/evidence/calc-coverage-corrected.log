@@ -1,0 +1,47 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx (3 tests | 1 failed) 747ms
+   × renders native formatting placements with the bound shared font-size control and unavailable actions disabled 95ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > renders native formatting placements with the bound shared font-size control and unavailable actions disabled
+Error: expect(element).toHaveValue()
+
+Expected the element to have value:
+
+Received:
+  Liberation Sans
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:211:20
+    209|   expect(fontsRequested).toHaveBeenCalled();
+    210|   expect(fonts[0]).toBeEnabled();
+    211|   expect(fonts[0]).toHaveValue("");
+       |                    ^
+    212|   expect(fonts[1]).toBeEnabled();
+    213|   expect(fonts[1]).toHaveValue("10");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 119 passed (120)
+      Tests  1 failed | 351 passed (352)
+   Start at  01:29:22
+   Duration  63.91s (transform 18.86s, setup 7.14s, import 36.83s, tests 28.63s, environment 39.56s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task37-calc-initial --coverage.reporter=json --coverage.reporter=text

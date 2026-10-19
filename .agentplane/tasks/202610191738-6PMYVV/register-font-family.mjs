@@ -55,3 +55,5 @@ for(const full of paths){const path=full.replace('apps/office/src/','');if(added
  write(rp,runtime);write(pp,provenance);
 }
 console.log(JSON.stringify({capId,newNative:native.length,newBrowser:browser.length,verification:'pending'}));
+
+const fp=root+"writer/provenance/sw/source/core/txtnode/ndhints-font.ts.json"; const f=read(fp); f.record.filenameDivergence={stackNecessity:"responsibility-split",localPath:f.record.localPath,rationale:"Keeps the bounded family-delta item-set operation separate from native hint maps under the source-size ceiling;its upstream responsibility belongs to thints.cxx SetAttr/TryInsertHint."}; write(fp,f);
