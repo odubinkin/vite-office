@@ -19,7 +19,7 @@
   "apps/office/src/sw/sdi/swriter.ts": "74c5e2ab210427ab6c04d818515abdee8e1d720e15ad4da0d26c0b3e4e1bdea4",
   "apps/office/src/sw/source/core/txtnode/ndhints-font.ts": "024fdb6ab6bfc6b5dc044860b89ff3d0b44f76b494f1fa826af94cd37e3f2099",
   "apps/office/src/sw/source/core/txtnode/ndhints.ts": "c312260586762bf0c6346b7fe2e818eccb985e640e879d24851ba857a7b965f4",
-  "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "0c33f319653251057ba18600669b9c79cc1c1c6562056c43458763338f535f61",
+  "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "dc081ac5aba3328c64cad37b1f7cfaf09d37466abc1ba770b1300581931118a0",
   "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "9102fad1d221a7f4cba077fdf6d942304d642c70233019e8ab49fefa1f5f974c",
   "apps/office/src/sw/source/core/undo/unattr.ts": "ed2ba8bbbb8b30dc19840e8eaac7fa6d826fcba724810b0aa9459adf1931f3ac",
   "apps/office/src/sw/source/uibase/shells/textsh1.ts": "ace069fa96ba5da74e0af954b9d1213b7a4fabe16c729d4c98ba21160b80dbfa",
