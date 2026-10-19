@@ -4,7 +4,7 @@ title: "Record recent upstream RTL buffer and conversion findings in Calc issue 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,25 @@ verification:
   updated_by: "CODER"
   note: "Canonical ledger now records3distinct source findings with explicit preserve-upstream decisions. Original226406bytes unchanged;16links/7anchors and native fixture/source/status evidence pass. Prettier,size,doctor,routing and whitespace pass;all kernel paths/hashes unchanged. Docs-only scope,goalactive,nextfull30."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T07:35:25.282Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical issue ledger now records recent actual/source-only RTL concerns with precise evidence and explicit preserve-upstream decisions;kernel remains unchanged."
+  evaluated_sha: "8362ad9e8a535db2647dc6bab91b9de3a1ca7782"
+  blueprint_digest: "8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9"
+  evidence_refs:
+    - ".agentplane/tasks/202610190727-BRPCJB/README.md"
+    - ".agentplane/tasks/202610190727-BRPCJB/quality/20261019-073525282-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610190727-BRPCJB/quality/20261019-073525282-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610190727-BRPCJB/quality/20261019-073525282-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610190727-BRPCJB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610190727-BRPCJB/verification.md"
+    - ".agentplane/tasks/202610190727-BRPCJB/audit-summary.json"
+  findings:
+    - "CALC189documents exact reproduced ASan input and distinguishes excluded candidate inputs from confirmed failures;CALC190distinguishes source-derived example,initialized native observation and host storage;CALC191is expressly static-only with unknown caller invariants. Intentional ASCII_US/MS1252 compatibility is not labeled a defect."
+    - "Audit preserves all226406original ledger bytes and prior SHA256;unique IDs189/190/191,16local links and7actual source anchors validate. Five original source hashes and both existing native capture digests/counts match committed evidence;all task26 kernel hashes and production paths remain unchanged."
+    - "One non-task Markdown path plus task artifacts;new-section direct Prettier validation,CLI format,size,doctor,routing and whitespace checks pass. Current Calc299/raw100 remains task26 evidence;no new runtime/unsafe-native execution or coverage claim is invented for this docs-only update."
 commit: null
 comments:
   -
