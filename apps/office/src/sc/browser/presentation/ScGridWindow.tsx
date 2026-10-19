@@ -1,4 +1,5 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import type { ScPatternAttr } from "../../inc/patattr";
 import {
   useLayoutEffect,
   useRef,
@@ -8,6 +9,8 @@ import {
   type UIEvent,
 } from "react";
 import { ScInputMode } from "../../inc/global";
+import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
+import { ATTR_FONT_HEIGHT } from "../../inc/scitems";
 import { ScAddress } from "../../inc/address";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 /** Logical visible rectangle and measured browser dimensions; this contains no cell data. */
@@ -248,6 +251,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
                         textAlign: cell.alignment,
+                        fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
                         left: 48 + col * viewport.columnWidth,
                         width: viewport.columnWidth,
                         height: viewport.rowHeight,

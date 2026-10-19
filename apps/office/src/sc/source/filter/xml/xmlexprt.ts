@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
@@ -12,86 +13,155 @@ import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScPatternAttr } from "../../../inc/patattr";
+import { SfxItemState } from "../../../../svl/source/items/itemset";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT } from "../../../inc/scitems";
 /** Browser export bounds/cancellation over the native content traversal. */
 export interface ScXMLExportOptions {
   readonly isCancelled?: () => boolean;
   readonly maxOutputBytes?: number;
 }
-/** Native spreadsheet content export specialization;styles,objects and full filter services remain unported. */
+/** Native spreadsheet content traversal plus consumed automatic font-height styles. Other styles/objects remain unported. */
 export class ScXMLExport {
-  /** Binds actual document. @param document - Document. @param options - Controls. @returns Exporter. */
+  private readonly styles = new Map<string, string>();
+  /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
   constructor(
     private readonly document: ScDocument,
     private readonly options: ScXMLExportOptions = {},
   ) {}
-  /** Serializes actual supported cells,compressing empty row/cell spans without materializing them. @returns ODF content XML. */
+  /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
+  private styleName(pattern: ScPatternAttr): string {
+    const ids = [ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT];
+    if (
+      !ids.some(
+        /** Tests genuine direct item state. @param which - Identity. @returns Set. */ (which) =>
+          pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET,
+      )
+    )
+      return "";
+    const key = ids
+      .map(
+        /** Reads original effective twips. @param which - Identity. @returns Twips. */ (which) =>
+          (pattern.GetItem(which) as SvxFontHeightItem).GetHeight(),
+      )
+      .join(",");
+    let name = this.styles.get(key);
+    if (name === undefined) {
+      name = `ce${this.styles.size + 1}`;
+      this.styles.set(key, name);
+    }
+    return name;
+  }
+  /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
   exportContent(): string {
-    let xml = `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" office:version="1.3"><office:body><office:spreadsheet>`;
+    this.styles.clear();
+    let body = "";
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
-      const name = new OUString();
+      const table = this.document.FetchTable(tab) as ScTable,
+        name = new OUString();
       this.document.GetName(tab, name);
-      try {
-        xml += `<table:table table:name="${escapeXml(text(name))}">`;
-      } finally {
-        name.dispose();
+      body += `<table:table table:name="${escapeXml(text(name))}">`;
+      name.dispose();
+      const first: [number] = [0],
+        last: [number] = [0],
+        allocated = table.GetAllocatedColumnsCount();
+      let maxRow = 0;
+      const bounds = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
+        bc: [number] = [0],
+        br: [number] = [0];
+      while (bounds.GetNext(bc, br)) {
+        if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+        maxRow = br[0];
       }
+      for (let col = 0; col <= allocated; col++)
+        for (let row = 0; row <= MAXROW;) {
+          const pattern = table
+            .GetColumnData(col)
+            .GetPatternRange(first, last, row) as ScPatternAttr;
+          if (this.styleName(pattern)) maxRow = Math.max(maxRow, last[0]);
+          row = last[0] + 1;
+        }
       const iterator = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
         col: [number] = [0],
         row: [number] = [0];
-      let currentRow = -1,
-        nextCol = 0;
-      for (let cell = iterator.GetNext(col, row); cell; cell = iterator.GetNext(col, row)) {
+      let cell = iterator.GetNext(col, row);
+      for (let currentRow = 0; currentRow <= maxRow;) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
-        if (row[0] !== currentRow) {
-          if (currentRow >= 0) xml += "</table:table-row>";
-          const gap = row[0] - currentRow - 1;
-          if (gap)
-            xml += `<table:table-row table:number-rows-repeated="${gap}"><table:table-cell/></table:table-row>`;
-          xml += "<table:table-row>";
-          currentRow = row[0];
-          nextCol = 0;
+        let endRow = maxRow;
+        for (let column = 0; column <= allocated; column++) {
+          table.GetColumnData(column).GetPatternRange(first, last, currentRow);
+          endRow = Math.min(endRow, last[0]);
         }
-        const gap = col[0] - nextCol;
-        if (gap) xml += `<table:table-cell table:number-columns-repeated="${gap}"/>`;
-        nextCol = col[0] + 1;
-        let formula = "",
-          value = "",
-          children = "";
-        const type = cell.getType();
-        if (type === CellType.CELLTYPE_FORMULA) {
-          const actual = cell.getFormula() as ScFormulaCell;
-          const source = actual.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
-          try {
-            formula = ` table:formula="of:${escapeXml(text(source))}"`;
-          } finally {
-            source.dispose();
+        if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
+        const repeat = endRow - currentRow + 1;
+        body += `<table:table-row${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
+        const defaultPattern = table.GetDefaultColumnData().GetPattern(currentRow) as ScPatternAttr;
+        const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
+        for (let column = 0; column <= endColumn;) {
+          const style = this.styleName(
+            table.GetColumnData(column).GetPattern(currentRow) as ScPatternAttr,
+          );
+          const attribute = style ? ` table:style-name="${style}"` : "";
+          if (cell && row[0] === currentRow && col[0] === column) {
+            body += this.exportCell(cell, attribute);
+            column++;
+            cell = iterator.GetNext(col, row);
+          } else {
+            const stop = Math.min(
+              column < allocated ? column + 1 : endColumn + 1,
+              cell && row[0] === currentRow ? col[0] : endColumn + 1,
+            );
+            const count = stop - column;
+            body += `<table:table-cell${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
+            column = stop;
           }
-          if (actual.GetErrCode() === FormulaError.NONE && !actual.IsEmpty()) {
-            if (actual.IsValue())
-              value = ` office:value-type="float" office:value="${doubleToString(actual.GetValue())}"`;
-            else {
-              const string = text(actual.GetString().getString());
-              value = ' office:value-type="string"';
-              children = this.textParagraph(string);
-            }
-          }
-        } else if (type === CellType.CELLTYPE_VALUE)
-          value = ` office:value-type="float" office:value="${doubleToString(cell.getDouble())}"`;
-        else {
-          // The iterator/store trait contract leaves only the supported literal-string family.
-          value = ' office:value-type="string"';
-          const string = cell.getSharedString() as SharedStringConstReference;
-          children = this.textParagraph(text(string.getString()));
         }
-        xml += `<table:table-cell${formula}${value}>${children}</table:table-cell>`;
+        body += "</table:table-row>";
+        currentRow = endRow + 1;
       }
-      xml +=
-        currentRow >= 0
-          ? "</table:table-row>"
-          : "<table:table-row><table:table-cell/></table:table-row>";
-      xml += "</table:table>";
+      body += "</table:table>";
     }
-    return xml + "</office:spreadsheet></office:body></office:document-content>";
+    let automatic = "";
+    for (const [key, name] of this.styles) {
+      const heights = key.split(",").map(Number);
+      automatic += `<style:style style:name="${name}" style:family="table-cell"><style:text-properties fo:font-size="${(heights[0] as number) / 20}pt" style:font-size-asian="${(heights[1] as number) / 20}pt" style:font-size-complex="${(heights[2] as number) / 20}pt"/></style:style>`;
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" office:version="1.3"><office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+  }
+  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param attribute - Escaped generated style attribute. @returns Cell XML. */
+  private exportCell(cell: ScRefCellValue, attribute: string): string {
+    let formula = "",
+      value = "",
+      children = "";
+    const type = cell.getType();
+    if (type === CellType.CELLTYPE_FORMULA) {
+      const actual = cell.getFormula() as ScFormulaCell;
+      const source = actual.GetFormula(FormulaGrammar.Grammar.GRAM_ODFF);
+      try {
+        formula = ` table:formula="of:${escapeXml(text(source))}"`;
+      } finally {
+        source.dispose();
+      }
+      if (actual.GetErrCode() === FormulaError.NONE && !actual.IsEmpty()) {
+        if (actual.IsValue())
+          value = ` office:value-type="float" office:value="${doubleToString(actual.GetValue())}"`;
+        else {
+          const string = text(actual.GetString().getString());
+          value = ' office:value-type="string"';
+          children = this.textParagraph(string);
+        }
+      }
+    } else if (type === CellType.CELLTYPE_VALUE)
+      value = ` office:value-type="float" office:value="${doubleToString(cell.getDouble())}"`;
+    else {
+      // The iterator/store trait contract leaves only the supported literal-string family.
+      value = ' office:value-type="string"';
+      const string = cell.getSharedString() as SharedStringConstReference;
+      children = this.textParagraph(text(string.getString()));
+    }
+    return `<table:table-cell${attribute}${formula}${value}>${children}</table:table-cell>`;
   }
   /** Reuses actual shared Writer/Calc inline encoding;multiline/rich edit text is an explicit boundary. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {

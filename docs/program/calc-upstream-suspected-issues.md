@@ -2792,3 +2792,22 @@ Decision: preserve the original private-mapping order, logical write and returne
 insert a destination-capacity guard or clamp the count. Borrowed typed storage binds initialized
 native buffer views; its handling of writes outside the physical allocation does not certify native
 undefined-memory behavior.
+
+## CALC-194: attribute lookup validates an uninitialized row but trusts a single initialized run
+
+Status: source inspection and managed logical reproduction; no compiled native reproduction has
+been performed. Whether callers always satisfy a valid-row precondition remains unproved.
+
+The pinned [ScAttrArray::Search](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L189)
+returns index zero immediately when the array has one entry. It does not inspect the requested row.
+[GetPattern](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L235) and
+[GetPatternRange](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L250) validate
+rows only while the array is empty; initialized arrays delegate directly to Search. Consequently an
+out-of-range row can return the single canonical run after initialization,where an uninitialized array
+returns null. Multiple-run lookup rejects rows beyond its final end through binary search.
+
+Decision: preserve these source branches in the managed
+[ScAttrArray](../../apps/office/src/sc/source/core/data/attarray.ts). The
+[regression](../../apps/office/src/sc/source/core/data/attarray.test.ts) explicitly distinguishes empty,
+single-run and multiple-run results. Normal document/table UI boundaries validate coordinates.
+Do not silently normalize this source behavior while implementing font-size UI.

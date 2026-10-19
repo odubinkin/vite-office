@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlstyli.cxx",
+    "localSymbols": [
+      "XMLTableStylesContext",
+      "XMLTableStyleContext"
+    ],
+    "upstreamSymbols": [
+      "XMLTableStylesContext",
+      "XMLTableStyleContext"
+    ],
+    "preservedResponsibilities": [
+      "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+          "marker": "XMLTableStylesContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "imports real script-specific"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "XMLTableStyleContext"
+        }
+      ]
+    }
+  }
+}

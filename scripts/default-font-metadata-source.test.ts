@@ -37,3 +37,14 @@ it("pins actual ScDocumentPool metadata fields and the three spreadsheet roles",
   );
   expect(native).toContain("aDefFont.GetPitchMaybeAskConfig(), aDefFont.GetCharSet(), nItemId");
 });
+
+it("pins loaded linguistic defaults and the original no-device OnlyOne first-token branch", /** Distinguishes loaded SYSTEM defaults from SvtLinguOptions temporary NONE initialization. @returns Nothing. */ () => {
+  const schema = source("officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs"),
+    configuration = source("unotools/source/config/lingucfg.cxx"),
+    font = source("vcl/source/outdev/font.cxx");
+  for (const property of ["DefaultLocale", "DefaultLocale_CJK", "DefaultLocale_CTL"])
+    expect(schema).toMatch(new RegExp(`oor:name="${property}"[\\s\\S]*?<value/>`));
+  expect(configuration).toContain("(aTmp.isEmpty()) ? LANGUAGE_SYSTEM :");
+  expect(font).toContain("if( !pOutDev )");
+  expect(font).toContain("aFont.SetFamilyName( aSearch.getToken( 0, ';' ) )");
+});

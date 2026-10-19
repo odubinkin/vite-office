@@ -1,4 +1,6 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import type { ScPatternAttr } from "../../../inc/patattr";
+import type { ScTable } from "../../../inc/table";
 import { assert, expect, it, vi } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
@@ -353,4 +355,101 @@ it("exposes native export component and wrapper entry points on the same documen
   const xml = new ScXMLExport(doc).exportContent(),
     bytes = new ScXMLImportWrapper(doc).Export();
   expect(await new ZipFile(bytes).readTextEntry("content.xml")).toBe(xml);
+});
+
+/** Independent ODF automatic style envelope for native font-height import contracts. @param styles - Source styles. @param rows - Source rows. @returns XML. */
+function fontStyles(styles: string, rows: string): string {
+  return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><office:automatic-styles>${styles}</office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data">${rows}</table:table></office:spreadsheet></office:body></office:document-content>`;
+}
+it("imports real script-specific automatic font heights and preserves styled empty repeats without expanding cell contents", /** Independent XML tests native item identities rather than exporter agreement alone. @returns Completion. */ async () => {
+  const xml = fontStyles(
+    `<style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="1in" style:font-size-asian="16pt" style:font-size-complex="22pt"/></style:style>`,
+    `<table:table-row table:number-rows-repeated="1048576"><table:table-cell table:style-name="ce" table:number-columns-repeated="16384"/></table:table-row>`,
+  );
+  const doc = load(xml, { maxExpandedCells: 0 });
+  expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(0);
+  const pos = new ScAddress(doc.MaxCol(), doc.MaxRow(), 0),
+    pattern = doc.GetPattern(pos) as ScPatternAttr;
+  expect(
+    [101, 112, 117].map(
+      /** Reads actual imported script height. @param which - Identity. @returns Twips. */ (
+        which,
+      ) =>
+        (
+          pattern.GetItem(which) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+        ).GetHeight(),
+    ),
+  ).toEqual([1440, 320, 440]);
+  const bytes = writeOdsDocument(doc),
+    xmlOut = await new ZipFile(bytes).readTextEntry("content.xml");
+  expect(xmlOut.length).toBeLessThan(3000);
+  expect(xmlOut).toContain('table:number-rows-repeated="1048576"');
+  const again = await readOdsDocument(bytes);
+  expect(
+    (
+      (again.GetPattern(pos) as ScPatternAttr).GetItem(
+        112,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(320);
+  expect(again.GetCellType(pos)).toBe(0);
+  doc.DisposeAttributes();
+  again.DisposeAttributes();
+});
+it("diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights", /** Invalid metadata never becomes a successful invented format. @returns Nothing. */ () => {
+  const names: string[] = [];
+  const xml = fontStyles(
+    `<style:style style:name="p" style:family="paragraph"/><style:default-style style:family="table-cell"/><style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="8pt"/></style:style><style:style style:name="ce" style:family="table-cell" style:parent-style-name="Base"><style:table-cell-properties/><style:text-properties fo:font-size="0pt" style:font-size-asian="120%" style:font-size-complex="16pt" fo:font-weight="bold"/></style:style>`,
+    `<table:table-row><table:table-cell table:style-name="ce"/><table:table-cell table:style-name="missing"/><table:covered-table-cell table:style-name="ce"/></table:table-row><table:table-row table:number-rows-repeated="1048577"><table:table-cell table:style-name="ce" table:number-columns-repeated="16385"/></table:table-row><table:table-row><table:table-cell table:style-name="ce"/></table:table-row>`,
+  );
+  const doc = load(xml, {
+    onDiagnostic:
+      /** Records actual importer diagnostics. @param value - Native diagnostic. @returns Nothing. */ (
+        value,
+      ) => {
+        names.push(value.name);
+      },
+  });
+  expect(names).toEqual(
+    expect.arrayContaining([
+      "non-cell automatic style",
+      "cell parent style inheritance",
+      "cell style properties",
+      "relative or invalid cell font height",
+      "cell style/number format",
+      "cell range overflow",
+      "fo:font-weight",
+    ]),
+  );
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(0, 0, 0)) as ScPatternAttr).GetItem(
+        101,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(200);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(0, 0, 0)) as ScPatternAttr).GetItem(
+        117,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(320);
+  doc.DisposeAttributes();
+  expect(
+    /** Rejects an automatic cell style without its required name. @returns Never. */ () =>
+      load(fontStyles('<style:style style:family="table-cell"/>', "<table:table-row/>")),
+  ).toThrow(/cell style name/);
+});
+
+it("observes cancellation while traversing an empty sheet's attribute row runs", /** Empty formatting/content still participates in the cooperative export boundary. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Empty"));
+  let calls = 0;
+  expect(
+    /** Observes actual export cancellation in an empty row run. @returns Never. */ () =>
+      writeOdsDocument(doc, {
+        isCancelled: /** Cancels after wrapper admission. @returns Cancelled. */ () => ++calls > 1,
+      }),
+  ).toThrow(/cancelled/);
 });

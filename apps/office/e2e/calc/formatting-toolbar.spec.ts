@@ -70,11 +70,10 @@ for (const viewport of [
             ),
         ),
     ).toEqual(labels);
-    for (const name of labels.slice(0, 2)) {
-      const select = bar.getByRole("combobox", { name, exact: true });
-      await expect(select).toBeDisabled();
-      await expect(select).toHaveValue("");
-    }
+    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toBeDisabled();
+    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toHaveValue("");
+    await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toBeEnabled();
+    await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
     for (let index = 0; index < 31; index++) {
       const button = bar.getByRole("button").nth(index);
       await expect(button).toBeDisabled();

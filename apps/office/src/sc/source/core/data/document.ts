@@ -1,4 +1,8 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import type { ScMarkData } from "../../../inc/markdata";
+import type { ScColumnData } from "../../../inc/column";
+import { ScDocumentPool } from "./docpool";
+import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScHint } from "../../../inc/brdcst";
@@ -14,6 +18,7 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScTable } from "../../../inc/table";
 import {
   ScAddress,
+  ScRange,
   MAXCOL,
   MAXROW,
   MAXROWCOUNT,
@@ -23,7 +28,7 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { CellType } from "../../../inc/global";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -33,6 +38,8 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private readonly xPool = new ScDocumentPool();
+  private readonly maCellAttributeHelper = new CellAttributeHelper(this.xPool);
   private pFormulaTree: ScFormulaCell | null = null;
   private pEOFormulaTree: ScFormulaCell | null = null;
   private pFormulaTrack: ScFormulaCell | null = null;
@@ -56,6 +63,107 @@ export class ScDocument {
         return uppercase(value, locale);
       },
     });
+  }
+  /** Borrows the real consumed character-item pool. @returns Pool. */
+  GetPool(): ScDocumentPool {
+    return this.xPool;
+  }
+  /** Borrows actual document pattern canonicalization. @returns Helper. */
+  getCellAttributeHelper(): CellAttributeHelper {
+    return this.maCellAttributeHelper;
+  }
+  /** Borrows effective cell attributes through the sheet/column/default chain. @param position - Cell. @returns Pattern or null. */
+  GetPattern(position: ScAddress): ScPatternAttr | null {
+    return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
+  }
+  /** Applies an actual source pattern delta on a single sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Pattern delta. @returns Whether changed. */
+  ApplyPatternAreaTab(
+    startCol: number,
+    startRow: number,
+    endCol: number,
+    endRow: number,
+    tab: number,
+    delta: ScPatternAttr,
+  ): boolean {
+    return (
+      this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false
+    );
+  }
+  /** Copies only the consumed ATTRIB, simple-rectangle native branch into a real document, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB only. @param marked - Multi-mark mode (unported). @param destination - Real target document. @param marks - Optional selected sheets. @returns Nothing. */
+  CopyToDocument(
+    range: ScRange,
+    flags: InsertDeleteFlags,
+    marked: boolean,
+    destination: ScDocument,
+    marks?: ScMarkData,
+  ): void {
+    if (flags !== InsertDeleteFlags.ATTRIB || marked)
+      throw new Error("Only simple attribute document copying is implemented");
+    const start = range.aStart,
+      end = range.aEnd;
+    for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
+      if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+      const source = this.FetchTable(tab),
+        target = destination.FetchTable(tab);
+      if (!source || !target) continue;
+      const last =
+        end.Col() === this.MaxCol()
+          ? Math.max(
+              start.Col(),
+              source.GetAllocatedColumnsCount(),
+              target.GetAllocatedColumnsCount(),
+            ) - 1
+          : end.Col();
+      for (let col = start.Col(); col <= last; col++)
+        this.CopyColumnAttributes(
+          source.GetColumnData(col),
+          target.CreateColumnIfNotExists(col),
+          start.Row(),
+          end.Row(),
+          destination,
+        );
+      if (end.Col() === this.MaxCol()) {
+        if (last >= 0) target.CreateColumnIfNotExists(last);
+        this.CopyColumnAttributes(
+          source.GetDefaultColumnData(),
+          target.GetDefaultColumnData(),
+          start.Row(),
+          end.Row(),
+          destination,
+        );
+      }
+    }
+  }
+  /** Copies real pattern runs across actual helper/pool ownership. @param source - Source attributes. @param target - Target attributes. @param start - First row. @param end - Last row. @param destination - Target document. @returns Nothing. */
+  private CopyColumnAttributes(
+    source: ScColumnData,
+    target: ScColumnData,
+    start: number,
+    end: number,
+    destination: ScDocument,
+  ): void {
+    const first: [number] = [0],
+      last: [number] = [0];
+    for (let row = start; row <= end;) {
+      const old = source.GetPatternRange(first, last, row) as ScPatternAttr;
+      const next = new ScPatternAttr(
+        destination.getCellAttributeHelper(),
+        old.GetItemSet(),
+        old.GetStyleName() ?? undefined,
+      );
+      const holder = new CellAttributeHolder(next, true);
+      try {
+        const stop = Math.min(end, last[0]);
+        target.SetPatternArea(row, stop, holder);
+        row = stop + 1;
+      } finally {
+        holder.Dispose();
+      }
+    }
+  }
+  /** Releases actual attribute registrations at document closure. @returns Nothing. */
+  DisposeAttributes(): void {
+    for (const table of this.maTabs) table.DisposeAttributes();
   }
   /** Borrows document-independent native sheet limits. @returns Limits. */
   GetSheetLimits(): ScSheetLimits {
@@ -320,6 +428,7 @@ export class ScDocument {
       row: [number] = [0];
     let cell;
     while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
+    (this.maTabs[tab] as ScTable).DisposeAttributes();
     this.maTabs.splice(tab, 1);
     for (let index = tab; index < this.maTabs.length; index++)
       (this.maTabs[index] as ScTable).SetTabNo(index);

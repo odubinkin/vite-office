@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScUndoSelectionAttr } from "../../source/ui/undo/undoblk3";
+import { ScFormatShell } from "../../source/ui/view/formatsh";
 import type { ScCellValue } from "../../inc/cellvalue";
 import { ScInputMode } from "../../inc/global";
 import { ScInputHandler } from "../../source/ui/inc/inputhdl";
@@ -174,6 +176,18 @@ export class CalcViewController {
     this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
     this.Changed();
     return true;
+  }
+  /** Queries actual selected font-height state through the native format owner. @returns Uniform points or mixed state. */
+  GetFontSize(): number | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetFontSize();
+  }
+  /** Commits input before the native attribute operation and publishes resulting bindings. @param points - Point height. @returns Whether changed. */
+  SetFontSize(points: number): boolean {
+    ScFormatShell.ValidateFontSize(points);
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetFontSize(points);
+    this.Changed();
+    return changed;
   }
   /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
   StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {
@@ -383,7 +397,7 @@ export class CalcViewController {
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
     const position =
-      cursorAction instanceof ScUndoSetCell
+      cursorAction instanceof ScUndoSetCell || cursorAction instanceof ScUndoSelectionAttr
         ? cursorAction.getAffectedRange().aStart
         : new ScAddress(
             0,
@@ -392,6 +406,10 @@ export class CalcViewController {
           );
     this.SelectTab(position.Tab());
     this.Select(position.Col(), position.Row());
+    if (cursorAction instanceof ScUndoSelectionAttr) {
+      this.viewData.GetMarkData().assign(cursorAction.GetMarkData());
+      this.Changed();
+    }
     return true;
   }
   /** Maps browser scroll geometry to logical sheet coordinates without CSS-size overflow. @param left - Horizontal pixels. @param top - Physical vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */

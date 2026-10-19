@@ -8,15 +8,17 @@ import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { ScAddress } from "../../../inc/address";
-import { ScColumn } from "../../../inc/column";
+import { ScColumn, ScColumnData } from "../../../inc/column";
 import { CellType } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
   private readonly aCol: ScColumn[] = [];
+  private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
   /** Stores the native sheet identity without constructing unrelated services. @param rDocument - Owner. @param nTab - Sheet position. @param name - Sheet name. @returns Sheet. */
   constructor(
@@ -25,6 +27,52 @@ export class ScTable {
     name: OUStringConstReference,
   ) {
     this.aName = new OUString(name);
+    this.aDefaultColData = new ScColumnData(rDocument);
+    this.aDefaultColData.Init(-1, nTab);
+  }
+  /** Borrows the native default column's attribute portion. @returns Owner. */
+  GetDefaultColumnData(): ScColumnData {
+    return this.aDefaultColData;
+  }
+  /** Borrows existing column attributes without allocating cell stores. @param col - Valid column. @returns Attribute owner. */
+  GetColumnData(col: number): ScColumnData {
+    return col < this.aCol.length ? (this.aCol[col] as ScColumn) : this.aDefaultColData;
+  }
+  /** Releases canonical pattern ownership on sheet removal. @returns Nothing. */
+  DisposeAttributes(): void {
+    for (const col of this.aCol) col.DisposeAttributes();
+    this.aDefaultColData.DisposeAttributes();
+  }
+  /** Reads actual native/default column attributes. @param col - Column. @param row - Row. @returns Pattern or null. */
+  GetPattern(col: number, row: number): ScPatternAttr | null {
+    return this.rDocument.ValidColRow(col, row) ? this.GetColumnData(col).GetPattern(row) : null;
+  }
+  /** Applies source ordered/clamped attribute ranges and default-column optimization for an end at MaxCol. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param delta - Pattern delta. @returns Whether changed. */
+  ApplyPatternArea(
+    startCol: number,
+    startRow: number,
+    endCol: number,
+    endRow: number,
+    delta: ScPatternAttr,
+  ): boolean {
+    if (
+      !this.rDocument.ValidColRow(startCol, startRow) ||
+      !this.rDocument.ValidColRow(endCol, endRow)
+    )
+      return false;
+    [startCol, endCol] = [Math.min(startCol, endCol), Math.max(startCol, endCol)];
+    [startRow, endRow] = [Math.min(startRow, endRow), Math.max(startRow, endRow)];
+    let maxCol = endCol,
+      changed = false;
+    if (endCol === this.rDocument.MaxCol()) {
+      maxCol = Math.max(startCol, this.aCol.length) - 1;
+      if (maxCol >= 0) this.CreateColumnIfNotExists(maxCol);
+      changed = this.aDefaultColData.ApplyPatternArea(startRow, endRow, delta);
+    }
+    for (let col = startCol; col <= maxCol; col++)
+      changed =
+        this.CreateColumnIfNotExists(col).ApplyPatternArea(startRow, endRow, delta) || changed;
+    return changed;
   }
   /** Borrows the existing sheet name. @returns Native Unicode value. */
   GetName(): OUStringConstReference {
@@ -33,6 +81,7 @@ export class ScTable {
   /** Updates sheet and existing column coordinates after sheet insertion. @param tab - New position. @returns Nothing. */
   SetTabNo(tab: number): void {
     this.nTab = tab;
+    this.aDefaultColData.SetTabNo(tab);
     for (const col of this.aCol) col.SetTabNo(tab);
   }
   /** Reports how many columns have actually been allocated. @returns Count. */
@@ -44,7 +93,7 @@ export class ScTable {
     while (this.aCol.length <= col) {
       const index = this.aCol.length,
         column = new ScColumn(this.rDocument);
-      column.Init(index, this.nTab);
+      column.Init(index, this.nTab, this.aDefaultColData);
       this.aCol.push(column);
     }
     return this.aCol[col] as ScColumn;

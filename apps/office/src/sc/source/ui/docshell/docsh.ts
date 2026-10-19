@@ -104,6 +104,7 @@ export class ScDocShell extends SfxObjectShell {
   }
   /** Releases semantic subscriptions owned by one displaced model. @param document - Model. @returns Nothing. */
   private DisposeDocument(document: ScDocument): void {
+    document.DisposeAttributes();
     for (let tab = 0; tab < document.GetTableCount(); tab++) {
       const iterator = new ScHorizontalCellIterator(
           document,

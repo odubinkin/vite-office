@@ -120,6 +120,8 @@ const allowedEdges = new Map([
       "svl",
       "svtools",
       "svx",
+      // Original docpool.cxx uses Tools font enums/colors; Library_sc links tl.
+      "tools",
       "unotools",
       "vcl",
       "xmloff",
@@ -168,7 +170,8 @@ const allowedEdges = new Map([
   // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
   // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
   // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
-  ["vcl", new Set(["o3tl", "offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
+  // Original Library_vcl links i18nlangtag; GetDefaultFont consumes resolved language/Locale values.
+  ["vcl", new Set(["i18nlangtag", "o3tl", "offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
@@ -188,6 +191,17 @@ const allowedEdges = new Map([
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
+}
+/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
+export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
+  const source = relativeSource.split(path.sep).join("/"),
+    target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
+  if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // docpool.cxx consumes FontRelief and GetDefaultFont; these represented modules contain no browser/device adapter.
+  return (
+    source !== "sc/source/core/data/docpool.ts" ||
+    !["vcl/inc/fntstyle", "vcl/source/outdev/font"].includes(target)
+  );
 }
 const suiteModules = new Set(["sw", "sc"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];
@@ -666,10 +680,7 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
-    if (
-      relativeSource.includes(`${path.sep}source${path.sep}core${path.sep}`) &&
-      targetModule === "vcl"
-    ) {
+    if (isForbiddenDomainVclImport(relativeSource, relativeTarget)) {
       failures.push(
         `${displayPath(sourceFile)}: domain core must receive browser adapters through an injected contract`,
       );

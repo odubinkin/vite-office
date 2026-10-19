@@ -3,6 +3,8 @@ import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
 export interface CalcCommandTarget {
+  GetFontSize(): number | undefined;
+  SetFontSize(points: number): boolean;
   CanUndo(): boolean;
   CanRedo(): boolean;
   Undo(): boolean;
@@ -99,6 +101,7 @@ export const calcInputModeCommand = {
 } as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcUserCommands = [
+  { id: ".uno:FontHeight", slotId: 10015, label: "Font Size" },
   ...calcEditCommands,
   calcInputModeCommand,
   ...calcFileCommands,
@@ -112,22 +115,60 @@ export const calcUserCommands = [
     id: item.id,
     label: item.label,
     capabilityId:
-      item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
-        ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
-        : item.id === ".uno:JumpToTable"
-          ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-          : "direction" in item ||
-              item.id === ".uno:TableSelectAll" ||
-              item.id === ".uno:TableDeselectAll"
-            ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-            : "kind" in item
-              ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-              : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      item.id === ".uno:FontHeight"
+        ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
+        : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+          ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+          : item.id === ".uno:JumpToTable"
+            ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+            : "direction" in item ||
+                item.id === ".uno:TableSelectAll" ||
+                item.id === ".uno:TableDeselectAll"
+              ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+              : "kind" in item
+                ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+                : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */
 export function createCalcInterface(): SfxInterface<CalcCommandTarget> {
   return new SfxInterface<CalcCommandTarget>([
+    {
+      commandUrl: ".uno:FontHeight",
+      slotId: 10015,
+      label: "Font Size",
+      getState:
+        /** Publishes actual uniform/mixed selected attribute state. @param target - Active view. @returns State. */ (
+          target,
+        ) => {
+          const value = target.GetFontSize();
+          return { enabled: true, value, mixed: value === undefined };
+        },
+      execute:
+        /** Consumes the shared Writer widget argument at the Sfx boundary. @param target - Active view. @param request - Structured request. @returns Changed. */ (
+          target,
+          request,
+        ) => {
+          const item = request
+            .GetArgs()
+            .find(
+              /** Finds actual structured arguments. @param value - Item. @returns Match. */ (
+                value,
+              ) => value instanceof SfxUnoAnyItem,
+            ) as SfxUnoAnyItem | undefined;
+          const args = item?.GetValue();
+          // The native no-argument font dialog is not exposed by this slice.
+          if (args === undefined) return false;
+          if (
+            typeof args !== "object" ||
+            args === null ||
+            !("fontSizePt" in args) ||
+            typeof args.fontSizePt !== "number"
+          )
+            throw new TypeError("FontHeight requires numeric fontSizePt");
+          return target.SetFontSize(args.fontSizePt);
+        },
+    },
     {
       commandUrl: calcInputModeCommand.id,
       slotId: calcInputModeCommand.slotId,

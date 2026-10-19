@@ -228,6 +228,8 @@ export enum XMLToken {
   OFFICE_STRING_VALUE,
   TABLE_TABLE_ROWS,
   TABLE_TABLE_ROW_GROUP,
+  STYLE_FONT_SIZE_ASIAN,
+  STYLE_FONT_SIZE_COMPLEX,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -425,6 +427,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.fo, "font-style", XMLToken.FO_FONT_STYLE],
   [ODF_NAMESPACES.fo, "font-family", XMLToken.FO_FONT_FAMILY],
   [ODF_NAMESPACES.fo, "font-size", XMLToken.FO_FONT_SIZE],
+  [ODF_NAMESPACES.style, "font-size-asian", XMLToken.STYLE_FONT_SIZE_ASIAN],
+  [ODF_NAMESPACES.style, "font-size-complex", XMLToken.STYLE_FONT_SIZE_COMPLEX],
   [ODF_NAMESPACES.fo, "color", XMLToken.FO_COLOR],
   [ODF_NAMESPACES.fo, "background-color", XMLToken.FO_BACKGROUND_COLOR],
   [ODF_NAMESPACES.fo, "keep-with-next", XMLToken.FO_KEEP_WITH_NEXT],

@@ -39,9 +39,9 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 ## Current conclusion
 
-The current actual frame registers15user-visible generated command identities out of463source
+The current actual frame registers16user-visible generated command identities out of463source
 resource identities. This is an implementation inventory,not a completion percentage. The fresh
-session audit in task33 records all registrations and default enabled states;empty history and a
+session audit in task34 records all registrations and default enabled states;empty history and a
 single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
 
 | UI action group | Current path | Next concrete work |
@@ -50,16 +50,18 @@ single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
 | Open,Save As,Export | Existing Calc file workflows over shared browser storage/dialog and same-model basic ODS | Continue Writer browser save/recovery policy;do not restore native recovery UI |
 | Sheet navigation,grouping,Go to Sheet | Real Sfx slots and current ScTabView/ScMarkData;shared menus and tab popup | Connect further sheet actions only to actual document operations |
 | Select Row,Select Column | Task33 connects normal simple range expansion to shared Edit/Select and native grid accelerators | Preserve active cell/group and independent input ownership;parameterized/reference-mode APIs remain pending |
-| Font name and size | Exact shared Writer FontNameSelect/FontSizeSelect already rendered;Calc slots currently unregistered | Connect cell pattern storage/readback,actual attribute application/history/rendering and existing shared bindings for these concrete actions |
+| Font size | Task34 connects exact shared Writer FontSizeSelect to actual FontHeight10015, three-script native attributes, uniform/mixed state, undo/redo, grid CSS and same-model ODS/autosave | Automatic row-height layout and script-aware foreign formatting still need their real consumed owners |
+| Font name | Exact shared Writer FontNameSelect is rendered; CharFontName remains unavailable | Implement native selection-script application/readback using the now-connected attribute path, then enable this same shared control |
 | Cell styles | ScPatternAttr and shared itemset/value owners exist;document/column style application and Calc style-command owner remain missing | Implement the consumed cell-style path,then reuse the shared style-control presentation;do not substitute browser-only style state |
 | Other formatting/menu actions | Native resource composition is generated;unimplemented commands remain disabled | Audit each action against existing document/view operations and implement the available UI paths before broader prerequisite work |
 
-For font/style work,the immediate gap is the consumed cell-attribute path:the current ScColumn
-cell-content chain has no connected cell-pattern attribute storage or document font/style apply/read
-operations,and the active Calc interface has no CharFontName,FontHeight or StyleApply handlers.
-Standalone font/item/value classes do not make those UI actions functional. Conversely,this is not
-permission to finish every default item,codec or native constructor service first:implement only
-the real subset required by each concrete UI action and document unsupported services honestly.
+The consumed cell-attribute path is now connected for font size: ScColumnData owns canonical
+ScAttrArray runs,including a real default column for unallocated column tails. ScDocumentPool
+registers the original contiguous character prefix100..124 with genuine defaults and slot metadata.
+This is not the full pool constructor. CharFontName and StyleApply remain unregistered;family
+selection-script handling,named-style resolution,remaining cell/page defaults and full layout remain
+concrete gaps. Standalone items do not make these other actions ready. Continue implementing
+available UI actions on this same owner chain rather than requiring every codec/constructor first.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not
@@ -824,3 +826,25 @@ Worker checks pass,including a real upstream-created ODS fixture. This does not
 certify opening arbitrary spreadsheets without content or formatting loss.
 Full ODF or full native core parity is not claimed. The all-app regression run
 and requested goal pause follow this milestone;UI implementation stays separate.
+
+## Shared font-size UI and actual cell attributes (task34)
+
+The production FontHeight slot10015 consumes the shared Writer widget argument through Sfx.
+ScFormatShell applies original200twip100percent defaults and source three-script height deltas to
+simple selections and selected sheets. ScUndoSelectionAttr retains a real attribute-only undo
+document and redo pattern. Grid painting reads effective attributes directly. Automatic ODF cell
+styles preserve heights and styled empty spans with repeated rows/cells,including full columns and
+default-column tails,without a browser format map or an intermediate imported workbook.
+
+Default font metadata uses original static script-language fallbacks,the shipped configured families
+and the genuine no-device OnlyOne first-token branch. It does not certify physical font installation.
+The existing browser registered-face helper retains its absent-family behavior. On-the-fly LanguageTag
+registration,linguistic preference editing,other cell/page defaults,style inheritance,script-aware foreign
+font painting and automatic row layout remain unsupported. Larger fonts currently paint inside the
+existing fixed-height grid rows; this leaf does not certify native optimal row-height behavior.
+
+Writer's visible-content exclusion,first-two-words naming,primary browser saving and no-recovery
+policy remain. Styled empty cells round-trip within saved documents;format-only empty documents
+retain the same visible-content save exclusion as Writer. Further font/style/formatting/menu UI
+remains active work. The task34 actual463-resource audit records16registered and13default-enabled
+commands; these counts are an implementation inventory,not a completion percentage.

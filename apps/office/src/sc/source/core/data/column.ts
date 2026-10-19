@@ -37,31 +37,88 @@ import {
 import { CellTextAttr } from "../../../inc/celltextattr";
 import type { ScDocument } from "../../../inc/document";
 
+import { ScAttrArray } from "./attarray";
+import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+/** Attribute portion of native ScColumnData, also used for the real default column. */
+export class ScColumnData {
+  protected nCol = 0;
+  protected nTab = 0;
+  protected pAttrArray: ScAttrArray;
+  /** Creates an uninitialized-position attribute owner. @param rDocument - Document. @returns Owner. */
+  constructor(protected readonly rDocument: ScDocument) {
+    this.pAttrArray = new ScAttrArray(0, 0, rDocument);
+  }
+  /** Initializes native position and default-column inheritance. @param col - Column or sentinel. @param tab - Sheet. @param defaults - Real default column. @returns Nothing. */
+  Init(col: number, tab: number, defaults?: ScColumnData): void {
+    this.nCol = col;
+    this.nTab = tab;
+    this.pAttrArray.Dispose();
+    this.pAttrArray = new ScAttrArray(col, tab, this.rDocument, defaults?.pAttrArray);
+  }
+  /** Updates source sheet position. @param tab - Sheet. @returns Nothing. */
+  SetTabNo(tab: number): void {
+    this.nTab = tab;
+  }
+  /** Releases real canonical registrations. @returns Nothing. */
+  DisposeAttributes(): void {
+    this.pAttrArray.Dispose();
+  }
+  /** Borrows a canonical pattern. @param row - Row. @returns Pattern or null. */
+  GetPattern(row: number): ScPatternAttr | null {
+    return this.pAttrArray.GetPattern(row);
+  }
+  /** Borrows a complete attribute run. @param start - First output. @param end - Last output. @param row - Query row. @returns Pattern or null. */
+  GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
+    return this.pAttrArray.GetPatternRange(start, end, row);
+  }
+  /** Replaces actual run attributes. @param start - Ordered first row. @param end - Ordered last row. @param pattern - Canonical holder. @returns Nothing. */
+  SetPatternArea(start: number, end: number, pattern: CellAttributeHolder): void {
+    this.pAttrArray.SetPatternArea(start, end, pattern);
+  }
+  /** Applies the source itemset delta while retaining each existing pattern's other attributes. The native pool-cache search is an omitted optimization. @param start - First row. @param end - Last row. @param delta - Attribute delta without unported borders. @returns Whether changed. */
+  ApplyPatternArea(start: number, end: number, delta: ScPatternAttr): boolean {
+    if (!this.rDocument.ValidRow(start) || !this.rDocument.ValidRow(end)) return false;
+    let changed = false;
+    const first: [number] = [0],
+      last: [number] = [0];
+    for (let row = start; row <= end;) {
+      const old = this.GetPatternRange(first, last, row) as ScPatternAttr;
+      const next = new ScPatternAttr(old);
+      next.GetItemSetWritable().PutSet(delta.GetItemSet(), false);
+      const holder = new CellAttributeHolder(next, true);
+      try {
+        const stop = Math.min(end, last[0]);
+        if (!ScPatternAttr.areSame(old, holder.getScPatternAttr())) {
+          this.SetPatternArea(row, stop, holder);
+          changed = true;
+        }
+        row = stop + 1;
+      } finally {
+        holder.Dispose();
+      }
+    }
+    return changed;
+  }
+}
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
-export class ScColumn {
+export class ScColumn extends ScColumnData {
   /** Native friend-visible logical counters used by CellStoreEvent; no lifetime accounting. */
   mnBlkCountFormula = 0;
   mnBlkCountCellNotes = 0;
-  private nCol = 0;
-  private nTab = 0;
   private readonly maBroadcasters: BroadcasterStoreType;
   private readonly maCells: CellStoreType;
   private readonly maCellTextAttrs: CellTextAttrStoreType;
   /** Creates empty stores spanning the document's actual row domain. @param rDocument - Owning document. @returns Column. */
-  constructor(private readonly rDocument: ScDocument) {
+  constructor(rDocument: ScDocument) {
+    super(rDocument);
     this.maBroadcasters = new BroadcasterStoreType(rDocument.GetMaxRowCount());
     this.maCells = new CellStoreType(new CellStoreEvent(this));
     this.maCells.resize(rDocument.GetMaxRowCount());
     this.maCellTextAttrs = new CellTextAttrStoreType(rDocument.GetMaxRowCount());
   }
-  /** Initializes position in the owning sheet;full attribute-array services are not claimed. @param col - Column. @param tab - Sheet. @returns Nothing. */
-  Init(col: number, tab: number): void {
-    this.nCol = col;
-    this.nTab = tab;
-  }
   /** Updates native sheet identity in every real formula cell after sheet insertion. Formatting attributes remain a declared gap. @param tab - Sheet. @returns Nothing. */
-  SetTabNo(tab: number): void {
-    this.nTab = tab;
+  override SetTabNo(tab: number): void {
+    super.SetTabNo(tab);
     ProcessFormula(
       this.maCells,
       /** Updates the actual formula position. @param row - Row. @param cell - Cell. @returns Nothing. */ (

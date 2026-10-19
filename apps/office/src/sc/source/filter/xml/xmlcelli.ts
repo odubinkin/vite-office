@@ -11,6 +11,7 @@ import { repeatCount } from "./xmlrowi";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
+  private readonly style: import("../../../inc/patattr").ScPatternAttr | null;
   private paragraph: string | undefined;
   private readonly repeat: number;
   private readonly type: string | null;
@@ -37,8 +38,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       attributes.get(XMLToken.TABLE_NUMBER_ROWS_SPANNED) !== null
     )
       throw new Error("ODS merged cells are not implemented");
-    if (attributes.get(XMLToken.TABLE_STYLE_NAME) !== null)
-      row.table.owner.unsupported("cell style/number format");
+    const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
+    this.style = name === null ? null : row.table.owner.GetAutoStyle(name);
     if (this.type !== null && this.type !== "float" && this.type !== "string")
       throw new Error("ODS formatted cell type is not implemented");
     if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
@@ -62,6 +63,16 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     this.row.col += this.repeat;
     if (this.covered) return;
     const value = this.stringValue || this.paragraph;
+    if (this.style !== null) {
+      const endCol = Math.min(owner.GetDocument().MaxCol(), pos.Col() + this.repeat - 1),
+        endRow = Math.min(owner.GetDocument().MaxRow(), pos.Row() + this.row.repeat - 1);
+      if (owner.GetDocument().ValidColRow(pos.Col(), pos.Row()))
+        owner
+          .GetDocument()
+          .ApplyPatternAreaTab(pos.Col(), pos.Row(), endCol, endRow, pos.Tab(), this.style);
+      if (endCol !== pos.Col() + this.repeat - 1 || endRow !== pos.Row() + this.row.repeat - 1)
+        owner.unsupported("cell range overflow");
+    }
     if (this.source === null && this.type !== "float" && value === undefined) return;
     if (value !== undefined && /[\r\n]/.test(value))
       throw new Error("ODS multiline cell string is not implemented");

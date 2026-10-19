@@ -1,4 +1,5 @@
 /** @fileoverview Real Calc ODS primary bytes,shared IndexedDB and autosave cadence/race integration. */
+import type { ScPatternAttr } from "../../inc/patattr";
 import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
@@ -181,4 +182,47 @@ it("constructs suite-scoped production storage and owns its session scheduler", 
   const defaults = createCalcSession();
   expect(defaults.store).toBeDefined();
   defaults.Close();
+});
+
+it("autosaves font attributes on empty ranges in the same primary ODS and restores them through real open", /** Preserves Writer's existing visible-content/naming policy while testing empty styled cells inside a saved document. @returns Completion. */ async () => {
+  const db = store(),
+    session = createCalcSession(db),
+    c = session.controller;
+  c.EnterString("Font sample");
+  c.Select(1, 2);
+  c.MarkColumns();
+  c.SetFontSize(18);
+  await (session.autosave as NonNullable<typeof session.autosave>).Flush();
+  const record = await db.load(c.shell.GetDocumentId());
+  if (record === undefined) throw new Error("Expected primary font document");
+  const loaded = await readOdsDocument(record.bytes);
+  expect(
+    (
+      (loaded.GetPattern(new ScAddress(1, loaded.MaxRow(), 0)) as ScPatternAttr).GetItem(
+        101,
+      ) as import("../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(360);
+  expect(loaded.GetCellType(new ScAddress(1, 100, 0))).toBe(0);
+  expect(c.shell.IsModified()).toBe(false);
+  const reopened = new CalcViewController();
+  expect(await openBrowserCalcDocument(reopened.shell, db, record.id)).toBe(true);
+  reopened.Select(1, 20);
+  expect(reopened.GetFontSize()).toBe(18);
+  reopened.SetFontSize(24);
+  expect(await autosaveCalc(reopened.shell, db)).toBe(true);
+  const saved = await db.load(record.id);
+  if (saved === undefined) throw new Error("Expected updated primary font document");
+  const again = await readOdsDocument(saved.bytes);
+  expect(
+    (
+      (again.GetPattern(new ScAddress(1, 20, 0)) as ScPatternAttr).GetItem(
+        101,
+      ) as import("../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(480);
+  loaded.DisposeAttributes();
+  again.DisposeAttributes();
+  reopened.Close();
+  session.Close();
 });

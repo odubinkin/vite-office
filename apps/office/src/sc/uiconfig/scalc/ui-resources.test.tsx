@@ -149,7 +149,7 @@ it("retains the complete visible source standardbar with disabled missing slots 
   session.Close();
 });
 
-it("renders the full native cell formatting toolbar through shared disabled controls with empty unknown font state", /** Verifies actual source placements and production Sfx ownership. @returns Nothing. */ () => {
+it("renders native formatting placements with the bound shared font-size control and unavailable actions disabled", /** Verifies actual source placements and production Sfx ownership. @returns Nothing. */ () => {
   const session = createCalcSession();
   const fontsRequested = vi.spyOn(FontList, "FromBrowser");
   render(
@@ -207,10 +207,10 @@ it("renders the full native cell formatting toolbar through shared disabled cont
   const fonts = within(bar).getAllByRole("combobox");
   expect(fonts).toHaveLength(2);
   expect(fontsRequested).not.toHaveBeenCalled();
-  for (const font of fonts) {
-    expect(font).toBeDisabled();
-    expect(font).toHaveValue("");
-  }
+  expect(fonts[0]).toBeDisabled();
+  expect(fonts[0]).toHaveValue("");
+  expect(fonts[1]).toBeEnabled();
+  expect(fonts[1]).toHaveValue("10");
   for (const button of within(bar).getAllByRole("button")) {
     expect(button).toBeDisabled();
     expect(button).toHaveClass("size-8", "rounded-md", "bg-white");

@@ -38,3 +38,10 @@ export enum ScInputMode {
   SC_INPUT_TABLE = 2,
   SC_INPUT_TOP = 3,
 }
+
+/** Consumed native attribute-copy flags; content/object flag operations remain separate. */
+export enum InsertDeleteFlags {
+  HARDATTR = 0x0020,
+  STYLES = 0x0040,
+  ATTRIB = 0x0060,
+}

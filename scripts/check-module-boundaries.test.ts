@@ -5,6 +5,7 @@ import {
   getRuntimeImportSpecifiers,
   isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
+  isForbiddenDomainVclImport,
   getProtectedBrowserGlobalReferences,
   getProtectedOwnershipReferences,
   getRuntimeOwnershipLayer,
@@ -872,4 +873,52 @@ it("admits only source-backed VCL variation and original UTF16 decimal header bi
       specifier,
     ),
   ).toBe(false);
+});
+
+it("admits only original pure document-pool VCL dependencies while retaining domain/browser gates", /** Verifies the exact consumed native edge and negative browser/reverse cases. @returns Nothing. */ () => {
+  const source = "sc/source/core/data/docpool.ts";
+  for (const target of [
+    "vcl/inc/fntstyle.ts",
+    "vcl/source/outdev/font.ts",
+    "vcl/inc/fntstyle",
+    "vcl/source/outdev/font",
+  ])
+    expect(isForbiddenDomainVclImport(source, target)).toBe(false);
+  for (const target of [
+    "vcl/browser/font-list.ts",
+    "vcl/browser/default-font-device.ts",
+    "vcl/source/font/font.ts",
+  ])
+    expect(isForbiddenDomainVclImport(source, target)).toBe(true);
+  expect(
+    isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/source/outdev/font.ts"),
+  ).toBe(true);
+  expect(isForbiddenDomainVclImport("sw/source/core/doc/doc.ts", "vcl/source/outdev/font.ts")).toBe(
+    true,
+  );
+  expect(
+    isForbiddenDomainVclImport(
+      "sc/browser/presentation/ScGridWindow.tsx",
+      "vcl/browser/font-list.ts",
+    ),
+  ).toBe(false);
+  expect(isForbiddenDomainVclImport(source, "tools/inc/fontenum.ts")).toBe(false);
+  expect(
+    getRuntimeOwnershipViolation(
+      source,
+      "vcl/browser/font-list.ts",
+      "../../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser/u);
+  expect(
+    getRuntimeOwnershipViolation(
+      "vcl/source/outdev/font.ts",
+      "vcl/browser/default-font-device.ts",
+      "../../browser/default-font-device",
+    ),
+  ).toMatch(/browser/u);
+  expect(isForbiddenModuleEdge("sc", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("vcl", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "sc")).toBe(true);
+  expect(isForbiddenModuleEdge("i18nlangtag", "vcl")).toBe(true);
 });

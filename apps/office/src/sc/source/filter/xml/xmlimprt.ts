@@ -1,4 +1,6 @@
 /** @fileoverview Basic Calc content importer over shared fast XML contexts;styles/layout/objects remain outside the supported content subset. */
+import { XMLTableStylesContext } from "./xmlstyli";
+import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
 import {
   SvXMLImport,
@@ -22,6 +24,7 @@ export interface ScXMLImportOptions extends OdfXmlParseOptions {
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly docImport: ScDocumentImport;
   private cells = 0;
+  private readonly autoStyles = new Map<string, CellAttributeHolder>();
   private body = false;
   /** Binds actual document and parser controls. @param document - Target. @param options - Controls. @returns Importer. */
   constructor(
@@ -30,6 +33,17 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   ) {
     super();
     this.docImport = new ScDocumentImport(document);
+  }
+  /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @returns Nothing. */
+  AddAutoStyle(name: string, pattern: ScPatternAttr): void {
+    this.autoStyles.get(name)?.Dispose();
+    this.autoStyles.set(name, new CellAttributeHolder(pattern, true));
+  }
+  /** Borrows actual automatic style data; missing references remain diagnosed. @param name - Style reference. @returns Pattern or null. */
+  GetAutoStyle(name: string): ScPatternAttr | null {
+    const pattern = this.autoStyles.get(name)?.getScPatternAttr() ?? null;
+    if (pattern === null) this.unsupported("cell style/number format");
+    return pattern;
   }
   /** Borrows the actual native document-import owner. @returns Importer. */
   GetDoc(): ScDocumentImport {
@@ -94,6 +108,8 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
     } finally {
       this.document.SetAutoCalc(auto);
+      for (const holder of this.autoStyles.values()) holder.Dispose();
+      this.autoStyles.clear();
     }
   }
   /** Marks the unique spreadsheet body. @returns Context. */
@@ -116,8 +132,8 @@ class ScXMLDocContext_Impl extends ScXMLImportContext {
       this.owner.unsupported("scripts are not preserved");
       return new SvXMLIgnoreContext(true);
     }
-    if (element === XMLToken.OFFICE_AUTOMATIC_STYLES || element === XMLToken.OFFICE_FONT_FACE_DECLS)
-      return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.OFFICE_AUTOMATIC_STYLES) return new XMLTableStylesContext(this.owner);
+    if (element === XMLToken.OFFICE_FONT_FACE_DECLS) return new SvXMLIgnoreContext(true);
     throw new Error("ODS document feature is not implemented");
   }
 }
