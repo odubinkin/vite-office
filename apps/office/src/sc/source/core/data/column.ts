@@ -1,6 +1,7 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
 import {
   CellStoreType,
+  element_type_empty,
   CellTextAttrStoreType,
   string_element_callbacks,
   string_value_type,
@@ -36,11 +37,18 @@ import {
 } from "../../../inc/mtvelements";
 import { CellTextAttr } from "../../../inc/celltextattr";
 import type { ScDocument } from "../../../inc/document";
+import type { ScMergePatternState } from "../../../inc/attarray";
+import type { ScMarkData } from "../../../inc/markdata";
+import { ScMultiSelIter } from "../../../inc/markmulti";
 
 import { ScAttrArray } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
 export class ScColumnData {
+  /** Original column.hxx forwarding to the actual attribute array. @param state - Selection accumulator. @param first - First row. @param last - Last row. @param deep - Include inherited items. @returns Nothing. */
+  MergePatternArea(state: ScMergePatternState, first: number, last: number, deep: boolean): void {
+    this.pAttrArray.MergePatternArea(first, last, state, deep);
+  }
   protected nCol = 0;
   protected nTab = 0;
   protected pAttrArray: ScAttrArray;
@@ -84,7 +92,7 @@ export class ScColumnData {
     for (let row = start; row <= end;) {
       const old = this.GetPatternRange(first, last, row) as ScPatternAttr;
       const next = new ScPatternAttr(old);
-      next.GetItemSetWritable().PutSet(delta.GetItemSet(), false);
+      next.GetItemSetWritable().PutSet(delta.GetItemSet());
       const holder = new CellAttributeHolder(next, true);
       try {
         const stop = Math.min(end, last[0]);
@@ -102,6 +110,37 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original disjoint row-span traversal over native multi-selection data. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited values. @returns Nothing. */
+  MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {
+    if (marks.IsMultiMarked()) {
+      const multi = marks.GetMultiSelData();
+      if (multi.HasMarks(this.nCol)) {
+        const iterator = new ScMultiSelIter(multi, this.nCol);
+        for (let result = iterator.Next(0, 0); result[0]; result = iterator.Next(0, 0))
+          this.pAttrArray.MergePatternArea(result[1], result[2], state, deep);
+      }
+    }
+  }
+  /** Reads actual typed-block emptiness, excluding formatting. @returns Whether no cell payload exists. */
+  IsEmptyData(): boolean {
+    return (
+      this.maCells.block_size() === 1 && this.maCells.cbegin().get().type === element_type_empty
+    );
+  }
+  /** Reads the first payload row from the leading native block. @returns Row or native empty zero. */
+  GetFirstDataPos(): number {
+    if (this.IsEmptyData()) return 0;
+    const first = this.maCells.cbegin().get();
+    return first.type !== element_type_empty ? 0 : first.size;
+  }
+  /** Reads the last payload row from the trailing native block. @returns Row or native empty zero. */
+  GetLastDataPos(): number {
+    if (this.IsEmptyData()) return 0;
+    const last = this.maCells.crbegin().get();
+    return last.type !== element_type_empty
+      ? this.rDocument.MaxRow()
+      : this.rDocument.MaxRow() - last.size;
+  }
   /** Native friend-visible logical counters used by CellStoreEvent; no lifetime accounting. */
   mnBlkCountFormula = 0;
   mnBlkCountCellNotes = 0;

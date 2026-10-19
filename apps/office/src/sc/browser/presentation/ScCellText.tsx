@@ -7,6 +7,7 @@ import { getConfiguredSystemUILanguage } from "../../../i18nlangtag/source/isola
 import { getScriptType, ScriptType } from "../../../i18nlangtag/source/isolang/mslangid.script";
 import { browserFontFamily } from "../../../vcl/browser/font-family";
 import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
+import type { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 const breakIterator = new BreakIteratorImpl();
 /** Paints original script font values without storing text or attributes in React state. @param props - Display text and borrowed pattern. @returns Script-specific text spans. */
 export function ScCellText({
@@ -36,6 +37,7 @@ export function ScCellText({
               font.GetFamilyName(),
               getFontFamilyGeneric(font.GetFamily()),
             ),
+            fontSize: `${(pattern.GetItem(effective === ScriptType.ASIAN ? 112 : effective === ScriptType.COMPLEX ? 117 : 101) as SvxFontHeightItem).GetHeight() / 20}pt`,
           }}
         >
           {text.slice(pos, end)}

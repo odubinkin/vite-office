@@ -1,4 +1,4 @@
-/** @fileoverview ScUndoSelectionAttr consumed simple-pattern path over a real attribute-only undo document; rich text, borders, merge and VCL painting remain unported. */
+/** @fileoverview ScUndoSelectionAttr consumed single/multi-mark pattern path over a real attribute-only undo document;rich text,borders,merge and VCL painting remain unported. */
 import { AdjustBlockHeight } from "../view/viewfun2";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
@@ -33,7 +33,7 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
     this.pUndoDoc.CopyToDocument(
       range,
       InsertDeleteFlags.ATTRIB,
-      false,
+      this.aMarkData.IsMultiMarked(),
       this.shell.GetDocument(),
       this.aMarkData,
     );
@@ -48,17 +48,25 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   override RedoWithContext(): void {
     const start = this.aRange.aStart,
       end = this.aRange.aEnd;
-    for (const tab of this.aMarkData.GetSelectedTabs())
+    if (this.aMarkData.IsMultiMarked())
       this.shell
         .GetDocument()
-        .ApplyPatternAreaTab(
-          start.Col(),
-          start.Row(),
-          end.Col(),
-          end.Row(),
-          tab,
+        .ApplySelectionPattern(
           this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
+          this.aMarkData,
         );
+    else
+      for (const tab of this.aMarkData.GetSelectedTabs())
+        this.shell
+          .GetDocument()
+          .ApplyPatternAreaTab(
+            start.Col(),
+            start.Row(),
+            end.Col(),
+            end.Row(),
+            tab,
+            this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
+          );
     AdjustBlockHeight(this.shell.GetDocument(), this.aMarkData, start.Row(), end.Row());
   }
   /** Borrows the original native mark data for the browser view restoration. @returns Marks. */

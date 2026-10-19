@@ -2986,3 +2986,103 @@ as borrowed values; it does not emulate those unported services.
 Decision: retain the original branch ordering rather than always using configuration or
 always forcing black for Print. Literal current-view/no-view and cached configuration cases
 are retained in `patattr.test.ts`; full native view-service execution remains unverified.
+
+## CALC-205: font growth can reduce oversized values or wrap below the shrink minimum
+
+Status: pinned `ScFormatShell::ExecuteAttr` expressions and 16 initialized standalone C++
+witnesses; complete LibreOffice/VCL execution is not claimed.
+
+In `sc/source/ui/view/formatsh.cxx`, Grow computes unsigned32 `nSize + 40` before taking
+`min(..., 19998)`. Therefore growing 22000 twips reduces it to 19998, and growing
+`0xffffffff` wraps to 39 twips. The 40-twip minimum belongs only to Shrink. Shrink converts
+its unsigned subtraction to signed32 for `std::max<sal_Int32>`; sufficiently large heights
+can consequently become 40 twips. These are initialized integer inputs accepted by the
+native font-height item, rather than claims about undefined floating-point casts.
+
+Decision: retain the exact conversions and limits. Task89YNKC compiles the original pinned
+expressions in an isolated witness and compares all 16 observations with the JavaScript
+operation. `calc-font-step.test.tsx` retains ordinary, zero, oversized and wrap cases.
+
+## CALC-206: stepping one script can clear mixed heights of other scripts
+
+Status: pinned selection/item-set/pool-cache path and real Calc pattern/history regression.
+
+The Grow/Shrink branch first copies the complete selected font-height script set, including
+INVALID entries of scripts whose values differ between selected cells. It then replaces
+only the selected-script items. `ScViewFunc::ApplyUserItemSet` preserves those INVALID entries
+with `Put(..., false)`, while `ScItemPoolCache::ApplyTo` uses the default `Put` behavior when
+merging the delta into each cell: INVALID clears the existing direct item to default.
+
+For example, Latin12 in both selected cells and Asian15/20 can become Latin14 and default
+Asian height after a Latin Grow. Omitting the unselected script entries would avoid the
+reset but would differ from the source.
+
+Decision: retain the original full script-set delta and default-clearing application.
+`calc-font-step.test.tsx` checks the reset and real Undo/Redo restoration of both prior
+Asian heights. This also corrects the previous local pattern application that copied
+INVALID into a cell instead of clearing its direct item as the native pool cache does.
+
+## CALC-207: script-set cloning ignores an explicitly requested destination pool
+
+Status: pinned `SvxScriptSetItem::Clone` and real shared-pool regression.
+
+In `editeng/source/items/textitem.cxx`, `SvxScriptSetItem::Clone(SfxItemPool*)` leaves its
+parameter unnamed and constructs the new item with the original contained set's pool.
+This differs from the target-pool copy facility of the base `SfxSetItem` contract.
+
+Decision: retain original-pool cloning. `native-script-set-item.test.ts` supplies a distinct
+real destination pool and verifies that the clone still belongs to the original one,
+with independent contained state and retained INVALID entries. No replacement pool or
+compatibility wrapper is introduced.
+
+## CALC-208: multi-selection merging can omit unallocated default columns
+
+Status: pinned `ScTable::MergeSelectionPattern` and consumed core selection regression.
+
+In `sc/source/core/data/table2.cxx`, the multi-selection path clamps each marked column
+span to allocated columns. It has no default-column merge after that loop. In contrast,
+`ScTable::MergePatternArea` explicitly merges `aDefaultColData` when a simple rectangle
+extends beyond allocated columns.
+
+An allocated selected cell with height240 and another marked column outside the allocated
+prefix can therefore retain a uniform240 selection result instead of becoming mixed with
+the default200. The equivalent simple rectangle does become mixed.
+
+Decision: preserve the two source paths. `selection-pattern.test.ts` checks the conditional
+unallocated-column example without allocating cells to hide the difference. This is not a
+certificate of full native sheet-view or device services.
+
+## CALC-209: repeated identical formatting still records Undo and marks the document modified
+
+Status: pinned `ApplyAttributesOperation.cxx`, base `Operation::canRunTheOperation` and
+consumed Calc history regressions.
+
+The view's selection-pattern path invokes `ApplyAttributesToCellOperation` or
+`ApplyAttributesWithChangedRangeOperation`. Their ordinary record-enabled branches create
+an undo action and call the document modificator without testing whether the resulting
+pattern differs. The base operation admission is true; these operation classes do not
+replace it with an equality check. A repeated explicit font size, alignment or color can
+therefore consume another Undo entry even though the stored attribute values are unchanged.
+
+Decision: preserve the native operation record and modified notification separately from
+the browser's boolean indication of whether attributes changed. Tests for FontHeight,
+alignment and color retain the repeated entry, the actual bounded undo-stack limit and
+Undo/Redo through the unchanged intermediate value. Failed input admission and mixed-script
+Grow with no uniform item still leave history untouched.
+
+## CALC-210: whole-sheet font queries clip to data while the formatting path retains the full marks
+
+Status: pinned `viewfunc.cxx` source inspection and consumed view-query regression.
+
+`ScViewFunc::GetSelectionPattern` calls `ShrinkToDataArea` for an exact whole-sheet simple
+mark. Its comment says this is consistent with `ApplySelectionPattern`; the pinned file's
+only call to that helper is the query call. The current apply path copies the actual marks,
+excludes filtered cells and converts them to multi marks before invoking attribute operations.
+It does not perform the same clipping at that point. A font state can therefore describe
+only occupied data while formatting still receives the original whole-sheet marks.
+
+Decision: preserve the query clipping and keep the actual view selection unchanged. The
+port derives bounds from the real typed cell blocks, excludes formatting-only cells and
+retains the native clipping function's partially mutated outputs on failure. This source
+observation does not certify the unported filtered-cell, alternate sheet-view, operation
+allocation or device-layout services.

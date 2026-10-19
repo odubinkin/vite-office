@@ -14,6 +14,8 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
+import type { ScMergePatternState } from "../../../inc/attarray";
+import type { ScMarkData } from "../../../inc/markdata";
 
 import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
 import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
@@ -24,6 +26,50 @@ import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { SetOptimalHeightsToRows } from "./table1";
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original multi-column spans clamp to allocated columns and retain sparse storage. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited items. @returns Nothing. */
+  MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {
+    for (const span of marks.GetMarkedColSpans()) {
+      const last = this.ClampToAllocatedColumns(span.mnEnd);
+      for (let col = span.mnStart; col <= last; col++)
+        (this.aCol[col] as ScColumn).MergeSelectionPattern(state, marks, deep);
+    }
+  }
+  /** Original table2.cxx range traversal also merges the real default-column data once. @param state - Selection accumulator. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param deep - Include inherited values. @returns Nothing. */
+  MergePatternArea(
+    state: ScMergePatternState,
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    deep: boolean,
+  ): void {
+    const last = this.ClampToAllocatedColumns(lastCol);
+    for (let col = firstCol; col <= last; col++)
+      (this.aCol[col] as ScColumn).MergePatternArea(state, firstRow, lastRow, deep);
+    if (last !== lastCol) this.aDefaultColData.MergePatternArea(state, firstRow, lastRow, deep);
+  }
+  /** Finds native first occupied coordinates using actual column stores. @param col - Column output. @param row - Row output. @returns Nothing. */
+  GetFirstDataPos(col: [number], row: [number]): void {
+    col[0] = 0;
+    row[0] = this.rDocument.MaxRow() + 1;
+    while (col[0] < this.aCol.length - 1 && (this.aCol[col[0]] as ScColumn).IsEmptyData()) ++col[0];
+    let current = col[0];
+    while (current < this.aCol.length && row[0] > 0) {
+      const column = this.aCol[current] as ScColumn;
+      if (!column.IsEmptyData()) row[0] = Math.min(row[0], column.GetFirstDataPos());
+      ++current;
+    }
+  }
+  /** Finds native last occupied coordinates; an unallocated empty table retains the initial empty-column coordinates without allocation. @param col - Column output. @param row - Row output. @returns Nothing. */
+  GetLastDataPos(col: [number], row: [number]): void {
+    col[0] = Math.max(0, this.aCol.length - 1);
+    row[0] = 0;
+    if (!this.aCol.length) return;
+    while ((this.aCol[col[0]] as ScColumn).IsEmptyData() && col[0] > 0) --col[0];
+    let current = col[0];
+    while (current >= 0 && row[0] < this.rDocument.MaxRow())
+      row[0] = Math.max(row[0], (this.aCol[current--] as ScColumn).GetLastDataPos());
+  }
   private readonly aCol: ScColumn[] = [];
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;

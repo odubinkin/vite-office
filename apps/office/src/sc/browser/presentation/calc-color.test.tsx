@@ -200,7 +200,11 @@ it("applies full native colors without changing independent font attributes and 
     );
     expect(c.GetColor("font")?.GetValue().toUInt32()).toBe(0x102030);
     c.Undo();
+    expect(c.GetColor("font")?.GetValue().toUInt32()).toBe(0x102030);
+    c.Undo();
     expect(c.GetColor("font")?.GetValue().equals(COL_AUTO)).toBe(true);
+    c.Redo();
+    expect(c.GetColor("font")?.GetValue().toUInt32()).toBe(0x102030);
     c.Redo();
     expect(c.GetColor("font")?.GetValue().toUInt32()).toBe(0x102030);
     expect(

@@ -6,6 +6,7 @@ import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
+import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
 import { ScUndoSelectionAttr } from "../../source/ui/undo/undoblk3";
@@ -238,13 +239,34 @@ export class CalcViewController {
   }
   /** Queries actual selected font-height state through the native format owner. @returns Uniform points or mixed state. */
   GetFontSize(): number | undefined {
-    return new ScFormatShell(this.viewData, this.shell).GetFontSize();
+    return new ScFormatShell(this.viewData, this.shell).GetFontSize(
+      getCalcSelectionScriptType(this.viewData),
+    );
+  }
+  /** Commits actual input before the native selected-script grow/shrink operation. @param grow - Source grow slot flag. @returns Changed. */
+  ChangeFontSize(grow: boolean): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).ChangeFontSize(
+      grow,
+      getCalcSelectionScriptType(this.viewData),
+    );
+    this.Changed();
+    return changed;
   }
   /** Commits input before the native attribute operation and publishes resulting bindings. @param points - Point height. @returns Whether changed. */
   SetFontSize(points: number): boolean {
     ScFormatShell.ValidateFontSize(points);
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetFontSize(points);
+    this.Changed();
+    return changed;
+  }
+  /** Accepts a complete native height item without flattening relative/absolute property metadata. @param height - Source item. @returns Changed. */
+  SetFontHeight(height: SvxFontHeightItem): boolean {
+    if (!(height instanceof SvxFontHeightItem))
+      throw new TypeError("FontHeight requires SvxFontHeightItem");
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetFontHeight(height);
     this.Changed();
     return changed;
   }

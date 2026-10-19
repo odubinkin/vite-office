@@ -113,7 +113,7 @@ export class SfxItemSet {
   private parent: SfxItemSet | undefined;
 
   private readonly pool: SfxItemPool;
-  private readonly ranges: WhichRangesContainer;
+  private ranges: WhichRangesContainer;
   /** Original pool-only, explicit pool/ranges and base copy constructors. Copying slices derived source sets, without invoking virtual Clone. @param args - Pool/ranges/optional browser parent or actual const source. @returns Item set. */
   public constructor(
     ...args:
@@ -144,6 +144,15 @@ export class SfxItemSet {
   /** Returns the accepted WhichId ranges. @returns Inclusive ranges. */
   public GetRanges(): WhichRangesContainer {
     return this.ranges;
+  }
+
+  /** Original range expansion preserves all existing values and state sentinels. @param from - Inclusive native lower bound. @param to - Inclusive native upper bound. @returns Nothing. */
+  public MergeRange(from: number, to: number): void {
+    let allIncluded = this.ranges.length !== 0;
+    for (let which = from; allIncluded && which <= to; which++)
+      if (!this.containsWhich(which)) allIncluded = false;
+    if (allIncluded) return;
+    this.ranges = MergeRange(this.ranges, from, to);
   }
 
   /** Changes the inherited item set. @param parent - New parent or undefined. @returns Nothing. */
@@ -237,6 +246,55 @@ export class SfxItemSet {
       } else changed = this.Put(item) !== undefined || changed;
     }
     return changed;
+  }
+
+  /** Original shallow merge iterates destination ranges and treats absent source entries as defaults. @param source - Set in the same native pool. @returns Nothing. */
+  public MergeValues(source: SfxItemSet): void {
+    if (this.pool !== source.pool) throw new Error("MergeValues with different Pools");
+    for (const [first, last] of this.ranges)
+      for (let which = first; which <= last; which++)
+        this.MergeItem_Impl(which, source.poolItemMap.get(which), false);
+  }
+
+  /** Original single-item merge ignores disabled input and destination-unknown identities. @param item - Borrowed value or native state sentinel. @returns Nothing. */
+  public MergeValue(item: SfxPoolItem): void {
+    if (IsDisabledItem(item)) return;
+    if (this.containsWhich(item.Which())) this.MergeItem_Impl(item.Which(), item, true);
+  }
+
+  /** Original MergeValue(s) decision table,including default-valued explicit items and native invalid sentinels. @param which - Destination-known identity. @param source - Direct source entry or default absence. @param ignoreDefaults - Original single-item mode. @returns Nothing. */
+  private MergeItem_Impl(
+    which: number,
+    source: SfxPoolItem | undefined,
+    ignoreDefaults: boolean,
+  ): void {
+    const old = this.poolItemMap.get(which);
+    if (old === undefined) {
+      let next: SfxPoolItem | undefined;
+      if (source !== undefined && IsInvalidItem(source)) next = INVALID_POOL_ITEM;
+      else if (
+        source !== undefined &&
+        !ignoreDefaults &&
+        !this.pool.GetUserOrPoolDefaultItem(which).equals(source)
+      )
+        next = INVALID_POOL_ITEM;
+      else if (source !== undefined && ignoreDefaults)
+        next = implCreateItemEntry(this.pool, source, false) as SfxPoolItem;
+      if (next !== undefined) {
+        this.poolItemMap.set(which, next);
+      }
+      return;
+    }
+    if (IsInvalidItem(old)) return;
+    let change = false;
+    if (source === undefined) {
+      if (!ignoreDefaults && !old.equals(this.pool.GetUserOrPoolDefaultItem(which))) change = true;
+    } else if (IsInvalidItem(source)) {
+      if (!ignoreDefaults || !old.equals(this.pool.GetUserOrPoolDefaultItem(which))) change = true;
+    } else if (!old.equals(source)) change = true;
+    if (change) {
+      this.poolItemMap.set(which, INVALID_POOL_ITEM);
+    }
   }
 
   /** Original replacing Set operation; clears first even for self-set, then copies declared-range effective SET values or shallow direct states. @param source - Source set. @param deep - Include effective parent SET values. @returns Whether insertion/Put changed a value, independently of the initial clear. */

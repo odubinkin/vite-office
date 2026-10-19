@@ -21,7 +21,7 @@ function height(doc: ScDocument, col: number, row: number, tab = 0, which = 101)
     ) as SvxFontHeightItem
   ).GetHeight();
 }
-it("binds the real shared font widget,uniform and mixed state,paint,undo,redo and idempotence", /** No secondary format model or direct UI state assignment participates. @returns Nothing. */ () => {
+it("binds the real shared font widget,mixed state,paint and native repeated-operation history", /** No secondary format model or direct UI state assignment participates. @returns Nothing. */ () => {
   const s = createCalcSession(),
     c = s.controller,
     d = s.frame.GetDispatcher(),
@@ -45,12 +45,12 @@ it("binds the real shared font widget,uniform and mixed state,paint,undo,redo an
   const count = c.shell.GetUndoManager().GetUndoActionCount(),
     generation = c.shell.GetContentGeneration();
   act(
-    /** Checks idempotent font selection without a new history entry. @returns Nothing. */ () => {
+    /** Source records repeated formatting even when stored attributes are unchanged. @returns Nothing. */ () => {
       expect(c.SetFontSize(18)).toBe(false);
     },
   );
-  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
-  expect(c.shell.GetContentGeneration()).toBe(generation);
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
+  expect(c.shell.GetContentGeneration()).toBe(generation + 1);
   act(
     /** Extends the actual range to a cell with a different font height. @returns Nothing. */ () => {
       c.Select(1, 0, true);
@@ -175,11 +175,11 @@ it("retains non-height item deltas and copies real simple attributes across docu
   expect(
     /** Rejects unsupported partial attribute copy flags. @returns Never. */ () =>
       source.CopyToDocument(new ScRange(), InsertDeleteFlags.HARDATTR, false, dest),
-  ).toThrow(/simple attribute/);
+  ).toThrow(/attribute document/);
   expect(
-    /** Rejects unported multi-mark document copying. @returns Never. */ () =>
+    /** Enforces the native marked-copy precondition. @returns Never. */ () =>
       source.CopyToDocument(new ScRange(), InsertDeleteFlags.ATTRIB, true, dest),
-  ).toThrow(/simple attribute/);
+  ).toThrow(/requires mark data/);
   const table = source.FetchTable(0) as ScTable;
   expect(table.GetDefaultColumnData().ApplyPatternArea(-1, 0, delta)).toBe(false);
   expect(table.GetDefaultColumnData().ApplyPatternArea(0, source.MaxRow() + 1, delta)).toBe(false);

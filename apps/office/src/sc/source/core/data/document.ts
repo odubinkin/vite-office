@@ -1,5 +1,8 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
 import type { ScMarkData } from "../../../inc/markdata";
+import { ScMergePatternState } from "../../../inc/attarray";
+import { SfxItemState } from "../../../../svl/inc/itemset";
+import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { ScColumnData } from "../../../inc/column";
 import { ScDocumentPool } from "./docpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
@@ -38,6 +41,71 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Clips only to real cell data, preserving source output mutations on failure. @param tab - Sheet. @param firstCol - Start-column output. @param firstRow - Start-row output. @param lastCol - End-column output. @param lastRow - End-row output. @returns Whether the clipped area is valid. */
+  ShrinkToDataArea(
+    tab: number,
+    firstCol: [number],
+    firstRow: [number],
+    lastCol: [number],
+    lastRow: [number],
+  ): boolean {
+    const table = this.FetchTable(tab);
+    if (table === null) return false;
+    const col1: [number] = [0],
+      row1: [number] = [0],
+      col2: [number] = [0],
+      row2: [number] = [0];
+    table.GetFirstDataPos(col1, row1);
+    table.GetLastDataPos(col2, row2);
+    if (col1[0] > col2[0] || row1[0] > row2[0]) return false;
+    if (firstCol[0] < col1[0]) firstCol[0] = col1[0];
+    if (col2[0] < lastCol[0]) lastCol[0] = col2[0];
+    if (firstRow[0] < row1[0]) firstRow[0] = row1[0];
+    if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
+    if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
+    return true;
+  }
+  private pSelectionAttr: ScPatternAttr | undefined;
+  /** Original owned selection pattern assembled by native table/column/run merges. @param marks - Actual sheet and cell marks. @param deep - Include inherited items. @returns Independent pattern. */
+  CreateSelectionPattern(marks: ScMarkData, deep = true): ScPatternAttr {
+    const state = new ScMergePatternState();
+    try {
+      if (marks.IsMultiMarked())
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          (this.maTabs[tab] as ScTable).MergeSelectionPattern(state, marks, deep);
+        }
+      if (marks.IsMarked()) {
+        const range = marks.GetMarkArea();
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          (this.maTabs[tab] as ScTable).MergePatternArea(
+            state,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+            deep,
+          );
+        }
+      }
+      if (state.pItemSet !== undefined) {
+        const pattern = new ScPatternAttr(this.getCellAttributeHelper(), state.pItemSet);
+        if (state.mbValidPatternId) pattern.SetPAKey(state.mnPatternId);
+        return pattern;
+      }
+      return new ScPatternAttr(this.getCellAttributeHelper());
+    } finally {
+      state.Dispose();
+    }
+  }
+  /** Original retained native selection result replaces the previous owned value. @param marks - Actual marks. @returns Borrowed current pattern. */
+  GetSelectionPattern(marks: ScMarkData): ScPatternAttr {
+    const next = this.CreateSelectionPattern(marks);
+    this.pSelectionAttr?.Dispose();
+    this.pSelectionAttr = next;
+    return this.pSelectionAttr;
+  }
   private readonly xPool = new ScDocumentPool();
   private readonly maCellAttributeHelper = new CellAttributeHelper(this.xPool);
   private pFormulaTree: ScFormulaCell | null = null;
@@ -89,7 +157,29 @@ export class ScDocument {
       this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false
     );
   }
-  /** Copies only the consumed ATTRIB, simple-rectangle native branch into a real document, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB only. @param marked - Multi-mark mode (unported). @param destination - Real target document. @param marks - Optional selected sheets. @returns Nothing. */
+  /** Native selection-pattern application over actual mark spans;attribute-only range decomposition replaces the unported physical pool-cache search. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Whether stored attributes changed. */
+  ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
+    let set = false;
+    for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
+      set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
+    if (!set) return false;
+    let changed = false;
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      for (const range of marks.GetMarkedRangesForTab(tab))
+        changed =
+          this.ApplyPatternAreaTab(
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+            tab,
+            delta,
+          ) || changed;
+    }
+    return changed;
+  }
+  /** Copies consumed ATTRIB through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB only. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
   CopyToDocument(
     range: ScRange,
     flags: InsertDeleteFlags,
@@ -97,8 +187,29 @@ export class ScDocument {
     destination: ScDocument,
     marks?: ScMarkData,
   ): void {
-    if (flags !== InsertDeleteFlags.ATTRIB || marked)
-      throw new Error("Only simple attribute document copying is implemented");
+    if (flags !== InsertDeleteFlags.ATTRIB)
+      throw new Error("Only attribute document copying is implemented");
+    if (marked) {
+      if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
+      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
+        if (!marks.GetTableSelect(tab)) continue;
+        for (const part of marks.GetMarkedRangesForTab(tab)) {
+          const firstCol = Math.max(part.aStart.Col(), range.aStart.Col()),
+            firstRow = Math.max(part.aStart.Row(), range.aStart.Row()),
+            lastCol = Math.min(part.aEnd.Col(), range.aEnd.Col()),
+            lastRow = Math.min(part.aEnd.Row(), range.aEnd.Row());
+          if (firstCol > lastCol || firstRow > lastRow) continue;
+          this.CopyToDocument(
+            new ScRange(firstCol, firstRow, tab, lastCol, lastRow, tab),
+            flags,
+            false,
+            destination,
+            marks,
+          );
+        }
+      }
+      return;
+    }
     const start = range.aStart,
       end = range.aEnd;
     for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
@@ -163,6 +274,8 @@ export class ScDocument {
   }
   /** Releases actual attribute registrations at document closure. @returns Nothing. */
   DisposeAttributes(): void {
+    this.pSelectionAttr?.Dispose();
+    this.pSelectionAttr = undefined;
     for (const table of this.maTabs) table.DisposeAttributes();
   }
   /** Borrows document-independent native sheet limits. @returns Limits. */

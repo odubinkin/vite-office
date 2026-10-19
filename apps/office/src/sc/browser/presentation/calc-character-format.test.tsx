@@ -16,6 +16,36 @@ import {
   SvxUnderlineItem,
 } from "../../../editeng/source/items/textitem";
 import { FontWeight, FontItalic, FontLineStyle } from "../../../tools/inc/fontenum";
+
+it("uses the shared native three-script weight set when Latin and complex are bold but Asian is normal", /** Source compares all scripts before deciding whether the no-argument command should turn bold off. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    d = session.frame.GetDispatcher(),
+    doc = c.shell.GetDocument(),
+    delta = new ScPatternAttr(doc.getCellAttributeHelper());
+  try {
+    for (const which of [102, 118])
+      delta.ItemSetPut(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
+    doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
+    expect(c.GetCharacterState("bold")).toBe(true);
+    expect(d.Execute(".uno:Bold")).toMatchObject({ value: true });
+    for (const which of [102, 113, 118])
+      expect(
+        (
+          (doc.GetPattern(new ScAddress()) as ScPatternAttr).GetItem(which) as SvxWeightItem
+        ).GetWeight(),
+      ).toBe(FontWeight.WEIGHT_BOLD);
+    c.Undo();
+    expect(
+      (
+        (doc.GetPattern(new ScAddress()) as ScPatternAttr).GetItem(113) as SvxWeightItem
+      ).GetWeight(),
+    ).toBe(FontWeight.WEIGHT_NORMAL);
+  } finally {
+    delta.Dispose();
+    session.Close();
+  }
+});
 it("uses the shared controls with real three-script attributes,mixed ranges and undo", /** No substitute formatting model participates. @returns Nothing. */ () => {
   const session = createCalcSession(),
     c = session.controller,
@@ -195,7 +225,7 @@ it("validates explicit host arguments and commits input before native character 
     expect(d.Execute(command, { enabled: true })).toMatchObject({ value: true });
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(d.Execute(command, { enabled: true })).toMatchObject({ value: false });
-    expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
+    expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
     expect(d.Execute(command, { enabled: false })).toMatchObject({ value: true });
   }
   c.SetCharacterFormat("italic");

@@ -28,22 +28,23 @@ export function getCalcSelectionScriptType(view: ScViewData): SvtScriptType {
         string.dispose();
       }
     };
-  if (!marks.IsMarked()) classify(new ScAddress(view.GetCurX(), view.GetCurY(), tab));
-  else {
-    const range = marks.GetMarkArea();
-    const cells = new ScHorizontalCellIterator(
-      doc,
-      range.aStart.Tab(),
-      range.aStart.Col(),
-      range.aStart.Row(),
-      range.aEnd.Col(),
-      range.aEnd.Row(),
-    );
-    const col: [number] = [0],
-      row: [number] = [0];
-    while (cells.GetNext(col, row) !== null)
-      classify(new ScAddress(col[0], row[0], range.aStart.Tab()));
-  }
+  if (!marks.IsMarked() && !marks.IsMultiMarked())
+    classify(new ScAddress(view.GetCurX(), view.GetCurY(), tab));
+  else
+    for (const range of marks.GetMarkedRanges()) {
+      const cells = new ScHorizontalCellIterator(
+        doc,
+        range.aStart.Tab(),
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+      );
+      const col: [number] = [0],
+        row: [number] = [0];
+      while (cells.GetNext(col, row) !== null)
+        classify(new ScAddress(col[0], row[0], range.aStart.Tab()));
+    }
   if (script === SvtScriptType.NONE) {
     const officeScript = getScriptType(getConfiguredSystemUILanguage());
     script =

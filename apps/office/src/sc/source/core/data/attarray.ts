@@ -1,6 +1,32 @@
 /** @fileoverview ScAttrArray canonical pattern row runs, default-column inheritance and native split/merge algorithm. VCL width caches, stream-copy validity and rich edit-text stripping are outside this document slice. */
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
+import type { ScMergePatternState } from "../../../inc/attarray";
+import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
+import { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
+
+/** Original lcl_MergeDeep compares inherited values against actual pool defaults;existing invalid states remain invalid. @param merged - Parentless accumulator. @param source - Source pattern set. @returns Nothing. */
+function lcl_MergeDeep(merged: SfxItemSet, source: SfxItemSet): void {
+  for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; which++) {
+    const oldState = merged.GetItemState(which, false);
+    if (oldState === SfxItemState.DEFAULT) {
+      if (
+        source.GetItemState(which, true) === SfxItemState.SET &&
+        !source.Get(which).equals(merged.GetPool().GetUserOrPoolDefaultItem(which))
+      )
+        merged.InvalidateItem(which);
+    } else if (oldState === SfxItemState.SET) {
+      if (source.GetItemState(which, true) === SfxItemState.SET) {
+        if (
+          !SfxPoolItem.areSame(source.GetItemIfSet(which, true), merged.GetItemIfSet(which, false))
+        )
+          merged.InvalidateItem(which);
+      } else if (!merged.Get(which).equals(source.GetPool().GetUserOrPoolDefaultItem(which)))
+        merged.InvalidateItem(which);
+    }
+  }
+}
 /** Original end-row entry with actual canonical holder ownership. */
 class ScAttrEntry extends CellAttributeHolder {
   nEndRow = 0;
@@ -8,6 +34,46 @@ class ScAttrEntry extends CellAttributeHolder {
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
   private readonly mvData: ScAttrEntry[] = [];
+  /** Original pattern-run selection merge without allocating cells or traversing individual rows. @param startRow - First row. @param endRow - Last row. @param state - Shared accumulator. @param deep - Whether inherited items participate. @returns Nothing. */
+  MergePatternArea(
+    startRow: number,
+    endRow: number,
+    state: ScMergePatternState,
+    deep: boolean,
+  ): void {
+    if (!this.rDocument.ValidRow(startRow) || !this.rDocument.ValidRow(endRow)) return;
+    const position: [number] = [0];
+    let start: number;
+    if (this.mvData.length !== 0 && !this.Search(startRow, position)) return;
+    do {
+      const pattern =
+        this.mvData.length === 0
+          ? this.rDocument.getCellAttributeHelper().getDefaultCellAttribute()
+          : ((this.mvData[position[0]] as ScAttrEntry).getScPatternAttr() as ScPatternAttr);
+      if (
+        !ScPatternAttr.areSame(pattern, state.aOld1.getScPatternAttr()) &&
+        !ScPatternAttr.areSame(pattern, state.aOld2.getScPatternAttr())
+      ) {
+        const source = pattern.GetItemSet();
+        if (state.pItemSet !== undefined) {
+          state.mbValidPatternId = false;
+          if (deep) lcl_MergeDeep(state.pItemSet, source);
+          else state.pItemSet.MergeValues(source);
+        } else {
+          state.pItemSet = new SfxItemSet(source.GetPool(), source.GetRanges());
+          state.pItemSet.Set(source, deep);
+          state.mnPatternId = pattern.GetPAKey();
+        }
+        state.aOld2.assign(state.aOld1);
+        state.aOld1.setScPatternAttr(pattern);
+      }
+      start =
+        this.mvData.length !== 0
+          ? (this.mvData[position[0]] as ScAttrEntry).nEndRow + 1
+          : this.rDocument.MaxRow() + 1;
+      position[0]++;
+    } while (start <= endRow);
+  }
   /** Copies the source default column's runs, retaining real canonical holders. @param nCol - Column or default-column sentinel. @param nTab - Sheet. @param rDocument - Owner. @param defaults - Actual default-column array. @returns Array. */
   constructor(
     nCol: number,

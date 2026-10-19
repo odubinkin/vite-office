@@ -94,7 +94,10 @@ it("preserves native slots,mixed/default state,no-op explicit items and failed-i
       const before = c.shell.GetUndoManager().GetUndoActionCount();
       d.Execute(resource.id);
       expect(c.GetAlignment(resource.axis)).toBe(resource.toggle ? 0 : resource.value);
-      if (!resource.toggle) expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(before);
+      if (!resource.toggle)
+        expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(
+          Math.min(before + 1, c.shell.GetUndoManager().GetMaxUndoActionCount()),
+        );
     }
     c.Select(0, 0);
     c.SetAlignment("horizontal", H.Left, false);
