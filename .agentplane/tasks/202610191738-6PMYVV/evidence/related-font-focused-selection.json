@@ -1,0 +1,20 @@
+[
+  "src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+  "src/sw/browser/editor/native-table-column-commands.test.tsx",
+  "src/sw/browser/editor/native-table-row-commands.test.tsx",
+  "src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-default-tabs.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-tab-glyphs.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-tab-pixels.test.tsx",
+  "src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+  "src/sw/sdi/swriter.test.ts",
+  "src/sw/source/core/table/native-row-insertion.test.ts",
+  "src/sw/source/uibase/docvw/native-headline-selection.test.ts",
+  "src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+  "src/sw/source/uibase/wrtsh/native-font-selection.test.ts"
+]
