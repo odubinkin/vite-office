@@ -1,0 +1,289 @@
+{
+  "task": "202610192240-89YNKC",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceReferences": [
+    {
+      "path": "vendor/libreoffice-reference/include/editeng/scriptsetitem.hxx",
+      "sha256": "83bce6017ab0d9897b91cf0432ee53747baa0e1d9fb19dbc476f94ca554bf668",
+      "anchors": [
+        {
+          "marker": "SvxScriptSetItem",
+          "lines": [
+            25,
+            28,
+            29,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+      "sha256": "f62b23dea2f77c012f98b8afd13d05f18d9079ab690eb60d0336cdc323e1b4d6",
+      "anchors": [
+        {
+          "marker": "SvxScriptSetItem::Clone",
+          "lines": [
+            2779
+          ]
+        },
+        {
+          "marker": "SvxScriptSetItem::GetItemOfScriptSet",
+          "lines": [
+            2786
+          ]
+        },
+        {
+          "marker": "SvxScriptSetItem::PutItemForScriptType",
+          "lines": [
+            2845
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe",
+      "anchors": [
+        {
+          "marker": "SfxItemSet::MergeRange",
+          "lines": [
+            775
+          ]
+        },
+        {
+          "marker": "SfxItemSet::MergeValues",
+          "lines": [
+            1201
+          ]
+        },
+        {
+          "marker": "SfxItemSet::MergeItem_Impl",
+          "lines": [
+            1123
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/attarray.hxx",
+      "sha256": "86efb856a71c07f8212af75e6286a06086cc376507cc7e366964ca06e10be883",
+      "anchors": [
+        {
+          "marker": "ScMergePatternState",
+          "lines": [
+            65,
+            74,
+            152
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+      "sha256": "dfd43a44c441b5723501c8424891220caa68a954817bb1fbda0b224bb59664dd",
+      "anchors": [
+        {
+          "marker": "lcl_MergeDeep",
+          "lines": [
+            924,
+            989
+          ]
+        },
+        {
+          "marker": "ScAttrArray::MergePatternArea",
+          "lines": [
+            960
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
+      "sha256": "9e46fdcb1c09fa97dac89a38a540f37e268fe2d4add9e80f77c17f24e3dc7f62",
+      "anchors": [
+        {
+          "marker": "ScColumn::IsEmptyData",
+          "lines": [
+            1294,
+            1339
+          ]
+        },
+        {
+          "marker": "ScColumn::GetFirstDataPos",
+          "lines": [
+            1419
+          ]
+        },
+        {
+          "marker": "ScColumn::GetLastDataPos",
+          "lines": [
+            1431,
+            1443
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33",
+      "anchors": [
+        {
+          "marker": "ScTable::MergeSelectionPattern",
+          "lines": [
+            2922
+          ]
+        },
+        {
+          "marker": "ScTable::MergePatternArea",
+          "lines": [
+            2936
+          ]
+        },
+        {
+          "marker": "ScTable::GetFirstDataPos",
+          "lines": [
+            2091
+          ]
+        },
+        {
+          "marker": "ScTable::GetLastDataPos",
+          "lines": [
+            2106
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+      "sha256": "e89ce72a7e618225be9d61e531e36175787a32e246d5cbb0b4738a93f7e3d9da",
+      "anchors": [
+        {
+          "marker": "ScDocument::CreateSelectionPattern",
+          "lines": [
+            5151
+          ]
+        },
+        {
+          "marker": "ScDocument::ShrinkToDataArea",
+          "lines": [
+            1129
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "anchors": [
+        {
+          "marker": "SID_GROW_FONT_SIZE",
+          "lines": [
+            907,
+            924
+          ]
+        },
+        {
+          "marker": "SID_SHRINK_FONT_SIZE",
+          "lines": [
+            908
+          ]
+        },
+        {
+          "marker": "nFontMaxSz",
+          "lines": [
+            923,
+            925
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260",
+      "anchors": [
+        {
+          "marker": "ScViewFunc::GetSelectionPattern",
+          "lines": [
+            1107
+          ]
+        },
+        {
+          "marker": "static void ShrinkToDataArea",
+          "lines": [
+            1105,
+            1422
+          ]
+        },
+        {
+          "marker": "ScViewFunc::ApplySelectionPattern",
+          "lines": [
+            1114,
+            1117,
+            1452
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/poolcach.cxx",
+      "sha256": "7d89f92b05a711c85010696364b7ea9be37f0eb95e269c87db4d46cc523227ed",
+      "anchors": [
+        {
+          "marker": "ScItemPoolCache::ApplyTo",
+          "lines": [
+            45
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/operation/ApplyAttributesOperation.cxx",
+      "sha256": "68cfafee67572d9c909b9be90933d9a57bc63b21da7322af2b21a8f78f1e3154",
+      "anchors": [
+        {
+          "marker": "ApplyAttributesToCellOperation",
+          "lines": [
+            190,
+            201
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
+      "sha256": "c6722a5a75189cb61c3ccabb1172fdd3f2ee25d29bcbf89799ca3292030c289b",
+      "anchors": [
+        {
+          "marker": ".uno:Grow",
+          "lines": [
+            27
+          ]
+        },
+        {
+          "marker": ".uno:Shrink",
+          "lines": [
+            28
+          ]
+        }
+      ]
+    }
+  ],
+  "preserved": [
+    "Native seven script-slot families, real mapped Which ranges and source-pool Clone",
+    "Complete font height metadata, native grow uint32 cap and shrink signed32 floor",
+    "Real selection merge DEFAULT/SET/INVALID and original pattern holder lifetime",
+    "Whole-sheet query-only data clipping over genuine cell blocks",
+    "Multi-mark attribute snapshots and unchanged-format Undo records",
+    "Actual script-specific DOM font sizes; shared Writer controls/storage"
+  ],
+  "limitations": [
+    "Native pool-cache search and border transformation remain unported in existing column pattern application; consumed font deltas use real itemset merging.",
+    "Physical pattern allocation order/keys are not a full ScTable::ApplyWithAllocation implementation.",
+    "No full VCL device metrics, rich edit context, filtered or alternate sheet views.",
+    "Empty never-allocated tables preserve the initial empty-column coordinate outcome without adding a physical column.",
+    "English default resources keep Grow/Shrink hidden; unsupported EditEngine textobjectbar is not simulated.",
+    "Upstream default font-height QA reference is dependency context only; arithmetic witness is only extracted native expressions."
+  ],
+  "suspectedIssues": "docs/program/calc-upstream-suspected-issues.md#CALC-205 through CALC-210"
+}
