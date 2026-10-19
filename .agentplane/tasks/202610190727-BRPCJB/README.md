@@ -1,10 +1,11 @@
 ---
 id: "202610190727-BRPCJB"
 title: "Record recent upstream RTL buffer and conversion findings in Calc issue ledger"
-status: "DOING"
+result_summary: "Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T07:34:24.212Z"
+  updated_at: "2026-10-19T07:35:40.460Z"
   updated_by: "CODER"
-  note: "Canonical ledger now records3distinct source findings with explicit preserve-upstream decisions. Original226406bytes unchanged;16links/7anchors and native fixture/source/status evidence pass. Prettier,size,doctor,routing and whitespace pass;all kernel paths/hashes unchanged. Docs-only scope,goalactive,nextfull30."
+  note: "Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "CALC189documents exact reproduced ASan input and distinguishes excluded candidate inputs from confirmed failures;CALC190distinguishes source-derived example,initialized native observation and host storage;CALC191is expressly static-only with unknown caller invariants. Intentional ASCII_US/MS1252 compatibility is not labeled a defect."
     - "Audit preserves all226406original ledger bytes and prior SHA256;unique IDs189/190/191,16local links and7actual source anchors validate. Five original source hashes and both existing native capture digests/counts match committed evidence;all task26 kernel hashes and production paths remain unchanged."
     - "One non-task Markdown path plus task artifacts;new-section direct Prettier validation,CLI format,size,doctor,routing and whitespace checks pass. Current Calc299/raw100 remains task26 evidence;no new runtime/unsafe-native execution or coverage claim is invented for this docs-only update."
-commit: null
+commit:
+  hash: "8362ad9e8a535db2647dc6bab91b9de3a1ca7782"
+  message: "🧩 BRPCJB docs: record preserved upstream RTL buffer findings"
 comments:
   -
     author: "CODER"
     body: "Start:record verified and source-only upstream RTL concerns in the existing canonical ledger while preserving every kernel contract and prior entry."
+  -
+    author: "CODER"
+    body: "Verified: Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Canonical ledger now records3distinct source findings with explicit preserve-upstream decisions. Original226406bytes unchanged;16links/7anchors and native fixture/source/status evidence pass. Prettier,size,doctor,routing and whitespace pass;all kernel paths/hashes unchanged. Docs-only scope,goalactive,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-19T07:35:40.460Z"
+    author: "CODER"
+    state: "ok"
+    note: "Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic."
+  -
+    type: "status"
+    at: "2026-10-19T07:35:40.604Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T07:34:24.287Z"
+doc_updated_at: "2026-10-19T07:35:40.605Z"
 doc_updated_by: "CODER"
 description: "Task27 of approved Calc goal:apply new user requirement to canonical calc-upstream-suspected-issues.md. Append nonduplicate entries for original negative-F stack allocation overflow,OUStringBuffer setLength documentation/body mismatch,and source-only ImplUpperCharToUnicode destination-bound concern. Link exact pinned sources and existing genuine native evidence;distinguish observed outputs,undefined memory domains and untested concerns. Preserve all kernel logic/defaults and existing ledger entries;no network/publication/merge. Only calc branch/checkout."
 sections:
@@ -114,6 +133,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610190727-BRPCJB -m 🧩 BRPCJB task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T07:35:40.460Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T07:34:24.287Z, excerpt_hash=sha256:38e74e319fd970e0a3c6774aceaa05a611967b3a6656a411e2032b503fe338f9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190727-BRPCJB/blueprint/resolved-snapshot.json
+    - old_digest: 8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9
+    - current_digest: 8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610190727-BRPCJB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610190727-BRPCJB --result verified-202610190727-BRPCJB --commit f8124b697ce608f1046a8c74819a46e1bc889574
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -185,6 +234,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610190727-BRPCJB -m 🧩 BRPCJB task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T07:35:40.460Z — VERIFY — ok
+
+By: CODER
+
+Note: Canonical Calc issue ledger now records3distinct RTL findings with verified source/native evidence and unchanged kernel logic.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T07:34:24.287Z, excerpt_hash=sha256:38e74e319fd970e0a3c6774aceaa05a611967b3a6656a411e2032b503fe338f9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190727-BRPCJB/blueprint/resolved-snapshot.json
+- old_digest: 8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9
+- current_digest: 8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610190727-BRPCJB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610190727-BRPCJB --result verified-202610190727-BRPCJB --commit f8124b697ce608f1046a8c74819a46e1bc889574
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
