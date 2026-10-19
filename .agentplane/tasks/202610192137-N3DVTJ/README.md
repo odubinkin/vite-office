@@ -4,7 +4,7 @@ title: "Validate integrated Calc and Writer UI at the task40 regression checkpoi
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,36 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-19T22:37:56.257Z"
+  updated_by: "CODER"
+  note: "Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T22:38:19.264Z"
+  updated_by: "EVALUATOR"
+  note: "Task40 satisfies its finite full-regression contract on f7ecba6fabe5 with strict current-source raw100,complete test accounting and no runtime application changes."
+  evaluated_sha: "f7ecba6fabe5d6cd395eea920af4869f86944fec"
+  blueprint_digest: "5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66"
+  evidence_refs:
+    - ".agentplane/tasks/202610192137-N3DVTJ/README.md"
+    - ".agentplane/tasks/202610192137-N3DVTJ/quality/20261019-223819264-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/quality/20261019-223819264-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610192137-N3DVTJ/quality/20261019-223819264-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610192137-N3DVTJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/application-final-proof.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/application-final-raw.json.gz"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/inventory-final-proof.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/checkpoint-final-source-test-hashes.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/browser-reconciliation.json"
+    - ".agentplane/tasks/202610192137-N3DVTJ/evidence/font-diagnostics-audit.json"
+    - "f7ecba6fabe5d6cd395eea920af4869f86944fec"
+  findings:
+    - "Inspected eight intentional test/config edits:actual disjoint CLI discovery is preserved;native sc->tools ownership is source-backed;menu tests assert enabled Bold and disabled Overline hover;the Unicode optional-font export scenario retains all prior cases and exercises the real shared five-field pool."
+    - "Independently decoded application/inventory raw gzip and recalculated all four100metrics;validated current2729file hashes,exact1040file test accounting,17215current passed cases,Calc125/372,and complete changed config coverage. Batches require identical source/maps;partial threshold exits are preserved and not accepted standalone."
+    - "Inventory fixture corrections match pinned binary digests and six Asian/four complex size attributes;normalization fixes only marker-only test dependencies. Full inventory123/tooling128 and402distinct browser cases pass;fresh menu screenshots and unchanged1114runtime hashes justify reuse."
+    - "All declared source/type/lint/format/resource/build/static gates have retained evidence;no rule,threshold,exclusion,timeout,production behavior or parity claim is weakened. This closes checkpoint40;overall Calc UI implementation remains active and next full checkpoint50."
 commit: null
 comments:
   -
@@ -35,8 +60,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute the authorized task40 full integrated regression checkpoint,repair proven native/UI contract regressions without weakening gates,and retain current-source raw100/browser evidence;calc checkout only."
+  -
+    type: "verify"
+    at: "2026-10-19T22:37:56.257Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50."
 doc_version: 3
-doc_updated_at: "2026-10-19T22:37:33.251Z"
+doc_updated_at: "2026-10-19T22:37:56.775Z"
 doc_updated_by: "CODER"
 description: "Task40 of the active authorized Calc UI goal:execute the full all-application regression cadence after tasks31-39,repair source-backed regressions in the integrated Calc/shared/Writer UI and contracts,retain current-source raw100 evidence and fresh all-project browser checks. Only vite-office-calc branch calc;next full checkpoint50."
 sections:
@@ -69,6 +100,39 @@ sections:
     Result: diff check pass;clean final status required by close route.
     Evidence: traceable task/implementation commits and quality report.
     Scope: calc branch in vite-office-calc only. Next full checkpoint50;overall UI goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T22:37:56.257Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T22:37:33.251Z, excerpt_hash=sha256:49925c441377a61a6951ac1037df3b6a4df6cc90a54ee77ea7a829a3741b13c5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192137-N3DVTJ/blueprint/resolved-snapshot.json
+    - old_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+    - current_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192137-N3DVTJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610192137-N3DVTJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task40 repair commits if needed,preserving evidence and unrelated tasks. Keep user-owned merge/branch decisions and existing save/recovery deviations untouched."
   Findings: |-
     Preflight:direct workflow,branch calc,clean tracked/untracked tree;network approval required and unused. No user-instructions file present. Unrelated active C9TN6M,X6VV8G,Z7BW2Y remain untouched. The user explicitly authorized ongoing UI/core/common-module work and a full test run once per10tasks;this is checkpoint40,last recorded full checkpoint30. Prior task39 full related graph467files8582cases found9stale Writer expectations,now corrected and revalidated with213fresh cases and4complete shared owners raw100. Full application coverage uses disjoint Writer/Calc/shared projects and unchanged Istanbul100 thresholds;default report has raw JSON. Diagnostic reportOnFailure changes artifact emission only,not pass criteria. No specific new regression is assumed.
@@ -134,6 +198,39 @@ Command: git diff --check; final git status --short --untracked-files=all after 
 Result: diff check pass;clean final status required by close route.
 Evidence: traceable task/implementation commits and quality report.
 Scope: calc branch in vite-office-calc only. Next full checkpoint50;overall UI goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T22:37:56.257Z — VERIFY — ok
+
+By: CODER
+
+Note: Task40 complete: application1040files17215distinct passed tests with source/map-matched raw S50209/B32026/F9765/L45649 all100;Calc125files372cases all100;tooling128cases and config100;inventory123cases and full100;402distinct browser cases reconciled with fresh4;all declared static/build/source gates pass. Eight intentional test/config paths committed f7ecba6fabe5;no runtime application source changes,no lowered gates. Evidence retained in task subtree;next full checkpoint50.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T22:37:33.251Z, excerpt_hash=sha256:49925c441377a61a6951ac1037df3b6a4df6cc90a54ee77ea7a829a3741b13c5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192137-N3DVTJ/blueprint/resolved-snapshot.json
+- old_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+- current_digest: 5f2bdbc51c7e3780f50a677cd710798bf231dbc3900228676a5e5c425594ca66
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192137-N3DVTJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610192137-N3DVTJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
