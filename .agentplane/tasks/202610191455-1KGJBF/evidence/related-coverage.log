@@ -3,32 +3,20 @@
       Coverage enabled with istanbul
 
 
- Test Files  154 passed (154)
-      Tests  6752 passed (6752)
-   Start at  00:16:57
-   Duration  80.51s (transform 13.18s, setup 11.39s, import 46.28s, tests 24.89s, environment 60.71s)
+ Test Files  156 passed (156)
+      Tests  6767 passed (6767)
+   Start at  00:20:31
+   Duration  75.97s (transform 12.85s, setup 10.77s, import 43.92s, tests 20.90s, environment 59.15s)
 
  % Coverage report from istanbul
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |    99.9 |    99.86 |     100 |   99.89 |                   
- sax/source/tools  |     100 |    98.61 |     100 |     100 |                   
-  converter.ts     |     100 |    98.61 |     100 |     100 | 71                
- ...e/core/txtnode |   97.26 |      100 |     100 |   96.77 |                   
-  ndtxt-hints.ts   |   97.26 |      100 |     100 |   96.77 | 78,146            
- ...rce/filter/xml |     100 |    99.85 |     100 |     100 |                   
-  xmlimp.ts        |     100 |    99.67 |     100 |     100 | 860               
- ...f/source/style |     100 |    99.75 |     100 |     100 |                   
-  xmlstyle.ts      |     100 |    99.66 |     100 |     100 | 622               
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 99.9% ( 2133/2135 )
-Branches     : 99.86% ( 2196/2199 )
+Statements   : 100% ( 2135/2135 )
+Branches     : 100% ( 2199/2199 )
 Functions    : 100% ( 326/326 )
-Lines        : 99.89% ( 1963/1965 )
+Lines        : 100% ( 1965/1965 )
 ================================================================================
-ERROR: Coverage for lines (99.89%) does not meet global threshold (100%)
-ERROR: Coverage for statements (99.9%) does not meet global threshold (100%)
-ERROR: Coverage for branches (99.86%) does not meet global threshold (100%)

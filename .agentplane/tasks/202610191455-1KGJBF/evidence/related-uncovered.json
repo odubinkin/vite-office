@@ -1,0 +1,145 @@
+[
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter.ts",
+    "kind": "b",
+    "id": "13",
+    "index": 1,
+    "map": {
+      "loc": {
+        "start": {
+          "line": 71,
+          "column": 19
+        },
+        "end": {
+          "line": 71,
+          "column": null
+        }
+      },
+      "type": "cond-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 71,
+            "column": 40
+          },
+          "end": {
+            "line": 71,
+            "column": 51
+          }
+        },
+        {
+          "start": {
+            "line": 71,
+            "column": 51
+          },
+          "end": {
+            "line": 71,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "kind": "s",
+    "id": "33",
+    "index": 0,
+    "map": {
+      "start": {
+        "line": 78,
+        "column": 6
+      },
+      "end": {
+        "line": 78,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "kind": "s",
+    "id": "59",
+    "index": 0,
+    "map": {
+      "start": {
+        "line": 146,
+        "column": 2
+      },
+      "end": {
+        "line": 146,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/xmlimp.ts",
+    "kind": "b",
+    "id": "105",
+    "index": 1,
+    "map": {
+      "loc": {
+        "start": {
+          "line": 860,
+          "column": 4
+        },
+        "end": {
+          "line": 860,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 860,
+            "column": 4
+          },
+          "end": {
+            "line": 860,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlstyle.ts",
+    "kind": "b",
+    "id": "145",
+    "index": 1,
+    "map": {
+      "loc": {
+        "start": {
+          "line": 622,
+          "column": 4
+        },
+        "end": {
+          "line": 622,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 622,
+            "column": 4
+          },
+          "end": {
+            "line": 622,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  }
+]

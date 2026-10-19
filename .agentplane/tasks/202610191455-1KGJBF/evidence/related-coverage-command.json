@@ -140,6 +140,8 @@
     "src/sw/source/filter/xml/odt-worker-client.test.ts",
     "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
     "src/sw/source/filter/xml/xmltbli-default-cell.test.ts",
+    "src/sw/source/uibase/docvw/native-context-menu.test.ts",
+    "src/xmloff/source/core/xmluconv.test.ts",
     "src/xmloff/source/style/XMLFontAutoStylePool.test.ts",
     "src/xmloff/source/style/character-hdl.test.ts",
     "src/xmloff/source/style/native-bullet-font.test.ts",
