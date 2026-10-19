@@ -4,7 +4,7 @@ title: "Connect Calc bold italic underline UI to native attributes and ODS"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: connect approved native character formatting actions through shared Writer UI,actual Calc attributes and same-model ODS within calc checkout."
 doc_version: 3
-doc_updated_at: "2026-10-19T15:19:56.344Z"
+doc_updated_at: "2026-10-19T15:39:46.325Z"
 doc_updated_by: "CODER"
 description: "Task36: connect existing shared Writer controls and Calc native commands for bold,italic and underline through actual selection attributes,script groups,history,painting and same-model ODS. Stay in calc checkout;no full constructor or codec work."
 sections:
@@ -49,7 +49,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit and retain previous font-size/row-height controls and data;never reset unrelated tasks or branches."
-  Findings: "Implementation is in progress. Real shared control test and actual ODS script-value/color/direct-state roundtrip pass. Initial task generator syntax errors produced no application edits before correction;initial type diagnostics were fixed using the actual generated FontSlant type-getter argument and concrete native Clone contracts. An initial test command used app-relative paths from app cwd and created no tests;correct root-relative writes and app-cwd execution replaced it. The first underline source-map extraction missed whitespace-free thick mapping;original map sizes18/18/20 are now checked and source cases rerun. Existing tests expecting Bold as unsupported must now assert supported state. Native empty/minus numeric weight and DONTKNOW roundtrip quirks are retained and will be recorded in upstream suspicion ledger. No verification criteria,thresholds or exclusions changed;last full task30,next full task40."
+  Findings: "Implementation remains in progress. Character-format UI and ODS tests pass. Shared handler contracts now retain the original third SvXMLUnitConverter argument; six related files and14cases pass with complete shared owner S413/B158/F22/L391 all100, without exclusions or relaxed thresholds (evidence/shared-coverage-second.log). Existing initial diagnostic failures and corrections remain in earlier task revisions and evidence logs. User explicitly authorizes replacing simplified Writer/common modules with canonical upstream behavior directly in this calc checkout. Inspection found real loss at xmloff/source/text/txtparae.ts boolean style keys/export, xmloff/source/style/xmlstyle.ts boolean-only imports and forced script agreement, sw/source/filter/xml/xmlexp.ts browser-run projection/script rejection, sw/source/filter/xml/xmlimp.ts boolean item construction, and sw/source/core/txtnode/ndtxt-hints.ts CreateTextNodeFragment browser projection. These paths are not yet corrected or parity-certified; the change must preserve actual native item values and independent scripts throughout transport/insertion, reuse common xmloff handlers in Writer and Calc, and test actual ODT/ODS packages. Do not add a Calc-only workaround or treat browser booleans as the canonical file/core contract. Browser primary-save/no-recovery deviations remain as previously authorized. Current task whole-Calc, UI and registry verification is still pending; shared coverage alone is not task completion. Last full all-app run task30;next task40."
 id_source: "generated"
 ---
 ## Summary
@@ -79,4 +79,4 @@ Revert only this task implementation commit and retain previous font-size/row-he
 
 ## Findings
 
-Implementation is in progress. Real shared control test and actual ODS script-value/color/direct-state roundtrip pass. Initial task generator syntax errors produced no application edits before correction;initial type diagnostics were fixed using the actual generated FontSlant type-getter argument and concrete native Clone contracts. An initial test command used app-relative paths from app cwd and created no tests;correct root-relative writes and app-cwd execution replaced it. The first underline source-map extraction missed whitespace-free thick mapping;original map sizes18/18/20 are now checked and source cases rerun. Existing tests expecting Bold as unsupported must now assert supported state. Native empty/minus numeric weight and DONTKNOW roundtrip quirks are retained and will be recorded in upstream suspicion ledger. No verification criteria,thresholds or exclusions changed;last full task30,next full task40.
+Implementation remains in progress. Character-format UI and ODS tests pass. Shared handler contracts now retain the original third SvXMLUnitConverter argument; six related files and14cases pass with complete shared owner S413/B158/F22/L391 all100, without exclusions or relaxed thresholds (evidence/shared-coverage-second.log). Existing initial diagnostic failures and corrections remain in earlier task revisions and evidence logs. User explicitly authorizes replacing simplified Writer/common modules with canonical upstream behavior directly in this calc checkout. Inspection found real loss at xmloff/source/text/txtparae.ts boolean style keys/export, xmloff/source/style/xmlstyle.ts boolean-only imports and forced script agreement, sw/source/filter/xml/xmlexp.ts browser-run projection/script rejection, sw/source/filter/xml/xmlimp.ts boolean item construction, and sw/source/core/txtnode/ndtxt-hints.ts CreateTextNodeFragment browser projection. These paths are not yet corrected or parity-certified; the change must preserve actual native item values and independent scripts throughout transport/insertion, reuse common xmloff handlers in Writer and Calc, and test actual ODT/ODS packages. Do not add a Calc-only workaround or treat browser booleans as the canonical file/core contract. Browser primary-save/no-recovery deviations remain as previously authorized. Current task whole-Calc, UI and registry verification is still pending; shared coverage alone is not task completion. Last full all-app run task30;next task40.
