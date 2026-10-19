@@ -6,7 +6,9 @@
       "style:font-size-complex": 4
     },
     "diagnostics": 75,
-    "supportedFontAttributeDiagnostics": []
+    "supportedFontAttributeDiagnostics": [],
+    "localSha256": "bc2f30b4f429dc5acaa2833f94f140414204f8a04b45fdab856181e55184980c",
+    "pinnedSha256": "bc2f30b4f429dc5acaa2833f94f140414204f8a04b45fdab856181e55184980c"
   },
   {
     "file": "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt",
@@ -15,7 +17,9 @@
       "style:font-size-complex": 4
     },
     "diagnostics": 70,
-    "supportedFontAttributeDiagnostics": []
+    "supportedFontAttributeDiagnostics": [],
+    "localSha256": "56f981b9fcf2dc656e07688f732af08028c24e224fa1e98c11328ea87be2a5ec",
+    "pinnedSha256": "56f981b9fcf2dc656e07688f732af08028c24e224fa1e98c11328ea87be2a5ec"
   },
   {
     "file": "sw/qa/extras/odfimport/data/tdf94882.odt",
@@ -24,6 +28,8 @@
       "style:font-size-complex": 4
     },
     "diagnostics": 82,
-    "supportedFontAttributeDiagnostics": []
+    "supportedFontAttributeDiagnostics": [],
+    "localSha256": "c8330da0f5684c15c7fe38433c16410204c31dc0a2c06c1a12093bb61305d8ce",
+    "pinnedSha256": "c8330da0f5684c15c7fe38433c16410204c31dc0a2c06c1a12093bb61305d8ce"
   }
 ]
