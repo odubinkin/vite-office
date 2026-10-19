@@ -273,6 +273,16 @@
           "line": 594
         }
       ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/app/settings.cxx",
+      "sha256": "95a0ef4c31c0dbf46f70185488466b98ae94a3ea4f64a04eddfc6a32752e0e6c",
+      "markers": [
+        {
+          "marker": "mnColorValueSetColumnCount = 12",
+          "line": 250
+        }
+      ]
     }
   ]
 }
