@@ -1,0 +1,6 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/inc/rtl/math-values.ts
+  24:3  error  Explicit enum value must only be a literal value (string or number)  @typescript-eslint/prefer-literal-enum-member
+
+✖ 1 problem (1 error, 0 warnings)
+

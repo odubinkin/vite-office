@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |shared| src/sal/rtl/double-format.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/sal/rtl/double-format.test.ts [ src/sal/rtl/double-format.test.ts ]
+Error: Failed to resolve import "./native-double-format-cases.json" from "src/sal/rtl/double-format.test.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/double-format.test.ts:19:20
+  6  |  import { rtl_uString_new, rtl_uString_newFromStr_WithLength, rtl_uString_acquire, rtl_uString_release } from "../inc/...
+  7  |  import { rtl_uStringbuffer_newFromStr_WithLength } from "../inc/rtl/ustrbuf.h";
+  8  |  import fixture from "./native-double-format-cases.json";
+     |                       ^
+  9  |  const groups = [
+  10 |  	[0],
+ ❯ TransformPluginContext._formatLog ../../node_modules/vite/dist/node/chunks/node.js:31066:39
+ ❯ TransformPluginContext.error ../../node_modules/vite/dist/node/chunks/node.js:31063:14
+ ❯ normalizeUrl ../../node_modules/vite/dist/node/chunks/node.js:28008:18
+ ❯ ../../node_modules/vite/dist/node/chunks/node.js:28076:30
+ ❯ TransformPluginContext.transform ../../node_modules/vite/dist/node/chunks/node.js:28044:4
+ ❯ EnvironmentPluginContainer.transform ../../node_modules/vite/dist/node/chunks/node.js:30851:14
+ ❯ loadAndTransform ../../node_modules/vite/dist/node/chunks/node.js:20619:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  4 passed (4)
+   Start at  06:58:55
+   Duration  1.50s (transform 156ms, setup 324ms, import 166ms, tests 116ms, environment 1.75s)
+

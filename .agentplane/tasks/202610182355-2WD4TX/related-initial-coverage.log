@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/rtl/strtmpl.math.ts --coverage.include=src/sal/rtl/math.ts --coverage.include=src/sal/inc/rtl/math-values.ts --coverage.include=src/sal/inc/rtl/math.h.ts --coverage.reportsDirectory=coverage/task25-numeric src/sal/rtl src/sal/inc/rtl/math.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  16 passed (16)
+      Tests  41 passed (41)
+   Start at  07:00:30
+   Duration  9.41s (transform 1.94s, setup 1.27s, import 2.96s, tests 5.71s, environment 6.74s)
+
+ % Coverage report from istanbul
+------------------|---------|----------|---------|---------|-------------------
+File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------|---------|----------|---------|---------|-------------------
+------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 287/287 )
+Branches     : 100% ( 297/297 )
+Functions    : 100% ( 12/12 )
+Lines        : 100% ( 252/252 )
+================================================================================
