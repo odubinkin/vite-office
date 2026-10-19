@@ -43,8 +43,20 @@ for (const suite of ["writer", "calc"] as const)
         (entry as NonNullable<typeof entry>).y + 10,
       );
       await expect(first).toHaveAttribute("data-popup-highlighted", "true");
-      if (suite === "calc") await expect(first).toBeDisabled();
-      await page.screenshot({ path: `output/playwright/task29-popup-${suite}-${width}.png` });
+      await expect(first).toBeEnabled();
+      if (suite === "calc") {
+        const disabled = popup.getByRole("menuitemcheckbox", { name: "Overline", exact: true });
+        await expect(disabled).toBeDisabled();
+        await disabled.hover();
+        const disabledRect = await disabled.boundingBox();
+        expect(disabledRect).not.toBeNull();
+        await page.mouse.move(
+          (disabledRect as NonNullable<typeof disabledRect>).x + 10,
+          (disabledRect as NonNullable<typeof disabledRect>).y + 10,
+        );
+        await expect(disabled).toHaveAttribute("data-popup-highlighted", "true");
+      }
+      await page.screenshot({ path: test.info().outputPath(`popup-${suite}-${width}.png`) });
       await expect(trigger).toHaveAttribute("data-popup-highlighted", "true");
       await page.mouse.move(0, 0);
       await expect(popup).toBeVisible();

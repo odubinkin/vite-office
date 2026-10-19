@@ -97,7 +97,7 @@ function dependencies(registry: InventoryRegistry, baseline: string): RegistryCl
   }
   for (const item of registry.records) {
     if (item.kind === "provenance" && typeof item.record.upstreamPath === "string") {
-      const path = item.record.upstreamPath;
+      const path = item.record.upstreamPath.replace(/^vendor\/libreoffice-reference\//u, "");
       markers.set(
         path,
         `${markers.get(path) ?? ""}\n${(item.record.upstreamSymbols as string[]).join("\n")}`,
