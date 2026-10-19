@@ -1,10 +1,11 @@
 ---
 id: "202610191206-ZXWXQ8"
 title: "Connect available Calc row and column selection to shared menus and keyboard"
-status: "DOING"
+result_summary: "Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T12:25:08.791Z"
+  updated_at: "2026-10-19T12:28:45.010Z"
   updated_by: "CODER"
-  note: "Connected actual SelectRow/SelectColumn UI slots,menus and native platform grid keys over canonical marks,with proper block anchor and input ownership.112files314Calc cases pass raw100 S/B/F/L;all four changed owners100;2desktop/mobile real browser cases pass;17paths and all declared gates pass. Full UI goal/font-style priority remain active;nextfull40."
+  note: "Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610191206-ZXWXQ8/evidence/ui-action-audit.json"
   findings:
     - "Four changed owners preserve actual no-argument native axis boundaries,cursor and selected-sheet ownership;browser block anchor follows original InitBlockMode start. Real SDI26547/26548 and platform-specific grid keys route through the same Sfx target as menus,without a duplicate model or fabricated formatting state.112files314cases pass wholeCalc raw100;four complete changed owners all counters positive;two real desktop/mobile browser cases pass with inspected screenshots.17paths within25;463resource audit identifies15registered/12default-enabled commands and concrete missing font/style cell pipeline. Readiness prioritizes all available UI and concrete consumed dependencies rather than broad codec preparation."
-commit: null
+commit:
+  hash: "c8d000e400bf789a000f9d8d0f51c82cbe107b76"
+  message: "🧩 ZXWXQ8 calc: connect real row and column UI selection"
 comments:
   -
     author: "CODER"
     body: "Start:connect already available canonical cell-axis selection through actual shared Calc menu/keyboard slots;retain broader all-available UI goal and font/style priority."
+  -
+    author: "CODER"
+    body: "Verified: Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Connected actual SelectRow/SelectColumn UI slots,menus and native platform grid keys over canonical marks,with proper block anchor and input ownership.112files314Calc cases pass raw100 S/B/F/L;all four changed owners100;2desktop/mobile real browser cases pass;17paths and all declared gates pass. Full UI goal/font-style priority remain active;nextfull40."
+  -
+    type: "verify"
+    at: "2026-10-19T12:28:45.010Z"
+    author: "CODER"
+    state: "ok"
+    note: "Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40."
+  -
+    type: "status"
+    at: "2026-10-19T12:28:45.115Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T12:25:08.841Z"
+doc_updated_at: "2026-10-19T12:28:45.115Z"
 doc_updated_by: "CODER"
 description: "Task33:begin user-prioritized integration of all UI actions already supported by current Calc kernel. First concrete batch connects native SelectRow/SelectColumn menu actions and document keyboard selection to actual ScViewData/ScMarkData,using original no-argument ScTabView MarkRows/MarkColumns range rules. Preserve cursor and selected sheet group;commit or reject pending input through existing owner;no new workbook/model,style placeholder or speculative codec work. Reuse current shared Writer menus/resources/dispatch. Audit and update active Calc UI readiness around concrete next font/style command gaps instead of broad prerequisite scheduling. WholeCalc100 and complete changed owners100,related controller/menu/core tests and actual browser desktop/mobile action acceptance;types/build/static/style/docs/tree/provenance/scoped inventory/doctor/routing. Up to25non-task source/test/browser/registry/readiness paths. Full UI goal remains active;onlycalc/offline/no merge,lastfull30,next40."
 sections:
@@ -114,6 +133,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610191206-ZXWXQ8 -m 🧩 ZXWXQ8 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T12:28:45.010Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T12:25:08.841Z, excerpt_hash=sha256:0ebf9acdf70e6857a7fc732e8248b61ff1934e8f378b2e7eef85540d04e7c3fc
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191206-ZXWXQ8/blueprint/resolved-snapshot.json
+    - old_digest: fd9e06030ae54b46a1ae4ad97822c9c2098bed614b04553751cc2edb836cdf56
+    - current_digest: fd9e06030ae54b46a1ae4ad97822c9c2098bed614b04553751cc2edb836cdf56
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191206-ZXWXQ8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191206-ZXWXQ8 --result verified-202610191206-ZXWXQ8 --commit a4f61040a8843e560ffee4e3de3fc6b4b91e8a82
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -185,6 +234,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610191206-ZXWXQ8 -m 🧩 ZXWXQ8 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T12:28:45.010Z — VERIFY — ok
+
+By: CODER
+
+Note: Connected native SelectRow/SelectColumn shared menu and platform grid keys to actual marks with cursor/group/history and block-anchor preservation;314Calc cases raw100 plus2real desktop/mobile browser cases pass. Audited463resources and prioritized remaining font/style/UI paths. Task33,nextfull40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T12:25:08.841Z, excerpt_hash=sha256:0ebf9acdf70e6857a7fc732e8248b61ff1934e8f378b2e7eef85540d04e7c3fc
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191206-ZXWXQ8/blueprint/resolved-snapshot.json
+- old_digest: fd9e06030ae54b46a1ae4ad97822c9c2098bed614b04553751cc2edb836cdf56
+- current_digest: fd9e06030ae54b46a1ae4ad97822c9c2098bed614b04553751cc2edb836cdf56
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191206-ZXWXQ8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191206-ZXWXQ8 --result verified-202610191206-ZXWXQ8 --commit a4f61040a8843e560ffee4e3de3fc6b4b91e8a82
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
