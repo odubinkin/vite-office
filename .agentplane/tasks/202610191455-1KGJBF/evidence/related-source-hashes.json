@@ -1,0 +1,22 @@
+{
+  "apps/office/src/editeng/browser/text-line-item-codec.ts": "d5334242a662ec6b13f7e095199c56068aa43438ac0b799fa97f48dafe711422",
+  "apps/office/src/o3tl/inc/numeric.ts": "9d6c42f3dbc35515189dbe9a8757e05c5be0f6a2e73e9cd5362b3c905f41170c",
+  "apps/office/src/offapi/com/sun/star/awt/FontUnderline.ts": "9e552ed9e2934a3d80b9f4ec8051f7e796cf4e83f40327e36a30d2416cd26268",
+  "apps/office/src/sax/source/tools/converter.ts": "bb142ea92eb274fe15bcd65ee08274959fcbb4be400bf5ab1d07dae47420a353",
+  "apps/office/src/sw/browser/filter/xml/item-codec.ts": "fdfe239bfc7095771cdb0f1387123de187023537b4e44015a676bce0248de835",
+  "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "f0d5e979a1d3d8d1b307cb4db0a45ee251bb5845a66ca83fa3c99f4dff50a6fc",
+  "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "b54ff6aaf4c3ae895abc5651ce37acc823dec602d09593dac63ae527c25e695b",
+  "apps/office/src/sw/source/filter/xml/xmlexp.ts": "9c7135cd57afe7d9a993a434a6dec11263964bbb29ef3ab7156227a8751919f5",
+  "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts": "a2084186b6ed1e14e753403352994bd9e5f12217c143656be2c1af82e129dd65",
+  "apps/office/src/sw/source/filter/xml/xmlimp.ts": "048a0f3625987ac13bac882445e4fd5f9e1c4150f3060d0ccdd6d8af91e9fe48",
+  "apps/office/src/xmloff/source/core/xmltoken.ts": "0da055160abbfefd311a52831fd4161abd658fc1dc09ccbfbc140f053243241e",
+  "apps/office/src/xmloff/source/style/postuhdl.ts": "4d594af538fcb0c70b62435e2b0d0f43ca1c2791c5c18ae95c2d894f3f70d3cc",
+  "apps/office/src/xmloff/source/style/undlihdl.ts": "d8895f6127adc8db2a83b93fc1a3544d6a77e9cd2e7903b9cdc3c1e6ac78bcf5",
+  "apps/office/src/xmloff/source/style/weighhdl.ts": "17ab977583be689737938ee1045bdabf54e7add07a90eff662734ae58613c5cf",
+  "apps/office/src/xmloff/source/style/xmlbahdl.ts": "7b3ba0db29a39941a5365ee64fd97ad636d871b0e62e29ebb1b775a531e188ac",
+  "apps/office/src/xmloff/source/style/xmlstyle.ts": "f820dd9b66db522ab2379eb38e84f19bef80e5ee035f912a8850ccdf9a2fd064",
+  "apps/office/src/xmloff/source/text/txtparae.ts": "cebcd588cc9da734277cc02c1d4406939a51412d82baf1df6b4c02bc70f4a9a8",
+  "apps/office/src/xmloff/source/text/txtparae.types.ts": "e60408449f1d762a3e5692e1569886b2e4afc307814e9f54ca084e86496e6261",
+  "apps/office/src/xmloff/source/text/txtparai.ts": "d2e961182ccb733b347f88fc2f63201ed574d5b476afd791e8e42e8b9aa78645",
+  "apps/office/src/xmloff/source/text/txtprmap.ts": "929e91fc6a5a986c237084debef3f6da93b15f101c77b301a7ea95f1f56ea927"
+}
