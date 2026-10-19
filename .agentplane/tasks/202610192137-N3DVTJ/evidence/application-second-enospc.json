@@ -1,0 +1,8 @@
+{
+  "terminalExit": 1,
+  "error": "ENOSPC",
+  "temporaryChunks": 863,
+  "finalResultPresent": false,
+  "finalCoveragePresent": false,
+  "acceptance": "none; incomplete temporary chunks removed before complete bounded batches"
+}
