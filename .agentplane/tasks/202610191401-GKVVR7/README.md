@@ -1,10 +1,11 @@
 ---
 id: "202610191401-GKVVR7"
 title: "Connect native standard automatic row heights to Calc font UI"
-status: "DOING"
+result_summary: "Connected standard automatic row heights to Calc font-size UI,Undo/Redo,variable scrolling and ODS row styles using actual native-shaped storage and defaults. All declared checks pass;complete Calc UI/core goal continues."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610191401-GKVVR7/evidence/verification-text.md"
   findings:
     - "Raw whole Calc counters are all positive;complete changed owners100%,all source/build/visual hashes match,and all final gates pass. Real full-column,manual/pixel/context-order,history,ODS and desktop/mobile last-row cases cover the bounded behavior. No exclusions,thresholds or UI assertions were weakened."
-commit: null
+commit:
+  hash: "6b204b104af0d81d3904ceefc60398ed51a93e49"
+  message: "🧩 GKVVR7 calc: connect native standard automatic row heights"
 comments:
   -
     author: "CODER"
     body: "Start: Continue user-authorized UI work by replacing fixed-row painting with real source standard automatic row heights after point-size changes and history;preserve genuine model,default and ODS owners."
+  -
+    author: "CODER"
+    body: "Verified: native standard automatic row heights now follow actual font attributes,shared selection history,variable viewport geometry and same-model ODS row styles;336Calc tests at raw100%,27related shared tests,91tooling tests and17browser cases pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation6b204b104af0 verified:116Calc files336cases,raw S7507/B4745/F1512/L6725 all100%,20complete changed executable owners all100%;8shared files27cases and3tooling files91cases pass. Fresh types/build/static and all17Calc browser cases pass serially with unchanged assertions/timeouts;desktop/mobile final images inspected. All declared metadata gates pass with scoped semantic violations0. Evidence:task evidence/verification-text.md,coverage-summary.json,final-checks.json,metadata-checks.json and source-audit.json. Task35;full regression next task40;advanced device/mixed-script layout,horizontal overflow and height dialogs remain outside this leaf."
+  -
+    type: "status"
+    at: "2026-10-19T14:54:06.320Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native standard automatic row heights now follow actual font attributes,shared selection history,variable viewport geometry and same-model ODS row styles;336Calc tests at raw100%,27related shared tests,91tooling tests and17browser cases pass."
 doc_version: 3
-doc_updated_at: "2026-10-19T14:50:47.047Z"
+doc_updated_at: "2026-10-19T14:54:06.323Z"
 doc_updated_by: "CODER"
 description: "Iteration35: remove fixed-row clipping for the currently supported plain unwrapped font-height UI by connecting genuine row height/flag storage and the original standard attribute-height algorithm to model,view,undo and ODS. Use the actual existing segment/compressed-array owners and source defaults. Preserve unsupported script-aware/rich/rotated services explicitly. Keep all changes in this checkout on calc;next broad regression is40."
 sections:
