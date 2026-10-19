@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Wrong source anchor:include/rtl/ustrbuf.hxx:449
+    at file:///Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190727-BRPCJB/audit.mjs:27:39 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.13.1

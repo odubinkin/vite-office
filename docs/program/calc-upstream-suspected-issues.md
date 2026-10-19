@@ -2642,3 +2642,97 @@ column range that the next sheet has not allocated;it neither creates columns
 nor silently re-clamps. Task203 covers supported resets and the rejected
 precondition. This is source-derived,not native execution,physical memory
 emulation or a claim of a confirmed document-level upstream defect.
+
+## CALC-189: Negative F precision can under-allocate the native output buffer
+
+Status: an original memory-safety failure was reproduced under AddressSanitizer; no returned value
+is certified for that failing call.
+
+The pinned
+[doubleToString allocation estimate](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1562)
+combines `nDigits`, `nDecPlaces` and an optional grouping allowance before `alloca`. The later
+[negative-F integer fill](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1661) can write
+more units than that estimate permits.
+
+Native call: value `1e14`, format F, decimal places `-15`, decimal separator period, groups
+`{1, 0}`, group separator comma, and trailing-zero erasure false. Here `nExp` is 14 and `nDigits`
+is 0. The estimate reserves 24 Unicode units; the integer fill executes 14 iterations, each writing
+a separator and a zero. The isolated original caller aborts with `SIGABRT` and
+`dynamic-stack-buffer-overflow` at `strtmpl.hxx:1667`. This is an observed failure of that input,
+not proof that every negative-F call fails or a confirmed upstream issue report.
+
+Evidence: the
+[unchanged-source observation caller](../../scripts/rtl-double-format-native-probe.mjs),
+[original fixture](../../apps/office/src/sal/rtl/native-double-format-cases.json),
+[isolated sanitizer diagnostic](../../.agentplane/tasks/202610182355-2WD4TX/native-isolated-stack-overflow.log)
+and [task 25 verification](../../.agentplane/tasks/202610182355-2WD4TX/verification.md). The
+separate returned-output matrix compares 122,765 states under full normal/ASanUBSan SAL/CPPU graphs.
+A conservative allocation-domain check excludes 1,203 potentially unsafe matrix inputs; that count
+does not assert 1,203 individually reproduced failures.
+
+Decision: retain the original format selection, precision, rounding, grouping and emission sequence.
+Do not clamp negative precision or repair grouping to make the case look normal. Managed string
+storage does not reproduce native stack corruption, and the aborted native call is not assigned an
+invented normal-output parity certificate. This ledger update changes no kernel code.
+
+## CALC-190: OUStringBuffer setLength does not implement its documented zero fill
+
+Status: source/comment mismatch, with initialized native nonzero-payload observations; complete
+caller expectations remain unverified.
+
+The pinned
+[setLength documentation and body](../../vendor/libreoffice-reference/include/rtl/ustrbuf.hxx#L447)
+say extension appends null characters. The body instead reserves if needed, otherwise writes only
+the new terminator, and updates the length. It does not clear all newly exposed cells. The
+[reserve implementation](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1218) retains the
+old logical payload and initializes its logical terminator; native spare allocation is not a promise
+of initialized zeroes.
+
+Source-derived initialized example: start with capacity 4 and logical `ABCD`, truncate length to 1,
+then restore length 4 without allocation. The first truncation writes zero at index 1; the later
+extension preserves the already initialized `C` and `D` at indices 2 and 3. The logical units become
+`A, NUL, C, D`. This exact example is a source derivation, not a separately captured native call.
+
+Evidence: the genuine
+[OUStringBuffer observation caller](../../scripts/rtl-oustringbuffer-native-probe.mjs),
+[original fixture](../../apps/office/src/sal/rtl/native-oustringbuffer-cases.json) and
+[task 26 verification](../../.agentplane/tasks/202610190012-CMHQFZ/verification.md). Its
+within-capacity length events explicitly initialize spare cells, then observe nonzero `0x4321` units
+after extension. The growing case compares initialized prefix/capacity/terminator and fills unknown
+new payload before reading; it does not inspect uninitialized native memory or prove those bytes are
+zero.
+
+Decision: preserve the body, including the unchanged-length no-op and the
+reserve-versus-direct-terminator branch. Do not add zero filling to match the comment. The
+[managed owner](../../apps/office/src/sal/inc/rtl/ustrbuf.ts) retains those explicit operations.
+Typed-array initialization is a host storage property, not an asserted native guarantee.
+
+## CALC-191: UpperCharToUnicode checks destination exhaustion only before its loop
+
+Status: source-only bounds concern; no native overflow experiment or affected-caller proof has been
+performed.
+
+The pinned
+[ImplUpperCharToUnicode](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx#L122) checks
+whether the destination is empty once, then loops over the full source, writing and advancing the
+destination without another end comparison. The final counters follow that full-source traversal. In
+contrast, the nearby public conversion contract accepts a destination capacity, and other conversion
+loops check it while writing.
+
+Source-level example: two initialized ASCII source bytes and a destination capacity of one pass the
+initial nonempty-destination check; the loop then attempts two writes. Whether every original caller
+supplies at least one destination unit per source byte is not established here. Do not claim an
+observed sanitizer failure or a defined returned buffer for this hypothetical overrun. A separate
+corner is that the initial empty-destination branch reports an error even when the source is empty.
+
+Evidence:
+[original implementation](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx#L122),
+[original declaration](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.hxx#L28), and the
+[public conversion declaration](../../vendor/libreoffice-reference/include/rtl/textcvt.h#L109). This
+converter is not implemented in the managed kernel at the time of this entry.
+
+Decision: retain the original initial check, loop order, flags and counters when porting this
+responsibility. Do not silently add a per-character destination check as an upstream fix. Document
+valid caller/storage preconditions and keep undefined memory effects outside native output
+certification. The explicitly documented `ASCII_US` import compatibility with MS-1252 in
+`textenc.cxx` is intentional source behavior, and is not classified as a defect by this entry.

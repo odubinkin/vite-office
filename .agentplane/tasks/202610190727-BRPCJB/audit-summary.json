@@ -1,0 +1,33 @@
+{
+  "result": "pass",
+  "ledgerPrefixBytes": 226406,
+  "ledgerPrefixSHA256": "b20c132f0b5ddd8064864a57aca02af96a9c1f3b6a46af203b498f867bdb616d",
+  "newIDs": [
+    189,
+    190,
+    191
+  ],
+  "newLocalLinks": 16,
+  "sourceHashes": {
+    "sal/rtl/strtmpl.hxx": "12d2bc50c11768dd386a3fde274e538f62ae7617ea7ae8ee258ee3940efebcab",
+    "include/rtl/ustrbuf.hxx": "1a8e9f4af8a3f8046ebc30e416b9e923450db262e27cc8d76042a8765c53a4e9",
+    "sal/textenc/tcvtbyte.cxx": "ee5011fd2861690cc99ffa5cdc72958d703f97df5d045399e93605318f7ce5e2",
+    "sal/textenc/tcvtbyte.hxx": "0730a999d363bb869160937badeb68868f741e92d597080d0721766f302e5dca",
+    "include/rtl/textcvt.h": "ac7b22baf902ce068fcd4ee18e0ac7a6820bcea48f61a774d0f72fb6ff5e07d1"
+  },
+  "records": {
+    "double-format": {
+      "digest": "8af7de5b6c8c68dd4bf103a9bd59ca40bdfaa7d5018c4a2137921adc4fd3f438",
+      "byteLength": 19326523,
+      "rowCount": 122765
+    },
+    "oustringbuffer": {
+      "digest": "54315f541d223104273d2e3e139f7be521853d687d069c69e31832ebe66caf25",
+      "byteLength": 855897,
+      "rowCount": 2119
+    }
+  },
+  "kernelUnchanged": true,
+  "sourceOnlyConcern": "CALC-191 has no claimed native execution",
+  "runtimeEvidence": "Existing committed task25/26 observations audited;no new runtime or unsafe native execution"
+}
