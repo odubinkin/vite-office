@@ -1,0 +1,13 @@
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  04:42:07
+   Duration  175ms (transform 41ms, setup 0ms, import 56ms, tests 4ms, environment 0ms)
+
