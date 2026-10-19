@@ -1,0 +1,43 @@
+{
+  "result": "pass",
+  "files": 28,
+  "tests": 208,
+  "passed": 208,
+  "summary": {
+    "lines": {
+      "total": 257,
+      "covered": 257,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 311,
+      "covered": 311,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 57,
+      "covered": 57,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 255,
+      "covered": 255,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "rawSha256": "5d3bf570e9d0fa4815c989f14c005bb96872de0ff0d0ef86e09ccd1c478659cc",
+  "ownerHashes": {
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/textitem.scriptset.ts": "38dd827826086d29016bf1f5a649380dd9c6cc052e34d70fafc9048cbdd5d71f",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/itemset.ts": "fc87571468d7e2d4997002b6bf2b0f63e53c70bbbafde029f558b528412f6534"
+  }
+}
