@@ -1,0 +1,32 @@
+{
+  "kind": "Compiled original consumed scalar scopes with an explicitly constrained SCRIPT dispatch bootstrap;not a full ICU library or LibreOffice service build.",
+  "codePoints": 1114112,
+  "record": "little endian uint16 block,int16 script,int16 uncached editing class",
+  "rawSha256": "de83cad71eb82644c4a2283d4defbdc6081b42baeea2aaeb68d5154cd758de70",
+  "driverSha256": "1319cec69ca5847a0d4ba2b910d2bbf7a5b355147b515b1ea9bac8bc6ad44df7",
+  "scopes": {
+    "vendor/icu-reference/source/common/ucptrie.cpp::ucptrie_internalSmallIndex": "952256523fae9972f00b7307ae9ba424186bddbea976198a19333501b5886b3f",
+    "vendor/icu-reference/source/common/ucptrie.cpp::getValue": "242e3c06a95d77820d19a37a3fc19876a8e973d8b1e0fe3039975cd4c6dcf38a",
+    "vendor/icu-reference/source/common/ucptrie.cpp::ucptrie_get": "f0f8bb49f7c116e00fc6feb5e347302a292545d7a66ba7fe943787993d9279fc",
+    "vendor/icu-reference/source/common/uchar.cpp::u_getUnicodeProperties": "994a9cda74afa3c193404e3f2c57e1c1877a5fa090c8924202cc91a5d639e899",
+    "vendor/icu-reference/source/common/uchar.cpp::uscript_getScript": "7b66135925cd0d19e84951372a4b015484bf6def3aff9113aff5f40e75b5f85e",
+    "vendor/icu-reference/source/common/uchar.cpp::ublock_getCode": "57b33854d085a882d923d45a3895706b192fb6aa2ef562e7d9fc9d15900bfcc2",
+    "vendor/icu-reference/source/common/uprops.cpp::getScript": "f5398637a566a0a455a96afb37d05836b15060c5173da8a505abc7e24fe55aef",
+    "scriptList": "b420295d4e2f92824661da8b3aebafe28de980673a3b5cb230eeb77f514ee067",
+    "vendor/libreoffice-reference/i18nutil/source/utility/unicode.cxx::unicode::getScriptClassFromUScriptCode": "e40f5324522331f83234e9434e6c0a93694b381735b2117a00deb023bb9614d7",
+    "vendor/libreoffice-reference/i18nutil/source/utility/scriptclass.cxx::getScriptClassByUAX24Script": "d817e0a52b9a608271758b4d07514b725661a724cabc5c63f265efa92b811cd2",
+    "vendor/libreoffice-reference/i18nutil/source/utility/scriptclass.cxx::getCompatibilityScriptClassByBlock": "0704149c17f8e71ac99995a0cf0275e02a5b6873ad33d6c7df9396e7e134819b",
+    "vendor/libreoffice-reference/i18nutil/source/utility/scriptclass.cxx::i18nutil::GetScriptClass": "1487c9158f1d02ad3fcb32d908d256c06552b8a1e4c64ad8fc4ad0ee41fca185"
+  },
+  "command": [
+    "c++",
+    "-std=c++17",
+    "-O2",
+    "-DU_DISABLE_RENAMING=1",
+    "-DU_STATIC_IMPLEMENTATION",
+    "-Ivendor/icu-reference/source/common",
+    "output/playwright/task37-script-native/driver.cpp",
+    "-o",
+    "output/playwright/task37-script-native/driver"
+  ]
+}
