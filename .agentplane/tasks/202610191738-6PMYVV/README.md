@@ -4,7 +4,7 @@ title: "Connect Calc font-family UI with native script attributes and ODS font d
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,33 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T19:48:00.461Z"
+  updated_at: "2026-10-19T19:48:50.779Z"
   updated_by: "CODER"
-  note: "Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40."
+  note: "verified-202610191738-6PMYVV"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T19:48:35.536Z"
+  updated_by: "EVALUATOR"
+  note: "The committed bounded font UI/native-item slice satisfies approved evidence gates; full application parity is not promoted."
+  evaluated_sha: "f8583d20a4af1f5c753b1971a03144a476d7e6be"
+  blueprint_digest: "0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe"
+  evidence_refs:
+    - ".agentplane/tasks/202610191738-6PMYVV/README.md"
+    - ".agentplane/tasks/202610191738-6PMYVV/quality/20261019-194835536-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191738-6PMYVV/quality/20261019-194835536-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191738-6PMYVV/quality/20261019-194835536-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191738-6PMYVV/evidence/changed-font-owner-coverage.json"
+    - ".agentplane/tasks/202610191738-6PMYVV/evidence/calc-font-styles-proof.json"
+    - ".agentplane/tasks/202610191738-6PMYVV/evidence/related-font-final-proof.json"
+    - ".agentplane/tasks/202610191738-6PMYVV/evidence/browser-styles-fixed.log"
+    - ".agentplane/tasks/202610191738-6PMYVV/evidence/script-native-source-report.json"
+  findings:
+    - "Commit f8583d20a4af contains143 intentional non-task paths within180 approved; actual shared Writer font controls, source script selection, full native font metadata and ODS declarations are wired to real owners and histories."
+    - "Calc120files353cases and related271files11822cases pass at raw S/B/F/L100. All37 changed executable owners have source-matched raw100; erased IDL and pure re-export are explicitly accounted for without exclusions."
+    - "Fresh production build and19 Chromium Calc cases pass,including ODS in page/Worker and font selection/history at1280/390; inspected screenshots confirm shared control layout. Initial styles-stream failure is retained and corrected through explicit unsupported-style diagnostics."
+    - "Pinned ICU scalar witness covers all1114112codepoints; constrained dispatcher bootstrap, partial script interface, initial-NUL source cache behavior and unported service/device/layout/style scope are disclosed. No broad parity flags are set."
 commit: null
 comments:
   -
@@ -41,8 +64,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40."
+  -
+    type: "verify"
+    at: "2026-10-19T19:48:50.779Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610191738-6PMYVV"
 doc_version: 3
-doc_updated_at: "2026-10-19T19:48:00.520Z"
+doc_updated_at: "2026-10-19T19:48:50.834Z"
 doc_updated_by: "CODER"
 description: "Task37: connect the existing shared Writer font-family widget to real Calc script-specific SvxFontItem attributes,source selection scripts,attribute-only history,cell painting and native ODS declarations. Reuse shared Writer font/ODF owners;correct simplified common selection metadata where required by source. Port only consumed pinned ICU script/block and native script-selection paths needed for this concrete UI action,using existing local ICU78.3 sources/data;no approximate Unicode regex classifier or shadow workbook model. All changes stay in calc checkout/branch with no network or merges."
 sections:
@@ -102,6 +131,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-19T19:48:50.779Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610191738-6PMYVV
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:48:00.520Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+    - old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191738-6PMYVV --result verified-202610191738-6PMYVV --commit f8583d20a4af1f5c753b1971a03144a476d7e6be
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -233,6 +292,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T19:48:50.779Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610191738-6PMYVV
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:48:00.520Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+- old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191738-6PMYVV --result verified-202610191738-6PMYVV --commit f8583d20a4af1f5c753b1971a03144a476d7e6be
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
