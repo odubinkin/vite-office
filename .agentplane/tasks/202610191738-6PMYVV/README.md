@@ -1,10 +1,11 @@
 ---
 id: "202610191738-6PMYVV"
 title: "Connect Calc font-family UI with native script attributes and ODS font declarations"
-status: "DOING"
+result_summary: "verified-202610191738-6PMYVV"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T19:48:50.779Z"
+  updated_at: "2026-10-19T19:49:15.471Z"
   updated_by: "CODER"
   note: "verified-202610191738-6PMYVV"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - "Calc120files353cases and related271files11822cases pass at raw S/B/F/L100. All37 changed executable owners have source-matched raw100; erased IDL and pure re-export are explicitly accounted for without exclusions."
     - "Fresh production build and19 Chromium Calc cases pass,including ODS in page/Worker and font selection/history at1280/390; inspected screenshots confirm shared control layout. Initial styles-stream failure is retained and corrected through explicit unsupported-style diagnostics."
     - "Pinned ICU scalar witness covers all1114112codepoints; constrained dispatcher bootstrap, partial script interface, initial-NUL source cache behavior and unported service/device/layout/style scope are disclosed. No broad parity flags are set."
-commit: null
+commit:
+  hash: "1a359cc05dad3344511072b0ca915233bcd488c3"
+  message: "✅ 6PMYVV calc: record verified font UI quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: connect native font-family UI and real ODS font values using shared Writer controls and pinned consumed script semantics in the calc branch."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610191738-6PMYVV. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -70,8 +76,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610191738-6PMYVV"
+  -
+    type: "verify"
+    at: "2026-10-19T19:49:15.471Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610191738-6PMYVV"
+  -
+    type: "status"
+    at: "2026-10-19T19:49:15.617Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610191738-6PMYVV. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T19:48:50.834Z"
+doc_updated_at: "2026-10-19T19:49:15.618Z"
 doc_updated_by: "CODER"
 description: "Task37: connect the existing shared Writer font-family widget to real Calc script-specific SvxFontItem attributes,source selection scripts,attribute-only history,cell painting and native ODS declarations. Reuse shared Writer font/ODF owners;correct simplified common selection metadata where required by source. Port only consumed pinned ICU script/block and native script-selection paths needed for this concrete UI action,using existing local ICU78.3 sources/data;no approximate Unicode regex classifier or shadow workbook model. All changes stay in calc checkout/branch with no network or merges."
 sections:
@@ -163,6 +182,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-19T19:49:15.471Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610191738-6PMYVV
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:48:50.834Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+    - old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191738-6PMYVV --result verified-202610191738-6PMYVV --commit 1a359cc05dad3344511072b0ca915233bcd488c3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit using the repository-approved task lifecycle;retain task/raw evidence. Preserve earlier Calc/Writer shared controls and primary ODS behavior. Do not reset the branch or alter unrelated active tasks."
   Findings: |-
@@ -221,6 +270,10 @@ sections:
     - Observation: Root/tools/app types,changed-path ESLint/Prettier,dependencies,JSDoc,size,source-tree/provenance,Calc/Writer resources,scoped Calc/shared/Writer inventories,static build,48 boundary-tooling cases,doctor,routing and diff checks pass. The143non-task paths remain within the approved180-path budget. No network,other checkouts,branch changes or merges were used.
       Impact: The font UI slice is reviewable;full device metrics,formatted-cell caches/UNO factory,rich layout,embedded fonts,named styles and full Writer/Calc parity remain outside the verified slice. Registry parity flags remain unverified. Existing Vite chunk-size and older managed-shim readiness notices remain informational.
       Resolution: Record acceptance and commit only intentional task paths on calc. Continue feasible formatting UI actions;next full all-app regression remains task40 under the user's cadence. Overall UI goal remains active.
+extensions:
+  implementation_commit:
+    hash: "f8583d20a4af1f5c753b1971a03144a476d7e6be"
+    message: "✨ 6PMYVV calc: connect shared native font selection and ODS metadata"
 id_source: "generated"
 ---
 ## Summary
@@ -317,6 +370,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610191738-6PMYVV --result verified-202610191738-6PMYVV --commit f8583d20a4af1f5c753b1971a03144a476d7e6be
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T19:49:15.471Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610191738-6PMYVV
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:48:50.834Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+- old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191738-6PMYVV --result verified-202610191738-6PMYVV --commit 1a359cc05dad3344511072b0ca915233bcd488c3
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
