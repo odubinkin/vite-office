@@ -1,0 +1,11 @@
+[WebServer] (node:78547) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:78548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px (1.6s)
+  ✓  2 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px (1.4s)
+
+  2 passed (3.8s)

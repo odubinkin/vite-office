@@ -1,0 +1,785 @@
+{
+  "result": "pass",
+  "owners": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+      "sha256": "edfe6e8914c0a4275775f733576e1a4d305da768b174313616ea18fc18ab7e24",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.ts",
+      "sha256": "be892a56e3e095c3f1a78e5cbac3855f51dbc2783e6c98e70f851b4d58d2836a",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 77,
+          "covered": 77,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 93,
+          "covered": 93,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 78,
+          "covered": 78,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "957acbaf41f20881a705644c4b442e66086460eff241f55fbcc7b8f3e34f85a7",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 255,
+          "covered": 255,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 282,
+          "covered": 282,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 116,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx",
+      "sha256": "d51bd454a6f9e0c03c9605bc4206a2195e29038ef6002e71b5b09d272eb0f02f",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "abc87a21b553dbbdd3b3559c0f4fc135386e84069969eab92dde8c77f8053ef3",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "2a5df0be6c522004d65bafca7d631b60a1265207f24eb830d3d2c062436b20af",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 140,
+          "covered": 140,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 149,
+          "covered": 149,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 172,
+          "covered": 172,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "16bc5f3f8e3b031adfc28d0da182780aa72d671582d043eca40bba1bccd8ea42",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 73,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 77,
+          "covered": 77,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 80,
+          "covered": 80,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool.ts",
+      "sha256": "537d3b64df5f52342ce5a125d0a0544a4db6610d06b7bbbd7552d9fe5e69cbc1",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global.ts",
+      "sha256": "8fe578a842b6415b31e57687c1d7aaedca4726ecfd76e9745c8c48721bfb9dc6",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/patattr.ts",
+      "sha256": "17a62e4f37f31df45a560b41f715384ec16f23e28134dface68729b4cc089ca5",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 179,
+          "covered": 179,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 212,
+          "covered": 212,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 154,
+          "covered": 154,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "e31674dcbbacb5c5320249b969052aac3b29fe4f2fd0a2e4442ed9fad6562bb3",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 119,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 131,
+          "covered": 131,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 58,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "bfaa71cec14ecf5ff79d3e603d8455448f22e7a812eb4a99c17579352369580f",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 146,
+          "covered": 146,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 162,
+          "covered": 162,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "3b6a4f05953c0e9d7c11c7078326c7e060bb5f29b1bea3c394bab1b7d0e5f24a",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 56,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 58,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "sha256": "652d2c143f2fa6a3c5653d990afa94d9d72bd952ddfcec5f337855b7d76e8f1e",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 118,
+          "covered": 118,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 127,
+          "covered": 127,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 56,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "09e6ce41d7ba2643b2e9e80585966f6889303fefa5571178a6750c53bf850404",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 119,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 129,
+          "covered": 129,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 71,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/toolbar/formatobjectbar.ts",
+      "sha256": "cae77006af3c94e7f96d192e2d901b3055f3eec1769c2bfee9fdcf2fb75fecb3",
+      "proof": "calc-colors-final-proof.json",
+      "summary": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/objsh.ts",
+      "sha256": "87d641b3797877d6263cb569d7cd3786067e12f01c76f943b0bc1d0e67211385",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 97,
+          "covered": 97,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 110,
+          "covered": 110,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
+      "kind": "pure public re-export",
+      "implementation": "svx/browser/tbxctrls/ColorControl.tsx"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "sha256": "eabde85d1d7dd562a3be19288af17a4c4a66f6e1f34b464db54d694c8b74755f",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 177,
+          "covered": 177,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 195,
+          "covered": 195,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 93,
+          "covered": 93,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+      "sha256": "ec8ead0d8ae5d63312550876e4c74728cb108080862aaffa52bb4207fc9a9032",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 60,
+          "covered": 60,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/inc/namedcolor.ts",
+      "sha256": "e1bdba7f354be6f0bf6d38d5b4b4bb550cbd56fe0df3f78241883a173834ea4c",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/ColorControl.tsx",
+      "sha256": "5127ebbfe0cd7f2e0b4eb5066ba72e54d279836d84129b9de300257c5603fc93",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/ColorSelect.tsx",
+      "sha256": "5e9be295c5ff8a7059c5f7c868e6f2422d7e0239defb48ee6344a57b0868e571",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/color-item.ts",
+      "sha256": "58b67ed6946ce3ebfe45963a6ebb8cb9e22cc159405fc9fcfc9d16afbc13a04a",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/inc/xdef.ts",
+      "sha256": "5a067b4b655ef69566d8f0b172feb96d70a5eda661c70b9b567292e915ed0f90",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/browser/color.ts",
+      "sha256": "15e858fc60902297d7eab3fc0a8903606802136e2c443935f153b34f846c8c49",
+      "proof": "related-colors-third-proof.json",
+      "summary": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  ]
+}
