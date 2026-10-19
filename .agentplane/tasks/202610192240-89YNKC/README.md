@@ -4,7 +4,7 @@ title: "Implement native Calc grow and shrink font UI with shared script-set ite
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-19T23:44:25.614Z"
+  state: "ok"
+  updated_at: "2026-10-19T23:44:58.301Z"
   updated_by: "CODER"
-  note: "Acceptance checks pass;closeout ordering correction only: persist the intentional implementation and final fresh browser screenshot evidence before binding verification to that implementation commit. No implementation or check criteria change."
-  attempts: 1
+  note: "verified-202610192240-89YNKC"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T23:44:50.557Z"
+  updated_by: "EVALUATOR"
+  note: "Task41 source-shaped font operations and shared script-set contracts satisfy the approved bounded scope on implementation7d39aed21bac;all declared acceptance evidence is present,current and reproducible."
+  evaluated_sha: "7d39aed21bac7cb193789faa20237d7816b07324"
+  blueprint_digest: "f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e"
+  evidence_refs:
+    - ".agentplane/tasks/202610192240-89YNKC/README.md"
+    - ".agentplane/tasks/202610192240-89YNKC/quality/20261019-234450557-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610192240-89YNKC/quality/20261019-234450557-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610192240-89YNKC/quality/20261019-234450557-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610192240-89YNKC/evidence/source-audit.json"
+    - ".agentplane/tasks/202610192240-89YNKC/evidence/complete-owner-proof.json"
+    - ".agentplane/tasks/202610192240-89YNKC/evidence/browser-proof.json"
+    - ".agentplane/tasks/202610192240-89YNKC/evidence/calc-proof.json"
+    - ".agentplane/tasks/202610192240-89YNKC/evidence/shared-proof.json"
+  findings:
+    - "Native slot/script/default/limit semantics,complete typed height metadata,whole-sheet query bounds and repeated-format history are source-audited;hidden upstream toolbar placements remain hidden. No alternate document model or fake services added."
+    - "Calc127files386cases and related shared/Writer28files208cases pass;raw S/B/F/L100 for Calc and every14changed executable owner,source hashes current. Header reexport has no executable owner. Tests/coverage exclusions and thresholds are not weakened."
+    - "27unique actual browser cases and3final fresh-build replays pass at1280/390,including page/DOM-free Worker history/ODS and UI primary autosave/reopen. Four screenshot hashes and visual observations retained."
+    - "All required static/source/resource/inventory/routing gates pass and56non-task paths stay within approved60. Candidate failures and closeout ordering correction are explicitly reconciled in Findings."
 commit: null
 comments:
   -
@@ -47,8 +70,20 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Acceptance checks pass;closeout ordering correction only: persist the intentional implementation and final fresh browser screenshot evidence before binding verification to that implementation commit. No implementation or check criteria change."
+  -
+    type: "verify"
+    at: "2026-10-19T23:44:49.958Z"
+    author: "CODER"
+    state: "ok"
+    note: "Accepted implementation7d39aed21bac:386Calc+208related cases pass,Calc and all14changed executable owners raw S/B/F/L100,current hashes;27unique browser cases plus3fresh rebuilt replay pass. Static/source/resource/inventory gates pass;evidence retained;next full checkpoint50."
+  -
+    type: "verify"
+    at: "2026-10-19T23:44:58.301Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192240-89YNKC"
 doc_version: 3
-doc_updated_at: "2026-10-19T23:44:35.330Z"
+doc_updated_at: "2026-10-19T23:44:58.358Z"
 doc_updated_by: "CODER"
 description: "Task41 of the authorized Calc UI goal after verified full checkpoint40. Port the source-shaped consumed SvxScriptSetItem contract and native ScFormatShell grow/shrink size dispatch,wire actual source slots to shared Writer menu/toolbar components and current selection/history/ODS paths;preserve native script/default/limit quirks and document suspected issues. Only vite-office-calc branch calc;targeted Calc100 and related/current-owner100 tests,no full repeat before checkpoint50."
 sections:
@@ -126,6 +161,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit d37e4a8ab9dac9aea56de21c2be7830cc288e50e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T23:44:49.958Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Accepted implementation7d39aed21bac:386Calc+208related cases pass,Calc and all14changed executable owners raw S/B/F/L100,current hashes;27unique browser cases plus3fresh rebuilt replay pass. Static/source/resource/inventory gates pass;evidence retained;next full checkpoint50.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:35.330Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+    - old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610192240-89YNKC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-19T23:44:58.301Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192240-89YNKC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:50.017Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+    - old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit 7d39aed21bac7cb193789faa20237d7816b07324
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -236,6 +331,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit d37e4a8ab9dac9aea56de21c2be7830cc288e50e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T23:44:49.958Z — VERIFY — ok
+
+By: CODER
+
+Note: Accepted implementation7d39aed21bac:386Calc+208related cases pass,Calc and all14changed executable owners raw S/B/F/L100,current hashes;27unique browser cases plus3fresh rebuilt replay pass. Static/source/resource/inventory gates pass;evidence retained;next full checkpoint50.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:35.330Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+- old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610192240-89YNKC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T23:44:58.301Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192240-89YNKC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T23:44:50.017Z, excerpt_hash=sha256:89c97ca2049381dc82b41f321c84eeaaae69dd1cc2b7c1871610b8f984ddba00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192240-89YNKC/blueprint/resolved-snapshot.json
+- old_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- current_digest: f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192240-89YNKC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192240-89YNKC --result verified-202610192240-89YNKC --commit 7d39aed21bac7cb193789faa20237d7816b07324
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
