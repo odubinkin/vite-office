@@ -1,0 +1,970 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |writer| src/sw/browser/presentation/native-command-popup.test.tsx (13 tests | 6 failed) 366ms
+   × standalone native popup starts unselected and includes disabled entries by source default 96ms
+   × actual command dispatch observes completed popup teardown and restored focus 16ms
+   × native popup Space does not replace the explicit Return command route 13ms
+   × keyboard children retain parent ownership and close one level at a time 21ms
+   × pointer child opens after native delay and stays while its owner is highlighted 171ms
+   × reusing an active child retains its current selected entry 12ms
+ ❯ |writer| src/sw/browser/presentation/writer-style-selector.test.tsx (6 tests | 3 failed) 340ms
+     × merges font selections with optional formatting arguments (undefined) 132ms
+     × merges font selections with optional formatting arguments (null) 31ms
+     × merges font selections with optional formatting arguments ({ fontFamily: 'Overridden', fontSizePt: 10 }) 22ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > standalone native popup starts unselected and includes disabled entries by source default
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Alpha"
+
+Here are the accessible roles:
+
+  menuitem:
+
+  Name "Disabled":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitemcheckbox:
+
+  Name "Alpha":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Child":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"child"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitemcheckbox:
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-label[39m=[32m"Original popup"[39m
+  [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+  [33mdata-popup-depth[39m=[32m"0"[39m
+  [33mid[39m=[32m"_r_0_-0"[39m
+  [33mrole[39m=[32m"menu"[39m
+  [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mDisabled[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+  [36m/>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33maria-checked[39m=[32m"false"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mrole[39m=[32m"menuitemcheckbox"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mAlpha[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"relative"[39m
+  [36m>[39m
+    [36m<button[39m
+      [33maria-expanded[39m=[32m"false"[39m
+      [33maria-haspopup[39m=[32m"menu"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+      [33mdata-popup-trigger[39m=[32m"child"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span>[39m
+        [0mChild[0m
+      [36m</span>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"ml-auto"[39m
+      [36m>[39m
+        [0m›[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33maria-checked[39m=[32m"false"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mrole[39m=[32m"menuitemcheckbox"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mBeta[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+[36m</div>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:92:22
+     90|   const f = fixture(),
+     91|     menu = screen.getByRole("menu", { name: "Original popup" }),
+     92|     a = within(menu).getByRole("menuitem", { name: "Alpha" }),
+       |                      ^
+     93|     b = within(menu).getByRole("menuitem", { name: "Beta" });
+     94|   expect(menu).toHaveFocus();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > actual command dispatch observes completed popup teardown and restored focus
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Alpha"
+
+Here are the accessible roles:
+
+  textbox:
+
+  Name "":
+  [36m<input />[39m
+
+  --------------------------------------------------textbox:
+
+  Name "":
+  [36m<input />[39m
+
+  --------------------------------------------------menu:
+
+  Name "Original popup":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Original popup"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-popup-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"_r_1_-0"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Disabled":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Child":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"child"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitemcheckbox:
+
+  Name "Alpha":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<input />[39m
+  [36m<input />[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative z-[60] [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Original popup"[39m
+        [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+        [33mdata-popup-depth[39m=[32m"0"[39m
+        [33mid[39m=[32m"_r_1_-0"[39m
+        [33mrole[39m=[32m"menu"[39m
+        [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mdisabled[39m=[32m""[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mDisabled[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+        [36m/>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33maria-checked[39m=[32m"false"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mrole[39m=[32m"menuitemcheckbox"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mAlpha[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+            [33mdata-popup-trigger[39m=[32m"child"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span>[39m
+              [0mChild[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"ml-auto"[39m
+            [36m>[39m
+              [0m›[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33maria-checked[39m=[32m"false"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mrole[39m=[32m"menuitemcheckbox"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mBeta[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:140:28
+    138|       },
+    139|     );
+    140|   fireEvent.keyDown(screen.getByRole("menuitem", { name: "Alpha" }), {…
+       |                            ^
+    141|   expect(observer).toHaveBeenCalledOnce();
+    142|   expect(f.s.view.QueryState(ids.bold).checked).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > native popup Space does not replace the explicit Return command route
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Alpha"
+
+Here are the accessible roles:
+
+  textbox:
+
+  Name "":
+  [36m<input />[39m
+
+  --------------------------------------------------textbox:
+
+  Name "":
+  [36m<input />[39m
+
+  --------------------------------------------------menu:
+
+  Name "Original popup":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Original popup"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-popup-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"_r_2_-0"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Disabled":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Child":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"child"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitemcheckbox:
+
+  Name "Alpha":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<input />[39m
+  [36m<input />[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative z-[60] [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Original popup"[39m
+        [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+        [33mdata-popup-depth[39m=[32m"0"[39m
+        [33mid[39m=[32m"_r_2_-0"[39m
+        [33mrole[39m=[32m"menu"[39m
+        [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mdisabled[39m=[32m""[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mDisabled[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+        [36m/>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33maria-checked[39m=[32m"false"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mrole[39m=[32m"menuitemcheckbox"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mAlpha[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-expanded[39m=[32m"false"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+            [33mdata-popup-trigger[39m=[32m"child"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span>[39m
+              [0mChild[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"ml-auto"[39m
+            [36m>[39m
+              [0m›[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<button[39m
+            [33maria-checked[39m=[32m"false"[39m
+            [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+            [33mrole[39m=[32m"menuitemcheckbox"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+              [33mdata-menu-checkmark[39m=[32m"true"[39m
+            [36m/>[39m
+            [36m<span>[39m
+              [0mBeta[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:146:19
+    144| it("native popup Space does not replace the explicit Return command ro…
+    145|   const f = fixture(),
+    146|     item = screen.getByRole("menuitem", { name: "Alpha" }),
+       |                   ^
+    147|     execute = vi.spyOn(f.s.view.GetViewFrame().GetDispatcher(), "Execu…
+    148|   act(/** Highlights an actual enabled entry. @returns Nothing. */ () …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > keyboard children retain parent ownership and close one level at a time
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Beta"
+
+Here are the accessible roles:
+
+  menuitemcheckbox:
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdata-popup-highlighted[39m=[32m"true"[39m
+    [33mid[39m=[32m"_r_3_-1-item-0"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Deep":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"deep"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-activedescendant[39m=[32m"_r_3_-1-item-0"[39m
+  [33maria-label[39m=[32m"Child menu"[39m
+  [33mclass[39m=[32m"fixed z-30 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+  [33mdata-popup-depth[39m=[32m"1"[39m
+  [33mid[39m=[32m"_r_3_-1"[39m
+  [33mrole[39m=[32m"menu"[39m
+  [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 8px; max-height: 752px;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33maria-checked[39m=[32m"false"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdata-popup-highlighted[39m=[32m"true"[39m
+      [33mid[39m=[32m"_r_3_-1-item-0"[39m
+      [33mrole[39m=[32m"menuitemcheckbox"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mBeta[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"relative"[39m
+  [36m>[39m
+    [36m<button[39m
+      [33maria-expanded[39m=[32m"false"[39m
+      [33maria-haspopup[39m=[32m"menu"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+      [33mdata-popup-trigger[39m=[32m"deep"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span>[39m
+        [0mDeep[0m
+      [36m</span>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"ml-auto"[39m
+      [36m>[39m
+        [0m›[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+[36m</div>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:159:22
+    157|   fireEvent.keyDown(child, { key: "ArrowRight" });
+    158|   const sub = screen.getByRole("menu", { name: "Child menu" });
+    159|   expect(within(sub).getByRole("menuitem", { name: "Beta" })).toHaveFo…
+       |                      ^
+    160|   const deep = within(sub).getByRole("menuitem", { name: "Deep" });
+    161|   fireEvent.keyDown(deep, { key: "Enter" });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > pointer child opens after native delay and stays while its owner is highlighted
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Beta"
+
+Here are the accessible roles:
+
+  menuitemcheckbox:
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Localized Deep":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"deep"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-label[39m=[32m"Localized Child menu"[39m
+  [33mclass[39m=[32m"fixed z-30 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+  [33mdata-popup-depth[39m=[32m"1"[39m
+  [33mid[39m=[32m"_r_4_-1"[39m
+  [33mrole[39m=[32m"menu"[39m
+  [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 8px; max-height: 752px;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33maria-checked[39m=[32m"false"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mrole[39m=[32m"menuitemcheckbox"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mBeta[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"relative"[39m
+  [36m>[39m
+    [36m<button[39m
+      [33maria-expanded[39m=[32m"false"[39m
+      [33maria-haspopup[39m=[32m"menu"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+      [33mdata-popup-trigger[39m=[32m"deep"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span>[39m
+        [0mLocalized Deep[0m
+      [36m</span>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"ml-auto"[39m
+      [36m>[39m
+        [0m›[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+[36m</div>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:184:23
+    182|   expect(screen.queryByRole("menu", { name: "Localized Child menu" }))…
+    183|   const menu = await screen.findByRole("menu", { name: "Localized Chil…
+    184|   expect(within(menu).getByRole("menuitem", { name: "Beta" })).not.toH…
+       |                       ^
+    185|   fireEvent.mouseLeave(child.parentElement as HTMLElement);
+    186|   expect(menu).toBeVisible();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-command-popup.test.tsx > reusing an active child retains its current selected entry
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Beta"
+
+Here are the accessible roles:
+
+  menuitemcheckbox:
+
+  Name "Beta":
+  [36m<button[39m
+    [33maria-checked[39m=[32m"false"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdata-popup-highlighted[39m=[32m"true"[39m
+    [33mid[39m=[32m"_r_c_-1-item-0"[39m
+    [33mrole[39m=[32m"menuitemcheckbox"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Deep":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+    [33mdata-popup-trigger[39m=[32m"deep"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-activedescendant[39m=[32m"_r_c_-1-item-0"[39m
+  [33maria-label[39m=[32m"Child menu"[39m
+  [33mclass[39m=[32m"fixed z-30 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+  [33mdata-popup-depth[39m=[32m"1"[39m
+  [33mid[39m=[32m"_r_c_-1"[39m
+  [33mrole[39m=[32m"menu"[39m
+  [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 8px; max-height: 752px;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33maria-checked[39m=[32m"false"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdata-popup-highlighted[39m=[32m"true"[39m
+      [33mid[39m=[32m"_r_c_-1-item-0"[39m
+      [33mrole[39m=[32m"menuitemcheckbox"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mBeta[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33mclass[39m=[32m"relative"[39m
+  [36m>[39m
+    [36m<button[39m
+      [33maria-expanded[39m=[32m"false"[39m
+      [33maria-haspopup[39m=[32m"menu"[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"[39m
+      [33mdata-popup-trigger[39m=[32m"deep"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span>[39m
+        [0mDeep[0m
+      [36m</span>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"ml-auto"[39m
+      [36m>[39m
+        [0m›[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+[36m</div>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/sw/browser/presentation/native-command-popup.test.tsx:264:27
+    262|   fireEvent.keyDown(trigger, { key: "ArrowRight" });
+    263|   const child = screen.getByRole("menu", { name: "Child menu" }),
+    264|     entry = within(child).getByRole("menuitem", { name: "Beta" });
+       |                           ^
+    265|   expect(entry).toHaveFocus();
+    266|   fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/writer-style-selector.test.tsx > Writer live style selector > merges font selections with optional formatting arguments (undefined)
+ FAIL  |writer| src/sw/browser/presentation/writer-style-selector.test.tsx > Writer live style selector > merges font selections with optional formatting arguments (null)
+AssertionError: expected "Execute" to be called with arguments: [ Any<String>, …(1) ]
+
+Received:
+
+  1st Execute call:
+
+  [
+-   Any<String>,
++   ".uno:CharFontName",
+    {
+-     "fontFamily": "Liberation Serif",
++     "fontFamily": SvxFontItem {
++       "aFamilyName": "Liberation Serif",
++       "aStyleName": "",
++       "eFamily": 0,
++       "ePitch": 0,
++       "eTextEncoding": 0,
++       "m_bDynamicDefault": false,
++       "m_bIsSetItem": false,
++       "m_bStaticDefault": false,
++       "shareable": true,
++       "which": 10007,
++     },
+    },
+  ]
+
+  2nd Execute call:
+
+  [
+-   Any<String>,
++   ".uno:FontHeight",
+    {
+-     "fontFamily": "Liberation Serif",
++     "fontSizePt": 14,
+    },
+  ]
+
+
+Number of calls: 2
+
+ ❯ src/sw/browser/presentation/writer-style-selector.test.tsx:107:25
+    105|         fireEvent.change(font, { target: { value: "Liberation Serif" }…
+    106|         fireEvent.change(size, { target: { value: "14" } });
+    107|         expect(execute).toHaveBeenCalledWith(expect.any(String), {
+       |                         ^
+    108|           ...(value ?? {}),
+    109|           fontFamily: "Liberation Serif",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯
+
+ FAIL  |writer| src/sw/browser/presentation/writer-style-selector.test.tsx > Writer live style selector > merges font selections with optional formatting arguments ({ fontFamily: 'Overridden', fontSizePt: 10 })
+AssertionError: expected "Execute" to be called with arguments: [ Any<String>, { …(2) } ]
+
+Received:
+
+  1st Execute call:
+
+  [
+-   Any<String>,
++   ".uno:CharFontName",
+    {
+-     "fontFamily": "Liberation Serif",
++     "fontFamily": SvxFontItem {
++       "aFamilyName": "Liberation Serif",
++       "aStyleName": "",
++       "eFamily": 0,
++       "ePitch": 0,
++       "eTextEncoding": 0,
++       "m_bDynamicDefault": false,
++       "m_bIsSetItem": false,
++       "m_bStaticDefault": false,
++       "shareable": true,
++       "which": 10007,
++     },
+      "fontSizePt": 10,
+    },
+  ]
+
+  2nd Execute call:
+
+  [
+-   Any<String>,
++   ".uno:FontHeight",
+    {
+-     "fontFamily": "Liberation Serif",
+-     "fontSizePt": 10,
++     "fontFamily": "Overridden",
++     "fontSizePt": 14,
+    },
+  ]
+
+
+Number of calls: 2
+
+ ❯ src/sw/browser/presentation/writer-style-selector.test.tsx:107:25
+    105|         fireEvent.change(font, { target: { value: "Liberation Serif" }…
+    106|         fireEvent.change(size, { target: { value: "14" } });
+    107|         expect(execute).toHaveBeenCalledWith(expect.any(String), {
+       |                         ^
+    108|           ...(value ?? {}),
+    109|           fontFamily: "Liberation Serif",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯
+
+
+ Test Files  2 failed | 465 passed (467)
+      Tests  9 failed | 8573 passed (8582)
+   Start at  04:22:46
+   Duration  284.20s (transform 11.75s, setup 27.98s, import 118.72s, tests 223.18s, environment 157.60s)
+
