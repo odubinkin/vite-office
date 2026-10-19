@@ -1,0 +1,88 @@
+{
+  "icuVersion": "78.3",
+  "archiveSha256": "3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0",
+  "libreOfficePin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "vendor/icu-reference/source/common/uchar.cpp",
+      "sha256": "8ff2f2e37df64948c8fc52b8debbebf41fdfb109b194bcabc530f354ccfe0f32",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/uchar_props_data.h",
+      "sha256": "7d4957e68beae1bd86427684350c186717e40cf9fb90355001f2195150801184",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/uprops.cpp",
+      "sha256": "3bcf7ac1b51187b671a9ad047ae53bb43e150f616788a98d262234b494ec186a",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/uprops.h",
+      "sha256": "1cc85c5dbfd1dec6d8d615614b1e9cac3b68b07840d6e4d226c608e3e6d412f2",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/ucptrie.cpp",
+      "sha256": "106bc196dbb729788d5ea0d3f08ac6a6af11765d877f6c59b06ac5a73c315063",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/ucptrie_impl.h",
+      "sha256": "143e133e1d26da3cecb2f2e05bc17620f058dfb1b9b50dcee73f32387ffaf511",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/unicode/ucptrie.h",
+      "sha256": "186e73fc293da8e6583cd6ea06d17afab51a823cf7b453ff5daf576e650eef7c",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/unicode/uchar.h",
+      "sha256": "911b76cdee1723f681fcee98994bc09b8f32a4b8f4d00461ad0bed810ec86cea",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/icu-reference/source/common/unicode/uscript.h",
+      "sha256": "293adf40390583c1c5394d3dc1794ed1669e8356cdf292ca5eaac145a2a5d1e0",
+      "archiveEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/i18nutil/source/utility/scriptclass.cxx",
+      "sha256": "aba25d4c92d73f34b41211bcb242e9ceee155a2e7f5965a67ad279fd6b83275e",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/i18nutil/source/utility/unicode.cxx",
+      "sha256": "3f7219e2175bc1ace15f64091cccf020482c9dff3ac88f6bf484208d7c5de26f",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
+      "sha256": "ea7c8890d026ac91a50b7a4c9c34e473a4c208d0bee1e32aed44905b196b8268",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx",
+      "sha256": "6e4663c7b55f89a3b351aa091cd9b424cb158ec206dae54ee3b0285001441b2f",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlfonte.cxx",
+      "sha256": "e83ca82de8b9641879f559ce7268c04ee56d3d4c49e4eabea4f607c5c66b4799",
+      "gitPinEqual": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "gitPinEqual": true
+    }
+  ],
+  "status": "Source availability and byte identity only;script implementation/native differential evidence still pending."
+}
