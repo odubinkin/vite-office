@@ -4,7 +4,7 @@ title: "Connect Calc bold italic underline UI to native attributes and ODS"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: connect approved native character formatting actions through shared Writer UI,actual Calc attributes and same-model ODS within calc checkout."
 doc_version: 3
-doc_updated_at: "2026-10-19T14:55:32.917Z"
+doc_updated_at: "2026-10-19T15:19:56.344Z"
 doc_updated_by: "CODER"
 description: "Task36: connect existing shared Writer controls and Calc native commands for bold,italic and underline through actual selection attributes,script groups,history,painting and same-model ODS. Stay in calc checkout;no full constructor or codec work."
 sections:
@@ -49,7 +49,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit and retain previous font-size/row-height controls and data;never reset unrelated tasks or branches."
-  Findings: ""
+  Findings: "Implementation is in progress. Real shared control test and actual ODS script-value/color/direct-state roundtrip pass. Initial task generator syntax errors produced no application edits before correction;initial type diagnostics were fixed using the actual generated FontSlant type-getter argument and concrete native Clone contracts. An initial test command used app-relative paths from app cwd and created no tests;correct root-relative writes and app-cwd execution replaced it. The first underline source-map extraction missed whitespace-free thick mapping;original map sizes18/18/20 are now checked and source cases rerun. Existing tests expecting Bold as unsupported must now assert supported state. Native empty/minus numeric weight and DONTKNOW roundtrip quirks are retained and will be recorded in upstream suspicion ledger. No verification criteria,thresholds or exclusions changed;last full task30,next full task40."
 id_source: "generated"
 ---
 ## Summary
@@ -78,3 +78,5 @@ Run npm run test:coverage:calc at raw S/B/F/L100 with no new exclusions and comp
 Revert only this task implementation commit and retain previous font-size/row-height controls and data;never reset unrelated tasks or branches.
 
 ## Findings
+
+Implementation is in progress. Real shared control test and actual ODS script-value/color/direct-state roundtrip pass. Initial task generator syntax errors produced no application edits before correction;initial type diagnostics were fixed using the actual generated FontSlant type-getter argument and concrete native Clone contracts. An initial test command used app-relative paths from app cwd and created no tests;correct root-relative writes and app-cwd execution replaced it. The first underline source-map extraction missed whitespace-free thick mapping;original map sizes18/18/20 are now checked and source cases rerun. Existing tests expecting Bold as unsupported must now assert supported state. Native empty/minus numeric weight and DONTKNOW roundtrip quirks are retained and will be recorded in upstream suspicion ledger. No verification criteria,thresholds or exclusions changed;last full task30,next full task40.
