@@ -1,6 +1,12 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import {
+  MenuPopupPointer,
+  markMenuItem,
+  selectedMenuItem,
+  type MenuPopupPointerOwner,
+} from "./menu-popup-pointer";
 import { MenuBarOverflow, MENUBAR_OVERFLOW_ID, menuBarTriggerClassName } from "./menubar-overflow";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
@@ -164,12 +170,14 @@ function CommandMenuBarContent({
     if (item.items.length === 0) trigger.focus();
   }
 
-  /** Closes the current popup and restores its parent focus. @param menu - Current popup. @returns Nothing. */
-  function closePopup(menu: HTMLElement): void {
+  /** Closes the current popup and restores its parent focus. @param menu - Current popup. @param selectParent - Keyboard closure retains the parent entry;pointer closure restores the parent window with its existing highlight. @returns Nothing. */
+  function closePopup(menu: HTMLElement, selectParent = true): void {
     if (menu.dataset.submenu !== undefined) {
       pendingSubmenuFocus.current = undefined;
       setOpenSubmenuPath(openSubmenuPath.slice(0, Number(menu.dataset.menuDepth) - 1));
-      menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
+      if (selectParent)
+        menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
+      else ((menu.parentElement as HTMLElement).closest('[role="menu"]') as HTMLElement).focus();
     } else closeMenu(true);
   }
 
@@ -386,6 +394,26 @@ function CommandMenuBarContent({
     }
   }
 
+  /** Executes HighlightChanged over the same actual resource and popup depth used by keyboard admission. @param entry - Highlighted original entry. @param items - Original direct popup placements. @param depth - Popup depth. @returns Nothing. */
+  function commitPointerHighlight(
+    entry: HTMLElement,
+    items: readonly CommandMenuItemPlacement[],
+    depth: number,
+  ): void {
+    const child = items.find(
+      /** Resolves the original child submenu without synthesizing a command. @param item - Actual placement. @returns Whether it owns the entry. */
+      (item): item is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+        item.kind === "submenu" && item.id === entry.dataset.submenuTrigger,
+    );
+    if (child !== undefined) openSubmenu(child, false, entry, depth);
+    else {
+      const popup = entry.closest<HTMLElement>('[role="menu"]') as HTMLElement;
+      pendingSubmenuFocus.current = undefined;
+      setOpenSubmenuPath(openSubmenuPath.slice(0, depth));
+      if (popup.contains(document.activeElement)) popup.focus();
+    }
+  }
+
   /** Renders resource items recursively in their original owning popup. @param items - Resource items. @param menuIndex - Owning menu index. @param depth - Current parent popup depth. @returns Rendered items. */
   function renderItems(
     items: readonly CommandMenuItemPlacement[],
@@ -409,32 +437,11 @@ function CommandMenuBarContent({
           const isOpen = openSubmenuPath[depth] === item.id;
           const label = getMenuLabel(item.id, item.label);
           return (
-            <div
-              className="relative"
-              key={item.id}
-              onMouseEnter={
-                /** Borrows the current child and original parent entry for pointer admission. @param event - Original trigger region event. @returns Nothing. */ (
-                  event,
-                ) =>
-                  openSubmenu(
-                    item,
-                    false,
-                    event.currentTarget.firstElementChild as HTMLElement,
-                    depth,
-                  )
-              }
-              onMouseLeave={
-                /** Closes this submenu and restores parent focus after the pointer leaves. @param event - Submenu region event. @returns Nothing. */ (
-                  event,
-                ) => {
-                  if (isOpen) closePopup(event.currentTarget.lastElementChild as HTMLElement);
-                }
-              }
-            >
+            <div className="relative" key={item.id}>
               <button
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
-                className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
+                className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"
                 data-submenu-trigger={item.id}
                 onClick={
                   /** Opens the current original child on native browser activation. @param event - Original button activation. @returns Nothing. */ (
@@ -456,6 +463,14 @@ function CommandMenuBarContent({
                   aria-label={`${label} menu`}
                   data-submenu={item.id}
                   data-menu-depth={depth + 1}
+                  pointerOwner={{
+                    commit:
+                      /** Admits the original highlighted resource after native hover delay. @param entry - Actual child popup entry. @returns Nothing. */
+                      (entry) => commitPointerHighlight(entry, item.items, depth + 1),
+                    close:
+                      /** Removes only this active child after native parent-leave delay. @param popup - Mounted child popup. @returns Nothing. */
+                      (popup) => closePopup(popup, false),
+                  }}
                   id={`${idPrefix}-${item.id}-menu`}
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -572,6 +587,14 @@ function CommandMenuBarContent({
                 <CommandMenuPopup
                   aria-label={`${label} menu`}
                   data-menu-depth={0}
+                  pointerOwner={{
+                    commit:
+                      /** Admits the original root-popup resource after native hover delay. @param entry - Actual entry. @returns Nothing. */
+                      (entry) => commitPointerHighlight(entry, menu.items, 0),
+                    close:
+                      /** Restores the original popup owner when closed. @param popup - Mounted popup. @returns Nothing. */
+                      (popup) => closePopup(popup, false),
+                  }}
                   id={`${idPrefix}-${menu.id}-menu`}
                   onKeyDown={
                     /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -595,14 +618,39 @@ function CommandMenuBarContent({
 export function CommandMenuPopup({
   submenu = false,
   anchorPoint,
+  pointerOwner,
   ...props
 }: Readonly<
   React.HTMLAttributes<HTMLDivElement> & {
     submenu?: boolean;
     anchorPoint?: Readonly<{ x: number; y: number }>;
+    pointerOwner?: MenuPopupPointerOwner;
   }
 >): React.JSX.Element {
   const popupRef = useRef<HTMLDivElement>(null);
+  const pointerNavigation = pointerOwner !== undefined;
+  const commitPointer = useEffectEvent(
+    /** Uses the current resource/focus closures when the original timer expires. @param entry - Actual highlighted entry. @returns Nothing. */
+    (entry: HTMLElement) => (pointerOwner as MenuPopupPointerOwner).commit(entry),
+  );
+  const closePointer = useEffectEvent(
+    /** Uses the current popup close owner. @param popup - Active original popup. @returns Nothing. */
+    (popup: HTMLElement) => (pointerOwner as MenuPopupPointerOwner).close(popup),
+  );
+  useLayoutEffect(
+    /** Owns pointer timers exactly for this mounted popup lifetime. @returns Timer/listener cleanup when pointer navigation is enabled. */
+    () => {
+      if (!pointerNavigation) return;
+      const pointer = new MenuPopupPointer(
+        popupRef.current as HTMLDivElement,
+        commitPointer,
+        closePointer,
+      );
+      return /** Stops pending original popup work before its DOM is removed. @returns Nothing. */ () =>
+        pointer.dispose();
+    },
+    [pointerNavigation],
+  );
   useLayoutEffect(
     /** Tracks viewport and ancestor scrolling while the popup is mounted. @returns Listener cleanup. */ () => {
       const popup = popupRef.current as HTMLDivElement;
@@ -693,7 +741,7 @@ export function BindingsMenuCommand({
     <button
       aria-checked={isCheckable ? isChecked : undefined}
       aria-keyshortcuts={resource.shortcuts[0]}
-      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
+      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
       disabled={!presentation.enabled}
       onClick={
         /** Unmounts the popup and restores focus before dispatching this command. @returns Nothing. */ () => {
@@ -721,28 +769,6 @@ export function BindingsMenuCommand({
       )}
     </button>
   );
-}
-
-/** Reads selected direct entries independently of HTML disabled focus. @param container - Actual popup owner. @returns Selected native entry, if present. */
-function selectedMenuItem(container: HTMLElement): HTMLElement | undefined {
-  return [...container.querySelectorAll<HTMLElement>("[data-popup-highlighted]")].find(
-    /** Retains this popup's original highlighted placement. @param item - Actual entry. @returns Whether owned here. */
-    (item) => item.closest('[role="menu"]') === container,
-  );
-}
-
-/** Publishes selection over the existing popup DOM without changing native command state. @param container - Actual popup. @param item - Original entry. @returns Nothing. */
-function markMenuItem(container: HTMLElement, item: HTMLElement): void {
-  selectedMenuItem(container)?.removeAttribute("data-popup-highlighted");
-  item.dataset.popupHighlighted = "true";
-  if (item.id === "") {
-    const entries = [...container.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
-      /** Reads direct original placement order. @param entry - Actual entry. @returns Whether owned here. */
-      (entry) => entry.closest('[role="menu"]') === container,
-    );
-    item.id = `${container.id}-item-${entries.indexOf(item)}`;
-  }
-  container.setAttribute("aria-activedescendant", item.id);
 }
 
 /** Selects direct children with native SkipDisabledInMenus=false. @param container - Active menu. @param direction - Requested move. @param current - Current item. @returns Nothing. */

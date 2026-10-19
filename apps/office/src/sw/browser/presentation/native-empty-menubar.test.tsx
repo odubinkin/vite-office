@@ -1,6 +1,6 @@
 /** @fileoverview Checks menubar child admission borrows original resources and native Writer bindings without creating empty popups. */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
   CommandMenuBar,
   type CommandMenuItemPlacement,
@@ -9,11 +9,27 @@ import { createBrowserCommandSource } from "../../../framework/browser/presentat
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import { WRITER_COMMAND_IDS as ids } from "../../uiconfig/swriter/menubar/menubar-commands";
+/** Advances original popup movement and admission over actual rendered resources. @param entry - Original menu entry. @returns Nothing. */
+function pointerAdmission(entry: HTMLElement): void {
+  fireEvent.mouseMove(entry);
+  fireEvent.mouseMove(entry);
+  act(
+    /** Commits native150ms admission. @returns Nothing. */ () => {
+      vi.advanceTimersByTime(150);
+    },
+  );
+}
+beforeEach(
+  /** Controls actual popup timers. @returns Nothing. */ () => {
+    vi.useFakeTimers();
+  },
+);
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [],
   owners: HTMLElement[] = [];
 afterEach(
   /** Releases original document bindings and DOM owners. @returns Nothing. */ () => {
     cleanup();
+    vi.useRealTimers();
     for (const session of sessions.splice(0)) session.Close();
     for (const owner of owners.splice(0)) owner.remove();
   },
@@ -78,7 +94,7 @@ it.each(["pointer", "click", "middle", "right"])(
   ) => {
     const f = fixture(),
       empty = screen.getByRole("menuitem", { name: "Empty" });
-    if (input === "pointer") fireEvent.mouseEnter(empty);
+    if (input === "pointer") pointerAdmission(empty);
     else if (input === "click") fireEvent.click(empty);
     else
       fireEvent(
@@ -106,7 +122,7 @@ it.each(["keyboard", "pointer", "click"])(
     fireEvent.keyDown(filled, { key: "ArrowRight" });
     expect(screen.getByRole("menuitemcheckbox", { name: "Bold" })).toHaveFocus();
     if (input === "keyboard") fireEvent.keyDown(empty, { key: "ArrowRight" });
-    else if (input === "pointer") fireEvent.mouseEnter(empty);
+    else if (input === "pointer") pointerAdmission(empty);
     else fireEvent.click(empty);
     expect(screen.queryByRole("menu", { name: "Filled menu" })).not.toBeInTheDocument();
     expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/menu-popup-pointer.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115",
+      "CAP-0116",
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/menu-popup-pointer.ts",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx"
+      ],
+      "justification": "Task6DD2P4 binds original MenuFloatingWindow pointer admission and timer responsibilities to the actual shared Writer/Calc mounted popup DOM. Enter-only events and the first real mouse move do not change popup selection;subsequent direct-window motion highlights original enabled or disabled entries. Original150ms default highlight admission reads the current entry at expiry,invalid selection returns early,and parent leave retains the active child when it matches the highlighted entry. A different child receives its own delayed parent-close timer;motion into that child cancels close before first-move suppression. Popup lifetime stops timers/listeners. Existing resource/command/focus/keyboard/click owners remain shared;highlight CSS follows logical native selection. This is a browser adaptation,not a complete VCL window or platform MouseSettings implementation. Original root menubar pointer/mnemonic behavior,native mouse-button-down preselection/geometry/scroller/accessibility-event integration and broad UI parity remain pending and unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DEFAULT_MENU_DELAY",
+        "MenuPopupPointer",
+        "selectedMenuItem",
+        "markMenuItem"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

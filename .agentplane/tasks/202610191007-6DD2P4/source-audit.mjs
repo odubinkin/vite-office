@@ -1,0 +1,28 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import assert from 'node:assert/strict';
+const pin='9bc445578031fecf56086729d8e4940c77e14d65', root='vendor/libreoffice-reference';
+assert.equal(execFileSync('git',['-C',root,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),pin);
+const names=['vcl/source/window/menufloatingwindow.cxx','vcl/source/app/settings.cxx'];
+const sources=Object.fromEntries(names.map(name=>[name,readFileSync(root+'/'+name,'utf8')]));
+const menu=sources[names[0]],settings=sources[names[1]],anchors=[];
+function anchor(name,text){const source=sources[name],offset=source.indexOf(text);assert.ok(offset>=0,text);anchors.push({path:root+'/'+name,line:source.slice(0,offset).split('\n').length,text});}
+for(const text of ['bIgnoreFirstMove(true)','aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() )','aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() )','void MenuFloatingWindow::MouseMove','void MenuFloatingWindow::ChangeHighlightItem','IMPL_LINK( MenuFloatingWindow, HighlightChanged','IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose','aHighlightChangedTimer.Stop();','aSubmenuCloseTimer.Stop();'])anchor(names[0],text);
+anchor(names[1],'mnMenuDelay         = 150');
+const motion=menu.slice(menu.indexOf('void MenuFloatingWindow::MouseMove'),menu.indexOf('void MenuFloatingWindow::ImplScroll( bool'));
+assert.ok(motion.includes('rMEvt.IsSynthetic() || rMEvt.IsEnterWindow()'));
+assert.ok(motion.includes('pActivePopup && pData && pData->pSubMenu != pActivePopup'));
+assert.ok(motion.includes('pActivePopup->ImplGetFloatingWindow()->aSubmenuCloseTimer.Start()'));
+assert.ok(motion.indexOf('aSubmenuCloseTimer.Stop()')<motion.indexOf('if( bIgnoreFirstMove )'));
+assert.ok(motion.indexOf('bIgnoreFirstMove = false')<motion.indexOf('ImplHighlightItem( rMEvt, false )'));
+const highlight=menu.slice(menu.indexOf('IMPL_LINK( MenuFloatingWindow, HighlightChanged'),menu.indexOf('IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose'));
+assert.ok(highlight.indexOf('if ( !pItemData )')<highlight.indexOf('KillActivePopup()'));
+assert.ok(highlight.includes('pItemData->pSubMenu->GetItemCount()'));
+assert.ok(highlight.includes('pTimer == nullptr'));
+const change=menu.slice(menu.indexOf('void MenuFloatingWindow::ChangeHighlightItem'),menu.indexOf('tools::Long MenuFloatingWindow::GetInitialItemY'));
+assert.ok(change.indexOf('aSubmenuCloseTimer.Stop()')<change.indexOf('nHighlightedItem = n'));
+assert.ok(change.indexOf('nHighlightedItem = n')<change.indexOf('if ( bStartPopupTimer )'));
+const report={pin,kind:'pinned-original-source-contract-audit',scope:'Original default and pointer/timer source anchors,not an executed native VCL GUI oracle. Actual browser/component tests separately establish bounded adapter behavior;full native VCL/platform parity remains unverified.',hashes:Object.fromEntries(names.map(n=>[n,createHash('sha256').update(sources[n]).digest('hex')])),anchors};
+writeFileSync('.agentplane/tasks/202610191007-6DD2P4/source-audit.json',JSON.stringify(report,null,2)+'\n');
+console.log('Pinned original pointer/default/timer contract audit passed:'+anchors.length+' anchors;2 source hashes');

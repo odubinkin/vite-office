@@ -25,13 +25,13 @@ test("root and nested commands restore the saved editor before dispatch", /** Ch
   await expect(editor).toBeFocused();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toHaveCount(0);
   await page.getByRole("menuitem", { name: "Format", exact: true }).click();
-  await page.getByRole("menuitem", { name: "Text", exact: true }).hover();
+  await page.getByRole("menuitem", { name: "Text", exact: true }).click();
   const bold = page.getByRole("menuitemcheckbox", { name: "Bold", exact: true });
   await bold.focus();
   await bold.press("Enter");
   await expect(editor).toBeFocused();
   await page.getByRole("menuitem", { name: "Format", exact: true }).click();
-  await page.getByRole("menuitem", { name: "Text", exact: true }).hover();
+  await page.getByRole("menuitem", { name: "Text", exact: true }).click();
   await expect(bold).toHaveAttribute("aria-checked", "true");
 });
 

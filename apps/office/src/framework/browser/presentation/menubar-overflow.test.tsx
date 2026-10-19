@@ -142,3 +142,30 @@ it("restores the actual saved owner before a measured root replacement removes a
   expect(source.CreateControllerItem).not.toHaveBeenCalled();
   owner.remove();
 });
+
+it("renders the original More indicator over actual hidden-root submenu entries", /** Exercises the real shared renderer after native suffix projection. @returns Nothing. */ () => {
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    /** Provides browser-resolved label widths and constrained root space. @param this - Actual measured DOM element. @returns Actual fixture box. */ function (
+      this: HTMLElement,
+    ) {
+      return new DOMRect(0, 0, this.tagName === "SPAN" ? 60 : 40, 32);
+    },
+  );
+  const source = { CreateControllerItem: vi.fn(), Execute: vi.fn(), QueryCommand: vi.fn() };
+  render(
+    <CommandMenuBar
+      ariaLabel="Constrained menus"
+      idPrefix="constrained"
+      commandSource={source}
+      getCommandResource={vi.fn()}
+      resolveArguments={vi.fn()}
+      menus={menus}
+    />,
+  );
+  const more = screen.getByRole("menuitem", { name: "More menus" });
+  expect(more).toHaveTextContent("»");
+  fireEvent.click(more);
+  for (const label of ["File", "Edit", "Help"])
+    expect(screen.getByRole("menuitem", { name: label })).toHaveAttribute("aria-haspopup", "menu");
+  expect(source.CreateControllerItem).not.toHaveBeenCalled();
+});

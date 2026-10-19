@@ -1,13 +1,14 @@
 /** @fileoverview Verifies pointer popup focus separately from keyboard item preselection. */
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { BrowserCommandSource } from "./command-surface";
 import { CommandMenuBar } from "./CommandMenuBar";
 
 /** Renders two app-owned submenus with enabled commands. @returns Mounted fixture and dispatch spy. */
 function renderPreselectionMenu() {
-  const state = { enabled: true };
+  const state = { enabled: true },
+    disabled = { enabled: false };
   const execute = vi.fn(
     /** Records one owned dispatch. @param commandId - Command identity. @returns Dispatch result. */ (
       commandId: string,
@@ -15,9 +16,12 @@ function renderPreselectionMenu() {
   );
   const source: BrowserCommandSource = {
     CreateControllerItem:
-      /** Creates a stable bindings fixture. @returns Controller item. */ () => ({
+      /** Creates a stable bindings fixture. @param commandId - Actual fixture command. @returns Controller item. */ (
+        commandId,
+      ) => ({
         Dispose: /** Releases no fixture resources. @returns Nothing. */ () => undefined,
-        GetState: /** Returns the stable enabled snapshot. @returns Command state. */ () => state,
+        GetState: /** Returns the stable enabled snapshot. @returns Command state. */ () =>
+          commandId === "Disabled" ? disabled : state,
         Subscribe: /** Registers no fixture invalidation. @returns Cleanup. */ () =>
           /** Releases no subscription. @returns Nothing. */ () =>
             undefined,
@@ -54,6 +58,12 @@ function renderPreselectionMenu() {
               items: [
                 { kind: "command", commandId: "First" },
                 { kind: "command", commandId: "Middle" },
+                {
+                  id: "nested",
+                  kind: "submenu",
+                  label: "Nested",
+                  items: [{ kind: "command", commandId: "NestedFirst" }],
+                },
                 { kind: "command", commandId: "Last" },
               ],
             },
@@ -63,6 +73,9 @@ function renderPreselectionMenu() {
               label: "Spacing",
               items: [{ kind: "command", commandId: "Indent" }],
             },
+            { kind: "command", commandId: "Disabled" },
+            { kind: "separator" },
+            { id: "empty", kind: "submenu", label: "Empty", items: [] },
           ],
         },
       ]}
@@ -73,9 +86,35 @@ function renderPreselectionMenu() {
   return { ...mounted, execute, trigger: screen.getByRole("menuitem", { name: "Text" }) };
 }
 
+/** Moves within an actual popup beyond its first native ignored movement. @param entry - Actual entry. @returns Nothing. */
+function move(entry: HTMLElement): void {
+  fireEvent.mouseMove(entry, { clientX: 10, clientY: 10 });
+  fireEvent.mouseMove(entry, { clientX: 11, clientY: 11 });
+}
+/** Runs actual popup admission timers under React commit. @param milliseconds - Elapsed native timer duration. @returns Nothing. */
+function advance(milliseconds = 150): void {
+  act(
+    /** Commits expired popup timers. @returns Nothing. */ () => {
+      vi.advanceTimersByTime(milliseconds);
+    },
+  );
+}
+beforeEach(
+  /** Controls the original150ms timer. @returns Nothing. */ () => {
+    vi.useFakeTimers();
+  },
+);
+afterEach(
+  /** Destroys windows before restoring real timers. @returns Nothing. */ () => {
+    cleanup();
+    vi.useRealTimers();
+  },
+);
 /** Opens the Text submenu by mouse. @returns Popup container. */
 function hoverText(): HTMLElement {
-  fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+  move(screen.getByRole("menu", { name: "Format menu" }));
+  move(screen.getByRole("menuitem", { name: "Text" }));
+  advance();
   return screen.getByRole("menu", { name: "Text menu" });
 }
 
@@ -147,7 +186,8 @@ describe("submenu preselection", /** Groups pointer and keyboard opening contrac
   it("focuses a newly hovered sibling popup without dispatch and retains pointer execution", /** Verifies sibling switching and single command activation. @returns Nothing. */ function switchesPointerPopup(): void {
     const fixture = renderPreselectionMenu();
     fireEvent.keyDown(fixture.trigger, { key: "ArrowRight" });
-    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Spacing" }));
+    move(screen.getByRole("menuitem", { name: "Spacing" }));
+    advance();
     const popup = screen.getByRole("menu", { name: "Spacing menu" });
     expect(popup).toHaveFocus();
     expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
@@ -157,12 +197,13 @@ describe("submenu preselection", /** Groups pointer and keyboard opening contrac
     expect(screen.queryAllByRole("menu")).toHaveLength(0);
   });
 
-  it("restores parent focus when the pointer closes its child popup", /** Verifies focused popup removal without losing menu keyboard ownership. @returns Nothing. */ function closesPointerPopup(): void {
+  it("retains the active child when leaving its highlighted parent entry", /** Preserves original leave behavior for the current active popup. @returns Nothing. */ () => {
     const fixture = renderPreselectionMenu();
-    hoverText();
+    const popup = hoverText();
     fireEvent.mouseLeave(fixture.trigger);
-    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
-    expect(fixture.trigger).toHaveFocus();
+    advance(300);
+    expect(popup).toBeInTheDocument();
+    expect(fixture.trigger).toHaveAttribute("data-popup-highlighted", "true");
     expect(fixture.execute).not.toHaveBeenCalled();
   });
 
@@ -175,4 +216,137 @@ describe("submenu preselection", /** Groups pointer and keyboard opening contrac
     expect(screen.getByRole("menuitem", { name: "Format" })).toHaveFocus();
     expect(fixture.execute).not.toHaveBeenCalled();
   });
+});
+
+describe("original popup pointer timers", /** Groups actual window,entry and timer transitions. @returns Nothing. */ () => {
+  it("ignores enter and first motion,then admits at150ms without restarting for the same highlight", /** Checks original first-move and ChangeHighlightItem gates. @returns Nothing. */ () => {
+    const fixture = renderPreselectionMenu();
+    fireEvent.mouseEnter(fixture.trigger);
+    advance(300);
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+    fireEvent.mouseMove(fixture.trigger);
+    advance(300);
+    expect(fixture.trigger).not.toHaveAttribute("data-popup-highlighted");
+    fireEvent.mouseMove(fixture.trigger);
+    advance(149);
+    expect(fixture.trigger).toHaveAttribute("data-popup-highlighted", "true");
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+    fireEvent.mouseMove(fixture.trigger);
+    advance(1);
+    expect(screen.getByRole("menu", { name: "Text menu" })).toHaveFocus();
+    expect(screen.getByRole("menuitem", { name: "First" })).not.toHaveAttribute(
+      "data-popup-highlighted",
+    );
+    expect(fixture.execute).not.toHaveBeenCalled();
+  });
+  it("clears invalid highlight and retains the timer's invalid-entry early return", /** Checks leave before admission and original no-entry timer expiry. @returns Nothing. */ () => {
+    const fixture = renderPreselectionMenu(),
+      root = screen.getByRole("menu", { name: "Format menu" });
+    move(fixture.trigger);
+    fireEvent.mouseOut(fixture.trigger, { relatedTarget: document.body });
+    advance();
+    expect(root).not.toHaveAttribute("aria-activedescendant");
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+    move(fixture.trigger);
+    fireEvent.mouseMove(root);
+    advance();
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+  });
+  it("keeps the old child until sibling admission,and ignores same-window leave transitions", /** Checks the original delayed sibling switch. @returns Nothing. */ () => {
+    const fixture = renderPreselectionMenu();
+    hoverText();
+    const sibling = screen.getByRole("menuitem", { name: "Spacing" });
+    fireEvent.mouseOut(fixture.trigger, { relatedTarget: sibling });
+    expect(fixture.trigger).toHaveAttribute("data-popup-highlighted", "true");
+    move(sibling);
+    advance(149);
+    expect(screen.getByRole("menu", { name: "Text menu" })).toBeInTheDocument();
+    advance(1);
+    expect(screen.getByRole("menu", { name: "Spacing menu" })).toHaveFocus();
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+  });
+  it("highlights disabled commands and closes the old child after delay without dispatch", /** Checks native disabled pointer highlight and leaf admission. @returns Nothing. */ () => {
+    const fixture = renderPreselectionMenu();
+    hoverText();
+    const leaf = screen.getByRole("menuitem", { name: "Disabled" });
+    move(leaf);
+    expect(leaf).toBeDisabled();
+    expect(leaf).toHaveAttribute("data-popup-highlighted", "true");
+    advance(149);
+    expect(screen.getByRole("menu", { name: "Text menu" })).toBeInTheDocument();
+    advance(1);
+    expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBeInTheDocument();
+    expect(screen.getByRole("menu", { name: "Format menu" })).toHaveFocus();
+    expect(fixture.execute).not.toHaveBeenCalled();
+  });
+  it("delays different-child close and cancels it on child reentry before first-move suppression", /** Checks original child-owned close and cancellation ordering. @returns Nothing. */ () => {
+    renderPreselectionMenu();
+    const popup = hoverText();
+    const leaf = screen.getByRole("menuitem", { name: "Disabled" });
+    move(leaf);
+    fireEvent.mouseOut(leaf, { relatedTarget: document.body });
+    advance(149);
+    expect(popup).toBeInTheDocument();
+    fireEvent.mouseMove(popup);
+    advance(1);
+    expect(popup).toBeInTheDocument();
+    move(leaf);
+    fireEvent.mouseOut(leaf, { relatedTarget: document.body });
+    advance(149);
+    expect(popup).toBeInTheDocument();
+    advance(1);
+    expect(popup).not.toBeInTheDocument();
+    expect(screen.getByRole("menu", { name: "Format menu" })).toHaveFocus();
+  });
+  it("preserves separate nested ownership and closes only the nested active child", /** Checks nested bubbling filters and original parent close binding. @returns Nothing. */ () => {
+    renderPreselectionMenu();
+    const outer = hoverText();
+    const nested = screen.getByRole("menuitem", { name: "Nested" });
+    move(nested);
+    advance();
+    const child = screen.getByRole("menu", { name: "Nested menu" });
+    expect(child).toHaveFocus();
+    const leaf = screen.getByRole("menuitem", { name: "First" });
+    move(leaf);
+    fireEvent.mouseOut(leaf, { relatedTarget: document.body });
+    advance();
+    expect(child).not.toBeInTheDocument();
+    expect(outer).toBeInTheDocument();
+    expect(outer).toHaveFocus();
+  });
+  it("cancels admission and child-close timers when windows unmount", /** Checks original destruction cleanup with actual mounted ownership. @returns Nothing. */ () => {
+    const fixture = renderPreselectionMenu();
+    hoverText();
+    const leaf = screen.getByRole("menuitem", { name: "Disabled" });
+    move(leaf);
+    fireEvent.mouseOut(leaf, { relatedTarget: document.body });
+    fixture.unmount();
+    advance(500);
+    expect(screen.queryAllByRole("menu")).toHaveLength(0);
+    expect(fixture.execute).not.toHaveBeenCalled();
+  });
+  it("keeps empty resources closed and retains the child without a parent highlight", /** Checks empty-resource admission and missing-highlight leave guards. @returns Nothing. */ () => {
+    renderPreselectionMenu();
+    move(screen.getByRole("menuitem", { name: "Empty" }));
+    advance();
+    expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();
+    fireEvent.mouseMove(screen.getByRole("menu", { name: "Format menu" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
+    const popup = screen.getByRole("menu", { name: "Text menu" });
+    fireEvent.mouseOut(screen.getByRole("menuitem", { name: "Text" }), {
+      relatedTarget: document.body,
+    });
+    advance();
+    expect(popup).toBeInTheDocument();
+  });
+});
+
+it("retains focus on the active menubar trigger during leaf highlight admission", /** Checks that hover does not steal an owner outside its popup window. @returns Nothing. */ () => {
+  const fixture = renderPreselectionMenu();
+  const owner = screen.getByRole("menuitem", { name: "Format" });
+  owner.focus();
+  move(screen.getByRole("menuitem", { name: "Disabled" }));
+  advance();
+  expect(owner).toHaveFocus();
+  expect(fixture.execute).not.toHaveBeenCalled();
 });

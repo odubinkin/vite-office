@@ -213,7 +213,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     });
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
-    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Size" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Height (cm)" }), {
       target: { value: "1" },
@@ -355,7 +355,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       (label: RegExp): void => {
         fireEvent.click(screen.getByRole("menuitem", { name: "Insert" }));
         if (label.source.includes("Manual Break"))
-          fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "More Breaks" }));
+          fireEvent.click(screen.getByRole("menuitem", { name: "More Breaks" }));
         fireEvent.click(screen.getByRole("menuitem", { name: label }));
       };
     openInsert(/Bookmark/);

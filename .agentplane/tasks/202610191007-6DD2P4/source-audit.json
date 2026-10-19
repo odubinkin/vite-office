@@ -1,0 +1,61 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "kind": "pinned-original-source-contract-audit",
+  "scope": "Original default and pointer/timer source anchors,not an executed native VCL GUI oracle. Actual browser/component tests separately establish bounded adapter behavior;full native VCL/platform parity remains unverified.",
+  "hashes": {
+    "vcl/source/window/menufloatingwindow.cxx": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351",
+    "vcl/source/app/settings.cxx": "95a0ef4c31c0dbf46f70185488466b98ae94a3ea4f64a04eddfc6a32752e0e6c"
+  },
+  "anchors": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 49,
+      "text": "bIgnoreFirstMove(true)"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 59,
+      "text": "aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() )"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 61,
+      "text": "aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() )"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 601,
+      "text": "void MenuFloatingWindow::MouseMove"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 738,
+      "text": "void MenuFloatingWindow::ChangeHighlightItem"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 324,
+      "text": "IMPL_LINK( MenuFloatingWindow, HighlightChanged"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 385,
+      "text": "IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 99,
+      "text": "aHighlightChangedTimer.Stop();"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "line": 112,
+      "text": "aSubmenuCloseTimer.Stop();"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/app/settings.cxx",
+      "line": 71,
+      "text": "mnMenuDelay         = 150"
+    }
+  ]
+}

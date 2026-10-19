@@ -187,7 +187,7 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
         );
       } else if (kind === "break") {
         fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Insert" }));
-        fireEvent.mouseEnter(fixture.frame.getByRole("menuitem", { name: "More Breaks" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "More Breaks" }));
         fireEvent.click(fixture.frame.getByRole("menuitem", { name: /Manual Break/ }));
       } else if (kind === "table") {
         act(

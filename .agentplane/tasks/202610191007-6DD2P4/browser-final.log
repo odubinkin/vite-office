@@ -1,0 +1,23 @@
+[WebServer] (node:79900) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 2 workers
+
+(node:79947) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:79948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor (2.7s)
+  ✓   1 [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:22:1 › pointer submenu owns focus without a selected Writer command (3.9s)
+  ✓   3 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch (2.0s)
+  ✓   4 [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:55:1 › keyboard opening still preselects and executes one Writer command (2.1s)
+  ✓   5 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog (1.8s)
+  ✓   6 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control (1.5s)
+(node:79968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   7 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 1280px (2.5s)
+  ✓   8 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 390px (2.6s)
+  ✓   9 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 1280px (2.2s)
+  ✓  10 [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 390px (2.3s)
+
+  10 passed (23.4s)
