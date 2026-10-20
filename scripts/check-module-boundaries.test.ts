@@ -983,3 +983,8 @@ it("admits only pinned character-handler value imports without widening module o
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("admits the original VCL numeric-field Unicode utility dependency without admitting its reverse", /** Source field.cxx and Library_vcl.mk own this edge. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("vcl", "i18nutil")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nutil", "vcl")).toBe(true);
+});

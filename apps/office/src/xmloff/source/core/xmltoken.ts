@@ -243,6 +243,12 @@ export enum XMLToken {
   STYLE_TEXT_LINE_THROUGH_WIDTH,
   STYLE_TEXT_LINE_THROUGH_TEXT,
   STYLE_TEXT_OUTLINE,
+  STYLE_USE_OPTIMAL_COLUMN_WIDTH,
+  TABLE_VISIBILITY,
+  TABLE_DEFAULT_CELL_STYLE_NAME,
+  TABLE_TABLE_COLUMNS,
+  TABLE_TABLE_HEADER_COLUMNS,
+  TABLE_TABLE_COLUMN_GROUP,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -478,6 +484,12 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "text-line-through-width", XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH],
   [ODF_NAMESPACES.style, "text-line-through-text", XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT],
   [ODF_NAMESPACES.style, "text-outline", XMLToken.STYLE_TEXT_OUTLINE],
+  [ODF_NAMESPACES.style, "use-optimal-column-width", XMLToken.STYLE_USE_OPTIMAL_COLUMN_WIDTH],
+  [ODF_NAMESPACES.table, "visibility", XMLToken.TABLE_VISIBILITY],
+  [ODF_NAMESPACES.table, "default-cell-style-name", XMLToken.TABLE_DEFAULT_CELL_STYLE_NAME],
+  [ODF_NAMESPACES.table, "table-columns", XMLToken.TABLE_TABLE_COLUMNS],
+  [ODF_NAMESPACES.table, "table-header-columns", XMLToken.TABLE_TABLE_HEADER_COLUMNS],
+  [ODF_NAMESPACES.table, "table-column-group", XMLToken.TABLE_TABLE_COLUMN_GROUP],
 ];
 
 const tokens = new Map(

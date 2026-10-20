@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
@@ -35,6 +36,7 @@ export interface ScXMLExportOptions {
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();
   private readonly styles = new Map<string, string>();
+  private readonly columnStyles = new Map<number, string>();
   private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
   constructor(
@@ -77,6 +79,7 @@ export class ScXMLExport {
     }
     this.styles.clear();
     this.rowStyles.clear();
+    this.columnStyles.clear();
     let body = "";
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
@@ -84,6 +87,21 @@ export class ScXMLExport {
       this.document.GetName(tab, name);
       body += `<table:table table:name="${escapeXml(text(name))}">`;
       name.dispose();
+      for (let column = 0; column <= this.document.MaxCol();) {
+        if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
+        const width = table.GetColWidthRange(column),
+          end: [number] = [0],
+          hidden = table.ColHidden(column, undefined, end),
+          stop = Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
+          count = stop - column + 1;
+        let style = this.columnStyles.get(width.maValue);
+        if (style === undefined) {
+          style = "co" + (this.columnStyles.size + 1);
+          this.columnStyles.set(width.maValue, style);
+        }
+        body += `<table:table-column table:style-name="${style}"${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}${hidden ? ' table:visibility="collapse"' : ""}/>`;
+        column = stop + 1;
+      }
       const first: [number] = [0],
         last: [number] = [0],
         allocated = table.GetAllocatedColumnsCount();
@@ -167,6 +185,10 @@ export class ScXMLExport {
     for (const [key, name] of this.rowStyles) {
       const [height, optimal] = key.split(",");
       automatic += `<style:style style:name="${name}" style:family="table-row"><style:table-row-properties style:row-height="${new SvXMLUnitConverter("twip").convertMeasureToXML(Number(height))}" style:use-optimal-row-height="${optimal}"/></style:style>`;
+    }
+    for (const [width, name] of this.columnStyles) {
+      const hmm = Number(convert(BigInt(width), Length.twip, Length.mm100));
+      automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
     return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }

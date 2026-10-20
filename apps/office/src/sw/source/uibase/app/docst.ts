@@ -84,7 +84,8 @@ export function execStyleSheet(owner: SwDocShell, request: SfxRequest): number |
   if (typeof familyName === "string" && Object.hasOwn(namedFamilies, familyName))
     resolved = namedFamilies[familyName] as number;
   const result = owner.ApplyStyles(name, resolved, request.GetModifier());
-  request.Done(new SfxUInt16Item(SID_STYLE_APPLY, result));
+  request.SetReturnValue(new SfxUInt16Item(SID_STYLE_APPLY, result));
+  request.Done();
   return result;
 }
 

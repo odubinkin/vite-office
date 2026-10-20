@@ -1,4 +1,7 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
+import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
+import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
 import { ScViewFunc } from "../../source/ui/view/viewfunc";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
@@ -53,6 +56,34 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
+  ExecuteColumnWidth(request: SfxRequest): boolean {
+    const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteColumnWidth(
+      request,
+      this.viewData,
+    );
+    if (consumed) {
+      this.addressText = this.Address();
+      this.Changed();
+    }
+    return consumed;
+  }
+  /** Applies accepted native dialog twips and returns its separate completed recording request. @param twips - Input twips. @returns Recording request. */
+  CompleteColumnWidth(twips: number): SfxRequest {
+    const request = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).CompleteColumnWidth(
+      twips,
+    );
+    this.addressText = this.Address();
+    this.Changed();
+    return request;
+  }
+  /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
+  ShowColumns(show: boolean): void {
+    if (!this.Commit()) return;
+    new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ShowColumns(show);
+    this.addressText = this.Address();
+    this.Changed();
+  }
   /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
   ResetAttributes(): boolean {
     if (!this.Commit()) return false;
@@ -121,7 +152,9 @@ export class CalcViewController {
     firstRow: 0,
     columns: 16,
     rows: 36,
-    columnWidth: 96,
+    scrollWidth: 1_000_000,
+    scrollLeft: 0,
+    columnOffset: 0,
     rowHeight: 22,
     scrollTop: 0,
     rowOffset: 0,
@@ -211,6 +244,15 @@ export class CalcViewController {
     this.error = "";
     this.Changed();
     return true;
+  }
+  /** Routes relative keyboard motion through native hidden-column skipping before actual cursor/mark selection. @param columns - Horizontal delta. @param rows - Vertical delta. @param extend - Extend the actual selection. @returns Accepted. */
+  Navigate(columns: number, rows: number, extend = false): boolean {
+    const old = this.viewData.GetCurX(),
+      proposed = Math.max(0, Math.min(this.shell.GetDocument().MaxCol(), old + columns)),
+      column = columns
+        ? new ScTabView(this.viewData).SkipCursorHorizontal(proposed, old, columns)
+        : proposed;
+    return this.Select(column, this.viewData.GetCurY() + rows, extend);
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
@@ -549,6 +591,11 @@ export class CalcViewController {
     let cursorAction = action;
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
+    if (cursorAction instanceof ScUndoWidthOrHeight) {
+      this.addressText = this.Address();
+      this.Changed();
+      return true;
+    }
     const position =
       cursorAction instanceof ScUndoSetCell ||
       cursorAction instanceof ScUndoSelectionAttr ||
@@ -590,19 +637,33 @@ export class CalcViewController {
     const firstRow = rowAtPixel(table, logicalTop, doc.MaxRow());
     const lastRow = rowAtPixel(table, logicalTop + bodyHeight, doc.MaxRow());
     const rows = lastRow - firstRow + 1,
-      columns = Math.max(1, Math.floor((width - 48) / this.viewport.columnWidth));
+      bodyWidth = Math.max(1, width - 48),
+      logicalLeft =
+        Math.min(1, Math.max(0, left) / Math.max(1, this.viewport.scrollWidth - width)) *
+        Math.max(0, columnPixels(table, 0, doc.MaxCol()) - bodyWidth),
+      firstColumn = columnAtPixel(table, logicalLeft, doc.MaxCol()),
+      lastColumn = columnAtPixel(table, logicalLeft + bodyWidth, doc.MaxCol());
     this.viewport = {
       ...this.viewport,
-      firstColumn: Math.min(
-        this.shell.GetDocument().MaxCol(),
-        Math.floor(Math.max(0, left) / this.viewport.columnWidth),
-      ),
+      firstColumn,
+      scrollLeft: left,
+      columnOffset: logicalLeft - columnPixels(table, 0, firstColumn - 1),
       firstRow: Math.min(this.shell.GetDocument().MaxRow(), firstRow),
-      columns: columns + 1,
+      columns: lastColumn - firstColumn + 2,
       rows: rows + 1,
       scrollTop: top,
       rowOffset: logicalTop - rowPixels(table, 0, firstRow - 1),
     };
+  }
+  /** Projects native column position to the bounded horizontal browser scroll track. @param column - Target column. @param clientWidth - Measured width. @returns Physical horizontal offset. */
+  ScrollLeftForColumn(column: number, clientWidth: number): number {
+    const doc = this.shell.GetDocument(),
+      table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable,
+      maximum = Math.max(1, columnPixels(table, 0, doc.MaxCol()) - Math.max(1, clientWidth - 48));
+    return (
+      Math.min(1, columnPixels(table, 0, column - 1) / maximum) *
+      Math.max(0, this.viewport.scrollWidth - clientWidth)
+    );
   }
   /** Projects a logical row to the bounded browser scroll track. @param row - Target first row. @param clientHeight - Measured viewport. @returns Physical offset. */
   ScrollTopForRow(row: number, clientHeight: number): number {

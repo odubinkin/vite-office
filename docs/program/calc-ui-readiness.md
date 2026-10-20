@@ -1,6 +1,28 @@
 # Calc UI and ODS implementation critical path
 
-## Current UI delivery priority
+## Current UI delivery priority — task46 column geometry
+
+Task `202610200120-RV75WR` implements native Column Width,Hide Columns and Show Columns
+through shared Writer menus and dialog presentation. Compressed widths default to1280twips;
+hidden columns retain their stored width. Actual geometry owns grid/header positions,bounded
+scrolling and keyboard skipping. Real geometry undo documents preserve the original grouped
+sheets without resetting cell marks or cursor. Typed HMM requests,optional one-based columns,
+two-decimal metric/default behavior and separate even-HMM recording requests follow source.
+ODS imports/exports actual repeated column styles and visibility,including native signed-width
+narrowing. Device-dependent optimal widths remain unavailable.
+
+The common request separates SetReturnValue from Done;both dispatch adapters and the actual
+Writer style caller use the corrected contract. Shared VCL numeric fields reuse native unit
+conversion,RTL trim/number parsing and pinned Unicode classification. The complete character
+type/alpha/control scalar protocol matches unchanged native ICU78.3 and LibreOffice bodies.
+This does not certify complete native widgets,UNO transforms,macro recording or application parity.
+
+Task46 verification and exact raw/current-owner/browser evidence live in its task README and
+`evidence/`. Full all-app checkpoint40 remains the last broad run;the next is50. Existing primary
+save/open/no-recovery policies remain. Next UI work can use actual column widths for indentation;
+row-height controls and remaining feasible native commands remain further work.
+
+## Historical task37 delivery priority
 
 Task 37 (`202610191738-6PMYVV`) connects the actual shared Writer font-family selector to
 Calc's native CharFontName slot, independent Latin/Asian/Complex font items, selection state,

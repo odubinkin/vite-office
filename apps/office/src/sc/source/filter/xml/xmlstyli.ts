@@ -27,6 +27,17 @@ export class XMLTableStylesContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (
+      element === XMLToken.STYLE_STYLE &&
+      attributes.get(XMLToken.STYLE_FAMILY) === "table-column"
+    ) {
+      if (attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) !== null)
+        this.owner.unsupported("column parent style inheritance");
+      return new XMLTableColumnStyleContext(
+        this.owner,
+        attributes.require(XMLToken.STYLE_NAME, "column style name"),
+      );
+    }
     if (element === XMLToken.STYLE_STYLE && attributes.get(XMLToken.STYLE_FAMILY) === "table-row")
       return new XMLTableRowStyleContext(
         this.owner,
@@ -180,5 +191,47 @@ class XMLTableRowStyleContext extends ScXMLImportContext {
   /** Transfers parsed row properties. @returns Nothing. */
   override endFastElement(): void {
     this.owner.AddRowStyle(this.name, this.height, this.optimal);
+  }
+}
+
+/** Native table-column automatic style property owner. */
+class XMLTableColumnStyleContext extends ScXMLImportContext {
+  private width: number | null = null;
+  /** Borrows the real importer and style identity. @param owner - Importer. @param name - Source name. @returns Context. */
+  constructor(
+    private readonly owner: ScXMLImport,
+    private readonly name: string,
+  ) {
+    super(owner);
+  }
+  /** Reads native XML_TYPE_MEASURE in HMM;device-dependent optimal sizing remains diagnosed. @param element - Source token. @param attributes - Properties. @returns Leaf context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (element !== XMLToken.STYLE_TABLE_COLUMN_PROPERTIES) {
+      this.owner.unsupported("column style properties");
+      return new SvXMLIgnoreContext(true);
+    }
+    attributes.assertOnly(
+      [XMLToken.STYLE_COLUMN_WIDTH, XMLToken.STYLE_USE_OPTIMAL_COLUMN_WIDTH],
+      "Calc column geometry",
+    );
+    const width = attributes.get(XMLToken.STYLE_COLUMN_WIDTH),
+      optimal = attributes.get(XMLToken.STYLE_USE_OPTIMAL_COLUMN_WIDTH);
+    if (width !== null) {
+      this.width = new SvXMLUnitConverter("mm100").convertMeasureToCore(
+        width,
+        -2147483648,
+        2147483647,
+      );
+      if (this.width === null) this.owner.unsupported("invalid column width");
+    }
+    if (optimal !== null && optimal !== "false") this.owner.unsupported("optimal column width");
+    return new SvXMLIgnoreContext(true);
+  }
+  /** Transfers actual parsed property into import resources. @returns Nothing. */
+  override endFastElement(): void {
+    this.owner.AddColumnStyle(this.name, this.width);
   }
 }

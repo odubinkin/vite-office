@@ -171,7 +171,21 @@ const allowedEdges = new Map([
   // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
   // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
   // Original Library_vcl links i18nlangtag; GetDefaultFont consumes resolved language/Locale values.
-  ["vcl", new Set(["i18nlangtag", "o3tl", "offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
+  // Original field.cxx includes i18nutil/unicode.hxx; Library_vcl.mk links i18nutil.
+  [
+    "vcl",
+    new Set([
+      "i18nutil",
+      "i18nlangtag",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "tools",
+      "unotools",
+      "udkapi",
+    ]),
+  ],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.

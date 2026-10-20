@@ -1,4 +1,7 @@
 /** @fileoverview Browser async adapter for native ScTabViewShell::ExecGoToTab and JumpToTable/Nr;real sheet/cursor ownership remains with Calc. */
+import { ScMetricInputDlg } from "../../source/ui/miscdlgs/mtrindlg";
+import { ScOptionsUtil } from "../../source/core/tool/optutil";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SfxDialogController } from "../../../sfx2/source/dialog/basedlgs";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
@@ -17,12 +20,48 @@ export interface CalcGoToSheetRequest {
 /** Session-owned native Go to Sheet request and asynchronous result application. */
 export class CalcSheetWorkflows {
   readonly dialogs = new SfxDialogController<CalcGoToSheetRequest, string>();
+  readonly widthDialogs = new SfxDialogController<ScMetricInputDlg, number>();
   private readonly shell: SfxShell;
   /** Connects a source command to the active document view. @param controller - Actual Calc controller. @returns Workflow. */
   constructor(readonly controller: CalcViewController) {
     this.shell = createSfxShell(
       this,
       new SfxInterface<CalcSheetWorkflows>([
+        {
+          commandUrl: ".uno:ColumnWidth",
+          slotId: 26290,
+          label: "Width",
+          getState:
+            /** Excludes duplicate width dialogs. @param target - Owner. @returns Availability. */ (
+              target,
+            ) => ({ enabled: target.widthDialogs.GetSnapshot() === undefined }),
+          execute:
+            /** Executes source column-width request. @param target - Owner. @param request - Native request. @returns Completion. */ (
+              target,
+              request,
+            ) => target.ColumnWidth(request),
+        },
+        ...(
+          [
+            [".uno:HideColumn", 26292, false],
+            [".uno:ShowColumn", 26293, true],
+          ] as const
+        ).map(
+          /** Binds native show/hide identities. @param entry - Source command. @returns Slot. */ ([
+            commandUrl,
+            slotId,
+            show,
+          ]) => ({
+            commandUrl,
+            slotId,
+            label: show ? "Show" : "Hide",
+            execute:
+              /** Delegates to the actual view command. @param target - Owner. @returns Nothing. */ (
+                target: CalcSheetWorkflows,
+              ) => target.controller.ShowColumns(show),
+          }),
+        ),
+
         {
           commandUrl: calcGoToSheetCommand.id,
           slotId: calcGoToSheetCommand.slotId,
@@ -92,8 +131,22 @@ export class CalcSheetWorkflows {
       if (tab >= 0) this.controller.SelectTab(tab);
     }
   }
+  /** Original typed arguments execute immediately;no-argument commands wait for the actual metric dialog. @param request - Native request. @returns Completion. */
+  private async ColumnWidth(request: SfxRequest): Promise<void> {
+    if (!this.controller.Commit()) return;
+    if (this.controller.ExecuteColumnWidth(request)) return;
+    const data = this.controller.viewData,
+      dialog = new ScMetricInputDlg(
+        data.GetDocument().GetColWidth(data.GetCurX(), data.GetTabNumber()),
+        ScOptionsUtil.IsMetricSystem() ? FieldUnit.CM : FieldUnit.INCH,
+      ),
+      result = await this.widthDialogs.Request(dialog);
+    if (result.kind === "accepted") this.controller.CompleteColumnWidth(result.result);
+  }
   /** Cancels the native async request before the session destroys its document. @returns Nothing. */
   Close(): void {
+    const width = this.widthDialogs.GetSnapshot();
+    if (width) this.widthDialogs.Cancel(width.id);
     const request = this.dialogs.GetSnapshot();
     if (request) this.dialogs.Cancel(request.id);
   }

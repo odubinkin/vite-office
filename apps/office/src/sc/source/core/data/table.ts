@@ -18,11 +18,16 @@ import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
 
 import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
-import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
-import { CRFlags, ScGlobal } from "../../../inc/global";
+import {
+  ScCompressedArray,
+  ScBitMaskCompressedArray,
+  type ScCompressedArrayRangeData,
+} from "../../../inc/compressedarray";
+import { CRFlags, ScGlobal, STD_COL_WIDTH } from "../../../inc/global";
 import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
+import { FilterData } from "../../../inc/FilterData";
 import { SetOptimalHeightsToRows } from "./table1";
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
@@ -94,6 +99,9 @@ export class ScTable {
   private readonly aCol: ScColumn[] = [];
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
+  private readonly mpColWidth: ScCompressedArray;
+  private readonly mpColFlags: ScBitMaskCompressedArray;
+  private readonly maFilterData: FilterData;
   private readonly mpRowHeights: ScFlatUInt16RowSegments;
   private readonly pRowFlags: ScBitMaskCompressedArray;
   private mnOptimalMinRowHeight = 0;
@@ -104,6 +112,12 @@ export class ScTable {
     name: OUStringConstReference,
   ) {
     this.aName = new OUString(name);
+    this.mpColWidth = new ScCompressedArray(rDocument.MaxCol() + 1, STD_COL_WIDTH, {
+      access: 16,
+      value: 16,
+    });
+    this.mpColFlags = new ScBitMaskCompressedArray(rDocument.MaxCol() + 1, CRFlags.NONE, 16);
+    this.maFilterData = new FilterData(this);
     this.mpRowHeights = new ScFlatUInt16RowSegments(
       rDocument.MaxRow(),
       this.GetOptimalMinRowHeight(),
@@ -111,6 +125,56 @@ export class ScTable {
     this.pRowFlags = new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32);
     this.aDefaultColData = new ScColumnData(rDocument);
     this.aDefaultColData.Init(-1, nTab);
+  }
+  /** Borrows the original document owner. @returns Actual document. */
+  GetDoc(): ScDocument {
+    return this.rDocument;
+  }
+  /** Original UInt16 column-width setter retains zero-to-standard fallback;page-break services remain outside this slice. @param column - Column. @param width - Native unsigned16 twips. @returns Nothing. */
+  SetColWidth(column: number, width: number): void {
+    if (this.rDocument.ValidCol(column)) {
+      width = width & 0xffff || STD_COL_WIDTH;
+      if (width !== this.mpColWidth.GetValue(column)) this.mpColWidth.SetValue(column, width);
+    }
+  }
+  /** Original width-only setter shares the represented width mutation without page-break services. @param column - Column. @param width - UInt16 twips. @returns Nothing. */
+  SetColWidthOnly(column: number, width: number): void {
+    this.SetColWidth(column, width);
+  }
+  /** Original invalid-column standard fallback and optional hidden-as-zero query. @param column - Column. @param hiddenAsZero - Native default,true. @returns Twips. */
+  GetColWidth(column: number, hiddenAsZero = true): number {
+    if (!this.rDocument.ValidCol(column)) return STD_COL_WIDTH;
+    return hiddenAsZero && this.ColHidden(column) ? 0 : this.mpColWidth.GetValue(column);
+  }
+  /** Borrows actual source compressed width runs for the browser projection without another geometry model. @param column - Valid source column. @returns Original range data;its unused terminal sentinel may exceed MaxCol. */
+  GetColWidthRange(column: number): ScCompressedArrayRangeData {
+    return this.mpColWidth.GetRangeData(column);
+  }
+  /** Delegates original table5.cxx hidden query to its real FilterData owner. @param column - Column. @param first - Optional span start. @param last - Optional span end. @returns Hidden. */
+  ColHidden(column: number, first?: [number], last?: [number]): boolean {
+    return this.maFilterData.colHidden(column, first, last);
+  }
+  /** Assigns original segmented column visibility. @param first - First column. @param last - Last column. @param hidden - Hidden flag. @returns Nothing. */
+  SetColHidden(first: number, last: number, hidden: boolean): void {
+    this.maFilterData.setColHidden(first, last, hidden);
+  }
+  /** Original ShowCol changes only visibility,retaining the stored width. @param column - Valid column. @param show - Show flag. @returns Nothing. */
+  ShowCol(column: number, show: boolean): void {
+    if (this.rDocument.ValidCol(column) && !this.ColHidden(column) !== show)
+      this.SetColHidden(column, column, !show);
+  }
+  /** Consumed native geometry-only CopyToTable width/flag/hidden path;no cells or patterns are copied. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param target - Real destination sheet. @returns Nothing. */
+  CopyToTable(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    target: ScTable,
+  ): void {
+    if (firstRow !== 0 || lastRow !== this.rDocument.MaxRow()) return;
+    target.mpColWidth.CopyFrom(this.mpColWidth, firstCol, lastCol);
+    target.mpColFlags.CopyFrom(this.mpColFlags, firstCol, lastCol);
+    target.maFilterData.copyColHidden(this.maFilterData, firstCol, lastCol);
   }
   /** Reads native per-sheet override or startup minimum; device-dependent global initialization remains separate. @returns Twips. */
   GetOptimalMinRowHeight(): number {

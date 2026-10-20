@@ -68,7 +68,7 @@ for (const viewport of [
     for (let index = 0; index < labels.length; index++) {
       const button = buttons.nth(index);
       await expect(button.locator("svg")).toHaveCount(1);
-      if (index === 0) await expect(button).toBeEnabled();
+      if (index === 0 || labels[index] === "Clear") await expect(button).toBeEnabled();
       else await expect(button).toBeDisabled();
     }
     const geometry = await toolbar.evaluate(

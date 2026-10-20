@@ -3,6 +3,7 @@ import { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { OutlinedText } from "../../../vcl/browser/outlined-text";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
+import { columnPixels, visibleColumns } from "./column-geometry";
 import { rowPixels } from "./row-geometry";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
 import { ScPatternAttr } from "../../inc/patattr";
@@ -38,7 +39,9 @@ export interface CalcGridViewport {
   readonly firstRow: number;
   readonly columns: number;
   readonly rows: number;
-  readonly columnWidth: number;
+  readonly scrollWidth: number;
+  readonly scrollLeft: number;
+  readonly columnOffset: number;
   /** Column-header height only; body rows use actual native sheet geometry. */
   readonly rowHeight: number;
   /** Physical browser scroll offset; kept distinct from the native logical first row. */
@@ -92,12 +95,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     tab = viewData.GetTabNumber();
   const document = viewData.GetDocument();
   const table = document.FetchTable(tab) as ScTable;
-  const columns = Array.from(
-    { length: Math.min(viewport.columns, document.MaxCol() - viewport.firstColumn + 1) },
-    /** Projects one visible column coordinate. @param unused - Unused entry. @param offset - Visible index. @returns Native column. */ (
-      _,
-      offset,
-    ) => viewport.firstColumn + offset,
+  const columns = visibleColumns(
+    table,
+    viewport.firstColumn,
+    Math.min(document.MaxCol(), viewport.firstColumn + viewport.columns - 1),
   );
   const rows = Array.from(
     { length: Math.min(viewport.rows, document.MaxRow() - viewport.firstRow + 1) },
@@ -142,7 +143,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       <div
         className="relative"
         style={{
-          width: 48 + (document.MaxCol() + 1) * viewport.columnWidth,
+          width: viewport.scrollWidth,
           height: viewport.scrollHeight,
         }}
       >
@@ -183,8 +184,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 aria-colindex={col + 2}
                 aria-label={`Column ${columnLabel(col)}`}
                 style={{
-                  left: 48 + col * viewport.columnWidth,
-                  width: viewport.columnWidth,
+                  left:
+                    48 +
+                    viewport.scrollLeft -
+                    viewport.columnOffset +
+                    columnPixels(table, viewport.firstColumn, col - 1),
+                  width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                   height: viewport.rowHeight,
                 }}
                 className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
@@ -334,8 +339,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             ? "none"
                             : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
-                        left: 48 + col * viewport.columnWidth,
-                        width: viewport.columnWidth,
+                        left:
+                          48 +
+                          viewport.scrollLeft -
+                          viewport.columnOffset +
+                          columnPixels(table, viewport.firstColumn, col - 1),
+                        width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                         height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                         lineHeight: "normal",
                       }}

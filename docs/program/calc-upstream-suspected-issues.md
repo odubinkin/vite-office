@@ -3188,3 +3188,57 @@ Decision: preserve the source traversal and allocation behavior. Tests apply an 
 full-sheet pattern, allocate the real content column, clear its range and inspect the
 unchanged tail through the genuine document owner. No allocation or default-tail reset
 is added to disguise the difference. Attribute Undo captures the real source patterns.
+
+## CALC218 — Column metric dialog quantizes the unchanged default and minimum
+
+Pinned `sc/source/ui/miscdlgs/mtrindlg.cxx` initializes normalized twips,converts them
+into a two-decimal configured field unit,and reads converted/denormalized twips on OK.
+With `STD_COL_WIDTH=1280`,the actual result is1281twips after2.26cm or1282twips after0.89in.
+The factory's2twip minimum rounds to a zero display-unit minimum;accepting zero reaches
+native DIRECT hiding while retaining the prior stored width. Preserve this behavior.
+`sc/source/ui/miscdlgs/mtrindlg.test.ts` covers both unit results,zero and the one-metre maximum.
+Native widget/device services and arbitrary decimal precisions are not certified.
+
+## CALC219 — Maximum column width wraps the recorded UInt16 HMM argument
+
+Pinned `cellsh3.cxx` accepts metric twips directly,but constructs a separate recording request
+with `static_cast<sal_uInt16>(TwipsToEvenHMM(nVal))`. `global.hxx` rounds127/144 then doubles.
+The56693twip maximum records100000HMM narrowed to34464;the live column retains56693twips.
+Preserve this order rather than replacing the recording argument with a wider browser value.
+`sc/source/ui/view/column-width.test.ts` observes the actual separate completed request.
+Macro recorder services and replay through full UNO transformations remain unported.
+
+## CALC220 — Numeric mixed fractions preserve native negative-sign asymmetry
+
+Pinned `vcl/source/control/field.cxx::ToScaledWholeAndDec` removes the numerator sign,
+applies the negative marker to the whole part,then adds the unsigned fractional magnitude.
+Consequently `-1/2` parses as+0.5 and `-1 1/2` as-0.5. Preserve this source arithmetic.
+`vcl/source/control/field.test.ts` checks both original alternatives and division-by-zero failure.
+Currency parsing,translated unit catalogs and full native widget services remain unported.
+
+## CALC221 — Native width storage includes one extra terminal column
+
+Pinned `table1.cxx` creates column widths and flags with inclusive `MaxCol()+1` as their
+compressed-array limit. Preserve that sentinel while validating public column setters through
+`ValidCol`. Browser geometry and ODS clamp runs to the actual `MaxCol` and do not emit an
+extra cell/column. `sc/source/core/data/native-column-width.test.ts` pins the sentinel separately
+from actual document limits. This observation does not establish an upstream defect.
+
+## CALC222 — Signed ODF column width narrows after HMM conversion
+
+Pinned `XMLMeasurePropHdl::importXML` uses `convertMeasureToCore` with signed32 defaults.
+`ScTableColumnsObj::SetOnePropertyValue` converts the HMM integer to twips before the
+UInt16 `ScDocFunc::SetWidthOrHeight` argument. Thus `-1cm` becomes-567twips narrowed to64969,
+rather than zero. Preserve these source defaults and narrowing;do not add a positive-width clamp.
+`sc/source/filter/xml/ods-native-columns.test.ts` supplies independently authored negative XML.
+The complete UNO property/service graph and undefined native arithmetic domains are unverified.
+
+## CALC223 — Unicode type cache starts with a NUL/UNASSIGNED fast path
+
+Pinned `unicode::getUnicodeType` initializes its thread-local cached character and type to0.
+A first call with NUL returns UNASSIGNED without querying ICU's CONTROL category. After a
+different character,NUL receives the normal category. Preserve this cache behavior per JS realm.
+The complete native character-type witness includes the original fast path and all1114112 scalars.
+`external/icu/source/common/native-character-types.test.ts` compares the unchanged native byte
+protocol,then checks the later NUL lookup. Native OS threading and full Unicode utilities remain
+unported;this is a bounded shared numeric-field prerequisite.

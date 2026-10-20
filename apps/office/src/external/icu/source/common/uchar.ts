@@ -1,5 +1,6 @@
 /** @fileoverview Original ICU78.3 Unicode property-vector,script and block scalar algorithms over the actual frozen data. Remaining character APIs are unported. */
 import {
+  propsTrie,
   propsVectorsTrie,
   propsVectors,
   propsVectorsColumns,
@@ -36,4 +37,9 @@ export function ublock_getCode(c: number): UBlockCode {
   let c4 = c >>> 0;
   if (c4 <= 0x10ffff) c4 >>>= 4;
   return ucptrie_get(block_trie, c4 | 0) as UBlockCode;
+}
+
+/** Original ICU u_charType reads the main property category bits. @param c - Signed32 Unicode scalar or native out-of-range value. @returns Native general category. */
+export function u_charType(c: number): number {
+  return UTRIE2_GET16(propsTrie, c | 0) & 0x1f;
 }

@@ -151,7 +151,8 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   c.Scroll(-100, -100, 0, 0);
   expect(c.viewport.firstColumn).toBe(0);
   c.Scroll(1e10, 1e10, 960, 400);
-  expect(c.viewport.firstColumn).toBe(MAXCOL);
+  expect(c.viewport.firstColumn).toBe(MAXCOL - 10);
+  expect(c.viewport.firstColumn + c.viewport.columns).toBeGreaterThan(MAXCOL);
   expect(c.viewport.firstRow + c.viewport.rows).toBeGreaterThan(MAXROW);
   expect(c.viewport.rowOffset).toBeGreaterThanOrEqual(0);
   expect(c.viewport.rowOffset).toBeLessThan(17);

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/source/weld/MetricSpinButton.ts",
+    "status": "mapped",
+    "localSymbols": [
+      "MetricSpinButton"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/weld/MetricSpinButton.ts",
+          "marker": "MetricSpinButton"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/weld/MetricSpinButton.cxx",
+          "marker": "MetricSpinButton::ConvertValue"
+        }
+      ]
+    },
+    "upstreamPath": "vcl/source/weld/MetricSpinButton.cxx",
+    "upstreamSymbols": [
+      "MetricSpinButton::ConvertValue",
+      "MetricSpinButton::set_unit"
+    ],
+    "preservedResponsibilities": [
+      "TaskRV75WR implements native1280twip compressed column widths,source FilterData hidden runs,geometry-only document copies,marked/grouped direct/show/hide commands and real ScUndoWidthOrHeight documents. ColumnWidth26290 uses typed UInt16 HMM and optional one-based FN_PARAM_1;the actual metric dialog normalizes two decimals in the configured CM/INCH unit,preserves default/current toggling,and records a separate completed even-HMM request. Shared SfxRequest now separates cloned SetReturnValue from Done and implements source call-mode flags/AppendItem/removal;both common dispatch adapters and the actual Writer style caller use that contract. React reuses shared Writer menus/dialog styling and reads actual native column geometry with bounded scrolling and hidden-column keyboard skipping. Independent ODS column style/repeat/visibility and genuine byte reopens preserve represented widths and cells. Full pool/recorder/UNO argument transforms,optimal widths,protection,merged/outline/drawing/alternate views,native widget/font/device services and complete application parity remain unverified. Existing primary saving/open/no-recovery policy remains."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented unprotected,unmerged,default-view explicit column-size path is implemented;device-dependent optimal sizing is rejected,not simulated.",
+      "Native FilterData valid-column total segment coverage makes its corrupt/uninitialized range-query failure unreachable;objects and alternate-view callbacks remain unported.",
+      "Native active global VCL view lookup is replaced by borrowing the actual existing ScViewFunc for redo;an absent actual view retains native headless redo no-op.",
+      "Shared request argument vectors retain existing browser transport;full SfxAllItemSet pool ownership,macro recording,Done(itemset),UNO argument descriptors/transforms and native window/service lifetimes remain unported.",
+      "Numeric field parsing uses actual locale decimal resources and source English unit aliases;localized unit translation catalogs,currency formatting,native widget/device sizing and arithmetic outside defined represented input domains remain unverified.",
+      "ODS column width uses the source XML measure HMM then integral twip/UInt16 path;optimal width and non-default column cell-style inheritance/outline groups remain explicitly diagnosed.",
+      "The original extra MaxCol()+1 width sentinel,two-digit metric quantization,and UInt16 even-HMM recording wrap are preserved.",
+      "Source native QA is cited as a related source reference;it is not executed full native QA or broad parity certification."
+    ]
+  }
+}

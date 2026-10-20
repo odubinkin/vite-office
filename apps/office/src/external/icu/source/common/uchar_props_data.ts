@@ -40,3 +40,25 @@ export const block_trie: UCPTrie = {
   dataNullOffset: 0x7f4,
   nullValue: 0,
 };
+
+/** Original frozen main properties trie,including native shared index/data offsets. */
+export const propsTrie_index = new Uint16Array(data.propsTrie_index);
+export const propsTrie: UTrie2 = {
+  index: propsTrie_index,
+  data16: propsTrie_index.subarray(4628),
+  data32: null,
+  indexLength: 4628,
+  dataLength: 19480,
+  index2NullOffset: 0xa40,
+  dataNullOffset: 0x1294,
+  initialValue: 0,
+  errorValue: 0,
+  highStart: 0x110000,
+  highValueIndex: 0x5e28,
+  memory: null,
+  length: 0,
+  isMemoryOwned: false,
+  padding1: false,
+  padding2: 0,
+  newTrie: null,
+};

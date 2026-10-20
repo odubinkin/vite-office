@@ -41,6 +41,38 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original document column-domain query. @param column - Native column. @returns Whether valid. */
+  ValidCol(column: number): boolean {
+    return ValidCol(column, MAXCOL);
+  }
+  /** Original selected-table width assignment. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
+  SetColWidth(column: number, tab: number, width: number): void {
+    this.FetchTable(tab)?.SetColWidth(column, width);
+  }
+  /** Original width-only table dispatch. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
+  SetColWidthOnly(column: number, tab: number, width: number): void {
+    this.FetchTable(tab)?.SetColWidthOnly(column, width);
+  }
+  /** Original absent-sheet zero fallback. @param column - Column. @param tab - Sheet. @param hiddenAsZero - Include hidden flag,true by default. @returns Twips. */
+  GetColWidth(column: number, tab: number, hiddenAsZero = true): number {
+    return this.FetchTable(tab)?.GetColWidth(column, hiddenAsZero) ?? 0;
+  }
+  /** Original absent-sheet false result writes the requested column into both optional span outputs. @param column - Column. @param tab - Sheet. @param first - Optional span start. @param last - Optional span end. @returns Hidden flag. */
+  ColHidden(column: number, tab: number, first?: [number], last?: [number]): boolean {
+    const table = this.FetchTable(tab);
+    if (table) return table.ColHidden(column, first, last);
+    if (first) first[0] = column;
+    if (last) last[0] = column;
+    return false;
+  }
+  /** Original column visibility assignment dispatch. @param first - First column. @param last - Last column. @param tab - Sheet. @param hidden - Hidden flag. @returns Nothing. */
+  SetColHidden(first: number, last: number, tab: number, hidden: boolean): void {
+    this.FetchTable(tab)?.SetColHidden(first, last, hidden);
+  }
+  /** Original ShowCol dispatch preserves stored widths. @param column - Column. @param tab - Sheet. @param show - Show flag. @returns Nothing. */
+  ShowCol(column: number, tab: number, show: boolean): void {
+    this.FetchTable(tab)?.ShowCol(column, show);
+  }
   /** Consumed source DeleteArea orders coordinates and visits selected real sheets;attribute deletion does not rebuild formula listeners. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param marks - Selected sheets. @param flags - Attribute-only deletion flags. @returns Nothing. */
   DeleteArea(
     firstCol: number,
@@ -223,6 +255,22 @@ export class ScDocument {
     destination: ScDocument,
     marks?: ScMarkData,
   ): void {
+    if (flags === InsertDeleteFlags.NONE) {
+      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
+        if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+        const source = this.FetchTable(tab),
+          target = destination.FetchTable(tab);
+        if (source && target)
+          source.CopyToTable(
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+            target,
+          );
+      }
+      return;
+    }
     if (
       (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
       flags &

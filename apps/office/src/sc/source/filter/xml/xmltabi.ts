@@ -1,18 +1,16 @@
 /** @fileoverview Native Calc sheet context for scalar rows over an actual ScTable. */
 import { ScXMLImportContext } from "./importcontext";
-import {
-  SvXMLImportContext,
-  SvXMLIgnoreContext,
-  type FastAttributeList,
-} from "../../../../xmloff/source/core/xmlimp";
+import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLImport } from "./xmlimprt";
+import { ScXMLTableColContext } from "./xmlcoli";
 import { ScXMLTableRowContext } from "./xmlrowi";
 /** Real sheet import cursor;row/column positions are transient parser state only. */
 export class ScXMLTableContext extends ScXMLImportContext {
   readonly tab: number;
   row = 0;
+  column = 0;
   /** Appends a real native sheet with its supplied valid name. @param owner - Owner. @param attributes - Attributes. @returns Context. */
   constructor(
     readonly owner: ScXMLImport,
@@ -41,9 +39,12 @@ export class ScXMLTableContext extends ScXMLImportContext {
       element === XMLToken.TABLE_TABLE_HEADER_ROWS
     )
       return this;
-    if (element === XMLToken.TABLE_TABLE_COLUMN) {
-      this.owner.unsupported("table:table-column geometry");
-      return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.TABLE_TABLE_COLUMN) return new ScXMLTableColContext(this, attributes);
+    if (element === XMLToken.TABLE_TABLE_COLUMNS || element === XMLToken.TABLE_TABLE_HEADER_COLUMNS)
+      return this;
+    if (element === XMLToken.TABLE_TABLE_COLUMN_GROUP) {
+      this.owner.unsupported("column outline group");
+      return this;
     }
     throw new Error("ODS sheet feature is not implemented");
   }

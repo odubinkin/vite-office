@@ -1,5 +1,14 @@
 /** @fileoverview Ports the bounded SfxBindings state/invalidation boundary from pinned `sfx2/source/control/bindings.cxx`. */
 
+/** Original bindings.hxx request call-mode flags. */
+export enum SfxCallMode {
+  SLOT = 0x00,
+  SYNCHRON = 0x01,
+  ASYNCHRON = 0x02,
+  RECORD = 0x04,
+  API = 0x08,
+}
+
 import { SfxItemSet, SfxItemState } from "../../../svl/inc/itemset";
 import { SfxItemPool } from "../../../svl/source/items/itempool";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";

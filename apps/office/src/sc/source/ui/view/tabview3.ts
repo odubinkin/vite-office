@@ -8,6 +8,10 @@ export class ScTabView {
     private readonly aViewData: ScViewData,
     private readonly wrapNextPrevSheetTab = true,
   ) {}
+  /** Original view-data borrow used by active native history. @returns Actual view. */
+  GetViewData(): ScViewData {
+    return this.aViewData;
+  }
   /** Selects the next/previous existing sheet with native wrapping and group extension. @param nDir - Signed movement;zero does nothing. @param bExtendSelection - Extend the sheet group. @returns Nothing. */
   SelectNextTab(nDir: number, bExtendSelection = false): void {
     if (!nDir) return;
@@ -41,6 +45,32 @@ export class ScTabView {
     if (bExtendSelection) rMark.SelectTable(nTab, true);
     else rMark.SelectOneTable(nTab);
     this.aViewData.ResetOldCursor();
+  }
+  /** Original SkipCursorHorizontal hidden-column branch for the unprotected,unmerged cell slice. @param column - Proposed column. @param old - Original cursor. @param movement - Nonzero horizontal direction. @returns Source cursor after boundary reversal. */
+  SkipCursorHorizontal(column: number, old: number, movement: number): number {
+    const doc = this.aViewData.GetDocument(),
+      tab = this.aViewData.GetTabNumber(),
+      first: [number] = [0];
+    let maximum = doc.ColHidden(doc.MaxCol(), tab, first) ? first[0] + 1 : doc.MaxCol();
+    maximum = Math.max(
+      maximum,
+      Math.min(
+        (
+          doc.FetchTable(tab) as NonNullable<ReturnType<typeof doc.FetchTable>>
+        ).GetAllocatedColumnsCount() + 1,
+        doc.MaxCol(),
+      ),
+    );
+    let flipped = false;
+    while (doc.ColHidden(column, tab)) {
+      if (column <= 0 || column >= maximum) {
+        if (flipped) return old;
+        movement = -movement;
+        column += movement > 0 ? 1 : -1;
+        flipped = true;
+      } else column += movement > 0 ? 1 : -1;
+    }
+    return column;
   }
   /** Expands the simple selection to complete columns using original no-argument MarkColumns rules. Browser notifications stay with the owning controller;reference/window block services remain outside this slice. @returns Nothing. */
   MarkColumns(): void {

@@ -32,6 +32,7 @@ import { CommandToolbarItems } from "../../../framework/browser/presentation/Com
 import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { ScMetricInputDlg } from "./ScMetricInputDlg";
 import { ScGoToTabDlg } from "./ScGoToTabDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
@@ -67,12 +68,17 @@ export function CalcWorkbench({
     sheetWorkflows.dialogs.GetSnapshot,
     sheetWorkflows.dialogs.GetSnapshot,
   );
+  const widthDialog = useSyncExternalStore(
+    sheetWorkflows.widthDialogs.Subscribe,
+    sheetWorkflows.widthDialogs.GetSnapshot,
+    sheetWorkflows.widthDialogs.GetSnapshot,
+  );
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
     [],
   );
-  const modal = dialog !== undefined || sheetDialog !== undefined;
+  const modal = dialog !== undefined || sheetDialog !== undefined || widthDialog !== undefined;
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null);
@@ -141,7 +147,10 @@ export function CalcWorkbench({
       ) {
         const first = Math.max(0, row - visibleRows + 1);
         client.scrollTop = controller.ScrollTopForRow(first, client.clientHeight);
-        client.scrollLeft = Math.max(0, col - viewport.columns + 2) * viewport.columnWidth;
+        client.scrollLeft = controller.ScrollLeftForColumn(
+          Math.max(0, col - viewport.columns + 2),
+          client.clientWidth,
+        );
         controller.Scroll(
           client.scrollLeft,
           client.scrollTop,
@@ -166,7 +175,7 @@ export function CalcWorkbench({
       const dx = event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
       const dy = event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0;
       if (controller.Commit()) {
-        controller.Select(view.GetCurX() + dx, view.GetCurY() + dy, event.shiftKey);
+        controller.Navigate(dx, dy, event.shiftKey);
         focusGrid();
       }
       return;
@@ -180,10 +189,7 @@ export function CalcWorkbench({
       event.preventDefault();
       if (controller.Commit()) {
         const delta = event.shiftKey ? -1 : 1;
-        controller.Select(
-          view.GetCurX() + (event.key === "Tab" ? delta : 0),
-          view.GetCurY() + (event.key === "Enter" ? delta : 0),
-        );
+        controller.Navigate(event.key === "Tab" ? delta : 0, event.key === "Enter" ? delta : 0);
         focusGrid();
       }
     }
@@ -225,11 +231,7 @@ export function CalcWorkbench({
     const move = moves[event.key];
     if (move && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
-      controller.Select(
-        view.GetCurX() + move[0],
-        view.GetCurY() + move[1],
-        event.shiftKey && event.key.startsWith("Arrow"),
-      );
+      controller.Navigate(move[0], move[1], event.shiftKey && event.key.startsWith("Arrow"));
       return;
     }
     if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.length === 1) {
@@ -515,6 +517,26 @@ export function CalcWorkbench({
           onClose={
             /** Closes the dialog and restores the actual grid focus. @returns Nothing. */ () => {
               fileWorkflows.dialogs.Close();
+              focusGrid();
+            }
+          }
+        />
+      )}
+      {widthDialog === undefined ? null : (
+        <ScMetricInputDlg
+          key={widthDialog.id}
+          model={widthDialog.request}
+          onCancel={
+            /** Cancels native width request and restores actual grid focus. @returns Nothing. */ () => {
+              sheetWorkflows.widthDialogs.Cancel(widthDialog.id);
+              focusGrid();
+            }
+          }
+          onSubmit={
+            /** Returns integral native twips to the originating command. @param twips - Native result. @returns Nothing. */ (
+              twips,
+            ) => {
+              sheetWorkflows.widthDialogs.Complete(widthDialog.id, twips);
               focusGrid();
             }
           }

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-numeric-character-types",
+    "capabilityIds": [
+      "CAP-b0983657-1a03-4cca-8982-119820de587b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+        "apps/office/src/external/icu/source/common/native-character-types.test.ts"
+      ],
+      "justification": "Original UnicodeType numeric identities are consumed by native getUnicodeType,isAlpha and isControl over frozen ICU78.3 data. Every Unicode scalar matches unchanged native category and LibreOffice classification bodies,including initial-NUL cache behavior. This is not a full Unicode utility or application parity certificate.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UNASSIGNED",
+        "CONTROL",
+        "FORMAT"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/i18n/UnicodeType.idl",
+      "upstreamSymbols": [
+        "UNASSIGNED",
+        "CONTROL",
+        "FORMAT"
+      ]
+    }
+  }
+}

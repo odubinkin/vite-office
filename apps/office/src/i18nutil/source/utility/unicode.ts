@@ -1,9 +1,138 @@
 /** @fileoverview Original unicode::getScriptClassFromUScriptCode switch;remaining unicode utility methods are unported. */
+import { u_charType } from "../../../external/icu/source/common/uchar";
+import { UCharCategory } from "../../../external/icu/source/common/unicode/uchar";
+import * as UnicodeType from "../../../offapi/com/sun/star/i18n/UnicodeType";
+/** Original thread-local cache adapted per JavaScript realm,including its initial zero fast path. */
+let cachedCharacter = 0,
+  cachedType = 0;
 import { UScriptCode } from "../../../external/icu/source/common/unicode/uscript";
 import * as ScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
 /** Original stateless unicode utility owner for consumed script classification. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original static unicode utility owner.
 export class unicode {
+  /** Original cached UnicodeType mapping over the pinned ICU category owner. @param ch - Unsigned32 character. @returns Source category. */
+  static getUnicodeType(ch: number): number {
+    ch >>>= 0;
+    if (ch === cachedCharacter) return cachedType;
+    cachedCharacter = ch;
+    switch (u_charType(ch)) {
+      case UCharCategory.U_UNASSIGNED:
+        cachedType = UnicodeType.UNASSIGNED;
+        break;
+      case UCharCategory.U_UPPERCASE_LETTER:
+        cachedType = UnicodeType.UPPERCASE_LETTER;
+        break;
+      case UCharCategory.U_LOWERCASE_LETTER:
+        cachedType = UnicodeType.LOWERCASE_LETTER;
+        break;
+      case UCharCategory.U_TITLECASE_LETTER:
+        cachedType = UnicodeType.TITLECASE_LETTER;
+        break;
+      case UCharCategory.U_MODIFIER_LETTER:
+        cachedType = UnicodeType.MODIFIER_LETTER;
+        break;
+      case UCharCategory.U_OTHER_LETTER:
+        cachedType = UnicodeType.OTHER_LETTER;
+        break;
+      case UCharCategory.U_NON_SPACING_MARK:
+        cachedType = UnicodeType.NON_SPACING_MARK;
+        break;
+      case UCharCategory.U_ENCLOSING_MARK:
+        cachedType = UnicodeType.ENCLOSING_MARK;
+        break;
+      case UCharCategory.U_COMBINING_SPACING_MARK:
+        cachedType = UnicodeType.COMBINING_SPACING_MARK;
+        break;
+      case UCharCategory.U_DECIMAL_DIGIT_NUMBER:
+        cachedType = UnicodeType.DECIMAL_DIGIT_NUMBER;
+        break;
+      case UCharCategory.U_LETTER_NUMBER:
+        cachedType = UnicodeType.LETTER_NUMBER;
+        break;
+      case UCharCategory.U_OTHER_NUMBER:
+        cachedType = UnicodeType.OTHER_NUMBER;
+        break;
+      case UCharCategory.U_SPACE_SEPARATOR:
+        cachedType = UnicodeType.SPACE_SEPARATOR;
+        break;
+      case UCharCategory.U_LINE_SEPARATOR:
+        cachedType = UnicodeType.LINE_SEPARATOR;
+        break;
+      case UCharCategory.U_PARAGRAPH_SEPARATOR:
+        cachedType = UnicodeType.PARAGRAPH_SEPARATOR;
+        break;
+      case UCharCategory.U_CONTROL_CHAR:
+        cachedType = UnicodeType.CONTROL;
+        break;
+      case UCharCategory.U_FORMAT_CHAR:
+        cachedType = UnicodeType.FORMAT;
+        break;
+      case UCharCategory.U_PRIVATE_USE_CHAR:
+        cachedType = UnicodeType.PRIVATE_USE;
+        break;
+      case UCharCategory.U_SURROGATE:
+        cachedType = UnicodeType.SURROGATE;
+        break;
+      case UCharCategory.U_DASH_PUNCTUATION:
+        cachedType = UnicodeType.DASH_PUNCTUATION;
+        break;
+      case UCharCategory.U_INITIAL_PUNCTUATION:
+        cachedType = UnicodeType.INITIAL_PUNCTUATION;
+        break;
+      case UCharCategory.U_FINAL_PUNCTUATION:
+        cachedType = UnicodeType.FINAL_PUNCTUATION;
+        break;
+      case UCharCategory.U_CONNECTOR_PUNCTUATION:
+        cachedType = UnicodeType.CONNECTOR_PUNCTUATION;
+        break;
+      case UCharCategory.U_OTHER_PUNCTUATION:
+        cachedType = UnicodeType.OTHER_PUNCTUATION;
+        break;
+      case UCharCategory.U_MATH_SYMBOL:
+        cachedType = UnicodeType.MATH_SYMBOL;
+        break;
+      case UCharCategory.U_CURRENCY_SYMBOL:
+        cachedType = UnicodeType.CURRENCY_SYMBOL;
+        break;
+      case UCharCategory.U_MODIFIER_SYMBOL:
+        cachedType = UnicodeType.MODIFIER_SYMBOL;
+        break;
+      case UCharCategory.U_OTHER_SYMBOL:
+        cachedType = UnicodeType.OTHER_SYMBOL;
+        break;
+      case UCharCategory.U_START_PUNCTUATION:
+        cachedType = UnicodeType.START_PUNCTUATION;
+        break;
+      case UCharCategory.U_END_PUNCTUATION:
+        cachedType = UnicodeType.END_PUNCTUATION;
+        break;
+    }
+
+    return cachedType;
+  }
+  /** Original control category bit mask includes FORMAT and line/paragraph separators. @param ch - Character. @returns Control category. */
+  static isControl(ch: number): boolean {
+    return (
+      ((1 << unicode.getUnicodeType(ch)) &
+        ((1 << UnicodeType.CONTROL) |
+          (1 << UnicodeType.FORMAT) |
+          (1 << UnicodeType.LINE_SEPARATOR) |
+          (1 << UnicodeType.PARAGRAPH_SEPARATOR))) !==
+      0
+    );
+  }
+  /** Original alphabetic category mask excludes combining/letter-number categories. @param ch - Character. @returns Letter category. */
+  static isAlpha(ch: number): boolean {
+    return (
+      ((1 << unicode.getUnicodeType(ch)) &
+        ((1 << UnicodeType.UPPERCASE_LETTER) |
+          (1 << UnicodeType.LOWERCASE_LETTER) |
+          (1 << UnicodeType.TITLECASE_LETTER) |
+          (1 << UnicodeType.MODIFIER_LETTER) |
+          (1 << UnicodeType.OTHER_LETTER))) !==
+      0
+    );
+  }
   /** Maps every original script identity to the native editing class. @param eScript - Native UScriptCode. @returns ScriptType. */
   static getScriptClassFromUScriptCode(eScript: UScriptCode): number {
     switch (eScript) {

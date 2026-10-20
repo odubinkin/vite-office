@@ -1,4 +1,5 @@
-/** @fileoverview Calc scalar,cell-font and row-geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+/** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
@@ -69,6 +70,24 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     return new XMLFontStylesContext(this, RTL_TEXTENCODING_UTF8);
   }
   private readonly autoStyles = new Map<string, CellAttributeHolder>();
+  private readonly columnStyles = new Map<string, number | null>();
+  /** Registers the native column width property in HMM. @param name - Automatic style. @param width - Signed32 HMM or absent property. @returns Nothing. */
+  AddColumnStyle(name: string, width: number | null): void {
+    this.columnStyles.set(name, width);
+  }
+  /** Consumed CellWidth UNO property converts HMM then narrows to UInt16;zero does not replace stored width. @param name - Style. @param tab - Actual sheet. @param first - First column. @param last - Last column. @returns Nothing. */
+  ApplyColumnStyle(name: string, tab: number, first: number, last: number): void {
+    if (!this.columnStyles.has(name)) {
+      this.unsupported("column style");
+      return;
+    }
+    const width = this.columnStyles.get(name) as number | null;
+    if (width === null) return;
+    const twips = Number(toTwips(BigInt(width), Length.mm100)) & 0xffff;
+    if (twips)
+      for (let column = first; column <= last; column++)
+        this.document.SetColWidthOnly(column, tab, twips);
+  }
   private body = false;
   private readonly rowStyles = new Map<
     string,
@@ -200,6 +219,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       for (const holder of this.autoStyles.values()) holder.Dispose();
       this.autoStyles.clear();
       this.rowStyles.clear();
+      this.columnStyles.clear();
       this.fontFaces.clear();
     }
   }
