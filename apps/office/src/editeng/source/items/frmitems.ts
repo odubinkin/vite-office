@@ -325,11 +325,19 @@ export class SvxBoxItem extends SfxPoolItem {
       return result;
     }
     result.Color = line.GetColor().toInt32();
-    result.InnerLineWidth = convert ? convertTwipToMm100(line.GetInWidth()) : line.GetInWidth();
-    result.OuterLineWidth = convert ? convertTwipToMm100(line.GetOutWidth()) : line.GetOutWidth();
-    result.LineDistance = convert ? convertTwipToMm100(line.GetDistance()) : line.GetDistance();
+    result.InnerLineWidth = convert
+      ? Number(convertTwipToMm100(BigInt(line.GetInWidth())))
+      : line.GetInWidth();
+    result.OuterLineWidth = convert
+      ? Number(convertTwipToMm100(BigInt(line.GetOutWidth())))
+      : line.GetOutWidth();
+    result.LineDistance = convert
+      ? Number(convertTwipToMm100(BigInt(line.GetDistance())))
+      : line.GetDistance();
     result.LineStyle = line.GetBorderLineStyle();
-    result.LineWidth = convert ? convertTwipToMm100(line.GetWidth()) : line.GetWidth();
+    result.LineWidth = convert
+      ? Number(convertTwipToMm100(BigInt(line.GetWidth())))
+      : line.GetWidth();
     return result;
   }
   /** Original base overload; the final literal binds the erased static C++ argument type. @param line - Base view, possibly of a derived object. @param target - Existing border. @param convert - Input uses mm100. @param family - Erased declared type. @returns Native nonempty state. */

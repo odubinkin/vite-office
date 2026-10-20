@@ -42,6 +42,7 @@ import { CellTextAttr } from "../../../inc/celltextattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
+import { ScItemPoolCache } from "../../../inc/poolcach";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 
 import { ScAttrArray } from "./attarray";
@@ -127,33 +128,44 @@ export class ScColumnData {
   SetPatternArea(start: number, end: number, pattern: CellAttributeHolder): void {
     this.pAttrArray.SetPatternArea(start, end, pattern);
   }
-  /** Applies the source itemset delta while retaining each existing pattern's other attributes. The native pool-cache search is an omitted optimization. @param start - First row. @param end - Last row. @param delta - Attribute delta without unported borders. @returns Whether changed. */
+  /** Original column.cxx itemset cache applies real canonical patterns and optional change output. @param first - First row. @param last - Last row. @param cache - Borrowed shared cache. @param changed - Original changed flag. @returns Nothing. */
+  ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
+    this.pAttrArray.ApplyCacheArea(first, last, cache, changed);
+  }
+  /** Original ApplyPatternArea owns one actual native itemset cache. @param start - First row. @param end - Last row. @param delta - Borrowed actual pattern. @returns Stored attribute change. */
   ApplyPatternArea(start: number, end: number, delta: ScPatternAttr): boolean {
-    if (!this.rDocument.ValidRow(start) || !this.rDocument.ValidRow(end)) return false;
-    let changed = false;
-    const first: [number] = [0],
-      last: [number] = [0];
-    for (let row = start; row <= end;) {
-      const old = this.GetPatternRange(first, last, row) as ScPatternAttr;
-      const next = new ScPatternAttr(old);
-      next.GetItemSetWritable().PutSet(delta.GetItemSet());
-      const holder = new CellAttributeHolder(next, true);
-      try {
-        const stop = Math.min(end, last[0]);
-        if (!ScPatternAttr.areSame(old, holder.getScPatternAttr())) {
-          this.SetPatternArea(row, stop, holder);
-          changed = true;
-        }
-        row = stop + 1;
-      } finally {
-        holder.Dispose();
-      }
+    const cache = new ScItemPoolCache(this.rDocument.getCellAttributeHelper(), delta.GetItemSet()),
+      changed: [boolean] = [false];
+    try {
+      this.pAttrArray.ApplyCacheArea(start, end, cache, changed);
+      return changed[0];
+    } finally {
+      cache.Dispose();
     }
-    return changed;
   }
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
+  ApplyPattern(row: number, pattern: ScPatternAttr): void {
+    const cache = new ScItemPoolCache(
+        this.rDocument.getCellAttributeHelper(),
+        pattern.GetItemSet(),
+      ),
+      old = new CellAttributeHolder(this.pAttrArray.GetPattern(row));
+    try {
+      const next = cache.ApplyTo(old);
+      if (!CellAttributeHolder.areSame(next, old)) this.pAttrArray.SetPattern(row, next);
+    } finally {
+      old.Dispose();
+      cache.Dispose();
+    }
+  }
+  /** Original column.hxx cursor pattern assignment. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(row: number, holder: CellAttributeHolder): void {
+    this.pAttrArray.SetPattern(row, holder);
+  }
+
   /** Consumed unmarked CopyToColumn STRING/CopyByCloneHandler string-block path;native typed-store writes and text metadata avoid introducing setter broadcasts. Attribute copying remains with the existing document run-copy owner. @param first - First row. @param last - Last row. @param target - Actual target column. @returns Nothing. */
   CopyToColumn(first: number, last: number, target: ScColumn): void {
     const end = this.maCells.cend();

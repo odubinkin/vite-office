@@ -1,6 +1,8 @@
 /** @fileoverview Consumed original Operation default-admission/run dispatch for default sheet views;alternate-view conversion/protection/sync services remain unported. */
 /** Native operation identities used by the represented deletion paths. */
 export enum OperationType {
+  ApplyAttributesWithChangedRange = 2,
+  ApplyAttributesToCell = 3,
   DeleteContent = 4,
   DeleteCell = 5,
   ChangeIndent = 26,

@@ -3284,3 +3284,73 @@ but leaves the adjacent borders restored by Undo. Preserve this source ordering;
 do not regenerate envelopes to silently repair it. `border-history.test.ts` verifies
 the selected and neighboring edges independently, including retained request-item copies.
 Native drawing, merged-cell paint extents and rich-edit history remain unported.
+
+## CALC228 — Mixed frame-style changes bypass attribute undo
+
+Pinned `ScViewFunc::SetSelectionFrameLines` (`sc/source/ui/view/viewfun2.cxx`) sends
+uniform outer/diagonal items through `ApplyAttributes`, which records attribute history.
+If any of those selected items is INVALID, it instead converts working marks to multi
+and calls `ScDocument::ApplySelectionLineStyle` directly. That branch records no undo
+operation before marking the document modified. Preserve the branch and existing history;
+do not silently add a synthetic undo action. `calc-borders.test.tsx` distinguishes
+uniform single-cell history from genuinely different perimeter items in a rectangle.
+Protection, rich edit, alternate views and native paint services remain unported.
+
+## CALC229 — Toolbar preset lines bypass Calc's current default line
+
+Pinned `DispatchBorderItem` (`svx/source/tbxctrls/tbcontrl.cxx`) now calls
+`GuessLinesWidths` with `SvxBorderLineWidth::Thin` (15twips) for non-diagonal presets.
+Calc's `ScFormatShell::ExecuteAttr` (`sc/source/ui/view/formatsh.cxx`) still substitutes
+its stored current frame line only for requested lines whose outer width is zero.
+Thus toolbar presets apply black solid 0.75pt edges even after changing the current
+frame color/style; they do not use the remembered default line. The diagonal presets
+independently use Hairline (1twip). Preserve these actual source values and the zero-width
+substitution branch. `calc-borders.test.tsx` checks preset widths/colors after a real
+style/color workflow. Full UNO argument transformation and native widgets remain unported.
+
+## CALC230 — None line style retains empty diagonal line pointers
+
+Pinned `ScViewFunc::SetSelectionFrameLines` (`sc/source/ui/view/viewfun2.cxx`) clears
+outer edge pointers when the requested line is absent. Its diagonal branch instead
+calls `UpdateLineAttrs` with that absent source,which returns without changing the
+shared temporary line,and then stores the temporary through `SvxLineItem::SetLine`.
+For the None request this leaves a present zero-width diagonal rather than a null
+pointer. Preserve both the empty value and explicit item state;do not normalize them
+to the No Borders preset's null diagonal items. `calc-borders.test.tsx` checks the
+actual native diagonal binding after removing outer/diagonal lines with None.
+Full native widget,UNO and rendering-service parity remain unverified.
+
+## CALC231 — Border set-cache inheritance collapses independent distances
+
+Pinned `ScItemPoolCache::ApplyTo` (`sc/source/core/data/poolcach.cxx`) merges an
+incoming SET border with an existing border item. If the incoming right distance is
+zero,it assigns the old right distance to all four sides. Thus an old left distance
+of3 and right distance of8 become8 on every side,rather than retaining independent
+old distances. Preserve this right-side test and SetAllDistances call. The real
+set-cache case in `border-frame.test.ts` checks the resulting left distance;the
+single-item cache path remains a different whole-item replacement operation.
+
+## CALC232 — Frame query treats the last allocated column as the selection end
+
+Pinned `ScTable::MergeBlockFrame` (`sc/source/core/data/table2.cxx`) clamps the end
+column to allocated columns before calculating each column's right-edge distance.
+A selection extending into unallocated columns can therefore report the right border
+of its last allocated column as the outer right border. Preserve the clamp and the
+resulting validity/color/style query behavior;do not substitute the logical selection
+end or synthesize allocated cells. `border-frame.test.ts` checks an extended actual
+selection whose reported right line still comes from the last allocated column.
+Full merged/device/alternate-view paint parity remains unverified.
+
+### CALC233 — diagonal width-only XML properties remain active without diagonal shorthand
+
+- Pinned source: `sc/source/filter/xml/xmlstyli.cxx`, `ScXMLCellImportPropertyMapper::finished`; `sc/source/filter/xml/xmlstyle.cxx`, `aXMLScCellStylesProperties`; `editeng/source/items/frmitems.cxx`, `SvxLineItem::PutValue`.
+- Observation: outer per-side width properties are disabled independently of whether a border shorthand exists. Diagonal old/new width properties are disabled only inside the branch requiring a diagonal shorthand. A width-only diagonal declaration therefore remains an active property for the original line item. New-spelling preference applies inside the shorthand merge branch; otherwise original SAX property order remains observable.
+- Impact: a diagonal width-only declaration can create a solid line even though the same component widths supplied without an outer border do not create outer lines. This asymmetry looks accidental but is retained.
+- Local preservation: the Calc border property importer retains this original branch and the existing actual SvxLineItem conversion. Independent ODF fixtures assert the resulting width-only diagonal. Full native UNO property services remain outside the consumed slice.
+
+### CALC234 — compound border width parsing ignores trailing tokens
+
+- Pinned source: `xmloff/source/style/bordrhdl.cxx`, `XMLBorderWidthHdl::importXML`.
+- Observation: the shared original handler reads exactly three measures and never checks for a fourth token. Additional trailing text is accepted while only inner width, distance and outer width are assigned.
+- Impact: malformed compound width declarations can be imported without rejection. The browser port formerly rejected them, which differed from the pinned source.
+- Local preservation: the shared handler now consumes the original first three measures. An independent Calc ODF fixture includes a trailing token and verifies the original resulting component widths. Writer uses the same handler.

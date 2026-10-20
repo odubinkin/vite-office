@@ -18,6 +18,7 @@ import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
+import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
@@ -133,6 +134,21 @@ export class CalcViewController {
     return changed;
   }
 
+  /** Reads original selected diagonal attribute state. @param which - Native diagonal identity. @returns Original binding. */
+  GetDiagonalState(which: 141 | 142): import("../../../sfx2/source/control/bindings").SfxSlotState {
+    return new ScFormatShell(this.viewData, this.shell).GetDiagonalState(which);
+  }
+  /** Reads source border-style/color bindings. @param color - Color slot. @returns Native state. */
+  GetFrameLineState(color: boolean): import("../../../sfx2/source/control/bindings").SfxSlotState {
+    return new ScFormatShell(this.viewData, this.shell).GetFrameLineState(color);
+  }
+  /** Commits actual input before original border formatting. @param request - Typed native request. @returns Result. */
+  ExecuteBorder(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const result = new ScFormatShell(this.viewData, this.shell).ExecuteBorder(request);
+    this.Changed();
+    return result;
+  }
   /** Reads genuine source color state. @param kind - Native slot kind. @returns Native item or mixed. */
   GetColor(kind: CalcColorKind): SvxColorItem | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetColor(kind);
@@ -635,6 +651,7 @@ export class CalcViewController {
     }
     const position =
       cursorAction instanceof ScUndoSetCell ||
+      cursorAction instanceof ScUndoCursorAttr ||
       cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents

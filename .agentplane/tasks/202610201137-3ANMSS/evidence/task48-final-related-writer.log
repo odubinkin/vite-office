@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- WriterAdvancedFormattingControls.test native-cell-box-roundtrip.test --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts WriterAdvancedFormattingControls.test native-cell-box-roundtrip.test --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  39 passed (39)
+   Start at  20:30:00
+   Duration  8.88s (transform 5.72s, setup 644ms, import 6.75s, tests 1.52s, environment 3.52s)
+

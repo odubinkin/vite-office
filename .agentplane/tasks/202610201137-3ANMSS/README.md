@@ -4,7 +4,7 @@ title: "Implement native Calc cell border toolbar and ODS workflows"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved native Calc border toolbar,selection history and ODS block in calc."
 doc_version: 3
-doc_updated_at: "2026-10-20T12:10:47.712Z"
+doc_updated_at: "2026-10-20T13:33:47.143Z"
 doc_updated_by: "CODER"
 description: "Task48 continues authorized Calc UI work only in calc checkout/branch. Deliver native cell border presets,line style/color and actual selection-frame mutation/history,using real shared box/line items,source default frame line and shared Writer browser controls. Port consumed missing border pool/cache/frame/mark owners and native ODS properties;actual grid borders and desktop/mobile/Worker acceptance. Canonicalize shared Writer helpers directly when required. Up to180 non-task paths with source-backed registries/docs/tests. Preserve native suspicious behavior and established primary/autosave/open/no-recovery policy. Only related module tests;last full all-app checkpoint40,next50. No branch,merge,network,outside files or fake native protection/device/UNO services."
 sections:
@@ -47,9 +47,20 @@ sections:
   Verification: "Pending implementation and scoped evidence;no broad native parity claim."
   Rollback Plan: "Revert only this task through a separately scoped authorized change;do not reset unrelated work or alter pinned native references."
   Findings: |-
-    Preflight clean calc with three unrelated DOING tasks left untouched. Real shared border/line items and Writer controls already exist;Calc currently lacks ATTR_BORDER/INNER pool defaults and consumed native selection-frame/cache/mutation paths. Existing actual ScMarkData envelope owners will be reused for native adjacent-cell behavior. User authorization covers canonical changes to common Writer modules. This coherent visible UI block is within the continuing approved goal;no new approval is required.
+    Preflight clean calc with three stale historical DOING records left untouched. Real shared border/line items and Writer controls already exist;Calc currently lacks ATTR_BORDER/INNER pool defaults and consumed native selection-frame/cache/mutation paths. Existing actual ScMarkData envelope owners will be reused for native adjacent-cell behavior. User authorization covers canonical changes to common Writer modules. This coherent visible UI block is within the continuing approved goal;no new approval is required.
 
     Progress checkpoint: real frame/cache/pool/view-shell and envelope-aware native attribute history are implemented;147 related scenarios pass across11files (Calc27/shared31/Writer89). Types,changed-source lint/format,dependencies,JSDoc,size,source tree/provenance and scoped Calc registry pass. CALC227 documents source rectangular Redo dropping adjacent envelopes;the source order is retained. Core first test run exposed this original behavior;the test now independently asserts both selected and adjacent edges. Full task verification is pending toolbar/style/color/diagonal dispatch,grid projection,ODS and browser acceptance. Evidence: evidence/frame-foundation-progress.json. No full all-app test run or task-count checkpoint advancement. The three old DOING entries are historical audit/test-run/deferred-language records,not live parallel Calc work;they remain untouched.
+
+    Final scoped implementation: all twelve original Calc border presets, last-used glyph/repetition, Shift-only validity reset, style/color and independent diagonal slots now use shared Writer toolbar/SVX controls. Native ScViewFunc/operation/cache/document/history owners retain source defaults and branches, including admitted-success returns and adjacent envelope ordering. Actual grid frames resolve neighbor conflicts through shared native SVX Array; CSS and palette are shared with Writer. Common popup content is created lazily and constrained to the viewport. No timeouts, retries or skip policies were increased.
+
+    ODS: original cell property map, ContextFilter equal-side/equal-width reduction and finished merge preserve independent sides, compounds and diagonals through actual ZIP packages. New diagonal widths override the old spelling inside the original shorthand branch. Common SvxLineToLine now selects integral native twip conversion before IDL narrowing. Shared compound-width parsing retains original three-token consumption. CALC227-234 document and preserve suspicious source behavior. Padding margin, complex-color, merged/rich-edit/drawing/device/protection and complete UNO services remain outside the consumed slice.
+
+    Command: exact commands and current source/test/native hashes are retained in evidence/border-ui-ods-final.json and referenced logs.
+    Result: pass for 176 related module scenarios across 25 files (Calc89/shared48/Writer39), three production browser cases (1280px,390px,DOM-free Worker), plus the two Writer resource tooling checks. Tail changes to shared width parsing separately pass five independent ODS cases and33 Writer border cases. Types, authored lint/format, dependencies, JSDoc, size, source tree/provenance, resource checks, registry/scoped parity, production/static build, routing and doctor pass. Doctor reports an existing managed-shim readiness advisory but exits0; no unrelated hook/config changes were made.
+    Evidence: evidence/border-ui-ods-final.json; evidence/borders-1280.png; evidence/borders-390.png. Both screenshots were visually inspected. Browser tests cover actual Undo/Redo, preset count, popup viewport bounds, style/color, diagonals, keyboard movement, source owner focus and outside dismissal; the actual Worker retains border history, value42 and ODS with typeof document undefined.
+    Scope: current approved task48 only; full native parity is not claimed. Initial fixture mistakes and source-contract mismatches were repaired and rerun; previous failed logs remain under output/playwright. Final task quality review and direct closure follow the implementation commit.
+
+    Stop condition from user: pause the active goal immediately after the next full all-app run, regardless of success/failure. Last full checkpoint40;next50. This task did not run the full suite or advance that checkpoint. The three historical DOING records remain untouched and do not constitute live parallel work.
 id_source: "generated"
 ---
 ## Summary
@@ -78,6 +89,17 @@ Revert only this task through a separately scoped authorized change;do not reset
 
 ## Findings
 
-Preflight clean calc with three unrelated DOING tasks left untouched. Real shared border/line items and Writer controls already exist;Calc currently lacks ATTR_BORDER/INNER pool defaults and consumed native selection-frame/cache/mutation paths. Existing actual ScMarkData envelope owners will be reused for native adjacent-cell behavior. User authorization covers canonical changes to common Writer modules. This coherent visible UI block is within the continuing approved goal;no new approval is required.
+Preflight clean calc with three stale historical DOING records left untouched. Real shared border/line items and Writer controls already exist;Calc currently lacks ATTR_BORDER/INNER pool defaults and consumed native selection-frame/cache/mutation paths. Existing actual ScMarkData envelope owners will be reused for native adjacent-cell behavior. User authorization covers canonical changes to common Writer modules. This coherent visible UI block is within the continuing approved goal;no new approval is required.
 
 Progress checkpoint: real frame/cache/pool/view-shell and envelope-aware native attribute history are implemented;147 related scenarios pass across11files (Calc27/shared31/Writer89). Types,changed-source lint/format,dependencies,JSDoc,size,source tree/provenance and scoped Calc registry pass. CALC227 documents source rectangular Redo dropping adjacent envelopes;the source order is retained. Core first test run exposed this original behavior;the test now independently asserts both selected and adjacent edges. Full task verification is pending toolbar/style/color/diagonal dispatch,grid projection,ODS and browser acceptance. Evidence: evidence/frame-foundation-progress.json. No full all-app test run or task-count checkpoint advancement. The three old DOING entries are historical audit/test-run/deferred-language records,not live parallel Calc work;they remain untouched.
+
+Final scoped implementation: all twelve original Calc border presets, last-used glyph/repetition, Shift-only validity reset, style/color and independent diagonal slots now use shared Writer toolbar/SVX controls. Native ScViewFunc/operation/cache/document/history owners retain source defaults and branches, including admitted-success returns and adjacent envelope ordering. Actual grid frames resolve neighbor conflicts through shared native SVX Array; CSS and palette are shared with Writer. Common popup content is created lazily and constrained to the viewport. No timeouts, retries or skip policies were increased.
+
+ODS: original cell property map, ContextFilter equal-side/equal-width reduction and finished merge preserve independent sides, compounds and diagonals through actual ZIP packages. New diagonal widths override the old spelling inside the original shorthand branch. Common SvxLineToLine now selects integral native twip conversion before IDL narrowing. Shared compound-width parsing retains original three-token consumption. CALC227-234 document and preserve suspicious source behavior. Padding margin, complex-color, merged/rich-edit/drawing/device/protection and complete UNO services remain outside the consumed slice.
+
+Command: exact commands and current source/test/native hashes are retained in evidence/border-ui-ods-final.json and referenced logs.
+Result: pass for 176 related module scenarios across 25 files (Calc89/shared48/Writer39), three production browser cases (1280px,390px,DOM-free Worker), plus the two Writer resource tooling checks. Tail changes to shared width parsing separately pass five independent ODS cases and33 Writer border cases. Types, authored lint/format, dependencies, JSDoc, size, source tree/provenance, resource checks, registry/scoped parity, production/static build, routing and doctor pass. Doctor reports an existing managed-shim readiness advisory but exits0; no unrelated hook/config changes were made.
+Evidence: evidence/border-ui-ods-final.json; evidence/borders-1280.png; evidence/borders-390.png. Both screenshots were visually inspected. Browser tests cover actual Undo/Redo, preset count, popup viewport bounds, style/color, diagonals, keyboard movement, source owner focus and outside dismissal; the actual Worker retains border history, value42 and ODS with typeof document undefined.
+Scope: current approved task48 only; full native parity is not claimed. Initial fixture mistakes and source-contract mismatches were repaired and rerun; previous failed logs remain under output/playwright. Final task quality review and direct closure follow the implementation commit.
+
+Stop condition from user: pause the active goal immediately after the next full all-app run, regardless of success/failure. Last full checkpoint40;next50. This task did not run the full suite or advance that checkpoint. The three historical DOING records remain untouched and do not constitute live parallel work.

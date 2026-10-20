@@ -107,8 +107,8 @@ export class XMLBorderWidthHdl {
     converter = new SvXMLUnitConverter("mm100"),
   ): boolean {
     const tokens = text.trim().split(/\s+/u);
-    if (tokens.length !== 3) return false;
-    const widths = tokens.map(
+    if (tokens.length < 3) return false;
+    const widths = tokens.slice(0, 3).map(
       /** Converts one native component. @param token - Measure. @returns Metric or failure. */
       (token) => converter.convertMeasureToCore(token, 0, 500),
     );

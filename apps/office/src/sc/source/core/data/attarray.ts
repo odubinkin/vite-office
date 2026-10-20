@@ -150,8 +150,8 @@ export class ScAttrArray {
     }
     return changed;
   }
-  /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @returns Nothing. */
-  ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache): void {
+  /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
+  ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
     if (!(this.rDocument.ValidRow(first) && this.rDocument.ValidRow(last))) return;
     const position: [number] = [0];
     let start = 0;
@@ -161,6 +161,7 @@ export class ScAttrArray {
       const old = this.mvData[position[0]] as ScAttrEntry,
         next = cache.ApplyTo(old);
       if (!CellAttributeHolder.areSame(next, old)) {
+        if (changed) changed[0] = true;
         let from = start,
           to = old.nEndRow;
         start = old.nEndRow + 1;
@@ -629,6 +630,10 @@ export class ScAttrArray {
     } finally {
       defaults.Dispose();
     }
+  }
+  /** Original attarray.hxx cursor assignment wraps the same complete-pattern area owner. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(row: number, holder: CellAttributeHolder): void {
+    this.SetPatternArea(row, row, holder);
   }
   /** Original SetPatternAreaImpl logical split/shrink/replace/combine operations. Rich text is not a represented cell alternative. @param start - Ordered first row. @param end - Ordered last row. @param holder - Canonical source. @returns Nothing. */
   SetPatternArea(start: number, end: number, holder: CellAttributeHolder): void {

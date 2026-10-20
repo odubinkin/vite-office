@@ -1,5 +1,5 @@
 /** @fileoverview Real shared color palette, Calc native item state, browser painting and attribute history. */
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
@@ -60,7 +60,11 @@ it("uses the actual shared palette and native recent colors for cell painting an
     fireEvent.click(screen.getByRole("button", { name: "Font Color" }));
     expect(c.GetColor("font")?.GetValue().toUInt32()).toBe(0xff0000);
     fireEvent.click(screen.getByLabelText("Font Color palette", { exact: true }));
-    fireEvent.click(screen.getByRole("button", { name: "Automatic" }));
+    fireEvent.click(
+      within(screen.getByLabelText("Font Color", { selector: "div" })).getByRole("button", {
+        name: "Automatic",
+      }),
+    );
     expect(c.GetColor("font")?.GetValue().equals(COL_AUTO)).toBe(true);
     expect(a1).toHaveStyle({ color: "#000000" });
     act(
@@ -144,7 +148,7 @@ it("retains native missing-recent defaults,failed input admission and grouped fu
     // An explicit default item changes direct-item state even when its effective color is unchanged.
     expect(c.SetColor("font")).toBe(true);
     expect(c.GetColor("font")?.GetValue().equals(COL_AUTO)).toBe(true);
-    expect(c.SetColor("font")).toBe(false);
+    expect(c.SetColor("font")).toBe(true);
     c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
     expect(c.SetColor("background", new SvxColorItem(new Color(0x123456), 10186))).toBe(false);
     c.Cancel();
@@ -194,7 +198,7 @@ it("applies full native colors without changing independent font attributes and 
     c.SetFontFamily(font);
     const color = new SvxColorItem(new Color(0x102030), 10017);
     expect(c.SetColor("font", color)).toBe(true);
-    expect(c.SetColor("font", color)).toBe(false);
+    expect(c.SetColor("font", color)).toBe(true);
     expect((doc.GetPattern(new ScAddress())?.GetItem(100) as SvxFontItem).GetStyleName()).toBe(
       "Book",
     );

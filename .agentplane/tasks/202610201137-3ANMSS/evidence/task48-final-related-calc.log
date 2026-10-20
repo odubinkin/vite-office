@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-font calc-color calc-alignment.test calc-character-format.test calc-clear-format.test calc-borders.test border-frame.test border-history.test undocell.test cell-indent-row-height.test ods-native-borders.test ods-native-colors.test ods-native-alignment.test ods.test --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-font calc-color calc-alignment.test calc-character-format.test calc-clear-format.test calc-borders.test border-frame.test border-history.test undocell.test cell-indent-row-height.test ods-native-borders.test ods-native-colors.test ods-native-alignment.test ods.test --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  16 passed (16)
+      Tests  89 passed (89)
+   Start at  20:29:17
+   Duration  76.27s (transform 12.12s, setup 5.02s, import 40.22s, tests 72.69s, environment 27.84s)
+

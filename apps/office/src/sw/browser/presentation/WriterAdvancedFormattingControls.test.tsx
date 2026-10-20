@@ -314,6 +314,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByText("None"));
     expect(onColor).toHaveBeenCalledWith("highlight", "transparent");
     fireEvent.click(screen.getByRole("button", { name: "Character Highlighting Color" }));
+    fireEvent.click(screen.getByLabelText("Character Highlighting Color palette"));
     fireEvent.change(screen.getByLabelText("Character Highlighting Color custom color"), {
       target: { value: "#00ff00" },
     });

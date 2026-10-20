@@ -4,3 +4,6 @@ import { Color } from "../../tools/inc/color";
 export const COL_DEFAULT_FONT = Object.freeze(new Color(0xc9211e));
 /** Original yellow background/highlight button default. */
 export const COL_DEFAULT_HIGHLIGHT = Object.freeze(new Color(0xffff00));
+
+/** Original Blue frame-line toolbox default,independent of the Calc view default line. */
+export const COL_DEFAULT_FRAMELINE = Object.freeze(new Color(0x2a6099));

@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import type { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScLineFlags } from "../../../inc/attarray";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
@@ -16,7 +17,7 @@ import { ScColumn, ScColumnData } from "../../../inc/column";
 import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import type { ScPatternAttr } from "../../../inc/patattr";
+import type { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -37,6 +38,16 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table2.cxx cursor delta validates coordinates before allocating its actual column. @param col - Column. @param row - Row. @param pattern - Borrowed delta. @returns Nothing. */
+  ApplyPattern(col: number, row: number, pattern: ScPatternAttr): void {
+    if (this.rDocument.ValidColRow(col, row))
+      this.CreateColumnIfNotExists(col).ApplyPattern(row, pattern);
+  }
+  /** Original table2.cxx complete-pattern assignment validates native coordinates before column allocation. @param col - Column. @param row - Row. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(col: number, row: number, holder: CellAttributeHolder): void {
+    if (this.rDocument.ValidColRow(col, row))
+      this.CreateColumnIfNotExists(col).SetPattern(row, holder);
+  }
   /** Native table layout direction;the constructor default matches the non-visible core-document path. */
   private bLayoutRTL = false;
   /** Original actual layout-direction query. @returns RTL flag. */
@@ -134,6 +145,19 @@ export class ScTable {
       this.Apply(marks, this.rDocument.MaxCol(), apply);
     } else this.CreateColumnIfNotExists(marks.GetArea().aEnd.Col());
     for (let col = 0; col < this.aCol.length; col++) this.Apply(marks, col, apply);
+  }
+  /** Original table2.cxx selected cache uses native minimal column allocation and actual default-column tail. @param cache - Borrowed canonical transform. @param marks - Actual multi marks. @returns Stored change. */
+  ApplySelectionCache(cache: ScItemPoolCache, marks: ScMarkData): boolean {
+    const changed: [boolean] = [false];
+    this.ApplyWithAllocation(
+      marks,
+      /** Applies the original cache to real marked attribute runs. @param column - Column owner. @param first - First row. @param last - Last row. @returns Nothing. */ (
+        column,
+        first,
+        last,
+      ) => column.ApplyCacheArea(first, last, cache, changed),
+    );
+    return changed[0];
   }
   /** Original selected indentation. @param marks - Marks. @param increment - Direction. @returns Nothing. */
   ChangeSelectionIndent(marks: ScMarkData, increment: boolean): void {

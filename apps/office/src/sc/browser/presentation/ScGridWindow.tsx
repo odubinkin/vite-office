@@ -1,4 +1,6 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
+import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScIndentItem } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
@@ -109,6 +111,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     viewport.firstRow,
     Math.min(document.MaxRow(), viewport.firstRow + viewport.rows - 1),
   );
+  const frames = createCalcGridFrames(viewData, columns, rows);
   const activeVisible = columns.includes(column) && rows.includes(row);
   useLayoutEffect(
     /** Follows native table/inline input focus on editing transitions, without retaining edit content. @returns Nothing. */ () => {
@@ -309,6 +312,13 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       }
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        ...calcGridBorderStyle(
+                          frames,
+                          col,
+                          r,
+                          col === columns[columns.length - 1],
+                          r === rows[rows.length - 1],
+                        ),
                         paddingLeft: Math.trunc(
                           ((pattern.GetItem(143) as SvxMarginItem).GetLeftMargin() +
                             ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
@@ -367,6 +377,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         lineHeight: "normal",
                       }}
                     >
+                      <ScCellDiagonalBorders
+                        pattern={pattern}
+                        width={NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15)}
+                        height={NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15)}
+                      />
                       {editing && active ? (
                         <input
                           ref={input}

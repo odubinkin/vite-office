@@ -1,4 +1,9 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
+import {
+  createCalcBorderSlots,
+  calcBorderCommands,
+  type CalcBorderCommandTarget,
+} from "./formatsh";
 import { SvxContourItem } from "../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../editeng/inc/crossedoutitem";
 import { SvxCellHorJustify as H, SvxCellVerJustify as V } from "../../editeng/inc/svxenum";
@@ -14,7 +19,7 @@ import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
-export interface CalcCommandTarget {
+export interface CalcCommandTarget extends CalcBorderCommandTarget {
   ResetAttributes(): boolean;
   ChangeIndent(increment: boolean): boolean;
   GetOutlineState(): boolean | undefined;
@@ -312,6 +317,7 @@ export const calcUserCommands = [
   { id: ".uno:OutlineFont", slotId: 10012, label: "Outline Font Effect" },
   { id: ".uno:Strikeout", slotId: 10013, label: "Strikethrough" },
   { id: ".uno:Overline", slotId: 11568, label: "Overline" },
+  ...calcBorderCommands,
   ...calcAlignmentCommands,
   ...calcColorCommands,
   { id: ".uno:CharFontName", slotId: 10007, label: "Font Name" },
@@ -331,8 +337,13 @@ export const calcUserCommands = [
   (item) => ({
     id: item.id,
     label: item.label,
-    capabilityId:
-      item.id === ".uno:ResetAttributes"
+    capabilityId: calcBorderCommands.some(
+      /** Identifies native border commands. @param command - Original border resource. @returns Match. */ (
+        command,
+      ) => command.id === item.id,
+    )
+      ? ("CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f" as const)
+      : item.id === ".uno:ResetAttributes"
         ? ("CAP-d7aef795-0709-4ea9-9f92-079142960ada" as const)
         : item.id === ".uno:OutlineFont"
           ? ("CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875" as const)
@@ -370,6 +381,7 @@ export function createCalcInterface(
   resolveShortcuts?: (command: string) => readonly string[] | undefined,
 ): SfxInterface<CalcCommandTarget> {
   const definitions: SfxSlotDefinition<CalcCommandTarget>[] = [
+    ...createCalcBorderSlots(),
     ...calcFontSizeStepCommands.map(
       /** Native no-argument slots retain source no-op behavior when a request contains arguments. @param resource - Source slot. @returns Dispatcher definition. */
       (resource): SfxSlotDefinition<CalcCommandTarget> => ({

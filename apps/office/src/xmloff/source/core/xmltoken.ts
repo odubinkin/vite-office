@@ -249,9 +249,21 @@ export enum XMLToken {
   TABLE_TABLE_COLUMNS,
   TABLE_TABLE_HEADER_COLUMNS,
   TABLE_TABLE_COLUMN_GROUP,
+  STYLE_DIAGONAL_TL_BR,
+  STYLE_DIAGONAL_TL_BR_WIDTH,
+  STYLE_DIAGONAL_TL_BR_WIDTHS,
+  STYLE_DIAGONAL_BL_TR,
+  STYLE_DIAGONAL_BL_TR_WIDTH,
+  STYLE_DIAGONAL_BL_TR_WIDTHS,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.style, "diagonal-tl-br", XMLToken.STYLE_DIAGONAL_TL_BR],
+  [ODF_NAMESPACES.style, "diagonal-tl-br-width", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTH],
+  [ODF_NAMESPACES.style, "diagonal-tl-br-widths", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTHS],
+  [ODF_NAMESPACES.style, "diagonal-bl-tr", XMLToken.STYLE_DIAGONAL_BL_TR],
+  [ODF_NAMESPACES.style, "diagonal-bl-tr-width", XMLToken.STYLE_DIAGONAL_BL_TR_WIDTH],
+  [ODF_NAMESPACES.style, "diagonal-bl-tr-widths", XMLToken.STYLE_DIAGONAL_BL_TR_WIDTHS],
   [ODF_NAMESPACES.office, "document-styles", XMLToken.OFFICE_DOCUMENT_STYLES],
   [ODF_NAMESPACES.office, "document-content", XMLToken.OFFICE_DOCUMENT_CONTENT],
   [ODF_NAMESPACES.office, "document-meta", XMLToken.OFFICE_DOCUMENT_META],

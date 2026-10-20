@@ -49,7 +49,7 @@ it("dispatches the actual shared family selector through Calc and real attribute
       },
     );
     expect(c.GetFontFamily()).toBe("Liberation Mono");
-    expect(c.SetFontFamily(new SvxFontItem(0, "Liberation Mono", "", 0, 0, 10007))).toBe(false);
+    expect(c.SetFontFamily(new SvxFontItem(0, "Liberation Mono", "", 0, 0, 10007))).toBe(true);
     const loaded = await readOdsDocument(writeOdsDocument(doc));
     expect(
       (loaded.GetPattern(new ScAddress(0, 0, 0))?.GetItem(100) as SvxFontItem).GetFamilyName(),

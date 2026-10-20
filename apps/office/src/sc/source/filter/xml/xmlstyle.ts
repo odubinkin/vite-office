@@ -1,4 +1,9 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
+import {
+  cellBorderTokens,
+  exportCellBorderProperties,
+  importCellBorderProperties,
+} from "./xmlstyle.borders";
 import { ScIndentItem } from "../../../inc/attrib";
 import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
@@ -130,7 +135,7 @@ const lineGroups = [
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
   100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 107, 109, 129, 132,
-  148,
+  148, 150, 141, 142,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -327,7 +332,7 @@ export function importCellTextProperties(
 
 /** Emits the original table-cell background property group. @param pattern - Native pattern. @returns Cell-property attributes. */
 export function exportCellProperties(pattern: ScPatternAttr): string {
-  let result = "";
+  let result = exportCellBorderProperties(pattern);
   const alignmentValue = new Any(),
     alignmentOutput: [string] = [""];
   try {
@@ -370,6 +375,7 @@ export function importCellProperties(
 ): void {
   attributes.assertOnly(
     [
+      ...cellBorderTokens,
       XMLToken.FO_BACKGROUND_COLOR,
       XMLToken.STYLE_TEXT_ALIGN_SOURCE,
       XMLToken.STYLE_REPEAT_CONTENT,
@@ -377,6 +383,7 @@ export function importCellProperties(
     ],
     "Calc cell properties",
   );
+  importCellBorderProperties(pattern, attributes, unsupported);
   for (const [token, source] of attributes) {
     const handler =
       token === XMLToken.STYLE_TEXT_ALIGN_SOURCE

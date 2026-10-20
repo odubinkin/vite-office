@@ -1,4 +1,5 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
@@ -434,6 +435,14 @@ export class ScDocument {
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
+  /** Original document.cxx cursor-pattern assignment delegates through the actual sheet. @param col - Column. @param row - Row. @param tab - Sheet. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(col: number, row: number, tab: number, holder: CellAttributeHolder): void {
+    this.FetchTable(tab)?.SetPattern(col, row, holder);
+  }
+  /** Original document.cxx cursor delta applies to exactly one sheet cell. @param col - Column. @param row - Row. @param tab - Sheet. @param pattern - Borrowed delta. @returns Nothing. */
+  ApplyPattern(col: number, row: number, tab: number, pattern: ScPatternAttr): void {
+    this.FetchTable(tab)?.ApplyPattern(col, row, pattern);
+  }
   /** Applies an actual source pattern delta on a single sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Pattern delta. @returns Whether changed. */
   ApplyPatternAreaTab(
     startCol: number,
@@ -447,16 +456,17 @@ export class ScDocument {
       this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false
     );
   }
-  /** Native selection-pattern application over actual mark spans;attribute-only range decomposition replaces the unported physical pool-cache search. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Whether stored attributes changed. */
+  /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
     let set = false;
     for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
       set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
     if (!set) return false;
     let changed = false;
-    for (const tab of marks.GetSelectedTabs()) {
-      if (tab >= this.GetTableCount()) break;
-      for (const range of marks.GetMarkedRangesForTab(tab))
+    if (marks.IsMarked() && !marks.IsMultiMarked()) {
+      const range = marks.GetMarkArea();
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
         changed =
           this.ApplyPatternAreaTab(
             range.aStart.Col(),
@@ -466,6 +476,17 @@ export class ScDocument {
             tab,
             delta,
           ) || changed;
+      }
+    } else {
+      const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
+      try {
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
+        }
+      } finally {
+        cache.Dispose();
+      }
     }
     return changed;
   }
