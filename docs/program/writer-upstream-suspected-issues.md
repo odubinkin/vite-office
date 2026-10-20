@@ -553,6 +553,27 @@ sanitizer reproduction remain unverified. Decision: preserve the call to
 single-byte array through ordinary GC references; this is a stack lifetime
 difference, not a claim to reproduce or repair undefined native memory.
 
+## WRITER-022: XCS info descriptions share a buffer across ancestor nodes
+
+Status: original control flow and initialized portable schema example verified;
+complete compiled native configuration-service consumers remain unverified.
+`XcsParser::characters` in `configmgr/source/xcsparser.cxx` appends all info
+text to one `description_`. `endElement` drains that buffer only when closing
+an ordinary or localized property, not when closing component/group info.
+Ignored `desc` tags do not discard their characters while info mode is active.
+
+Example: schema info `schema`, group info `group` and first property info
+` property  one ` produce first property description
+`schemagroup property one`. A following property's info is independent because
+the previous property drained the buffer. Native trim only removes edge
+whitespace and repeated ASCII double spaces are collapsed; an interior newline
+remains. Test `retains shared description accumulation and ignored-tag character
+flow` uses real Parser/ParseManager/XcsParser/Node owners and preserves this.
+
+Decision: retain shared accumulation and the exact clearing/normalization order.
+Do not reset descriptions on component/group or property begin. Intended schema
+metadata inheritance, compiled behavior and UI consumer impact remain unverified.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

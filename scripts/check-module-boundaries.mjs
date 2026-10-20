@@ -207,6 +207,18 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Original Parser, ParseManager, xmldata and XcsParser declare/use these XML event/span contracts.
+  ["configmgr/source/parser.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
+  [
+    "configmgr/source/parsemanager.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+  ["configmgr/source/xmldata.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
+  [
+    "configmgr/source/xcsparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+
   // Original valueparser.hxx/cxx directly owns XmlReader, Span and Pad contracts.
   [
     "configmgr/source/valueparser.ts",

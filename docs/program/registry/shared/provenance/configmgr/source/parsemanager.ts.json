@@ -5,19 +5,24 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/configmgr/source/parsemanager.ts",
     "status": "mapped",
-    "upstreamPath": "configmgr/source/parsemanager.hxx",
+    "upstreamPath": "configmgr/source/parsemanager.cxx",
     "localSymbols": [
       "NAMESPACE_OOR",
       "NAMESPACE_XS",
-      "NAMESPACE_XSI"
+      "NAMESPACE_XSI",
+      "ParseManager",
+      "parse"
     ],
     "upstreamSymbols": [
       "NAMESPACE_OOR",
       "NAMESPACE_XS",
-      "NAMESPACE_XSI"
+      "NAMESPACE_XSI",
+      "ParseManager",
+      "parse"
     ],
     "preservedResponsibilities": [
-      "Original namespace enum identities 1/2/3 only, consumed by actual ValueParser. No ParseManager parser orchestration/provider or default service state is invented."
+      "Original namespace enum identities 1/2/3 only, consumed by actual ValueParser. No ParseManager parser orchestration/provider or default service state is invented.",
+      "9BAAAC extends the earlier namespace-only boundary to actual ParseManager driver ownership, registration and Begin/End/Text/Done dispatch, retaining pending begin state on false or throwing start callbacks and forwarding caller dependencies unchanged. Native synchronous URL mapping uses actual XmlReader existing explicit loaded-byte host boundary; OS mapping/timer/logging and reference-count lifetimes remain unverified. No service provider or parser factory is invented."
     ],
     "omittedResponsibilities": [
       "Complete compiled native library/service, ABI/lifetime/logging and application/UI parity remain unverified."
@@ -31,12 +36,20 @@
         {
           "path": "apps/office/src/configmgr/source/valueparser.test.ts",
           "marker": "retains original unicode scalar whitelist"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/parsemanager.test.ts",
+          "marker": "replays the pending begin on false"
         }
       ],
       "upstream": [
         {
           "path": "configmgr/source/parsemanager.hxx",
           "marker": "NAMESPACE_OOR"
+        },
+        {
+          "path": "configmgr/source/parsemanager.cxx",
+          "marker": "ParseManager::parse"
         }
       ]
     }

@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/xcsparser.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/xcsparser.ts#XcsParser",
+        "apps/office/src/configmgr/source/xcsparser.test.ts#parses the unchanged complete pinned Common.xcs"
+      ],
+      "justification": "Complete original logical XCS event/attribute/template/group/set/property/reference and conservative merge operation family over actual Data/Node/ValueParser/Parser/XMLReader/Any/string owners. Repeated attribute/fallthrough/local UTF16 syntax is erased without another parser/state object. Preserve insertion/error timing, ignored-tag character flow, shared description buffer and layer/finalized/type gates. Unchanged Common.xcs is bundled at matching officecfg path (SHA256 68638aecc184c70e0262905a8c3b2a8e369ed26b28d83f3bd381a3f68a6cb630, original MPL/Apache notices retained). Schema data alone does not enable recovery or alter browser persistence deviations. Native OS/ABI/refcount/logging and full config services/default integration/UI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XcsParser",
+        "merge",
+        "getTextMode",
+        "startElement",
+        "endElement",
+        "characters",
+        "handleComponentSchema",
+        "handleNodeRef",
+        "handleProp",
+        "handlePropValue",
+        "handleGroup",
+        "handleSet",
+        "handleSetItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/xcsparser.cxx",
+      "upstreamSymbols": [
+        "XcsParser",
+        "merge",
+        "getTextMode",
+        "startElement",
+        "endElement",
+        "characters",
+        "handleComponentSchema",
+        "handleNodeRef",
+        "handleProp",
+        "handlePropValue",
+        "handleGroup",
+        "handleSet",
+        "handleSetItem"
+      ]
+    }
+  }
+}

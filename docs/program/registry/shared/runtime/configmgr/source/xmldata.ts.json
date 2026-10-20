@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/xmldata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/xmldata.ts#parseType",
+        "apps/office/src/configmgr/source/parsemanager.test.ts#retains actual namespace QName grammar"
+      ],
+      "justification": "Original registered-namespace QName whitelist, strict schema true/false and template-reference presence/default/value-copy rules. Actual XmlReader, Data/OUString and RuntimeException used; no type/default provider.",
+      "knownViolations": [],
+      "localSymbols": [
+        "parseType",
+        "parseBoolean",
+        "parseTemplateReference"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/xmldata.cxx",
+      "upstreamSymbols": [
+        "parseType",
+        "parseBoolean",
+        "parseTemplateReference"
+      ]
+    }
+  }
+}

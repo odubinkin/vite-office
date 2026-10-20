@@ -42,3 +42,19 @@ it("admits only the original SAL byte integral named import", /** Original witne
     ),
   ).toBe(false);
 });
+
+it("admits only original schema driver and lexical XML imports", /** Neighbor and browser modules retain the original restrictions. @returns Nothing. */ () => {
+  for (const owner of ["parser", "parsemanager", "xmldata", "xcsparser"])
+    for (const target of ["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]) {
+      expect(isOriginalCharacterValueImport("configmgr/source/" + owner + ".ts", target)).toBe(
+        true,
+      );
+      expect(
+        isOriginalCharacterValueImport("configmgr/source/" + owner + "-neighbor.ts", target),
+      ).toBe(false);
+      expect(isOriginalCharacterValueImport("configmgr/browser/" + owner + ".ts", target)).toBe(
+        false,
+      );
+    }
+  expect(isForbiddenModuleEdge("configmgr", "xmlreader")).toBe(true);
+});

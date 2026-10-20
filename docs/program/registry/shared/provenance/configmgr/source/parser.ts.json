@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/configmgr/source/parser.ts",
+    "status": "mapped",
+    "upstreamPath": "configmgr/source/parser.hxx",
+    "localSymbols": [
+      "Parser",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters"
+    ],
+    "upstreamSymbols": [
+      "Parser",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters"
+    ],
+    "preservedResponsibilities": [
+      "Original abstract Parser event contract and unchanged borrowed dependency forwarding; native SimpleReferenceObject lifetime is erased to ordinary references. No parser factory, service provider or dependency-default substitution."
+    ],
+    "omittedResponsibilities": [
+      "Compiled complete native service/ABI/OS/lifetime and whole application/UI parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/configmgr/source/parser.ts",
+          "marker": "Parser"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/parsemanager.test.ts",
+          "marker": "replays the pending begin on false"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "configmgr/source/parser.hxx",
+          "marker": "Parser"
+        }
+      ]
+    }
+  }
+}
