@@ -13,6 +13,14 @@ function u(value: string): OUString {
   );
   return new OUString(units, units.length);
 }
+it("retains the nonempty external descriptor precondition without mutating node metadata", /** Empty descriptors fail before setting the original layer. @returns Nothing. */ () => {
+  const node = new PropertyNode(1, Type.TYPE_BOOLEAN, false, new Any(true), false);
+  expect(
+    /** Calls the native assertion boundary. @returns Nothing. */ () =>
+      node.setExternal(2, new OUString()),
+  ).toThrow("assert(!descriptor.isEmpty())");
+  expect(node.getLayer()).toBe(1);
+});
 /** Test-only receiver that must never be called for local values. */
 const none: PropertyNodeComponents = {
   getExternalValue: /** Flags an unintended lookup. @returns Never. */ () => {

@@ -13,6 +13,11 @@ function string(text: string): OUString {
   );
   return new OUString(units, units.length);
 }
+it("ranks a single-character suffix of a short key after both substring passes", /** Original fallback accumulates two failed length-two ranks before the suffix hit. @returns Nothing. */ () => {
+  const score: [number, number] = [-1, -1];
+  expect(TextSearch.SimilaritySearch(string("a"), string("ba"), score)).toBe(true);
+  expect(score).toEqual([7, 1]);
+});
 /** Borrows the logical UTF16 view. @param owner - Live string. @returns Logical units. */
 function view(owner: OUString): Uint16Array {
   return owner.getStr().subarray(0, owner.getLength());

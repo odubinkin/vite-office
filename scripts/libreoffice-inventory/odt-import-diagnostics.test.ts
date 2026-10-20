@@ -120,7 +120,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     ).toBe(false);
     const imported = await readOdtDocument(bytes, { title: "Synthetic markers" });
     const marks = imported.document.GetIDocumentMarkAccess();
-    expect(marks.FindMark("test-mark")?.GetPosition().GetContentIndex()).toBe(12);
+    expect(marks.FindMark("test-mark")?.GetMarkPos().GetContentIndex()).toBe(12);
     expect(marks.GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(12);
     const unknownAttribute = content.replace(
       "</text:p>",

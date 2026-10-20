@@ -157,6 +157,14 @@ it.each([
 );
 it("retains strict schema boolean/type and template-reference fallback contracts", /** Value parser's numeric boolean grammar must not leak into schema metadata. @returns Nothing. */ () => {
   const reader = new XmlReader(u("types"), new TextEncoder().encode("<r/>"));
+  expect(
+    /** Unbound spans violate the native lexical precondition. @returns Type. */ () =>
+      parseType(reader, new Span()),
+  ).toThrow("assert(text.is())");
+  expect(
+    /** Schema boolean has the same present-span precondition. @returns Boolean. */ () =>
+      parseBoolean(new Span()),
+  ).toThrow("assert(text.is())");
   reader.nextItem(Text.NONE, new Span(), [0]);
   for (const lexical of ["string", "z:string", "z:unknown", ":string", "x:string:extra"]) {
     expect(

@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { SwCursor } from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
-import { FindTextImpl } from "./findtxt";
+import { FindText, FindTextImpl } from "./findtxt";
 import { SwPaM, SwPosition } from "./pam";
 import { SwDoc } from "../doc/doc";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -29,6 +29,53 @@ function range(first: SwTextNode, low: number, last = first, high = first.Len())
     end.Dispose();
   }
 }
+it("retains empty model searches, default find mode and structural other-area boundaries", /** Uses actual document sections and public cursor boundary selectors. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode,
+    position = new SwPosition(node, 0),
+    cursor = new SwCursor(position),
+    region = range(node, 0),
+    options = new SearchOptions2();
+  position.Dispose();
+  try {
+    expect(FindTextImpl(cursor, options, new TextSearch(options), false, region)).toBe(false);
+    node.SetText("needle");
+    options.searchString.assign(string("needle"));
+    cursor.FillFindPos(SwDocPositions.OtherStart, cursor.GetPoint());
+    expect(cursor.GetPoint().GetNode()).toBe(node);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+    cursor.FillFindPos(SwDocPositions.OtherEnd, cursor.GetPoint());
+    expect(cursor.GetPoint().GetNode()).toBe(doc.nodes.GetEndOfContent().StartOfSectionNode());
+    expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+    cursor.GetPoint().Assign(node, 0);
+    expect(
+      FindText(
+        cursor,
+        options,
+        SwDocPositions.Start,
+        SwDocPositions.End,
+        [false],
+        FindRanges.InBody,
+      ),
+    ).toBe(1);
+    expect(cursor.Start().GetContentIndex()).toBe(0);
+    expect(cursor.End().GetContentIndex()).toBe(6);
+    cursor.DeleteMark();
+    expect(
+      FindText(
+        cursor,
+        options,
+        SwDocPositions.Start,
+        SwDocPositions.End,
+        [false],
+        FindRanges.InOther,
+      ),
+    ).toBe(0);
+  } finally {
+    region.Dispose();
+    cursor.Dispose();
+  }
+});
 /** Searches one initialized model string and returns directional source endpoints. @param text - Node text. @param key - Pattern. @param backward - Direction. @returns Point and mark. */
 function search(text: string, key: string, backward: boolean): readonly number[] | undefined {
   const doc = new SwDoc(),

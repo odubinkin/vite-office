@@ -574,6 +574,26 @@ Decision: retain shared accumulation and the exact clearing/normalization order.
 Do not reset descriptions on component/group or property begin. Intended schema
 metadata inheritance, compiled behavior and UI consumer impact remain unverified.
 
+## WRITER-023: Unknown nested info markup ends description mode early
+
+Status: source control flow and initialized portable XML example verified;
+compiled native configuration-service consumers remain unverified.
+Pinned `configmgr/source/xcsparser.cxx`, `XcsParser::startElement`, accepts
+arbitrary elements while `bIsParsingInfo_` is true without recording their
+depth. `endElement` clears that flag on the first close event. The recognized
+ignored tags, including `desc`, instead use `ignoring_` and retain info mode.
+
+Example: `<info><extra>root</extra></info><component/>` clears info mode when
+closing `extra`; closing `info` then advances the component-schema state to
+component-done. The following `component` is rejected as a bad member.
+The parser regression suite preserves this result through real XMLReader,
+ParseManager and XcsParser owners. Plain info text and recognized `desc`
+markup retain their original behavior.
+
+Decision: retain the original depth-free info flag and close ordering. Do not
+introduce nested-info depth tracking. Intended acceptance of unknown nested
+markup and the effect on extension schemas remain unverified.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

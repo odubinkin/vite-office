@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T21:24:47.046Z"
+doc_updated_at: "2026-10-20T22:01:03.568Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -56,8 +56,8 @@ sections:
     Scope: complete tooling collection, including exact XML import/graph data.
 
     Command: npm test
-    Result: running, not yet verified; tool session 41183, live Vitest coverage PID 73246 at last observation.
-    Evidence: output/playwright/writer-xcs-schema/full-npm-test.log and active coverage/all/.tmp output.
+    Result: fail at strict coverage gate; all 1099 files / 17727 scenarios passed. Statements99.89%, branches99.76%, functions99.98%, lines99.92%.
+    Evidence: output/playwright/writer-xcs-schema/full-npm-test.log, coverage-gaps.json and original apps/office/coverage/all reports.
     Scope: complete application coverage followed by inventory coverage under unchanged strict100 thresholds.
 
     Command: npm run test:e2e
@@ -66,6 +66,28 @@ sections:
     Scope: complete browser collection; a related import-syntax repair and a complete browser run remain required. No skip or threshold change approved.
 
     Static source/dependency/tree/docs/file-size/provenance and policy checks pass. Inventory initially required the original exported merge operation record; source-backed data was added and writer/shared inventories pass. Build/lint initially found two unused test imports, now removed and successful browser-command build/scoped lint confirms repair. Formatting and raw schema hash pass. Full tests, final static smoke, final review and clean closure are pending; task must remain DOING.
+
+    Command: npx playwright test --config apps/office/playwright.config.ts --list
+    Result: pass after five JSON import-attribute repairs; 432 tests /196 files.
+    Evidence: output/playwright/writer-xcs-schema/e2e-collection-repaired.log.
+    Scope: complete browser collection; full execution remains live in session80095 (full-e2e-repaired.log).
+
+    Command: npm run test:inventory:coverage
+    Result: fail, eight tests: two obsolete bookmark API consumers and six timeouts.
+    Evidence: output/playwright/writer-xcs-schema/full-inventory-coverage.log.
+    Scope: complete inventory collection; obsolete GetPosition calls replaced with current native GetMarkPos. Focused two-file replay passes17 tests (inventory-bookmark-regression.log); full replay is required after reducing competing browser load. No timeout settings changed.
+
+    Related additional source-contract regressions: XCS30, search62, configuration/SAL/helpers133, Writer find10 and bookmark history15 scenarios pass in their focused logs. Formatting-only undo suite passes17 scenarios in format-replace-regression.log. Scoped ESLint, Prettier, policy routing and diff checks pass. Native info-depth observation WRITER-023 is preserved, not repaired. Remaining strict coverage gaps, complete browser verdict, canonical static run, final review and closure remain outstanding.
+
+    Command: scoped configmgr Istanbul replay (exact command in config-coverage-regression.log context; include five configmgr runtime modules, reportsDirectory coverage/xcs-regression).
+    Result: all130 tests /11 files pass; strict coverage still fails at98.62% lines and97.14% branches.
+    Evidence: output/playwright/writer-xcs-schema/config-coverage-regression.log and apps/office/coverage/xcs-regression.
+    Scope: diagnostic replay after additional native XML/metadata histories; does not replace complete coverage and does not weaken thresholds. Remaining gaps include debug invariants and private compiler-binding fallbacks; no injected private state or mocked core peers introduced.
+
+    Command: npm run typecheck; npm run check:dependencies; npm run check:docs; scoped Prettier/ESLint; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass.
+    Evidence: regression-typecheck.log, regression-dependencies.log, regression-docs.log, regression-lint.log, writer-regression-lint.log.
+    Scope: both tool/application types, all authored JSDoc and runtime edges, changed style and routing. This checkpoint remains unverified overall pending strict full gates and browser/static results.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -79,6 +101,8 @@ sections:
     - Observation: Full npm test is still live under session 41183 / PID 73246; temporary coverage artifacts advanced from 400 to 608 while workers continue running. Production sources remain frozen during this run.
       Impact: No full-suite verdict is available yet, so this task remains DOING; no rerun or coverage-gate change is justified.
       Resolution: Prepared and executed an ignored native Node JSON import probe for the five affected existing table imports. Explicit type:json loading succeeds; prospective repairs preserve all non-import source lines and source line counts, and imported objects exactly equal the unchanged JSON data. Evidence: output/playwright/writer-xcs-schema/json-import-repair-proof.json. An optional instrumenter-level probe was unavailable because that package is not exposed; no executable coverage-map identity claim is made. Apply the syntax repairs after the live full run terminates, then repeat browser verification.
+
+    Full cadence terminal result: npm test completed application execution with all 1099 test files and 17727 tests passing in 2367.38 seconds. The strict coverage gate failed at statements 99.89% (55245/55302), branches 99.76% (35126/35209), functions 99.98% (10422/10424), lines 99.92% (50180/50219). Inventory coverage was not reached in the npm chain and is now running separately. Raw evidence: full-npm-test.log, coverage-gaps.json and original coverage/all JSON report. No threshold/exclusion changes. Related native contract regression tests remain required; impossible internal state fabrication is not acceptable. Five existing JSON runtime import declarations now have the Node-required type:json attributes; table data and function bodies unchanged. Playwright collection passes with 432 tests in196 files; full browser execution is running.
 id_source: "generated"
 ---
 ## Summary
@@ -110,8 +134,8 @@ Evidence: output/playwright/writer-xcs-schema/full-tooling.log.
 Scope: complete tooling collection, including exact XML import/graph data.
 
 Command: npm test
-Result: running, not yet verified; tool session 41183, live Vitest coverage PID 73246 at last observation.
-Evidence: output/playwright/writer-xcs-schema/full-npm-test.log and active coverage/all/.tmp output.
+Result: fail at strict coverage gate; all 1099 files / 17727 scenarios passed. Statements99.89%, branches99.76%, functions99.98%, lines99.92%.
+Evidence: output/playwright/writer-xcs-schema/full-npm-test.log, coverage-gaps.json and original apps/office/coverage/all reports.
 Scope: complete application coverage followed by inventory coverage under unchanged strict100 thresholds.
 
 Command: npm run test:e2e
@@ -120,6 +144,28 @@ Evidence: output/playwright/writer-xcs-schema/full-e2e.log.
 Scope: complete browser collection; a related import-syntax repair and a complete browser run remain required. No skip or threshold change approved.
 
 Static source/dependency/tree/docs/file-size/provenance and policy checks pass. Inventory initially required the original exported merge operation record; source-backed data was added and writer/shared inventories pass. Build/lint initially found two unused test imports, now removed and successful browser-command build/scoped lint confirms repair. Formatting and raw schema hash pass. Full tests, final static smoke, final review and clean closure are pending; task must remain DOING.
+
+Command: npx playwright test --config apps/office/playwright.config.ts --list
+Result: pass after five JSON import-attribute repairs; 432 tests /196 files.
+Evidence: output/playwright/writer-xcs-schema/e2e-collection-repaired.log.
+Scope: complete browser collection; full execution remains live in session80095 (full-e2e-repaired.log).
+
+Command: npm run test:inventory:coverage
+Result: fail, eight tests: two obsolete bookmark API consumers and six timeouts.
+Evidence: output/playwright/writer-xcs-schema/full-inventory-coverage.log.
+Scope: complete inventory collection; obsolete GetPosition calls replaced with current native GetMarkPos. Focused two-file replay passes17 tests (inventory-bookmark-regression.log); full replay is required after reducing competing browser load. No timeout settings changed.
+
+Related additional source-contract regressions: XCS30, search62, configuration/SAL/helpers133, Writer find10 and bookmark history15 scenarios pass in their focused logs. Formatting-only undo suite passes17 scenarios in format-replace-regression.log. Scoped ESLint, Prettier, policy routing and diff checks pass. Native info-depth observation WRITER-023 is preserved, not repaired. Remaining strict coverage gaps, complete browser verdict, canonical static run, final review and closure remain outstanding.
+
+Command: scoped configmgr Istanbul replay (exact command in config-coverage-regression.log context; include five configmgr runtime modules, reportsDirectory coverage/xcs-regression).
+Result: all130 tests /11 files pass; strict coverage still fails at98.62% lines and97.14% branches.
+Evidence: output/playwright/writer-xcs-schema/config-coverage-regression.log and apps/office/coverage/xcs-regression.
+Scope: diagnostic replay after additional native XML/metadata histories; does not replace complete coverage and does not weaken thresholds. Remaining gaps include debug invariants and private compiler-binding fallbacks; no injected private state or mocked core peers introduced.
+
+Command: npm run typecheck; npm run check:dependencies; npm run check:docs; scoped Prettier/ESLint; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass.
+Evidence: regression-typecheck.log, regression-dependencies.log, regression-docs.log, regression-lint.log, writer-regression-lint.log.
+Scope: both tool/application types, all authored JSDoc and runtime edges, changed style and routing. This checkpoint remains unverified overall pending strict full gates and browser/static results.
 
 ## Rollback Plan
 
@@ -138,3 +184,5 @@ Full cadence is in progress, not verified: npm test remains live under tool sess
 - Observation: Full npm test is still live under session 41183 / PID 73246; temporary coverage artifacts advanced from 400 to 608 while workers continue running. Production sources remain frozen during this run.
   Impact: No full-suite verdict is available yet, so this task remains DOING; no rerun or coverage-gate change is justified.
   Resolution: Prepared and executed an ignored native Node JSON import probe for the five affected existing table imports. Explicit type:json loading succeeds; prospective repairs preserve all non-import source lines and source line counts, and imported objects exactly equal the unchanged JSON data. Evidence: output/playwright/writer-xcs-schema/json-import-repair-proof.json. An optional instrumenter-level probe was unavailable because that package is not exposed; no executable coverage-map identity claim is made. Apply the syntax repairs after the live full run terminates, then repeat browser verification.
+
+Full cadence terminal result: npm test completed application execution with all 1099 test files and 17727 tests passing in 2367.38 seconds. The strict coverage gate failed at statements 99.89% (55245/55302), branches 99.76% (35126/35209), functions 99.98% (10422/10424), lines 99.92% (50180/50219). Inventory coverage was not reached in the npm chain and is now running separately. Raw evidence: full-npm-test.log, coverage-gaps.json and original coverage/all JSON report. No threshold/exclusion changes. Related native contract regression tests remain required; impossible internal state fabrication is not acceptable. Five existing JSON runtime import declarations now have the Node-required type:json attributes; table data and function bodies unchanged. Playwright collection passes with 432 tests in196 files; full browser execution is running.

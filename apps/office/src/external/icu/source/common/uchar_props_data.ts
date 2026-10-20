@@ -1,5 +1,5 @@
 /** @fileoverview Original frozen ICU78.3 Unicode17 property vectors and block trie; shared typed-array offsets retain native storage. */
-import data from "./uchar_props_data.json";
+import data from "./uchar_props_data.json" with { type: "json" };
 import type { UTrie2 } from "./utrie2.h";
 import type { UCPTrie } from "./unicode/ucptrie";
 export const propsVectorsTrie_index = new Uint16Array(data.propsVectorsTrie_index);

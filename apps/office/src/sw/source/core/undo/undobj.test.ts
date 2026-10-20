@@ -70,6 +70,28 @@ function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
 }
 
 describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance coverage. @returns Nothing. */, function defineWriterUndoTests(): void {
+  it("records same-text fragment formatting as one attribute action", /** Text and bookmark positions stay stable through formatting-only replacement history. @returns Nothing. */ () => {
+    const { docShell, document, shell } = createSession("abc"),
+      node = document.paragraphs[0] as SwTextNode;
+    document.GetIDocumentMarkAccess().MakeMark(node, 2, "inside");
+    try {
+      expect(
+        fixtureReplaceRange(shell, { paragraphId: "p-1", start: 0, end: 3 }, [run("abc", true)]),
+      ).toBe(true);
+      expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoAttr);
+      expect(projectWriterTextRuns(node)).toEqual([run("abc", true)]);
+      expect(shell.Undo()).toBe(true);
+      expect(projectWriterTextRuns(node)).toEqual([run("abc")]);
+      expect(shell.Redo()).toBe(true);
+      expect(projectWriterTextRuns(node)).toEqual([run("abc", true)]);
+      expect(
+        document.GetIDocumentMarkAccess().FindMark("inside")?.GetMarkPos().GetContentIndex(),
+      ).toBe(2);
+    } finally {
+      shell.Close();
+      docShell.Close();
+    }
+  });
   it("owns removed text and paragraphs in Writer history and releases them with discarded actions" /** Verifies native action-owned deletion text and undo-node replacement/join retention across stack disposal. @returns Nothing. */, function ownsUndoNodes(): void {
     const { docShell, document, shell } = createSession("abcd");
     const manager = docShell.GetUndoManager();

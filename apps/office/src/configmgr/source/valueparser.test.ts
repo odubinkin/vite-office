@@ -25,6 +25,25 @@ function s(value: string): Span {
   const bytes = new TextEncoder().encode(value);
   return new Span(bytes, bytes.length);
 }
+it("retains inactive callbacks, present lexical bytes and single-active-node preconditions", /** Original public callback ordering is checked without replacing library owners. @returns Nothing. */ () => {
+  const parser = new ValueParser(0),
+    node = new PropertyNode(0, Type.TYPE_STRING, true, new Any(), false);
+  parser.characters(s("inactive"));
+  expect(parser.endElement()).toBe(false);
+  expect(
+    /** A missing lexical buffer cannot bind a native scalar view. @returns Any. */ () =>
+      parseValue(new Uint8Array(), new Span(), Type.TYPE_STRING),
+  ).toThrow("assert(text.is())");
+  parser.type_ = Type.TYPE_STRING;
+  parser.start(node);
+  expect(
+    /** A second start cannot overwrite an active native target. @returns Nothing. */ () =>
+      parser.start(node),
+  ).toThrow("assert(node.is() && !node_.is())");
+  parser.characters(s("actual"));
+  expect(parser.endElement()).toBe(true);
+  expect(parser.getTextMode()).toBe(Text.NONE);
+});
 /** Reads exact Unicode. @param value - Native owner. @returns Unit text. */
 function text(value: OUString): string {
   let out = "";

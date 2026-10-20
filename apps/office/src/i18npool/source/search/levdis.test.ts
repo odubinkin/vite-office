@@ -9,6 +9,16 @@ function units(value: string | readonly number[]): Uint16Array {
   for (let i = 0; i < value.length; ++i) result[i] = value.charCodeAt(i);
   return result;
 }
+it("retains the pattern terminator precondition and asymmetric insertion/deletion weights", /** Exercises the native z-minimum middle-value branch with explicit weights. @returns Nothing. */ () => {
+  expect(
+    /** Unterminated storage cannot bind the native pointer. @returns Calculator. */ () =>
+      new WLevDistance(new Uint16Array([97]), 2, 3, 1, false),
+  ).toThrow("NUL-terminated");
+  const calculator = new WLevDistance(units("a"), 2, 3, 1, false);
+  expect(calculator.GetLimit()).toBe(6);
+  expect(calculator.WLD(units(""), 0)).toBe(2);
+  expect(calculator.WLD(units("aa"), 2)).toBe(6);
+});
 it.each(cases.settings)(
   "matches original compiled WLD $other/$shorter/$longer relaxed=$relaxed",
   /** Uses frozen results from the original isolated C++ kernel, not another port of its algorithm. @param setting - Original native result matrix. @returns Nothing. */ (

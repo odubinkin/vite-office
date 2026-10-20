@@ -43,12 +43,12 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
           .GetBookmarks()
           .filter(
             /** Selects this paragraph's marks. @param mark - Bookmark. @returns Match. */ (mark) =>
-              mark.GetPosition().GetNode() === paragraph,
+              mark.GetMarkPos().GetNode() === paragraph,
           )
           .map(
             /** Projects a mark. @param mark - Bookmark. @returns Name and offset. */ (mark) => ({
               name: mark.GetName(),
-              offset: mark.GetPosition().GetContentIndex(),
+              offset: mark.GetMarkPos().GetContentIndex(),
             }),
           ),
         list: projectWriterParagraphList(paragraph),
@@ -138,7 +138,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
             .map(
               /** Projects a mark. @param mark - Bookmark. @returns Name and offset. */ (mark) => [
                 mark.GetName(),
-                mark.GetPosition().GetContentIndex(),
+                mark.GetMarkPos().GetContentIndex(),
               ],
             ),
         ).toEqual([[fixture.name, 0]]);

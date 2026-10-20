@@ -181,11 +181,34 @@ it("uses the Replace bookmark exception inside a node and ordinary insertion at 
 /** Exposes the native protected content-index operation through a test-only owner. */
 class SaveContent extends SwUndoSaveContent {
   /** Runs original flags and exposes its actual history. @param selection - Native range. @param flags - Native flags. @returns Actual history or absent. */
-  public collect(selection: SwPaM, flags: DelContentType): SwHistory | undefined {
+  public collect(selection: SwPaM, flags?: DelContentType): SwHistory | undefined {
     this.DelContentIndex(selection.GetMark(), selection.GetPoint(), flags);
     return this.m_pHistory;
   }
 }
+it("uses default content-index flags and preserves undo state when an unsaved bookmark disappears", /** Real manager deletion cannot supply an omitted historical coordinate. @returns Nothing. */ () => {
+  const f = fixture(),
+    access = f.doc.GetIDocumentMarkAccess(),
+    mark = access.MakeMark(f.node, 2, "saved"),
+    record = new SwHistoryBookmark(mark, false, false),
+    selected = range(f.node, 1, 4);
+  try {
+    const history = new SaveContent().collect(selected);
+    expect(history?.Count()).toBe(1);
+    expect(access.FindMark("saved")).toBeUndefined();
+    expect(
+      /** No saved coordinate and no surviving mark is an unsupported restoration. @returns Nothing. */ () =>
+        record.SetInDoc(f.doc, false),
+    ).toThrow("requires an existing mark");
+    expect(f.doc.GetUndoManager().DoesUndo()).toBe(true);
+    expect(history?.Rollback(f.doc)).toBe(true);
+    expect(access.FindMark("saved")?.GetMarkPos().GetContentIndex()).toBe(2);
+  } finally {
+    selected.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
 it("honors Bkm and CheckNoCntnt node-only source predicates", /** Checks original flag identities and ranges against the actual manager. @returns Nothing. */ () => {
   const f = fixture("first"),
     last = f.doc.nodes.MakeTextNode("last"),

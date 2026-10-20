@@ -204,6 +204,13 @@ it.each([
   '<component><prop oor:name="P" oor:type="xs:string"><value oor:separator=""/></prop></component>',
   '<component><prop oor:name="P" oor:type="xs:boolean" oor:localized="1"/></component>',
   "<component><bad/></component>",
+  "<info><extra>root</extra></info><component/>",
+  "<component><xs:prop/></component>",
+  '<component><prop oor:name="P" oor:type="xs:string"><bad/></prop></component>',
+  '<component><set oor:name="S" oor:node-type="T"><bad/></set></component>',
+  "<templates><bad/></templates><component/>",
+  '<templates><group oor:name="T"><bad/></group></templates><component/>',
+  "<info/><bad/>",
   '<component><prop oor:name="P" oor:type="xs:boolean"/><prop oor:name="P" oor:type="xs:boolean"/></component>',
 ])(
   "retains source schema rejection %j",
@@ -240,6 +247,47 @@ it("retains missing root metadata and layered template visibility errors", /** R
       ),
   ).toThrow();
   expect(partial.getTemplate(0, u("test.Schema:T"))).toBeInstanceOf(GroupNode);
+});
+it("ignores unrelated attributes while resolving explicit components", /** Uses real namespace aliases and cross-component template lookup. @returns Nothing. */ () => {
+  const data = parse(schema('<templates><group oor:name="T"/></templates><component/>'));
+  parse(
+    schema(
+      '<info>root</info><templates><info>templates</info></templates><component><node-ref xs:ignored="1" oor:extra="1" oor:name="R" oor:component="test.Schema" oor:node-type="T"/><group xs:ignored="1" oor:extra="1" oor:name="G"><prop xs:ignored="1" oor:extra="1" oor:name="P" oor:type="xs:string"><value xs:ignored="1" oor:extra="1">text</value></prop></group><set xs:ignored="1" oor:extra="1" oor:name="S" oor:component="test.Schema" oor:node-type="T"><item xs:ignored="1" oor:extra="1" oor:component="test.Schema" oor:node-type="T"/></set></component>',
+      'oor:package="other" oor:name="Schema"',
+    ),
+    0,
+    data,
+  );
+  const component = data.getComponents().findNode(0, u("other.Schema")) as GroupNode;
+  expect(component.getMember(u("R"))).toBeInstanceOf(GroupNode);
+  expect((component.getMember(u("S")) as SetNode).isValidTemplate(u("test.Schema:T"))).toBe(true);
+  expect(
+    text(
+      (
+        (component.getMember(u("G")) as GroupNode).getMember(u("P")) as PropertyNode
+      ).getDescription(),
+    ),
+  ).toBe("roottemplates");
+});
+it("rejects repeated root metadata even when distinct prefixes resolve to the same namespace", /** Reader namespace aliases exercise original duplicate-attribute validation. @returns Nothing. */ () => {
+  for (const attribute of ["package", "name"]) {
+    throwsMessage(
+      /** Parses aliased duplicate root metadata. @returns Data. */ () =>
+        parse(
+          schema(
+            "",
+            'xmlns:o="http://openoffice.org/2001/registry" oor:package="test" oor:name="Schema" o:' +
+              attribute +
+              '="duplicate"',
+          ),
+        ),
+      "multiple component-schema " + attribute,
+    );
+  }
+  throwsMessage(
+    /** Wrong root cannot start a schema parser. @returns Data. */ () => parse("<wrong/>"),
+    "bad member",
+  );
 });
 it("merges only new ordinary properties into an existing extensible group while retaining previous defaults", /** Native conservative merge ignores new groups/localized properties and existing scalar values. @returns Nothing. */ () => {
   const data = parse(

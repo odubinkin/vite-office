@@ -1,5 +1,5 @@
 /** @fileoverview Complete original widthfolding_data.h rows, preserving duplicates and initialized units. */
-import data from "./widthfolding_data.json";
+import data from "./widthfolding_data.json" with { type: "json" };
 import type { UnicodePairWithFlag } from "../../inc/oneToOneMapping";
 export const FULL2HALF_NORMAL = data.constants.FULL2HALF_NORMAL;
 export const FULL2HALF_ASC_FUNCTION = data.constants.FULL2HALF_ASC_FUNCTION;

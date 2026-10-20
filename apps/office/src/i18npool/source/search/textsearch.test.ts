@@ -40,6 +40,14 @@ function both(source: string, key: string, fold = false, words = false): readonl
   );
 }
 
+it("normalizes mixed ASCII and typographic punctuation in the prepared pattern", /** Native pattern preparation also maps unchanged units inside a mixed key. @returns Nothing. */ () => {
+  expect(both("''x\"\"", "'‘x“\"")).toEqual([
+    [1, [0], [5]],
+    [1, [5], [0]],
+  ]);
+  expect(getCharacterType(string("ʰ"), 0)).toBe(getCharacterType(string("中"), 0));
+});
+
 describe("native absolute TextSearch", /** Registers initialized native source examples. @returns Nothing. */ () => {
   it.each([
     [
