@@ -4,7 +4,7 @@ title: "Restore native Calc text-size context and shared browser line measuremen
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T18:41:56.296Z"
+  updated_by: "CODER"
+  note: "Pass:502 Calc and35 related tests,9 Chromium/Worker cases,14static stages and build. Raw Calc/shared/changed-Writer S/B/F/L100 verified by portable committed archive audit;unchanged shared52 source hashes checked. Scoped native context/script/cache and exact shared measurement extraction only;automatic wrapped-height remains required and unported. Code03f6df1eed8b;commands,reports,screenshots and source/native hashes in task evidence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T18:41:57.289Z"
+  updated_by: "EVALUATOR"
+  note: "Approved task53 native text-size/script ownership and unchanged shared Writer measurement extraction satisfy their bounded contract;broader automatic wrapped-height/UI goal remains active."
+  evaluated_sha: "03f6df1eed8bb7f4f769f10cb8b944b9e02587cd"
+  blueprint_digest: "9f0cb3325ad88201652ba47a814fb3735ffbd2da85d4dd0a601edc73c77c1a51"
+  evidence_refs:
+    - ".agentplane/tasks/202610201812-JT4A81/README.md"
+    - ".agentplane/tasks/202610201812-JT4A81/quality/20261020-184157289-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201812-JT4A81/quality/20261020-184157289-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201812-JT4A81/quality/20261020-184157289-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201812-JT4A81/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201812-JT4A81/evidence/proof.json"
+    - ".agentplane/tasks/202610201812-JT4A81/evidence/commands.json"
+    - ".agentplane/tasks/202610201812-JT4A81/evidence/audit-archives.mjs"
+    - ".agentplane/tasks/202610201812-JT4A81/evidence/screenshots.json"
+    - "03f6df1eed8b"
+  findings:
+    - "Compared native six-input RowHeightContext,documen6 lazy per-document service ownership and original cached getter/setter storage preconditions to the committed implementation. Core imports only XBreakIterator;real existing BreakIteratorImpl is supplied at the browser host factory boundary. No dependency allowlist or global service manager added."
+    - "Portable archive audit verifies502 Calc tests,35 related tests,9 unique Chromium/Worker cases with no skips/retries,and exact raw100 Calc/shared/changed-Writer coverage. Stock Calc configuration includes TSX and locale integration. Four screenshots inspected;14static checks and fresh build pass. Initial failures and interrupted non-accepted run remain recorded."
+    - "Writer DOM Range implementation moved unchanged to shared VCL while Writer wrappers retain node offsets and geometry. UNKNOWN and absent storage semantics remain source-shaped;CALC238 documents the setter allocation precondition. Scope stays under25 source/test files plus declared records and evidence."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore native row text-size/script ownership and share the actual Writer browser line measurer as required groundwork for canonical automatic wrapped row layout;no substitute metrics engine."
+  -
+    type: "verify"
+    at: "2026-10-20T18:41:56.296Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass:502 Calc and35 related tests,9 Chromium/Worker cases,14static stages and build. Raw Calc/shared/changed-Writer S/B/F/L100 verified by portable committed archive audit;unchanged shared52 source hashes checked. Scoped native context/script/cache and exact shared measurement extraction only;automatic wrapped-height remains required and unported. Code03f6df1eed8b;commands,reports,screenshots and source/native hashes in task evidence."
 doc_version: 3
-doc_updated_at: "2026-10-20T18:41:31.992Z"
+doc_updated_at: "2026-10-20T18:41:56.395Z"
 doc_updated_by: "CODER"
 description: "Continue the required automatic wrapped-height path without a scrollHeight substitute. Restore the full original RowHeightContext scales/zoom/device-reference contract, actual document-owned script service and native cached script metadata boundaries, route existing UI script classification through those owners, and move the existing Writer DOM line measurement implementation into shared VCL for later Calc device use. Automatic wrapped layout still requires original GetNeededSize/EditEngine and remains an explicit active goal requirement."
 sections:
@@ -57,6 +85,39 @@ sections:
     Scope: complete Calc raw Istanbul coverage100 S10454/B6489/F1958/L9380. Changed shared VCL and Writer measurement raw coverage100 separately;complete shared100 is recomputed from hash-verified unchanged task52 owners plus fresh shared owner. Raw archives,original repair logs,SHA256 source/native snapshots and4 current inspected screenshots are committed.
 
     Full all-app suite: not due under the user cadence;repaired checkpoint51 retained,next checkpoint60. Automatic wrapped row-height remains unported and the broader goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T18:41:56.296Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass:502 Calc and35 related tests,9 Chromium/Worker cases,14static stages and build. Raw Calc/shared/changed-Writer S/B/F/L100 verified by portable committed archive audit;unchanged shared52 source hashes checked. Scoped native context/script/cache and exact shared measurement extraction only;automatic wrapped-height remains required and unported. Code03f6df1eed8b;commands,reports,screenshots and source/native hashes in task evidence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:41:31.992Z, excerpt_hash=sha256:b178d92ef62e3498c643809edef3d27e38c86e80cef557aca5f265906ff881fe
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201812-JT4A81/blueprint/resolved-snapshot.json
+    - old_digest: 9f0cb3325ad88201652ba47a814fb3735ffbd2da85d4dd0a601edc73c77c1a51
+    - current_digest: 9f0cb3325ad88201652ba47a814fb3735ffbd2da85d4dd0a601edc73c77c1a51
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201812-JT4A81
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201812-JT4A81
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit while preserving prior Wrap Text work and native reference/evidence;no history rewrite or branch changes."
   Findings: |-
     Observation: pinned RowHeightContext has six inputs;all current callers now retain original independent scales/zooms and a borrowed opaque device identity. ScScriptTypeData is a per-document owner. The original process-context creation read site is an explicit borrowed browser factory supplying the actual shared BreakIteratorImpl;Calc core imports only XBreakIterator. Empty-string laziness,empty-reference retries and native script loop are exercised with the genuine backend in jsdom,Chromium and a DOM-free Worker.
@@ -97,6 +158,39 @@ Evidence: 154 Calc files /502 tests;6 related files /35 tests;9 browser cases,0f
 Scope: complete Calc raw Istanbul coverage100 S10454/B6489/F1958/L9380. Changed shared VCL and Writer measurement raw coverage100 separately;complete shared100 is recomputed from hash-verified unchanged task52 owners plus fresh shared owner. Raw archives,original repair logs,SHA256 source/native snapshots and4 current inspected screenshots are committed.
 
 Full all-app suite: not due under the user cadence;repaired checkpoint51 retained,next checkpoint60. Automatic wrapped row-height remains unported and the broader goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T18:41:56.296Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass:502 Calc and35 related tests,9 Chromium/Worker cases,14static stages and build. Raw Calc/shared/changed-Writer S/B/F/L100 verified by portable committed archive audit;unchanged shared52 source hashes checked. Scoped native context/script/cache and exact shared measurement extraction only;automatic wrapped-height remains required and unported. Code03f6df1eed8b;commands,reports,screenshots and source/native hashes in task evidence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:41:31.992Z, excerpt_hash=sha256:b178d92ef62e3498c643809edef3d27e38c86e80cef557aca5f265906ff881fe
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201812-JT4A81/blueprint/resolved-snapshot.json
+- old_digest: 9f0cb3325ad88201652ba47a814fb3735ffbd2da85d4dd0a601edc73c77c1a51
+- current_digest: 9f0cb3325ad88201652ba47a814fb3735ffbd2da85d4dd0a601edc73c77c1a51
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201812-JT4A81
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201812-JT4A81
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
