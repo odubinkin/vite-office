@@ -9,6 +9,25 @@ import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.table
 import { MapUnit } from "../../../tools/inc/mapunit";
 import { SfxItemPresentation } from "../../../svl/inc/poolitem";
 
+it("provides the original ordered opaque hash contract without claiming native stdlib numeric bits", /** Equal binary32 values and signed zeros hash alike;order and stored tags participate. @returns Nothing. */ () => {
+  const empty = new SvxFontVariationsItem(4080);
+  expect(empty.supportsHashCode()).toBe(true);
+  expect(empty.hashCode()).toBe(0n);
+  const item = new SvxFontVariationsItem([new Variation(1, 0.1), new Variation(2, Infinity)], 4080);
+  expect(item.hashCode()).toBe(item.Clone().hashCode());
+  expect(item.hashCode()).toBeGreaterThanOrEqual(0n);
+  expect(item.hashCode()).toBeLessThan(1n << 64n);
+  const plus = new SvxFontVariationsItem([new Variation(1, 0)], 4080),
+    minus = new SvxFontVariationsItem([new Variation(1, -0)], 4080);
+  expect(plus.equals(minus)).toBe(true);
+  expect(plus.hashCode()).toBe(minus.hashCode());
+  expect(item.hashCode()).not.toBe(
+    new SvxFontVariationsItem([new Variation(2, Infinity), new Variation(1, 0.1)], 4080).hashCode(),
+  );
+  const nan = new SvxFontVariationsItem([new Variation(1, NaN)], 4080);
+  expect(nan.hashCode()).toBe(nan.hashCode());
+});
+
 it("keeps actual empty and ordered axis vector constructors with independent aggregate ownership", /** Source order and duplicates are part of the native value. @returns Nothing. */ () => {
   const empty = new SvxFontVariationsItem(4030);
   expect(empty.GetVariations()).toEqual([]);

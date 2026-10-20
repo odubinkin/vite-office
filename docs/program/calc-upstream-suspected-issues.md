@@ -3463,3 +3463,18 @@ exposed that mismatch and their failing raw report is retained. The implementati
 now follows the original fallback. Unknown enum roles also retain this release
 fallback instead of that exception. No CJK family was hardcoded into production.
 Decision: preserve these defaults and separate actual device font selection.
+
+## CALC245: Rich-text style changes and field updates preserve different cache rules
+
+Pinned `editeng/source/editeng/editobj.cxx` implements `SetStyleSheet` without
+clearing portion info. `ChangeStyleSheetName` delegates to `ImpChangeStyleSheets`
+without clearing it either. `ChangeStyleSheets`, however, clears it whenever
+a paragraph matches, even when the requested name and family already equal the
+previous values. This asymmetry may depend on the callers' layout responsibilities;
+it is preserved rather than normalized.
+
+Pinned `editeng/source/editeng/fieldupdater.cxx` passes every `EE_FEATURE_FIELD`
+item to `UpdatePageRelativeURLs`, including table and unspecified fields. The
+callback owns semantic selection. Neither it nor `updateTableFields` clears
+portion info. Task57 tests actual field holders and cache identity through these
+operations. These are source observations, not confirmed upstream defects.

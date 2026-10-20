@@ -31,13 +31,18 @@ const globalDefault: Readonly<FontMetadata> = Object.freeze({
   fontSize: Object.freeze(new Size()),
 });
 /** Const reference excludes every represented native mutator. */
-export type ConstFont = Omit<Font, Extract<keyof Font, `Set${string}`>>;
+export type ConstFont = Omit<Font, Extract<keyof Font, `Set${string}`> | "assign">;
 /** Shared VCL value owner; unrepresented native attributes and MaybeAskConfig are not approximated. */
 export class Font {
   private mpImplFont: Readonly<FontMetadata>;
   /** Shares immutable default/copied metadata until this handle changes. @param font - Optional source. @returns Nothing. */
   public constructor(font?: ConstFont) {
     this.mpImplFont = font === undefined ? globalDefault : (font as Font).mpImplFont;
+  }
+  /** Original copy assignment shares immutable font data while retaining the recipient handle. @param font - Actual const source. @returns Recipient. */
+  public assign(font: ConstFont): this {
+    this.mpImplFont = (font as Font).mpImplFont;
+    return this;
   }
   /** Native const family name. @returns Family name. */
   public GetFamilyName(): string {

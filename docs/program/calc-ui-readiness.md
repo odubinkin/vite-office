@@ -6,14 +6,20 @@ Task `202610202009-NF91KY` remains open. Its first prerequisite adds the actual
 SvxFontVariationsItem vector/copy/equality,typed string Any and presentation,
 plus native VariationsToString using OUStringBuffer's real float overload.
 The fixed tag conversion uses the existing original ASCII_US table/converter;
-CALC242 records its upper-byte behavior. Native float hashing is still missing.
+CALC242 records its upper-byte behavior. Logical ordered float hashing now uses normalized binary32 bits and coalesces signed zero;native stdlib ABI hash numeric parity remains unverified.
 Original numbering-rule slot storage,geometry,validity,copy/conversion and pooled
 rule ownership are now present as the next prerequisite. Shared NumberFormat
 alignment,color,relative size,style name and legal fields now retain original
 copy/equality. Native ordered three-script GetDefaultFonts uses the genuine VCL
 metadata path,including original UI-font fallback and NONE/OnlyOne selection.
-Remaining NumberFormat fields/providers,graphics,UNO rule wrappers,the complete EditEngine item package
-and EditTextObject owners are the rest of this same task.
+The complete61-entry original EditEngine package and actual derived pool now exist,
+including per-pool dynamic numbering defaults and source secondary-chain resolution.
+Actual EditTextObjectImpl owns paragraphs,shared strings,styles,fields,attributes and
+cache metadata;its copy/equality,orientation,field selection and style invalidation
+follow source. FieldUpdater uses the actual attribute holders. CALC245 records
+the native style/cache and all-field callback asymmetries. Remaining NumberFormat
+providers,nonempty bullet graphics,formatted portion payloads and real device/layout
+operations remain explicitly unported.
 No style UI,pool or renderer facade is introduced. Full task coverage and browser
 acceptance are pending;focused value tests do not certify the complete block.
 

@@ -1,4 +1,4 @@
-/** @fileoverview Original SvxFontVariationsItem owned vector/copy/equality,serialization and Any boundary from textitem.cxx;native float-hash responsibility remains unported. */
+/** @fileoverview Original SvxFontVariationsItem value/serialization/Any and ordered hash contract. Implementation-defined std::hash<float> numeric bits use this runtime's normalized IEEE32 value hash;native stdlib ABI bits are not certified. */
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import {
@@ -10,6 +10,7 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import type { MapUnit } from "../../../tools/inc/mapunit";
 import type { SfxItemPresentation } from "../../../svl/inc/poolitem";
+import { hash_combine } from "../../../o3tl/inc/hash_combine";
 
 /** Original font-axis pooled value;vector order,duplicates and IEEE float values are retained. */
 export class SvxFontVariationsItem extends SfxPoolItem {
@@ -55,6 +56,21 @@ export class SvxFontVariationsItem extends SfxPoolItem {
   override Clone(pool?: SfxItemPool): SvxFontVariationsItem {
     void pool;
     return new SvxFontVariationsItem(this);
+  }
+  /** Original explicit hash support. @returns True. */
+  supportsHashCode(): boolean {
+    return true;
+  }
+  /** Original ordered tag/float hash combination. The standard library's float hash is runtime-opaque;this binding hashes normalized binary32 bits and coalesces signed zero,without a stdlib provider facade. @returns Unsigned64 hash. */
+  hashCode(): bigint {
+    const seed: [bigint] = [0n];
+    const bits = new DataView(new ArrayBuffer(4));
+    for (const variation of this.maVariations) {
+      hash_combine(seed, variation.nTag);
+      bits.setFloat32(0, variation.fValue === 0 ? 0 : variation.fValue, true);
+      hash_combine(seed, bits.getUint32(0, true));
+    }
+    return seed[0];
   }
   /** Original content presentation uses the same native serialization as UNO. @param presentation - Ignored degree. @param coreMetric - Ignored unit. @param presentationMetric - Ignored unit. @param output - Native string output. @param intl - Unused provider. @returns True. */
   GetPresentation(
