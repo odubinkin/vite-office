@@ -1,10 +1,11 @@
 ---
 id: "202610202016-PC6WK7"
 title: "Refactor search results to native UNO sequence value contracts"
-status: "DOING"
+result_summary: "refactor search results to native UNO sequence value contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reviewed SearchResult IDL, cppumaker constructors/equality and existing Sequence semantics against the changed owner and producers/consumers. Default/full/copy, stable assignment, COW, directional result mapping, equality and local destruction match the represented source contracts."
     - "166 related cases pass, including Writer and frozen native public Sequence replay; final changed search replay passes 137 cases and boundary tooling passes 48 cases. Build/static/source registries pass after precise type/dependency repairs. Literal observation adapters stay in test paths; no guard algorithm or fidelity status was weakened."
-commit: null
+commit:
+  hash: "9dff2d0282f0bdc1cf45694bce8a56b936819f2d"
+  message: "🧩 PC6WK7 search: preserve native result sequence value contracts"
 comments:
   -
     author: "CODER"
     body: "Start: replace the old search result array shortcut with actual shared UNO sequence owners and migrate the complete represented search path."
+  -
+    author: "CODER"
+    body: "Verified: replaced search result arrays with actual UNO sequence values throughout represented engine/wrapper/replacement paths; related tests, native Sequence fixture replay, build and required static checks pass. Parent configuration and UI remain open."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "166 related cases pass; final affected search replay 137 cases and boundary tooling 48 cases pass. Build and required static/source/registry checks pass; real Sequence contracts replace result arrays without full ABI/UI claim."
+  -
+    type: "status"
+    at: "2026-10-20T20:26:35.242Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: replaced search result arrays with actual UNO sequence values throughout represented engine/wrapper/replacement paths; related tests, native Sequence fixture replay, build and required static checks pass. Parent configuration and UI remain open."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:25:46.352Z"
+doc_updated_at: "2026-10-20T20:26:35.244Z"
 doc_updated_by: "CODER"
 description: "Replace the old array-shaped SearchResult shortcut throughout the shared search engine/wrapper/replacement path with actual generated struct value and shared Sequence<sal_Int32> owners; preserve directional offsets, defaults, copy-on-write and existing algorithms."
 sections:
@@ -129,6 +142,10 @@ sections:
     Source evidence includes pinned SearchResult.idl, cppumaker PlainStructType declaration/constructor/equality generator, Sequence.h/hxx and search caller definitions. Registry classifications/statuses remain unchanged. Test fixtures now construct and compare actual native values; literal array decoding is restricted to test caller observations. Existing native public Sequence captured results replay unchanged.
 
     Authorized local LibreOffice source reading was sufficient. ICU/network remain unapproved and unused. Configuration service dependencies, actual item/configuration defaults, unported algorithms/layout/fields/notes and full browser search UI remain pending under the active parent. No merge, external publication, policy mutation or unrelated file changes.
+extensions:
+  implementation_commit:
+    hash: "9dff2d0282f0bdc1cf45694bce8a56b936819f2d"
+    message: "🧩 PC6WK7 search: preserve native result sequence value contracts"
 id_source: "generated"
 ---
 ## Summary
