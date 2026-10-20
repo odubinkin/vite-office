@@ -20,7 +20,7 @@
         "apps/office/src/sw/source/core/layout/pagedesc.ts#SwPageDesc",
         "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx#SwPageDesc"
       ],
-      "justification": "Implements the bounded Standard page descriptor, locale defaults, physical dimensions, orientation, margins, and copy semantics at the pinned SwPageDesc ownership boundary.",
+      "justification": "Implements the bounded Standard page descriptor, locale defaults, physical dimensions, orientation, margins, and copy semantics at the pinned SwPageDesc ownership boundary. Task0HHKNT ports the original86entry Paper order and physical table with original floating conversion plus0.5 truncation. Actual PaperInfo retains exact-before-rotated search,duplicate first-match order,strict44mm100 tolerance,orientation-preserving sloppy fit,ordered dimension snapping,ASCII-only borrowed-byte PostScript aliases and exact native Locale country defaults. Writer existing A4/Letter sizes derive from this actual common owner through genuine integral o3tl conversions. No printer,platform or string-owner service is imitated.",
       "knownViolations": [],
       "localSymbols": [
         "SwPageDesc",

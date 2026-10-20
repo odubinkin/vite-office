@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-63cfb71b-ed58-4a1c-b868-bf15135b6fe5",
+    "capabilityId": "CAP-63cfb71b-ed58-4a1c-b868-bf15135b6fe5",
+    "suite": "shared",
+    "subsystem": "paper-geometry",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task0HHKNT ports the original86entry Paper order and physical table with original floating conversion plus0.5 truncation. Actual PaperInfo retains exact-before-rotated search,duplicate first-match order,strict44mm100 tolerance,orientation-preserving sloppy fit,ordered dimension snapping,ASCII-only borrowed-byte PostScript aliases and exact native Locale country defaults. Writer existing A4/Letter sizes derive from this actual common owner through genuine integral o3tl conversions. No printer,platform or string-owner service is imitated."
+    ],
+    "capability": "Native paper physical table and portable PaperInfo value algorithms",
+    "gaps": [
+      "Native getSystemDefaultPaper platform/config/libpaper discovery,toPSName owning OString return and SvxPaperInfo printer/device conversion remain unported. Full Calc styles and broader native/UI parity remain unverified. Bounded verification passes528Calc tests,33related owner/page/menu tests,19XML/ODT cases and3Chromium/Worker/page-dialog cases. Calc and all four changed runtime owners reach100percent coverage;no broad parity promotion.",
+      "Pinned i18nutil QA contains no direct PaperInfo case;the upstream QA reference is an A4 document consumer only. Literal table and authored boundary tests do not claim original QA execution."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "C++ integral tools::Long values use exact safe JS integer distances;borrowed std::string_view is a Uint8Array. Native owning OString and platform paper APIs are omitted rather than replaced."
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/i18nutil/source/utility/paper.cxx",
+          "marker": "PaperInfo"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/text/text.cxx",
+          "marker": "Given a document with A4 paper size"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/i18nutil/paper.hxx",
+          "marker": "The values of the following enumerators must correspond"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "aspect": "model-operation",
+    "atomicOperation": "Resolve native paper geometry and matching without platform or printer substitutes",
+    "scopeLimitations": [
+      "Native getSystemDefaultPaper platform/config/libpaper discovery,toPSName owning OString return and SvxPaperInfo printer/device conversion remain unported. Full Calc styles and broader native/UI parity remain unverified. Bounded verification passes528Calc tests,33related owner/page/menu tests,19XML/ODT cases and3Chromium/Worker/page-dialog cases. Calc and all four changed runtime owners reach100percent coverage;no broad parity promotion.",
+      "Pinned i18nutil QA contains no direct PaperInfo case;the upstream QA reference is an A4 document consumer only. Literal table and authored boundary tests do not claim original QA execution."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/i18nutil/source/utility/paper.ts",
+          "marker": "PaperInfo"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/i18nutil/source/utility/paper.test.ts",
+          "marker": "retains every native enum position"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task59 shared native paper geometry"
+        }
+      ]
+    }
+  }
+}

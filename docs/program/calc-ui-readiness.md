@@ -1,5 +1,18 @@
 # Calc UI and ODS implementation critical path
 
+## Current shared dependency — task59 shared native paper geometry
+
+Task `202610202322-0HHKNT` adds original86entry Paper/PaperInfo physical values,
+exact/rotated recognition,strict sloppy fitting,PostScript alias lookup over real
+borrowed bytes and actual Locale country defaults. Writer A4/Letter dimensions now
+derive from the common owner through original o3tl conversion. Platform default-paper
+discovery,owning OString name returns,printer/device conversion and Calc style owners
+remain explicitly unported. All528Calc tests pass with100% coverage across130owners.
+All33related owner/page/menu tests and19XML/ODT tests pass;the four changed owners
+reach100% coverage. All48current boundary tests pass(the runner also selected43old
+ignored-artifact cases). Chromium/Worker and Writer page-dialog acceptance passes
+at1280/390px. Source/build/static gates pass. No full style UI or native parity claim.
+
 ## Current default-pool ownership — task58
 
 Task `202610202254-D9RYSD` completes the actual ScDocumentPool package100..188:

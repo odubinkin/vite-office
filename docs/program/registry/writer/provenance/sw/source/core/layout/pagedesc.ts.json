@@ -26,7 +26,8 @@
       "Native printer integration and page-frame features beyond supported paragraphs remain outside the browser Writer slice."
     ],
     "preservedResponsibilities": [
-      "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
+      "Owns bounded physical page size, margin, orientation, and descriptor copy semantics.",
+      "Task0HHKNT ports the original86entry Paper order and physical table with original floating conversion plus0.5 truncation. Actual PaperInfo retains exact-before-rotated search,duplicate first-match order,strict44mm100 tolerance,orientation-preserving sloppy fit,ordered dimension snapping,ASCII-only borrowed-byte PostScript aliases and exact native Locale country defaults. Writer existing A4/Letter sizes derive from this actual common owner through genuine integral o3tl conversions. No printer,platform or string-owner service is imitated."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/layout/pagedesc.cxx",
