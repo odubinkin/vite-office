@@ -1,0 +1,43 @@
+{
+  "status": "partial-task-in-progress",
+  "passedTests": 10,
+  "failedTests": 0,
+  "commands": {
+    "tests": {
+      "cwd": "apps/office",
+      "argv": [
+        "node",
+        "../../node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/editeng/source/items/native-font-variations-item.test.ts",
+        "src/vcl/source/font/FontVariation.test.ts",
+        "--maxWorkers=1",
+        "--reporter=json",
+        "--outputFile=../../output/playwright/task57-values-final-results.json"
+      ]
+    },
+    "types": "npm run typecheck",
+    "registry": "npm run inventory:registry:build && npm run inventory:registry:check",
+    "provenance": "npm run check:source-provenance",
+    "docs": "npm run check:docs"
+  },
+  "sourceHashes": {
+    "apps/office/src/editeng/inc/fontvariationsitem.ts": "16fdf27e6a565d8fc2920d0b59da4680696cc18dccee8986ab835f28d136a921",
+    "apps/office/src/editeng/source/items/textitem.variations.ts": "c3f1b229cf63991af4062d069981329b7c5f31d55878d65ec94e7c64bf10aa93",
+    "apps/office/src/editeng/source/items/native-font-variations-item.test.ts": "9e29e28b6372306a63fb1cc439ce8c6bb5acc4ee434891130301e85a5d74f2b1",
+    "apps/office/src/vcl/inc/font/Feature.ts": "827c4906fe6ce7cd8fd112befb2936b3e45a4ee78d939ec57ce52df219eb4ad1",
+    "apps/office/src/vcl/source/font/Feature.ts": "d6d365348911114187fc9961f142ca24733308018c52bc3d93861c6e201c0600",
+    "apps/office/src/vcl/inc/font/Variation.ts": "8e66fced61ce4ba99c8c471dcceffeb5886d07ab9c342cb010562e634658a6d8",
+    "apps/office/src/vcl/source/font/FontVariation.ts": "4ba56b3f06af615912807fe60513f28949ee61382b3de2d0233f6ebc9f943fe4",
+    "apps/office/src/vcl/source/font/FontVariation.test.ts": "937b7fd516032501dd48417d270d815ef64c47f2f8fd474995b2db343abae004"
+  },
+  "pending": [
+    "Native float hash",
+    "Bullet/numbering prerequisites and actual full EditEngine pool",
+    "Original EditTextObject owner",
+    "Complete shared100/Calc100/static/build/browser/evaluator and final clean closure"
+  ],
+  "coverageClaim": "No complete task coverage claim;previous shared coverage cannot certify newly changed shared sources."
+}

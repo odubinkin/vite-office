@@ -1,2 +1,6 @@
-/** @fileoverview Native Variation value and input-parsing declarations;axis metadata and serialization await their actual owners. */
-export { Variation, VariationsFromString } from "../../source/font/FontVariation";
+/** @fileoverview Native Variation value and original parsing/serialization declarations;axis metadata services remain outside this value boundary. */
+export {
+  Variation,
+  VariationsFromString,
+  VariationsToString,
+} from "../../source/font/FontVariation";

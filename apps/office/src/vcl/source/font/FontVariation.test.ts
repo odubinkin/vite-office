@@ -1,13 +1,50 @@
 /** @fileoverview Source-backed native axis parsing,IEEE float values and OpenType tag contracts needed by EditEngine defaults. */
 import { expect, it } from "vitest";
-import { Variation, VariationsFromString } from "../../inc/font/Variation";
-import { featureCode } from "../../inc/font/Feature";
+import { Variation, VariationsFromString, VariationsToString } from "../../inc/font/Variation";
+import { featureCode, featureCodeAsString } from "../../inc/font/Feature";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 /** Creates a borrowed native UTF16 input without codepoint normalization. @param text - Original text. @returns Units. */
 function units(text: string): Uint16Array {
   const data = new Uint16Array(text.length);
   for (let i = 0; i < text.length; i++) data[i] = text.charCodeAt(i);
   return data;
 }
+
+it("decodes original terminated tag bytes using the original ASCII_US descriptor rather than Unicode reinterpretation", /** Zero truncates the intermediate native C string. @returns Nothing. */ () => {
+  for (const [tag, expected] of [
+    [0x77676874, "wght"],
+    [0x4131205a, "A1 Z"],
+    [0x41004243, "A"],
+    [0, ""],
+    [0x807fff41, "€\u007fÿA"],
+  ] as const) {
+    const value = featureCodeAsString(tag);
+    try {
+      expect(text(value)).toBe(expected);
+    } finally {
+      value.dispose();
+    }
+  }
+});
+
+it("serializes axes in source order with exact native binary32 formatting and independent string ownership", /** Does not sort,deduplicate,clamp or replace native float formatting with JavaScript number conversion. @returns Nothing. */ () => {
+  const empty = VariationsToString([]);
+  expect(text(empty)).toBe("");
+  empty.dispose();
+  const values = [
+    new Variation(0x77676874, 0.1),
+    new Variation(0x77676874, 600),
+    new Variation(0x77647468, Infinity),
+  ];
+  const result = VariationsToString(values);
+  try {
+    expect(text(result)).toBe('"wght" 0.1, "wght" 600, "wdth" INF');
+    (values[0] as Variation).fValue = 3;
+    expect(text(result)).toBe('"wght" 0.1, "wght" 600, "wdth" INF');
+  } finally {
+    result.dispose();
+  }
+});
 it("retains native aggregate defaults,copy and public field narrowing without font-side normalization", /** Checks actual uint32/binary32 and IEEE equality semantics. @returns Nothing. */ () => {
   const empty = new Variation();
   expect([empty.nTag, empty.fValue]).toEqual([0, 0]);

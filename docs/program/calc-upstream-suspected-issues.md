@@ -3403,3 +3403,23 @@ Full merged/device/alternate-view paint parity remains unverified.
 - Observation: builtin `Heading 1` precedes compatibility programmatic alias `Heading1`. Programmatic `Heading1` resolves to display `Heading 1`,whose display-to-programmatic conversion then chooses `Heading 1`;a custom display `Heading1` is escaped with ` (user)`. Decoding removes one exact suffix before considering family or map. Pool ScaleToPages is1 and paper size is zero;document-backed page-style setup later installs scale-to-pages0 and configured paper size.
 - Impact: alias round trips need not retain the old programmatic spelling,and pool defaults must not be mistaken for configured page style values. Source comments describe the compatibility and escaping intent;these are not asserted defects.
 - Local preservation: keep initializer order,sentinel iteration,case-sensitive UTF16 suffix and one-suffix removal. Do not sort/deduplicate aliases,normalize spelling,replace pool values with style configuration or invent unavailable rich header/footer defaults.
+
+## CALC242: Feature tag ASCII_US decoding retains upper-byte Windows-1252 mappings
+
+Status: source-confirmed compatibility behavior whose relevance to malformed
+font-axis tags is uncertain;preserved,not classified as a confirmed defect.
+
+Pinned `vcl/source/font/Feature.cxx::featureCodeAsString` constructs a terminated
+four-byte string and calls OStringToOUString with RTL_TEXTENCODING_ASCII_US.
+The original `sal/textenc/textenc.cxx::aImplUSASCIIByteCvtData` explicitly uses
+`aImplMS1252ToUniTab` for bytes0x80..0xff. Thus initialized tag0x807fff41 produces
+Euro,U+007F,U+00FF,A rather than strict ASCII rejection or bytewise Unicode.
+An embedded zero truncates the intermediate C string. The axis parser separately
+accepts only ASCII letters,digits and spaces;this concerns direct aggregate tags.
+
+Evidence: actual native table and converter plus literal expected-value tests in
+`apps/office/src/vcl/source/font/FontVariation.test.ts`. The first test expectation
+incorrectly assumed private-use mapping;source inspection corrected that
+expectation while leaving the implementation and native descriptor unchanged.
+Decision: retain original table selection,terminator behavior and float output;
+do not introduce a host decoder or normalize malformed aggregate tags.

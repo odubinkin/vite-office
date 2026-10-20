@@ -1,5 +1,17 @@
 # Calc UI and ODS implementation critical path
 
+## In progress — task57 genuine EditEngine pool and rich-text ownership
+
+Task `202610202009-NF91KY` remains open. Its first prerequisite adds the actual
+SvxFontVariationsItem vector/copy/equality,typed string Any and presentation,
+plus native VariationsToString using OUStringBuffer's real float overload.
+The fixed tag conversion uses the existing original ASCII_US table/converter;
+CALC242 records its upper-byte behavior. Native float hashing is still missing.
+The complete EditEngine item package/pool and EditTextObject owners,including
+remaining bullet/numbering dependencies,are the rest of this same task.
+No style UI,pool or renderer facade is introduced. Full task coverage and browser
+acceptance are pending;focused value tests do not certify the complete block.
+
 ## Current style-owner inputs — task56 naming and static defaults
 
 Task `202610201944-B9WXKD` adds original ScStyleNameConversion and stable
