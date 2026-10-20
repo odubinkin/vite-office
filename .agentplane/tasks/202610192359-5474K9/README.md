@@ -1,10 +1,11 @@
 ---
 id: "202610192359-5474K9"
 title: "Implement native Calc strikethrough UI and shared ODF crossed-out property handlers"
-status: "DOING"
+result_summary: "verified-202610192359-5474K9"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T00:23:04.407Z"
+  updated_at: "2026-10-20T00:23:34.356Z"
   updated_by: "CODER"
-  note: "Implementation1b7501f11ccf accepted:Calc129files394cases raw S/B/F/L100;current shared/Writer8files28cases raw100 and focused current Calc3files14cases pass. All9changed executable application owners have current hashes and full raw100. Browser15Calc+8shared cases reconciled;native unsigned-short witness passes isolated page/Worker replay. All required static/source/resource/tooling gates pass,next full checkpoint50."
+  note: "verified-202610192359-5474K9"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Calc129files394cases raw100 is supplemented by current exact-body Calc3files14case integration. Shared/Writer8files28cases and all9changed executable application owners raw S/B/F/L100,current hashes,no threshold/exclusion weakening. Genuine Any values are used;no native assignment kernel was altered."
     - "Current rebuilt Calc run passes14unchanged browser cases;the new negative witness initially assumed unsupported LONG narrowing. Corrected to genuine UNSIGNED_SHORT65535 and isolated page/DOM-free Worker replay passes1case with all assertions retained. Shared8cases pass;23unique cases and current1280/390screenshots are reconciled. Historical type-import bundle equivalence is explicitly not the final runtime certificate."
     - "Exact native cdouthdl->cppu Any dependency registration matches pinned source and leaves broad module/browser/cycle guards unchanged. Tooling3files92cases and all declared static/source/resource/inventory gates pass.36non-task paths stay below approved50;no network,branch change or merge."
-commit: null
+commit:
+  hash: "00a7b6d0ac2e863e918f4d3bb9ca455503a06d16"
+  message: "🧩 5474K9 task: preserve verified strikeout quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement native Calc Strikeout and original shared ODF crossed-out handlers using actual item/selection/history/store owners;retain source quirks and current-owner raw100 evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192359-5474K9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation1b7501f11ccf accepted:Calc129files394cases raw S/B/F/L100;current shared/Writer8files28cases raw100 and focused current Calc3files14cases pass. All9changed executable application owners have current hashes and full raw100. Browser15Calc+8shared cases reconciled;native unsigned-short witness passes isolated page/Worker replay. All required static/source/resource/tooling gates pass,next full checkpoint50."
+  -
+    type: "verify"
+    at: "2026-10-20T00:23:34.356Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192359-5474K9"
+  -
+    type: "status"
+    at: "2026-10-20T00:23:34.495Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192359-5474K9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T00:23:04.465Z"
+doc_updated_at: "2026-10-20T00:23:34.496Z"
 doc_updated_by: "CODER"
 description: "Task43 of the authorized Calc UI goal after verified task42. Connect native Strikeout10013/Which106 with shared attribute toggle,actual SvxCrossedOutItem,selection/history,Writer menu and original shared crossed-out ODF type/style/width/text handlers. Calc branch/checkout only;targeted Calc100 plus related/current-owner100,next full checkpoint50."
 sections:
@@ -121,6 +140,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T00:23:34.356Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192359-5474K9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:23:04.465Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+    - old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192359-5474K9 --result verified-202610192359-5474K9 --commit 00a7b6d0ac2e863e918f4d3bb9ca455503a06d16
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task43 intentional implementation commits if required;retain evidence and unrelated task state. User owns branch integration."
   Findings: |-
@@ -137,6 +186,10 @@ sections:
     Actual browser evidence:current rebuilt15case suite passes14unchanged tests;the single new Any fixture is corrected from invalid LONG narrowing to genuine unsigned-short projection and its isolated replay passes1case. Shared8cases pass;23unique browser cases reconciled. Initial14case suite also passed. Current native body additionally passes Calc3files14cases,including independent XML and all represented ODS variants. Two current1280/390primary ODS reopen screenshots were inspected and retained. Browser-build-equivalence.json is only a historical type-import-only snapshot and explicitly no longer the current runtime certificate. No assertion,coverage rule or source behavior was relaxed to hide failures.
 
     All declared static/resource/source/inventory/tooling gates pass. Root authored lint/format gates are supplemented by final scoped checks for the subsequently changed native/tooling files. Exact commands,logs,raw/result/source hashes and browser reconciliation are retained. Intentional Writer primary-save/open/no-recovery policy remains. Next full all-app checkpoint50;bounded task43 can close after quality and implementation persistence,overall Calc UI goal remains active.
+extensions:
+  implementation_commit:
+    hash: "1b7501f11ccf7ce81b0d1ed3480cb79f3a6942dc"
+    message: "✨ 5474K9 calc: implement native strikeout UI and shared ODF handlers"
 id_source: "generated"
 ---
 ## Summary
@@ -202,6 +255,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T00:23:34.356Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192359-5474K9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:23:04.465Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+- old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192359-5474K9 --result verified-202610192359-5474K9 --commit 00a7b6d0ac2e863e918f4d3bb9ca455503a06d16
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
