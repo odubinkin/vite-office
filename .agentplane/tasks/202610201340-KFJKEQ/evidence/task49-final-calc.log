@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-shadow-relief.test calc-outline.test calc-overline.test calc-strikeout.test --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-shadow-relief.test calc-outline.test calc-overline.test calc-strikeout.test --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  4 passed (4)
+      Tests  16 passed (16)
+   Start at  21:01:02
+   Duration  12.73s (transform 6.28s, setup 794ms, import 9.72s, tests 8.19s, environment 4.44s)
+

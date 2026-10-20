@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/shdwdhdl.ts",
+    "upstreamPath": "xmloff/source/style/shdwdhdl.cxx",
+    "localSymbols": [
+      "XMLShadowedPropHdl"
+    ],
+    "upstreamSymbols": [
+      "XMLShadowedPropHdl::importXML"
+    ],
+    "preservedResponsibilities": [
+      "TaskKFJKEQ consumes native Calc Shadowed10010/Which108 and parameterized CharacterRelief10920/Which124 with actual source attribute operations,default/mixed state,complete typed items and real selection history. Shadow uses the existing shared Writer Format/Text menu placement;native nonconfigurable CharacterRelief receives no invented menu/toolbar placement. Common XMLShadowedPropHdl and XMLConstantsPropertyHandler preserve actual Any,exact lexical matching,original failure/output branches and ODS text properties(CALC235/236). Shared browser VCL special text composition preserves relief-before-shadow/outline selection,black-to-white relief foreground,native luminance tint,signed integer offset and original shadow/eight-outline/white-center draw order over one accessible text raster. Actual browser text bounds and CSS96dpi are browser paint inputs,not simulated native device/font metrics. Full Sfx/UNO/widget/device/font services,rich edit,mixed-script per-device drawing,printer DPI and complete native parity remain unverified. Production browser/Worker and ODS acceptance pass with inspected raster screenshots;Writer saving/open/no-recovery policies remain."
+    ],
+    "omittedResponsibilities": [
+      "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
+      "Full script/device rendering,rich/wrapped/rotated/merged layout and native dialogs remain unported.",
+      "Full UNO property-set/handler factory graph,complex color XML and Worker state and complete ODF filters remain unverified;unsupported complex Worker values reject instead of losing fields.",
+      "Browser filters use a bounded native-value handoff;this is not a full native UNO property-set provider. Source and managed evidence do not certify compiled native or broad module parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/shdwdhdl.ts",
+          "marker": "XMLShadowedPropHdl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx",
+          "marker": "XMLShadowedPropHdl::importXML"
+        }
+      ]
+    }
+  }
+}

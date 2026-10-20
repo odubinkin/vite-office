@@ -135,7 +135,7 @@ const lineGroups = [
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
   100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 107, 109, 129, 132,
-  148, 150, 141, 142,
+  148, 150, 141, 142, 108, 124,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -233,6 +233,8 @@ export function importCellTextProperties(
       ),
       ...strikeoutPropertyTokens,
       XMLToken.STYLE_TEXT_OUTLINE,
+      XMLToken.FO_TEXT_SHADOW,
+      XMLToken.STYLE_FONT_RELIEF,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
     ],

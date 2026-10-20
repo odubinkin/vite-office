@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- special-text.test outlined-text.test native-shadow-constants.test --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts special-text.test outlined-text.test native-shadow-constants.test --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  11 passed (11)
+   Start at  21:01:16
+   Duration  3.00s (transform 942ms, setup 489ms, import 1.19s, tests 320ms, environment 2.50s)
+

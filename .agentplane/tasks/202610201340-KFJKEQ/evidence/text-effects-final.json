@@ -1,0 +1,230 @@
+{
+  "task": "202610201340-KFJKEQ",
+  "taskOrdinal": 49,
+  "branch": "calc",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "command": "npm run test:calc -- calc-shadow-relief.test calc-outline.test calc-overline.test calc-strikeout.test --maxWorkers=2",
+      "exit": 0,
+      "tests": 16,
+      "files": 4,
+      "log": ".agentplane/tasks/202610201340-KFJKEQ/evidence/task49-final-calc.log"
+    },
+    {
+      "command": "npm run test:shared -- special-text.test outlined-text.test native-shadow-constants.test --maxWorkers=2",
+      "exit": 0,
+      "tests": 11,
+      "files": 3,
+      "log": ".agentplane/tasks/202610201340-KFJKEQ/evidence/task49-final-common.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-text-effects.test.ts",
+      "exit": 0,
+      "tests": 91,
+      "files": 3,
+      "log": ".agentplane/tasks/202610201340-KFJKEQ/evidence/task49-boundary-tests.log"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/shadow-relief.spec.ts apps/office/e2e/calc/outline.spec.ts",
+      "exit": 0,
+      "tests": 8,
+      "files": 2,
+      "log": ".agentplane/tasks/202610201340-KFJKEQ/evidence/task49-browser-first.log"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/shadow-relief.spec.ts",
+      "exit": 0,
+      "tests": 4,
+      "files": 1,
+      "log": ".agentplane/tasks/202610201340-KFJKEQ/evidence/task49-browser-complete.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "log": "output/playwright/task49-complete-types.log"
+    },
+    {
+      "command": "npm run build",
+      "exit": 0,
+      "log": "output/playwright/task49-verified-build.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exit": 0,
+      "log": "output/playwright/task49-verified-static.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "log": "output/playwright/task49-final-docs.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "log": "output/playwright/task49-final-size.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "log": "output/playwright/task49-complete-dependencies.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "log": "output/playwright/task49-tree.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exit": 0,
+      "log": "output/playwright/task49-writer-resources.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exit": 0,
+      "log": "output/playwright/task49-calc-resources.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "log": "output/playwright/task49-complete-provenance.log"
+    },
+    {
+      "command": "npm run inventory:parity:calc",
+      "exit": 0,
+      "log": "output/playwright/task49-complete-parity-calc.log"
+    },
+    {
+      "command": "npm run inventory:parity:shared",
+      "exit": 0,
+      "log": "output/playwright/task49-complete-parity-shared.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "log": "output/playwright/task49-routing.log"
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "log": "output/playwright/task49-doctor.log"
+    },
+    {
+      "command": "prettier --check <all changed existing authored source/registry/doc paths>",
+      "exit": 0,
+      "pathList": "output/playwright/task49-final-authored-paths.txt"
+    },
+    {
+      "command": "eslint <all changed existing authored TS/TSX/MJS paths> --max-warnings 0",
+      "exit": 0,
+      "pathList": "output/playwright/task49-final-authored-paths.txt"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "nonTaskPaths": 49,
+  "screenshots": [
+    {
+      "path": ".agentplane/tasks/202610201340-KFJKEQ/evidence/relief-black-lines-raster.png",
+      "inspected": true,
+      "sha256": "72145238fad3cbc7265a1f13c79abeca029af5c9b1e4eb9273e12fb8b6dd233a"
+    },
+    {
+      "path": ".agentplane/tasks/202610201340-KFJKEQ/evidence/shadow-colored-raster.png",
+      "inspected": true,
+      "sha256": "c0b9db9ab44796f879e76e76e5898a0709be1f5a54ec120f181423be208b902e"
+    },
+    {
+      "path": ".agentplane/tasks/202610201340-KFJKEQ/evidence/shadow-reopened-390.png",
+      "inspected": true,
+      "sha256": "d5064fc26d001f4660d5f5514cdfe938baf02541adb8fbc170b48f8e96630629"
+    },
+    {
+      "path": ".agentplane/tasks/202610201340-KFJKEQ/evidence/shadow-reopened-1280.png",
+      "inspected": true,
+      "sha256": "da027adea39555f8575db8794caab578f7c16f8c14db2761005a37b6ec092102"
+    }
+  ],
+  "hashes": {
+    "apps/office/e2e/calc/shadow-relief.spec.ts": "8409a8368f38d13b231e7a35ffe86158871ddce980ffa946d29e247d6b5e53dd",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "b25adbb6d7e4ad3b94228a771db59c11d16a79ce23d031eba62939a7fd28266a",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx": "fdd72a4ba59d7ead105315b7e6ab389d1ea089151c1c3fd89b5518f0583a8903",
+    "apps/office/src/sc/browser/presentation/ScGridWindow.tsx": "c33493901e20645a1b43f326fb02d37bfba38558a0c6c3445c7dd76d54eca3d0",
+    "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx": "eba7981ecfcd9769dd55a55cd1342f2a95dc2caa7b3ab8b46296329e908fd90a",
+    "apps/office/src/sc/sdi/formatsh.ts": "8ce6c54a6c398b3bfc52ee08201babffa855a16018e7c2627c788cbae073a7fc",
+    "apps/office/src/sc/sdi/scalc.ts": "c8ec5620bb3e886295682c7756412e7d67685949d4dca22995a8dde41ed518e2",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts": "814f7f17d99a6fa5ba44ea1180ad4a24869e19e6463ba4b6f4b826c2ceac9756",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "eaad4bf10897985e2296cc88d8f1a0f0c46ae85ce29e170a6973e42d7fffc738",
+    "apps/office/src/sc/source/ui/view/formatsh.ts": "0fc99d6f07ae77ffcb360de87768b5bd50ecfd4394a5c6e6029d2d7292015afc",
+    "apps/office/src/vcl/browser/outlined-text.test.tsx": "d42d175a2834af89ab3ce266c0626ad59141f94eda2ea1b571f324abdb80169b",
+    "apps/office/src/vcl/browser/special-text.test.tsx": "7dd66e03e2fcc6934cc6b016d867d09cf33c91ae6b3b24e1b578e0def4d29f7d",
+    "apps/office/src/vcl/browser/special-text.tsx": "76581f847e489b4f0e138648680f5a6ea24063e74dac83d3131bc38d120f8bba",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "29a199335ae86f6d5330a76dbd36b0bbdffd5e9bb82ef75f2c4d67af9c7b0228",
+    "apps/office/src/xmloff/source/style/XMLConstantsPropertyHandler.ts": "af09d83389ac6a6d6fa03e663bcd8aedec6657ef3fd2faec35b91da1af16e4f6",
+    "apps/office/src/xmloff/source/style/native-shadow-constants.test.ts": "abb4c605e0fd3e1fe19bcd47d9a31d530511c25bd11ffbe240d5c41a5fce2002",
+    "apps/office/src/xmloff/source/style/shdwdhdl.ts": "86f9eee1edd007af19f7393e1d611505016b01597ecdf74ec110be211442ea41",
+    "docs/program/calc-upstream-suspected-issues.md": "facb8c739c7c736e4ae4484841a6af45b28c53071017c1436052e3c725261323",
+    "docs/program/registry/calc/capabilities/CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448.json": "1310031cf09384775cfa32ac564f9d7e2f85b79881149c4bfc1d2da0e6d0be2b",
+    "docs/program/registry/calc/capabilities/CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875.json": "4e21d9b49c09a5bf60d35ab6b02fdbce7e6a77730d3475a00f0f3200c6bc2b73",
+    "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json": "353fe4cefd8160558fde57c26e2c3084aff9fc6ac5ca208ae3c32ae7f0663302",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/ScCellText.tsx.json": "bc4b2c674fc198b9bf06e6e3e64a8a2827e5d25529ccf28a067bf2c75d474045",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/ScGridWindow.tsx.json": "c2c3bef5aef357d8248b7d8e891d1159c78bbd2041669424eb94d50e9ff1f308",
+    "docs/program/registry/calc/provenance/sc/sdi/formatsh.ts.json": "34ea95d301c58ff6af688c074483f78e9f76ac3e7165ea3328d7e8806030acbd",
+    "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json": "e361f4f749a1e242a4874828a486e7dd4ca436aed6a8783bd24e3598022a98f1",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyle.font-effects.ts.json": "036d52cbfc3cfc587a0f150bdcd3da95192672b732c9a9267bbffe84439ca725",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyle.ts.json": "2ba584a753a39010d6a81a315867f6192174aec8545e4b4c902ea2113a1c7dd2",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/formatsh.ts.json": "5e5f11079f3a382de03d40169ebb4caad44eabade8ee84a029c98aaa54e4bfe9",
+    "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json": "16abdae47fc8b501ab5b2e3ee20042f619dffae6698e4028d186eafd317fccc1",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/ScCellText.tsx.json": "50a03c0e4f5d0c5136c528293e5ebfa4a3779202d7615bcd689fa4bede7dabd1",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/ScGridWindow.tsx.json": "ec89c1d5ec9f94502064b2cda4fa51eaf37f0dda5985fd1cb52292a64c236040",
+    "docs/program/registry/calc/runtime/sc/sdi/formatsh.ts.json": "c36585e896df864e87bc924e325abbfd57857accb4da8b86242c64770907895c",
+    "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json": "23e989b704c46255f4a4b55f310753771b4b6491ac1a2acdfafce2fad4769c0b",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyle.font-effects.ts.json": "c449eb35866e977df56ebb5992ce801e89e83b307f72cdec448b5275c0fc2296",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyle.ts.json": "2f83d703f5790e03719b63aa52c0e224ad8dad89fcbf1f14c069d225bd24055e",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/formatsh.ts.json": "963553382eb5a18d261f9f0c3ebc60303a6402fa0a4f8c71d23284392453cd13",
+    "docs/program/registry/shared/provenance/vcl/browser/special-text.tsx.json": "ad059b836065831a34c940a918efd5d32474f5c9c7581754144d910a215a2b0d",
+    "docs/program/registry/shared/provenance/xmloff/source/core/xmltoken.ts.json": "b513c36f0a509a2c491c765f65feae653a73757219bb3cce7e99f0d6525ff796",
+    "docs/program/registry/shared/provenance/xmloff/source/style/XMLConstantsPropertyHandler.ts.json": "fa86422ecd66c32493dd9388bc865bd4bbf0555535b22b3902ec471a37d2df1c",
+    "docs/program/registry/shared/provenance/xmloff/source/style/shdwdhdl.ts.json": "09372e7b37d532abd9e1f886c7ca4a9ca5d899fd2314d9c483e0f59545b784df",
+    "docs/program/registry/shared/runtime/vcl/browser/special-text.tsx.json": "d708f87ebe2d89dde49c8af2ed1eb4913ebe37bad59a7772805270b894bc38cb",
+    "docs/program/registry/shared/runtime/xmloff/source/core/xmltoken.ts.json": "82b59d13c3865d776ad61e97e5454f3df6899cecb664a8daffba8bd01464b521",
+    "docs/program/registry/shared/runtime/xmloff/source/style/XMLConstantsPropertyHandler.ts.json": "5394793d426a064be73fa4c634d6794f83c951a1434d53c441d959db769943cb",
+    "docs/program/registry/shared/runtime/xmloff/source/style/shdwdhdl.ts.json": "e1b92704a994e1678e960e70af7a7e07274ac6826db1bf84f01efcc177e86c5b",
+    "scripts/check-module-boundaries-text-effects.test.ts": "d42652d3d1cfcf38fe8114993128f8b464e95c7f79fd5354a7c2ffaf01b92a39",
+    "scripts/check-module-boundaries.mjs": "2f8470dd80de36821927e8ac82a78ef874a94680cc96a9f1a14f0dbd468fc027"
+  },
+  "deletedPaths": [
+    "apps/office/src/vcl/browser/outlined-text.tsx",
+    "docs/program/registry/shared/provenance/vcl/browser/outlined-text.tsx.json",
+    "docs/program/registry/shared/runtime/vcl/browser/outlined-text.tsx.json"
+  ],
+  "nativeHashes": {
+    "sc/source/ui/view/formatsh.cxx": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+    "sc/sdi/formatsh.sdi": "cc19b3bba7fd3a8d2be5b99ca75dc21c986c5fe38f75649d96080014845ee3aa",
+    "sc/source/core/data/docpool.cxx": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327",
+    "vcl/source/outdev/text.cxx": "d131c3830f4a2ead6a0a11372692a258ce8be0ab6e88131f76708cb89c7c8643",
+    "xmloff/source/style/shdwdhdl.cxx": "722785ea15e9ad16d00efc4a35029763a512ec33ef900866c08e4ec735bc731d",
+    "xmloff/source/style/XMLConstantsPropertyHandler.cxx": "779b0b4de2d24fc048a381dde17119e9bd4de1ef950582203e9335a813abd1fe",
+    "xmloff/source/text/txtprhdl.cxx": "8368f5e88045101e422964cb0f918a36631038fd9ad196b91ac7870fa5139eeb",
+    "xmloff/source/text/txtprmap.cxx": "06e707be14bb818761eeb362f71d1e3d47e8938bf952e1ce06fd80cf718c3cdf",
+    "include/xmloff/XMLConstantsPropertyHandler.hxx": "e6fb0d054c250fe6d2bc060a6ffa9f84f6c2a43410fd422b30cea1750cd035d8",
+    "svx/sdi/svx.sdi": "4a8618560588e4cc301d6c3ee671c4a0d647719086201a5e51f7587ef4190afd"
+  },
+  "observations": [
+    "Original XML contracts CALC235/236 are preserved;fixed required constructor default-token argument matches native header.",
+    "Native Shadowed uses existing shared Writer menu and actual source selection/history;CharacterRelief is not menu/toolbox configurable upstream,so no browser placement was invented.",
+    "Common browser raster owner directly handles outline/shadow/relief. The obsolete outline-only component was removed and existing outline evidence/consumers now reference the shared owner.",
+    "Common XML handlers use actual Any and original direct enum payload extraction. Only exact source-backed Any/TypeClass import edges were added to boundary data;general module restrictions and guard algorithms remain unchanged,with negative tests.",
+    "Initial shared raster matcher assertion used unsupported composite style matching;separate real CSSOM/color assertions now pass without changing correct output.",
+    "Initial boundary scan identified missing exact owner imports;native constants direct TypeClass read replaces an unnecessary comphelper dependency.",
+    "Initial build caught unsafe test-result union property access;the fixture now asserts a typed discriminated result. No timeouts,retries,skips or coverage criteria were weakened.",
+    "No current Writer consumer imports the former outline-only raster;new common handlers are available for future source-mapped consumers. Writer resource checks pass;unrelated Writer module tests were not run."
+  ],
+  "limitations": [
+    "Browser CSS96dpi and actual element bounds are explicit paint inputs;full native device/font/printer/mixed-script/rich-edit services and complete pixel parity remain unverified.",
+    "Full Sfx/UNO/widget/device services remain unported or unverified;no broad parity flags are promoted."
+  ],
+  "stopCondition": "Last full checkpoint40;next50. Pause the active goal immediately after the next full all-app run regardless of result. No full test run occurred in task49."
+}

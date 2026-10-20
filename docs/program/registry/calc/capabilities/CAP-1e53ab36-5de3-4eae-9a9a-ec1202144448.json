@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448",
+    "capabilityId": "CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskKFJKEQ consumes native Calc Shadowed10010/Which108 and parameterized CharacterRelief10920/Which124 with actual source attribute operations,default/mixed state,complete typed items and real selection history. Shadow uses the existing shared Writer Format/Text menu placement;native nonconfigurable CharacterRelief receives no invented menu/toolbar placement. Common XMLShadowedPropHdl and XMLConstantsPropertyHandler preserve actual Any,exact lexical matching,original failure/output branches and ODS text properties(CALC235/236). Shared browser VCL special text composition preserves relief-before-shadow/outline selection,black-to-white relief foreground,native luminance tint,signed integer offset and original shadow/eight-outline/white-center draw order over one accessible text raster. Actual browser text bounds and CSS96dpi are browser paint inputs,not simulated native device/font metrics. Full Sfx/UNO/widget/device/font services,rich edit,mixed-script per-device drawing,printer DPI and complete native parity remain unverified. Production browser/Worker and ODS acceptance pass with inspected raster screenshots;Writer saving/open/no-recovery policies remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native text shadow and relief state,history,ODS and ordered browser raster effects",
+    "gaps": [
+      "Native full Sfx/UNO/widget/device/font/rich-edit/printer services and complete parity remain unverified.",
+      "Production desktop1280/mobile390,DOM-free Worker and ODS acceptance pass;full native parity remains unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_ATTR_CHAR_SHADOWED"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/text.cxx",
+          "marker": "OutputDevice::ImplDrawSpecialText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/shdwdhdl.cxx",
+          "marker": "XMLShadowedPropHdl::importXML"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "ScPatternAttr"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/text.cxx",
+          "marker": "OutputDevice::ImplDrawSpecialText"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "SetShadowed"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+          "marker": "exportFontEffectProperties"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/special-text.tsx",
+          "marker": "SpecialText"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/special-text.test.tsx",
+          "marker": "SpecialText"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/native-shadow-constants.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/shadow-relief.spec.ts",
+          "marker": "DOM-free Worker"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC235"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-native-text-shadow-relief",
+    "scopeLimitations": [
+      "TaskKFJKEQ consumes native Calc Shadowed10010/Which108 and parameterized CharacterRelief10920/Which124 with actual source attribute operations,default/mixed state,complete typed items and real selection history. Shadow uses the existing shared Writer Format/Text menu placement;native nonconfigurable CharacterRelief receives no invented menu/toolbar placement. Common XMLShadowedPropHdl and XMLConstantsPropertyHandler preserve actual Any,exact lexical matching,original failure/output branches and ODS text properties(CALC235/236). Shared browser VCL special text composition preserves relief-before-shadow/outline selection,black-to-white relief foreground,native luminance tint,signed integer offset and original shadow/eight-outline/white-center draw order over one accessible text raster. Actual browser text bounds and CSS96dpi are browser paint inputs,not simulated native device/font metrics. Full Sfx/UNO/widget/device/font services,rich edit,mixed-script per-device drawing,printer DPI and complete native parity remain unverified. Production browser/Worker and ODS acceptance pass with inspected raster screenshots;Writer saving/open/no-recovery policies remain."
+    ]
+  }
+}

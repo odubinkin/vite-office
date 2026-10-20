@@ -1,4 +1,7 @@
 /** @fileoverview Plain-cell font-family painting from the actual three-script items and native UTF16 run classification;device/rich/wrapped layout remains unported. */
+import { COL_BLACK } from "../../../tools/inc/color";
+import { SvxCharReliefItem } from "../../../editeng/source/items/textitem";
+
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { ScPatternAttr } from "../../inc/patattr";
 import { SvxOverlineItem } from "../../../editeng/source/items/textitem";
@@ -51,9 +54,12 @@ export function ScCellText({
               textDecorationStyle:
                 lineStyle === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
               textDecorationColor:
-                lineColor.GetAlpha() === 255
-                  ? `rgb(${lineColor.GetRed()}, ${lineColor.GetGreen()}, ${lineColor.GetBlue()})`
-                  : "currentColor",
+                (pattern.GetItem(124) as SvxCharReliefItem).GetValue() !== 0 &&
+                lineColor.equals(COL_BLACK)
+                  ? "white"
+                  : lineColor.GetAlpha() === 255
+                    ? `rgb(${lineColor.GetRed()}, ${lineColor.GetGreen()}, ${lineColor.GetBlue()})`
+                    : "currentColor",
               fontFamily: browserFontFamily(
                 font.GetFamilyName(),
                 getFontFamilyGeneric(font.GetFamily()),

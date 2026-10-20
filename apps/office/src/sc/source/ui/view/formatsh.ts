@@ -1,4 +1,6 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import { SvxShadowedItem, SvxCharReliefItem } from "../../../../editeng/source/items/textitem";
+
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -450,6 +452,26 @@ export class ScFormatShell {
   /** Applies original contour ExecuteAttr through shared native bound-toggle preparation. @param value - Optional complete native request. @returns Whether changed. */
   SetOutlineFont(value?: SvxContourItem): boolean {
     return this.ApplyToggleAttr(107, SvxContourItem.CreateDefault, value);
+  }
+  /** Original merged shadow bool/default state. @returns Shadow or mixed. */
+  GetShadowState(): boolean | undefined {
+    return (this.SelectionItem(108) as SvxShadowedItem | undefined)?.GetValue();
+  }
+  /** Original complete shadow item or generic bound toggle. @param value - Optional request. @returns Admitted success. */
+  SetShadowed(value?: SvxShadowedItem): boolean {
+    return this.ApplyToggleAttr(108, SvxShadowedItem.CreateDefault, value);
+  }
+  /** Original relief item state retains all enum values. @returns Relief or mixed. */
+  GetReliefState(): number | undefined {
+    return (this.SelectionItem(124) as SvxCharReliefItem | undefined)?.GetValue();
+  }
+  /** Original parameterized relief ExecuteAttr case. @param value - Complete native item. @returns Admitted success. */
+  SetCharacterRelief(value: SvxCharReliefItem): boolean {
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper()),
+      copy = value.Clone();
+    copy.SetWhich(124);
+    delta.ItemSetPut(copy);
+    return this.ApplySelectionPattern(delta);
   }
   /** Shared consumed ExecuteAttr cases receive a concrete native toggleable item. @param which - Known mapped attribute. @param factory - Concrete native factory. @param value - Optional complete request. @returns Whether changed. */
   private ApplyToggleAttr(which: number, factory: () => SfxPoolItem, value?: SfxPoolItem): boolean {

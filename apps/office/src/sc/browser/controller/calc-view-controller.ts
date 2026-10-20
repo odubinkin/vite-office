@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
+
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
 import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
@@ -411,6 +413,28 @@ export class CalcViewController {
   SetOutlineFont(item?: SvxContourItem): boolean {
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetOutlineFont(item);
+    this.Changed();
+    return changed;
+  }
+  /** Original shadow selection state. @returns Shadow or mixed. */
+  GetShadowState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetShadowState();
+  }
+  /** Commits input before original shadow mutation. @param item - Optional native item. @returns Admitted success. */
+  SetShadowed(item?: SvxShadowedItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetShadowed(item);
+    this.Changed();
+    return changed;
+  }
+  /** Original relief state. @returns Enum or mixed. */
+  GetReliefState(): number | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetReliefState();
+  }
+  /** Commits input before original relief mutation. @param item - Native item. @returns Admitted success. */
+  SetCharacterRelief(item: SvxCharReliefItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetCharacterRelief(item);
     this.Changed();
     return changed;
   }

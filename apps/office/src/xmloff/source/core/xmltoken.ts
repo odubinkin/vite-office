@@ -249,6 +249,8 @@ export enum XMLToken {
   TABLE_TABLE_COLUMNS,
   TABLE_TABLE_HEADER_COLUMNS,
   TABLE_TABLE_COLUMN_GROUP,
+  FO_TEXT_SHADOW,
+  STYLE_FONT_RELIEF,
   STYLE_DIAGONAL_TL_BR,
   STYLE_DIAGONAL_TL_BR_WIDTH,
   STYLE_DIAGONAL_TL_BR_WIDTHS,
@@ -258,6 +260,8 @@ export enum XMLToken {
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.fo, "text-shadow", XMLToken.FO_TEXT_SHADOW],
+  [ODF_NAMESPACES.style, "font-relief", XMLToken.STYLE_FONT_RELIEF],
   [ODF_NAMESPACES.style, "diagonal-tl-br", XMLToken.STYLE_DIAGONAL_TL_BR],
   [ODF_NAMESPACES.style, "diagonal-tl-br-width", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTH],
   [ODF_NAMESPACES.style, "diagonal-tl-br-widths", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTHS],

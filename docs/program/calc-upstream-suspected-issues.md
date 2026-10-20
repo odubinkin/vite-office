@@ -3354,3 +3354,17 @@ Full merged/device/alternate-view paint parity remains unverified.
 - Observation: the shared original handler reads exactly three measures and never checks for a fourth token. Additional trailing text is accepted while only inner width, distance and outer width are assigned.
 - Impact: malformed compound width declarations can be imported without rejection. The browser port formerly rejected them, which differed from the pinned source.
 - Local preservation: the shared handler now consumes the original first three measures. An independent Calc ODF fixture includes a trailing token and verifies the original resulting component widths. Writer uses the same handler.
+
+### CALC235 — XML text shadow accepts every value except exact none
+
+- Pinned source: `xmloff/source/style/shdwdhdl.cxx`, `XMLShadowedPropHdl::importXML`.
+- Observation: the original handler does not parse a shadow color or displacement. It writes true for every string other than the exact token `none`,including empty text,whitespace,uppercase variants and malformed declarations,and always returns success.
+- Impact: malformed or differently spaced ODF shadow values enable the shadow effect;export subsequently canonicalizes them to `1pt 1pt`.
+- Local preservation: the shared actual-Any handler retains the exact comparison and fixed export spelling. Literal lexical tests cover these inputs;no browser normalization is added.
+
+### CALC236 — XML constants handler returns success without output for out-of-range values
+
+- Pinned source: `xmloff/source/style/XMLConstantsPropertyHandler.cxx`, `XMLConstantsPropertyHandler::exportXML`.
+- Observation: after successful enum/integer extraction,the original handler checks the0..65535 range. The out-of-range branch emits a diagnostic but leaves the success bool true and the caller's existing output unchanged. An in-range unmapped constant instead returns false and assigns empty output when no default token exists.
+- Impact: callers can receive success together with stale XML text for invalid numeric input.
+- Local preservation: the common handler retains both original return/output branches. Actual Any tests independently assert negative,oversized and unmapped values.

@@ -6,7 +6,8 @@ import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
 import { visibleRows } from "./row-geometry";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
-import { OutlinedText } from "../../../vcl/browser/outlined-text";
+import { SpecialText } from "../../../vcl/browser/special-text";
+import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import { columnPixels, visibleColumns } from "./column-geometry";
@@ -262,7 +263,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   const pattern = document.GetPattern(position) as ScPatternAttr;
                   const weight = (pattern.GetItem(102) as SvxWeightItem).GetWeight();
                   const posture = (pattern.GetItem(103) as SvxPostureItem).GetPosture();
-                  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue();
+                  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue(),
+                    shadowed = (pattern.GetItem(108) as SvxShadowedItem).GetValue(),
+                    relief = (pattern.GetItem(124) as SvxCharReliefItem).GetValue(),
+                    special = outlined || shadowed || relief !== 0;
                   const lineItem = pattern.GetItem(104) as SvxUnderlineItem;
                   const underline = lineItem.GetLineStyle(),
                     lineColor = lineItem.GetColor();
@@ -363,7 +367,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         textDecorationStyle:
                           underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
                         textDecorationLine:
-                          outlined || underline === FontLineStyle.LINESTYLE_NONE
+                          special || underline === FontLineStyle.LINESTYLE_NONE
                             ? "none"
                             : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
@@ -397,8 +401,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         />
                       ) : (
                         <div className="w-full shrink-0">
-                          <OutlinedText
+                          <SpecialText
                             enabled={outlined}
+                            shadow={shadowed}
+                            relief={relief}
+                            color={fontColor.getFinalColor()}
+                            lineColor={lineColor}
                             paintStyle={{
                               textDecorationColor:
                                 lineColor.GetAlpha() === 255
@@ -411,7 +419,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             }}
                           >
                             <ScCellText text={cell.text} pattern={pattern} />
-                          </OutlinedText>
+                          </SpecialText>
                         </div>
                       )}
                     </div>

@@ -1,4 +1,6 @@
 /** @fileoverview Native Calc border slot adapter;typed browser arguments are converted into actual mapped native items before ScFormatShell dispatch. */
+import { SvxShadowedItem, SvxCharReliefItem } from "../../editeng/source/items/textitem";
+
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 import { SvxBoxItem, SvxBoxInfoItem } from "../../editeng/source/items/frmitems";
@@ -104,4 +106,65 @@ export function createCalcBorderSlots(): SfxSlotDefinition<CalcBorderCommandTarg
         },
     }),
   );
+}
+
+/** Source font effect slots;CharacterRelief is not menu/toolbox configurable in native SDI. */
+export interface CalcTextEffectCommandTarget {
+  GetShadowState(): boolean | undefined;
+  SetShadowed(item?: SvxShadowedItem): boolean;
+  GetReliefState(): number | undefined;
+  SetCharacterRelief(item: SvxCharReliefItem): boolean;
+}
+/** Original shadow resource is exposed at its existing native Format/Text placement. */
+export const calcTextEffectCommands = [
+  { id: ".uno:Shadowed", slotId: 10010, label: "Shadow" },
+] as const;
+/** Consumed native effect slots retain typed attributes and source no-argument admission. @returns Slots. */
+export function createCalcTextEffectSlots(): readonly SfxSlotDefinition<CalcTextEffectCommandTarget>[] {
+  return [
+    {
+      commandUrl: ".uno:Shadowed",
+      slotId: 10010,
+      label: "Shadow",
+      getState: /** Reads original bound bool. @param target - Owner. @returns State. */ (
+        target,
+      ) => {
+        const checked = target.GetShadowState();
+        return { enabled: true, ...(checked === undefined ? { mixed: true } : { checked }) };
+      },
+      execute:
+        /** Accepts actual native items or original bound toggle. @param target - Owner. @param request - Request. @returns Native result. */ (
+          target,
+          request,
+        ) => {
+          if (!request.GetArgs().length) return target.SetShadowed();
+          const item = request.GetArgs()[0];
+          if (!(item instanceof SvxShadowedItem))
+            throw new TypeError("Shadowed requires a complete SvxShadowedItem");
+          return target.SetShadowed(item);
+        },
+    },
+    {
+      commandUrl: ".uno:CharacterRelief",
+      slotId: 10920,
+      label: "Character Relief",
+      getState: /** Reads original enum value. @param target - Owner. @returns State. */ (
+        target,
+      ) => {
+        const value = target.GetReliefState();
+        return { enabled: true, ...(value === undefined ? { mixed: true } : { value }) };
+      },
+      execute:
+        /** Non-toggle source slot requires complete native arguments. @param target - Owner. @param request - Request. @returns Native result. */ (
+          target,
+          request,
+        ) => {
+          if (!request.GetArgs().length) return false;
+          const item = request.GetArgs()[0];
+          if (!(item instanceof SvxCharReliefItem))
+            throw new TypeError("CharacterRelief requires a complete SvxCharReliefItem");
+          return target.SetCharacterRelief(item);
+        },
+    },
+  ];
 }
