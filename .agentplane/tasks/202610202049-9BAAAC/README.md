@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:23:32.233Z"
+doc_updated_at: "2026-10-20T23:31:11.867Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -190,6 +190,8 @@ sections:
     Point-only ordinary FindAll regression: source ordinary branch invokes DoFind on the original cursor and does not synthesize a mark. The managed transfer had always supplied first.GetMark(), which aliases its point for an unmarked result and therefore invented a marked selection. A real public SwFindParas region-boundary visitor reproduced the failure without substituting a TextSearch service or document owner. Ordinary transfer now preserves marklessness; selection/all-ring transfers and old-mark extension retain their separate source rules. Genuine removal of a bookmarked last paragraph also verifies numeric-slot restoration skips a structural end node and restores undo state. No private history/parser state is overwritten.
 
     Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.
+
+    Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.
 id_source: "generated"
 ---
 ## Summary
@@ -360,3 +362,5 @@ Current compiler/search/cursor checkpoint (all edits remain in writer on writer)
 Point-only ordinary FindAll regression: source ordinary branch invokes DoFind on the original cursor and does not synthesize a mark. The managed transfer had always supplied first.GetMark(), which aliases its point for an unmarked result and therefore invented a marked selection. A real public SwFindParas region-boundary visitor reproduced the failure without substituting a TextSearch service or document owner. Ordinary transfer now preserves marklessness; selection/all-ring transfers and old-mark extension retain their separate source rules. Genuine removal of a bookmarked last paragraph also verifies numeric-slot restoration skips a structural end node and restores undo state. No private history/parser state is overwritten.
 
 Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.
+
+Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.

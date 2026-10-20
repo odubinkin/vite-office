@@ -618,6 +618,30 @@ the ring before its head, and the portable shell close must do the same.
 Higher-level UI cleanup, UNO cursor overrides and the intended reason for
 retaining the saved cursor remain unverified.
 
+## WRITER-025: New transliteration module loading checks a different table index
+
+Status: original table and control-flow source proof; compiled native service
+reproduction and consumer consequences remain unverified.
+Pinned `i18npool/source/transliteration/transliterationImpl.cxx`,
+`TransliterationImpl::loadModuleNew` (lines 250–273), searches `TMlist[j]` for
+the requested `modType[i]`. It initializes and checks the ignore/non-ignore
+mask using `TMlist[i].tm`, then loads `TMlist[j].implName`. The input sequence
+position and the matching table position need not agree.
+
+For example, the initialized request sequence
+`[LOWERCASE_UPPERCASE, IGNORE_CASE]` matches the uppercase conversion entry
+and the ignore-case entry respectively. However, the mask checks use table
+entries zero (`IGNORE_CASE`) and one (`IGNORE_WIDTH`). Both are ignore
+entries, so the explicit mixed-family rejection does not run. If both native
+module loads succeed, the cascade accepts both requested modules. This is a
+source-derived conditional consequence, not a compiled-service test result.
+
+Decision: preserve the original index expressions when this owner is ported;
+do not replace `i` with `j` or add a new mixed-family rejection. The portable
+owner and this initialization path are not implemented yet. Actual service
+loading, valid consumer request restrictions and the intended compatibility
+behavior remain to be established.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,
