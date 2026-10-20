@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T21:16:47.660Z"
+doc_updated_at: "2026-10-20T21:24:47.046Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -75,6 +75,10 @@ sections:
     Targeted development: 130 related tests / nine files pass; full tooling 91 tests / eighteen files passes. Initial fixture assumptions were corrected from native evidence: Common has nine templates and all Japanese match/ignore defaults are true; native Raw mode emits an initial empty text event; real UNO RuntimeException diagnostics are in Message, not JS Error.message. The tests now observe those original contracts, without changing production defaults/parser event flow. The Common fixture uses the actual raw asset import rather than a jsdom file URL. Unused test imports were removed after the build/lint gate found them. Exact XML source imports and exported native merge mutation inventory were added as data only, with no guard algorithm changes or fidelity promotion.
 
     Full cadence is in progress, not verified: npm test remains live under tool session 41183 (Vitest coverage PID 73246 at last observation; coverage temporary files and active child workers prove progress). Do not restart solely from an observation timeout; poll that handle or inspect the current process. The first full browser attempt completed its build but stopped during test collection: native Node ESM requires type:json attributes for existing repository ICU/casefolding JSON imports. No browser scenarios ran in that attempt. Syntax-only attributes are queued for correction after the current full coverage run ends; do not alter table data or read the unapproved external ICU source. Full coverage and inventory results, browser scenarios and static smoke remain required before finish. Native OS/ABI/lifetime/debug-invalid-state behavior and full config service/UI integration remain unverified.
+
+    - Observation: Full npm test is still live under session 41183 / PID 73246; temporary coverage artifacts advanced from 400 to 608 while workers continue running. Production sources remain frozen during this run.
+      Impact: No full-suite verdict is available yet, so this task remains DOING; no rerun or coverage-gate change is justified.
+      Resolution: Prepared and executed an ignored native Node JSON import probe for the five affected existing table imports. Explicit type:json loading succeeds; prospective repairs preserve all non-import source lines and source line counts, and imported objects exactly equal the unchanged JSON data. Evidence: output/playwright/writer-xcs-schema/json-import-repair-proof.json. An optional instrumenter-level probe was unavailable because that package is not exposed; no executable coverage-map identity claim is made. Apply the syntax repairs after the live full run terminates, then repeat browser verification.
 id_source: "generated"
 ---
 ## Summary
@@ -130,3 +134,7 @@ Implementation checkpoint: original Parser, ParseManager, xmldata and complete X
 Targeted development: 130 related tests / nine files pass; full tooling 91 tests / eighteen files passes. Initial fixture assumptions were corrected from native evidence: Common has nine templates and all Japanese match/ignore defaults are true; native Raw mode emits an initial empty text event; real UNO RuntimeException diagnostics are in Message, not JS Error.message. The tests now observe those original contracts, without changing production defaults/parser event flow. The Common fixture uses the actual raw asset import rather than a jsdom file URL. Unused test imports were removed after the build/lint gate found them. Exact XML source imports and exported native merge mutation inventory were added as data only, with no guard algorithm changes or fidelity promotion.
 
 Full cadence is in progress, not verified: npm test remains live under tool session 41183 (Vitest coverage PID 73246 at last observation; coverage temporary files and active child workers prove progress). Do not restart solely from an observation timeout; poll that handle or inspect the current process. The first full browser attempt completed its build but stopped during test collection: native Node ESM requires type:json attributes for existing repository ICU/casefolding JSON imports. No browser scenarios ran in that attempt. Syntax-only attributes are queued for correction after the current full coverage run ends; do not alter table data or read the unapproved external ICU source. Full coverage and inventory results, browser scenarios and static smoke remain required before finish. Native OS/ABI/lifetime/debug-invalid-state behavior and full config service/UI integration remain unverified.
+
+- Observation: Full npm test is still live under session 41183 / PID 73246; temporary coverage artifacts advanced from 400 to 608 while workers continue running. Production sources remain frozen during this run.
+  Impact: No full-suite verdict is available yet, so this task remains DOING; no rerun or coverage-gate change is justified.
+  Resolution: Prepared and executed an ignored native Node JSON import probe for the five affected existing table imports. Explicit type:json loading succeeds; prospective repairs preserve all non-import source lines and source line counts, and imported objects exactly equal the unchanged JSON data. Evidence: output/playwright/writer-xcs-schema/json-import-repair-proof.json. An optional instrumenter-level probe was unavailable because that package is not exposed; no executable coverage-map identity claim is made. Apply the syntax repairs after the live full run terminates, then repeat browser verification.
