@@ -41,6 +41,42 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Consumed source DeleteArea orders coordinates and visits selected real sheets;attribute deletion does not rebuild formula listeners. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param marks - Selected sheets. @param flags - Attribute-only deletion flags. @returns Nothing. */
+  DeleteArea(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    marks: ScMarkData,
+    flags: InsertDeleteFlags,
+  ): void {
+    const oldAutoCalc = this.GetAutoCalc();
+    this.SetAutoCalc(false);
+    try {
+      [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
+      [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
+      for (let tab = 0; tab < this.GetTableCount(); tab++)
+        if (marks.GetTableSelect(tab))
+          (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
+    } finally {
+      this.SetAutoCalc(oldAutoCalc);
+    }
+  }
+
+  /** Original selected-sheet DeleteSelection traversal for the represented hard/edit-attribute flags;cell payload/listener owners are untouched. @param flags - Attribute-only deletion flags. @param marks - Actual multi marks. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
+    const oldAutoCalc = this.GetAutoCalc();
+    this.SetAutoCalc(false);
+    try {
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
+      }
+    } finally {
+      this.SetAutoCalc(oldAutoCalc);
+    }
+  }
+
   /** Clips only to real cell data, preserving source output mutations on failure. @param tab - Sheet. @param firstCol - Start-column output. @param firstRow - Start-row output. @param lastCol - End-column output. @param lastRow - End-row output. @returns Whether the clipped area is valid. */
   ShrinkToDataArea(
     tab: number,
@@ -179,7 +215,7 @@ export class ScDocument {
     }
     return changed;
   }
-  /** Copies consumed ATTRIB through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB only. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
+  /** Copies consumed ATTRIB and optional source STRING undo payload through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
   CopyToDocument(
     range: ScRange,
     flags: InsertDeleteFlags,
@@ -187,7 +223,16 @@ export class ScDocument {
     destination: ScDocument,
     marks?: ScMarkData,
   ): void {
-    if (flags !== InsertDeleteFlags.ATTRIB)
+    if (
+      (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
+      flags &
+        ~(
+          InsertDeleteFlags.ATTRIB |
+          InsertDeleteFlags.STRING |
+          InsertDeleteFlags.EDITATTR |
+          InsertDeleteFlags.NOCAPTIONS
+        )
+    )
       throw new Error("Only attribute document copying is implemented");
     if (marked) {
       if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
@@ -225,7 +270,7 @@ export class ScDocument {
               target.GetAllocatedColumnsCount(),
             ) - 1
           : end.Col();
-      for (let col = start.Col(); col <= last; col++)
+      for (let col = start.Col(); col <= last; col++) {
         this.CopyColumnAttributes(
           source.GetColumnData(col),
           target.CreateColumnIfNotExists(col),
@@ -233,6 +278,11 @@ export class ScDocument {
           end.Row(),
           destination,
         );
+        if (flags & InsertDeleteFlags.STRING && col < source.GetAllocatedColumnsCount())
+          source
+            .CreateColumnIfNotExists(col)
+            .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
+      }
       if (end.Col() === this.MaxCol()) {
         if (last >= 0) target.CreateColumnIfNotExists(last);
         this.CopyColumnAttributes(

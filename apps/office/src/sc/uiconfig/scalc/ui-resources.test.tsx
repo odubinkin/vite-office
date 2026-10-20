@@ -137,7 +137,7 @@ it("retains the complete visible source standardbar with disabled missing slots 
     ) => {
       expect(button.querySelector("svg")).not.toBeNull();
       expect(button).toHaveClass("size-9", "shrink-0");
-      if (index === 0) expect(button).toBeEnabled();
+      if (index === 0 || ids[index] === ".uno:ResetAttributes") expect(button).toBeEnabled();
       else expect(button).toBeDisabled();
     },
   );

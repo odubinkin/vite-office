@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScCellShell } from "../../source/ui/view/cellsh3";
+import { ScViewFunc } from "../../source/ui/view/viewfunc";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
@@ -12,7 +14,7 @@ import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
-import { ScUndoSelectionAttr } from "../../source/ui/undo/undoblk3";
+import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import type { ScCellValue } from "../../inc/cellvalue";
@@ -51,6 +53,13 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
+  ResetAttributes(): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ResetAttributes();
+    this.Changed();
+    return changed;
+  }
   /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetAlignment(axis);
@@ -541,7 +550,9 @@ export class CalcViewController {
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
     const position =
-      cursorAction instanceof ScUndoSetCell || cursorAction instanceof ScUndoSelectionAttr
+      cursorAction instanceof ScUndoSetCell ||
+      cursorAction instanceof ScUndoSelectionAttr ||
+      cursorAction instanceof ScUndoDeleteContents
         ? cursorAction.getAffectedRange().aStart
         : new ScAddress(
             0,
@@ -550,7 +561,10 @@ export class CalcViewController {
           );
     this.SelectTab(position.Tab());
     this.Select(position.Col(), position.Row());
-    if (cursorAction instanceof ScUndoSelectionAttr) {
+    if (
+      cursorAction instanceof ScUndoSelectionAttr ||
+      cursorAction instanceof ScUndoDeleteContents
+    ) {
       this.viewData.GetMarkData().assign(cursorAction.GetMarkData());
       this.Changed();
     }

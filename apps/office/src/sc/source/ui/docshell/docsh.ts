@@ -1,4 +1,5 @@
 /** @fileoverview Bounded ScDocShell lifecycle,ODS filter and shared Sfx history ownership. Browser primary media use existing Sfx acknowledgement/generation contracts;native drawing/formatting services remain unported. */
+import { ScDocFunc } from "./docfunc";
 import {
   SfxObjectShell,
   createDocument,
@@ -40,6 +41,11 @@ class ShellSubscriber extends SfxListener {
 }
 /** Real document shell with canonical model,medium and shared native action history. */
 export class ScDocShell extends SfxObjectShell {
+  private readonly docFunc = new ScDocFunc(this);
+  /** Borrows the native document-function dispatcher. @returns Real owner. */
+  GetDocFunc(): ScDocFunc {
+    return this.docFunc;
+  }
   static readonly ODS_MEDIA_TYPE = ODS_MIMETYPE;
   private readonly undo = new SfxUndoManager<ScDocShell>();
   private openRequest = 0;

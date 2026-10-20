@@ -4,7 +4,12 @@ import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { SfxPoolItem } from "../../../../svl/inc/poolitem";
-import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
+import {
+  ATTR_PATTERN_START,
+  ATTR_PATTERN_END,
+  ATTR_MERGE,
+  ATTR_MERGE_FLAG,
+} from "../../../inc/scitems";
 
 /** Original lcl_MergeDeep compares inherited values against actual pool defaults;existing invalid states remain invalid. @param merged - Parentless accumulator. @param source - Source pattern set. @returns Nothing. */
 function lcl_MergeDeep(merged: SfxItemSet, source: SfxItemSet): void {
@@ -157,6 +162,45 @@ export class ScAttrArray {
     const entry = new ScAttrEntry(value);
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
+  }
+  /** Original DeleteHardAttr clears direct items while retaining styles and both merge items;canonical runs are re-searched after replacement. @param first - Ordered valid first row. @param last - Ordered valid last row. @returns Nothing. */
+  DeleteHardAttr(first: number, last: number): void {
+    this.SetDefaultIfNotInit();
+    const defaults = new CellAttributeHolder(
+        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+      ),
+      index: [number] = [0];
+    try {
+      this.Search(first, index);
+      let row = index[0] > 0 ? (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0;
+      if (row < first) row = first;
+      while (row <= last) {
+        const entry = this.mvData[index[0]] as ScAttrEntry,
+          old = entry.getScPatternAttr() as ScPatternAttr;
+        if (old.GetItemSet().Count()) {
+          const stop = Math.min(entry.nEndRow, last),
+            next = new ScPatternAttr(old);
+          for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; which++)
+            if (which !== ATTR_MERGE && which !== ATTR_MERGE_FLAG) next.ItemSetClearItem(which);
+          if (next.equals(defaults.getScPatternAttr() as ScPatternAttr)) {
+            next.Dispose();
+            this.SetPatternArea(row, stop, defaults);
+          } else {
+            const holder = new CellAttributeHolder(next, true);
+            try {
+              this.SetPatternArea(row, stop, holder);
+            } finally {
+              holder.Dispose();
+            }
+          }
+          this.Search(row, index);
+        }
+        ++index[0];
+        row = (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1;
+      }
+    } finally {
+      defaults.Dispose();
+    }
   }
   /** Original SetPatternAreaImpl logical split/shrink/replace/combine operations. Rich text is not a represented cell alternative. @param start - Ordered first row. @param end - Ordered last row. @param holder - Canonical source. @returns Nothing. */
   SetPatternArea(start: number, end: number, holder: CellAttributeHolder): void {

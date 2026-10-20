@@ -41,6 +41,10 @@ export enum ScInputMode {
 
 /** Consumed native attribute-copy flags; content/object flag operations remain separate. */
 export enum InsertDeleteFlags {
+  NONE = 0x0000,
+  STRING = 0x0004,
+  EDITATTR = 0x0100,
+  NOCAPTIONS = 0x8000,
   HARDATTR = 0x0020,
   STYLES = 0x0040,
   ATTRIB = 0x0060,

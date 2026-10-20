@@ -9,7 +9,7 @@ import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { ScAddress } from "../../../inc/address";
 import { ScColumn, ScColumnData } from "../../../inc/column";
-import { CellType } from "../../../inc/global";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScPatternAttr } from "../../../inc/patattr";
@@ -26,6 +26,27 @@ import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { SetOptimalHeightsToRows } from "./table1";
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table2.cxx DeleteArea clamps to allocated columns and never mutates the default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param flags - Consumed attribute-only flags. @returns Nothing. */
+  DeleteArea(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    flags: InsertDeleteFlags,
+  ): void {
+    if (lastCol >= this.aCol.length) lastCol = this.aCol.length - 1;
+    if (lastRow > this.rDocument.MaxRow()) lastRow = this.rDocument.MaxRow();
+    if (
+      this.rDocument.ValidColRow(firstCol, firstRow) &&
+      this.rDocument.ValidColRow(lastCol, lastRow)
+    )
+      for (let col = firstCol; col <= lastCol; col++)
+        (this.aCol[col] as ScColumn).DeleteArea(firstRow, lastRow, flags);
+  }
+  /** Original DeleteSelection traverses allocated columns only;no synthetic column allocation or default-tail correction. @param flags - Attribute-only flags. @param marks - Actual native marks. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
+    for (const column of this.aCol) column.DeleteSelection(flags, marks);
+  }
   /** Original multi-column spans clamp to allocated columns and retain sparse storage. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited items. @returns Nothing. */
   MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {
     for (const span of marks.GetMarkedColSpans()) {

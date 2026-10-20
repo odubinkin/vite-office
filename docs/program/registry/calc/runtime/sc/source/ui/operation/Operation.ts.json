@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "native-direct-format-deletion",
+    "capabilityIds": [
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/operation/Operation.ts",
+        "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx"
+      ],
+      "justification": "TaskGWT2KJ enables native SID_CELL_FORMAT_RESET26067 through existing shared Writer Clear menu/shortcut,ScCellShell,ScViewFunc,ScDocFunc and original concrete DeleteCell/DeleteContent operation owners. Actual ScAttrArray::DeleteHardAttr clears direct item ids except merge/merge flags,retains unbound style names and source parent itemsets,reuses default patterns and re-searches coalesced runs. Source table deletion visits only allocated columns;default-column tails remain unchanged. Actual ScUndoDeleteContents owns attribute snapshots,marks,flags and native Delete history;scalar text/numbers/formulas and listeners remain with original cell owners. Independently authored ODS and repeated package reopen exercise cleared properties. Only the represented plain-cell/default-sheet-view HARDATTR|EDITATTR path is supported;rich edit,style resolution,protection,matrix/merged-range expansion,conditional formatting,drawing,alternate views and full native service/parity are unverified. Existing browser primary saving/open/no-recovery policies remain.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Operation",
+        "OperationType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/operation/Operation.cxx",
+      "upstreamSymbols": [
+        "Operation::run"
+      ]
+    }
+  }
+}

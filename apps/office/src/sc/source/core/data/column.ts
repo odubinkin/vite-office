@@ -29,7 +29,7 @@ import { ScAddress } from "../../../inc/address";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { CellType } from "../../../inc/global";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import {
   element_type_numeric,
   element_type_string,
@@ -110,6 +110,63 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Consumed unmarked CopyToColumn STRING/CopyByCloneHandler string-block path;native typed-store writes and text metadata avoid introducing setter broadcasts. Attribute copying remains with the existing document run-copy owner. @param first - First row. @param last - Last row. @param target - Actual target column. @returns Nothing. */
+  CopyToColumn(first: number, last: number, target: ScColumn): void {
+    const end = this.maCells.cend();
+    for (
+      const position = this.maCells.cposition(first).first;
+      !position.equals(end);
+      position.increment()
+    ) {
+      const block = position.get();
+      if (block.position > last) break;
+      if (block.type !== element_type_string) continue;
+      for (
+        let row = Math.max(first, block.position);
+        row <= Math.min(last, block.position + block.size - 1);
+        row++
+      ) {
+        const string = this.GetSharedString(row);
+        try {
+          target.DetachFormulaCell(row);
+          if (string.isEmpty()) {
+            target.maCells.set_empty(row, row);
+            target.maCellTextAttrs.set_empty(row, row);
+          } else {
+            const copy =
+              this.rDocument.GetPool() === target.rDocument.GetPool()
+                ? new SharedString(string)
+                : target.rDocument.GetSharedStringPool().intern(string.getString());
+            try {
+              target.maCells.set(row, copy, string_element_callbacks);
+              target.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+            } finally {
+              copy.dispose();
+            }
+          }
+        } finally {
+          string.dispose();
+        }
+      }
+    }
+  }
+  /** Consumed native column3.cxx attribute-only deletion;unrepresented content/style deletion is rejected before mutation. Plain cells have no EditEngine attributes to strip. @param first - First row. @param last - Last row. @param flags - HARDATTR/EDITATTR and optional internal NOCAPTIONS. @returns Nothing. */
+  DeleteArea(first: number, last: number, flags: InsertDeleteFlags): void {
+    if (
+      flags &
+      ~(InsertDeleteFlags.HARDATTR | InsertDeleteFlags.EDITATTR | InsertDeleteFlags.NOCAPTIONS)
+    )
+      throw new Error("Only native hard-attribute deletion is implemented");
+    if (flags & InsertDeleteFlags.HARDATTR) this.pAttrArray.DeleteHardAttr(first, last);
+  }
+  /** Original DeleteSelection visits only actual multi-mark row spans for this allocated column. @param flags - Consumed deletion flags. @param marks - Native marks. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
+    if (marks.IsMultiMarked()) {
+      const iterator = new ScMultiSelIter(marks.GetMultiSelData(), this.nCol);
+      for (let result = iterator.Next(0, 0); result[0]; result = iterator.Next(0, 0))
+        this.DeleteArea(result[1], result[2], flags);
+    }
+  }
   /** Original disjoint row-span traversal over native multi-selection data. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited values. @returns Nothing. */
   MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {
     if (marks.IsMultiMarked()) {

@@ -3172,3 +3172,19 @@ boolean into the Any, then returns the converter result. Rejected forms such as 
 Decision: preserve this shared value contract. The Calc property mapper honors the false
 return and diagnoses the rejected property rather than applying its intermediate Any.
 Export extracts an actual bool and leaves the caller's string unchanged on type failure.
+
+## CALC-217: direct-format deletion leaves the unallocated default-column tail unchanged
+
+Status: pinned `ScTable::ApplyPatternArea`, `ScTable::DeleteArea` and `ScTable::DeleteSelection`
+in `sc/source/core/data/table2.cxx`.
+
+Applying a pattern through MaxCol updates `aDefaultColData` for unallocated columns.
+The deletion paths visit only `aCol`: DeleteArea clamps its last column to the allocated
+size, and DeleteSelection loops allocated columns. Neither clears `aDefaultColData`.
+Consequently a whole-sheet Clear may remove direct formatting from allocated columns
+while the unallocated tail retains the previously applied pattern.
+
+Decision: preserve the source traversal and allocation behavior. Tests apply an actual
+full-sheet pattern, allocate the real content column, clear its range and inspect the
+unchanged tail through the genuine document owner. No allocation or default-tail reset
+is added to disguise the difference. Attribute Undo captures the real source patterns.

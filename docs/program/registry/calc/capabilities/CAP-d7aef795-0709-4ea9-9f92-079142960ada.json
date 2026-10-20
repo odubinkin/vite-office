@@ -1,0 +1,118 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+    "capabilityId": "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskGWT2KJ enables native SID_CELL_FORMAT_RESET26067 through existing shared Writer Clear menu/shortcut,ScCellShell,ScViewFunc,ScDocFunc and original concrete DeleteCell/DeleteContent operation owners. Actual ScAttrArray::DeleteHardAttr clears direct item ids except merge/merge flags,retains unbound style names and source parent itemsets,reuses default patterns and re-searches coalesced runs. Source table deletion visits only allocated columns;default-column tails remain unchanged. Actual ScUndoDeleteContents owns attribute snapshots,marks,flags and native Delete history;scalar text/numbers/formulas and listeners remain with original cell owners. Independently authored ODS and repeated package reopen exercise cleared properties. Only the represented plain-cell/default-sheet-view HARDATTR|EDITATTR path is supported;rich edit,style resolution,protection,matrix/merged-range expansion,conditional formatting,drawing,alternate views and full native service/parity are unverified. Existing browser primary saving/open/no-recovery policies remain.",
+      "Source EDITATTR undo snapshots also copy ordinary STRING blocks through the consumed native CopyToColumn/CopyByCloneHandler path,including cross-pool re-interning,empty-string removal markers and no setter broadcasts;HARDATTR-only undo does not restore strings."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native Clear direct formatting command and attribute deletion history",
+    "gaps": [
+      "Only represented plain-cell/default-view hard/edit-attribute deletion is implemented;content/style deletion flags are explicitly rejected rather than silently truncated.",
+      "Named style references/parents are retained but the full ScStyleSheet resolution graph is not certified.",
+      "Rich EditEngine attributes,protection,matrix/merged-range expansion,conditional format deletion,drawing,alternate views,full services and device layout remain unported.",
+      "Original allocated-column traversal leaves default-column tails unchanged;this source behavior is retained.",
+      "Native DeleteContents QA for sparklines is a related call-boundary reference,not executed full sparkline coverage."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::DeleteHardAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx",
+          "marker": "SID_CELL_FORMAT_RESET"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/DeleteContentOperation.cxx",
+          "marker": "DeleteContentOperation::runImplementation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk3.cxx",
+          "marker": "ScUndoDeleteContents::DoChange"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_sparkline.cxx",
+          "marker": "testUndoRedoClearContentForSparkline"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "ResetAttributes"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts",
+          "marker": "DeleteCellOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts",
+          "marker": "DeleteContentOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+          "marker": "Operation"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attarray.ts",
+          "marker": "DeleteHardAttr"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/cellsh3.ts",
+          "marker": "ResetAttributes"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/clear-format.spec.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610200048-GWT2KJ/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-clear-direct-formatting",
+    "scopeLimitations": [
+      "Only represented plain-cell/default-view hard/edit-attribute deletion is implemented;content/style deletion flags are explicitly rejected rather than silently truncated.",
+      "Named style references/parents are retained but the full ScStyleSheet resolution graph is not certified.",
+      "Rich EditEngine attributes,protection,matrix/merged-range expansion,conditional format deletion,drawing,alternate views,full services and device layout remain unported.",
+      "Original allocated-column traversal leaves default-column tails unchanged;this source behavior is retained.",
+      "Native DeleteContents QA for sparklines is a related call-boundary reference,not executed full sparkline coverage."
+    ]
+  }
+}
