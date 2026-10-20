@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/postuhdl.ts",
+    "upstreamPath": "xmloff/source/style/postuhdl.cxx",
+    "localSymbols": [
+      "XMLPosturePropHdl"
+    ],
+    "upstreamSymbols": [
+      "XMLPosturePropHdl"
+    ],
+    "preservedResponsibilities": [
+      "Task1KGJBF connects native Calc Bold/Italic/Underline slots through the actual shared Writer command controls to real script-specific weight/posture and underline items,selection state,attribute undo and cell painting. Shared xmloff weight/posture/underline/color handlers retain actual Any,source maps,failed conversion,merge order and consumed unit-converter contracts. Writer text filters now preserve native independent script scalars,font metadata and exact underline style/color instead of browser booleans;automatic-style keys include every represented field,and insertion fragments retain actual native items. Original Writer underline-color ContextFilter suppression is retained. Shared literal underline Worker transport preserves style and packed alpha/color using the real pool;unported complex interface state rejects rather than silently flattening. Native source full constructors,UNO property-set/service/factory graph,complex color XML/Worker transport,rich-text editing,script/device layout,named Calc styles and complete UI/filter parity remain unverified. Source-based managed tests are not a compiled native parity certificate;intentional browser primary-save/open/no-recovery policy remains. Bounded managed verification is recorded in task1KGJBF;no broad parity flags are promoted."
+    ],
+    "omittedResponsibilities": [
+      "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
+      "Full script/device rendering,rich/wrapped/rotated/merged layout and native dialogs remain unported.",
+      "Full UNO property-set/handler factory graph,complex color XML and Worker state and complete ODF filters remain unverified;unsupported complex Worker values reject instead of losing fields.",
+      "Browser filters use a bounded native-value handoff;this is not a full native UNO property-set provider. Source and managed evidence do not certify compiled native or broad module parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/postuhdl.ts",
+          "marker": "XMLPosturePropHdl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/postuhdl.cxx",
+          "marker": "XMLPosturePropHdl"
+        }
+      ]
+    }
+  }
+}

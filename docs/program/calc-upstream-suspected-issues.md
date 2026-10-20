@@ -2642,3 +2642,603 @@ column range that the next sheet has not allocated;it neither creates columns
 nor silently re-clamps. Task203 covers supported resets and the rejected
 precondition. This is source-derived,not native execution,physical memory
 emulation or a claim of a confirmed document-level upstream defect.
+
+## CALC-189: Negative F precision can under-allocate the native output buffer
+
+Status: an original memory-safety failure was reproduced under AddressSanitizer; no returned value
+is certified for that failing call.
+
+The pinned
+[doubleToString allocation estimate](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1562)
+combines `nDigits`, `nDecPlaces` and an optional grouping allowance before `alloca`. The later
+[negative-F integer fill](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1661) can write
+more units than that estimate permits.
+
+Native call: value `1e14`, format F, decimal places `-15`, decimal separator period, groups
+`{1, 0}`, group separator comma, and trailing-zero erasure false. Here `nExp` is 14 and `nDigits`
+is 0. The estimate reserves 24 Unicode units; the integer fill executes 14 iterations, each writing
+a separator and a zero. The isolated original caller aborts with `SIGABRT` and
+`dynamic-stack-buffer-overflow` at `strtmpl.hxx:1667`. This is an observed failure of that input,
+not proof that every negative-F call fails or a confirmed upstream issue report.
+
+Evidence: the
+[unchanged-source observation caller](../../scripts/rtl-double-format-native-probe.mjs),
+[original fixture](../../apps/office/src/sal/rtl/native-double-format-cases.json),
+[isolated sanitizer diagnostic](../../.agentplane/tasks/202610182355-2WD4TX/native-isolated-stack-overflow.log)
+and [task 25 verification](../../.agentplane/tasks/202610182355-2WD4TX/verification.md). The
+separate returned-output matrix compares 122,765 states under full normal/ASanUBSan SAL/CPPU graphs.
+A conservative allocation-domain check excludes 1,203 potentially unsafe matrix inputs; that count
+does not assert 1,203 individually reproduced failures.
+
+Decision: retain the original format selection, precision, rounding, grouping and emission sequence.
+Do not clamp negative precision or repair grouping to make the case look normal. Managed string
+storage does not reproduce native stack corruption, and the aborted native call is not assigned an
+invented normal-output parity certificate. This ledger update changes no kernel code.
+
+## CALC-190: OUStringBuffer setLength does not implement its documented zero fill
+
+Status: source/comment mismatch, with initialized native nonzero-payload observations; complete
+caller expectations remain unverified.
+
+The pinned
+[setLength documentation and body](../../vendor/libreoffice-reference/include/rtl/ustrbuf.hxx#L447)
+say extension appends null characters. The body instead reserves if needed, otherwise writes only
+the new terminator, and updates the length. It does not clear all newly exposed cells. The
+[reserve implementation](../../vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#L1218) retains the
+old logical payload and initializes its logical terminator; native spare allocation is not a promise
+of initialized zeroes.
+
+Source-derived initialized example: start with capacity 4 and logical `ABCD`, truncate length to 1,
+then restore length 4 without allocation. The first truncation writes zero at index 1; the later
+extension preserves the already initialized `C` and `D` at indices 2 and 3. The logical units become
+`A, NUL, C, D`. This exact example is a source derivation, not a separately captured native call.
+
+Evidence: the genuine
+[OUStringBuffer observation caller](../../scripts/rtl-oustringbuffer-native-probe.mjs),
+[original fixture](../../apps/office/src/sal/rtl/native-oustringbuffer-cases.json) and
+[task 26 verification](../../.agentplane/tasks/202610190012-CMHQFZ/verification.md). Its
+within-capacity length events explicitly initialize spare cells, then observe nonzero `0x4321` units
+after extension. The growing case compares initialized prefix/capacity/terminator and fills unknown
+new payload before reading; it does not inspect uninitialized native memory or prove those bytes are
+zero.
+
+Decision: preserve the body, including the unchanged-length no-op and the
+reserve-versus-direct-terminator branch. Do not add zero filling to match the comment. The
+[managed owner](../../apps/office/src/sal/inc/rtl/ustrbuf.ts) retains those explicit operations.
+Typed-array initialization is a host storage property, not an asserted native guarantee.
+
+## CALC-191: UpperCharToUnicode checks destination exhaustion only before its loop
+
+Status: source-only bounds concern; no native overflow experiment or affected-caller proof has been
+performed.
+
+The pinned
+[ImplUpperCharToUnicode](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx#L122) checks
+whether the destination is empty once, then loops over the full source, writing and advancing the
+destination without another end comparison. The final counters follow that full-source traversal. In
+contrast, the nearby public conversion contract accepts a destination capacity, and other conversion
+loops check it while writing.
+
+Source-level example: two initialized ASCII source bytes and a destination capacity of one pass the
+initial nonempty-destination check; the loop then attempts two writes. Whether every original caller
+supplies at least one destination unit per source byte is not established here. Do not claim an
+observed sanitizer failure or a defined returned buffer for this hypothetical overrun. A separate
+corner is that the initial empty-destination branch reports an error even when the source is empty.
+
+Evidence:
+[original implementation](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx#L122),
+[original declaration](../../vendor/libreoffice-reference/sal/textenc/tcvtbyte.hxx#L28), and the
+[public conversion declaration](../../vendor/libreoffice-reference/include/rtl/textcvt.h#L109). This
+converter is not implemented in the managed kernel at the time of this entry.
+
+Decision: retain the original initial check, loop order, flags and counters when porting this
+responsibility. Do not silently add a per-character destination check as an upstream fix. Document
+valid caller/storage preconditions and keep undefined memory effects outside native output
+certification. The explicitly documented `ASCII_US` import compatibility with MS-1252 in
+`textenc.cxx` is intentional source behavior, and is not classified as a defect by this entry.
+
+## CALC-192: reverse replacement table contains an out-of-order registered-sign entry
+
+Status: source/table inconsistency with genuine normal and ASan/UBSan conversion witnesses;
+intent and all affected callers remain unverified.
+
+The pinned [replacement string table](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L370)
+places `0x0AE0` with comment `REGISTERED SIGN` between `0x00AB` and `0x00BB`. The expected
+registered-sign code point is `0x00AE`; the literal entry also breaks the ordering required by the
+following [binary search](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L416).
+This is not merely a mislabeled successful lookup: the out-of-order entry can prevent nearby
+replacement rows from being reached.
+
+The [original native caller](../../scripts/rtl-singlebyte-reverse-native-probe.mjs) invokes the unchanged
+full converter with actual `ASCII_US` data, destination capacity seven and both replacement flags
+(`0x300`). `U+00A9` writes `(c)` and `U+00AB` writes `<<`, with no undefined status. `U+00AE`,
+`U+00BB`, `U+00BC` and `U+0AE0` instead write `?`, consume one UTF-16 unit and report undefined
+status `8`. The `U+00BB` and `U+00BC` replacement rows are present in the source. Both genuine
+native graphs return identical bytes; initialized sentinel storage is retained after the output.
+
+Evidence: [authenticated native observations](../../apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json),
+[bounded extracted witnesses](../../.agentplane/tasks/202610191146-5W55E9/evidence/native-suspect-witnesses.json)
+and the [managed original owner](../../apps/office/src/sal/textenc/convertsimple.ts).
+
+Decision: keep the literal `0x0AE0`, original table order and original binary search. Do not substitute
+`0x00AE`, sort the table or add a special registered-sign fallback as a compatibility fix. The current
+port does not claim complete caller intent or a native public-codec integration certificate.
+
+## CALC-193: private Unicode byte mapping writes before checking destination capacity
+
+Status: original logical destination-capacity overrun reproduced with initialized oversized backing
+storage; no native physical allocation overflow experiment has been performed.
+
+The pinned [undefined-character handler](../../vendor/libreoffice-reference/sal/textenc/handleundefinedunicodetotextchar.cxx#L82)
+handles `U+F100..U+F1FF` plus `RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0` before any destination-end
+comparison. It writes the mapped byte, advances both pointers and returns success. The
+[reverse converter](../../vendor/libreoffice-reference/sal/textenc/convertsimple.cxx#L580) calls that handler
+before its normal temporary-buffer capacity check.
+
+A genuine full native call with `ASCII_US` data, source `U+F100`, logical destination capacity zero
+and flag `0x400` writes byte zero into an initialized sentinel backing array. It returns one written
+byte, one consumed unit and status zero, despite the advertised capacity being zero. The independently
+called handler similarly advances a nonzero initial destination offset beyond its supplied end.
+Normal and ASan/UBSan observations agree. This experiment deliberately provides physical backing
+storage for the observed write; it does not demonstrate a sanitizer failure for a zero-sized allocation.
+Whether all production callers reserve a sufficient byte-per-unit backing allocation remains unproved.
+
+Evidence: [original native probe](../../scripts/rtl-singlebyte-reverse-native-probe.mjs),
+[authenticated fixture](../../apps/office/src/sal/textenc/native-singlebyte-reverse-cases.json),
+[bounded witness](../../.agentplane/tasks/202610191146-5W55E9/evidence/native-suspect-witnesses.json)
+and [managed handler](../../apps/office/src/sal/textenc/handleundefinedunicodetotextchar.ts).
+
+Decision: preserve the original private-mapping order, logical write and returned counters. Do not
+insert a destination-capacity guard or clamp the count. Borrowed typed storage binds initialized
+native buffer views; its handling of writes outside the physical allocation does not certify native
+undefined-memory behavior.
+
+## CALC-194: attribute lookup validates an uninitialized row but trusts a single initialized run
+
+Status: source inspection and managed logical reproduction; no compiled native reproduction has
+been performed. Whether callers always satisfy a valid-row precondition remains unproved.
+
+The pinned [ScAttrArray::Search](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L189)
+returns index zero immediately when the array has one entry. It does not inspect the requested row.
+[GetPattern](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L235) and
+[GetPatternRange](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#L250) validate
+rows only while the array is empty; initialized arrays delegate directly to Search. Consequently an
+out-of-range row can return the single canonical run after initialization,where an uninitialized array
+returns null. Multiple-run lookup rejects rows beyond its final end through binary search.
+
+Decision: preserve these source branches in the managed
+[ScAttrArray](../../apps/office/src/sc/source/core/data/attarray.ts). The
+[regression](../../apps/office/src/sc/source/core/data/attarray.test.ts) explicitly distinguishes empty,
+single-run and multiple-run results. Normal document/table UI boundaries validate coordinates.
+Do not silently normalize this source behavior while implementing font-size UI.
+
+## CALC-195: standard row height narrows before multiplying a font height
+
+Status: pinned source inspection only; no compiled native reproduction or undefined-behavior claim.
+
+[lcl_GetAttribHeight](../../vendor/libreoffice-reference/sc/source/core/data/column2.cxx#L866)
+assigns the UInt32 font height to UInt16, then performs `nHeight *= 1.18`. Large font heights
+therefore first narrow modulo 65536. A floating result outside the UInt16 range has no certified
+conversion in this port. Emphasis and margin additions also store back into UInt16. The current
+normal UI sizes use the defined representable range.
+
+Decision: retain source field widths, truncation, emphasis, margins and the 23-twip correction in
+[column2.ts](../../apps/office/src/sc/source/core/data/column2.ts). Do not silently widen the
+algorithm or certify extreme native floating conversions from managed tests.
+
+## CALC-196: automatic height context accumulates across selected sheets
+
+Status: source inspection and managed logical regression; no compiled native reproduction.
+Whether this cross-sheet height policy is intentional remains unproved.
+
+[AdjustBlockHeight](../../vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx#L151)
+constructs one RowHeightContext before walking the selected sheets.
+[GetOptimalHeightsInColumn](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx#L89)
+passes its existing array to the column calculation, whose standard path only raises values when
+its attribute height is larger. There is no reset between sheets. Consequently a later selected
+sheet can retain an earlier sheet's larger calculated row height even when its own fonts are smaller.
+
+Decision: preserve shared context ordering in
+[AdjustBlockHeight](../../apps/office/src/sc/source/ui/view/viewfun2.ts) and exercise it with real
+selected sheets in [rowheight.test.ts](../../apps/office/src/sc/source/core/data/rowheight.test.ts).
+Do not add an independent per-sheet reset as an unrequested upstream fix.
+
+## CALC-197: empty signed numeric input can become a valid minimum font weight
+
+Status: pinned source inspection and managed logical reproduction; no compiled native reproduction.
+
+The signed UTF16 [SAX number converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L689)
+checks complete consumption after an optional minus and digit scan, then clamps the RTL result.
+Empty input, whitespace-only input and a bare minus can therefore succeed with the supplied lower
+bound. The original [font-weight handler](../../vendor/libreoffice-reference/xmloff/source/style/weighhdl.cxx#L72)
+uses bounds 100..900, so these inputs become THIN. Its DONTKNOW weight exports as `0`, which
+reimports through the same clamp as THIN rather than DONTKNOW.
+
+Decision: preserve the source parser, clamping and handler map. Managed witnesses are in
+[converter-number.test.ts](../../apps/office/src/sax/source/tools/converter-number.test.ts) and
+[character-hdl.test.ts](../../apps/office/src/xmloff/source/style/character-hdl.test.ts).
+Do not add a digit-presence check or special-case the DONTKNOW roundtrip without an upstream change.
+
+## CALC-198: RGB import validates shape but propagates invalid hex digits as signed bits
+
+Status: pinned source inspection and managed port; compiled native reproduction remains pending.
+
+The [SAX color converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L640)
+requires seven characters and a leading hash, but does not reject invalid hexadecimal digits.
+[convertToHex](../../vendor/libreoffice-reference/include/o3tl/numeric.hxx#L27) returns -1 for
+an invalid character and combines paired results with signed shifts and bitwise OR. The color
+converter similarly combines RGB pairs and returns success. Thus a shape-valid invalid color can
+produce negative color bits instead of a failed conversion. Invalid shape leaves its output untouched.
+
+Decision: retain this source behavior in the shared
+[converter](../../apps/office/src/sax/source/tools/converter.ts) and consumed signed32
+[numeric helper](../../apps/office/src/o3tl/inc/numeric.ts). Both document filters must consume
+the same native color handler behavior rather than introduce a format-specific strict regular expression.
+
+
+## CALC-199: underline variant slots reset line color while the general toggle preserves it
+
+- Status: source behavior retained; no upstream correction inferred.
+- Pinned source: `sc/source/ui/view/formatsh.cxx`, `ScFormatShell::ExecuteAttr`, cases `SID_ATTR_CHAR_UNDERLINE` and `SID_ULINE_VAL_SINGLE/DOUBLE/DOTTED` (around lines730–786).
+- Observation: the general no-argument underline slot copies the effective `SvxUnderlineItem` before changing its line style. The variant slots construct a fresh item, so selecting or toggling a variant resets color/complex-color state to native item defaults.
+- Managed implementation: `sc/source/ui/view/formatsh.ts`, `SetCharacterFormat` and `SetUnderlineStyle`, preserves this distinction. The shared Format menu uses the native Single/Double slots and source numeric identities.
+- Evidence: `calc-character-format.test.tsx` tests an actual colored native item, visible menu dispatch, reset alpha, exact style state and undo. These are source-based managed checks, not compiled LibreOffice comparison evidence.
+
+
+## CALC-200: the initial break-iterator scalar cache treats U+0000 differently
+
+Status: pinned source inspection; compiled source reproduction is still pending in task37.
+
+`BreakIteratorImpl::getScriptClass` in
+`i18npool/source/breakiterator/breakiteratorImpl.cxx` initializes its function-static
+`lastChar` to zero and `nRet` to WEAK, and recomputes only when the requested character
+changes. Therefore an initial U+0000 request returns WEAK without consulting
+`i18nutil::GetScriptClass`. After a different character has been requested, a U+0000 request
+recomputes through `i18nutil/source/utility/scriptclass.cxx`; its compatibility table maps
+BASIC_LATIN to LATIN and does not list U+0000 among the special WEAK characters.
+The resulting classification depends on the preceding scalar-cache history.
+
+Decision: preserve the original cache initialization and update logic when porting the
+consumed break-iterator script methods. Do not silently initialize a different sentinel or
+remove the cache merely to obtain uniform null-character behavior. The source byte identities
+are retained in task37's `font-script-source-baseline.json`; this observation is not a claim
+of compiled full LibreOffice service parity.
+
+## CALC-201: grouped-sheet script selection does not enumerate every selected sheet
+
+Status: pinned source inspection, retained by the current simple-mark browser binding.
+
+`ScMarkData::FillRangeListWithMarks` in `sc/source/core/data/markdata.cxx` explicitly
+contains `TODO: for multiple selected tables enter multiple ranges !!!`. Its simple-mark
+branch appends `aMarkRange` once. `ScViewFunc::GetSelectionScriptType` calls this method
+without extending the resulting ranges to all grouped sheets, and
+`ScDocument::GetRangeScriptType` in `documen6.cxx` reads each range's start sheet.
+
+Consequently, applying a family to grouped sheets can choose script attributes from one
+sheet even when another selected sheet contains a different script. Attribute application
+still affects the grouped sheets. This can leave a different script's font unchanged there.
+
+Decision: retain the source distinction between script aggregation and grouped attribute
+application. Do not silently union every selected sheet's scripts in the browser binding.
+This observation does not certify full native multi-mark or formatted-cell cache behavior.
+
+## CALC-202: invalid background color can still apply an opaque transparency property
+
+Status: source-composition candidate; a compiled whole-native-import reproduction is pending.
+
+The cell map in `sc/source/filter/xml/xmlstyle.cxx` maps the same
+`fo:background-color` attribute to both `CellBackColor` and
+`IsCellBackgroundTransparent`. `XMLColorTransparentPropHdl::importXML` in
+`xmloff/source/style/xmlbahdl.cxx` reports a failed RGB conversion for a value such as
+`invalid`, whereas `XMLIsTransparentPropHdl::importXML` always succeeds and reports
+false for every value other than the exact `transparent` token. The separate bool property
+therefore remains admissible even when its accompanying RGB property is rejected.
+
+`sc/inc/CommonProperties.hxx` and `cellsuno.cxx` bind these properties to the real brush's
+`MID_BACK_COLOR` and `MID_GRAPHIC_TRANSPARENT`. The latter branch of
+`SvxBrushItem::PutValue` sets alpha to 255 for false. Over the transparent-white pool default
+in `sc/source/core/data/docpool.cxx`, applying only this successful property yields opaque
+white. Task38's consumed mapper reproduces this result with an invalid-color diagnostic.
+Native property-list ordering and the complete UNO import transaction still require a
+whole-native witness before this is described as a confirmed LibreOffice import bug.
+
+Decision: retain the two independent source handlers and native brush writes. Do not turn
+their merged attribute into an atomic browser validator that suppresses the successful bool
+property merely because RGB parsing failed. The regression uses independently authored XML
+in `ods-native-colors.test.ts`; it does not certify the complete native importer.
+
+## CALC-203: parameterless color commands retain the previous complex-color identity
+
+Status: pinned source inspection and consumed-item regression; complete native theme rendering
+has not been reproduced.
+
+In `sc/source/ui/view/formatsh.cxx`, the no-argument `SID_ATTR_CHAR_COLOR` and
+`SID_BACKGROUND_COLOR` branches obtain the recent `NamedColor`'s resolved final color,
+copy the selected font-color item or brush, and replace only its plain color. The native
+setters in `include/editeng/colritem.hxx` and `include/editeng/brushitem.hxx` do not replace
+the owned complex-color value. In contrast, the background argument branch explicitly
+copies `rNewColorItem.getComplexColor()` as well.
+
+Thus a parameterless background action can apply the RGB value of a recent Accent5 color
+while retaining the selected brush's Accent3 identity and transformations. A later theme
+re-resolution could therefore behave differently from the argument-bearing action even
+when the currently resolved RGB values agree. This is a suspected inconsistency rather
+than a claim about the complete native renderer.
+
+Decision: preserve the source branch distinction. Task38's actual native brush/history
+regression in `calc-color.test.tsx` checks retained shading/graphic transparency, replacement
+of complex metadata on an explicit argument, retention of the old theme identity on a
+recent-color action, and restoration through the real attribute undo document.
+
+## CALC-204: an active view overrides the configured automatic-font comparison color
+
+Status: pinned `ScPatternAttr::fillColor` inspection and consumed value regression.
+
+In `sc/source/core/data/patattr.cxx`, the automatic/ignore-font branch computes
+`aSysTextColor` from the supplied cached font color or configuration. Its final
+`SfxViewShell::Current()` branch nevertheless chooses plain white or black from background
+brightness whenever any current view exists. The computed system color is used only when
+there is no current view. This also distinguishes Print behavior on a dark background:
+with a current view the result is white; without one it is the earlier plain-black print
+color. The browser binding supplies actual current-view presence and configuration colors
+as borrowed values; it does not emulate those unported services.
+
+Decision: retain the original branch ordering rather than always using configuration or
+always forcing black for Print. Literal current-view/no-view and cached configuration cases
+are retained in `patattr.test.ts`; full native view-service execution remains unverified.
+
+## CALC-205: font growth can reduce oversized values or wrap below the shrink minimum
+
+Status: pinned `ScFormatShell::ExecuteAttr` expressions and 16 initialized standalone C++
+witnesses; complete LibreOffice/VCL execution is not claimed.
+
+In `sc/source/ui/view/formatsh.cxx`, Grow computes unsigned32 `nSize + 40` before taking
+`min(..., 19998)`. Therefore growing 22000 twips reduces it to 19998, and growing
+`0xffffffff` wraps to 39 twips. The 40-twip minimum belongs only to Shrink. Shrink converts
+its unsigned subtraction to signed32 for `std::max<sal_Int32>`; sufficiently large heights
+can consequently become 40 twips. These are initialized integer inputs accepted by the
+native font-height item, rather than claims about undefined floating-point casts.
+
+Decision: retain the exact conversions and limits. Task89YNKC compiles the original pinned
+expressions in an isolated witness and compares all 16 observations with the JavaScript
+operation. `calc-font-step.test.tsx` retains ordinary, zero, oversized and wrap cases.
+
+## CALC-206: stepping one script can clear mixed heights of other scripts
+
+Status: pinned selection/item-set/pool-cache path and real Calc pattern/history regression.
+
+The Grow/Shrink branch first copies the complete selected font-height script set, including
+INVALID entries of scripts whose values differ between selected cells. It then replaces
+only the selected-script items. `ScViewFunc::ApplyUserItemSet` preserves those INVALID entries
+with `Put(..., false)`, while `ScItemPoolCache::ApplyTo` uses the default `Put` behavior when
+merging the delta into each cell: INVALID clears the existing direct item to default.
+
+For example, Latin12 in both selected cells and Asian15/20 can become Latin14 and default
+Asian height after a Latin Grow. Omitting the unselected script entries would avoid the
+reset but would differ from the source.
+
+Decision: retain the original full script-set delta and default-clearing application.
+`calc-font-step.test.tsx` checks the reset and real Undo/Redo restoration of both prior
+Asian heights. This also corrects the previous local pattern application that copied
+INVALID into a cell instead of clearing its direct item as the native pool cache does.
+
+## CALC-207: script-set cloning ignores an explicitly requested destination pool
+
+Status: pinned `SvxScriptSetItem::Clone` and real shared-pool regression.
+
+In `editeng/source/items/textitem.cxx`, `SvxScriptSetItem::Clone(SfxItemPool*)` leaves its
+parameter unnamed and constructs the new item with the original contained set's pool.
+This differs from the target-pool copy facility of the base `SfxSetItem` contract.
+
+Decision: retain original-pool cloning. `native-script-set-item.test.ts` supplies a distinct
+real destination pool and verifies that the clone still belongs to the original one,
+with independent contained state and retained INVALID entries. No replacement pool or
+compatibility wrapper is introduced.
+
+## CALC-208: multi-selection merging can omit unallocated default columns
+
+Status: pinned `ScTable::MergeSelectionPattern` and consumed core selection regression.
+
+In `sc/source/core/data/table2.cxx`, the multi-selection path clamps each marked column
+span to allocated columns. It has no default-column merge after that loop. In contrast,
+`ScTable::MergePatternArea` explicitly merges `aDefaultColData` when a simple rectangle
+extends beyond allocated columns.
+
+An allocated selected cell with height240 and another marked column outside the allocated
+prefix can therefore retain a uniform240 selection result instead of becoming mixed with
+the default200. The equivalent simple rectangle does become mixed.
+
+Decision: preserve the two source paths. `selection-pattern.test.ts` checks the conditional
+unallocated-column example without allocating cells to hide the difference. This is not a
+certificate of full native sheet-view or device services.
+
+## CALC-209: repeated identical formatting still records Undo and marks the document modified
+
+Status: pinned `ApplyAttributesOperation.cxx`, base `Operation::canRunTheOperation` and
+consumed Calc history regressions.
+
+The view's selection-pattern path invokes `ApplyAttributesToCellOperation` or
+`ApplyAttributesWithChangedRangeOperation`. Their ordinary record-enabled branches create
+an undo action and call the document modificator without testing whether the resulting
+pattern differs. The base operation admission is true; these operation classes do not
+replace it with an equality check. A repeated explicit font size, alignment or color can
+therefore consume another Undo entry even though the stored attribute values are unchanged.
+
+Decision: preserve the native operation record and modified notification separately from
+the browser's boolean indication of whether attributes changed. Tests for FontHeight,
+alignment and color retain the repeated entry, the actual bounded undo-stack limit and
+Undo/Redo through the unchanged intermediate value. Failed input admission and mixed-script
+Grow with no uniform item still leave history untouched.
+
+## CALC-210: whole-sheet font queries clip to data while the formatting path retains the full marks
+
+Status: pinned `viewfunc.cxx` source inspection and consumed view-query regression.
+
+`ScViewFunc::GetSelectionPattern` calls `ShrinkToDataArea` for an exact whole-sheet simple
+mark. Its comment says this is consistent with `ApplySelectionPattern`; the pinned file's
+only call to that helper is the query call. The current apply path copies the actual marks,
+excludes filtered cells and converts them to multi marks before invoking attribute operations.
+It does not perform the same clipping at that point. A font state can therefore describe
+only occupied data while formatting still receives the original whole-sheet marks.
+
+Decision: preserve the query clipping and keep the actual view selection unchanged. The
+port derives bounds from the real typed cell blocks, excludes formatting-only cells and
+retains the native clipping function's partially mutated outputs on failure. This source
+observation does not certify the unported filtered-cell, alternate sheet-view, operation
+allocation or device-layout services.
+
+## CALC-211: mixed line formatting toggles through a fresh factory item and loses independent line color
+
+Status: pinned `SfxBindings::Execute_Impl` and consumed Calc Overline regression.
+
+For a uniform SET/default toggleable enum, bindings clone the current item and flip its
+boolean projection, retaining line color and other metadata. For INVALID (mixed) state,
+bindings instead create the slot's default item, set its mapped Which and enable it. Thus
+selecting differently formatted cells and toggling Overline can reset an existing explicit
+line color to the fresh item's `font-color` default while setting SINGLE overline.
+
+Decision: preserve the original factory branch. The shared toggle preparation and actual
+Calc selection/history tests check the distinct uniform-color-preserving and mixed-color-
+resetting outcomes. This is a source-based consumed contract, not a full native bindings,
+UNO dispatch or device-painting certificate.
+
+## CALC-212: strikeout text treats every nonempty non-slash value as X
+
+Status: pinned `XMLCrossedOutTextPropHdl::importXML` and native-handler/Calc XML regressions.
+
+The text handler tests only whether the string is empty and whether its first UTF16 code
+unit is `/`. Every other nonempty value, including lowercase x, whitespace, arbitrary
+words and a leading surrogate, successfully assigns `FontStrikeout::X`. It does not validate
+that the text is the literal uppercase X.
+
+Decision: preserve that conversion exactly in the shared handler and in the real Calc
+style importer. Tests include slash suffixes, whitespace, an emoji and arbitrary words;
+empty input returns false without changing the accumulated Any.
+
+## CALC-213: strikeout none properties can preserve an already active accumulated style
+
+Status: pinned crossed-out type/style/width handlers and independently authored Calc XML.
+
+When a non-NONE short is already present, the type handler retains it for incoming NONE or
+SINGLE; the style handler retains it for both recognized incoming style values. Width NONE
+also preserves the existing style. Thus `style=solid,width=bold,type=none` retains BOLD in
+actual XML attribute order rather than clearing strikeout. DOUBLE overrides SINGLE/BOLD
+but retains SLASH/X; BOLD width upgrades SINGLE but retains DOUBLE/SLASH/X.
+
+Decision: retain original ordered maps, actual SAX order, signed/unsigned Any projections
+and no-write behavior. Shared and Calc tests verify the explicit contradictory-property
+examples. Native DONTKNOW is not present in the export maps and is not invented as a new
+ODF token. No full mapper/service or rich-text device certificate is claimed.
+
+## CALC-214: a negative signed projection can force a SHORT Any writeback
+
+Status: pinned `cdouthdl.cxx` integer declarations/casts and genuine Any tests in managed and
+browser/Worker runtimes.
+
+Type and width merge candidates are `sal_uInt16`, while the extracted old value is
+`sal_Int16`. Retaining a negative signed projection assigns its unsigned representation to
+the candidate. Their subsequent promoted comparison is unequal, so the handler casts back
+to `sal_Int16` and writes the Any. For an original UNSIGNED_SHORT Any carrying65535, the
+native signed extraction yields-1 and the merge writes SHORT-1. The style handler's direct
+preservation path does not perform that assignment and retains the original UNSIGNED_SHORT.
+
+Decision: preserve unsigned candidates, signed comparison and final short writeback. Tests
+initialize real unsigned-short Any values65535/32768 and verify their signed projections
+and final type identities. LONG-to-SHORT narrowing is not assumed: the existing original
+Any extraction rules do not admit LONG. These are initialized native value-contract
+witnesses;ordinary valid ODF strikeout tokens do not produce negative enum values.
+
+## CALC-215: outline font paints its central glyph and line rasters white
+
+Status: pinned `vcl/source/outdev/text.cxx`, `OutputDevice::ImplDrawSpecialText`.
+
+After eight one-pixel draws in the original text and line colors, the outline branch sets
+text, underline and overline colors to COL_WHITE and draws the central raster. This is
+white even when the cell background has another color; it is not a transparent cutout.
+
+Decision: retain the ordered source offsets and white central alpha raster in the shared
+browser SVG filter. The actual glyph and independently colored line pixels form the
+source graphic once. Browser drawing uses CSS pixels and actual observed layout bounds;
+this does not certify native device scaling, font metrics or rich-text painting.
+
+## CALC-216: failed boolean XML conversion still replaces the output Any
+
+Status: pinned `xmloff/source/style/xmlbahdl.cxx`, `XMLBoolPropHdl::importXML`.
+
+The handler initializes false, calls the original strict boolean converter, writes that
+boolean into the Any, then returns the converter result. Rejected forms such as `1` and
+`TRUE` therefore replace a previous numeric Any with a false bool while returning false.
+
+Decision: preserve this shared value contract. The Calc property mapper honors the false
+return and diagnoses the rejected property rather than applying its intermediate Any.
+Export extracts an actual bool and leaves the caller's string unchanged on type failure.
+
+## CALC-217: direct-format deletion leaves the unallocated default-column tail unchanged
+
+Status: pinned `ScTable::ApplyPatternArea`, `ScTable::DeleteArea` and `ScTable::DeleteSelection`
+in `sc/source/core/data/table2.cxx`.
+
+Applying a pattern through MaxCol updates `aDefaultColData` for unallocated columns.
+The deletion paths visit only `aCol`: DeleteArea clamps its last column to the allocated
+size, and DeleteSelection loops allocated columns. Neither clears `aDefaultColData`.
+Consequently a whole-sheet Clear may remove direct formatting from allocated columns
+while the unallocated tail retains the previously applied pattern.
+
+Decision: preserve the source traversal and allocation behavior. Tests apply an actual
+full-sheet pattern, allocate the real content column, clear its range and inspect the
+unchanged tail through the genuine document owner. No allocation or default-tail reset
+is added to disguise the difference. Attribute Undo captures the real source patterns.
+
+## CALC218 — Column metric dialog quantizes the unchanged default and minimum
+
+Pinned `sc/source/ui/miscdlgs/mtrindlg.cxx` initializes normalized twips,converts them
+into a two-decimal configured field unit,and reads converted/denormalized twips on OK.
+With `STD_COL_WIDTH=1280`,the actual result is1281twips after2.26cm or1282twips after0.89in.
+The factory's2twip minimum rounds to a zero display-unit minimum;accepting zero reaches
+native DIRECT hiding while retaining the prior stored width. Preserve this behavior.
+`sc/source/ui/miscdlgs/mtrindlg.test.ts` covers both unit results,zero and the one-metre maximum.
+Native widget/device services and arbitrary decimal precisions are not certified.
+
+## CALC219 — Maximum column width wraps the recorded UInt16 HMM argument
+
+Pinned `cellsh3.cxx` accepts metric twips directly,but constructs a separate recording request
+with `static_cast<sal_uInt16>(TwipsToEvenHMM(nVal))`. `global.hxx` rounds127/144 then doubles.
+The56693twip maximum records100000HMM narrowed to34464;the live column retains56693twips.
+Preserve this order rather than replacing the recording argument with a wider browser value.
+`sc/source/ui/view/column-width.test.ts` observes the actual separate completed request.
+Macro recorder services and replay through full UNO transformations remain unported.
+
+## CALC220 — Numeric mixed fractions preserve native negative-sign asymmetry
+
+Pinned `vcl/source/control/field.cxx::ToScaledWholeAndDec` removes the numerator sign,
+applies the negative marker to the whole part,then adds the unsigned fractional magnitude.
+Consequently `-1/2` parses as+0.5 and `-1 1/2` as-0.5. Preserve this source arithmetic.
+`vcl/source/control/field.test.ts` checks both original alternatives and division-by-zero failure.
+Currency parsing,translated unit catalogs and full native widget services remain unported.
+
+## CALC221 — Native width storage includes one extra terminal column
+
+Pinned `table1.cxx` creates column widths and flags with inclusive `MaxCol()+1` as their
+compressed-array limit. Preserve that sentinel while validating public column setters through
+`ValidCol`. Browser geometry and ODS clamp runs to the actual `MaxCol` and do not emit an
+extra cell/column. `sc/source/core/data/native-column-width.test.ts` pins the sentinel separately
+from actual document limits. This observation does not establish an upstream defect.
+
+## CALC222 — Signed ODF column width narrows after HMM conversion
+
+Pinned `XMLMeasurePropHdl::importXML` uses `convertMeasureToCore` with signed32 defaults.
+`ScTableColumnsObj::SetOnePropertyValue` converts the HMM integer to twips before the
+UInt16 `ScDocFunc::SetWidthOrHeight` argument. Thus `-1cm` becomes-567twips narrowed to64969,
+rather than zero. Preserve these source defaults and narrowing;do not add a positive-width clamp.
+`sc/source/filter/xml/ods-native-columns.test.ts` supplies independently authored negative XML.
+The complete UNO property/service graph and undefined native arithmetic domains are unverified.
+
+## CALC223 — Unicode type cache starts with a NUL/UNASSIGNED fast path
+
+Pinned `unicode::getUnicodeType` initializes its thread-local cached character and type to0.
+A first call with NUL returns UNASSIGNED without querying ICU's CONTROL category. After a
+different character,NUL receives the normal category. Preserve this cache behavior per JS realm.
+The complete native character-type witness includes the original fast path and all1114112 scalars.
+`external/icu/source/common/native-character-types.test.ts` compares the unchanged native byte
+protocol,then checks the later NUL lookup. Native OS threading and full Unicode utilities remain
+unported;this is a bounded shared numeric-field prerequisite.

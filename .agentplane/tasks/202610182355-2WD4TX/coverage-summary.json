@@ -1,0 +1,60 @@
+{
+  "related": {
+    "statements": {
+      "total": 287,
+      "covered": 287,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 297,
+      "covered": 297,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 12,
+      "covered": 12,
+      "skipped": 0,
+      "pct": 100
+    },
+    "lines": {
+      "total": 252,
+      "covered": 252,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "calc": {
+    "statements": {
+      "total": 6823,
+      "covered": 6823,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 4390,
+      "covered": 4390,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 1410,
+      "covered": 1410,
+      "skipped": 0,
+      "pct": 100
+    },
+    "lines": {
+      "total": 6112,
+      "covered": 6112,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "currentSourceHashes": {
+    "apps/office/src/sal/rtl/strtmpl.math.ts": "15563add8fa49fc5654643eee0bae52717297814b8a927778866fa097c41bb8b",
+    "apps/office/src/sal/rtl/math.ts": "9dcf0a4236cc44cd6e137e2064f9cdc28935c209f88fd598ec290d165eed364e",
+    "apps/office/src/sal/inc/rtl/math-values.ts": "664f4e17c4f6516f511a7348a72c10a33016eeba542b10d1a325afdc5865817b",
+    "apps/office/src/sal/inc/rtl/math.h.ts": "9ce81a875740d7e93a29d437b61c31677933ace0fd9297d980e1933bca9c4833"
+  }
+}

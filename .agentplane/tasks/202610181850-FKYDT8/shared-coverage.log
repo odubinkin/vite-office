@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- CommandMenuBar WriterMenuBar.test WriterCommandToolbar.test native-menubar native-disabled-menubar native-empty-menubar native-context-menu.test calc-sheet-commands.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/calc-sheet-menus
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage CommandMenuBar WriterMenuBar.test WriterCommandToolbar.test native-menubar native-disabled-menubar native-empty-menubar native-context-menu.test calc-sheet-commands.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/calc-sheet-menus
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  17 passed (17)
+      Tests  180 passed (180)
+   Start at  01:56:54
+   Duration  14.09s (transform 4.18s, setup 1.08s, import 7.94s, tests 11.49s, environment 6.01s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 251/251 )
+Branches     : 100% ( 237/237 )
+Functions    : 100% ( 54/54 )
+Lines        : 100% ( 223/223 )
+================================================================================

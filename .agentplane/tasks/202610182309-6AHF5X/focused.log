@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- --run src/vcl/source/font/FontVariation.test.ts src/o3tl/inc/string_view-views.test.ts
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts --run src/vcl/source/font/FontVariation.test.ts src/o3tl/inc/string_view-views.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  06:12:39
+   Duration  825ms (transform 119ms, setup 221ms, import 121ms, tests 8ms, environment 1.10s)
+

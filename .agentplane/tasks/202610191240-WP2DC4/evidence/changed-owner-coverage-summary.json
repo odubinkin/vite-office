@@ -1,0 +1,33 @@
+{
+  "executableOwners": 20,
+  "counterlessReexports": [
+    {
+      "path": "apps/office/src/sc/inc/column.ts",
+      "reason": "Pure re-export; Istanbul has no own executable counters. Full actual column owner is included."
+    }
+  ],
+  "wholeCalcRawSha256": "928674e9a9e15edf6572b694c7e46f6c0604b4c89ced88e0cbce821e3e6c4df8",
+  "sourceSha256": {
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "432a58b8daf6e9092e3606f05e7524244974e062100f861c6bf8ed376e51b1c2",
+    "apps/office/src/sc/browser/presentation/ScGridWindow.tsx": "90824e06a01244db1d3f52016e5d5f586d371e08e7c5fe10b45f440888e1085e",
+    "apps/office/src/sc/inc/column.ts": "e537098bd44eed646a615749adf7f9b2dcb47b4846b7d6c8ad3507e43807434c",
+    "apps/office/src/sc/inc/global.ts": "a900c306afdadd942e4a326dc93730787264e4867ef541c656597d527d980e69",
+    "apps/office/src/sc/sdi/scalc.ts": "65110290e732bc22b0f2d4294f393cd3e978b49d9104752ab9fbac30aa2795ed",
+    "apps/office/src/sc/source/core/data/column.ts": "c5e05f43c1a306ddf4df1988e9e9fee1954fa484326ea27aca8ad72b355a4c9f",
+    "apps/office/src/sc/source/core/data/document.ts": "7e408abc9954cac9f02b5147b68a3d49b05beaf61ae5baf6d74d996725e7a41c",
+    "apps/office/src/sc/source/core/data/table.ts": "6724db7bac3929cd904a7cdee0b52e6d56d1ca28cfbcf0cfac0fb32ca36d86d3",
+    "apps/office/src/sc/source/filter/xml/xmlcelli.ts": "dc348dd18ec856c72b8857ed80955a14b2b1f4c3a84e134b0ebd26d42dd8d5df",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.ts": "71f08c9cc716f12bdab51c7aca3c255fc7e6dec2bddf2637237764ccf2da988e",
+    "apps/office/src/sc/source/filter/xml/xmlimprt.ts": "78aac4607cd1677443603505cc659a1be90a07dc5ebb7c292f79f458d0c2c315",
+    "apps/office/src/sc/source/ui/docshell/docsh.ts": "d69e99c51cea41968639b3edd764adc85d95e52e606b8565e0083c15d2bc52d9",
+    "apps/office/src/vcl/browser/default-font-metadata.ts": "45213af132e2f502731b28f52d1cabfe18adc9bfddeaa17d0a1e10fdb66b8790",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "dc620d15847573cfa9c4a2c3cad4d0cc59504bad3ef553b77338320d32b55326",
+    "apps/office/src/i18nlangtag/source/isolang/mslangid.script.ts": "8332d12483d1ecdfe84f7363ebddf1d02db1557fdeeec82db0bc2c5e3883cb13",
+    "apps/office/src/sc/source/core/data/attarray.ts": "7d9d558fc6b917b0d13d6b23317b28e22c7244df8c15db01a5d1944f8c0d7c2e",
+    "apps/office/src/sc/source/core/data/docpool.ts": "3e3a74f6508ca09f5cebb0789e3dc9895ceef2c990e60436a84f84e60b38ee64",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "ee51bbfdd5e2dc24600b15308b782f0be2b4ed77d74d2358a1f2ea3c3777c23e",
+    "apps/office/src/sc/source/ui/undo/undoblk3.ts": "4450a1a7d35057a3b4d713626a327229e039ac0fe0439362471e8eccc114b867",
+    "apps/office/src/sc/source/ui/view/formatsh.ts": "3e8ec39462d92a98caaae8b5c8cc17bfa26403d890019f1bdd25a65699bd1edb",
+    "apps/office/src/vcl/source/outdev/font.ts": "ff2dd1f1514634b8e0e4a8e02dbcc1cb0580a908d2aff99981c62eb6e196fc89"
+  }
+}

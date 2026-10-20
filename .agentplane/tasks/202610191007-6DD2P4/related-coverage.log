@@ -1,0 +1,1308 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-popup src/framework/browser/presentation/CommandMenuBar
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx (15 tests | 11 failed) 481ms
+     × focuses a pointer-opened popup without preselecting a command 152ms
+     × selects First from an unselected popup with ArrowDown 19ms
+     × selects First from an unselected popup with Home 17ms
+     × selects Last from an unselected popup with ArrowUp 24ms
+     × selects Last from an unselected popup with End 16ms
+     × closes only the unselected submenu with Enter 17ms
+     × closes only the unselected submenu with Escape 23ms
+     × closes only the unselected submenu with ArrowLeft 20ms
+     × preserves selection on repeated hover and resets opening origin after close 42ms
+     × focuses a newly hovered sibling popup without dispatch and retains pointer execution 35ms
+     × restores parent focus when the pointer closes its child popup 17ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > focuses a pointer-opened popup without preselecting a command
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Text menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-popup-highlighted[39m=[32m"true"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mid[39m=[32m"preselection-format-menu-item-0"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-activedescendant[39m=[32m"preselection-format-menu-item-0"[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-activedescendant[39m=[32m"preselection-format-menu-item-0"[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-popup-highlighted[39m=[32m"true"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mid[39m=[32m"preselection-format-menu-item-0"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ hoverText src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:79:17
+     77| function hoverText(): HTMLElement {
+     78|   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     79|   return screen.getByRole("menu", { name: "Text menu" });
+       |                 ^
+     80| }
+     81|
+ ❯ focusesUnselectedPopup src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:86:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > selects First from an unselected popup with ArrowDown
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > selects First from an unselected popup with Home
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > selects Last from an unselected popup with ArrowUp
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > selects Last from an unselected popup with End
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Text menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ hoverText src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:79:17
+     77| function hoverText(): HTMLElement {
+     78|   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     79|   return screen.getByRole("menu", { name: "Text menu" });
+       |                 ^
+     80| }
+     81|
+ ❯ navigatesUnselectedPopup src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:111:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > closes only the unselected submenu with Enter
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > closes only the unselected submenu with Escape
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > closes only the unselected submenu with ArrowLeft
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Text menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ hoverText src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:79:17
+     77| function hoverText(): HTMLElement {
+     78|   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     79|   return screen.getByRole("menu", { name: "Text menu" });
+       |                 ^
+     80| }
+     81|
+ ❯ dismissesUnselectedPopup src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:122:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > preserves selection on repeated hover and resets opening origin after close
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Text menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-popup-highlighted[39m=[32m"true"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mid[39m=[32m"preselection-format-menu-item-0"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-activedescendant[39m=[32m"preselection-format-menu-item-0"[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-activedescendant[39m=[32m"preselection-format-menu-item-0"[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-popup-highlighted[39m=[32m"true"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mid[39m=[32m"preselection-format-menu-item-0"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ hoverText src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:79:17
+     77| function hoverText(): HTMLElement {
+     78|   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     79|   return screen.getByRole("menu", { name: "Text menu" });
+       |                 ^
+     80| }
+     81|
+ ❯ reopensWithRequestedOrigin src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:140:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > focuses a newly hovered sibling popup without dispatch and retains pointer execution
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Spacing menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "First":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdata-popup-highlighted[39m=[32m"true"[39m
+    [33mid[39m=[32m"preselection-text-menu-item-0"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Middle":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Last":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Text menu":
+  [36m<div[39m
+    [33maria-activedescendant[39m=[32m"preselection-text-menu-item-0"[39m
+    [33maria-label[39m=[32m"Text menu"[39m
+    [33mclass[39m=[32m"fixed z-30 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"1"[39m
+    [33mdata-submenu[39m=[32m"text"[39m
+    [33mid[39m=[32m"preselection-text-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 8px; max-height: 752px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"true"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+              [36m<div[39m
+                [33maria-activedescendant[39m=[32m"preselection-text-menu-item-0"[39m
+                [33maria-label[39m=[32m"Text menu"[39m
+                [33mclass[39m=[32m"fixed z-30 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+                [33mdata-menu-depth[39m=[32m"1"[39m
+                [33mdata-submenu[39m=[32m"text"[39m
+                [33mid[39m=[32m"preselection-text-menu"[39m
+                [33mrole[39m=[32m"menu"[39m
+                [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 8px; max-height: 752px;"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+              [36m>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+                  [33mdata-popup-highlighted[39m=[32m"true"[39m
+                  [33mid[39m=[32m"preselection-text-menu-item-0"[39m
+                  [33mrole[39m=[32m"menuitem"[39m
+                  [33mtabindex[39m=[32m"-1"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+                    [33mdata-menu-checkmark[39m=[32m"true"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mFirst[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+                  [33mrole[39m=[32m"menuitem"[39m
+                  [33mtabindex[39m=[32m"-1"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+                    [33mdata-menu-checkmark[39m=[32m"true"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mMiddle[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+                [36m<button[39m
+                  [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+                  [33mrole[39m=[32m"menuitem"[39m
+                  [33mtabindex[39m=[32m"-1"[39m
+                  [33mtype[39m=[32m"button"[39m
+                [36m>[39m
+                  [36m<span[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+                    [33mdata-menu-checkmark[39m=[32m"true"[39m
+                  [36m/>[39m
+                  [36m<span>[39m
+                    [0mLast[0m
+                  [36m</span>[39m
+                [36m</button>[39m
+              [36m</div>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ switchesPointerPopup src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:151:26
+    149|     fireEvent.keyDown(fixture.trigger, { key: "ArrowRight" });
+    150|     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Spacing…
+    151|     const popup = screen.getByRole("menu", { name: "Spacing menu" });
+       |                          ^
+    152|     expect(popup).toHaveFocus();
+    153|     expect(screen.queryByRole("menu", { name: "Text menu" })).not.toBe…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  |shared| src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > restores parent focus when the pointer closes its child popup
+TestingLibraryElementError: Unable to find an accessible element with the role "menu" and name "Text menu"
+
+Here are the accessible roles:
+
+  menubar:
+
+  Name "Preselection menus":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Preselection menus"[39m
+    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+    [33mrole[39m=[32m"menubar"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Format":
+  [36m<button[39m
+    [33maria-controls[39m=[32m"preselection-format-menu"[39m
+    [33maria-expanded[39m=[32m"true"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33maria-label[39m=[32m"Format"[39m
+    [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"0"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Text":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"text"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Spacing":
+  [36m<button[39m
+    [33maria-expanded[39m=[32m"false"[39m
+    [33maria-haspopup[39m=[32m"menu"[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+    [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  menu:
+
+  Name "Format menu":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Format menu"[39m
+    [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+    [33mdata-menu-depth[39m=[32m"0"[39m
+    [33mid[39m=[32m"preselection-format-menu"[39m
+    [33mrole[39m=[32m"menu"[39m
+    [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"relative max-w-full"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+        [33minert[39m=[32m""[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0mFormat[0m
+        [36m</span>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+        [36m>[39m
+          [0m»[0m
+        [36m</span>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Preselection menus"[39m
+        [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+        [33mrole[39m=[32m"menubar"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"relative"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-controls[39m=[32m"preselection-format-menu"[39m
+            [33maria-expanded[39m=[32m"true"[39m
+            [33maria-haspopup[39m=[32m"menu"[39m
+            [33maria-label[39m=[32m"Format"[39m
+            [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"[39m
+            [33mrole[39m=[32m"menuitem"[39m
+            [33mtabindex[39m=[32m"0"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [0mFormat[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33maria-label[39m=[32m"Format menu"[39m
+            [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+            [33mdata-menu-depth[39m=[32m"0"[39m
+            [33mid[39m=[32m"preselection-format-menu"[39m
+            [33mrole[39m=[32m"menu"[39m
+            [33mstyle[39m=[32m"max-width: 1008px; left: 8px; top: 4px; max-height: 756px;"[39m
+            [33mtabindex[39m=[32m"-1"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"text"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mText[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"relative"[39m
+            [36m>[39m
+              [36m<button[39m
+                [33maria-expanded[39m=[32m"false"[39m
+                [33maria-haspopup[39m=[32m"menu"[39m
+                [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"[39m
+                [33mdata-submenu-trigger[39m=[32m"spacing"[39m
+                [33mrole[39m=[32m"menuitem"[39m
+                [33mtabindex[39m=[32m"-1"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"w-2.5 shrink-0"[39m
+                [36m/>[39m
+                [36m<span>[39m
+                  [0mSpacing[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"ml-auto"[39m
+                [36m>[39m
+                  [0m›[0m
+                [36m</span>[39m
+              [36m</button>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ hoverText src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:79:17
+     77| function hoverText(): HTMLElement {
+     78|   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     79|   return screen.getByRole("menu", { name: "Text menu" });
+       |                 ^
+     80| }
+     81|
+ ❯ closesPointerPopup src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx:162:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  11 failed | 90 passed (101)
+   Start at  17:11:34
+   Duration  8.62s (transform 5.91s, setup 824ms, import 7.08s, tests 3.43s, environment 4.58s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-popup src/framework/browser/presentation/CommandMenuBar

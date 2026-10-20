@@ -1,0 +1,1122 @@
+{
+  "result": "pass",
+  "owners": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+      "sha256": "798b7861bc11aa40e037f5e034842a75ee3203e11fa1a0c1ae1f61a85dab7553",
+      "coverage": {
+        "lines": {
+          "total": 31,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 31,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+      "sha256": "ed0535b342e707c85632b8f5e8b5547fe42aa4efc60ce73d3266f11a30c0f8b2",
+      "coverage": {
+        "lines": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/column-geometry.ts",
+      "sha256": "909499e68f5236c47a6d0be7ef380871510e865578f174af450e957da19d837e",
+      "coverage": {
+        "lines": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/inc/FilterData.ts",
+      "sha256": "051468b77d69782bf89fc33760a8a28aa9d391108c7a09a00827beb740887e7d",
+      "classification": "static re-export header;no executable body"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/FilterData.ts",
+      "sha256": "a6ffe728cba82b68ec49eb84caace7a1893fff6a66eb153e3638abdb1a8849d9",
+      "coverage": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlcoli.ts",
+      "sha256": "4ecee95f5f3c09a4f015b9f3381341dd0731d81b3dd8acbaf0f7a8b163457887",
+      "coverage": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+      "sha256": "af22376cca363eead4e6894107d532283a91c79ef2143666b3abf5707c88cbe4",
+      "coverage": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+      "sha256": "87384302b8780ad2c4fc7877465df344091d257df61c04a0005294f29ba31ba5",
+      "coverage": {
+        "lines": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/inc/units.ts",
+      "sha256": "21ba4da3906836dada86468a5931326ab5f2dab4f8d0e592f58413b98863ee42",
+      "coverage": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/source/control/field.ts",
+      "sha256": "1dcb44e077841fa5c394aeebb197a4a82bec75679a18058ce7f996f12e19d79a",
+      "coverage": {
+        "lines": {
+          "total": 79,
+          "covered": 79,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 96,
+          "covered": 96,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 75,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/source/weld/MetricSpinButton.ts",
+      "sha256": "595fa892e846eb669b01e76a7c9d85213f2193aa9d48de6fbb38d7ec112110e9",
+      "coverage": {
+        "lines": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/source/weld/SpinButton.ts",
+      "sha256": "3aec85e5a8fac7b1166f46fb184fe40463f546165916c856054af1e9bd9e9115",
+      "coverage": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uchar.ts",
+      "sha256": "bdbde8a83425b00ff9b19f27744004368ed20ca9e66ab2d851fa52a2289012e6",
+      "coverage": {
+        "lines": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uchar_props_data.ts",
+      "sha256": "7ac7188de5971c88eee1713a5e3a55f20e02025a88736337bfb6aa50b3a41b7d",
+      "coverage": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unicode/uchar.ts",
+      "sha256": "24b2ee0f6d0aebb2a14fffab3140295b7cafb6f75e167685a26b8f9415a16682",
+      "coverage": {
+        "lines": {
+          "total": 387,
+          "covered": 387,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 387,
+          "covered": 387,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+      "sha256": "e54ac38f492f520a862118cc63d18e63bf8edf2ab69616a90325aba180aa0bce",
+      "coverage": {
+        "lines": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+      "sha256": "4dd483d6a54829ee6f85e17a6ef2cfc3dc245cf98d2676b11e01f5f056330801",
+      "coverage": {
+        "lines": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18nutil/source/utility/unicode.ts",
+      "sha256": "be33ac77cf4b325cbeb118bdb11cac300a99053124056890f16c364fc1327f2e",
+      "coverage": {
+        "lines": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 75,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 184,
+          "covered": 184,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "ad00f32983a108d4a45e3d74198d693d782c916e31a69429254ccbf43ae43257",
+      "coverage": {
+        "lines": {
+          "total": 317,
+          "covered": 317,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 68,
+          "covered": 68,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 352,
+          "covered": 352,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 144,
+          "covered": 144,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "05a55b1a7d8c22ae055f6b6893a509c3e3b9af65761bcdb3dfe008007d2e0c5f",
+      "coverage": {
+        "lines": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "fc1bccddc59357218ac38de5d017563ec2810b7aa2738be7c75b272d48fd37a8",
+      "coverage": {
+        "lines": {
+          "total": 145,
+          "covered": 145,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 154,
+          "covered": 154,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 175,
+          "covered": 175,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+      "sha256": "c7dc80654e3613872556d389dfed9cc95f571f65abd40977a11d29cbff1e3c4e",
+      "coverage": {
+        "lines": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 53,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "a13461324222493165ce7bee6a1663dd3a04b6cbbbfa0f469e3bad4cd7200ff6",
+      "coverage": {
+        "lines": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "95ecbcb60ac3d5f20a4a37e574d1d8a2203e17e149dff2d87f38b5c4d9c1a225",
+      "coverage": {
+        "lines": {
+          "total": 303,
+          "covered": 303,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 65,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 361,
+          "covered": 361,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 210,
+          "covered": 210,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "6324dc5d71baa0e321896930d23f3b758ce2dfbda67e3d591bbd5b379201599f",
+      "coverage": {
+        "lines": {
+          "total": 156,
+          "covered": 156,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 185,
+          "covered": 185,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 138,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "0b0dc86379e3da0bf21244c12a046e10379c2ec11059ae527a9a279e533f228e",
+      "coverage": {
+        "lines": {
+          "total": 138,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 152,
+          "covered": 152,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 68,
+          "covered": 68,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "sha256": "ec44c0cd1241bdb8b746df4d4c639e1a4e67468030645dbef209c04df023cc44",
+      "coverage": {
+        "lines": {
+          "total": 100,
+          "covered": 100,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 116,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "feb90470737b55f4274a01c425dd261ff3bfd9eab2fec5bbc7f0b7345138a7c7",
+      "coverage": {
+        "lines": {
+          "total": 85,
+          "covered": 85,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 90,
+          "covered": 90,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 46,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmltabi.ts",
+      "sha256": "f3b7aaf4c34f55d7ef47c8453a766eca691dac2076ccc80491321e060bb0bb71",
+      "coverage": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cellsh3.ts",
+      "sha256": "0097a4fd436643228e98854af3e7628aaaf405fddd74e2dde3feaff76dc78761",
+      "coverage": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "8de88761941780923fb931c7a940d9f8b53a86d26eed65c90cc9992fbd8f0831",
+      "coverage": {
+        "lines": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 79,
+          "covered": 79,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 56,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "7fd4221ceb205d5534502f86c7607f9fbc2933a83e10fc551ad00e0fc64623e2",
+      "coverage": {
+        "lines": {
+          "total": 70,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 80,
+          "covered": 80,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/bindings.ts",
+      "sha256": "b280acb587ff3da6de1b7abb2ed97ae2ae775402bdcc1cfec87cb299350bce92",
+      "coverage": {
+        "lines": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/dispatch.ts",
+      "sha256": "0cf57b8ed052ed339235bd617210ed4dfe9b504627d3654882c36e30b41deb0c",
+      "coverage": {
+        "lines": {
+          "total": 62,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/request.ts",
+      "sha256": "d6f3b7c37901f40b7d8f086b4a56788e225bb0572aff54cb5c57667861ff7eea",
+      "coverage": {
+        "lines": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 58,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "sha256": "deefff023f7c3516a8e9a26fce64b2a11972c36d988d0c6b2e36e9a7a1cda13b",
+      "coverage": {
+        "lines": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 54,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/unotools/source/misc/syslocale.ts",
+      "sha256": "53a894158c56b02ae9b73c0d0d75177f2c89f817982b78c5e72cf296666e51d6",
+      "coverage": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "3b9701efdc86275e0fafa6a6ea32976c9fd532649866f4935a56ba7b8a864742",
+      "coverage": {
+        "lines": {
+          "total": 237,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 237,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  ],
+  "executableOwners": 37,
+  "staticHeaders": 1
+}

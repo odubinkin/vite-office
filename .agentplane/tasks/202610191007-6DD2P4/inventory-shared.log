@@ -1,0 +1,16 @@
+
+> vite-office@0.1.0 inventory:parity:shared
+> tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:612
+    throw new Error(
+          ^
+
+Error: Runtime mutation helper inventory must be exhaustive; expected apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#append_to_prev_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#insert_empty_impl, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts#append_cell_to_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts#append_empty, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts#insert_empty, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts#merge_with_next_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#append_storage, apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#insert_storage, apps/office/src/framework/browser/presentation/menu-popup-pointer.ts#markMenuItem, apps/office/src/sal/inc/rtl/character.ts#splitSurrogates, apps/office/src/sal/rtl/strtmpl.ts#replaceChars, apps/office/src/tools/inc/color.ts#insertColor; received apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#append_to_prev_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#insert_empty_impl, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts#append_cell_to_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts#append_empty, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts#insert_empty, apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts#merge_with_next_block, apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#append_storage, apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts#insert_storage, apps/office/src/sal/inc/rtl/character.ts#splitSurrogates, apps/office/src/sal/rtl/strtmpl.ts#replaceChars, apps/office/src/tools/inc/color.ts#insertColor.
+    at assertSameValues (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:612:11)
+    at validateRuntimeInventory (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:210:3)
+    at async validateRegistryEvidence (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-validation.ts:284:25)
+    at async runRegistryCli (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:74:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:89:3)
+
+Node.js v24.13.1

@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- tabview3.test calc-sheet-commands.test calc-view-controller.test calc-workbench.test ui-resources.test
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts tabview3.test calc-sheet-commands.test calc-view-controller.test calc-workbench.test ui-resources.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  5 passed (5)
+      Tests  11 passed (11)
+   Start at  01:57:32
+   Duration  3.87s (transform 1.73s, setup 356ms, import 2.62s, tests 2.56s, environment 1.75s)
+

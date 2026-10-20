@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/unichars.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/textenc/unichars.ts",
+        "apps/office/src/sal/textenc/singlebyte-reverse.test.ts",
+        "scripts/rtl-singlebyte-reverse-native-probe.mjs",
+        "vendor/libreoffice-reference/sal/textenc/unichars.cxx"
+      ],
+      "justification": "Task5W55E9 ports complete original convertUnicodeToChar,all private reverse/replacement lookup data and binary searches,whole undefined-character handling and original fixed Unicode3.1.1 predicates. Native flags,table order,partial surrogate consumption,private mapping before capacity checking,sentinel mutation and lack of terminator are preserved. Actual descriptor const data and existing character predicates are reused;typed borrowed byte/unit views and scalar offset/status cells bind original pointer parameters. Genuine unchanged original69normal+69ASanUBSan graph observations cover all BMP inputs for core descriptors,real two-byte MS1258 mapping,additional genuine descriptors,flags/capacities,independent handler calls and complete classifier domains. No host codec,stub procedure or fabricated registry. Full converter registry/factories,OUString byte construction,VCL serializer,item/pool/document integration,native ABI and invalid physical storage remain unverified. Native contract evidence additionally supplies one valid caller-owned copy of the original ISO88591 descriptor with one second-range undefined-zero sentinel;this is a test input,not a synthetic production registry. The original fixed replacement strings consist entirely of ASCII units;the source lookup unconditionally returns1 for every such nonzero unit,so the preserved defensive i==0 replacement-string arm is unreachable and has one source-proven coverage annotation. All other source arms are exercised;thresholds and validators are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplIsControlOrFormat",
+        "ImplIsPrivateUse",
+        "ImplIsZeroWidth"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sal/textenc/unichars.cxx",
+      "upstreamSymbols": [
+        "ImplIsControlOrFormat",
+        "ImplIsPrivateUse",
+        "ImplIsZeroWidth"
+      ]
+    }
+  }
+}

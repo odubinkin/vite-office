@@ -75,7 +75,7 @@ function mountMenus() {
     execute,
     refresh: /** Changes placement identity without changing content. @returns Nothing. */ () =>
       mounted.rerender(surface([...menus])),
-    trigger: screen.getByRole("button", { name: "Format" }),
+    trigger: screen.getByRole("menuitem", { name: "Format" }),
   };
 }
 
@@ -91,11 +91,120 @@ describe("root popup opening", /** Groups opening and reuse contracts. @returns 
 
   it("transfers pointer focus to a neighboring root without preselection", /** Checks pointer switching. @returns Nothing. */ function switchesPointerPopup(): void {
     mountMenus();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.mouseEnter(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Edit" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
     expect(screen.getByRole("menuitem", { name: "Delta" })).not.toHaveFocus();
     expect(screen.queryByRole("menu", { name: "Format menu" })).not.toBeInTheDocument();
+  });
+
+  it("admits closed rollover without consuming the first active motion", /** Checks enter-only input,paint priority and motion reset on each popup creation. @returns Nothing. */ function admitsRootMotion(): void {
+    mountMenus();
+    const format = screen.getByRole("menuitem", { name: "Format" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
+    fireEvent.mouseEnter(edit);
+    expect(edit).not.toHaveAttribute("data-menubar-rollover");
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("data-menubar-highlighted", "true");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    fireEvent.click(format);
+    fireEvent.mouseMove(edit);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    expect(format).toHaveAttribute("data-menubar-highlighted", "true");
+    expect(edit).toHaveAttribute("data-menubar-rollover", "true");
+    expect(edit).not.toHaveAttribute("data-menubar-highlighted");
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(format);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(format);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(format);
+    fireEvent.mouseMove(format);
+    expect(screen.getByRole("menu", { name: "Format menu" })).toHaveFocus();
+  });
+
+  it("consumes invalid motion but preserves admission on native window leave", /** Checks invalid positions and transitions within and outside the native menubar window. @returns Nothing. */ function admitsInvalidPosition(): void {
+    mountMenus();
+    const bar = screen.getByRole("menubar");
+    const format = screen.getByRole("menuitem", { name: "Format" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
+    fireEvent.mouseMove(format);
+    fireEvent.mouseOut(format, { relatedTarget: edit });
+    expect(format).toHaveAttribute("data-menubar-rollover", "true");
+    fireEvent.mouseOut(format, { relatedTarget: document.body });
+    expect(format).not.toHaveAttribute("data-menubar-rollover");
+    fireEvent.click(format);
+    fireEvent.mouseMove(bar);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(bar);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseOut(edit);
+    expect(edit).not.toHaveAttribute("data-menubar-rollover");
+    fireEvent.mouseMove(format);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(format);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("excludes floating popup motion from root admission and rollover", /** Checks actual separate native window ownership despite DOM nesting. @returns Nothing. */ function excludesFloatingMotion(): void {
+    mountMenus();
+    const format = screen.getByRole("menuitem", { name: "Format" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
+    fireEvent.click(format);
+    fireEvent.mouseMove(format);
+    const popup = screen.getByRole("menu", { name: "Format menu" });
+    fireEvent.mouseOut(format, { relatedTarget: popup });
+    expect(format).not.toHaveAttribute("data-menubar-rollover");
+    fireEvent.mouseMove(popup);
+    fireEvent.mouseOut(popup, { relatedTarget: edit });
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(format);
+    fireEvent.mouseMove(screen.getByRole("menu", { name: "Format menu" }));
+    fireEvent.mouseMove(edit);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(format);
+    fireEvent.mouseMove(format);
+    fireEvent.click(screen.getByRole("menuitem", { name: "Nested" }));
+    expect(screen.getByRole("menu", { name: "Nested menu" })).toBeVisible();
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    expect(screen.queryByRole("menu", { name: "Nested menu" })).not.toBeInTheDocument();
+  });
+
+  it("resets first motion for keyboard creation while clicks remain immediate", /** Checks keyboard origin and click toggling share native popup lifetime. @returns Nothing. */ function resetsKeyboardMotion(): void {
+    mountMenus();
+    const format = screen.getByRole("menuitem", { name: "Format" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
+    fireEvent.keyDown(format, { key: "ArrowDown" });
+    fireEvent.mouseMove(edit);
+    expect(format).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(edit);
+    expect(edit).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(edit);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(edit).toHaveAttribute("data-menubar-highlighted", "true");
+  });
+
+  it("retains keyboard-only highlight and suppression without creating a popup", /** Checks F10 activation,subsequent root motion and highlight priority while auto-popup is disabled. @returns Nothing. */ function movesUnopenedHighlight(): void {
+    mountMenus();
+    const format = screen.getByRole("menuitem", { name: "Format" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
+    fireEvent.keyDown(format, { key: "Home" });
+    expect(format).toHaveAttribute("data-menubar-highlighted", "true");
+    fireEvent.mouseMove(edit);
+    expect(format).toHaveAttribute("data-menubar-highlighted", "true");
+    fireEvent.mouseMove(edit);
+    expect(edit).toHaveFocus();
+    expect(edit).toHaveAttribute("data-menubar-highlighted", "true");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    fireEvent.keyDown(edit, { key: "Escape" });
   });
 
   for (const [key, label] of [

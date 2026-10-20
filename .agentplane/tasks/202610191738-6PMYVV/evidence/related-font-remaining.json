@@ -1,0 +1,1168 @@
+{
+  "result": "All253files11671cases pass;coverage not accepted yet.",
+  "rawSha256": "2b57d13620e8488e9415b23362f41fc9916a936774385f4cab2dd31c651c9813",
+  "coverage": {
+    "statements": [
+      2425,
+      2447
+    ],
+    "branches": [
+      1410,
+      1445
+    ],
+    "functions": [
+      466,
+      472
+    ],
+    "lines": [
+      2231,
+      2249
+    ]
+  },
+  "remaining": [
+    {
+      "path": "apps/office/src/sw/sdi/swriter.ts",
+      "functions": [],
+      "branches": [
+        {
+          "id": "0",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 14
+              },
+              "end": {
+                "line": 33,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 33,
+                  "column": 51
+                },
+                "end": {
+                  "line": 33,
+                  "column": 56
+                }
+              },
+              {
+                "start": {
+                  "line": 33,
+                  "column": 56
+                },
+                "end": {
+                  "line": 33,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            158353
+          ]
+        },
+        {
+          "id": "5",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 62,
+                "column": 2
+              },
+              "end": {
+                "line": 62,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 62,
+                  "column": 2
+                },
+                "end": {
+                  "line": 62,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            76
+          ]
+        },
+        {
+          "id": "6",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 100,
+                "column": 18
+              },
+              "end": {
+                "line": 102,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 101,
+                  "column": 7
+                },
+                "end": {
+                  "line": 101,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 102,
+                  "column": 6
+                },
+                "end": {
+                  "line": 102,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            158459,
+            0
+          ]
+        },
+        {
+          "id": "7",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 104,
+                "column": 2
+              },
+              "end": {
+                "line": 104,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 104,
+                  "column": 2
+                },
+                "end": {
+                  "line": 104,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            158459
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints-font.ts",
+      "functions": [],
+      "branches": [
+        {
+          "id": "4",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 75,
+                "column": 8
+              },
+              "end": {
+                "line": 75,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 75,
+                  "column": 18
+                },
+                "end": {
+                  "line": 75,
+                  "column": 51
+                }
+              },
+              {
+                "start": {
+                  "line": 75,
+                  "column": 51
+                },
+                "end": {
+                  "line": 75,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            7,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+      "functions": [],
+      "branches": [
+        {
+          "id": "31",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 184,
+                "column": 2
+              },
+              "end": {
+                "line": 185,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 184,
+                  "column": 2
+                },
+                "end": {
+                  "line": 185,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            9725
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "functions": [],
+      "branches": [
+        {
+          "id": "54",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 506,
+                "column": 11
+              },
+              "end": {
+                "line": 506,
+                "column": null
+              }
+            },
+            "type": "binary-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 506,
+                  "column": 11
+                },
+                "end": {
+                  "line": 506,
+                  "column": 65
+                }
+              },
+              {
+                "start": {
+                  "line": 506,
+                  "column": 65
+                },
+                "end": {
+                  "line": 506,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            55,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "functions": [
+        {
+          "name": "(anonymous_4)",
+          "line": 64
+        },
+        {
+          "name": "(anonymous_5)",
+          "line": 67
+        }
+      ],
+      "branches": []
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "functions": [
+        {
+          "name": "(anonymous_36)",
+          "line": 620
+        },
+        {
+          "name": "(anonymous_61)",
+          "line": 821
+        },
+        {
+          "name": "(anonymous_62)",
+          "line": 826
+        }
+      ],
+      "branches": [
+        {
+          "id": "3",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 156,
+                "column": 11
+              },
+              "end": {
+                "line": 162,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 161,
+                  "column": 9
+                },
+                "end": {
+                  "line": 161,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 162,
+                  "column": 8
+                },
+                "end": {
+                  "line": 162,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            45,
+            0
+          ]
+        },
+        {
+          "id": "72",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 555,
+                "column": 10
+              },
+              "end": {
+                "line": 561,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 556,
+                  "column": 14
+                },
+                "end": {
+                  "line": 556,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 557,
+                  "column": 14
+                },
+                "end": {
+                  "line": 561,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            14
+          ]
+        },
+        {
+          "id": "85",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 627,
+                "column": 19
+              },
+              "end": {
+                "line": 627,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 627,
+                  "column": 66
+                },
+                "end": {
+                  "line": 627,
+                  "column": 75
+                }
+              },
+              {
+                "start": {
+                  "line": 627,
+                  "column": 75
+                },
+                "end": {
+                  "line": 627,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            136
+          ]
+        },
+        {
+          "id": "87",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 628,
+                "column": 18
+              },
+              "end": {
+                "line": 628,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 628,
+                  "column": 65
+                },
+                "end": {
+                  "line": 628,
+                  "column": 74
+                }
+              },
+              {
+                "start": {
+                  "line": 628,
+                  "column": 74
+                },
+                "end": {
+                  "line": 628,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            136
+          ]
+        },
+        {
+          "id": "103",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 777,
+                "column": 50
+              },
+              "end": {
+                "line": 777,
+                "column": 75
+              }
+            },
+            "type": "default-arg",
+            "locations": [
+              {
+                "start": {
+                  "line": 777,
+                  "column": 60
+                },
+                "end": {
+                  "line": 777,
+                  "column": 75
+                }
+              }
+            ]
+          },
+          "counts": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "functions": [
+        {
+          "name": "(anonymous_84)",
+          "line": 711
+        }
+      ],
+      "branches": [
+        {
+          "id": "1",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 138,
+                "column": 4
+              },
+              "end": {
+                "line": 138,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 138,
+                  "column": 4
+                },
+                "end": {
+                  "line": 138,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            197
+          ]
+        },
+        {
+          "id": "35",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 421,
+                "column": 4
+              },
+              "end": {
+                "line": 422,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 421,
+                  "column": 4
+                },
+                "end": {
+                  "line": 422,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            7
+          ]
+        },
+        {
+          "id": "37",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 425,
+                "column": 4
+              },
+              "end": {
+                "line": 432,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 425,
+                  "column": 4
+                },
+                "end": {
+                  "line": 432,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            7
+          ]
+        },
+        {
+          "id": "55",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 498,
+                "column": 4
+              },
+              "end": {
+                "line": 507,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 498,
+                  "column": 4
+                },
+                "end": {
+                  "line": 507,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            6,
+            0
+          ]
+        },
+        {
+          "id": "60",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 534,
+                "column": 20
+              },
+              "end": {
+                "line": 534,
+                "column": 43
+              }
+            },
+            "type": "default-arg",
+            "locations": [
+              {
+                "start": {
+                  "line": 534,
+                  "column": 28
+                },
+                "end": {
+                  "line": 534,
+                  "column": 43
+                }
+              }
+            ]
+          },
+          "counts": [
+            0
+          ]
+        },
+        {
+          "id": "62",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 538,
+                "column": 6
+              },
+              "end": {
+                "line": 541,
+                "column": null
+              }
+            },
+            "type": "binary-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 538,
+                  "column": 6
+                },
+                "end": {
+                  "line": 538,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 539,
+                  "column": 6
+                },
+                "end": {
+                  "line": 539,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 540,
+                  "column": 6
+                },
+                "end": {
+                  "line": 540,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 541,
+                  "column": 7
+                },
+                "end": {
+                  "line": 541,
+                  "column": 28
+                }
+              },
+              {
+                "start": {
+                  "line": 541,
+                  "column": 28
+                },
+                "end": {
+                  "line": 541,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            4,
+            4,
+            4,
+            2,
+            0
+          ]
+        },
+        {
+          "id": "63",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 544,
+                "column": 4
+              },
+              "end": {
+                "line": 551,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 544,
+                  "column": 4
+                },
+                "end": {
+                  "line": 551,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            2
+          ]
+        },
+        {
+          "id": "64",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 545,
+                "column": 13
+              },
+              "end": {
+                "line": 550,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 549,
+                  "column": 10
+                },
+                "end": {
+                  "line": 549,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 550,
+                  "column": 10
+                },
+                "end": {
+                  "line": 550,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0
+          ]
+        },
+        {
+          "id": "65",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 545,
+                "column": 13
+              },
+              "end": {
+                "line": 548,
+                "column": null
+              }
+            },
+            "type": "binary-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 545,
+                  "column": 13
+                },
+                "end": {
+                  "line": 545,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 546,
+                  "column": 8
+                },
+                "end": {
+                  "line": 546,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 547,
+                  "column": 8
+                },
+                "end": {
+                  "line": 547,
+                  "column": null
+                }
+              },
+              {
+                "start": {
+                  "line": 548,
+                  "column": 8
+                },
+                "end": {
+                  "line": 548,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "66",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 567,
+                "column": 4
+              },
+              "end": {
+                "line": 567,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 567,
+                  "column": 4
+                },
+                "end": {
+                  "line": 567,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            2,
+            0
+          ]
+        },
+        {
+          "id": "68",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 569,
+                "column": 21
+              },
+              "end": {
+                "line": 569,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 569,
+                  "column": 34
+                },
+                "end": {
+                  "line": 569,
+                  "column": 52
+                }
+              },
+              {
+                "start": {
+                  "line": 569,
+                  "column": 52
+                },
+                "end": {
+                  "line": 569,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0
+          ]
+        },
+        {
+          "id": "69",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 569,
+                "column": 52
+              },
+              "end": {
+                "line": 569,
+                "column": null
+              }
+            },
+            "type": "cond-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 569,
+                  "column": 65
+                },
+                "end": {
+                  "line": 569,
+                  "column": 74
+                }
+              },
+              {
+                "start": {
+                  "line": 569,
+                  "column": 74
+                },
+                "end": {
+                  "line": 569,
+                  "column": null
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0
+          ]
+        },
+        {
+          "id": "75",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 712,
+                "column": 4
+              },
+              "end": {
+                "line": 712,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 712,
+                  "column": 4
+                },
+                "end": {
+                  "line": 712,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0
+          ]
+        },
+        {
+          "id": "76",
+          "location": {
+            "loc": {
+              "start": {
+                "line": 712,
+                "column": 8
+              },
+              "end": {
+                "line": 712,
+                "column": 74
+              }
+            },
+            "type": "binary-expr",
+            "locations": [
+              {
+                "start": {
+                  "line": 712,
+                  "column": 8
+                },
+                "end": {
+                  "line": 712,
+                  "column": 39
+                }
+              },
+              {
+                "start": {
+                  "line": 712,
+                  "column": 39
+                },
+                "end": {
+                  "line": 712,
+                  "column": 56
+                }
+              },
+              {
+                "start": {
+                  "line": 712,
+                  "column": 56
+                },
+                "end": {
+                  "line": 712,
+                  "column": 74
+                }
+              }
+            ]
+          },
+          "counts": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

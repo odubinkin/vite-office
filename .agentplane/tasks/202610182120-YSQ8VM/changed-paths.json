@@ -1,0 +1,22 @@
+[
+  "apps/office/src/framework/browser/presentation/CommandToolbar.test.tsx",
+  "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+  "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+  "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+  "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+  "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+  "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+  "docs/program/registry/calc/provenance/sc/uiconfig/scalc/toolbar/standardbar.ts.json",
+  "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+  "docs/program/registry/calc/runtime/sc/uiconfig/scalc/toolbar/standardbar.ts.json",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/CommandToolbar.tsx.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/CommandToolbar.tsx.json",
+  "docs/program/registry/writer/provenance/sw/browser/presentation/WriterCommandToolbar.tsx.json",
+  "docs/program/registry/writer/runtime/sw/browser/presentation/WriterCommandToolbar.tsx.json",
+  "scripts/calc-sheet-command-source.test.ts",
+  "apps/office/e2e/calc/standard-toolbar.spec.ts",
+  "apps/office/src/framework/browser/presentation/office-command-icons.ts",
+  "apps/office/src/sw/browser/presentation/WriterCommandToolbar.test.tsx",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/office-command-icons.ts.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/office-command-icons.ts.json"
+]

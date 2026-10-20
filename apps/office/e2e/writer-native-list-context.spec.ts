@@ -1,5 +1,6 @@
 /** @fileoverview Checks production native list context transitions, current level menus and text-shell history. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem } from "../test-support/menu-pointer-e2e";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SwPosition } from "../src/sw/source/core/crsr/pam";
 import { createWriterNumFormat } from "../src/sw/source/core/doc/number";
@@ -71,8 +72,8 @@ for (const width of [1280, 390])
     await expect(maximumEditor).toHaveAttribute("data-list-level", "9");
     /** Opens the real submenu through visible controls. @returns Completion. */
     async function menu(): Promise<void> {
-      await page.getByRole("button", { name: "Format", exact: true }).click();
-      await page.getByRole("menuitem", { name: "Lists", exact: true }).hover();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+      await hoverBrowserMenuItem(page, page.getByRole("menuitem", { name: "Lists", exact: true }));
     }
     /** Closes the actual menu stack. @returns Completion. */
     async function close(): Promise<void> {

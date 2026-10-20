@@ -12,12 +12,12 @@ test("Chromium hyperlink state distinguishes original interior and non-expanding
   await page.getByRole("button", { name: "Apply", exact: true }).click();
   await editor.focus();
   await editor.press("End");
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
   await page.keyboard.press("Escape");
   await editor.focus();
   await editor.press("ArrowLeft");
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
   await expect(editor.locator('a[href="https://example.test/end"]')).toHaveText("abc");
 });

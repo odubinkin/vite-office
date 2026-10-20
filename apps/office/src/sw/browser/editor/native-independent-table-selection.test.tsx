@@ -42,8 +42,8 @@ it("mounted physical column selection paints actual cells and keeps formatting u
     pos.Dispose();
     doc.GetUndoManager().Clear();
     render(<WriterWorkbench isActive view={session.view} />);
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
-    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Select Column" }));
     const selected = [boxes[1], boxes[4], boxes[7]],
       element = screen.getByRole("table", { name: "Table1" });

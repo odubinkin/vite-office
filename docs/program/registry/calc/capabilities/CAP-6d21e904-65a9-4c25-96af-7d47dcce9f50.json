@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50",
+    "capabilityId": "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50",
+    "suite": "calc",
+    "subsystem": "browser-file-ui",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task2BTWEE connects Calc native OpenFromCalc26204,SaveAs5502 and ExportTo5829 Sfx slots to actual ODS workflows and the shared Writer-style file dialog. Current input commits before file focus;primary autosave flushes before open/copy/import;computer imports use existing ODS candidate loading and collision-resolved browser identity;named copies and browser opens use actual primary IO. Shell Export uses a separate medium and leaves primary identity,modified state,generation and undo-save position unchanged. Shared CommandMenuBar and CommandButton render consumed native File/Edit placements and normalized source labels/shortcuts. Open dialogs make background Calc chrome/grid inert and restore actual grid focus on close. Native slot/placement/resource identities are preserved for consumed commands;this is not complete native menu/UI parity.",
+      "Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Calc file menu and ODS browser workflows",
+    "gaps": [
+      "Complete native menu/resource/chrome and interaction breadth remains subsequent approved UI work;this slice places only implemented file/history commands.",
+      "Calc file support remains existing plain ODS scalar/local-reference filter support;unsupported content rejects rather than silently translating it.",
+      "Browser primary IndexedDB/autosave,no recovery and the shared file choices intentionally follow Writer project deviations;native desktop filesystem/recovery fidelity is not claimed.",
+      "Full all-app regression remains task10;this UI-cycle task7 uses allCalc100percent and affected Writer/shared evidence."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+          "marker": ".uno:OpenFromCalc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "OpenFromCalc SID_OPEN_CALC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+          "marker": ".uno:OpenFromCalc"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+          "marker": "CalcFileDialog"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-file-workflows.ts",
+          "marker": "CalcFileWorkflows"
+        },
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+          "marker": "calcMenus"
+        },
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+          "marker": "calcStandardBarItems"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "opens real Calc file dialogs"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "WriterFileDialog"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+          "marker": "CalcFileDialog"
+        }
+      ]
+    },
+    "aspect": "command-placement",
+    "atomicOperation": "calc-browser-ods-file-command-ui",
+    "scopeLimitations": [
+      "Complete native menu/resource/chrome and interaction breadth remains subsequent approved UI work;this slice places only implemented file/history commands.",
+      "Calc file support remains existing plain ODS scalar/local-reference filter support;unsupported content rejects rather than silently translating it.",
+      "Browser primary IndexedDB/autosave,no recovery and the shared file choices intentionally follow Writer project deviations;native desktop filesystem/recovery fidelity is not claimed.",
+      "Full all-app regression remains task10;this UI-cycle task7 uses allCalc100percent and affected Writer/shared evidence."
+    ]
+  }
+}

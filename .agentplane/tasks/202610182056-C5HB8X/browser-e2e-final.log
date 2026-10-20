@@ -1,0 +1,82 @@
+[WebServer] (node:15526) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:15619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 (1.0s)
+(node:15635) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 (648ms)
+
+
+  1) [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 
+
+    Error: locator.click: Error: strict mode violation: getByRole('menu', { name: 'Calc sheet context menu' }).getByRole('menuitem', { name: 'Select All Sheets' }) resolved to 2 elements:
+        1) <button tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> aka getByRole('menuitem', { name: 'Select All Sheets', exact: true })
+        2) <button disabled tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> aka getByRole('menuitem', { name: 'Deselect All Sheets' })
+
+    Call log:
+      - waiting for getByRole('menu', { name: 'Calc sheet context menu' }).getByRole('menuitem', { name: 'Select All Sheets' })
+
+
+      29 |     await expect(menu.getByRole("menuitem")).toHaveCount(14);
+      30 |     await expect(menu.getByRole("menuitem", { name: "Insert Sheet…" })).toBeDisabled();
+    > 31 |     await menu.getByRole("menuitem", { name: "Select All Sheets" }).click();
+         |                                                                     ^
+      32 |     for (const name of ["Sheet1", "Sheet2", "Sheet3"])
+      33 |       await expect(page.getByRole("tab", { name })).toHaveAttribute("aria-selected", "true");
+      34 |     await second.click({ button: "right" });
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/sheet-context-menu.spec.ts:31:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-sheet-context-menu-na-71a78-et-context-menu-at-1280x800-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-sheet-context-menu-na-71a78-et-context-menu-at-1280x800-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-sheet-context-menu-na-71a78-et-context-menu-at-1280x800-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-sheet-context-menu-na-71a78-et-context-menu-at-1280x800-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 
+
+    Error: locator.click: Error: strict mode violation: getByRole('menu', { name: 'Calc sheet context menu' }).getByRole('menuitem', { name: 'Select All Sheets' }) resolved to 2 elements:
+        1) <button tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> aka getByRole('menuitem', { name: 'Select All Sheets', exact: true })
+        2) <button disabled tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> aka getByRole('menuitem', { name: 'Deselect All Sheets' })
+
+    Call log:
+      - waiting for getByRole('menu', { name: 'Calc sheet context menu' }).getByRole('menuitem', { name: 'Select All Sheets' })
+
+
+      29 |     await expect(menu.getByRole("menuitem")).toHaveCount(14);
+      30 |     await expect(menu.getByRole("menuitem", { name: "Insert Sheet…" })).toBeDisabled();
+    > 31 |     await menu.getByRole("menuitem", { name: "Select All Sheets" }).click();
+         |                                                                     ^
+      32 |     for (const name of ["Sheet1", "Sheet2", "Sheet3"])
+      33 |       await expect(page.getByRole("tab", { name })).toHaveAttribute("aria-selected", "true");
+      34 |     await second.click({ button: "right" });
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/sheet-context-menu.spec.ts:31:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-sheet-context-menu-native-sheet-context-menu-at-390x600-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-sheet-context-menu-native-sheet-context-menu-at-390x600-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-sheet-context-menu-native-sheet-context-menu-at-390x600-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-sheet-context-menu-native-sheet-context-menu-at-390x600-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 
+    [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 

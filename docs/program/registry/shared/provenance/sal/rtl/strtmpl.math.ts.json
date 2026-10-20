@@ -7,28 +7,42 @@
     "status": "mapped",
     "upstreamPath": "sal/rtl/strtmpl.hxx",
     "localSymbols": [
-      "doubleToString"
+      "doubleToString",
+      "valueOfFP"
     ],
     "upstreamSymbols": [
-      "doubleToString"
+      "doubleToString",
+      "valueOfFP"
     ],
     "preservedResponsibilities": [
-      "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported."
+      "Task2WD4TX ports all8original Unicode number formats,original enum values and28bit precision sentinel,pre-round notation selection,integer handling,half-up significand rounding,precision clamps,decimal/grouping/zero erasure and exponent widths. Existing scalar and float adapters share this algorithm. Host shortest binary64 text replaces Dragonbox;native ignored-trailing-zero scale is restored from binary64 fields and original checked Dragonbox integer-log constants. Actual rtl_math_doubleToUString replacement and insertion use existing SAL allocation/buffer/ref owners. Genuine full69normal+69ASanUBSan SAL/CPPU graphs verify complete captured units,terminator,capacity,relative identity and refs,with original source/config/object hashes and bounded binary64 observations. Initial actual ASan evidence identifies upstream negative-F stack-allocation overflow;conservative source-bound filtering excludes that undefined memory domain from returned-output observations without disabling sanitizers. Native mathematical presentation remains represented with managed storage. This is not exhaustive binary64 or host-runtime/Dragonbox/ABI proof;other RTL APIs,full OUStringBuffer,font-axis output,item/pool/UI integration remain pending. The original float C wrapper still narrows binary32 before valueOfFP;macro15,full output storage,terminator and untouched caller sentinels remain verified by37026genuine binary32 observations."
     ],
     "omittedResponsibilities": [
-      "Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+      "Other RTL APIs and byte-string formatting facade,exhaustive binary64/Dragonbox/host-runtime equivalence,native ABI and complete OUStringBuffer/font/item/pool/Calc UI remain unverified or unported. Native negative-F stack-allocation unsafe domain is excluded from returned-output oracle evidence,not treated as a defined native result."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sal/rtl/strtmpl.math.ts",
           "marker": "doubleToString"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/float-format.test.ts",
+          "marker": "matches every byte of native float output buffers"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/double-format.test.ts",
+          "marker": "matches complete native normal and sanitized formatter states"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
           "marker": "doubleToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "valueOfFP"
         }
       ]
     },

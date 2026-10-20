@@ -1,42 +1,12 @@
 /** @fileoverview Renders the pinned standard toolbar subset from declarative command placements. */
-import {
-  ClipboardPaste,
-  Copy,
-  FilePlus,
-  FolderOpen,
-  Printer,
-  Link,
-  Bookmark,
-  Redo2,
-  Scissors,
-  SeparatorHorizontal,
-  Undo2,
-} from "lucide-react";
-
 import { WriterTableInsertControl } from "./WriterTableInsertControl";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerStandardBarItems } from "../../uiconfig/swriter/toolbar/standardbar";
 import { selectWriterCommandResource } from "./writer-command-presentation";
-import {
-  CommandToolbarItems,
-  type CommandIcon,
-} from "../../../framework/browser/presentation/CommandToolbar";
+import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
+import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-
-const icons = new Map<string, CommandIcon>([
-  [WRITER_COMMAND_IDS.newDocument, FilePlus],
-  [WRITER_COMMAND_IDS.openOdt, FolderOpen],
-  [WRITER_COMMAND_IDS.print, Printer],
-  [WRITER_COMMAND_IDS.insertPageBreak, SeparatorHorizontal],
-  [WRITER_COMMAND_IDS.cut, Scissors],
-  [WRITER_COMMAND_IDS.copy, Copy],
-  [WRITER_COMMAND_IDS.paste, ClipboardPaste],
-  [WRITER_COMMAND_IDS.undo, Undo2],
-  [WRITER_COMMAND_IDS.redo, Redo2],
-  [WRITER_COMMAND_IDS.hyperlinkDialog, Link],
-  [WRITER_COMMAND_IDS.insertBookmark, Bookmark],
-]);
 
 const tableIndex = writerStandardBarItems.findIndex(
   /** Finds Insert Table in pinned order. @param item - Toolbar placement. @returns Match. */ (
@@ -64,7 +34,7 @@ export function WriterCommandToolbar({
   function getCommandResource(commandUrl: string) {
     return selectWriterCommandResource(localization, commandUrl);
   }
-  const common = { commandSource, getCommandResource, icons, resolveArguments };
+  const common = { commandSource, getCommandResource, icons: officeCommandIcons, resolveArguments };
   return (
     <>
       <CommandToolbarItems {...common} items={beforeTable} />

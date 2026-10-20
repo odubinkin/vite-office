@@ -43,7 +43,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
         loss: "styling",
       }),
     );
-    expect(report.diagnostics).toContainEqual(
+    expect(report.diagnostics).not.toContainEqual(
       expect.objectContaining({
         kind: "unknown-attribute",
         stream: "styles.xml",

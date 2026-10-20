@@ -1,0 +1,16 @@
+
+> vite-office@0.1.0 inventory:parity:calc
+> tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:612
+    throw new Error(
+          ^
+
+Error: Runtime semantic violations for apps/office/src/sc/inc/rowheightcontext.ts must be exhaustive; expected missing-local-symbol:RowHeightContext; received none.
+    at assertSameValues (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:612:11)
+    at validateRuntimeInventory (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/runtime-inventory.ts:174:5)
+    at async validateRegistryEvidence (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-validation.ts:284:25)
+    at async runRegistryCli (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:74:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:89:3)
+
+Node.js v24.13.1

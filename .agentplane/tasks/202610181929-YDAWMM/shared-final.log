@@ -1,0 +1,40 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar native-context-menu WriterMenuBar.test WriterPageLayout.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.reportsDirectory=coverage/shared-accessibility
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar native-context-menu WriterMenuBar.test WriterPageLayout.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.reportsDirectory=coverage/shared-accessibility
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  17 passed (17)
+      Tests  192 passed (192)
+   Start at  02:40:27
+   Duration  18.81s (transform 8.01s, setup 1.32s, import 13.55s, tests 12.69s, environment 7.18s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    98.39 |     100 |     100 |                   
+ ...paceHeader.tsx |     100 |    66.66 |     100 |     100 | 34-35,59-99       
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 265/265 )
+Branches     : 98.39% ( 245/249 )
+Functions    : 100% ( 59/59 )
+Lines        : 100% ( 236/236 )
+================================================================================
+ERROR: Coverage for branches (98.39%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar native-context-menu WriterMenuBar.test WriterPageLayout.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.reportsDirectory=coverage/shared-accessibility

@@ -7,7 +7,7 @@ for (const key of ["Enter", "Space"]) {
   }) => {
     await page.goto("/writer");
     await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
-    await page.getByRole("button", { name: "View", exact: true }).click();
+    await page.getByRole("menuitem", { name: "View", exact: true }).click();
     const submenu = page.getByRole("menuitem", { name: "Rulers", exact: true });
     await submenu.focus();
     await submenu.press("ArrowRight");
@@ -17,7 +17,7 @@ for (const key of ["Enter", "Space"]) {
     await command.press(key);
     await expect(page.getByRole("menu")).toHaveCount(0);
     await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
-    await page.getByRole("button", { name: "View", exact: true }).click();
+    await page.getByRole("menuitem", { name: "View", exact: true }).click();
     await submenu.focus();
     await submenu.press("ArrowRight");
     await expect(command).toHaveAttribute("aria-checked", "false");

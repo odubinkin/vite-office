@@ -1,0 +1,23 @@
+{
+  "command": "npx",
+  "cwd": "apps/office",
+  "args": [
+    "vitest",
+    "related",
+    "--run",
+    "--config",
+    "vite.config.ts",
+    "src/framework/browser/presentation/command-surface.ts",
+    "src/framework/browser/presentation/CommandToolbar.tsx",
+    "src/framework/browser/presentation/CommandMenuBar.tsx",
+    "src/xmloff/source/core/xmltoken.ts",
+    "--coverage",
+    "--coverage.include=src/framework/browser/presentation/command-surface.ts",
+    "--coverage.include=src/framework/browser/presentation/CommandToolbar.tsx",
+    "--coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx",
+    "--coverage.include=src/xmloff/source/core/xmltoken.ts",
+    "--coverage.reportsDirectory=coverage/task39-related",
+    "--coverage.reporter=json",
+    "--coverage.reporter=text"
+  ]
+}

@@ -1,0 +1,102 @@
+[WebServer] (node:67765) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 21 tests using 1 worker
+
+(node:67766) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 1280px (1.2s)
+  ✓   2 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 390px (831ms)
+  ✘   3 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px (30.2s)
+(node:71522) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px (30.2s)
+(node:73761) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 [calc] › apps/office/e2e/calc/compiler-arithmetic.spec.ts:5:1 › compiles actual arithmetic tokens in browser and Worker (417ms)
+  ✓   6 [calc] › apps/office/e2e/calc/dociter.spec.ts:5:1 › traverses actual sparse cells by row in browser and Worker (506ms)
+  ✓   7 [calc] › apps/office/e2e/calc/document-formulas.spec.ts:5:1 › edits actual numeric formula cells in browser and Worker (515ms)
+  ✓   8 [calc] › apps/office/e2e/calc/document-references.spec.ts:4:1 › propagates actual cell references in browser and Worker (503ms)
+  ✓   9 [calc] › apps/office/e2e/calc/document-scalars.spec.ts:4:1 › edits the same actual scalar document chain in browser and Worker (498ms)
+  ✓  10 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 1280px (919ms)
+  ✓  11 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 390px (852ms)
+  ✓  12 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 1280px (1.0s)
+  ✓  13 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 390px (869ms)
+  ✓  14 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (3.9s)
+  ✓  15 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (2.2s)
+  ✓  16 [calc] › apps/office/e2e/calc/formula-output.spec.ts:5:1 › serializes actual formula tokens in browser and Worker (494ms)
+  ✓  17 [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker (631ms)
+  ✓  18 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 (3.4s)
+  ✓  19 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 (1.6s)
+  ✓  20 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800 (3.2s)
+  ✓  21 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600 (1.6s)
+
+
+  1) [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Background Color #00ff00', exact: true })
+
+
+      28 |     await expect(a1).toHaveCSS("background-color", "rgb(255, 255, 0)");
+      29 |     await page.getByLabel("Background Color palette", { exact: true }).click();
+    > 30 |     await page.getByRole("button", { name: "Background Color #00ff00", exact: true }).click();
+         |                                                                                       ^
+      31 |     await expect(a1).toHaveCSS("background-color", "rgb(0, 255, 0)");
+      32 |     await page.getByRole("button", { name: "Undo", exact: true }).click();
+      33 |     await expect(a1).toHaveCSS("background-color", "rgb(255, 255, 0)");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/colors.spec.ts:30:87
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Background Color #00ff00', exact: true })
+
+
+      28 |     await expect(a1).toHaveCSS("background-color", "rgb(255, 255, 0)");
+      29 |     await page.getByLabel("Background Color palette", { exact: true }).click();
+    > 30 |     await page.getByRole("button", { name: "Background Color #00ff00", exact: true }).click();
+         |                                                                                       ^
+      31 |     await expect(a1).toHaveCSS("background-color", "rgb(0, 255, 0)");
+      32 |     await page.getByRole("button", { name: "Undo", exact: true }).click();
+      33 |     await expect(a1).toHaveCSS("background-color", "rgb(255, 255, 0)");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/colors.spec.ts:30:87
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px 
+    [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px ─
+  19 passed (1.5m)

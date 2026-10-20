@@ -1,4 +1,5 @@
-/** @fileoverview Existing browser ODF character-property handoff, shared by text export/import and actual Writer font values; native txtparae.cxx responsibility, no UNO property-set provider or binary struct. */
+/** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { FontSlant } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FontPitch } from "../../../tools/inc/fontenum";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 /** Direct character properties supported by the bounded text exporter. */
@@ -22,9 +23,19 @@ export interface OdfCharacterProperties {
   /** Absolute font height in twips. */
   readonly fontSizeTwips?: number;
   readonly highlight?: string;
-  readonly bold: boolean;
-  readonly italic: boolean;
-  readonly underline: boolean;
+  /** Native UNO CharWeight values, independently represented for each script. */
+  readonly fontWeight?: number;
+  readonly fontWeightAsian?: number;
+  readonly fontWeightComplex?: number;
+  readonly fontPosture?: FontSlant;
+  readonly fontPostureAsian?: FontSlant;
+  readonly fontPostureComplex?: FontSlant;
+  readonly fontSizeTwipsAsian?: number;
+  readonly fontSizeTwipsComplex?: number;
+  /** Native UNO CharUnderline and its independent color properties. */
+  readonly underlineStyle?: number;
+  readonly underlineColor?: number;
+  readonly underlineHasColor?: boolean;
 }
 
 /** Resolves a complete font declaration to its document-local ODF name. */

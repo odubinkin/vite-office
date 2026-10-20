@@ -8,7 +8,8 @@
     "suite": "writer",
     "subsystem": "browser-editor",
     "capabilityIds": [
-      "CAP-0111"
+      "CAP-0111",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
       "behaviorStatus": "divergent",
@@ -20,11 +21,9 @@
         "vendor/libreoffice-reference/vcl/source/font/PhysicalFontCollection.cxx#FindFontFamily",
         "vendor/libreoffice-reference/vcl/source/font/PhysicalFontFamily.cxx#CalcType"
       ],
-      "justification": "Projects the imported VCL generic family to bundled Liberation families after the requested face; full physical-font scoring against the host collection remains unimplemented.",
+      "justification": "Projects the imported VCL generic family to bundled Liberation families after the requested face; full physical-font scoring against the host collection remains unimplemented. Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. This Writer module is now a public re-export only; the declared browserFontFamily implementation and its semantic ownership live in vcl/browser/font-family.ts.",
       "knownViolations": [],
-      "localSymbols": [
-        "browserFontFamily"
-      ],
+      "localSymbols": [],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,
       "upstreamSymbols": []

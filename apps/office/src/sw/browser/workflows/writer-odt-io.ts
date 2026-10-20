@@ -1,5 +1,6 @@
 /** @fileoverview Primary browser ODT operations around the live Writer shell. */
 
+import { getUniqueDocumentTitle as getUniqueWriterTitle } from "../../../framework/browser/storage/document-store";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SwDoc } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
@@ -31,27 +32,8 @@ export function getAutomaticWriterTitle(document: SwDoc): string | undefined {
   return undefined;
 }
 
-/** Allocates the first unused browser title by appending a one-based parenthesized index. @param baseTitle - Requested display name. @param documents - Existing browser records. @returns Unique normalized title. */
-export function getUniqueWriterTitle(
-  baseTitle: string,
-  documents: readonly BrowserWriterDocument[],
-): string {
-  const normalized = baseTitle.trim();
-  if (normalized.length === 0) throw new Error("Document name is required.");
-  const occupied = new Set(
-    documents.map(
-      /** Selects one occupied browser title. @param document - Stored record. @returns Record title. */ (
-        document,
-      ) => document.title,
-    ),
-  );
-  if (!occupied.has(normalized)) return normalized;
-  const indexed = /^(.*) \((\d+)\)$/u.exec(normalized);
-  const root = indexed?.[1]?.trim() || normalized;
-  let index = indexed === null ? 1 : Number(indexed[2]) + 1;
-  while (occupied.has(`${root} (${index})`)) index += 1;
-  return `${root} (${index})`;
-}
+/** Uses shared format-neutral title uniqueness while retaining the Writer domain API. */
+export { getUniqueDocumentTitle as getUniqueWriterTitle } from "../../../framework/browser/storage/document-store";
 
 /** Derives the browser title represented by a supported imported filename. @param filename - Computer filename. @returns Extension-free title. */
 export function getImportedWriterTitle(filename: string): string {

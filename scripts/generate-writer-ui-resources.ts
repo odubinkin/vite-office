@@ -4,6 +4,13 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 
 import { format } from "prettier";
 import {
+  findEnglishLabel,
+  findEnglishLabelProperty,
+  findShortcuts,
+  escapeRegExp,
+  stripMnemonic,
+} from "./office-ui-command-catalog";
+import {
   assertGeneratedResourceFresh,
   buildResourceGraph,
   collectResourceCommands,
@@ -342,7 +349,9 @@ const commands = Object.fromEntries(
           ? findEnglishLabelProperty(spec.commandUrl, "PopupLabel", genericCommands, writerCommands)
           : undefined;
       const shortcuts =
-        spec.browserLabel === undefined ? findShortcuts(spec.commandUrl, accelerators) : [];
+        spec.browserLabel === undefined
+          ? findShortcuts(spec.commandUrl, accelerators, "com.sun.star.text.TextDocument")
+          : [];
       const placements = resourcePaths.filter(
         /** Detects a command placement in an upstream resource. @param _path - Resource path. @param index - Resource index. @returns Whether placed. */ (
           _,
@@ -523,49 +532,6 @@ function addBrowserMenuExtensions(nodes: readonly ResourceNode[]): readonly Reso
   return nodes.map(extend);
 }
 
-/** Finds the pinned English command label. @param commandUrl - UNO command URL. @param catalogs - XCU command catalogs. @returns Localized label. */
-function findEnglishLabel(commandUrl: string, ...catalogs: readonly string[]): string {
-  const label = findEnglishLabelProperty(commandUrl, "Label", ...catalogs);
-  if (label !== undefined) return label;
-  throw new Error(`Missing upstream English label: ${commandUrl}`);
-}
-
-/** Reads an original native label property without fabricating a popup override when absent. @param commandUrl - Native URL. @param property - Original XCU property. @param catalogs - Pinned catalogs. @returns Original English property, or absent. */
-function findEnglishLabelProperty(
-  commandUrl: string,
-  property: "Label" | "PopupLabel",
-  ...catalogs: readonly string[]
-): string | undefined {
-  for (const catalog of catalogs) {
-    const marker = `<node oor:name="${commandUrl}"`;
-    const start = catalog.indexOf(marker);
-    if (start < 0) continue;
-    const next = catalog.indexOf("\n      <node oor:name=", start + marker.length);
-    const block = catalog.slice(start, next < 0 ? undefined : next);
-    const label = block.match(
-      new RegExp(
-        `<prop oor:name="${property}"[\\s\\S]*?<value xml:lang="en-US">([\\s\\S]*?)<\\/value>`,
-      ),
-    )?.[1];
-    if (label !== undefined) return decodeXml(label.trim());
-  }
-  return undefined;
-}
-
-/** Finds default shortcuts for one command. @param commandUrl - UNO command URL. @param catalog - Accelerator XCU. @returns Browser-normalized shortcuts. */
-function findShortcuts(commandUrl: string, catalog: string): readonly string[] {
-  const shortcuts = new Set<string>();
-  for (const match of catalog.matchAll(
-    /<node oor:name="([^"]+)"[^>]*>\s*<prop oor:name="Command">([\s\S]*?)<\/prop>\s*<\/node>/g,
-  )) {
-    if (!match[2]?.includes(`<value xml:lang="en-US">${commandUrl}</value>`)) continue;
-    const shortcut = convertShortcut(match[1] as string);
-    shortcuts.add(shortcut);
-    if (shortcut.startsWith("Ctrl+")) shortcuts.add(`Meta+${shortcut.slice(5)}`);
-  }
-  return [...shortcuts];
-}
-
 /** Finds the SDI macro backing one command. @param commandUrl - UNO command URL. @param catalogs - SDI texts. @returns HRC macro name. */
 function findSlotSymbol(commandUrl: string, catalogs: readonly string[]): string {
   const commandName = commandUrl.slice(".uno:".length).split("?", 1)[0] as string;
@@ -648,30 +614,4 @@ function resolveMacro(
     },
     0,
   );
-}
-
-/** Escapes literal text for a regular expression. @param value - Literal value. @returns Escaped pattern text. */
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-/** Converts a LibreOffice accelerator key name. @param value - XCU accelerator identity. @returns Browser shortcut. */
-function convertShortcut(value: string): string {
-  const [key, ...modifiers] = value.split("_");
-  return [
-    ...(modifiers.includes("MOD1") ? ["Ctrl"] : []),
-    ...(modifiers.includes("MOD2") ? ["Alt"] : []),
-    ...(modifiers.includes("SHIFT") ? ["Shift"] : []),
-    key === "RETURN" ? "Enter" : key,
-  ].join("+");
-}
-
-/** Removes desktop mnemonic and dialog suffix syntax. @param value - Upstream label. @returns Browser label base. */
-function stripMnemonic(value: string): string {
-  return value.replaceAll("~", "").replace(/\.\.\.$/, "");
-}
-
-/** Decodes XML entities used by labels. @param value - XML text. @returns Plain text. */
-function decodeXml(value: string): string {
-  return value.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 }

@@ -1,0 +1,28 @@
+[WebServer] (node:19320) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 17 tests using 2 workers
+
+(node:19547) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:19546) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [calc] › apps/office/e2e/calc/compiler-arithmetic.spec.ts:5:1 › compiles actual arithmetic tokens in browser and Worker (672ms)
+  ✓   3 [calc] › apps/office/e2e/calc/dociter.spec.ts:5:1 › traverses actual sparse cells by row in browser and Worker (542ms)
+  ✓   1 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 1280px (1.3s)
+  ✓   4 [calc] › apps/office/e2e/calc/document-formulas.spec.ts:5:1 › edits actual numeric formula cells in browser and Worker (579ms)
+  ✓   5 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 390px (854ms)
+  ✓   6 [calc] › apps/office/e2e/calc/document-references.spec.ts:5:1 › propagates actual cell references in browser and Worker (561ms)
+  ✓   7 [calc] › apps/office/e2e/calc/document-scalars.spec.ts:5:1 › edits the same actual scalar document chain in browser and Worker (617ms)
+  ✓   8 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 1280px (835ms)
+  ✓  10 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 390px (691ms)
+  ✓  11 [calc] › apps/office/e2e/calc/formula-output.spec.ts:5:1 › serializes actual formula tokens in browser and Worker (585ms)
+  ✓  12 [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker (701ms)
+  ✓   9 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (3.4s)
+  ✓  14 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (1.7s)
+  ✓  13 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 (3.0s)
+  ✓  16 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 (1.5s)
+  ✓  15 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800 (2.8s)
+  ✓  17 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600 (1.4s)
+
+  17 passed (13.6s)

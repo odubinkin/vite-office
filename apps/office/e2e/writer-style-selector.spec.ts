@@ -116,7 +116,7 @@ for (const width of [1280, 390])
     if (width === 1280)
       await expect(page.locator("p").filter({ hasText: /^Owned child$/ })).toHaveCount(1);
     const openDialog = /** Opens the product paragraph draft. @returns Completion. */ async () => {
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
     };
     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });

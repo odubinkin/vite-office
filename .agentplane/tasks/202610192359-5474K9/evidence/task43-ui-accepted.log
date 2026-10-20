@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-strikeout.test.tsx calc-overline.test.tsx calc-font-step.test.tsx
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-strikeout.test.tsx calc-overline.test.tsx calc-font-step.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  14 passed (14)
+   Start at  07:18:41
+   Duration  9.22s (transform 7.39s, setup 343ms, import 9.40s, tests 4.47s, environment 2.11s)
+

@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/textenc/convertsimple.ts --coverage.include=src/sal/textenc/convertsimple.hxx.ts --coverage.include=src/sal/textenc/unichars.ts --coverage.include=src/sal/textenc/unichars.hxx.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.hxx.ts --coverage.include=src/sal/inc/rtl/textcvt.h.ts --coverage.reportsDirectory=coverage/task32-reverse src/sal/textenc/singlebyte.test.ts src/sal/textenc/singlebyte-reverse.test.ts src/sal/inc/rtl/character.test.ts src/sal/rtl src/vcl/source/font/FontVariation.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  21 passed (21)
+      Tests  58 passed (58)
+   Start at  18:56:36
+   Duration  35.70s (transform 8.13s, setup 5.34s, import 10.24s, tests 26.65s, environment 22.57s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 249/249 )
+Branches     : 100% ( 170/170 )
+Functions    : 100% ( 12/12 )
+Lines        : 100% ( 232/232 )
+================================================================================

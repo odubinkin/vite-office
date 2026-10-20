@@ -1,0 +1,135 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
+    "capabilityId": "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "type": "platform",
+    "maturity": "implemented",
+    "assertions": [
+      "Task0V5WR6 connects the production Calc route to actual ScDocument,ScViewData and ScDocShell owners through shared SfxObjectShell,SfxUndoManager,SfxInterface,SfxViewFrame,dispatcher and command bindings. Controlled React presenters reuse Writer toolbar styles,Tailwind,Lucide and global fonts. The supported slice includes plain scalar/native local-A1 input,recalculation,cancel,selection,name-box navigation,sheet append/switch,typed token-valued undo/redo and bounded browser viewport projection. Compiled formula adoption retains code errors in history;sheet deletion ends formula subscriptions and renumbers source cells. One real model owns cells;browser state contains transient input/geometry only. This is a bounded editable workspace,not full Calc/native parity.",
+      "TaskQXFX41 ports original ScInputMode NONE0 TYPE1 TABLE2 TOP3 and bounded ScInputHandler mode predicates/toggle at native source boundaries. Browser scalar input shares one draft:TYPE arrows commit/move,TABLE and TOP keep caret navigation. Original SID_SETINPUTMODE26552 and F2 use the same shared-menu dispatcher;TYPE/TABLE toggles preserve draft/history,TOP commits before TABLE and rejected input retains mode/error. GetMode is a read-only browser projection of eMode,not an upstream method. EditEngine,protection,formula reference selection,autocomplete and VCL synchronization remain unported;no full native input parity is claimed.",
+      "TaskEJ2ZC1 replaces browser JSON equality gating with native input bModified lifecycle. Constructor false and source SetModified mark actual input;F2,focus and caret-only mode changes preserve the flag without writes. Accepted input uses native EnterHandler2 bOldMod guard;explicit replacement or changed-and-reverted text creates actual Undo even when final values are equal,as native SetNormalStringOperation does. Cancel,accepted input,history and model replacement reset modification;rejected drafts retain it. IsModified/ResetModified are explicit browser read/lifecycle projections of native private flag operations,not full upstream handlers. EditEngine,validation/autocorrect,format services and complete input/undo operation ownership remain unported.",
+      "TaskGBSSRW implements native ScTokenArray deep Clone with independent code tokens and first matching cloned code identity reused by RPN;RPN-only tokens clone separately,retaining represented flags and leaving native finalized default false. Same-document same-position ScFormulaCell copy/Clone retains cached result,dirty state and grammar,deep-copies code and follows native nonempty-error reset/recompile rule without starting listeners. Unsupported relocation/foreign-document/name/external/group/reference-adjustment services remain explicit. Represented destructor tracking/listener cleanup uses existing Dispose. Native ScCellValue now owns empty/numeric/shared-string/formula values,copies real borrowed/document content and commits cloned formulas;current plain literal text setter maps source SetString/setTextInput semantics without format services. Browser Undo owns actual ScCellValue before/after and releases through existing SfxUndoAction Dispose;the browser stored-cell union and token snapshot reconstruction are removed. Full EditEngine/rich text,clone relocation,clipboard/undo document modes,format services and whole Calc parity remain unported.",
+      "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React DOM composition shares Writer presentation and Sfx contracts while preserving actual Calc model/view/history ownership."
+    },
+    "capability": "Editable production Calc workspace over canonical scalar model",
+    "gaps": [
+      "Full native menus,formatting/sidebar/status services,clipboard,rich/multiline cells,functions/ranges/cross-sheet references and locale-aware number formats remain outside this current-core slice.",
+      "Shared file dialogs,ODS filters,primary browser storage/autosave and close workflows are subsequent approved UI tasks;no recovery UI is introduced.",
+      "Token array copies share native const token identities;physical memory uses JS GC. Full native deep-copy/undo-document services and sheet reference transformation are not claimed.",
+      "Browser geometry is platform-owned;native row coordinates are projected onto a bounded physical scroll track. Exact VCL implementation parity is not claimed."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx",
+          "marker": "case SID_ENTER_STRING:"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "EnterString"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+          "marker": "ScDocShell"
+        },
+        {
+          "path": "apps/office/src/sc/browser/editor/cell-input.ts",
+          "marker": "captureCell"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+          "marker": "CalcViewController"
+        },
+        {
+          "path": "apps/office/src/sc/sdi/scalc.ts",
+          "marker": "calcEditCommands"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+          "marker": "CalcWorkbench"
+        },
+        {
+          "path": "apps/office/src/sc/browser/composition/calc-module.tsx",
+          "marker": "createCalcSession"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/app/inputhdl.ts",
+          "marker": "ScInputHandler"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undocell.ts",
+          "marker": "ScUndoSetCell"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+          "marker": "mounts the lazy production factory"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+          "marker": "edits canonical scalars"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+          "marker": "compiled"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+          "marker": "native F2"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+          "marker": "native modified-flag gating"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+          "marker": "Actual owning cell snapshots"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+          "marker": "Grouped Calc input"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+          "marker": "Browser input/viewport binding"
+        }
+      ]
+    },
+    "aspect": "browser-input",
+    "atomicOperation": "calc-production-scalar-workspace",
+    "scopeLimitations": [
+      "Full native menus,formatting/sidebar/status services,clipboard,rich/multiline cells,functions/ranges/cross-sheet references and locale-aware number formats remain outside this current-core slice.",
+      "Shared file dialogs,ODS filters,primary browser storage/autosave and close workflows are subsequent approved UI tasks;no recovery UI is introduced.",
+      "Token array copies share native const token identities;physical memory uses JS GC. Full native deep-copy/undo-document services and sheet reference transformation are not claimed.",
+      "Browser geometry is platform-owned;native row coordinates are projected onto a bounded physical scroll track. Exact VCL implementation parity is not claimed."
+    ]
+  }
+}

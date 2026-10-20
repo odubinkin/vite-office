@@ -113,7 +113,7 @@ for (const width of [1280, 390]) {
       await page.mouse.move(point.x + 20, point.y, { steps: 3 });
       await page.mouse.up();
       await assertAnchors(item.pixels);
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
       await expect(dialog.getByLabel("Automatic first-line indent")).toBeChecked();

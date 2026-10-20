@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:shared
+> npm run test:coverage:shared --workspace @vite-office/office -- field.test request.test unoctitm.test dispatch.test bindings.test native-attribute-toggle.test native-popup-owner.test measurement.test isolang.test mslangid.test languagetag.extract.test browser-dispatcher.test xmlimp.test scriptclass.test script-native-branches.test native-character-types.test string_view.test --coverage.include=src/unotools/source/misc/syslocale.ts --coverage.include=src/vcl/source/control/field.ts --coverage.include=src/vcl/source/weld/SpinButton.ts --coverage.include=src/vcl/source/weld/MetricSpinButton.ts --coverage.include=src/vcl/inc/units.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.include=src/i18npool/source/localedata/localedata.ts --coverage.include=src/sfx2/source/control/request.ts --coverage.include=src/sfx2/source/control/bindings.ts --coverage.include=src/sfx2/source/control/dispatch.ts --coverage.include=src/framework/browser/dispatch/browser-dispatcher.ts --coverage.include=src/i18nutil/source/utility/unicode.ts --coverage.include=src/external/icu/source/common/uchar.ts --coverage.include=src/external/icu/source/common/uchar_props_data.ts --coverage.include=src/external/icu/source/common/unicode/uchar.ts --coverage.include=src/offapi/com/sun/star/i18n/UnicodeType.ts --coverage.reportsDirectory=coverage/task46-shared-final-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-shared-final-accepted-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:shared
+> vitest run --config vitest.shared-coverage.config.ts --coverage field.test request.test unoctitm.test dispatch.test bindings.test native-attribute-toggle.test native-popup-owner.test measurement.test isolang.test mslangid.test languagetag.extract.test browser-dispatcher.test xmlimp.test scriptclass.test script-native-branches.test native-character-types.test string_view.test --coverage.include=src/unotools/source/misc/syslocale.ts --coverage.include=src/vcl/source/control/field.ts --coverage.include=src/vcl/source/weld/SpinButton.ts --coverage.include=src/vcl/source/weld/MetricSpinButton.ts --coverage.include=src/vcl/inc/units.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.include=src/i18npool/source/localedata/localedata.ts --coverage.include=src/sfx2/source/control/request.ts --coverage.include=src/sfx2/source/control/bindings.ts --coverage.include=src/sfx2/source/control/dispatch.ts --coverage.include=src/framework/browser/dispatch/browser-dispatcher.ts --coverage.include=src/i18nutil/source/utility/unicode.ts --coverage.include=src/external/icu/source/common/uchar.ts --coverage.include=src/external/icu/source/common/uchar_props_data.ts --coverage.include=src/external/icu/source/common/unicode/uchar.ts --coverage.include=src/offapi/com/sun/star/i18n/UnicodeType.ts --coverage.reportsDirectory=coverage/task46-shared-final-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-shared-final-accepted-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task46-shared-final-accepted-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1134/1134 )
+Branches     : 100% ( 450/450 )
+Functions    : 100% ( 101/101 )
+Lines        : 100% ( 1077/1077 )
+================================================================================

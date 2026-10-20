@@ -187,9 +187,9 @@ function importBody(
 
 it("uses automatic-first direct lookup with named-only parent resolution", /** Verifies the model-facing lookup boundary without merging container identities. @returns Nothing. */ () => {
   const named: [string, OdfStyleDefinition][] = [
-    ["Shared", { family: "paragraph", leftMargin: 1440, properties: { bold: true } }],
-    ["Shared", { family: "text", properties: { bold: true } }],
-    ["TextOnly", { family: "text", properties: { bold: true } }],
+    ["Shared", { family: "paragraph", leftMargin: 1440, properties: { fontWeight: 150 } }],
+    ["Shared", { family: "text", properties: { fontWeight: 150 } }],
+    ["TextOnly", { family: "text", properties: { fontWeight: 150 } }],
   ];
   const automatic: [string, OdfStyleDefinition][] = [
     [
@@ -198,12 +198,12 @@ it("uses automatic-first direct lookup with named-only parent resolution", /** V
         family: "paragraph",
         parentStyleName: "Shared",
         leftMargin: 720,
-        properties: { bold: false },
+        properties: { fontWeight: 100 },
       },
     ],
-    ["Shared", { family: "text", parentStyleName: "Shared", properties: { italic: true } }],
-    ["Orphan", { family: "text", parentStyleName: "AutoOnly", properties: { italic: true } }],
-    ["AutoOnly", { family: "text", properties: { bold: true } }],
+    ["Shared", { family: "text", parentStyleName: "Shared", properties: { fontPosture: 2 } }],
+    ["Orphan", { family: "text", parentStyleName: "AutoOnly", properties: { fontPosture: 2 } }],
+    ["AutoOnly", { family: "text", properties: { fontWeight: 150 } }],
   ];
   const paragraph = importBody(
     '<text:p text:style-name="Shared"><text:span text:style-name="Shared">x</text:span></text:p>',
@@ -212,9 +212,7 @@ it("uses automatic-first direct lookup with named-only parent resolution", /** V
     automatic,
   )[0];
   expect(paragraph?.leftMargin).toBe(720);
-  expect(paragraph?.runs).toEqual([
-    { text: "x", properties: { bold: true, italic: true, underline: false } },
-  ]);
+  expect(paragraph?.runs).toEqual([{ text: "x", properties: { fontWeight: 150, fontPosture: 2 } }]);
   for (const name of ["Missing", "TextOnly"]) {
     const missing = importBody(
       `<text:p text:style-name="${name}"><text:span text:style-name="Orphan">x</text:span></text:p>`,
@@ -223,18 +221,16 @@ it("uses automatic-first direct lookup with named-only parent resolution", /** V
       automatic,
     )[0];
     expect(missing?.style).toBe("default");
-    expect(missing?.runs).toEqual([
-      { text: "x", properties: { bold: false, italic: true, underline: false } },
-    ]);
+    expect(missing?.runs).toEqual([{ text: "x", properties: { fontPosture: 2 } }]);
   }
 });
 
 describe("ODF streaming text import contexts", /** Groups direct model import tests. @returns Nothing. */ () => {
   const styles = new Map<string, OdfStyleDefinition>([
-    ["Standard", { family: "paragraph", leftMargin: 720, properties: { bold: true } }],
+    ["Standard", { family: "paragraph", leftMargin: 720, properties: { fontWeight: 150 } }],
     [
       "Heading_20_1",
-      { family: "paragraph", parentStyleName: "Standard", properties: { italic: true } },
+      { family: "paragraph", parentStyleName: "Standard", properties: { fontPosture: 2 } },
     ],
     [
       "P1",
@@ -242,12 +238,12 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         alignment: "right",
         family: "paragraph",
         parentStyleName: "Heading_20_1",
-        properties: { underline: true },
+        properties: { underlineStyle: 1 },
       },
     ],
     ["P2", { family: "paragraph", parentStyleName: "P1" }],
-    ["T1", { family: "text", properties: { bold: true, italic: false, underline: false } }],
-    ["T2", { family: "text", parentStyleName: "T1", properties: { italic: true } }],
+    ["T1", { family: "text", properties: { fontWeight: 150, fontPosture: 0, underlineStyle: 0 } }],
+    ["T2", { family: "text", parentStyleName: "T1", properties: { fontPosture: 2 } }],
   ]);
 
   it("applies paragraphs, headings, inherited spans, whitespace, and controls directly", /** Verifies context dispatch and style inheritance. @returns Nothing. */ () => {
@@ -261,7 +257,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     expect(paragraphs[1]).toMatchObject({ style: "heading-1", runs: [] });
     expect(paragraphs[2]).toMatchObject({
       alignment: "right",
-      properties: { underline: true },
+      properties: { underlineStyle: 1 },
       style: "heading-1",
     });
     expect(
@@ -276,9 +272,12 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("accepts unstyled and empty-style spans with inherited inline state", /** Checks source-derived optional style hints, child overrides and scope restoration. @returns Nothing. */ () => {
     const definitions = new Map<string, OdfStyleDefinition>([
-      ["PBold", { family: "paragraph", properties: { bold: true, italic: true, underline: true } }],
-      ["TBold", { family: "text", properties: { bold: true } }],
-      ["TItalic", { family: "text", properties: { italic: true } }],
+      [
+        "PBold",
+        { family: "paragraph", properties: { fontWeight: 150, fontPosture: 2, underlineStyle: 1 } },
+      ],
+      ["TBold", { family: "text", properties: { fontWeight: 150 } }],
+      ["TItalic", { family: "text", properties: { fontPosture: 2 } }],
     ]);
     const cases = [
       {
@@ -325,9 +324,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
           /** Projects text, effective formatting and active link. @param run - Imported run. @returns Comparable source-derived state. */
           (run) => [
             run.text,
-            run.properties.bold,
-            run.properties.italic,
-            run.properties.underline,
+            run.properties.fontWeight === 150,
+            run.properties.fontPosture === 2,
+            run.properties.underlineStyle === 1,
             run.hyperlink?.url ?? null,
           ],
         ),
@@ -338,9 +337,12 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("retains inline state for unresolved and property-less character styles", /** Checks family-specific no-op lookups and independent found properties against pinned style application. @returns Nothing. */ () => {
     const definitions = new Map<string, OdfStyleDefinition>([
-      ["PBold", { family: "paragraph", properties: { bold: true, italic: true, underline: true } }],
-      ["TBold", { family: "text", properties: { bold: true } }],
-      ["TItalic", { family: "text", properties: { italic: true } }],
+      [
+        "PBold",
+        { family: "paragraph", properties: { fontWeight: 150, fontPosture: 2, underlineStyle: 1 } },
+      ],
+      ["TBold", { family: "text", properties: { fontWeight: 150 } }],
+      ["TItalic", { family: "text", properties: { fontPosture: 2 } }],
       ["TEmpty", { family: "text" }],
       ["TInherited", { family: "text", parentStyleName: "TBold" }],
       ["TChain", { family: "text", parentStyleName: "TInherited" }],
@@ -348,12 +350,19 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       ["TEmptyWrong", { family: "text", parentStyleName: "PBold" }],
       [
         "TMissingParent",
-        { family: "text", parentStyleName: "Missing", properties: { italic: true } },
+        { family: "text", parentStyleName: "Missing", properties: { fontPosture: 2 } },
       ],
-      ["TWrongParent", { family: "text", parentStyleName: "PBold", properties: { italic: true } }],
+      [
+        "TWrongParent",
+        { family: "text", parentStyleName: "PBold", properties: { fontPosture: 2 } },
+      ],
       [
         "TFalse",
-        { family: "text", parentStyleName: "TBold", properties: { bold: false, italic: true } },
+        {
+          family: "text",
+          parentStyleName: "TBold",
+          properties: { fontWeight: 100, fontPosture: 2 },
+        },
       ],
     ]);
     const cases = [
@@ -442,9 +451,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
           /** Projects text, effective properties and link across style lookup boundaries. @param run - Captured run. @returns Comparable state tuple. */
           (run) => [
             run.text,
-            run.properties.bold,
-            run.properties.italic,
-            run.properties.underline,
+            run.properties.fontWeight === 150,
+            run.properties.fontPosture === 2,
+            run.properties.underlineStyle === 1,
             run.hyperlink?.url ?? null,
           ],
         ),
@@ -455,27 +464,34 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("resolves equal style names within the requested family", /** Compares source-derived family identity through direct, parent and built-in context lookups in both declaration orders. @returns Nothing. */ () => {
     const definitions: readonly (readonly [string, OdfStyleDefinition])[] = [
-      ["Standard", { family: "paragraph", properties: { bold: false } }],
-      ["Standard", { family: "text", properties: { italic: true } }],
+      ["Standard", { family: "paragraph", properties: { fontWeight: 100 } }],
+      ["Standard", { family: "text", properties: { fontPosture: 2 } }],
       [
         "Heading_20_1",
-        { family: "paragraph", parentStyleName: "Standard", properties: { bold: true } },
+        { family: "paragraph", parentStyleName: "Standard", properties: { fontWeight: 150 } },
       ],
-      ["Heading_20_1", { family: "text", properties: { underline: true } }],
+      ["Heading_20_1", { family: "text", properties: { underlineStyle: 1 } }],
       [
         "Shared",
-        { family: "paragraph", parentStyleName: "Heading_20_1", properties: { italic: true } },
+        { family: "paragraph", parentStyleName: "Heading_20_1", properties: { fontPosture: 2 } },
       ],
-      ["Shared", { family: "text", parentStyleName: "Standard", properties: { underline: true } }],
-      ["Child", { family: "paragraph", parentStyleName: "Shared", properties: { italic: false } }],
+      [
+        "Shared",
+        { family: "text", parentStyleName: "Standard", properties: { underlineStyle: 1 } },
+      ],
+      ["Child", { family: "paragraph", parentStyleName: "Shared", properties: { fontPosture: 0 } }],
       [
         "Child",
-        { family: "text", parentStyleName: "Shared", properties: { bold: false, italic: false } },
+        {
+          family: "text",
+          parentStyleName: "Shared",
+          properties: { fontWeight: 100, fontPosture: 0 },
+        },
       ],
-      ["OnlyParagraph", { family: "paragraph", properties: { bold: true } }],
+      ["OnlyParagraph", { family: "paragraph", properties: { fontWeight: 150 } }],
       [
         "WrongParent",
-        { family: "text", parentStyleName: "OnlyParagraph", properties: { italic: true } },
+        { family: "text", parentStyleName: "OnlyParagraph", properties: { fontPosture: 2 } },
       ],
     ];
     const cases = [
@@ -527,9 +543,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
             /** Projects family-isolated inherited state. @param run - Captured run. @returns Expected comparison tuple. */
             (run) => [
               run.text,
-              run.properties.bold,
-              run.properties.italic,
-              run.properties.underline,
+              run.properties.fontWeight === 150,
+              run.properties.fontPosture === 2,
+              run.properties.underlineStyle === 1,
             ],
           ),
           body,
@@ -600,9 +616,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         styles,
       )[0]?.runs,
     ).toEqual([
-      { properties: { bold: false, italic: false, underline: false }, text: "before " },
+      { properties: {}, text: "before " },
       {
-        properties: { bold: false, italic: false, underline: false },
+        properties: {},
         hyperlink: {
           name: "named",
           styleName: "Internet_20_link",
@@ -613,7 +629,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         text: "linked",
       },
       {
-        properties: { bold: true, italic: false, underline: false },
+        properties: { fontWeight: 150, fontPosture: 0, underlineStyle: 0 },
         hyperlink: {
           name: "named",
           styleName: "Internet_20_link",
@@ -624,7 +640,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         text: " bold",
       },
       {
-        properties: { bold: false, italic: false, underline: false },
+        properties: {},
         hyperlink: {
           name: "named",
           styleName: "Internet_20_link",
@@ -634,10 +650,10 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         },
         text: "\t",
       },
-      { properties: { bold: false, italic: false, underline: false }, text: " after" },
+      { properties: {}, text: " after" },
     ]);
     expect(importBody("<text:p><text:a>plain</text:a></text:p>", styles)[0]?.runs).toEqual([
-      { properties: { bold: false, italic: false, underline: false }, text: "plain" },
+      { properties: {}, text: "plain" },
     ]);
     expect(
       importBody(
@@ -647,17 +663,17 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     ).toEqual([
       {
         hyperlink: { targetFrame: "_self", url: "same" },
-        properties: { bold: false, italic: false, underline: false },
+        properties: {},
         text: "same",
       },
       {
         hyperlink: { url: "other" },
-        properties: { bold: false, italic: false, underline: false },
+        properties: {},
         text: "other",
       },
       {
         hyperlink: { targetFrame: "_parent", url: "parent" },
-        properties: { bold: false, italic: false, underline: false },
+        properties: {},
         text: "parent",
       },
     ]);
@@ -669,7 +685,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     ).toEqual([
       {
         hyperlink: { url: "relative" },
-        properties: { bold: true, italic: false, underline: false },
+        properties: { fontWeight: 150, fontPosture: 0, underlineStyle: 0 },
         text: "A  B",
       },
     ]);
@@ -713,7 +729,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       )[0]?.list?.listId,
     ).toBe("isolated");
     expect(importBody('<text:p text:style-name="P2"/>', styles)[0]?.properties).toEqual({
-      underline: true,
+      underlineStyle: 1,
     });
     for (const count of ["0", "1.5", "100001", "nope"])
       expect(
@@ -729,8 +745,8 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         importBody('<text:p text:style-name="P1"/>', paragraphCycle),
     ).toThrow("Cyclic");
     const textCycle = new Map<string, OdfStyleDefinition>([
-      ["T1", { family: "text", parentStyleName: "T2", properties: { bold: true } }],
-      ["T2", { family: "text", parentStyleName: "T1", properties: { italic: true } }],
+      ["T1", { family: "text", parentStyleName: "T2", properties: { fontWeight: 150 } }],
+      ["T2", { family: "text", parentStyleName: "T1", properties: { fontPosture: 2 } }],
     ]);
     expect(
       /** Imports cyclic text styles. @returns Nothing. */ () =>

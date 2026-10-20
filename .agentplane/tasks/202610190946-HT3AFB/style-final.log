@@ -1,0 +1,8 @@
+Command: prettier --check apps/office/src/sal/inc/rtl/textcvt.h.ts apps/office/src/sal/textenc/convertsimple.hxx.ts apps/office/src/sal/textenc/convertsimple.ts apps/office/src/sal/textenc/singlebyte.test.ts apps/office/src/sal/textenc/tenchelp.ts apps/office/src/sal/textenc/textenc.ts apps/office/src/sal/textenc/unichars.hxx.ts scripts/rtl-singlebyte-native-probe.mjs
+Exit: 0
+Checking formatting...
+All matched files use Prettier code style!
+
+Command: eslint apps/office/src/sal/inc/rtl/textcvt.h.ts apps/office/src/sal/textenc/convertsimple.hxx.ts apps/office/src/sal/textenc/convertsimple.ts apps/office/src/sal/textenc/singlebyte.test.ts apps/office/src/sal/textenc/tenchelp.ts apps/office/src/sal/textenc/textenc.ts apps/office/src/sal/textenc/unichars.hxx.ts scripts/rtl-singlebyte-native-probe.mjs --max-warnings 0
+Exit: 0
+

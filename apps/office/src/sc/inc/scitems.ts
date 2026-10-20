@@ -147,3 +147,8 @@ export const ATTR_CTL_FONT_LANGUAGE = 120;
 
 /** Original Calc background brush identity. */
 export const ATTR_BACKGROUND = 148;
+
+/** Original beginning of the cell-attribute pattern schema. */
+export const ATTR_PATTERN_START = 100;
+/** Original end of the cell-attribute pattern schema. */
+export const ATTR_PATTERN_END = 155;

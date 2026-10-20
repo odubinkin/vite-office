@@ -1,0 +1,204 @@
+---
+id: "202610191455-1KGJBF"
+title: "Connect Calc bold italic underline UI to native attributes and ODS"
+result_summary: "verified-202610191455-1KGJBF"
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 23
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify:
+  - "Whole Calc raw S/B/F/L100,complete changed executable owner coverage100 and related shared/tooling tests;real shared toolbar/menu/keyboard and ODS/undo/group-selection cases at desktop/mobile;types/build/static,changed-path lint/format,docs/size/tree/dependencies/provenance/resources/scoped inventories,doctor/routing/diff. Full all-app regression next task40."
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-19T16:21:59.174Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-19T17:33:22.703Z"
+  updated_by: "CODER"
+  note: "verified-202610191455-1KGJBF"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T17:32:11.748Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation cf512f2fe197c0713c9cc7c3c9a626376ed77e5b satisfies the approved bounded Calc character UI and common Writer/ODF correction scope."
+  evaluated_sha: "cf512f2fe197c0713c9cc7c3c9a626376ed77e5b"
+  blueprint_digest: "e2003c78a867d7a6e7ea2df1b7c926a48bdc02fd41179d3b2cf0e159109d67f3"
+  evidence_refs:
+    - ".agentplane/tasks/202610191455-1KGJBF/README.md"
+    - ".agentplane/tasks/202610191455-1KGJBF/quality/20261019-173211748-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191455-1KGJBF/quality/20261019-173211748-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191455-1KGJBF/quality/20261019-173211748-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191455-1KGJBF/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/coverage-final-summary.json"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/related-coverage.log"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/calc-coverage-final2.log"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/underline-accelerator-source-audit.json"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/browser-final.log"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/browser-pressed-final.log"
+    - ".agentplane/tasks/202610191455-1KGJBF/evidence/types-accepted.log"
+  findings:
+    - "Deterministic evidence passes: Calc117files345cases,related156files6767cases and all29changed executable application owners at raw S/B/F/L100;retained maps and source hashes match the immutable reviewed feature. The remaining application file is AST-confirmed type-only."
+    - "Native toggle/style/default-color contracts,three-script values,item ownership,attribute-only history,real ODS/ODT packages and structured-clone Worker colors have concrete tests. Source-scoped accelerator precedence and native grid Space ownership are verified;no broad boundary relaxation or coverage exclusions were added."
+    - "Fresh build,types,static/source/registry/style checks,66tooling cases and17serial browser cases plus focused pressed-state checks pass. Inspected1280/390screenshots use the shared Writer controls. No blocking findings in the bounded scope."
+commit:
+  hash: "ade457693c99f6b8963f5a6190ca52bddc0ea47d"
+  message: "🧩 1KGJBF quality: record source-matched coverage and accepted review"
+comments:
+  -
+    author: "CODER"
+    body: "Start: connect approved native character formatting actions through shared Writer UI,actual Calc attributes and same-model ODS within calc checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610191455-1KGJBF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+events:
+  -
+    type: "status"
+    at: "2026-10-19T14:55:32.917Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: connect approved native character formatting actions through shared Writer UI,actual Calc attributes and same-model ODS within calc checkout."
+  -
+    type: "verify"
+    at: "2026-10-19T17:30:45.632Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified implementation cf512f2fe197c0713c9cc7c3c9a626376ed77e5b: Calc117files345cases and related156files6767cases pass at raw S/B/F/L100;all29changed executable application owners100 with retained source-matched maps. Root/app types,build/static,tooling66,style/dependency/source/registry checks and17serial browser cases plus2pressed-state cases pass. Actual1280/390screenshots inspected;existing doctor shim advisory recorded. No full all-app claim;next task40."
+  -
+    type: "verify"
+    at: "2026-10-19T17:33:22.703Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610191455-1KGJBF"
+  -
+    type: "status"
+    at: "2026-10-19T17:33:22.838Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610191455-1KGJBF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+doc_version: 3
+doc_updated_at: "2026-10-19T17:33:22.838Z"
+doc_updated_by: "CODER"
+description: "Task36: connect existing shared Writer controls and Calc native commands for bold,italic and underline through actual selection attributes,script groups,history,painting and same-model ODS. Stay in calc checkout;no full constructor or codec work."
+sections:
+  Summary: "Connect currently available character-formatting UI actions to real Calc attributes and ODS using shared Writer presentation."
+  Scope: "Native format slots,toggle/state selection semantics,shared Writer toolbar consumers,cell painting,automatic styles,history and selected sheets. Latest explicit user authorization also includes replacing lossy Writer/common ODF character-property transport and native insertion/export bridges in this calc checkout. Preserve independent three-script weight,posture and height,all represented underline values/color,direct/default state and actual item ownership through both ODT and ODS. Reuse shared native xmloff handlers rather than separate Calc conversions or browser boolean data for filters. Test related Writer/shared modules and actual package roundtrips alongside original whole Calc100 and complete changed-owner100 requirements. Up to180non-task paths including canonical registry/readiness records and evidence. Rich text UI,named Calc styles,full script/device painting and remaining unrelated actions stay later work. No branch,merge or network work;browser primary-save/no-recovery deviations remain."
+  Plan: "Connect Bold10009,Italic10008,Underline10014 and the existing visible native underline variants through shared Writer command controls to actual Calc attributes,source toggles,script equality,selection state,attribute undo and cell painting. Preserve actual native item ownership and same-model ODS;do not add a shadow formatting model. User explicitly authorized correcting simplified Writer/common modules directly to follow upstream. Accordingly replace lossy Writer/common ODF boolean transport with independent native weight/posture/height/font metadata and underline values,source XML handlers/merge/failure/color conversion,source Writer color ContextFilter and real item-based insertion/export. Extend the shared Worker binding as required for represented native style and packed color;never silently flatten unported complex interface state. Preserve existing source API/layer responsibilities and document unported generic UNO/relative-height/device/rich-editing contracts rather than claim broad parity. Keep browser primary-save/no-recovery deviations and stay exclusively in this calc checkout/branch;no network,merge or new branch. Budget180non-task paths including canonical registry/readiness records and evidence. Verify whole Calc and complete changed executable owner raw S/B/F/L100 with no exclusions or weakened thresholds;related Writer/shared/tooling tests and actual ODT/ODS/Worker repeated roundtrips;real Calc toolbar/menu/accelerators,history/grouped sheets and geometry at1280/390 after fresh build;all declared static/registry gates. The full goal and remaining feasible UI actions stay active. Last full all-app task30;next full task40."
+  Verify Steps: "Run npm run test:coverage:calc at raw S/B/F/L100 with no new exclusions and complete changed executable owner coverage100;related Writer/shared/tooling tests. Check original toggle values,all-three-script equality/mixed cases,underline preservation,invalid arguments,no-op and failed input,range/full-row/full-column/grouped-sheet/history and actual ODS bytes plus independent XML. For the explicitly user-authorized common-module correction,verify actual ODT import/export and repeated reopen of independent native script weights/postures/heights/font metadata and underline style/color,including the real structured-clone Writer Worker boundary;do not use browser boolean projections as filter evidence. Preserve source failed-property conversion,attribute order and Writer ContextFilter behavior. Exercise real shared Calc toolbar,Format menu and accelerators at1280/390 after fresh build;assert model-based cell CSS,pressed/mixed states,undo/redo and row geometry. Run root types,build/static,changed-path ESLint/Prettier,JSDoc,size/tree/dependencies/provenance/resources,scoped Calc/shared/Writer inventories,doctor/routing/diff;record raw evidence,quality review and clean calc state. Full all-app tests next task40 under user cadence."
+  Verification: |-
+    All declared application checks pass for the bounded task36 slice. Whole Calc: npm run test:coverage:calc,117files345cases,raw S7647/B4820/F1536/L6853 all100. Related Writer/ODF consumers: node .agentplane/tasks/202610191455-1KGJBF/run-related-coverage.mjs,156files6767cases,raw S2135/B2199/F326/L1965 all100. All29changed executable application owners: S3048/B2747/F502/L2806 all100;the remaining changed application file is AST-confirmed type-only. Raw gzip maps,source hashes,coverage-final-summary.json and collection helper preserve exact evidence;no new exclusions,threshold reductions or skipped counters. Root/app types,production build/static,changed-path ESLint/Prettier,JSDoc,size,source tree/provenance,source-specific dependencies,Calc/Writer/shared inventories and routing pass. Current tooling66cases5files pass without archived output copies. Fresh Calc browser suite17cases passes serially;two focused1280/390cases additionally verify underline pressed state and capture animation-complete screenshots. Both images were inspected. Doctor exitsOK with its existing advisory about an older managed hook shim;no unrelated hooks upgrade is included. Implementation commit cf512f2fe197c0713c9cc7c3c9a626376ed77e5b has CODER verification and an EVALUATOR pass;the overall UI goal remains active. Full all-app suite next task40,following task30 cadence.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T17:33:22.703Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610191455-1KGJBF
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T17:33:03.998Z, excerpt_hash=sha256:e5953ffc5608b138d02ebf23ffff3b01dddac577bb583ece5e114caf2a6661e0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191455-1KGJBF/blueprint/resolved-snapshot.json
+    - old_digest: e2003c78a867d7a6e7ea2df1b7c926a48bdc02fd41179d3b2cf0e159109d67f3
+    - current_digest: e2003c78a867d7a6e7ea2df1b7c926a48bdc02fd41179d3b2cf0e159109d67f3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191455-1KGJBF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191455-1KGJBF --result verified-202610191455-1KGJBF --commit ade457693c99f6b8963f5a6190ca52bddc0ea47d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only this task implementation commit and retain previous font-size/row-height controls and data;never reset unrelated tasks or branches."
+  Findings: |-
+    User explicitly authorized correcting simplified Writer/common modules directly;Scope/Plan/Verify Steps now include that bounded native ODF correction within180non-task paths,and the updated plan is approved by ORCHESTRATOR. Both filters use genuine Any and original shared weight/posture/underline/color handlers. Writer ODF transport now retains independent script scalars,font metadata and precise line/color values;item-based insertion and actual hint-boundary export avoid boolean loss. Shared browser underline Worker transport restores real pool items and packed color/alpha;unsupported complex interface state rejects instead of flattening. Source XMLIsTransparent defaults are null/native-invalid token and true polarity,confirmed in pinned xmlbahdl.hxx. CALC-197 and CALC-198 record retained source numeric/color quirks without compiled native claims. Actual ODT/ODS/Worker and adjacent native-weight cases pass in the latest focused7files46cases;third app typecheck passes after the native font-loop refactor. Whole Calc initial117files338cases all pass;raw coverage S7621/7629 B4802/4817 F1526/1527 L6828/6835 is below100 and task verification is not complete. Exact24uncovered counters across5Calc owners are preserved in evidence/calc-initial-uncovered.json and the raw gz map. Initial ten shared-owner coverage S547/B251/F38/L512 is100 with every counter positive;header-default correction is being rerun in evidence/shared-coverage-final1.log,so use that newer source-matched result when complete. Dependencies pass897runtime sources3963relative imports131edges after exact native SAX/o3tl and xmloff/Any/pure-VCL edges;general module,browser and cycle guards remain intact. Initial provenance passes898modules. JSDoc2368files and size checks pass after removing duplicate font construction;xmlimp is982lines. Current tooling JSON proves49tests in2current files with output/.agentplane exclusions. Earlier root filters also matched43archived output tests;retain their logs but do not count those as current verification. Remaining: visible native underline variants,correct module accelerator scope,Calc gaps100,complete changed Writer/shared owner100,full related final regression,fresh-build1280/390browser cases,final static/registry/source audit and implementation/quality/close commits. Writer remaining browser-shaped editing helpers,relative-height/property/factory services,complex colors and full script/device rendering remain unported,not intentional parity exceptions. Last full all-app task30;next full task40. The overall goal and current task remain active.
+
+    Final task36 correction and evidence: visible Single/Double Underline11196/11197 preserve exact source style toggles and fresh-item color reset;the general underline toggle clones color. CALC-199 records this source distinction. The common XCU generator now resolves only the actual module/global configuration,primary before secondary,removes empty bindings and selects the established unxwnt-plus-Meta browser adaptation;macosx-only MOD3 cannot collapse to bare Tab. Calc uses the common key mapper and the same resource configuration for its actual dispatcher and menus;native grid Space ownership remains separate. The earlier Calc failures were stale preferred-key expectations and missing browser normalization/Space ownership after configuration binding;these were corrected without weakening assertions. The old scalar underline Worker fixture was upgraded to a full style/color record plus actual native-pool clone restoration. Final Calc345cases and related6767cases pass at raw S/B/F/L100;all29changed executable application owners are100 with source hashes matching retained maps. Broad native parity remains unverified. Both1280/390screenshots show actual shared Writer controls,pressed B/I/U,no document overflow and the real native styled cell. The first immediate screenshot caught a CSS color transition;animation-complete capture and explicit pressed-state assertions confirm final visuals. No source workaround was introduced. All17fresh browser cases and two focused pressed-state cases pass. Existing doctor hook-shim advisory is outside this approved code scope and is nonblocking. Remaining overall work includes font-family and other feasible UI actions,broader Writer range-edit helpers,relative-height/generic UNO/factory/complex-color and full script/device services. Full all-app suite stays scheduled at task40;no all-app pass is claimed here.
+extensions:
+  implementation_commit:
+    hash: "cf512f2fe197c0713c9cc7c3c9a626376ed77e5b"
+    message: "🧩 1KGJBF calc: connect native character controls and shared ODF values"
+id_source: "generated"
+---
+## Summary
+
+Connect currently available character-formatting UI actions to real Calc attributes and ODS using shared Writer presentation.
+
+## Scope
+
+Native format slots,toggle/state selection semantics,shared Writer toolbar consumers,cell painting,automatic styles,history and selected sheets. Latest explicit user authorization also includes replacing lossy Writer/common ODF character-property transport and native insertion/export bridges in this calc checkout. Preserve independent three-script weight,posture and height,all represented underline values/color,direct/default state and actual item ownership through both ODT and ODS. Reuse shared native xmloff handlers rather than separate Calc conversions or browser boolean data for filters. Test related Writer/shared modules and actual package roundtrips alongside original whole Calc100 and complete changed-owner100 requirements. Up to180non-task paths including canonical registry/readiness records and evidence. Rich text UI,named Calc styles,full script/device painting and remaining unrelated actions stay later work. No branch,merge or network work;browser primary-save/no-recovery deviations remain.
+
+## Plan
+
+Connect Bold10009,Italic10008,Underline10014 and the existing visible native underline variants through shared Writer command controls to actual Calc attributes,source toggles,script equality,selection state,attribute undo and cell painting. Preserve actual native item ownership and same-model ODS;do not add a shadow formatting model. User explicitly authorized correcting simplified Writer/common modules directly to follow upstream. Accordingly replace lossy Writer/common ODF boolean transport with independent native weight/posture/height/font metadata and underline values,source XML handlers/merge/failure/color conversion,source Writer color ContextFilter and real item-based insertion/export. Extend the shared Worker binding as required for represented native style and packed color;never silently flatten unported complex interface state. Preserve existing source API/layer responsibilities and document unported generic UNO/relative-height/device/rich-editing contracts rather than claim broad parity. Keep browser primary-save/no-recovery deviations and stay exclusively in this calc checkout/branch;no network,merge or new branch. Budget180non-task paths including canonical registry/readiness records and evidence. Verify whole Calc and complete changed executable owner raw S/B/F/L100 with no exclusions or weakened thresholds;related Writer/shared/tooling tests and actual ODT/ODS/Worker repeated roundtrips;real Calc toolbar/menu/accelerators,history/grouped sheets and geometry at1280/390 after fresh build;all declared static/registry gates. The full goal and remaining feasible UI actions stay active. Last full all-app task30;next full task40.
+
+## Verify Steps
+
+Run npm run test:coverage:calc at raw S/B/F/L100 with no new exclusions and complete changed executable owner coverage100;related Writer/shared/tooling tests. Check original toggle values,all-three-script equality/mixed cases,underline preservation,invalid arguments,no-op and failed input,range/full-row/full-column/grouped-sheet/history and actual ODS bytes plus independent XML. For the explicitly user-authorized common-module correction,verify actual ODT import/export and repeated reopen of independent native script weights/postures/heights/font metadata and underline style/color,including the real structured-clone Writer Worker boundary;do not use browser boolean projections as filter evidence. Preserve source failed-property conversion,attribute order and Writer ContextFilter behavior. Exercise real shared Calc toolbar,Format menu and accelerators at1280/390 after fresh build;assert model-based cell CSS,pressed/mixed states,undo/redo and row geometry. Run root types,build/static,changed-path ESLint/Prettier,JSDoc,size/tree/dependencies/provenance/resources,scoped Calc/shared/Writer inventories,doctor/routing/diff;record raw evidence,quality review and clean calc state. Full all-app tests next task40 under user cadence.
+
+## Verification
+
+All declared application checks pass for the bounded task36 slice. Whole Calc: npm run test:coverage:calc,117files345cases,raw S7647/B4820/F1536/L6853 all100. Related Writer/ODF consumers: node .agentplane/tasks/202610191455-1KGJBF/run-related-coverage.mjs,156files6767cases,raw S2135/B2199/F326/L1965 all100. All29changed executable application owners: S3048/B2747/F502/L2806 all100;the remaining changed application file is AST-confirmed type-only. Raw gzip maps,source hashes,coverage-final-summary.json and collection helper preserve exact evidence;no new exclusions,threshold reductions or skipped counters. Root/app types,production build/static,changed-path ESLint/Prettier,JSDoc,size,source tree/provenance,source-specific dependencies,Calc/Writer/shared inventories and routing pass. Current tooling66cases5files pass without archived output copies. Fresh Calc browser suite17cases passes serially;two focused1280/390cases additionally verify underline pressed state and capture animation-complete screenshots. Both images were inspected. Doctor exitsOK with its existing advisory about an older managed hook shim;no unrelated hooks upgrade is included. Implementation commit cf512f2fe197c0713c9cc7c3c9a626376ed77e5b has CODER verification and an EVALUATOR pass;the overall UI goal remains active. Full all-app suite next task40,following task30 cadence.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T17:33:22.703Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610191455-1KGJBF
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T17:33:03.998Z, excerpt_hash=sha256:e5953ffc5608b138d02ebf23ffff3b01dddac577bb583ece5e114caf2a6661e0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191455-1KGJBF/blueprint/resolved-snapshot.json
+- old_digest: e2003c78a867d7a6e7ea2df1b7c926a48bdc02fd41179d3b2cf0e159109d67f3
+- current_digest: e2003c78a867d7a6e7ea2df1b7c926a48bdc02fd41179d3b2cf0e159109d67f3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191455-1KGJBF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191455-1KGJBF --result verified-202610191455-1KGJBF --commit ade457693c99f6b8963f5a6190ca52bddc0ea47d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only this task implementation commit and retain previous font-size/row-height controls and data;never reset unrelated tasks or branches.
+
+## Findings
+
+User explicitly authorized correcting simplified Writer/common modules directly;Scope/Plan/Verify Steps now include that bounded native ODF correction within180non-task paths,and the updated plan is approved by ORCHESTRATOR. Both filters use genuine Any and original shared weight/posture/underline/color handlers. Writer ODF transport now retains independent script scalars,font metadata and precise line/color values;item-based insertion and actual hint-boundary export avoid boolean loss. Shared browser underline Worker transport restores real pool items and packed color/alpha;unsupported complex interface state rejects instead of flattening. Source XMLIsTransparent defaults are null/native-invalid token and true polarity,confirmed in pinned xmlbahdl.hxx. CALC-197 and CALC-198 record retained source numeric/color quirks without compiled native claims. Actual ODT/ODS/Worker and adjacent native-weight cases pass in the latest focused7files46cases;third app typecheck passes after the native font-loop refactor. Whole Calc initial117files338cases all pass;raw coverage S7621/7629 B4802/4817 F1526/1527 L6828/6835 is below100 and task verification is not complete. Exact24uncovered counters across5Calc owners are preserved in evidence/calc-initial-uncovered.json and the raw gz map. Initial ten shared-owner coverage S547/B251/F38/L512 is100 with every counter positive;header-default correction is being rerun in evidence/shared-coverage-final1.log,so use that newer source-matched result when complete. Dependencies pass897runtime sources3963relative imports131edges after exact native SAX/o3tl and xmloff/Any/pure-VCL edges;general module,browser and cycle guards remain intact. Initial provenance passes898modules. JSDoc2368files and size checks pass after removing duplicate font construction;xmlimp is982lines. Current tooling JSON proves49tests in2current files with output/.agentplane exclusions. Earlier root filters also matched43archived output tests;retain their logs but do not count those as current verification. Remaining: visible native underline variants,correct module accelerator scope,Calc gaps100,complete changed Writer/shared owner100,full related final regression,fresh-build1280/390browser cases,final static/registry/source audit and implementation/quality/close commits. Writer remaining browser-shaped editing helpers,relative-height/property/factory services,complex colors and full script/device rendering remain unported,not intentional parity exceptions. Last full all-app task30;next full task40. The overall goal and current task remain active.
+
+Final task36 correction and evidence: visible Single/Double Underline11196/11197 preserve exact source style toggles and fresh-item color reset;the general underline toggle clones color. CALC-199 records this source distinction. The common XCU generator now resolves only the actual module/global configuration,primary before secondary,removes empty bindings and selects the established unxwnt-plus-Meta browser adaptation;macosx-only MOD3 cannot collapse to bare Tab. Calc uses the common key mapper and the same resource configuration for its actual dispatcher and menus;native grid Space ownership remains separate. The earlier Calc failures were stale preferred-key expectations and missing browser normalization/Space ownership after configuration binding;these were corrected without weakening assertions. The old scalar underline Worker fixture was upgraded to a full style/color record plus actual native-pool clone restoration. Final Calc345cases and related6767cases pass at raw S/B/F/L100;all29changed executable application owners are100 with source hashes matching retained maps. Broad native parity remains unverified. Both1280/390screenshots show actual shared Writer controls,pressed B/I/U,no document overflow and the real native styled cell. The first immediate screenshot caught a CSS color transition;animation-complete capture and explicit pressed-state assertions confirm final visuals. No source workaround was introduced. All17fresh browser cases and two focused pressed-state cases pass. Existing doctor hook-shim advisory is outside this approved code scope and is nonblocking. Remaining overall work includes font-family and other feasible UI actions,broader Writer range-edit helpers,relative-height/generic UNO/factory/complex-color and full script/device services. Full all-app suite stays scheduled at task40;no all-app pass is claimed here.

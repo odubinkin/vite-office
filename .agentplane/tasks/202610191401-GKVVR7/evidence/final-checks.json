@@ -1,0 +1,43 @@
+[
+  {
+    "check": "types-final",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "build-final",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "static-final",
+    "command": [
+      "node",
+      "scripts/check-static-build.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "browser-calc-final",
+    "command": [
+      "npx",
+      "playwright",
+      "test",
+      "--config",
+      "apps/office/playwright.config.ts",
+      "--project",
+      "calc",
+      "--workers",
+      "1"
+    ],
+    "exitCode": 0
+  }
+]

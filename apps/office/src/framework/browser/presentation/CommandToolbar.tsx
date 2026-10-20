@@ -18,7 +18,7 @@ export interface ToolbarCommandResource {
 export type CommandToolbarPlacement =
   | Readonly<{ commandId: string; kind: "command" }>
   | Readonly<{ kind: "separator" }>
-  | Readonly<{ kind: "command-select" | "font-select" | "font-size-select" }>;
+  | Readonly<{ kind: "command-select" | "font-select" | "font-size-select" | "color-select" }>;
 
 /** Inputs for one bindings-backed command button. */
 export interface CommandButtonProps extends BrowserCommandSurfaceProps {
@@ -29,7 +29,7 @@ export interface CommandButtonProps extends BrowserCommandSurfaceProps {
   readonly icon?: CommandIcon;
 }
 
-/** Renders one command whose execution and state both come from the active Sfx frame. @param props - Command control inputs. @returns Accessible command button or null for an inactive resource. */
+/** Renders one command whose execution and state both come from the active Sfx frame. @param props - Command control inputs. @returns Accessible command button retaining unavailable source placements. */
 export function CommandButton({
   commandId,
   commandSource,
@@ -38,12 +38,14 @@ export function CommandButton({
   getCommandResource,
   icon: Icon,
   resolveArguments,
-}: CommandButtonProps): React.JSX.Element | null {
+}: CommandButtonProps): React.JSX.Element {
   const presentation = useBrowserCommandPresentation(commandSource, commandId, getCommandResource);
-  const command = commandSource.QueryCommand(commandId);
-  if (command === undefined) return null;
   const resource = presentation.resource;
-  const pressed = resource.semantics === "action" ? undefined : presentation.checked;
+  const pressed = !presentation.checkable
+    ? undefined
+    : presentation.mixed
+      ? "mixed"
+      : presentation.checked;
   return (
     <button
       aria-label={resource.label}
@@ -51,7 +53,7 @@ export function CommandButton({
       aria-pressed={pressed}
       className={
         className ??
-        "grid size-9 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
+        "grid size-9 shrink-0 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
       }
       data-active={pressed}
       disabled={!presentation.enabled}
@@ -68,17 +70,24 @@ export function CommandButton({
 }
 
 /** Inputs for a sequence of generated toolbar placements. */
-export interface CommandToolbarItemsProps extends BrowserCommandSurfaceProps {
+export interface CommandToolbarItemsProps<
+  Placement extends CommandToolbarPlacement = CommandToolbarPlacement,
+> extends BrowserCommandSurfaceProps {
   readonly buttonClassName?: string;
   readonly getCommandResource: (commandUrl: string) => ToolbarCommandResource;
   readonly getButtonContent?: (commandUrl: string) => ReactNode;
   readonly icons?: ReadonlyMap<string, CommandIcon>;
-  readonly items: readonly CommandToolbarPlacement[];
-  readonly renderSpecialItem?: (item: CommandToolbarPlacement, index: number) => ReactNode;
+  readonly items: readonly Placement[];
+  readonly renderSpecialItem?: (
+    item: Exclude<Placement, { kind: "command" | "separator" }>,
+    index: number,
+  ) => ReactNode;
 }
 
 /** Renders commands and separators in generated resource order. @param props - Toolbar resource inputs. @returns Toolbar item fragment. */
-export function CommandToolbarItems({
+export function CommandToolbarItems<
+  Placement extends CommandToolbarPlacement = CommandToolbarPlacement,
+>({
   commandSource,
   buttonClassName,
   getCommandResource,
@@ -87,7 +96,7 @@ export function CommandToolbarItems({
   items,
   renderSpecialItem,
   resolveArguments,
-}: CommandToolbarItemsProps): React.JSX.Element {
+}: CommandToolbarItemsProps<Placement>): React.JSX.Element {
   return (
     <>
       {items.map(
@@ -103,7 +112,13 @@ export function CommandToolbarItems({
                 key={`separator-${index}`}
               />
             );
-          if (item.kind !== "command") return renderSpecialItem?.(item, index) ?? null;
+          if (item.kind !== "command")
+            return (
+              renderSpecialItem?.(
+                item as Exclude<Placement, { kind: "command" | "separator" }>,
+                index,
+              ) ?? null
+            );
           const content = getButtonContent?.(item.commandId);
           const icon = icons?.get(item.commandId);
           return (

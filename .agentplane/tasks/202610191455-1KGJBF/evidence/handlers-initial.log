@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |shared| src/xmloff/source/style/character-hdl.test.ts (3 tests | 1 failed) 266ms
+   × retains native underline multi-property merges and export guards 54ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/xmloff/source/style/character-hdl.test.ts > retains native underline multi-property merges and export guards
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/xmloff/source/style/character-hdl.test.ts:125:37
+    123|     for (const token of ts[i] as string[]) {
+    124|       a.clear();
+    125|       expect(h.importXML(token, a)).toBe(true);
+       |                                     ^
+    126|       for (let old = 0; old <= 18; old++) {
+    127|         a.insert([old], "sal_Int16");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 3 passed (4)
+   Start at  22:14:57
+   Duration  12.85s (transform 2.99s, setup 1.97s, import 3.36s, tests 275ms, environment 16.51s)
+

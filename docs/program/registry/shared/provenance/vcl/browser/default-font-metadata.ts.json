@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/default-font-metadata.ts",
+          "marker": "getBrowserDefaultFontMetadata"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/default-font-metadata.test.ts",
+          "marker": "preserves source family"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+          "marker": "binds the real shared"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/default-font-metadata.ts",
+    "rationale": "Adapts synchronous CSS Font Loading availability checks to the narrow output-device contract used for locale- and script-specific Writer defaults. Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager.",
+    "responsibilities": [
+      "TaskAPQYXE adds a browser metadata bridge over existing actual configured/loaded default-font family selection and actual shared Font. Pinned native GetDefaultFont role switch supplies stored family,pitch,symbol encoding and12height;platform text encoding is explicit,style retains genuine Font default,and missing loaded families remain absent. Writer device API is unchanged. This is only the represented metadata of the configured/matched branch,not a fake OutputDevice,physical fallback,MaybeAskConfig,full Font weight/language or Calc document-pool constructor.",
+      "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "CSS Font Loading replaces native VCL output-device font enumeration in the browser runtime."
+    },
+    "status": "local-only"
+  }
+}

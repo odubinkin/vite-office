@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
 import {
   SvxIndentValue,
@@ -887,7 +888,11 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Creates a native fragment with a requested font family. @param start - Inclusive source offset. @param end - Exclusive source offset. @param family - Requested serialized family. @returns Native formatted fragment. */
-  public CreateFontTextFragment(start: number, end: number, family: string): SwTextFragment {
+  public CreateFontTextFragment(
+    start: number,
+    end: number,
+    family: string | SvxFontItem,
+  ): SwTextFragment {
     const fragment = this.CaptureTextFragment(start, end);
     return {
       text: fragment.text,

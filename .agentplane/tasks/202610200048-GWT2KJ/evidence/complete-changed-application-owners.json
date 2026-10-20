@@ -1,0 +1,133 @@
+{
+  "result": "pass",
+  "owners": [
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "01df4d6633941a1cfd8f04d2012d9bcb2c4ff9ff7cedc8a8d7b1033bfe5d2b5a",
+      "coverage": "S/B/F/L100",
+      "statements": 323,
+      "functions": 63,
+      "branches": 135
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "2e12773490ce41c7737e66219f599128dd105c1d516387dbf9dbd2c6994b787e",
+      "coverage": "S/B/F/L100",
+      "statements": 35,
+      "functions": 6,
+      "branches": 0
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "e8084f8524732f8ee6bd828ac28d4095dee96d3a5c7d1404d7cf72ac8ebbcbec",
+      "coverage": "S/B/F/L100",
+      "statements": 114,
+      "functions": 47,
+      "branches": 116
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "e2c07d5144c617f172a1cccc17c05cc2c7b6debd0c1b1c49610fd3d9f10ff675",
+      "coverage": "S/B/F/L100",
+      "statements": 180,
+      "functions": 12,
+      "branches": 129
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "22fc7c5d1bdda724581f8b7f0124201c158cd6ec3966f466b2815279c1a9259e",
+      "coverage": "S/B/F/L100",
+      "statements": 170,
+      "functions": 42,
+      "branches": 74
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "1fdc1e1060b10bd9a2bf90a36bc30e4a5ec310c489389a8fbaa4622dae77c05d",
+      "coverage": "S/B/F/L100",
+      "statements": 337,
+      "functions": 58,
+      "branches": 191
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "7067f16c41be3e89f7d23d849db2b77d002065b55bfcd71c34e9f14b8b841bd1",
+      "coverage": "S/B/F/L100",
+      "statements": 163,
+      "functions": 42,
+      "branches": 117
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+      "sha256": "3ef004ce421600206743f1513b8acc5b49a7a1bc5db2ab46e11078d4e0985f4d",
+      "coverage": "S/B/F/L100",
+      "statements": 3,
+      "functions": 3,
+      "branches": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfuncutil.ts",
+      "sha256": "cbf6b180c527fe1180a131821170ab47b020067697b4638c762fa4b2a1083231",
+      "coverage": "S/B/F/L100",
+      "statements": 14,
+      "functions": 1,
+      "branches": 2
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "sha256": "a719b00bb1d1012d5a23888a7138e56d8e5d368f9f5ed7357d740eddad273438",
+      "coverage": "S/B/F/L100",
+      "statements": 129,
+      "functions": 24,
+      "branches": 56
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts",
+      "sha256": "21ba5b3b3b5444dfb2c826825713e403302f2f00adc009f46d34f739e94d0b40",
+      "coverage": "S/B/F/L100",
+      "statements": 15,
+      "functions": 2,
+      "branches": 4
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts",
+      "sha256": "d065a635b469f584bde91450f2018dd9827872d0c14ea0a523e540fa5bafb818",
+      "coverage": "S/B/F/L100",
+      "statements": 19,
+      "functions": 2,
+      "branches": 8
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+      "sha256": "5e46787d22bd4b896f73589a4abb4e714ba8b1a7eb1c2e9fb2ae43eafe3f23d4",
+      "coverage": "S/B/F/L100",
+      "statements": 7,
+      "functions": 3,
+      "branches": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "sha256": "1242e7e9502a779871f1b8d58a43afd12da729fc0024b565cdc2f723b276efa4",
+      "coverage": "S/B/F/L100",
+      "statements": 52,
+      "functions": 14,
+      "branches": 8
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cellsh3.ts",
+      "sha256": "8233e8cfd6e63972751d5129f11f5b06491a5e8ca2d63e74dbbacd8c176ee5b0",
+      "coverage": "S/B/F/L100",
+      "statements": 2,
+      "functions": 2,
+      "branches": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "331af7aba916bd573082d918fd9e29da268fb9cdd6e4c0bee8014689cae2dbdc",
+      "coverage": "S/B/F/L100",
+      "statements": 36,
+      "functions": 4,
+      "branches": 22
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+apps/office/src/framework/browser/presentation/FontCommandSelects.test.tsx 49ms
+apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx 17ms
+scripts/calc-sheet-command-source.test.ts 23ms

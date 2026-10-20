@@ -1,0 +1,94 @@
+[WebServer] (node:76445) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:76446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px (6.3s)
+(node:77121) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px (6.4s)
+
+
+  1) [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px 
+
+    Error: expect(locator).toHaveCSS(expected) failed
+
+    Locator:  getByRole('gridcell', { name: 'A1', exact: true })
+    Expected: "rgb(238, 242, 255)"
+    Received: "oklch(0.962 0.018 272.314)"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCSS" with timeout 5000ms
+      - waiting for getByRole('gridcell', { name: 'A1', exact: true })
+        14 × locator resolved to <div id="calc-0-0-0" role="gridcell" aria-label="A1" aria-colindex="2" aria-selected="true" class="absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 z-[2] outline outline-2 -outline-offset-2 outline-indigo-700 bg-indigo-50">…</div>
+           - unexpected value "oklch(0.962 0.018 272.314)"
+
+
+      44 |     await page.getByLabel("Background Color palette", { exact: true }).click();
+      45 |     await page.getByRole("button", { name: "None", exact: true }).click();
+    > 46 |     await expect(a1).toHaveCSS("background-color", "rgb(238, 242, 255)");
+         |                      ^
+      47 |     await page.getByLabel("Font Color palette", { exact: true }).click();
+      48 |     await page.getByRole("button", { name: "Automatic", exact: true }).click();
+      49 |     await expect(a1).toHaveCSS("color", "rgb(0, 0, 0)");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/colors.spec.ts:46:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-1280px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px 
+
+    Error: expect(locator).toHaveCSS(expected) failed
+
+    Locator:  getByRole('gridcell', { name: 'A1', exact: true })
+    Expected: "rgb(238, 242, 255)"
+    Received: "oklch(0.962 0.018 272.314)"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCSS" with timeout 5000ms
+      - waiting for getByRole('gridcell', { name: 'A1', exact: true })
+        14 × locator resolved to <div id="calc-0-0-0" role="gridcell" aria-label="A1" aria-colindex="2" aria-selected="true" class="absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 z-[2] outline outline-2 -outline-offset-2 outline-indigo-700 bg-indigo-50">…</div>
+           - unexpected value "oklch(0.962 0.018 272.314)"
+
+
+      44 |     await page.getByLabel("Background Color palette", { exact: true }).click();
+      45 |     await page.getByRole("button", { name: "None", exact: true }).click();
+    > 46 |     await expect(a1).toHaveCSS("background-color", "rgb(238, 242, 255)");
+         |                      ^
+      47 |     await page.getByLabel("Font Color palette", { exact: true }).click();
+      48 |     await page.getByRole("button", { name: "Automatic", exact: true }).click();
+      49 |     await expect(a1).toHaveCSS("color", "rgb(0, 0, 0)");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/colors.spec.ts:46:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-colors-Calc-shared-font-background-colors-at-390px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px 
+    [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px ─

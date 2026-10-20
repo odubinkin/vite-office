@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 check:source-tree
+> node scripts/check-lo-source-tree.mjs
+
+LibreOffice source-tree check passed for 114 required paths and 33 retired roots.

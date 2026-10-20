@@ -1,0 +1,474 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+······································································x·····························································································································································································································
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-sheet-popup.test.tsx > opens the exact native popup and executes real group commands without changing document history
+TestingLibraryElementError: Unable to find an accessible element with the role "separator"
+
+Here are the accessible roles:
+
+  menuitem:
+
+  Name "Insert Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Delete Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Rename Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Duplicate Sheet":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Move or Copy Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Select All Sheets":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Deselect All Sheets":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Protect Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Hide Sheet":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Show Sheet…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "View Grid Lines":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Tab Color…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Sheet Right-To-Left":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------menuitem:
+
+  Name "Sheet Events…":
+  [36m<button[39m
+    [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33mrole[39m=[32m"menuitem"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33maria-label[39m=[32m"Calc sheet context menu"[39m
+  [33mclass[39m=[32m"fixed z-20 w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg"[39m
+  [33mdata-popup-depth[39m=[32m"0"[39m
+  [33mid[39m=[32m"_r_0_-0"[39m
+  [33mrole[39m=[32m"menu"[39m
+  [33mstyle[39m=[32m"max-width: 1008px; left: 20px; top: 30px; max-height: 730px;"[39m
+  [33mtabindex[39m=[32m"-1"[39m
+[36m>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mInsert Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mDelete Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mRename Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mDuplicate Sheet[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mMove or Copy Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mSelect All Sheets[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mDeselect All Sheets[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+  [36m/>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mProtect Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mHide Sheet[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mShow Sheet…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+  [36m/>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mView Grid Lines[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div[39m
+    [33maria-hidden[39m=[32m"true"[39m
+    [33mclass[39m=[32m"my-1 border-t border-slate-200"[39m
+  [36m/>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mTab Color…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mSheet Right-To-Left[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+  [36m<div>[39m
+    [36m<button[39m
+      [33mclass[39m=[32m"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"[39m
+      [33mdisabled[39m=[32m""[39m
+      [33mrole[39m=[32m"menuitem"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+      [33mtype[39m=[32m"button"[39m
+    [36m>[39m
+      [36m<span[39m
+        [33maria-hidden[39m=[32m"true"[39m
+        [33mclass[39m=[32m"flex w-2.5 shrink-0 justify-center font-semibold"[39m
+        [33mdata-menu-checkmark[39m=[32m"true"[39m
+      [36m/>[39m
+      [36m<span>[39m
+        [0mSheet Events…[0m
+      [36m</span>[39m
+    [36m</button>[39m
+  [36m</div>[39m
+[36m</div>[39m
+ ❯ Object.getElementError ../../node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../../node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+ ❯ src/sc/browser/presentation/calc-sheet-popup.test.tsx:67:23
+     65|     "Sheet Events…",
+     66|   ]);
+     67|   expect(within(menu).getAllByRole("separator")).toHaveLength(3);
+       |                       ^
+     68|   expect(within(menu).getByRole("menuitem", { name: "Insert Sheet…" })…
+     69|   expect(within(menu).getByRole("menuitem", { name: "Deselect All Shee…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 109 passed (110)
+      Tests  1 failed | 291 passed (292)
+   Start at  04:01:51
+   Duration  54.02s (transform 15.96s, setup 7.29s, import 27.91s, tests 20.21s, environment 37.19s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot

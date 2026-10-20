@@ -24,7 +24,7 @@ test("Writer cell paragraph alignment and native list display survive history an
     .getByRole("button", { name: "Center", exact: true })
     .click();
   await expect(cell).toHaveCSS("text-align", "center");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
   const id = await cell.getAttribute("data-writer-paragraph-id"),
@@ -44,7 +44,7 @@ test("Writer cell paragraph alignment and native list display survive history an
   await expect(neighbor).toHaveCSS("text-align", "left");
   await expect(neighbor).toHaveAttribute("data-list-kind", "none");
   const pending = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const path = await (await pending).path();

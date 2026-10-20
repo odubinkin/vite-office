@@ -1,0 +1,94 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePath": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+  "sourceSha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+  "sourceStartLine": 922,
+  "witnessSource": "output/playwright/task41-size-native.cxx",
+  "witnessSha256": "6c2b1693106ba5b23eb845272c7a36c9e02155f5f15a3eca19d6d4c780261115",
+  "command": "c++ -std=c++20 output/playwright/task41-size-native.cxx -o output/playwright/task41-size-native",
+  "compileExit": 0,
+  "runExit": 0,
+  "cases": [
+    {
+      "height": 0,
+      "slot": 11042,
+      "result": 40
+    },
+    {
+      "height": 0,
+      "slot": 11043,
+      "result": 40
+    },
+    {
+      "height": 20,
+      "slot": 11042,
+      "result": 60
+    },
+    {
+      "height": 20,
+      "slot": 11043,
+      "result": 40
+    },
+    {
+      "height": 200,
+      "slot": 11042,
+      "result": 240
+    },
+    {
+      "height": 200,
+      "slot": 11043,
+      "result": 160
+    },
+    {
+      "height": 19998,
+      "slot": 11042,
+      "result": 19998
+    },
+    {
+      "height": 19998,
+      "slot": 11043,
+      "result": 19958
+    },
+    {
+      "height": 22000,
+      "slot": 11042,
+      "result": 19998
+    },
+    {
+      "height": 22000,
+      "slot": 11043,
+      "result": 21960
+    },
+    {
+      "height": 4294967295,
+      "slot": 11042,
+      "result": 39
+    },
+    {
+      "height": 4294967295,
+      "slot": 11043,
+      "result": 40
+    },
+    {
+      "height": 4294967280,
+      "slot": 11042,
+      "result": 24
+    },
+    {
+      "height": 4294967280,
+      "slot": 11043,
+      "result": 40
+    },
+    {
+      "height": 2147483712,
+      "slot": 11042,
+      "result": 19998
+    },
+    {
+      "height": 2147483712,
+      "slot": 11043,
+      "result": 40
+    }
+  ],
+  "scope": "Exact pinned initialized arithmetic expressions compiled standalone;not a full LibreOffice/VCL service certificate."
+}

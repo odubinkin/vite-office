@@ -60,7 +60,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const download = await downloadPromise;
@@ -75,7 +75,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   expect(contentXml).toContain("<text:list-style");
   expect(contentXml).toContain("<text:list-item>");
 
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await expect(page.getByRole("menuitem", { name: "Open Local Copy…" })).toHaveCount(0);
   await expect(page.getByRole("menuitem", { name: "Save Local Copy" })).toHaveCount(0);
   await expect(page.getByRole("menuitem", { name: "Export…" })).toBeVisible();
@@ -115,7 +115,7 @@ test("Writer keeps one ODT text node across visible page fragments after reopen"
     expect(await fragment.getAttribute("data-writer-paragraph-id")).toBe(id);
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const savedPath = await (await downloadPromise).path();
@@ -157,7 +157,7 @@ test("Writer types in a table cell and reopens the edited ODT", /** Checks nativ
   await expect(cell).toHaveText("typed cell");
 
   const pending = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const savedPath = await (await pending).path();

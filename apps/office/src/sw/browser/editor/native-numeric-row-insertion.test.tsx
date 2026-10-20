@@ -1,6 +1,6 @@
 /** @fileoverview Mounted selected row menus recreate numeric native history and preserve top-border ownership. */
 import { Color } from "../../../tools/inc/color";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { within, act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -54,8 +54,12 @@ for (const behind of [false, true])
         const element = screen.getByRole("table", { name: "NumericRows" }),
           index = behind ? 2 : 0,
           source = required(originals[behind ? 1 : 0]);
-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
-        fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+        fireEvent.click(
+          within(screen.getByRole("menu", { name: "Table menu" })).getByRole("menuitem", {
+            name: "Insert",
+          }),
+        );
         fireEvent.click(
           screen.getByRole("menuitem", {
             name: behind ? "Insert Rows Below" : "Insert Rows Above",

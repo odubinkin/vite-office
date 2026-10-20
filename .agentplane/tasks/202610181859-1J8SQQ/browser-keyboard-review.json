@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "### Result\n{\n  \"url\": \"http://127.0.0.1:5176/calc\",\n  \"keyboard\": \"End then Enter\",\n  \"active\": \"Sheet2\",\n  \"dialogClosed\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('async()=>{const wait=()=>new Promise(r=>setTimeout(r,60));const click=async(role,name)=>{const b=[...document.querySelectorAll(role===\\'button\\'?\\'button\\':`[role=${role}]`)].find(b=>(b.getAttribute(\\'aria-label\\')??b.textContent.trim().replace(/›$/,\\'\\'))===name);if(!b)throw Error(\\'Missing \\'+name);b.click();await wait();};await click(\\'button\\',\\'Insert Sheet\\');await click(\\'tab\\',\\'Sheet1\\');await click(\\'button\\',\\'Sheet\\');await click(\\'menuitem\\',\\'Navigate\\');await click(\\'menuitem\\',\\'Go to Sheet…\\');const list=document.querySelector(\\'[role=listbox]\\');list.focus();list.dispatchEvent(new KeyboardEvent(\\'keydown\\',{key:\\'End\\',bubbles:true,cancelable:true}));await wait();list.dispatchEvent(new KeyboardEvent(\\'keydown\\',{key:\\'Enter\\',bubbles:true,cancelable:true}));await wait();const active=document.querySelector(\\'[role=tab][aria-current=page]\\').textContent;if(active!==\\'Sheet2\\'||document.querySelector(\\'[role=dialog]\\'))throw Error(\\'List Enter did not accept target\\');return{url:location.href,keyboard:\\'End then Enter\\',active,dialogClosed:true};}');\n```"
+    }
+  ]
+}

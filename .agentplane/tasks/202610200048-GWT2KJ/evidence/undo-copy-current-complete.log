@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- native-delete-hardattr calc-clear-format ui-resources --coverage.include=src/sc/source/ui/docshell/docfuncutil.ts --coverage.reportsDirectory=coverage/task45-undo-copy-current --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task45-undo-copy-current-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage native-delete-hardattr calc-clear-format ui-resources --coverage.include=src/sc/source/ui/docshell/docfuncutil.ts --coverage.reportsDirectory=coverage/task45-undo-copy-current --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task45-undo-copy-current-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task45-undo-copy-current-results.json
+ % Coverage report from istanbul
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 14/14 )
+Branches     : 100% ( 2/2 )
+Functions    : 100% ( 1/1 )
+Lines        : 100% ( 13/13 )
+================================================================================

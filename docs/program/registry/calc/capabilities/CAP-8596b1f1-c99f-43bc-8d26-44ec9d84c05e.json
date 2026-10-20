@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+    "capabilityId": "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc script-aware grow and shrink font size",
+    "gaps": [
+      "Exact native Grow/Shrink UI regression has not been located; the cited native default-height export test establishes dependency context only. Standalone C++ arithmetic witness certifies only extracted size expressions.",
+      "Device metrics, rich edit textobjectbar context, filtered and alternate sheet views, native pool-cache/border services and full native application parity remain outside this slice."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_GROW_FONT_SIZE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxScriptSetItem::GetItemOfScriptSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ShrinkToDataArea"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testDefaultFontHeight"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/scriptsetitem.hxx",
+          "marker": "SvxScriptSetItem"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "ChangeFontSize"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.scriptset.ts",
+          "marker": "SvxScriptSetItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/font-step.spec.ts",
+          "marker": "font"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610192240-89YNKC/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-script-font-size-step",
+    "scopeLimitations": [
+      "No broad parity promotion; the actual standard format toolbar hides these slots as upstream. All visible font controls reuse shared Writer presentation."
+    ]
+  }
+}

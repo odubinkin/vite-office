@@ -1,0 +1,5 @@
+apps/office/src/framework/browser/presentation/office-command-icons.ts 30ms (unchanged)
+apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx 21ms (unchanged)
+apps/office/src/sw/browser/presentation/WriterCommandToolbar.test.tsx 6ms
+scripts/calc-sheet-command-source.test.ts 17ms
+apps/office/e2e/calc/standard-toolbar.spec.ts 8ms

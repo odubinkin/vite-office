@@ -153,3 +153,27 @@ describe("BrowserSfxDispatcher", /** Defines browser dispatch tests. @returns No
     expect(dispatcher.GetLastCommandError()).toBeUndefined();
   });
 });
+
+it("completes an actual asynchronous void slot without inventing a return item", /** Source Done and return-value assignment remain separate. @returns Completion. */ async () => {
+  const dispatcher = new BrowserSfxDispatcher(),
+    request = new SfxRequest(100);
+  dispatcher.Push(
+    createSfxShell(
+      {},
+      new SfxInterface([
+        {
+          commandUrl: ".uno:Void",
+          slotId: 100,
+          label: "Void",
+          execute: /** Real void asynchronous command. @returns Completion. */ async () =>
+            undefined,
+        },
+      ]),
+    ),
+  );
+  const result = dispatcher.ExecuteRequest(request);
+  if (result.status !== "executed") throw new Error(result.status);
+  await result.value;
+  expect(request.IsDone()).toBe(true);
+  expect(request.GetReturnValue()).toBeUndefined();
+});

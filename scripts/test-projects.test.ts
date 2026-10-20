@@ -46,7 +46,16 @@ function discover(config: string): { file: string; projectName: string }[] {
 }
 
 it("partitions every existing unit test exactly once and scoped configs discover the same owners", /** Verifies actual CLI discovery rather than mirroring glob implementation. @returns Nothing. */ () => {
-  const full = discover("vite.config.ts");
+  const full = discover("vite.config.ts"),
+    allOptions = createOfficeTestOptions();
+  expect(allOptions.projects).toHaveLength(3);
+  for (const name of ["writer", "calc", "shared"])
+    expect(allOptions.projects).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ test: expect.objectContaining({ name }) }),
+      ]),
+    );
+  expect(createOfficeTestOptions("shared", true).projects).toEqual(allOptions.projects);
   expect(discover("vitest.shared-coverage.config.ts")).toEqual(full);
   const expected = collectTests(path.resolve("apps/office/src")).sort();
   expect(

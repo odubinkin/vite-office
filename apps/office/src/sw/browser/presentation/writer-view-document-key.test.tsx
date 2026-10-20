@@ -82,7 +82,7 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
       fixture.owner.focus();
       if (origin === "root") pressDocumentKey({ key: "F10", ctrlKey: false });
       else {
-        fireEvent.click(fixture.frame.getByRole("button", { name: "View" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "View" }));
         if (origin === "child")
           fireEvent.keyDown(fixture.frame.getByRole("menuitem", { name: "Rulers" }), {
             key: "ArrowRight",
@@ -95,7 +95,7 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
       expect(execute).not.toHaveBeenCalled();
       expect(fixture.frame.getByLabelText("Writer horizontal ruler")).toBeInTheDocument();
       pressDocumentKey({ key: "F10", ctrlKey: false });
-      expect(fixture.frame.getByRole("button", { name: "File" })).toHaveFocus();
+      expect(fixture.frame.getByRole("menuitem", { name: "File" })).toHaveFocus();
       pressDocumentKey({ key: "F10", ctrlKey: false });
       expect(fixture.editor).toHaveFocus();
     });
@@ -172,7 +172,7 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
     it(`keeps the ${kind} modal's focus and resumes after cancellation`, /** Checks every existing modal eligibility owner. @returns Nothing. */ function preservesModalFocus(): void {
       const fixture = mountFrame();
       if (kind === "paragraph" || kind === "page") {
-        fireEvent.click(fixture.frame.getByRole("button", { name: "Format" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Format" }));
         fireEvent.click(
           fixture.frame.getByRole("menuitem", {
             name: kind === "paragraph" ? /Paragraph/ : /Page Style/,
@@ -186,8 +186,8 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
           }),
         );
       } else if (kind === "break") {
-        fireEvent.click(fixture.frame.getByRole("button", { name: "Insert" }));
-        fireEvent.mouseEnter(fixture.frame.getByRole("menuitem", { name: "More Breaks" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Insert" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "More Breaks" }));
         fireEvent.click(fixture.frame.getByRole("menuitem", { name: /Manual Break/ }));
       } else if (kind === "table") {
         act(
@@ -199,7 +199,7 @@ describe("Writer direct document key", /** Groups frame focus routing. @returns 
           },
         );
       } else if (kind === "line") {
-        fireEvent.click(fixture.frame.getByRole("button", { name: "Tools" }));
+        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Tools" }));
         fireEvent.click(fixture.frame.getByRole("menuitem", { name: /Line Numbering/ }));
       } else
         act(

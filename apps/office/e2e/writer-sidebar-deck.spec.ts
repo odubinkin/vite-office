@@ -19,7 +19,7 @@ for (const viewport of [
     await expect(paragraph).not.toBeVisible();
     await expect(activation).toBeVisible();
     await expect(activation).toHaveAttribute("aria-pressed", "false");
-    await page.getByRole("button", { name: "View", exact: true }).click();
+    await page.getByRole("menuitem", { name: "View", exact: true }).click();
     await expect(page.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
       "aria-checked",
       "true",

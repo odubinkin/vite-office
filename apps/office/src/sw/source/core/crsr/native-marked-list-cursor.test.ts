@@ -108,6 +108,14 @@ it("native cursor mark preserves exact pair no-op and former clear before new de
   expect(f.docShell.GetContentGeneration()).toBe(0);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });
+it("returns no marked label when the list lookup cannot resolve an attached member", /** Checks the optional manager lookup boundary on a real attached node. @returns Nothing. */ () => {
+  const f = fixture(),
+    first = f.nodes[0];
+  if (first === undefined) throw Error("Missing node");
+  expect(first.IsInList()).toBe(true);
+  vi.spyOn(f.doc.GetDocumentListsManager(), "GetListByName").mockReturnValueOnce(undefined);
+  expect(first.HasMarkedLabel()).toBe(false);
+});
 it("native shading gate retains bookkeeping and does not invent implicit mark repair", /** Checks source transitions while visual marking is disabled. @returns Nothing. */ () => {
   const f = fixture(),
     options = f.shell.GetViewOptions(),

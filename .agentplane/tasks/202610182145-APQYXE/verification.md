@@ -1,0 +1,25 @@
+Command: npm run test:coverage:calc -- --maxWorkers=4 --reporter=dot
+Result: pass
+Evidence: calc-coverage.log;111files,298cases. Raw statements6813/6813,branches4376/4376,functions1408/1408,lines6104/6104. All100percent;no threshold/exclusion changes.
+Scope: whole current Calc runtime. New bridge is a shared browser dependency,not yet imported by document/pool composition;existing Calc behavior and raw counts remain unchanged.
+
+Command: npm exec --workspace @vite-office/office -- vitest run default-font-metadata default-font-device fontcfg native-font-values native-font-metadata --coverage --coverage.include=src/vcl/browser/default-font-metadata.ts --maxWorkers=4 --reporter=dot
+Result: pass
+Evidence: related-coverage-complete.log;5files,51cases. New module raw statements22/22,branches27/27,functions1/1,lines20/20,all100percent. All23native roles verified against independent family/pitch expectations. Genuine browser default-font device/configuration and shared Font values are used;only platform FontFace boundary is a fixture.
+Scope: configured/matched native role metadata,pitch/family,symbol-vs-explicit-platform charset,actual empty style default,width0/height12,loaded-face admission and async preparation,absence,independent Font/COW handles. CJK/CTL fixtures use corresponding zh-CN/hi-IN configuration,other roles en-US. Existing generic Writer device API and family behavior are unchanged.
+
+Command: npm run typecheck; npm run build; npx vitest run scripts/default-font-metadata-source.test.ts scripts/calc-sheet-command-source.test.ts scripts/writer-ui-resource-model.test.ts; npm run check:calc-resources; npm run check:writer-resources
+Result: pass
+Evidence: types-final.log,build-verified.log,source.log,calc-resources.log,writer-resources.log.14source/resource cases and2Writer freshness cases. New source tests independently read pinned VCL GetDefaultFont role switch/defaults/matched-name path and ScDocumentPool's actual five consumed font metadata fields and three spreadsheet roles. Existing generated resources unchanged. Existing bundle-size warning remains.
+Scope: real source contract and whole application/tools compilation,without claiming full native OutputDevice or initialized Calc document-pool construction.
+
+Command: node .agentplane/tasks/202610182145-APQYXE/touched-checks.mjs; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run inventory:parity:writer; ap doctor; node .agentplane/policy/check-routing.mjs
+Result: pass
+Evidence: style-complete.log,dependencies.log,docs-complete.log,size.log,tree.log,provenance.log,inventory-calc-final.log,inventory-shared-final.log,inventory-writer-final.log,doctor.log,routing.log.6intentional non-task paths.852runtime sources,3707relative imports,124allowed edges;853provenance modules (735mapped/100browser/18infrastructure). All three scoped semanticViolationCount0;final inventory logs explicitly summarize counts/flags and SHA256 of successful output while omitting bulk record arrays. Doctor OK with existing managed hook readiness warning;routing OK.
+Scope: new shared browser metadata module and honest unverified runtime/provenance evidence. Existing Writer capability/certified assertions are unchanged.
+
+Findings: Initial per-role fixture assumed an English default for every role;CJK_TEXT is empty in that configuration. Corrected fixtures to use actual CJK/CTL prepared languages,not guessed families or changed runtime defaults. Added required JSDoc to the platform load fixture. Initial registry path assumption put CAP-0109 in shared;its real owner is Writer. An attempted new assertion on the existing certified capability was rejected by exact assertion-evidence enforcement. Removed only this task's assertion:existing capability and its certification remain byte-identical;new bridge is recorded as browser-owned/unverified runtime/provenance evidence. Fidelity review replaced a role-derived charset guard with the actual native Font charset DONTKNOW predicate;an initially missing import was caught by typecheck/tests and corrected. All final affected checks pass. No guard,criterion or threshold was weakened.
+
+Native scope: This browser bridge covers represented Font metadata of the successful configured/loaded-family branch of GetDefaultFont. It returns the actual existing Font owner,not a new metadata model or fake OutputDevice. Explicit platform encoding replaces no hidden global guess;native symbol encoding is retained. Physical best-match/substitution/fuzzing,MaybeAskConfig,unrepresented Font weight/language and full VCL device geometry remain unported. It does not construct ScDocumentPool or enable formatting slots. Missing source defaults/services are not fabricated.
+
+Cadence: UI task19. Next task20 requires the full regression run. Overall Calc UI goal remains active. This prerequisite adds no production route/rendered behavior;no new browser scenario was required by its approved Verify Steps.

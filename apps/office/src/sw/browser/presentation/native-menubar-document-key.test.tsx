@@ -63,7 +63,7 @@ function fixture(callback = true) {
       resolveArguments={/** Uses native slot defaults. @returns Undefined. */ () => undefined}
     />,
   );
-  return { session, owner, client, trigger: screen.getByRole("button", { name: "Native" }) };
+  return { session, owner, client, trigger: screen.getByRole("menuitem", { name: "Native" }) };
 }
 /** Sends original browser Ctrl-F6 and returns its consumption state. @param target - Actual focused owner. @param ctrlKey - Native Mod1 state. @returns Event. */
 function f6(target: HTMLElement, ctrlKey = true) {

@@ -10,7 +10,8 @@
     "capabilityIds": [
       "CAP-0113",
       "CAP-0114",
-      "CAP-0131"
+      "CAP-0131",
+      "CAP-aa9a7145-62c9-4e3c-9b22-4ba90b6833fa"
     ],
     "semantic": {
       "behaviorStatus": "divergent",
@@ -18,9 +19,10 @@
       "defaultStatus": "divergent",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/workflows/writer-odt-io.ts#autosaveWriter"
+        "apps/office/src/sw/browser/workflows/writer-odt-io.ts#autosaveWriter",
+        "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts"
       ],
-      "justification": "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+      "justification": "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents. This browser policy is an intentional upstream divergence and must not be rewritten by parity work. TaskFJTKAS extracts the existing Writer complete-package IndexedDB store,title uniqueness and autosave cadence into format-neutral framework/browser owners. Writer adapters retain the database vite-office-writer-workbench and10second interval,1second idle,30second maximum delay,input/capture handling,primary byte storage and no recovery copies. The shared scheduler receives suite-owned dirty/content,save,failure and subscription callbacks;it owns no document model. Calc uses the same storage transactions and timing policy with a separate suite database. This is an intentional browser persistence adaptation,not native AutoRecovery parity.",
       "knownViolations": [],
       "localSymbols": [
         "hasWriterContent",

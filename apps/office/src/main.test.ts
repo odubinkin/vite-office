@@ -4,6 +4,9 @@ const calls = vi.hoisted(
   /** Creates observable composition boundaries. @returns Mock ports. */ () => ({
     mount: vi.fn(),
     prepare: vi.fn(),
+    calcFactory: vi.fn(
+      /** Returns the Calc module boundary. @returns Token. */ () => "calc-factory",
+    ),
     factory: vi.fn(/** Returns the module boundary. @returns Token. */ () => "writer-factory"),
     descriptors: vi.fn(/** Returns module descriptors. @returns Token. */ () => "descriptors"),
   }),
@@ -23,6 +26,12 @@ vi.mock(
   /** Binds actual preparation/module composition boundaries. @returns Module. */ () => ({
     createWriterModuleFactory: calls.factory,
     prepareWriterBrowserFonts: calls.prepare,
+  }),
+);
+vi.mock(
+  "./sc/browser/composition/calc-module",
+  /** Keeps both application factories observable without constructing documents during bootstrap. @returns Module. */ () => ({
+    createCalcModuleFactory: calls.calcFactory,
   }),
 );
 afterEach(
@@ -52,10 +61,12 @@ it.each(["fr-FR", undefined])(
     expect(calls.prepare).toHaveBeenCalledWith(document, language ?? "en-US");
     expect(calls.mount).not.toHaveBeenCalled();
     expect(calls.factory).not.toHaveBeenCalled();
+    expect(calls.calcFactory).not.toHaveBeenCalled();
     finish?.();
     await Promise.resolve();
     expect(calls.factory).toHaveBeenCalledOnce();
-    expect(calls.descriptors).toHaveBeenCalledWith(["writer-factory"]);
+    expect(calls.calcFactory).toHaveBeenCalledOnce();
+    expect(calls.descriptors).toHaveBeenCalledWith(["writer-factory", "calc-factory"]);
     expect(calls.mount).toHaveBeenCalledWith(document.getElementById("root"), "descriptors");
   },
 );

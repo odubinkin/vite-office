@@ -1,0 +1,43 @@
+{
+  "result": "pass",
+  "testFiles": 138,
+  "tests": 425,
+  "summary": {
+    "lines": {
+      "total": 442,
+      "covered": 442,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 482,
+      "covered": 482,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 99,
+      "covered": 99,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 210,
+      "covered": 210,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "rawSha256": "bed33f6ca44a1b32df45f842491d7beab8fc9275a25dbb647eb79456a3e1102a",
+  "sourceHashes": {
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "ad00f32983a108d4a45e3d74198d693d782c916e31a69429254ccbf43ae43257",
+    "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx": "ed0535b342e707c85632b8f5e8b5547fe42aa4efc60ce73d3266f11a30c0f8b2",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "feb90470737b55f4274a01c425dd261ff3bfd9eab2fec5bbc7f0b7345138a7c7"
+  }
+}

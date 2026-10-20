@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "source-ui-resources",
+    "capabilityIds": [
+      "CAP-a8560287-c005-4bae-8300-bcd06f394ec7"
+    ],
+    "semantic": {
+      "behaviorStatus": "divergent",
+      "contractStatus": "divergent",
+      "defaultStatus": "divergent",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+        "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+        "scripts/office-ui-command-catalog.test.ts"
+      ],
+      "justification": "Projects every pinned visible standardbar command after explicit Writer browser save-policy dispositions; normalizes separators without filtering missing slots. Shared Sfx bindings keep unavailable native operations disabled; source order and visibility remain intact. Native command execution beyond the current kernel slice remains unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "calcStandardBarItems"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "upstreamSymbols": [
+        ".uno:"
+      ]
+    }
+  }
+}

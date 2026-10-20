@@ -31,7 +31,10 @@ export class ScXMLImportWrapper {
     readPlainPackageManifest(zip, await zip.readTextEntry("META-INF/manifest.xml"), mimetype);
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const content = await zip.readTextEntry("content.xml");
-    new ScXMLImport(this.document, options).importContent(content);
+    const importer = new ScXMLImport(this.document, options);
+    if (zip.getEntryNames().includes("styles.xml"))
+      importer.importStyles(await zip.readTextEntry("styles.xml"));
+    importer.importContent(content);
   }
   /** Writes supported content through shared native manifest properties and ZIP records. @param options - Controls. @returns ODS bytes. */
   Export(options: ScXMLExportOptions = {}): Uint8Array {

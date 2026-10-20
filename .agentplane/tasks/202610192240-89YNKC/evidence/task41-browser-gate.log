@@ -1,0 +1,25 @@
+[WebServer] (node:52012) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 2 workers
+
+(node:52014) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:52015) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [calc] › apps/office/e2e/calc/alignment.spec.ts:4:3 › Calc native alignment at 1280px (5.1s)
+  ✓   1 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px (5.3s)
+  ✓   3 [calc] › apps/office/e2e/calc/alignment.spec.ts:4:3 › Calc native alignment at 390px (5.2s)
+  ✓   4 [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px (5.1s)
+  ✓   5 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 1280px (2.7s)
+  ✓   6 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 1280px (3.3s)
+  ✓   7 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 390px (2.3s)
+  ✓   8 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 390px (2.3s)
+  ✓   9 [calc] › apps/office/e2e/calc/font-step.spec.ts:34:1 › executes real script-height items,font stepping,history and ODS in page and DOM-free Worker (3.1s)
+  ✓  10 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (15.4s)
+  ✓  11 [calc] › apps/office/e2e/calc/font-step.spec.ts:145:3 › shows actual script font sizes and reopens the saved ODS at 1280px (15.0s)
+  ✓  12 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (8.6s)
+  ✓  14 [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker (1.7s)
+  ✓  13 [calc] › apps/office/e2e/calc/font-step.spec.ts:145:3 › shows actual script font sizes and reopens the saved ODS at 390px (13.9s)
+
+  14 passed (55.6s)

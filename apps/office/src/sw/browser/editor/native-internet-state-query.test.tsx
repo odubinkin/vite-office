@@ -52,7 +52,7 @@ it("mounted Edit Hyperlink is disabled for equal URLs with different native styl
     point.Dispose();
     mark.Dispose();
   }
-  fireEvent.click(screen.getByRole("button", { name: /^Edit$/ }));
+  fireEvent.click(screen.getByRole("menuitem", { name: /^Edit$/ }));
   expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
 });
 it("mounted hyperlink state honors the original end-expansion flag", /** Checks native caret inheritance controls actual UI enablement. @returns Nothing. */ () => {
@@ -80,6 +80,6 @@ it("mounted hyperlink state honors the original end-expansion flag", /** Checks 
   } finally {
     point.Dispose();
   }
-  fireEvent.click(screen.getByRole("button", { name: /^Edit$/ }));
+  fireEvent.click(screen.getByRole("menuitem", { name: /^Edit$/ }));
   expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
 });

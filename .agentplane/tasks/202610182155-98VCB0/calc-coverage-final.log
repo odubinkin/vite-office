@@ -1,0 +1,44 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+···········································································································································································································································································································
+
+ Test Files  111 passed (111)
+      Tests  299 passed (299)
+   Start at  05:02:26
+   Duration  72.23s (transform 20.58s, setup 9.17s, import 37.80s, tests 27.36s, environment 49.63s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.98 |      100 |   99.92 |   99.98 |                   
+ ...r/presentation |   99.61 |      100 |   98.85 |   99.59 |                   
+  ...workbench.tsx |   99.29 |      100 |   97.22 |   99.24 | 303               
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.98% ( 6825/6826 )
+Branches     : 100% ( 4388/4388 )
+Functions    : 99.92% ( 1411/1412 )
+Lines        : 99.98% ( 6114/6115 )
+================================================================================
+ERROR: Coverage for lines (99.98%) does not meet global threshold (100%)
+ERROR: Coverage for functions (99.92%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.98%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot

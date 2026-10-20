@@ -1,0 +1,171 @@
+{
+  "task": "202610192347-1K31AJ",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceReferences": [
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx",
+      "sha256": "196ce969202be94a6f4677f7f884a24f169f586e3ce7502946095fe7e85173bc",
+      "anchors": [
+        {
+          "marker": "SfxBindings::Execute_Impl",
+          "lines": [
+            887,
+            964
+          ]
+        },
+        {
+          "marker": "SfxItemState::INVALID",
+          "lines": [
+            1016,
+            1187,
+            1190
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "anchors": [
+        {
+          "marker": "SID_ATTR_CHAR_OVERLINE",
+          "lines": [
+            1051
+          ]
+        },
+        {
+          "marker": "ScFormatShell::GetAttrState",
+          "lines": [
+            1300
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/sdi/svx.sdi",
+      "sha256": "4a8618560588e4cc301d6c3ee671c4a0d647719086201a5e51f7587ef4190afd",
+      "anchors": [
+        {
+          "marker": "SvxOverlineItem Overline",
+          "lines": [
+            9085
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+      "sha256": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327",
+      "anchors": [
+        {
+          "marker": "ATTR_FONT_OVERLINE",
+          "lines": [
+            102
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+      "sha256": "c65efef6a83d87d5deecf198faba46a6ee7e2e429a1e1e32486141bbc58aca64",
+      "anchors": [
+        {
+          "marker": "XML_TYPE_TEXT_OVERLINE_STYLE",
+          "lines": [
+            360
+          ]
+        },
+        {
+          "marker": "XML_TYPE_TEXT_OVERLINE_TYPE",
+          "lines": [
+            357
+          ]
+        },
+        {
+          "marker": "XML_TYPE_TEXT_OVERLINE_COLOR",
+          "lines": [
+            366
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+      "sha256": "06e707be14bb818761eeb362f71d1e3d47e8938bf952e1ce06fd80cf718c3cdf",
+      "anchors": [
+        {
+          "marker": "PROP_CharOverline",
+          "lines": [
+            261,
+            262,
+            263,
+            264,
+            265,
+            650,
+            651,
+            652,
+            653,
+            654
+          ]
+        },
+        {
+          "marker": "XML_TEXT_OVERLINE_WIDTH",
+          "lines": [
+            263,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/editeng/udlnitem.hxx",
+      "sha256": "4dc0a38070c5c573883cf772ace9a0088dc3dde986563bb65bd358620be9992f",
+      "anchors": [
+        {
+          "marker": "SvxOverlineItem",
+          "lines": [
+            104,
+            108,
+            116,
+            117,
+            120
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+      "sha256": "cb114b512cff15ea3df06ad8dec0d419649f82925fe34ccce7f2027782ff378b",
+      "anchors": [
+        {
+          "marker": "testRichTextExportODS",
+          "lines": [
+            1311
+          ]
+        },
+        {
+          "marker": "Over and Under",
+          "lines": [
+            1560,
+            1732
+          ]
+        }
+      ]
+    }
+  ],
+  "preserved": [
+    "Native Overline11568 maps to real pool Which105;NONE default retained",
+    "SET/default bool or bool-enum clones;INVALID uses original concrete factory and enables",
+    "Uniform overline toggles retain full line metadata;native mixed factory resets color",
+    "Original line style/type/width/color handlers and per-property Any merge;actual automatic style registration includes105",
+    "Real document/selection/attribute snapshots,history and ODS bytes;shared Writer menu components"
+  ],
+  "browserAdaptation": "Shared createAttributeToggleItem extracts only the source Execute_Impl value-state portion. Existing browser routing retains request ownership;no native SfxShell,GetPool or dispatcher service is fabricated. Calc selection query supplies its native105known/toggleable precondition. Generic disabled/unknown/non-bool states are tested at the shared boundary.",
+  "limitations": [
+    "Full native bindings request admission/recording/UNO transport and device/rich-edit services are unported.",
+    "Native line mode,theme-color XML,device dash/wave/thickness and pixel-identical line geometry remain unverified.",
+    "Inspected native rich-text export QA supports stored overline/underline DOUBLE expectations;the entire EditEngine QA test is not executed.",
+    "Existing Writer primary-save/open/no-recovery deviations remain."
+  ],
+  "suspectedIssue": "docs/program/calc-upstream-suspected-issues.md#CALC-211"
+}

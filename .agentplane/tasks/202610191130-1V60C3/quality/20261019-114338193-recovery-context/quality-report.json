@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610191130-1V60C3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-19T11:43:38.193Z",
+  "verdict": "pass",
+  "summary": "Reviewed681b1333a4a8:approved shared-root pointer scope implemented and independently checked against pinned native ordering,complete raw owner coverage and actual browser consumers.",
+  "evaluated_sha": "681b1333a4a8426395d1b9a8c0521129426336a0",
+  "blueprint_digest": "76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8",
+  "findings": [
+    "Actual common Writer/Calc component owns constructor/creation first-move lifetime,separate rollover/highlight and floating-window filtering;no duplicate presenter or fabricated command state. Source Paint priority and unopened keyboard selection are represented. Existing assertions remain and fixture migrations use actual movement. Complete two-owner raw coverage100,wholeCalc100 and final25browser cases pass.11non-task paths remain within approved20."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610191130-1V60C3/README.md",
+    ".agentplane/tasks/202610191130-1V60C3/verification.md",
+    ".agentplane/tasks/202610191130-1V60C3/evidence/source-audit.json",
+    ".agentplane/tasks/202610191130-1V60C3/evidence/menu-coverage-final.json",
+    ".agentplane/tasks/202610191130-1V60C3/evidence/browser-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Source audit does not execute native VCL GUI;browser has no portable IsSynthetic mapping. Native mouse-button-down,mnemonics/platform settings/full theme and wider Calc attribute/core/UI parity remain pending. Prior root-lint ignored-output and hook readiness limitations remain. Last full30,next40."
+  ]
+}

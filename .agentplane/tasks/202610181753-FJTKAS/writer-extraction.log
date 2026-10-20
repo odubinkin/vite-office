@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- writer-odt-store.test writer-autosave.test
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts writer-odt-store.test writer-autosave.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  15 passed (15)
+   Start at  00:56:41
+   Duration  1.81s (transform 335ms, setup 694ms, import 506ms, tests 93ms, environment 1.95s)
+

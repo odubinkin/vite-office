@@ -1,22 +1,40 @@
-/** @fileoverview Owning scalar ScCellValue and borrowed scalar/formula/document ScRefCellValue families. Rich text and owning-formula alternatives remain unsupported. */
+/** @fileoverview Owning scalar/formula ScCellValue and borrowed scalar/formula/document ScRefCellValue families. Rich text remains unsupported. */
 import type { ScDocument } from "../../../inc/document";
 import type { ScAddress } from "../../../inc/address";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { CellType } from "../../../inc/global";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 
-/** Original first three std::variant alternatives represented by JS tags and values. */
+/** Original empty,numeric,shared-string and formula std::variant alternatives represented by JS tags and values. */
 type CellData =
   | { readonly index: 0 }
   | { readonly index: 1; readonly value: number }
-  | { readonly index: 2; readonly value: SharedString };
+  | { readonly index: 2; readonly value: SharedString }
+  | { readonly index: 4; readonly value: ScFormulaCell };
 
 /** Original owning cell value; scalar construction/set copies string values, logical moves empty their source. */
 export class ScCellValue {
   private maData: CellData = { index: 0 };
-  /** Original default/double/const SharedString constructors. @param value - Optional scalar value. @returns Cell value. */
-  constructor(value?: number | SharedStringConstReference) {
-    if (value !== undefined)
+  /** Original default/scalar/copy and borrowed-reference constructors;formula alternatives clone the actual cell. @param value - Optional value or copied owner/view. @returns Cell value. */
+  constructor(value?: number | SharedStringConstReference | ScCellValue | ScRefCellValue) {
+    if (value instanceof ScCellValue || value instanceof ScRefCellValue) {
+      switch (value.getType()) {
+        case CellType.CELLTYPE_NONE:
+          break;
+        case CellType.CELLTYPE_VALUE:
+          this.maData = { index: 1, value: value.getDouble() };
+          break;
+        case CellType.CELLTYPE_STRING:
+          this.maData = {
+            index: 2,
+            value: new SharedString(value.getSharedString() as SharedStringConstReference),
+          };
+          break;
+        case CellType.CELLTYPE_FORMULA:
+          this.maData = { index: 4, value: (value.getFormula() as ScFormulaCell).Clone() };
+          break;
+      }
+    } else if (value !== undefined)
       this.maData =
         typeof value === "number"
           ? { index: 1, value }
@@ -36,17 +54,20 @@ export class ScCellValue {
   /** Original noexcept clear resets the variant and its existing shared value boundary. @returns Nothing. */
   clear(): void {
     if (this.maData.index === 2) this.maData.value.dispose();
+    if (this.maData.index === 4) this.maData.value.Dispose();
     this.reset_to_empty();
   }
   /** Original scalar set first clears then assigns/copies the new value. @param value - Scalar value. @returns Nothing. */
-  set(value: number | SharedStringConstReference): void {
+  set(value: number | SharedStringConstReference | ScFormulaCell): void {
     this.clear();
     this.maData =
       typeof value === "number"
         ? { index: 1, value }
-        : { index: 2, value: new SharedString(value) };
+        : "GetCode" in value
+          ? { index: 4, value }
+          : { index: 2, value: new SharedString(value) };
   }
-  /** Original mapping of the three implemented variant indices. @returns Native cell type. */
+  /** Original mapping of the four implemented variant indices. @returns Native cell type. */
   getType(): CellType {
     switch (this.maData.index) {
       case 0:
@@ -55,6 +76,8 @@ export class ScCellValue {
         return CellType.CELLTYPE_VALUE;
       case 2:
         return CellType.CELLTYPE_STRING;
+      case 4:
+        return CellType.CELLTYPE_FORMULA;
     }
   }
   /** Original std::get numeric access rejects the wrong alternative; TypeError is the JS exception boundary. @returns Numeric value. */
@@ -66,6 +89,52 @@ export class ScCellValue {
   getSharedString(): SharedStringConstReference {
     if (this.maData.index !== 2) throw new TypeError("bad_variant_access");
     return this.maData.value;
+  }
+  /** Original formula variant getter;wrong alternatives follow the existing bad_variant_access boundary. @returns Actual owned formula. */
+  getFormula(): ScFormulaCell {
+    if (this.maData.index !== 4) throw new TypeError("bad_variant_access");
+    return this.maData.value;
+  }
+  /** Original document assignment clears then copies current real content;formula cells are cloned and remain detached. @param rDoc - Source document. @param rPos - Source cell. @returns Nothing. */
+  assign(rDoc: ScDocument, rPos: ScAddress): void {
+    this.clear();
+    const value = new ScCellValue(new ScRefCellValue(rDoc, rPos));
+    this.maData = value.maData;
+    value.reset_to_empty();
+  }
+  /** Original document commit copies owned content. The current kernel literal text setter implements native SetString/setTextInput's plain-text branch;rich text and number formats remain unsupported. @param rDoc - Destination document. @param rPos - Destination cell. @returns Nothing. */
+  commit(rDoc: ScDocument, rPos: ScAddress): void {
+    switch (this.getType()) {
+      case CellType.CELLTYPE_STRING:
+        rDoc.SetTextCell(rPos, this.getSharedString().getString());
+        break;
+      case CellType.CELLTYPE_VALUE:
+        rDoc.SetValue(rPos, this.getDouble());
+        break;
+      case CellType.CELLTYPE_FORMULA:
+        rDoc.SetFormulaCell(rPos, this.getFormula().Clone());
+        break;
+      default:
+        rDoc.SetEmptyCell(rPos);
+    }
+  }
+  /** Original document release transfers formula ownership and empties this value;strings still copy through literal text input. @param rDoc - Destination document. @param rPos - Cell. @returns Nothing. */
+  release(rDoc: ScDocument, rPos: ScAddress): void {
+    switch (this.getType()) {
+      case CellType.CELLTYPE_STRING:
+        rDoc.SetTextCell(rPos, this.getSharedString().getString());
+        break;
+      case CellType.CELLTYPE_VALUE:
+        rDoc.SetValue(rPos, this.getDouble());
+        break;
+      case CellType.CELLTYPE_FORMULA:
+        rDoc.SetFormulaCell(rPos, this.getFormula());
+        break;
+      default:
+        rDoc.SetEmptyCell(rPos);
+    }
+    if (this.maData.index === 2) this.maData.value.dispose();
+    this.reset_to_empty();
   }
   /** Original emptiness depends on the variant tag, not string content or numeric value. @returns Empty-cell predicate. */
   isEmpty(): boolean {

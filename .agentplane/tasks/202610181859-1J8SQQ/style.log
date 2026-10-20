@@ -1,0 +1,5 @@
+{"command":"prettier","args":["--check","apps/office/e2e/foundation.spec.ts","apps/office/e2e/shared/launcher.spec.ts","apps/office/e2e/writer-dialog-layout.spec.ts"]}
+Checking formatting...
+All matched files use Prettier code style!
+{"command":"eslint","args":["apps/office/e2e/foundation.spec.ts","apps/office/e2e/shared/launcher.spec.ts","apps/office/e2e/writer-dialog-layout.spec.ts","--max-warnings","0"]}
+Touched checks passed for 3 non-task paths.

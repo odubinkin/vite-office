@@ -201,7 +201,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
     first.select.focus();
     fireEvent.change(first.select, { target: { value: "OwnedB" } });
     expect(first.editor.contains(document.activeElement)).toBe(true);
-    fireEvent.click(first.frame.getByRole("button", { name: "Insert" }));
+    fireEvent.click(first.frame.getByRole("menuitem", { name: "Insert" }));
     fireEvent.click(first.frame.getByRole("menuitem", { name: "Hyperlink…" }));
     const url = first.frame.getByRole("textbox", { name: "URL" });
     expect(url).toHaveFocus();

@@ -1,0 +1,34 @@
+{
+  "restoredFormula": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"2\",\n  \"b1\": \"6\",\n  \"formula\": \"=A1*3\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,b1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"B1\\\\\"]\")?.textContent,formula:document.querySelector(\"[aria-label=\\\\\"Input line\\\\\"]\")?.value})');\n```"
+      }
+    ]
+  },
+  "recalculated": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"4\",\n  \"b1\": \"12\",\n  \"redoDisabled\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,b1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"B1\\\\\"]\")?.textContent,redoDisabled:document.querySelector(\"button[aria-label=\\\\\"Redo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  },
+  "undone": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"2\",\n  \"b1\": \"6\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,b1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"B1\\\\\"]\")?.textContent})');\n```"
+      }
+    ]
+  },
+  "redone": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"4\",\n  \"b1\": \"12\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,b1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"B1\\\\\"]\")?.textContent})');\n```"
+      }
+    ]
+  }
+}

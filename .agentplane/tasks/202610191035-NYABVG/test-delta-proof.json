@@ -1,0 +1,132 @@
+{
+  "existingFilesChecked": 21,
+  "newSupportHelper": "Actual visible root/More controls and two physical mouse movements;no force,sleep,model writes or assertion removal.",
+  "files": [
+    {
+      "file": "apps/office/e2e/writer-dialog-layout.spec.ts",
+      "existingAssertionCalls": 28,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-menu-alignment.spec.ts",
+      "existingAssertionCalls": 8,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-column-commands.spec.ts",
+      "existingAssertionCalls": 14,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-list-context.spec.ts",
+      "existingAssertionCalls": 36,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-none-numbering.spec.ts",
+      "existingAssertionCalls": 32,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-row-commands.spec.ts",
+      "existingAssertionCalls": 12,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+      "existingAssertionCalls": 30,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-table-column-page.spec.ts",
+      "existingAssertionCalls": 50,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/e2e/writer-native-table-selection-commands.spec.ts",
+      "existingAssertionCalls": 12,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/framework/browser/app/desktop.test.tsx",
+      "existingAssertionCalls": 218,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+      "existingAssertionCalls": 36,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+      "existingAssertionCalls": 22,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+      "existingAssertionCalls": 22,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "existingAssertionCalls": 54,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx",
+      "existingAssertionCalls": 34,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+      "existingAssertionCalls": 38,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+      "existingAssertionCalls": 20,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+      "existingAssertionCalls": 28,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+      "existingAssertionCalls": 26,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+      "existingAssertionCalls": 26,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+      "existingAssertionCalls": 70,
+      "assertionsExactlyPreserved": true,
+      "timeoutAndSkipCallsPreserved": true
+    }
+  ]
+}

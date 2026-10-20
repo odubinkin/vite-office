@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "font-family-values",
     "capabilityIds": [
-      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/xmloff/source/text/txtparae.types.ts",
-        "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)"
+        "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)",
+        "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+        "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts"
       ],
-      "justification": "Type-only browser neutral character handoff and complete font callback, shared with the actual text exporter; not claimed to be a native named struct or provider. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
+      "justification": "Type-only browser neutral character handoff and complete font callback, shared with the actual text exporter; not claimed to be a native named struct or provider. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine. Task1KGJBF connects native Calc Bold/Italic/Underline slots through the actual shared Writer command controls to real script-specific weight/posture and underline items,selection state,attribute undo and cell painting. Shared xmloff weight/posture/underline/color handlers retain actual Any,source maps,failed conversion,merge order and consumed unit-converter contracts. Writer text filters now preserve native independent script scalars,font metadata and exact underline style/color instead of browser booleans;automatic-style keys include every represented field,and insertion fragments retain actual native items. Original Writer underline-color ContextFilter suppression is retained. Shared literal underline Worker transport preserves style and packed alpha/color using the real pool;unported complex interface state rejects rather than silently flattening. Native source full constructors,UNO property-set/service/factory graph,complex color XML/Worker transport,rich-text editing,script/device layout,named Calc styles and complete UI/filter parity remain unverified. Source-based managed tests are not a compiled native parity certificate;intentional browser primary-save/open/no-recovery policy remains. Bounded managed verification is recorded in task1KGJBF;no broad parity flags are promoted.",
       "knownViolations": [],
       "localSymbols": [
         "OdfCharacterProperties",

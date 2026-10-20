@@ -3,6 +3,7 @@
  * `sfx2/source/control/request.cxx`.
  */
 
+import { SfxCallMode } from "./bindings";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
@@ -12,14 +13,17 @@ import { SfxUnoAnyItem } from "../view/frame";
 /** One slot invocation with item arguments, completion state, and an optional return item. */
 export class SfxRequest {
   private done = false;
+  private arguments_: readonly SfxPoolItem[];
   private modifier = 0;
   private returnValue: SfxPoolItem | undefined;
 
-  /** Creates one request. Browser-only payloads are deliberately not part of this upstream-shaped record. @param slot - Numeric Sfx slot ID. @param arguments_ - Argument items. @returns Nothing. */
+  /** Creates one request. Browser-only payloads are deliberately not part of this upstream-shaped record. @param slot - Numeric Sfx slot ID. @param arguments_ - Argument items. @param callMode - Native execution flags. @returns Nothing. */
   public constructor(
     private readonly slot: number,
-    private readonly arguments_: readonly SfxPoolItem[] = [],
+    arguments_: readonly SfxPoolItem[] = [],
+    private readonly callMode: SfxCallMode = SfxCallMode.SYNCHRON,
   ) {
+    this.arguments_ = arguments_;
     if (!Number.isInteger(slot) || slot <= 0) throw new Error("SfxRequest slot is invalid.");
   }
 
@@ -43,10 +47,38 @@ export class SfxRequest {
     return this.modifier;
   }
 
-  /** Completes the request with an optional return item. @param returnValue - Slot return item. @returns Nothing. */
-  public Done(returnValue?: SfxPoolItem): void {
-    this.returnValue = returnValue;
+  /** Original AppendItem puts an independent concrete value,replacing an existing WhichId. The current browser argument vector represents the source SfxAllItemSet transport. @param item - Actual native item. @returns Nothing. */
+  public AppendItem(item: SfxPoolItem): void {
+    const items = [...this.arguments_],
+      index = items.findIndex(
+        /** Finds the source WhichId replacement. @param candidate - Existing native item. @returns Same identity. */ (
+          candidate,
+        ) => candidate.Which() === item.Which(),
+      ),
+      copy = item.Clone() as SfxPoolItem;
+    if (index < 0) items.push(copy);
+    else items[index] = copy;
+    this.arguments_ = items;
+  }
+  /** Original RemoveItem clears only the supplied WhichId. @param which - Native identity. @returns Nothing. */
+  public RemoveItem(which: number): void {
+    this.arguments_ = this.arguments_.filter(
+      /** Keeps other source identities. @param item - Existing item. @returns Keep. */ (item) =>
+        item.Which() !== which,
+    );
+  }
+  /** Original SetReturnValue owns an independent concrete value without completing the request;full native pool/recording services remain outside this browser bridge. @param value - Actual return item. @returns Nothing. */
+  public SetReturnValue(value: SfxPoolItem): void {
+    this.returnValue = value.Clone() as SfxPoolItem;
+  }
+  /** Original API call-mode bit query,independent of arguments. @returns Whether called by API. */
+  public IsAPI(): boolean {
+    return Boolean(this.callMode & SfxCallMode.API);
+  }
+  /** Original boolean Done overload completes the request and optionally releases arguments;return assignment is separate. @param release - Clear argument transport after completion. @returns Nothing. */
+  public Done(release = false): void {
     this.done = true;
+    if (release) this.arguments_ = [];
   }
 
   /** Reports whether execution completed. @returns Completion state. */

@@ -1,0 +1,15 @@
+[WebServer] (node:51262) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 2 workers
+
+(node:51269) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:51268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker (2.0s)
+  ✓  2 [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 1280px (13.0s)
+  ✓  3 [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 390px (12.4s)
+  ✓  4 [calc] › apps/office/e2e/calc/column-width.spec.ts:127:1 › keeps native column width/visibility/history and actual ODS in a DOM-free Worker (1.4s)
+
+  4 passed (29.4s)

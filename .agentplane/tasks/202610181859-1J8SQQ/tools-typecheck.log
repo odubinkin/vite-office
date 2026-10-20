@@ -1,0 +1,4 @@
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+

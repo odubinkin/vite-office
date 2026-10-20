@@ -16,7 +16,8 @@ describe("explicit UNO key modifiers", /** Defines real request contracts. @retu
       request = new SfxRequest(5552, [item]);
     expect(request.GetModifier()).toBe(0);
     request.SetModifier(65535);
-    request.Done(new SfxStringItem(5552, "done"));
+    request.SetReturnValue(new SfxStringItem(5552, "done"));
+    request.Done();
     expect(request.GetModifier()).toBe(65535);
     expect(request.GetArgs()).toEqual([item]);
     expect(request.GetArgs()[0]).toBe(item);

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610182355-2WD4TX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-19T00:07:56.388Z",
+  "verdict": "pass",
+  "summary": "Complete RTL Unicode formatting and actual replacement/insertion contracts meet the approved bounded source scope with100percent changed-module and Calc coverage.",
+  "evaluated_sha": "d6ca1e55634ce53464c92f752b8137ed99b6c0d7",
+  "blueprint_digest": "0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8",
+  "findings": [
+    "All8native formats and actual enum/28bit sentinel values follow pinned source;pre-round selection,half-up integer rounding,grouping,erase,exponent widths and Dragonbox ignored-zero scale are represented in one existing numeric owner. C facade uses actual SAL allocation/buffer/ref ownership,no synthetic provider.",
+    "122765genuine normal/ASanUBSan states and37026prior float buffers pass on verified138actual objects/346original sources. Native negative-F stack-allocation bug is independently reproduced as expected SIGABRT/ASan,retained with exact input and conservatively excluded from returned-output observations without sanitizer weakening.",
+    "WholeCalc299/raw100,related16files41cases/raw100 S287 B297 F12 L252,formula32,types/finalbuild/static/style/docs/dependencies/provenance/scopedinventories/doctor/routing pass.15intentional paths,clean implementation commit d6ca1e55634c,no validators or thresholds changed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610182355-2WD4TX/README.md",
+    ".agentplane/tasks/202610182355-2WD4TX/verification.md",
+    ".agentplane/tasks/202610182355-2WD4TX/native-build-summary.json",
+    ".agentplane/tasks/202610182355-2WD4TX/native-isolated-stack-overflow.log",
+    ".agentplane/tasks/202610182355-2WD4TX/coverage-summary.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Bounded observations do not certify exhaustive binary64/host shortest/Dragonbox equivalence,native ABI or undefined upstream allocation behavior. OUStringBuffer,axis serialization and real item/pool/UI integration remain pending;overall goal active,next full regression30."
+  ]
+}

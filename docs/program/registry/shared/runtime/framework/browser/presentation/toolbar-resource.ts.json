@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "source-ui-resources",
+    "capabilityIds": [
+      "CAP-00aaebb2-10cf-4f9c-b8c4-ef2bc3fc3caa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+        "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts"
+      ],
+      "justification": "Extracts the existing Writer toolbar separator normalization unchanged into a shared office module consumed by Writer and Calc. Removes orphaned separators after native visibility/availability filtering without changing command order.",
+      "knownViolations": [],
+      "localSymbols": [
+        "normalizeToolbarItems"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,4 +1,11 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import {
+  createCharacterFormatItems,
+  createFontHeightItems,
+  createCharacterColorItems,
+} from "../../core/txtnode/ndhints-font";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
@@ -31,7 +38,6 @@ import {
 import { SwPosition, getWriterSelectedTextRange, type WriterTextRange } from "../../core/crsr/pam";
 import type { WriterCharacterFormat, WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import {
-  createWriterCharacterItemSet,
   projectWriterCharacterAttributes,
   type WriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
@@ -122,6 +128,12 @@ export interface WriterParagraphFormatValue {
 }
 /** Dedicated text context shell owning its execute/state registration. */
 export class SwTextShell {
+  /** Applies only the requested native pending item delta. @param items - Complete changed values. @returns Nothing. */
+  private ApplyPendingCharacterItems(items: readonly SfxPoolItem[]): void {
+    const pending = this.target.GetPendingCharacterItems().Clone();
+    for (const item of items) pending.Put(item);
+    this.target.SetPendingCharacterItems(pending);
+  }
   private readonly shell: SfxShell;
   /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
   public constructor(
@@ -176,11 +188,8 @@ export class SwTextShell {
     }
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
-    this.target.SetPendingCharacterItems(
-      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
-        ...this.GetPendingCharacterAttributes(),
-        [format]: this.GetCharacterFormatState(format) !== "on",
-      }),
+    this.ApplyPendingCharacterItems(
+      createCharacterFormatItems(format, this.GetCharacterFormatState(format) !== "on"),
     );
     if (selected === undefined || selected.length === 0) {
       if (this.target.GetCursor().HasMark()) this.target.NotifySelectionChanged();
@@ -355,17 +364,24 @@ export class SwTextShell {
   }
 
   /** Applies a font family through one text-shell history action. @param fontFamily - Requested family. @returns Whether changed. */
-  public SetFontFamily(fontFamily: string): boolean {
-    const family = fontFamily.trim();
-    if (family.length === 0) throw new Error("Writer font family must not be blank.");
+  public SetFontFamily(fontFamily: string | SvxFontItem): boolean {
+    const family = typeof fontFamily === "string" ? fontFamily.trim() : fontFamily;
+    if (typeof family === "string" && family.length === 0)
+      throw new Error("Writer font family must not be blank.");
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
-    this.target.SetPendingCharacterItems(
-      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
-        ...this.GetPendingCharacterAttributes(),
-        fontFamily: family,
-      }),
-    );
+    const pending = this.target.GetPendingCharacterItems().Clone();
+    const font =
+      family instanceof SvxFontItem
+        ? family
+        : new SvxFontItem(pending.Get(RES_CHRATR_FONT) as SvxFontItem);
+    if (typeof family === "string") font.SetFamilyName(family);
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+      const item = font.Clone();
+      item.SetWhich(which);
+      pending.Put(item);
+    }
+    this.target.SetPendingCharacterItems(pending);
     if (selected === undefined || selected.length === 0) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
@@ -394,12 +410,7 @@ export class SwTextShell {
       throw new Error("Writer font size must be a positive value representable in twips.");
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
-    this.target.SetPendingCharacterItems(
-      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
-        ...this.GetPendingCharacterAttributes(),
-        fontSizeTwips,
-      }),
-    );
+    this.ApplyPendingCharacterItems(createFontHeightItems(fontSizeTwips));
     if (selected === undefined || selected.length === 0) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
@@ -430,12 +441,7 @@ export class SwTextShell {
       throw new Error("Writer color must be a six-digit hex value or its automatic marker.");
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
-    this.target.SetPendingCharacterItems(
-      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
-        ...this.GetPendingCharacterAttributes(),
-        [property]: value,
-      }),
-    );
+    this.ApplyPendingCharacterItems(createCharacterColorItems(property, value));
     if (selected === undefined || selected.length === 0) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();

@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-character-format.test.tsx
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-character-format.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  22:01:34
+   Duration  4.67s (transform 1.64s, setup 150ms, import 2.03s, tests 1.14s, environment 847ms)
+

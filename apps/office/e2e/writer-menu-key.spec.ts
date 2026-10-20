@@ -8,11 +8,11 @@ test("F10 activates the first Writer root without opening and closes its keyboar
   const editor = page.getByLabel("Writer document body", { exact: true });
   await editor.focus();
   await page.keyboard.press("F10");
-  const first = page.getByRole("button", { name: "File", exact: true });
+  const first = page.getByRole("menuitem", { name: "File", exact: true });
   await expect(first).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);
   await first.press("ArrowRight");
-  const edit = page.getByRole("button", { name: "Edit", exact: true });
+  const edit = page.getByRole("menuitem", { name: "Edit", exact: true });
   await expect(edit).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);
   await edit.press("ArrowDown");
@@ -36,7 +36,7 @@ test("repeated F10 restores a saved Writer toolbar owner", /** Checks a no-popup
   const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
   await owner.focus();
   await page.keyboard.press("F10");
-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
+  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
   await page.keyboard.press("F10");
   await expect(owner).toBeFocused();
 });
@@ -45,7 +45,7 @@ test("F10 leaves a modal Writer Hyperlink dialog's focus untouched", /** Checks 
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Insert", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Insert", exact: true }).click();
   await page.getByRole("menuitem", { name: "Hyperlink…", exact: true }).click();
   const url = page.getByRole("textbox", { name: "URL", exact: true });
   await expect(url).toBeFocused();

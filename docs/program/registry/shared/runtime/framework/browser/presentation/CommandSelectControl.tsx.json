@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/CommandSelectControl.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0112",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/CommandSelectControl.tsx#CommandSelectControl"
+      ],
+      "justification": "Task98VCB0 shares actual Sfx select binding and typed browser argument augmentation through an injected widget render port. Lower-layer SVX widgets own rendering;Framework imports neither SVX nor VCL. State and execution remain with actual frame bindings.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CommandSelectControl"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

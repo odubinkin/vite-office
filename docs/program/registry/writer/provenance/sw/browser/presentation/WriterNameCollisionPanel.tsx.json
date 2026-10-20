@@ -8,19 +8,23 @@
         {
           "marker": "WriterNameCollisionPanel",
           "path": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "downloads actual ODS"
         }
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterNameCollisionPanel.tsx",
     "rationale": "Presents the existing browser-owned document-title collision choices shared by import and rename.",
     "responsibilities": [
-      "Collects an alternative title or forwards explicit overwrite and cancel choices to existing browser lifecycle owners."
+      "Collects an alternative title or forwards explicit overwrite and cancel choices to existing browser lifecycle owners.",
+      "Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "Browser document identity and storage collision choices follow the registered local lifecycle policy."
     },
     "status": "local-only"
-  },
-  "legacyOrder": 108
+  }
 }

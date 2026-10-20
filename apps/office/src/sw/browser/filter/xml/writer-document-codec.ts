@@ -64,6 +64,7 @@ import {
 } from "../../../source/core/doc/DocumentSettingManager";
 import {
   decodeSfxItemSet,
+  decodeSfxPoolItem,
   encodeSfxItemSet,
   decodeSwFormatINetFormatRecord,
   encodeSwFormatINetFormatRecord,
@@ -873,7 +874,8 @@ export function decodeWriterDocument(
   node.ResetAllAttr();
   node.SetListGeometryWins(nodeRecord.listGeometryWins === true);
   const direct = new SfxItemSet(document.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
-  for (const item of nodeRecord.autoAttributes) direct.Put(document.GetAttrPool().CreateItem(item));
+  for (const item of nodeRecord.autoAttributes)
+    direct.Put(decodeSfxPoolItem(document.GetAttrPool(), item));
   node.SetAttr(direct);
   if (nodeRecord.emptyListStyle === true) node.SetEmptyListStyleDueToSetOutlineLevelAttr();
   const hints = nodeRecord.hints.map(

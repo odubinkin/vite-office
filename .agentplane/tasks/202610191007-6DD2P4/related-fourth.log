@@ -1,0 +1,39 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-popup src/framework/browser/presentation/CommandMenuBar
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  8 passed (8)
+      Tests  109 passed (109)
+   Start at  17:14:16
+   Duration  8.57s (transform 5.69s, setup 870ms, import 6.86s, tests 3.63s, environment 4.59s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   97.31 |    92.88 |   96.15 |   98.33 |                   
+ ...andMenuBar.tsx |   96.67 |    91.96 |   95.23 |   97.92 | 367,377,509-516   
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 97.31% ( 326/335 )
+Branches     : 92.88% ( 261/281 )
+Functions    : 96.15% ( 75/78 )
+Lines        : 98.33% ( 295/300 )
+================================================================================
+ERROR: Coverage for lines (98.33%) does not meet global threshold (100%)
+ERROR: Coverage for functions (96.15%) does not meet global threshold (100%)
+ERROR: Coverage for statements (97.31%) does not meet global threshold (100%)
+ERROR: Coverage for branches (92.88%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-popup src/framework/browser/presentation/CommandMenuBar

@@ -1,6 +1,6 @@
 /** @fileoverview Checks original native bindings over per-parent recursive menubar popup ownership and nearest parent focus. */
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
   CommandMenuBar,
   type CommandMenuPlacement,
@@ -9,11 +9,27 @@ import { createBrowserCommandSource } from "../../../framework/browser/presentat
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import { WRITER_COMMAND_IDS as ids } from "../../uiconfig/swriter/menubar/menubar-commands";
+/** Advances original popup movement and admission over actual rendered resources. @param entry - Original menu entry. @returns Nothing. */
+function pointerAdmission(entry: HTMLElement): void {
+  fireEvent.mouseMove(entry);
+  fireEvent.mouseMove(entry);
+  act(
+    /** Commits native150ms admission. @returns Nothing. */ () => {
+      vi.advanceTimersByTime(150);
+    },
+  );
+}
+beforeEach(
+  /** Controls actual popup timers. @returns Nothing. */ () => {
+    vi.useFakeTimers();
+  },
+);
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [],
   owners: HTMLElement[] = [];
 afterEach(
   /** Ends original native frame bindings before document disposal. @returns Nothing. */ () => {
     cleanup();
+    vi.useRealTimers();
     for (const s of sessions.splice(0)) s.Close();
     for (const owner of owners.splice(0)) owner.remove();
   },
@@ -86,7 +102,7 @@ function fixture() {
     );
   }
   const mounted = render(view());
-  fireEvent.click(screen.getByRole("button", { name: "Native" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Native" }));
   return { session, owner, menus, view, ...mounted };
 }
 /** Opens one original child with ordinary browser keyboard input. @param label - Native resource label. @returns Original child popup. */
@@ -155,11 +171,11 @@ it("native nested empty admission closes its sibling subtree while retaining the
 it("native recursive pointer children retain original parent windows without preselection", /** Checks ordinary browser pointer ownership at two independent depths. @returns Nothing. */ () => {
   fixture();
   const outerTrigger = screen.getByRole("menuitem", { name: "Outer" });
-  fireEvent.mouseEnter(outerTrigger);
+  pointerAdmission(outerTrigger);
   const outer = screen.getByRole("menu", { name: "Outer menu" });
   expect(outer).toHaveFocus();
   const deepTrigger = screen.getByRole("menuitem", { name: "Deep" });
-  fireEvent.mouseEnter(deepTrigger);
+  pointerAdmission(deepTrigger);
   const deep = screen.getByRole("menu", { name: "Deep menu" });
   expect(deep).toHaveFocus();
   expect(screen.getByRole("menu", { name: "Outer menu" })).toBe(outer);
@@ -167,8 +183,10 @@ it("native recursive pointer children retain original parent windows without pre
   fireEvent.mouseLeave(deepTrigger.parentElement as HTMLElement, {
     relatedTarget: within(outer).getByRole("menuitemcheckbox", { name: "Bold" }),
   });
+  expect(deep).toBeInTheDocument();
+  pointerAdmission(within(outer).getByRole("menuitemcheckbox", { name: "Bold" }));
   expect(screen.queryByRole("menu", { name: "Deep menu" })).not.toBeInTheDocument();
-  expect(deepTrigger).toHaveFocus();
+  expect(outer).toHaveFocus();
   expect(screen.getByRole("menu", { name: "Outer menu" })).toBe(outer);
 });
 it("native recursive current child reuse and resource reprojection preserve selection", /** Checks no one-shot opening request is replayed for existing or projected windows. @returns Nothing. */ () => {

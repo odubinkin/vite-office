@@ -1,0 +1,55 @@
+{
+  "scope": "shared",
+  "capabilityCount": 177,
+  "moduleCount": 523,
+  "invariantCount": 4,
+  "globalRecordCount": 2092,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 0,
+    "classifiedDivergenceCount": 0,
+    "contractParityCount": 0,
+    "defaultParityCount": 0,
+    "differentialParityCount": 0,
+    "exceptionCount": 0,
+    "exceptions": {
+      "omittedArrayLength": 0
+    },
+    "gapCount": 300,
+    "implementedCount": 177,
+    "parityReady": false,
+    "ownershipParityCount": 0,
+    "closureEvidence": {
+      "omittedArrayLength": 0
+    },
+    "recordCount": 177,
+    "resolvedEvidence": {
+      "omittedArrayLength": 2172
+    },
+    "schemaVersion": 6,
+    "serializationParityCount": 0,
+    "scopeLimitationCount": 287,
+    "unresolvedParityCount": 177,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 0
+  },
+  "provenance": {
+    "browserAdaptationCount": 41,
+    "localInfrastructureCount": 8,
+    "mappedCount": 474,
+    "moduleCount": 523
+  },
+  "runtime": {
+    "commandCount": 0,
+    "exportedOperationCount": 709,
+    "internalOperationCount": 11,
+    "modules": {
+      "omittedArrayLength": 523
+    },
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 0
+  },
+  "originalOutputSHA256": "cef6fa0e640fac738836fb2e0f9858cf0fa61228acae1817cb96f1ab228c0ead"
+}

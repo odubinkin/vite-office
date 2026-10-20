@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-file-ui",
+    "capabilityIds": [
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx",
+        "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+        "apps/office/e2e/foundation.spec.ts",
+        "apps/office/e2e/shared/launcher.spec.ts"
+      ],
+      "justification": "Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction. TaskYDAWMM repairs actual browser accessibility defects exposed by task10 axe acceptance. Shared top-level CommandMenuBar controls retain their native HTML buttons,existing focus/keyboard/dispatch state machine and visual styling while exposing the required menuitem role. The shared Writer/Calc document title gains h1 semantics with identical text sizing and line height. Calc row/column/corner headers now contain their native selection buttons within proper header elements;corner accessible text and a valid status container complete the grid/chrome semantics. Tests migrate queries to the real menu items and native header buttons,not compatibility aliases or audit exclusions. Native command/cell/selection/input ownership is unchanged. Actual foundation/launcher axe checks and all three Writer dialog geometry viewports pass;full native UI/accessibility service parity remains unclaimed. TaskWN0H8T measures actual browser trigger geometry and projects the trailing hidden root menus into the native MenuBarWindow::ImplCreatePopup parent-popup shape. Original command trees and submenu identities are retained;shared React menu state/dispatch/focus ownership remains unchanged. This does not certify complete native VCL parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OfficeWorkspaceHeader"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

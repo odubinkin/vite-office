@@ -89,14 +89,14 @@ for (const width of [1280, 390])
       const firstMarker = ruler.getByRole("button", { name: "First line indent", exact: true });
       await expect(firstMarker).toHaveCount(1);
       const rawMarkerPosition = await firstMarker.getAttribute("style");
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
       await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue(String(raw / 20));
       await expect(dialog.getByLabel("Automatic first-line indent")).not.toBeChecked();
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       await checkLayout(wrappedPoints);
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       // The existing authoring command admits signed16 values only. Choose
       // a valid new draft; Undo must restore the complete imported raw item.

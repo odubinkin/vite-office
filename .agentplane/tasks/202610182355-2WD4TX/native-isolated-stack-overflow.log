@@ -1,0 +1,43 @@
+Original undefined input:F,value=1e14,places=-15,groups={1,0},decimal=period,group=comma,erase=false
+=================================================================
+==41376==ERROR: AddressSanitizer: dynamic-stack-buffer-overflow on address 0x00016bba2170 at pc 0x000104265e88 bp 0x00016bba2110 sp 0x00016bba2108
+WRITE of size 2 at 0x00016bba2170 thread T0
+    #0 0x000104265e84 in void rtl::str::doubleToString<_rtl_uString>(_rtl_uString**, int*, int, double, rtl_math_StringFormat, int, __remove_extent(decltype(_rtl_uString::buffer)), int const*, __remove_extent(decltype(_rtl_uString::buffer)), bool) strtmpl.hxx:1667
+    #1 0x00010426288c in rtl_math_doubleToUString math.cxx:162
+    #2 0x00010425de40 in main driver.cpp:44
+    #3 0x0001895c7e7c in start+0x1a1c (dyld:arm64e+0x31e7c)
+
+Address 0x00016bba2170 is located in stack of thread T0
+SUMMARY: AddressSanitizer: dynamic-stack-buffer-overflow strtmpl.hxx:1667 in void rtl::str::doubleToString<_rtl_uString>(_rtl_uString**, int*, int, double, rtl_math_StringFormat, int, __remove_extent(decltype(_rtl_uString::buffer)), int const*, __remove_extent(decltype(_rtl_uString::buffer)), bool)
+Shadow bytes around the buggy address:
+  0x00016bba1e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba1f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba1f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x00016bba2100: 00 00 00 00 ca ca ca ca 00 00 00 00 00 00[cb]cb
+  0x00016bba2180: cb cb cb cb 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016bba2380: f1 f1 f1 f1 00 f2 f2 f2 f8 f8 f8 f8 f8 f8 f8 f8
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==41376==ABORTING

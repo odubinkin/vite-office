@@ -1,0 +1,14 @@
+{
+  "apps/office/src/framework/browser/presentation/CommandToolbar.tsx": "edfe6e8914c0a4275775f733576e1a4d305da768b174313616ea18fc18ab7e24",
+  "apps/office/src/sax/source/tools/converter.ts": "be892a56e3e095c3f1a78e5cbac3855f51dbc2783e6c98e70f851b4d58d2836a",
+  "apps/office/src/sfx2/inc/namedcolor.ts": "e1bdba7f354be6f0bf6d38d5b4b4bb550cbd56fe0df3f78241883a173834ea4c",
+  "apps/office/src/sfx2/source/doc/objsh.ts": "87d641b3797877d6263cb569d7cd3786067e12f01c76f943b0bc1d0e67211385",
+  "apps/office/src/svx/browser/tbxctrls/ColorControl.tsx": "5127ebbfe0cd7f2e0b4eb5066ba72e54d279836d84129b9de300257c5603fc93",
+  "apps/office/src/svx/browser/tbxctrls/ColorSelect.tsx": "5e9be295c5ff8a7059c5f7c868e6f2422d7e0239defb48ee6344a57b0868e571",
+  "apps/office/src/svx/browser/tbxctrls/color-item.ts": "58b67ed6946ce3ebfe45963a6ebb8cb9e22cc159405fc9fcfc9d16afbc13a04a",
+  "apps/office/src/svx/inc/xdef.ts": "5a067b4b655ef69566d8f0b172feb96d70a5eda661c70b9b567292e915ed0f90",
+  "apps/office/src/sw/browser/presentation/WriterColorControl.tsx": "20be9d29ffbd1108b79ae91cb6b2d0c8e7cd99ca1f815ce9c1c6c11af7465a9b",
+  "apps/office/src/sw/source/uibase/app/docsh.ts": "eabde85d1d7dd562a3be19288af17a4c4a66f6e1f34b464db54d694c8b74755f",
+  "apps/office/src/vcl/browser/color.ts": "15e858fc60902297d7eab3fc0a8903606802136e2c443935f153b34f846c8c49",
+  "apps/office/src/xmloff/source/style/xmlbahdl.ts": "ec8ead0d8ae5d63312550876e4c74728cb108080862aaffa52bb4207fc9a9032"
+}

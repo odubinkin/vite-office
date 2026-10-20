@@ -67,7 +67,7 @@ for (const width of [1280, 390]) {
     });
     const openParagraph =
       /** Opens the existing formatting controller through its upstream menu placement. @returns Completion. */ async () => {
-        await page.getByRole("button", { name: "Format", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
         await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
         return page.getByRole("dialog", { name: "Paragraph", exact: true });
       };

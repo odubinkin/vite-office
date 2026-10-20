@@ -78,7 +78,7 @@ test("Writer imported restarted table row Add to List preserves both starts and 
   await expect(secondMarker).toHaveText("11.");
   await selectBrowserTableRow(page, "RestartRow", 2);
   await expect(rendered.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitem", { name: "Add to List", exact: true }).click();
   await expect(firstMarker).toHaveText("2.");

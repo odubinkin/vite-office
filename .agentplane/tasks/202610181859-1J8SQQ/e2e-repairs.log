@@ -1,0 +1,2094 @@
+[WebServer] (node:27919) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+(node:27922) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27923) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (10.2s)
+  ✓  1 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 1280x800 (11.6s)
+(node:27961) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session (3.8s)
+(node:28194) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [shared] › apps/office/e2e/shared/launcher.spec.ts:21:1 › shared launcher handles unknown application routes (449ms)
+  ✓  3 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 390x600 (6.9s)
+  ✓  6 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 640x360 (6.1s)
+
+
+  1) [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -    1
+    + Received  + 1003
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure role attribute has an appropriate value for the element",
+    +     "help": "ARIA role should be appropriate for the element",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-allowed-role?application=playwright",
+    +     "id": "aria-allowed-role",
+    +     "impact": "minor",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-label=\"Select all cells\" class=\"sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50\" style=\"width: 48px; height: 22px;\"></button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".z-\\[11\\]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"2\" aria-label=\"Column A\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 48px; width: 96px; height: 22px;\">A</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column A\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"3\" aria-label=\"Column B\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 144px; width: 96px; height: 22px;\">B</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column B\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"4\" aria-label=\"Column C\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 240px; width: 96px; height: 22px;\">C</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column C\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"5\" aria-label=\"Column D\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 336px; width: 96px; height: 22px;\">D</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column D\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"6\" aria-label=\"Column E\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 432px; width: 96px; height: 22px;\">E</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column E\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"7\" aria-label=\"Column F\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 528px; width: 96px; height: 22px;\">F</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column F\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"8\" aria-label=\"Column G\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 624px; width: 96px; height: 22px;\">G</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column G\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"9\" aria-label=\"Column H\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 720px; width: 96px; height: 22px;\">H</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column H\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"10\" aria-label=\"Column I\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 816px; width: 96px; height: 22px;\">I</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column I\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"11\" aria-label=\"Column J\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 912px; width: 96px; height: 22px;\">J</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column J\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"12\" aria-label=\"Column K\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1008px; width: 96px; height: 22px;\">K</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column K\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"13\" aria-label=\"Column L\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1104px; width: 96px; height: 22px;\">L</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column L\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"14\" aria-label=\"Column M\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1200px; width: 96px; height: 22px;\">M</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column M\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 1\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">1</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 1\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 2\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">2</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 2\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 3\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">3</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 3\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 4\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">4</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 4\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 5\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">5</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 5\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 6\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">6</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 6\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 7\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">7</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 7\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 8\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">8</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 8\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 9\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">9</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 9\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 10\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">10</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 10\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 11\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">11</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 11\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 12\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">12</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 12\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 13\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">13</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 13\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 14\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">14</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 14\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 15\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">15</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 15\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 16\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">16</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 16\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 17\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">17</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 17\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 18\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">18</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 18\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 19\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">19</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 19\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 20\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">20</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 20\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 21\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">21</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 21\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 22\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">22</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 22\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "status",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role status is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role status is not allowed for given element",
+    +         "html": "<footer role=\"status\" aria-label=\"Calc status bar\" class=\"flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300\"><span>Sheet 1 of 1</span><span>A1</span><span class=\"ml-auto\">Ready</span></footer>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "footer",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.aria",
+    +       "best-practice",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure elements with an ARIA role that require child roles contain them",
+    +     "help": "Certain ARIA roles must contain particular children",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-required-children?application=playwright",
+    +     "id": "aria-required-children",
+    +     "impact": "critical",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "messageKey": "unallowed",
+    +               "values": "button[aria-controls]",
+    +             },
+    +             "id": "aria-required-children",
+    +             "impact": "critical",
+    +             "message": "Element has children which are not allowed: button[aria-controls]",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:PickList-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"0\" type=\"button\">File</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:PickList-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:EditMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Edit</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:EditMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:ViewMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">View</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:ViewMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:InsertMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Insert</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:InsertMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:FormatMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Format</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:FormatMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:FormatStylesMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Styles</button>",
+    +                 "target": Array [
+    +                   ".relative:nth-child(6) > .font-medium.hover\\:bg-slate-100[aria-haspopup=\"menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:SheetMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Sheet</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:SheetMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:DataMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Data</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:DataMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:ToolsMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Tools</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:ToolsMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:WindowList-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Window</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:WindowList-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:HelpMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Help</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:HelpMenu-menu\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has children which are not allowed: button[aria-controls]",
+    +         "html": "<div aria-label=\"Calc menu\" class=\"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100\" role=\"menubar\">",
+    +         "impact": "critical",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".\\[\\&_\\[data-popup-highlighted\\]\\]\\:bg-slate-100",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.aria",
+    +       "wcag2a",
+    +       "wcag131",
+    +       "EN-301-549",
+    +       "EN-9.1.3.1",
+    +       "RGAAv4",
+    +       "RGAA-9.3.1",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure table headers have discernible text",
+    +     "help": "Table header text should not be empty",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/empty-table-header?application=playwright",
+    +     "id": "empty-table-header",
+    +     "impact": "minor",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "has-visible-text",
+    +             "impact": "minor",
+    +             "message": "Element does not have text that is visible to screen readers",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element does not have text that is visible to screen readers",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-label=\"Select all cells\" class=\"sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50\" style=\"width: 48px; height: 22px;\"></button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".z-\\[11\\]",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.name-role-value",
+    +       "best-practice",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+    +     "help": "Page should contain a level-one heading",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/page-has-heading-one?application=playwright",
+    +     "id": "page-has-heading-one",
+    +     "impact": "moderate",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "page-has-heading-one",
+    +             "impact": "moderate",
+    +             "message": "Page must have a level-one heading",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "any": Array [],
+    +         "failureSummary": "Fix all of the following:
+    +   Page must have a level-one heading",
+    +         "html": "<html lang=\"en\">",
+    +         "impact": "moderate",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "html",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.semantics",
+    +       "best-practice",
+    +     ],
+    +   },
+    + ]
+
+      264 |
+      265 |   const accessibilityResults = await new AxeBuilder({ page }).analyze();
+    > 266 |   expect(accessibilityResults.violations).toEqual([]);
+          |                                           ^
+      267 | });
+      268 |
+        at verifyStaticFoundation (/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/foundation.spec.ts:266:43)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -    1
+    + Received  + 1003
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure role attribute has an appropriate value for the element",
+    +     "help": "ARIA role should be appropriate for the element",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-allowed-role?application=playwright",
+    +     "id": "aria-allowed-role",
+    +     "impact": "minor",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-label=\"Select all cells\" class=\"sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50\" style=\"width: 48px; height: 22px;\"></button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".z-\\[11\\]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"2\" aria-label=\"Column A\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 48px; width: 96px; height: 22px;\">A</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column A\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"3\" aria-label=\"Column B\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 144px; width: 96px; height: 22px;\">B</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column B\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"4\" aria-label=\"Column C\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 240px; width: 96px; height: 22px;\">C</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column C\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"5\" aria-label=\"Column D\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 336px; width: 96px; height: 22px;\">D</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column D\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"6\" aria-label=\"Column E\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 432px; width: 96px; height: 22px;\">E</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column E\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"7\" aria-label=\"Column F\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 528px; width: 96px; height: 22px;\">F</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column F\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"8\" aria-label=\"Column G\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 624px; width: 96px; height: 22px;\">G</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column G\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"9\" aria-label=\"Column H\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 720px; width: 96px; height: 22px;\">H</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column H\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"10\" aria-label=\"Column I\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 816px; width: 96px; height: 22px;\">I</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column I\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"11\" aria-label=\"Column J\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 912px; width: 96px; height: 22px;\">J</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column J\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"12\" aria-label=\"Column K\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1008px; width: 96px; height: 22px;\">K</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column K\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"13\" aria-label=\"Column L\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1104px; width: 96px; height: 22px;\">L</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column L\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "columnheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role columnheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role columnheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-colindex=\"14\" aria-label=\"Column M\" class=\"absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"left: 1200px; width: 96px; height: 22px;\">M</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Column M\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 1\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">1</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 1\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 2\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">2</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 2\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 3\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">3</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 3\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 4\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">4</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 4\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 5\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">5</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 5\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 6\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">6</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 6\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 7\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">7</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 7\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 8\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">8</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 8\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 9\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">9</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 9\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 10\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">10</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 10\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 11\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">11</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 11\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 12\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">12</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 12\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 13\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">13</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 13\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 14\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">14</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 14\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 15\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">15</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 15\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 16\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">16</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 16\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 17\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">17</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 17\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 18\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">18</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 18\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 19\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">19</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 19\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 20\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">20</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 20\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 21\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">21</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 21\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "rowheader",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role rowheader is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role rowheader is not allowed for given element",
+    +         "html": "<button type=\"button\" role=\"rowheader\" aria-colindex=\"1\" aria-label=\"Row 22\" class=\"sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal\" style=\"width: 48px; height: 22px;\">22</button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "button[aria-label=\"Row 22\"]",
+    +         ],
+    +       },
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "status",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role status is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role status is not allowed for given element",
+    +         "html": "<footer role=\"status\" aria-label=\"Calc status bar\" class=\"flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300\"><span>Sheet 1 of 1</span><span>A1</span><span class=\"ml-auto\">Ready</span></footer>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "footer",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.aria",
+    +       "best-practice",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure elements with an ARIA role that require child roles contain them",
+    +     "help": "Certain ARIA roles must contain particular children",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-required-children?application=playwright",
+    +     "id": "aria-required-children",
+    +     "impact": "critical",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Object {
+    +               "messageKey": "unallowed",
+    +               "values": "button[aria-controls]",
+    +             },
+    +             "id": "aria-required-children",
+    +             "impact": "critical",
+    +             "message": "Element has children which are not allowed: button[aria-controls]",
+    +             "relatedNodes": Array [
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:PickList-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"0\" type=\"button\">File</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:PickList-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:EditMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Edit</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:EditMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:ViewMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">View</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:ViewMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:InsertMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Insert</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:InsertMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:FormatMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Format</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:FormatMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:FormatStylesMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Styles</button>",
+    +                 "target": Array [
+    +                   ".relative:nth-child(6) > .font-medium.hover\\:bg-slate-100[aria-haspopup=\"menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:SheetMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Sheet</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:SheetMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:DataMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Data</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:DataMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:ToolsMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Tools</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:ToolsMenu-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:WindowList-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Window</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:WindowList-menu\"]",
+    +                 ],
+    +               },
+    +               Object {
+    +                 "html": "<button aria-controls=\"calc-menu-.uno:HelpMenu-menu\" aria-expanded=\"false\" aria-haspopup=\"menu\" class=\"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100\" tabindex=\"-1\" type=\"button\">Help</button>",
+    +                 "target": Array [
+    +                   "button[aria-controls=\"calc-menu-.uno:HelpMenu-menu\"]",
+    +                 ],
+    +               },
+    +             ],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element has children which are not allowed: button[aria-controls]",
+    +         "html": "<div aria-label=\"Calc menu\" class=\"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100\" role=\"menubar\">",
+    +         "impact": "critical",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".\\[\\&_\\[data-popup-highlighted\\]\\]\\:bg-slate-100",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.aria",
+    +       "wcag2a",
+    +       "wcag131",
+    +       "EN-301-549",
+    +       "EN-9.1.3.1",
+    +       "RGAAv4",
+    +       "RGAA-9.3.1",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure table headers have discernible text",
+    +     "help": "Table header text should not be empty",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/empty-table-header?application=playwright",
+    +     "id": "empty-table-header",
+    +     "impact": "minor",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "has-visible-text",
+    +             "impact": "minor",
+    +             "message": "Element does not have text that is visible to screen readers",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element does not have text that is visible to screen readers",
+    +         "html": "<button type=\"button\" role=\"columnheader\" aria-label=\"Select all cells\" class=\"sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50\" style=\"width: 48px; height: 22px;\"></button>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           ".z-\\[11\\]",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.name-role-value",
+    +       "best-practice",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+    +     "help": "Page should contain a level-one heading",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/page-has-heading-one?application=playwright",
+    +     "id": "page-has-heading-one",
+    +     "impact": "moderate",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "page-has-heading-one",
+    +             "impact": "moderate",
+    +             "message": "Page must have a level-one heading",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "any": Array [],
+    +         "failureSummary": "Fix all of the following:
+    +   Page must have a level-one heading",
+    +         "html": "<html lang=\"en\">",
+    +         "impact": "moderate",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "html",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.semantics",
+    +       "best-practice",
+    +     ],
+    +   },
+    + ]
+
+      16 |   await expect(page.getByRole("region", { name: "Calc workspace" })).toBeVisible();
+      17 |   await expect(page.getByRole("region", { name: "Writer workspace" })).toHaveCount(0);
+    > 18 |   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+         |                                                                 ^
+      19 | });
+      20 |
+      21 | test("shared launcher handles unknown application routes", /** Checks the fallback route. @param fixtures - Browser fixtures. @param fixtures.page - Isolated page. @returns Completion of fallback assertions. */ async ({
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/launcher.spec.ts:18:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome 
+    [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session 
+  4 passed (27.6s)

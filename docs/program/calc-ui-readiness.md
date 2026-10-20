@@ -1,13 +1,61 @@
 # Calc UI and ODS implementation critical path
 
-Priority correction (task198, explicit user direction): deliver a minimal
-canonical core ready for a separate editable UI task and basic ODS import/export
-before pursuing broad kernel parity. UI implementation is outside this stage.
-Source fidelity applies to supported operations and
-module boundaries; it does not require completing every dependency's entire
-API or the full native constructor graph before UI work can begin. The
-language/font prerequisite ordering below is superseded by the implementation
-order in this document. Task197 normal LanguageTag expansion is deferred.
+## Current UI delivery priority — task46 column geometry
+
+Task `202610200120-RV75WR` implements native Column Width,Hide Columns and Show Columns
+through shared Writer menus and dialog presentation. Compressed widths default to1280twips;
+hidden columns retain their stored width. Actual geometry owns grid/header positions,bounded
+scrolling and keyboard skipping. Real geometry undo documents preserve the original grouped
+sheets without resetting cell marks or cursor. Typed HMM requests,optional one-based columns,
+two-decimal metric/default behavior and separate even-HMM recording requests follow source.
+ODS imports/exports actual repeated column styles and visibility,including native signed-width
+narrowing. Device-dependent optimal widths remain unavailable.
+
+The common request separates SetReturnValue from Done;both dispatch adapters and the actual
+Writer style caller use the corrected contract. Shared VCL numeric fields reuse native unit
+conversion,RTL trim/number parsing and pinned Unicode classification. The complete character
+type/alpha/control scalar protocol matches unchanged native ICU78.3 and LibreOffice bodies.
+This does not certify complete native widgets,UNO transforms,macro recording or application parity.
+
+Task46 verification and exact raw/current-owner/browser evidence live in its task README and
+`evidence/`. Full all-app checkpoint40 remains the last broad run;the next is50. Existing primary
+save/open/no-recovery policies remain. Next UI work can use actual column widths for indentation;
+row-height controls and remaining feasible native commands remain further work.
+
+## Historical task37 delivery priority
+
+Task 37 (`202610191738-6PMYVV`) connects the actual shared Writer font-family selector to
+Calc's native CharFontName slot, independent Latin/Asian/Complex font items, selection state,
+attribute history and ODS declarations. Shared and Writer operations retain all five font
+fields through selection, pending input, typing and paste. The browser font fallback renderer
+now belongs to shared VCL. Pinned ICU78.3 data and consumed script algorithms replace host
+Unicode assumptions; their compiled scalar witness covers every Unicode codepoint.
+
+The current Calc gate passes 120 files / 353 cases at raw S/B/F/L 100%; related modules pass
+271 files / 11,822 cases with all 37 changed executable owners covered at 100%. The fresh
+build passes 19 browser cases, including real ODS import in page and Worker. Shared font
+controls and inspected screenshots cover widths 1280 and 390. Final raw evidence and source
+hashes are retained in the task. Font-family joins the existing shared
+font-size, Bold/Italic/Underline controls and native underline variants. Further feasible
+formatting actions and wider UI delivery remain pending. Named/master style application,
+embedded fonts, full device metrics and rich cell layout remain explicitly unported.
+
+Explicit user direction (task33):connect every UI action already supported by the current
+Calc kernel,with fonts,styles and formatting as priority. Reuse the actual Writer browser
+components and shared command bindings. New core work must close a concrete visible action
+gap;do not continue a broad codec,language or constructor prerequisite programme first.
+Source fidelity applies to the supported operations and their real model ownership;it does not
+require completing every dependency API or the complete native constructor graph before UI work.
+
+Historical evidence anchor: `Priority correction (task198, explicit user direction)`
+introduced the minimal editable-core/basic-ODS delivery stage. That stage has since produced
+the current workspace;its earlier restriction on UI scheduling is superseded by the active
+UI delivery priority above. Historical capability records retain this anchor as evidence.
+
+The current editable workspace and same-model basic ODS load/save already exist. The historical
+constructor and font-dependency audit below is background,not a mandatory scheduling checklist.
+The complete UI/core goal remains active;neither all generated menu entries nor full formatting
+behavior has been implemented.
 
 Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166 and actual shared string pool by task167 and the eager shared named-style index by task168.
 Reference: local LibreOffice commit
@@ -29,14 +77,28 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 ## Current conclusion
 
-An editable Calc UI and same-model ODS import/export are not ready. This is a
-delivery gap,not a reason to postpone starting their minimal implementation.
-The document/sheet/column chain and scalar/numeric formula operations now
-exist. Local cell references and dependency updates are implemented in task201.
-Formula serialization and basic same-model ODS remain the next delivery gap.
-Full functions/ranges, localization and native constructor services belong to
-later scope unless a supported basic operation directly requires them. No meaningful percentage, task count or delivery date
-follows from the number of ported declarations.
+The generated command inventory is an implementation inventory,not a completion percentage.
+Session tests record registrations and default enabled states;empty history and a
+single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
+
+| UI action group | Current path | Next concrete work |
+| --- | --- | --- |
+| Scalar/formula input and history | Canonical ScDocument/ScColumn stores,input handler and shared undo actions;editable grid/formula line | Expand only actual supported cell editing operations and preserve same-model undo/ODS |
+| Open,Save As,Export | Existing Calc file workflows over shared browser storage/dialog and same-model basic ODS | Continue Writer browser save/recovery policy;do not restore native recovery UI |
+| Sheet navigation,grouping,Go to Sheet | Real Sfx slots and current ScTabView/ScMarkData;shared menus and tab popup | Connect further sheet actions only to actual document operations |
+| Select Row,Select Column | Task33 connects normal simple range expansion to shared Edit/Select and native grid accelerators | Preserve active cell/group and independent input ownership;parameterized/reference-mode APIs remain pending |
+| Font size | Task34 connects exact shared Writer FontSizeSelect to actual FontHeight10015, three-script native attributes, uniform/mixed state, undo/redo, grid CSS and same-model ODS/autosave | Automatic row-height layout and script-aware foreign formatting still need their real consumed owners |
+| Font name | Exact shared Writer FontNameSelect is rendered; CharFontName remains unavailable | Implement native selection-script application/readback using the now-connected attribute path, then enable this same shared control |
+| Cell styles | ScPatternAttr and shared itemset/value owners exist;document/column style application and Calc style-command owner remain missing | Implement the consumed cell-style path,then reuse the shared style-control presentation;do not substitute browser-only style state |
+| Other formatting/menu actions | Native resource composition is generated;unimplemented commands remain disabled | Audit each action against existing document/view operations and implement the available UI paths before broader prerequisite work |
+
+The consumed cell-attribute path is now connected for font size: ScColumnData owns canonical
+ScAttrArray runs,including a real default column for unallocated column tails. ScDocumentPool
+registers the original contiguous character prefix100..124 with genuine defaults and slot metadata.
+This is not the full pool constructor. CharFontName and StyleApply remain unregistered;family
+selection-script handling,named-style resolution,remaining cell/page defaults and full layout remain
+concrete gaps. Standalone items do not make these other actions ready. Continue implementing
+available UI actions on this same owner chain rather than requiring every codec/constructor first.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not
@@ -801,3 +863,64 @@ Worker checks pass,including a real upstream-created ODS fixture. This does not
 certify opening arbitrary spreadsheets without content or formatting loss.
 Full ODF or full native core parity is not claimed. The all-app regression run
 and requested goal pause follow this milestone;UI implementation stays separate.
+
+## Shared font-size UI and actual cell attributes (task34)
+
+The production FontHeight slot10015 consumes the shared Writer widget argument through Sfx.
+ScFormatShell applies original200twip100percent defaults and source three-script height deltas to
+simple selections and selected sheets. ScUndoSelectionAttr retains a real attribute-only undo
+document and redo pattern. Grid painting reads effective attributes directly. Automatic ODF cell
+styles preserve heights and styled empty spans with repeated rows/cells,including full columns and
+default-column tails,without a browser format map or an intermediate imported workbook.
+
+Default font metadata uses original static script-language fallbacks,the shipped configured families
+and the genuine no-device OnlyOne first-token branch. It does not certify physical font installation.
+The existing browser registered-face helper retains its absent-family behavior. On-the-fly LanguageTag
+registration,linguistic preference editing,other cell/page defaults,style inheritance,script-aware foreign
+font painting and automatic row layout remain unsupported. Larger fonts currently paint inside the
+existing fixed-height grid rows; this leaf does not certify native optimal row-height behavior.
+
+Writer's visible-content exclusion,first-two-words naming,primary browser saving and no-recovery
+policy remain. Styled empty cells round-trip within saved documents;format-only empty documents
+retain the same visible-content save exclusion as Writer. Further font/style/formatting/menu UI
+remains active work. The task34 actual463-resource audit records16registered and13default-enabled
+commands; these counts are an implementation inventory,not a completion percentage.
+
+### Task35: standard automatic row geometry
+
+The current font-height action now calculates standard row heights from actual pattern runs,
+including attributes in other columns of the affected rows. Source margin/emphasis arithmetic,
+256-twip startup minimum,23-twip correction,manual-size flags,shared selected-sheet context and
+pixel-change conditions are represented. Undo/Redo repeats automatic adjustment. The browser
+uses native height segments for visible rows and bounded scroll projection;the shared Writer
+font-size widget and chrome remain unchanged. ODS row styles use actual sheet height/flag storage.
+
+This is the plain,unwrapped,unrotated,uniform-script-height path. Device initialization of the
+process minimum,script scanning,wrapped/rich/rotated/merged layout,drawing/hidden rows and
+standalone manual/optimal-height dialogs remain unported. Unequal script-height attribute profiles decline adjustment. Mixed-script text,unsupported foreign
+layout properties and device measurements remain unverified;this is not full text-layout parity. Full UI/core parity remains unverified.
+Next UI delivery remains row-height actions and shared Writer font/format controls.
+
+## Character controls and shared ODF transport (task36, verification in progress)
+
+The shared Writer toolbar now dispatches Calc Bold10009, Italic10008 and Underline10014 to
+real ScFormatShell attributes and the existing selection-attribute history. Script values remain
+on the actual native items; React reads those items for cell painting and command state.
+The current in-progress task also removes lossy boolean character-property handoffs from shared
+xmloff and Writer ODT filters under the user's explicit authorization. Separate Latin/CJK/CTL
+weights, postures, absolute heights and font metadata survive the represented XML path, as do
+native underline styles and literal colors. Original transparent-color handlers, SAX signed color
+conversion, source attribute merge order and Writer ContextFilter suppression are retained.
+Writer insertion/export reads actual item values. Its Worker adapter now uses one shared literal
+underline record and actual pool factories, retaining packed alpha/color; unported complex interface
+state rejects instead of silently flattening.
+
+Initial whole Calc regression passes 338 cases in117 files, but raw coverage is not yet100.
+Ten consumed shared owners are measured at raw S/B/F/L100 in task36 evidence. Neither result
+certifies all changed Writer owners or complete native filter/UI parity. Visible underline variants,
+module-specific accelerator projection, comprehensive changed-owner coverage, browser checks
+and final static/registry acceptance remain pending. Writer's bounded absolute-height grammar,
+full property-set/factory graph, complex colors, broader browser-shaped editing helpers, rich/script
+layout, Calc named styles and other feasible UI actions remain further work. These limitations are
+unported responsibilities, not additional intentional deviations from upstream. Task36 is still active;
+last full all-app regression was task30, next is task40.

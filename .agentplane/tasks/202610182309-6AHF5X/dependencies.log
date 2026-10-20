@@ -1,0 +1,8 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check failed:
+- apps/office/src/o3tl/inc/string_view.ts: non-original SAL/o3tl import ../../sal/inc/rtl/math.h
+- apps/office/src/vcl/source/font/FontVariation.ts: non-allowlisted module edge vcl -> o3tl
+- runtime module cycle: sal -> o3tl -> sal

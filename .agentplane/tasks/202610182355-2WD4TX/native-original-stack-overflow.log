@@ -1,0 +1,55 @@
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-double-format-native-probe.mjs:136
+  throw new Error(`Original formatter observations failed:${first.stderr}\n${second.stderr}`);
+        ^
+
+Error: Original formatter observations failed:
+=================================================================
+==13314==ERROR: AddressSanitizer: dynamic-stack-buffer-overflow on address 0x00016f6b6054 at pc 0x0001007514e8 bp 0x00016f6b5ff0 sp 0x00016f6b5fe8
+WRITE of size 2 at 0x00016f6b6054 thread T0
+    #0 0x0001007514e4 in void rtl::str::doubleToString<_rtl_uString>(_rtl_uString**, int*, int, double, rtl_math_StringFormat, int, __remove_extent(decltype(_rtl_uString::buffer)), int const*, __remove_extent(decltype(_rtl_uString::buffer)), bool) strtmpl.hxx:1667
+    #1 0x00010074deec in rtl_math_doubleToUString math.cxx:162
+    #2 0x000100748cfc in emit(double, int, int, int, bool) driver.cpp:17
+    #3 0x000100749294 in main driver.cpp:24
+    #4 0x0001895c7e7c in start+0x1a1c (dyld:arm64e+0x31e7c)
+
+Address 0x00016f6b6054 is located in stack of thread T0
+SUMMARY: AddressSanitizer: dynamic-stack-buffer-overflow strtmpl.hxx:1667 in void rtl::str::doubleToString<_rtl_uString>(_rtl_uString**, int*, int, double, rtl_math_StringFormat, int, __remove_extent(decltype(_rtl_uString::buffer)), int const*, __remove_extent(decltype(_rtl_uString::buffer)), bool)
+Shadow bytes around the buggy address:
+  0x00016f6b5d80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b5e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b5e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b5f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b5f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x00016f6b6000: ca ca ca ca 00 00 00 00 00 00[04]cb cb cb cb cb
+  0x00016f6b6080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b6100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b6180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x00016f6b6200: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+  0x00016f6b6280: 00 f2 f2 f2 04 f2 04 f3 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==13314==ABORTING
+
+    at file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-double-format-native-probe.mjs:136:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+Source provenance check passed for 936 runtime modules (801 mapped, 116 browser adaptations, 19 local infrastructure).

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/inc/scriptsetitem.ts",
+    "status": "mapped",
+    "upstreamPath": "include/editeng/scriptsetitem.hxx",
+    "localSymbols": [
+      "SvxScriptSetItem"
+    ],
+    "upstreamSymbols": [
+      "SvxScriptSetItem"
+    ],
+    "preservedResponsibilities": [
+      "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full native services and device/widget parity remain unported; shared item ownership uses existing JS lifetime rules."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/scriptsetitem.ts",
+          "marker": "SvxScriptSetItem"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/scriptsetitem.hxx",
+          "marker": "SvxScriptSetItem"
+        }
+      ]
+    }
+  }
+}

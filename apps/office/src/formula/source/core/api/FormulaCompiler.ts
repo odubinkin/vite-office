@@ -38,8 +38,14 @@ export class FormulaCompiler {
   protected meGrammar: Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED;
   /** Serializes source-order tokens rather than RPN, preserving the native forced-recalc prefix and output replacement. @param output - Actual mutable Unicode output owner. @returns Nothing. */
   CreateStringFromTokenArray(output: OUString): void {
-    if (this.mpArr.GetLen() && !FormulaGrammar.isODFF(this.meGrammar))
-      throw new Error("ODFF symbols must be selected before serialization");
+    if (
+      this.mpArr.GetLen() &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
+      this.meGrammar !== FormulaGrammar.Grammar.GRAM_ENGLISH
+    )
+      throw new Error("Scalar formula symbols must be selected before serialization");
     let result = this.mpArr.GetLen() && this.mpArr.IsRecalcModeForced() ? "=" : "";
     for (const token of this.mpArr.Tokens()) result += this.CreateStringFromToken(token);
     const value = new OUString(

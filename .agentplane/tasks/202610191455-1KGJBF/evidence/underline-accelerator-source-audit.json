@@ -1,0 +1,41 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "evidenceKind": "Pinned source inspection and managed tests; no compiled native differential claim.",
+  "contracts": [
+    "SID_ULINE_VAL_SINGLE/DOUBLE use fresh items and exact-style toggle; SID_ATTR_CHAR_UNDERLINE copies its effective item.",
+    "Native slots11196/11197 derive SID_SVX_START10000+1196/+1197.",
+    "AcceleratorExecute checks module before global; XCUBasedAcceleratorConfiguration::getCommandByKeyEvent checks primary before secondary.",
+    "Browser generation projects pinned English default bindings only;document/custom configuration services remain unported.",
+    "Generator explicitly selects unxwnt install:module values before the established suite Ctrl/Meta alias;macosx-only MOD3 values cannot become bare Tab. Full native OS-specific accelerator services remain unported."
+  ],
+  "sources": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svx/svxids.hrc",
+      "sha256": "8490030f09b56de06bba37683b28301900358b4d67aa8fdc7966878f09487d21"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svl/solar.hrc",
+      "sha256": "73c3aeb9a7ed1e0762a89dff9e1f0fcd82497dc61e509bd8176cee37a07e4ba2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+      "sha256": "17c47048431d2933ac248977da2dbba66636c7ae1310a361825d8334828f97bc"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+      "sha256": "c1441749f6a4f52c6d64ff38f0f851a309659d4c2a0bc70d9630c86b5de5471f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/framework/source/accelerators/acceleratorconfiguration.cxx",
+      "sha256": "df4f3968794fb640301eb1f4ad3ad12c52fe7191ad6400ac09773c716e52b12e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svtools/source/misc/acceleratorexecute.cxx",
+      "sha256": "ced43334df839c3b37b2531da80008b45d2fb6756927ac1d20a9b58b13cf6f3b"
+    }
+  ]
+}

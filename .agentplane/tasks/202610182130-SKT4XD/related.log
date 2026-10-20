@@ -1,0 +1,10 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+············································································
+
+ Test Files  4 passed (4)
+      Tests  76 passed (76)
+   Start at  04:36:02
+   Duration  6.29s (transform 4.52s, setup 624ms, import 5.57s, tests 66ms, environment 4.19s)
+

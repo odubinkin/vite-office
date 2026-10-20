@@ -8,9 +8,9 @@ test("Print appears in upstream locations and print media keeps only pages", /**
   await page.goto("/writer");
   const editor = page.getByRole("textbox", { name: "Writer document text" });
   await editor.fill("Print proof");
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await expect(page.getByRole("menuitem", { name: "Print" })).toBeVisible();
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await expect(
     page.getByRole("toolbar", { name: "Writer standard toolbar" }).getByRole("button", {
       name: "Print",

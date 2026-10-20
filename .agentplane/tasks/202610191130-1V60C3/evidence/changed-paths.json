@@ -1,0 +1,13 @@
+[
+  "apps/office/e2e/writer-menu-alignment.spec.ts",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+  "apps/office/src/framework/browser/presentation/menubar-overflow.tsx",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/CommandMenuBar.tsx.json",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/menubar-overflow.tsx.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/CommandMenuBar.tsx.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/menubar-overflow.tsx.json",
+  "apps/office/e2e/shared/menubar-pointer.spec.ts"
+]

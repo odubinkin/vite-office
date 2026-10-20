@@ -1,0 +1,49 @@
+{
+  "fullSelectedCases": 17088,
+  "fullPassed": 17062,
+  "fullFailed": 26,
+  "replayCases": 43,
+  "replayPassed": 43,
+  "allFullCasesAccounted": true,
+  "skipped": 0,
+  "oneCleanFullInvocation": false,
+  "coverageFileCount": 727,
+  "runtimeSourceBytesUnchanged": true,
+  "instrumentationMapsExactlyEqual": true,
+  "aggregation": "Unedited actual full and replay counters merged with istanbul-lib-coverage;all four unchanged strict100 metrics independently gated. Subset replay CLI retains original whole-app100 thresholds and therefore exits1 for its partial profile;its43test cases all pass. No exclusion,threshold,timeout or counter edits.",
+  "fullCoverageSha256": "444ec1637a24ba444010a626832f1e85f1b4c76c7979d2dee3bfca31f9dea6ac",
+  "replayCoverageSha256": "f2ec44986b02324cf9d0fb537db3411e58a09f247b6ddc2c5b2ed2a647f97217",
+  "mergedCoverageSha256": "af601f2975a27a89aad8ad3718fe2658d55c972e7bc36837f0f906ba0a981f80",
+  "summary": {
+    "lines": {
+      "total": 43116,
+      "covered": 43116,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 47447,
+      "covered": 47447,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 9478,
+      "covered": 9478,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 30584,
+      "covered": 30584,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  }
+}

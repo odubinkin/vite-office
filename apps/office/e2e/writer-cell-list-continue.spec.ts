@@ -20,7 +20,7 @@ for (const initial of ["plain", "bullet"] as const) {
       const first = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }),
         second = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
       await first.fill("First");
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await expect(page.getByRole("menuitem", { name: "Add to List", exact: true })).toBeDisabled();
       await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
@@ -28,11 +28,11 @@ for (const initial of ["plain", "bullet"] as const) {
       await expect(page.locator('[data-writer-list-marker="' + firstId + '"]')).toHaveText("1.");
       await second.fill("Second");
       if (initial === "bullet") {
-        await page.getByRole("button", { name: "Format", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
         await page.getByRole("menuitemradio", { name: "Unordered List", exact: true }).click();
       }
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       const continuation = page.getByRole("menuitem", { name: "Add to List", exact: true });
       await expect(continuation).toBeEnabled();

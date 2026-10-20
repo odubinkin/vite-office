@@ -81,8 +81,8 @@ it("preserves compiler/runtime errors and explicit unsupported boundaries", /** 
   expect(doc.GetFormulaCell(pos)).toBe(original);
   expect(
     /** Rejects missing localized grammar/formatter. @returns Nothing. */ () =>
-      doc.SetFormula(pos, unicode("=1"), FormulaGrammar.Grammar.GRAM_DEFAULT),
-  ).toThrow(/ODFF/);
+      doc.SetFormula(pos, unicode("=1"), FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1),
+  ).toThrow(/not implemented/);
 });
 
 it("tracks actual formula blocks and updates positions when a sheet is inserted", /** Native block events count splits/merges, not formula objects or memory lifetimes. @returns Nothing. */ () => {

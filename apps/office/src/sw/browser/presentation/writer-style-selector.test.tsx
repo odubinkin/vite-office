@@ -1,4 +1,5 @@
 /** @fileoverview Checks live document-owned style population, dispatch and history through actual Sfx bindings. */
+import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { useSyncExternalStore } from "react";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -104,11 +105,11 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
         if (font === undefined || size === undefined) throw new Error("Missing font selectors");
         fireEvent.change(font, { target: { value: "Liberation Serif" } });
         fireEvent.change(size, { target: { value: "14" } });
-        expect(execute).toHaveBeenCalledWith(expect.any(String), {
+        expect(execute).toHaveBeenCalledWith(".uno:CharFontName", {
           ...(value ?? {}),
-          fontFamily: "Liberation Serif",
+          fontFamily: new SvxFontItem(0, "Liberation Serif", "", 0, 0, 10007),
         });
-        expect(execute).toHaveBeenCalledWith(expect.any(String), {
+        expect(execute).toHaveBeenCalledWith(".uno:FontHeight", {
           ...(value ?? {}),
           fontSizePt: 14,
         });

@@ -1,0 +1,69 @@
+{
+  "command": "npm run inventory:parity:writer",
+  "result": "pass",
+  "evidenceKind": "Explicit summary of successful command output; bulk module/evidence arrays omitted",
+  "originalOutputSha256": "4761656c2ca69a0f24288f620a57bc3df2b4e412bc810e9c7a30de7f382bd9bd",
+  "scope": "writer",
+  "applications": [
+    {
+      "suite": "writer",
+      "active": true,
+      "commands": {
+        "module": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "export": "writerUserCommands"
+      }
+    },
+    {
+      "suite": "calc",
+      "active": true,
+      "commands": {
+        "module": "apps/office/src/sc/sdi/scalc.ts",
+        "export": "calcUserCommands"
+      }
+    },
+    {
+      "suite": "shared",
+      "active": true,
+      "commands": null
+    }
+  ],
+  "capabilityCount": 225,
+  "moduleCount": 734,
+  "invariantCount": 34,
+  "globalRecordCount": 2063,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 43,
+    "classifiedDivergenceCount": 107,
+    "contractParityCount": 43,
+    "defaultParityCount": 43,
+    "differentialParityCount": 43,
+    "exceptionCount": 2,
+    "gapCount": 309,
+    "implementedCount": 223,
+    "parityReady": false,
+    "ownershipParityCount": 43,
+    "recordCount": 225,
+    "schemaVersion": 6,
+    "serializationParityCount": 43,
+    "scopeLimitationCount": 367,
+    "unresolvedParityCount": 180,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 43
+  },
+  "provenance": {
+    "browserAdaptationCount": 87,
+    "localInfrastructureCount": 18,
+    "mappedCount": 629,
+    "moduleCount": 734
+  },
+  "runtime": {
+    "commandCount": 56,
+    "exportedOperationCount": 1020,
+    "internalOperationCount": 14,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 10
+  }
+}

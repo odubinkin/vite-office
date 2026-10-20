@@ -1,11 +1,12 @@
 /** @fileoverview Checks equal, compact insets for Writer command and submenu labels. */
 import { expect, test } from "@playwright/test";
+import { hoverBrowserMenuItem } from "../test-support/menu-pointer-e2e";
 
 test("menu commands and submenus align their labels", /** Checks rendered label positions and submenu interaction. @param fixtures - Browser fixtures. @returns Nothing. */ async ({
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   const paragraph = page.getByRole("menuitem", { name: "Paragraph…" });
   const lists = page.getByRole("menuitem", { name: "Lists" });
   const commandLabel = await paragraph.locator("span").nth(1).boundingBox();
@@ -15,9 +16,12 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
   const rowX = (await paragraph.boundingBox())?.x ?? Number.NaN;
   expect(commandX).toBe(submenuX);
   expect(commandX - rowX).toBeLessThanOrEqual(20);
-  await lists.hover();
+  await hoverBrowserMenuItem(page, lists);
   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).hover();
+  await hoverBrowserMenuItem(
+    page,
+    page.getByRole("menubar").getByRole("menuitem", { name: "View", exact: true }),
+  );
   const sidebarX =
     (
       await page

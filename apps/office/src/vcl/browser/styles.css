@@ -52,7 +52,7 @@ body:has([aria-label="Writer workspace"]) {
   inset: 0;
 }
 
-[data-writer-modal] {
+:is([data-writer-modal], [data-office-modal]) {
   display: flex;
   align-items: safe center;
   justify-content: center;
@@ -62,7 +62,7 @@ body:has([aria-label="Writer workspace"]) {
   backdrop-filter: blur(2px);
 }
 
-[data-writer-modal-panel] {
+:is([data-writer-modal-panel], [data-office-modal-panel]) {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -75,12 +75,12 @@ body:has([aria-label="Writer workspace"]) {
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
 }
 
-.writer-dialog-header,
-.writer-dialog-actions {
+:is(.writer-dialog-header, .office-dialog-header),
+:is(.writer-dialog-actions, .office-dialog-actions) {
   flex-shrink: 0;
 }
 
-.writer-dialog-form {
+:is(.writer-dialog-form, .office-dialog-form) {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -88,8 +88,8 @@ body:has([aria-label="Writer workspace"]) {
   overflow: clip;
 }
 
-.writer-dialog-content,
-.writer-dialog-scroll {
+:is(.writer-dialog-content, .office-dialog-content),
+:is(.writer-dialog-scroll, .office-dialog-scroll) {
   flex: 1 1 auto;
   min-height: 0;
   overflow-x: hidden;
@@ -98,34 +98,46 @@ body:has([aria-label="Writer workspace"]) {
   scrollbar-gutter: stable;
 }
 
-:is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist) {
+:is(
+  :is(.writer-dialog-content, .office-dialog-content),
+  :is(.writer-dialog-scroll, .office-dialog-scroll),
+  :is(.writer-dialog-tablist, .office-dialog-tablist)
+) {
   scrollbar-width: auto;
   scrollbar-color: #64748b #f1f5f9;
 }
 
 @supports selector(::-webkit-scrollbar) {
-  :is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist) {
+  :is(
+    :is(.writer-dialog-content, .office-dialog-content),
+    :is(.writer-dialog-scroll, .office-dialog-scroll),
+    :is(.writer-dialog-tablist, .office-dialog-tablist)
+  ) {
     scrollbar-color: auto;
   }
 
-  :is(.writer-dialog-content, .writer-dialog-scroll, .writer-dialog-tablist)::-webkit-scrollbar {
+  :is(
+    :is(.writer-dialog-content, .office-dialog-content),
+    :is(.writer-dialog-scroll, .office-dialog-scroll),
+    :is(.writer-dialog-tablist, .office-dialog-tablist)
+  )::-webkit-scrollbar {
     width: 12px;
     height: 12px;
   }
 
   :is(
-    .writer-dialog-content,
-    .writer-dialog-scroll,
-    .writer-dialog-tablist
+    :is(.writer-dialog-content, .office-dialog-content),
+    :is(.writer-dialog-scroll, .office-dialog-scroll),
+    :is(.writer-dialog-tablist, .office-dialog-tablist)
   )::-webkit-scrollbar-track {
     background: #f1f5f9;
     border-radius: 6px;
   }
 
   :is(
-    .writer-dialog-content,
-    .writer-dialog-scroll,
-    .writer-dialog-tablist
+    :is(.writer-dialog-content, .office-dialog-content),
+    :is(.writer-dialog-scroll, .office-dialog-scroll),
+    :is(.writer-dialog-tablist, .office-dialog-tablist)
   )::-webkit-scrollbar-thumb {
     border: 3px solid #f1f5f9;
     border-radius: 6px;
@@ -133,15 +145,15 @@ body:has([aria-label="Writer workspace"]) {
   }
 
   :is(
-      .writer-dialog-content,
-      .writer-dialog-scroll,
-      .writer-dialog-tablist
+      :is(.writer-dialog-content, .office-dialog-content),
+      :is(.writer-dialog-scroll, .office-dialog-scroll),
+      :is(.writer-dialog-tablist, .office-dialog-tablist)
     )::-webkit-scrollbar-thumb:hover {
     background: #475569;
   }
 }
 
-.writer-dialog-content {
+:is(.writer-dialog-content, .office-dialog-content) {
   display: grid;
   grid-auto-rows: max-content;
   align-content: start;
@@ -151,7 +163,10 @@ body:has([aria-label="Writer workspace"]) {
   font-size: 0.875rem;
 }
 
-.writer-dialog-content.writer-dialog-tabbed {
+:is(.writer-dialog-content, .office-dialog-content):is(
+  .writer-dialog-tabbed,
+  .office-dialog-tabbed
+) {
   display: flex;
   flex-direction: column;
   overflow: clip;
@@ -160,7 +175,7 @@ body:has([aria-label="Writer workspace"]) {
   padding: 0;
 }
 
-.writer-dialog-tabs-layout {
+:is(.writer-dialog-tabs-layout, .office-dialog-tabs-layout) {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -168,7 +183,7 @@ body:has([aria-label="Writer workspace"]) {
   overflow: clip;
 }
 
-.writer-dialog-tablist {
+:is(.writer-dialog-tablist, .office-dialog-tablist) {
   min-height: 0;
   overflow-x: auto;
   overflow-y: hidden;
@@ -176,17 +191,17 @@ body:has([aria-label="Writer workspace"]) {
   padding: 0.75rem 1.5rem;
 }
 
-.writer-dialog-tabs-layout > [role="tabpanel"] {
+:is(.writer-dialog-tabs-layout, .office-dialog-tabs-layout) > [role="tabpanel"] {
   grid-auto-rows: max-content;
   padding: 1.5rem;
 }
 
 @media (min-width: 640px) {
-  .writer-dialog-tabs-layout {
+  :is(.writer-dialog-tabs-layout, .office-dialog-tabs-layout) {
     flex-direction: row;
   }
 
-  .writer-dialog-tablist {
+  :is(.writer-dialog-tablist, .office-dialog-tablist) {
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-gutter: stable;
@@ -194,24 +209,25 @@ body:has([aria-label="Writer workspace"]) {
   }
 }
 
-.writer-dialog-content :where(div, label, fieldset) {
+:is(.writer-dialog-content, .office-dialog-content) :where(div, label, fieldset) {
   min-width: 0;
 }
 
-.writer-dialog-content fieldset {
+:is(.writer-dialog-content, .office-dialog-content) fieldset {
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   padding: 1rem;
 }
 
-.writer-dialog-content legend {
+:is(.writer-dialog-content, .office-dialog-content) legend {
   padding-inline: 0.25rem;
   color: #334155;
   font-size: 0.875rem;
   font-weight: 600;
 }
 
-.writer-dialog-content :is(input:not([type="checkbox"]):not([type="radio"]), select) {
+:is(.writer-dialog-content, .office-dialog-content)
+  :is(input:not([type="checkbox"]):not([type="radio"]), select) {
   min-width: 0;
   max-width: 100%;
   border: 1px solid #cbd5e1;
@@ -222,41 +238,41 @@ body:has([aria-label="Writer workspace"]) {
   font-weight: 400;
 }
 
-.writer-dialog-content input:is([type="checkbox"], [type="radio"]) {
+:is(.writer-dialog-content, .office-dialog-content) input:is([type="checkbox"], [type="radio"]) {
   flex-shrink: 0;
   accent-color: #4f46e5;
 }
 
-.writer-dialog-content :is(input, select, button):focus-visible,
-.writer-dialog-actions button:focus-visible {
+:is(.writer-dialog-content, .office-dialog-content) :is(input, select, button):focus-visible,
+:is(.writer-dialog-actions, .office-dialog-actions) button:focus-visible {
   outline: 2px solid #4f46e5;
   outline-offset: 2px;
 }
 
-.writer-dialog-content [role="tablist"] {
+:is(.writer-dialog-content, .office-dialog-content) [role="tablist"] {
   gap: 0.25rem;
   border-color: #e2e8f0;
 }
 
-.writer-dialog-content [role="tab"] {
+:is(.writer-dialog-content, .office-dialog-content) [role="tab"] {
   border-radius: 0.5rem;
   border-color: transparent;
   color: #64748b;
   font-weight: 600;
 }
 
-.writer-dialog-content [role="tab"]:hover {
+:is(.writer-dialog-content, .office-dialog-content) [role="tab"]:hover {
   background: #f8fafc;
   color: #0f172a;
 }
 
-.writer-dialog-content [role="tab"][aria-selected="true"] {
+:is(.writer-dialog-content, .office-dialog-content) [role="tab"][aria-selected="true"] {
   border-color: #4f46e5;
   background: #eef2ff;
   color: #4338ca;
 }
 
-.writer-dialog-actions {
+:is(.writer-dialog-actions, .office-dialog-actions) {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -266,7 +282,7 @@ body:has([aria-label="Writer workspace"]) {
   background: #f8fafc;
 }
 
-.writer-dialog-actions button {
+:is(.writer-dialog-actions, .office-dialog-actions) button {
   border: 1px solid #cbd5e1;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -276,36 +292,44 @@ body:has([aria-label="Writer workspace"]) {
   font-weight: 600;
 }
 
-.writer-dialog-actions button:hover {
+:is(.writer-dialog-actions, .office-dialog-actions) button:hover {
   background: #f1f5f9;
 }
 
-.writer-dialog-actions .writer-dialog-danger {
+:is(.writer-dialog-actions, .office-dialog-actions)
+  :is(.writer-dialog-danger, .office-dialog-danger) {
   border-color: #fca5a5;
   color: #b91c1c;
 }
 
-.writer-dialog-actions .writer-dialog-danger:hover {
+:is(.writer-dialog-actions, .office-dialog-actions)
+  :is(.writer-dialog-danger, .office-dialog-danger):hover {
   background: #fef2f2;
 }
 
-.writer-dialog-actions .writer-dialog-primary {
+:is(.writer-dialog-actions, .office-dialog-actions)
+  :is(.writer-dialog-primary, .office-dialog-primary) {
   border-color: #4f46e5;
   background: #4f46e5;
   color: white;
 }
 
-.writer-dialog-actions .writer-dialog-primary:hover {
+:is(.writer-dialog-actions, .office-dialog-actions)
+  :is(.writer-dialog-primary, .office-dialog-primary):hover {
   background: #4338ca;
 }
 
-:is(.writer-dialog-content, .writer-dialog-actions) :is(input, select, button):disabled {
+:is(
+    :is(.writer-dialog-content, .office-dialog-content),
+    :is(.writer-dialog-actions, .office-dialog-actions)
+  )
+  :is(input, select, button):disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
 @media (max-height: 550px) {
-  [data-writer-palette] {
+  [data-office-palette] {
     top: auto;
     bottom: 100%;
   }

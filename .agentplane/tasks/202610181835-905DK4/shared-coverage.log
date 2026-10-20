@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- menubar-commands.test WriterCommandToolbar.test WriterMenuBar.test --coverage.include=src/framework/browser/presentation/toolbar-resource.ts --coverage.include=src/sw/uiconfig/swriter/ui-resource.ts --coverage.reportsDirectory=coverage/calc-shared-resources
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage menubar-commands.test WriterCommandToolbar.test WriterMenuBar.test --coverage.include=src/framework/browser/presentation/toolbar-resource.ts --coverage.include=src/sw/uiconfig/swriter/ui-resource.ts --coverage.reportsDirectory=coverage/calc-shared-resources
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  2 passed (2)
+      Tests  10 passed (10)
+   Start at  01:46:03
+   Duration  14.69s (transform 6.09s, setup 161ms, import 7.07s, tests 7.12s, environment 797ms)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 8/8 )
+Branches     : 100% ( 7/7 )
+Functions    : 100% ( 1/1 )
+Lines        : 100% ( 7/7 )
+================================================================================

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610192240-89YNKC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-19T23:44:50.557Z",
+  "verdict": "pass",
+  "summary": "Task41 source-shaped font operations and shared script-set contracts satisfy the approved bounded scope on implementation7d39aed21bac;all declared acceptance evidence is present,current and reproducible.",
+  "evaluated_sha": "7d39aed21bac7cb193789faa20237d7816b07324",
+  "blueprint_digest": "f5c76ebcfe1e9a9c138dc2df77ac16216914028c2202739ef9b696eeb6ae1f1e",
+  "findings": [
+    "Native slot/script/default/limit semantics,complete typed height metadata,whole-sheet query bounds and repeated-format history are source-audited;hidden upstream toolbar placements remain hidden. No alternate document model or fake services added.",
+    "Calc127files386cases and related shared/Writer28files208cases pass;raw S/B/F/L100 for Calc and every14changed executable owner,source hashes current. Header reexport has no executable owner. Tests/coverage exclusions and thresholds are not weakened.",
+    "27unique actual browser cases and3final fresh-build replays pass at1280/390,including page/DOM-free Worker history/ODS and UI primary autosave/reopen. Four screenshot hashes and visual observations retained.",
+    "All required static/source/resource/inventory/routing gates pass and56non-task paths stay within approved60. Candidate failures and closeout ordering correction are explicitly reconciled in Findings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610192240-89YNKC/README.md",
+    ".agentplane/tasks/202610192240-89YNKC/evidence/source-audit.json",
+    ".agentplane/tasks/202610192240-89YNKC/evidence/complete-owner-proof.json",
+    ".agentplane/tasks/202610192240-89YNKC/evidence/browser-proof.json",
+    ".agentplane/tasks/202610192240-89YNKC/evidence/calc-proof.json",
+    ".agentplane/tasks/202610192240-89YNKC/evidence/shared-proof.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native device metrics,rich edit,filtered/alternate sheet views,pool-cache/border services and physical allocation order remain outside this bounded implementation;all broad parity flags remain false. Overall Calc UI goal remains active."
+  ]
+}

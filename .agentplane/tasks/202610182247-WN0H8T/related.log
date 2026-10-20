@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- --run src/framework/browser/presentation/menubar-overflow.test.tsx src/framework/browser/presentation/CommandMenuBar*.test.tsx src/framework/browser/presentation/OfficeWorkspaceHeader.test.tsx
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts --run src/framework/browser/presentation/menubar-overflow.test.tsx src/framework/browser/presentation/CommandMenuBar*.test.tsx src/framework/browser/presentation/OfficeWorkspaceHeader.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  3 passed (3)
+   Start at  05:49:00
+   Duration  841ms (transform 51ms, setup 222ms, import 39ms, tests 103ms, environment 1.09s)
+

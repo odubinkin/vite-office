@@ -18,7 +18,7 @@ test("Writer Enter ends an empty cell list without inserting a paragraph", /** E
     tail = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 2", exact: true }),
     neighbor = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
   await cell.click();
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
   await page

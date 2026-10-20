@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "### Result\n{\n  \"url\": \"http://127.0.0.1:5176/calc\",\n  \"heading\": \"Untitled Calc Document\",\n  \"menuItems\": 11,\n  \"headerButton\": true,\n  \"statusTag\": \"DIV\",\n  \"goToActiveSheet\": \"Sheet1\",\n  \"dialogClosed\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('async()=>{const wait=()=>new Promise(r=>setTimeout(r,50));const click=async(role,name)=>{const b=[...document.querySelectorAll(`[role=${role}]`)].find(b=>(b.getAttribute(\\'aria-label\\')??b.textContent.trim().replace(/›$/,\\'\\'))===name);if(!b)throw Error(\\'Missing \\'+role+\\' \\'+name);b.click();await wait();};const insert=document.querySelector(\\'[aria-label=\"Insert Sheet\"]\\');insert.click();await wait();await click(\\'menuitem\\',\\'Sheet\\');await click(\\'menuitem\\',\\'Navigate\\');await click(\\'menuitem\\',\\'Go to Sheet…\\');const options=[...document.querySelectorAll(\\'[role=option]\\')];options[0].dispatchEvent(new MouseEvent(\\'dblclick\\',{bubbles:true}));await wait();const active=document.querySelector(\\'[role=tab][aria-current=page]\\').textContent;if(active!==\\'Sheet1\\')throw Error(\\'GoToSheet failed\\');return {url:location.href,heading:document.querySelector(\\'h1\\').textContent.trim(),menuItems:document.querySelector(\\'[role=menubar]\\').querySelectorAll(\\'[role=menuitem]\\').length,headerButton:!!document.querySelector(\\'[role=columnheader] button[aria-label=\"Select all cells\"]\\'),statusTag:document.querySelector(\\'[role=status]\\').tagName,goToActiveSheet:active,dialogClosed:!document.querySelector(\\'[role=dialog]\\')};}');\n```"
+    }
+  ]
+}

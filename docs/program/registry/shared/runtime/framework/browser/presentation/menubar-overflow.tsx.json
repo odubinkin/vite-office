@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/menubar-overflow.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115",
+      "CAP-0116",
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/menubar-overflow.tsx#MenuBarOverflow",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx#admitsRootMotion",
+        "apps/office/e2e/shared/menubar-pointer.spec.ts"
+      ],
+      "justification": "TaskWN0H8T measures actual browser trigger geometry and projects the trailing hidden root menus into the native MenuBarWindow::ImplCreatePopup parent-popup shape. Original command trees and submenu identities are retained;shared React menu state/dispatch/focus ownership remains unchanged. This does not certify complete native VCL parity. Task1V60C3 applies MenuBarWindow constructor/ImplCreatePopup first-motion reset and MouseMove ordering to the actual shared root menubar. Enter-only input does not switch roots; closed motion updates rollover without consuming admission, leave clears rollover, floating popup events stay with their native window owner, and first active motion is ignored before valid neighboring-root switching. Native Paint priority highlights the active root, otherwise rollover; shared Writer geometry/colors remain. Browser DOM movement has no portable native IsSynthetic marker; full platform event synthesis, mnemonic/theme/window parity remains unverified. Task1V60C3 also retains native highlighted-item ownership independently of root-popup existence: keyboard/focus activation paints the selected root,and admitted pointer movement in that state updates selection without creating a popup. F10 alone does not reset the existing first-motion flag;only actual popup creation does. This does not implement the pending native mouse-button-down contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MenuBarOverflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

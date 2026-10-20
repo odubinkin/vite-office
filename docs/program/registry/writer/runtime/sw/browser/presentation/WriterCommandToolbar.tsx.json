@@ -20,7 +20,7 @@
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx#WriterCommandToolbar"
       ],
-      "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "justification": "Renders Writer source standard-toolbar placements through shared command controls and shared office icon vocabulary,retaining existing Writer icons and Insert Table control.",
       "knownViolations": [],
       "localSymbols": [
         "WriterCommandToolbar"

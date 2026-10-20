@@ -1,0 +1,33 @@
+/** @fileoverview Original English SV_FUNIT_STRINGS resources from vcl/inc/units.hrc; UI translation catalogs remain unported. */
+import { FieldUnit as F } from "../../tools/inc/fldunit";
+/** Pinned source unit aliases in original lookup order. */
+export const SV_FUNIT_STRINGS: readonly (readonly [string, F])[] = [
+  ["mm", F.MM],
+  ["cm", F.CM],
+  ["m", F.M],
+  ["km", F.KM],
+  ["twips", F.TWIP],
+  ["twip", F.TWIP],
+  ["pt", F.POINT],
+  ["pc", F.PICA],
+  ["″", F.INCH],
+  ['"', F.INCH],
+  ["in", F.INCH],
+  ["inch", F.INCH],
+  ["′", F.FOOT],
+  ["'", F.FOOT],
+  ["ft", F.FOOT],
+  ["foot", F.FOOT],
+  ["feet", F.FOOT],
+  ["miles", F.MILE],
+  ["mile", F.MILE],
+  ["ch", F.CHAR],
+  ["line", F.LINE],
+  ["pixels", F.PIXEL],
+  ["pixel", F.PIXEL],
+  ["°", F.DEGREE],
+  ["sec", F.SECOND],
+  ["ms", F.MILLISECOND],
+  ["em", F.FONT_EM],
+  ["ic", F.FONT_CJK_ADVANCE],
+];

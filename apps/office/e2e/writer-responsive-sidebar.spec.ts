@@ -9,7 +9,7 @@ test("long menus scroll inside the viewport and nested commands stay reachable",
 }) => {
   await page.goto("/writer");
   await page.setViewportSize({ width: 390, height: 240 });
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   const menu = page.getByRole("menu", { name: "Format menu" });
   expect(
     await menu.evaluate(
@@ -67,13 +67,13 @@ test("sidebar remains reachable and its checked state follows visibility on a to
   await expect(sidebar).toBeVisible();
   await expect(sidebar.getByRole("heading", { name: "Paragraph" })).toBeVisible();
 
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const toggle = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
   await expect(toggle).toHaveAttribute("aria-checked", "true");
   await toggle.click();
   await expect(sidebar).toHaveCount(0);
 
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   await expect(page.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
     "aria-checked",
     "false",
@@ -108,7 +108,7 @@ test("the page stays within the viewport while the document and modal body scrol
   ).toBe(true);
 
   await page.setViewportSize({ width: 390, height: 340 });
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Paragraph…" }).click();
   const panel = page.locator("[data-writer-modal-panel]");
   await expect(panel).toBeVisible();

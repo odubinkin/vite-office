@@ -1,0 +1,6 @@
+{
+  "apps/office/src/framework/browser/presentation/command-surface.ts": "0e14e1b20eea87cf93744ba3a2ff1c00baa155c4f6f1ee1adc58786eeae7bd6e",
+  "apps/office/src/framework/browser/presentation/CommandToolbar.tsx": "421c19f6e22a92d5c5ef20ee2903784be50348a3b0753c3ccde5a603aa7981bf",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "a460cc8f32bea493ec20e79a5e3ade6e574e8082766d552720614cc2421b5710",
+  "apps/office/src/xmloff/source/core/xmltoken.ts": "f35e06b005773e45b8b3d4ee136d586eee5136b2ee78e368b37e2b6211f7f542"
+}

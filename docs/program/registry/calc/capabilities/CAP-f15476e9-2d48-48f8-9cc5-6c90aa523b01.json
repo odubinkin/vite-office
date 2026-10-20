@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01",
+    "capabilityId": "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "type": "lifecycle",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskFJTKAS connects actual Calc ODS packages and ScDocShell lifecycle/history to shared primary browser storage and Writer autosave policy. Open imports into a separate real ScDocument and adopts it only while request/content generation remain current. Replacement resets actual view/history ownership and ends displaced formula subscriptions. Confirmed Save/SaveAs captures source model,medium,generation and shared SfxUndoSavePosition;later edits remain dirty and stale/failed/closed completions cannot adopt a destination. The first two displayed scalar words in native row-major sheet order name an untitled browser document,matching Writer first-two-word naming;empty documents are excluded. Stored bodies are complete existing ODS packages,not alternate workbook JSON. No recovery UI/storage is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves Writer primary browser storage/no-recovery policy and timing while native-shaped Calc shell/filter/history owners retain semantic state."
+    },
+    "capability": "Calc primary ODS persistence and atomic shell lifecycle",
+    "gaps": [
+      "Full native shell/filter/formatting and AutoRecovery parity are not claimed;browser storage and timing are deliberate shared project deviations.",
+      "Production file menus/dialogs,computer import/download and title-collision presentation are the next approved UI task.",
+      "ODS support remains bounded by existing Calc scalar/local-reference filter contracts;unsupported content rejects without replacing the live graph.",
+      "Full all-app regression follows the user cadence at task10;task6 uses allCalc100percent and targeted shared/Writer evidence."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx",
+          "marker": "bool ScDocShell::Save()"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx",
+          "marker": "bool ScDocShell::Load("
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+          "marker": "createCalcDocumentStore"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+          "marker": "stores actual ODS bytes"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "acknowledges only the captured generation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+          "marker": "createCalcDocumentStore"
+        }
+      ]
+    },
+    "aspect": "persistence-filter",
+    "atomicOperation": "calc-primary-ods-lifecycle",
+    "scopeLimitations": [
+      "Full native shell/filter/formatting and AutoRecovery parity are not claimed;browser storage and timing are deliberate shared project deviations.",
+      "Production file menus/dialogs,computer import/download and title-collision presentation are the next approved UI task.",
+      "ODS support remains bounded by existing Calc scalar/local-reference filter contracts;unsupported content rejects without replacing the live graph.",
+      "Full all-app regression follows the user cadence at task10;task6 uses allCalc100percent and targeted shared/Writer evidence."
+    ]
+  }
+}

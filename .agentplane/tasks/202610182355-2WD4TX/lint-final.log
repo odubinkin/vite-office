@@ -1,0 +1,6 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/inc/rtl/math-values.ts
+  24:3  error  Duplicate enum member value 134217727  @typescript-eslint/no-duplicate-enum-values
+
+✖ 1 problem (1 error, 0 warnings)
+

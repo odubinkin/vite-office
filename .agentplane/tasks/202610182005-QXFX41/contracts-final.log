@@ -1,0 +1,39 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  03:11:44
+   Duration  118ms (transform 35ms, setup 0ms, import 49ms, tests 9ms, environment 0ms)
+
+
+> vite-office@0.1.0 check:calc-resources
+> tsx scripts/generate-calc-ui-resources.ts --check
+
+Calc resources: 450 commands;11 top menus;17 policy dispositions.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  03:11:46
+   Duration  129ms (transform 24ms, setup 0ms, import 31ms, tests 3ms, environment 0ms)
+

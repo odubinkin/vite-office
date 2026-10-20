@@ -1,0 +1,6 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/numeric.ts
+  5:44  error  These overloads can be combined into one signature with an optional parameter  @typescript-eslint/unified-signatures
+
+✖ 1 problem (1 error, 0 warnings)
+

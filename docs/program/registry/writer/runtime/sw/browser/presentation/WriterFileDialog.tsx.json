@@ -10,7 +10,8 @@
     "capabilityIds": [
       "CAP-0113",
       "CAP-0114",
-      "CAP-0131"
+      "CAP-0131",
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
     ],
     "semantic": {
       "behaviorStatus": "divergent",
@@ -18,9 +19,10 @@
       "defaultStatus": "divergent",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx#WriterFileDialog"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx#WriterFileDialog",
+        "apps/office/src/sc/browser/presentation/calc-files.test.tsx"
       ],
-      "justification": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+      "justification": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This browser policy is an intentional upstream divergence and must not be rewritten by parity work. Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced.",
       "knownViolations": [],
       "localSymbols": [
         "WriterFileDialog"

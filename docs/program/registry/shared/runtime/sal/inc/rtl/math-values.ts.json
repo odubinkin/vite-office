@@ -19,17 +19,22 @@
       "evidence": [
         "apps/office/src/sal/inc/rtl/math-values.ts",
         "apps/office/src/sal/rtl/math.test.ts",
-        "docs/program/calc-ui-readiness.md#Shared ODS decimal scalar reader (task184)"
+        "docs/program/calc-ui-readiness.md#Shared ODS decimal scalar reader (task184)",
+        "apps/office/src/sal/rtl/double-format.test.ts"
       ],
-      "justification": "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "justification": "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim. Task2WD4TX ports all8original Unicode number formats,original enum values and28bit precision sentinel,pre-round notation selection,integer handling,half-up significand rounding,precision clamps,decimal/grouping/zero erasure and exponent widths. Existing scalar and float adapters share this algorithm. Host shortest binary64 text replaces Dragonbox;native ignored-trailing-zero scale is restored from binary64 fields and original checked Dragonbox integer-log constants. Actual rtl_math_doubleToUString replacement and insertion use existing SAL allocation/buffer/ref owners. Genuine full69normal+69ASanUBSan SAL/CPPU graphs verify complete captured units,terminator,capacity,relative identity and refs,with original source/config/object hashes and bounded binary64 observations. Initial actual ASan evidence identifies upstream negative-F stack-allocation overflow;conservative source-bound filtering excludes that undefined memory domain from returned-output observations without disabling sanitizers. Native mathematical presentation remains represented with managed storage. This is not exhaustive binary64 or host-runtime/Dragonbox/ABI proof;other RTL APIs,full OUStringBuffer,font-axis output,item/pool/UI integration remain pending.",
       "knownViolations": [],
       "localSymbols": [
-        "rtl_math_ConversionStatus"
+        "rtl_math_ConversionStatus",
+        "rtl_math_StringFormat",
+        "rtl_math_DecimalPlaces"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/rtl/math.h",
       "upstreamSymbols": [
-        "rtl_math_ConversionStatus"
+        "rtl_math_ConversionStatus",
+        "rtl_math_StringFormat",
+        "rtl_math_DecimalPlaces"
       ]
     }
   }

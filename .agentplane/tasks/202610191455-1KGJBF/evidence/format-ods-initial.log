@@ -1,0 +1,59 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-character-format.test.tsx ods.test.ts calc-font-size.test.tsx
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-character-format.test.tsx ods.test.ts calc-font-size.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/source/filter/xml/ods.test.ts (15 tests | 1 failed) 234ms
+   × diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights 13ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/source/filter/xml/ods.test.ts > diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights
+AssertionError: expected [ 'non-cell automatic style', …(8) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ [
++   "non-cell automatic style",
+    "non-cell automatic style",
+    "cell parent style inheritance",
+    "cell style properties",
++   "relative or invalid cell font height",
+    "relative or invalid cell font height",
+    "cell style/number format",
+    "cell range overflow",
+-   "fo:font-weight",
++   "cell range overflow",
+  ]
+
+ ❯ src/sc/source/filter/xml/ods.test.ts:413:17
+    411|       },
+    412|   });
+    413|   expect(names).toEqual(
+       |                 ^
+    414|     expect.arrayContaining([
+    415|       "non-cell automatic style",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 20 passed (21)
+   Start at  22:11:32
+   Duration  26.90s (transform 18.89s, setup 1.18s, import 24.04s, tests 4.57s, environment 13.87s)
+
+npm error Lifecycle script `test:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts calc-character-format.test.tsx ods.test.ts calc-font-size.test.tsx

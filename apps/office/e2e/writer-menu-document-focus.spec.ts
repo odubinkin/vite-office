@@ -10,7 +10,7 @@ test("unopened menu Escape without a saved owner focuses the Writer document", /
       (document.activeElement as HTMLElement).blur();
     },
   );
-  const trigger = page.getByRole("button", { name: "View", exact: true });
+  const trigger = page.getByRole("menuitem", { name: "View", exact: true });
   await trigger.focus();
   await expect(page.getByRole("menu")).toHaveCount(0);
   await trigger.press("Escape");
@@ -26,7 +26,7 @@ test("unopened menu Escape restores its saved Writer toolbar control", /** Check
   await page.goto("/writer");
   const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
   await owner.focus();
-  const trigger = page.getByRole("button", { name: "View", exact: true });
+  const trigger = page.getByRole("menuitem", { name: "View", exact: true });
   await trigger.focus();
   await trigger.press("Escape");
   await expect(owner).toBeFocused();

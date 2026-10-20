@@ -1,0 +1,31 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  2 passed (2)
+      Tests  21 passed (21)
+   Start at  00:01:21
+   Duration  14.02s (transform 10.87s, setup 565ms, import 12.89s, tests 4.20s, environment 4.39s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-----------------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s           
+-------------------|---------|----------|---------|---------|-----------------------------
+All files          |   87.55 |    77.37 |   72.09 |   87.01 |                             
+ sdi               |   63.63 |    57.89 |   61.53 |   64.15 |                             
+  scalc.ts         |   63.63 |    57.89 |   61.53 |   64.15 | 244-272,303,316-323,337-377 
+ source/ui/view    |    90.9 |       86 |   81.81 |   90.24 |                             
+  formatsh.ts      |    90.9 |       86 |   81.81 |   90.24 | 34-36,60-64                 
+-------------------|---------|----------|---------|---------|-----------------------------
+
+=============================== Coverage summary ===============================
+Statements   : 87.55% ( 197/225 )
+Branches     : 77.37% ( 106/137 )
+Functions    : 72.09% ( 31/43 )
+Lines        : 87.01% ( 181/208 )
+================================================================================
+ERROR: Coverage for lines (87.01%) does not meet global threshold (100%)
+ERROR: Coverage for functions (72.09%) does not meet global threshold (100%)
+ERROR: Coverage for statements (87.55%) does not meet global threshold (100%)
+ERROR: Coverage for branches (77.37%) does not meet global threshold (100%)

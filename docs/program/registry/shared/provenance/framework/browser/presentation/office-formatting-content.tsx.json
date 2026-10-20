@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/office-formatting-content.tsx",
+          "marker": "getOfficeFormattingButtonContent"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/framework/browser/presentation/office-formatting-content.tsx",
+    "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+    "responsibilities": [
+      "Task98VCB0 extracts the exact existing Writer B/I/U glyph rendering into a shared office helper without supplying document attribute state."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  }
+}

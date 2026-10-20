@@ -9,7 +9,8 @@
     "subsystem": "dispatch",
     "capabilityIds": [
       "CAP-0101",
-      "CAP-0115"
+      "CAP-0115",
+      "CAP-2be21078-2d50-4abe-a26d-73c695894d95"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sfx2/source/control/bindings.ts#SfxBindings",
-        "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx#SfxBindings::SfxBindings"
+        "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx#SfxBindings::SfxBindings",
+        "apps/office/src/sc/browser/presentation/calc-overline.test.tsx"
       ],
-      "justification": "Ports the bounded frame-owned command state query and invalidation facade.",
+      "justification": "Ports the bounded frame-owned command state query and invalidation facade. Task1K31AJ implements native Overline11568/Which105 through consumed shared SfxBindings toggle preparation using real SfxItemSet states and concrete bool/enum slot factories. Uniform items clone complete metadata;INVALID creates the native default. Actual selection patterns,attribute Undo/Redo and grouped/disjoint marks retain one document model. Existing Writer menu components publish checked/mixed state. Native ODS overline style/type/width/color reuse original shared line handlers with independent property values;plain-cell spans paint overline separately from parent underline. Full native bindings request routing,rich edit,device metrics and full native parity remain unverified;Writer primary-save/open/no-recovery deviations remain.",
       "knownViolations": [],
       "localSymbols": [
         "SfxBindings",

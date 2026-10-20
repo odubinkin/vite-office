@@ -1,0 +1,14 @@
+[
+  "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+  "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+  "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+  "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+  "apps/office/src/sc/source/ui/app/inputhdl.test.ts",
+  "apps/office/src/sc/source/ui/app/inputhdl.ts",
+  "docs/program/registry/calc/capabilities/CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86.json",
+  "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+  "docs/program/registry/calc/provenance/sc/source/ui/app/inputhdl.ts.json",
+  "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+  "docs/program/registry/calc/runtime/sc/source/ui/app/inputhdl.ts.json",
+  "scripts/calc-sheet-command-source.test.ts"
+]

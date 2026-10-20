@@ -1,4 +1,6 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import type { ScPatternAttr } from "../../../inc/patattr";
+import type { ScTable } from "../../../inc/table";
 import { assert, expect, it, vi } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
@@ -143,7 +145,7 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
   for (const xml of [
     "<unknown/>",
     independent("").replace("document-content", "document-styles"),
-    independent("").replace("<office:body>", "<office:styles/> <office:body>"),
+    independent("").replace("<office:body>", "<office:settings/> <office:body>"),
     independent("")
       .replace("<office:spreadsheet>", "<office:text>")
       .replace("</office:spreadsheet>", "</office:text>"),
@@ -353,4 +355,190 @@ it("exposes native export component and wrapper entry points on the same documen
   const xml = new ScXMLExport(doc).exportContent(),
     bytes = new ScXMLImportWrapper(doc).Export();
   expect(await new ZipFile(bytes).readTextEntry("content.xml")).toBe(xml);
+});
+
+/** Independent ODF automatic style envelope for native font-height import contracts. @param styles - Source styles. @param rows - Source rows. @returns XML. */
+function fontStyles(styles: string, rows: string): string {
+  return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><office:automatic-styles>${styles}</office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data">${rows}</table:table></office:spreadsheet></office:body></office:document-content>`;
+}
+it("imports real script-specific automatic font heights and preserves styled empty repeats without expanding cell contents", /** Independent XML tests native item identities rather than exporter agreement alone. @returns Completion. */ async () => {
+  const xml = fontStyles(
+    `<style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="1in" style:font-size-asian="16pt" style:font-size-complex="22pt"/></style:style>`,
+    `<table:table-row table:number-rows-repeated="1048576"><table:table-cell table:style-name="ce" table:number-columns-repeated="16384"/></table:table-row>`,
+  );
+  const doc = load(xml, { maxExpandedCells: 0 });
+  expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(0);
+  const pos = new ScAddress(doc.MaxCol(), doc.MaxRow(), 0),
+    pattern = doc.GetPattern(pos) as ScPatternAttr;
+  expect(
+    [101, 112, 117].map(
+      /** Reads actual imported script height. @param which - Identity. @returns Twips. */ (
+        which,
+      ) =>
+        (
+          pattern.GetItem(which) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+        ).GetHeight(),
+    ),
+  ).toEqual([1440, 320, 440]);
+  const bytes = writeOdsDocument(doc),
+    xmlOut = await new ZipFile(bytes).readTextEntry("content.xml");
+  expect(xmlOut.length).toBeLessThan(3000);
+  expect(xmlOut).toContain('table:number-rows-repeated="1048576"');
+  const again = await readOdsDocument(bytes);
+  expect(
+    (
+      (again.GetPattern(pos) as ScPatternAttr).GetItem(
+        112,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(320);
+  expect(again.GetCellType(pos)).toBe(0);
+  doc.DisposeAttributes();
+  again.DisposeAttributes();
+});
+it("diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights", /** Invalid metadata never becomes a successful invented format. @returns Nothing. */ () => {
+  const names: string[] = [];
+  const xml = fontStyles(
+    `<style:style style:name="p" style:family="paragraph"/><style:default-style style:family="table-cell"/><style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="8pt"/></style:style><style:style style:name="ce" style:family="table-cell" style:parent-style-name="Base"><style:paragraph-properties/><style:table-row-properties/><style:text-properties fo:font-size="0pt" style:font-size-asian="120%" style:font-size-complex="16pt" fo:font-weight="bold"/></style:style>`,
+    `<table:table-row><table:table-cell table:style-name="ce"/><table:table-cell table:style-name="missing"/><table:covered-table-cell table:style-name="ce"/></table:table-row><table:table-row table:number-rows-repeated="1048577"><table:table-cell table:style-name="ce" table:number-columns-repeated="16385"/></table:table-row><table:table-row><table:table-cell table:style-name="ce"/></table:table-row>`,
+  );
+  const doc = load(xml, {
+    onDiagnostic:
+      /** Records actual importer diagnostics. @param value - Native diagnostic. @returns Nothing. */ (
+        value,
+      ) => {
+        names.push(value.name);
+      },
+  });
+  expect(names).toEqual(
+    expect.arrayContaining([
+      "non-cell automatic style",
+      "cell parent style inheritance",
+      "cell style properties",
+      "relative or invalid cell font height",
+      "cell style/number format",
+      "cell range overflow",
+    ]),
+  );
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(0, 0, 0)) as ScPatternAttr).GetItem(
+        101,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(200);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(0, 0, 0)) as ScPatternAttr).GetItem(
+        117,
+      ) as import("../../../../editeng/inc/fhgtitem").SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(320);
+  doc.DisposeAttributes();
+  expect(
+    /** Rejects an automatic cell style without its required name. @returns Never. */ () =>
+      load(fontStyles('<style:style style:family="table-cell"/>', "<table:table-row/>")),
+  ).toThrow(/cell style name/);
+});
+
+it("observes cancellation while traversing an empty sheet's attribute row runs", /** Empty formatting/content still participates in the cooperative export boundary. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Empty"));
+  let calls = 0;
+  expect(
+    /** Observes actual export cancellation in an empty row run. @returns Never. */ () =>
+      writeOdsDocument(doc, {
+        isCancelled: /** Cancels after wrapper admission. @returns Cancelled. */ () => ++calls > 1,
+      }),
+  ).toThrow(/cancelled/);
+});
+it("preserves manual row geometry and recalculates standard automatic font rows through actual ODS", /** Independent ODF input covers row defaults and large empty repeats. @returns Completion. */ async () => {
+  const xml = fontStyles(
+    '<style:style style:name="r" style:family="table-row"><style:table-row-properties style:row-height="30pt" style:use-optimal-row-height="false"/></style:style><style:style style:name="a" style:family="table-row"><style:table-row-properties style:row-height="0pt" style:use-optimal-row-height="true"/></style:style>',
+    '<table:table-row table:style-name="r" table:number-rows-repeated="3"><table:table-cell office:value-type="string"><text:p xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0">Rows</text:p></table:table-cell></table:table-row><table:table-row table:style-name="a"/><table:table-row table:number-rows-repeated="1048572"><table:table-cell/></table:table-row>',
+  );
+  const doc = load(xml),
+    table = doc.FetchTable(0) as ScTable;
+  expect(table.GetRowHeight(0)).toBe(600);
+  expect(table.GetRowHeight(2)).toBe(600);
+  expect(table.GetRowHeight(3)).toBe(256);
+  expect(table.GetRowFlagsRange(0).maValue & 8).toBe(8);
+  const bytes = writeOdsDocument(doc),
+    content = await new ZipFile(bytes).readTextEntry("content.xml");
+  expect(content).toContain('style:row-height="1.058cm"');
+  expect(content).toContain('style:use-optimal-row-height="false"');
+  const reopened = await readOdsDocument(bytes),
+    result = reopened.FetchTable(0) as ScTable;
+  expect(result.GetRowHeight(2)).toBe(600);
+  expect(result.GetRowHeight(3)).toBe(256);
+  expect(result.GetRowFlagsRange(2).maValue & 8).toBe(8);
+  doc.DisposeAttributes();
+  reopened.DisposeAttributes();
+});
+it("diagnoses unsupported row-style children and invalid properties without manufacturing geometry", /** Exercises actual property parser with independent XML. @returns Nothing. */ () => {
+  const diagnostics: string[] = [];
+  const doc = load(
+    fontStyles(
+      '<style:style style:name="empty" style:family="table-row"><style:table-row-properties/></style:style><style:style style:name="r" style:family="table-row"><style:text-properties/><style:table-row-properties style:row-height="bad" style:use-optimal-row-height="bad"/></style:style>',
+      '<table:table-row table:style-name="empty"/><table:table-row table:style-name="r"/>',
+    ),
+    {
+      /** Collects parser diagnostics. @param diagnostic - Unsupported metadata. @returns Nothing. */
+      onDiagnostic: (diagnostic) => {
+        diagnostics.push(diagnostic.name);
+      },
+    },
+  );
+  expect(diagnostics).toEqual(
+    expect.arrayContaining([
+      "row style properties",
+      "invalid row height",
+      "invalid optimal row height",
+    ]),
+  );
+  expect((doc.FetchTable(0) as ScTable).GetRowHeight(0)).toBe(256);
+  doc.DisposeAttributes();
+});
+
+it("retains source item defaults and diagnostics when character conversions fail", /** Independent malformed properties exercise shared handler failure contracts. @returns Nothing. */ () => {
+  const names: string[] = [];
+  const doc = load(
+    fontStyles(
+      `<style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-style="invalid" fo:font-weight="heavy" style:text-underline-style="invalid" style:text-underline-color="invalid"/></style:style>`,
+      `<table:table-row><table:table-cell table:style-name="ce"/></table:table-row>`,
+    ),
+    {
+      onDiagnostic:
+        /** Collects native diagnostics. @param diagnostic - Source error. @returns Nothing. */ (
+          diagnostic,
+        ) => {
+          names.push(diagnostic.name);
+        },
+    },
+  );
+  expect(
+    names.filter(
+      /** Counts actual conversion failures. @param name - Error. @returns Match. */ (name) =>
+        name === "invalid cell character property",
+    ),
+  ).toHaveLength(2);
+  expect(names).toContain("invalid cell underline property");
+  const pattern = doc.GetPattern(new ScAddress()) as ScPatternAttr;
+  expect(pattern.GetItem(102).equals(doc.GetPool().GetUserOrPoolDefaultItem(102))).toBe(true);
+  expect(pattern.GetItem(103).equals(doc.GetPool().GetUserOrPoolDefaultItem(103))).toBe(true);
+  doc.DisposeAttributes();
+});
+
+it("omits an unrepresentable native posture on export without replacing it with a boolean", /** Checks the original handler's unsupported enum outcome. @returns Completion. */ async () => {
+  const { ScPatternAttr } = await import("../../../inc/patattr"),
+    { SvxPostureItem } = await import("../../../../editeng/source/items/textitem"),
+    { FontItalic } = await import("../../../../tools/inc/fontenum");
+  const doc = load(independent("<table:table-row><table:table-cell/></table:table-row>"));
+  const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+  delta.ItemSetPut(new SvxPostureItem(FontItalic.ITALIC_DONTKNOW, 103));
+  doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
+  delta.Dispose();
+  const xml = await new ZipFile(writeOdsDocument(doc)).readTextEntry("content.xml");
+  expect(xml).not.toContain("fo:font-style=");
+  doc.DisposeAttributes();
 });

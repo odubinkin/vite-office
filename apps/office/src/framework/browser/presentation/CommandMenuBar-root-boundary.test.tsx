@@ -89,9 +89,9 @@ function mountRoots() {
   const result = render(tree());
   return {
     owner: screen.getByRole("button", { name: "Document owner" }),
-    first: screen.getByRole("button", { name: "First" }),
-    middle: screen.getByRole("button", { name: "Middle" }),
-    last: screen.getByRole("button", { name: "Last" }),
+    first: screen.getByRole("menuitem", { name: "First" }),
+    middle: screen.getByRole("menuitem", { name: "Middle" }),
+    last: screen.getByRole("menuitem", { name: "Last" }),
     execute,
     rerender: /** Keeps menu identities stable on resource reprojection. @returns Nothing. */ () =>
       result.rerender(tree()),

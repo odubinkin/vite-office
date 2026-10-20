@@ -34,14 +34,14 @@ for (const kind of ["Ordered List", "Unordered List"] as const)
           second = page.getByRole("textbox", { name: "Row 2 column 2 paragraph 1", exact: true });
         await neighbor.fill("Neighbor");
         await previous.fill("Previous");
-        await page.getByRole("button", { name: "Format", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
         await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
         await first.fill("First");
         await second.fill("Second");
         if (initial === "different") {
           await selectBrowserTableRow(page, "Table1", 2);
-          await page.getByRole("button", { name: "Format", exact: true }).click();
+          await page.getByRole("menuitem", { name: "Format", exact: true }).click();
           await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
           await page
             .getByRole("menuitemradio", {
@@ -53,7 +53,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const)
         await selectBrowserTableRow(page, "Table1", 2);
         const table = page.getByRole("table", { name: "Table1" });
         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
-        await page.getByRole("button", { name: "Format", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
         const command = page.getByRole("menuitem", { name: "Add to List", exact: true });
         await expect(command).toBeEnabled();
@@ -148,14 +148,14 @@ test("Writer table row Add to List continues an imported restarted body list", /
     rendered = page.getByRole("table", { name: "RestartRow" });
   await first.click();
   await selectBrowserTableRow(page, "RestartRow", 2);
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Unordered List", exact: true }).click();
   await expect(firstMarker).toHaveText("•");
   await expect(secondMarker).toHaveText("•");
   await selectBrowserTableRow(page, "RestartRow", 2);
   await expect(rendered.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitem", { name: "Add to List", exact: true }).click();
   await expect(firstMarker).toHaveText("8.");

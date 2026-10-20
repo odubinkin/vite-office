@@ -1,0 +1,13 @@
+{
+  "result": "pass",
+  "sourceChange": "cdouthdl imports Any only as a type because all value operations borrow caller-owned instances.",
+  "executedBrowserBundleAndFinalBundleIdentical": true,
+  "assetHashes": {
+    "index.html": "fc58f135c65c87574f9e42a1078e4222409f88d727307833af03663b1868377e",
+    "assets/index-CTuLb1xf.css": "104f2e10561613ce7d956307157ccfa45175dd89b26bf434c93e2b96c18f8227",
+    "assets/index-BJwSg7Dn.js": "3b6becbe4f938add2564336dd8f30e770ce645133136dffbf09cbf6feb8b56ef",
+    "assets/odt-worker-B9xAFHBa.js": "7aff44c71e2b7ec569cea993a435b7f89de8a2d3167015fc35a3d169a5ce1917"
+  },
+  "scope": "Historical type-import-only rebuild identity;superseded as the current runtime certificate by the final browser suite after the integer-fidelity repair.",
+  "currentRuntimeCertificate": false
+}

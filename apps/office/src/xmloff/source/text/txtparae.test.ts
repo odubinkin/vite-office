@@ -27,7 +27,10 @@ describe("ODF list label alignment export", /** Groups ODF list label alignment 
                 },
               },
               runs: [
-                { text: "item", properties: { bold: false, italic: false, underline: false } },
+                {
+                  text: "item",
+                  properties: { fontWeight: 100, fontPosture: 0, underlineStyle: 0 },
+                },
               ],
               style: "default" as const,
             };

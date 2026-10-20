@@ -123,11 +123,7 @@ export interface XMLTextImportTarget {
   resolveNamedParagraphStyle?(styleName: string): string | undefined;
 }
 
-const DEFAULT_PROPERTIES: OdfCharacterProperties = {
-  bold: false,
-  italic: false,
-  underline: false,
-};
+const DEFAULT_PROPERTIES: OdfCharacterProperties = {};
 
 /** Handles office:text children and owns list identity state for one stream. */
 export class XMLTextBodyContext extends SvXMLImportContext {

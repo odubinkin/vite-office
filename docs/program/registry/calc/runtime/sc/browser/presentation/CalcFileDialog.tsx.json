@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "browser-file-ui",
+    "capabilityIds": [
+      "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+        "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Task2BTWEE connects Calc native OpenFromCalc26204,SaveAs5502 and ExportTo5829 Sfx slots to actual ODS workflows and the shared Writer-style file dialog. Current input commits before file focus;primary autosave flushes before open/copy/import;computer imports use existing ODS candidate loading and collision-resolved browser identity;named copies and browser opens use actual primary IO. Shell Export uses a separate medium and leaves primary identity,modified state,generation and undo-save position unchanged. Shared CommandMenuBar and CommandButton render consumed native File/Edit placements and normalized source labels/shortcuts. Open dialogs make background Calc chrome/grid inert and restore actual grid focus on close. Native slot/placement/resource identities are preserved for consumed commands;this is not complete native menu/UI parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcFileDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

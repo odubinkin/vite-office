@@ -1,0 +1,32 @@
+{
+  "result": "pass",
+  "focusedCalcCases": 14,
+  "focusedSharedCases": 13,
+  "finalRebuiltFontReplayCases": 3,
+  "uniqueCases": 27,
+  "widths": [
+    1280,
+    390
+  ],
+  "pageAndDOMFreeWorker": true,
+  "uncaughtExceptions": 0,
+  "screenshots": [
+    {
+      "path": ".agentplane/tasks/202610192240-89YNKC/evidence/font-script-mixed-390.png",
+      "sha256": "ea965921c4421314f6e568b67512a37ff32a9e733f29924c4530890c1a1d7ea3"
+    },
+    {
+      "path": ".agentplane/tasks/202610192240-89YNKC/evidence/font-script-reopened-390.png",
+      "sha256": "20ebef00bc7601113011c8dcdfac56c48408583bfdd535d91618fd31ddc9e213"
+    },
+    {
+      "path": ".agentplane/tasks/202610192240-89YNKC/evidence/font-script-reopened-1280.png",
+      "sha256": "621ec536c6ca14d1f1a854d5fbfd8ac1b953fa3878caa09a4e9adde72f156b6b"
+    },
+    {
+      "path": ".agentplane/tasks/202610192240-89YNKC/evidence/font-script-mixed-1280.png",
+      "sha256": "7ade42cad4b7a46359b3ce95819c376ffeadfff51b02c6f3febf3db295285cb3"
+    }
+  ],
+  "visualReview": "Inspected mixed1280 and reopened390 images:actual per-script sizes,mixed selector,shared Writer toolbar/menu layout and uniform18pt reopening are visible;no new native device-layout parity claim."
+}

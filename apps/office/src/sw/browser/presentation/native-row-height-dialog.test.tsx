@@ -9,8 +9,8 @@ import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom"
 afterEach(cleanup);
 /** Opens the generated source menu, retaining native selection. @returns Nothing. */
 function open(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
-  fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Size" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
 }
 for (const selected of [false, true])

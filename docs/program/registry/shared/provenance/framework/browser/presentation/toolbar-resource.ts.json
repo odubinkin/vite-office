@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+    "rationale": "Extracts the existing Writer toolbar separator normalization unchanged into a shared office module consumed by Writer and Calc. Removes orphaned separators after native visibility/availability filtering without changing command order.",
+    "responsibilities": [
+      "Extracts the existing Writer toolbar separator normalization unchanged into a shared office module consumed by Writer and Calc. Removes orphaned separators after native visibility/availability filtering without changing command order."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared React placement normalization after source projection."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+          "marker": "normalizeToolbarItems"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts",
+          "marker": "normalizeWriterToolbarItems"
+        }
+      ]
+    }
+  }
+}

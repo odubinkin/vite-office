@@ -1,0 +1,188 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+      "sha256": "dfd43a44c441b5723501c8424891220caa68a954817bb1fbda0b224bb59664dd",
+      "anchors": [
+        {
+          "marker": "ScAttrArray::DeleteHardAttr",
+          "lines": [
+            2333
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+      "sha256": "19388249a9559f354bf914abc44a474ccd482d975ca9307e83b01a73d5132aed",
+      "anchors": [
+        {
+          "marker": "ScColumn::DeleteArea",
+          "lines": [
+            1104
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+      "sha256": "670bec58a4d8d51fb9e6d04e5b8292ed4dcbfcaa5d1a7e9f3831ad1c87b42727",
+      "anchors": [
+        {
+          "marker": "ScColumn::DeleteSelection",
+          "lines": [
+            397
+          ]
+        },
+        {
+          "marker": "ScColumn::CopyToColumn",
+          "lines": [
+            1526
+          ]
+        },
+        {
+          "marker": "class CopyByCloneHandler",
+          "lines": [
+            1237
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33",
+      "anchors": [
+        {
+          "marker": "ScTable::DeleteArea",
+          "lines": [
+            423
+          ]
+        },
+        {
+          "marker": "ScTable::DeleteSelection",
+          "lines": [
+            446
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+      "sha256": "e89ce72a7e618225be9d61e531e36175787a32e246d5cbb0b4738a93f7e3d9da",
+      "anchors": [
+        {
+          "marker": "ScDocument::DeleteArea",
+          "lines": [
+            1992,
+            2053,
+            2068
+          ]
+        },
+        {
+          "marker": "ScDocument::DeleteSelection",
+          "lines": [
+            6022,
+            6080
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx",
+      "sha256": "92959feb0ed284ea03da5cb864ab99c7a86e0f076db4205ce00fe3f165612b4d",
+      "anchors": [
+        {
+          "marker": "SID_CELL_FORMAT_RESET",
+          "lines": [
+            836
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260",
+      "anchors": [
+        {
+          "marker": "ScViewFunc::DeleteContents",
+          "lines": [
+            2222
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docfuncutil.cxx",
+      "sha256": "c25ee3a4b16e699b0f4fc53d1856e9315eb9cac7b487116f7d017bdfae386bd2",
+      "anchors": [
+        {
+          "marker": "DocFuncUtil::createDeleteContentsUndoDoc",
+          "lines": [
+            70
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/operation/Operation.cxx",
+      "sha256": "5e75760f8c2c44bfb5d867e99b44de9f50562755494b24cb443e1f019ba6f208",
+      "anchors": [
+        {
+          "marker": "Operation::run()",
+          "lines": [
+            565
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/operation/DeleteContentOperation.cxx",
+      "sha256": "c7ee9cdfdfea94b6c4a2e4af31e6e34b1e2f4ec3e1a83e9162d4f41757d2cb0f",
+      "anchors": [
+        {
+          "marker": "DeleteContentOperation::runImplementation",
+          "lines": [
+            62
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/operation/DeleteCellOperation.cxx",
+      "sha256": "fc49a9edc9b01a765b48b9096b0f7e8954aa46f8e35d8968685389fbcdd5e892",
+      "anchors": [
+        {
+          "marker": "DeleteCellOperation::runImplementation",
+          "lines": [
+            34
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk3.cxx",
+      "sha256": "0c3d01b6c58b5a895f3e7ea0705417aec67be48450c05c89e298f90e67842daf",
+      "anchors": [
+        {
+          "marker": "ScUndoDeleteContents::DoChange",
+          "lines": [
+            111
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+      "sha256": "7b24b601115cda9adf8a1ed805c3f9a8ff45dc654603b4e8f1d1d79d0619dcc0",
+      "anchors": [
+        {
+          "marker": "ResetAttributes",
+          "lines": [
+            4545
+          ]
+        }
+      ]
+    }
+  ]
+}

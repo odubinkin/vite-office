@@ -4,6 +4,7 @@
  */
 
 import { useState, type ReactNode } from "react";
+import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
 import { SidebarDeck } from "../../../sfx2/browser/presentation/SidebarDeck";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WriterRulerLaneContext } from "./writer-ruler-lane-context";
@@ -73,92 +74,26 @@ export function WriterWorkspaceChrome({
   toolbar,
 }: WriterWorkspaceChromeProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(documentTitle);
   const [rulerLane, setRulerLane] = useState<HTMLElement | null>(null);
   const [canvasScrollTop, setCanvasScrollTop] = useState(0);
-
-  /** Commits the normalized title draft and closes the inline editor. @returns Nothing. */
-  function commitTitle(): void {
-    const nextTitle = draftTitle.trim();
-    if (nextTitle.length > 0 && nextTitle !== documentTitle) onDocumentTitleChange(nextTitle);
-    setDraftTitle(nextTitle.length > 0 ? nextTitle : documentTitle);
-    setIsEditingTitle(false);
-  }
 
   return (
     <section
       aria-label="Writer workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
-      <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
-        <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
-          <div className="min-w-0">
-            {isEditingTitle ? (
-              <input
-                aria-label={localization.GetText("writer.workspace.title-label", "Document title")}
-                autoFocus
-                className="w-full min-w-48 rounded border border-indigo-300 px-1 text-sm font-bold text-slate-950 outline-none ring-indigo-200 focus:ring-2"
-                onBlur={commitTitle}
-                onChange={
-                  /** Retains the current title draft. @param event - Input change. @returns Nothing. */ (
-                    event,
-                  ) => setDraftTitle(event.target.value)
-                }
-                onKeyDown={
-                  /** Commits the title when Enter blurs the editor. @param event - Keyboard input. @returns Nothing. */ (
-                    event,
-                  ) => {
-                    if (event.key === "Enter") {
-                      event.preventDefault();
-                      event.currentTarget.blur();
-                    }
-                  }
-                }
-                type="text"
-                value={draftTitle}
-              />
-            ) : (
-              <button
-                aria-label={localization.GetText(
-                  "writer.workspace.edit-title",
-                  "Edit document title",
-                )}
-                className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
-                onClick={
-                  /** Opens title editing with the current document title. @returns Nothing. */ () => {
-                    setDraftTitle(documentTitle);
-                    setIsEditingTitle(true);
-                  }
-                }
-                type="button"
-              >
-                {documentTitle}
-              </button>
-            )}
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
-              {localization.GetText("writer.workspace.subtitle", "Writer · browser workbench")}
-            </p>
-          </div>
-          <div className="shrink-0">{menuBar}</div>
-        </div>
-
-        <div
-          aria-label="Writer standard toolbar"
-          className="flex min-h-12 min-w-0 items-center gap-1 overflow-x-auto border-b border-slate-200 px-3 py-1.5"
-          role="toolbar"
-        >
-          {toolbar}
-        </div>
-
-        <div
-          aria-label="Writer formatting toolbar"
-          className="flex min-h-12 min-w-0 flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5"
-          role="toolbar"
-        >
-          {formattingToolbar}
-        </div>
-      </header>
+      <OfficeWorkspaceHeader
+        documentTitle={documentTitle}
+        onDocumentTitleChange={onDocumentTitleChange}
+        titleLabel={localization.GetText("writer.workspace.title-label", "Document title")}
+        editTitleLabel={localization.GetText("writer.workspace.edit-title", "Edit document title")}
+        subtitle={localization.GetText("writer.workspace.subtitle", "Writer · browser workbench")}
+        standardToolbarLabel="Writer standard toolbar"
+        formattingToolbarLabel="Writer formatting toolbar"
+        menuBar={menuBar}
+        toolbar={toolbar}
+        formattingToolbar={formattingToolbar}
+      />
 
       <div
         className={`min-h-0 min-w-0 flex-1 overflow-hidden ${
@@ -186,6 +121,7 @@ export function WriterWorkspaceChrome({
               ) => setCanvasScrollTop(event.currentTarget.scrollTop)
             }
             role="region"
+            tabIndex={0}
           >
             <WriterRulerLaneContext.Provider
               value={{ lane: rulerLane, scrollTop: canvasScrollTop }}
@@ -211,7 +147,7 @@ export function WriterWorkspaceChrome({
       </div>
 
       {isStatusBarVisible ? (
-        <footer
+        <div
           aria-label="Writer status bar"
           className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
           role="status"
@@ -219,7 +155,7 @@ export function WriterWorkspaceChrome({
           <span aria-live="polite" className="sm:ml-auto">
             {status}
           </span>
-        </footer>
+        </div>
       ) : null}
     </section>
   );

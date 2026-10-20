@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "ods-content-filter",
     "capabilityIds": [
-      "CAP-52899cc6-d061-4979-a569-681a6b9e15e0"
+      "CAP-52899cc6-d061-4979-a569-681a6b9e15e0",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -20,7 +21,7 @@
         "apps/office/src/sc/source/filter/xml/ods.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/xmlwrap.cxx#ScXMLImportWrapper::Import"
       ],
-      "justification": "Task204 binds native ScXMLImportWrapper package responsibilities to browser byte input/output using existing shared ZipFile/ZipOutputStream,plain manifest reader/writer and actual PropertyValue sequences. The plain modern ODS mimetype and resource/cancellation bounds are explicit;there is no ZIP or manifest clone. Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed.",
+      "justification": "Task204 binds native ScXMLImportWrapper package responsibilities to browser byte input/output using existing shared ZipFile/ZipOutputStream,plain manifest reader/writer and actual PropertyValue sequences. The plain modern ODS mimetype and resource/cancellation bounds are explicit;there is no ZIP or manifest clone. Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed. Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
       "knownViolations": [],
       "localSymbols": [
         "ODS_MIMETYPE",

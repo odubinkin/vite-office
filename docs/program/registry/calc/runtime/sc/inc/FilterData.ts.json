@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/FilterData.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "column-geometry",
+    "capabilityIds": [
+      "CAP-b0983657-1a03-4cca-8982-119820de587b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/FilterData.ts",
+        "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx"
+      ],
+      "justification": "TaskRV75WR implements native1280twip compressed column widths,source FilterData hidden runs,geometry-only document copies,marked/grouped direct/show/hide commands and real ScUndoWidthOrHeight documents. ColumnWidth26290 uses typed UInt16 HMM and optional one-based FN_PARAM_1;the actual metric dialog normalizes two decimals in the configured CM/INCH unit,preserves default/current toggling,and records a separate completed even-HMM request. Shared SfxRequest now separates cloned SetReturnValue from Done and implements source call-mode flags/AppendItem/removal;both common dispatch adapters and the actual Writer style caller use that contract. React reuses shared Writer menus/dialog styling and reads actual native column geometry with bounded scrolling and hidden-column keyboard skipping. Independent ODS column style/repeat/visibility and genuine byte reopens preserve represented widths and cells. Full pool/recorder/UNO argument transforms,optimal widths,protection,merged/outline/drawing/alternate views,native widget/font/device services and complete application parity remain unverified. Existing primary saving/open/no-recovery policy remains.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamSymbols": [
+        "class FilterData"
+      ],
+      "upstreamFile": "sc/inc/FilterData.hxx"
+    }
+  }
+}

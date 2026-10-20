@@ -1,0 +1,20 @@
+apps/office/src/o3tl/inc/numeric.ts 253ms (unchanged)
+apps/office/src/sax/source/tools/converter.ts 165ms (unchanged)
+apps/office/src/xmloff/source/style/xmlbahdl.ts 36ms
+apps/office/src/xmloff/source/text/txtprmap.ts 253ms
+apps/office/src/xmloff/source/text/txtparae.types.ts 137ms (unchanged)
+apps/office/src/xmloff/source/text/txtparae.ts 320ms
+apps/office/src/xmloff/source/text/txtparai.ts 87ms (unchanged)
+apps/office/src/xmloff/source/style/xmlstyle.ts 375ms
+apps/office/src/sw/source/filter/xml/xmlexp.ts 772ms
+apps/office/src/sw/source/filter/xml/xmlexpit.ts 256ms
+apps/office/src/sw/source/filter/xml/xmlimp.ts 1554ms
+apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts 60ms
+apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts 32ms
+apps/office/src/sc/source/filter/xml/xmlstyle.ts 31ms
+apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.test.ts 25ms (unchanged)
+apps/office/src/xmloff/source/table/XMLTableExport-header-count.test.ts 59ms (unchanged)
+apps/office/src/xmloff/source/style/xmlstyle.test.ts 43ms (unchanged)
+apps/office/src/xmloff/source/text/txtparai.test.ts 98ms
+apps/office/src/xmloff/source/text/txtparae.test.ts 17ms
+apps/office/src/xmloff/source/text/txtpara.test.ts 117ms (unchanged)

@@ -5,7 +5,7 @@ test("pointer root popup owns focus and passes keyboard input to its first comma
   page,
 }) => {
   await page.goto("/writer");
-  const view = page.getByRole("button", { name: "View", exact: true });
+  const view = page.getByRole("menuitem", { name: "View", exact: true });
   await view.click();
   const popup = page.getByRole("menu", { name: "View menu" });
   const first = page.getByRole("menuitemcheckbox", { name: "Status Bar", exact: true });
@@ -25,7 +25,7 @@ for (const key of ["ArrowDown", "ArrowUp", "Enter", "Space"]) {
     page,
   }) => {
     await page.goto("/writer");
-    const view = page.getByRole("button", { name: "View", exact: true });
+    const view = page.getByRole("menuitem", { name: "View", exact: true });
     await view.focus();
     await view.press(key);
     const first = page.getByRole("menuitemcheckbox", { name: "Status Bar", exact: true });

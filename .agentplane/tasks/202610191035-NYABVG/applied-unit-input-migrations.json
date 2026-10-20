@@ -1,0 +1,89 @@
+{
+  "runtimeSourcesUnchanged": true,
+  "files": [
+    {
+      "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+      "beforeSha256": "82e6eb5d76b5b3a6d33d47d16341b880293e39ebe6a061f852cb48e0a3e45e83",
+      "intermediateAfterSha256": "e46edf0c43cab357df149358254ac1f5a205d20b55486ccd33e061120fcd2f85",
+      "replacementCount": 6,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+      "beforeSha256": "91182e7068c95e6b8d9b5ee36d64aea62ef76d065109dddd329afef1090372a2",
+      "intermediateAfterSha256": "8f7da0e4272a3de41a4fab6b6063c9206536f05e4d296846bc9d96f209d0fe99",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+      "beforeSha256": "c2e3f5bffeee7fc20a5c3ea9f447ba235a46cc985014eff4a24cc4812cd182e3",
+      "intermediateAfterSha256": "95ed055a926b070babbf240bb20eb451c943109e5857165bcc63c92bbc35a4b2",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+      "beforeSha256": "69c0452a97ef34939e44aea7641f6ac4f9aae3144cdd644d98ec41124e806a3d",
+      "intermediateAfterSha256": "d5ea4a8b7efbc22f6b6572e0bc64c5e8a6e48b42f71546519dc9fd4865629d01",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "beforeSha256": "d4e34a484b946ca226b115472a0de70550ea8d830543b30c010a683b791741e4",
+      "intermediateAfterSha256": "2af74e2f73d503600d62a5057bfff935f29519c5ca735b8647e68c629ba7608e",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx",
+      "beforeSha256": "6d8728a5fbaa3d37a11aac1d3c67c5a579a175ebfcceb0e5756a9748248adb70",
+      "intermediateAfterSha256": "41a429b2082b31b656db34c114a2dde4b6cc8ff6d9334c9caa21c236fe2d9e91",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+      "beforeSha256": "018b29b2447e7ac474fb2a3d75ef60ee153444a780994e478a72f72b31d40586",
+      "intermediateAfterSha256": "329d6ee71500c6e63601b1e80d1ba0a0ada7352767ed8b83d5127b067c9ee86d",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+      "beforeSha256": "a05dfd7db77d47b152174a87bad5564374e5875cb713fe5ef2d255ace3deb4e4",
+      "intermediateAfterSha256": "2e8f9962a1b89c4787e652362bf15fe23669c9f8e59b5aa0ee8433cf30e91bd6",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+      "beforeSha256": "d78ed90345bd74d97f7060dba6fc3f6440fde092a88a35325003b3cb43daa71f",
+      "intermediateAfterSha256": "1062fc69bf8c409a0da87852d868e8fce0ff879bc90759e1ac99dee6d60d623f",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+      "beforeSha256": "6ac22cf09740546ae88cbafded1eb9d028244daac16462e46aecf2c906b22d7c",
+      "intermediateAfterSha256": "bf52b3e54f94671485dd39e6bb9d64dff551eeaf6208ea33be46460a49ef95a8",
+      "replacementCount": 1,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+      "beforeSha256": "c4941a284c209feba72f8ec537c53d448d8ecdab7e6dab7a9f147a68be91d193",
+      "intermediateAfterSha256": "27789c105740e5c28bc642698a8087c610b90eddff5274c1eff65787bc8cf9ae",
+      "replacementCount": 3,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+      "beforeSha256": "420c2858843ff894ca719f472dcdb64dde5dba97d8b322015843396613586898",
+      "intermediateAfterSha256": "6bde2a844f6bc730f5348173317ead73d43d9c7ba007759a17d29343b7737235",
+      "replacementCount": 2,
+      "intent": "Keep document/selection/history assertions unchanged;use the existing immediate ordinary submenu click route for tests whose purpose is command/model behavior,not hover timing."
+    }
+  ]
+}

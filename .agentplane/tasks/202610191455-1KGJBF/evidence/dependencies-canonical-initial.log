@@ -1,0 +1,12 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check failed:
+- apps/office/src/sax/source/tools/converter.ts: non-allowlisted module edge sax -> o3tl
+- apps/office/src/xmloff/source/style/postuhdl.ts: non-allowlisted module edge xmloff -> cppu
+- apps/office/src/xmloff/source/style/postuhdl.ts: non-allowlisted module edge xmloff -> vcl
+- apps/office/src/xmloff/source/style/undlihdl.ts: non-allowlisted module edge xmloff -> cppu
+- apps/office/src/xmloff/source/style/weighhdl.ts: non-allowlisted module edge xmloff -> cppu
+- apps/office/src/xmloff/source/style/xmlbahdl.ts: non-allowlisted module edge xmloff -> cppu
+- apps/office/src/xmloff/source/text/txtprmap.ts: non-allowlisted module edge xmloff -> cppu

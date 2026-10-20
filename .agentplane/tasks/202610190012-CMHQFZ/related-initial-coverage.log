@@ -1,0 +1,41 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/inc/rtl/ustrbuf.ts --coverage.include=src/sal/inc/rtl/stringutils.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.include=src/sal/inc/rtl/string.h.ts --coverage.include=src/sal/inc/rtl/ustring.h.ts --coverage.reportsDirectory=coverage/task26-buffer src/sal/rtl src/sal/inc/rtl src/svl/source/misc/sharedstring.test.ts src/svl/source/misc/sharedstringpool.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  20 passed (20)
+      Tests  50 passed (50)
+   Start at  07:18:37
+   Duration  13.61s (transform 4.77s, setup 1.54s, import 6.31s, tests 6.75s, environment 8.47s)
+
+ % Coverage report from istanbul
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+All files       |   99.62 |    98.14 |   98.59 |   99.57 |                   
+ stringutils.ts |     100 |       90 |     100 |     100 | 4                 
+ ustrbuf.ts     |     100 |    97.59 |     100 |     100 | 85,98             
+ ustring.ts     |   99.13 |      100 |   97.22 |   99.01 | 267               
+----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.62% ( 264/265 )
+Branches     : 98.14% ( 159/162 )
+Functions    : 98.59% ( 70/71 )
+Lines        : 99.57% ( 234/235 )
+================================================================================
+ERROR: Coverage for lines (99.57%) does not meet global threshold (100%)
+ERROR: Coverage for functions (98.59%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.62%) does not meet global threshold (100%)
+ERROR: Coverage for branches (98.14%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/sal/inc/rtl/ustrbuf.ts --coverage.include=src/sal/inc/rtl/stringutils.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.include=src/sal/inc/rtl/string.h.ts --coverage.include=src/sal/inc/rtl/ustring.h.ts --coverage.reportsDirectory=coverage/task26-buffer src/sal/rtl src/sal/inc/rtl src/svl/source/misc/sharedstring.test.ts src/svl/source/misc/sharedstringpool.test.ts

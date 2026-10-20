@@ -120,6 +120,8 @@ const allowedEdges = new Map([
       "svl",
       "svtools",
       "svx",
+      // Original docpool.cxx uses Tools font enums/colors; Library_sc links tl.
+      "tools",
       "unotools",
       "vcl",
       "xmloff",
@@ -167,7 +169,23 @@ const allowedEdges = new Map([
   ],
   // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
   // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
-  ["vcl", new Set(["offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
+  // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
+  // Original Library_vcl links i18nlangtag; GetDefaultFont consumes resolved language/Locale values.
+  // Original field.cxx includes i18nutil/unicode.hxx; Library_vcl.mk links i18nutil.
+  [
+    "vcl",
+    new Set([
+      "i18nutil",
+      "i18nlangtag",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "tools",
+      "unotools",
+      "udkapi",
+    ]),
+  ],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
@@ -184,9 +202,87 @@ const allowedEdges = new Map([
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);
+/** Exact native value imports needed by the consumed SAX/xmloff character-property owners.
+ * converter.cxx includes o3tl/numeric.hxx; original xo handlers use Any and postuhdl.cxx uses vcl/unohelp.hxx.
+ * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
+ */
+const originalCharacterValueImports = new Map([
+  // patattr.cxx::fillColor owns and returns actual model::ComplexColor values.
+  ["sc/source/core/data/patattr.ts", new Set(["docmodel/inc/color/ComplexColor.ts"])],
+  ["sc/browser/presentation/ScGridWindow.tsx", new Set(["docmodel/inc/color/ComplexColor.ts"])],
+  // Original sfx2/namedcolor.hxx owns Color/OUString and the docmodel theme/transformation value conversion.
+  [
+    "sfx2/inc/namedcolor.ts",
+    new Set([
+      "tools/inc/color.ts",
+      "sal/inc/rtl/ustring.ts",
+      "docmodel/inc/color/ComplexColor.ts",
+      "docmodel/inc/color/Transformation.ts",
+      "docmodel/inc/theme/ThemeColorType.ts",
+    ]),
+  ],
+  // The browser binding of ToolboxButtonColorUpdater borrows actual Sfx owners;JS names use the existing UTF16 bridge.
+  [
+    "svx/browser/tbxctrls/ColorSelect.tsx",
+    new Set([
+      "sfx2/source/doc/objsh.ts",
+      "sfx2/inc/namedcolor.ts",
+      "i18nlangtag/source/isolang/isolang.tables.ts",
+    ]),
+  ],
+  // Original mslangid.cxx uses css::i18n::ScriptType from the published API.
+  [
+    "i18nlangtag/source/isolang/mslangid.script.ts",
+    new Set(["offapi/com/sun/star/i18n/ScriptType.ts"]),
+  ],
+  // Original BreakIteratorImpl includes o3tl/string_view.hxx and the generated i18n ScriptType.hpp.
+  [
+    "i18npool/source/breakiterator/breakiteratorImpl.ts",
+    new Set(["o3tl/inc/string_view.ts", "offapi/com/sun/star/i18n/ScriptType.ts"]),
+  ],
+  // Browser composition borrows the actual producer for the consumed XBreakIterator port.
+  // Native documen6.cxx obtains it via BreakIterator::create;that unported UNO factory is not copied into ScDocument.
+  [
+    "sc/browser/controller/calc-selection-script.ts",
+    new Set(["i18npool/source/breakiterator/breakiteratorImpl.ts"]),
+  ],
+  [
+    "sc/browser/presentation/ScCellText.tsx",
+    new Set(["i18npool/source/breakiterator/breakiteratorImpl.ts"]),
+  ],
+  ["sax/source/tools/converter.ts", new Set(["o3tl/inc/numeric.ts"])],
+  ["xmloff/source/style/weighhdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  [
+    "xmloff/source/style/postuhdl.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Any.ts", "vcl/inc/unohelp.ts"]),
+  ],
+  ["xmloff/source/style/undlihdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  // Pinned cdouthdl.cxx includes com/sun/star/uno/Any.hxx and mutates the caller-owned native Any.
+  ["xmloff/source/style/cdouthdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  ["xmloff/source/style/xmlbahdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  ["xmloff/source/text/txtprmap.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+]);
+/** Matches only source-backed value-owner imports,leaving general module/browser/cycle guards unchanged. @param relativeSource - Importing source path. @param relativeTarget - Imported source path. @returns Whether this exact edge is original. */
+export function isOriginalCharacterValueImport(relativeSource, relativeTarget) {
+  const source = relativeSource.split(path.sep).join("/"),
+    target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") + ".ts";
+  return originalCharacterValueImports.get(source)?.has(target) ?? false;
+}
+
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
+}
+/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
+export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
+  const source = relativeSource.split(path.sep).join("/"),
+    target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
+  if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // docpool.cxx consumes FontRelief and GetDefaultFont; these represented modules contain no browser/device adapter.
+  return (
+    source !== "sc/source/core/data/docpool.ts" ||
+    !["vcl/inc/fntstyle", "vcl/source/outdev/font"].includes(target)
+  );
 }
 const suiteModules = new Set(["sw", "sc"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];
@@ -400,6 +496,13 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original o3tl/string_view.hxx::iterateCodePoints calls exactly these rtl/character.hxx helpers.
+  [
+    "o3tl/inc/string_view.ts -> sal/inc/rtl/character.ts",
+    ["isHighSurrogate", "isLowSurrogate", "combineSurrogates"],
+  ],
+  // Original o3tl/string_view.hxx::toDouble calls rtl_math_uStringToDouble from rtl/math.h.
+  ["o3tl/inc/string_view.ts -> sal/inc/rtl/math.h.ts", ["rtl_math_uStringToDouble"]],
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
@@ -663,16 +766,16 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
-    if (
-      relativeSource.includes(`${path.sep}source${path.sep}core${path.sep}`) &&
-      targetModule === "vcl"
-    ) {
+    if (isForbiddenDomainVclImport(relativeSource, relativeTarget)) {
       failures.push(
         `${displayPath(sourceFile)}: domain core must receive browser adapters through an injected contract`,
       );
       continue;
     }
-    if (isForbiddenModuleEdge(sourceModule, targetModule))
+    if (
+      isForbiddenModuleEdge(sourceModule, targetModule) &&
+      !isOriginalCharacterValueImport(relativeSource, relativeTarget)
+    )
       failures.push(
         `${displayPath(sourceFile)}: non-allowlisted module edge ${sourceModule} -> ${targetModule}`,
       );

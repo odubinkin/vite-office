@@ -1,0 +1,21 @@
+Initial expanded diagnostic run;full exact output is preserved in related-expanded.raw.json with byte length and SHA256.
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-related src/framework/browser/presentation src/sw/browser/presentation src/sw/browser/editor/native-context-menu.test.tsx src/sc/browser/presentation
+ FAIL  |writer| src/sw/browser/presentation/WriterMenuBar.test.tsx > WriterMenuBar > covers every keyboard entry and transition in the reusable menu state machine
+Error: expect(element).not.toBeInTheDocument()
+ FAIL  |writer| src/sw/browser/presentation/native-empty-menubar.test.tsx > native empty menubar pointer activation does not create a child input=pointer
+Error: expect(element).toHaveFocus()
+ FAIL  |writer| src/sw/browser/presentation/native-empty-menubar.test.tsx > native empty menubar sibling request closes the previous actual child input=pointer
+Error: expect(element).not.toBeInTheDocument()
+ FAIL  |writer| src/sw/browser/presentation/native-menubar-chain.test.tsx > native recursive pointer children retain original parent windows without preselection
+ FAIL  |writer| src/sw/browser/presentation/native-row-height-dialog.test.tsx > mounted native height dialog selected=false cancel=false
+ FAIL  |writer| src/sw/browser/presentation/native-row-height-dialog.test.tsx > mounted native height dialog selected=false cancel=true
+ FAIL  |writer| src/sw/browser/presentation/native-row-height-dialog.test.tsx > mounted native height dialog selected=true cancel=false
+ FAIL  |writer| src/sw/browser/presentation/native-row-height-dialog.test.tsx > mounted native height dialog selected=true cancel=true
+ FAIL  |writer| src/sw/browser/presentation/native-row-height-dialog.test.tsx > menu refocus preserves native row selection before height dispatch
+ FAIL  |writer| src/sw/browser/presentation/native-table-column-page.test.tsx > mounted workbench passes actual row versus whole-table selection to native columns
+ FAIL  |writer| src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the break modal's focus and resumes after cancellation
+ FAIL  |writer| src/sw/browser/presentation/writer-view.test.tsx > Writer browser presentation > inserts, selects, edits and reopens a canonical Writer table
+ FAIL  |writer| src/sw/browser/presentation/writer-view.test.tsx > Writer browser presentation > creates, navigates, renames and removes bookmarks and inserts a hard page break from Insert
+ Test Files  7 failed | 111 passed (118)
+      Tests  13 failed | 939 passed (952)
+   Duration  214.45s (transform 16.06s, setup 13.92s, import 75.15s, tests 240.37s, environment 78.87s)

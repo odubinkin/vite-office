@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/menubar-overflow.tsx --coverage.reportsDirectory=coverage/task31-menu src/framework/browser/presentation src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/native-menubar src/sw/browser/presentation/native-empty-menubar.test.tsx src/sw/browser/presentation/native-disabled-menubar.test.tsx src/sw/browser/editor/native-context-menu.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  20 passed (20)
+      Tests  196 passed (196)
+   Start at  18:36:56
+   Duration  63.01s (transform 24.75s, setup 4.50s, import 37.80s, tests 55.73s, environment 21.98s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 336/336 )
+Branches     : 100% ( 293/293 )
+Functions    : 100% ( 73/73 )
+Lines        : 100% ( 303/303 )
+================================================================================

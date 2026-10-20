@@ -1,0 +1,21 @@
+[
+  "apps/office/src/sal/inc/rtl/string.h.ts",
+  "apps/office/src/sal/inc/rtl/ustring.h.ts",
+  "apps/office/src/sal/rtl/strtmpl.math.ts",
+  "apps/office/src/sal/rtl/strtmpl.ts",
+  "apps/office/src/sal/rtl/ustring.ts",
+  "docs/program/calc-pattern-attributes.md",
+  "docs/program/registry/shared/provenance/sal/inc/rtl/string.h.ts.json",
+  "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json",
+  "docs/program/registry/shared/provenance/sal/rtl/strtmpl.math.ts.json",
+  "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json",
+  "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json",
+  "docs/program/registry/shared/runtime/sal/inc/rtl/string.h.ts.json",
+  "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json",
+  "docs/program/registry/shared/runtime/sal/rtl/strtmpl.math.ts.json",
+  "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json",
+  "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json",
+  "apps/office/src/sal/rtl/float-format.test.ts",
+  "apps/office/src/sal/rtl/native-float-format-cases.json",
+  "scripts/rtl-float-format-native-probe.mjs"
+]

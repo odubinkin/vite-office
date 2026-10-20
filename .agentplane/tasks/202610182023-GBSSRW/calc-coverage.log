@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+··································································································································································x·························································································································
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/controller/calc-view-controller.test.ts > edits canonical scalars and formulas with real dependency updates and token-valued Undo/Redo
+AssertionError: expected +0 to be 502 // Object.is equality
+
+- Expected
++ Received
+
+- 502
++ 0
+
+ ❯ src/sc/browser/controller/calc-view-controller.test.ts:58:72
+     56|     c.EnterString("replacement");
+     57|     c.Undo();
+     58|     expect(doc.GetFormulaCell(c.Position())?.GetCode().GetCodeError())…
+       |                                                                        ^
+     59|     c.Redo();
+     60|     expect(c.Input()).toBe("replacement");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 106 passed (107)
+      Tests  1 failed | 283 passed (284)
+   Start at  03:26:19
+   Duration  60.56s (transform 17.93s, setup 8.07s, import 32.04s, tests 24.07s, environment 41.92s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot

@@ -1,0 +1,8 @@
+scripts/generate-calc-ui-resources.ts 51ms
+apps/office/src/sc/source/ui/app/inputhdl.ts 7ms
+apps/office/src/sc/browser/controller/calc-view-controller.ts 32ms
+apps/office/src/sc/sdi/scalc.ts 10ms (unchanged)
+apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts 6ms
+apps/office/src/sc/browser/presentation/ScTabControl.tsx 11ms
+apps/office/src/sc/browser/presentation/calc-workbench.tsx 24ms
+apps/office/src/sc/browser/presentation/calc-presenters.test.tsx 18ms (unchanged)

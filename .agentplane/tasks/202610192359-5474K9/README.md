@@ -1,0 +1,310 @@
+---
+id: "202610192359-5474K9"
+title: "Implement native Calc strikethrough UI and shared ODF crossed-out property handlers"
+result_summary: "verified-202610192359-5474K9"
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 16
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-20T00:00:13.896Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-20T00:23:34.356Z"
+  updated_by: "CODER"
+  note: "verified-202610192359-5474K9"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T00:23:05.015Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded task43 native Strikeout UI,shared crossed-out ODF handlers and source integer contracts satisfy the approved plan on implementation1b7501f11ccf;verification is current and failures are explicitly reconciled."
+  evaluated_sha: "1b7501f11ccf7ce81b0d1ed3480cb79f3a6942dc"
+  blueprint_digest: "261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d"
+  evidence_refs:
+    - ".agentplane/tasks/202610192359-5474K9/README.md"
+    - ".agentplane/tasks/202610192359-5474K9/quality/20261020-002305015-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610192359-5474K9/quality/20261020-002305015-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610192359-5474K9/quality/20261020-002305015-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610192359-5474K9/evidence/source-audit.json"
+    - ".agentplane/tasks/202610192359-5474K9/evidence/calc-proof.json"
+    - ".agentplane/tasks/202610192359-5474K9/evidence/shared-proof.json"
+    - ".agentplane/tasks/202610192359-5474K9/evidence/complete-owner-proof.json"
+    - ".agentplane/tasks/202610192359-5474K9/evidence/browser-proof.json"
+  findings:
+    - "Native10013/106 slot/default,full enum items,actual shared toggle,grouped/disjoint selection and original attribute/history ownership are preserved. Source ODF type/style/width/text maps and native signed/unsigned Any rules are source-audited;CALC212..214 preserve surprising behavior."
+    - "Calc129files394cases raw100 is supplemented by current exact-body Calc3files14case integration. Shared/Writer8files28cases and all9changed executable application owners raw S/B/F/L100,current hashes,no threshold/exclusion weakening. Genuine Any values are used;no native assignment kernel was altered."
+    - "Current rebuilt Calc run passes14unchanged browser cases;the new negative witness initially assumed unsupported LONG narrowing. Corrected to genuine UNSIGNED_SHORT65535 and isolated page/DOM-free Worker replay passes1case with all assertions retained. Shared8cases pass;23unique cases and current1280/390screenshots are reconciled. Historical type-import bundle equivalence is explicitly not the final runtime certificate."
+    - "Exact native cdouthdl->cppu Any dependency registration matches pinned source and leaves broad module/browser/cycle guards unchanged. Tooling3files92cases and all declared static/source/resource/inventory gates pass.36non-task paths stay below approved50;no network,branch change or merge."
+commit:
+  hash: "00a7b6d0ac2e863e918f4d3bb9ca455503a06d16"
+  message: "🧩 5474K9 task: preserve verified strikeout quality evidence"
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement native Calc Strikeout and original shared ODF crossed-out handlers using actual item/selection/history/store owners;retain source quirks and current-owner raw100 evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192359-5474K9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+events:
+  -
+    type: "status"
+    at: "2026-10-20T00:00:14.670Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement native Calc Strikeout and original shared ODF crossed-out handlers using actual item/selection/history/store owners;retain source quirks and current-owner raw100 evidence."
+  -
+    type: "verify"
+    at: "2026-10-20T00:23:04.407Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation1b7501f11ccf accepted:Calc129files394cases raw S/B/F/L100;current shared/Writer8files28cases raw100 and focused current Calc3files14cases pass. All9changed executable application owners have current hashes and full raw100. Browser15Calc+8shared cases reconciled;native unsigned-short witness passes isolated page/Worker replay. All required static/source/resource/tooling gates pass,next full checkpoint50."
+  -
+    type: "verify"
+    at: "2026-10-20T00:23:34.356Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192359-5474K9"
+  -
+    type: "status"
+    at: "2026-10-20T00:23:34.495Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192359-5474K9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+doc_version: 3
+doc_updated_at: "2026-10-20T00:23:34.496Z"
+doc_updated_by: "CODER"
+description: "Task43 of the authorized Calc UI goal after verified task42. Connect native Strikeout10013/Which106 with shared attribute toggle,actual SvxCrossedOutItem,selection/history,Writer menu and original shared crossed-out ODF type/style/width/text handlers. Calc branch/checkout only;targeted Calc100 plus related/current-owner100,next full checkpoint50."
+sections:
+  Summary: "Task43 adds native Strikethrough to the real Calc menu/document/ODS paths. Previous goal turn made verified authoritative progress:task42 implementation3cd98e2f9edd,closure5bf603575279,390Calc+58related cases raw100 and14browser cases. Overall UI goal remains active."
+  Scope: "Only vite-office-calc branch calc,up to50non-task paths for shared original FontStrikeout IDL and XML crossed-out handlers,Calc typed formatting/controller/slot/plain-cell painting/ODS mapping,appropriate unit/browser tests and source/runtime/provenance/capability/issue records. Reuse actual shared toggle and Writer menu controls. No network,branches,merges,outside-repo access,full device/rich-edit emulation or verification weakening."
+  Plan: "Audit pinned cdouthdl.cxx/FontStrikeout.idl and Calc ExecuteAttr/GetAttrState/SDI/property maps. Port shared native crossed-out type/style/width/text handlers using actual Any types,ordered enum tables and source precedence/failure/no-write rules;add original IDL constants. Bind Strikeout10013/106 via existing shared toggle and complete native item requests,real selection/history and Writer menu. Preserve ODS type/style/width/text fields through actual automatic style registration/import/export;plain-cell painting supports source line strikeout while retaining other line decorations. Test shared state/enum maps,source quirks,typed/default/mixed/grouped/disjoint/history/pending-input semantics,independent XML and page/Worker/UI persistence. Record suspected source issues,run Calc100 and complete modified-owner100 plus related/static/source/browser checks;quality,commit and clean closure,next full checkpoint50."
+  Verify Steps: "Read task brief/verify-show and pin source hashes/line anchors. Run npm run test:coverage:calc with nonempty raw S/B/F/L100;related shared/Writer tests and full changed executable owner100 with current source hashes,no test/exclusion/threshold reductions. Verify original crossed-out maps,Any signed/unsigned extraction,merge priorities,no-write/failure cases,text first-codeunit rule,all factory/toggle/default/mixed states,complete typed item,grouped/disjoint selection,Undo/Redo,pending input. Verify native automatic ODS styles,independent authored XML and repeated reopen. Fresh build and focused1280/390browser actual shared Format/Text menu,checked/mixed state,painting,history,primary save/reload/reopen and true DOM-free Worker,no uncaught exceptions. Types,authored lint/format respecting existing ignored artifacts,dependencies,JSDoc,size,Calc/Writer resources,source tree/provenance,inventory invariants/scoped parity,affected tooling,static smoke,routing/doctor,diff. Retain exact commands/exits/counts/raw/source/browser evidence,quality report,implementation commit and clean final calc status. No full repeat before checkpoint50."
+  Verification: |-
+    Command: npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task43-calc-initial --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-calc-initial-results.json
+    Result:pass,exit0,129files394cases,raw S8405/B5316/F1642/L7523 all100. Evidence:calc-proof.json,calc-raw.json.gz,calc-results.json.gz,calc-complete.log. Scope:all current Calc executable owners. After a later shared-handler integer-fidelity repair,the current exact shared body also passes focused actual Calc3files14cases (npm run test:calc -- calc-strikeout.test.tsx calc-overline.test.tsx calc-font-step.test.tsx),with unchanged Calc source hashes.
+
+    Command: npm run test:coverage:shared -- src/xmloff/source/style/native-crossedout-handlers.test.ts src/xmloff/source/core src/sfx2/source/control/native-attribute-toggle.test.ts src/sw/source/filter/xml/odt-native-character-values.test.ts --coverage.include=src/xmloff/source/style/cdouthdl.ts --coverage.include=src/offapi/com/sun/star/awt/FontStrikeout.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task43-shared-native-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-shared-native-accepted-results.json
+    Result:pass,exit0,8files28cases,raw S282/B40/F16/L278 all100. Evidence:shared-proof.json,shared-raw.json.gz,shared-results.json.gz,shared-complete.log. Scope:complete changed shared owners and actual related Writer XML consumer. Complete-owner-proof.json verifies all9changed executable application owners raw100 and every source hash current;no coverage thresholds/exclusions weakened. The exact native dependency registration in tooling is separately verified by its real gate and existing tool tests.
+
+    Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/strikeout.spec.ts apps/office/e2e/calc/overline.spec.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/font-step.spec.ts apps/office/e2e/calc/formatting-toolbar.spec.ts apps/office/e2e/calc/ods.spec.ts
+    Result:initial14case suite pass,exit0. Final rebuilt15case suite passes14unchanged cases and identifies an invalid LONG-to-SHORT assumption in the new native Any fixture. Source assign.hxx does not admit that narrowing. Corrected the fixture to genuine UNSIGNED_SHORT65535 and reran npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/strikeout.spec.ts --grep 'signed short writeback':pass,exit0,1case. No production Any kernel change or assertion removal. The application bundle is unchanged by that test-only fixture correction. Final Calc15cases are reconciled with exact logs in browser-proof.json.
+    Command:npx playwright test --config apps/office/playwright.config.ts --project shared --workers=2 apps/office/e2e/shared/menubar-pointer.spec.ts apps/office/e2e/shared/popup-pointer.spec.ts
+    Result:pass,exit0,8cases. Scope:23unique browser cases,actual1280/390Writer/Calc menus,font controls,independent line painting,Undo/Redo,primary ODS autosave/reload/reopen and genuine page/DOM-free Worker metadata. Two current strikeout screenshots visually inspected and retained with hashes. Disabled popup sample now selects actual unsupported Shadow;all pointer assertions remain. Font family test checks leaf glyph spans so independent decoration wrappers do not count as script runs.
+
+    Command:npm run typecheck; npx eslint . --max-warnings 0 --ignore-pattern 'output/playwright/**'; npx prettier --check . --ignore-path .prettierignore --ignore-path .gitignore; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run check:writer-resources; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity:calc; npm run inventory:parity:shared; npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/check-lo-source-tree.test.ts; node scripts/check-static-build.mjs; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check
+    Result:pass,exit0 for all required gates with candidate repairs reconciled in Findings. Evidence:retained task43 logs and compressed inventory/parity. Latest native source/test and tooling files have additional passing scoped ESLint/Prettier checks after the root authored-source gates. Scope:928runtime records794mapped/115browser/19infrastructure,0semantic violations;dependency927sources4180relative imports141allowed module edges;tooling3files92cases;Writer resources1file2cases;Calc463commands/11menus/17policy dispositions. The optional source-tree test file does not exist and no nonexistent cases are counted.
+
+    No mandatory checks skipped or weakened. Source-audit.json pins native sources and honest consumed boundaries. CALC212..214 document source quirks. Historical browser-build-equivalence.json applies only to the earlier type-import-only change and is explicitly superseded by final browser evidence. Next full all-app checkpoint50;overall UI goal remains active. Final implementation,quality and clean closure are recorded through lifecycle commands.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T00:23:04.407Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implementation1b7501f11ccf accepted:Calc129files394cases raw S/B/F/L100;current shared/Writer8files28cases raw100 and focused current Calc3files14cases pass. All9changed executable application owners have current hashes and full raw100. Browser15Calc+8shared cases reconciled;native unsigned-short witness passes isolated page/Worker replay. All required static/source/resource/tooling gates pass,next full checkpoint50.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:21:20.494Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+    - old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610192359-5474K9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-20T00:23:34.356Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192359-5474K9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:23:04.465Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+    - old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192359-5474K9 --result verified-202610192359-5474K9 --commit 00a7b6d0ac2e863e918f4d3bb9ca455503a06d16
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only task43 intentional implementation commits if required;retain evidence and unrelated task state. User owns branch integration."
+  Findings: |-
+    Task43 executes existing user authorization only in vite-office-calc branch calc. Previous goal turn was authoritative progress:task42 implementation3cd98e2f9edd,closure5bf603575279,verified clean checkout. Unrelated C9TN6M/X6VV8G/Z7BW2Y remain untouched. Actual task43 scope36non-task paths stays below approved50.
+
+    Native source audit pins original cdouthdl.cxx,FontStrikeout.idl,Calc slot/state/default path,shared toggle,property map/factory,assignment.hxx and rich-text export QA. Original NONE/SINGLE/DOUBLE/BOLD/SLASH/X enum values survive real ODS type/style/width/text handling. DONTKNOW has no invented XML token. Original type/style/width precedence,first UTF16 text codeunit and unsigned-candidate/signed-short writeback are retained (CALC212..214). The rich-text QA is inspected evidence,not an executed full-native certificate.
+
+    Command:Calc coverage,shared/Writer coverage and focused current Calc integration. Result:pass,394Calc cases+28related shared/Writer cases;all9complete changed executable application owners and Calc raw S/B/F/L100,current hashes. Actual native items,shared toggle,selection-pattern/attribute-only undo owners and automatic ODS styles carry all state;no second browser grid or fake service. Core source ApplyToggleAttr factors the two original ExecuteAttr cases. Browser line layers preserve independent underline/overline/strikeout and original script glyph values. Full native bold thickness,slash/X repetition,line modes,rich edit,device geometry and complete UNO/bindings services remain unverified;all broad parity flags false.
+
+    Candidate reconciliation:initial imports guessed a textitem reexport that does not exist;corrected to the actual crossedoutitem header. One broad import edit damaged a constructor argument;compiler caught it and it was repaired. Initial handler tests used JS strings as low-level OUString Any storage,violating that native interface;replaced with genuine valid wrong-type bool Any witnesses. No production string/lifetime code was changed. A later native integer audit found missing sal_uInt16 candidate representation and sal_Int16 writeback,which were corrected. The first new negative test incorrectly assumed LONG narrows to SHORT;authoritative assign.hxx and actual extraction disproved that. Real UNSIGNED_SHORT65535/32768 witnesses now prove signed projections and type changes,while source style preservation leaves the unsigned Any. Final managed and page/Worker cases pass. No Any kernel widening or fake conversion is introduced.
+
+    Dependency gate correctly enforces compile-time as well as runtime imports. A type-only borrowed Any import is accurate but still needs source graph registration. Added only the pinned cdouthdl.ts->cppu Any.ts edge beside existing original character-handler edges. General xmloff->cppu,nearby typedef imports,browser ownership and cycle guards remain unchanged;positive and nearby-negative tests pass,tooling92cases. Source provenance initially rejected a basename-only IDL symbol list;added actual SLASH constant evidence and corrected the Calc property-factory symbol from the source. Final source/inventory gates pass928records and0semantic violations.
+
+    Actual browser evidence:current rebuilt15case suite passes14unchanged tests;the single new Any fixture is corrected from invalid LONG narrowing to genuine unsigned-short projection and its isolated replay passes1case. Shared8cases pass;23unique browser cases reconciled. Initial14case suite also passed. Current native body additionally passes Calc3files14cases,including independent XML and all represented ODS variants. Two current1280/390primary ODS reopen screenshots were inspected and retained. Browser-build-equivalence.json is only a historical type-import-only snapshot and explicitly no longer the current runtime certificate. No assertion,coverage rule or source behavior was relaxed to hide failures.
+
+    All declared static/resource/source/inventory/tooling gates pass. Root authored lint/format gates are supplemented by final scoped checks for the subsequently changed native/tooling files. Exact commands,logs,raw/result/source hashes and browser reconciliation are retained. Intentional Writer primary-save/open/no-recovery policy remains. Next full all-app checkpoint50;bounded task43 can close after quality and implementation persistence,overall Calc UI goal remains active.
+extensions:
+  implementation_commit:
+    hash: "1b7501f11ccf7ce81b0d1ed3480cb79f3a6942dc"
+    message: "✨ 5474K9 calc: implement native strikeout UI and shared ODF handlers"
+id_source: "generated"
+---
+## Summary
+
+Task43 adds native Strikethrough to the real Calc menu/document/ODS paths. Previous goal turn made verified authoritative progress:task42 implementation3cd98e2f9edd,closure5bf603575279,390Calc+58related cases raw100 and14browser cases. Overall UI goal remains active.
+
+## Scope
+
+Only vite-office-calc branch calc,up to50non-task paths for shared original FontStrikeout IDL and XML crossed-out handlers,Calc typed formatting/controller/slot/plain-cell painting/ODS mapping,appropriate unit/browser tests and source/runtime/provenance/capability/issue records. Reuse actual shared toggle and Writer menu controls. No network,branches,merges,outside-repo access,full device/rich-edit emulation or verification weakening.
+
+## Plan
+
+Audit pinned cdouthdl.cxx/FontStrikeout.idl and Calc ExecuteAttr/GetAttrState/SDI/property maps. Port shared native crossed-out type/style/width/text handlers using actual Any types,ordered enum tables and source precedence/failure/no-write rules;add original IDL constants. Bind Strikeout10013/106 via existing shared toggle and complete native item requests,real selection/history and Writer menu. Preserve ODS type/style/width/text fields through actual automatic style registration/import/export;plain-cell painting supports source line strikeout while retaining other line decorations. Test shared state/enum maps,source quirks,typed/default/mixed/grouped/disjoint/history/pending-input semantics,independent XML and page/Worker/UI persistence. Record suspected source issues,run Calc100 and complete modified-owner100 plus related/static/source/browser checks;quality,commit and clean closure,next full checkpoint50.
+
+## Verify Steps
+
+Read task brief/verify-show and pin source hashes/line anchors. Run npm run test:coverage:calc with nonempty raw S/B/F/L100;related shared/Writer tests and full changed executable owner100 with current source hashes,no test/exclusion/threshold reductions. Verify original crossed-out maps,Any signed/unsigned extraction,merge priorities,no-write/failure cases,text first-codeunit rule,all factory/toggle/default/mixed states,complete typed item,grouped/disjoint selection,Undo/Redo,pending input. Verify native automatic ODS styles,independent authored XML and repeated reopen. Fresh build and focused1280/390browser actual shared Format/Text menu,checked/mixed state,painting,history,primary save/reload/reopen and true DOM-free Worker,no uncaught exceptions. Types,authored lint/format respecting existing ignored artifacts,dependencies,JSDoc,size,Calc/Writer resources,source tree/provenance,inventory invariants/scoped parity,affected tooling,static smoke,routing/doctor,diff. Retain exact commands/exits/counts/raw/source/browser evidence,quality report,implementation commit and clean final calc status. No full repeat before checkpoint50.
+
+## Verification
+
+Command: npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task43-calc-initial --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-calc-initial-results.json
+Result:pass,exit0,129files394cases,raw S8405/B5316/F1642/L7523 all100. Evidence:calc-proof.json,calc-raw.json.gz,calc-results.json.gz,calc-complete.log. Scope:all current Calc executable owners. After a later shared-handler integer-fidelity repair,the current exact shared body also passes focused actual Calc3files14cases (npm run test:calc -- calc-strikeout.test.tsx calc-overline.test.tsx calc-font-step.test.tsx),with unchanged Calc source hashes.
+
+Command: npm run test:coverage:shared -- src/xmloff/source/style/native-crossedout-handlers.test.ts src/xmloff/source/core src/sfx2/source/control/native-attribute-toggle.test.ts src/sw/source/filter/xml/odt-native-character-values.test.ts --coverage.include=src/xmloff/source/style/cdouthdl.ts --coverage.include=src/offapi/com/sun/star/awt/FontStrikeout.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task43-shared-native-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-shared-native-accepted-results.json
+Result:pass,exit0,8files28cases,raw S282/B40/F16/L278 all100. Evidence:shared-proof.json,shared-raw.json.gz,shared-results.json.gz,shared-complete.log. Scope:complete changed shared owners and actual related Writer XML consumer. Complete-owner-proof.json verifies all9changed executable application owners raw100 and every source hash current;no coverage thresholds/exclusions weakened. The exact native dependency registration in tooling is separately verified by its real gate and existing tool tests.
+
+Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/strikeout.spec.ts apps/office/e2e/calc/overline.spec.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/font-step.spec.ts apps/office/e2e/calc/formatting-toolbar.spec.ts apps/office/e2e/calc/ods.spec.ts
+Result:initial14case suite pass,exit0. Final rebuilt15case suite passes14unchanged cases and identifies an invalid LONG-to-SHORT assumption in the new native Any fixture. Source assign.hxx does not admit that narrowing. Corrected the fixture to genuine UNSIGNED_SHORT65535 and reran npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/strikeout.spec.ts --grep 'signed short writeback':pass,exit0,1case. No production Any kernel change or assertion removal. The application bundle is unchanged by that test-only fixture correction. Final Calc15cases are reconciled with exact logs in browser-proof.json.
+Command:npx playwright test --config apps/office/playwright.config.ts --project shared --workers=2 apps/office/e2e/shared/menubar-pointer.spec.ts apps/office/e2e/shared/popup-pointer.spec.ts
+Result:pass,exit0,8cases. Scope:23unique browser cases,actual1280/390Writer/Calc menus,font controls,independent line painting,Undo/Redo,primary ODS autosave/reload/reopen and genuine page/DOM-free Worker metadata. Two current strikeout screenshots visually inspected and retained with hashes. Disabled popup sample now selects actual unsupported Shadow;all pointer assertions remain. Font family test checks leaf glyph spans so independent decoration wrappers do not count as script runs.
+
+Command:npm run typecheck; npx eslint . --max-warnings 0 --ignore-pattern 'output/playwright/**'; npx prettier --check . --ignore-path .prettierignore --ignore-path .gitignore; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:calc-resources; npm run check:writer-resources; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity:calc; npm run inventory:parity:shared; npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/check-lo-source-tree.test.ts; node scripts/check-static-build.mjs; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check
+Result:pass,exit0 for all required gates with candidate repairs reconciled in Findings. Evidence:retained task43 logs and compressed inventory/parity. Latest native source/test and tooling files have additional passing scoped ESLint/Prettier checks after the root authored-source gates. Scope:928runtime records794mapped/115browser/19infrastructure,0semantic violations;dependency927sources4180relative imports141allowed module edges;tooling3files92cases;Writer resources1file2cases;Calc463commands/11menus/17policy dispositions. The optional source-tree test file does not exist and no nonexistent cases are counted.
+
+No mandatory checks skipped or weakened. Source-audit.json pins native sources and honest consumed boundaries. CALC212..214 document source quirks. Historical browser-build-equivalence.json applies only to the earlier type-import-only change and is explicitly superseded by final browser evidence. Next full all-app checkpoint50;overall UI goal remains active. Final implementation,quality and clean closure are recorded through lifecycle commands.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T00:23:04.407Z — VERIFY — ok
+
+By: CODER
+
+Note: Implementation1b7501f11ccf accepted:Calc129files394cases raw S/B/F/L100;current shared/Writer8files28cases raw100 and focused current Calc3files14cases pass. All9changed executable application owners have current hashes and full raw100. Browser15Calc+8shared cases reconciled;native unsigned-short witness passes isolated page/Worker replay. All required static/source/resource/tooling gates pass,next full checkpoint50.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:21:20.494Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+- old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610192359-5474K9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T00:23:34.356Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192359-5474K9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:23:04.465Z, excerpt_hash=sha256:ed6f817983008854db240ed4ae88ffb667d2484e476bc92da86776dee42e884b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192359-5474K9/blueprint/resolved-snapshot.json
+- old_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- current_digest: 261e2cf2901c7f275db668abc1483ecb93b97294143ad30b8efb930fccec785d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192359-5474K9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192359-5474K9 --result verified-202610192359-5474K9 --commit 00a7b6d0ac2e863e918f4d3bb9ca455503a06d16
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only task43 intentional implementation commits if required;retain evidence and unrelated task state. User owns branch integration.
+
+## Findings
+
+Task43 executes existing user authorization only in vite-office-calc branch calc. Previous goal turn was authoritative progress:task42 implementation3cd98e2f9edd,closure5bf603575279,verified clean checkout. Unrelated C9TN6M/X6VV8G/Z7BW2Y remain untouched. Actual task43 scope36non-task paths stays below approved50.
+
+Native source audit pins original cdouthdl.cxx,FontStrikeout.idl,Calc slot/state/default path,shared toggle,property map/factory,assignment.hxx and rich-text export QA. Original NONE/SINGLE/DOUBLE/BOLD/SLASH/X enum values survive real ODS type/style/width/text handling. DONTKNOW has no invented XML token. Original type/style/width precedence,first UTF16 text codeunit and unsigned-candidate/signed-short writeback are retained (CALC212..214). The rich-text QA is inspected evidence,not an executed full-native certificate.
+
+Command:Calc coverage,shared/Writer coverage and focused current Calc integration. Result:pass,394Calc cases+28related shared/Writer cases;all9complete changed executable application owners and Calc raw S/B/F/L100,current hashes. Actual native items,shared toggle,selection-pattern/attribute-only undo owners and automatic ODS styles carry all state;no second browser grid or fake service. Core source ApplyToggleAttr factors the two original ExecuteAttr cases. Browser line layers preserve independent underline/overline/strikeout and original script glyph values. Full native bold thickness,slash/X repetition,line modes,rich edit,device geometry and complete UNO/bindings services remain unverified;all broad parity flags false.
+
+Candidate reconciliation:initial imports guessed a textitem reexport that does not exist;corrected to the actual crossedoutitem header. One broad import edit damaged a constructor argument;compiler caught it and it was repaired. Initial handler tests used JS strings as low-level OUString Any storage,violating that native interface;replaced with genuine valid wrong-type bool Any witnesses. No production string/lifetime code was changed. A later native integer audit found missing sal_uInt16 candidate representation and sal_Int16 writeback,which were corrected. The first new negative test incorrectly assumed LONG narrows to SHORT;authoritative assign.hxx and actual extraction disproved that. Real UNSIGNED_SHORT65535/32768 witnesses now prove signed projections and type changes,while source style preservation leaves the unsigned Any. Final managed and page/Worker cases pass. No Any kernel widening or fake conversion is introduced.
+
+Dependency gate correctly enforces compile-time as well as runtime imports. A type-only borrowed Any import is accurate but still needs source graph registration. Added only the pinned cdouthdl.ts->cppu Any.ts edge beside existing original character-handler edges. General xmloff->cppu,nearby typedef imports,browser ownership and cycle guards remain unchanged;positive and nearby-negative tests pass,tooling92cases. Source provenance initially rejected a basename-only IDL symbol list;added actual SLASH constant evidence and corrected the Calc property-factory symbol from the source. Final source/inventory gates pass928records and0semantic violations.
+
+Actual browser evidence:current rebuilt15case suite passes14unchanged tests;the single new Any fixture is corrected from invalid LONG narrowing to genuine unsigned-short projection and its isolated replay passes1case. Shared8cases pass;23unique browser cases reconciled. Initial14case suite also passed. Current native body additionally passes Calc3files14cases,including independent XML and all represented ODS variants. Two current1280/390primary ODS reopen screenshots were inspected and retained. Browser-build-equivalence.json is only a historical type-import-only snapshot and explicitly no longer the current runtime certificate. No assertion,coverage rule or source behavior was relaxed to hide failures.
+
+All declared static/resource/source/inventory/tooling gates pass. Root authored lint/format gates are supplemented by final scoped checks for the subsequently changed native/tooling files. Exact commands,logs,raw/result/source hashes and browser reconciliation are retained. Intentional Writer primary-save/open/no-recovery policy remains. Next full all-app checkpoint50;bounded task43 can close after quality and implementation persistence,overall Calc UI goal remains active.

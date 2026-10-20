@@ -1,0 +1,39 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  253 passed (253)
+      Tests  11671 passed (11671)
+   Start at  02:21:13
+   Duration  120.43s (transform 25.61s, setup 14.76s, import 73.07s, tests 46.73s, environment 82.31s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |    99.1 |    97.57 |   98.72 |   99.19 |                   
+ sw/sdi            |   88.88 |       75 |     100 |     100 |                   
+  swriter.ts       |   88.88 |       75 |     100 |     100 | 33,62-104         
+ ...e/core/txtnode |   99.87 |    99.46 |     100 |   99.86 |                   
+  ndhints-font.ts  |     100 |    97.14 |     100 |     100 | 75                
+  ndtxt-hints.ts   |   98.83 |    98.68 |     100 |   98.61 | 185               
+  ndtxt.ts         |     100 |     99.5 |     100 |     100 | 506               
+ ...urce/core/undo |   98.27 |      100 |   94.28 |   98.21 |                   
+  unattr.ts        |   98.27 |      100 |   94.28 |   98.21 | 65-67             
+ .../uibase/shells |   99.05 |    98.12 |   95.52 |   98.91 |                   
+  textsh1.ts       |   99.05 |    98.12 |   95.52 |   98.91 | 621,822-827       
+ ...e/uibase/wrtsh |   95.97 |    89.49 |   99.13 |    96.3 |                   
+  wrtsh1.ts        |   95.97 |    89.49 |   99.13 |    96.3 | ...68-570,712-716 
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.1% ( 2425/2447 )
+Branches     : 97.57% ( 1410/1445 )
+Functions    : 98.72% ( 466/472 )
+Lines        : 99.19% ( 2231/2249 )
+================================================================================
+ERROR: Coverage for lines (99.19%) does not meet global threshold (100%)
+ERROR: Coverage for functions (98.72%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.1%) does not meet global threshold (100%)
+ERROR: Coverage for branches (97.57%) does not meet global threshold (100%)

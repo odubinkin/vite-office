@@ -10,6 +10,11 @@ test("loads native ODS data and edits/saves the same real document in page and W
   await installKernelFixture(page, "CalcODSFixture", [
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
+    { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
+    { module: "src/editeng/inc/colritem.ts", names: ["SvxColorItem"] },
+    { module: "src/editeng/inc/brushitem.ts", names: ["SvxBrushItem"] },
+    { module: "src/tools/inc/color.ts", names: ["Color"] },
+    { module: "src/editeng/inc/justifyitem.ts", names: ["SvxHorJustifyItem", "SvxVerJustifyItem"] },
     { module: "src/formula/inc/grammar.ts", names: ["FormulaGrammar"] },
     {
       module: "src/sc/source/filter/xml/xmlwrap.ts",
@@ -27,6 +32,11 @@ test("loads native ODS data and edits/saves the same real document in page and W
           globalThis as unknown as {
             CalcODSFixture: typeof import("../../src/sc/inc/document") &
               typeof import("../../src/sc/inc/address") &
+              typeof import("../../src/sc/inc/patattr") &
+              typeof import("../../src/editeng/inc/colritem") &
+              typeof import("../../src/editeng/inc/brushitem") &
+              typeof import("../../src/tools/inc/color") &
+              typeof import("../../src/editeng/inc/justifyitem") &
               typeof import("../../src/formula/inc/grammar") &
               typeof import("../../src/sc/source/filter/xml/xmlwrap") &
               typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
@@ -48,6 +58,13 @@ test("loads native ODS data and edits/saves the same real document in page and W
         doc.SetValue(a, 2.5);
         doc.SetFormula(b, n.unicode("=[.$A$1]*2"), n.FormulaGrammar.Grammar.GRAM_ODFF);
         doc.SetTextCell(c, n.unicode(" x\t&😀 "));
+        const pattern = new n.ScPatternAttr(doc.getCellAttributeHelper());
+        pattern.ItemSetPut(new n.SvxColorItem(new n.Color(0x123456), 109));
+        pattern.ItemSetPut(new n.SvxBrushItem(new n.Color(0xfedcba), 148));
+        pattern.ItemSetPut(new n.SvxHorJustifyItem(2, 129));
+        pattern.ItemSetPut(new n.SvxVerJustifyItem(1, 132));
+        doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
+        pattern.Dispose();
         const loaded = await n.readOdsDocument(n.writeOdsDocument(doc)),
           first = loaded.GetValue(b);
         loaded.SetValue(a, 7);
@@ -60,6 +77,20 @@ test("loads native ODS data and edits/saves the same real document in page and W
           nativeText: n.text(native.GetSharedString(new n.ScAddress(1, 1, 0)).getString()),
           nativeNumber: native.GetValue(new n.ScAddress(1, 2, 0)),
           diagnosed: diagnostics.length > 0,
+          horizontal: (
+            again.GetPattern(a)?.GetItem(129) as InstanceType<typeof n.SvxHorJustifyItem>
+          ).GetValue(),
+          vertical: (
+            again.GetPattern(a)?.GetItem(132) as InstanceType<typeof n.SvxVerJustifyItem>
+          ).GetValue(),
+          fontColor: (again.GetPattern(a)?.GetItem(109) as InstanceType<typeof n.SvxColorItem>)
+            .GetValue()
+            .toUInt32(),
+          backgroundColor: (
+            again.GetPattern(a)?.GetItem(148) as InstanceType<typeof n.SvxBrushItem>
+          )
+            .GetColor()
+            .toUInt32(),
         };
       }
       const script = Array.from(document.scripts).find(
@@ -111,6 +142,10 @@ test("loads native ODS data and edits/saves the same real document in page and W
     nativeText: "LibreOffice Calc",
     nativeNumber: 12345,
     diagnosed: true,
+    horizontal: 2,
+    vertical: 1,
+    fontColor: 0x123456,
+    backgroundColor: 0xfedcba,
   };
   expect(result.main).toEqual(expected);
   expect(result.other).toEqual({ value: expected, dom: "undefined" });

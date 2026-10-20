@@ -40,7 +40,7 @@
     "local": {
       "implementation": [
         {
-          "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "style:text-underline-style"
         }
       ],
@@ -89,7 +89,7 @@
     "closure": {
       "contract": {
         "local": {
-          "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "style:text-underline-style"
         },
         "method": "api-invariant",
@@ -102,7 +102,7 @@
       },
       "ownership": {
         "local": {
-          "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "style:text-underline-style"
         },
         "method": "api-invariant",

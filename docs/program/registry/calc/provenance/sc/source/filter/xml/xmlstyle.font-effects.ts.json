@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlstyle.cxx",
+    "localSymbols": [
+      "exportFontEffectProperties",
+      "importFontEffectProperties"
+    ],
+    "upstreamSymbols": [
+      "XMLScPropHdlFactory::GetPropertyHandler"
+    ],
+    "preservedResponsibilities": [
+      "TaskQVC626 implements native OutlineFont10012/Which107 with complete SvxContourItem,bool/default/mixed state,shared Sfx toggle preparation,actual grouped/disjoint selections and attribute history. Shared Writer menus expose source checked state. Original XMLBoolPropHdl uses real Any and exact Converter bool lexical rules,including false assignment on rejected import and unchanged failed-export output. Actual ODS styles preserve explicit true and false across reopen. Shared browser raster composition applies the original ordered eight colored offsets and white center to actual glyph and line pixels with one accessible text instance and measured browser bounds. Browser CSS pixel/device scaling,rich edit,full native font/device services and broad parity remain unverified;Writer primary storage/open/no-recovery policies remain."
+    ],
+    "omittedResponsibilities": [
+      "Full original UNO property-set/service/factory graph,native widget/device rendering and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+          "marker": "exportFontEffectProperties"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XMLScPropHdlFactory::GetPropertyHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharContoured"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original contour property mapping is split from the existing large Calc XML style owner;shared native XMLBoolPropHdl and actual SvxContourItem remain canonical."
+    }
+  }
+}

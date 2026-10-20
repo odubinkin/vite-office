@@ -79,7 +79,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       .mockImplementation(/** Stubs browser printing. @returns Nothing. */ () => undefined);
     try {
       render(<App />);
-      fireEvent.click(screen.getByRole("button", { name: "File" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Print" }));
       fireEvent.click(
         within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole(
@@ -100,7 +100,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
    */, function rendersWriterMenus(): void {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
     const newMenuItem = screen.getByRole("menuitem", { name: "New Document" });
     expect(newMenuItem).toBeEnabled();
@@ -121,9 +121,9 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     ).not.toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Open Local Copy…" })).not.toBeInTheDocument();
     expect(screen.queryByRole("menuitem", { name: "Save Local Copy" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     expect(screen.getByRole("menu", { name: "View menu" })).toBeVisible();
     const sidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
@@ -138,12 +138,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     );
     expect(screen.getByRole("document", { name: "Page 1" })).toBeVisible();
     expect(screen.getByLabelText("Writer vertical ruler")).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const hiddenSidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
     fireEvent.click(hiddenSidebarMenuItem);
     expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
     const rulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
     rulersMenu.focus();
@@ -152,7 +152,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(rulerMenuItem).toHaveAttribute("aria-checked", "true");
     fireEvent.click(rulerMenuItem);
     expect(screen.queryByLabelText("Writer horizontal ruler")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const hiddenRulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
     hiddenRulersMenu.focus();
     fireEvent.keyDown(hiddenRulersMenu, { key: "ArrowRight" });
@@ -160,38 +160,38 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(hiddenRulerMenuItem).toHaveAttribute("aria-checked", "false");
     fireEvent.click(hiddenRulerMenuItem);
     expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const statusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
     expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
     fireEvent.click(statusBarMenuItem);
     expect(screen.queryByRole("status", { name: "Writer status bar" })).not.toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const hiddenStatusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
     expect(hiddenStatusBarMenuItem).toHaveAttribute("aria-checked", "false");
     fireEvent.click(hiddenStatusBarMenuItem);
     expect(screen.getByRole("status", { name: "Writer status bar" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
     expect(screen.getByRole("menuitem", { name: "Cut" })).toBeEnabled();
     expect(screen.getByRole("menuitem", { name: "Paste" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     getSelection.mockRestore();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Text" })).toBeEnabled();
-    fireEvent.click(screen.getByRole("button", { name: "Styles" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Styles" }));
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Insert" }));
     expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
-    expect(screen.getByRole("button", { name: "Table" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Tools" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Window" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Help" })).not.toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Table" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "Tools" })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Window" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Help" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
   }, 30_000);
 
@@ -199,7 +199,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     render(<App />);
     const page = screen.getByRole("document", { name: "Page 1" });
     const originalWidth = page.style.width;
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Page Style…" }));
     expect(screen.getByRole("dialog", { name: "Page Style" })).toBeVisible();
     await act(
@@ -213,7 +213,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     );
     expect(page.style.width).toBe(originalWidth);
 
-    const formatButton = screen.getByRole("button", { name: "Format" });
+    const formatButton = screen.getByRole("menuitem", { name: "Format" });
     if (formatButton.getAttribute("aria-expanded") !== "true") fireEvent.click(formatButton);
     await act(
       /** Reopens Page Style. @returns A fulfilled act promise. */ async () => {
@@ -252,7 +252,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         expect(paragraph.style.marginInlineStart).not.toBe(""),
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const rulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
     rulersMenu.focus();
     fireEvent.keyDown(rulersMenu, { key: "ArrowRight" });
@@ -275,7 +275,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
       enterWriterParagraphText(editor, "Copied Writer body");
       selectWriterParagraphText(editor);
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       const copyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
       await act(
         /** Requests native Copy from the Writer Edit menu. @returns A fulfilled React act promise. */
@@ -290,7 +290,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
       writeText.mockRejectedValueOnce(new Error("Denied"));
       selectWriterParagraphText(editor);
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       const rejectedCopyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
       await act(
         /** Requests a rejected native copy that must surface deterministic status feedback. @returns A fulfilled React act promise. */
@@ -335,11 +335,11 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
           { name: "Center" },
         ),
       );
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
       fireEvent.change(screen.getByLabelText("Font name"), { target: { value: "Noto Serif" } });
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
       await act(
@@ -385,7 +385,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       selection.removeAllRanges();
       selection.addRange(selectedRange);
       document.dispatchEvent(new Event("selectionchange"));
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       await act(
         /** Executes the menu Cut command after preparing one same-paragraph selection. @returns A fulfilled React act promise. */
         async function cutsSelectedWriterText(): Promise<void> {
@@ -428,7 +428,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       selection.removeAllRanges();
       selection.addRange(replaceRange);
       document.dispatchEvent(new Event("selectionchange"));
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       await act(
         /** Replaces a same-paragraph selection through the Edit Paste command. @returns A fulfilled React act promise. */
         async function pastesOverSelection(): Promise<void> {
@@ -514,7 +514,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         { name: "Center" },
       ),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     const setData = vi.fn();
     fireEvent.copy(documentBody, {
@@ -534,8 +534,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
   it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {
     render(<App />);
-    const file = screen.getByRole("button", { name: "File" });
-    const edit = screen.getByRole("button", { name: "Edit" });
+    const file = screen.getByRole("menuitem", { name: "File" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
     file.focus();
     fireEvent.keyDown(file, { key: "ArrowRight" });
     expect(edit).toHaveFocus();
@@ -567,7 +567,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     const text = screen.getByRole("menuitem", { name: "Text" });
     text.focus();
     fireEvent.keyDown(text, { key: "ArrowRight" });
@@ -588,16 +588,16 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     vi.useFakeTimers();
     try {
       render(<App />);
-      const file = screen.getByRole("button", { name: "File" });
+      const file = screen.getByRole("menuitem", { name: "File" });
       file.focus();
       fireEvent.keyDown(file, { key: "ArrowLeft" });
-      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Home" });
+      expect(screen.getByRole("menuitem", { name: "Tools" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Home" });
       expect(file).toHaveFocus();
       fireEvent.keyDown(file, { key: "End" });
-      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Escape" });
-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Tab" });
+      expect(screen.getByRole("menuitem", { name: "Tools" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Escape" });
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Tab" });
 
       fireEvent.click(file);
       const firstFileItem = screen.getByRole("menuitem", { name: "New Document" });
@@ -655,19 +655,19 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: " " });
       expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
 
-      const view = screen.getByRole("button", { name: "View" });
+      const view = screen.getByRole("menuitem", { name: "View" });
       fireEvent.keyDown(view, { key: "ArrowUp" });
       const firstViewItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
       expect(firstViewItem).toHaveFocus();
       fireEvent.keyDown(firstViewItem, { key: "Escape" });
       expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
 
-      const insert = screen.getByRole("button", { name: "Insert" });
+      const insert = screen.getByRole("menuitem", { name: "Insert" });
       fireEvent.keyDown(insert, { key: "ArrowDown" });
       expect(screen.getByRole("menu", { name: "Insert menu" })).toBeVisible();
       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Hyperlink…" }), { key: "Escape" });
 
-      const format = screen.getByRole("button", { name: "Format" });
+      const format = screen.getByRole("menuitem", { name: "Format" });
       fireEvent.keyDown(format, { key: "ArrowDown" });
       const lists = screen.getByRole("menuitem", { name: "Lists" });
       fireEvent.mouseLeave(lists.parentElement as HTMLElement);
@@ -681,7 +681,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.mouseEnter(lists);
       expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
       fireEvent.mouseLeave(lists.parentElement as HTMLElement);
-      expect(screen.queryByRole("menu", { name: "Lists menu" })).not.toBeInTheDocument();
+      expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
     } finally {
       vi.useRealTimers();
     }

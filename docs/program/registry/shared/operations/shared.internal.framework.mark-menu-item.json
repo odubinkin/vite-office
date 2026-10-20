@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.framework.mark-menu-item",
+    "modulePath": "apps/office/src/framework/browser/presentation/menu-popup-pointer.ts",
+    "symbol": "markMenuItem",
+    "classification": "browser-adaptation",
+    "capabilityId": "CAP-0101",
+    "description": "Existing shared menu highlight mutation moved to the popup pointer owner:updates only the actual direct-entry DOM selection and accessible descendant identity;does not mutate document or command state or certify native VCL parity."
+  }
+}

@@ -1,0 +1,69 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/ScGridWindow.tsx
+  253:39  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-size.test.tsx
+   16:5   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   82:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  156:17  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/workflows/calc-ods-io.test.ts
+  194:9  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  200:7  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  218:7  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.test.ts
+  68:69  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  70:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  71:14  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  72:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.ts
+   50:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   51:30  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   67:38  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   79:31  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   80:14  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   81:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  105:43  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  118:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  119:15  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  129:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  135:39  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  140:13  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  140:44  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  142:37  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  146:43  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  150:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  151:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  160:38  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  161:24  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  164:19  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  165:7   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  166:7   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts
+  20:49  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods.test.ts
+  368:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  370:15  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  388:7   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  424:7   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  431:7   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlexprt.ts
+   61:21   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   79:27   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   97:32   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  100:40   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  124:120  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  124:166  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  124:214  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/formatsh.ts
+  48:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  55:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+✖ 48 problems (48 errors, 0 warnings)
+

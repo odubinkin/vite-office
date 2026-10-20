@@ -1,0 +1,151 @@
+[WebServer] (node:1152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 2 workers
+
+(node:1274) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1273) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (1.6s)
+  ✓   1 [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (1.6s)
+  ✓   3 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (681ms)
+  ✓   4 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (795ms)
+  ✓   5 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (595ms)
+  ✓   6 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (722ms)
+  ✓   7 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (541ms)
+(node:1607) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (600ms)
+  ✓   9 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 1280px (491ms)
+  ✘  10 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px (5.7s)
+(node:1857) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px (5.6s)
+(node:1892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  12 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px (5.8s)
+
+
+  1) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+        14 × locator resolved to <button tabindex="0" type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" aria-label="More menus" aria-controls="writer-office-hidden-menus-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100">…</button>
+           - unexpected value "inactive"
+
+
+      54 |           await expect(popup).toBeVisible();
+      55 |           await page.keyboard.press("Escape");
+    > 56 |           await expect(more).toBeFocused();
+         |                              ^
+      57 |         }
+      58 |         await more.press("ArrowDown");
+      59 |         await page.keyboard.press("End");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:56:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      77 |         await expect(more).toHaveCount(0);
+      78 |         await expect(page.getByRole("menu")).toHaveCount(0);
+    > 79 |       } else await expect(more).toHaveCount(0);
+         |                                 ^
+      80 |       for (const label of roots[suite])
+      81 |         await expect(bar.getByRole("menuitem", { name: label, exact: true })).toBeVisible();
+      82 |       expect(errors).toEqual([]);
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:79:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-5867e--remain-reachable-at-1280px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-ca-5867e--remain-reachable-at-1280px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-5867e--remain-reachable-at-1280px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-ca-5867e--remain-reachable-at-1280px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'More menus', exact: true })
+        14 × locator resolved to <button tabindex="0" type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" aria-label="More menus" aria-controls="calc-menu-office-hidden-menus-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100">…</button>
+           - unexpected value "inactive"
+
+
+      54 |           await expect(
+      55 |             page.getByRole("menu", { name: `${label} menu`, exact: true }),
+    > 56 |           ).toBeVisible();
+         |                           ^
+      57 |           await page.keyboard.press("Escape");
+      58 |           await expect(popup).toBeVisible();
+      59 |           await page.keyboard.press("Escape");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:56:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px 
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+  9 passed (24.6s)

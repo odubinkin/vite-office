@@ -11,6 +11,32 @@ import {
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
+import { registerWriterFontFace } from "./xmlfonte";
+import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
+import { exportCharacterAttributes } from "../../../../xmloff/source/text/txtparae";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+
+it("exports a family-only browser font through the real native font pool", /** Missing optional metadata must still allocate one usable Unicode face declaration. @returns Nothing. */ () => {
+  const pool = new XMLFontAutoStylePool();
+  const properties = { fontFamily: "Шрифт 測試" };
+  const resolver = registerWriterFontFace.bind(undefined, pool);
+  const attributes = exportCharacterAttributes(properties, resolver);
+  expect(attributes).toContain(' style:font-name="Шрифт 測試"');
+  expect(exportCharacterAttributes(properties, resolver)).toBe(attributes);
+  expect(
+    pool.Find(
+      properties.fontFamily,
+      "",
+      FontFamily.FAMILY_DONTKNOW,
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+    ),
+  ).toBe("Шрифт 測試");
+  expect(pool.exportXML()).toBe(
+    '<office:font-face-decls><style:font-face style:name="Шрифт 測試" svg:font-family="&apos;Шрифт 測試&apos;"/></office:font-face-decls>',
+  );
+});
 
 it("rejects incorrectly typed direct margins and paragraph adjustments at export", /** Corrupt pool inputs must not silently serialize as valid paragraph state. @returns Nothing. */ () => {
   for (const [which, message] of [

@@ -1,0 +1,13 @@
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-font-boundary-complete-results.json
+ % Coverage report from istanbul
+-------------|---------|----------|---------|---------|-------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------|---------|----------|---------|---------|-------------------
+-------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 30/30 )
+Branches     : 100% ( 19/19 )
+Functions    : 100% ( 3/3 )
+Lines        : 100% ( 26/26 )
+================================================================================

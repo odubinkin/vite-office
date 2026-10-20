@@ -1,0 +1,71 @@
+{
+  "calc": {
+    "lines": {
+      "total": 6725,
+      "covered": 6725,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 7507,
+      "covered": 7507,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 1512,
+      "covered": 1512,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 4745,
+      "covered": 4745,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "changedOwners": {
+    "lines": {
+      "total": 1226,
+      "covered": 1226,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1327,
+      "covered": 1327,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 228,
+      "covered": 228,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 634,
+      "covered": 634,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "ownerCount": 20,
+  "barrels": [
+    "apps/office/src/sc/inc/rowheightcontext.ts"
+  ],
+  "rawSha256": "549257d4797fe07a0927c238e64dbc1c073eff1a88deeb38ab4ff9129928b71a"
+}

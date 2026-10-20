@@ -32,7 +32,9 @@ export class BrowserSfxDispatcher extends SfxDispatcher {
     const tracked = Promise.resolve(result.value).then(
       /** Completes a fulfilled browser request. @param value - Fulfilled value. @returns Original value. */
       (value) => {
-        request.Done(createRequestReturnItem(request.GetSlot(), value));
+        const returned = createRequestReturnItem(request.GetSlot(), value);
+        if (returned) request.SetReturnValue(returned);
+        request.Done();
         if (this.asyncStates.get(commandId)?.generation === generation)
           this.asyncStates.delete(commandId);
         this.Invalidate("command-async");

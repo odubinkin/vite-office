@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- --run src/sal/rtl/stringbuffer.test.ts
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts --run src/sal/rtl/stringbuffer.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  06:45:36
+   Duration  676ms (transform 102ms, setup 90ms, import 106ms, tests 7ms, environment 389ms)
+

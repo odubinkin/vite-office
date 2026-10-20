@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610181643-YYAGKX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-18T16:49:15.476Z",
+  "verdict": "pass",
+  "summary": "Unicode simple-number scanner matches pinned source control flow and consumes actual shared RTL conversion.",
+  "evaluated_sha": "0ee0fdaea19aa416a0349840cf20d195586a01c2",
+  "blueprint_digest": "332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81",
+  "findings": [
+    "All16 original testCSV numeric cases pass; boundary evidence covers native grouping,alternate decimals,spaces/NBSP,scientific flag,sign ordering,overflow/underflow and output-reference behavior. Final Calc coverage100 percent across90files/241tests. Typecheck,lint,format,provenance and scoped parity gates pass. No weakened thresholds or fake formatter."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610181643-YYAGKX/README.md",
+    ".agentplane/tasks/202610181643-YYAGKX/evidence/calc-coverage.log",
+    ".agentplane/tasks/202610181643-YYAGKX/evidence/related-rtl.log",
+    ".agentplane/tasks/202610181643-YYAGKX/evidence/parity.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The operation is Unicode-only; full formatter-driven date/special-number classification and browser cell entry remain subsequent work."
+  ]
+}

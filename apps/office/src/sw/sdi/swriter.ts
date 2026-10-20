@@ -69,7 +69,7 @@ export function getWriterCommandArguments<Value>(arguments_: unknown): Value | u
 
 /** Character-format arguments carried by a Writer SfxRequest Any item. */
 export interface WriterCharacterCommandArguments {
-  readonly fontFamily?: string;
+  readonly fontFamily?: string | import("../../editeng/inc/fontitem").SvxFontItem;
   readonly fontSizePt?: number;
 }
 

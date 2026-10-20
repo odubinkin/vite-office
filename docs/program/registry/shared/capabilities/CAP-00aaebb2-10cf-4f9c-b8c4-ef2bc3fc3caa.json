@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-00aaebb2-10cf-4f9c-b8c4-ef2bc3fc3caa",
+    "capabilityId": "CAP-00aaebb2-10cf-4f9c-b8c4-ef2bc3fc3caa",
+    "suite": "shared",
+    "subsystem": "source-ui-resources",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Extracts the existing Writer toolbar separator normalization unchanged into a shared office module consumed by Writer and Calc. Removes orphaned separators after native visibility/availability filtering without changing command order."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Shared office toolbar normalization",
+    "gaps": [
+      "Native unsupported operations remain disabled; full execution/formatting parity is outside this resource projection.",
+      "Full all-app regression follows task10; current task8 uses all Calc and affected shared/Writer checks."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+          "marker": ".uno:OpenFromCalc"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs",
+          "marker": "Properties"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+          "marker": "normalizeToolbarItems"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts",
+          "marker": "normalizeWriterToolbarItems"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/toolbar-resource.ts",
+          "marker": "normalizeToolbarItems"
+        }
+      ]
+    },
+    "aspect": "command-placement",
+    "atomicOperation": "office-toolbar-resource-normalization",
+    "scopeLimitations": [
+      "Native unsupported operations remain disabled; full execution/formatting parity is outside this resource projection.",
+      "Full all-app regression follows task10; current task8 uses all Calc and affected shared/Writer checks."
+    ]
+  }
+}

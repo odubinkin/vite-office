@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uchar_props_data.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uchar_props_data.h",
+    "localSymbols": [
+      "propsVectorsTrie",
+      "propsVectors",
+      "scriptExtensions",
+      "block_trie"
+    ],
+    "upstreamSymbols": [
+      "propsVectorsTrie",
+      "propsVectors",
+      "scriptExtensions",
+      "block_trie"
+    ],
+    "preservedResponsibilities": [
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted."
+    ],
+    "omittedResponsibilities": [
+      "Full native formatted-cell script cache,UNO/service factory graph,device metrics and rich/wrapped/rotated/merged layout remain unported.",
+      "Browser Local Font Access supplies names rather than native metric classifications;native missing-metric defaults and known symbol-recode availability are retained without guessing.",
+      "Full Writer SetAttr/rich script command behavior and complete native document/filter/UI parity remain unverified;the family path fixes represented native item loss.",
+      "Calc named-style inheritance,embedded font resources and the complete shared paragraph property mapper remain unported;unsupported values are diagnosed.",
+      "Full document/layout/UI and named-style parity remain unverified beyond the consumed font slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uchar_props_data.ts",
+          "marker": "propsVectorsTrie"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uchar_props_data.h",
+          "marker": "propsVectorsTrie"
+        }
+      ]
+    }
+  }
+}

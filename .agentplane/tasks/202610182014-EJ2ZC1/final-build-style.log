@@ -1,0 +1,50 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 2446 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.54 kB │ gzip:   0.33 kB
+dist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB
+dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
+dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
+dist/assets/odt-worker-B2I8woT4.js    702.38 kB
+dist/assets/index-CtU_MWDv.css         67.59 kB │ gzip:  10.88 kB
+dist/assets/index-t4TCTJGw.js       2,112.78 kB │ gzip: 494.20 kB
+
+✓ built in 1.79s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+{"command":"prettier","args":["--check","apps/office/src/sc/browser/controller/calc-view-controller.test.ts","apps/office/src/sc/browser/controller/calc-view-controller.ts","apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx","apps/office/src/sc/source/ui/app/inputhdl.test.ts","apps/office/src/sc/source/ui/app/inputhdl.ts","docs/program/registry/calc/capabilities/CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86.json","docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json","docs/program/registry/calc/provenance/sc/source/ui/app/inputhdl.ts.json","docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json","docs/program/registry/calc/runtime/sc/source/ui/app/inputhdl.ts.json","scripts/calc-sheet-command-source.test.ts","apps/office/src/sc/browser/controller/calc-input-modification.test.ts"]}
+Checking formatting...
+All matched files use Prettier code style!
+{"command":"eslint","args":["apps/office/src/sc/browser/controller/calc-view-controller.test.ts","apps/office/src/sc/browser/controller/calc-view-controller.ts","apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx","apps/office/src/sc/source/ui/app/inputhdl.test.ts","apps/office/src/sc/source/ui/app/inputhdl.ts","scripts/calc-sheet-command-source.test.ts","apps/office/src/sc/browser/controller/calc-input-modification.test.ts","--max-warnings","0"]}
+Touched checks passed for 12 non-task paths.
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+JSDoc validation passed for 2267 authored source files.

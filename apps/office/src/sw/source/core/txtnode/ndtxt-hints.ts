@@ -4,10 +4,11 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTextNode, SwTextFragment, WriterCharacterFormat } from "./ndtxt";
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
-import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "./txatbase";
+import { SfxItemSet as NativeItemSet } from "../../../../svl/source/items/itemset";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 
 /** Validates the existing text-node range contract at the source-owned responsibility split. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
 export function AssertTextNodeRange(node: SwTextNode, start: number, end: number): void {
@@ -105,13 +106,15 @@ export function CreateTextNodeFragment(
   attributes: SfxItemSet,
   hyperlink?: WriterHyperlink,
 ): SwTextFragment {
-  const hints = new SwpHints(node.GetDoc().GetAttrPool()).createTextHints(
-    text.length,
-    projectWriterCharacterAttributes(attributes),
-    node.GetSwAttrSet(),
-    hyperlink,
-  );
-  return { text, hints };
+  return {
+    text,
+    hints: new SwpHints(node.GetDoc().GetAttrPool()).createItemHints(
+      text.length,
+      attributes,
+      node.GetSwAttrSet(),
+      hyperlink,
+    ),
+  };
 }
 
 /** Projects one native node range to immutable runs. @param node - Source node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Derived runs. */
@@ -150,25 +153,31 @@ export function InsertTextNodeHints(
     text.length,
     attributes === undefined && hyperlink === undefined
       ? undefined
-      : projectWriterCharacterAttributes(attributes ?? node.GetCharacterItemsAt(offset)),
+      : (attributes ?? node.GetCharacterItemsAt(offset)),
     node.GetSwAttrSet(),
     hyperlink,
     mode,
   );
 }
 
-/** Reads direct attributes inherited by a collapsed caret. @param node - Native owner. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
+/** Snapshots effective native character items at a collapsed caret,including inherited item values. @param node - Native owner. @param offset - UTF-16 caret offset. @returns Independent native item snapshot. */
 export function GetTextNodeCharacterItems(node: SwTextNode, offset: number): SfxItemSet {
-  const hints = node.GetpSwpHints();
-  const attributes =
-    hints === undefined
-      ? new SwpHints(node.GetDoc().GetAttrPool()).getCharacterAttributes(
-          node.GetText(),
-          offset,
-          node.GetSwAttrSet(),
-        )
-      : hints.getCharacterAttributes(node.GetText(), offset, node.GetSwAttrSet());
-  return createWriterCharacterItemSet(node.GetDoc().GetAttrPool(), attributes);
+  if (!Number.isInteger(offset) || offset < 0 || offset > node.Len())
+    throw new Error("Writer character-format caret is outside the text node.");
+  const items = new NativeItemSet(node.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+  const inheritance: SfxItemSet[] = [];
+  for (
+    let source: SfxItemSet | undefined = node.GetSwAttrSet();
+    source;
+    source = source.GetParent()
+  )
+    inheritance.unshift(source);
+  for (const source of inheritance) items.PutSet(source);
+  if (node.Len() === 0) return items;
+  const characterOffset = offset === 0 ? 0 : offset - 1;
+  const hint = node.GetTextAttrAt(characterOffset, RES_TXTATR_AUTOFMT);
+  if (hint?.format instanceof SwFormatAutoFormat) items.PutSet(hint.format.GetStyleHandle());
+  return items;
 }
 
 /** Creates a native fragment with one toggled character item. @param node - Native owner. @param start - Inclusive source offset. @param end - Exclusive source offset. @param format - Toggled item group. @returns Native formatted fragment. */

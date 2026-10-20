@@ -1,0 +1,220 @@
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task135-checks/final-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task137-checks/final-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task143-checks/audit-mapping.ts
+  8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task143-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task145-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task153-checks/audit-boundaries.mjs
+  5:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task155-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task156-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task157-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task158-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task159-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task160-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task162-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task165-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166-checks/native-audit.mjs
+  15:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166a-checks/semantic-audit.mjs
+   8:1   error  Missing JSDoc comment                 jsdoc/require-jsdoc
+  34:1   error  Missing JSDoc comment                 jsdoc/require-jsdoc
+  34:10  error  'findCalc' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/guard-proof.mjs
+  6:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  6:93  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/native-audit.mjs
+  12:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task168-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/migrate-iterations.mjs
+  7:2   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  9:20  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/native-audit.mjs
+  14:1    error  Missing JSDoc comment  jsdoc/require-jsdoc
+  14:134  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task170-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task171-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task173-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task174-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task175-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task176-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task177-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task177-checks/native-audit.mjs
+  30:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task178-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task179-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task180-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task181-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task182-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task183-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task184-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task184-checks/native-audit.mjs
+  6:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  6:44  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task185-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task185-checks/native-audit.mjs
+  8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task186-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task187-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task188-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task188-checks/native-audit.mjs
+  6:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task189-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task189-checks/native-audit.mjs
+  8:31  error  Spaces are hard to count. Use {4}  no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task190-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task191-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task191-checks/native-audit.mjs
+   8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  10:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task192-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task193-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task193-checks/native-audit.mjs
+  13:91  error  'tag' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  17:1   error  Missing JSDoc comment                     jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task194-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task195-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task196-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task198-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task199-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task200-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task201-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task202-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task203-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task204-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task204-checks/portable.mjs
+  11:30  error  'c' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task205-checks/final-audit.mjs
+  10:486  error  'k' is defined but never used                                @typescript-eslint/no-unused-vars
+  10:568  error  'k' is defined but never used                                @typescript-eslint/no-unused-vars
+  17:111  error  Unexpected control character(s) in regular expression: \x1b  no-control-regex
+  17:175  error  Spaces are hard to count. Use {2}                            no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task206-checks/final-audit.mjs
+  9:138  error  Spaces are hard to count. Use {2}  no-regex-spaces
+
+✖ 78 problems (78 errors, 0 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

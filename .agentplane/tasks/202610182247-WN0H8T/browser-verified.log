@@ -1,0 +1,97 @@
+[WebServer] (node:18374) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:18465) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 1280px (534ms)
+  ✘  2 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px (5.9s)
+(node:18695) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px (503ms)
+  ✘  4 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px (5.8s)
+
+
+  1) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Writer document body', { exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByLabel('Writer document body', { exact: true })
+        14 × locator resolved to <article contenteditable="true" data-writer-editing-host="true" aria-label="Writer document body" class="grid w-max min-w-full justify-center gap-6 px-8 text-slate-950 outline-none">…</article>
+           - unexpected value "inactive"
+
+
+      62 |           await page.mouse.click(1, 1);
+      63 |           await expect(page.getByRole("menu")).toHaveCount(0);
+    > 64 |           await expect(editor).toBeFocused();
+         |                                ^
+      65 |         }
+      66 |         await page.mouse.move(0, 0);
+      67 |         await more.press("ArrowDown");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:64:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('grid')
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" with timeout 5000ms
+      - waiting for getByRole('grid')
+        14 × locator resolved to <div role="grid" tabindex="0" aria-colcount="16385" aria-rowcount="1048577" aria-label="Spreadsheet" aria-activedescendant="calc-0-0-0" class="min-h-0 flex-1 overflow-auto bg-white text-[13px] text-slate-900 outline-none">…</div>
+           - unexpected value "inactive"
+
+
+      62 |           await page.mouse.click(1, 1);
+      63 |           await expect(page.getByRole("menu")).toHaveCount(0);
+    > 64 |           await expect(editor).toBeFocused();
+         |                                ^
+      65 |         }
+      66 |         await page.mouse.move(0, 0);
+      67 |         await more.press("ArrowDown");
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:64:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+  2 passed (14.7s)

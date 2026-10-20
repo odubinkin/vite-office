@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+        "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts"
+      ],
+      "justification": "TaskFJTKAS connects actual Calc ODS packages and ScDocShell lifecycle/history to shared primary browser storage and Writer autosave policy. Open imports into a separate real ScDocument and adopts it only while request/content generation remain current. Replacement resets actual view/history ownership and ends displaced formula subscriptions. Confirmed Save/SaveAs captures source model,medium,generation and shared SfxUndoSavePosition;later edits remain dirty and stale/failed/closed completions cannot adopt a destination. The first two displayed scalar words in native row-major sheet order name an untitled browser document,matching Writer first-two-word naming;empty documents are excluded. Stored bodies are complete existing ODS packages,not alternate workbook JSON. No recovery UI/storage is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createCalcDocumentStore",
+        "hasCalcContent",
+        "getAutomaticCalcTitle",
+        "saveCalcAsBrowserCopy",
+        "autosaveCalc",
+        "openBrowserCalcDocument",
+        "overwriteBrowserCalcDocument",
+        "createCalcAutosave"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

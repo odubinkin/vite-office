@@ -1,0 +1,55 @@
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task39-calc-initial --coverage.reporter=json --coverage.reporter=text
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |calc| src/sc/source/filter/xml/ods.test.ts (17 tests | 1 failed) 129ms
+   × diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/source/filter/xml/ods.test.ts > diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights
+AssertionError: expected [ 'non-cell automatic style', …(7) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ [
++   "non-cell automatic style",
+    "non-cell automatic style",
+    "cell parent style inheritance",
+-   "cell style properties",
++   "relative or invalid cell font height",
+    "relative or invalid cell font height",
+    "cell style/number format",
++   "cell range overflow",
+    "cell range overflow",
+  ]
+
+ ❯ src/sc/source/filter/xml/ods.test.ts:413:17
+    411|       },
+    412|   });
+    413|   expect(names).toEqual(
+       |                 ^
+    414|     expect.arrayContaining([
+    415|       "non-cell automatic style",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 124 passed (125)
+      Tests  1 failed | 371 passed (372)
+   Start at  04:14:46
+   Duration  70.21s (transform 19.51s, setup 8.36s, import 37.75s, tests 36.46s, environment 41.06s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task39-calc-initial --coverage.reporter=json --coverage.reporter=text

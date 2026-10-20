@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- --run src/sw/browser/presentation/WriterPageLayout.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts --run src/sw/browser/presentation/WriterPageLayout.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  23 passed (23)
+   Start at  05:57:32
+   Duration  9.97s (transform 7.28s, setup 310ms, import 9.22s, tests 4.87s, environment 1.62s)
+

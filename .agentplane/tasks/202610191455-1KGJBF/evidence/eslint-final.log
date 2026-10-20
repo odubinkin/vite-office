@@ -1,0 +1,10 @@
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-character-format.test.tsx
+  190:28  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  191:33  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/weighhdl.ts
+  27:9  error  The value assigned to 'valid' is not used in subsequent statements  no-useless-assignment
+
+✖ 3 problems (3 errors, 0 warnings)
+

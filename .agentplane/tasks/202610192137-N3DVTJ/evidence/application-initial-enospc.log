@@ -1,0 +1,26 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --coverage.reportsDirectory=coverage/task40-all --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task40-all-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.reportsDirectory=coverage/task40-all --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task40-all-results.json
+
+
+⎯⎯⎯⎯ Unhandled Rejection ⎯⎯⎯⎯⎯
+Error: ENOSPC: no space left on device, open '/Users/odubinkin/Projects/vite-office-calc/apps/office/coverage/task40-all/.tmp/coverage-137.json'
+ ❯ open node:internal/fs/promises:637:25
+ ❯ Object.writeFile node:internal/fs/promises:1239:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { errno: -28, code: 'ENOSPC', syscall: 'open', path: '/Users/odubinkin/Projects/vite-office-calc/apps/office/coverage/task40-all/.tmp/coverage-137.json' }
+
+
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.reportsDirectory=coverage/task40-all --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task40-all-results.json

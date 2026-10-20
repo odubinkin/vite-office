@@ -1,0 +1,20 @@
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/casefolding-native-build.mjs:50
+    if (result.status !== 0) throw new Error(result.error?.message ?? result.stderr);
+                                   ^
+
+Error: output/playwright/rtl-singlebyte-reverse-native/driver.cpp:26:518: error: cannot initialize a parameter of type 'const sal_Unicode **' (aka 'const char16_t **') with an rvalue of type 'value_type **' (aka 'char16_t **')
+   26 | for(auto src:std::vector<std::vector<sal_Unicode>>{{0xffff},{0xf100},{0xf1ff},{0xe000},{0x200b},{0x200c},{0x070f},{0xd800},{0xd800,'A'},{0xd800,0xdc00},{0xd800,0xdfff},{0xdc00}})for(unsigned f:flags)for(int cap=0;cap<3;cap++){std::vector<sal_Unicode> input{'P'};input.insert(input.end(),src.begin(),src.end());input.push_back('S');auto start=input.data()+1;auto cur=start;char dst[8];for(auto&b:dst)b=char(0xbe);char*out=dst+1;sal_uInt32 info=0x8000;bool result=sal::detail::textenc::handleUndefinedUnicodeToTextChar(&cur,start+src.size(),&out,dst+1+cap,f,&info);std::printf("[[");for(size_t i=0;i<src.size();i++)std::printf("%s%u",i?",":"",unsigned(src[i]));std::printf("],%d,%u,[%d,%td,%td,%u",cap,f,int(result),cur-input.data(),out-dst,info);for(auto b:dst)std::printf(",%u",unsigned(static_cast<unsigned char>(b)));std::puts("]]");}}
+      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^~~~
+vendor/libreoffice-reference/sal/textenc/handleundefinedunicodetotextchar.hxx:24:26: note: passing argument to parameter 'ppSrcBuf' here
+   24 |     sal_Unicode const ** ppSrcBuf, sal_Unicode const * pEndSrcBuf,
+      |                          ^
+1 error generated.
+
+    at Object.run (file:///Users/odubinkin/Projects/vite-office-calc/scripts/casefolding-native-build.mjs:50:36)
+    at build (file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-singlebyte-reverse-native-probe.mjs:136:10)
+    at file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-singlebyte-reverse-native-probe.mjs:176:16
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

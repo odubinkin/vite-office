@@ -30,7 +30,7 @@ for (const cell of [false, true])
         const secondLabel = cell ? "Row 1 column 1 paragraph 2" : "Writer paragraph 2",
           second = page.getByRole("textbox", { name: secondLabel });
         await first.click();
-        await page.getByRole("button", { name: "Format", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
         await page
           .getByRole("menuitemradio", {

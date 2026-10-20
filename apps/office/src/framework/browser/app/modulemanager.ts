@@ -46,7 +46,6 @@ export const suiteDefinitions = [
     description: "Worksheets, formulas, analysis, and calculation workflows.",
     id: "calc",
     name: "Calc",
-    status: "Foundation only",
   },
   {
     description: "Slide authoring, presenting, animation, and export workflows.",

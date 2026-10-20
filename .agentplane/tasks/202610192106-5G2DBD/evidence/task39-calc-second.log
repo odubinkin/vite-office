@@ -1,0 +1,47 @@
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task39-calc-second --coverage.reporter=json --coverage.reporter=text
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |calc| src/sc/source/filter/xml/ods.test.ts (17 tests | 1 failed) 131ms
+   × diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/source/filter/xml/ods.test.ts > diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights
+Error: ODS content is not implemented: graphic-properties
+ ❯ XMLTableStyleContext.createUnknownChildContext src/sc/source/filter/xml/importcontext.ts:31:11
+     29|     void namespaceURI;
+     30|     void attributes;
+     31|     throw new Error(`ODS content is not implemented: ${localName}`);
+       |           ^
+     32|   }
+     33| }
+ ❯ Object.open src/xmloff/source/core/xmlimp.ts:259:34
+ ❯ SaxesParser.openTagHandler src/sax/source/fastparser/fastparser.ts:80:15
+ ❯ SaxesParser.openSelfClosingTag ../../src/saxes.ts:2613:23
+ ❯ SaxesParser.sOpenTagSlash ../../src/saxes.ts:2032:11
+ ❯ SaxesParser.write ../../src/saxes.ts:991:29
+ ❯ parseFastXmlStream src/sax/source/fastparser/fastparser.ts:110:12
+ ❯ parseOdfXmlStream src/xmloff/source/core/xmlimp.ts:233:5
+ ❯ ScXMLImport.importContent src/sc/source/filter/xml/xmlimprt.ts:189:7
+ ❯ load src/sc/source/filter/xml/ods.test.ts:54:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 124 passed (125)
+      Tests  1 failed | 371 passed (372)
+   Start at  04:16:12
+   Duration  69.74s (transform 17.53s, setup 7.60s, import 38.39s, tests 36.38s, environment 41.08s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task39-calc-second --coverage.reporter=json --coverage.reporter=text

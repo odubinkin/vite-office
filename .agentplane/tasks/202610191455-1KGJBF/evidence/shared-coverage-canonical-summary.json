@@ -1,0 +1,80 @@
+{
+  "scope": "Ten consumed shared owners only;this does not certify whole Calc or complete changed Writer owners.",
+  "testFiles": 9,
+  "testCases": 19,
+  "summary": {
+    "lines": {
+      "total": 512,
+      "covered": 512,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 547,
+      "covered": 547,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 38,
+      "covered": 38,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 251,
+      "covered": 251,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "owners": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/browser/text-line-item-codec.ts",
+      "sha256": "d5334242a662ec6b13f7e095199c56068aa43438ac0b799fa97f48dafe711422"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/numeric.ts",
+      "sha256": "9d6c42f3dbc35515189dbe9a8757e05c5be0f6a2e73e9cd5362b3c905f41170c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/awt/FontUnderline.ts",
+      "sha256": "9e552ed9e2934a3d80b9f4ec8051f7e796cf4e83f40327e36a30d2416cd26268"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter.ts",
+      "sha256": "bb142ea92eb274fe15bcd65ee08274959fcbb4be400bf5ab1d07dae47420a353"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "0da055160abbfefd311a52831fd4161abd658fc1dc09ccbfbc140f053243241e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/postuhdl.ts",
+      "sha256": "4d594af538fcb0c70b62435e2b0d0f43ca1c2791c5c18ae95c2d894f3f70d3cc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/undlihdl.ts",
+      "sha256": "d8895f6127adc8db2a83b93fc1a3544d6a77e9cd2e7903b9cdc3c1e6ac78bcf5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/weighhdl.ts",
+      "sha256": "53bec43a74b7c8e71e45226a5817acb99067bf7bca157a4e64c6d3d350f77518"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlbahdl.ts",
+      "sha256": "83688adc7dc307bca901f84f42c8f31366046220cbf70268095271f8e9e9b47b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtprmap.ts",
+      "sha256": "929e91fc6a5a986c237084debef3f6da93b15f101c77b301a7ea95f1f56ea927"
+    }
+  ],
+  "rawSha256": "f6131418f6efcf39926641a805d1367658f2b0e453257b4124dbe1c19c2a26ab"
+}

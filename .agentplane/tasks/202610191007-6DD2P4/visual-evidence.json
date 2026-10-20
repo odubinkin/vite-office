@@ -1,0 +1,29 @@
+{
+  "screenshots": [
+    {
+      "path": "output/playwright/task29-popup-calc-1280.png",
+      "bytes": 104649,
+      "sha256": "5afb1db48fbde8429d6d4c9ecd9718c6cfe9a3d700dc5acac410e6a7aca5e18d",
+      "visuallyInspected": true
+    },
+    {
+      "path": "output/playwright/task29-popup-writer-1280.png",
+      "bytes": 65253,
+      "sha256": "624f75d4d8961d44ac36140fec446f95ce62353b17faf111a43dd86e762bdd1b",
+      "visuallyInspected": true
+    },
+    {
+      "path": "output/playwright/task29-popup-calc-390.png",
+      "bytes": 47053,
+      "sha256": "421664007647a7f29be82c470676bc6cda4f3e11463e4c2f50c2ae2641fd345a",
+      "visuallyInspected": true
+    },
+    {
+      "path": "output/playwright/task29-popup-writer-390.png",
+      "bytes": 31662,
+      "sha256": "69b53051983893602aa4b18e48ae0b478667af007855b708dbdeb189215402b7",
+      "visuallyInspected": true
+    }
+  ],
+  "review": "Shared root/submenu typeface,row spacing,borders,highlight and accelerator styling agree in Writer/Calc. Both viewport variants remain within browser bounds;large Calc native menus scroll. Existing unported format actions remain disabled. This does not certify full native VCL/scroller/geometry parity."
+}

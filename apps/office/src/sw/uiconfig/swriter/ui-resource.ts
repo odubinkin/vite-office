@@ -38,19 +38,5 @@ export type WriterToolbarItemPlacement =
   | Readonly<{ commandId: string; kind: "font-select"; label: string }>
   | Readonly<{ commandId: string; kind: "font-size-select"; label: string }>;
 
-/** Removes separators orphaned when hidden or unsupported toolbar commands are filtered. @param items - Filtered placements. @returns Normalized placements. */
-export function normalizeWriterToolbarItems(
-  items: readonly WriterToolbarItemPlacement[],
-): readonly WriterToolbarItemPlacement[] {
-  const normalized: WriterToolbarItemPlacement[] = [];
-  for (const item of items) {
-    if (
-      item.kind === "separator" &&
-      (normalized.length === 0 || normalized.at(-1)?.kind === "separator")
-    )
-      continue;
-    normalized.push(item);
-  }
-  if (normalized.at(-1)?.kind === "separator") normalized.pop();
-  return normalized;
-}
+/** Retains Writer resource API over the shared office placement normalizer. */
+export { normalizeToolbarItems as normalizeWriterToolbarItems } from "../../../framework/browser/presentation/toolbar-resource";

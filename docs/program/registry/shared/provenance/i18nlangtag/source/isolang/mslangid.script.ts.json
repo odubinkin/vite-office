@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/isolang/mslangid.script.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/isolang/mslangid.cxx",
+    "localSymbols": [
+      "getScriptType",
+      "resolveSystemLanguageByScriptType",
+      "setConfiguredWesternFallback",
+      "setConfiguredAsianFallback",
+      "setConfiguredComplexFallback"
+    ],
+    "upstreamSymbols": [
+      "MsLangId::getScriptType",
+      "MsLangId::resolveSystemLanguageByScriptType"
+    ],
+    "preservedResponsibilities": [
+      "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.script.ts",
+          "marker": "getScriptType"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.script.test.ts",
+          "marker": "keeps native static"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/mslangid.cxx",
+          "marker": "MsLangId::resolveSystemLanguageByScriptType"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/isolang/mslangid.script.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates consumed static script-language classification and configured fallback state from existing system/Locale wrappers; on-the-fly LanguageTag registration remains unsupported rather than invented."
+    }
+  }
+}

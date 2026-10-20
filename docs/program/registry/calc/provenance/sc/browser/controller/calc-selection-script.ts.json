@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+    "rationale": "Browser composition binds actual native items and script-query producers at the existing plain-cell display boundary.",
+    "responsibilities": [
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React/DOM replace native painting and toolbox controls;source data and attribute ownership remain native."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+          "marker": "getCalcSelectionScriptType"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+          "marker": "native"
+        }
+      ]
+    }
+  }
+}

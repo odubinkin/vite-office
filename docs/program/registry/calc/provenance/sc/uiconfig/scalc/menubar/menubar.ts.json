@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+    "upstreamPath": "sc/uiconfig/scalc/menubar/menubar.xml",
+    "localSymbols": [
+      "adaptItems",
+      "calcMenus",
+      "getCalcCommandResource",
+      "getCalcPopupCommandResource",
+      "selectCalcResource"
+    ],
+    "upstreamSymbols": [
+      ".uno:"
+    ],
+    "preservedResponsibilities": [
+      "Task905DK4 projects pinned Calc menu hierarchy, source command labels, dialog suffixes, default accelerators and Properties toggle flags through deterministic generated resources. The actual Writer parser and command-catalog helpers are shared; Writer output remains byte-identical. Shared React menu and toolbar presenters retain original command identities. Unsupported native operations remain disabled through missing Sfx slots. Standardbar retains only registered visible operations in native order. Explicit Writer browser autosave/open/no-recovery policy dispositions remain auditable. Complete native command execution and formatting behavior are not claimed.",
+      "TaskC5HB8X generates complete pinned sheettab.xml14commands/3separators and native PopupLabel/dialog-suffix projections through shared Writer parser/catalog tooling;451Calc commands remain source-hashed with11top menus and17explicit save-policy dispositions. Actual framework CommandPopupMenu is reused for pointer,ContextMenu and ShiftF10 with shared focus,disabled selection,outside dismissal and geometry. Source ScTabControl SwitchToPageId already-selected return preserves canonical active sheet/group;unselected requests commit supported input and select one target;blank-strip requests retain selection. Native ScInputHandler bFormulaMode/mbEditingExistingContent and StartsLikeFormula predicate distinguish new plus/minus/equals input from existing content. Explicit browser UpdateInputState/ResetInputState projections supply the actual draft/lifecycle without pretending to implement EditEngine or full UpdateFormulaMode. Formula/modal requests are rejected. Existing native SelectAll/Deselect slots execute;unported Insert/Remove/Rename/format/event services remain disabled. Full VCL TabBar current-page state,protection/reference highlighting,EditEngine and whole Calc parity remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Unported native operations remain unavailable; this task adds source resource projection, not new spreadsheet execution services.",
+      "Browser primary save/open/recovery policy intentionally follows Writer."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+          "marker": "getCalcCommandResource"
+        },
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+          "marker": "opens every source top menu"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+          "marker": ".uno:"
+        }
+      ]
+    }
+  }
+}

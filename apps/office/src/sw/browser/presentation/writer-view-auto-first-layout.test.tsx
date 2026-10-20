@@ -244,7 +244,7 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
       "24pt",
     );
     expect(screen.queryByRole("button", { name: "First line indent" })).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Paragraph…" }));
     expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(18.35);
     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));

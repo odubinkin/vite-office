@@ -1,0 +1,6 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check failed:
+- apps/office/src/framework/browser/presentation/FontCommandSelects.tsx: non-allowlisted module edge framework -> vcl

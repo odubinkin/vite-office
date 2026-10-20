@@ -1,0 +1,31 @@
+{
+  "result": "pass",
+  "calcCases": 15,
+  "sharedWriterCalcCases": 8,
+  "uniqueCases": 23,
+  "widths": [
+    1280,
+    390
+  ],
+  "actualPageAndDOMFreeWorker": true,
+  "uncaughtExceptions": 0,
+  "assetHashes": {
+    "index.html": "3e98d245e5469e1f2f56575f742f8e1e997584ade39a668f97269473f480f20b",
+    "assets/index-Co5uYlUS.js": "57aa047de9543360634079bce6ca450f1cf01d55afde26938821be4bad4a85a0",
+    "assets/index-CTuLb1xf.css": "104f2e10561613ce7d956307157ccfa45175dd89b26bf434c93e2b96c18f8227",
+    "assets/odt-worker-B9xAFHBa.js": "7aff44c71e2b7ec569cea993a435b7f89de8a2d3167015fc35a3d169a5ce1917"
+  },
+  "screenshots": [
+    {
+      "path": ".agentplane/tasks/202610192359-5474K9/evidence/strikeout-reopened-1280.png",
+      "sha256": "39b3146431ecd1749b1016538e3108a892a195130230f9f35d5ce13267a466de"
+    },
+    {
+      "path": ".agentplane/tasks/202610192359-5474K9/evidence/strikeout-reopened-390.png",
+      "sha256": "f8506400eff5ddd2ecf9c828bccc3e4b1523300db92b7a50ec0bba7419b8acd5"
+    }
+  ],
+  "visualReview": "Inspected actual primary ODS reopens at1280/390:the strikeout line is visible through cell text and shared Writer menu/toolbar styling remains.",
+  "reconciliation": "Final current-build15case run passed14unchanged cases and exposed an invalid LONG-to-SHORT narrowing assumption in the new Any witness. Source assign.hxx permits signed extraction from BYTE/SHORT/UNSIGNED_SHORT,not LONG. Corrected the new fixture to genuine UNSIGNED_SHORT65535;isolated page/Worker replay passed1case. No Any kernel change or lost assertion. The initial earlier14case run also passed before the integer fidelity repair. Shared menus8cases pass;disabled sample now uses actual unsupported Shadow.",
+  "productionBodyChange": "Only source unsigned-candidate and signed-short writeback semantics changed after the first UI run. Final actual Calc3files14case focused integration also passes against that exact shared body."
+}

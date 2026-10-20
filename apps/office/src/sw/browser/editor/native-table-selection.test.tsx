@@ -155,8 +155,8 @@ it("keyboard escalation paints only native rectangle and ordinary caret clears i
 it("table properties use native selected rows and preserve other row geometry", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
   const f = fixture();
   selectMountedTableRow("First", 2);
-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
-  fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Size" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
   const dialog = screen.getByRole("dialog", { name: "Row Height" });
   fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Height (cm)" }), {
@@ -179,8 +179,8 @@ it("row surface delegates to native selection and caret properties apply to its 
       f.edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 1 } });
     },
   );
-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
-  fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Size" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
   const dialog = screen.getByRole("dialog", { name: "Row Height" });
   fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Height (cm)" }), {

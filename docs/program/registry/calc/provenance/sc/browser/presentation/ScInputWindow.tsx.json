@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/ScInputWindow.tsx",
+    "rationale": "React DOM replaces the native VCL window presenter;no native implementation file is falsely claimed as the owner of browser code. Source composition is referenced in the capability evidence.",
+    "responsibilities": [
+      "TaskSGE6BG implements controlled React/Tailwind Calc presenters for native grid,input-window and sheet-tab responsibilities. They consume actual ScViewData/ScMarkData and controller display/input projections,never a second cell,selection or draft model. The grid paints a bounded viewport on a full-domain scroll canvas,with logical ARIA coordinates,source active/marked cell state,headers,inline edit focus and unchanged keyboard/pointer/IME intents. Input-window function/sum/equals and OK/cancel composition follows native mode switching. Tabs read actual sheet names and selected/active identities. Native commands,formatting,draft state and navigation stay with their controllers. Exact Writer toolbar-button styles are extracted into framework/browser/presentation/office-control-styles.ts and shared by Writer/Calc; global fonts,slate/indigo palette,Tailwind,rounded states and Lucide icons are reused. This task implements presentation contracts,not a registered production Calc module or complete editable workbench."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser presenter forwards input intents and paints controller-owned state using the same Vite Office styling as Writer."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScInputWindow.tsx",
+          "marker": "ScInputWindow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+          "marker": "presenters exercise actual document/view/mark owners"
+        }
+      ]
+    }
+  }
+}

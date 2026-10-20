@@ -11,6 +11,7 @@ import {
 import { internRelease } from "./ustring";
 import { implIsWhitespace } from "../../o3tl/inc/string_view";
 import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../inc/rtl/string.h";
+import { SAL_MAX_INT32 } from "../inc/types";
 
 /** Adapts the original basic_string_view to the host's exact UTF16 search storage without normalization, termination scanning or code-point conversion. @param data - Borrowed original units, nullable for an empty view. @param length - Logical view length. @returns Same logical sequence of UTF16 units. */
 function stringView(data: Uint16Array | null, length: number): string {
@@ -389,4 +390,93 @@ export const toAsciiUpper = new CaseReplace(isAsciiLowerCase, toAsciiUpperCase);
 /** Original range replacement writes every unit, including zero. @param range - Original known-length borrowed range. @param replacer - Original strategy. @returns Nothing. */
 export function replaceChars(range: with_length, replacer: CaseReplace): void {
   for (let i = 0; i < range.len; i++) range.p[i] = replacer.Replace(range.p[i] as number);
+}
+/** Original Unicode float valueOfFP specialization remains with the existing source arithmetic responsibility split. */
+export { valueOfFP } from "./strtmpl.math";
+/** Original buffer construction with16spare units and legacy null-source count reset. @param destination - Actual destination slot. @param source - Borrowed input or null. @param count - Native signed32 count. @returns Nothing. */
+export function stringbuffer_newFromStr_WithLength(
+  destination: rtl_uStringSlot | null,
+  source: Uint16Array | null,
+  count: number,
+): void {
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (count < 0) throw new Error("assert(count >= 0)");
+  if (source === null) count = 0;
+  newFromStr_WithLength(destination, source, count, 16);
+}
+/** Original buffer copy with capacity bounded below by source length. @param destination - Destination slot. @param capacity - Requested native capacity. @param source - Actual source data. @returns Capacity actually selected. */
+export function stringbuffer_newFromStringBuffer(
+  destination: rtl_uStringSlot | null,
+  capacity: number,
+  source: rtl_uString | null,
+): number {
+  if (capacity < 0) throw new Error("assert(capacity >= 0)");
+  if (source === null) throw new Error("assert(pStr)");
+  if (capacity < source.length) capacity = source.length;
+  newFromStr_WithLength(destination, source.buffer, source.length, capacity - source.length);
+  return capacity;
+}
+/** Original reserve grows from logical length rather than previous capacity;negative minimum is deliberately not asserted upstream. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param minimum - Requested native minimum. @returns Nothing. */
+export function stringbuffer_ensureCapacity(
+  destination: rtl_uStringSlot | null,
+  capacity: [number] | null,
+  minimum: number,
+): void {
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (capacity === null || capacity[0] < 0) throw new Error("assert(capacity && *capacity >= 0)");
+  if (minimum <= capacity[0]) return;
+  const data = destination[0] as rtl_uString;
+  const length = data.length;
+  capacity[0] = (length + 1) * 2;
+  if (minimum > capacity[0]) capacity[0] = minimum;
+  newFromStr_WithLength(destination, data.buffer, length, capacity[0] - length);
+}
+/** Original UTF16/ASCII insertion,including null-source gap retention and source assertion order. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param offset - Original insertion position. @param source - Borrowed initialized units or null. @param length - Original insertion count. @returns Nothing. */
+export function stringbuffer_insert(
+  destination: rtl_uStringSlot | null,
+  capacity: [number] | null,
+  offset: number,
+  source: Uint16Array | Uint8Array | null,
+  length: number,
+): void {
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (capacity === null || capacity[0] < 0) throw new Error("assert(capacity && *capacity >= 0)");
+  if (offset < 0 || offset > (destination[0] as rtl_uString).length)
+    throw new Error("assert(offset >= 0 && offset <= (*ppThis)->length)");
+  if (length < 0) throw new Error("assert(len >= 0)");
+  if (length === 0) return;
+  if (length > SAL_MAX_INT32 - (destination[0] as rtl_uString).length)
+    throw new RangeError("std::bad_alloc");
+  stringbuffer_ensureCapacity(
+    destination,
+    capacity,
+    (destination[0] as rtl_uString).length + length,
+  );
+  const data = destination[0] as rtl_uString,
+    oldLength = data.length,
+    buffer = data.buffer;
+  const tail = oldLength - offset;
+  if (tail > 0) buffer.copyWithin(offset + length, offset, oldLength);
+  if (source !== null) Copy(buffer.subarray(offset), source, length);
+  data.length = oldLength + length;
+  buffer[data.length] = 0;
+}
+/** Original removal clamps only the count and retains allocation/capacity. @param destination - Actual buffer slot. @param start - Original position. @param length - Original nonnegative count. @returns Nothing. */
+export function stringbuffer_remove(
+  destination: rtl_uStringSlot | null,
+  start: number,
+  length: number,
+): void {
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (start < 0 || start > (destination[0] as rtl_uString).length)
+    throw new Error("assert(start >= 0 && start <= (*ppThis)->length)");
+  if (length < 0) throw new Error("assert(len >= 0)");
+  const data = destination[0] as rtl_uString;
+  if (length > data.length - start) length = data.length - start;
+  if (length === 0) return;
+  const buffer = data.buffer,
+    tail = data.length - (start + length);
+  if (tail !== 0) Copy(buffer.subarray(start), buffer.subarray(start + length), tail);
+  data.length -= length;
+  buffer[data.length] = 0;
 }

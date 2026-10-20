@@ -1,0 +1,19 @@
+[
+  "apps/office/src/o3tl/inc/string_view.ts",
+  "docs/program/calc-pattern-attributes.md",
+  "docs/program/registry/shared/provenance/o3tl/inc/string_view.ts.json",
+  "docs/program/registry/shared/runtime/o3tl/inc/string_view.ts.json",
+  "scripts/check-module-boundaries.mjs",
+  "scripts/check-module-boundaries.test.ts",
+  "apps/office/src/o3tl/inc/string_view-views.test.ts",
+  "apps/office/src/vcl/inc/font/Feature.ts",
+  "apps/office/src/vcl/inc/font/Variation.ts",
+  "apps/office/src/vcl/source/font/FontVariation.test.ts",
+  "apps/office/src/vcl/source/font/FontVariation.ts",
+  "docs/program/registry/shared/provenance/vcl/inc/font/Feature.ts.json",
+  "docs/program/registry/shared/provenance/vcl/inc/font/Variation.ts.json",
+  "docs/program/registry/shared/provenance/vcl/source/font/FontVariation.ts.json",
+  "docs/program/registry/shared/runtime/vcl/inc/font/Feature.ts.json",
+  "docs/program/registry/shared/runtime/vcl/inc/font/Variation.ts.json",
+  "docs/program/registry/shared/runtime/vcl/source/font/FontVariation.ts.json"
+]

@@ -1,0 +1,5 @@
+202609240501-C9TN6M [DOING] Close implemented runtime parity audit (owner=CODER, prio=med, deps=ready, tags=code, verify=1, blueprint=code.direct)
+202610090408-X6VV8G [DOING] Run iteration247 full upstream-absent test suites and stop (owner=CODER, prio=med, deps=none, tags=ops, blueprint=ops.approval)
+202610160534-Z7BW2Y [DOING] Implement shared LanguageTag normal value and registry owner (owner=CODER, prio=low, deps=none, tags=code, blueprint=code.direct)
+202610182023-GBSSRW [DOING] Use native owning cell values and formula clones for Calc Undo (owner=CODER, prio=med, deps=none, tags=code, blueprint=code.direct)
+Total: 4 (DOING=4)

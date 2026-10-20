@@ -1,0 +1,61 @@
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+
+ ❯ scripts/test-projects.test.ts (1 test | 1 failed) 1942ms
+   × partitions every existing unit test exactly once and scoped configs discover the same owners 1941ms
+stdout | scripts/native-tools-ownership.test.ts
+Module boundary check passed: 920 runtime sources, 4119 relative imports, 141 allowed cross-module edges.
+
+ ❯ scripts/native-tools-ownership.test.ts (1 test | 1 failed) 10ms
+   × native tools geometry is shared infrastructure with one original Writer dependency 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/native-tools-ownership.test.ts > native tools geometry is shared infrastructure with one original Writer dependency
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ scripts/native-tools-ownership.test.ts:16:48
+     14|   expect(isForbiddenModuleEdge("tools", "o3tl")).toBe(false);
+     15|   expect(isForbiddenModuleEdge("tools", "cppu")).toBe(false);
+     16|   expect(isForbiddenModuleEdge("sc", "tools")).toBe(true);
+       |                                                ^
+     17|   expect(getRuntimeOwnershipViolation("tools/inc/gen.ts", "", "react")…
+     18|   expect(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  scripts/test-projects.test.ts > partitions every existing unit test exactly once and scoped configs discover the same owners
+AssertionError: /Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/browser/text-line-item-codec.test.ts: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ scripts/test-projects.test.ts:86:96
+     84|         for (const imported of imports) {
+     85|           const target = path.resolve(path.dirname(entry.file), import…
+     86|           expect(target.startsWith(path.resolve("apps/office/src/sw") …
+       |                                                                                                ^
+     87|             false,
+     88|           );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 14 passed (16)
+      Tests  2 failed | 126 passed (128)
+   Start at  04:43:00
+   Duration  17.45s (transform 268ms, setup 0ms, import 29.54s, tests 3.11s, environment 2ms)
+

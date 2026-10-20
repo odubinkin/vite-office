@@ -1,0 +1,45 @@
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  115 passed (115)
+      Tests  323 passed (323)
+   Start at  19:58:04
+   Duration  59.79s (transform 17.16s, setup 8.44s, import 30.80s, tests 25.48s, environment 38.58s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.94 |    99.93 |   99.86 |   99.96 |                   
+ source/core/data  |   99.93 |    99.88 |   99.82 |   99.96 |                   
+  attarray.ts      |     100 |    98.82 |     100 |     100 | 122               
+  document.ts      |   99.16 |    99.25 |   98.07 |   99.51 | 69                
+ source/filter/xml |   99.73 |    99.55 |     100 |     100 |                   
+  xmlexprt.ts      |   99.05 |    97.82 |     100 |     100 | 88                
+ source/ui/undo    |   97.61 |      100 |   93.75 |   97.61 |                   
+  undoblk3.ts      |   94.73 |      100 |   85.71 |   94.73 | 66                
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.94% ( 7270/7274 )
+Branches     : 99.93% ( 4629/4632 )
+Functions    : 99.86% ( 1475/1477 )
+Lines        : 99.96% ( 6516/6518 )
+================================================================================
+ERROR: Coverage for lines (99.96%) does not meet global threshold (100%)
+ERROR: Coverage for functions (99.86%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.94%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.93%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage

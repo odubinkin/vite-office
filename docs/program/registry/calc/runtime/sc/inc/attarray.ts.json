@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/attarray.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "font-script-selection",
+    "capabilityIds": [
+      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/attarray.ts",
+        "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx"
+      ],
+      "justification": "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScMergePatternState"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/attarray.hxx",
+      "upstreamSymbols": [
+        "ScMergePatternState"
+      ]
+    }
+  }
+}

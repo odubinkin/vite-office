@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --coverage.include=src/vcl/source/font/FontVariation.ts --coverage.include=src/vcl/inc/font/Feature.ts --coverage.include=src/o3tl/inc/string_view.ts --coverage.reportsDirectory=coverage/task22-variations src/vcl/source/font/FontVariation.test.ts src/o3tl/inc/string_view-views.test.ts src/o3tl/inc/string_view.test.ts src/sal/rtl/math.test.ts src/sal/rtl/strtmpl.math.test.ts
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/vcl/source/font/FontVariation.ts --coverage.include=src/vcl/inc/font/Feature.ts --coverage.include=src/o3tl/inc/string_view.ts --coverage.reportsDirectory=coverage/task22-variations src/vcl/source/font/FontVariation.test.ts src/o3tl/inc/string_view-views.test.ts src/o3tl/inc/string_view.test.ts src/sal/rtl/math.test.ts src/sal/rtl/strtmpl.math.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  5 passed (5)
+      Tests  15 passed (15)
+   Start at  06:13:37
+   Duration  3.42s (transform 801ms, setup 555ms, import 1.01s, tests 1.26s, environment 3.01s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 62/62 )
+Branches     : 100% ( 53/53 )
+Functions    : 100% ( 13/13 )
+Lines        : 100% ( 48/48 )
+================================================================================

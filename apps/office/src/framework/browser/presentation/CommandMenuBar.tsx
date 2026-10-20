@@ -1,6 +1,13 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import {
+  MenuPopupPointer,
+  markMenuItem,
+  selectedMenuItem,
+  type MenuPopupPointerOwner,
+} from "./menu-popup-pointer";
+import { MenuBarOverflow, MENUBAR_OVERFLOW_ID, menuBarTriggerClassName } from "./menubar-overflow";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
@@ -40,13 +47,47 @@ export interface CommandMenuBarProps extends BrowserCommandSurfaceProps {
   readonly menus: readonly CommandMenuPlacement[];
 }
 
+/** Finds an owned popup by literal source identity,without turning UNO punctuation into CSS selector syntax. @param root - Mounted menubar. @param attribute - Original identity attribute. @param value - Original identity. @returns Popup if mounted. */
+function findOwnedPopup(
+  root: HTMLElement,
+  attribute: "id" | "data-submenu",
+  value: string,
+): HTMLElement | undefined {
+  return [...root.querySelectorAll<HTMLElement>('[role="menu"]')].find(
+    /** Matches literal IDs,including dots,colons and quoted/parameterized resource identities. @param popup - Owned popup. @returns Matching. */
+    (popup) => popup.getAttribute(attribute) === value,
+  );
+}
 /** Returns a generated fallback menu label unchanged. @param _id - Stable menu identity. @param fallback - Generated label. @returns Generated label. */
 function useFallbackMenuLabel(_id: string, fallback: string): string {
   return fallback;
 }
 
 /** Renders the supported menu resource. @param props - Shared command surface. @returns Accessible menu bar. */
-export function CommandMenuBar({
+export function CommandMenuBar(props: CommandMenuBarProps): React.JSX.Element {
+  return (
+    <MenuBarOverflow menus={props.menus} getMenuLabel={props.getMenuLabel ?? useFallbackMenuLabel}>
+      {
+        /** Keeps the existing menu state machine over the measured native root projection. @param menus - Visible roots and hidden-suffix parent. @returns Original renderer. */
+        (menus) => (
+          <CommandMenuBarContent
+            {...props}
+            menus={menus}
+            key={menus
+              .map(
+                /** Keys the active native root projection. @param menu - Visible root. @returns Identity. */ (
+                  menu,
+                ) => menu.id,
+              )
+              .join("|")}
+          />
+        )
+      }
+    </MenuBarOverflow>
+  );
+}
+/** Owns the original native popup/focus state machine independently of measured root visibility. @param props - Current projected roots and original execution ports. @returns Menubar. */
+function CommandMenuBarContent({
   ariaLabel,
   commandSource,
   focusDocument,
@@ -60,6 +101,9 @@ export function CommandMenuBar({
   const [openMenuIndex, setOpenMenuIndex] = useState<number>();
   const [openSubmenuPath, setOpenSubmenuPath] = useState<readonly string[]>([]);
   const [activeTriggerIndex, setActiveTriggerIndex] = useState(0);
+  const [rolloverIndex, setRolloverIndex] = useState<number>();
+  const [highlightedIndex, setHighlightedIndex] = useState<number>();
+  const ignoreFirstMove = useRef(true);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const typeahead = useRef("");
@@ -70,6 +114,18 @@ export function CommandMenuBar({
   );
   const savedFocus = useRef<HTMLElement | undefined>(undefined);
   const menuActive = useRef(false);
+
+  useLayoutEffect(
+    /** Returns an owned popup's saved focus before measured root replacement removes its DOM. @returns Teardown. */
+    function retainOwnerAcrossLayout(): () => void {
+      const root = rootRef.current;
+      return /** Restores only a connected owner while focus still belongs to this menu. @returns Nothing. */ () => {
+        if (savedFocus.current?.isConnected === true && root?.contains(document.activeElement))
+          savedFocus.current.focus();
+      };
+    },
+    [],
+  );
 
   /** Retains one external owner for the active menu cycle. @param target - Previous focus target. @returns Nothing. */
   function saveFocus(target: EventTarget | null): void {
@@ -93,6 +149,7 @@ export function CommandMenuBar({
     pendingSubmenuFocus.current = undefined;
     setOpenSubmenuPath([]);
     setOpenMenuIndex(undefined);
+    setHighlightedIndex(undefined);
     if (restoreFocus) {
       if (previousFocus?.isConnected === true) previousFocus.focus();
       else if (defaultToDocument && focusDocument !== undefined) focusDocument();
@@ -117,21 +174,25 @@ export function CommandMenuBar({
     if (item.items.length === 0) trigger.focus();
   }
 
-  /** Closes the current popup and restores its parent focus. @param menu - Current popup. @returns Nothing. */
-  function closePopup(menu: HTMLElement): void {
+  /** Closes the current popup and restores its parent focus. @param menu - Current popup. @param selectParent - Keyboard closure retains the parent entry;pointer closure restores the parent window with its existing highlight. @returns Nothing. */
+  function closePopup(menu: HTMLElement, selectParent = true): void {
     if (menu.dataset.submenu !== undefined) {
       pendingSubmenuFocus.current = undefined;
       setOpenSubmenuPath(openSubmenuPath.slice(0, Number(menu.dataset.menuDepth) - 1));
-      menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
+      if (selectParent)
+        menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
+      else ((menu.parentElement as HTMLElement).closest('[role="menu"]') as HTMLElement).focus();
     } else closeMenu(true);
   }
 
   /** Opens one popup with origin-specific preselection. @param index - Menu index. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
   function openMenu(index: number, preSelectFirst = false): void {
     if (openMenuIndex === index) return;
+    ignoreFirstMove.current = true;
     saveFocus(document.activeElement);
     menuActive.current = true;
     setActiveTriggerIndex(index);
+    setHighlightedIndex(index);
     pendingSubmenuFocus.current = undefined;
     setOpenSubmenuPath([]);
     pendingMenuPreselection.current = preSelectFirst;
@@ -142,8 +203,10 @@ export function CommandMenuBar({
     /** Applies the requested initial focus after React mounts a popup. @returns Nothing. */
     function restoreRequestedMenuFocus(): void {
       if (openMenuIndex === undefined || pendingMenuPreselection.current === undefined) return;
-      const menu = rootRef.current?.querySelector<HTMLElement>(
-        `#${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
+      const menu = findOwnedPopup(
+        rootRef.current as HTMLElement,
+        "id",
+        `${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
       );
       if (menu != null) {
         if (pendingMenuPreselection.current) focusMenuItem(menu, "first");
@@ -169,7 +232,7 @@ export function CommandMenuBar({
       const request = pendingSubmenuFocus.current;
       if (request === undefined) return;
       pendingSubmenuFocus.current = undefined;
-      const submenu = rootRef.current?.querySelector<HTMLElement>(`[data-submenu="${request.id}"]`);
+      const submenu = findOwnedPopup(rootRef.current as HTMLElement, "data-submenu", request.id);
       if (submenu != null) {
         if (request.preSelectFirst) focusMenuItem(submenu, "first");
         else submenu.focus();
@@ -201,6 +264,7 @@ export function CommandMenuBar({
           saveFocus(document.activeElement);
           menuActive.current = true;
           setActiveTriggerIndex(0);
+          setHighlightedIndex(0);
           first.focus();
         }
       }
@@ -243,6 +307,7 @@ export function CommandMenuBar({
             ? menus.length - 1
             : (index + (event.key === "ArrowRight" ? 1 : -1) + menus.length) % menus.length;
       setActiveTriggerIndex(next);
+      setHighlightedIndex(next);
       triggerRefs.current[next]?.focus();
       if (openMenuIndex !== undefined) openMenu(next, true);
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -337,6 +402,26 @@ export function CommandMenuBar({
     }
   }
 
+  /** Executes HighlightChanged over the same actual resource and popup depth used by keyboard admission. @param entry - Highlighted original entry. @param items - Original direct popup placements. @param depth - Popup depth. @returns Nothing. */
+  function commitPointerHighlight(
+    entry: HTMLElement,
+    items: readonly CommandMenuItemPlacement[],
+    depth: number,
+  ): void {
+    const child = items.find(
+      /** Resolves the original child submenu without synthesizing a command. @param item - Actual placement. @returns Whether it owns the entry. */
+      (item): item is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+        item.kind === "submenu" && item.id === entry.dataset.submenuTrigger,
+    );
+    if (child !== undefined) openSubmenu(child, false, entry, depth);
+    else {
+      const popup = entry.closest<HTMLElement>('[role="menu"]') as HTMLElement;
+      pendingSubmenuFocus.current = undefined;
+      setOpenSubmenuPath(openSubmenuPath.slice(0, depth));
+      if (popup.contains(document.activeElement)) popup.focus();
+    }
+  }
+
   /** Renders resource items recursively in their original owning popup. @param items - Resource items. @param menuIndex - Owning menu index. @param depth - Current parent popup depth. @returns Rendered items. */
   function renderItems(
     items: readonly CommandMenuItemPlacement[],
@@ -360,32 +445,11 @@ export function CommandMenuBar({
           const isOpen = openSubmenuPath[depth] === item.id;
           const label = getMenuLabel(item.id, item.label);
           return (
-            <div
-              className="relative"
-              key={item.id}
-              onMouseEnter={
-                /** Borrows the current child and original parent entry for pointer admission. @param event - Original trigger region event. @returns Nothing. */ (
-                  event,
-                ) =>
-                  openSubmenu(
-                    item,
-                    false,
-                    event.currentTarget.firstElementChild as HTMLElement,
-                    depth,
-                  )
-              }
-              onMouseLeave={
-                /** Closes this submenu and restores parent focus after the pointer leaves. @param event - Submenu region event. @returns Nothing. */ (
-                  event,
-                ) => {
-                  if (isOpen) closePopup(event.currentTarget.lastElementChild as HTMLElement);
-                }
-              }
-            >
+            <div className="relative" key={item.id}>
               <button
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
-                className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
+                className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100"
                 data-submenu-trigger={item.id}
                 onClick={
                   /** Opens the current original child on native browser activation. @param event - Original button activation. @returns Nothing. */ (
@@ -407,6 +471,14 @@ export function CommandMenuBar({
                   aria-label={`${label} menu`}
                   data-submenu={item.id}
                   data-menu-depth={depth + 1}
+                  pointerOwner={{
+                    commit:
+                      /** Admits the original highlighted resource after native hover delay. @param entry - Actual child popup entry. @returns Nothing. */
+                      (entry) => commitPointerHighlight(entry, item.items, depth + 1),
+                    close:
+                      /** Removes only this active child after native parent-leave delay. @param popup - Mounted child popup. @returns Nothing. */
+                      (popup) => closePopup(popup, false),
+                  }}
                   id={`${idPrefix}-${item.id}-menu`}
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -471,6 +543,43 @@ export function CommandMenuBar({
           if (!event.currentTarget.contains(event.relatedTarget)) menuActive.current = true;
         }
       }
+      onMouseMove={
+        /** Applies MenuBarWindow motion admission independently of its floating popup windows. @param event - Actual menubar motion. @returns Nothing. */ (
+          event,
+        ) => {
+          const target = event.target as HTMLElement;
+          if (target.closest('[role="menu"]') !== null) return;
+          const index = triggerRefs.current.indexOf(target.closest('[role="menuitem"]'));
+          setRolloverIndex(index < 0 ? undefined : index);
+          if (highlightedIndex === undefined) return;
+          if (ignoreFirstMove.current) {
+            ignoreFirstMove.current = false;
+            return;
+          }
+          if (index >= 0 && index !== highlightedIndex) {
+            if (openMenuIndex === undefined) {
+              setHighlightedIndex(index);
+              setActiveTriggerIndex(index);
+              (triggerRefs.current[index] as HTMLButtonElement).focus();
+            } else openMenu(index);
+          }
+        }
+      }
+      onMouseOut={
+        /** Clears rollover only when leaving the native menubar window,including entry into a floating popup. @param event - Pointer window transition. @returns Nothing. */ (
+          event,
+        ) => {
+          if ((event.target as HTMLElement).closest('[role="menu"]') !== null) return;
+          const next = event.relatedTarget;
+          if (
+            next instanceof Element &&
+            event.currentTarget.contains(next) &&
+            next.closest('[role="menu"]') === null
+          )
+            return;
+          setRolloverIndex(undefined);
+        }
+      }
       ref={rootRef}
       role="menubar"
     >
@@ -483,21 +592,30 @@ export function CommandMenuBar({
           return (
             <div className="relative" key={menu.id}>
               <button
+                role="menuitem"
                 aria-controls={`${idPrefix}-${menu.id}-menu`}
                 aria-expanded={openMenuIndex === index}
                 aria-haspopup="menu"
-                className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className={menuBarTriggerClassName}
+                data-menubar-rollover={rolloverIndex === index ? "true" : undefined}
+                data-menubar-highlighted={
+                  (
+                    highlightedIndex === undefined
+                      ? rolloverIndex === index
+                      : highlightedIndex === index
+                  )
+                    ? "true"
+                    : undefined
+                }
+                aria-label={label}
                 onClick={
                   /** Toggles this top-level menu. @returns Nothing. */ () =>
                     openMenuIndex === index ? closeMenu() : openMenu(index)
                 }
                 onFocus={
-                  /** Activates this trigger for roving tabindex. @returns Nothing. */ () =>
-                    setActiveTriggerIndex(index)
-                }
-                onMouseEnter={
-                  /** Switches to a neighboring menu after the menubar has been opened. @returns Nothing. */ () => {
-                    if (openMenuIndex !== undefined && openMenuIndex !== index) openMenu(index);
+                  /** Activates this trigger for roving tabindex and native focus highlight. @returns Nothing. */ () => {
+                    setActiveTriggerIndex(index);
+                    setHighlightedIndex(index);
                   }
                 }
                 onKeyDown={
@@ -515,12 +633,20 @@ export function CommandMenuBar({
                 tabIndex={index === activeTriggerIndex ? 0 : -1}
                 type="button"
               >
-                {label}
+                {menu.id === MENUBAR_OVERFLOW_ID ? <span aria-hidden="true">»</span> : label}
               </button>
               {openMenuIndex === index ? (
                 <CommandMenuPopup
                   aria-label={`${label} menu`}
                   data-menu-depth={0}
+                  pointerOwner={{
+                    commit:
+                      /** Admits the original root-popup resource after native hover delay. @param entry - Actual entry. @returns Nothing. */
+                      (entry) => commitPointerHighlight(entry, menu.items, 0),
+                    close:
+                      /** Restores the original popup owner when closed. @param popup - Mounted popup. @returns Nothing. */
+                      (popup) => closePopup(popup, false),
+                  }}
                   id={`${idPrefix}-${menu.id}-menu`}
                   onKeyDown={
                     /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -544,14 +670,39 @@ export function CommandMenuBar({
 export function CommandMenuPopup({
   submenu = false,
   anchorPoint,
+  pointerOwner,
   ...props
 }: Readonly<
   React.HTMLAttributes<HTMLDivElement> & {
     submenu?: boolean;
     anchorPoint?: Readonly<{ x: number; y: number }>;
+    pointerOwner?: MenuPopupPointerOwner;
   }
 >): React.JSX.Element {
   const popupRef = useRef<HTMLDivElement>(null);
+  const pointerNavigation = pointerOwner !== undefined;
+  const commitPointer = useEffectEvent(
+    /** Uses the current resource/focus closures when the original timer expires. @param entry - Actual highlighted entry. @returns Nothing. */
+    (entry: HTMLElement) => (pointerOwner as MenuPopupPointerOwner).commit(entry),
+  );
+  const closePointer = useEffectEvent(
+    /** Uses the current popup close owner. @param popup - Active original popup. @returns Nothing. */
+    (popup: HTMLElement) => (pointerOwner as MenuPopupPointerOwner).close(popup),
+  );
+  useLayoutEffect(
+    /** Owns pointer timers exactly for this mounted popup lifetime. @returns Timer/listener cleanup when pointer navigation is enabled. */
+    () => {
+      if (!pointerNavigation) return;
+      const pointer = new MenuPopupPointer(
+        popupRef.current as HTMLDivElement,
+        commitPointer,
+        closePointer,
+      );
+      return /** Stops pending original popup work before its DOM is removed. @returns Nothing. */ () =>
+        pointer.dispose();
+    },
+    [pointerNavigation],
+  );
   useLayoutEffect(
     /** Tracks viewport and ancestor scrolling while the popup is mounted. @returns Listener cleanup. */ () => {
       const popup = popupRef.current as HTMLDivElement;
@@ -630,10 +781,10 @@ export function BindingsMenuCommand({
   );
   const resource = presentation.resource;
   const role =
-    resource.semantics === "check"
-      ? "menuitemcheckbox"
-      : resource.semantics === "radio"
-        ? "menuitemradio"
+    resource.semantics === "radio"
+      ? "menuitemradio"
+      : presentation.checkable
+        ? "menuitemcheckbox"
         : "menuitem";
   const isCheckable = role !== "menuitem";
   const isChecked = presentation.checked;
@@ -642,7 +793,7 @@ export function BindingsMenuCommand({
     <button
       aria-checked={isCheckable ? isChecked : undefined}
       aria-keyshortcuts={resource.shortcuts[0]}
-      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
+      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
       disabled={!presentation.enabled}
       onClick={
         /** Unmounts the popup and restores focus before dispatching this command. @returns Nothing. */ () => {
@@ -670,28 +821,6 @@ export function BindingsMenuCommand({
       )}
     </button>
   );
-}
-
-/** Reads selected direct entries independently of HTML disabled focus. @param container - Actual popup owner. @returns Selected native entry, if present. */
-function selectedMenuItem(container: HTMLElement): HTMLElement | undefined {
-  return [...container.querySelectorAll<HTMLElement>("[data-popup-highlighted]")].find(
-    /** Retains this popup's original highlighted placement. @param item - Actual entry. @returns Whether owned here. */
-    (item) => item.closest('[role="menu"]') === container,
-  );
-}
-
-/** Publishes selection over the existing popup DOM without changing native command state. @param container - Actual popup. @param item - Original entry. @returns Nothing. */
-function markMenuItem(container: HTMLElement, item: HTMLElement): void {
-  selectedMenuItem(container)?.removeAttribute("data-popup-highlighted");
-  item.dataset.popupHighlighted = "true";
-  if (item.id === "") {
-    const entries = [...container.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
-      /** Reads direct original placement order. @param entry - Actual entry. @returns Whether owned here. */
-      (entry) => entry.closest('[role="menu"]') === container,
-    );
-    item.id = `${container.id}-item-${entries.indexOf(item)}`;
-  }
-  container.setAttribute("aria-activedescendant", item.id);
 }
 
 /** Selects direct children with native SkipDisabledInMenus=false. @param container - Active menu. @param direction - Requested move. @param current - Current item. @returns Nothing. */

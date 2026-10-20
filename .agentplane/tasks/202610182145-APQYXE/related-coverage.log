@@ -1,0 +1,26 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+································x··················
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3000
+AssertionError: expected 0 to be greater than 0
+ ❯ src/vcl/browser/default-font-metadata.test.ts:67:25
+     65|       ...configured.getStr().subarray(0, configured.getLength()),
+     66|     ).split(";")[0] as string;
+     67|     expect(name.length).toBeGreaterThan(0);
+       |                         ^
+     68|     const native = getBrowserDefaultFontMetadata(
+     69|       device([face(name)]),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 50 passed (51)
+   Start at  04:47:33
+   Duration  4.71s (transform 2.38s, setup 588ms, import 3.01s, tests 61ms, environment 2.78s)
+

@@ -1,0 +1,40 @@
+Checking formatting...
+All matched files use Prettier code style!
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/stringbuffer.test.ts
+  109:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  118:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  122:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  129:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  213:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/rtl-stringbuffer-native-probe.mjs
+  6:42  error  'upstream' is defined but never used            @typescript-eslint/no-unused-vars
+  7:10  error  'originalDependency' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 7 problems (7 errors, 0 warnings)
+
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: npx eslint apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/inc/rtl/ustrbuf.h.ts apps/office/src/sal/rtl/stringbuffer.test.ts apps/office/src/sal/rtl/ustrbuf.ts scripts/rtl-stringbuffer-native-probe.mjs --max-warnings 0
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at file:///Users/odubinkin/Projects/vite-office-calc/[eval1]:1:519
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:268:26)
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:265:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 88239,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.13.1

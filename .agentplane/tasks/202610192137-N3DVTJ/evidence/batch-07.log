@@ -1,0 +1,879 @@
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-batch-07-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   27.46 |    23.04 |   29.22 |   28.44 |                   
+ comphelper/inc    |      80 |        0 |       0 |      80 |                   
+  extract.ts       |       0 |        0 |       0 |       0 | 6-10              
+ ...per/source/xml |    36.2 |       40 |   33.33 |   38.77 |                   
+  attributelist.ts |    36.2 |       40 |   33.33 |   38.77 | ...08-115,125-127 
+ configmgr/source  |       0 |        0 |       0 |       0 |                   
+  config_map.ts    |       0 |        0 |       0 |       0 | 18                
+  data.ts          |       0 |        0 |       0 |       0 | 19-254            
+  groupnode.ts     |       0 |        0 |       0 |       0 | 11-64             
+  ...opertynode.ts |       0 |        0 |       0 |       0 | 10-50             
+  ...dvaluenode.ts |       0 |        0 |       0 |       0 | 12-52             
+  modifications.ts |       0 |        0 |       0 |       0 | 13-75             
+  node.ts          |       0 |        0 |       0 |       0 | 11-87             
+  nodemap.ts       |       0 |        0 |       0 |       0 | 11-84             
+  rootnode.ts      |       0 |      100 |       0 |       0 | 8-24              
+  setnode.ts       |       0 |        0 |       0 |       0 | 13-91             
+  type.ts          |       0 |        0 |       0 |       0 | 11-155            
+ cppu/inc          |   36.36 |       30 |   29.16 |    37.8 |                   
+  Enterable.ts     |       0 |      100 |       0 |       0 | 15-105            
+  EnvDcp.ts        |       0 |      100 |       0 |       0 | 8-16              
+  unotype.ts       |   50.79 |       30 |    87.5 |   54.38 | ...32,146,151-153 
+ .../sun/star/lang |       0 |        0 |       0 |       0 |                   
+  ...dException.ts |       0 |        0 |       0 |       0 | 15-65             
+  XServiceInfo.ts  |       0 |        0 |       0 |       0 | 38-258            
+ ...m/sun/star/uno |    8.14 |     7.69 |    9.67 |    8.06 |                   
+  Any.ts           |   25.26 |    26.22 |   27.58 |    24.7 | ...24,233,244-289 
+  Reference.ts     |    7.96 |        0 |    4.34 |    8.73 | 58-314            
+  ...eException.ts |    8.33 |        0 |       0 |    8.33 | 17-42             
+  Sequence-type.ts |      12 |        0 |       0 |    12.5 | 19-49,55-60       
+  Sequence.ts      |   13.04 |     2.38 |       4 |   13.84 | 45,63-216         
+  Type.ts          |   11.11 |        0 |   15.38 |   11.42 | 41-94,102-114     
+  XAdapter.ts      |       0 |        0 |       0 |       0 | 36-281            
+  XAggregation.ts  |       0 |        0 |       0 |       0 | 35-223            
+  XReference.ts    |       0 |        0 |       0 |       0 | 31-135            
+  XWeak.ts         |       0 |        0 |       0 |       0 | 31-140            
+  ...ion-values.ts |       0 |        0 |       0 |       0 | 18-83             
+  genfunc.ts       |       0 |        0 |       0 |       0 | 9-36              
+ cppu/inc/typelib  |   79.54 |    16.66 |      50 |   81.39 |                   
+  ...escription.ts |      10 |    16.66 |   33.33 |   11.11 | 328-338           
+ cppu/inc/uno      |       0 |        0 |       0 |       0 |                   
+  dispatcher.ts    |       0 |        0 |       0 |       0 | 30-90             
+ cppu/source/cppu  |   38.88 |      100 |      25 |   38.88 |                   
+  cppu_opt.ts      |   38.88 |      100 |      25 |   38.88 | 25-53             
+ ...source/typelib |    8.05 |     3.85 |      20 |    7.87 |                   
+  static_types.ts  |      11 |        8 |   15.38 |    9.66 | ...88-225,243-439 
+  ...ignability.ts |     2.7 |        0 |       0 |    3.03 | 33-95             
+  ...b-complete.ts |       0 |        0 |       0 |       0 | 21-92             
+  ...-factories.ts |       0 |        0 |       0 |       0 | 35-212            
+  ...lib-lookup.ts |    1.65 |        0 |       0 |     1.8 | 28-118,124-242    
+  ...-factories.ts |       0 |        0 |       0 |       0 | 30-187            
+  ...ib-members.ts |       0 |        0 |       0 |       0 | 21-101            
+  typelib.ts       |   14.63 |      6.7 |   35.89 |   14.55 | ...55-731,742-908 
+ cppu/source/uno   |    4.79 |     3.07 |    9.67 |    5.05 |                   
+  EnvDcp.ts        |       0 |        0 |       0 |       0 | 14-30             
+  any.ts           |   26.08 |    16.66 |    37.5 |      25 | ...33-58,69,80-93 
+  ...gn-numeric.ts |   18.91 |     8.33 |     100 |   18.91 | ...,58-98,109-123 
+  assign.ts        |       0 |        0 |       0 |       0 | 38-211            
+  constr.ts        |       0 |        0 |       0 |       0 | 17-86             
+  copy.ts          |    13.3 |    10.48 |   35.71 |   13.75 | ...52-262,268-538 
+  data.ts          |    5.88 |        0 |       0 |    6.34 | ...52-155,162-310 
+  destr.ts         |    4.46 |     5.17 |   16.66 |     4.9 | ...8,54-77,91-241 
+  eq-numeric.ts    |       0 |        0 |       0 |       0 | 5-196             
+  eq-sequence.ts   |       0 |        0 |       0 |       0 | 21-146            
+  eq.ts            |       0 |        0 |       0 |       0 | 25-178            
+  lbenv.ts         |       0 |        0 |       0 |       0 | 10-173            
+  lbmap.ts         |       0 |        0 |       0 |       0 | 10-135            
+  prim.ts          |    25.8 |     12.5 |   28.57 |      25 | 36-91             
+  ...e-elements.ts |       0 |        0 |       0 |       0 | 40-336            
+  sequence.ts      |    0.96 |        0 |       0 |    1.01 | 26-277            
+ cppuhelper/inc    |       0 |        0 |       0 |       0 |                   
+  ...yinterface.ts |       0 |        0 |       0 |       0 | 17-19             
+  weakref.ts       |       0 |        0 |       0 |       0 | 16-58             
+ ...per/inc/detail |       0 |        0 |       0 |       0 |                   
+  ...ionThrower.ts |       0 |        0 |       0 |       0 | 33-216            
+ cppuhelper/source |       0 |        0 |       0 |       0 |                   
+  ...rtsservice.ts |       0 |        0 |       0 |       0 | 6-13              
+  weak.ts          |       0 |        0 |       0 |       0 | 15-243            
+ ...ource/tabpages |    1.58 |        0 |       0 |    1.76 |                   
+  border.ts        |    1.58 |        0 |       0 |    1.76 | 54-431            
+ ...odel/inc/color |   50.25 |       25 |   14.28 |   52.65 |                   
+  ComplexColor.ts  |   43.39 |    29.41 |   13.33 |      46 | ...46-230,248-334 
+  ...sformation.ts |   78.94 |        0 |      25 |   78.94 | 43-56             
+ ...odel/inc/theme |   86.36 |        0 |   66.66 |   90.47 |                   
+  ...eColorType.ts |   86.36 |        0 |   66.66 |   90.47 | 27-28             
+ editeng/browser   |   26.66 |    20.83 |      50 |   26.66 |                   
+  ...item-codec.ts |   26.66 |    20.83 |      50 |   26.66 | 11-18,37-52       
+ editeng/inc       |   51.22 |    32.86 |   48.29 |   52.63 |                   
+  EPaM.ts          |       0 |        0 |       0 |       0 | 4-43              
+  ESelection.ts    |       0 |        0 |       0 |       0 | 6-97              
+  colritem.ts      |       0 |      100 |     100 |       0 | 4                 
+  eeitem.ts        |       0 |      100 |     100 |       0 | 4-142             
+  fhgtitem.ts      |       0 |      100 |     100 |       0 | 4-6               
+  frmdir.ts        |       0 |      100 |       0 |       0 | 3-12              
+  lrspitem.ts      |      46 |    36.74 |   56.66 |   47.25 | ...24-828,836-914 
+  ulspitem.ts      |   28.39 |    25.67 |   38.09 |    31.5 | ...11-113,117-175 
+ ...source/editeng |       0 |        0 |       0 |       0 |                   
+  ...j.sections.ts |       0 |        0 |       0 |       0 | 6-70              
+  editobj.ts       |       0 |        0 |       0 |       0 | 24-189            
+  edtspell.ts      |       0 |        0 |       0 |       0 | 21-233            
+  misspellrange.ts |       0 |        0 |       0 |       0 | 8-27              
+  section.ts       |       0 |      100 |       0 |       0 | 5-10              
+ ...g/source/items |   21.35 |    16.58 |   30.12 |   22.56 |                   
+  borderline.ts    |   49.31 |    51.72 |   63.63 |   48.61 | ...66,175,201-222 
+  flditem.ts       |       0 |        0 |       0 |       0 | 12-317            
+  ...tems.brush.ts |       0 |        0 |       0 |       0 | 24-239            
+  ....direction.ts |       0 |        0 |       0 |       0 | 11-100            
+  frmitems.line.ts |       0 |        0 |       0 |       0 | 15-99             
+  frmitems.pbin.ts |   14.28 |        0 |       0 |   16.66 | 10-20             
+  ...ems.shadow.ts |     4.2 |        0 |    5.55 |    4.23 | 53-290            
+  frmitems.size.ts |   12.06 |    21.62 |   42.85 |   12.96 | ...1,47-53,77-143 
+  frmitems.ts      |   38.51 |       20 |   43.42 |    42.2 | ...53-557,574-654 
+  justifyitem.ts   |       0 |        0 |       0 |       0 | 26-346            
+  numitem.ts       |   80.59 |    74.35 |   93.33 |   86.66 | ...73,276,298-310 
+  ...tem.adjust.ts |   44.76 |     17.1 |      80 |   46.91 | ...56-257,263-332 
+  ...em.spacing.ts |   26.13 |     6.89 |    42.1 |   27.05 | ...2-63,80,88-218 
+  paraitem.tabs.ts |   14.56 |    15.65 |   11.11 |   15.62 | 37,67,75,84-320   
+  paraitem.ts      |    36.2 |    33.33 |   11.11 |   38.46 | ...71-122,134-186 
+  rubyitem.ts      |       0 |        0 |       0 |       0 | 14-132            
+  ...item.color.ts |       0 |        0 |       0 |       0 | 9-85              
+  ...em.effects.ts |       0 |        0 |       0 |       0 | 14-186            
+  ...escapement.ts |       0 |        0 |       0 |       0 | 10-150            
+  textitem.font.ts |   46.42 |    23.07 |   41.17 |   54.16 | ...99-101,110-142 
+  ...tem.height.ts |   19.82 |    15.29 |   41.17 |   20.75 | ...6-68,70,91-252 
+  ...m.language.ts |       0 |        0 |       0 |       0 | 13-72             
+  ...item.modes.ts |       0 |        0 |       0 |       0 | 17-145            
+  ...em.spacing.ts |       0 |        0 |       0 |       0 | 16-119            
+  textitem.ts      |   27.38 |    20.35 |   39.21 |   27.81 | ...23,432,444-449 
+  xmlcnitm.ts      |       0 |        0 |       0 |       0 | 12-86             
+ ...eng/source/uno |       0 |      100 |       0 |       0 |                   
+  unofdesc.ts      |       0 |      100 |       0 |       0 | 6-8               
+ .../source/common |       0 |        0 |       0 |       0 |                   
+  ucase.h.ts       |       0 |      100 |       0 |       0 | 14-50             
+  ucase.ts         |       0 |        0 |       0 |       0 | 26-163            
+  ...props_data.ts |       0 |      100 |     100 |       0 | 5-10              
+  uchar.ts         |       0 |        0 |       0 |       0 | 15-38             
+  ...props_data.ts |       0 |      100 |     100 |       0 | 5-28              
+  ucptrie.ts       |       0 |        0 |       0 |       0 | 5-40              
+  uprops.ts        |       0 |        0 |       0 |       0 | 6-19              
+  utrie2.h.ts      |       0 |        0 |       0 |       0 | 24-77             
+ ...common/unicode |       0 |      100 |       0 |       0 |                   
+  stringoptions.ts |       0 |      100 |     100 |       0 | 2-3               
+  uchar.ts         |       0 |      100 |       0 |       0 | 5-364             
+  ucptrie.ts       |       0 |      100 |       0 |       0 | 3-13              
+  uscript.ts       |       0 |      100 |       0 |       0 | 2-229             
+ ...tag/extensions |       0 |        0 |       0 |       0 |                   
+  lt-ext-ldml-t.ts |       0 |        0 |       0 |       0 | 23-136            
+  lt-ext-ldml-u.ts |       0 |        0 |       0 |       0 | 22-137            
+ ...tag/liblangtag |       0 |        0 |       0 |       0 |                   
+  lt-error.ts      |       0 |        0 |       0 |       0 | 6-36              
+  lt-extension.ts  |       0 |        0 |       0 |       0 | 19-139            
+  lt-registry.ts   |       0 |        0 |       0 |       0 | 21-33             
+  ...nonicalize.ts |       0 |        0 |       0 |       0 | 21-134            
+  lt-tag.parse.ts  |       0 |        0 |       0 |       0 | 13-270            
+  ...ag.scanner.ts |       0 |        0 |       0 |       0 | 16-72             
+  lt-tag.ts        |       0 |        0 |       0 |       0 | 10-167            
+  lt-utils.ts      |       0 |        0 |       0 |       0 | 7-31              
+  lt-xml.cldr.ts   |       0 |      100 |       0 |       0 | 22-52             
+ ...s/include/mdds |       0 |        0 |       0 |       0 |                   
+  ...gment_tree.ts |       0 |        0 |       0 |       0 | 33-589            
+  ...t_tree_itr.ts |       0 |        0 |       0 |       0 | 21-205            
+  global.ts        |       0 |      100 |       0 |       0 | 9-14              
+  ...ype_matrix.ts |       0 |        0 |       0 |       0 | 50-739            
+  ...matrix_def.ts |       0 |        0 |       0 |       0 | 24-77             
+  node.ts          |       0 |        0 |       0 |       0 | 14-182            
+  ref_pair.ts      |       0 |        0 |       0 |       0 | 11-25             
+ ...ti_type_vector |       0 |        0 |       0 |       0 |                   
+  block_funcs.ts   |       0 |        0 |       0 |       0 | 50-202            
+  ...ete_vector.ts |       0 |        0 |       0 |       0 | 29-321            
+  iterator_node.ts |       0 |        0 |       0 |       0 | 9-99              
+  macro.ts         |       0 |        0 |       0 |       0 | 73-200            
+  ...ent_blocks.ts |       0 |      100 |       0 |       0 | 8-210             
+  types.ts         |       0 |        0 |       0 |       0 | 10-789            
+  util.ts          |       0 |        0 |       0 |       0 | 10-131            
+  ...or_storage.ts |       0 |        0 |       0 |       0 | 20-338            
+ ...ype_vector/soa |       0 |        0 |       0 |       0 |                   
+  block_util.ts    |       0 |        0 |       0 |       0 | 25-180            
+  iterator.ts      |       0 |        0 |       0 |       0 | 10-278            
+  main.ts          |       0 |        0 |       0 |       0 | 80-971            
+  ..._def.range.ts |       0 |        0 |       0 |       0 | 47-557            
+  main_def.set.ts  |       0 |        0 |       0 |       0 | 36-670            
+  main_def.ts      |       0 |        0 |       0 |       0 | 38-997            
+ formula/inc       |       0 |        0 |       0 |       0 |                   
+  core_resource.ts |       0 |      100 |     100 |       0 | 4                 
+  errorcodes.ts    |       0 |        0 |       0 |       0 | 4-145             
+  opcode.enum.ts   |       0 |      100 |     100 |       0 | 3                 
+  opcode.ts        |       0 |        0 |       0 |       0 | 7-983             
+  paramclass.ts    |       0 |      100 |       0 |       0 | 3-13              
+  token.enum.ts    |       0 |        0 |       0 |       0 | 3-88              
+ ...ource/core/api |       0 |        0 |       0 |       0 |                   
+  ...laCompiler.ts |       0 |        0 |       0 |       0 | 20-282            
+  grammar.ts       |       0 |        0 |       0 |       0 | 3-183             
+  token.array.ts   |       0 |        0 |       0 |       0 | 15-450            
+  token.string.ts  |       0 |        0 |       0 |       0 | 10-160            
+  token.ts         |       0 |        0 |       0 |       0 | 28-194            
+  token.values.ts  |       0 |        0 |       0 |       0 | 17-415            
+ ...r/accelerators |       8 |        0 |       0 |    8.69 |                   
+  keymapping.ts    |       8 |        0 |       0 |    8.69 | 33-87             
+ ...rk/browser/app |       0 |        0 |       0 |       0 |                   
+  SuiteCard.tsx    |       0 |        0 |       0 |       0 | 25-45             
+  bootstrap.tsx    |       0 |        0 |       0 |       0 | 25-35             
+  desktop.tsx      |       0 |        0 |       0 |       0 | 24-135            
+  modulemanager.ts |       0 |        0 |       0 |       0 | 39-109            
+ ...owser/dispatch |   25.71 |       20 |   33.33 |   24.24 |                   
+  ...dispatcher.ts |   25.71 |       20 |   33.33 |   24.24 | 26-57,73-81       
+ ...r/localization |   31.25 |    14.28 |   22.22 |   31.25 |                   
+  ...nProvider.tsx |       0 |      100 |       0 |       0 | 13                
+  ...on-context.ts |      50 |      100 |       0 |      50 | 12                
+  ...calization.ts |      50 |       25 |   33.33 |      50 | 29-38             
+  messages.ts      |   14.28 |        0 |      25 |   14.28 | 30-59             
+ ...r/presentation |    1.95 |     1.17 |    0.53 |    2.01 |                   
+  ...ileDialog.tsx |       0 |        0 |       0 |       0 | 75-499            
+  ...ndMenuBar.tsx |       0 |        0 |       0 |       0 | 56-852            
+  ...PopupMenu.tsx |       0 |        0 |       0 |       0 | 31-465            
+  ...ctControl.tsx |       0 |        0 |       0 |       0 | 29-38             
+  ...ndToolbar.tsx |       0 |        0 |       0 |       0 | 42-124            
+  DialogHeader.tsx |       0 |        0 |       0 |       0 | 15                
+  ...sionPanel.tsx |       0 |      100 |       0 |       0 | 24-51             
+  ...aceHeader.tsx |       0 |        0 |       0 |       0 | 29-75             
+  ...nd-surface.ts |       0 |        0 |       0 |       0 | 36-101            
+  ...up-pointer.ts |    3.12 |        0 |       0 |    3.38 | 16-136            
+  ...-overflow.tsx |    5.88 |        0 |       0 |    6.06 | 19-97             
+  ...g-content.tsx |       0 |        0 |       0 |       0 | 4-7               
+  ...-shortcuts.ts |       0 |        0 |       0 |       0 | 39-55             
+ ...rowser/storage |    0.85 |        0 |       0 |     0.9 |                   
+  ...ment-store.ts |    0.85 |        0 |       0 |     0.9 | 31-314            
+ ...rowser/workers |   11.11 |        0 |       0 |   11.11 |                   
+  ...r-protocol.ts |   11.11 |        0 |       0 |   11.11 | 70-101            
+ ...wser/workflows |     5.6 |        0 |       0 |    6.12 |                   
+  ...t-autosave.ts |    3.19 |        0 |       0 |    3.48 | 18-178            
+  ...controller.ts |   23.07 |      100 |       0 |      25 | 14,22-48          
+ ...ource/dispatch |       0 |      100 |       0 |       0 |                   
+  ...chprovider.ts |       0 |      100 |       0 |       0 | 11-15             
+ i18nlangtag/inc   |    92.3 |      100 |      50 |    92.3 |                   
+  lang.ts          |   91.66 |      100 |      50 |   91.66 | 12                
+ ...source/isolang |   12.27 |     4.52 |    15.9 |   13.44 |                   
+  insys.locale.ts  |      80 |       45 |      75 |   78.94 | 11-13,25          
+  insys.ts         |   22.22 |        0 |       0 |      25 | 10-21             
+  ...g.fallback.ts |       0 |        0 |       0 |       0 | 22-62             
+  ...ang.tables.ts |   44.82 |        0 |      25 |      48 | 46-48,55,63-95    
+  isolang.ts       |       0 |        0 |       0 |       0 | 36-183            
+  ...gid.script.ts |       0 |        0 |       0 |       0 | 6-127             
+  mslangid.ts      |   11.11 |        4 |    8.33 |   11.53 | 20-81             
+ ...ce/languagetag |   30.25 |     13.3 |   57.14 |   33.13 |                   
+  ...conversion.ts |   19.44 |     7.14 |   28.57 |   20.68 | 29,36-75          
+  ...ag.extract.ts |   32.63 |    10.49 |     100 |   33.69 | ...2,54-56,63-166 
+  languagetag.ts   |   32.81 |    20.45 |      75 |   39.21 | 25-44,52-56,85-95 
+ .../breakiterator |       0 |        0 |       0 |       0 |                   
+  ...eratorImpl.ts |       0 |        0 |       0 |       0 | 7-43              
+ ...classification |       0 |        0 |       0 |       0 |                   
+  ...ss_unicode.ts |       0 |        0 |       0 |       0 | 13-16             
+ ...rce/localedata |      48 |    18.18 |   66.66 |      50 |                   
+  localedata.ts    |      48 |    18.18 |   66.66 |      50 | 19-22,48-57,66    
+ ...ransliteration |       0 |      100 |       0 |       0 |                   
+  ...ation_body.ts |       0 |      100 |       0 |       0 | 14-22             
+ i18nutil/inc      |       0 |      100 |       0 |       0 |                   
+  casefolding.ts   |       0 |      100 |       0 |       0 | 4-64              
+  ...ngescanner.ts |       0 |      100 |       0 |       0 | 5-10              
+  ...literation.ts |       0 |      100 |     100 |       0 | 5                 
+  widthfolding.ts  |       0 |      100 |     100 |       0 | 2                 
+ ...source/utility |       0 |        0 |       0 |       0 |                   
+  casefolding.ts   |       0 |        0 |       0 |       0 | 36-273            
+  ...lding_data.ts |       0 |      100 |       0 |       0 | 5-15              
+  ...OneMapping.ts |       0 |        0 |       0 |       0 | 14-107            
+  scriptclass.ts   |       0 |        0 |       0 |       0 | 9-72              
+  unicode.ts       |       0 |        0 |       0 |       0 | 9-168             
+  widthfolding.ts  |       0 |        0 |       0 |       0 | 17-96             
+  ...lding_data.ts |       0 |      100 |       0 |       0 | 4-36              
+ o3tl/inc          |   59.06 |    31.09 |    64.7 |   64.67 |                   
+  hash_combine.ts  |       0 |        0 |       0 |       0 | 4-9               
+  numeric.ts       |       0 |        0 |       0 |       0 | 4-8               
+  sorted_vector.ts |   85.29 |    82.14 |   82.35 |   84.84 | 16-38             
+  string_view.ts   |       0 |        0 |       0 |       0 | 13-73             
+  ...conversion.ts |    91.8 |       70 |   88.88 |   94.54 | 90,102,132        
+ ...m/sun/star/awt |   35.29 |        0 |    8.33 |   36.36 |                   
+  FontSlant.ts     |      75 |        0 |      50 |      75 | 22-31             
+  Size.ts          |       5 |        0 |       0 |    5.26 | 11-72             
+ ...n/star/drawing |       0 |      100 |     100 |       0 |                   
+  ...ingPattern.ts |       0 |      100 |     100 |       0 | 3                 
+ ...r/frame/status |    4.16 |        0 |       0 |    4.34 |                   
+  FontHeight.ts    |    4.16 |        0 |       0 |    4.34 | 12-82             
+ .../sun/star/i18n |       0 |      100 |       0 |       0 |                   
+  ScriptType.ts    |       0 |      100 |     100 |       0 | 2-5               
+  ...ionModules.ts |       0 |      100 |       0 |       0 | 3-41              
+  ...dulesExtra.ts |       0 |      100 |     100 |       0 | 3                 
+ ...sun/star/sheet |       0 |      100 |     100 |       0 |                   
+  ...laLanguage.ts |       0 |      100 |     100 |       0 | 2                 
+ ...sun/star/style |   52.02 |        0 |    3.22 |   52.63 |                   
+  CaseMap.ts       |       0 |      100 |     100 |       0 | 3-11              
+  LineSpacing.ts   |    4.76 |        0 |       0 |       5 | 12-68             
+  ...tyleLayout.ts |       0 |        0 |       0 |       0 | 9-26              
+  ...raphAdjust.ts |       0 |      100 |       0 |       0 | 3-12              
+  TabAlign.ts      |   72.72 |        0 |      50 |   72.72 | 21-27             
+  TabStop.ts       |    3.57 |        0 |       0 |     3.7 | 13-107            
+  ...lAlignment.ts |       0 |        0 |       0 |       0 | 9-29              
+ ...sun/star/table |      44 |    15.38 |   37.77 |   44.59 |                   
+  BorderLine.ts    |   53.12 |       20 |   71.42 |   53.12 | ...5-48,85,97-106 
+  BorderLine2.ts   |   61.29 |    30.76 |      50 |   63.33 | 13-25,77-97       
+  ...oriJustify.ts |       0 |        0 |       0 |       0 | 9-32              
+  ...tifyMethod.ts |       0 |      100 |     100 |       0 | 3                 
+  ...rientation.ts |       0 |        0 |       0 |       0 | 9-29              
+  ...rtJustify2.ts |       0 |      100 |     100 |       0 | 3                 
+  ShadowFormat.ts  |    3.22 |        0 |       0 |    3.33 | 16-110            
+  ...owLocation.ts |   72.72 |        0 |      50 |   72.72 | 21-27             
+ .../sun/star/text |      66 |      100 |      75 |      66 |                   
+  FontEmphasis.ts  |       0 |      100 |     100 |       0 | 3                 
+  RubyAdjust.ts    |       0 |      100 |       0 |       0 | 3-10              
+  RubyPosition.ts  |       0 |      100 |     100 |       0 | 3-7               
+  ...ptHintType.ts |       0 |      100 |     100 |       0 | 3-11              
+  WritingMode2.ts  |       0 |      100 |     100 |       0 | 3                 
+ ...text/textfield |       0 |      100 |     100 |       0 |                   
+  Type.ts          |       0 |      100 |     100 |       0 | 3-35              
+ .../sun/star/util |    2.85 |        0 |       0 |    2.85 |                   
+  ...Protection.ts |       0 |        0 |       0 |       0 | 16-47             
+  XComplexColor.ts |       0 |        0 |       0 |       0 | 22-44             
+  XTheme.ts        |       0 |        0 |       0 |       0 | 21-43             
+ ...ource/manifest |   84.45 |    65.48 |   84.09 |   86.24 |                   
+  ...festExport.ts |   91.66 |    70.27 |     100 |   93.81 | 135,141,179-182   
+  ...festImport.ts |   81.98 |    65.27 |   84.21 |   83.83 | ...27,140,160-172 
+  ...festReader.ts |   73.01 |       25 |   55.55 |   74.57 | ...03-109,119-120 
+ .../source/zipapi |    74.2 |    64.17 |   85.71 |   79.82 |                   
+  CRC32.ts         |   86.66 |     87.5 |      75 |   84.61 | 14,25             
+  ZipFile.ts       |   63.87 |    63.63 |   80.95 |   69.56 | ...34,238-270,312 
+  ...tputStream.ts |   91.46 |    56.25 |     100 |    97.4 | 39,64             
+ ...rce/zippackage |   85.84 |    60.29 |     100 |    91.3 |                   
+  ZipPackage.ts    |   87.09 |    55.76 |     100 |   90.24 | ...23-127,130,137 
+  ...kageFolder.ts |   76.92 |       75 |     100 |     100 | 13,16,18          
+ sal/inc/rtl       |   28.05 |      6.2 |   12.03 |      31 |                   
+  character.ts     |    0.98 |        0 |       0 |    1.29 | 5-86,97-152       
+  math.ts          |       0 |        0 |       0 |       0 | 6-12              
+  stringconcat.ts  |       0 |        0 |       0 |       0 | 17-104            
+  stringutils.ts   |       0 |        0 |       0 |       0 | 5-20              
+  textcvt.h.ts     |       0 |      100 |     100 |       0 | 3-103             
+  ustrbuf.ts       |       0 |        0 |       0 |       0 | 28-315            
+  ustring.ts       |   31.03 |    26.08 |   27.77 |   32.35 | ...14-221,238-363 
+ sal/rtl           |    7.56 |     4.24 |   15.74 |    8.53 |                   
+  hash.ts          |    1.12 |        0 |       0 |    1.38 | 25-139            
+  math.ts          |       0 |        0 |       0 |       0 | 12-230            
+  strimp.hxx.ts    |      80 |      100 |   66.66 |      80 | 11                
+  strtmpl.math.ts  |       0 |        0 |       0 |       0 | 18-209            
+  strtmpl.ts       |   14.51 |     11.2 |   20.51 |    17.8 | ...78-385,392-481 
+  ustrbuf.ts       |       0 |        0 |       0 |       0 | 11-84             
+  ustring.ts       |    7.29 |        0 |   13.88 |    8.64 | ...06-210,224-298 
+ sal/textenc       |       0 |        0 |       0 |       0 |                   
+  convertsimple.ts |       0 |        0 |       0 |       0 | 18-565            
+  ...totextchar.ts |       0 |        0 |       0 |       0 | 8-149             
+  tenchelp.ts      |       0 |        0 |       0 |       0 | 8-53              
+  textenc.ts       |       0 |      100 |     100 |       0 | 4-106             
+  unichars.hxx.ts  |       0 |      100 |     100 |       0 | 3                 
+  unichars.ts      |       0 |        0 |       0 |       0 | 4-66              
+ ...urce/expatwrap |   96.55 |    66.66 |     100 |   96.29 |                   
+  saxwriter.ts     |   96.55 |    66.66 |     100 |   96.29 | 21                
+ ...rce/fastparser |   78.43 |    47.61 |      75 |   86.66 |                   
+  fastparser.ts    |   78.43 |    47.61 |      75 |   86.66 | 59,77,85,112-119  
+ sax/source/tools  |    38.7 |    35.89 |   33.33 |   44.15 |                   
+  converter.ts     |    38.7 |    35.89 |   33.33 |   44.15 | ...91,121,143-165 
+ ...er/composition |       0 |        0 |       0 |       0 |                   
+  calc-module.tsx  |       0 |        0 |       0 |       0 | 23-84             
+ ...ser/controller |       0 |        0 |       0 |       0 |                   
+  ...ion-script.ts |       0 |        0 |       0 |       0 | 12-56             
+  ...controller.ts |       0 |        0 |       0 |       0 | 30-552            
+ sc/browser/editor |       0 |        0 |       0 |       0 |                   
+  cell-input.ts    |       0 |        0 |       0 |       0 | 14-125            
+ ...r/presentation |       0 |        0 |       0 |       0 |                   
+  ...ileDialog.tsx |       0 |        0 |       0 |       0 | 16-61             
+  ...ngToolbar.tsx |       0 |        0 |       0 |       0 | 19-74             
+  ScCellText.tsx   |       0 |        0 |       0 |       0 | 10-49             
+  ScGoToTabDlg.tsx |       0 |        0 |       0 |       0 | 17-138            
+  ScGridWindow.tsx |       0 |        0 |       0 |       0 | 76-346            
+  ...putWindow.tsx |       0 |        0 |       0 |       0 | 26-110            
+  ScTabControl.tsx |       0 |        0 |       0 |       0 | 24-151            
+  ...workbench.tsx |       0 |        0 |       0 |       0 | 50-538            
+  row-geometry.ts  |       0 |        0 |       0 |       0 | 6-27              
+ ...wser/workflows |       0 |        0 |       0 |       0 |                   
+  ...-workflows.ts |       0 |        0 |       0 |       0 | 26-116            
+  calc-ods-io.ts   |       0 |        0 |       0 |       0 | 18-213            
+  ...-workflows.ts |       0 |        0 |       0 |       0 | 19-98             
+ sc/inc            |       0 |        0 |       0 |       0 |                   
+  address.ts       |       0 |        0 |       0 |       0 | 19-240            
+  brdcst.ts        |       0 |        0 |       0 |       0 | 11-45             
+  fstalgorithm.ts  |       0 |        0 |       0 |       0 | 23-80             
+  global.ts        |       0 |      100 |       0 |       0 | 4-50              
+  globalnames.ts   |       0 |      100 |     100 |       0 | 3                 
+  math.ts          |       0 |        0 |       0 |       0 | 6                 
+  mid.ts           |       0 |      100 |     100 |       0 | 3-9               
+  mtvcellfunc.ts   |       0 |        0 |       0 |       0 | 10-20             
+  mtvelements.ts   |       0 |      100 |       0 |       0 | 29-235            
+  scitems.ts       |       0 |      100 |     100 |       0 | 4-154             
+  sheetlimits.ts   |       0 |        0 |       0 |       0 | 25-78             
+  types.ts         |       0 |      100 |     100 |       0 | 13                
+ sc/sdi            |       0 |        0 |       0 |       0 |                   
+  scalc.ts         |       0 |        0 |       0 |       0 | 43-646            
+ ...urce/core/data |       0 |        0 |       0 |       0 |                   
+  attarray.ts      |       0 |        0 |       0 |       0 | 6-170             
+  attrib.ts        |       0 |        0 |       0 |       0 | 25-337            
+  attrib.values.ts |       0 |        0 |       0 |       0 | 17-243            
+  bigrange.ts      |       0 |        0 |       0 |       0 | 13-192            
+  celltextattr.ts  |       0 |        0 |       0 |       0 | 12-35             
+  cellvalue.ts     |       0 |        0 |       0 |       0 | 17-239            
+  column.ts        |       0 |        0 |       0 |       0 | 44-299            
+  column2.ts       |       0 |        0 |       0 |       0 | 25-53             
+  columnspanset.ts |       0 |      100 |       0 |       0 | 8-23              
+  ...essedarray.ts |       0 |        0 |       0 |       0 | 20-473            
+  dociter.ts       |       0 |        0 |       0 |       0 | 14-149            
+  docpool.ts       |       0 |      100 |       0 |       0 | 80-181            
+  documen6.ts      |       0 |        0 |       0 |       0 | 11-31             
+  document.ts      |       0 |        0 |       0 |       0 | 41-479            
+  ...mentimport.ts |       0 |        0 |       0 |       0 | 9-28              
+  formulacell.ts   |       0 |        0 |       0 |       0 | 21-250            
+  global.ts        |       0 |      100 |     100 |       0 | 7-11              
+  markarr.ts       |       0 |        0 |       0 |       0 | 11-281            
+  markdata.ts      |       0 |        0 |       0 |       0 | 20-734            
+  markmulti.ts     |       0 |        0 |       0 |       0 | 15-490            
+  mtvelements.ts   |       0 |        0 |       0 |       0 | 22-80             
+  patattr.ts       |       0 |        0 |       0 |       0 | 19-391            
+  ...atecontext.ts |       0 |      100 |     100 |       0 | 3-5               
+  ...ghtcontext.ts |       0 |      100 |       0 |       0 | 6-37              
+  segmenttree.ts   |       0 |        0 |       0 |       0 | 35-540            
+  table.ts         |       0 |        0 |       0 |       0 | 27-308            
+  table1.ts        |       0 |        0 |       0 |       0 | 14-52             
+  types.ts         |       0 |        0 |       0 |       0 | 6-148             
+ ...ource/core/inc |       0 |      100 |       0 |       0 |                   
+  refupdat.ts      |       0 |      100 |       0 |       0 | 6-10              
+ ...urce/core/tool |       0 |        0 |       0 |       0 |                   
+  address.ts       |       0 |        0 |       0 |       0 | 24-408            
+  calcconfig.ts    |       0 |        0 |       0 |       0 | 8-139             
+  compiler.ts      |       0 |        0 |       0 |       0 | 22-223            
+  docoptio.ts      |       0 |        0 |       0 |       0 | 13-291            
+  formularesult.ts |       0 |        0 |       0 |       0 | 22-524            
+  interpr4.ts      |       0 |        0 |       0 |       0 | 26-217            
+  ...tercontext.ts |       0 |      100 |       0 |       0 | 6-10              
+  math.ts          |       0 |        0 |       0 |       0 | 7-21              
+  optutil.ts       |       0 |      100 |       0 |       0 | 8-11              
+  rangelst.ts      |       0 |        0 |       0 |       0 | 11-821            
+  refdata.ts       |       0 |        0 |       0 |       0 | 23-522            
+  refupdat.ts      |       0 |        0 |       0 |       0 | 41-494            
+  scmatrix.ts      |       0 |        0 |       0 |       0 | 30-512            
+  stringutil.ts    |       0 |        0 |       0 |       0 | 8-77              
+  token.ranges.ts  |       0 |        0 |       0 |       0 | 24-107            
+  ...references.ts |       0 |        0 |       0 |       0 | 20-447            
+  token.ts         |       0 |        0 |       0 |       0 | 29-436            
+  viewopti.grid.ts |       0 |        0 |       0 |       0 | 8-22              
+ ...rce/filter/xml |       0 |        0 |       0 |       0 |                   
+  ...aracontext.ts |       0 |        0 |       0 |       0 | 8-36              
+  importcontext.ts |       0 |      100 |       0 |       0 | 7-31              
+  xmlbodyi.ts      |       0 |        0 |       0 |       0 | 14-38             
+  xmlcelli.ts      |       0 |        0 |       0 |       0 | 23-101            
+  xmlexprt.ts      |       0 |        0 |       0 |       0 | 36-209            
+  xmlimprt.ts      |       0 |        0 |       0 |       0 | 37-244            
+  xmlrowi.ts       |       0 |        0 |       0 |       0 | 9-48              
+  xmlstyle.ts      |       0 |        0 |       0 |       0 | 48-539            
+  xmlstyli.ts      |       0 |        0 |       0 |       0 | 22-182            
+  xmltabi.ts       |       0 |        0 |       0 |       0 | 15-48             
+  xmlwrap.ts       |       0 |        0 |       0 |       0 | 13-89             
+ sc/source/ui/app  |       0 |        0 |       0 |       0 |                   
+  inputhdl.ts      |       0 |        0 |       0 |       0 | 5-69              
+ ...ce/ui/docshell |       0 |        0 |       0 |       0 |                   
+  docsh.ts         |       0 |        0 |       0 |       0 | 33-302            
+ sc/source/ui/undo |       0 |        0 |       0 |       0 |                   
+  undoblk3.ts      |       0 |      100 |       0 |       0 | 17-79             
+  undocell.ts      |       0 |        0 |       0 |       0 | 14-69             
+ sc/source/ui/view |       0 |        0 |       0 |       0 |                   
+  formatsh.ts      |       0 |        0 |       0 |       0 | 35-297            
+  tabview3.ts      |       0 |        0 |       0 |       0 | 8-80              
+  viewdata.ts      |       0 |        0 |       0 |       0 | 6-123             
+  viewfun2.ts      |       0 |        0 |       0 |       0 | 13-18             
+ .../scalc/menubar |       0 |        0 |       0 |       0 |                   
+  menubar.ts       |       0 |        0 |       0 |       0 | 19-76             
+ ...calc/popupmenu |       0 |        0 |       0 |       0 |                   
+  sheettab.ts      |       0 |        0 |       0 |       0 | 6-19              
+ .../scalc/toolbar |       0 |        0 |       0 |       0 |                   
+  ...tobjectbar.ts |       0 |        0 |       0 |       0 | 15-35             
+  standardbar.ts   |       0 |        0 |       0 |       0 | 11-17             
+ ...r/presentation |     1.4 |        0 |       0 |     1.6 |                   
+  SidebarDeck.tsx  |       0 |        0 |       0 |       0 | 43-175            
+  ...ingWindow.tsx |   11.11 |        0 |       0 |    12.5 | 44-58             
+  ...cusManager.ts |    3.22 |        0 |       0 |    3.57 | 12-113            
+  SidebarPanel.tsx |       0 |        0 |       0 |       0 | 43-141            
+ sfx2/inc          |       0 |        0 |       0 |       0 |                   
+  namedcolor.ts    |       0 |        0 |       0 |       0 | 9-45              
+ ...source/control |   54.54 |    31.65 |   64.06 |   56.47 |                   
+  bindings.ts      |   55.55 |    33.33 |   66.66 |      50 | 28-29,42,52       
+  ctrlitem.ts      |       0 |        0 |       0 |       0 | 7-55              
+  dispatch.ts      |   73.23 |    55.26 |      70 |   76.66 | ...74-178,190,202 
+  msg.ts           |   83.33 |       50 |      60 |   83.33 | 55-60             
+  objface.ts       |   63.41 |    35.71 |    87.5 |   65.78 | 24,26,49,68,70-84 
+  request.ts       |   38.63 |    17.14 |   66.66 |   38.88 | ...9,75-88,97-104 
+  shell.ts         |   76.92 |       50 |     100 |    90.9 | 44                
+  unoctitm.ts      |       0 |        0 |       0 |       0 | 6-26              
+ .../source/dialog |   13.79 |        0 |       0 |   15.38 |                   
+  basedlgs.ts      |   13.79 |        0 |       0 |   15.38 | 23,30-75          
+ sfx2/source/doc   |   50.93 |    49.03 |   53.84 |   55.71 |                   
+  docfile.ts       |   68.62 |    57.14 |   69.23 |   79.06 | ...96,224-225,242 
+  objsh.ts         |   42.72 |    41.81 |   46.15 |   45.36 | ...52,266,268,270 
+ sfx2/source/view  |   66.66 |        0 |   54.54 |      65 |                   
+  frame.ts         |       0 |      100 |       0 |       0 | 10-33             
+  viewfrm.ts       |     100 |        0 |     100 |     100 | 16                
+ svl/inc           |   82.55 |       75 |   52.94 |   82.74 |                   
+  eitem.ts         |      75 |      100 |    62.5 |      75 | 34,42-46          
+  hint.ts          |   98.42 |    33.33 |      50 |   98.42 | 201-206           
+  ...ageoptions.ts |       0 |      100 |       0 |       0 | 3-8               
+  poolitem.ts      |   73.33 |    76.92 |     100 |      75 | 15-17             
+  solar.ts         |       0 |      100 |     100 |       0 | 3-5               
+  style-values.ts  |       0 |      100 |       0 |       0 | 3-42              
+ svl/source/items  |   22.57 |    27.06 |   27.27 |   23.78 |                   
+  ...tyleSheets.ts |       0 |        0 |       0 |       0 | 11-195            
+  cenumitm.ts      |   26.53 |    38.09 |      50 |   28.57 | 18,46-67,97-131   
+  cintitem.ts      |    15.7 |       20 |   22.22 |   15.92 | ...19-126,137-297 
+  grabbagitem.ts   |       0 |        0 |       0 |       0 | 21-151            
+  intitem.ts       |   35.18 |    48.64 |   39.13 |   33.33 | ...5,83-87,97-157 
+  itempool.ts      |    15.2 |    12.29 |   15.55 |   18.28 | ...63,274,304-409 
+  itemset.ts       |   58.76 |    56.59 |    73.8 |   63.37 | ...41,374,386-410 
+  poolitem.ts      |      56 |       75 |      50 |   58.69 | ...31-142,155-166 
+  sitem.ts         |       0 |        0 |       0 |       0 | 16-51             
+  stritem.ts       |     100 |       60 |     100 |     100 | 9-10              
+  style-model.ts   |       0 |        0 |       0 |       0 | 16-425            
+  style-sheet.ts   |       0 |        0 |       0 |       0 | 28-101            
+  style.ts         |       0 |        0 |       0 |       0 | 16-164            
+  stylepool.ts     |    90.9 |    78.57 |     100 |   96.66 | 48                
+  voiditem.ts      |       0 |        0 |       0 |       0 | 11-39             
+ svl/source/misc   |       0 |        0 |       0 |       0 |                   
+  sharedstring.ts  |       0 |        0 |       0 |       0 | 30-156            
+  ...stringpool.ts |       0 |        0 |       0 |       0 | 15-167            
+ svl/source/notify |   43.92 |    30.69 |   36.84 |   46.23 |                   
+  ...roadcaster.ts |   26.66 |     4.54 |   41.66 |    30.3 | 18-60,69,75       
+  broadcast.ts     |   65.34 |    47.36 |    62.5 |   67.74 | ...42-145,154,171 
+  listener.ts      |   57.14 |       75 |   46.15 |   56.52 | 15-18,41,58-76    
+  lstner.ts        |       0 |        0 |       0 |       0 | 6-102             
+ ...source/numbers |       0 |      100 |       0 |       0 |                   
+  ...t.defaults.ts |       0 |      100 |       0 |       0 | 4-7               
+ svl/source/undo   |   53.79 |     40.9 |   56.41 |    55.9 |                   
+  undo.ts          |   53.79 |     40.9 |   56.41 |    55.9 | ...01,308-321,330 
+ ...source/control |   55.23 |    44.11 |   51.61 |   56.12 |                   
+  ctrlbox.ts       |   90.62 |    59.18 |   84.61 |    93.1 | 48,85             
+  ruler.ts         |   39.72 |     5.26 |   27.77 |   40.57 | ...04-108,117-157 
+ ...ls/source/misc |       0 |        0 |       0 |       0 |                   
+  unitconv.ts      |       0 |        0 |       0 |       0 | 7-49              
+ ...owser/tbxctrls |    2.05 |        0 |       0 |    2.22 |                   
+  ColorControl.tsx |    2.77 |        0 |       0 |    2.94 | 27-196            
+  ColorSelect.tsx  |       0 |        0 |       0 |       0 | 29-79             
+  FontSelects.tsx  |    4.54 |        0 |       0 |       5 | 24-65,94-120      
+  ...boxSelect.tsx |       0 |        0 |       0 |       0 | 27-113            
+  color-item.ts    |       0 |        0 |       0 |       0 | 6-10              
+  font-item.ts     |       0 |      100 |       0 |       0 | 6-7               
+  ...ox-control.ts |    7.69 |        0 |       0 |    9.09 | 39-55             
+ svx/inc           |   22.22 |      100 |       0 |   22.22 |                   
+  rotmodit.ts      |       0 |      100 |       0 |       0 | 3-7               
+  unomid.ts        |       0 |      100 |     100 |       0 | 3-16              
+  xdef.ts          |       0 |      100 |     100 |       0 | 4-6               
+ svx/source/dialog |    15.9 |     6.35 |   10.28 |   17.44 |                   
+  framelink.ts     |   55.88 |    37.25 |   58.33 |   62.06 | ...98,100,106-109 
+  frmsel.ts        |   19.53 |        0 |    8.57 |   22.12 | 56-263            
+  optgrid.ts       |       0 |        0 |       0 |       0 | 5-82              
+  rulritem.ts      |       0 |        0 |       0 |       0 | 25-161            
+  svxruler.ts      |    7.65 |        0 |    4.54 |     8.5 | 45-46,73-423      
+ svx/source/items  |       0 |        0 |       0 |       0 |                   
+  algitem.ts       |       0 |        0 |       0 |       0 | 30-268            
+  pageitem.ts      |       0 |        0 |       0 |       0 | 18-207            
+  rotmodit.ts      |       0 |        0 |       0 |       0 | 11-81             
+ svx/source/svdraw |       0 |        0 |       0 |       0 |                   
+  svdattr.ts       |       0 |        0 |       0 |       0 | 9-23              
+ ...er/composition |   60.97 |    36.84 |   33.33 |    62.5 |                   
+  ...er-module.tsx |   60.97 |    36.84 |   33.33 |    62.5 | 52-66,185-222     
+ sw/browser/editor |       0 |        0 |       0 |       0 |                   
+  ...Paragraph.tsx |       0 |        0 |       0 |       0 | 43-374            
+  ...ableTable.tsx |       0 |        0 |       0 |       0 | 19-326            
+  ...extEditor.tsx |       0 |        0 |       0 |       0 | 44-576            
+  ...dit-window.ts |       0 |        0 |       0 |       0 | 49-738            
+  ...ard-events.ts |       0 |      100 |       0 |       0 | 10-15             
+  ...r-geometry.ts |       0 |        0 |       0 |       0 | 23-130            
+  ...easurement.ts |       0 |        0 |       0 |       0 | 11-110            
+  ...-selection.ts |       0 |        0 |       0 |       0 | 24-329            
+ ...er/filter/html |     1.2 |        0 |       0 |     1.4 |                   
+  swhtml.ts        |     1.2 |        0 |       0 |     1.4 | 45-255            
+ ...ser/filter/xml |   52.91 |    48.47 |    49.5 |   54.25 |                   
+  item-codec.ts    |   50.79 |    46.75 |      60 |   51.72 | ...32-134,200-254 
+  odt-transfer.ts  |    37.5 |    43.75 |      50 |    37.5 | 29-46,70          
+  ...ker-client.ts |    1.02 |        0 |       0 |    1.09 | 59-280            
+  ...er-runtime.ts |       0 |        0 |       0 |       0 | 68-202            
+  ...ment-codec.ts |   72.95 |    56.76 |   69.23 |   74.67 | ...56,872,908-932 
+  ...item-codec.ts |    81.7 |     69.9 |     100 |    87.5 | ...93,221,235,278 
+ ...r/presentation |    5.89 |     2.29 |    2.14 |    5.85 |                   
+  ...gControls.tsx |       0 |        0 |       0 |       0 | 32-50             
+  ...arkDialog.tsx |       0 |        0 |       0 |       0 | 23-148            
+  ...orderPage.tsx |    3.17 |        0 |       0 |    3.27 | 90-446            
+  ...ndToolbar.tsx |      50 |      100 |   33.33 |      50 | 32-38             
+  ...ntextMenu.tsx |       0 |        0 |       0 |       0 | 19-49             
+  ...ileDialog.tsx |       0 |        0 |       0 |       0 | 36-113            
+  ...ngToolbar.tsx |       0 |        0 |       0 |       0 | 47-214            
+  ...inkDialog.tsx |       0 |        0 |       0 |       0 | 22-139            
+  ...eakDialog.tsx |       0 |        0 |       0 |       0 | 11-36             
+  ...bleDialog.tsx |       0 |        0 |       0 |       0 | 24-216            
+  ...ingDialog.tsx |       0 |      100 |       0 |       0 | 16-158            
+  ...ngControl.tsx |    4.34 |        0 |       0 |    4.76 | 25-104            
+  ...yleDialog.tsx |       0 |        0 |       0 |       0 | 28-276            
+  ...aphDialog.tsx |       0 |        0 |       0 |       0 | 22-534            
+  ...tiesPanel.tsx |   18.75 |        0 |       0 |      20 | 53-182            
+  ...ghtDialog.tsx |       0 |        0 |       0 |       0 | 16-113            
+  WriterRulers.tsx |    2.01 |        0 |       0 |    2.15 | 49-758            
+  ...bleDialog.tsx |       0 |        0 |       0 |       0 | 63-716            
+  ...rtControl.tsx |    4.16 |        0 |       0 |    4.34 | 17-156            
+  ...aceChrome.tsx |       0 |        0 |       0 |       0 | 76-121            
+  ...r-tracking.ts |    1.96 |        0 |       0 |    2.32 | 34-128            
+  ...esentation.ts |       0 |        0 |       0 |       0 | 14-31             
+  ...t-observer.ts |     100 |    94.44 |     100 |     100 | 37                
+  ...projection.ts |   14.67 |     1.01 |    9.67 |   15.23 | ...99-601,614-672 
+  writer-view.tsx  |    0.86 |        0 |       0 |    0.91 | 90,95-993         
+ ...rowser/storage |       0 |        0 |       0 |       0 |                   
+  ...-odt-store.ts |       0 |        0 |       0 |       0 | 11                
+ ...wser/workflows |    2.88 |        0 |    5.88 |    3.12 |                   
+  ...r-autosave.ts |       0 |        0 |       0 |       0 | 20-33             
+  ...ocument-io.ts |       0 |      100 |       0 |       0 | 12-46             
+  writer-odt-io.ts |       0 |        0 |       0 |       0 | 17-197            
+  ...-workflows.ts |   14.28 |        0 |   14.28 |   14.28 | 34-67,78,85-123   
+ sw/inc            |    68.1 |    47.37 |   70.38 |   68.75 |                   
+  calbck.ts        |   90.69 |       80 |      92 |   93.28 | ...22,262,361,415 
+  fmtfsize.ts      |    25.2 |     17.7 |      75 |   28.97 | 67,128-275        
+  fmtornt.ts       |   32.81 |    20.45 |   58.33 |   32.81 | ...28,136,155-205 
+  hints.ts         |   93.75 |       40 |   85.71 |   93.75 | 119-125           
+  lineinfo.ts      |   54.28 |     93.1 |   41.66 |   54.28 | ...34,142,150-158 
+  poolfmt.ts       |     100 |     80.8 |     100 |     100 | ...07-313,328-334 
+  swrect.ts        |    5.35 |     8.62 |    5.88 |    5.35 | 39-203            
+  swtblfmt.ts      |   88.88 |      100 |   71.42 |   88.88 | 37,84             
+  viewopt.ts       |   73.33 |      100 |   63.63 |   72.09 | 92-129            
+ sw/sdi            |   66.66 |    43.75 |   77.77 |      75 |                   
+  swriter.ts       |   66.66 |    43.75 |   77.77 |      75 | 62-67             
+ ...e/SwNumberTree |   95.81 |    94.91 |   98.33 |   96.39 |                   
+  SwNumberTree.ts  |   94.73 |    93.17 |   97.61 |   95.36 | 66,227-239        
+ ...urce/core/attr |   57.93 |    40.98 |   52.74 |   59.19 |                   
+  cellatr.ts       |      50 |    23.07 |   41.17 |      50 | ...60-69,81,89-97 
+  fmtpdsc.ts       |      70 |    23.07 |   66.66 |      70 | 18,38-48          
+  format.ts        |   78.33 |       70 |      90 |   79.62 | ...76,180,213,236 
+  swatrset.ts      |   47.36 |     30.5 |   39.58 |   49.04 | ...07-627,634-635 
+ ...ce/core/bastyp |   89.38 |    78.46 |    92.3 |    93.2 |                   
+  index.ts         |   86.25 |    73.58 |      90 |   91.54 | ...35-136,161,167 
+  tabcol.ts        |   96.96 |      100 |   94.73 |   96.87 | 121               
+ ...urce/core/crsr |   39.16 |    27.33 |   55.44 |   41.28 |                   
+  pam.ts           |   82.82 |    53.12 |   87.17 |   84.04 | ...83,203,275-286 
+  swcrsr.ts        |   43.47 |    28.23 |   42.85 |   47.15 | ...00,212-217,228 
+  trvltbl.ts       |   20.67 |    16.66 |    31.7 |   21.18 | ...57-397,410-434 
+ ...ource/core/doc |   47.96 |    39.85 |   67.78 |   50.19 |                   
+  ...onsManager.ts |   57.14 |     50.7 |   76.47 |   58.06 | ...08,216,218-230 
+  ...stsManager.ts |   69.11 |    65.78 |      75 |      80 | ...99,119-120,123 
+  ...oolManager.ts |      92 |       80 |     100 |   95.65 | 36                
+  ...NameMapper.ts |   83.33 |       75 |     100 |      75 | 10                
+  default-font.ts  |      75 |    58.33 |      80 |    92.3 | 58                
+  doc.ts           |   34.98 |    21.31 |   57.14 |   36.39 | ...09-821,868,906 
+  docbm.ts         |    9.09 |        0 |   14.28 |      10 | ...65-117,125-139 
+  docchart.ts      |       0 |        0 |       0 |       0 | 8-16              
+  docedt.ts        |       0 |        0 |       0 |       0 | 9-47              
+  docfmt.ts        |    1.26 |        0 |       0 |    1.44 | 38-113,121-176    
+  docnum.ts        |    1.44 |        0 |       0 |    1.72 | 13-90             
+  fmtcol.ts        |   93.75 |    84.21 |     100 |   93.75 | 69,87             
+  list.ts          |   69.47 |    58.82 |   81.81 |   72.22 | ...51-254,267,288 
+  number.ts        |   61.96 |    58.04 |   83.82 |   63.53 | ...32-570,662-688 
+  ...t-defaults.ts |   72.36 |    63.38 |     100 |      72 | ...29,240,242,248 
+ ...e/core/docnode |   69.02 |    61.68 |   76.82 |   72.84 |                   
+  ndtbl.ts         |   45.81 |     42.1 |      50 |   47.23 | 39-195            
+  ndtbl1.ts        |   49.43 |    40.68 |   60.52 |   56.38 | ...81-398,413-418 
+  node.ts          |   88.77 |    75.51 |   87.87 |   91.95 | ...71,262,278,284 
+  nodes.ts         |   89.37 |    83.33 |      90 |   91.61 | ...81,516,518,537 
+ ...urce/core/edit |    3.47 |      4.1 |    8.69 |    3.96 |                   
+  edattr.ts        |       0 |        0 |       0 |       0 | 20-162            
+  eddel.ts         |       0 |        0 |       0 |       0 | 28-183            
+  edfcol.ts        |       0 |        0 |       0 |       0 | 29-66             
+  editsh.ts        |    6.89 |      7.4 |      25 |    8.33 | 49-118            
+  ednumber.ts      |       0 |        0 |       0 |       0 | 29-416            
+  edtab.ts         |   82.35 |       75 |      75 |    87.5 | 13,41             
+ ...ce/core/frmedt |    47.8 |    42.23 |   44.44 |   50.27 |                   
+  fetab.ts         |   43.08 |    37.58 |   41.17 |    46.1 | ...77-364,388-445 
+ ...ource/core/inc |    60.6 |    53.84 |   47.05 |   60.71 |                   
+  frame.ts         |    60.6 |    53.84 |   47.05 |   60.71 | 19-27,62-71,77-86 
+ ...ce/core/layout |   91.49 |     84.9 |    93.4 |   92.71 |                   
+  frmtool.ts       |       0 |        0 |       0 |       0 | 19-31             
+  newfrm.ts        |   96.07 |    91.39 |   94.73 |   95.98 | ...01-410,505-513 
+  tabfrm.ts        |   88.48 |    80.21 |   97.29 |   90.65 | ...96,207-214,522 
+  wsfrm.ts         |   83.68 |    71.15 |   85.71 |   86.39 | ...56,296-305,342 
+ ...rce/core/table |   98.45 |    97.14 |   98.71 |   98.84 |                   
+  ...le-boxline.ts |    99.2 |     97.1 |     100 |     100 | 120,130           
+  swtable.ts       |   98.24 |    97.15 |   98.03 |   98.52 | 285,571-574,896   
+ ...urce/core/text |   91.46 |    90.03 |      96 |   91.66 |                   
+  frmcrsr.ts       |   97.22 |    94.11 |     100 |     100 | 16,54             
+  itrcrsr.ts       |   26.66 |    16.66 |     100 |   23.07 | 21-39             
+  itrform2.ts      |       0 |        0 |       0 |       0 | 8-42              
+  txtfrm.ts        |     100 |    96.82 |     100 |     100 | 144,250           
+ ...e/core/txtnode |   84.63 |    81.14 |   87.09 |   86.19 |                   
+  ndhints-font.ts  |   70.58 |    71.42 |   57.14 |   73.33 | 47-53,73,84-95    
+  ndhints-range.ts |   97.36 |    97.67 |     100 |     100 | 11                
+  ndhints.ts       |   92.04 |    87.55 |   93.24 |   94.83 | ...16,770-775,786 
+  ...bute-query.ts |      92 |    81.81 |     100 |      90 | 33,45             
+  ...mat-change.ts |   87.75 |    78.72 |     100 |    91.3 | 77-78,92,109      
+  ndtxt-hints.ts   |   95.94 |    97.05 |    92.3 |   95.08 | 126-127,166       
+  ...ist-indent.ts |    19.8 |    10.11 |   36.36 |   19.51 | ...30,142-171,202 
+  ndtxt.ts         |   88.78 |    87.62 |   84.46 |   88.81 | ...96-936,966-996 
+  thints.ts        |   87.61 |    84.05 |     100 |   85.86 | ...35,50,52,57-64 
+  txatbase.ts      |   84.67 |    68.11 |   83.87 |   87.02 | ...24-425,427,445 
+  txtedt.ts        |   21.87 |       28 |      50 |   26.92 | 19-46,60          
+ ...urce/core/undo |   54.62 |    37.99 |   53.47 |   55.87 |                   
+  ...doPageDesc.ts |       0 |        0 |       0 |       0 | 10-28             
+  docundo.ts       |   82.45 |    63.15 |    90.9 |   87.03 | ...20-121,129,142 
+  rolbck.ts        |    57.4 |    34.52 |   74.07 |   61.19 | ...47,263,279-317 
+  unattr.ts        |   28.44 |    26.08 |   17.14 |   28.57 | ...55,183,215-397 
+  undel.ts         |   16.42 |      3.5 |   15.78 |   16.41 | 33-255,291-297    
+  undobj.ts        |   88.27 |    70.58 |   82.14 |   90.44 | ...56,278,296,352 
+  unfmco.ts        |       0 |        0 |       0 |       0 | 40-105            
+  unins.ts         |   59.25 |    13.33 |      50 |   59.25 | 47-76,101-113     
+  unnum.ts         |   15.38 |    16.66 |   13.04 |   15.92 | ...97,105,110-289 
+  unoutl.ts        |       0 |      100 |       0 |       0 | 12-40             
+  unspnd.ts        |   91.17 |    66.66 |      60 |   90.62 | 29-34,43          
+  untbl.ts         |    87.2 |    69.69 |   83.33 |   87.95 | 31-74             
+  untblk.ts        |   89.47 |    61.53 |    87.5 |   92.72 | 29,52,64,79       
+ ...e/core/unocore |    90.9 |    56.32 |     100 |   89.79 |                   
+  unosett.ts       |    90.9 |    56.32 |     100 |   89.79 | ...53,159,162,166 
+ ...e/filter/ascii |   34.78 |    20.63 |      40 |   37.93 |                   
+  ascatr.ts        |       0 |        0 |       0 |       0 | 15-46             
+  parasc.ts        |   82.75 |     61.9 |     100 |   91.66 | 29-30             
+  wrtasc.ts        |       0 |        0 |       0 |       0 | 8-39              
+ .../filter/basflt |   75.86 |    67.94 |   76.47 |   77.21 |                   
+  shellio.ts       |   59.52 |    34.61 |      50 |   63.15 | 33,101-153        
+  ...r-transfer.ts |   91.11 |    84.61 |    90.9 |   90.24 | 36-39             
+ ...ce/filter/html |       0 |        0 |       0 |       0 |                   
+  htmlnumwriter.ts |       0 |        0 |       0 |       0 | 16-178            
+ ...rce/filter/xml |   70.82 |     51.4 |   66.09 |   74.37 |                   
+  ...er-service.ts |   10.86 |        0 |   11.76 |   11.36 | ...24-198,209-224 
+  swxml.ts         |   41.79 |    25.49 |   83.33 |   46.66 | ...14,137,156-157 
+  wrtxml.ts        |   79.41 |    63.63 |   71.42 |   81.25 | 49,67-69,74,103   
+  xmlexp.ts        |   82.51 |       60 |   65.11 |   84.68 | ...54,768-769,863 
+  xmlexpit.ts      |   78.57 |    33.33 |      50 |   83.33 | 13-14             
+  xmlfonte.ts      |      60 |    36.84 |   66.66 |   69.23 | 23-24,35-37,68-70 
+  ...med-styles.ts |   82.35 |    61.11 |      75 |   86.36 | ...82,107,110-113 
+  xmlimp.ts        |   68.73 |    48.85 |   68.25 |   73.66 | ...52,954,959,968 
+  xmlimpit.ts      |      90 |    80.95 |     100 |   94.44 | 36                
+  xmltbli.ts       |      75 |    41.66 |    87.5 |   78.21 | ...33,248,260,276 
+ ...ource/ui/table |   11.65 |     5.07 |    8.95 |   12.53 |                   
+  instable.ts      |       0 |        0 |       0 |       0 | 15-97             
+  rowht.ts         |   13.33 |        0 |       0 |   14.28 | 9-38              
+  tabledlg.ts      |    12.7 |     5.65 |   11.53 |   13.63 | ...54-395,403-646 
+ ...rce/uibase/app |   33.06 |    18.36 |      50 |   33.63 |                   
+  docsh.ts         |   37.43 |    29.03 |   57.77 |   37.28 | ...12,454-506,531 
+  docst.ts         |      16 |        0 |   11.11 |    18.6 | 30-88,99-101      
+ .../uibase/dialog |      20 |        0 |       0 |      20 |                   
+  ...controller.ts |      20 |        0 |       0 |      20 | 96-174            
+ .../uibase/dochdl |       0 |        0 |       0 |       0 |                   
+  swdtflvr.ts      |       0 |        0 |       0 |       0 | 47-332            
+ ...e/uibase/docvw |   25.12 |    21.98 |    23.4 |   26.92 |                   
+  edtwin.ts        |   25.12 |    21.98 |    23.4 |   26.92 | ...31,349-529,536 
+ .../uibase/shells |   10.86 |     7.32 |   18.47 |    11.5 |                   
+  listsh.ts        |      50 |       25 |      50 |      50 | 29-36,51-55       
+  tabsh.ts         |    8.28 |    11.34 |      40 |     8.8 | 67-317,374-380    
+  ...1-commands.ts |   12.32 |     8.33 |   12.76 |   13.43 | ...71-279,288-291 
+  textsh1.ts       |    9.81 |     4.49 |   11.94 |   10.14 | ...19-792,802-903 
+  view.ts          |      25 |      100 |      20 |      25 | 27,32-78          
+ ...e/uibase/table |   70.13 |    60.97 |   81.25 |   71.11 |                   
+  swtablerep.ts    |   70.13 |    60.97 |   81.25 |   71.11 | ...68-169,203-206 
+ .../uibase/uiview |   48.63 |    44.44 |    37.2 |   50.75 |                   
+  view.ts          |    69.3 |    78.04 |   40.54 |   71.73 | ...80-257,302-304 
+  viewfunc.ts      |      50 |        0 |      50 |      50 | 16                
+  viewtab.ts       |       0 |        0 |       0 |       0 | 13-103            
+ ...e/uibase/utlui |       0 |        0 |       0 |       0 |                   
+  uiitems.ts       |       0 |        0 |       0 |       0 | 8-28              
+ ...e/uibase/wrtsh |   37.29 |    28.95 |   45.52 |   39.26 |                   
+  delete.ts        |     100 |       50 |     100 |     100 | 13-17             
+  move.ts          |       0 |        0 |       0 |       0 | 11-14             
+  wrtsh-editing.ts |   33.02 |    20.51 |      50 |   35.29 | ...10,260,275-279 
+  ...-selection.ts |   60.71 |    71.42 |      75 |      60 | 44-51,65-67       
+  wrtsh1.ts        |   36.49 |    26.94 |   43.47 |   38.46 | ...51-881,981-986 
+ ...config/swriter |   91.66 |       75 |     100 |    90.9 |                   
+  ...-resources.ts |   91.66 |       75 |     100 |    90.9 | 48                
+ ...writer/menubar |   93.33 |    93.75 |   91.66 |   96.42 |                   
+  ...r-commands.ts |   93.33 |    93.75 |   91.66 |   96.42 | 144               
+ ...writer/toolbar |      90 |    76.92 |      80 |   88.88 |                   
+  numobjectbar.ts  |       0 |        0 |       0 |       0 | 8-13              
+ tools/inc         |   69.54 |    36.61 |   38.35 |   69.69 |                   
+  ...Conversion.ts |       0 |      100 |       0 |       0 | 9                 
+  color.ts         |   64.13 |    85.71 |   27.77 |   64.44 | ...47-192,208-212 
+  fldunit.ts       |   58.97 |        0 |      50 |   58.97 | 30-60             
+  gen.ts           |   33.33 |    38.09 |   33.33 |   33.33 | ...03-107,123-132 
+  mapunit.ts       |   56.66 |        0 |      50 |   56.66 | 24-48             
+ ...source/generic |       0 |        0 |       0 |       0 |                   
+  color.ts         |       0 |        0 |       0 |       0 | 5-41              
+ ...sun/star/beans |      40 |    11.11 |   31.25 |   41.02 |                   
+  PropertyState.ts |   66.66 |        0 |      50 |   66.66 | 19-25             
+  PropertyValue.ts |   32.25 |     12.5 |   28.57 |   33.33 | ...9,62-66,74-107 
+ .../sun/star/lang |   33.33 |    28.57 |   38.46 |   33.33 |                   
+  Locale.ts        |   33.33 |    28.57 |   38.46 |   33.33 | ...9,49,57,65-106 
+ .../source/config |   89.28 |       45 |     100 |   95.45 |                   
+  fontcfg.ts       |   89.28 |       45 |     100 |   95.45 | 33                
+ ...ls/source/i18n |       0 |        0 |       0 |       0 |                   
+  charclass.ts     |       0 |        0 |       0 |       0 | 23-27             
+  ...atawrapper.ts |       0 |        0 |       0 |       0 | 5-17              
+  textsearch.ts    |       0 |        0 |       0 |       0 | 16-100            
+ ...ls/source/misc |   47.42 |       50 |      40 |   45.78 |                   
+  fontcvt.ts       |   38.46 |        0 |   33.33 |   45.45 | 52-56,65          
+  fontdefs.ts      |   47.56 |    57.14 |      30 |   44.28 | ...8,38-41,75-140 
+ vcl/browser       |   16.04 |     3.57 |   17.54 |   16.74 |                   
+  ...-clipboard.ts |       0 |        0 |       0 |       0 | 55-152            
+  ...r-download.ts |    7.14 |    14.28 |   16.66 |    7.14 | 33-66,77-95       
+  browser-file.ts  |       5 |    28.57 |    12.5 |    5.26 | 10-44,55-56       
+  color.ts         |       0 |        0 |       0 |       0 | 5-8               
+  ...ont-device.ts |      50 |     3.57 |   53.33 |   52.38 | ...18-121,127-153 
+  ...t-metadata.ts |       0 |        0 |       0 |       0 | 15-16             
+  ...ont-loader.ts |       0 |        0 |       0 |       0 | 19-50             
+  font-family.ts   |       0 |        0 |       0 |       0 | 8-17              
+  font-list.ts     |    6.45 |        0 |       0 |     7.4 | 27-37,65-108      
+  ...data-codec.ts |       0 |        0 |       0 |       0 | 24-91             
+  pointer.ts       |       0 |        0 |       0 |       0 | 11-27             
+ vcl/inc/font      |       0 |      100 |       0 |       0 |                   
+  Feature.ts       |       0 |      100 |       0 |       0 | 4                 
+ vcl/source/app    |    44.3 |    43.33 |     100 |   54.38 |                   
+  unohelp.ts       |    44.3 |    43.33 |     100 |   54.38 | ...55,76-78,90-92 
+ vcl/source/font   |   13.33 |     12.9 |   21.62 |    14.7 |                   
+  FontVariation.ts |       0 |        0 |       0 |       0 | 7-65              
+  font.ts          |   24.39 |    21.05 |   26.66 |      25 | ...6-71,79,87-170 
+ vcl/source/outdev |       0 |        0 |       0 |       0 |                   
+  font.ts          |       0 |        0 |       0 |       0 | 19-75             
+ xmloff/inc        |       0 |      100 |     100 |       0 |                   
+  xmlnamespace.ts  |       0 |      100 |     100 |       0 | 3-185             
+ ...ff/source/core |   46.14 |    13.74 |   21.81 |   50.61 |                   
+  SvXMLAttr.ts     |       0 |        0 |       0 |       0 | 15-53             
+  ...Collection.ts |       0 |        0 |       0 |       0 | 10-135            
+  namespacemap.ts  |       0 |        0 |       0 |       0 | 5-321             
+  xmlcnimp.ts      |       0 |        0 |       0 |       0 | 8-82              
+  xmlimp.ts        |   56.31 |    51.78 |   61.53 |   58.33 | ...71,291,298-299 
+  xmltoken.ts      |     100 |       50 |     100 |     100 | 474               
+  xmluconv.ts      |    61.9 |    52.63 |     100 |   68.75 | 22-23,26-27,29    
+ ...f/source/style |   51.43 |     39.3 |   61.41 |   54.54 |                   
+  ...oStylePool.ts |   53.57 |    34.78 |   54.54 |    61.7 | ...-80,94-114,130 
+  ...lesContext.ts |   38.98 |    28.84 |    62.5 |   40.35 | 101-181           
+  bordrhdl.ts      |   34.48 |    36.36 |    37.5 |      38 | ...97-121,133-136 
+  fonthdl.ts       |   77.77 |       30 |   66.66 |   77.77 | 14-18             
+  postuhdl.ts      |    5.88 |        0 |       0 |    6.25 | 20-39             
+  styleexp.ts      |   66.66 |     37.5 |     100 |   66.66 | 11,13             
+  undlihdl.ts      |    4.83 |        0 |       0 |    5.08 | 77-214            
+  weighhdl.ts      |   75.75 |    59.09 |     100 |      80 | 29-30,34,51-53    
+  xmlbahdl.ts      |       5 |        0 |      20 |    5.88 | 9-44,53-69,81-96  
+  xmlnume.ts       |   58.92 |    30.26 |     100 |   63.46 | ...40,53-58,69-79 
+  xmlnumi.ts       |   81.37 |    53.77 |   88.23 |   84.37 | ...32,284,295-297 
+  xmlstyle.ts      |   74.19 |    56.18 |   91.42 |   77.83 | ...04-609,620-627 
+  xmltabi.ts       |       0 |        0 |       0 |       0 | 21-90             
+ ...f/source/table |   83.22 |     68.5 |     100 |   84.41 |                   
+  ...ableExport.ts |    91.8 |    66.66 |     100 |   96.36 | 123,128           
+  ...ableImport.ts |      78 |    69.53 |     100 |   77.77 | ...04,356-361,405 
+ ...ff/source/text |    61.6 |     46.2 |   68.25 |   64.58 |                   
+  ...ringExport.ts |     100 |       50 |     100 |     100 | 9-21              
+  ...ortContext.ts |   51.28 |    55.55 |   44.44 |   57.57 | ...-83,96-114,132 
+  ...ockContext.ts |   74.54 |    59.61 |     100 |   83.33 | 57-59,62-67       
+  ...temContext.ts |   91.66 |     61.9 |     100 |   91.66 | 26,69             
+  ...umRuleInfo.ts |   94.11 |       75 |      80 |   93.93 | 70-74             
+  ...SetContext.ts |   33.33 |        0 |      50 |      40 | 19-21             
+  txtimp.ts        |   58.82 |       45 |     100 |    62.5 | 33-43             
+  txtlists.ts      |   62.22 |    55.55 |   61.53 |   63.15 | 57-84             
+  txtparae.ts      |   71.37 |     51.4 |   84.44 |   74.29 | ...38,849-851,937 
+  txtparai.ts      |   23.07 |    26.87 |   29.62 |   24.77 | ...17-529,573-598 
+  txtprmap.ts      |      60 |    26.66 |   83.33 |    60.6 | ...,74-83,113-131 
+ xmlreader/source  |       0 |        0 |       0 |       0 |                   
+  pad.ts           |       0 |        0 |       0 |       0 | 6-55              
+  span.ts          |       0 |        0 |       0 |       0 | 15-85             
+  ...er.lexical.ts |       0 |        0 |       0 |       0 | 7-128             
+  ...references.ts |       0 |        0 |       0 |       0 | 7-157             
+  ...ader.state.ts |       0 |        0 |       0 |       0 | 8-110             
+  ...eader.tags.ts |       0 |        0 |       0 |       0 | 16-148            
+  ...eader.text.ts |       0 |        0 |       0 |       0 | 15-188            
+  xmlreader.ts     |       0 |        0 |       0 |       0 | 20-114            
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 27.46% ( 13789/50209 )
+Branches     : 23.04% ( 7381/32026 )
+Functions    : 29.22% ( 2854/9765 )
+Lines        : 28.44% ( 12985/45649 )
+================================================================================
+ERROR: Coverage for lines (28.44%) does not meet global threshold (100%)
+ERROR: Coverage for functions (29.22%) does not meet global threshold (100%)
+ERROR: Coverage for statements (27.46%) does not meet global threshold (100%)
+ERROR: Coverage for branches (23.04%) does not meet global threshold (100%)

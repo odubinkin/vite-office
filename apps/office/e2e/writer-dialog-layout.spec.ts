@@ -1,5 +1,6 @@
 /** @fileoverview Checks actual Writer modal geometry, shared styling and reachable actions. */
 import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
+import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 
 // Chromium's headless default hides scrollbars, which would invalidate visual affordance evidence.
 test.use({ launchOptions: { ignoreDefaultArgs: ["--hide-scrollbars"] } });
@@ -11,7 +12,7 @@ async function openCommand(
   command: string,
   submenu?: string,
 ): Promise<void> {
-  await page.getByRole("button", { name: root, exact: true }).click();
+  await openBrowserMenu(page, root);
   if (submenu !== undefined)
     await page.getByRole("menuitem", { name: submenu, exact: true }).press("ArrowRight");
   await page.getByRole("menuitem", { name: command, exact: true }).click();
@@ -43,7 +44,7 @@ async function inspect(
   label: string,
   info: TestInfo,
 ): Promise<void> {
-  const panel = page.locator("[data-writer-modal-panel]");
+  const panel = page.locator("[data-writer-modal-panel],[data-office-modal-panel]");
   await expect(panel).toBeVisible();
   expect(await surface(panel)).toEqual(reference);
   const issues = await panel.evaluate(
@@ -80,7 +81,7 @@ async function inspect(
         issues.push("panel outside viewport");
       if (element.scrollWidth > element.clientWidth + 1) issues.push("horizontal panel overflow");
       for (const region of element.querySelectorAll<HTMLElement>(
-        ".writer-dialog-content,.writer-dialog-scroll",
+        ":is(.writer-dialog-content,.office-dialog-content),:is(.writer-dialog-scroll,.office-dialog-scroll)",
       )) {
         if (region.scrollWidth > region.clientWidth + 1) issues.push("horizontal body overflow");
       }
@@ -141,18 +142,22 @@ async function inspect(
   expect(issues, label).toEqual([]);
   await inspectScrolling(panel, label);
   if (
-    await panel.locator(".writer-dialog-content,.writer-dialog-scroll").evaluateAll(
-      /** Finds bodies left at the bottom for visual scroll evidence. @param regions - Scroll regions. @returns Whether scrolled. */ (
-        regions,
-      ) =>
-        regions.some(
-          /** Checks one scroll offset. @param region - Scroll body. @returns Whether scrolled. */
-          (region) => region.scrollTop > 0,
-        ),
-    )
+    await panel
+      .locator(
+        ":is(.writer-dialog-content,.office-dialog-content),:is(.writer-dialog-scroll,.office-dialog-scroll)",
+      )
+      .evaluateAll(
+        /** Finds bodies left at the bottom for visual scroll evidence. @param regions - Scroll regions. @returns Whether scrolled. */ (
+          regions,
+        ) =>
+          regions.some(
+            /** Checks one scroll offset. @param region - Scroll body. @returns Whether scrolled. */
+            (region) => region.scrollTop > 0,
+          ),
+      )
   )
     await page.screenshot({ path: info.outputPath(`${label}-scrolled.png`) });
-  const action = panel.locator(".writer-dialog-actions button").last();
+  const action = panel.locator(":is(.writer-dialog-actions,.office-dialog-actions) button").last();
   if (await action.count()) {
     await action.scrollIntoViewIfNeeded();
     expect(
@@ -176,7 +181,7 @@ async function inspect(
       element,
     ) => {
       for (const region of element.querySelectorAll<HTMLElement>(
-        ".writer-dialog-content,.writer-dialog-scroll,.writer-dialog-tablist",
+        ":is(.writer-dialog-content,.office-dialog-content),:is(.writer-dialog-scroll,.office-dialog-scroll),:is(.writer-dialog-tablist,.office-dialog-tablist)",
       ))
         region.scrollTop = 0;
     },
@@ -193,7 +198,7 @@ async function inspectScrolling(panel: Locator, label: string): Promise<void> {
       const issues: string[] = [];
       const anchors = [
         ...element.querySelectorAll<HTMLElement>(
-          ".writer-dialog-header,.writer-dialog-actions,.writer-dialog-tablist",
+          ":is(.writer-dialog-header,.office-dialog-header),:is(.writer-dialog-actions,.office-dialog-actions),:is(.writer-dialog-tablist,.office-dialog-tablist)",
         ),
       ];
       const before = anchors.map(
@@ -202,7 +207,7 @@ async function inspectScrolling(panel: Locator, label: string): Promise<void> {
         ) => JSON.stringify(anchor.getBoundingClientRect().toJSON()),
       );
       for (const region of element.querySelectorAll<HTMLElement>(
-        ".writer-dialog-content,.writer-dialog-scroll",
+        ":is(.writer-dialog-content,.office-dialog-content),:is(.writer-dialog-scroll,.office-dialog-scroll)",
       )) {
         if (region.scrollHeight <= region.clientHeight + 1) continue;
         if (getComputedStyle(region).overflowY !== "auto") {
@@ -243,10 +248,16 @@ async function inspectNavigationOverflow(panel: Locator): Promise<void> {
     /** Temporarily extends the tablist and measures its independent scroll contract. @param element - Modal panel. @returns Observed scroll state. */ (
       element,
     ) => {
-      const nav = element.querySelector(".writer-dialog-tablist") as HTMLElement;
+      const nav = element.querySelector(
+        ":is(.writer-dialog-tablist,.office-dialog-tablist)",
+      ) as HTMLElement;
       const body = element.querySelector('[role="tabpanel"]') as HTMLElement;
-      const header = element.querySelector(".writer-dialog-header") as HTMLElement;
-      const footer = element.querySelector(".writer-dialog-actions") as HTMLElement;
+      const header = element.querySelector(
+        ":is(.writer-dialog-header,.office-dialog-header)",
+      ) as HTMLElement;
+      const footer = element.querySelector(
+        ":is(.writer-dialog-actions,.office-dialog-actions)",
+      ) as HTMLElement;
       const clones: HTMLElement[] = [];
       for (let index = 0; index < 30; index++) {
         const clone = (nav.firstElementChild as HTMLElement).cloneNode(true) as HTMLElement;
@@ -314,7 +325,7 @@ for (const viewport of [
     test.setTimeout(90_000);
     await page.setViewportSize(viewport);
     await page.goto("/writer");
-    const panel = page.locator("[data-writer-modal-panel]");
+    const panel = page.locator("[data-writer-modal-panel],[data-office-modal-panel]");
     await page.getByRole("button", { name: "Open", exact: true }).click();
     const reference = await surface(panel);
     await inspect(page, reference, "open-browser", info);
@@ -338,9 +349,13 @@ for (const viewport of [
             ) => {
               const input = element.getBoundingClientRect();
               const panel = (
-                element.closest("[data-writer-modal-panel]") as HTMLElement
+                element.closest(
+                  "[data-writer-modal-panel],[data-office-modal-panel]",
+                ) as HTMLElement
               ).getBoundingClientRect();
-              const region = element.closest(".writer-dialog-content") as HTMLElement;
+              const region = element.closest(
+                ":is(.writer-dialog-content,.office-dialog-content)",
+              ) as HTMLElement;
               const gutter = region.offsetWidth - region.clientWidth;
               return { left: input.left - panel.left, right: panel.right - input.right - gutter };
             },
@@ -362,9 +377,11 @@ for (const viewport of [
       await inspect(page, reference, name as string, info);
       if (name === "paragraph") {
         if (viewport.width === 390 || viewport.height === 360) {
-          const body = panel.locator('.writer-dialog-scroll[role="tabpanel"]');
+          const body = panel.locator(
+            ':is(.writer-dialog-scroll,.office-dialog-scroll)[role="tabpanel"]',
+          );
           const anchors = panel.locator(
-            ".writer-dialog-header,.writer-dialog-actions,.writer-dialog-tablist",
+            ":is(.writer-dialog-header,.office-dialog-header),:is(.writer-dialog-actions,.office-dialog-actions),:is(.writer-dialog-tablist,.office-dialog-tablist)",
           );
           const before = await anchors.evaluateAll(
             /** Captures chrome/navigation bounds before a real wheel event. @param elements - Fixed surfaces. @returns Rectangle snapshots. */ (

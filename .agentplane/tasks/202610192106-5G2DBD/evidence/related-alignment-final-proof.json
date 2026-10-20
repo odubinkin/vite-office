@@ -1,0 +1,57 @@
+{
+  "commandSpec": "related-alignment-focused-third-command.json",
+  "result": "pass",
+  "testFiles": 26,
+  "testCases": 213,
+  "rawEvidence": "related-alignment-final-raw.json.gz",
+  "rawSha256": "fd0f7ca4ca6f1cd1f135de7822044b74ef7210cb0362fbd2049ef6b471a38be7",
+  "summary": {
+    "lines": {
+      "total": 519,
+      "covered": 519,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 551,
+      "covered": 551,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 79,
+      "covered": 79,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 306,
+      "covered": 306,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "coveredOwnerHashes": {
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "a460cc8f32bea493ec20e79a5e3ade6e574e8082766d552720614cc2421b5710",
+    "apps/office/src/framework/browser/presentation/CommandToolbar.tsx": "421c19f6e22a92d5c5ef20ee2903784be50348a3b0753c3ccde5a603aa7981bf",
+    "apps/office/src/framework/browser/presentation/command-surface.ts": "0e14e1b20eea87cf93744ba3a2ff1c00baa155c4f6f1ee1adc58786eeae7bd6e",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "f35e06b005773e45b8b3d4ee136d586eee5136b2ee78e368b37e2b6211f7f542"
+  },
+  "relatedReconciliation": {
+    "initialGraphFiles": 467,
+    "initialGraphCases": 8582,
+    "initialPassedCases": 8573,
+    "initialFailedCases": 9,
+    "initialFailedFiles": [
+      "src/sw/browser/presentation/native-command-popup.test.tsx",
+      "src/sw/browser/presentation/writer-style-selector.test.tsx"
+    ],
+    "freshValidation": "All modified Writer test files,including the strengthened FontCommandSelects missing-descriptor assertion,are included in the fresh26file213case run. The original4changed shared production hashes are unchanged. No passing unrelated files were replayed and no test cases were removed."
+  }
+}

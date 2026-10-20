@@ -27,6 +27,7 @@ export function applyNamedParagraphStyles(
   characterItems: (
     properties: Partial<OdfCharacterProperties>,
     put: (item: SfxPoolItem) => unknown,
+    inherited: (which: number) => SfxPoolItem,
   ) => void,
   listName: (name: string) => string | undefined,
 ): void {
@@ -76,6 +77,9 @@ export function applyNamedParagraphStyles(
         /** Stores one style-owned character item. @param item - Converted item. @returns Set result. */ (
           item,
         ) => collection.SetFormatAttr(item),
+        /** Reads untouched inherited character subfields. @param which - Identity. @returns Effective item. */ (
+          which,
+        ) => collection.GetAttrSet().Get(which),
       );
   }
   if (defaultStyle !== undefined) apply(document.GetDfltTextFormatColl(), defaultStyle);

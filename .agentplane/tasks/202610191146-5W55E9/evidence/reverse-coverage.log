@@ -1,0 +1,38 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/textenc/convertsimple.ts --coverage.include=src/sal/textenc/unichars.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.ts --coverage.reportsDirectory=coverage/task32-reverse src/sal/textenc/singlebyte.test.ts src/sal/textenc/singlebyte-reverse.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  18:53:49
+   Duration  14.53s (transform 4.27s, setup 472ms, import 4.51s, tests 12.81s, environment 3.01s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   98.99 |    98.83 |     100 |    98.9 |                   
+ convertsimple.ts  |   98.46 |     97.5 |     100 |   98.27 | 529-530           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 98.99% ( 197/199 )
+Branches     : 98.83% ( 170/172 )
+Functions    : 100% ( 12/12 )
+Lines        : 98.9% ( 180/182 )
+================================================================================
+ERROR: Coverage for lines (98.9%) does not meet global threshold (100%)
+ERROR: Coverage for statements (98.99%) does not meet global threshold (100%)
+ERROR: Coverage for branches (98.83%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/sal/textenc/convertsimple.ts --coverage.include=src/sal/textenc/unichars.ts --coverage.include=src/sal/textenc/handleundefinedunicodetotextchar.ts --coverage.reportsDirectory=coverage/task32-reverse src/sal/textenc/singlebyte.test.ts src/sal/textenc/singlebyte-reverse.test.ts

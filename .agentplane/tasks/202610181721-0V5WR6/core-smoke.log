@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- document.scalar document.references
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts document.scalar document.references
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  00:30:55
+   Duration  1.52s (transform 943ms, setup 231ms, import 1.15s, tests 22ms, environment 1.44s)
+

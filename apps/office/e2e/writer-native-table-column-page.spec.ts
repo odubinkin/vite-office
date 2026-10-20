@@ -1,5 +1,6 @@
 /** @fileoverview Verifies production native column-page modes, field windows, selected-table sensitivity and actual browser history. */
 import { expect, test, type Page } from "@playwright/test";
+import { hoverBrowserMenuItem, openBrowserMenu } from "../test-support/menu-pointer-e2e";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { HoriOrientation as H } from "../src/offapi/com/sun/star/text/HoriOrientation";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
@@ -160,8 +161,8 @@ for (const viewport of [1280, 390]) {
     await columns(page);
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
-    await page.getByRole("button", { name: "Table", exact: true }).click();
-    await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
+    await openBrowserMenu(page, "Table");
+    await hoverBrowserMenuItem(page, page.getByRole("menuitem", { name: "Select", exact: true }));
     await page.getByRole("menuitem", { name: "Select Table", exact: true }).click();
     await columns(page);
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();

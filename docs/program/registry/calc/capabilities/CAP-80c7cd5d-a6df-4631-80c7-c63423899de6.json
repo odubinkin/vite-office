@@ -1,0 +1,111 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6",
+    "capabilityId": "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6",
+    "suite": "calc",
+    "subsystem": "browser-presentation",
+    "type": "platform",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskSGE6BG implements controlled React/Tailwind Calc presenters for native grid,input-window and sheet-tab responsibilities. They consume actual ScViewData/ScMarkData and controller display/input projections,never a second cell,selection or draft model. The grid paints a bounded viewport on a full-domain scroll canvas,with logical ARIA coordinates,source active/marked cell state,headers,inline edit focus and unchanged keyboard/pointer/IME intents. Input-window function/sum/equals and OK/cancel composition follows native mode switching. Tabs read actual sheet names and selected/active identities. Native commands,formatting,draft state and navigation stay with their controllers. Exact Writer toolbar-button styles are extracted into framework/browser/presentation/office-control-styles.ts and shared by Writer/Calc; global fonts,slate/indigo palette,Tailwind,rounded states and Lucide icons are reused. This task implements presentation contracts,not a registered production Calc module or complete editable workbench.",
+      "TaskYDAWMM repairs actual browser accessibility defects exposed by task10 axe acceptance. Shared top-level CommandMenuBar controls retain their native HTML buttons,existing focus/keyboard/dispatch state machine and visual styling while exposing the required menuitem role. The shared Writer/Calc document title gains h1 semantics with identical text sizing and line height. Calc row/column/corner headers now contain their native selection buttons within proper header elements;corner accessible text and a valid status container complete the grid/chrome semantics. Tests migrate queries to the real menu items and native header buttons,not compatibility aliases or audit exclusions. Native command/cell/selection/input ownership is unchanged. Actual foundation/launcher axe checks and all three Writer dialog geometry viewports pass;full native UI/accessibility service parity remains unclaimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React/DOM replace VCL painting while original composition,model/view ownership and controller-input boundaries are preserved for the represented presenters;Writer shared styles and icons are reused."
+    },
+    "capability": "Controlled Calc grid,input-line and sheet-tab presenters",
+    "gaps": [
+      "Production Calc module registration,document/input/view command controllers,shared menus/toolbars,status/sidebar,file dialogs,ODS workflows,primary storage/autosave and close prompts remain following UI tasks.",
+      "Column/row resizing,drag selection,hidden/merged/formatted cells,panes,functions and names require their actual core/view services;no no-op services or whole native/UI fidelity claim.",
+      "Native UI test anchors are reference callers only,not executed upstream suites. Task-local preview journals intents;it does not implement substitute document commands."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/gridwin4.cxx",
+          "marker": "void ScGridWindow::Paint("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/inputwin.cxx",
+          "marker": "void ScInputWindow::SetOkCancelMode()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabcont.cxx",
+          "marker": "ScTabControl::ScTabControl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf54197.py",
+          "marker": "test_tdf54197_CTRL_D_input_line_change"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/app/inputwin.cxx",
+          "marker": "// Position window, 3 buttons, input window"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+          "marker": "export function ScGridWindow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScInputWindow.tsx",
+          "marker": "export function ScInputWindow"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScTabControl.tsx",
+          "marker": "export function ScTabControl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+          "marker": "renders canonical grid coordinates"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+          "marker": "keeps formula-line state controlled"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+          "marker": "projects actual sheet names"
+        },
+        {
+          "path": "apps/office/e2e/foundation.spec.ts",
+          "marker": "Writer menu keyboard navigation and accessible application chrome"
+        },
+        {
+          "path": "apps/office/e2e/shared/launcher.spec.ts",
+          "marker": "shared launcher routes to Calc without a Writer session"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+          "marker": "Controller contracts corresponding to native grid painting"
+        }
+      ]
+    },
+    "aspect": "browser-input",
+    "atomicOperation": "calc-controlled-browser-presenters",
+    "scopeLimitations": [
+      "Production Calc module registration,document/input/view command controllers,shared menus/toolbars,status/sidebar,file dialogs,ODS workflows,primary storage/autosave and close prompts remain following UI tasks.",
+      "Column/row resizing,drag selection,hidden/merged/formatted cells,panes,functions and names require their actual core/view services;no no-op services or whole native/UI fidelity claim.",
+      "Native UI test anchors are reference callers only,not executed upstream suites. Task-local preview journals intents;it does not implement substitute document commands.",
+      "Logical native row coordinates remain separate from browser physical scroll offset/extent supplied by the viewport controller. Browser review measured raw CSS height clamping at16777214pixels,so no full-sheet pixel height is assumed by this renderer."
+    ]
+  }
+}

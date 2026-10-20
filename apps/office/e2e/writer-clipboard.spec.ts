@@ -12,13 +12,13 @@ test("copies visible formatted Writer content through the native browser copy ev
   await page.goto("/writer");
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Copied Writer heading");
-  await page.getByRole("button", { name: "Styles" }).click();
+  await page.getByRole("menuitem", { name: "Styles" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
   await page
     .getByRole("toolbar", { name: "Writer formatting toolbar" })
     .getByRole("button", { exact: true, name: "Center" })
     .click();
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(
     /**
@@ -61,7 +61,7 @@ test("Writer list clipboard" /**
   await page.goto("/writer");
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First item");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
   await firstParagraph.evaluate(
@@ -80,10 +80,10 @@ test("Writer list clipboard" /**
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await secondParagraph.fill("Second item");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Demote Outline Level" }).click();
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await firstParagraph.evaluate(
     /** Dispatches a native copy event and checks that a detached rich target parses nested ordered lists. @param element - Rendered Writer paragraph beneath the copy-event owner. @returns MIME data plus detached target counts for outer and nested list items. */

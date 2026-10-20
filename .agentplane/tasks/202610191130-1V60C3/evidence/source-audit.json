@@ -1,0 +1,83 @@
+{
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+  "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375",
+  "anchors": [
+    {
+      "text": "m_nRolloveredItem = ITEMPOS_INVALID;",
+      "lines": [
+        124,
+        433
+      ]
+    },
+    {
+      "text": "m_bIgnoreFirstMove = true;",
+      "lines": [
+        126,
+        283
+      ]
+    },
+    {
+      "text": "void MenuBarWindow::ImplCreatePopup",
+      "lines": [
+        277
+      ]
+    },
+    {
+      "text": "void MenuBarWindow::MouseMove",
+      "lines": [
+        412
+      ]
+    },
+    {
+      "text": "rMEvt.IsSynthetic() || rMEvt.IsEnterWindow()",
+      "lines": [
+        414
+      ]
+    },
+    {
+      "text": "if ( rMEvt.IsLeaveWindow() )",
+      "lines": [
+        417
+      ]
+    },
+    {
+      "text": "if ( m_nHighlightedItem == ITEMPOS_INVALID )",
+      "lines": [
+        438,
+        748,
+        1108
+      ]
+    },
+    {
+      "text": "if( m_bIgnoreFirstMove )",
+      "lines": [
+        452
+      ]
+    },
+    {
+      "text": "ChangeHighlightItem( nEntry, false );",
+      "lines": [
+        399,
+        460
+      ]
+    },
+    {
+      "text": "else if (m_nRolloveredItem != ITEMPOS_INVALID)",
+      "lines": [
+        911
+      ]
+    }
+  ],
+  "conclusions": [
+    "constructor initializes invalid rollover and first-move suppression",
+    "ImplCreatePopup resets first-move suppression before popup replacement",
+    "synthetic and enter return before leave;leave clears rollover before active-motion suppression",
+    "closed motion changes rollover without consuming first active motion",
+    "active invalid motion consumes suppression;valid different root switches after suppression",
+    "Paint prioritizes visible highlighted item and uses rollover only otherwise",
+    "ChangeHighlightItem creates popup only when mbAutoPopup;KEY_MENU and GetFocus disable auto-popup and retain a highlighted item without popup",
+    "F10 does not reset m_bIgnoreFirstMove; actual popup creation does"
+  ],
+  "boundary": "Source audit only; original compiled VCL GUI not executed. Browser DOM has no portable native IsSynthetic marker. No parity promotion and no newly suspected upstream defect."
+}

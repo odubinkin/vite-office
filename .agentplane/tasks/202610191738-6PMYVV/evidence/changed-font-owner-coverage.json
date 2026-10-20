@@ -1,0 +1,1163 @@
+{
+  "result": "pass",
+  "rawProofs": [
+    "calc-font-styles-proof.json",
+    "related-font-final-proof.json"
+  ],
+  "changedOwners": 39,
+  "executableOwners": 37,
+  "summary": {
+    "lines": {
+      "total": 3112,
+      "covered": 3112,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 3395,
+      "covered": 3395,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 642,
+      "covered": 642,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1925,
+      "covered": 1925,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "owners": [
+    {
+      "path": "apps/office/src/external/icu/source/common/uchar.ts",
+      "sha256": "9db825df926627a28bee0a613b502c02c3f1c58c4d35145f2d0e97537b43e8b7",
+      "summary": {
+        "lines": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uchar_props_data.ts",
+      "sha256": "f0560f6b84405fcea7fcb16d2afdb11b919fc6e9dd7bdc54bea803c55cbcfc94",
+      "summary": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/ucptrie.ts",
+      "sha256": "c5cad8ca6cfcbee49013695bd25c660ad50d1d257407dda733b8802361f104a2",
+      "summary": {
+        "lines": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unicode/uchar.ts",
+      "sha256": "3afa519114c261fb889fa1c44aea82fc15908d3337d6967edef20e91be1fd286",
+      "summary": {
+        "lines": {
+          "total": 355,
+          "covered": 355,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 355,
+          "covered": 355,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unicode/ucptrie.ts",
+      "sha256": "2d2cf2676d49aea112ee4bd13ae00db456f068935f44317dbb5abbf87da86785",
+      "summary": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unicode/uscript.ts",
+      "sha256": "87931e6cec362d6850e989e628b0b259506c03c2dadad89497feec909416ecac",
+      "summary": {
+        "lines": {
+          "total": 222,
+          "covered": 222,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 222,
+          "covered": 222,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uprops.ts",
+      "sha256": "bcfcd02c174786efecdbfe451e097f9970123acd83b33cbd1fe80f358e9c4365",
+      "summary": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.script.ts",
+      "sha256": "077b1e77700e3f14e59a80eec8b870ec0146eb9025e68eb79acb144018c91188",
+      "summary": {
+        "lines": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 32,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.ts",
+      "sha256": "68947405e3f4f80fb127a177efa2df77841382cc0e5d07794c646c6b328cd11d",
+      "summary": {
+        "lines": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18nutil/source/utility/scriptclass.ts",
+      "sha256": "5dfc06b0cb5f85c111737de5e9e5036b006051848f017a7e11ea8d00667d0dda",
+      "summary": {
+        "lines": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/i18nutil/source/utility/unicode.ts",
+      "sha256": "af075fc507cc366bf34002e25ad24c21f016df45de10ae88a02a6f816901e378",
+      "summary": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 152,
+          "covered": 152,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/o3tl/inc/string_view.ts",
+      "sha256": "ece87d308043f73259076ddc9a19c848267303c5207bf2a753999b0cf49b2992",
+      "summary": {
+        "lines": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/i18n/ScriptType.ts",
+      "sha256": "fdc91855f2f7fa7eb84c41d420f2cb268be2b1d7d5d70ecb83d58f7d8d1c1dc8",
+      "summary": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/i18n/XBreakIterator.ts",
+      "sha256": "c7447d668a0cb8d62e2de176c9246637412171cea9667f0f6536cb4e1a8e96a5",
+      "nonExecutable": "Consumed two-method IDL TypeScript interface; erased at runtime."
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+      "sha256": "97f70c090c51ef90707b6bbf2a353f710a9e5d4c1bc89ce400492eafe38a5f40",
+      "summary": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "5cc9da76e8ecb1141e85b7d4114bb2ec95d242644e8fb18eddbe7e1cadd13ee1",
+      "summary": {
+        "lines": {
+          "total": 248,
+          "covered": 248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 274,
+          "covered": 274,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 110,
+          "covered": 110,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScCellText.tsx",
+      "sha256": "dd2dc81038dfbb24c36d176aa3986ab1321b3998d78a45f7e3cbf994a76edf6e",
+      "summary": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "9fe23d0bd08fc5e944140ddf46e35f0eae8aabbe6cc1cfdf8402d4bc84b116b6",
+      "summary": {
+        "lines": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 53,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "475441e4a7409835a107011afa5663a34381bd63139c8a484f43e2289cbd57c0",
+      "summary": {
+        "lines": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 70,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen6.ts",
+      "sha256": "535405dfd07b51194632e51afc4fe4941fc0fba182861f461b7dec8ecea8ebc4",
+      "summary": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "cc72920c2b4e97fec06935ceda3826e92c2447d1806dbb584c6889996f12bdb9",
+      "summary": {
+        "lines": {
+          "total": 117,
+          "covered": 117,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 129,
+          "covered": 129,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 54,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "sha256": "a4a2e11a557623593a6968be879c8ddd0b9ad215c8827bfa95ccccaf1813a859",
+      "summary": {
+        "lines": {
+          "total": 88,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 102,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 57,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "3479cdd197ef32e56d31f4ced9be8b9574dc7e25e08122af7a8d23718044d5ff",
+      "summary": {
+        "lines": {
+          "total": 91,
+          "covered": 91,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 102,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "a2a69b3ded938cd01f2e0d61b2078b1e315c1faf6ba9db809e4d06e4c99766bb",
+      "summary": {
+        "lines": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 43,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+      "sha256": "97ff694a5bb9ea572facedf505ffc0c72196ca4ca0735341211057ddba71f69d",
+      "summary": {
+        "lines": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "c91e93b54515f29f9c1416a4f102c9c9f32ef346a065abfd1ec04306b6d292ed",
+      "summary": {
+        "lines": {
+          "total": 92,
+          "covered": 92,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 98,
+          "covered": 98,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/FontSelects.tsx",
+      "sha256": "bffce5f73d992507f988e49070b8d671ff39137a584fc051adbbf53f5c97ed4c",
+      "summary": {
+        "lines": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/font-item.ts",
+      "sha256": "da04bb5815ae82068bcc32b824c454c1842ac18239ea1bf317e60549fc8c00aa",
+      "summary": {
+        "lines": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-font-family.ts",
+      "sha256": "612ffca1d3edd6db34d2db0ca6ad34a7ea310d41cb46aee68979b75157d7bd67",
+      "nonExecutable": "Public re-export only; executable implementation is measured in shared vcl/browser/font-family.ts."
+    },
+    {
+      "path": "apps/office/src/sw/sdi/swriter.ts",
+      "sha256": "74c5e2ab210427ab6c04d818515abdee8e1d720e15ad4da0d26c0b3e4e1bdea4",
+      "summary": {
+        "lines": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints-font.ts",
+      "sha256": "024fdb6ab6bfc6b5dc044860b89ff3d0b44f76b494f1fa826af94cd37e3f2099",
+      "summary": {
+        "lines": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "sha256": "52dd5dd955a19bcf9eaf6ab0090912d5a33222c9a15042d95e58fb4eb3acfbb4",
+      "summary": {
+        "lines": {
+          "total": 310,
+          "covered": 310,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 352,
+          "covered": 352,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 249,
+          "covered": 249,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+      "sha256": "67a0b3df3299269ede85bf08d7c50d6ed6da311a8a6b17fc9c9f69dd4c035ae2",
+      "summary": {
+        "lines": {
+          "total": 61,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 68,
+          "covered": 68,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "sha256": "9102fad1d221a7f4cba077fdf6d942304d642c70233019e8ab49fefa1f5f974c",
+      "summary": {
+        "lines": {
+          "total": 295,
+          "covered": 295,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 103,
+          "covered": 103,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 321,
+          "covered": 321,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 202,
+          "covered": 202,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "sha256": "ed2ba8bbbb8b30dc19840e8eaac7fa6d826fcba724810b0aa9459adf1931f3ac",
+      "summary": {
+        "lines": {
+          "total": 112,
+          "covered": 112,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 116,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "sha256": "ace069fa96ba5da74e0af954b9d1213b7a4fabe16c729d4c98ba21160b80dbfa",
+      "summary": {
+        "lines": {
+          "total": 276,
+          "covered": 276,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 67,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 316,
+          "covered": 316,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 267,
+          "covered": 267,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "4877085025cb54b5cb6ddac7e0a340e2f08a1e26c4500674bc2e15153a00e188",
+      "summary": {
+        "lines": {
+          "total": 325,
+          "covered": 325,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 115,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 348,
+          "covered": 348,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 219,
+          "covered": 219,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/browser/font-family.ts",
+      "sha256": "fef67cac4acb0fd0f62819d74d1c2123405013b21c989012f80d464b442dd2a1",
+      "summary": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/browser/font-list.ts",
+      "sha256": "85a5e07a6462de56b9f5f7610a51f38716d3f8fa2e182bdfa6f74545319f0327",
+      "summary": {
+        "lines": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 31,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  ]
+}

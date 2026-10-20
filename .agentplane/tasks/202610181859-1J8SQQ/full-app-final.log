@@ -1,0 +1,323 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+····················································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································stderr | src/sw/source/filter/xml/odt-embedded-fonts.test.ts > pinned Writer embedded font resources > rejects a font reference absent from the validated manifest
+Unknown ODF attribute ignored: svg:stroke-color
+Unknown ODF attribute ignored: draw:fill-color
+Unknown ODF attribute ignored: fo:wrap-option
+Unknown ODF attribute ignored: draw:shadow-offset-x
+Unknown ODF attribute ignored: draw:shadow-offset-y
+Unknown ODF attribute ignored: draw:start-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:start-line-spacing-vertical
+Unknown ODF attribute ignored: draw:end-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:end-line-spacing-vertical
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: style:flow-with-text
+No ODF context for unknown element: style:graphic-properties
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: loext:tab-stop-distance
+Unknown ODF attribute ignored: loext:opacity
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenation-ladder-count
+Unknown ODF attribute ignored: fo:hyphenation-keep
+Unknown ODF attribute ignored: loext:hyphenation-keep-type
+Unknown ODF attribute ignored: loext:hyphenation-keep-line
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:punctuation-wrap
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: style:tab-stop-distance
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: loext:opacity
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenate
+Unknown ODF attribute ignored: fo:hyphenation-remain-char-count
+Unknown ODF attribute ignored: fo:hyphenation-push-char-count
+Unknown ODF attribute ignored: loext:hyphenation-no-caps
+Unknown ODF attribute ignored: loext:hyphenation-no-last-word
+Unknown ODF attribute ignored: loext:hyphenation-word-char-count
+Unknown ODF attribute ignored: loext:hyphenation-zone
+Unknown ODF attribute ignored: style:font-family-asian
+Unknown ODF attribute ignored: style:font-family-generic-asian
+Unknown ODF attribute ignored: style:font-pitch-asian
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: style:font-family-generic-complex
+Unknown ODF attribute ignored: style:font-pitch-complex
+Unknown ODF attribute ignored: style:font-size-complex
+Unsupported ODF text properties attribute ignored: style:font-family-generic
+Unsupported ODF text properties attribute ignored: style:font-pitch
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: text:footnotes-position
+Unknown ODF attribute ignored: text:start-numbering-at
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: style:layout-grid-color
+Unknown ODF attribute ignored: style:layout-grid-lines
+Unknown ODF attribute ignored: style:layout-grid-base-height
+Unknown ODF attribute ignored: style:layout-grid-ruby-height
+Unknown ODF attribute ignored: style:layout-grid-mode
+Unknown ODF attribute ignored: style:layout-grid-ruby-below
+Unknown ODF attribute ignored: style:layout-grid-print
+Unknown ODF attribute ignored: style:layout-grid-display
+Unknown ODF attribute ignored: style:footnote-max-height
+Unknown ODF attribute ignored: loext:margin-gutter
+Unknown ODF attribute ignored: style:distance-before-sep
+Unknown ODF attribute ignored: style:distance-after-sep
+Unknown ODF attribute ignored: style:line-style
+Unknown ODF attribute ignored: style:adjustment
+Unknown ODF attribute ignored: style:color
+No ODF context for unknown element: style:header-style
+No ODF context for unknown element: style:footer-style
+Unknown ODF attribute ignored: draw:background-size
+No ODF context for unknown element: style:drawing-page-properties
+Unknown ODF attribute ignored: draw:style-name
+Unknown ODF attribute ignored: officeooo:rsid
+Unknown ODF attribute ignored: officeooo:paragraph-rsid
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-size-complex
+
+···········································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································stderr | src/sw/browser/presentation/writer-style-selector.test.tsx > Writer live style selector > shows custom names, dispatches their native identity, and records native repeat history
+Received NaN for the `value` attribute. If this is expected, cast the value to a string.
+
+·················································stderr | src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts > Writer ODT paragraph margins > round-trips every represented paragraph metric and ignores unknown extension data
+Unknown ODF attribute ignored: ext:value
+No ODF context for unknown element: ext:unsupported
+
+········································································································································································stderr | src/sw/source/filter/xml/odt-table-roundtrip.test.ts > Writer canonical ODF tables > imports and structurally reopens upstream tdf132642_keepWithNextTable.odt
+Unsupported ODF font size ignored: 130%
+Unsupported ODF font size ignored: 115%
+Unsupported ODF font size ignored: 101%
+
+·stderr | src/sw/source/filter/xml/odt-table-roundtrip.test.ts > Writer canonical ODF tables > rejects malformed table geometry instead of silently inventing a width
+Unsupported ODF font size ignored: 130%
+Unsupported ODF font size ignored: 115%
+Unsupported ODF font size ignored: 101%
+
+·································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································stderr | src/sw/source/filter/xml/odt-hyperlink-roundtrip.test.ts > Writer upstream hyperlink ODT fixtures > opens and round-trips pinned upstream hyperlink ODT fixtures
+Unknown ODF attribute ignored: svg:stroke-color
+Unknown ODF attribute ignored: draw:fill-color
+Unknown ODF attribute ignored: fo:wrap-option
+Unknown ODF attribute ignored: draw:shadow-offset-x
+Unknown ODF attribute ignored: draw:shadow-offset-y
+Unknown ODF attribute ignored: draw:start-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:start-line-spacing-vertical
+Unknown ODF attribute ignored: draw:end-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:end-line-spacing-vertical
+Unknown ODF attribute ignored: style:flow-with-text
+No ODF context for unknown element: style:graphic-properties
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenation-ladder-count
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:punctuation-wrap
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: style:tab-stop-distance
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenate
+Unknown ODF attribute ignored: fo:hyphenation-remain-char-count
+Unknown ODF attribute ignored: fo:hyphenation-push-char-count
+Unknown ODF attribute ignored: loext:contextual-spacing
+Unknown ODF attribute ignored: style:font-family-asian
+Unknown ODF attribute ignored: style:font-family-generic-asian
+Unknown ODF attribute ignored: style:font-pitch-asian
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: style:font-family-generic-complex
+Unknown ODF attribute ignored: style:font-pitch-complex
+Unknown ODF attribute ignored: style:font-size-complex
+Unsupported ODF text properties attribute ignored: style:font-family-generic
+Unsupported ODF text properties attribute ignored: style:font-pitch
+Unknown ODF attribute ignored: loext:contextual-spacing
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: loext:contextual-spacing
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: text:footnotes-position
+Unknown ODF attribute ignored: text:start-numbering-at
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: style:footnote-max-height
+Unknown ODF attribute ignored: style:distance-before-sep
+Unknown ODF attribute ignored: style:distance-after-sep
+Unknown ODF attribute ignored: style:line-style
+Unknown ODF attribute ignored: style:adjustment
+Unknown ODF attribute ignored: style:color
+No ODF context for unknown element: style:header-style
+No ODF context for unknown element: style:footer-style
+Unknown ODF attribute ignored: officeooo:rsid
+Unknown ODF attribute ignored: officeooo:paragraph-rsid
+
+stderr | src/sw/source/filter/xml/odt-hyperlink-roundtrip.test.ts > Writer upstream hyperlink ODT fixtures > opens and round-trips pinned upstream hyperlink ODT fixtures
+Unknown ODF attribute ignored: svg:stroke-color
+Unknown ODF attribute ignored: draw:fill-color
+Unknown ODF attribute ignored: fo:wrap-option
+Unknown ODF attribute ignored: draw:shadow-offset-x
+Unknown ODF attribute ignored: draw:shadow-offset-y
+Unknown ODF attribute ignored: draw:start-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:start-line-spacing-vertical
+Unknown ODF attribute ignored: draw:end-line-spacing-horizontal
+Unknown ODF attribute ignored: draw:end-line-spacing-vertical
+Unknown ODF attribute ignored: style:flow-with-text
+No ODF context for unknown element: style:graphic-properties
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: loext:tab-stop-distance
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: loext:opacity
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenation-ladder-count
+Unknown ODF attribute ignored: style:text-autospace
+Unknown ODF attribute ignored: style:punctuation-wrap
+Unknown ODF attribute ignored: style:line-break
+Unknown ODF attribute ignored: style:tab-stop-distance
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: loext:opacity
+Unknown ODF attribute ignored: fo:language
+Unknown ODF attribute ignored: fo:country
+Unknown ODF attribute ignored: style:letter-kerning
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:language-asian
+Unknown ODF attribute ignored: style:country-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: style:language-complex
+Unknown ODF attribute ignored: style:country-complex
+Unknown ODF attribute ignored: fo:hyphenate
+Unknown ODF attribute ignored: fo:hyphenation-remain-char-count
+Unknown ODF attribute ignored: fo:hyphenation-push-char-count
+Unknown ODF attribute ignored: loext:hyphenation-no-caps
+Unknown ODF attribute ignored: loext:hyphenation-no-last-word
+Unknown ODF attribute ignored: loext:hyphenation-word-char-count
+Unknown ODF attribute ignored: loext:hyphenation-zone
+Unknown ODF attribute ignored: style:font-family-asian
+Unknown ODF attribute ignored: style:font-family-generic-asian
+Unknown ODF attribute ignored: style:font-pitch-asian
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-family-complex
+Unknown ODF attribute ignored: style:font-family-generic-complex
+Unknown ODF attribute ignored: style:font-pitch-complex
+Unknown ODF attribute ignored: style:font-size-complex
+Unsupported ODF text properties attribute ignored: style:font-family-generic
+Unsupported ODF text properties attribute ignored: style:font-pitch
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: style:font-size-complex
+Unknown ODF attribute ignored: text:line-number
+Unknown ODF attribute ignored: style:font-size-asian
+Unknown ODF attribute ignored: loext:opacity
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: text:footnotes-position
+Unknown ODF attribute ignored: text:start-numbering-at
+Unknown ODF attribute ignored: text:note-class
+Unknown ODF attribute ignored: style:writing-mode
+Unknown ODF attribute ignored: style:footnote-max-height
+Unknown ODF attribute ignored: loext:margin-gutter
+Unknown ODF attribute ignored: style:distance-before-sep
+Unknown ODF attribute ignored: style:distance-after-sep
+Unknown ODF attribute ignored: style:line-style
+Unknown ODF attribute ignored: style:adjustment
+Unknown ODF attribute ignored: style:color
+No ODF context for unknown element: style:header-style
+No ODF context for unknown element: style:footer-style
+Unknown ODF attribute ignored: officeooo:rsid
+Unknown ODF attribute ignored: style:text-underline-type
+Unknown ODF attribute ignored: officeooo:rsid
+
+··················································································································································································································································stderr | src/sw/source/filter/xml/odt-declarations.test.ts > ODT declaration import > keeps pinned styles.odt and feature_text.odt canonical imports while diagnosing font metadata
+Unsupported ODF font size ignored: 130%
+Unsupported ODF font size ignored: 115%
+Unsupported ODF font size ignored: 101%
+
+··························································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································································
+
+ Test Files  987 passed (987)
+      Tests  16998 passed (16998)
+   Start at  02:24:32
+   Duration  806.10s (transform 91.49s, setup 67.07s, import 510.41s, tests 399.54s, environment 358.40s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 46421/46421 )
+Branches     : 100% ( 29881/29881 )
+Functions    : 100% ( 9298/9298 )
+Lines        : 100% ( 42216/42216 )
+================================================================================

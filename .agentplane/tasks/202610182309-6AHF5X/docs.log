@@ -1,0 +1,15 @@
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237
+    throw new Error(`JSDoc validation failed:\n${errors.join("\n")}`);
+          ^
+
+Error: JSDoc validation failed:
+apps/office/src/o3tl/inc/string_view-views.test.ts:17 function is missing JSDoc
+apps/office/src/o3tl/inc/string_view-views.test.ts:18 function is missing JSDoc
+    at main (file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237:11)
+    at async file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:243:1
+
+Node.js v24.13.1

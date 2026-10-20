@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:shared
+> npm run test:coverage:shared --workspace @vite-office/office -- native-boolean-handler native-color-handlers native-auto-color character-hdl outlined-text xmlimp.test calc-namespace-binding --coverage.include=src/xmloff/source/style/xmlbahdl.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.include=src/vcl/browser/outlined-text.tsx --coverage.reportsDirectory=coverage/task44-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task44-shared-final-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:shared
+> vitest run --config vitest.shared-coverage.config.ts --coverage native-boolean-handler native-color-handlers native-auto-color character-hdl outlined-text xmlimp.test calc-namespace-binding --coverage.include=src/xmloff/source/style/xmlbahdl.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.include=src/vcl/browser/outlined-text.tsx --coverage.reportsDirectory=coverage/task44-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task44-shared-final-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task44-shared-final-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 331/331 )
+Branches     : 100% ( 51/51 )
+Functions    : 100% ( 22/22 )
+Lines        : 100% ( 318/318 )
+================================================================================

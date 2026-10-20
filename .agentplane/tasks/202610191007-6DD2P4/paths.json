@@ -1,0 +1,21 @@
+[
+  "apps/office/e2e/shared/popup-pointer.spec.ts",
+  "apps/office/e2e/writer-menu-saved-focus.spec.ts",
+  "apps/office/e2e/writer-submenu-preselection.spec.ts",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+  "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+  "apps/office/src/framework/browser/presentation/menu-popup-pointer.ts",
+  "apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx",
+  "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
+  "apps/office/src/sw/browser/presentation/native-empty-menubar.test.tsx",
+  "apps/office/src/sw/browser/presentation/native-menubar-chain.test.tsx",
+  "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+  "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+  "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+  "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+  "docs/program/registry/shared/operations/shared.internal.framework.mark-menu-item.json",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/CommandMenuBar.tsx.json",
+  "docs/program/registry/shared/provenance/framework/browser/presentation/menu-popup-pointer.ts.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/CommandMenuBar.tsx.json",
+  "docs/program/registry/shared/runtime/framework/browser/presentation/menu-popup-pointer.ts.json"
+]

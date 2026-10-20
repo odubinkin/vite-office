@@ -1,0 +1,52 @@
+{
+  "result": "pass",
+  "calcFiles": 127,
+  "calcCases": 386,
+  "sharedFiles": 28,
+  "sharedCases": 208,
+  "changedProductionOwners": [
+    "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx",
+    "apps/office/src/sc/sdi/scalc.ts",
+    "apps/office/src/sc/source/core/data/attarray.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+    "apps/office/src/sc/source/ui/view/formatsh.ts",
+    "apps/office/src/svl/source/items/itemset.ts",
+    "apps/office/src/editeng/inc/scriptsetitem.ts",
+    "apps/office/src/editeng/source/items/textitem.scriptset.ts",
+    "apps/office/src/sc/inc/attarray.ts",
+    "apps/office/src/sc/source/ui/view/viewfunc.ts"
+  ],
+  "completeExecutableOwners": 14,
+  "reexportOnlyNoExecutableOwner": [
+    "apps/office/src/editeng/inc/scriptsetitem.ts"
+  ],
+  "allRawCountsPositive": true,
+  "changedOwnerCounts": {
+    "statements": 1681,
+    "branches": 1069,
+    "functions": 332
+  },
+  "sourceHashes": {
+    "apps/office/src/sc/browser/controller/calc-selection-script.ts": "e17d63f8fbfcf05da54c7f07be2bfa5c606e102999878a5ad43e370fb09c3b1b",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "e22c67a9a45912d6716310c9470d75bbc31e8b84dbd6dc881b3bac7d60d1a72c",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx": "8e1e1c296b84c7e1994c29b5bb89fa949546e463ae509379b64ab0d5cb888a9e",
+    "apps/office/src/sc/sdi/scalc.ts": "05c7c0d882e3816c8c75958b8781069a5e878095461a52a3880f42da6733899a",
+    "apps/office/src/sc/source/core/data/attarray.ts": "a76f3da8a886f46e0a663ed48a7935efc550f16d658ffd7830c2b01790a6adc6",
+    "apps/office/src/sc/source/core/data/column.ts": "b277279adeb0334e04da230a5095053de8445f15123f887c81fa424b25305215",
+    "apps/office/src/sc/source/core/data/document.ts": "a94dd3cd9916cb3a12f731cf48b04ec562d0ff91c58cb109dc5fdb791d2d0a1a",
+    "apps/office/src/sc/source/core/data/table.ts": "4ec796f1ae3f160f5e60c634081b453a7a7806f06e5b3858c4e521d87f4561a2",
+    "apps/office/src/sc/source/ui/undo/undoblk3.ts": "ecf40ce3c056b3bc7602cfe6fc9a39a7e30281d6b5c330710fe89c80b1681601",
+    "apps/office/src/sc/source/ui/view/formatsh.ts": "b1e8b312082f86c6fcaf7cf17b264c8ca16236659c2f068b435c1ce9c5e176bf",
+    "apps/office/src/svl/source/items/itemset.ts": "fc87571468d7e2d4997002b6bf2b0f63e53c70bbbafde029f558b528412f6534",
+    "apps/office/src/editeng/source/items/textitem.scriptset.ts": "38dd827826086d29016bf1f5a649380dd9c6cc052e34d70fafc9048cbdd5d71f",
+    "apps/office/src/sc/inc/attarray.ts": "542c1e1b865b6de07048da9906c8045dc7bc23208e4de1dbbd4bcf2d6c742653",
+    "apps/office/src/sc/source/ui/view/viewfunc.ts": "11921afe698e582d794853ee8df1558096ff6594d4195309206bb4bbdf9ab391"
+  },
+  "allSourceHashesCurrent": true,
+  "coverageReductions": false
+}

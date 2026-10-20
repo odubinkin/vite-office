@@ -151,8 +151,8 @@ it("mounted workbench passes actual row versus whole-table selection to native c
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
-  fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select Table" }));
   fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));

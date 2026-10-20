@@ -44,7 +44,7 @@ function fixture(
       resolveArguments={/** Uses original native defaults. @returns Undefined. */ () => undefined}
     />,
   );
-  return { session, owner, trigger: screen.getByRole("button", { name: "Native" }) };
+  return { session, owner, trigger: screen.getByRole("menuitem", { name: "Native" }) };
 }
 it("native root keyboard preselection includes a disabled first entry", /** Checks Menu::Execute uses SkipDisabledInMenus=false while HTML disabled stays protected. @returns Nothing. */ () => {
   const f = fixture();

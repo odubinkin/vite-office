@@ -1,0 +1,279 @@
+{
+  "task": "202610200048-GWT2KJ",
+  "result": "pass",
+  "changedNonTaskPaths": [
+    "apps/office/e2e/calc/clear-format.spec.ts",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+    "apps/office/src/sc/inc/global.ts",
+    "apps/office/src/sc/sdi/scalc.ts",
+    "apps/office/src/sc/source/core/data/attarray.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+    "apps/office/src/sc/source/ui/docshell/docfuncutil.ts",
+    "apps/office/src/sc/source/ui/docshell/docsh.ts",
+    "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts",
+    "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts",
+    "apps/office/src/sc/source/ui/operation/Operation.ts",
+    "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+    "apps/office/src/sc/source/ui/view/cellsh3.ts",
+    "apps/office/src/sc/source/ui/view/viewfunc.ts",
+    "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/capabilities/CAP-d7aef795-0709-4ea9-9f92-079142960ada.json",
+    "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+    "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+    "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/docshell/docfunc.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/docshell/docfuncutil.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/docshell/docsh.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/operation/DeleteCellOperation.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/operation/DeleteContentOperation.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/operation/Operation.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json",
+    "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+    "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/docshell/docfunc.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/docshell/docfuncutil.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/docshell/docsh.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/operation/DeleteCellOperation.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/operation/DeleteContentOperation.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/operation/Operation.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task45-calc-complete --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task45-calc-complete-results.json",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "132 files;408 cases;raw S8644/B5415/F1683/L7739 all100",
+      "log": "calc-full-complete.log"
+    },
+    {
+      "command": "npm run test:coverage:calc -- native-delete-hardattr calc-clear-format ui-resources --coverage.include=src/sc/source/ui/docshell/docfuncutil.ts --coverage.reportsDirectory=coverage/task45-undo-copy-current --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task45-undo-copy-current-results.json",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "3 files;13 cases;complete current helper owner S14/B2/F1/L13 all100;original flag-bit retention is reconciled explicitly",
+      "log": "undo-copy-current-complete.log"
+    },
+    {
+      "command": "npm run test:calc -- native-delete-hardattr calc-clear-format ui-resources",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "3 files;13 cases in final fixture context",
+      "log": "task45-focused-current.log"
+    },
+    {
+      "command": "npm run test:writer -- WriterMenuBar",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "1 file;9 cases",
+      "log": "task45-writer-related.log"
+    },
+    {
+      "command": "npm run test:shared -- menu popup native-attribute-toggle undo document-store document-autosave",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "10 files;110 cases",
+      "log": "task45-shared-related.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "3 files;92 cases",
+      "log": "task45-tooling.log"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "fresh current production build and office tsc;existing nonfatal chunk warning",
+      "log": "task45-build-current.log"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/clear-format.spec.ts apps/office/e2e/calc/formatting-toolbar.spec.ts apps/office/e2e/calc/outline.spec.ts",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "9 related cases;later current3-case rerun supersedes Clear observations",
+      "log": "task45-browser.log"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/clear-format.spec.ts",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "3 current production cases;1280/390 menu/Ctrl+M/history/primary ODS and DOM-free Worker",
+      "log": "task45-browser-current.log"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project shared --workers=2 apps/office/e2e/shared/menubar-pointer.spec.ts apps/office/e2e/shared/popup-pointer.spec.ts",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "8 related cases;both apps/both widths",
+      "log": "task45-browser-shared.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "root tools and office TypeScript pass",
+      "log": "task45-types-current.log"
+    },
+    {
+      "command": "npx eslint . --max-warnings 0 --ignore-pattern 'output/playwright/**'",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "zero errors/warnings on current production",
+      "log": "task45-lint-current.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx --max-warnings 0",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "late fixture cleanup passes",
+      "log": "task45-lint-fixture-current.log"
+    },
+    {
+      "command": "npx prettier --check . --ignore-path .prettierignore --ignore-path .gitignore",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "all matched authored files pass;changed-path/helper/fixture checks cover subsequent edits",
+      "log": "task45-format.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/e2e/calc/clear-format.spec.ts apps/office/src/sc/browser/controller/calc-view-controller.ts apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx apps/office/src/sc/inc/global.ts apps/office/src/sc/sdi/scalc.ts apps/office/src/sc/source/core/data/attarray.ts apps/office/src/sc/source/core/data/column.ts apps/office/src/sc/source/core/data/document.ts apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts apps/office/src/sc/source/core/data/table.ts apps/office/src/sc/source/ui/docshell/docfunc.ts apps/office/src/sc/source/ui/docshell/docfuncutil.ts apps/office/src/sc/source/ui/docshell/docsh.ts apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts apps/office/src/sc/source/ui/operation/Operation.ts apps/office/src/sc/source/ui/undo/undoblk3.ts apps/office/src/sc/source/ui/view/cellsh3.ts apps/office/src/sc/source/ui/view/viewfunc.ts apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx docs/program/calc-upstream-suspected-issues.md docs/program/registry/calc/capabilities/CAP-d7aef795-0709-4ea9-9f92-079142960ada.json docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json docs/program/registry/calc/provenance/sc/inc/global.ts.json docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json docs/program/registry/calc/provenance/sc/source/ui/docshell/docfunc.ts.json docs/program/registry/calc/provenance/sc/source/ui/docshell/docfuncutil.ts.json docs/program/registry/calc/provenance/sc/source/ui/docshell/docsh.ts.json docs/program/registry/calc/provenance/sc/source/ui/operation/DeleteCellOperation.ts.json docs/program/registry/calc/provenance/sc/source/ui/operation/DeleteContentOperation.ts.json docs/program/registry/calc/provenance/sc/source/ui/operation/Operation.ts.json docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk3.ts.json docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json docs/program/registry/calc/runtime/sc/inc/global.ts.json docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json docs/program/registry/calc/runtime/sc/source/ui/docshell/docfunc.ts.json docs/program/registry/calc/runtime/sc/source/ui/docshell/docfuncutil.ts.json docs/program/registry/calc/runtime/sc/source/ui/docshell/docsh.ts.json docs/program/registry/calc/runtime/sc/source/ui/operation/DeleteCellOperation.ts.json docs/program/registry/calc/runtime/sc/source/ui/operation/DeleteContentOperation.ts.json docs/program/registry/calc/runtime/sc/source/ui/operation/Operation.ts.json docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk3.ts.json docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "programmatically enumerated exact paths via git diff/ls-files;all pass",
+      "log": "task45-format-complete.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sc/source/ui/docshell/docfuncutil.ts",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "final one-line flag correction passes",
+      "log": "task45-format-helper-current.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "late owning-string fixture cleanup passes",
+      "log": "task45-format-fixture-current.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-deps-current.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-docs-fixture-current.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-size-complete.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-provenance-current.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-source-tree-complete.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-calc-resources.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-writer-resources.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-static-current.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-routing-current.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "pass",
+      "log": "task45-doctor-current.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "zero semantic violations;no broad parity promotion",
+      "log": "task45-invariants-complete.log.gz"
+    },
+    {
+      "command": "npm run inventory:parity:calc",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "zero semantic violations;no broad parity promotion",
+      "log": "task45-parity-calc-complete.log.gz"
+    },
+    {
+      "command": "npm run inventory:parity:shared",
+      "exitCode": 0,
+      "result": "pass",
+      "evidence": "zero semantic violations;no broad parity promotion",
+      "log": "task45-parity-shared.log.gz"
+    }
+  ],
+  "coverage": "calc-current-proof.json reconciles complete raw maps with current hashes;16 complete changed application owners100. Full132 files408 cases;current complete helper-owner3 files13 cases. No stale counters/maps merged.",
+  "browser": "17 unique related cases;current final Clear3-case run on fresh build. Retained1280/390 screenshots visually inspected.",
+  "limitations": [
+    "Current plain-cell/default-view HARDATTR|EDITATTR slice;rich EditEngine,style resolution,protection,matrix/merged-range extension,conditional formats,drawing/alternate views/full native services are unported.",
+    "Source allocated-column deletion deliberately retains default-column tails;CALC217 documents it.",
+    "Overall Calc UI goal remains active. Full all-app checkpoint40 retained;next50."
+  ]
+}

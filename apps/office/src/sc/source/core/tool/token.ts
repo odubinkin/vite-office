@@ -391,6 +391,39 @@ export class ScTokenArray extends FormulaTokenArray {
           ? source
           : source.GetSheetLimits();
   }
+  /** Original deep Clone:independent code tokens;RPN entries reuse the first matching cloned code entry or receive their own clone. Native refcounts are represented by actual JS identity. @returns Deep token-array owner. */
+  Clone(): ScTokenArray {
+    const p = new ScTokenArray(this.mxSheetLimits);
+    p.nLen = this.nLen;
+    p.nRPN = this.nRPN;
+    p.nMode = this.nMode;
+    p.nError = this.nError;
+    p.bHyperLink = this.bHyperLink;
+    p.mbFromRangeName = this.mbFromRangeName;
+    p.mbShareable = this.mbShareable;
+    p.mbDynamicArrayFunction = this.mbDynamicArrayFunction;
+    if (this.nLen) {
+      p.pCode = [];
+      for (let i = 0; i < this.nLen; i++)
+        p.pCode.push(((this.pCode as FormulaToken[])[i] as FormulaToken).Clone());
+    }
+    if (this.nRPN) {
+      p.pRPN = [];
+      for (let i = 0; i < this.nRPN; i++) {
+        const token = (this.pRPN as FormulaToken[])[i] as FormulaToken;
+        let index = -1;
+        for (let j = 0; j < this.nLen; j++)
+          if ((this.pCode as FormulaToken[])[j] === token) {
+            index = j;
+            break;
+          }
+        p.pRPN.push(
+          index < 0 ? token.Clone() : ((p.pCode as FormulaToken[])[index] as FormulaToken),
+        );
+      }
+    }
+    return p;
+  }
   /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
   AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
     return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));

@@ -1,0 +1,67 @@
+{
+  "scope": "calc",
+  "applications": [
+    {
+      "suite": "writer",
+      "active": true,
+      "commands": {
+        "module": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "export": "writerUserCommands"
+      }
+    },
+    {
+      "suite": "calc",
+      "active": true,
+      "commands": {
+        "module": "apps/office/src/sc/sdi/scalc.ts",
+        "export": "calcUserCommands"
+      }
+    },
+    {
+      "suite": "shared",
+      "active": true,
+      "commands": null
+    }
+  ],
+  "capabilityCount": 258,
+  "moduleCount": 638,
+  "invariantCount": 4,
+  "globalRecordCount": 2082,
+  "provenance": {
+    "browserAdaptationCount": 54,
+    "localInfrastructureCount": 8,
+    "mappedCount": 576,
+    "moduleCount": 638
+  },
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 0,
+    "classifiedDivergenceCount": 0,
+    "contractParityCount": 0,
+    "defaultParityCount": 0,
+    "differentialParityCount": 0,
+    "exceptionCount": 0,
+    "gapCount": 442,
+    "implementedCount": 258,
+    "parityReady": false,
+    "ownershipParityCount": 0,
+    "recordCount": 258,
+    "schemaVersion": 6,
+    "serializationParityCount": 0,
+    "scopeLimitationCount": 431,
+    "unresolvedParityCount": 258,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 0
+  },
+  "runtime": {
+    "commandCount": 13,
+    "exportedOperationCount": 736,
+    "internalOperationCount": 11,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 0
+  },
+  "evidenceFormat": "Successful command output summary;large module/evidence arrays omitted",
+  "sourceOutputSha256": "8ad12e3a5463d354926e7c425163a2ac0e51ff87675fffa50fb17f76a56aed48"
+}

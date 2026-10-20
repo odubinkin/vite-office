@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- WriterFileDialog.test current-dialog-baseline.test writer-view-title-collision.test desktop.test writer-module.test
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts WriterFileDialog.test current-dialog-baseline.test writer-view-title-collision.test desktop.test writer-module.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  5 passed (5)
+      Tests  45 passed (45)
+   Start at  01:10:18
+   Duration  8.94s (transform 2.40s, setup 418ms, import 3.95s, tests 10.53s, environment 2.10s)
+

@@ -1,0 +1,9 @@
+{
+  "reason": "Native XMLMeasurePropHdl signed32 defaults replace the earlier positive clamp;entire current xmlstyli owner is remeasured,not counter-merged.",
+  "changedOwners": {
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": {
+      "before": "1ac4b397d7828e4af39c10fa40a12d7d5a763b3648c8618222a28c3d6a46ad39",
+      "after": "70ef7ad0e815710a43a8e4a8feb8d260468fe75b6fb048d4b6869cae9daff275"
+    }
+  }
+}

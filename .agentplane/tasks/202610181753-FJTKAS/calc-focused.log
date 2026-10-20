@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- calc-ods-io.test docsh.test
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts calc-ods-io.test docsh.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  01:00:45
+   Duration  2.14s (transform 1.82s, setup 229ms, import 2.31s, tests 183ms, environment 1.09s)
+

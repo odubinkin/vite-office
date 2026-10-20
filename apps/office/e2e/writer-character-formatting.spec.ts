@@ -47,7 +47,7 @@ test("Writer direct character formatting" /**
       selection.addRange(range);
     },
   );
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Text" }).click();
   await page.getByRole("menuitemcheckbox", { name: "Italic" }).click();
   await expect(writerEditor.locator("strong em")).toHaveText("Formatted Writer body");
@@ -72,7 +72,7 @@ test("Writer direct character formatting" /**
   await expect(writerEditor.locator("strong em span")).toHaveCount(0);
   await page.getByRole("button", { name: "Redo" }).click();
   await expect(writerEditor.locator("strong em span")).toHaveCount(1);
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(
     /** Dispatches a native-shaped Copy event and reads the Writer-provided rich MIME value. @param element - Writer paragraph beneath the document-body Copy listener. @returns Sanitized browser Copy representations. */

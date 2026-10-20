@@ -1,0 +1,107 @@
+{
+  "state": "captured",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceCount": 346,
+  "objectCount": 138,
+  "commands": [
+    {
+      "tool": "clang++",
+      "mode": "link",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "clang++",
+      "mode": "link",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/normal-caller",
+      "mode": "descriptors",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/asan-caller",
+      "mode": "descriptors",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/normal-caller",
+      "mode": "values",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/asan-caller",
+      "mode": "values",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/normal-caller",
+      "mode": "helpers",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/asan-caller",
+      "mode": "helpers",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/normal-caller",
+      "mode": "aliases",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/asan-caller",
+      "mode": "aliases",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/normal-caller",
+      "mode": "constants",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-singlebyte-native/asan-caller",
+      "mode": "constants",
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "captures": {
+    "descriptors": {
+      "bytes": 5718,
+      "sha256": "fca65e7264adccb4cef68ad2ee54e41ced50c653a38099c3a0a49e9f7547ae3e",
+      "rows": 4
+    },
+    "values": {
+      "bytes": 5638038,
+      "sha256": "2624ba4d66e91226e658c913f0f45f5af3b008f78904c42ffd99d4d415909261",
+      "rows": 93760
+    },
+    "helpers": {
+      "bytes": 57120,
+      "sha256": "50c885e94626f740bdcabda1980a4a0f81432dc6e791f785cc811742b1b532f3",
+      "rows": 4096
+    },
+    "aliases": {
+      "bytes": 24,
+      "sha256": "a57cc21b307dc475dea521cf3d3ce32aa9618d91a12da27df39c64500efc509d",
+      "rows": 1
+    },
+    "constants": {
+      "bytes": 1059,
+      "sha256": "dd84cc6e3c2f2528e3c778ece9381ed9030444876f63f1444d7730b8a65cb054",
+      "rows": 23
+    }
+  }
+}

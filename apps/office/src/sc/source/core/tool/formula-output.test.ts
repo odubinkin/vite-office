@@ -59,7 +59,7 @@ it("serializes actual code tokens and ODFF references without interpreting or re
   ).toThrow(/not implemented/);
   expect(
     /** Missing localized grammar rejects. @returns Formula. */ () =>
-      cell.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE),
+      cell.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1),
   ).toThrow(/implemented/);
   const compiler = new ScCompiler(doc, pos, grammar),
     empty = compiler.CompileString(unicode("=")),

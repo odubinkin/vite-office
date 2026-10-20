@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- rowheight.test.ts
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts rowheight.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  21:39:30
+   Duration  5.51s (transform 2.54s, setup 591ms, import 2.92s, tests 101ms, environment 1.71s)
+

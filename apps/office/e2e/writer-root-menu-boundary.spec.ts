@@ -8,11 +8,14 @@ for (const key of ["Home", "End"] as const) {
     await page.goto("/writer");
     const editor = page.getByLabel("Writer document body", { exact: true });
     await editor.focus();
-    const view = page.getByRole("button", { name: "View", exact: true });
+    const view = page.getByRole("menuitem", { name: "View", exact: true });
     await view.click();
     await view.focus();
     await view.press(key);
-    const root = page.getByRole("button", { name: key === "Home" ? "File" : "Tools", exact: true });
+    const root = page.getByRole("menuitem", {
+      name: key === "Home" ? "File" : "Tools",
+      exact: true,
+    });
     await expect(root).toHaveAttribute("aria-expanded", "true");
     await expect(view).toHaveAttribute("aria-expanded", "false");
     await expect(page.getByRole("menu")).toHaveCount(1);
@@ -35,9 +38,9 @@ test("Writer F10 boundary navigation stays unopened until an explicit popup key"
   const editor = page.getByLabel("Writer document body", { exact: true });
   await editor.focus();
   await page.keyboard.press("F10");
-  const file = page.getByRole("button", { name: "File", exact: true });
+  const file = page.getByRole("menuitem", { name: "File", exact: true });
   await file.press("End");
-  const tools = page.getByRole("button", { name: "Tools", exact: true });
+  const tools = page.getByRole("menuitem", { name: "Tools", exact: true });
   await expect(tools).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);
   await tools.press("Home");

@@ -1,0 +1,26 @@
+# EVALUATOR opinion: pass
+
+Revieweda2a56060ded0:approved shared menubar popup pointer/timer scope preserves original default and source ordering,real resource/focus owners and browser style,with complete raw100new/touched owners and wholeCalc evidence.
+
+## Findings
+- Original pinned MenuFloatingWindow and MouseSettings source audit checks10anchors and2source hashes. Browser adaptation correctly distinguishes enter/first motion,current highlight,150ms admission,matching-child leave retention,different-child delayed close,reentry cancellation and parent-window focus restoration. Full VCL GUI execution/platform configuration is explicitly unclaimed;no source-body fixture or fake model/provider.
+- Entire new pointer module and full touched shared renderer raw100 S337 B284 F78 L302;20files191cases pass. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Related expanded951passes and repaired10case native-chain replay account for all952cases without claiming one clean952case command. Final overflow type-only option repair passes all4cases and final app types.
+- All21targeted browser cases are accounted across initial17passes and clean10case affected-spec replay;separate4case real disabled-item/visual runs pass for Writer/Calc1280/390. Four actual screenshots inspected and persisted. Style/accelerators remain shared;original command state and core-unimplemented disabled actions are preserved.
+- Exactly19intentional non-task paths,including exhaustive registration of moved DOM highlight mutation. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. No validator,threshold,timeout,policy,source ledger,network,other checkout or merge changes. Existing hook/bundle warnings remain.
+
+## Evidence
+- .agentplane/tasks/202610191007-6DD2P4/README.md
+- .agentplane/tasks/202610191007-6DD2P4/verification.md
+- .agentplane/tasks/202610191007-6DD2P4/source-audit.json
+- .agentplane/tasks/202610191007-6DD2P4/coverage-summary.json
+- .agentplane/tasks/202610191007-6DD2P4/calc-coverage-summary.json
+- .agentplane/tasks/202610191007-6DD2P4/visual-evidence.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Root menubar first-move/mnemonics,full MouseSettings/configuration,native click-down,VCL GUI/scrollers/ABI,the separate existing context-menu timer state and broader core/formatting/document/UI parity remain pending. This leaf does not complete the overall goal;next full all-app regression30.

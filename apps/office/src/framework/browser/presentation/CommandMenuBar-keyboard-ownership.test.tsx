@@ -18,7 +18,10 @@ function renderOwnedMenu(semantics: MenuCommandResource["semantics"] = "action")
       /** Creates a stable app-owned bindings snapshot. @param id - Command identity. @returns Controller item. */ (
         id,
       ) => {
-        const state = { enabled: id !== "disabled", checked: false };
+        const state = {
+          enabled: id !== "disabled",
+          ...(semantics === "action" ? {} : { checked: false }),
+        };
         return {
           Dispose: /** Releases no fixture resources. @returns Nothing. */ () => undefined,
           GetState: /** Returns the stable snapshot. @returns State. */ () => state,
@@ -75,7 +78,7 @@ function renderOwnedMenu(semantics: MenuCommandResource["semantics"] = "action")
       }
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   return { ...mounted, execute, arguments_ };
 }
 
@@ -113,7 +116,7 @@ describe("popup keyboard ownership", /** Groups event ownership regressions. @re
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "root" }), { key: "Enter" });
     expect(fixture.execute).toHaveBeenCalledTimes(1);
     expect(fixture.execute).toHaveBeenLastCalledWith("root", fixture.arguments_);
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     openNestedMenu();
     fireEvent.click(screen.getByRole("menuitem", { name: "Beta" }));
     expect(fixture.execute).toHaveBeenCalledTimes(2);

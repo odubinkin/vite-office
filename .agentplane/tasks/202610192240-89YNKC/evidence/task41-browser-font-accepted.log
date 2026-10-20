@@ -1,0 +1,12 @@
+[WebServer] (node:63194) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:63195) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/font-step.spec.ts:34:1 › executes real script-height items,font stepping,history and ODS in page and DOM-free Worker (900ms)
+  ✓  2 [calc] › apps/office/e2e/calc/font-step.spec.ts:169:3 › shows actual script font sizes and reopens the saved ODS at 1280px (11.6s)
+  ✓  3 [calc] › apps/office/e2e/calc/font-step.spec.ts:169:3 › shows actual script font sizes and reopens the saved ODS at 390px (11.4s)
+
+  3 passed (24.9s)

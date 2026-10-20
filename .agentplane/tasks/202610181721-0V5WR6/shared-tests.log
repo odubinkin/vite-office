@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- modulemanager.test bootstrap.test dispatch.test objsh.test undo.test
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts modulemanager.test bootstrap.test dispatch.test objsh.test undo.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  5 passed (5)
+      Tests  25 passed (25)
+   Start at  00:48:40
+   Duration  4.28s (transform 1.30s, setup 815ms, import 1.57s, tests 160ms, environment 4.70s)
+

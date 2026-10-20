@@ -1,0 +1,6 @@
+apps/office/src/svx/browser/tbxctrls/FontSelects.tsx 45ms
+apps/office/src/framework/browser/presentation/CommandSelectControl.tsx 5ms
+apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx 14ms
+apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx 4ms
+apps/office/src/sw/browser/presentation/FontCommandSelects.test.tsx 16ms
+apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx 15ms (unchanged)

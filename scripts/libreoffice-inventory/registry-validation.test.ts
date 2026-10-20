@@ -2,6 +2,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import { createMarkerEvidenceFixture } from "../test-fixtures/inventory-reference";
+import { calcUserCommands } from "../../apps/office/src/sc/sdi/scalc";
 import { writerUserCommands } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";
 import {
   loadInventoryRegistry,
@@ -96,7 +97,7 @@ function dependencies(registry: InventoryRegistry, baseline: string): RegistryCl
   }
   for (const item of registry.records) {
     if (item.kind === "provenance" && typeof item.record.upstreamPath === "string") {
-      const path = item.record.upstreamPath;
+      const path = item.record.upstreamPath.replace(/^vendor\/libreoffice-reference\//u, "");
       markers.set(
         path,
         `${markers.get(path) ?? ""}\n${(item.record.upstreamSymbols as string[]).join("\n")}`,
@@ -118,6 +119,7 @@ function dependencies(registry: InventoryRegistry, baseline: string): RegistryCl
       readdir("apps/office/src", { recursive: true }),
     /** Supplies the app command export. @returns Module shape. */ loadModule: async () => ({
       writerUserCommands,
+      calcUserCommands,
     }),
     /** Rejects unexpected writes in check commands. @returns Never. */ write: async () => {
       throw new Error("Unexpected write.");

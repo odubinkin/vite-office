@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "native-outline-properties",
+    "capabilityIds": [
+      "CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+        "apps/office/src/sc/browser/presentation/calc-outline.test.tsx"
+      ],
+      "justification": "TaskQVC626 implements native OutlineFont10012/Which107 with complete SvxContourItem,bool/default/mixed state,shared Sfx toggle preparation,actual grouped/disjoint selections and attribute history. Shared Writer menus expose source checked state. Original XMLBoolPropHdl uses real Any and exact Converter bool lexical rules,including false assignment on rejected import and unchanged failed-export output. Actual ODS styles preserve explicit true and false across reopen. Shared browser raster composition applies the original ordered eight colored offsets and white center to actual glyph and line pixels with one accessible text instance and measured browser bounds. Browser CSS pixel/device scaling,rich edit,full native font/device services and broad parity remain unverified;Writer primary storage/open/no-recovery policies remain.",
+      "knownViolations": [],
+      "localSymbols": [
+        "exportFontEffectProperties",
+        "importFontEffectProperties"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/xmlstyle.cxx",
+      "upstreamSymbols": [
+        "XMLScPropHdlFactory::GetPropertyHandler"
+      ]
+    }
+  }
+}

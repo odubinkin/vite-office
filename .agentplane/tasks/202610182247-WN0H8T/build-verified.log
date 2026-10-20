@@ -1,0 +1,19 @@
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+e2e/shared/menubar-overflow.spec.ts(73,36): error TS2379: Argument of type '{ name: string | undefined; exact: true; }' is not assignable to parameter of type '{ checked?: boolean; description?: string | RegExp; disabled?: boolean; exact?: boolean; expanded?: boolean; includeHidden?: boolean; level?: number; name?: string | RegExp; pressed?: boolean; selected?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'name' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string | RegExp'.
+      Type 'undefined' is not assignable to type 'string | RegExp'.
+npm error Lifecycle script `build` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit && vite build

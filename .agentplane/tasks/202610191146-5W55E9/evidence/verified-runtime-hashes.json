@@ -1,0 +1,13 @@
+{
+  "apps/office/src/sal/textenc/convertsimple.ts": "cfd7f739dcbe8e6f585927dda74ef83b56a1e073c838359de0eccf0cadcb485c",
+  "apps/office/src/sal/textenc/tenchelp.ts": "4646d53dfb282f27f1775780a0f78f74db147dbc35893d392e3ca0f26933e93b",
+  "apps/office/src/sal/textenc/handleundefinedunicodetotextchar.ts": "8f8832f64dfff9f6e56aa65e661ebbf56a69de974c9312400177c08dc8b819e2",
+  "apps/office/src/sal/textenc/unichars.ts": "2da39ed4eb9043a01ff2f0ef7a517828205989c97cf409abba69f26cc236e53d",
+  "apps/office/src/sal/textenc/handleundefinedunicodetotextchar.hxx.ts": "0c7a8a7169f05724e1c99f79faf3668cf32c47d481d1f151872c43cacab4c0e9",
+  "apps/office/src/sal/textenc/singlebyte-reverse.test.ts": "3ef2f0e4a8d9f3889e44651a3b39fd22cbf491600c34fc71691ecd6a45c41906",
+  "apps/office/src/sal/textenc/unichars.hxx.ts": "009d29d8590686abce118fd33b0d4bb6a162ba10203c7a3d818fe53b8cdd2642",
+  "apps/office/src/sal/textenc/textenc.ts": "e51434b6853b9d8ad38babdc2358d39f549ae0977906c29d2e20263621456ef7",
+  "apps/office/src/sal/textenc/singlebyte.test.ts": "f597bd23804ee4f80aebab3833d2bea82b7be4331fb9b5f7d014c6615b8fb5ad",
+  "apps/office/src/sal/textenc/convertsimple.hxx.ts": "1e711522a6c3b5ff3ded66dc16ed9475f610bc3b01bea2b7331af421628be01f",
+  "apps/office/src/sal/inc/rtl/textcvt.h.ts": "fefaef7d333b1bc01d7e49a6969b9fd35613625d50235036908dc98619abde18"
+}

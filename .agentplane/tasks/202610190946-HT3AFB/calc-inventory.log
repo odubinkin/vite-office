@@ -1,0 +1,51 @@
+{
+  "command": "calc-inventory",
+  "result": "pass",
+  "originalOutputBytes": 3042432,
+  "originalOutputSha256": "4120212a2e750f2c30bc2add99e58ad1850f5329945465cc457878d1703f071d",
+  "scope": "calc",
+  "applicationsCount": 3,
+  "capabilityCount": 258,
+  "moduleCount": 651,
+  "invariantCount": 4,
+  "globalRecordCount": 2108,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 0,
+    "classifiedDivergenceCount": 0,
+    "contractParityCount": 0,
+    "defaultParityCount": 0,
+    "differentialParityCount": 0,
+    "exceptionCount": 0,
+    "exceptions": 0,
+    "gapCount": 442,
+    "implementedCount": 258,
+    "parityReady": false,
+    "ownershipParityCount": 0,
+    "closureEvidence": 0,
+    "recordCount": 258,
+    "resolvedEvidence": 2987,
+    "schemaVersion": 6,
+    "serializationParityCount": 0,
+    "scopeLimitationCount": 431,
+    "unresolvedParityCount": 258,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 0
+  },
+  "provenance": {
+    "browserAdaptationCount": 54,
+    "localInfrastructureCount": 8,
+    "mappedCount": 589,
+    "moduleCount": 651
+  },
+  "runtime": {
+    "commandCount": 13,
+    "exportedOperationCount": 762,
+    "internalOperationCount": 11,
+    "modules": 651,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 0
+  }
+}

@@ -118,7 +118,7 @@ it("ignores unnumbered start payload and the native absent-1 sentinel before XML
         yield {
           style: "default" as const,
           list: source,
-          runs: [{ text: "x", properties: { bold: false, italic: false, underline: false } }],
+          runs: [{ text: "x", properties: { fontWeight: 100, fontPosture: 0, underlineStyle: 0 } }],
         };
       },
     });

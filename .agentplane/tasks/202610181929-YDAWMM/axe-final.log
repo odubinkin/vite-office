@@ -1,0 +1,19 @@
+[WebServer] (node:40631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+(node:40635) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:40634) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (5.7s)
+(node:40651) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 1280x800 (7.8s)
+  ✓  3 [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session (2.8s)
+  ✓  5 [shared] › apps/office/e2e/shared/launcher.spec.ts:21:1 › shared launcher handles unknown application routes (363ms)
+  ✓  4 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 390x600 (5.8s)
+  ✓  6 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:321:3 › Writer dialog layout 640x360 (6.0s)
+
+  6 passed (20.9s)

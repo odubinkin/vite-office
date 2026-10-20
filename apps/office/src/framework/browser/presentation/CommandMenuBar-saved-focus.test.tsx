@@ -81,7 +81,7 @@ function mountSavedFocusMenu(focusDialog = false) {
     owner: screen.getByRole("textbox", { name: "First document" }),
     other: screen.getByRole("textbox", { name: "Second document" }),
     dialog: screen.getByRole("textbox", { name: "Command dialog" }),
-    trigger: screen.getByRole("button", { name: "First" }),
+    trigger: screen.getByRole("menuitem", { name: "First" }),
     execute,
     observedFocus,
     observedMenus,
@@ -176,7 +176,8 @@ describe("saved menu focus", /** Groups focus ownership and dispatch ordering. @
     const fixture = mountSavedFocusMenu();
     fixture.owner.focus();
     fireEvent.click(fixture.trigger);
-    fireEvent.mouseEnter(screen.getByRole("button", { name: "Second" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Second" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Second" }));
     fireEvent.keyDown(screen.getByRole("menu", { name: "Second menu" }), {
       key: "ArrowLeft",
     });

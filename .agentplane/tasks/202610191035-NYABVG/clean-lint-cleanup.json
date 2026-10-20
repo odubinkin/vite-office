@@ -1,0 +1,6 @@
+{
+  "removedOnlyDerivedSnapshot": ".agentplane/tasks/202610191035-NYABVG/clean-verification",
+  "originalSourceAndOutputPreserved": true,
+  "scopeProof": ".agentplane/tasks/202610191035-NYABVG/clean-lint-scope.json",
+  "lintExitCode": 0
+}

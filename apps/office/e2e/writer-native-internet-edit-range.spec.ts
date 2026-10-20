@@ -46,7 +46,7 @@ test("Chromium edits one independent identical hyperlink and replays native hist
   await add(editor, 3, 6);
   await expect(editor).toHaveText("abcdef");
   await select(editor, 1);
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
   await page.getByLabel("URL").fill("https://example.test/changed");
   await page.getByRole("button", { name: "Apply", exact: true }).click();

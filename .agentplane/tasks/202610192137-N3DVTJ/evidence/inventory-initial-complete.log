@@ -1,0 +1,24 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage --coverage.reportsDirectory=coverage/task40-inventory-repaired --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=output/playwright/task40-inventory-repaired-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-inventory-repaired-results.json
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.65 |    99.92 |   99.77 |   99.64 |                   
+ registry-cli.ts   |   94.44 |      100 |     100 |   94.44 | 83                
+ ...-validation.ts |   94.11 |    98.36 |   95.83 |    93.9 | 254,309-317       
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.65% ( 1728/1734 )
+Branches     : 99.92% ( 1291/1292 )
+Functions    : 99.77% ( 435/436 )
+Lines        : 99.64% ( 1662/1668 )
+================================================================================
+ERROR: Coverage for lines (99.64%) does not meet global threshold (100%)
+ERROR: Coverage for functions (99.77%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.65%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.92%) does not meet global threshold (100%)

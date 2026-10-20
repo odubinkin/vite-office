@@ -1,0 +1,13 @@
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+
+
+ Test Files  14 passed (14)
+      Tests  119 passed (119)
+   Start at  18:18:48
+   Duration  14.23s (transform 1.07s, setup 0ms, import 75.12s, tests 11.08s, environment 2ms)
+

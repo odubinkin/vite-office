@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/browser/presentation/calc-character-format.test.tsx (4 tests | 1 failed) 10904ms
+   × validates explicit host arguments and commits input before native character operations 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-character-format.test.tsx > validates explicit host arguments and commits input before native character operations
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/sc/browser/presentation/calc-character-format.test.tsx:183:9
+    181|         /** Rejects malformed request before mutating input. @returns …
+    182|           d.Execute(command, args),
+    183|       ).toThrow(/boolean enabled/);
+       |         ^
+    184|     expect(d.Execute(command, { enabled: true })).toMatchObject({ valu…
+    185|     const count = c.shell.GetUndoManager().GetUndoActionCount();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 19 passed (20)
+   Start at  23:59:49
+   Duration  20.90s (transform 10.26s, setup 615ms, import 12.81s, tests 11.63s, environment 3.44s)
+

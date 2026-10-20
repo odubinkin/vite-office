@@ -1,5 +1,11 @@
-/** @fileoverview Pinned RTL decimal lexer and parsed-end mapping with native JS binary64 rounding. */
-import { rtl_math_ConversionStatus as Status } from "../inc/rtl/math-values";
+/** @fileoverview Pinned RTL decimal parsing,numeric formatting and arithmetic C responsibilities. */
+import {
+  rtl_math_ConversionStatus as Status,
+  type rtl_math_StringFormat,
+} from "../inc/rtl/math-values";
+import type { rtl_uStringSlot } from "../inc/rtl/ustring.h";
+import { doubleToString } from "./strtmpl.math";
+import { newFromStr_WithLength, stringbuffer_insert } from "./strtmpl";
 
 /** Tests the original ASCII digit range, including an exhausted input. @param c - Unit. @returns Digit membership. */
 function digit(c: number): boolean {
@@ -194,4 +200,32 @@ export function rtl_math_approxEqual(a: number, b: number): boolean {
   if (difference >= threshold) return false;
   if (a < 2 ** 53 && Number.isInteger(a) && b < 2 ** 53 && Number.isInteger(b)) return false;
   return true;
+}
+
+/** Original Unicode C formatting facade; the native template's append branch uses actual shared string allocation or buffer insertion. @param result - Actual owning string slot. @param capacity - Null for replacement or actual mutable buffer capacity. @param offset - Insertion offset,ignored for replacement. @param value - Binary64. @param format - Original selector. @param places - Original signed decimal count/significance. @param decimal - sal_Unicode decimal unit. @param groups - Null or positive zero-terminated group sizes. @param group - sal_Unicode grouping unit. @param erase - Erase fractional zeroes. @returns Nothing. */
+export function rtl_math_doubleToUString(
+  result: rtl_uStringSlot | null,
+  capacity: [number] | null,
+  offset: number,
+  value: number,
+  format: rtl_math_StringFormat,
+  places: number,
+  decimal: number,
+  groups: readonly number[] | null,
+  group: number,
+  erase: boolean,
+): void {
+  const text = doubleToString(
+    value,
+    format,
+    places | 0,
+    decimal & 0xffff,
+    groups,
+    group & 0xffff,
+    erase,
+  );
+  const units = new Uint16Array(text.length);
+  for (let index = 0; index < text.length; index++) units[index] = text.charCodeAt(index);
+  if (capacity === null) newFromStr_WithLength(result, units, units.length);
+  else stringbuffer_insert(result, capacity, offset | 0, units, units.length);
 }

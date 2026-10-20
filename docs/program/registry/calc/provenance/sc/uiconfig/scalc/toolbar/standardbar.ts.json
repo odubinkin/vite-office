@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+    "upstreamPath": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+    "localSymbols": [
+      "calcStandardBarItems"
+    ],
+    "upstreamSymbols": [
+      ".uno:"
+    ],
+    "preservedResponsibilities": [
+      "Projects every pinned visible standardbar command after explicit Writer browser save-policy dispositions; normalizes separators without filtering missing slots. Shared Sfx bindings keep unavailable native operations disabled; source order and visibility remain intact. Native command execution beyond the current kernel slice remains unported."
+    ],
+    "omittedResponsibilities": [
+      "Unported native operations remain unavailable; this task adds source resource projection, not new spreadsheet execution services.",
+      "Browser primary save/open/recovery policy intentionally follows Writer."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+          "marker": "calcStandardBarItems"
+        },
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+          "marker": "opens every source top menu"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/toolbar/standardbar.xml",
+          "marker": ".uno:"
+        }
+      ]
+    }
+  }
+}

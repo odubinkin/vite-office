@@ -4,6 +4,9 @@
  */
 
 import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
+import { NamedColor } from "../../inc/namedcolor";
+import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
+import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
 
 /** Identifies the externally observable lifecycle of a locally held document shell. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
@@ -34,7 +37,26 @@ export interface CreateDocumentInput {
 }
 
 /** Framework document shell owning identity, title, modified state, and the primary medium. */
-export class SfxObjectShell {
+export class SfxObjectShell extends SfxBroadcaster {
+  private readonly m_aRecentColors = new Map<number, NamedColor>();
+  /** Original objcont.cxx optional value copy. The native broadcaster role is inherited through SfxShell upstream; its complete command/lifecycle class remains unported here. @param slotId - Native slot. @returns Independent optional value. */
+  public GetRecentColor(slotId: number): NamedColor | undefined {
+    const color = this.m_aRecentColors.get(slotId);
+    return color === undefined ? undefined : new NamedColor(color);
+  }
+  /** Original slot assignment and optional ColorsChanged broadcast. @param slotId - Native slot. @param color - Value to copy. @param broadcast - Native default true. @returns Nothing. */
+  public SetRecentColor(slotId: number, color: NamedColor, broadcast = true): void {
+    const copy = new NamedColor(color);
+    this.m_aRecentColors.get(slotId)?.Dispose();
+    this.m_aRecentColors.set(slotId, copy);
+    if (broadcast) this.Broadcast(new SfxHint(SfxHintId.ColorsChanged));
+  }
+  /** Releases owned recent values before the inherited native broadcaster destructor. @returns Nothing. */
+  public override Dispose(): void {
+    for (const color of this.m_aRecentColors.values()) color.Dispose();
+    this.m_aRecentColors.clear();
+    super.Dispose();
+  }
   private closed = false;
   private contentGeneration: number;
   private hasSavePosition: boolean;
@@ -46,6 +68,7 @@ export class SfxObjectShell {
 
   /** Creates an object shell from an initial state projection and medium. @param state - Initial shell state. @param medium - Current medium. @returns Nothing. */
   public constructor(state: SfxObjectShellState, medium: SfxMediumInputOrInstance) {
+    super();
     assertObjectShellState(state);
     if (state.lifecycle === "closed") throw new Error("Cannot construct a closed document shell.");
     this.contentGeneration = state.contentGeneration;

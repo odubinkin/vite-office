@@ -38,7 +38,12 @@
       "toAsciiUpper",
       "toInt",
       "valueOfInt",
-      "with_length"
+      "with_length",
+      "stringbuffer_newFromStr_WithLength",
+      "stringbuffer_newFromStringBuffer",
+      "stringbuffer_ensureCapacity",
+      "stringbuffer_insert",
+      "stringbuffer_remove"
     ],
     "upstreamSymbols": [
       "Alloc",
@@ -71,7 +76,12 @@
       "toAsciiUpper",
       "toInt",
       "valueOfInt",
-      "with_length"
+      "with_length",
+      "stringbuffer_newFromStr_WithLength",
+      "stringbuffer_newFromStringBuffer",
+      "stringbuffer_ensureCapacity",
+      "stringbuffer_insert",
+      "stringbuffer_remove"
     ],
     "preservedResponsibilities": [
       "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
@@ -83,7 +93,9 @@
       "Original rtl_uString_newFromAscii reuses the actual shared getLength char specialization, empty constructor, release and allocator. It reads to the first NUL, releases prior owned data before allocation, keeps the original null allocation result, copies defined ASCII bytes and preserves the checked unsigned-char range guard. OUString::createFromAscii char-pointer overload transfers the actual result without acquiring; a direct owner slot adapts erased nullable pointer versus known-length buffer constructor overloads, preserving the original null pointer rather than silently constructing empty data. Native normal/ASan/UBSan streams compare every127 nonzero first byte with every128 second byte, null/empty/embedded-NUL input, initialized refcount/length/units/zero/default-empty identity and full allocator/free order. The original replaceable allocation-function pointer provides a null-failure witness; no upstream method is replaced. A null-data C++ value is deliberately retained without destruction. Ordinary OS OOM, null-value consumers/destruction, the separate string_view/literal overload, physical ABI/threading/full consumer QA and malformed JS buffers remain unverified. Native SIGABRT is compared with the existing browser Error assertion adaptation, without post-failure recovery claims. Static types/Type/Any/Reference/default RuntimeException/case service remain unfinished; broad parity flags stay false.",
       "Continue the approved real Reference/default-exception dependency: bind original Reference.h/hxx direct default/pointer/copy/no-acquire/move constructors, get/is/Boolean/clear/set/assignment/destruction ownership operations into one shared Reference owner; preserve null defaults, acquire-before-release and clear-before-release callback visibility and release/transfer/null move assignment. Query/Any/throwing/interface-identity comparison constructors and operators remain separate unfinished responsibilities, not substitutes. Port actual generated Exception/RuntimeException IDL value classes (normal LIBO_INTERNAL_ONLY, OSL_DEBUG_LEVEL0, no source-location configuration), real shared OUString and Reference default/copy/move/assign/reverse lifetime, stable field owners, and actual cppumaker RuntimeException type initializer with unchanged typelib factory/register/release and leaked shared Type lifetime. No JavaScript Error/provider/type shim or independent exception registry. Full original native generated headers, true72 SAL/CPPU dependencies normal/ASan/UBSan and complete value/type/count/callback observations must precede source-absent raw100 acceptance. Debug source-location append, physical ABI/C++ interface casts/native threading/QA and full query/Any/case/service/UI remain unverified; broad flags remain false. This continues task39 under the user instruction to keep the current39/40/full41/fix/pause plan. The actual generated ASCII type-name constructor requires original rtl_uString_newFromLiteral, char-to-Unicode Copy and selected OUString const char array overload; extend existing shared SAL owners, preserve embedded-zero/trailer validity, ASCII assertion and release-last aliasing. Native JS typed-array operations adapt original array type/length/validation only, not another string factory.",
       "Task132 corrects only getLength host overload selection: actual Uint8Array/Uint16Array from another JS context must use native terminated-pointer length, not rtl_uString class length. Constructor instanceof failed across realms, including jsdom TextEncoder output and new normal UNO interface names. Standard ArrayBuffer.isView preserves the native element-kind distinction independent of realm; original first-zero loop and real string-record length branch stay unchanged. A real vm-created typed-array test plus existing related SAL fixtures verify the whole owner. No constructor/factory workaround, string trimming, extra tag/library, new C++/memory probes or lifecycle change; repeated human authorization covers shared/Writer canonical corrections.",
-      "The same shared strtmpl owner also used realm-dependent instanceof for the native Copy byte/Unicode overload. Use the standard BYTES_PER_ELEMENT1 discriminator under the existing typed-array domain, preserving native ASCII guard and known-length embedded zeros for both real foreign byte/Unicode inputs. Current focused JS-context test covers public C literal/Unicode constructors, with no new native binary/memory probe. Add existing integer-format/o3tl string-view/CPPU typelib unit selections to cover the complete shared owner numeric and compare methods; initial24tests8files already passed, and only coverage lacked those unchanged parts. Both interface owners already had all raw counters covered."
+      "The same shared strtmpl owner also used realm-dependent instanceof for the native Copy byte/Unicode overload. Use the standard BYTES_PER_ELEMENT1 discriminator under the existing typed-array domain, preserving native ASCII guard and known-length embedded zeros for both real foreign byte/Unicode inputs. Current focused JS-context test covers public C literal/Unicode constructors, with no new native binary/memory probe. Add existing integer-format/o3tl string-view/CPPU typelib unit selections to cover the complete shared owner numeric and compare methods; initial24tests8files already passed, and only coverage lacked those unchanged parts. Both interface owners already had all raw counters covered.",
+      "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending.",
+      "TaskRJ5DY8 implements actual Unicode stringbuffer template/C/header responsibilities on existing rtl_uString allocator/ref owners:16extra constructor units,copy capacity=max(request,length),growth=max(minimum,2*(length+1)),ordered checks,UTF16/ASCII/UTF32 insertion,overlap-safe native tail movement,null-source initialized-gap retention,remove clamp,acquired same-data return and no-copy makeStringAndClear transfer/reset/reuse. Native returns_nonnull requires initialized nonnull data for transfer;null-held transfer is outside the original public contract and not given a fake result. Original full normal/ASanUBSan SAL/CPPU graph objects are verified and reused,with complete initialized logical-unit/capacity/ref/identity observations and original assertions. No spare uninitialized-memory,invalid alias insertion or ABI/lifetime certification. Full OUStringBuffer/math-buffer append,VCL serializer,item/pool/model/UI integration remain pending;no broad parity promotion."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -129,6 +141,14 @@
         {
           "path": "apps/office/src/sal/rtl/string-length-realms.test.ts",
           "marker": "real foreign typed arrays"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/float-format.test.ts",
+          "marker": "matches every byte of native float output buffers"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "stringbuffer_newFromStr_WithLength"
         }
       ],
       "upstream": [
@@ -151,6 +171,14 @@
         {
           "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
           "marker": "std::char_traits<T>::length(pStr)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "valueOfFP"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "stringbuffer_newFromStr_WithLength"
         }
       ]
     },

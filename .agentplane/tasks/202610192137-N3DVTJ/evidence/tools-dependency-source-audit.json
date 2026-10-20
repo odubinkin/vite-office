@@ -1,0 +1,16 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
+  "sha256": "6393c66b1c33946c0b8c05a72d2b0386a9986b5aa4f9e85b923a23b3d98e0cde",
+  "markers": [
+    {
+      "marker": "#include <tools/fract.hxx>",
+      "line": 53
+    },
+    {
+      "marker": "#include <tools/UnitConversion.hxx>",
+      "line": 54
+    }
+  ],
+  "meaning": "The existing sc->tools edge matches original Calc consumers;only the stale test expectation changes. Shared-project discovery found one Writer integration codec test;the established owner-list correction retains actual full discovery exactly once."
+}

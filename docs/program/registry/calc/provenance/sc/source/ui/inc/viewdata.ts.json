@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/inc/viewdata.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/inc/viewdata.hxx",
+    "localSymbols": [
+      "ScViewData",
+      "ScSplitPos"
+    ],
+    "upstreamSymbols": [
+      "ScViewData",
+      "ScViewDataTable"
+    ],
+    "preservedResponsibilities": [
+      "Task4XSBZ5 implements the native document-bound ScViewData cursor subset, with actual borrowed ScDocument and ScMarkData. Per-sheet ScViewDataTable fields start at zero, old-cursor validity starts false, active pane starts SC_SPLIT_BOTTOMLEFT. SetTabNo keeps native ValidTab guard and lazily creates only the requested slot, independently of selected-sheet marks. Cursor accessors, old-cursor fallback/reset and absent-tab sentinel follow source. Coordinate setters retain caller validity preconditions rather than inventing clamping. JS GC replaces physical per-table ownership only; no cell data, document projection, allocator or window service is created. Header declarations are reexported from the TypeScript implementation as existing Calc boundaries do. Geometry,hidden/alternate sheet-view,zoom/window/configuration services are outside this cursor subset."
+    ],
+    "omittedResponsibilities": [
+      "Only document-bound visible-sheet cursor/mark operations are ported; full ScViewData construction, geometry, scroll-position calculations, zoom, windows, hidden and alternate sheet views, persistence and view commands remain outside this slice.",
+      "No full native module contract/behavior/default parity or upstream native QA run is certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/inc/viewdata.ts",
+          "marker": "ScViewData"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.test.ts",
+          "marker": "retains native per-sheet cursor state"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/viewdata.hxx",
+          "marker": "ScViewData"
+        }
+      ]
+    }
+  }
+}

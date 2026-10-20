@@ -1,0 +1,20 @@
+[WebServer] (node:61616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 2 workers
+
+(node:61828) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:61829) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (6.2s)
+  ✓  3 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (3.2s)
+  ✓  1 [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 1280px (12.5s)
+  ✓  4 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 1280px (12.4s)
+  ✓  5 [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 390px (11.8s)
+  ✓  7 [calc] › apps/office/e2e/calc/clear-format.spec.ts:94:1 › keeps native Clear deletion/history and actual ODS in a DOM-free Worker (1.0s)
+  ✓  6 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 390px (12.2s)
+  ✓  8 [calc] › apps/office/e2e/calc/outline.spec.ts:122:1 › preserves native Outline item metadata,history and ODS in a DOM-free Worker (1.4s)
+  ✓  9 [calc] › apps/office/e2e/calc/outline.spec.ts:221:1 › paints the native white center on colored background with independently colored lines (1.5s)
+
+  9 passed (38.6s)

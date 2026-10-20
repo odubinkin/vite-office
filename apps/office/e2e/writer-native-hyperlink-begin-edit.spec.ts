@@ -54,14 +54,14 @@ test("Chromium edits from the original link beginning and keeps selection on can
   await add(editor, 2, 5);
   await add(editor, 5, 8);
   await select(editor, 5);
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   const edit = page.getByRole("menuitem", { name: "Hyperlink…" });
   await expect(edit).toBeEnabled();
   await edit.click();
   await expect(page.getByLabel("URL")).toHaveValue("https://example.test/same");
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await expect(page.getByLabel("URL")).toHaveCount(0);
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
   await page.getByLabel("URL").fill("https://example.test/changed");
   await page.getByRole("button", { name: "Apply", exact: true }).click();

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+    "upstreamPath": "offapi/com/sun/star/i18n/UnicodeType.idl",
+    "localSymbols": [
+      "UNASSIGNED",
+      "CONTROL",
+      "FORMAT"
+    ],
+    "upstreamSymbols": [
+      "UNASSIGNED",
+      "CONTROL",
+      "FORMAT"
+    ],
+    "preservedResponsibilities": [
+      "Original IDL constant values for the consumed native Unicode category mapping."
+    ],
+    "omittedResponsibilities": [
+      "No native UNO service or ABI is fabricated."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+          "marker": "CONTROL"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/UnicodeType.idl",
+          "marker": "CONTROL"
+        }
+      ]
+    }
+  }
+}

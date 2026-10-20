@@ -1,0 +1,28 @@
+[WebServer] (node:98711) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 1 worker
+
+(node:98930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 1280px (1.1s)
+  ✓   2 [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 390px (813ms)
+  ✓   3 [calc] › apps/office/e2e/calc/compiler-arithmetic.spec.ts:5:1 › compiles actual arithmetic tokens in browser and Worker (376ms)
+  ✓   4 [calc] › apps/office/e2e/calc/dociter.spec.ts:5:1 › traverses actual sparse cells by row in browser and Worker (528ms)
+  ✓   5 [calc] › apps/office/e2e/calc/document-formulas.spec.ts:5:1 › edits actual numeric formula cells in browser and Worker (521ms)
+  ✓   6 [calc] › apps/office/e2e/calc/document-references.spec.ts:5:1 › propagates actual cell references in browser and Worker (572ms)
+  ✓   7 [calc] › apps/office/e2e/calc/document-scalars.spec.ts:5:1 › edits the same actual scalar document chain in browser and Worker (528ms)
+  ✓   8 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 1280px (880ms)
+  ✓   9 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 390px (864ms)
+  ✓  10 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 1280px (1.0s)
+  ✓  11 [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 390px (837ms)
+  ✓  12 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (3.8s)
+  ✓  13 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (2.0s)
+  ✓  14 [calc] › apps/office/e2e/calc/formula-output.spec.ts:5:1 › serializes actual formula tokens in browser and Worker (552ms)
+  ✓  15 [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker (709ms)
+  ✓  16 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 (3.7s)
+  ✓  17 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 (1.5s)
+  ✓  18 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800 (2.9s)
+  ✓  19 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600 (1.5s)
+
+  19 passed (26.1s)

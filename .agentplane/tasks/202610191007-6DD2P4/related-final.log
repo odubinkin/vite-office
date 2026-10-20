@@ -1,0 +1,39 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-related-final src/framework/browser/presentation src/sw/browser/presentation src/sw/browser/editor/native-context-menu.test.tsx src/sc/browser/presentation
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |writer| src/sw/browser/presentation/native-menubar-chain.test.tsx (10 tests | 1 failed) 868ms
+   × native recursive pointer children retain original parent windows without preselection 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-menubar-chain.test.tsx > native recursive pointer children retain original parent windows without preselection
+ReferenceError: act is not defined
+ ❯ pointerAdmission src/sw/browser/presentation/native-menubar-chain.test.tsx:16:3
+     14|   fireEvent.mouseMove(entry);
+     15|   fireEvent.mouseMove(entry);
+     16|   act(
+       |   ^
+     17|     /** Commits native150ms admission. @returns Nothing. */ () => {
+     18|       vi.advanceTimersByTime(150);
+ ❯ src/sw/browser/presentation/native-menubar-chain.test.tsx:174:3
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 117 passed (118)
+      Tests  1 failed | 951 passed (952)
+   Start at  17:21:03
+   Duration  213.48s (transform 22.68s, setup 13.38s, import 77.47s, tests 240.77s, environment 72.76s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --coverage.include=src/framework/browser/presentation/menu-popup-pointer.ts --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.reportsDirectory=coverage/task29-related-final src/framework/browser/presentation src/sw/browser/presentation src/sw/browser/editor/native-context-menu.test.tsx src/sc/browser/presentation

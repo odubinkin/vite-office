@@ -368,3 +368,21 @@ describe("native empty ranged ownership", /** Registers independent literals and
     expect(owner.node.GetTextAttrAt(3, 54)).toBe(owner.hint);
   });
 });
+
+it("copies a zero-length hint from an empty joined source at the destination boundary", /** Exercises native empty-source CopyAttr ownership. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = required(doc.paragraphs[0]);
+  node.SetText("A");
+  const source = node.SplitContent(1),
+    hint = attribute(doc, 0, 0, 0, 0);
+  source.SetTextHints(new SwpHints(doc.GetAttrPool(), [hint]));
+  const sourceOwned = required(source.GetpSwpHints()).Get(0);
+  node.AppendTextNode(source);
+  const copied = required(node.GetpSwpHints()).Get(0);
+  expect(copied).not.toBe(sourceOwned);
+  expect([copied.start, copied.end]).toEqual([1, 1]);
+  expect([hint.start, hint.end]).toEqual([0, 0]);
+  expect(node.GetText()).toBe("A");
+  expect(source.Len()).toBe(0);
+  doc.Dispose();
+});

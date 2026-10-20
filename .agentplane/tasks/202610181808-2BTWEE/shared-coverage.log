@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- WriterFileDialog.test current-dialog-baseline.test writer-view-title-collision.test desktop.test writer-module.test writer-workflows.test calc-files.test WriterPageLayout.test CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar WriterMenuBar.test native-context-menu.test --coverage.include=src/framework/browser/presentation/BrowserFileDialog.tsx --coverage.include=src/framework/browser/presentation/DialogHeader.tsx --coverage.include=src/framework/browser/presentation/NameCollisionPanel.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/workflows/file-dialog-controller.ts --coverage.include=src/sw/browser/presentation/WriterFileDialog.tsx --coverage.include=src/sw/browser/presentation/WriterWorkspaceChrome.tsx --coverage.reportsDirectory=coverage/calc-shared-files
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage WriterFileDialog.test current-dialog-baseline.test writer-view-title-collision.test desktop.test writer-module.test writer-workflows.test calc-files.test WriterPageLayout.test CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar WriterMenuBar.test native-context-menu.test --coverage.include=src/framework/browser/presentation/BrowserFileDialog.tsx --coverage.include=src/framework/browser/presentation/DialogHeader.tsx --coverage.include=src/framework/browser/presentation/NameCollisionPanel.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/workflows/file-dialog-controller.ts --coverage.include=src/sw/browser/presentation/WriterFileDialog.tsx --coverage.include=src/sw/browser/presentation/WriterWorkspaceChrome.tsx --coverage.reportsDirectory=coverage/calc-shared-files
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  24 passed (24)
+      Tests  247 passed (247)
+   Start at  01:25:24
+   Duration  23.31s (transform 6.12s, setup 1.52s, import 11.74s, tests 22.09s, environment 8.53s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 408/408 )
+Branches     : 100% ( 358/358 )
+Functions    : 100% ( 112/112 )
+Lines        : 100% ( 364/364 )
+================================================================================

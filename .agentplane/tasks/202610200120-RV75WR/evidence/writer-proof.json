@@ -1,0 +1,41 @@
+{
+  "result": "pass",
+  "testFiles": 2,
+  "tests": 57,
+  "summary": {
+    "lines": {
+      "total": 44,
+      "covered": 44,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 51,
+      "covered": 51,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 9,
+      "covered": 9,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 54,
+      "covered": 54,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "rawSha256": "8f4dc2db0b49c3c28b63d1b083ef4dddc34435b239983d587aefc69bf27fae47",
+  "sourceHashes": {
+    "apps/office/src/sw/source/uibase/app/docst.ts": "deefff023f7c3516a8e9a26fce64b2a11972c36d988d0c6b2e36e9a7a1cda13b"
+  }
+}

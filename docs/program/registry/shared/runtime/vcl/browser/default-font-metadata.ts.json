@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/default-font-metadata.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/default-font-metadata.ts#getBrowserDefaultFontMetadata",
+        "apps/office/src/vcl/browser/default-font-metadata.test.ts",
+        "scripts/default-font-metadata-source.test.ts",
+        "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx"
+      ],
+      "justification": "TaskAPQYXE adds a browser metadata bridge over existing actual configured/loaded default-font family selection and actual shared Font. Pinned native GetDefaultFont role switch supplies stored family,pitch,symbol encoding and12height;platform text encoding is explicit,style retains genuine Font default,and missing loaded families remain absent. Writer device API is unchanged. This is only the represented metadata of the configured/matched branch,not a fake OutputDevice,physical fallback,MaybeAskConfig,full Font weight/language or Calc document-pool constructor. TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getBrowserDefaultFontMetadata"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

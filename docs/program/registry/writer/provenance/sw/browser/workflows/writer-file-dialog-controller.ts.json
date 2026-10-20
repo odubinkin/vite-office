@@ -8,19 +8,23 @@
         {
           "marker": "WriterFileDialogController",
           "path": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "downloads actual ODS"
         }
       ]
     },
     "localPath": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts",
     "rationale": "Coordinates browser Open, Save As, and Export dialogs. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
     "responsibilities": [
-      "Coordinates browser Open, Save As, and Export dialogs."
+      "Coordinates browser Open, Save As, and Export dialogs.",
+      "Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
     },
     "status": "local-only"
-  },
-  "legacyOrder": 126
+  }
 }

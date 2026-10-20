@@ -67,6 +67,11 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
     return this.actions.length;
   }
 
+  /** Original inherited SfxUndoArray child access,using native forward storage order. Caller supplies an existing index. @param index - Child storage index. @returns Actual child action. */
+  public GetUndoAction(index: number): SfxUndoAction<Context> {
+    return this.actions[index] as SfxUndoAction<Context>;
+  }
+
   /** Reverts children in reverse execution order. @param context - Active undo context. @returns Nothing. */
   public override UndoWithContext(context: Context): void {
     for (let index = this.actions.length - 1; index >= 0; index -= 1)

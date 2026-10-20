@@ -1,0 +1,26 @@
+[WebServer] (node:33946) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 2 workers
+
+(node:33972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33969) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 1280px (2.3s)
+  ✓   3 [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 390px (1.9s)
+  ✓   2 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (10.7s)
+  ✓   4 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 1280px (13.7s)
+  ✓   5 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (8.9s)
+  ✓   6 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 390px (12.9s)
+  ✓   7 [calc] › apps/office/e2e/calc/overline.spec.ts:30:3 › native Overline menu and ODS reopen at 1280px (14.3s)
+  ✓   8 [calc] › apps/office/e2e/calc/outline.spec.ts:122:1 › preserves native Outline item metadata,history and ODS in a DOM-free Worker (3.3s)
+  ✓  10 [calc] › apps/office/e2e/calc/outline.spec.ts:221:1 › paints the native white center on colored background with independently colored lines (3.7s)
+  ✓   9 [calc] › apps/office/e2e/calc/overline.spec.ts:30:3 › native Overline menu and ODS reopen at 390px (15.8s)
+  ✓  11 [calc] › apps/office/e2e/calc/strikeout.spec.ts:36:3 › native Strikeout menu and ODS reopen at 1280px (13.7s)
+  ✓  12 [calc] › apps/office/e2e/calc/overline.spec.ts:107:1 › preserves native Overline item metadata,history and ODS in a DOM-free Worker (2.8s)
+  ✓  13 [calc] › apps/office/e2e/calc/strikeout.spec.ts:36:3 › native Strikeout menu and ODS reopen at 390px (13.5s)
+  ✓  14 [calc] › apps/office/e2e/calc/strikeout.spec.ts:113:1 › preserves native Strikeout item metadata,history and ODS in a DOM-free Worker (1.4s)
+  ✓  15 [calc] › apps/office/e2e/calc/strikeout.spec.ts:214:1 › preserves crossed-out signed short writeback in page and DOM-free Worker (1.3s)
+
+  15 passed (1.2m)

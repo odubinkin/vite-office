@@ -25,7 +25,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const) {
       await second.fill("Second");
       await neighbor.fill("Neighbor");
       await selectBrowserTableRow(page, "Table1", 1);
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
       const expected = kind === "Ordered List" ? "numbered" : "bullet",
@@ -46,7 +46,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const) {
       await page.keyboard.press("Control+y");
       await expect(first).toHaveAttribute("data-list-kind", expected);
       await expect(second).toHaveAttribute("data-list-kind", expected);
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await expect(page.getByRole("menuitemradio", { name: kind, exact: true })).toHaveAttribute(
         "aria-checked",
@@ -61,7 +61,7 @@ for (const kind of ["Ordered List", "Unordered List"] as const) {
       await page.keyboard.press("Control+y");
       await expect(first).toHaveAttribute("data-list-level", "1");
       await expect(second).toHaveAttribute("data-list-level", "1");
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
       await expect(first).toHaveAttribute("data-list-kind", "none");

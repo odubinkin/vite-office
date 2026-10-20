@@ -1,0 +1,31 @@
+START batch 00 files=100
+DONE batch 00 tests=740 partialExit=1 raw preserved
+START batch 01 files=100
+DONE batch 01 tests=777 partialExit=1 raw preserved
+START batch 02 files=100
+DONE batch 02 tests=281 partialExit=1 raw preserved
+START batch 03 files=100
+DONE batch 03 tests=574 partialExit=1 raw preserved
+START batch 04 files=100
+DONE batch 04 tests=411 partialExit=1 raw preserved
+START batch 05 files=100
+DONE batch 05 tests=912 partialExit=1 raw preserved
+START batch 06 files=100
+DONE batch 06 tests=1110 partialExit=1 raw preserved
+START batch 07 files=100
+DONE batch 07 tests=6198 partialExit=1 raw preserved
+START batch 08 files=100
+DONE batch 08 tests=1845 partialExit=1 raw preserved
+START batch 09 files=100
+DONE batch 09 tests=4205 partialExit=1 raw preserved
+START batch 10 files=40
+DONE batch 10 tests=161 partialExit=1 raw preserved
+file:///Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-batch-runner.mjs:45
+for(const metric of ['statements','branches','functions','lines'])if(summary[metric].pct!==100)throw Error('Incomplete full coverage '+metric+' '+JSON.stringify(summary[metric]));
+                                                                                                     ^
+
+Error: Incomplete full coverage branches {"total":32026,"covered":32023,"skipped":0,"pct":99.99}
+    at file:///Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-batch-runner.mjs:45:102
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+Node.js v24.13.1

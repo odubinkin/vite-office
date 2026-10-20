@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/stringutil.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "simple-number-input",
+    "capabilityIds": [
+      "CAP-6ab2bb60-d587-4df8-a7c0-98829f55edef"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/stringutil.ts",
+        "apps/office/src/sc/source/core/tool/stringutil.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/stringutil.cxx"
+      ],
+      "justification": "Task YYAGKX ports the Unicode ScStringUtil::parseSimpleNumber scanner with original space/NBSP trimming and group normalization, decimal/alternative separators, first-group permissiveness, three-digit subsequent groups, exponent/sign ordering and scientific default true. Real RTL Unicode conversion preserves binary64 status, full parse-end checks and output-reference assignment on converter failure; early prechecks preserve the output. JS code-unit arrays replace only the temporary native Unicode buffer. The original testCSV numeric cases are executed plus source-derived boundaries. No Number coercion, new locale/formatter service, byte overload, other ScStringUtil operation or full module parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScStringUtil"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/stringutil.cxx",
+      "upstreamSymbols": [
+        "ScStringUtil::parseSimpleNumber"
+      ]
+    }
+  }
+}

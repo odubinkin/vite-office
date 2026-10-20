@@ -36,7 +36,7 @@ describe("suiteDefinitions" /**
         .filter(
           /** Excludes Writer because its implemented workbench has no unavailable-suite status. @param suite - Immutable suite definition inspected by stable identity. @returns True only for a suite other than Writer. */
           function isUnavailableSuite(suite): boolean {
-            return suite.id !== "writer";
+            return suite.id !== "writer" && suite.id !== "calc";
           },
         )
         .every(

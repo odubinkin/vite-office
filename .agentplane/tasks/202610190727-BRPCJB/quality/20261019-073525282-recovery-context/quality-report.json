@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610190727-BRPCJB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-19T07:35:25.282Z",
+  "verdict": "pass",
+  "summary": "Canonical issue ledger now records recent actual/source-only RTL concerns with precise evidence and explicit preserve-upstream decisions;kernel remains unchanged.",
+  "evaluated_sha": "8362ad9e8a535db2647dc6bab91b9de3a1ca7782",
+  "blueprint_digest": "8fdc83fb78a268aa043811276c7754a42fca51a03a6a4ddc796731ffb73484c9",
+  "findings": [
+    "CALC189documents exact reproduced ASan input and distinguishes excluded candidate inputs from confirmed failures;CALC190distinguishes source-derived example,initialized native observation and host storage;CALC191is expressly static-only with unknown caller invariants. Intentional ASCII_US/MS1252 compatibility is not labeled a defect.",
+    "Audit preserves all226406original ledger bytes and prior SHA256;unique IDs189/190/191,16local links and7actual source anchors validate. Five original source hashes and both existing native capture digests/counts match committed evidence;all task26 kernel hashes and production paths remain unchanged.",
+    "One non-task Markdown path plus task artifacts;new-section direct Prettier validation,CLI format,size,doctor,routing and whitespace checks pass. Current Calc299/raw100 remains task26 evidence;no new runtime/unsafe-native execution or coverage claim is invented for this docs-only update."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610190727-BRPCJB/README.md",
+    ".agentplane/tasks/202610190727-BRPCJB/verification.md",
+    ".agentplane/tasks/202610190727-BRPCJB/audit-summary.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "CALC191has no executed-native/caller proof;CALC189failure has no certified returned value. Ledger entries are findings,not published upstream reports or authorization to fix contracts. Full Calc UI/core goal remains active,next full regression30."
+  ]
+}

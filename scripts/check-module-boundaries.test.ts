@@ -5,6 +5,8 @@ import {
   getRuntimeImportSpecifiers,
   isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
+  isOriginalCharacterValueImport,
+  isForbiddenDomainVclImport,
   getProtectedBrowserGlobalReferences,
   getProtectedOwnershipReferences,
   getRuntimeOwnershipLayer,
@@ -842,4 +844,147 @@ it("distinguishes emitted imports from erased type syntax before runtime cycle d
     expect(isForbiddenModuleEdge("udkapi", module)).toBe(true);
     expect(isForbiddenModuleEdge("cppu", module)).toBe(true);
   }
+});
+it("admits only source-backed VCL variation and original UTF16 decimal header bindings", /** Preserves reverse/application edge rejection and exact shared SAL/o3tl named bindings. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("vcl", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "vcl")).toBe(true);
+  expect(isForbiddenModuleEdge("vcl", "sc")).toBe(true);
+  const specifier = "../../sal/inc/rtl/math.h";
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/rtl/math.h.ts",
+      'import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";',
+      specifier,
+    ),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/rtl/math.h.ts",
+      'import { rtl_math_stringToDouble } from "../../sal/inc/rtl/math.h";',
+      specifier,
+    ),
+  ).toBe(false);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/other.ts",
+      "sal/inc/rtl/math.h.ts",
+      'import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";',
+      specifier,
+    ),
+  ).toBe(false);
+});
+
+it("admits only original pure document-pool VCL dependencies while retaining domain/browser gates", /** Verifies the exact consumed native edge and negative browser/reverse cases. @returns Nothing. */ () => {
+  const source = "sc/source/core/data/docpool.ts";
+  for (const target of [
+    "vcl/inc/fntstyle.ts",
+    "vcl/source/outdev/font.ts",
+    "vcl/inc/fntstyle",
+    "vcl/source/outdev/font",
+  ])
+    expect(isForbiddenDomainVclImport(source, target)).toBe(false);
+  for (const target of [
+    "vcl/browser/font-list.ts",
+    "vcl/browser/default-font-device.ts",
+    "vcl/source/font/font.ts",
+  ])
+    expect(isForbiddenDomainVclImport(source, target)).toBe(true);
+  expect(
+    isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/source/outdev/font.ts"),
+  ).toBe(true);
+  expect(isForbiddenDomainVclImport("sw/source/core/doc/doc.ts", "vcl/source/outdev/font.ts")).toBe(
+    true,
+  );
+  expect(
+    isForbiddenDomainVclImport(
+      "sc/browser/presentation/ScGridWindow.tsx",
+      "vcl/browser/font-list.ts",
+    ),
+  ).toBe(false);
+  expect(isForbiddenDomainVclImport(source, "tools/inc/fontenum.ts")).toBe(false);
+  expect(
+    getRuntimeOwnershipViolation(
+      source,
+      "vcl/browser/font-list.ts",
+      "../../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser/u);
+  expect(
+    getRuntimeOwnershipViolation(
+      "vcl/source/outdev/font.ts",
+      "vcl/browser/default-font-device.ts",
+      "../../browser/default-font-device",
+    ),
+  ).toMatch(/browser/u);
+  expect(isForbiddenModuleEdge("sc", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("vcl", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "sc")).toBe(true);
+  expect(isForbiddenModuleEdge("i18nlangtag", "vcl")).toBe(true);
+});
+
+it("admits only pinned character-handler value imports without widening module or browser permissions", /** Checks the exact new source edges and nearby forbidden imports. @returns Nothing. */ () => {
+  const any = "cppu/inc/com/sun/star/uno/Any.ts";
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/weighhdl.ts",
+      "cppu/inc/com/sun/star/uno/Any",
+    ),
+  ).toBe(true);
+  expect(isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/numeric")).toBe(
+    true,
+  );
+  for (const name of ["weighhdl", "postuhdl", "undlihdl", "cdouthdl", "xmlbahdl"])
+    expect(isOriginalCharacterValueImport(`xmloff/source/style/${name}.ts`, any)).toBe(true);
+  expect(isOriginalCharacterValueImport("xmloff/source/text/txtprmap.ts", any)).toBe(true);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/postuhdl.ts", "vcl/inc/unohelp.ts"),
+  ).toBe(true);
+  expect(
+    isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/numeric.ts"),
+  ).toBe(true);
+  expect(isOriginalCharacterValueImport("sax/source/tools/other.ts", "o3tl/inc/numeric.ts")).toBe(
+    false,
+  );
+  expect(
+    isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/unit_conversion.ts"),
+  ).toBe(false);
+  expect(isOriginalCharacterValueImport("xmloff/source/style/other.ts", any)).toBe(false);
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/postuhdl.ts",
+      "cppu/inc/typelib/typedescription.ts",
+    ),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/weighhdl.ts", "vcl/inc/unohelp.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/postuhdl.ts", "vcl/browser/font-list.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/cdouthdl.ts", "vcl/browser/font-list.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/cdouthdl.ts",
+      "cppu/inc/typelib/typedescription.ts",
+    ),
+  ).toBe(false);
+  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "vcl")).toBe(true);
+  expect(isForbiddenModuleEdge("sax", "o3tl")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "xmloff/source/style/postuhdl.ts",
+      "vcl/browser/font-list.ts",
+      "../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("admits the original VCL numeric-field Unicode utility dependency without admitting its reverse", /** Source field.cxx and Library_vcl.mk own this edge. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("vcl", "i18nutil")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nutil", "vcl")).toBe(true);
 });
