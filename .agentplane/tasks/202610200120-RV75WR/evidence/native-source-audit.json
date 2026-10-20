@@ -1,0 +1,279 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceRecords": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+      "sha256": "4973cc317e940243590f4633d78737a45acdc7fa0fa4d5f7dbb16b975cb44903",
+      "anchors": [
+        {
+          "marker": "STD_COL_WIDTH",
+          "line": 288
+        },
+        {
+          "marker": "ScCompressedArray<SCCOL, sal_uInt16>",
+          "line": 288
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33",
+      "anchors": [
+        {
+          "marker": "ScTable::SetColWidth",
+          "line": 3326
+        },
+        {
+          "marker": "ScTable::SetColWidthOnly",
+          "line": 3347
+        },
+        {
+          "marker": "ScTable::GetColWidth",
+          "line": 3502
+        },
+        {
+          "marker": "ScTable::CopyToTable",
+          "line": 1337
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/FilterData.cxx",
+      "sha256": "a2742e204bf2d41e09d176dbec7b63e2864209626d69a52cce6b1236257b6a58",
+      "anchors": [
+        {
+          "marker": "FilterData::colHidden",
+          "line": 308
+        },
+        {
+          "marker": "FilterData::copyColHidden",
+          "line": 351
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260",
+      "anchors": [
+        {
+          "marker": "ScViewFunc::SetWidthOrHeight",
+          "line": 2316
+        },
+        {
+          "marker": "ScViewFunc::SetMarkedWidthOrHeight",
+          "line": 2639
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx",
+      "sha256": "92959feb0ed284ea03da5cb864ab99c7a86e0f076db4205ce00fe3f165612b4d",
+      "anchors": [
+        {
+          "marker": "case FID_COL_WIDTH:",
+          "line": 686
+        },
+        {
+          "marker": "case FID_COL_HIDE:",
+          "line": 827
+        },
+        {
+          "marker": "case FID_COL_SHOW:",
+          "line": 831
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview2.cxx",
+      "sha256": "d57641c53aee363fd4c13258f7d61ac616b6f4a54a9b08a3523d0e067db1f03d",
+      "anchors": [
+        {
+          "marker": "ScTabView::SkipCursorHorizontal",
+          "line": 943
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk2.cxx",
+      "sha256": "68af6c621ee1721094425913a9ff975c7be0d38a7c1d4fd77bd2b1b30ccebe2a",
+      "anchors": [
+        {
+          "marker": "ScUndoWidthOrHeight::Undo",
+          "line": 79
+        },
+        {
+          "marker": "ScUndoWidthOrHeight::Redo",
+          "line": 143
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/mtrindlg.cxx",
+      "sha256": "19e46c30e3c9456ed71d54d22ce1dd33e17d88e08824506530f5d45506eb0d6b",
+      "anchors": [
+        {
+          "marker": "ScMetricInputDlg::GetInputValue",
+          "line": 63
+        },
+        {
+          "marker": "ScMetricInputDlg, SetDefValHdl",
+          "line": 39
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/cellsuno.cxx",
+      "sha256": "55c8357e6ad0b4c98ada78da72262c151e35a8e5e230d91c5ef5c3b71f817304",
+      "anchors": [
+        {
+          "marker": "SC_WID_UNO_CELLWID",
+          "line": 566
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlcoli.cxx",
+      "sha256": "3ddc7565b1a7e154127de312e44898ed41c9bf24cf6ca2985bfb80786481d96b",
+      "anchors": [
+        {
+          "marker": "ScXMLTableColContext::endFastElement",
+          "line": 86
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df",
+      "anchors": [
+        {
+          "marker": "XML_COLUMN_WIDTH",
+          "line": 129
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+      "sha256": "008d43838ad2bf131230277f3a4dc3e9b5bd2ca4331f83e1778e010ad4b3aefd",
+      "anchors": [
+        {
+          "marker": "XMLMeasurePropHdl::importXML",
+          "line": 185
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx",
+      "sha256": "3f415df3de02ea40c6fe48aa30162616ed49cb6c4188fa4755e145eb22973535",
+      "anchors": [
+        {
+          "marker": "nMin = SAL_MIN_INT32",
+          "line": 125
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/control/field.cxx",
+      "sha256": "07f5e9a33dae1c623adaee0fc5e9bc31dae4ef7ef8092485df8f175bba5915e4",
+      "anchors": [
+        {
+          "marker": "ToScaledWholeAndDec",
+          "line": 82
+        },
+        {
+          "marker": "ConvertDoubleValue",
+          "line": 967
+        },
+        {
+          "marker": "TextToValue",
+          "line": 1087
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/weld/SpinButton.cxx",
+      "sha256": "5d6c22fffbf844d4dfeeef79e9183c967b64ab9208bcb086038f571374695e21",
+      "anchors": [
+        {
+          "marker": "SpinButton::Power10",
+          "line": 107
+        },
+        {
+          "marker": "SpinButton::denormalize",
+          "line": 115
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/weld/MetricSpinButton.cxx",
+      "sha256": "56161847e77c2efc0f4114868904d5d6fdaa4651362950f1610f0fd160061b44",
+      "anchors": [
+        {
+          "marker": "MetricSpinButton::set_unit",
+          "line": 119
+        },
+        {
+          "marker": "MetricSpinButton::ConvertValue",
+          "line": 135
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/i18nutil/source/utility/unicode.cxx",
+      "sha256": "3f7219e2175bc1ace15f64091cccf020482c9dff3ac88f6bf484208d7c5de26f",
+      "anchors": [
+        {
+          "marker": "unicode::getUnicodeType",
+          "line": 70
+        },
+        {
+          "marker": "unicode::isAlpha",
+          "line": 206
+        },
+        {
+          "marker": "unicode::isControl",
+          "line": 197
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/bindings.hxx",
+      "sha256": "10d287087a5865dea45681239507857f06ca522104cb270a34d76bda2bc35f3c",
+      "anchors": [
+        {
+          "marker": "enum class SfxCallMode",
+          "line": 62
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/request.cxx",
+      "sha256": "ac3d4de7bb0effaf6e8650652f956a914c76dccd72aa4695a366aaf8ae792825",
+      "anchors": [
+        {
+          "marker": "SfxRequest::SetReturnValue",
+          "line": 425
+        },
+        {
+          "marker": "SfxRequest::AppendItem",
+          "line": 407
+        },
+        {
+          "marker": "SfxRequest::Done",
+          "line": 439
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+      "sha256": "a85c5f5575a94c096aaa1db1c3217631218eb59da4cd9b2fd04c3f2e4ae5bc1d",
+      "anchors": [
+        {
+          "marker": "testLastChangedColFlagsWidth",
+          "line": 1527
+        }
+      ]
+    }
+  ],
+  "nativeQaNote": "Related ucalc source is inspected,not executed full native QA. Character categories use separately compiled unchanged original bodies and all-codepoint observations.",
+  "scope": "Explicit unprotected/unmerged/default-view column geometry and native numeric fields;no macro/UNO/widget/device/drawing/outline service simulation."
+}

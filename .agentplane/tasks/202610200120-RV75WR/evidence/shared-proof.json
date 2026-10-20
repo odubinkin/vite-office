@@ -1,0 +1,56 @@
+{
+  "result": "pass",
+  "testFiles": 19,
+  "tests": 152,
+  "summary": {
+    "lines": {
+      "total": 1077,
+      "covered": 1077,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1134,
+      "covered": 1134,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 101,
+      "covered": 101,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 450,
+      "covered": 450,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "rawSha256": "27a19c73831b1de54f710bd8014add91a62cae488bcdc0361b5c2d7cf4f5b290",
+  "sourceHashes": {
+    "apps/office/src/external/icu/source/common/uchar.ts": "bdbde8a83425b00ff9b19f27744004368ed20ca9e66ab2d851fa52a2289012e6",
+    "apps/office/src/external/icu/source/common/uchar_props_data.ts": "7ac7188de5971c88eee1713a5e3a55f20e02025a88736337bfb6aa50b3a41b7d",
+    "apps/office/src/external/icu/source/common/unicode/uchar.ts": "24b2ee0f6d0aebb2a14fffab3140295b7cafb6f75e167685a26b8f9415a16682",
+    "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts": "e54ac38f492f520a862118cc63d18e63bf8edf2ab69616a90325aba180aa0bce",
+    "apps/office/src/i18npool/source/localedata/localedata.ts": "4dd483d6a54829ee6f85e17a6ef2cfc3dc245cf98d2676b11e01f5f056330801",
+    "apps/office/src/i18nutil/source/utility/unicode.ts": "be33ac77cf4b325cbeb118bdb11cac300a99053124056890f16c364fc1327f2e",
+    "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts": "798b7861bc11aa40e037f5e034842a75ee3203e11fa1a0c1ae1f61a85dab7553",
+    "apps/office/src/sfx2/source/control/bindings.ts": "b280acb587ff3da6de1b7abb2ed97ae2ae775402bdcc1cfec87cb299350bce92",
+    "apps/office/src/sfx2/source/control/dispatch.ts": "0cf57b8ed052ed339235bd617210ed4dfe9b504627d3654882c36e30b41deb0c",
+    "apps/office/src/sfx2/source/control/request.ts": "d6f3b7c37901f40b7d8f086b4a56788e225bb0572aff54cb5c57667861ff7eea",
+    "apps/office/src/unotools/source/misc/syslocale.ts": "53a894158c56b02ae9b73c0d0d75177f2c89f817982b78c5e72cf296666e51d6",
+    "apps/office/src/vcl/inc/units.ts": "21ba4da3906836dada86468a5931326ab5f2dab4f8d0e592f58413b98863ee42",
+    "apps/office/src/vcl/source/control/field.ts": "1dcb44e077841fa5c394aeebb197a4a82bec75679a18058ce7f996f12e19d79a",
+    "apps/office/src/vcl/source/weld/MetricSpinButton.ts": "595fa892e846eb669b01e76a7c9d85213f2193aa9d48de6fbb38d7ec112110e9",
+    "apps/office/src/vcl/source/weld/SpinButton.ts": "3aec85e5a8fac7b1166f46fb184fe40463f546165916c856054af1e9bd9e9115",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "3b9701efdc86275e0fafa6a6ea32976c9fd532649866f4935a56ba7b8a864742"
+  }
+}

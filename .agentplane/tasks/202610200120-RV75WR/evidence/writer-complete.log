@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:writer
+> npm run test:coverage:writer --workspace @vite-office/office -- docst.test writer-style-modifier.test --coverage.include=src/sw/source/uibase/app/docst.ts --coverage.reportsDirectory=coverage/task46-writer-current --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-writer-current-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:writer
+> vitest run --config vitest.writer.config.ts --coverage docst.test writer-style-modifier.test --coverage.include=src/sw/source/uibase/app/docst.ts --coverage.reportsDirectory=coverage/task46-writer-current --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-writer-current-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task46-writer-current-results.json
+ % Coverage report from istanbul
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+----------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 51/51 )
+Branches     : 100% ( 54/54 )
+Functions    : 100% ( 9/9 )
+Lines        : 100% ( 44/44 )
+================================================================================

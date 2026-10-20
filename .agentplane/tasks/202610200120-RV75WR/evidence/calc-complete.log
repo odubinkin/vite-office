@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.reportsDirectory=coverage/task46-calc-release --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-calc-release-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task46-calc-release --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-calc-release-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task46-calc-release-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9028/9028 )
+Branches     : 100% ( 5618/5618 )
+Functions    : 100% ( 1754/1754 )
+Lines        : 100% ( 8082/8082 )
+================================================================================

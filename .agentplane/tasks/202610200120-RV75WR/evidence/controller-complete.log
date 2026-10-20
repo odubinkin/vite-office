@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.reportsDirectory=coverage/task46-controller-release --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-controller-release-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.reportsDirectory=coverage/task46-controller-release --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-controller-release-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task46-controller-release-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 352/352 )
+Branches     : 100% ( 144/144 )
+Functions    : 100% ( 68/68 )
+Lines        : 100% ( 317/317 )
+================================================================================

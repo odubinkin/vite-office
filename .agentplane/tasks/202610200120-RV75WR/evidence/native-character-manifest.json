@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "icuArchiveSha256": "3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0",
+  "sourceHashes": {
+    "icu/source/common/uchar.cpp": "8ff2f2e37df64948c8fc52b8debbebf41fdfb109b194bcabc530f354ccfe0f32",
+    "icu/source/common/uchar_props_data.h": "7d4957e68beae1bd86427684350c186717e40cf9fb90355001f2195150801184",
+    "icu/source/common/utrie2.h": "79e37fcb51257a6e21ec261f20a4964707b5b922cfca2dc68c0932c4e2647dec",
+    "icu/source/common/uprops.h": "1cc85c5dbfd1dec6d8d615614b1e9cac3b68b07840d6e4d226c608e3e6d412f2",
+    "icu/source/common/unicode/uchar.h": "911b76cdee1723f681fcee98994bc09b8f32a4b8f4d00461ad0bed810ec86cea",
+    "icu/source/common/unicode/utypes.h": "065f3c26156af0f4b7374e07b1a772a2ed1a9cb5231c3566ec54ed37095fc7a7",
+    "icu/source/common/unicode/ucptrie.h": "186e73fc293da8e6583cd6ea06d17afab51a823cf7b453ff5daf576e650eef7c",
+    "i18nutil/source/utility/unicode.cxx": "3f7219e2175bc1ace15f64091cccf020482c9dff3ac88f6bf484208d7c5de26f",
+    "offapi/com/sun/star/i18n/UnicodeType.idl": "1b62f8629621c23d092c645f67e2342f166f65427965553b01d2bb43beccd4fc"
+  },
+  "codePoints": 1114112,
+  "byteProtocol": [
+    "icuCategory",
+    "libreOfficeType",
+    "isAlpha",
+    "isControl"
+  ],
+  "sha256": "129b93b3930eb37ef189e9d7375d3199761aa12a42c3e60c3a8862b206182e29",
+  "initial": [
+    [
+      15,
+      0,
+      0,
+      0
+    ],
+    [
+      15,
+      15,
+      0,
+      1
+    ]
+  ],
+  "compileArgv": [
+    "clang++",
+    "-std=c++17",
+    "-O2",
+    "-DU_STATIC_IMPLEMENTATION",
+    "-DU_COMMON_IMPLEMENTATION",
+    "-Ioutput/playwright/icu-case-native/icu/source/common",
+    "output/playwright/task46-character-native/driver.cpp",
+    "-o",
+    "output/playwright/task46-character-native/driver"
+  ]
+}
