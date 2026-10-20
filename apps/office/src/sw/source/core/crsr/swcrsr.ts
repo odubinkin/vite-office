@@ -191,7 +191,14 @@ export class SwCursor extends SwPaM {
         return 0;
       }
       if (all) while (this.GetNext() !== this) this.GetNext().Dispose();
-      this.Assign(first.GetPoint(), oldMark ?? first.GetMark());
+      // The ordinary native branch calls DoFind on this cursor and does not synthesize
+      // a mark. Selection/all-result ring transfer explicitly sets one upstream.
+      const mark =
+        oldMark ??
+        (all || inSelection || (ranges & FindRanges.InOther) !== 0 || first.HasMark()
+          ? first.GetMark()
+          : undefined);
+      this.Assign(first.GetPoint(), mark);
       if (all)
         for (let i = 1; i < found.length; i++) {
           const next = found[i] as SwPaM,

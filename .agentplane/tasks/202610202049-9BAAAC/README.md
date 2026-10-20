@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:14:41.438Z"
+doc_updated_at: "2026-10-20T23:23:32.233Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -147,6 +147,21 @@ sections:
     Result: pass; doctor0 errors and the same pre-existing managed hook-shim warning. Task scope65 non-task paths.
     Evidence: last-format/lint/typecheck/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing/doctor logs in output/playwright/writer-xcs-schema.
     Scope: current source and records. Keep task DOING: strict complete application coverage, final complete-cadence acceptance and final quality/closure remain pending. No live test process remains from the current checkpoint group.
+
+    Command: npx vitest run src/sw/source/core/crsr/native-search-contract-boundaries.test.ts src/sw/source/core/undo/native-bookmark-replace-history.test.ts src/sw/source/core/crsr/findtxt.test.ts src/sw/source/core/crsr/native-search-replace.test.ts --root apps/office
+    Result: pass,56 scenarios/four files after the point-only correction. Initial two-file red replay failed only on invented mark presence; the genuine structural-history case already passed.
+    Evidence: point-and-structural-history-red.log and point-and-history-green.log.
+    Scope: real generic find strategy/cursor/range contracts and native numeric bookmark history, retaining WRITER-024 behavior.
+
+    Command: npx eslint three changed source/test files; npm run typecheck; git diff --check.
+    Result: pass.
+    Evidence: point-contract-lint.log and point-contract-typecheck.log.
+    Scope: current narrow source correction; no new non-task paths beyond the approved65.
+
+    Command: npm test
+    Result: running, no verdict yet; session12311 and verified PID91470 at latest observation.
+    Evidence: full-current-native-contracts.log and fresh coverage/all temporary output.
+    Scope: fresh complete application coverage followed by inventory coverage only if its preceding gate passes. This run is necessary because current source changed materially since the original full snapshot; do not duplicate it. Task remains DOING pending terminal evidence and required quality/closure.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -171,6 +186,10 @@ sections:
     - WRITER-024 records the source FindAll failed whole-body InSelAll saved-member/mark-loss quirk. Preserve it in the core: the saved point-only cursor remains linked on no match and the original primary mark is removed. Original RestoreState only pops saved positions. Existing failed-ring fixtures had incorrectly required the old ring shape; retain the cases but assert old-member identity plus the source saved member instead. Higher-level UI and UNO override cleanup remain unverified.
     - A genuine file-size failure after the lifetime repair was fixed by moving the unchanged paragraph ruler-delta algorithm into the already-consumed wrtsh-editing module, retaining the public shell method and all item/history semantics. No compression, threshold changes, new state owner or protocol. Final task scope is65 non-task paths, within the approved bound.
     - Complete original application coverage remains unresolved. Original wildcard guards nString>=nEndPos and nString<=nEndPos remain present despite not being reached by initialized input tests and their loop-entry invariants. Do not delete them, fabricate private state, lower thresholds or add exclusions. Search scoped coverage remains99.57% lines/99.5% branches; this is not a global verdict. More real public-contract gaps may remain, including generic cursor/structural history responsibilities. No complete application rerun is justified until related preparations are ready.
+
+    Point-only ordinary FindAll regression: source ordinary branch invokes DoFind on the original cursor and does not synthesize a mark. The managed transfer had always supplied first.GetMark(), which aliases its point for an unmarked result and therefore invented a marked selection. A real public SwFindParas region-boundary visitor reproduced the failure without substituting a TextSearch service or document owner. Ordinary transfer now preserves marklessness; selection/all-ring transfers and old-mark extension retain their separate source rules. Genuine removal of a bookmarked last paragraph also verifies numeric-slot restoration skips a structural end node and restores undo state. No private history/parser state is overwritten.
+
+    Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -294,6 +313,21 @@ Result: pass; doctor0 errors and the same pre-existing managed hook-shim warning
 Evidence: last-format/lint/typecheck/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing/doctor logs in output/playwright/writer-xcs-schema.
 Scope: current source and records. Keep task DOING: strict complete application coverage, final complete-cadence acceptance and final quality/closure remain pending. No live test process remains from the current checkpoint group.
 
+Command: npx vitest run src/sw/source/core/crsr/native-search-contract-boundaries.test.ts src/sw/source/core/undo/native-bookmark-replace-history.test.ts src/sw/source/core/crsr/findtxt.test.ts src/sw/source/core/crsr/native-search-replace.test.ts --root apps/office
+Result: pass,56 scenarios/four files after the point-only correction. Initial two-file red replay failed only on invented mark presence; the genuine structural-history case already passed.
+Evidence: point-and-structural-history-red.log and point-and-history-green.log.
+Scope: real generic find strategy/cursor/range contracts and native numeric bookmark history, retaining WRITER-024 behavior.
+
+Command: npx eslint three changed source/test files; npm run typecheck; git diff --check.
+Result: pass.
+Evidence: point-contract-lint.log and point-contract-typecheck.log.
+Scope: current narrow source correction; no new non-task paths beyond the approved65.
+
+Command: npm test
+Result: running, no verdict yet; session12311 and verified PID91470 at latest observation.
+Evidence: full-current-native-contracts.log and fresh coverage/all temporary output.
+Scope: fresh complete application coverage followed by inventory coverage only if its preceding gate passes. This run is necessary because current source changed materially since the original full snapshot; do not duplicate it. Task remains DOING pending terminal evidence and required quality/closure.
+
 ## Rollback Plan
 
 Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge.
@@ -322,3 +356,7 @@ Current compiler/search/cursor checkpoint (all edits remain in writer on writer)
 - WRITER-024 records the source FindAll failed whole-body InSelAll saved-member/mark-loss quirk. Preserve it in the core: the saved point-only cursor remains linked on no match and the original primary mark is removed. Original RestoreState only pops saved positions. Existing failed-ring fixtures had incorrectly required the old ring shape; retain the cases but assert old-member identity plus the source saved member instead. Higher-level UI and UNO override cleanup remain unverified.
 - A genuine file-size failure after the lifetime repair was fixed by moving the unchanged paragraph ruler-delta algorithm into the already-consumed wrtsh-editing module, retaining the public shell method and all item/history semantics. No compression, threshold changes, new state owner or protocol. Final task scope is65 non-task paths, within the approved bound.
 - Complete original application coverage remains unresolved. Original wildcard guards nString>=nEndPos and nString<=nEndPos remain present despite not being reached by initialized input tests and their loop-entry invariants. Do not delete them, fabricate private state, lower thresholds or add exclusions. Search scoped coverage remains99.57% lines/99.5% branches; this is not a global verdict. More real public-contract gaps may remain, including generic cursor/structural history responsibilities. No complete application rerun is justified until related preparations are ready.
+
+Point-only ordinary FindAll regression: source ordinary branch invokes DoFind on the original cursor and does not synthesize a mark. The managed transfer had always supplied first.GetMark(), which aliases its point for an unmarked result and therefore invented a marked selection. A real public SwFindParas region-boundary visitor reproduced the failure without substituting a TextSearch service or document owner. Ordinary transfer now preserves marklessness; selection/all-ring transfers and old-mark extension retain their separate source rules. Genuine removal of a bookmarked last paragraph also verifies numeric-slot restoration skips a structural end node and restores undo state. No private history/parser state is overwritten.
+
+Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.

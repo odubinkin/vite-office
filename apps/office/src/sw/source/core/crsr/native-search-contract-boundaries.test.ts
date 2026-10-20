@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "./pam";
 import { FindTextImpl, SwFindParaText } from "./findtxt";
-import { FIND_FOUND, FIND_NO_RING, SwCursor } from "./swcrsr";
+import { FIND_FOUND, FIND_NO_RING, SwCursor, type SwFindParas } from "./swcrsr";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -45,6 +45,40 @@ function range(node: SwTextNode, start: number, end: number): SwPaM {
     mark.Dispose();
   }
 }
+it("preserves an unmarked result from the generic point-only strategy contract", /** This visits an actual region boundary through SwFindParas; it supplies no replacement TextSearch service or shadow document. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("abc");
+  const position = new SwPosition(node, 2),
+    cursor = new SwCursor(position),
+    strategy: SwFindParas = {
+      DoFind:
+        /** Finds the original region's first model position without creating a mark. @param target - Real working cursor. @param backward - Direction. @param region - Real region. @returns Native no-ring flag. */ (
+          target,
+          backward,
+          region,
+        ) => {
+          const boundary = backward ? region.End() : region.Start();
+          target.GetPoint().Assign(boundary.GetNode(), boundary.GetContentIndex());
+          return FIND_NO_RING;
+        },
+      IsReplaceMode: /** A point query does not replace document content. @returns False. */ () =>
+        false,
+    };
+  position.Dispose();
+  try {
+    expect(
+      cursor.FindAll(strategy, SwDocPositions.Start, SwDocPositions.End, FindRanges.InBody, [
+        false,
+      ]),
+    ).toBe(1);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+    expect(cursor.HasMark()).toBe(false);
+    expect(node.GetText()).toBe("abc");
+  } finally {
+    cursor.Dispose();
+  }
+});
 it.each([false, true])(
   "retains the upstream failed whole-body find-all saved cursor marked=%s",
   /** Source Create(this) produces an unmarked saved member; failure keeps that member and removes the primary mark. @param marked - Original selection presence. @returns Nothing. */ (

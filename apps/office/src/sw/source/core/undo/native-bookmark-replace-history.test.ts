@@ -42,6 +42,21 @@ function marks(doc: SwDoc): readonly (readonly [string, number])[] {
       ) => [mark.GetName(), mark.GetMarkPos().GetContentIndex()] as const,
     );
 }
+it("leaves a bookmark absent when its saved numeric node slot now names a structural end node", /** Actual paragraph deletion exercises the original non-content restoration path without rewriting private history payload. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    last = doc.nodes.MakeTextNode("last"),
+    access = doc.GetIDocumentMarkAccess(),
+    bookmark = access.MakeMark(last, 2, "removed-node"),
+    record = new SwHistoryBookmark(bookmark, true, false),
+    index = last.GetIndex();
+  access.DeleteMark("removed-node");
+  doc.nodes.removeTextNode(last);
+  expect(doc.nodes.at(index)).toBe(doc.nodes.GetEndOfContent());
+  expect(doc.GetUndoManager().DoesUndo()).toBe(true);
+  record.SetInDoc(doc, false);
+  expect(access.FindMark("removed-node")).toBeUndefined();
+  expect(doc.GetUndoManager().DoesUndo()).toBe(true);
+});
 it.each([
   [1, 4, "XYZ", "aXYZef", 4, 5],
   [1, 3, "12345", "a12345def", 6, 8],
