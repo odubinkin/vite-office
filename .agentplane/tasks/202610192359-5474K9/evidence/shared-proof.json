@@ -1,8 +1,8 @@
 {
   "result": "pass",
   "files": 8,
-  "tests": 27,
-  "passed": 27,
+  "tests": 28,
+  "passed": 28,
   "summary": {
     "lines": {
       "total": 278,
@@ -35,10 +35,10 @@
       "pct": "Unknown"
     }
   },
-  "rawSha256": "e0ad5455d6ae190fabc66b87a094e5161dc26f8623c67c8a181f212b2a2574aa",
+  "rawSha256": "d3f0117449cbadbb0ec3401d83ffe74bc782c86fe0476c0dd582e522eb6f3238",
   "sourceHashes": {
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts": "7f49b908686a65175e6c29b425b47aa7648d7e39e3f93906fe49ceef68c220f9",
     "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmltoken.ts": "db4d755f7a1918a54bf43ff652ed1fc901b30a0dc7bcb2d7df2435542a8b8ca6",
-    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/cdouthdl.ts": "c5d44c8fa1bad16156b1f54f05910180e17c29d4bb67f2980c6f0c3a0140db28"
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/cdouthdl.ts": "df77d2ece1e3ee5b0dea4cf853de4f07090cc004b6bdef1e850b48aa0c27d55e"
   }
 }

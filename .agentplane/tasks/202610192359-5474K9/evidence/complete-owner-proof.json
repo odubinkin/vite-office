@@ -3,7 +3,7 @@
   "calcFiles": 129,
   "calcCases": 394,
   "sharedFiles": 8,
-  "sharedCases": 27,
+  "sharedCases": 28,
   "completeExecutableOwners": 9,
   "owners": [
     "apps/office/src/sc/browser/controller/calc-view-controller.ts",
@@ -28,6 +28,7 @@
     "apps/office/src/xmloff/source/core/xmltoken.ts": "db4d755f7a1918a54bf43ff652ed1fc901b30a0dc7bcb2d7df2435542a8b8ca6",
     "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts": "7f49b908686a65175e6c29b425b47aa7648d7e39e3f93906fe49ceef68c220f9",
     "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts": "04dfa8ccca8344b74961c899b3c211e89b5919d5081a722f8cba8acd52388724",
-    "apps/office/src/xmloff/source/style/cdouthdl.ts": "c5d44c8fa1bad16156b1f54f05910180e17c29d4bb67f2980c6f0c3a0140db28"
-  }
+    "apps/office/src/xmloff/source/style/cdouthdl.ts": "df77d2ece1e3ee5b0dea4cf853de4f07090cc004b6bdef1e850b48aa0c27d55e"
+  },
+  "validationTooling": "Exact native cdouthdl->Any compile-time dependency is registered in the existing per-source allowlist;the general edge remains forbidden. Boundary/source tooling3files92cases pass."
 }

@@ -183,6 +183,40 @@
           ]
         }
       ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/cppu/source/uno/assign.hxx",
+      "sha256": "61adec20fdabda2b3e916191338afd053c04357ea49e6a6fa32600e2ca71a1e2",
+      "anchors": [
+        {
+          "marker": "case typelib_TypeClass_SHORT:",
+          "lines": [
+            152,
+            158,
+            171,
+            184,
+            203,
+            222,
+            247,
+            272,
+            290
+          ]
+        },
+        {
+          "marker": "case typelib_TypeClass_UNSIGNED_SHORT:",
+          "lines": [
+            159,
+            165,
+            172,
+            187,
+            206,
+            225,
+            250,
+            275,
+            293
+          ]
+        }
+      ]
     }
   ],
   "preserved": [
@@ -203,6 +237,9 @@
   ],
   "suspectedIssues": [
     "CALC-212",
-    "CALC-213"
-  ]
+    "CALC-213",
+    "CALC-214"
+  ],
+  "nativeIntegerContract": "Type/width candidates retain unsigned16 representation;comparison is against extracted signed16,and writes cast back to signed16. Genuine unsigned-short Any65535/32768 becomes SHORT-1/-32768,while style keeps the original unsigned Any. LONG narrowing is not assumed and the shared numeric assignment kernel is unchanged.",
+  "nativeDependency": "The new shared handler borrows caller-owned Any through a type-only import. Existing source dependency enforcement also checks compile-time edges,so the exact cdouthdl.ts->cppu Any.ts source-backed edge is registered adjacent to other native character handlers. General xmloff->cppu and browser ownership guards remain unchanged."
 }
