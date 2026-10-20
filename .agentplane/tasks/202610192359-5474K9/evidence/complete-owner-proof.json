@@ -28,6 +28,6 @@
     "apps/office/src/xmloff/source/core/xmltoken.ts": "db4d755f7a1918a54bf43ff652ed1fc901b30a0dc7bcb2d7df2435542a8b8ca6",
     "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts": "7f49b908686a65175e6c29b425b47aa7648d7e39e3f93906fe49ceef68c220f9",
     "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts": "04dfa8ccca8344b74961c899b3c211e89b5919d5081a722f8cba8acd52388724",
-    "apps/office/src/xmloff/source/style/cdouthdl.ts": "3cc03675a1baa019939b0943d6104373fe7d48a6fe95eff07d28eb0b2d3547a4"
+    "apps/office/src/xmloff/source/style/cdouthdl.ts": "c5d44c8fa1bad16156b1f54f05910180e17c29d4bb67f2980c6f0c3a0140db28"
   }
 }
