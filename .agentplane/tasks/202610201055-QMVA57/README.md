@@ -1,10 +1,11 @@
 ---
 id: "202610201055-QMVA57"
 title: "Implement native Calc cell indentation and manual row layout workflows"
-status: "DOING"
+result_summary: "verified-202610201055-QMVA57"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T11:32:03.890Z"
+  updated_at: "2026-10-20T11:33:43.261Z"
   updated_by: "CODER"
-  note: "Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction."
+  note: "verified-202610201055-QMVA57"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "Compared pinned attr/table/view/operation/undo/filter/metric/ODF source anchors and reviewed actual implementation diff. Native defaults,200twip caps,alignment coercion,stable filtered-mark coordinates,manual row flags and independent hidden/filter ownership are retained in the represented normal-document branch."
     - "Reconciled committed95 non-task path hashes against immutable evidence. Nonduplicated73 related module cases,95 focused tooling cases and6 latest production-browser/Worker cases pass. Static/type/lint/format/dependency/resource/provenance/invariant/parity/routing/doctor/diff gates pass;desktop/mobile screenshots inspected."
     - "No broad native parity or blanket coverage claim. CALC224–226 and full device/cache/protection/merged/outline/drawing/alternate-view/global undo/UNO-service gaps are explicit. Only related tests between checkpoint40 and planned all-app checkpoint50 match the latest user instruction."
-commit: null
+commit:
+  hash: "669445ce8fa036a3410b95777a178b1dfc0e0125"
+  message: "🧪 QMVA57 calc: persist verified layout quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610201055-QMVA57. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction."
+  -
+    type: "verify"
+    at: "2026-10-20T11:33:43.261Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610201055-QMVA57"
+  -
+    type: "status"
+    at: "2026-10-20T11:33:43.537Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610201055-QMVA57. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T11:32:04.016Z"
+doc_updated_at: "2026-10-20T11:33:43.538Z"
 doc_updated_by: "CODER"
 description: "Task47 continues the authorized Calc UI goal in calc checkout/branch. Deliver a coherent cell-layout block: original ChangeIndent attribute/document/operation/history chain with native width limits,shared menu/toolbar controls and ODS indentation;manual row height,hide/show and actual hidden/filtered row storage,source geometry copy/history,shared metric dialog and compressed grid/scroll projection. Generalize existing column machinery using original axis contracts. Preserve native quirks and intentional browser save/open/no-recovery policies. Run only related module tests and focused browser/static checks;full all-app checkpoint40 retained,next50. No branch/worktree,merge,network,outside files or fake device/UNO/protection services."
 sections:
@@ -113,6 +132,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T11:33:43.261Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610201055-QMVA57
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T11:32:04.016Z, excerpt_hash=sha256:a36d6b97728086afae4fe4007e546d3753cf5d0b3f509c29ff0c5007c80203b2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201055-QMVA57/blueprint/resolved-snapshot.json
+    - old_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+    - current_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201055-QMVA57
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610201055-QMVA57 --result verified-202610201055-QMVA57 --commit 669445ce8fa036a3410b95777a178b1dfc0e0125
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/registration commits through a separately scoped authorized task;never reset unrelated changes or alter the pinned upstream reference."
   Findings: |-
@@ -123,6 +172,10 @@ sections:
     Source findings CALC224/CALC225/CALC226 are recorded in `docs/program/calc-upstream-suspected-issues.md`:signed ODF indentation narrowing,fully filtered selection fallback,and differing native string-cache refresh/right-indent behavior. Full string cache/device painting,optimal sizing,protection,merged/outline/drawing/alternate views,global undo enablement and complete UNO/property/recorder services remain explicitly unported. No fake native services were introduced. Browser primary/autosave/open/no-recovery policies remain unchanged.
 
     Task47 is progress on the continuing UI goal. Current user direction is larger coherent tasks and related-module tests between full checkpoints;checkpoint50 remains the next full all-app run. Three unrelated DOING tasks remain untouched. No scope or verification drift required re-approval.
+extensions:
+  implementation_commit:
+    hash: "6df0c5fb7016fd0427d7b9e69a1b8fcee8b11889"
+    message: "✨ QMVA57 calc: implement indentation and manual row layout"
 id_source: "generated"
 ---
 ## Summary
@@ -182,6 +235,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T11:33:43.261Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610201055-QMVA57
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T11:32:04.016Z, excerpt_hash=sha256:a36d6b97728086afae4fe4007e546d3753cf5d0b3f509c29ff0c5007c80203b2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201055-QMVA57/blueprint/resolved-snapshot.json
+- old_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+- current_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201055-QMVA57
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610201055-QMVA57 --result verified-202610201055-QMVA57 --commit 669445ce8fa036a3410b95777a178b1dfc0e0125
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
