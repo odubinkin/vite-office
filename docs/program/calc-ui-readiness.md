@@ -1,5 +1,21 @@
 # Calc UI and ODS implementation critical path
 
+## Current cell-style path — task55 native pattern association
+
+Task `202610201913-6GG949` adds original style-pointer/name association to
+ScPatternAttr,including copied parent identity,default clearing of only style SET
+fields and owned-name detachment. Native CellAttributeHelper now handles exact
+style identity during registered-pattern rename/deletion and all-to-name teardown,
+including the default pattern. CALC240 records name/rename asymmetries.
+
+The consumed borrowed base operations use genuine shared native styles. This does
+not implement or replace the missing Calc ScStyleSheet/ScStyleSheetPool/ScPoolHelper,
+standard-style construction or document resolution. Mounted Calc already reads
+three-script fonts through the actual inherited column pattern;no browser style
+model or unsupported StyleApply action is introduced. Full named-style application,
+UI/history/ODS and repaint ownership remain required. Automatic-height also remains
+incomplete;the broader goal stays active. Next full checkpoint remains60.
+
 ## Current EditEngine dependency path — task54 native formatting transfer
 
 Task `202610201844-9K7PXS` ports the source Calc/EditEngine item transfer in both
