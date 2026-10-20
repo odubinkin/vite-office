@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201912-V6W22V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T19:37:01.453Z",
+  "verdict": "pass",
+  "summary": "The approved represented collapsed-bookmark replacement/history leaf meets its scoped source and regression contract at ef4bd7e8f31f. Parent search UI and advanced/typed mark responsibilities remain open.",
+  "evaluated_sha": "ef4bd7e8f31fb0890da8cf6b57ea742329cee5e0",
+  "blueprint_digest": "37eed74206f48384de7b46e3b854358d7269ad2ca76d8f56a8a1ed31769b3d69",
+  "findings": [
+    "Verified actual source ownership: SaveContent DelContentIndex captures [start,end) ordinary collapsed marks, history retains numeric/name payload with registered restoration PaM, wrapper/Impl partitions and moves original entries, and redo recollects the current mark graph. Source WRITER-010 and recording-dependent WRITER-016 are preserved.",
+    "The native Replace bookmark-boundary exception exposed old adapter flag misuse. Explicit fragment and complete-text construction now retain Default insertion behavior; affected ODT/browser tests pass unchanged expected positions. No storage format, conscious recovery/autosave deviation, dependency gate or semantic status promotion changed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201912-V6W22V/README.md",
+    "apps/office/src/sw/source/core/undo/native-bookmark-replace-history.test.ts",
+    "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
+    "output/playwright/writer-bookmark-replace-checks/core-final.log",
+    "output/playwright/writer-bookmark-replace-checks/integration-final.log",
+    "output/playwright/writer-bookmark-replace-checks/build-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Source-contract/portable bookmark evidence only; no compiled native bookmark/app execution. Expanded/typed/UNO/metadata/fly/footnote/redline mark histories and parent complete search/view/config/UI remain unimplemented or unverified."
+  ]
+}

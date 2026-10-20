@@ -4,7 +4,7 @@ title: "Implement Writer bookmark replacement history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Native collapsed bookmark replacement/history verified: 5059 core, 96 integration and final 36/14 focused cases; final build, scoped lint/format, registry/source/dependency/size/docs and policy checks pass. WRITER-016 and WRITER-010 preserved. Parent UI/advanced and expanded/typed mark responsibilities remain open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T19:37:01.453Z"
+  updated_by: "EVALUATOR"
+  note: "The approved represented collapsed-bookmark replacement/history leaf meets its scoped source and regression contract at ef4bd7e8f31f. Parent search UI and advanced/typed mark responsibilities remain open."
+  evaluated_sha: "ef4bd7e8f31fb0890da8cf6b57ea742329cee5e0"
+  blueprint_digest: "37eed74206f48384de7b46e3b854358d7269ad2ca76d8f56a8a1ed31769b3d69"
+  evidence_refs:
+    - ".agentplane/tasks/202610201912-V6W22V/README.md"
+    - ".agentplane/tasks/202610201912-V6W22V/quality/20261020-193701453-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201912-V6W22V/quality/20261020-193701453-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201912-V6W22V/quality/20261020-193701453-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201912-V6W22V/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/core/undo/native-bookmark-replace-history.test.ts"
+    - "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts"
+    - "output/playwright/writer-bookmark-replace-checks/core-final.log"
+    - "output/playwright/writer-bookmark-replace-checks/integration-final.log"
+    - "output/playwright/writer-bookmark-replace-checks/build-final.log"
+  findings:
+    - "Verified actual source ownership: SaveContent DelContentIndex captures [start,end) ordinary collapsed marks, history retains numeric/name payload with registered restoration PaM, wrapper/Impl partitions and moves original entries, and redo recollects the current mark graph. Source WRITER-010 and recording-dependent WRITER-016 are preserved."
+    - "The native Replace bookmark-boundary exception exposed old adapter flag misuse. Explicit fragment and complete-text construction now retain Default insertion behavior; affected ODT/browser tests pass unchanged expected positions. No storage format, conscious recovery/autosave deviation, dependency gate or semantic status promotion changed."
 commit: null
 comments:
   -
