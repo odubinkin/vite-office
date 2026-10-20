@@ -4,7 +4,7 @@ title: "Port native Calc EditEngine formatting transfer and shared target-Which 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T19:09:36.478Z"
+  updated_by: "CODER"
+  note: "Pass:fresh508-case complete Calc profile,107related cases,8fresh packaged Chromium/Worker cases,14final static stages and build. Raw Calc and shared S/B/F/L100 verified by portable archive audit;unchanged shared53 hashes retained. Original snapshot/order/units/attribute and nonvirtual target-Which contracts verified. Earlier source revision failures remain diagnostic only;final Calc coverage uses fresh maps. Automatic wrapped-height and real EditEngine services remain unported;broader goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T19:09:37.426Z"
+  updated_by: "EVALUATOR"
+  note: "The approved native Calc EditEngine formatting-transfer and shared const target-Which contracts satisfy bounded task54 acceptance;real EditEngine/automatic-height work remains active."
+  evaluated_sha: "bc43536c38a39c1e230809c82ff2becfefcf4c68"
+  blueprint_digest: "72de16facf9b7b0a89cb5ddca28622c93101d52fb72ff2c47da77c08bd2193c8"
+  evidence_refs:
+    - ".agentplane/tasks/202610201844-9K7PXS/README.md"
+    - ".agentplane/tasks/202610201844-9K7PXS/quality/20261020-190937426-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201844-9K7PXS/quality/20261020-190937426-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201844-9K7PXS/quality/20261020-190937426-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201844-9K7PXS/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201844-9K7PXS/evidence/proof.json"
+    - ".agentplane/tasks/202610201844-9K7PXS/evidence/commands.json"
+    - ".agentplane/tasks/202610201844-9K7PXS/evidence/audit-archives.mjs"
+    - ".agentplane/tasks/202610201844-9K7PXS/evidence/screenshots.json"
+  findings:
+    - "Reviewed pinned patattr.cxx and itemset.cxx/hxx against the committed forward/reverse methods,three-script fonts,integral unit conversion,table/direct/conditional precedence,automatic color and alignment/spacing omissions. Inputs snapshot before target mutations and actual insertion order match native source. A real Changed observer proves source mutation cannot alter previously read values."
+    - "Shared const PutAsTargetWhich clones for the actual destination pool and adopts the remapped clone;zero/same-Which follows private native insertion rather than a shadowed public nonvirtual method. Source immutability,fixed-Which Clone behavior,equality/out-of-range returns and derived-method shadow are exercised with actual classes."
+    - "Portable committed archive audit independently proves fresh508-case complete Calc acceptance,107related cases,8fresh packaged browser cases and raw Calc/shared four-metric100 coverage. Complete shared uses hash-verified unchanged53owners plus fresh changed owner. Final shared zero/same-Which adjustment is covered by107related cases and fresh browser integration;Calc production has only cross-domain remaps and Calc source maps remained unchanged. Initial old-source failures/replays remain diagnostic and are not merged into final Calc raw maps."
+    - "Build,14final static checks,current source/native hashes and screenshot inspection pass. Scope remains native pattern and shared itemset owners plus declared tests/records;no EditEngine,number-format,device or cache facade is introduced. CALC239 documents source asymmetries without normalizing them."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port source Calc EditEngine formatting transfer and genuine shared target-Which insertion as required GetNeededSize dependencies;preserve original asymmetries and native ownership."
+  -
+    type: "verify"
+    at: "2026-10-20T19:09:36.478Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass:fresh508-case complete Calc profile,107related cases,8fresh packaged Chromium/Worker cases,14final static stages and build. Raw Calc and shared S/B/F/L100 verified by portable archive audit;unchanged shared53 hashes retained. Original snapshot/order/units/attribute and nonvirtual target-Which contracts verified. Earlier source revision failures remain diagnostic only;final Calc coverage uses fresh maps. Automatic wrapped-height and real EditEngine services remain unported;broader goal active."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:09:09.556Z"
+doc_updated_at: "2026-10-20T19:09:36.569Z"
 doc_updated_by: "CODER"
 description: "Continue the actual GetNeededSize dependency path with the original complete Calc-to-EditEngine item transfer,reverse transfer,paragraph alignment and orientation contracts. Add the real shared SfxItemSet const-reference PutAsTargetWhich operation rather than local clone/remap helpers. Preserve all three script fonts,original integral unit rounding,conditional/table/direct precedence and source asymmetries. This is a required native formatting boundary,not a substitute automatic row-height implementation."
 sections:
@@ -57,6 +85,39 @@ sections:
     Scope: original ScPatternAttr forward/reverse edit attribute transfer,pre-mutation snapshot and insertion order,paragraph alignment,orientation,and shared SfxItemSet const target-Which insertion. Final shared zero/same-Which nonvirtual dispatch is covered by its fresh107-case profile and browser integration;Calc production uses only cross-domain remaps and Calc owner sources remained unchanged after the508-case run. Original earlier failures and replays remain diagnostic archives;old production maps are not merged into final Calc coverage. Exact raw maps,reports,source/native hashes and4current screenshots committed.
 
     Remaining: actual EditEngine/GetNeededSize/GetOptimalHeight,formatted number/script-cache services and automatic wrapped-height remain required and unported. Broader goal stays active. Full repaired checkpoint51 retained;next all-app checkpoint60.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T19:09:36.478Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass:fresh508-case complete Calc profile,107related cases,8fresh packaged Chromium/Worker cases,14final static stages and build. Raw Calc and shared S/B/F/L100 verified by portable archive audit;unchanged shared53 hashes retained. Original snapshot/order/units/attribute and nonvirtual target-Which contracts verified. Earlier source revision failures remain diagnostic only;final Calc coverage uses fresh maps. Automatic wrapped-height and real EditEngine services remain unported;broader goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T19:09:09.556Z, excerpt_hash=sha256:7553baf9f478eb5201243d6f10f1ef91ce3d300e275c79ffcbd3f7a34b68174c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201844-9K7PXS/blueprint/resolved-snapshot.json
+    - old_digest: 72de16facf9b7b0a89cb5ddca28622c93101d52fb72ff2c47da77c08bd2193c8
+    - current_digest: 72de16facf9b7b0a89cb5ddca28622c93101d52fb72ff2c47da77c08bd2193c8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201844-9K7PXS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201844-9K7PXS
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit,preserving prior verified native context/shared measurement work;no branch/history changes."
   Findings: |-
     Observation: original patattr.cxx converts actual Calc formatting to EditEngine attributes and back,with three independent script fonts and original twip/mm100 rounding. The shared const-reference SfxItemSet PutAsTargetWhich clones for the real destination pool and adopts that remapped clone;const sources retain identity. A fixed-Which native item demonstrates why cloning again would restore the wrong identity.
@@ -101,6 +162,39 @@ Evidence: fresh complete Calc155files/508tests pass,no failures/skips;final rela
 Scope: original ScPatternAttr forward/reverse edit attribute transfer,pre-mutation snapshot and insertion order,paragraph alignment,orientation,and shared SfxItemSet const target-Which insertion. Final shared zero/same-Which nonvirtual dispatch is covered by its fresh107-case profile and browser integration;Calc production uses only cross-domain remaps and Calc owner sources remained unchanged after the508-case run. Original earlier failures and replays remain diagnostic archives;old production maps are not merged into final Calc coverage. Exact raw maps,reports,source/native hashes and4current screenshots committed.
 
 Remaining: actual EditEngine/GetNeededSize/GetOptimalHeight,formatted number/script-cache services and automatic wrapped-height remain required and unported. Broader goal stays active. Full repaired checkpoint51 retained;next all-app checkpoint60.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T19:09:36.478Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass:fresh508-case complete Calc profile,107related cases,8fresh packaged Chromium/Worker cases,14final static stages and build. Raw Calc and shared S/B/F/L100 verified by portable archive audit;unchanged shared53 hashes retained. Original snapshot/order/units/attribute and nonvirtual target-Which contracts verified. Earlier source revision failures remain diagnostic only;final Calc coverage uses fresh maps. Automatic wrapped-height and real EditEngine services remain unported;broader goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T19:09:09.556Z, excerpt_hash=sha256:7553baf9f478eb5201243d6f10f1ef91ce3d300e275c79ffcbd3f7a34b68174c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201844-9K7PXS/blueprint/resolved-snapshot.json
+- old_digest: 72de16facf9b7b0a89cb5ddca28622c93101d52fb72ff2c47da77c08bd2193c8
+- current_digest: 72de16facf9b7b0a89cb5ddca28622c93101d52fb72ff2c47da77c08bd2193c8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201844-9K7PXS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201844-9K7PXS
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
