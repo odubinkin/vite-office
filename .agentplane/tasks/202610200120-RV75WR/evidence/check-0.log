@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 947 runtime sources, 4292 relative imports, 142 allowed cross-module edges.

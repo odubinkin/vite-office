@@ -1,10 +1,10 @@
 
 > vite-office@0.1.0 test:coverage:calc
-> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.include=src/sc/browser/presentation/ScMetricInputDlg.tsx --coverage.reportsDirectory=coverage/task46-ui-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-ui-accepted-results.json
+> npm run test:coverage:calc --workspace @vite-office/office -- --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.include=src/sc/browser/presentation/ScMetricInputDlg.tsx --coverage.include=src/sc/source/filter/xml/xmlstyli.ts --coverage.reportsDirectory=coverage/task46-ui-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-ui-accepted-results.json
 
 
 > @vite-office/office@0.1.0 test:coverage:calc
-> vitest run --config vitest.calc.config.ts --coverage --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.include=src/sc/browser/presentation/ScMetricInputDlg.tsx --coverage.reportsDirectory=coverage/task46-ui-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-ui-accepted-results.json
+> vitest run --config vitest.calc.config.ts --coverage --coverage.include=src/sc/browser/controller/calc-view-controller.ts --coverage.include=src/sc/browser/presentation/ScMetricInputDlg.tsx --coverage.include=src/sc/source/filter/xml/xmlstyli.ts --coverage.reportsDirectory=coverage/task46-ui-accepted --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task46-ui-accepted-results.json
 
 JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task46-ui-accepted-results.json
  % Coverage report from istanbul
@@ -14,8 +14,8 @@ File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 100% ( 392/392 )
-Branches     : 100% ( 164/164 )
-Functions    : 100% ( 81/81 )
-Lines        : 100% ( 357/357 )
+Statements   : 100% ( 482/482 )
+Branches     : 100% ( 210/210 )
+Functions    : 100% ( 99/99 )
+Lines        : 100% ( 442/442 )
 ================================================================================

@@ -788,11 +788,11 @@
     },
     {
       "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
-      "sha256": "70ef7ad0e815710a43a8e4a8feb8d260468fe75b6fb048d4b6869cae9daff275",
+      "sha256": "feb90470737b55f4274a01c425dd261ff3bfd9eab2fec5bbc7f0b7345138a7c7",
       "coverage": {
         "lines": {
-          "total": 83,
-          "covered": 83,
+          "total": 85,
+          "covered": 85,
           "skipped": 0,
           "pct": 100
         },
@@ -803,14 +803,14 @@
           "pct": 100
         },
         "statements": {
-          "total": 88,
-          "covered": 88,
+          "total": 90,
+          "covered": 90,
           "skipped": 0,
           "pct": 100
         },
         "branches": {
-          "total": 44,
-          "covered": 44,
+          "total": 46,
+          "covered": 46,
           "skipped": 0,
           "pct": 100
         }

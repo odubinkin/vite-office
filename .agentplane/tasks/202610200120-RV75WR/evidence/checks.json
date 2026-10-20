@@ -1,0 +1,203 @@
+{
+  "result": "pass",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-2.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-4.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-5.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-6.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-7.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-8.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-9.log"
+    },
+    {
+      "command": "npm run inventory:parity:calc",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-10.log"
+    },
+    {
+      "command": "npm run inventory:parity:shared",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-11.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-12.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-13.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "output/playwright/task46-accepted-gate-14.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "output/playwright/task46-last-types.log"
+    },
+    {
+      "command": "npx eslint . --max-warnings 0 --ignore-pattern 'output/playwright/**'",
+      "exitCode": 0,
+      "log": "output/playwright/task46-last-lint.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "output/playwright/task46-last-docs.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exitCode": 0,
+      "log": "output/playwright/task46-last-static.log"
+    },
+    {
+      "command": "npx prettier --check . --ignore-path .prettierignore --ignore-path .gitignore",
+      "exitCode": 0,
+      "log": "output/playwright/task46-root-format.log"
+    },
+    {
+      "command": "npx prettier --check <exact100changed paths>",
+      "exitCode": 0,
+      "log": "output/playwright/task46-all-changed-format.log"
+    }
+  ],
+  "changedPaths": [
+    "apps/office/e2e/calc/column-width.spec.ts",
+    "apps/office/src/external/icu/source/common/native-character-types.json",
+    "apps/office/src/external/icu/source/common/native-character-types.test.ts",
+    "apps/office/src/i18npool/source/localedata/data/numeric-separators.json",
+    "apps/office/src/offapi/com/sun/star/i18n/UnicodeType.ts",
+    "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+    "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+    "apps/office/src/sc/browser/presentation/column-geometry.test.ts",
+    "apps/office/src/sc/browser/presentation/column-geometry.ts",
+    "apps/office/src/sc/inc/FilterData.ts",
+    "apps/office/src/sc/source/core/data/FilterData.ts",
+    "apps/office/src/sc/source/core/data/native-column-width.test.ts",
+    "apps/office/src/sc/source/filter/xml/ods-native-columns.test.ts",
+    "apps/office/src/sc/source/filter/xml/xmlcoli.ts",
+    "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+    "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+    "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+    "apps/office/src/sc/source/ui/view/column-width.test.ts",
+    "apps/office/src/vcl/inc/units.ts",
+    "apps/office/src/vcl/source/control/field.test.ts",
+    "apps/office/src/vcl/source/control/field.ts",
+    "apps/office/src/vcl/source/weld/MetricSpinButton.ts",
+    "apps/office/src/vcl/source/weld/SpinButton.ts",
+    "docs/program/registry/calc/capabilities/CAP-b0983657-1a03-4cca-8982-119820de587b.json",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/column-geometry.ts.json",
+    "docs/program/registry/calc/provenance/sc/inc/FilterData.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/FilterData.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlcoli.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk2.ts.json",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/column-geometry.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/FilterData.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/FilterData.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlcoli.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk2.ts.json",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/i18n/UnicodeType.ts.json",
+    "docs/program/registry/shared/provenance/vcl/inc/units.ts.json",
+    "docs/program/registry/shared/provenance/vcl/source/control/field.ts.json",
+    "docs/program/registry/shared/provenance/vcl/source/weld/MetricSpinButton.ts.json",
+    "docs/program/registry/shared/provenance/vcl/source/weld/SpinButton.ts.json",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/i18n/UnicodeType.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/units.ts.json",
+    "docs/program/registry/shared/runtime/vcl/source/control/field.ts.json",
+    "docs/program/registry/shared/runtime/vcl/source/weld/MetricSpinButton.ts.json",
+    "docs/program/registry/shared/runtime/vcl/source/weld/SpinButton.ts.json",
+    "apps/office/e2e/calc/standard-toolbar.spec.ts",
+    "apps/office/src/external/icu/source/common/uchar.ts",
+    "apps/office/src/external/icu/source/common/uchar_props_data.json",
+    "apps/office/src/external/icu/source/common/uchar_props_data.ts",
+    "apps/office/src/external/icu/source/common/unicode/uchar.ts",
+    "apps/office/src/framework/browser/dispatch/browser-dispatcher.test.ts",
+    "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+    "apps/office/src/i18npool/source/localedata/localedata.ts",
+    "apps/office/src/i18nutil/source/utility/unicode.ts",
+    "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+    "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+    "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+    "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+    "apps/office/src/sc/inc/global.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+    "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+    "apps/office/src/sc/source/filter/xml/xmltabi.ts",
+    "apps/office/src/sc/source/ui/view/cellsh3.ts",
+    "apps/office/src/sc/source/ui/view/tabview3.ts",
+    "apps/office/src/sc/source/ui/view/viewfunc.ts",
+    "apps/office/src/sfx2/source/control/bindings.ts",
+    "apps/office/src/sfx2/source/control/dispatch.ts",
+    "apps/office/src/sfx2/source/control/request.test.ts",
+    "apps/office/src/sfx2/source/control/request.ts",
+    "apps/office/src/sfx2/source/control/unoctitm.test.ts",
+    "apps/office/src/sw/source/uibase/app/docst.ts",
+    "apps/office/src/unotools/source/i18n/measurement.test.ts",
+    "apps/office/src/unotools/source/misc/syslocale.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "docs/program/calc-ui-readiness.md",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json",
+    "docs/program/registry/shared/provenance/external/icu/source/common/uchar.ts.json",
+    "docs/program/registry/shared/provenance/i18npool/source/localedata/localedata.ts.json",
+    "docs/program/registry/shared/provenance/i18nutil/source/utility/unicode.ts.json",
+    "docs/program/registry/shared/provenance/sfx2/source/control/request.ts.json",
+    "docs/program/registry/shared/runtime/external/icu/source/common/uchar.ts.json",
+    "docs/program/registry/shared/runtime/i18npool/source/localedata/localedata.ts.json",
+    "docs/program/registry/shared/runtime/i18nutil/source/utility/unicode.ts.json",
+    "docs/program/registry/shared/runtime/sfx2/source/control/request.ts.json",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/check-module-boundaries.test.ts"
+  ],
+  "fileCount": 100,
+  "fullRegressionCheckpoint": {
+    "last": 40,
+    "next": 50,
+    "executedAllApps": false
+  }
+}

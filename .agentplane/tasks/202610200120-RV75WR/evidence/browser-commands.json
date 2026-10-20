@@ -1,0 +1,32 @@
+[
+  {
+    "argv": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "log": "output/playwright/task46-final-accepted-browser-0.log"
+  },
+  {
+    "argv": [
+      "npx",
+      "playwright",
+      "test",
+      "--config",
+      "apps/office/playwright.config.ts",
+      "--project",
+      "calc",
+      "--workers=2",
+      "apps/office/e2e/calc/column-width.spec.ts",
+      "apps/office/e2e/calc/standard-toolbar.spec.ts",
+      "apps/office/e2e/calc/formatting-toolbar.spec.ts",
+      "apps/office/e2e/calc/ods.spec.ts",
+      "apps/office/e2e/calc/clear-format.spec.ts",
+      "apps/office/e2e/calc/sheet-context-menu.spec.ts",
+      "apps/office/e2e/calc/outline.spec.ts"
+    ],
+    "exitCode": 0,
+    "log": "output/playwright/task46-final-accepted-browser-1.log"
+  }
+]

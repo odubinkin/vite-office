@@ -1,0 +1,27 @@
+[
+  {
+    "argv": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "log": "output/playwright/task46-current-browser-0.log"
+  },
+  {
+    "argv": [
+      "npx",
+      "playwright",
+      "test",
+      "--config",
+      "apps/office/playwright.config.ts",
+      "--project",
+      "calc",
+      "--workers=2",
+      "apps/office/e2e/calc/column-width.spec.ts",
+      "apps/office/e2e/calc/ods.spec.ts"
+    ],
+    "exitCode": 0,
+    "log": "output/playwright/task46-current-browser-1.log"
+  }
+]

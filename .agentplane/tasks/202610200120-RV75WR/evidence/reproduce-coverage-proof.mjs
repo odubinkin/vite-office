@@ -9,7 +9,7 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const freeze=JSON.parse(fs.readFileSync(root+'production-release-freeze.json'));
 const baseDir=process.cwd();
 const controller=path.resolve('apps/office/src/sc/browser/controller/calc-view-controller.ts');
-const refreshed=[controller,path.resolve('apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx')];
+const refreshed=[controller,path.resolve('apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx'),path.resolve('apps/office/src/sc/source/filter/xml/xmlstyli.ts')];
 const profiles={calc:['task46-calc-release','task46-calc-release-results.json','task46-calc-release.log'],ui:['task46-ui-accepted','task46-ui-accepted-results.json','task46-ui-accepted.log'],shared:['task46-shared-final-accepted','task46-shared-final-accepted-results.json','task46-shared-final-accepted.log'],writer:['task46-writer-current','task46-writer-current-results.json','task46-writer-current.log']};
 const maps={};const results={};
 for(const [name,[folder,result,log]] of Object.entries(profiles)){
@@ -33,12 +33,12 @@ for(const [name,[folder,result,log]] of Object.entries(profiles)){
 }
 const names=r=>new Set(r.testResults.flatMap(f=>f.assertionResults.map(t=>f.name+'#'+t.fullName)));
 if(JSON.stringify([...names(results.calc)].sort())!==JSON.stringify([...names(results.ui)].sort()))throw Error('UI owner refresh did not replay exactly the accepted Calc cases');
-if(maps.ui.files().length!==2||!refreshed.every(f=>maps.ui.files().includes(f)))throw Error('Expected two complete current UI owners');
+if(maps.ui.files().length!==3||!refreshed.every(f=>maps.ui.files().includes(f)))throw Error('Expected three complete current refreshed owners');
 const old=maps.calc.toJSON();for(const f of refreshed)old[f]=maps.ui.fileCoverageFor(f).toJSON();
 const accepted=coverage.createCoverageMap(old),summary=accepted.getCoverageSummary().toJSON();
 for(const k of ['statements','branches','functions','lines'])if(summary[k].pct!==100)throw Error('Reconciled '+k);
 const raw=JSON.stringify(accepted.toJSON());fs.writeFileSync(root+'calc-current-raw.json.gz',zlib.gzipSync(raw));
-fs.writeFileSync(root+'calc-current-proof.json',JSON.stringify({result:'pass',testFiles:results.calc.testResults.length,tests:results.calc.numPassedTests,summary,rawSha256:hash(raw),reconciliation:'Entire freshly measured controller and metric-dialog owner/maps replace the earlier complete owners;no old/new counter merge. Every other Calc owner retains its measured hash. Both profiles replay the identical successful Calc test set.',sourceHashes:Object.fromEntries(accepted.files().map(f=>[path.relative(baseDir,f),hash(fs.readFileSync(f))]))},null,2)+'\n');
+fs.writeFileSync(root+'calc-current-proof.json',JSON.stringify({result:'pass',testFiles:results.calc.testResults.length,tests:results.calc.numPassedTests,summary,rawSha256:hash(raw),reconciliation:'Entire freshly measured controller,metric-dialog and XML style owner/maps replace the earlier complete owners;no old/new counter merge. Every other Calc owner retains its measured hash. Both profiles replay the identical successful Calc test set.',sourceHashes:Object.fromEntries(accepted.files().map(f=>[path.relative(baseDir,f),hash(fs.readFileSync(f))]))},null,2)+'\n');
 const full=coverage.createCoverageMap({...accepted.toJSON(),...maps.shared.toJSON(),...maps.writer.toJSON()}),owners=[];
 for(const rel of Object.keys(freeze.sourceHashes)){
  if(!rel.endsWith('.ts')&&!rel.endsWith('.tsx'))continue;
