@@ -1,10 +1,11 @@
 ---
 id: "202610202009-NF91KY"
 title: "Implement native shared EditEngine pool and rich-text object ownership"
-status: "DOING"
+result_summary: "Native EditEngine pool and rich-text ownership verified with Calc and shared coverage100"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T22:42:51.290Z"
+  updated_at: "2026-10-20T22:44:21.297Z"
   updated_by: "CODER"
   note: "verified-202610202009-NF91KY"
   attempts: 0
@@ -44,11 +45,19 @@ quality_review:
     - "Real ContentInfo/string/item/field/style owners retain native copy/equality,field selection,style/cache and callback asymmetries;no fake renderer/device/UNO/lifetime provider is introduced."
     - "Final audit verifies45current task files,69historical source pins,50native blobs and every actual counter in495shared plus129Calc owners. The17453-test baseline plus10-test supplement has exact identical source/maps and exact counter sums;no thresholds or observations were rewritten."
     - "Calc523tests,related Writer35tests,Chromium/DOM-freeWorker7Calc cases,6Writer regressions and4inspected screenshots pass. Current45-file source lint/format,types,source/provenance/registry/build gates are recorded."
-commit: null
+commit:
+  hash: "8ceda10ab6b4af26036c33ff7cbac05cf0f57df3"
+  message: "🧩 NF91KY test: complete native pool ownership acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: implement genuine shared EditEngine pool/rich-text owners and missing native value dependencies under continuing user approval;preserve explicit unported service boundaries."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610202009-NF91KY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: original61-entry EditEngine pool and rich-text ownership pass complete Calc/shared100,native/source audit and genuine browser/Worker regressions. This idempotent DONE result correction repairs only the generic guided close summary;all quality gates remain passed."
 events:
   -
     type: "status"
@@ -69,8 +78,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610202009-NF91KY"
+  -
+    type: "verify"
+    at: "2026-10-20T22:44:21.297Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610202009-NF91KY"
+  -
+    type: "status"
+    at: "2026-10-20T22:44:21.563Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610202009-NF91KY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-10-20T22:47:36.578Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: original61-entry EditEngine pool and rich-text ownership pass complete Calc/shared100,native/source audit and genuine browser/Worker regressions. This idempotent DONE result correction repairs only the generic guided close summary;all quality gates remain passed."
 doc_version: 3
-doc_updated_at: "2026-10-20T22:44:06.933Z"
+doc_updated_at: "2026-10-20T22:47:36.580Z"
 doc_updated_by: "CODER"
 description: "Block57: port actual EditEngine item package/pool and consumed EditTextObject ownership from pinned upstream,including missing value prerequisites. Preserve native static/dynamic defaults,secondary-pool resolution,copy/equality/cache/style semantics and real shared classes;do not invent renderer,UNO,numbering or graphic services. Keep unported responsibilities explicit until real source owners exist."
 sections:
@@ -149,6 +178,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 8ceda10ab6b4af26036c33ff7cbac05cf0f57df3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-20T22:44:21.297Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610202009-NF91KY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:44:06.933Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+    - old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 7d8d30a01b195f4e0efe5ed01199e35f8aa3831d
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -276,6 +335,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 8ceda10ab6b4af26036c33ff7cbac05cf0f57df3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-20T22:44:21.297Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610202009-NF91KY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:44:06.933Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+- old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 7d8d30a01b195f4e0efe5ed01199e35f8aa3831d
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
