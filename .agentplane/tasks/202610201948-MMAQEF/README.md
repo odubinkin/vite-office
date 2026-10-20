@@ -1,10 +1,11 @@
 ---
 id: "202610201948-MMAQEF"
 title: "Implement native search option value and service contracts"
-status: "DOING"
+result_summary: "implement native search option value and service contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Inspected value owners, inherited full constructors, typed assignment/conversion and legacy forwarding; exact enum/field mappings and boundary exceptions preserve native contracts without promoting broader service/UI fidelity."
     - "122 focused search tests and 48 boundary-tooling cases pass; build and required static/registry checks pass. WRITER-017 is explicitly source-only; unimplemented item/configuration and ICU remain outside this leaf."
-commit: null
+commit:
+  hash: "cd07a2ca9954b1c1694d8cc6ce187f307896ec67"
+  message: "🧩 MMAQEF search: implement native option value and service bridge"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved independent native search value/service contract leaf on writer, using only the authorized LibreOffice reference."
+  -
+    author: "CODER"
+    body: "Verified: implemented native search option values and legacy/new service bridge; 122 search and 48 boundary tests, build and required checks passed. Parent configuration and browser UI remain open."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "122 search tests and 48 boundary tests pass; build, scoped style, source registries and policy checks pass. Native source/value evidence only; parent item/configuration/UI and ICU remain open."
+  -
+    type: "status"
+    at: "2026-10-20T20:05:51.553Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: implemented native search option values and legacy/new service bridge; 122 search and 48 boundary tests, build and required checks passed. Parent configuration and browser UI remain open."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:05:14.208Z"
+doc_updated_at: "2026-10-20T20:05:51.555Z"
 doc_updated_by: "CODER"
 description: "Implementation leaf of approved Writer search/replace plan 202610201742-6B984M. Port SearchAlgorithms and legacy/new UNO SearchOptions value fields/constructors, complete i18nutil SearchOptions2 conversion/assignment contracts, actual i18npool legacy setOptions and new-wire setOptions2 handling, and native search command/member identities for the future shared command item. Preserve native defaults and algorithm precedence, independent string/Locale values and unsupported modes. No configuration provider stub or UI parity claim; existing local LibreOffice reading authorized, no ICU external read without the pending explicit approval, network or document storage changes."
 sections:
@@ -118,6 +131,10 @@ sections:
     WRITER-017 records source-only SvxSearchItem constructor versus Notify case-flag asymmetry; the item/configuration owner remains pending and no constructor behavior has been fabricated here. Broader parent view dispatch, toolbar/dialog, configuration and ICU normalization/backend work remain open.
 
     Scope discovery: vendor/icu-reference physically points into the separate Calc repository. A limited normalization header read occurred before the repository boundary was confirmed; further ICU reads were stopped and the user was informed. Explicit approval for reading that ICU source/archive is pending. No additional outside-repository ICU reads, network access or writes were used for this independent leaf. Local LibreOffice source reading was already authorized.
+extensions:
+  implementation_commit:
+    hash: "cd07a2ca9954b1c1694d8cc6ce187f307896ec67"
+    message: "🧩 MMAQEF search: implement native option value and service bridge"
 id_source: "generated"
 ---
 ## Summary
