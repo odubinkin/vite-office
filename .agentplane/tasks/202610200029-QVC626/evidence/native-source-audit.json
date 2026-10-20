@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "anchors": [
+        {
+          "marker": "SID_ATTR_CHAR_CONTOUR",
+          "lines": [
+            1054
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/sdi/svx.sdi",
+      "sha256": "4a8618560588e4cc301d6c3ee671c4a0d647719086201a5e51f7587ef4190afd",
+      "anchors": [
+        {
+          "marker": "OutlineFont",
+          "lines": [
+            6346
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+      "sha256": "008d43838ad2bf131230277f3a4dc3e9b5bd2ca4331f83e1778e010ad4b3aefd",
+      "anchors": [
+        {
+          "marker": "XMLBoolPropHdl::importXML",
+          "lines": [
+            284
+          ]
+        },
+        {
+          "marker": "XMLBoolPropHdl::exportXML",
+          "lines": [
+            275,
+            293
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+      "sha256": "06e707be14bb818761eeb362f71d1e3d47e8938bf952e1ce06fd80cf718c3cdf",
+      "anchors": [
+        {
+          "marker": "PROP_CharContoured",
+          "lines": [
+            144,
+            529,
+            1084
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/editeng/contouritem.hxx",
+      "sha256": "e9bb0a098769f3914e468383aca42493205e3c1135553d55c9b83aff246593ed",
+      "anchors": [
+        {
+          "marker": "SvxContourItem",
+          "lines": [
+            25,
+            31,
+            35,
+            36,
+            40
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/outdev/text.cxx",
+      "sha256": "d131c3830f4a2ead6a0a11372692a258ce8be0ab6e88131f76708cb89c7c8643",
+      "anchors": [
+        {
+          "marker": "OutputDevice::ImplDrawSpecialText",
+          "lines": [
+            329
+          ]
+        },
+        {
+          "marker": "SetTextColor( COL_WHITE )",
+          "lines": [
+            439
+          ]
+        }
+      ]
+    }
+  ]
+}

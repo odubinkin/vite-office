@@ -1,0 +1,77 @@
+{
+  "result": "pass",
+  "owners": [
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "b5960d375fa2355d6bb71663dfb41990b30c7851a53a08944c3346fc76f1c24a",
+      "statements": 318,
+      "functions": 62,
+      "branches": 130,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "b7a89009dee7bcfeddfcc57b076a92cab3df71439bf32e5ed97d981f20428556",
+      "statements": 56,
+      "functions": 15,
+      "branches": 50,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "2818ee1c71b1ed510dca97fb9e36238d44014e71ab5fb4428b2f73a9567674c8",
+      "statements": 113,
+      "functions": 46,
+      "branches": 114,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+      "sha256": "b4555b82faecad0d07f925e5c7b986b9a014579621e219051c707bcdc9b3cf7a",
+      "statements": 22,
+      "functions": 2,
+      "branches": 6,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "238c9e55e14ad0aeb5c92432dc5f18d852f15ad1fad624df5fbb8473b031d414",
+      "statements": 309,
+      "functions": 25,
+      "branches": 146,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "e35c0de480a59bf49d8e94582396be2f58425c7c21247f3c689d473efa8b33af",
+      "statements": 138,
+      "functions": 27,
+      "branches": 95,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/vcl/browser/outlined-text.tsx",
+      "sha256": "4d846279f4f2fbdb703ce410d23fc7bbe25c688769a4528086585320f074501d",
+      "statements": 27,
+      "functions": 7,
+      "branches": 8,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "f371479f45489ab7fc8eda60c193413f96193da2ab72c34015b1ada6a3d8abef",
+      "statements": 231,
+      "functions": 3,
+      "branches": 2,
+      "coverage": "S/B/F/L100"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+      "sha256": "68d24cccfcfbb5778dab9cb2f9f8edca347adb191dfe29bc14a97b197382c392",
+      "statements": 73,
+      "functions": 12,
+      "branches": 41,
+      "coverage": "S/B/F/L100"
+    }
+  ]
+}

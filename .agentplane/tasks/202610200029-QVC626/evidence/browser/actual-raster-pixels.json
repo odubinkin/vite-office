@@ -1,0 +1,15 @@
+{
+  "result": "pass",
+  "source": "test-results/e2e/calc-outline-paints-the-na-3efc4-independently-colored-lines-calc/outline-colored-raster.png",
+  "width": 96,
+  "height": 17,
+  "excludedBorder": true,
+  "exactInteriorColors": {
+    "white": 38,
+    "blue": 17,
+    "red": 39,
+    "green": 22,
+    "yellow": 905
+  },
+  "interpretation": "Actual browser screenshot contains the source white center and separate blue glyph/red underline/green overline pixels on yellow cell background. No font metrics or device provider is simulated."
+}
