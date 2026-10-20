@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:51:09.294Z"
+doc_updated_at: "2026-10-20T23:54:50.670Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -193,6 +193,13 @@ sections:
     Scope: relative local assets,two JavaScript bundles,no embedded application backend endpoints; existing bundle-size warning retained. Build executed only after browser termination.
 
     Full application coverage remains live under session12311 / PID91470 at elapsed27:52,516 temporary files at latest observation. Active child processes and advancing temporary outputs verified; do not restart or treat an observation timeout as terminal. No application/inventory verdict yet. Runtime/test/config sources remain frozen; documentation changes do not alter the tested snapshot. Keep task DOING and strict coverage thresholds/exclusions unchanged.
+
+    Command: changed-file Prettier and ESLint; npm run typecheck; npm run check:dependencies; npm run check:source-provenance; npm run check:source-tree; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; original Common.xcs SHA256 and scope count.
+    Result: pass on current frozen runtime; no source/test/config changes. Doctor0 errors with the same pre-existing managed hook-shim readiness warning. Non-task scope remains65 paths. Common.xcs SHA256 remains68638aecc184c70e0262905a8c3b2a8e369ed26b28d83f3bd381a3f68a6cb630.
+    Evidence: final-audit-format/lint/typecheck/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing/doctor logs in output/playwright/writer-xcs-schema.
+    Scope: current source after the point-only FindAll correction and WRITER-025 documentation, including987 runtime dependency sources,988 provenance records,2555 authored JSDoc files and unchanged strict policies. These mechanical gates do not certify complete native service/ABI or whole Writer parity.
+
+    Full application coverage still running: session12311 / PID91470,elapsed32:03,562 temporary outputs at latest observation. Complete browser432,tooling91 and static gates already passed at current source; retain pending status until terminal full application/inventory evidence and formal quality/closure. No duplicated full run.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -393,6 +400,13 @@ Evidence: full-current-static.log.
 Scope: relative local assets,two JavaScript bundles,no embedded application backend endpoints; existing bundle-size warning retained. Build executed only after browser termination.
 
 Full application coverage remains live under session12311 / PID91470 at elapsed27:52,516 temporary files at latest observation. Active child processes and advancing temporary outputs verified; do not restart or treat an observation timeout as terminal. No application/inventory verdict yet. Runtime/test/config sources remain frozen; documentation changes do not alter the tested snapshot. Keep task DOING and strict coverage thresholds/exclusions unchanged.
+
+Command: changed-file Prettier and ESLint; npm run typecheck; npm run check:dependencies; npm run check:source-provenance; npm run check:source-tree; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check; original Common.xcs SHA256 and scope count.
+Result: pass on current frozen runtime; no source/test/config changes. Doctor0 errors with the same pre-existing managed hook-shim readiness warning. Non-task scope remains65 paths. Common.xcs SHA256 remains68638aecc184c70e0262905a8c3b2a8e369ed26b28d83f3bd381a3f68a6cb630.
+Evidence: final-audit-format/lint/typecheck/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing/doctor logs in output/playwright/writer-xcs-schema.
+Scope: current source after the point-only FindAll correction and WRITER-025 documentation, including987 runtime dependency sources,988 provenance records,2555 authored JSDoc files and unchanged strict policies. These mechanical gates do not certify complete native service/ABI or whole Writer parity.
+
+Full application coverage still running: session12311 / PID91470,elapsed32:03,562 temporary outputs at latest observation. Complete browser432,tooling91 and static gates already passed at current source; retain pending status until terminal full application/inventory evidence and formal quality/closure. No duplicated full run.
 
 ## Rollback Plan
 
