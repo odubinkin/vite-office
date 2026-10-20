@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:31:11.867Z"
+doc_updated_at: "2026-10-20T23:33:04.397Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -162,6 +162,13 @@ sections:
     Result: running, no verdict yet; session12311 and verified PID91470 at latest observation.
     Evidence: full-current-native-contracts.log and fresh coverage/all temporary output.
     Scope: fresh complete application coverage followed by inventory coverage only if its preceding gate passes. This run is necessary because current source changed materially since the original full snapshot; do not duplicate it. Task remains DOING pending terminal evidence and required quality/closure.
+
+    Command: npm run test:e2e
+    Result: running, fresh final complete browser acceptance on current runtime state; tool session16662. Build stage confirmed live, no browser verdict yet.
+    Evidence: output/playwright/writer-xcs-schema/full-current-browser.log.
+    Scope: all configured browser projects after the point-only ordinary-find correction. Do not overlap another build/static run while this job owns browser build output. Runtime/test/config sources remain frozen.
+
+    Concurrent canonical npm test remains live under session12311 / Vitest PID91470, elapsed10:08 with209 temporary coverage files at latest observation. No final application/inventory verdict yet; preserve this run rather than restarting. Documentation-only WRITER-025 checkpoint82462b8593d1 does not alter either runtime snapshot. Task remains DOING.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -329,6 +336,13 @@ Command: npm test
 Result: running, no verdict yet; session12311 and verified PID91470 at latest observation.
 Evidence: full-current-native-contracts.log and fresh coverage/all temporary output.
 Scope: fresh complete application coverage followed by inventory coverage only if its preceding gate passes. This run is necessary because current source changed materially since the original full snapshot; do not duplicate it. Task remains DOING pending terminal evidence and required quality/closure.
+
+Command: npm run test:e2e
+Result: running, fresh final complete browser acceptance on current runtime state; tool session16662. Build stage confirmed live, no browser verdict yet.
+Evidence: output/playwright/writer-xcs-schema/full-current-browser.log.
+Scope: all configured browser projects after the point-only ordinary-find correction. Do not overlap another build/static run while this job owns browser build output. Runtime/test/config sources remain frozen.
+
+Concurrent canonical npm test remains live under session12311 / Vitest PID91470, elapsed10:08 with209 temporary coverage files at latest observation. No final application/inventory verdict yet; preserve this run rather than restarting. Documentation-only WRITER-025 checkpoint82462b8593d1 does not alter either runtime snapshot. Task remains DOING.
 
 ## Rollback Plan
 
