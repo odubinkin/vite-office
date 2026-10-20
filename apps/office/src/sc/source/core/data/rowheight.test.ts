@@ -62,7 +62,7 @@ it("keeps device-dependent layouts outside the represented uniform-script standa
   doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
   expect(
     (doc.FetchTable(0) as ScTable).SetOptimalHeight(
-      new RowHeightContext(doc.MaxRow(), 1 / 15),
+      new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
       0,
       0,
       true,
@@ -101,7 +101,7 @@ it("retains pixel-change storage conditions,zero fallback and native single inte
 });
 it("applies grouped calculated heights,manual skipping,forced reset and extra-height flags", /** Actual reducer runs through the real sheet. @returns Nothing. */ () => {
   const [doc, table] = sheet(),
-    context = new RowHeightContext(doc.MaxRow(), 1 / 15);
+    context = new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);
   table.SetRowHeightOnly(0, 7, 600);
   table.SetManualHeight(2, 3, true);
   table.SetManualHeight(6, 6, true);
@@ -182,14 +182,24 @@ it("retains one shared context across selected sheets and source MAX accumulatio
   expect((doc.FetchTable(1) as ScTable).GetRowHeight(0)).toBe(583);
   const table = doc.FetchTable(0) as ScTable;
   table.SetManualHeight(2, 3, true);
-  expect(table.SetOptimalHeight(new RowHeightContext(doc.MaxRow(), 1 / 15), 2, 3, true)).toBe(
-    false,
-  );
+  expect(
+    table.SetOptimalHeight(
+      new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
+      2,
+      3,
+      true,
+    ),
+  ).toBe(false);
   controller.Select(0, 1);
   controller.SetFontSize(18);
-  expect(table.SetOptimalHeight(new RowHeightContext(doc.MaxRow(), 1 / 15), 0, 1, true)).toBe(
-    false,
-  );
+  expect(
+    table.SetOptimalHeight(
+      new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
+      0,
+      1,
+      true,
+    ),
+  ).toBe(false);
   controller.Close();
 });
 
@@ -199,9 +209,14 @@ it("excludes the unused default-column tail when all native columns are allocate
   const delta = new ScPatternAttr(doc.getCellAttributeHelper());
   for (const which of [101, 112, 117]) delta.ItemSetPut(new SvxFontHeightItem(480, 100, which));
   table.GetDefaultColumnData().ApplyPatternArea(0, 0, delta);
-  expect(table.SetOptimalHeight(new RowHeightContext(doc.MaxRow(), 1 / 15), 0, 0, true)).toBe(
-    false,
-  );
+  expect(
+    table.SetOptimalHeight(
+      new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
+      0,
+      0,
+      true,
+    ),
+  ).toBe(false);
   expect(table.GetRowHeight(0)).toBe(256);
   delta.Dispose();
   doc.DisposeAttributes();

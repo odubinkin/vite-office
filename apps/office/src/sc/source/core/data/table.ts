@@ -30,6 +30,7 @@ import {
 } from "../../../inc/compressedarray";
 import { CRFlags, ScGlobal, STD_COL_WIDTH } from "../../../inc/global";
 import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { FilterData } from "../../../inc/FilterData";
@@ -38,6 +39,17 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original const cached-script query only visits actually allocated columns. @param col - Column. @param row - Row. @returns Cached flags or NONE. */
+  GetScriptType(col: number, row: number): SvtScriptType {
+    return this.rDocument.ValidCol(col) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn).GetScriptType(row)
+      : SvtScriptType.NONE;
+  }
+  /** Original setter validates the logical column then directly accesses its existing storage. Unallocated target storage is an original caller precondition;no column is synthesized. @param col - Column. @param row - Row. @param type - Native flags. @returns Nothing. */
+  SetScriptType(col: number, row: number, type: SvtScriptType): void {
+    if (this.rDocument.ValidCol(col)) (this.aCol[col] as ScColumn).SetScriptType(row, type);
+  }
+
   /** Original table2.cxx cursor delta validates coordinates before allocating its actual column. @param col - Column. @param row - Row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(col: number, row: number, pattern: ScPatternAttr): void {
     if (this.rDocument.ValidColRow(col, row))

@@ -1,4 +1,7 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
+import { celltextattr_block, element_type_celltextattr } from "../../../inc/mtvelements";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScLineFlags } from "../../../inc/attarray";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
@@ -146,6 +149,26 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original cached script getter;UNKNOWN is retained until a real classifier writes metadata. @param row - Row. @returns Cached flags or NONE for absent metadata. */
+  GetScriptType(row: number): SvtScriptType {
+    if (
+      !this.rDocument.ValidRow(row) ||
+      this.maCellTextAttrs.get_type(row) !== element_type_celltextattr
+    )
+      return SvtScriptType.NONE;
+    const position = this.maCellTextAttrs.cposition(row);
+    return celltextattr_block.at(position.first.get().data as base_element_block, position.second)
+      .mnScriptType;
+  }
+  /** Original metadata-only script setter never creates a text-attribute slot. Native grouped-formula cache discard remains unported;no such cache is owned by this slice. @param row - Row. @param type - Native flags. @returns Nothing. */
+  SetScriptType(row: number, type: SvtScriptType): void {
+    if (!this.rDocument.ValidRow(row)) return;
+    const position = this.maCellTextAttrs.position(row),
+      block = position.first.get();
+    if (block.type !== element_type_celltextattr) return;
+    celltextattr_block.at(block.data as base_element_block, position.second).mnScriptType = type;
+  }
+
   /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(row: number, pattern: ScPatternAttr): void {
     const cache = new ScItemPoolCache(

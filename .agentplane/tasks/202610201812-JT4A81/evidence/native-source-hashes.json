@@ -1,0 +1,15 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": {
+    "vendor/libreoffice-reference/sc/inc/rowheightcontext.hxx": "2026b55c53691c473c2de94780a8c32852fb84e84a9213ac1b191cb87f4e3ea4",
+    "vendor/libreoffice-reference/sc/source/core/data/rowheightcontext.cxx": "88a8b07d65bd05359809457883507fe59436bc948919ab50d4d3eb1045bf7888",
+    "vendor/libreoffice-reference/sc/source/core/inc/scrdata.hxx": "7bdbb7b0a0c27889f1e93c53293691669cf8917b8cb065336e589a3b96e214bf",
+    "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx": "6e4663c7b55f89a3b351aa091cd9b424cb158ec206dae54ee3b0285001441b2f",
+    "vendor/libreoffice-reference/sc/source/core/data/document.cxx": "e89ce72a7e618225be9d61e531e36175787a32e246d5cbb0b4738a93f7e3d9da",
+    "vendor/libreoffice-reference/sc/source/core/data/column2.cxx": "9e46fdcb1c09fa97dac89a38a540f37e268fe2d4add9e80f77c17f24e3dc7f62",
+    "vendor/libreoffice-reference/sc/source/core/data/table1.cxx": "4973cc317e940243590f4633d78737a45acdc7fa0fa4d5f7dbb16b975cb44903",
+    "vendor/libreoffice-reference/sc/inc/colcontainer.hxx": "af9c2ef3c7b418b28b2d884abc472c661a4e21a4240b714d36a0b8eecae7a9da",
+    "vendor/libreoffice-reference/sc/source/core/data/global.cxx": "8f526d76fb84c65e5c5a78976443bdeee01303876f15beff30220dc2a8a3c2c5",
+    "vendor/libreoffice-reference/svl/source/config/languageoptions.cxx": "776c90c2c64159baf9ed48436951676435d756968c80c1248062d6e3d8a4875d"
+  }
+}

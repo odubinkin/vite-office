@@ -1,15 +1,17 @@
-/** @fileoverview Browser binding of source GetSelectionScriptType for the current plain-cell display boundary. The unported native formatted-cell script cache is not emulated. */
+/** @fileoverview GetSelectionScriptType browser binding over actual ScDocument script services and ScGlobal fallback. Formatted-cell cache updates remain unported. */
+import { BreakIteratorImpl } from "../../../i18npool/source/breakiterator/breakiteratorImpl";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScAddress } from "../../inc/address";
 import { ScHorizontalCellIterator } from "../../inc/dociter";
 import { cellPresentation } from "../editor/cell-input";
+import { ScGlobal } from "../../inc/global";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { getConfiguredSystemUILanguage } from "../../../i18nlangtag/source/isolang/mslangid";
-import { getScriptType, ScriptType } from "../../../i18nlangtag/source/isolang/mslangid.script";
 import { SvtScriptType } from "../../../svl/inc/languageoptions";
-import { GetStringScriptType } from "../../source/core/data/documen6";
-import { BreakIteratorImpl } from "../../../i18npool/source/breakiterator/breakiteratorImpl";
-const breakIterator = new BreakIteratorImpl();
+
+/** Supplies the actual shared backend at the native process-context read site;the document retains the created interface. @returns Real script service. */
+function createBreakIterator(): BreakIteratorImpl {
+  return new BreakIteratorImpl();
+}
 
 /** Classifies actual displayed cell strings;like FillRangeListWithMarks(false),grouping does not union script types from other selected sheets. @param view - Actual cursor and mark owner. @returns Nonempty source flags,using office UI language for entirely weak/empty text. */
 export function getCalcSelectionScriptType(view: ScViewData): SvtScriptType {
@@ -23,7 +25,7 @@ export function getCalcSelectionScriptType(view: ScViewData): SvtScriptType {
     ): void => {
       const string = unicode(cellPresentation(doc, pos).text);
       try {
-        script |= GetStringScriptType(string, breakIterator);
+        script |= doc.GetStringScriptType(string, createBreakIterator);
       } finally {
         string.dispose();
       }
@@ -45,14 +47,6 @@ export function getCalcSelectionScriptType(view: ScViewData): SvtScriptType {
       while (cells.GetNext(col, row) !== null)
         classify(new ScAddress(col[0], row[0], range.aStart.Tab()));
     }
-  if (script === SvtScriptType.NONE) {
-    const officeScript = getScriptType(getConfiguredSystemUILanguage());
-    script =
-      officeScript === ScriptType.ASIAN
-        ? SvtScriptType.ASIAN
-        : officeScript === ScriptType.COMPLEX
-          ? SvtScriptType.COMPLEX
-          : SvtScriptType.LATIN;
-  }
+  if (script === SvtScriptType.NONE) script = ScGlobal.GetDefaultScriptType();
   return script;
 }

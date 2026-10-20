@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/vcl/browser/text-line-measurement.ts",
+    "rationale": "Actual DOM Range text shaping belongs to shared VCL browser device code;Writer-specific node/pagination packaging remains in Writer.",
+    "responsibilities": [
+      "TaskJT4A81 restores the original complete RowHeightContext six-input contract,independent PPTX/PPTY and zoom values,opaque borrowed device identity,zero/false defaults and UInt16 extra-height storage. ScScriptTypeData owns a lazy XBreakIterator reference per document. The original process-context creation dependency is an explicit borrowed host factory:the browser supplies the existing real BreakIteratorImpl;Calc core imports only the interface. Empty host references can be retried;the empty-string guard and source script loop are preserved. Calc existing font-selection UI now uses that document owner and ScGlobal office-UI-language fallback. Original address-only cached GetScriptType/SetScriptType traverse actual document/table/column CellTextAttr storage,retain UNKNOWN and do not synthesize missing metadata or columns(CALC238). Formatted-cell UpdateScriptType/GetRangeScriptType and actual GetNeededSize/EditEngine automatic wrapped-height layout remain unported. The existing Writer DOM Range algorithm is moved unchanged into shared VCL;Writer retains source node offsets,twip geometry and fallback policy. No browser document model,synthetic row heights or UNO/OutputDevice emulator is added. Full native device/font/ABI/layout and full UI parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React/DOM replace native painting and toolbox controls;source data and attribute ownership remain native."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/text-line-measurement.ts",
+          "marker": "measureBrowserTextLines"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/text-line-measurement.test.ts",
+          "marker": "Shared"
+        },
+        {
+          "path": "apps/office/e2e/calc/text-size-context.spec.ts",
+          "marker": "Worker"
+        }
+      ]
+    }
+  }
+}

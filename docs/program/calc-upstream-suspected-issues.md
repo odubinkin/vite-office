@@ -3375,3 +3375,10 @@ Full merged/device/alternate-view paint parity remains unverified.
 - Observation: the no-argument toggle reads the actual selection pattern,applies its negated boolean and unconditionally calls `rReq.Done(aNewSet)` with the resulting cell item. The argument-present branch applies the mapped item and reaches the ordinary final completion guard,which does not complete API requests.
 - Impact: otherwise equivalent API operations have different completion and argument-recording states. This asymmetry may be intentional recording behavior;it is preserved rather than normalized by the browser adapter.
 - Local preservation: actual SfxRequest tests independently assert the unconditional API toggle completion,recorded Which139 value and unfinished typed API request,alongside normal typed completion and existing completed requests. Full native macro/UNO recording remains unported.
+
+### CALC238 — cached script setter checks logical column validity but assumes allocated storage
+
+- Pinned source: `sc/source/core/data/table1.cxx`, `ScTable::SetScriptType`; `sc/inc/colcontainer.hxx`, `ScColContainer::operator[]`; `sc/source/core/data/column2.cxx`, `ScColumn::SetScriptType`.
+- Observation: the table setter only checks ValidCol before directly indexing aCol. The container operator does not grow or allocate its vector. The column setter updates only an already-present CellTextAttr slot. The const table getter instead checks IsColValid before indexing.
+- Impact: a logically valid but unallocated column is not admitted by the setter's storage precondition;calling it can access outside the native vector. This may be a deliberate populated-cell caller assumption,not a defect in normal callers.
+- Local preservation: cached reads return NONE for unallocated columns;setters do not allocate columns or metadata. Existing-column writes retain UNKNOWN/default/reset semantics. The browser's underlying absent-column access throws instead of inventing storage;native undefined accesses and their failure representation are not executed or claimed as parity. Grouped-formula cache discard remains unported and no grouped-formula context is owned by this slice.

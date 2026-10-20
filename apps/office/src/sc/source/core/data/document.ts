@@ -1,5 +1,9 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
 import { ScItemPoolCache } from "../../../inc/poolcach";
+import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
+import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
+import { GetStringScriptType as classifyString } from "./documen6";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
@@ -52,6 +56,34 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private pScriptTypeData: ScScriptTypeData | undefined;
+  /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
+  GetBreakIterator(factory?: ScScriptServiceFactory): XBreakIterator | null {
+    this.pScriptTypeData ??= new ScScriptTypeData();
+    this.pScriptTypeData.xBreakIter ??= factory?.() ?? null;
+    return this.pScriptTypeData.xBreakIter;
+  }
+  /** Original document string classifier,retaining the empty-string lazy-service guard and consumed source loop. @param string - Actual UTF16 string. @param factory - Borrowed real service creation binding. @returns Native script flags. */
+  GetStringScriptType(
+    string: OUStringConstReference,
+    factory?: ScScriptServiceFactory,
+  ): SvtScriptType {
+    return string.getLength() === 0
+      ? SvtScriptType.NONE
+      : classifyString(string, this.GetBreakIterator(factory));
+  }
+  /** Original address-only const getter reads cached metadata without evaluating or updating it. @param position - Actual coordinate. @returns Stored flags or NONE. */
+  GetScriptType(position: ScAddress): SvtScriptType {
+    return (
+      this.FetchTable(position.Tab())?.GetScriptType(position.Col(), position.Row()) ??
+      SvtScriptType.NONE
+    );
+  }
+  /** Original address setter delegates through the actual sheet/column metadata owners. @param position - Actual coordinate. @param type - Native flags. @returns Nothing. */
+  SetScriptType(position: ScAddress, type: SvtScriptType): void {
+    this.FetchTable(position.Tab())?.SetScriptType(position.Col(), position.Row(), type);
+  }
+
   /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
   IsLayoutRTL(tab: number): boolean {
     return this.FetchTable(tab)?.IsLayoutRTL() ?? false;

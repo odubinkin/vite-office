@@ -1,5 +1,28 @@
 # Calc UI and ODS implementation critical path
 
+## Current automatic-height path — task53 native context and shared measurement
+
+Task `202610201812-JT4A81` restores the complete original RowHeightContext inputs
+and accessors,including independent horizontal/vertical scales,zoom and borrowed
+opaque device identity. Every current caller uses the original six arguments.
+Actual ScDocument script-service ownership now drives the existing font selection
+UI. A borrowed browser factory supplies the genuine BreakIterator backend at the
+original process-context creation site;the kernel imports only its interface.
+ScGlobal owns the office UI-language fallback. Cached address script accessors
+retain existing CellTextAttr data and UNKNOWN,without pretending to implement
+formatted-cell cache updates or creating unallocated column storage (CALC238).
+
+Writer's existing DOM Range line measurement now belongs to shared VCL. Its actual
+node offsets,geometry and fallback algorithm are retained;Writer keeps its own
+frame/pagination packaging. This is the reusable browser device-side measurement
+boundary,not a new row-height engine.
+
+Automatic wrapped height is still incomplete. The next required path is the real
+ScColumn GetNeededSize/GetOptimalHeight and consumed EditEngine services,including
+native numeric-wrap suppression,the90percent direct-text threshold,original paper
+width/margins and manual-height rules. Do not replace these with scrollHeight
+assignment or mark the UI goal complete. Next full checkpoint remains60.
+
 ## Current UI delivery priority — task52 native Wrap Text
 
 Task `202610201738-ANN4R2` connects the existing shared Writer Wrap Text toolbar
