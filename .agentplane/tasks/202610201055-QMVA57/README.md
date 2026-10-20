@@ -4,7 +4,7 @@ title: "Implement native Calc cell indentation and manual row layout workflows"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T11:32:03.890Z"
+  updated_by: "CODER"
+  note: "Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T11:32:53.840Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation6df0c5fb7016 satisfies the approved native indentation/manual-row layout block with shared Writer controls and actual ODS/native history. Recommend direct closure;continuing UI goal remains active."
+  evaluated_sha: "6df0c5fb7016fd0427d7b9e69a1b8fcee8b11889"
+  blueprint_digest: "eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac"
+  evidence_refs:
+    - ".agentplane/tasks/202610201055-QMVA57/README.md"
+    - ".agentplane/tasks/202610201055-QMVA57/quality/20261020-113253840-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201055-QMVA57/quality/20261020-113253840-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201055-QMVA57/quality/20261020-113253840-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201055-QMVA57/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201055-QMVA57/evidence/verification.json"
+    - ".agentplane/tasks/202610201055-QMVA57/evidence/native-audit.md"
+    - ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-1280.png"
+    - ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-390.png"
+  findings:
+    - "Compared pinned attr/table/view/operation/undo/filter/metric/ODF source anchors and reviewed actual implementation diff. Native defaults,200twip caps,alignment coercion,stable filtered-mark coordinates,manual row flags and independent hidden/filter ownership are retained in the represented normal-document branch."
+    - "Reconciled committed95 non-task path hashes against immutable evidence. Nonduplicated73 related module cases,95 focused tooling cases and6 latest production-browser/Worker cases pass. Static/type/lint/format/dependency/resource/provenance/invariant/parity/routing/doctor/diff gates pass;desktop/mobile screenshots inspected."
+    - "No broad native parity or blanket coverage claim. CALC224–226 and full device/cache/protection/merged/outline/drawing/alternate-view/global undo/UNO-service gaps are explicit. Only related tests between checkpoint40 and planned all-app checkpoint50 match the latest user instruction."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-20T11:32:03.890Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction."
 doc_version: 3
-doc_updated_at: "2026-10-20T11:31:26.276Z"
+doc_updated_at: "2026-10-20T11:32:04.016Z"
 doc_updated_by: "CODER"
 description: "Task47 continues the authorized Calc UI goal in calc checkout/branch. Deliver a coherent cell-layout block: original ChangeIndent attribute/document/operation/history chain with native width limits,shared menu/toolbar controls and ODS indentation;manual row height,hide/show and actual hidden/filtered row storage,source geometry copy/history,shared metric dialog and compressed grid/scroll projection. Generalize existing column machinery using original axis contracts. Preserve native quirks and intentional browser save/open/no-recovery policies. Run only related module tests and focused browser/static checks;full all-app checkpoint40 retained,next50. No branch/worktree,merge,network,outside files or fake device/UNO/protection services."
 sections:
@@ -54,6 +81,39 @@ sections:
     Command/result/scope: types,authored lint/format,dependency boundaries,JSDoc,file-size limits,Calc/Writer resources,source tree/provenance,invariants,Calc/shared parity,static build,routing,doctor and `git diff --check` passed. Existing500kB bundle advisory remains. Native source audit and honest unported service/paint boundaries are in `evidence/native-audit.md`;semantic registry statuses remain unverified rather than claiming complete native parity.
 
     Full all-app and blanket coverage runs are not required by the latest explicit user instruction or this approved task contract. Last all-app checkpoint40,next50. No branches,merges,network,outside-repository files or unrelated active tasks changed. Implementation commit and quality review are recorded through the direct lifecycle before closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T11:32:03.890Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T11:31:26.276Z, excerpt_hash=sha256:a36d6b97728086afae4fe4007e546d3753cf5d0b3f509c29ff0c5007c80203b2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201055-QMVA57/blueprint/resolved-snapshot.json
+    - old_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+    - current_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201055-QMVA57
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201055-QMVA57
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/registration commits through a separately scoped authorized task;never reset unrelated changes or alter the pinned upstream reference."
   Findings: |-
     Native indentation uses200twip steps,visible column width limits,and justification coercion even when indentation is numerically unchanged. ScViewUtil captures source coordinates before filter subtraction can expand its multi-mark rectangle;review caught this distinction and a grouped-sheet regression now proves it. True hidden/filtered row runs remain independent;manual resizing skips filtered visibility,whereas explicit Show Rows clears filtering. Geometry-only documents preserve raw heights,manual flags and original grouped/disjoint spans.
@@ -92,6 +152,39 @@ Command/result/scope: final production build and focused Playwright indentation/
 Command/result/scope: types,authored lint/format,dependency boundaries,JSDoc,file-size limits,Calc/Writer resources,source tree/provenance,invariants,Calc/shared parity,static build,routing,doctor and `git diff --check` passed. Existing500kB bundle advisory remains. Native source audit and honest unported service/paint boundaries are in `evidence/native-audit.md`;semantic registry statuses remain unverified rather than claiming complete native parity.
 
 Full all-app and blanket coverage runs are not required by the latest explicit user instruction or this approved task contract. Last all-app checkpoint40,next50. No branches,merges,network,outside-repository files or unrelated active tasks changed. Implementation commit and quality review are recorded through the direct lifecycle before closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T11:32:03.890Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified implementation6df0c5fb7016:73 related module cases,95 focused tooling cases and6 final production-browser/Worker cases pass;current hashes,native audit and screenshots retained. Types,lint,format,boundaries,resources,provenance,invariants,parity,static build,routing,doctor,diff pass. Full all-app checkpoint40 retained,next50 per latest user instruction.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T11:31:26.276Z, excerpt_hash=sha256:a36d6b97728086afae4fe4007e546d3753cf5d0b3f509c29ff0c5007c80203b2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201055-QMVA57/blueprint/resolved-snapshot.json
+- old_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+- current_digest: eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201055-QMVA57
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201055-QMVA57
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
