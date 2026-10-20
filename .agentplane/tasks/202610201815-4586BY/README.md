@@ -1,10 +1,11 @@
 ---
 id: "202610201815-4586BY"
 title: "Implement Writer native text replacement and undo"
-status: "DOING"
+result_summary: "verified-202610201815-4586BY"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T18:44:24.930Z"
+  updated_at: "2026-10-20T18:45:32.947Z"
   updated_by: "CODER"
-  note: "Native literal replacement, differential hints/indices, source undo placement and FindAll no-ring/threshold behavior verified. Focused suites: 4731 core, 22 search, 127 integration and 290 hint-update cases; build/static/registry checks pass. Source quirks WRITER-010/011 preserved. Parent UI/advanced modes remain open; no native binary parity claim."
+  note: "verified-202610201815-4586BY"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/writer-replace-checks/check-dependencies.log"
   findings:
     - "Actual node hints/index updates, source unins undo ownership, existing fragment-action composition and native no-ring/group/threshold boundaries are implemented and covered by focused regressions. WRITER-010 and WRITER-011 preserve suspicious source semantics rather than correcting upstream."
-commit: null
+commit:
+  hash: "663a1b8f12f200cb6f579c6e84a31d7974b0e3b5"
+  message: "📝 4586BY task: record replacement quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved search/replace plan's coherent native document replacement and history leaf, with real node/hint/index owners, source undo placement and targeted verification on writer."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610201815-4586BY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native literal replacement, differential hints/indices, source undo placement and FindAll no-ring/threshold behavior verified. Focused suites: 4731 core, 22 search, 127 integration and 290 hint-update cases; build/static/registry checks pass. Source quirks WRITER-010/011 preserved. Parent UI/advanced modes remain open; no native binary parity claim."
+  -
+    type: "verify"
+    at: "2026-10-20T18:45:32.947Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610201815-4586BY"
+  -
+    type: "status"
+    at: "2026-10-20T18:45:33.199Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610201815-4586BY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T18:44:25.026Z"
+doc_updated_at: "2026-10-20T18:45:33.200Z"
 doc_updated_by: "CODER"
 description: "Implementation leaf of user-approved Writer search/replace plan 202610201742-6B984M. Port actual SwTextNode ReplaceText, document string ReplaceRange and native unins SwUndoReplace with whole-hint history; replace the old fragment-shaped SwUndoReplace use with existing insertion/deletion/attribute actions. Connect plain model-text search replacement and Replace All count/progress/no-ring/undo grouping to real document owners. Verify source-sensitive attributes, cursor updates, selection/cell ranges and repeated undo/redo. Writer checkout and branch only; local upstream reading approved, no network/merge/publication. Parent feature remains open for further modes and UI."
 sections:
@@ -132,6 +151,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T18:45:32.947Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610201815-4586BY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:44:25.026Z, excerpt_hash=sha256:7a6138b10d4bd0f428e732ce225f085f183f9a25f686513b4befd8d611645575
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610201815-4586BY/blueprint/resolved-snapshot.json
+    - old_digest: a604a98b13161d920db910f89b3624cddfba840ab541db3a104434d45f930290
+    - current_digest: a604a98b13161d920db910f89b3624cddfba840ab541db3a104434d45f930290
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201815-4586BY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610201815-4586BY --result verified-202610201815-4586BY --commit 663a1b8f12f200cb6f579c6e84a31d7974b0e3b5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's implementation commit(s) and task closure artifacts; preserve parent search groundwork, user work, source reference links and other tasks. No resets, merges, destructive cleanup or outside-repository writes."
   Findings: |-
@@ -142,6 +191,10 @@ sections:
     Supported leaf profile: normal literal same-text-node replacement, existing represented body/selection/table text search and actual FIND_NO_RING/progress/threshold/undo grouping. Unsupported regex/other algorithms, notes, merged layout/fields/dummy characters, cross-node replacement/content-index histories, bookmarks/redlines and native descriptive undo localization remain parent 6B984M work. Search and string document replacement reject documents with bookmarks before mutation/opening history because native DelContentIndex/SwHistoryBookmark is absent. This explicit incomplete boundary is not native bookmark parity. Direct source undo is internal to the supported document replacement profile. No storage/recovery/autosave deviation changed.
 
     Source responsibility/status records remain unverified; this bounded implementation does not complete the parent UI feature or the Writer goal. Build, focused regression suites, static checks and registry checks passed. Two local evidence-update command typos (metadata key and working-directory-relative path) made no file changes before correction; route was recomputed, then evidence updates and checks completed.
+extensions:
+  implementation_commit:
+    hash: "f3dc7a884c4fd2ebb60e54ecf3c820a34f198dca"
+    message: "🧩 4586BY writer: implement native text replacement and undo"
 id_source: "generated"
 ---
 ## Summary
@@ -221,6 +274,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T18:45:32.947Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610201815-4586BY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:44:25.026Z, excerpt_hash=sha256:7a6138b10d4bd0f428e732ce225f085f183f9a25f686513b4befd8d611645575
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610201815-4586BY/blueprint/resolved-snapshot.json
+- old_digest: a604a98b13161d920db910f89b3624cddfba840ab541db3a104434d45f930290
+- current_digest: a604a98b13161d920db910f89b3624cddfba840ab541db3a104434d45f930290
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201815-4586BY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610201815-4586BY --result verified-202610201815-4586BY --commit 663a1b8f12f200cb6f579c6e84a31d7974b0e3b5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
