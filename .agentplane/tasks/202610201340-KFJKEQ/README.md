@@ -1,10 +1,11 @@
 ---
 id: "202610201340-KFJKEQ"
 title: "Implement native Calc text shadow and relief pipeline"
-status: "DOING"
+result_summary: "Native Calc shadow and relief preserve history ODS and ordered text raster effects"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Canonical shared XML handlers preserve original constructor,Any,exact lexical and unusual output branches. Independent XML fixtures and repeated real packages prove persistence;CALC235/236 retain suspicious upstream behavior."
     - "Common browser raster owner preserves relief precedence,exact black-to-white changes,independent line colors,source luminance/offset and shadow/outline order over one accessible text raster. Desktop/mobile primary ODS and genuine Worker acceptance pass;four screenshots inspected. Obsolete outline-only production owner was removed with references migrated."
     - "49non-task paths fit120approved. Only exact native Any/TypeClass dependency data was added;general guard algorithms/restrictions remain unchanged and91related tooling cases pass. Types,authored lint/format,resources,docs,size,source/provenance,scoped registry,build/static,routing and doctor pass."
-commit: null
+commit:
+  hash: "36cf91269a43ede8ad36444521da75de2450f294"
+  message: "✨ KFJKEQ calc: connect native shadow relief and shared text raster"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native shadow and relief text effects with shared Writer controls and source XML/raster contracts."
+  -
+    author: "CODER"
+    body: "Verified: native Calc shadow and relief preserve real selection history and ODS through shared Writer menu controls and original ordered VCL browser raster effects. Related module/tooling and desktop/mobile/DOM-free Worker checks pass with inspected screenshots and source hashes."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified commit36cf91269a43: native Shadowed/CharacterRelief state,real attribute history,shared Writer menu,canonical XML handlers and common VCL browser raster effects. Calc16/shared11 cases,91related tooling cases and8production browser cases pass;expanded4case shadow/relief acceptance also passes with desktop/mobile primary ODS reopens and DOM-free Worker. Current source/native hashes and4inspected screenshots are retained in evidence/text-effects-final.json. Declared local gates pass without broad native parity claims. Last full checkpoint40,next50;pause goal after that next full run regardless of outcome."
+  -
+    type: "status"
+    at: "2026-10-20T14:06:20.268Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc shadow and relief preserve real selection history and ODS through shared Writer menu controls and original ordered VCL browser raster effects. Related module/tooling and desktop/mobile/DOM-free Worker checks pass with inspected screenshots and source hashes."
 doc_version: 3
-doc_updated_at: "2026-10-20T14:05:45.624Z"
+doc_updated_at: "2026-10-20T14:06:20.271Z"
 doc_updated_by: "CODER"
 description: "Task49: connect native font shadow/relief attributes,state,history and ODS to shared Writer menu controls and source-ordered common VCL special-text painting;keep calc branch and pause goal after next full checkpoint50."
 sections:
