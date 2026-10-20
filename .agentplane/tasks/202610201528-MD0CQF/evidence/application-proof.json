@@ -1,0 +1,44 @@
+{
+  "fileAccounting": true,
+  "observedFiles": 1081,
+  "uniqueFiles": 1081,
+  "tests": 17377,
+  "passed": 17376,
+  "failed": 1,
+  "pending": 0,
+  "summary": {
+    "lines": {
+      "total": 48446,
+      "covered": 48444,
+      "skipped": 0,
+      "pct": 99.99
+    },
+    "statements": {
+      "total": 53317,
+      "covered": 53315,
+      "skipped": 0,
+      "pct": 99.99
+    },
+    "functions": {
+      "total": 10229,
+      "covered": 10227,
+      "skipped": 0,
+      "pct": 99.98
+    },
+    "branches": {
+      "total": 33877,
+      "covered": 33876,
+      "skipped": 0,
+      "pct": 99.99
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "coverageComplete": true,
+  "rawSha256": "982770ed2ebf708311d8049e20749ac2859e28284ebc69ca332012efe0f4aba0",
+  "uncoveredOwners": 3
+}

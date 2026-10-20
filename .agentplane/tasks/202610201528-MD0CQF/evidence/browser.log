@@ -1,0 +1,467 @@
+[WebServer] (node:7334) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 432 tests using 2 workers
+
+(node:7344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+(node:7343) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/432] [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome
+[2/432] [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:29:3 › native bullet font ODT body cell width=1280
+[3/432] [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:29:3 › native bullet font ODT body cell width=390
+[4/432] [writer] › apps/office/e2e/native-empty-bullet.spec.ts:8:3 › native zero bullet body cell width=1280
+[5/432] [writer] › apps/office/e2e/native-empty-bullet.spec.ts:8:3 › native zero bullet body cell width=390
+[6/432] [writer] › apps/office/e2e/native-label-affinity.spec.ts:7:3 › native before-label caret and input body cell width=1280
+[7/432] [writer] › apps/office/e2e/native-legacy-bullet-symbol.spec.ts:29:3 › native legacy bullet symbols body cell width=1280
+[8/432] [writer] › apps/office/e2e/native-label-affinity.spec.ts:7:3 › native before-label caret and input body cell width=390
+[9/432] [writer] › apps/office/e2e/native-legacy-bullet-symbol.spec.ts:29:3 › native legacy bullet symbols body cell width=390
+[10/432] [writer] › apps/office/e2e/native-line-margin.spec.ts:6:3 › native visual-line Home End and Shift body cell width=1280
+[11/432] [writer] › apps/office/e2e/native-line-margin.spec.ts:6:3 › native visual-line Home End and Shift body cell width=390
+[12/432] [writer] › apps/office/e2e/native-marked-list-paint.spec.ts:7:3 › native marked label paint body cell width=1280
+[13/432] [writer] › apps/office/e2e/native-numbering-font.spec.ts:29:3 › native numbering font body cell width=1280
+[14/432] [writer] › apps/office/e2e/native-marked-list-paint.spec.ts:7:3 › native marked label paint body cell width=390
+[15/432] [writer] › apps/office/e2e/native-numbering-font.spec.ts:29:3 › native numbering font body cell width=390
+[16/432] [writer] › apps/office/e2e/native-table-name.spec.ts:6:3 › native table name validation unique allocation and history width=1280
+[17/432] [writer] › apps/office/e2e/writer-accelerator-ownership.spec.ts:5:3 › Writer consumed accelerator ownership at width 1280
+[18/432] [writer] › apps/office/e2e/native-table-name.spec.ts:6:3 › native table name validation unique allocation and history width=390
+[19/432] [writer] › apps/office/e2e/writer-accelerator-ownership.spec.ts:5:3 › Writer consumed accelerator ownership at width 390
+[20/432] [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:29:5 › Writer automatic body layout width=1280 disregard=true
+[21/432] [writer] › apps/office/e2e/writer-cell-list-backspace.spec.ts:3:1 › Writer Backspace hides a cell marker and ShiftBackspace restores native numbering
+[22/432] [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:29:5 › Writer automatic body layout width=1280 disregard=false
+[23/432] [writer] › apps/office/e2e/writer-cell-list-continue.spec.ts:4:3 › Writer Continue Numbering joins a plain table cell to the preceding list
+[24/432] [writer] › apps/office/e2e/writer-cell-list-continue.spec.ts:4:3 › Writer Continue Numbering joins a bullet table cell to the preceding list
+[25/432] [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:29:5 › Writer automatic body layout width=390 disregard=true
+[26/432] [writer] › apps/office/e2e/writer-cell-list-enter.spec.ts:3:1 › Writer Enter ends an empty cell list without inserting a paragraph
+[27/432] [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:29:5 › Writer automatic body layout width=390 disregard=false
+[28/432] [writer] › apps/office/e2e/writer-cell-list-level.spec.ts:4:1 › Writer cell list levels use native commands and survive history and ODT reopen
+[29/432] [writer] › apps/office/e2e/writer-cell-paragraph-format.spec.ts:4:1 › Writer cell paragraph alignment and native list display survive history and ODT reopen
+[30/432] [writer] › apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting
+[31/432] [writer] › apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event
+[32/432] [writer] › apps/office/e2e/writer-collapsing-border-arbitration.spec.ts:10:3 › native shared-border winner and mode history width=1280
+[33/432] [writer] › apps/office/e2e/writer-clipboard.spec.ts:54:1 › Writer list clipboard
+[34/432] [writer] › apps/office/e2e/writer-counted-list-layout.spec.ts:12:3 › Writer counted axes stay independent through paragraph history cell=false
+[35/432] [writer] › apps/office/e2e/writer-collapsing-border-arbitration.spec.ts:10:3 › native shared-border winner and mode history width=390
+[36/432] [writer] › apps/office/e2e/writer-counted-list-layout.spec.ts:12:3 › Writer counted axes stay independent through paragraph history cell=true
+[37/432] [writer] › apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste
+[38/432] [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer toolbar focuses the document and retains editing
+[39/432] [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer root focuses the document and retains editing
+[40/432] [writer] › apps/office/e2e/writer-cut-paste.spec.ts:55:1 › Writer immediate spaces and structured list Paste
+[41/432] [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer child focuses the document and retains editing
+[42/432] [writer] › apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging
+[43/432] [writer] › apps/office/e2e/writer-document-key.spec.ts:44:1 › Ctrl-F6 retains the Writer Hyperlink modal's input focus
+[44/432] [writer] › apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph
+[45/432] [writer] › apps/office/e2e/writer-headline-selection.spec.ts:14:3 › Writer native table range excludes repeated headline selection width=1280
+[46/432] [writer] › apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks
+[47/432] [writer] › apps/office/e2e/writer-headline-selection.spec.ts:14:3 › Writer native table range excludes repeated headline selection width=390
+[48/432] [writer] › apps/office/e2e/writer-imported-table-lists.spec.ts:16:1 › Writer imported restarted table row Add to List preserves both starts and atomic selection
+[49/432] [writer] › apps/office/e2e/writer-headline-selection.spec.ts:151:1 › Writer native cross-cell bold formats the selected original rectangle and all headline text copies
+[50/432] [writer] › apps/office/e2e/writer-imported-table-lists.spec.ts:107:1 › Writer imported table list Enter edits native cell paragraphs and history
+[51/432] [writer] › apps/office/e2e/writer-insert-table-dialog.spec.ts:7:3 › native Insert Table inputs width=1280
+[52/432] [writer] › apps/office/e2e/writer-layout-ratios.spec.ts:11:1 › Writer keeps measured page breaks across device pixel ratios
+[53/432] [writer] › apps/office/e2e/writer-insert-table-dialog.spec.ts:7:3 › native Insert Table inputs width=390
+[54/432] [writer] › apps/office/e2e/writer-list-label-drag.spec.ts:9:3 › Writer native label document ruler width=1280
+[55/432] [writer] › apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering
+[56/432] [writer] › apps/office/e2e/writer-list-label-drag.spec.ts:9:3 › Writer native label document ruler width=390
+[57/432] [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=1280 raw=65537
+[58/432] [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:5:1 › menu commands and submenus align their labels
+[59/432] [writer] › apps/office/e2e/writer-menu-document-focus.spec.ts:4:1 › unopened menu Escape without a saved owner focuses the Writer document
+[60/432] [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=1280 raw=-65537
+[61/432] [writer] › apps/office/e2e/writer-menu-document-focus.spec.ts:23:1 › unopened menu Escape restores its saved Writer toolbar control
+[62/432] [writer] › apps/office/e2e/writer-menu-key.spec.ts:4:1 › F10 activates the first Writer root without opening and closes its keyboard popup
+[63/432] [writer] › apps/office/e2e/writer-menu-key.spec.ts:32:1 › repeated F10 restores a saved Writer toolbar owner
+[64/432] [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=390 raw=65537
+[65/432] [writer] › apps/office/e2e/writer-menu-key.spec.ts:44:1 › F10 leaves a modal Writer Hyperlink dialog's focus untouched
+[66/432] [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor
+[67/432] [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch
+[68/432] [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=390 raw=-65537
+[69/432] [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog
+[70/432] [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control
+[71/432] [writer] › apps/office/e2e/writer-named-style-history.spec.ts:16:3 › Writer named-style history width=1280
+[72/432] [writer] › apps/office/e2e/writer-native-attribute-portions.spec.ts:19:3 › Writer native body and cell portions retain formatting and editing width=1280
+[73/432] [writer] › apps/office/e2e/writer-named-style-history.spec.ts:16:3 › Writer named-style history width=390
+[74/432] [writer] › apps/office/e2e/writer-native-attribute-portions.spec.ts:19:3 › Writer native body and cell portions retain formatting and editing width=390
+[75/432] [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=1280
+[76/432] [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=390
+[77/432] [writer] › apps/office/e2e/writer-native-border-page.spec.ts:60:3 › native six-line border page and selected history width=1280
+[78/432] [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:10:3 › native common cell alignment and changed item history width=1280
+[79/432] [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:10:3 › native common cell alignment and changed item history width=390
+[80/432] [writer] › apps/office/e2e/writer-native-border-page.spec.ts:60:3 › native six-line border page and selected history width=390
+[81/432] [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:113:1 › native primitive cell orientation remains numeric across the browser open boundary
+[82/432] [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:12:5 › native four-edge cell paint and text history width=1280 fixed=false
+[83/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=false kind=numbered
+[84/432] [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:12:5 › native four-edge cell paint and text history width=1280 fixed=true
+[85/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=false kind=bullet
+[86/432] [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:12:5 › native four-edge cell paint and text history width=390 fixed=false
+[87/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=true kind=numbered
+[88/432] [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:12:5 › native four-edge cell paint and text history width=390 fixed=true
+[89/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=true kind=bullet
+[90/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:11:3 › native coupled border and merging item acceptance width=1280
+[91/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=false kind=numbered
+[92/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:11:3 › native coupled border and merging item acceptance width=390
+[93/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=false kind=bullet
+[94/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=true kind=numbered
+[95/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=collapsing width=1280
+[96/432] [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=true kind=bullet
+[97/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=separating width=1280
+[98/432] [writer] › apps/office/e2e/writer-native-column-commands.spec.ts:5:3 › native column insertion width=1280
+[99/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=undefined width=1280
+[100/432] [writer] › apps/office/e2e/writer-native-column-commands.spec.ts:5:3 › native column insertion width=390
+[101/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=collapsing width=390
+[102/432] [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:31:1 › Writer native context menu removes actual mixed hyperlinks with one undo and redo
+[103/432] [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:71:1 › Writer native context menu follows the actual table shell and inserts a native row
+[104/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=separating width=390
+[105/432] [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:90:1 › Writer native context menu keyboard cancellation retains the reversed original range
+[106/432] [writer] › apps/office/e2e/writer-native-cursor-frame-chain.spec.ts:5:1 › native body follow Home retains its original model offset and edit history
+[107/432] [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:76:5 › native table merging model=undefined width=390
+[108/432] [writer] › apps/office/e2e/writer-native-disabled-menubar.spec.ts:4:3 › Writer native disabled menubar traversal preserves focus and history width=1280
+[109/432] [writer] › apps/office/e2e/writer-native-disabled-popup.spec.ts:4:3 › Writer native disabled popup entries remain selected without executing width=1280
+[110/432] [writer] › apps/office/e2e/writer-native-disabled-menubar.spec.ts:4:3 › Writer native disabled menubar traversal preserves focus and history width=390
+[111/432] [writer] › apps/office/e2e/writer-native-disabled-popup.spec.ts:4:3 › Writer native disabled popup entries remain selected without executing width=390
+[112/432] [writer] › apps/office/e2e/writer-native-document-row.spec.ts:4:3 › document-owned styled final-row Tab width=1280
+[113/432] [writer] › apps/office/e2e/writer-native-formatted-cursor-frame-reuse.spec.ts:5:1 › repeated physical follow Home/End retains text and source edit/history boundaries
+[114/432] [writer] › apps/office/e2e/writer-native-document-row.spec.ts:4:3 › document-owned styled final-row Tab width=390
+[115/432] [writer] › apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts:39:1 › Chromium edits from the original link beginning and keeps selection on cancel
+[116/432] [writer] › apps/office/e2e/writer-native-hyperlink-mixed-remove.spec.ts:41:1 › Chromium preserves mixed native dispatch and one undo with pending popup presentation
+[117/432] [writer] › apps/office/e2e/writer-native-independent-table-properties.spec.ts:60:3 › native independent properties columns frame-width and history width=1280
+[118/432] [writer] › apps/office/e2e/writer-native-insert-table-row-history.spec.ts:4:3 › native inserted table and appended row history width=1280
+[119/432] [writer] › apps/office/e2e/writer-native-insert-table-row-history.spec.ts:4:3 › native inserted table and appended row history width=390
+[120/432] [writer] › apps/office/e2e/writer-native-insert-table.spec.ts:7:3 › native table insertion history width=1280
+[121/432] [writer] › apps/office/e2e/writer-native-independent-table-properties.spec.ts:60:3 › native independent properties columns frame-width and history width=390
+[122/432] [writer] › apps/office/e2e/writer-native-insert-table.spec.ts:7:3 › native table insertion history width=390
+[123/432] [writer] › apps/office/e2e/writer-native-internet-edit-range.spec.ts:39:1 › Chromium edits one independent identical hyperlink and replays native history
+[124/432] [writer] › apps/office/e2e/writer-native-internet-state-query.spec.ts:3:1 › Chromium hyperlink state distinguishes original interior and non-expanding end
+[125/432] [writer] › apps/office/e2e/writer-native-list-context.spec.ts:12:3 › Writer native list context and point state width=1280
+[126/432] [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=1280 cell=false
+[127/432] [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=1280 cell=true
+[128/432] [writer] › apps/office/e2e/writer-native-list-context.spec.ts:12:3 › Writer native list context and point state width=390
+[129/432] [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=390 cell=false
+[130/432] [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=390 cell=true
+[131/432] [writer] › apps/office/e2e/writer-native-list-tab.spec.ts:16:3 › Writer body list and table Tab retain editing focus width=1280
+[132/432] [writer] › apps/office/e2e/writer-native-margin-admission.spec.ts:7:3 › Writer ordinary native decrease owns no-op history cell=false
+[133/432] [writer] › apps/office/e2e/writer-native-list-tab.spec.ts:16:3 › Writer body list and table Tab retain editing focus width=390
+[134/432] [writer] › apps/office/e2e/writer-native-margin-admission.spec.ts:7:3 › Writer ordinary native decrease owns no-op history cell=true
+[135/432] [writer] › apps/office/e2e/writer-native-menubar-auxclick.spec.ts:5:5 › Writer native auxiliary menubar history width=1280 button=middle
+[136/432] [writer] › apps/office/e2e/writer-native-menubar-document-key.spec.ts:3:1 › native root Ctrl-F6 closes the Writer popup and focuses its document
+[137/432] [writer] › apps/office/e2e/writer-native-menubar-auxclick.spec.ts:5:5 › Writer native auxiliary menubar history width=1280 button=right
+[138/432] [writer] › apps/office/e2e/writer-native-menubar-document-key.spec.ts:19:1 › native menubar trigger Ctrl-F6 resets the Writer activation cycle
+[139/432] [writer] › apps/office/e2e/writer-native-menubar-document-key.spec.ts:33:1 › native child Ctrl-F6 closes only the Writer owning submenu
+[140/432] [writer] › apps/office/e2e/writer-native-menubar-auxclick.spec.ts:5:5 › Writer native auxiliary menubar history width=390 button=middle
+[141/432] [writer] › apps/office/e2e/writer-native-none-numbering.spec.ts:12:3 › Writer native NONE numbering roundtrip width=1280
+[142/432] [writer] › apps/office/e2e/writer-native-menubar-auxclick.spec.ts:5:5 › Writer native auxiliary menubar history width=390 button=right
+[143/432] [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:18:5 › Writer exhausted bullet tab keeps native text gap width=1280 cell=false
+[144/432] [writer] › apps/office/e2e/writer-native-none-numbering.spec.ts:12:3 › Writer native NONE numbering roundtrip width=390
+[145/432] [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:18:5 › Writer exhausted bullet tab keeps native text gap width=1280 cell=true
+[146/432] [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:18:5 › Writer exhausted bullet tab keeps native text gap width=390 cell=false
+[147/432] [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:9:3 › Writer native heading Tab retains styles and history width=1280
+[148/432] [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:18:5 › Writer exhausted bullet tab keeps native text gap width=390 cell=true
+[149/432] [writer] › apps/office/e2e/writer-native-painter-frame-borrow.spec.ts:10:3 › Writer borrowed native border paint survives history and editing width=1280
+[150/432] [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:9:3 › Writer native heading Tab retains styles and history width=390
+[151/432] [writer] › apps/office/e2e/writer-native-painter-frame-borrow.spec.ts:10:3 › Writer borrowed native border paint survives history and editing width=390
+[152/432] [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=false reverse=false
+[153/432] [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:96:3 › Writer native tenth heading boundary width=1280
+[154/432] [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=false reverse=true
+[155/432] [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:96:3 › Writer native tenth heading boundary width=390
+[156/432] [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=true reverse=false
+[157/432] [writer] › apps/office/e2e/writer-native-popup-delay.spec.ts:4:3 › Writer native submenu pointer delay and keyboard activation width=1280
+[158/432] [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=true reverse=true
+[159/432] [writer] › apps/office/e2e/writer-native-popup-delay.spec.ts:4:3 › Writer native submenu pointer delay and keyboard activation width=390
+[160/432] [writer] › apps/office/e2e/writer-native-popup-highlight.spec.ts:4:3 › Writer native popup current parent highlight width=1280
+[161/432] [writer] › apps/office/e2e/writer-native-popup-mouse.spec.ts:4:3 › Writer native popup auxiliary mouse buttons width=1280
+[162/432] [writer] › apps/office/e2e/writer-native-popup-highlight.spec.ts:4:3 › Writer native popup current parent highlight width=390
+[163/432] [writer] › apps/office/e2e/writer-native-popup-mouse.spec.ts:4:3 › Writer native popup auxiliary mouse buttons width=390
+[164/432] [writer] › apps/office/e2e/writer-native-properties-height.spec.ts:7:3 › Writer unrelated properties preserve fixed row height width=1280
+[165/432] [writer] › apps/office/e2e/writer-native-row-commands.spec.ts:5:3 › native row menu and caret width=1280
+[166/432] [writer] › apps/office/e2e/writer-native-properties-height.spec.ts:7:3 › Writer unrelated properties preserve fixed row height width=390
+[167/432] [writer] › apps/office/e2e/writer-native-row-commands.spec.ts:5:3 › native row menu and caret width=390
+[168/432] [writer] › apps/office/e2e/writer-native-row-frame-size.spec.ts:13:3 › Writer native fixed row clipping and minimum growth width=1280
+[169/432] [writer] › apps/office/e2e/writer-native-row-frame-size.spec.ts:13:3 › Writer native fixed row clipping and minimum growth width=390
+[170/432] [writer] › apps/office/e2e/writer-native-row-height-dialog.spec.ts:8:3 › Writer native row height dialog width=1280
+[171/432] [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:3:1 › Writer Ctrl Home End follows native cell and table boundaries
+[172/432] [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:54:1 › Writer Shift Ctrl Home selects cell paragraphs through native point and mark
+[173/432] [writer] › apps/office/e2e/writer-native-row-height-dialog.spec.ts:8:3 › Writer native row height dialog width=390
+[174/432] [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:94:1 › Writer inherited table editing host keeps split join and typing history
+[175/432] [writer] › apps/office/e2e/writer-native-select-all.spec.ts:37:1 › Writer Select All escalates cell table and outer text
+[176/432] [writer] › apps/office/e2e/writer-native-select-all.spec.ts:61:1 › Writer cell Select All replacement retains neighbors and native undo redo
+[177/432] [writer] › apps/office/e2e/writer-native-tabcols.spec.ts:8:3 › native physical column draft from relative table width=1280
+[178/432] [writer] › apps/office/e2e/writer-native-select-all.spec.ts:84:1 › Writer empty cell Select All immediately selects the native table
+[179/432] [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:8:3 › native mouse column tracking width=1280
+[180/432] [writer] › apps/office/e2e/writer-native-tabcols.spec.ts:8:3 › native physical column draft from relative table width=390
+[181/432] [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:8:3 › native mouse column tracking width=390
+[182/432] [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:130:1 › native outer-left tracking accepts Enter and preserves the editing cursor
+[183/432] [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:43:3 › native column page modes and history width=1280
+[184/432] [writer] › apps/office/e2e/writer-native-table-cursor-rings.spec.ts:4:1 › Writer selected row character formatting covers full cells and survives Undo Redo
+[185/432] [writer] › apps/office/e2e/writer-native-table-delete.spec.ts:6:5 › Writer native table deletion › Writer selected row Delete preserves table cells and native Undo Redo
+[186/432] [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:136:3 › native column page window and selection width=1280
+[187/432] [writer] › apps/office/e2e/writer-native-table-delete.spec.ts:6:5 › Writer native table deletion › Writer selected row Backspace preserves table cells and native Undo Redo
+[188/432] [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:43:3 › native column page modes and history width=390
+[189/432] [writer] › apps/office/e2e/writer-native-table-editing.spec.ts:3:1 › Writer table cell typing, split, join and formatting use document history
+[190/432] [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:36:3 › native format page local metrics cancel and native acceptance width=1280
+[191/432] [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:136:3 › native column page window and selection width=390
+[192/432] [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:98:3 › native format page activation consumes Columns width and retains browser input width=1280
+[193/432] [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:36:3 › native format page local metrics cancel and native acceptance width=390
+[194/432] [writer] › apps/office/e2e/writer-native-table-frame-reuse.spec.ts:5:3 › Writer retained table devices resize and edit width=1280
+[195/432] [writer] › apps/office/e2e/writer-native-table-frame-reuse.spec.ts:5:3 › Writer retained table devices resize and edit width=390
+[196/432] [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:98:3 › native format page activation consumes Columns width and retains browser input width=390
+[197/432] [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=1280 split=true
+[198/432] [writer] › apps/office/e2e/writer-native-table-linear-drag.spec.ts:11:3 › Writer solitary Shift translates following column borders width=1280
+[199/432] [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=1280 split=false
+[200/432] [writer] › apps/office/e2e/writer-native-table-linear-drag.spec.ts:11:3 › Writer solitary Shift translates following column borders width=390
+[201/432] [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=390 split=true
+[202/432] [writer] › apps/office/e2e/writer-native-table-mouse.spec.ts:14:3 › Writer native table mouse edge and drag width=1280
+[203/432] [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=390 split=false
+[204/432] [writer] › apps/office/e2e/writer-native-table-mouse.spec.ts:14:3 › Writer native table mouse edge and drag width=390
+[205/432] [writer] › apps/office/e2e/writer-native-table-paste.spec.ts:4:1 › Writer selected row paste appends in every cell and retains native Undo selection
+[206/432] [writer] › apps/office/e2e/writer-native-table-plain-paste.spec.ts:5:3 › Writer native plain table clipboard "X" preserves cells and inherited bold history
+[207/432] [writer] › apps/office/e2e/writer-native-table-pointer.spec.ts:14:3 › Writer native table interior and gutter pointer width=1280
+[208/432] [writer] › apps/office/e2e/writer-native-table-plain-paste.spec.ts:5:3 › Writer native plain table clipboard "A\nB\n" preserves cells and inherited bold history
+[209/432] [writer] › apps/office/e2e/writer-native-table-pointer.spec.ts:14:3 › Writer native table interior and gutter pointer width=390
+[210/432] [writer] › apps/office/e2e/writer-native-table-properties-reset.spec.ts:38:3 › native current-page table Reset preserves other pages and canonical history width=1280
+[211/432] [writer] › apps/office/e2e/writer-native-table-proportional-drag.spec.ts:11:3 › Writer solitary Control proportionally resizes following columns width=1280
+[212/432] [writer] › apps/office/e2e/writer-native-table-proportional-drag.spec.ts:11:3 › Writer solitary Control proportionally resizes following columns width=390
+[213/432] [writer] › apps/office/e2e/writer-native-table-properties-reset.spec.ts:38:3 › native current-page table Reset preserves other pages and canonical history width=390
+[214/432] [writer] › apps/office/e2e/writer-native-table-row-drag.spec.ts:7:3 › native mouse row tracking width=1280
+[215/432] [writer] › apps/office/e2e/writer-native-table-selection-commands.spec.ts:5:3 › native table selection menu width=1280
+[216/432] [writer] › apps/office/e2e/writer-native-table-row-drag.spec.ts:7:3 › native mouse row tracking width=390
+[217/432] [writer] › apps/office/e2e/writer-native-table-selection.spec.ts:17:1 › Writer row selection paints core boxes and typing after caret kill preserves neighbors
+[218/432] [writer] › apps/office/e2e/writer-native-table-selection-commands.spec.ts:5:3 › native table selection menu width=390
+[219/432] [writer] › apps/office/e2e/writer-native-table-selection.spec.ts:44:1 › Writer native keyboard box selection and caret properties context agree
+[220/432] [writer] › apps/office/e2e/writer-native-table-tab.spec.ts:3:1 › Writer Tab traverses native cell sections and appends one row with history
+[221/432] [writer] › apps/office/e2e/writer-native-table-text-flow-headline.spec.ts:39:3 › native Table Properties headline defaults and history width=1280
+[222/432] [writer] › apps/office/e2e/writer-native-table-text-flow-split.spec.ts:9:3 › native split properties controls and physical pages width=1280
+[223/432] [writer] › apps/office/e2e/writer-native-table-text-flow-split.spec.ts:9:3 › native split properties controls and physical pages width=390
+[224/432] [writer] › apps/office/e2e/writer-native-table-text-flow-headline.spec.ts:39:3 › native Table Properties headline defaults and history width=390
+[225/432] [writer] › apps/office/e2e/writer-native-text-frame-follow.spec.ts:15:1 › one original bullet has native master/follows through reformat, edit, history and reopen
+[226/432] [writer] › apps/office/e2e/writer-native-text-frame-owner.spec.ts:15:1 › native body/cell geometry survives reformat and history before document replacement
+[227/432] [writer] › apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file
+[228/432] [writer] › apps/office/e2e/writer-odt-file.spec.ts:87:1 › Writer keeps one ODT text node across visible page fragments after reopen
+[229/432] [writer] › apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages
+[230/432] [writer] › apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT
+[231/432] [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable
+[232/432] [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › Home replaces the active Writer root popup and returns to editing on Escape
+[233/432] [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:61:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport
+[234/432] [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › End replaces the active Writer root popup and returns to editing on Escape
+[235/432] [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:87:1 › the page stays within the viewport while the document and modal body scroll
+[236/432] [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:34:1 › Writer F10 boundary navigation stays unopened until an explicit popup key
+[237/432] [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:139:1 › the mobile table grid dismisses outside and More Options opens the full dialog
+[238/432] [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command
+[239/432] [writer] › apps/office/e2e/writer-ruler-auto-first.spec.ts:17:3 › Writer automatic first-line ruler at width 1280
+[240/432] [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle
+[241/432] [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle
+[242/432] [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle
+[243/432] [writer] › apps/office/e2e/writer-ruler-auto-first.spec.ts:17:3 › Writer automatic first-line ruler at width 390
+[244/432] [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle
+[245/432] [writer] › apps/office/e2e/writer-ruler-default-tabs.spec.ts:5:3 › Writer default ruler tabs at width 1280
+[246/432] [writer] › apps/office/e2e/writer-ruler-default-tabs.spec.ts:5:3 › Writer default ruler tabs at width 390
+[247/432] [writer] › apps/office/e2e/writer-ruler-indent-items.spec.ts:17:3 › Writer automatic ruler item history at width 1280
+[248/432] [writer] › apps/office/e2e/writer-ruler-indent-pixels.spec.ts:17:3 › Writer rounded paragraph indents at width 1280
+[249/432] [writer] › apps/office/e2e/writer-ruler-indent-items.spec.ts:17:3 › Writer automatic ruler item history at width 390
+[250/432] [writer] › apps/office/e2e/writer-ruler-indent-pixels.spec.ts:17:3 › Writer rounded paragraph indents at width 390
+[251/432] [writer] › apps/office/e2e/writer-ruler-tab-glyphs.spec.ts:57:3 › Writer ruler typed glyphs at width 1280
+[252/432] [writer] › apps/office/e2e/writer-ruler-tab-identity.spec.ts:5:3 › Writer ruler tab identity at width 1280
+[253/432] [writer] › apps/office/e2e/writer-ruler-tab-glyphs.spec.ts:57:3 › Writer ruler typed glyphs at width 390
+[254/432] [writer] › apps/office/e2e/writer-ruler-tab-identity.spec.ts:5:3 › Writer ruler tab identity at width 390
+[255/432] [writer] › apps/office/e2e/writer-ruler-tab-insertion.spec.ts:13:3 › Writer replaces a hidden default ruler tab at width 1280
+[256/432] [writer] › apps/office/e2e/writer-ruler-tab-pixels.spec.ts:13:3 › Writer rounded tab anchors at width 1280
+[257/432] [writer] › apps/office/e2e/writer-ruler-tab-insertion.spec.ts:13:3 › Writer replaces a hidden default ruler tab at width 390
+[258/432] [writer] › apps/office/e2e/writer-ruler-tab-pixels.spec.ts:13:3 › Writer rounded tab anchors at width 390
+[259/432] [writer] › apps/office/e2e/writer-ruler-tracking.spec.ts:5:3 › Writer ruler tracking at width 1280
+[260/432] [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected body toggle Ordered List as one list range
+[261/432] [writer] › apps/office/e2e/writer-ruler-tracking.spec.ts:5:3 › Writer ruler tracking at width 390
+[262/432] [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected body toggle Unordered List as one list range
+[263/432] [writer] › apps/office/e2e/writer-sidebar-deck.spec.ts:8:3 › Properties deck closes and reopens with document focus at width 1280
+[264/432] [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected table cells toggle Ordered List as one list range
+[265/432] [writer] › apps/office/e2e/writer-sidebar-deck.spec.ts:8:3 › Properties deck closes and reopens with document focus at width 390
+[266/432] [writer] › apps/office/e2e/writer-sidebar-escape.spec.ts:8:3 › Paragraph panel Escape returns to title then document at width 1280
+[267/432] [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected table cells toggle Unordered List as one list range
+[268/432] [writer] › apps/office/e2e/writer-sidebar-escape.spec.ts:8:3 › Paragraph panel Escape returns to title then document at width 390
+[269/432] [writer] › apps/office/e2e/writer-sidebar-key-isolation.spec.ts:5:3 › Sidebar docking key isolation at width 1280
+[270/432] [writer] › apps/office/e2e/writer-sidebar-navigation.spec.ts:8:3 › Sidebar managed Tab and arrow navigation at width 1280
+[271/432] [writer] › apps/office/e2e/writer-sidebar-key-isolation.spec.ts:5:3 › Sidebar docking key isolation at width 390
+[272/432] [writer] › apps/office/e2e/writer-sidebar-navigation.spec.ts:8:3 › Sidebar managed Tab and arrow navigation at width 390
+[273/432] [writer] › apps/office/e2e/writer-sidebar-panel.spec.ts:8:3 › Paragraph panel expansion and More Options at width 1280
+[274/432] [writer] › apps/office/e2e/writer-sidebar-scroll.spec.ts:5:3 › Sidebar ShowPanel reveals an oversized Paragraph panel at width 1280
+[275/432] [writer] › apps/office/e2e/writer-sidebar-panel.spec.ts:8:3 › Paragraph panel expansion and More Options at width 390
+[276/432] [writer] › apps/office/e2e/writer-sidebar-scroll.spec.ts:5:3 › Sidebar ShowPanel reveals an oversized Paragraph panel at width 390
+[277/432] [writer] › apps/office/e2e/writer-style-focus.spec.ts:68:3 › Writer direct style choice focus width=1280
+[278/432] [writer] › apps/office/e2e/writer-style-redo.spec.ts:39:3 › Writer native paired style history width=1280
+[279/432] [writer] › apps/office/e2e/writer-style-focus.spec.ts:99:3 › Writer keyboard style choice focus width=1280
+[280/432] [writer] › apps/office/e2e/writer-style-redo.spec.ts:39:3 › Writer native paired style history width=390
+[281/432] [writer] › apps/office/e2e/writer-style-focus.spec.ts:68:3 › Writer direct style choice focus width=390
+[282/432] [writer] › apps/office/e2e/writer-style-reset.spec.ts:81:3 › Writer ordinary native style reset width=1280
+[283/432] [writer] › apps/office/e2e/writer-style-focus.spec.ts:99:3 › Writer keyboard style choice focus width=390
+[284/432] [writer] › apps/office/e2e/writer-style-reset.spec.ts:81:3 › Writer ordinary native style reset width=390
+[285/432] [writer] › apps/office/e2e/writer-style-selection.spec.ts:63:3 › Writer inclusive paragraph style range width=1280
+[286/432] [writer] › apps/office/e2e/writer-style-selector.spec.ts:16:3 › Writer live style selector width=1280
+[287/432] [writer] › apps/office/e2e/writer-style-selection.spec.ts:63:3 › Writer inclusive paragraph style range width=390
+[288/432] [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter
+[289/432] [writer] › apps/office/e2e/writer-style-selector.spec.ts:16:3 › Writer live style selector width=390
+[290/432] [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space
+[291/432] [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:22:1 › pointer submenu owns focus without a selected Writer command
+[292/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:9:3 › native automatic restores edited width viewport=1280
+[293/432] [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:55:1 › keyboard opening still preselects and executes one Writer command
+[294/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:9:3 › native automatic restores edited width viewport=390
+[295/432] [writer] › apps/office/e2e/writer-table-border-changed-items.spec.ts:7:3 › native changed border properties preserve untouched cells width=1280
+[296/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Automatic viewport=1280
+[297/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Left viewport=1280
+[298/432] [writer] › apps/office/e2e/writer-table-border-changed-items.spec.ts:7:3 › native changed border properties preserve untouched cells width=390
+[299/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table From left viewport=1280
+[300/432] [writer] › apps/office/e2e/writer-table-border-common-state.spec.ts:11:3 › native common border input and selected four-distance history width=1280
+[301/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Right viewport=1280
+[302/432] [writer] › apps/office/e2e/writer-table-border-common-state.spec.ts:11:3 › native common border input and selected four-distance history width=390
+[303/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Center viewport=1280
+[304/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Manual viewport=1280
+[305/432] [writer] › apps/office/e2e/writer-table-headlines.spec.ts:9:1 › Writer headline-adjacent text reflow retains a source caret beyond the old page fragment
+[306/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Automatic viewport=390
+[307/432] [writer] › apps/office/e2e/writer-table-headlines.spec.ts:109:3 › Writer repeated table headlines edit the original native header width=1280
+[308/432] [writer] › apps/office/e2e/writer-table-headlines.spec.ts:109:3 › Writer repeated table headlines edit the original native header width=390
+[309/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Left viewport=390
+[310/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry left width=1280
+[311/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table From left viewport=390
+[312/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry center width=1280
+[313/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Right viewport=390
+[314/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry right width=1280
+[315/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Center viewport=390
+[316/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry margins width=1280
+[317/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry left width=390
+[318/432] [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Manual viewport=390
+[319/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry center width=390
+[320/432] [writer] › apps/office/e2e/writer-table-properties-history.spec.ts:13:3 › Writer table properties native history width=1280
+[321/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry right width=390
+[322/432] [writer] › apps/office/e2e/writer-table-properties-history.spec.ts:13:3 › Writer table properties native history width=390
+[323/432] [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry margins width=390
+[324/432] [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Ordered List/plain
+[325/432] [writer] › apps/office/e2e/writer-table-row-lists.spec.ts:5:3 › Writer table row native list commands Ordered List
+[326/432] [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Ordered List/different
+[327/432] [writer] › apps/office/e2e/writer-table-row-lists.spec.ts:5:3 › Writer table row native list commands Unordered List
+[328/432] [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Unordered List/plain
+[329/432] [writer] › apps/office/e2e/writer-uncounted-list-layout.spec.ts:4:3 › Writer uncounted list keeps native text-left through history cell=false
+[330/432] [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Unordered List/different
+[331/432] [writer] › apps/office/e2e/writer-uncounted-list-layout.spec.ts:4:3 › Writer uncounted list keeps native text-left through history cell=true
+[332/432] [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:96:1 › Writer table row Add to List continues an imported restarted body list
+(node:7939) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[333/432] [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:322:3 › Writer dialog layout 1280x800
+(node:7946) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[334/432] [calc] › apps/office/e2e/calc/alignment.spec.ts:4:3 › Calc native alignment at 1280px
+[335/432] [calc] › apps/office/e2e/calc/alignment.spec.ts:4:3 › Calc native alignment at 390px
+[336/432] [calc] › apps/office/e2e/calc/borders.spec.ts:7:3 › uses shared Writer border controls and viewport-safe popups at 1280px
+[337/432] [calc] › apps/office/e2e/calc/borders.spec.ts:7:3 › uses shared Writer border controls and viewport-safe popups at 390px
+[338/432] [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:322:3 › Writer dialog layout 390x600
+[339/432] [calc] › apps/office/e2e/calc/borders.spec.ts:83:1 › runs actual native border history and ODS reopens in a DOM-free Worker
+[340/432] [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 1280px
+[341/432] [calc] › apps/office/e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 390px
+[342/432] [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 1280px
+[343/432] [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:322:3 › Writer dialog layout 640x360
+(node:7992) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[344/432] [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 1280px
+[345/432] [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 390px
+[346/432] [calc] › apps/office/e2e/calc/colors.spec.ts:4:3 › Calc shared font/background colors at 390px
+[347/432] [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 1280px
+[348/432] [calc] › apps/office/e2e/calc/clear-format.spec.ts:100:1 › keeps native Clear deletion/history and actual ODS in a DOM-free Worker
+[349/432] [calc] › apps/office/e2e/calc/compiler-arithmetic.spec.ts:5:1 › compiles actual arithmetic tokens in browser and Worker
+[350/432] [calc] › apps/office/e2e/calc/dociter.spec.ts:5:1 › traverses actual sparse cells by row in browser and Worker
+[351/432] [calc] › apps/office/e2e/calc/document-formulas.spec.ts:5:1 › edits actual numeric formula cells in browser and Worker
+[352/432] [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 390px
+[353/432] [calc] › apps/office/e2e/calc/document-references.spec.ts:4:1 › propagates actual cell references in browser and Worker
+[354/432] [calc] › apps/office/e2e/calc/document-scalars.spec.ts:4:1 › edits the same actual scalar document chain in browser and Worker
+[355/432] [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 1280px
+[356/432] [calc] › apps/office/e2e/calc/font-family.spec.ts:4:3 › Calc shared font-family selection at 390px
+[357/432] [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 1280px
+[358/432] [calc] › apps/office/e2e/calc/font-size.spec.ts:4:3 › Calc font-size selection and undo at 390px
+[359/432] [calc] › apps/office/e2e/calc/font-step.spec.ts:34:1 › executes real script-height items,font stepping,history and ODS in page and DOM-free Worker
+[360/432] [calc] › apps/office/e2e/calc/font-step.spec.ts:169:3 › shows actual script font sizes and reopens the saved ODS at 1280px
+[361/432] [calc] › apps/office/e2e/calc/column-width.spec.ts:127:1 › keeps native column width/visibility/history and actual ODS in a DOM-free Worker
+[362/432] [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800
+[363/432] [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600
+[364/432] [calc] › apps/office/e2e/calc/font-step.spec.ts:169:3 › shows actual script font sizes and reopens the saved ODS at 390px
+[365/432] [calc] › apps/office/e2e/calc/formula-output.spec.ts:5:1 › serializes actual formula tokens in browser and Worker
+[366/432] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 1280px
+[367/432] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 390px
+[368/432] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:79:1 › preserves indentation,row history,visibility and ODS in a genuine DOM-free Worker
+[369/432] [calc] › apps/office/e2e/calc/ods.spec.ts:5:1 › loads native ODS data and edits/saves the same real document in page and Worker
+[370/432] [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 1280px
+[371/432] [calc] › apps/office/e2e/calc/overline.spec.ts:30:3 › native Overline menu and ODS reopen at 1280px
+[372/432] [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 390px
+[373/432] [calc] › apps/office/e2e/calc/overline.spec.ts:30:3 › native Overline menu and ODS reopen at 390px
+[374/432] [calc] › apps/office/e2e/calc/outline.spec.ts:122:1 › preserves native Outline item metadata,history and ODS in a DOM-free Worker
+[375/432] [calc] › apps/office/e2e/calc/outline.spec.ts:221:1 › paints the native white center on colored background with independently colored lines
+[376/432] [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:40:3 › native Shadow menu and ODS reopen at 1280px
+[377/432] [calc] › apps/office/e2e/calc/overline.spec.ts:107:1 › preserves native Overline item metadata,history and ODS in a DOM-free Worker
+[378/432] [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800
+[379/432] [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600
+[380/432] [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800
+[381/432] [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:40:3 › native Shadow menu and ODS reopen at 390px
+[382/432] [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600
+[383/432] [calc] › apps/office/e2e/calc/strikeout.spec.ts:36:3 › native Strikeout menu and ODS reopen at 1280px
+[384/432] [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:128:1 › preserves native Shadow item metadata,history and ODS in a DOM-free Worker
+[385/432] [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:238:1 › paints native relief over shadow on colored background with independent line colors
+(node:8204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[386/432] [shared] › apps/office/e2e/shared/configured-font-device.spec.ts:5:1 › prepares Writer fonts before mount and shares native candidate matching with Calc roles
+[387/432] [shared] › apps/office/e2e/shared/decimal-reader.spec.ts:4:1 › reads numeric attributes in Chromium and an isolated Worker
+[388/432] [shared] › apps/office/e2e/shared/document-options.spec.ts:5:1 › uses actual Calc option defaults and copies in Chromium and a DOM-free Worker
+[389/432] [shared] › apps/office/e2e/shared/font-transport.spec.ts:4:1 › preserves shared Font values in Chromium and a DOM-free Worker document round trip
+[390/432] [shared] › apps/office/e2e/shared/font-values.spec.ts:4:1 › uses native stored font colors alignment and size in Chromium
+[391/432] [calc] › apps/office/e2e/calc/strikeout.spec.ts:36:3 › native Strikeout menu and ODS reopen at 390px
+[392/432] [shared] › apps/office/e2e/shared/grid-options.spec.ts:5:1 › uses shared base construction and explicit Calc grid defaults in both browser realms
+[393/432] [shared] › apps/office/e2e/shared/indexed-style-sheets.spec.ts:5:1 › preserves native style name reindex and Clear family state in Chromium
+[394/432] [shared] › apps/office/e2e/shared/language-conversion.spec.ts:5:1 › uses native language tables and corrected real consumers in both browser realms
+[395/432] [shared] › apps/office/e2e/shared/language-names.spec.ts:5:1 › uses actual native legacy-name conversion and defined mappings
+[396/432] [shared] › apps/office/e2e/shared/language-tag-conversion.spec.ts:5:1 › uses actual private LanguageTag conversion state and font tags
+[397/432] [shared] › apps/office/e2e/shared/language-tag-extraction.spec.ts:5:1 › uses actual LanguageTag extraction in shared fallback consumers
+[398/432] [shared] › apps/office/e2e/shared/language-tag-intl-audit.spec.ts:7:1 › audits native JS language tags in Chromium and DOM-free Worker
+[399/432] [shared] › apps/office/e2e/shared/language-tag-normal.spec.ts:5:1 › executes actual normal registered grammar and canonicalization in both runtimes
+[400/432] [shared] › apps/office/e2e/shared/language-tag-parser-contract.spec.ts:7:1 › audits pinned parser substitution limits in Chromium and DOM-free Worker
+[401/432] [shared] › apps/office/e2e/shared/language-tag-registry.spec.ts:5:1 › scans source token boundaries and uses pinned registered data in both runtimes
+[402/432] [shared] › apps/office/e2e/shared/language-tag-unicode-extension.spec.ts:5:1 › preserves native Unicode extension values in both actual runtimes
+[403/432] [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session
+[404/432] [shared] › apps/office/e2e/shared/launcher.spec.ts:21:1 › shared launcher handles unknown application routes
+[405/432] [shared] › apps/office/e2e/shared/locale-uppercase.spec.ts:6:1 › preserves native uppercase QA and locale differences in actual Chromium
+[406/432] [shared] › apps/office/e2e/shared/manifest-import.spec.ts:4:1 › reads the same typed ODS manifest in Chromium and a DOM-free Worker
+[407/432] [shared] › apps/office/e2e/shared/manifest.spec.ts:4:1 › exports the same native ODS manifest in Chromium and a DOM-free Worker
+[408/432] [calc] › apps/office/e2e/calc/strikeout.spec.ts:113:1 › preserves native Strikeout item metadata,history and ODS in a DOM-free Worker
+[409/432] [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 1280px
+[410/432] [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px
+[411/432] [calc] › apps/office/e2e/calc/strikeout.spec.ts:214:1 › preserves crossed-out signed short writeback in page and DOM-free Worker
+(node:8266) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[412/432] [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 1280px
+[413/432] [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px
+[414/432] [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px
+[415/432] [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 390px
+[416/432] [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 1280px
+[417/432] [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 390px
+[418/432] [shared] › apps/office/e2e/shared/pool-chain.spec.ts:4:1 › constructs native pool-only item sets and preserves range cache in Chromium
+[419/432] [shared] › apps/office/e2e/shared/pool-copy.spec.ts:4:1 › copies native pool metadata and preserves independent shutdown state in Chromium
+[420/432] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 1280px
+[421/432] [shared] › apps/office/e2e/shared/sfx-notifications.spec.ts:5:1 › preserves native duplicate delivery and dying subscription order in Chromium
+[422/432] [shared] › apps/office/e2e/shared/shared-string-pool.spec.ts:5:1 › preserves original shared string mapping and two-pass purge in Chromium
+[423/432] [shared] › apps/office/e2e/shared/size-item.spec.ts:4:1 › uses shared native geometry and typed size members in Chromium
+[424/432] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 390px
+[425/432] [shared] › apps/office/e2e/shared/style-iterator.spec.ts:5:1 › preserves native style filtering and Find Next index behavior in Chromium
+[426/432] [shared] › apps/office/e2e/shared/style-model.spec.ts:4:1 › uses actual native styles for rename, attributes, clear and dying in Chromium
+[427/432] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 1280px
+[428/432] [shared] › apps/office/e2e/shared/style-sheet.spec.ts:4:1 › preserves actual style role identity, inherited forwarding, copies and destruction in Chromium
+[429/432] [shared] › apps/office/e2e/shared/system-language.spec.ts:5:1 › resolves system and configured language values through actual shared owners
+[430/432] [shared] › apps/office/e2e/shared/text-sections.spec.ts:4:1 › extracts ordered rich-text sections using actual shared values in Chromium
+[431/432] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 390px
+[432/432] [shared] › apps/office/e2e/shared/user-defaults.spec.ts:4:1 › separates original and effective native pool defaults and restores them in Chromium
+  432 passed (7.8m)

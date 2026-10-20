@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-final-inventory-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-final-inventory-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-final-inventory-results.json
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1734/1734 )
+Branches     : 100% ( 1292/1292 )
+Functions    : 100% ( 436/436 )
+Lines        : 100% ( 1668/1668 )
+================================================================================
