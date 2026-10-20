@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:33:04.397Z"
+doc_updated_at: "2026-10-20T23:39:42.610Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -169,6 +169,18 @@ sections:
     Scope: all configured browser projects after the point-only ordinary-find correction. Do not overlap another build/static run while this job owns browser build output. Runtime/test/config sources remain frozen.
 
     Concurrent canonical npm test remains live under session12311 / Vitest PID91470, elapsed10:08 with209 temporary coverage files at latest observation. No final application/inventory verdict yet; preserve this run rather than restarting. Documentation-only WRITER-025 checkpoint82462b8593d1 does not alter either runtime snapshot. Task remains DOING.
+
+    Command: npm run test:tooling
+    Result: fail,90 tests passed and one native compiler integration test exceeded the unchanged5000ms default, reporting5610ms under concurrent load. All18 files executed.
+    Evidence: full-current-tooling.log; terminal exit1,77.02 seconds.
+    Scope: final complete tooling suite; no compiler type diagnostic regression established, no timeout change authorized or made.
+
+    Command: npm run test:tooling -- --maxWorkers=2
+    Result: pass,91 tests in18 files,112.81 seconds.
+    Evidence: full-current-tooling-bounded.log; terminal exit0.
+    Scope: the same complete tooling suite with bounded scheduling only. Same assertions, tests and5000ms timeout; no source/config/exclusion/threshold changes.
+
+    Current full runs remain live: application session12311 / PID91470 (elapsed16:39,378 temporary coverage files at latest observation) and browser session16662 / Playwright PID3988 (197 scenario start/completion lines reached, no terminal verdict). Keep runtime/test/config sources frozen and task DOING until complete evidence. No duplicated application/browser job.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -343,6 +355,18 @@ Evidence: output/playwright/writer-xcs-schema/full-current-browser.log.
 Scope: all configured browser projects after the point-only ordinary-find correction. Do not overlap another build/static run while this job owns browser build output. Runtime/test/config sources remain frozen.
 
 Concurrent canonical npm test remains live under session12311 / Vitest PID91470, elapsed10:08 with209 temporary coverage files at latest observation. No final application/inventory verdict yet; preserve this run rather than restarting. Documentation-only WRITER-025 checkpoint82462b8593d1 does not alter either runtime snapshot. Task remains DOING.
+
+Command: npm run test:tooling
+Result: fail,90 tests passed and one native compiler integration test exceeded the unchanged5000ms default, reporting5610ms under concurrent load. All18 files executed.
+Evidence: full-current-tooling.log; terminal exit1,77.02 seconds.
+Scope: final complete tooling suite; no compiler type diagnostic regression established, no timeout change authorized or made.
+
+Command: npm run test:tooling -- --maxWorkers=2
+Result: pass,91 tests in18 files,112.81 seconds.
+Evidence: full-current-tooling-bounded.log; terminal exit0.
+Scope: the same complete tooling suite with bounded scheduling only. Same assertions, tests and5000ms timeout; no source/config/exclusion/threshold changes.
+
+Current full runs remain live: application session12311 / PID91470 (elapsed16:39,378 temporary coverage files at latest observation) and browser session16662 / Playwright PID3988 (197 scenario start/completion lines reached, no terminal verdict). Keep runtime/test/config sources frozen and task DOING until complete evidence. No duplicated application/browser job.
 
 ## Rollback Plan
 
