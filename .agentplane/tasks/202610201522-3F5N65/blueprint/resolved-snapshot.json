@@ -4,7 +4,7 @@
   "resolverInput": {
     "taskId": "202610201522-3F5N65",
     "title": "Integrate current Calc and Writer changes and synchronize branches",
-    "description": "Publish current writer and calc, merge both into main, resolve integration conflicts, run complete project checks and fix failures with regression coverage, publish main, back-merge into writer and calc and leave clean synchronized branch checkouts. User explicitly authorized all nine steps including network push and cross-checkout access.",
+    "description": "Publish corrected writer/calc histories, merge into main and synchronize all three branches. User revised the scope on 2026-10-21: tests already repaired in Calc; do not repeat full verification. Preserve prior partial edits as evidence, use corrected branch versions, verify Git integrity and clean remote synchronization.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "3205e98eb0d978d89898bbc6df642747b4933144adbe3f73b8ddc38784dd0db1"
+    "value": "58f0eb1ace7f91786279b402423f96390319fa3935ef6272438087e11bdac1ec"
   }
 }

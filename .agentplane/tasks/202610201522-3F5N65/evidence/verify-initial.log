@@ -1,0 +1,459 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run check:calc-resources && npm run test:tooling && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 966 runtime sources, 4458 relative imports, 143 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  22:31:23
+   Duration  1.00s (transform 240ms, setup 0ms, import 310ms, tests 15ms, environment 0ms)
+
+
+> vite-office@0.1.0 check:calc-resources
+> tsx scripts/generate-calc-ui-resources.ts --check
+
+Calc resources: 463 commands;11 top menus;17 policy dispositions.
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  16 passed (16)
+      Tests  87 passed (87)
+   Start at  22:31:30
+   Duration  29.72s (transform 1.59s, setup 0ms, import 145.55s, tests 20.78s, environment 7ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+ ❯ |calc| src/sc/browser/presentation/calc-files.test.tsx (4 tests | 1 failed) 13609ms
+   × opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS 11998ms
+ ❯ |calc| src/i18nlangtag/source/isolang/isolang.test.ts (6 tests | 1 failed) 34171ms
+   × keeps unmapped caller fields for every UInt16 ID and both override policies 30471ms
+ ❯ |calc| src/sc/browser/presentation/calc-borders.test.tsx (4 tests | 1 failed) 157969ms
+   × uses the shared toolbar preset control with original twelve entries and real native 0.75pt frame/diagonal values 155930ms
+ ❯ |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx (3 tests | 3 failed) 158735ms
+   × opens every source top menu with unavailable operations disabled and shared shortcut captions 70396ms
+   × retains the complete visible source standardbar with disabled missing slots and SVG icons 62667ms
+   × renders native formatting placements with the bound shared font-size control and unavailable actions disabled 25500ms
+ ❯ |calc| src/sc/browser/presentation/calc-cell-selection.test.tsx (15 tests | 1 failed) 60209ms
+   × connects Edit Select row and column to the actual shared menu and visible grid marks 31447ms
+ ❯ |calc| src/sc/browser/presentation/calc-workbench.test.tsx (3 tests | 1 failed) 88832ms
+   × mounts the lazy production factory and edits actual scalar/formula cells through shared history controls 67924ms
+ ❯ |calc| src/sc/browser/presentation/calc-input-mode.test.tsx (4 tests | 1 failed) 56139ms
+   × keeps inspection out of Undo and records changed-and-reverted input through production controls 34669ms
+ ❯ |calc| src/sc/browser/presentation/calc-input-group.test.tsx (2 tests | 1 failed) 35651ms
+   × shows grouped selection and executes one Undo/Redo from actual Writer-style controls 34844ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/i18nlangtag/source/isolang/isolang.test.ts > keeps unmapped caller fields for every UInt16 ID and both override policies
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/i18nlangtag/source/isolang/isolang.test.ts:61:1
+     59|   expect(getTagString(tables.iso[2] as (typeof tables.iso)[number])).t…
+     60| });
+     61| it("keeps unmapped caller fields for every UInt16 ID and both override…
+       | ^
+     62|   const known = new Set(
+     63|     [
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-borders.test.tsx > uses the shared toolbar preset control with original twelve entries and real native 0.75pt frame/diagonal values
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/browser/presentation/calc-borders.test.tsx:24:1
+     22|   ).GetItem(150) as SvxBoxItem;
+     23| }
+     24| it("uses the shared toolbar preset control with original twelve entrie…
+       | ^
+     25|   const s = createCalcSession(),
+     26|     c = s.controller,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-cell-selection.test.tsx > connects Edit Select row and column to the actual shared menu and visible grid marks
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/browser/presentation/calc-cell-selection.test.tsx:70:1
+     68|   s.Close();
+     69| });
+     70| it("connects Edit Select row and column to the actual shared menu and …
+       | ^
+     71|   const s = mountSelection(),
+     72|     grid = screen.getByRole("grid");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-files.test.tsx > opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS
+Error: expect(element).not.toBeInTheDocument()
+
+expected document not to contain element, found <div
+  aria-label="Save As"
+  aria-modal="true"
+  class="fixed inset-0 z-[60] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
+  data-office-modal="true"
+  role="dialog"
+>
+  <div
+    class="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+    data-office-modal-panel="true"
+  >
+    <div
+      class="office-dialog-header flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5"
+    >
+      <div
+        class="min-w-0"
+      >
+        <h2
+          class="text-xl font-bold text-slate-950"
+        >
+          Save As
+        </h2>
+        <p
+          class="mt-1 text-sm text-slate-500"
+        >
+          Save a separate copy in this browser.
+        </p>
+      </div>
+      <button
+        aria-label="Close"
+        class="shrink-0 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-indigo-600"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-x h-5 w-5"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6 6 18"
+          />
+          <path
+            d="m6 6 12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <form
+      class="office-dialog-form"
+    >
+      <div
+        class="office-dialog-content"
+      >
+        <label
+          class="grid gap-1 text-sm font-semibold text-slate-700"
+        >
+          New copy name
+          <input
+            class="rounded border p-2"
+            required=""
+            value="Named copy"
+          />
+        </label>
+      </div>
+      <div
+        class="office-dialog-actions"
+      >
+        <button
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          class="office-dialog-primary"
+          disabled=""
+          type="submit"
+        >
+          Save copy
+        </button>
+      </div>
+    </form>
+  </div>
+</div> instead
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<section[39m
+        [33maria-label[39m=[32m"Calc workspace"[39m
+        [33mclass[39m=[32m"flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"contents"[39m
+          [33minert[39m=[32m""[39m
+        [36m>[39m
+          [36m<header[39m
+            [33mclass[39m=[32m"relative z-50 shrink-0 border-b border-slate-200 bg-white"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0"[39m
+              [36m>[39m
+                [36m<h1[39m
+                  [33mclass[39m=[32m"m-0 text-sm font-bold leading-5"[39m
+                [36m>[39m
+                  [36m<button[39m
+                    [33maria-label[39m=[32m"Edit document title"[39m
+                    [33mclass[39m=[32m"block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0mWorking document[0m
+                  [36m</button>[39m
+                [36m</h1>[39m
+                [36m<p[39m
+                  [33mclass[39m=[32m"text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700"[39m
+                [36m>[39m
+                  [0mCalc · browser workbench[0m
+                [36m</p>[39m
+              [36m</div>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"min-w-0 max-w-full"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"relative max-w-full"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"pointer-events-none invisible absolute left-0 top-0 flex w-max items-center gap-1 whitespace-nowrap"[39m
+                    [33minert[39m=[32m""[39m
+                  [36m>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mFile[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mEdit[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mView[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mInsert[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mFormat[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mStyles[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mSheet[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mData[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mTools[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mWindow[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0mHelp[0m
+                    [36m</span>[39m
+                    [36m<span[39m
+                      [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                    [36m>[39m
+                      [0m»[0m
+                    [36m</span>[39m
+                  [36m</div>[39m
+                  [36m<div[39m
+                    [33maria-label[39m=[32m"Calc menu"[39m
+                    [33mclass[39m=[32m"flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"[39m
+                    [33mrole[39m=[32m"menubar"[39m
+                  [36m>[39m
+                    [36m<div[39m
+                      [33mclass[39m=[32m"relative"[39m
+                    [36m>[39m
+                      [36m<button[39m
+                        [33maria-controls[39m=[32m"calc-menu-.uno:PickList-menu"[39m
+                        [33maria-expanded[39m=[32m"false"[39m
+                        [33maria-haspopup[39m=[32m"menu"[39m
+                        [33maria-label[39m=[32m"File"[39m
+                        [33mclass[39m=[32m"rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100"[39m
+                        [33mrole[39m=[32m"menuitem"[39m
+                        [33mtabindex[39m=[32m"0"[39m
+                        [33mtype[39m=[32m"button"[39m
+                      [36m>[39m
+                        [0mFile[0m
+                      [36m</button>[39m
+                    [36m</div...
+ ❯ src/sc/browser/presentation/calc-files.test.tsx:68:48
+     66|   await waitFor(
+     67|     /** Waits for confirmed primary save. @returns Assertion. */ () =>
+     68|       expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+       |                                                ^
+     69|   );
+     70|   expect(c.shell.GetTitle()).toBe("Named copy");
+ ❯ runWithExpensiveErrorDiagnosticsDisabled ../../node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback ../../node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-input-group.test.tsx > shows grouped selection and executes one Undo/Redo from actual Writer-style controls
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/browser/presentation/calc-input-group.test.tsx:66:1
+     64|   c.Close();
+     65| });
+     66| it("shows grouped selection and executes one Undo/Redo from actual Wri…
+       | ^
+     67|   const s = createCalcSession(),
+     68|     c = s.controller;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-input-mode.test.tsx > keeps inspection out of Undo and records changed-and-reverted input through production controls
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/browser/presentation/calc-input-mode.test.tsx:119:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-workbench.test.tsx > mounts the lazy production factory and edits actual scalar/formula cells through shared history controls
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/browser/presentation/calc-workbench.test.tsx:16:1
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > opens every source top menu with unavailable operations disabled and shared shortcut captions
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:15:1
+     13|   },
+     14| );
+     15| it("opens every source top menu with unavailable operations disabled a…
+       | ^
+     16|   const session = createCalcSession();
+     17|   render(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > retains the complete visible source standardbar with disabled missing slots and SVG icons
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:61:1
+     59| });
+     60|
+     61| it("retains the complete visible source standardbar with disabled miss…
+       | ^
+     62|   const session = createCalcSession();
+     63|   render(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > renders native formatting placements with the bound shared font-size control and unavailable actions disabled
+Error: expect(element).toHaveClass("size-8 rounded-md bg-white")
+
+Expected the element to have class:
+  size-8 rounded-md bg-white
+Received:
+  flex h-8 w-8 flex-col items-center justify-center rounded-l border border-slate-300 bg-white text-base font-bold
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:252:25
+    250|     else expect(button).toBeDisabled();
+    251|     if (color) expect(button).toHaveClass("h-8", "w-8", "rounded-l", "…
+    252|     else expect(button).toHaveClass("size-8", "rounded-md", "bg-white"…
+       |                         ^
+    253|     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("…
+    254|       expect(button).toHaveTextContent(/B|I|U/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯
+
+
+ Test Files  8 failed | 1066 passed (1074)
+      Tests  10 failed | 17331 passed (17341)
+   Start at  22:32:03
+   Duration  4157.47s (transform 392.23s, setup 343.18s, import 2562.73s, tests 2271.97s, environment 1870.16s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage

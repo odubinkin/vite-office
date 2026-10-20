@@ -1,0 +1,79 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- src/sc/source/core/data/docpool.test.ts src/sc/uiconfig/scalc/ui-resources.test.tsx
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts src/sc/source/core/data/docpool.test.ts src/sc/uiconfig/scalc/ui-resources.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ |calc| src/sc/source/core/data/docpool.test.ts (1 test | 1 failed) 40ms
+   × registers the original contiguous character prefix with source slot IDs and defaults 38ms
+ ❯ |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx (3 tests | 1 failed) 7016ms
+   × renders native formatting placements with the bound shared font-size control and unavailable actions disabled 1938ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/uiconfig/scalc/ui-resources.test.tsx > renders native formatting placements with the bound shared font-size control and unavailable actions disabled
+AssertionError: expected [ 'Font Name', 'Font Size', …(30) ] to deeply equal [ 'Font Name', 'Font Size', …(31) ]
+
+- Expected
++ Received
+
+@@ -23,11 +23,10 @@
+    "Add Decimal Place",
+    "Delete Decimal Place",
+    "Increase",
+    "Decrease",
+    "Borders (Shift to overwrite)",
+-   "Border Style",
+    "Border Color",
+    "Conditional",
+    "Left-To-Right",
+    "Right-To-Left",
+    "Text direction from left to right",
+
+ ❯ src/sc/uiconfig/scalc/ui-resources.test.tsx:210:5
+    208|       ) => control.getAttribute("aria-label"),
+    209|     ),
+    210|   ).toEqual(labels);
+       |     ^
+    211|   const fonts = controls.filter(
+    212|     /** Selects font placements outside palette dropdowns. @param cont…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |calc| src/sc/source/core/data/docpool.test.ts > registers the original contiguous character prefix with source slot IDs and defaults
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/sc/source/core/data/docpool.test.ts:32:28
+     30|   expect((a.GetPoolDefaultItem(116) as SvxFontItem).GetFamilyName()).n…
+     31|   expect(a.IsInRange(99)).toBe(false);
+     32|   expect(a.IsInRange(149)).toBe(false);
+       |                            ^
+     33|   expect(
+     34|     /** Rejects an unported pool identity rather than inventing a defa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 2 passed (4)
+   Start at  22:24:22
+   Duration  21.41s (transform 9.84s, setup 689ms, import 12.42s, tests 7.06s, environment 6.55s)
+
+npm error Lifecycle script `test:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts src/sc/source/core/data/docpool.test.ts src/sc/uiconfig/scalc/ui-resources.test.tsx

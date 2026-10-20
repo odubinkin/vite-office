@@ -4,20 +4,20 @@ title: "Integrate current Calc and Writer changes and synchronize branches"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 12
 origin:
   system: "manual"
 depends_on: []
 tags:
   - "code"
 verify:
-  - "Verify clean main writer calc checkouts, remote equality and main ancestry in writer/calc"
+  - "git diff --check"
   - "ap doctor"
   - "node .agentplane/policy/check-routing.mjs"
-  - "npm run verify"
+  - "Verify clean main writer calc checkouts, remote equality and mutual branch ancestry"
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-20T15:22:31.586Z"
+  updated_at: "2026-10-20T17:17:09.840Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -31,6 +31,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Execute the user-authorized three-checkout integration, full verification repairs and remote synchronization."
+  -
+    author: "CODER"
+    body: "Start: Resume the user-approved corrected branch integration and synchronization without repeating the full test run."
 events:
   -
     type: "status"
@@ -39,23 +42,30 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Execute the user-authorized three-checkout integration, full verification repairs and remote synchronization."
+  -
+    type: "status"
+    at: "2026-10-20T17:17:10.430Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: Resume the user-approved corrected branch integration and synchronization without repeating the full test run."
 doc_version: 3
-doc_updated_at: "2026-10-20T15:22:32.513Z"
+doc_updated_at: "2026-10-20T17:17:10.430Z"
 doc_updated_by: "CODER"
-description: "Publish current writer and calc, merge both into main, resolve integration conflicts, run complete project checks and fix failures with regression coverage, publish main, back-merge into writer and calc and leave clean synchronized branch checkouts. User explicitly authorized all nine steps including network push and cross-checkout access."
+description: "Publish corrected writer/calc histories, merge into main and synchronize all three branches. User revised the scope on 2026-10-21: tests already repaired in Calc; do not repeat full verification. Preserve prior partial edits as evidence, use corrected branch versions, verify Git integrity and clean remote synchronization."
 sections:
   Summary: |-
     Integrate current Calc and Writer changes and synchronize branches
 
     Publish current writer and calc, merge both into main, resolve integration conflicts, run complete project checks and fix failures with regression coverage, publish main, back-merge into writer and calc and leave clean synchronized branch checkouts. User explicitly authorized all nine steps including network push and cross-checkout access.
   Scope: "All three user-named checkouts, writer/calc/main Git synchronization, integration fixes and regression tests, and task evidence. Preserve existing development task records. Network pushes are expressly authorized."
-  Plan: "User-approved plan: publish clean writer and calc histories; fetch and merge writer/calc into main preserving all work; resolve conflicts and repair full verification failures with meaningful regression tests; run npm run verify, doctor and routing checks; publish tested main; fetch and merge main back to writer/calc, publish both and verify clean synchronized checkouts. No force push or destructive history edits."
-  Verify Steps: "1. Run npm run verify: formatting, lint, tools/application typecheck, dependency boundaries, Writer/Calc resources, tooling, full application/inventory coverage, all Playwright projects, static build, docs, file sizes, source tree/provenance, invariants and parity. Fix failures and cover discovered defects. 2. Run ap doctor and node .agentplane/policy/check-routing.mjs. 3. Verify writer/calc commits are ancestors of main; final main is ancestor of writer/calc; each checkout stays on its designated branch, is clean and equals the remote tip."
+  Plan: "User-approved revised plan (2026-10-21): preserve previous incomplete local test patch as task evidence, restore only those agent-authored edits, publish repaired calc and writer, fetch and merge their current tips into main, resolve conflicts if present, run Git integrity/whitespace and AgentPlane checks only, publish main, merge main back into writer/calc and publish both. Leave each checkout clean on its named branch with all tips synchronized. Do not repeat full project tests; use existing MD0CQF acceptance evidence for repaired tests. No force push or destructive history edits."
+  Verify Steps: "1. git diff --check and confirm no unmerged paths after merging corrected writer/calc into main. 2. Run ap doctor and node .agentplane/policy/check-routing.mjs. 3. Confirm input tips are ancestors of main, main is ancestor of final writer/calc, all working trees are clean on their intended branches and each local tip equals the actual remote branch tip. 4. Full npm run verify and application/browser/coverage reruns are explicitly skipped at the user request on 2026-10-21; existing MD0CQF acceptance evidence belongs to Calc fixes and is not claimed as a new run."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain starting tips main/writer dd5047ff7 and calc d0b6e787c. Abort unresolved merges if necessary; use forward corrective/revert commits only after publication. Never reset or force-push user branches."
-  Findings: ""
+  Findings: "The original interrupted attempt merged Calc at d0b6e787c into main b05745299 and left four partial agent-authored test edits. Corrected Calc tip 6cdcf6529 now supersedes those edits. Preserve their patch with prior failure logs, restore those four files to the existing merge tip, then merge corrected Calc. User explicitly removed the full-run requirement on 2026-10-21. No prior full-suite success is claimed for this integration."
 id_source: "generated"
 ---
 ## Summary
@@ -70,11 +80,11 @@ All three user-named checkouts, writer/calc/main Git synchronization, integratio
 
 ## Plan
 
-User-approved plan: publish clean writer and calc histories; fetch and merge writer/calc into main preserving all work; resolve conflicts and repair full verification failures with meaningful regression tests; run npm run verify, doctor and routing checks; publish tested main; fetch and merge main back to writer/calc, publish both and verify clean synchronized checkouts. No force push or destructive history edits.
+User-approved revised plan (2026-10-21): preserve previous incomplete local test patch as task evidence, restore only those agent-authored edits, publish repaired calc and writer, fetch and merge their current tips into main, resolve conflicts if present, run Git integrity/whitespace and AgentPlane checks only, publish main, merge main back into writer/calc and publish both. Leave each checkout clean on its named branch with all tips synchronized. Do not repeat full project tests; use existing MD0CQF acceptance evidence for repaired tests. No force push or destructive history edits.
 
 ## Verify Steps
 
-1. Run npm run verify: formatting, lint, tools/application typecheck, dependency boundaries, Writer/Calc resources, tooling, full application/inventory coverage, all Playwright projects, static build, docs, file sizes, source tree/provenance, invariants and parity. Fix failures and cover discovered defects. 2. Run ap doctor and node .agentplane/policy/check-routing.mjs. 3. Verify writer/calc commits are ancestors of main; final main is ancestor of writer/calc; each checkout stays on its designated branch, is clean and equals the remote tip.
+1. git diff --check and confirm no unmerged paths after merging corrected writer/calc into main. 2. Run ap doctor and node .agentplane/policy/check-routing.mjs. 3. Confirm input tips are ancestors of main, main is ancestor of final writer/calc, all working trees are clean on their intended branches and each local tip equals the actual remote branch tip. 4. Full npm run verify and application/browser/coverage reruns are explicitly skipped at the user request on 2026-10-21; existing MD0CQF acceptance evidence belongs to Calc fixes and is not claimed as a new run.
 
 ## Verification
 
@@ -86,3 +96,5 @@ User-approved plan: publish clean writer and calc histories; fetch and merge wri
 Retain starting tips main/writer dd5047ff7 and calc d0b6e787c. Abort unresolved merges if necessary; use forward corrective/revert commits only after publication. Never reset or force-push user branches.
 
 ## Findings
+
+The original interrupted attempt merged Calc at d0b6e787c into main b05745299 and left four partial agent-authored test edits. Corrected Calc tip 6cdcf6529 now supersedes those edits. Preserve their patch with prior failure logs, restore those four files to the existing merge tip, then merge corrected Calc. User explicitly removed the full-run requirement on 2026-10-21. No prior full-suite success is claimed for this integration.

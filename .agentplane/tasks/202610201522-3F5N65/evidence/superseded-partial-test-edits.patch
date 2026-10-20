@@ -1,0 +1,94 @@
+diff --git a/apps/office/e2e/calc/formatting-toolbar.spec.ts b/apps/office/e2e/calc/formatting-toolbar.spec.ts
+index cae0c3f00..4696e481a 100644
+--- a/apps/office/e2e/calc/formatting-toolbar.spec.ts
++++ b/apps/office/e2e/calc/formatting-toolbar.spec.ts
+@@ -56,10 +56,10 @@ for (const viewport of [
+     await page.goto("/calc");
+     const bar = page.getByRole("toolbar", { name: "Calc formatting toolbar" });
+     await expect(bar.getByRole("combobox")).toHaveCount(2);
+-    await expect(bar.getByRole("button")).toHaveCount(31);
++    await expect(bar.getByRole("button")).toHaveCount(30);
+     expect(
+       await bar
+-        .locator("button,select")
++        .locator('button,select,summary[aria-label="Border Style"]')
+         .evaluateAll(
+           /** Reads actual resource order. @param nodes - Rendered controls. @returns Labels. */ (
+             nodes,
+@@ -80,9 +80,9 @@ for (const viewport of [
+     await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).not.toHaveValue("");
+     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toBeEnabled();
+     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
+-    for (let index = 0; index < 31; index++) {
++    for (let index = 0; index < 30; index++) {
+       const button = bar.getByRole("button").nth(index);
+-      if (index < 11) await expect(button).toBeEnabled();
++      if (index < 11 || [21, 22, 23, 24].includes(index)) await expect(button).toBeEnabled();
+       else await expect(button).toBeDisabled();
+       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
+       else if (index === 3 || index === 4) await expect(button).toHaveText(index === 3 ? "A" : "▨");
+diff --git a/apps/office/e2e/shared/popup-pointer.spec.ts b/apps/office/e2e/shared/popup-pointer.spec.ts
+index a9a498095..1e4b5a1bb 100644
+--- a/apps/office/e2e/shared/popup-pointer.spec.ts
++++ b/apps/office/e2e/shared/popup-pointer.spec.ts
+@@ -46,7 +46,7 @@ for (const suite of ["writer", "calc"] as const)
+       await expect(first).toBeEnabled();
+       if (suite === "calc") {
+         const disabled = popup.getByRole("menuitemcheckbox", {
+-          name: "Shadow",
++          name: "Superscript",
+           exact: true,
+         });
+         await expect(disabled).toBeDisabled();
+diff --git a/apps/office/src/sc/source/core/data/docpool.test.ts b/apps/office/src/sc/source/core/data/docpool.test.ts
+index 9277254ce..2e85188a2 100644
+--- a/apps/office/src/sc/source/core/data/docpool.test.ts
++++ b/apps/office/src/sc/source/core/data/docpool.test.ts
+@@ -13,9 +13,9 @@ it("registers the original contiguous character prefix with source slot IDs and
+     10007, 10015, 10009, 10008, 10014, 11568, 10013, 10012, 10010, 10017, 10020, 10887, 10888,
+     10891, 10890, 10889, 10892, 10893, 10896, 10895, 10894, 10899, 0, 10011, 10920, 10931, 0, 0,
+     10903, 11571, 11569, 10460, 11572, 11570, 10229, 10577, 10578, 10949, 10944, 10230, 11015,
+-    11013, 11014, 10228, 0, 0, 10085, 0, 10001,
++    11013, 11014, 10228, 0, 0, 10085, 0, 10001, 26036, 10024, 10023,
+   ];
+-  for (let i = 0; i < 49; i++) {
++  for (let i = 0; i < 52; i++) {
+     const which = i + 100;
+     expect(a.GetPoolDefaultItem(which)).toBe(b.GetPoolDefaultItem(which));
+     expect(a.GetPoolDefaultItem(which).Which()).toBe(which);
+@@ -29,9 +29,9 @@ it("registers the original contiguous character prefix with source slot IDs and
+   expect((a.GetPoolDefaultItem(111) as SvxFontItem).GetFamilyName()).not.toBe("");
+   expect((a.GetPoolDefaultItem(116) as SvxFontItem).GetFamilyName()).not.toBe("");
+   expect(a.IsInRange(99)).toBe(false);
+-  expect(a.IsInRange(149)).toBe(false);
++  expect(a.IsInRange(152)).toBe(false);
+   expect(
+     /** Rejects an unported pool identity rather than inventing a default. @returns Never. */ () =>
+-      a.GetPoolDefaultItem(149),
++      a.GetPoolDefaultItem(152),
+   ).toThrow();
+ });
+diff --git a/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx b/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx
+index ecd929a00..0788c082b 100644
+--- a/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx
++++ b/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx
+@@ -161,7 +161,7 @@ it("renders native formatting placements with the bound shared font-size control
+     />,
+   );
+   const bar = screen.getByRole("toolbar", { name: "Calc formatting toolbar" }),
+-    controls = [...bar.querySelectorAll("button,select")].filter(
++    controls = [...bar.querySelectorAll('button,select,summary[aria-label="Border Style"]')].filter(
+       /** Palette contents belong to the dropdown rather than the toolbar placement order. @param control - Rendered control. @returns Whether a top-level toolbar control. */ (
+         control,
+       ) => !control.closest("[data-office-palette]"),
+@@ -240,6 +240,10 @@ it("renders native formatting placements with the bound shared font-size control
+         "Align Top",
+         "Center Vertically",
+         "Align Bottom",
++        "Increase",
++        "Decrease",
++        "Borders (Shift to overwrite)",
++        "Border Color",
+       ].includes(button.getAttribute("aria-label") as string)
+     )
+       expect(button).toBeEnabled();
