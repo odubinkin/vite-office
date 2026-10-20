@@ -753,8 +753,8 @@
   },
   "archive": {
     "path": "final-pool-owner-reports.gz",
-    "sha256": "1fcb55621e5af4829f4ee6575987ea56060f96932988d8b67515beb3f676e75d",
-    "records": 30
+    "sha256": "4328618e73833173dee4eba6b0edcd82edb3a4114023355ec33069d5a1891245",
+    "records": 35
   },
   "results": {
     "baselineAllApplicationUnitTests": 17453,
@@ -795,7 +795,8 @@
     "Historical partial source proofs are checked against their explicit code commits;their test-file hashes intentionally predate the final added numbering test.",
     "Targeted source lint passes;unqualified npm run lint scans old ignored output helpers and fails. No rule or ignore configuration was changed.",
     "Doctor is OK with the preexisting hook-readiness warning.",
-    "All4screenshots from font/wrap desktop/mobile scenarios were visually inspected. The initial screenshot cleanup and duplicate visual replay remain disclosed in the partial evidence."
+    "All4screenshots from font/wrap desktop/mobile scenarios were visually inspected. The initial screenshot cleanup and duplicate visual replay remain disclosed in the partial evidence.",
+    "The first portable-audit attempt compared Istanbul empty branchesTrue presentation percentages (Unknown versus printed100). The repaired audit validates all actual four counter dimensions plus the empty bucket sizes. Both audit logs are retained;no coverage observations were edited."
   ],
   "remainingNativeGaps": [
     "Actual formatted portion payload/device access,full EditEngine layout and diagnostics remain unported.",

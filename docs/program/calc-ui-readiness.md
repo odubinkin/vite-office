@@ -1,8 +1,8 @@
 # Calc UI and ODS implementation critical path
 
-## In progress — task57 genuine EditEngine pool and rich-text ownership
+## Current EditEngine owners — task57 pool and rich-text ownership
 
-Task `202610202009-NF91KY` remains open. Its first prerequisite adds the actual
+Task `202610202009-NF91KY` adds the actual
 SvxFontVariationsItem vector/copy/equality,typed string Any and presentation,
 plus native VariationsToString using OUStringBuffer's real float overload.
 The fixed tag conversion uses the existing original ASCII_US table/converter;
@@ -22,9 +22,14 @@ providers,nonempty bullet graphics,formatted portion payloads and real device/la
 operations remain explicitly unported.
 No style UI,pool or renderer facade is introduced. Current acceptance passes523Calc
 tests with all129Calc runtime owners at100% coverage,and32related tests with the8
-checked EditEngine source owners at100%. Chromium/DOM-freeWorker ownership and existing font/wrap/ODS
-checks pass,as do6Writer browser regressions. Complete shared coverage and final
-task verification remain pending;the narrower results do not certify that gate.
+checked EditEngine source owners at100%. Complete shared coverage also reaches100%
+across495runtime owners:raw S27534/B16109/F4921/L25151,all counters positive.
+The original17453-test replay and a10-test numbering supplement use identical runtime
+sources and counter maps;Istanbul combines their actual counts without reducing scope
+or thresholds. The supplement adds the previously missing physical-null comparison.
+Chromium/DOM-freeWorker ownership and existing font/wrap/ODS checks pass,as do6Writer
+browser regressions and35related Writer numbering tests. These are bounded ownership
+and integration results;full layout,graphics and broader native parity remain unclaimed.
 
 ## Current style-owner inputs — task56 naming and static defaults
 

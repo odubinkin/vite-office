@@ -149,6 +149,20 @@ it("retains independent feature bits and current numbering mode", /** Feature ma
   expect(rule.GetFeatureFlags()).toBe(F.BULLET_COLOR);
 });
 
+it("compares physical null slots independently of equally invalid level flags", /** The original pointer-presence comparison distinguishes cleared slots from allocated invalid formats,and accepts two cleared slots. @returns Nothing. */ () => {
+  const left = new SvxNumRule(F.NONE, 1, false),
+    right = new SvxNumRule(left);
+  left.SetLevelPointer(0, null);
+  expect(left.Get(0)).toBeNull();
+  expect(right.Get(0)).toBeNull();
+  expect(left.Equals(right)).toBe(false);
+  expect(right.Equals(left)).toBe(false);
+  right.SetLevelPointer(0, null);
+  expect(left.Equals(right)).toBe(true);
+  expect(right.Equals(left)).toBe(true);
+  expect(new SvxNumRule(left).Equals(left)).toBe(true);
+});
+
 it("owns actual fixed node-number storage and preserves native byte/short conversions", /** Copies do not alias the fixed array. @returns Nothing. */ () => {
   const node = new SvxNodeNum();
   expect(node.GetLevel()).toBe(0);

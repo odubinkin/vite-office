@@ -15,6 +15,11 @@ function digest(bytes) { return createHash("sha256").update(bytes).digest("hex")
 const proof = json(resolve(folder, "final-pool-owner.json"));
 for (const [path, expected] of Object.entries({ ...proof.sourceHashes, ...proof.sharedRuntimeHashes, ...proof.calcRuntimeHashes, ...proof.nativeHashes }))
   assert.equal(digest(readFileSync(resolve(root, path))), expected, path);
+for (const [path, expected] of Object.entries(proof.nativeHashes)) {
+  const name = path.replace("vendor/libreoffice-reference/", "");
+  const original = execFileSync("git", ["-C", "vendor/libreoffice-reference", "show", `${proof.nativeBaseline}:${name}`], { cwd: root });
+  assert.equal(digest(original), expected, `Pinned native blob: ${name}`);
+}
 let historicalPins = 0;
 for (const record of proof.historicalSourceCheckpoints) {
   const previous = json(resolve(folder, record.manifest));
@@ -78,7 +83,13 @@ for (const [field, expected] of Object.entries(proof.results.sharedCounts)) {
   assert.equal(total[field].covered, expected);
   assert.equal(total[field].pct, 100);
 }
-assert.deepEqual(report("output/playwright/task57-complete-shared-coverage/coverage-summary.json").total, total);
+const printed = report("output/playwright/task57-complete-shared-coverage/coverage-summary.json").total;
+for (const field of Object.keys(proof.results.sharedCounts)) assert.deepEqual(printed[field], total[field]);
+// Istanbul prints 100 for an unmeasured zero-sized branchesTrue bucket while its in-memory summary uses Unknown.
+assert.equal(printed.branchesTrue.total, 0);
+assert.equal(total.branchesTrue.total, 0);
+assert.equal(printed.branchesTrue.covered, 0);
+assert.equal(total.branchesTrue.covered, 0);
 const partial = json(resolve(folder, "partial-pool-owner.json"));
 const retained = JSON.parse(gunzipSync(readFileSync(resolve(folder, partial.archive.path))).toString("utf8"));
 const original = new Map(retained.map((entry) => [entry.path, JSON.parse(entry.path.endsWith(".json") ? Buffer.from(entry.base64, "base64").toString("utf8") : "null")]));

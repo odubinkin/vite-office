@@ -17,7 +17,7 @@
     },
     "capability": "Native EditEngine pool construction and rich-text value ownership",
     "gaps": [
-      "Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. Complete task coverage/browser acceptance remains pending."
+      "Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. The bounded task acceptance has complete Calc100/shared100 and actual Chromium/DOM-freeWorker evidence;this does not establish full layout/graphics or native ABI parity."
     ],
     "upstream": {
       "implementation": [
@@ -87,7 +87,7 @@
     "aspect": "model-operation",
     "atomicOperation": "native-editengine-pool-richtext-ownership",
     "scopeLimitations": [
-      "Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. Complete task coverage/browser acceptance remains pending."
+      "Native formatted portion payload/device operations,full EditEngine layout and diagnostics,nonempty bullet graphics and CopyValidProperties remain unported. C++ lifetime/refcount bookkeeping is erased under GC. Float hashing preserves logical contracts using normalized binary32 bits;native stdlib ABI hash numeric parity is not certified. The bounded task acceptance has complete Calc100/shared100 and actual Chromium/DOM-freeWorker evidence;this does not establish full layout/graphics or native ABI parity."
     ]
   }
 }
