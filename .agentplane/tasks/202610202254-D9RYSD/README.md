@@ -4,7 +4,7 @@ title: "Complete native Calc document pool and header-footer ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "528 Calc and58 related tests pass;Calc130 and changed4 owners100%;7 Calc/Worker and6 Writer browser regressions,static gates and portable source/native/raw coverage audit pass. Actual services left explicitly unported."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T23:19:46.810Z"
+  updated_by: "EVALUATOR"
+  note: "Native default package and nullable rich-text ownership satisfy bounded scope;reviewed implementation08bc40fd2bc0."
+  evaluated_sha: "08bc40fd2bc0cb386fa0163b38d5c47235897bdd"
+  blueprint_digest: "679069c53f09abd05366b35ee25a9c319046e642ecb5648878ff4f6be13f72f1"
+  evidence_refs:
+    - ".agentplane/tasks/202610202254-D9RYSD/README.md"
+    - ".agentplane/tasks/202610202254-D9RYSD/quality/20261020-231946810-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610202254-D9RYSD/quality/20261020-231946810-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610202254-D9RYSD/quality/20261020-231946810-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610202254-D9RYSD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610202254-D9RYSD/evidence/acceptance.json"
+    - ".agentplane/tasks/202610202254-D9RYSD/evidence/audit.mjs"
+    - ".agentplane/tasks/202610202254-D9RYSD/evidence/raw-results.json.gz"
+  findings:
+    - "Verified89entries100..188,static/dynamic split,slots10057/10058,five source range pairs,base Clone and real text null/copy/alias semantics. Raw528Calc/58related tests and130+4owners100percent are reproducible by audit. Chromium/Worker and Writer regressions pass;shared emitted JS identical."
 commit: null
 comments:
   -
@@ -42,7 +60,7 @@ events:
     state: "ok"
     note: "528 Calc and58 related tests pass;Calc130 and changed4 owners100%;7 Calc/Worker and6 Writer browser regressions,static gates and portable source/native/raw coverage audit pass. Actual services left explicitly unported."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:19:00.319Z"
+doc_updated_at: "2026-10-20T23:19:45.792Z"
 doc_updated_by: "CODER"
 description: "Block58: complete original ScDocumentPool package100..188 using actual ScPageHFItem value ownership,ScGlobal EETextObjEqual and existing shared EditTextObject/SvxSetItem/ScPageScaleToItem. Preserve static versus per-pool dynamic defaults,ranges,slots,copy/base Clone and native null/text equality. No fake style pool,UNO header/footer content,renderer or lifetime service. Reuse actual shared values and document unported APIs. Work only calc checkout/branch;user performs integration."
 sections:
@@ -111,6 +129,8 @@ sections:
     Initial focused run had3test assertion failures:two old tests still treated177as out of range;one expected adjacent ranges160/161merged. Actual upstream preserves5pairs. Fixed only stale/wrong test expectations;repaired53tests and final58tests pass. Two preparation scripts stopped before writing because existing Which declarations or wrong cwd invalidated assumptions;corrected from Calc root. All raw first/repaired outcomes retained. A later formatting invocation lacked the local Node PATH;rerun successfully with explicit PATH. No production change was made to mask a test failure.
 
     CALC246 records nullable header/footer defaults versus unconditional XML diagnostic dereferences. Diagnostics and genuine UNO QueryValue/PutValue remain unported;native null state was preserved. Shared style bases already exist;Calc style/helper/standard-style creation and actual EditEngine editing/layout remain subsequent real owners. User-visible style UI is not claimed complete. No network,global files,branch switches or merges. Full all-app checkpoint remains60.
+
+    Closeout tooling: initial implementation commit subject was rejected because it lacked the repository emoji/task-suffix/scope format. No commit was created. The prematurely attempted evaluator recording also rejected the still-staged implementation. Route was recomputed;implementation then committed as08bc40fd2bc0 with the required format. Evaluator is rerun against that clean source commit;no policy was weakened.
 id_source: "generated"
 ---
 ## Summary
@@ -195,3 +215,5 @@ Original ScDocumentPool now has all89entries100..188,87static defaults and two p
 Initial focused run had3test assertion failures:two old tests still treated177as out of range;one expected adjacent ranges160/161merged. Actual upstream preserves5pairs. Fixed only stale/wrong test expectations;repaired53tests and final58tests pass. Two preparation scripts stopped before writing because existing Which declarations or wrong cwd invalidated assumptions;corrected from Calc root. All raw first/repaired outcomes retained. A later formatting invocation lacked the local Node PATH;rerun successfully with explicit PATH. No production change was made to mask a test failure.
 
 CALC246 records nullable header/footer defaults versus unconditional XML diagnostic dereferences. Diagnostics and genuine UNO QueryValue/PutValue remain unported;native null state was preserved. Shared style bases already exist;Calc style/helper/standard-style creation and actual EditEngine editing/layout remain subsequent real owners. User-visible style UI is not claimed complete. No network,global files,branch switches or merges. Full all-app checkpoint remains60.
+
+Closeout tooling: initial implementation commit subject was rejected because it lacked the repository emoji/task-suffix/scope format. No commit was created. The prematurely attempted evaluator recording also rejected the still-staged implementation. Route was recomputed;implementation then committed as08bc40fd2bc0 with the required format. Evaluator is rerun against that clean source commit;no policy was weakened.

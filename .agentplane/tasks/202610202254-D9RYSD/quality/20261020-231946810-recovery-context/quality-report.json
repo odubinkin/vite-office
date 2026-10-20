@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610202254-D9RYSD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T23:19:46.810Z",
+  "verdict": "pass",
+  "summary": "Native default package and nullable rich-text ownership satisfy bounded scope;reviewed implementation08bc40fd2bc0.",
+  "evaluated_sha": "08bc40fd2bc0cb386fa0163b38d5c47235897bdd",
+  "blueprint_digest": "679069c53f09abd05366b35ee25a9c319046e642ecb5648878ff4f6be13f72f1",
+  "findings": [
+    "Verified89entries100..188,static/dynamic split,slots10057/10058,five source range pairs,base Clone and real text null/copy/alias semantics. Raw528Calc/58related tests and130+4owners100percent are reproducible by audit. Chromium/Worker and Writer regressions pass;shared emitted JS identical."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610202254-D9RYSD/README.md",
+    ".agentplane/tasks/202610202254-D9RYSD/evidence/acceptance.json",
+    ".agentplane/tasks/202610202254-D9RYSD/evidence/audit.mjs",
+    ".agentplane/tasks/202610202254-D9RYSD/evidence/raw-results.json.gz"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "UNO header/footer content,XML diagnostics,Calc derived styles and editing/layout remain unported. Existing doctor hook-shim readiness warning remains out of scope. No full native or UI parity claim."
+  ]
+}
