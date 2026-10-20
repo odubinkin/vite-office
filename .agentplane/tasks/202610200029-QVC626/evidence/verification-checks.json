@@ -7,163 +7,190 @@
       "command": "npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task44-calc --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task44-calc-results.json",
       "result": "pass",
       "evidence": "130 files;398 cases;S8445/B5340/F1650/L7559 all100",
-      "log": "calc-proof.json"
+      "log": "calc-proof.json",
+      "exitCode": 0
     },
     {
       "command": "npm run test:coverage:shared -- native-boolean-handler native-color-handlers native-auto-color character-hdl outlined-text xmlimp.test calc-namespace-binding --coverage.include=src/xmloff/source/style/xmlbahdl.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.include=src/vcl/browser/outlined-text.tsx --coverage.reportsDirectory=coverage/task44-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task44-shared-final-results.json",
       "result": "pass",
       "evidence": "7 files;15 cases;S331/B51/F22/L318 all100",
-      "log": "shared-proof.json"
+      "log": "shared-proof.json",
+      "exitCode": 0
     },
     {
       "command": "npm run test:calc -- calc-outline calc-overline calc-strikeout",
       "result": "pass",
       "evidence": "3 files;12 cases in current shared-component context",
-      "log": "task44-calc-current-context.log"
+      "log": "task44-calc-current-context.log",
+      "exitCode": 0
     },
     {
       "command": "npm run test:writer -- odt-native-character-values native-font-metadata WriterMenuBar",
       "result": "pass",
       "evidence": "3 files;14 cases",
-      "log": "task44-writer-related.log"
+      "log": "task44-writer-related.log",
+      "exitCode": 0
     },
     {
       "command": "npm run test:shared -- menu popup native-attribute-toggle",
       "result": "pass",
       "evidence": "9 files;100 cases",
-      "log": "task44-shared-related.log"
+      "log": "task44-shared-related.log",
+      "exitCode": 0
     },
     {
       "command": "npm run build",
       "result": "pass",
       "evidence": "fresh production build;existing chunk-size warning",
-      "log": "task44-build-final.log"
+      "log": "task44-build-final.log",
+      "exitCode": 0
     },
     {
       "command": "npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/outline.spec.ts",
       "result": "pass",
       "evidence": "4 cases on current production build;1280/390px;primary ODS;Worker;actual raster",
-      "log": "task44-browser-current.log"
+      "log": "task44-browser-current.log",
+      "exitCode": 0
     },
     {
       "command": "npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/outline.spec.ts apps/office/e2e/calc/strikeout.spec.ts apps/office/e2e/calc/overline.spec.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/formatting-toolbar.spec.ts",
       "result": "pass",
       "evidence": "15 related cases;current final4-case rerun supersedes outline observations",
-      "log": "task44-browser-related.log"
+      "log": "task44-browser-related.log",
+      "exitCode": 0
     },
     {
       "command": "npx playwright test --config apps/office/playwright.config.ts --project shared --workers=2 apps/office/e2e/shared/menubar-pointer.spec.ts apps/office/e2e/shared/popup-pointer.spec.ts",
       "result": "pass",
       "evidence": "8 cases;Writer and Calc both sizes",
-      "log": "task44-browser-shared-final.log"
+      "log": "task44-browser-shared-final.log",
+      "exitCode": 0
     },
     {
       "command": "npm run typecheck",
       "result": "pass",
       "evidence": "TypeScript tools and application pass;also enforced by final build",
-      "log": "task44-types-final.log"
+      "log": "task44-types-final.log",
+      "exitCode": 0
     },
     {
       "command": "npx eslint . --max-warnings 0 --ignore-pattern 'output/playwright/**'",
       "result": "pass",
       "evidence": "zero errors/warnings",
-      "log": "task44-lint-final.log"
+      "log": "task44-lint-final.log",
+      "exitCode": 0
     },
     {
       "command": "npx prettier --check . --ignore-path .prettierignore --ignore-path .gitignore",
       "result": "pass",
       "evidence": "all matched authored files pass;subsequent focused check covers late component/test changes",
-      "log": "task44-format.log"
+      "log": "task44-format.log",
+      "exitCode": 0
     },
     {
       "command": "npx prettier --check apps/office/src/vcl/browser/outlined-text.tsx apps/office/src/vcl/browser/outlined-text.test.tsx apps/office/e2e/calc/outline.spec.ts .agentplane/tasks/202610200029-QVC626/evidence/native-source-audit.json",
       "result": "pass",
       "evidence": "current late edits pass",
-      "log": "task44-format-current.log"
+      "log": "task44-format-current.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:dependencies",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-deps-final.log"
+      "log": "task44-deps-final.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:docs",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-docs-final.log"
+      "log": "task44-docs-final.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:file-size",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-size.log"
+      "log": "task44-size.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:source-tree",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-source-tree-final.log"
+      "log": "task44-source-tree-final.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:source-provenance",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-provenance-final.log"
+      "log": "task44-provenance-final.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:calc-resources",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-calc-resources.log"
+      "log": "task44-calc-resources.log",
+      "exitCode": 0
     },
     {
       "command": "npm run check:writer-resources",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-writer-resources.log"
+      "log": "task44-writer-resources.log",
+      "exitCode": 0
     },
     {
       "command": "node scripts/check-static-build.mjs",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-static-final.log"
+      "log": "task44-static-final.log",
+      "exitCode": 0
     },
     {
       "command": "node .agentplane/policy/check-routing.mjs",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-routing.log"
+      "log": "task44-routing.log",
+      "exitCode": 0
     },
     {
       "command": "ap doctor",
       "result": "pass",
       "evidence": "pass",
-      "log": "task44-doctor.log"
+      "log": "task44-doctor.log",
+      "exitCode": 0
     },
     {
       "command": "npm run inventory:invariants",
       "result": "pass",
       "evidence": "zero semantic violations;no broad parity promotion",
-      "log": "task44-invariants.log.gz"
+      "log": "task44-invariants.log.gz",
+      "exitCode": 0
     },
     {
       "command": "npm run inventory:parity:calc",
       "result": "pass",
       "evidence": "zero semantic violations;no broad parity promotion",
-      "log": "task44-parity-calc.log.gz"
+      "log": "task44-parity-calc.log.gz",
+      "exitCode": 0
     },
     {
       "command": "npm run inventory:parity:shared",
       "result": "pass",
       "evidence": "zero semantic violations;no broad parity promotion",
-      "log": "task44-parity-shared.log.gz"
+      "log": "task44-parity-shared.log.gz",
+      "exitCode": 0
     },
     {
       "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/check-lo-source-tree.test.ts",
       "result": "pass",
       "evidence": "3 actual matched files;92 cases;absent optional path contributes no cases",
-      "log": "task44-tooling.log"
+      "log": "task44-tooling.log",
+      "exitCode": 0
     }
   ],
   "reconciliation": "All Calc application owners retain their raw report hashes. Removing an unnecessary export from shared OutlinedText for Fast Refresh required fresh complete shared owner coverage,current Calc integration and fresh production build/browser reruns. All nine changed application owners100,current hashes. Browser last formatting edit only changes whitespace. Full all-app checkpoint40 retained;next50.",

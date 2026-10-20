@@ -242,6 +242,7 @@ export enum XMLToken {
   STYLE_TEXT_LINE_THROUGH_TYPE,
   STYLE_TEXT_LINE_THROUGH_WIDTH,
   STYLE_TEXT_LINE_THROUGH_TEXT,
+  STYLE_TEXT_OUTLINE,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -476,6 +477,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "text-line-through-type", XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE],
   [ODF_NAMESPACES.style, "text-line-through-width", XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH],
   [ODF_NAMESPACES.style, "text-line-through-text", XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT],
+  [ODF_NAMESPACES.style, "text-outline", XMLToken.STYLE_TEXT_OUTLINE],
 ];
 
 const tokens = new Map(

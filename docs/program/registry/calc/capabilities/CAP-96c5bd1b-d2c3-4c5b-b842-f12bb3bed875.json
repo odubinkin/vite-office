@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875",
+    "capabilityId": "CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskQVC626 implements native OutlineFont10012/Which107 with complete SvxContourItem,bool/default/mixed state,shared Sfx toggle preparation,actual grouped/disjoint selections and attribute history. Shared Writer menus expose source checked state. Original XMLBoolPropHdl uses real Any and exact Converter bool lexical rules,including false assignment on rejected import and unchanged failed-export output. Actual ODS styles preserve explicit true and false across reopen. Shared browser raster composition applies the original ordered eight colored offsets and white center to actual glyph and line pixels with one accessible text instance and measured browser bounds. Browser CSS pixel/device scaling,rich edit,full native font/device services and broad parity remain unverified;Writer primary storage/open/no-recovery policies remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native outline font toggle,ODS contour boolean and browser raster stencil",
+    "gaps": [
+      "Full native SfxBindings/UNO transport,rich edit,device/font services and platform pixel scaling remain unverified.",
+      "The source always-white contour center is deliberately preserved on colored backgrounds.",
+      "Native rich-text ODS QA is a related source reference,not an executed full EditEngine certificate."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_ATTR_CHAR_CONTOUR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+          "marker": "XMLBoolPropHdl::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/text.cxx",
+          "marker": "OutputDevice::ImplDrawSpecialText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharContoured"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testRichTextExportODS"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/contouritem.hxx",
+          "marker": "SvxContourItem"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "SetOutlineFont"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+          "marker": "XMLBoolPropHdl"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/outlined-text.tsx",
+          "marker": "OutlinedText"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/native-boolean-handler.test.ts",
+          "marker": "Any"
+        },
+        {
+          "path": "apps/office/e2e/calc/outline.spec.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610200029-QVC626/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-outline-font-ui",
+    "scopeLimitations": [
+      "Full native SfxBindings/UNO transport,rich edit,device/font services and platform pixel scaling remain unverified.",
+      "The source always-white contour center is deliberately preserved on colored backgrounds.",
+      "Native rich-text ODS QA is a related source reference,not an executed full EditEngine certificate."
+    ]
+  }
+}

@@ -3147,3 +3147,28 @@ initialize real unsigned-short Any values65535/32768 and verify their signed pro
 and final type identities. LONG-to-SHORT narrowing is not assumed: the existing original
 Any extraction rules do not admit LONG. These are initialized native value-contract
 witnesses;ordinary valid ODF strikeout tokens do not produce negative enum values.
+
+## CALC-215: outline font paints its central glyph and line rasters white
+
+Status: pinned `vcl/source/outdev/text.cxx`, `OutputDevice::ImplDrawSpecialText`.
+
+After eight one-pixel draws in the original text and line colors, the outline branch sets
+text, underline and overline colors to COL_WHITE and draws the central raster. This is
+white even when the cell background has another color; it is not a transparent cutout.
+
+Decision: retain the ordered source offsets and white central alpha raster in the shared
+browser SVG filter. The actual glyph and independently colored line pixels form the
+source graphic once. Browser drawing uses CSS pixels and actual observed layout bounds;
+this does not certify native device scaling, font metrics or rich-text painting.
+
+## CALC-216: failed boolean XML conversion still replaces the output Any
+
+Status: pinned `xmloff/source/style/xmlbahdl.cxx`, `XMLBoolPropHdl::importXML`.
+
+The handler initializes false, calls the original strict boolean converter, writes that
+boolean into the Any, then returns the converter result. Rejected forms such as `1` and
+`TRUE` therefore replace a previous numeric Any with a false bool while returning false.
+
+Decision: preserve this shared value contract. The Calc property mapper honors the false
+return and diagnoses the rejected property rather than applying its intermediate Any.
+Export extracts an actual bool and leaves the caller's string unchanged on type failure.

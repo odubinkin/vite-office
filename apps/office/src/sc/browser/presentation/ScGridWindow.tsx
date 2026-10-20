@@ -1,4 +1,6 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import { SvxContourItem } from "../../../editeng/inc/contouritem";
+import { OutlinedText } from "../../../vcl/browser/outlined-text";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels } from "./row-geometry";
@@ -250,6 +252,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   const pattern = document.GetPattern(position) as ScPatternAttr;
                   const weight = (pattern.GetItem(102) as SvxWeightItem).GetWeight();
                   const posture = (pattern.GetItem(103) as SvxPostureItem).GetPosture();
+                  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue();
                   const lineItem = pattern.GetItem(104) as SvxUnderlineItem;
                   const underline = lineItem.GetLineStyle(),
                     lineColor = lineItem.GetColor();
@@ -327,7 +330,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         textDecorationStyle:
                           underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
                         textDecorationLine:
-                          underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
+                          outlined || underline === FontLineStyle.LINESTYLE_NONE
+                            ? "none"
+                            : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
                         left: 48 + col * viewport.columnWidth,
                         width: viewport.columnWidth,
@@ -350,7 +355,21 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         />
                       ) : (
                         <div className="w-full shrink-0">
-                          <ScCellText text={cell.text} pattern={pattern} />
+                          <OutlinedText
+                            enabled={outlined}
+                            paintStyle={{
+                              textDecorationColor:
+                                lineColor.GetAlpha() === 255
+                                  ? `rgb(${lineColor.GetRed()}, ${lineColor.GetGreen()}, ${lineColor.GetBlue()})`
+                                  : "currentColor",
+                              textDecorationStyle:
+                                underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
+                              textDecorationLine:
+                                underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
+                            }}
+                          >
+                            <ScCellText text={cell.text} pattern={pattern} />
+                          </OutlinedText>
                         </div>
                       )}
                     </div>

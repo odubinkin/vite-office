@@ -96,3 +96,25 @@ export class XMLIsTransparentPropHdl {
     return true;
   }
 }
+
+/** Original XMLBoolPropHdl;failed lexical conversion still writes the initialized false Any. */
+export class XMLBoolPropHdl {
+  /** Imports the original strict boolean tokens and preserves failure-side Any assignment. @param input - XML token. @param value - Actual Any. @param converter - Unused native unit converter. @returns Conversion success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const boolean: [boolean] = [false];
+    const result = Converter.convertBool(boolean, input);
+    value.insert(boolean, "bool");
+    return result;
+  }
+  /** Exports only a genuine boolean Any and retains XML on failed extraction. @param output - XML output. @param value - Native Any. @param converter - Unused native converter. @returns Whether emitted. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const boolean: [boolean] = [false];
+    if (!value.extract(boolean, "bool")) return false;
+    const buffer: [string] = [""];
+    Converter.convertBool(buffer, boolean[0]);
+    output[0] = buffer[0];
+    return true;
+  }
+}

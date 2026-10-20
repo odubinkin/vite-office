@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
 import type { CalcAlignmentAxis } from "../../source/ui/view/formatsh";
@@ -295,6 +296,17 @@ export class CalcViewController {
   SetStrikeout(item?: SvxCrossedOutItem): boolean {
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetStrikeout(item);
+    this.Changed();
+    return changed;
+  }
+  /** Reads native contour state. @returns Enabled or mixed. */
+  GetOutlineState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetOutlineState();
+  }
+  /** Commits pending input before the original contour attribute operation. @param item - Complete native item. @returns Whether changed. */
+  SetOutlineFont(item?: SvxContourItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetOutlineFont(item);
     this.Changed();
     return changed;
   }

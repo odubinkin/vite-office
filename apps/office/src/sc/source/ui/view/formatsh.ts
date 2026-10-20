@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import { SvxContourItem } from "../../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
@@ -221,6 +222,14 @@ export class ScFormatShell {
   /** Applies original Strikeout ExecuteAttr with the shared bound-toggle preparation. @param value - Native complete request. @returns Whether changed. */
   SetStrikeout(value?: SvxCrossedOutItem): boolean {
     return this.ApplyToggleAttr(106, SvxCrossedOutItem.CreateDefault, value);
+  }
+  /** Reads the actual native contour boolean or mixed selection state. @returns Outline state. */
+  GetOutlineState(): boolean | undefined {
+    return (this.SelectionItem(107) as SvxContourItem | undefined)?.GetValue();
+  }
+  /** Applies original contour ExecuteAttr through shared native bound-toggle preparation. @param value - Optional complete native request. @returns Whether changed. */
+  SetOutlineFont(value?: SvxContourItem): boolean {
+    return this.ApplyToggleAttr(107, SvxContourItem.CreateDefault, value);
   }
   /** Shared consumed ExecuteAttr cases receive a concrete native toggleable item. @param which - Known mapped attribute. @param factory - Concrete native factory. @param value - Optional complete request. @returns Whether changed. */
   private ApplyToggleAttr(which: number, factory: () => SfxPoolItem, value?: SfxPoolItem): boolean {
