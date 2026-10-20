@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:39:42.610Z"
+doc_updated_at: "2026-10-20T23:51:09.294Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -181,6 +181,18 @@ sections:
     Scope: the same complete tooling suite with bounded scheduling only. Same assertions, tests and5000ms timeout; no source/config/exclusion/threshold changes.
 
     Current full runs remain live: application session12311 / PID91470 (elapsed16:39,378 temporary coverage files at latest observation) and browser session16662 / Playwright PID3988 (197 scenario start/completion lines reached, no terminal verdict). Keep runtime/test/config sources frozen and task DOING until complete evidence. No duplicated application/browser job.
+
+    Command: npm run test:e2e
+    Result: pass,all432 scenarios in14.9 minutes; terminal session16662 exit0.
+    Evidence: full-current-browser.log and generated Playwright report. Final project counts are335 Writer,53 Calc,44 shared.
+    Scope: fresh complete Chromium acceptance on the current runtime snapshot including the point-only FindAll correction. Earlier333 Writer count was a partial observation while two Writer cases still ran across the project transition; use the terminal335 count.
+
+    Command: npm run test:static
+    Result: pass, fresh production build and static smoke; terminal session27780 exit0.
+    Evidence: full-current-static.log.
+    Scope: relative local assets,two JavaScript bundles,no embedded application backend endpoints; existing bundle-size warning retained. Build executed only after browser termination.
+
+    Full application coverage remains live under session12311 / PID91470 at elapsed27:52,516 temporary files at latest observation. Active child processes and advancing temporary outputs verified; do not restart or treat an observation timeout as terminal. No application/inventory verdict yet. Runtime/test/config sources remain frozen; documentation changes do not alter the tested snapshot. Keep task DOING and strict coverage thresholds/exclusions unchanged.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -211,6 +223,8 @@ sections:
     Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.
 
     Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.
+
+    Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
 id_source: "generated"
 ---
 ## Summary
@@ -368,6 +382,18 @@ Scope: the same complete tooling suite with bounded scheduling only. Same assert
 
 Current full runs remain live: application session12311 / PID91470 (elapsed16:39,378 temporary coverage files at latest observation) and browser session16662 / Playwright PID3988 (197 scenario start/completion lines reached, no terminal verdict). Keep runtime/test/config sources frozen and task DOING until complete evidence. No duplicated application/browser job.
 
+Command: npm run test:e2e
+Result: pass,all432 scenarios in14.9 minutes; terminal session16662 exit0.
+Evidence: full-current-browser.log and generated Playwright report. Final project counts are335 Writer,53 Calc,44 shared.
+Scope: fresh complete Chromium acceptance on the current runtime snapshot including the point-only FindAll correction. Earlier333 Writer count was a partial observation while two Writer cases still ran across the project transition; use the terminal335 count.
+
+Command: npm run test:static
+Result: pass, fresh production build and static smoke; terminal session27780 exit0.
+Evidence: full-current-static.log.
+Scope: relative local assets,two JavaScript bundles,no embedded application backend endpoints; existing bundle-size warning retained. Build executed only after browser termination.
+
+Full application coverage remains live under session12311 / PID91470 at elapsed27:52,516 temporary files at latest observation. Active child processes and advancing temporary outputs verified; do not restart or treat an observation timeout as terminal. No application/inventory verdict yet. Runtime/test/config sources remain frozen; documentation changes do not alter the tested snapshot. Keep task DOING and strict coverage thresholds/exclusions unchanged.
+
 ## Rollback Plan
 
 Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge.
@@ -402,3 +428,5 @@ Point-only ordinary FindAll regression: source ordinary branch invokes DoFind on
 Fresh canonical npm test is running after these source repairs: tool session12311, verified live Vitest PID91470. Log: output/playwright/writer-xcs-schema/full-current-native-contracts.log. It owns coverage/all now; the previous complete verdict is retained in full-npm-test.log and its extracted coverage-gaps.json, not in the fresh temporary directory. Keep the same process/handle until terminal; do not restart on an observation timeout. Runtime sources/tests are frozen during this full run; task documentation and local commits do not change the snapshot. Thresholds/exclusions remain unchanged.
 
 Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.
+
+Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
