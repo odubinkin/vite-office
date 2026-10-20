@@ -1,0 +1,31 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ✓ |calc| src/sc/browser/presentation/calc-input-mode.test.tsx > dispatches native F2 and shared Cell Edit Mode without committing TABLE TYPE drafts 5016ms
+ ✓ |calc| src/sc/browser/presentation/calc-input-mode.test.tsx > commits TOP before F2 and retains rejected drafts instead of entering TABLE 2639ms
+ ✓ |calc| src/sc/browser/presentation/calc-input-mode.test.tsx > routes scalar TYPE arrows to cell movement while modifiers and TABLE retain editing 3131ms
+ ✓ |calc| src/sc/browser/presentation/calc-input-mode.test.tsx > keeps inspection out of Undo and records changed-and-reverted input through production controls 8869ms
+ ✓ |calc| src/sc/browser/presentation/calc-workbench.test.tsx > mounts the lazy production factory and edits actual scalar/formula cells through shared history controls 16657ms
+ ✓ |calc| src/sc/browser/presentation/calc-workbench.test.tsx > keeps canonical selection,sheet ownership,failed drafts and physical scrolling independent 14443ms
+ ✓ |calc| src/sc/browser/presentation/calc-workbench.test.tsx > dispatches source SDI named arguments and defers input until InputLineEnter when requested 15ms
+ ✓ |calc| src/sc/browser/presentation/calc-color.test.tsx > uses the actual shared palette and native recent colors for cell painting and history 10916ms
+ ✓ |calc| src/sc/browser/presentation/calc-color.test.tsx > preserves full brush metadata and the source distinction between argument and recent-color paths 16ms
+ ✓ |calc| src/sc/browser/presentation/calc-color.test.tsx > retains native missing-recent defaults,failed input admission and grouped full-axis color selections 4356ms
+ ✓ |calc| src/sc/browser/presentation/calc-color.test.tsx > applies full native colors without changing independent font attributes and restores actual snapshots 7ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > uses the shared native three-script weight set when Latin and complex are bold but Asian is normal 80ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > uses the shared controls with real three-script attributes,mixed ranges and undo 5865ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > persists independent script values,explicit defaults and retained underline color through actual ODS 66ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > uses original fresh-item underline variants from the shared Format menu 2842ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > validates explicit host arguments and commits input before native character operations 14ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > formats full axes and grouped sheets with native attribute-only undo 3937ms
+ ✓ |calc| src/sc/browser/presentation/calc-character-format.test.tsx > retains native interface defaults when no host accelerator configuration is supplied 1ms
+ ✓ |calc| src/sc/browser/presentation/calc-files.test.tsx > opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS 6921ms
+ ✓ |calc| src/sc/browser/presentation/calc-files.test.tsx > imports computer ODS,offers name collision choices,and preserves real formula owners 289ms
+ ✓ |calc| src/sc/browser/presentation/calc-files.test.tsx > downloads actual ODS without changing primary identity,save position or dirty state,and retains failures 57ms
+ ✓ |calc| src/sc/browser/presentation/calc-files.test.tsx > rejects failed source input or unavailable storage,and exposes source command state and resources 19ms
+
+ Test Files  5 passed (5)
+      Tests  22 passed (22)
+   Start at  22:54:54
+   Duration  64.54s (transform 17.30s, setup 2.14s, import 26.96s, tests 86.17s, environment 9.55s)
+

@@ -1,0 +1,136 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > preserves validation, removed-sheet traversal, no-mark queries and optional filter outputs 68ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > applies canonical cache changes and diagonal line edits through whole compressed runs 15ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > merges unequal interior lines with sticky mixed flags and honors native RTL merge extents 16ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > transforms selected default-column tails and retains simple versus multi selection boundaries 513ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > retains attributes across failed interval search and coalesces neighboring canonical runs 5ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > ignores temporarily absent native table slots in all selected-sheet dispatch paths 6ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > styles independent diagonal-only runs without fabricating box or missing-line attributes 4ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > publishes row segment endpoints and preserves unselected copies and repeated simple-cache applications 14ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > preserves native selective RTL edges and skips adjacent removal when validity or requested outer lines forbid it 11ms
+ ✓ |calc| src/sc/source/core/data/border-boundaries.test.ts > marks an interior horizontal seam mixed when a middle row top differs from the preceding bottom 2ms
+ ✓ |calc| src/sc/source/ui/view/tabview3.test.ts > uses Calc.xcs wrap=true and preserves independent sheet cursors 77ms
+ ✓ |calc| src/sc/source/ui/view/tabview3.test.ts > retains a partial group when entering a selected sheet and collapses an all-sheet group 4ms
+ ✓ |calc| src/sc/source/ui/view/tabview3.test.ts > expands normal simple marks to full rows and columns without moving the cursor or changing sheet membership 4ms
+ ✓ |calc| src/sc/source/ui/view/tabview3.test.ts > reverses vertical hidden cursor movement at both boundaries and retains old cursor for an entirely hidden sheet 2147ms
+ ✓ |calc| src/sc/browser/presentation/calc-boundary-controls.test.tsx > paints no borders for empty windows and assigns internal right/bottom seams once 89ms
+stderr | src/sc/source/filter/xml/ods-native-borders.test.ts > keeps unequal compound sides and independently authored current and deprecated width-only diagonals
+Unsupported ODS formatting metadata: invalid cell border widths
+Unsupported ODS formatting metadata: invalid cell border widths
+
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > imports independent outer shorthand with side overrides in either attribute order and reopens actual ZIP packages 260ms
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > merges compound widths after shorthand, prefers new diagonal widths and retains native diagonal width-only application 13ms
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > keeps border presets and diagonal hairlines through actual packages without storing inner-frame command items 47ms
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > collapses equal compound sides independently and exports only current diagonal width spellings 23ms
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > diagnoses invalid border lexemes and unported padding while preserving valid independent sides 6ms
+ ✓ |calc| src/sc/source/filter/xml/ods-native-borders.test.ts > keeps unequal compound sides and independently authored current and deprecated width-only diagonals 28ms
+ ✓ |calc| src/sc/browser/presentation/calc-boundary-controls.test.tsx > uses actual relief overline black-to-white rule and leaves colored overlines intact 123ms
+ ✓ |calc| src/sc/browser/presentation/calc-boundary-controls.test.tsx > renders native row metric labels and submits the actual parsed height 300ms
+ ✓ |calc| src/sc/browser/presentation/calc-boundary-controls.test.tsx > routes actual typed and dialog row dimensions and declines invalid uncommitted input 22ms
+ ✓ |calc| src/sc/browser/presentation/calc-boundary-controls.test.tsx > applies border recent-color default through shared toolbar without inventing a recent entry 4049ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > rejects unsupported requests and uses actual fallback view with original no-argument command rules 31ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > validates browser border/effect transport before native mutation 34ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > consumes source three-width and missing-inner border branches and zero-width inner substitution 6ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > records optional operation outputs and preserves no-view/no-record semantics and copied history ranges 9ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > separates attribute-only, frame-only and selective-validity apply paths including mixed diagonals 10ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains actual request items when native virtual cloning cannot produce a mapped copy 2ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > restores the original active sheet before redoing a native height action 5ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains headless formatting, native history labels and API row-height completion boundaries 4ms
+ × |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains native empty destination handling after a diagonal virtual clone loses its line 14ms
+   → expected 20 to be +0 // Object.is equality
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > coerces unsupported alignment independently of the 200-twip width cap and preserves source right alignment 69ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > subtracts filtered marks,keeps disjoint/grouped sheets and restores original marked attributes on undo 15ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > changes the real default-column tail without allocating the whole sheet and follows moved sheet positions 24ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > uses UInt16 HMM and optional Int32 one-based Row and retains manual geometry across undo/redo 10ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > manual sizing skips filtered visibility while explicit show clears both flags and retains stored heights 7ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > preserves native invalid-row and missing-sheet outputs without synthetic geometry 2ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > restores disjoint manual row spans on original grouped sheets without changing values or cursor marks 8ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > retains native all-filtered selection fallback to current cell and typed height request completion 7ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > retains source captured coordinates when filter subtraction expands the multi-mark bounding rectangle 4ms
+ ✓ |calc| src/sc/source/ui/view/cell-indent-row-height.test.ts > clamps an indent step crossing a nonmultiple column width 6ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > registers exact native protection/outer/inner defaults and slots with real table/distance flags 21ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > uses real canonical cached transformations and source set-merge border preservation including right-distance propagation 4ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > applies source perimeter/interior lines to a real rectangle and preserves values and unselected cells 16ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > keeps one-cell/one-row/one-column edges,selective validity and actual RTL swaps 5ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > preserves disjoint and grouped marks rather than drawing a bounding rectangle 7ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > clears corresponding adjacent envelope edges only when the real removal flag is set 6ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > merges actual frame lines into native validity states and preserves source allocated-column clamping 6ms
+ ✓ |calc| src/sc/source/core/data/border-frame.test.ts > updates only present line styles/colors and source multi-marked allocated columns 4ms
+ ✓ |calc| src/sc/source/filter/xml/format-export-failures.test.ts > omits unmapped native relief and failed metric conversion without emitting malformed XML 23ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains native empty destination handling after a diagonal virtual clone loses its line
+AssertionError: expected 20 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 20
+
+ ❯ src/sc/source/ui/view/format-boundaries.test.ts:337:9
+    335|           .GetLine()
+    336|           ?.GetWidth(),
+    337|       ).toBe(0);
+       |         ^
+    338|     } finally {
+    339|       clone.mockRestore();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 52 passed (53)
+   Start at  22:57:37
+   Duration  40.54s (transform 38.56s, setup 2.61s, import 52.04s, tests 8.23s, environment 12.20s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   62.69 |    60.28 |   63.49 |   64.14 |                   
+ ...ser/controller |   44.67 |    31.67 |   51.89 |   46.89 |                   
+  ...controller.ts |   44.67 |    31.67 |   51.89 |   46.89 | ...02-703,708-756 
+ ...r/presentation |   84.16 |       73 |   69.23 |   83.62 |                   
+  ...ngToolbar.tsx |    91.3 |    96.42 |      80 |    91.3 | 78,137            
+  ScCellText.tsx   |     100 |    58.33 |     100 |     100 | 38-55,60-67       
+  ...cInputDlg.tsx |   62.22 |    38.46 |   53.84 |   62.22 | ...31-136,162-186 
+ browser/workflows |   42.85 |    39.21 |   64.28 |   46.93 |                   
+  ...-workflows.ts |   42.85 |    39.21 |   64.28 |   46.93 | 87-92,103-146     
+ sdi               |   53.25 |    56.17 |   51.66 |   55.76 |                   
+  formatsh.ts      |   96.15 |    91.07 |     100 |     100 | 65,69,92,104,140  
+  scalc.ts         |   34.18 |    40.16 |      42 |   36.69 | ...50-757,771-811 
+ source/core/data  |   70.24 |    69.09 |    71.3 |   72.22 |                   
+  FilterData.ts    |   83.87 |    88.23 |      90 |   86.95 | 37-42             
+  attarray.ts      |   88.59 |    90.65 |   86.95 |   89.57 | ...31,642,644-645 
+  column.ts        |   36.51 |    18.42 |   53.06 |   37.34 | ...25-426,442-451 
+  document.ts      |   60.66 |    56.88 |   69.87 |   63.83 | ...79-890,902-933 
+  table.ts         |   73.56 |    64.43 |   76.81 |   75.92 | ...91-597,607-613 
+ source/filter/xml |   37.97 |    33.48 |   40.54 |   38.28 |                   
+  ...nt-effects.ts |      50 |       30 |      50 |   52.17 | 56-73             
+  xmlstyle.ts      |   20.54 |    11.53 |      16 |   20.94 | ...70,591,597-639 
+ source/ui/undo    |   48.68 |    47.36 |   48.83 |      50 |                   
+  undoblk2.ts      |   88.46 |    64.28 |   83.33 |      92 | 51,61             
+  undoblk3.ts      |   22.03 |     37.5 |   14.28 |   23.21 | 43-89,104-171     
+  undocell.ts      |   38.29 |    16.66 |   43.75 |   38.29 | 18-73,104-109     
+ source/ui/view    |   74.44 |    68.22 |   73.56 |    75.3 |                   
+  cellsh3.ts       |   51.11 |       50 |   53.84 |   51.21 | 66-114            
+  formatsh.ts      |    67.3 |    58.64 |   67.39 |   67.21 | ...34-454,493-547 
+  tabview3.ts      |   83.33 |    81.25 |      90 |   81.08 | 51-73             
+  viewfunc.ts      |    83.4 |    76.08 |   94.44 |   86.81 | ...39-440,450-460 
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 62.69% ( 2173/3466 )
+Branches     : 60.28% ( 1240/2057 )
+Functions    : 63.49% ( 374/589 )
+Lines        : 64.14% ( 1984/3093 )
+================================================================================
+ERROR: Coverage for lines (64.14%) does not meet global threshold (100%)
+ERROR: Coverage for functions (63.49%) does not meet global threshold (100%)
+ERROR: Coverage for statements (62.69%) does not meet global threshold (100%)
+ERROR: Coverage for branches (60.28%) does not meet global threshold (100%)

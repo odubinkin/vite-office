@@ -1,0 +1,15 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ✓ |calc| src/sc/browser/presentation/calc-optional-icons.test.tsx > retains native border controls when their optional icon registry entries are absent 9409ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  22:54:26
+   Duration  11.45s (transform 6.56s, setup 258ms, import 47ms, tests 9.41s, environment 1.39s)
+
+ERROR: Coverage for lines (73.91%) does not meet global threshold (100%)
+ERROR: Coverage for functions (70%) does not meet global threshold (100%)
+ERROR: Coverage for statements (73.91%) does not meet global threshold (100%)
+ERROR: Coverage for branches (82.14%) does not meet global threshold (100%)
