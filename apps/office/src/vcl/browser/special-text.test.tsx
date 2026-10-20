@@ -91,3 +91,27 @@ it.each([
     );
   },
 );
+it("retains colored relief decoration and measures a tall nonblack shadow", /** retains colored relief decoration and measures a tall nonblack shadow. @returns Observed test result. */ () => {
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+    width: 100,
+    height: 120,
+  } as DOMRect);
+  const r = render(
+    <SpecialText enabled={false} shadow color={new Color(0xffffff)}>
+      Tall
+    </SpecialText>,
+  );
+  expect(r.container.querySelector("feOffset")).toHaveAttribute("dx", "5");
+  r.rerender(
+    <SpecialText
+      enabled={false}
+      relief={FontRelief.Embossed}
+      color={new Color(0x123456)}
+      lineColor={new Color(0xff0000)}
+      paintStyle={{ textDecorationColor: "red" }}
+    >
+      Color
+    </SpecialText>,
+  );
+  expect(screen.getByText("Color").style.textDecorationColor).toBe("red");
+});

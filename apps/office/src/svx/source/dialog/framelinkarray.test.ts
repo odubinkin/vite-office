@@ -48,3 +48,14 @@ it("preserves clipping-border own edges and original outside-neighbor queries wi
   a.Initialize(1, 1);
   expect(a.GetCellStyleLeft(0, 0).GetWidth()).toBe(0);
 });
+it("retains empty fallbacks for out-of-array writes and all clipped axes", /** retains empty fallbacks for out-of-array writes and all clipped axes. @returns Observed test result. */ () => {
+  const a = new FrameArray();
+  a.Initialize(2, 2);
+  a.SetCellStyleLeft(4, 4, style(60));
+  expect(a.GetCellStyleRight(1, 0).GetWidth()).toBe(0);
+  a.SetClipRange(1, 1, 1, 1);
+  expect(a.GetCellStyleLeft(0, 1).GetWidth()).toBe(0);
+  expect(a.GetCellStyleRight(1, 0).GetWidth()).toBe(0);
+  expect(a.GetCellStyleTop(1, 0).GetWidth()).toBe(0);
+  expect(a.GetCellStyleBottom(0, 1).GetWidth()).toBe(0);
+});

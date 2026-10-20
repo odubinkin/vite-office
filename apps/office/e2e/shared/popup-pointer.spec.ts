@@ -46,7 +46,7 @@ for (const suite of ["writer", "calc"] as const)
       await expect(first).toBeEnabled();
       if (suite === "calc") {
         const disabled = popup.getByRole("menuitemcheckbox", {
-          name: "Shadow",
+          name: "Superscript",
           exact: true,
         });
         await expect(disabled).toBeDisabled();

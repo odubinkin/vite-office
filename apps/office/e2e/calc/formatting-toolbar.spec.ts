@@ -56,10 +56,10 @@ for (const viewport of [
     await page.goto("/calc");
     const bar = page.getByRole("toolbar", { name: "Calc formatting toolbar" });
     await expect(bar.getByRole("combobox")).toHaveCount(2);
-    await expect(bar.getByRole("button")).toHaveCount(31);
+    await expect(bar.getByRole("button")).toHaveCount(30);
     expect(
       await bar
-        .locator("button,select")
+        .locator('button,select,summary[aria-label="Border Style"]')
         .evaluateAll(
           /** Reads actual resource order. @param nodes - Rendered controls. @returns Labels. */ (
             nodes,
@@ -80,9 +80,9 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).not.toHaveValue("");
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toBeEnabled();
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
-    for (let index = 0; index < 31; index++) {
+    for (let index = 0; index < 30; index++) {
       const button = bar.getByRole("button").nth(index);
-      if (index < 11) await expect(button).toBeEnabled();
+      if (index < 11 || [21, 22, 23, 24].includes(index)) await expect(button).toBeEnabled();
       else await expect(button).toBeDisabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
       else if (index === 3 || index === 4) await expect(button).toHaveText(index === 3 ? "A" : "▨");

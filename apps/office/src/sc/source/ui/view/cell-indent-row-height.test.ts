@@ -253,3 +253,21 @@ it("retains source captured coordinates when filter subtraction expands the mult
     session.Close();
   }
 });
+it("clamps an indent step crossing a nonmultiple column width", /** Literal source width cap and view-tab restoration. @returns Nothing. */ () => {
+  const s = createCalcSession(),
+    c = s.controller,
+    d = c.shell.GetDocument(),
+    p = new ScPatternAttr(d.getCellAttributeHelper());
+  try {
+    d.SetColWidth(0, 0, 450);
+    p.ItemSetPut(new ScIndentItem(190));
+    d.ApplyPattern(0, 0, 0, p);
+    c.ChangeIndent(true);
+    expect(values(d)[0]).toBe(250);
+    c.ChangeIndent(false);
+    expect(values(d)[0]).toBe(50);
+  } finally {
+    p.Dispose();
+    s.Close();
+  }
+});

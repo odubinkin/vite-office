@@ -161,7 +161,7 @@ it("renders native formatting placements with the bound shared font-size control
     />,
   );
   const bar = screen.getByRole("toolbar", { name: "Calc formatting toolbar" }),
-    controls = [...bar.querySelectorAll("button,select")].filter(
+    controls = [...bar.querySelectorAll('button,select,summary[aria-label="Border Style"]')].filter(
       /** Palette contents belong to the dropdown rather than the toolbar placement order. @param control - Rendered control. @returns Whether a top-level toolbar control. */ (
         control,
       ) => !control.closest("[data-office-palette]"),
@@ -224,7 +224,7 @@ it("renders native formatting placements with the bound shared font-size control
       control,
     ) => control.tagName === "BUTTON",
   )) {
-    const color = ["Font Color", "Background Color"].includes(
+    const color = ["Font Color", "Background Color", "Border Color"].includes(
       button.getAttribute("aria-label") as string,
     );
     if (
@@ -240,6 +240,10 @@ it("renders native formatting placements with the bound shared font-size control
         "Align Top",
         "Center Vertically",
         "Align Bottom",
+        "Increase",
+        "Decrease",
+        "Borders (Shift to overwrite)",
+        "Border Color",
       ].includes(button.getAttribute("aria-label") as string)
     )
       expect(button).toBeEnabled();
@@ -248,7 +252,8 @@ it("renders native formatting placements with the bound shared font-size control
     else expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
       expect(button).toHaveTextContent(/B|I|U/);
-    else if (color) expect(button).toHaveTextContent(/A|▨/);
+    else if (color && button.getAttribute("aria-label") !== "Border Color")
+      expect(button).toHaveTextContent(/A|▨/);
     else expect(button.querySelector("svg")).not.toBeNull();
   }
   expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);

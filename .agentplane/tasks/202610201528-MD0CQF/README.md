@@ -4,7 +4,7 @@ title: "Repair checkpoint50 regressions and restore Calc shared complete coverag
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: repair checkpoint50 failures and restore full Calc/shared coverage under the clarified user stop condition."
 doc_version: 3
-doc_updated_at: "2026-10-20T15:28:45.642Z"
+doc_updated_at: "2026-10-20T16:02:29.996Z"
 doc_updated_by: "CODER"
 description: "User clarified stop condition: repair the complete-run test failures and obtain 100 percent statements branches functions and lines for Calc and shared owners before pausing. Preserve native contracts and coverage gates. Work solely in calc checkout and branch."
 sections:
@@ -51,7 +51,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task implementation commit if needed; retain evidence and original checkpoint50 results. No history rewrite or source reference changes."
-  Findings: ""
+  Findings: "Checkpoint50 failures were stale native expectations: contiguous pool prefix now includes protection/borders; toolbar includes real summary line-style control and implemented indent/border commands; Shadow is implemented. Native core semantics were retained. Added actual-owner boundary/state/history/ODS/UI tests, including controlled failures at virtual search/clone ports. Shared popup toggle now reads the actual event currentTarget. Focused regression checks and changed-source lint/docs/types pass. A first Calc-only Istanbul run encountered 4 UI timeouts and one asynchronous dialog wait under concurrent machine load, plus 2 then-stale new fixtures. The 5 existing UI files subsequently passed all 22 cases serially without changing timeouts; new fixtures passed separately. Final acceptance remains pending a fresh complete stable-source run and raw 100 percent owner coverage. No coverage threshold, exclusion, skip, timeout, retry or dependency changes."
 id_source: "generated"
 ---
 ## Summary
@@ -82,3 +82,5 @@ Run focused regressions; npm run test:coverage:calc and npm run test:coverage:sh
 Revert only task implementation commit if needed; retain evidence and original checkpoint50 results. No history rewrite or source reference changes.
 
 ## Findings
+
+Checkpoint50 failures were stale native expectations: contiguous pool prefix now includes protection/borders; toolbar includes real summary line-style control and implemented indent/border commands; Shadow is implemented. Native core semantics were retained. Added actual-owner boundary/state/history/ODS/UI tests, including controlled failures at virtual search/clone ports. Shared popup toggle now reads the actual event currentTarget. Focused regression checks and changed-source lint/docs/types pass. A first Calc-only Istanbul run encountered 4 UI timeouts and one asynchronous dialog wait under concurrent machine load, plus 2 then-stale new fixtures. The 5 existing UI files subsequently passed all 22 cases serially without changing timeouts; new fixtures passed separately. Final acceptance remains pending a fresh complete stable-source run and raw 100 percent owner coverage. No coverage threshold, exclusion, skip, timeout, retry or dependency changes.
