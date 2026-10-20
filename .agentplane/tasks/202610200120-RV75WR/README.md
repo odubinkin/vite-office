@@ -1,10 +1,11 @@
 ---
 id: "202610200120-RV75WR"
 title: "Implement native Calc column widths,visibility,metric dialog and ODS geometry"
-status: "DOING"
+result_summary: "verified-202610200120-RV75WR"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T02:45:43.885Z"
+  updated_at: "2026-10-20T02:48:00.339Z"
   updated_by: "CODER"
-  note: "Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50."
+  note: "verified-202610200120-RV75WR"
   attempts: 0
 quality_review:
   state: "pass"
@@ -46,11 +47,16 @@ quality_review:
     - "Native source hashes/anchors,1280twip defaults,UInt16/HMM casts,signed ODS widths,hidden-range ownership,actual geometry undo documents and native metric/current/default/recording quirks agree with the declared consumed source slice. Unsupported column parent styles are diagnosed."
     - "All425 Calc cases pass;complete current controller,metric-dialog and XML-style maps replace their earlier complete owners without counter merging. Every other Calc source hash is retained. All37 modified executable owners100;shared152 and Writer57 cases pass with complete current owner coverage."
     - "17 unique actual-browser cases pass,with four affected cases rerun on the final build;primary ODS reopens,Undo/Redo,spin arrows,axe and DOM-free Worker are exercised. Native ICU/LibreOffice classification matches all1114112 codepoints. Tooling93 and all declared deterministic gates pass. Exactly100 non-task paths remain in calc;no network,merge or full-all-app run occurred."
-commit: null
+commit:
+  hash: "92d45eab7259381c3c07d5c92f421b034029da95"
+  message: "🧾 RV75WR task: retain verified column geometry review"
 comments:
   -
     author: "CODER"
     body: "Start: implement native column width/visibility storage,metric dialog,shared UI,geometry history and ODS with exact source defaults and declared scoped100 evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610200120-RV75WR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50."
+  -
+    type: "verify"
+    at: "2026-10-20T02:48:00.339Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610200120-RV75WR"
+  -
+    type: "status"
+    at: "2026-10-20T02:48:00.482Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610200120-RV75WR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T02:45:43.947Z"
+doc_updated_at: "2026-10-20T02:48:00.483Z"
 doc_updated_by: "CODER"
 description: "Task46 continues the authorized Calc UI goal. Replace fixed browser96px columns with source ScCompressedArray width/visibility storage and native1280twip default. Connect ColumnWidth and related Hide/Show source commands through actual marked/grouped ranges and width/history owners,shared Writer dialog/menu components and original metric/typed-HMM boundaries. Persist real column styles/visibility in ODS and verify browser scrolling/selection/history. Only calc checkout/branch;no network,branches,integration or full all-app run before checkpoint50."
 sections:
@@ -111,6 +130,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T02:48:00.339Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610200120-RV75WR
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T02:45:43.947Z, excerpt_hash=sha256:9f540a14a3711e0929ce095f2f9a71e0f1b60882cd8bf2d9f24e15bbcd9410d7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200120-RV75WR/blueprint/resolved-snapshot.json
+    - old_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+    - current_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610200120-RV75WR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610200120-RV75WR --result verified-202610200120-RV75WR --commit 92d45eab7259381c3c07d5c92f421b034029da95
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/registration commits through a new scoped authorized task;never reset unrelated work or edit the pinned upstream reference."
   Findings: |-
@@ -124,6 +173,10 @@ sections:
     - Observation: Source XMLMeasurePropHdl uses signed32 measure defaults before the native UInt16 width argument. Independent -1cm XML now verifies the original64969twip narrowing. New source quirks are documented as CALC218..223 without changing upstream behavior.
     - Observation: Final browser regression exposed a pre-existing task45 fixture still expecting Clear disabled. It now expects only Open and native Clear enabled,retaining every other toolbar state assertion. Actual width-dialog spin accessibility reads the real normalized range/current value;the browser acceptance includes axe. Exactly100 non-task paths remain within the approved scope.
     - Observation: Native width/hide may move the actual cursor;the browser name box now refreshes from that cursor. The complete current controller and metric-dialog owners are remeasured in an all-Calc test replay;their entire maps replace earlier complete owners,without merging stale counters. All remaining Calc source hashes must match the frozen measured owners.
+extensions:
+  implementation_commit:
+    hash: "fee73c7085d3f134eeb099d929833f4bf402bcf0"
+    message: "✨ RV75WR calc: implement native column geometry and shared metric controls"
 id_source: "generated"
 ---
 ## Summary
@@ -178,6 +231,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T02:48:00.339Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610200120-RV75WR
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T02:45:43.947Z, excerpt_hash=sha256:9f540a14a3711e0929ce095f2f9a71e0f1b60882cd8bf2d9f24e15bbcd9410d7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200120-RV75WR/blueprint/resolved-snapshot.json
+- old_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+- current_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610200120-RV75WR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610200120-RV75WR --result verified-202610200120-RV75WR --commit 92d45eab7259381c3c07d5c92f421b034029da95
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
