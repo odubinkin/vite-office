@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- odt-native-character-values native-font-metadata WriterMenuBar
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts odt-native-character-values native-font-metadata WriterMenuBar
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  14 passed (14)
+   Start at  07:39:55
+   Duration  48.84s (transform 35.01s, setup 1.33s, import 44.09s, tests 19.35s, environment 10.22s)
+

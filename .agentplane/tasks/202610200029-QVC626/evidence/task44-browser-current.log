@@ -1,0 +1,13 @@
+[WebServer] (node:39558) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:39627) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 1280px (12.2s)
+  ✓  2 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 390px (11.5s)
+  ✓  3 [calc] › apps/office/e2e/calc/outline.spec.ts:122:1 › preserves native Outline item metadata,history and ODS in a DOM-free Worker (720ms)
+  ✓  4 [calc] › apps/office/e2e/calc/outline.spec.ts:221:1 › paints the native white center on colored background with independently colored lines (928ms)
+
+  4 passed (27.1s)

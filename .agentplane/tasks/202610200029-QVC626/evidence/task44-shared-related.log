@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- menu popup native-attribute-toggle
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts menu popup native-attribute-toggle
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  9 passed (9)
+      Tests  100 passed (100)
+   Start at  07:40:46
+   Duration  8.81s (transform 1.79s, setup 1.38s, import 2.30s, tests 3.59s, environment 8.46s)
+
