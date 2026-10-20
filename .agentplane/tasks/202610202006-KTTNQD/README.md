@@ -1,10 +1,11 @@
 ---
 id: "202610202006-KTTNQD"
 title: "Implement native replacement references and similarity helpers"
-status: "DOING"
+result_summary: "implement native replacement references and similarity helpers"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "All four original methods and both thresholds are present; replacement uses actual SAL values/buffer and deferred assignment, captures normalize direction only in the native dollar branch, and weighted/substr scoring preserves original UTF16/default/output behavior."
     - "146 related tests across eight files pass; 54 changed-helper cases rerun after indexing-type repair also pass. Build, formatting/lint, source registries, dependencies, docs and policy checks pass. No enforcement weakening or fidelity-status promotion."
-commit: null
+commit:
+  hash: "e0cbee1927029e66d8f710eb621f7b6f61678a22"
+  message: "🧩 KTTNQD search: implement replacement references and similarity helpers"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native replacement-reference and similarity helper family on writer without ICU access."
+  -
+    author: "CODER"
+    body: "Verified: ported native replacement-reference expansion and complete shared similarity scoring; 146 related cases, 54 focused replay cases, build and required static registries pass. Preserved WRITER-018 and kept parent UI/configuration open."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "146 related tests pass; changed helper suite 54 tests passes after type-only lint repair; build, style, dependency/source/docs/inventory and policy checks pass. Native source/portable scope only."
+  -
+    type: "status"
+    at: "2026-10-20T20:13:37.188Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ported native replacement-reference expansion and complete shared similarity scoring; 146 related cases, 54 focused replay cases, build and required static registries pass. Preserved WRITER-018 and kept parent UI/configuration open."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:13:02.334Z"
+doc_updated_at: "2026-10-20T20:13:37.189Z"
 doc_updated_by: "CODER"
 description: "Continue approved Writer search parent with complete source-shaped shared utl::TextSearch replacement expansion and similarity-scoring methods, preserving native UTF16 and directional quirks without requiring ICU."
 sections:
@@ -119,6 +132,10 @@ sections:
     Initial checks: ESLint rejects non-null assertions, so matrix indexing now binds already-allocated source rows through explicit erased array types. Test callbacks received required JSDoc. The runtime header inventory accepts declaration symbols rather than constants merely re-exported from another file; corrected only the claimed local symbol data, with no detector or known-violation changes. All affected checks pass after correction. Source/runtime classifications and unverified statuses remain unchanged.
 
     Analogous incident advice was reviewed: maintain source-backed expectations, inspect bounded failures and repair only affected in-scope fixtures/metadata. No incident policy change is needed. ICU access remains pending; no ICU/network or other outside-repository reads were needed. Parent item/configuration, backend algorithms and browser UI remain open. All changes stay on writer in vite-office-writer; no branch merge.
+extensions:
+  implementation_commit:
+    hash: "e0cbee1927029e66d8f710eb621f7b6f61678a22"
+    message: "🧩 KTTNQD search: implement replacement references and similarity helpers"
 id_source: "generated"
 ---
 ## Summary
