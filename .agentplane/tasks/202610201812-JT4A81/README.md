@@ -1,10 +1,11 @@
 ---
 id: "202610201812-JT4A81"
 title: "Restore native Calc text-size context and shared browser line measurement"
-status: "DOING"
+result_summary: "Native six-input RowHeightContext,document-owned script/cache contracts and shared VCL text measurement verified and committed;no automatic wrapped-height completion claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Compared native six-input RowHeightContext,documen6 lazy per-document service ownership and original cached getter/setter storage preconditions to the committed implementation. Core imports only XBreakIterator;real existing BreakIteratorImpl is supplied at the browser host factory boundary. No dependency allowlist or global service manager added."
     - "Portable archive audit verifies502 Calc tests,35 related tests,9 unique Chromium/Worker cases with no skips/retries,and exact raw100 Calc/shared/changed-Writer coverage. Stock Calc configuration includes TSX and locale integration. Four screenshots inspected;14static checks and fresh build pass. Initial failures and interrupted non-accepted run remain recorded."
     - "Writer DOM Range implementation moved unchanged to shared VCL while Writer wrappers retain node offsets and geometry. UNKNOWN and absent storage semantics remain source-shaped;CALC238 documents the setter allocation precondition. Scope stays under25 source/test files plus declared records and evidence."
-commit: null
+commit:
+  hash: "03f6df1eed8bb7f4f769f10cb8b944b9e02587cd"
+  message: "🧩 JT4A81 feat: restore native Calc text-size context and shared line measurement"
 comments:
   -
     author: "CODER"
     body: "Start: restore native row text-size/script ownership and share the actual Writer browser line measurer as required groundwork for canonical automatic wrapped row layout;no substitute metrics engine."
+  -
+    author: "CODER"
+    body: "Verified: native Calc row-size/script ownership and exact shared Writer measurement extraction;502 Calc tests,35 related tests,9 browser cases,14static checks and build pass. Calc/shared/changed-Writer100 raw coverage archived. Automatic wrapped-height remains required;broader UI goal active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:502 Calc and35 related tests,9 Chromium/Worker cases,14static stages and build. Raw Calc/shared/changed-Writer S/B/F/L100 verified by portable committed archive audit;unchanged shared52 source hashes checked. Scoped native context/script/cache and exact shared measurement extraction only;automatic wrapped-height remains required and unported. Code03f6df1eed8b;commands,reports,screenshots and source/native hashes in task evidence."
+  -
+    type: "status"
+    at: "2026-10-20T18:42:21.821Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc row-size/script ownership and exact shared Writer measurement extraction;502 Calc tests,35 related tests,9 browser cases,14static checks and build pass. Calc/shared/changed-Writer100 raw coverage archived. Automatic wrapped-height remains required;broader UI goal active."
 doc_version: 3
-doc_updated_at: "2026-10-20T18:41:56.395Z"
+doc_updated_at: "2026-10-20T18:42:21.827Z"
 doc_updated_by: "CODER"
 description: "Continue the required automatic wrapped-height path without a scrollHeight substitute. Restore the full original RowHeightContext scales/zoom/device-reference contract, actual document-owned script service and native cached script metadata boundaries, route existing UI script classification through those owners, and move the existing Writer DOM line measurement implementation into shared VCL for later Calc device use. Automatic wrapped layout still requires original GetNeededSize/EditEngine and remains an explicit active goal requirement."
 sections:
