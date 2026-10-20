@@ -1,10 +1,11 @@
 ---
 id: "202610201912-V6W22V"
 title: "Implement Writer bookmark replacement history"
-status: "DOING"
+result_summary: "implement Writer bookmark replacement and native undo history"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Verified actual source ownership: SaveContent DelContentIndex captures [start,end) ordinary collapsed marks, history retains numeric/name payload with registered restoration PaM, wrapper/Impl partitions and moves original entries, and redo recollects the current mark graph. Source WRITER-010 and recording-dependent WRITER-016 are preserved."
     - "The native Replace bookmark-boundary exception exposed old adapter flag misuse. Explicit fragment and complete-text construction now retain Default insertion behavior; affected ODT/browser tests pass unchanged expected positions. No storage format, conscious recovery/autosave deviation, dependency gate or semantic status promotion changed."
-commit: null
+commit:
+  hash: "ef4bd7e8f31fb0890da8cf6b57ea742329cee5e0"
+  message: "🧩 V6W22V writer: implement bookmark replacement history"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved native bookmark/content-index replacement history leaf, preserving original recording and hint-history behavior on writer."
+  -
+    author: "CODER"
+    body: "Verified: native collapsed bookmark replacement history, prefix/suffix rollback and fresh redo recollection pass targeted core, ODT/browser and production/static checks. Source WRITER-016 and WRITER-010 are preserved; parent search UI and advanced mark scope remain open."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native collapsed bookmark replacement/history verified: 5059 core, 96 integration and final 36/14 focused cases; final build, scoped lint/format, registry/source/dependency/size/docs and policy checks pass. WRITER-016 and WRITER-010 preserved. Parent UI/advanced and expanded/typed mark responsibilities remain open."
+  -
+    type: "status"
+    at: "2026-10-20T19:38:08.255Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native collapsed bookmark replacement history, prefix/suffix rollback and fresh redo recollection pass targeted core, ODT/browser and production/static checks. Source WRITER-016 and WRITER-010 are preserved; parent search UI and advanced mark scope remain open."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:35:32.090Z"
+doc_updated_at: "2026-10-20T19:38:08.257Z"
 doc_updated_by: "CODER"
 description: "Implementation leaf of approved Writer search/replace plan 202610201742-6B984M. Port native represented bookmark DelContentIndex/SwHistoryBookmark ownership and replacement history partition/moves. Refactor actual replacement wrapper/Impl boundaries and remove blanket bookmark rejection only after source-backed undo/redo is implemented. Keep unsupported expanded/type/metadata responsibilities explicit; preserve source quirks. Writer checkout/branch only, approved local upstream reads, no network/merges/storage changes."
 sections:
@@ -136,6 +149,10 @@ sections:
     WRITER-016 documents native recording-dependent bookmark deletion: normal undo construction captures/deletes [start,end) collapsed marks, including identical replacement; no-recording document replacement omits that constructor and keeps live marks. Source-derived portable checks retain both recording states. This observation is not a compiled native/complete consumer defect claim. Existing WRITER-010/011 source quirks remain preserved.
 
     Initial typecheck required override on Impl.GetPayloadSize inherited from the existing SaveContent payload adapter; corrected. Initial browser/ODT tests exposed the old ordinary-fragment Replace flag; source/adapter mode separation resolves both failures and new direct fragment/construction boundary checks cover the distinction. All required affected checks pass. Full leaf scope is represented ordinary collapsed bookmark replacement/history only; parent remains open for expanded/typed/metadata content indices, advanced engines/options, complete layout/notes/fields/view/wrap and Find UI/focus/browser fidelity. No task or full goal parity status was promoted.
+extensions:
+  implementation_commit:
+    hash: "ef4bd7e8f31fb0890da8cf6b57ea742329cee5e0"
+    message: "🧩 V6W22V writer: implement bookmark replacement history"
 id_source: "generated"
 ---
 ## Summary
