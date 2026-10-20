@@ -174,3 +174,27 @@ it("diagnoses invalid border lexemes and unported padding while preserving valid
     doc.DisposeAttributes();
   }
 });
+it("keeps unequal compound sides and independently authored current and deprecated width-only diagonals", /** keeps unequal compound sides and independently authored current and deprecated width-only diagonals. @returns Observed test result. */ async () => {
+  for (const attributes of [
+    'fo:border="3pt double #123456" style:border-line-width-left="1pt 2pt 3pt"',
+    'style:diagonal-tl-br-width="1pt 2pt 3pt"',
+    'style:diagonal-tl-br-widths="1pt 2pt 3pt"',
+    'style:diagonal-tl-br-width="bad" style:diagonal-tl-br-widths="bad"',
+  ]) {
+    const doc = new ScDocument();
+    try {
+      new ScXMLImport(doc).importContent(xml(attributes));
+      const bytes = writeOdsDocument(doc);
+      expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+        "office:document-content",
+      );
+      if (attributes.includes("fo:border="))
+        expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+          "style:border-line-width-left=",
+        );
+    } finally {
+      doc.DisposeAttributes();
+      doc.GetSharedStringPool().dispose();
+    }
+  }
+});

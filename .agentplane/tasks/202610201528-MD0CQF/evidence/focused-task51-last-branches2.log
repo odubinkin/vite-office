@@ -1,0 +1,26 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+ ✓ |shared| src/svx/browser/tbxctrls/border-popup.test.tsx > navigates actual preset buttons and returns focus on Escape and selection 607ms
+ ✓ |shared| src/svx/browser/tbxctrls/border-popup.test.tsx > uses actual style items, native None, and external dismissal 141ms
+ ✓ |shared| src/svx/browser/tbxctrls/border-popup.test.tsx > handles unattached and single-child popups and bounded above/below geometry 22ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > rejects unsupported requests and uses actual fallback view with original no-argument command rules 37ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > validates browser border/effect transport before native mutation 72ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > consumes source three-width and missing-inner border branches and zero-width inner substitution 11ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > records optional operation outputs and preserves no-view/no-record semantics and copied history ranges 52ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > separates attribute-only, frame-only and selective-validity apply paths including mixed diagonals 15ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains actual request items when native virtual cloning cannot produce a mapped copy 8ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > restores the original active sheet before redoing a native height action 56ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains headless formatting, native history labels and API row-height completion boundaries 11ms
+ ✓ |calc| src/sc/source/ui/view/format-boundaries.test.ts > retains native empty destination handling after a diagonal virtual clone loses its line 8ms
+
+ Test Files  2 passed (2)
+      Tests  12 passed (12)
+   Start at  22:59:56
+   Duration  21.46s (transform 19.92s, setup 1.08s, import 22.85s, tests 1.05s, environment 3.77s)
+
+ERROR: Coverage for lines (85.95%) does not meet global threshold (100%)
+ERROR: Coverage for functions (91.42%) does not meet global threshold (100%)
+ERROR: Coverage for statements (83.75%) does not meet global threshold (100%)
+ERROR: Coverage for branches (72.77%) does not meet global threshold (100%)

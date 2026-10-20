@@ -63,9 +63,9 @@ export function useToolboxPopup(): ToolboxPopup {
   useEffect(
     /** Borrows actual native popup events and shared Writer dismissal rules. @returns Cleanup. */ () => {
       const details = ref.current;
-      /** Synchronizes externally changed actual details state without introducing document state. @returns Nothing. */
-      function changed(): void {
-        setOpen(details?.open ?? false);
+      /** Synchronizes the actual details event owner without introducing document state. @param event - Native toggle event from the attached details. @returns Nothing. */
+      function changed(event: Event): void {
+        setOpen((event.currentTarget as HTMLDetailsElement).open);
       }
       /** Tracks real viewport and ancestor scroll geometry. @returns Nothing. */
       function updatePosition(): void {

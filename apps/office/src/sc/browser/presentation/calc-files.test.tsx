@@ -1,7 +1,7 @@
 /** @fileoverview Actual Calc file/menu/dialog integration over shared browser UI,IndexedDB and ODS owners. */
 import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
 import { createCalcSession } from "../composition/calc-module";
@@ -42,6 +42,36 @@ async function first(db: IndexedDbDocumentStore) {
   return record;
 }
 
+/** Observes a genuine file operation while preserving its original Promise and failures. @param operation - Real bound file operation. @returns Completion and the call-through observer. */
+function observeOperation<Result>(operation: (value: string) => Promise<Result>) {
+  let resolveResult: (value: Result) => void;
+  let rejectResult: (error: unknown) => void;
+  const completion = new Promise<Result>(
+    /** Retains the actual operation completion. @param resolve - Successful native result. @param reject - Actual operation error. @returns Nothing. */ (
+      resolve,
+      reject,
+    ) => {
+      resolveResult = resolve;
+      rejectResult = reject;
+    },
+  );
+  return {
+    completion,
+    call: /** Forwards the original operation without changing its scheduling or result. @param value - Actual file argument. @returns Original Promise. */ (
+      value: string,
+    ): Promise<Result> => {
+      try {
+        const pending = operation(value);
+        void pending.then(resolveResult, rejectResult);
+        return pending;
+      } catch (error) {
+        rejectResult(error);
+        throw error;
+      }
+    },
+  };
+}
+
 it("opens real Calc file dialogs from the shared menu and keyboard,then saves and reopens primary ODS", /** Mounted production owners drive canonical operations. @returns Completion. */ async () => {
   const db = store(),
     session = createCalcSession(db),
@@ -62,20 +92,28 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   fireEvent.change(screen.getByRole("textbox", { name: "New copy name" }), {
     target: { value: "Named copy" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Save copy" }));
-  await waitFor(
-    /** Waits for confirmed primary save. @returns Assertion. */ () =>
-      expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+  const saved = observeOperation(session.fileWorkflows.SaveCopy.bind(session.fileWorkflows));
+  vi.spyOn(session.fileWorkflows, "SaveCopy").mockImplementation(saved.call);
+  await act(
+    /** Waits for actual ODS persistence and the resulting dialog update. @returns Completion. */ async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Save copy" }));
+      await saved.completion;
+    },
   );
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   expect(c.shell.GetTitle()).toBe("Named copy");
   expect(await db.list()).toHaveLength(2);
   fireEvent.keyDown(screen.getByRole("grid"), { key: "o", ctrlKey: true });
   await screen.findByRole("button", { name: "Working document" });
-  fireEvent.click(screen.getByRole("button", { name: "Working document" }));
-  await waitFor(
-    /** Waits for actual source replacement. @returns Assertion. */ () =>
-      expect(c.shell.GetTitle()).toBe("Working document"),
+  const opened = observeOperation(session.fileWorkflows.OpenStored.bind(session.fileWorkflows));
+  vi.spyOn(session.fileWorkflows, "OpenStored").mockImplementation(opened.call);
+  await act(
+    /** Waits for actual package loading before checking source replacement. @returns Completion. */ async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Working document" }));
+      await opened.completion;
+    },
   );
+  expect(c.shell.GetTitle()).toBe("Working document");
   expect(c.viewData.GetDocument()).toBe(c.shell.GetDocument());
   fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
   fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {

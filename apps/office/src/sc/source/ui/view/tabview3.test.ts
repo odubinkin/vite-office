@@ -96,3 +96,16 @@ it("expands normal simple marks to full rows and columns without moving the curs
   expect([data.GetCurX(), data.GetCurY()]).toEqual([4, 7]);
   expect([...marks.GetSelectedTabs()]).toEqual([0, 1]);
 });
+it("reverses vertical hidden cursor movement at both boundaries and retains old cursor for an entirely hidden sheet", /** reverses vertical hidden cursor movement at both boundaries and retains old cursor for an entirely hidden sheet. @returns Observed test result. */ () => {
+  const { doc, view } = fixture(1);
+  doc.SetRowHidden(0, 0, 0, true);
+  expect(view.SkipCursorVertical(0, 2, -1)).toBe(1);
+  doc.SetRowHidden(doc.MaxRow(), doc.MaxRow(), 0, true);
+  expect(view.SkipCursorVertical(doc.MaxRow(), 2, 1)).toBe(doc.MaxRow() - 1);
+  // A small actual document domain exercises both boundary reversals without a million-row traversal.
+  const maximum = doc.MaxRow();
+  doc.SetRowHidden(0, maximum, 0, true);
+  expect(view.SkipCursorVertical(0, 7, -1)).toBe(7);
+  doc.DisposeAttributes();
+  doc.GetSharedStringPool().dispose();
+});

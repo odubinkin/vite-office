@@ -1,4 +1,5 @@
 /** @fileoverview Literal native shadow and constants handler lexical,Any and failure contracts. */
+import { cppu_detail_getUnoType_FontSlant as FontReliefType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import { expect, it } from "vitest";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { XMLShadowedPropHdl } from "./shdwdhdl";
@@ -63,6 +64,21 @@ it("retains constants signed16 imports and original range/unmapped/output behavi
     expect(out[0]).toBe("");
     expect(new XMLConstantsPropertyHandler([], "none").exportXML(out, value, units)).toBe(true);
     expect(out[0]).toBe("none");
+  } finally {
+    value.dispose();
+  }
+});
+it("exports actual enum Any values and rejects nonnumeric transport without touching output", /** exports actual enum Any values and rejects nonnumeric transport without touching output. @returns Observed test result. */ () => {
+  const handler = new XMLConstantsPropertyHandler([["solid", 0]], null),
+    units = new SvXMLUnitConverter("twip"),
+    value = new Any(),
+    out: [string] = ["old"];
+  try {
+    expect(handler.exportXML(out, value, units)).toBe(false);
+    expect(out[0]).toBe("old");
+    value.insert([0], FontReliefType);
+    expect(handler.exportXML(out, value, units)).toBe(true);
+    expect(out[0]).toBe("solid");
   } finally {
     value.dispose();
   }

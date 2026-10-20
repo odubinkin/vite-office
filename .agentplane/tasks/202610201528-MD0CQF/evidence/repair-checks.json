@@ -1,0 +1,44 @@
+[
+  {
+    "name": "lint",
+    "command": "node node_modules/eslint/bin/eslint.js apps/office/src/sc/browser/presentation/calc-files.test.tsx --max-warnings 0",
+    "exit": 0,
+    "log": "repair-lint.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "types",
+    "command": "npm run typecheck",
+    "exit": 0,
+    "log": "repair-types.log",
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "name": "docs",
+    "command": "npm run check:docs",
+    "exit": 0,
+    "log": "repair-docs.log",
+    "sha256": "7dd41c3c141dbba051c971fa23737854a10bdfe8dea57e5b96f050d511c22cae"
+  },
+  {
+    "name": "format",
+    "command": "node node_modules/prettier/bin/prettier.cjs --check apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+    "exit": 0,
+    "log": "repair-format.log",
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "name": "size",
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "log": "repair-size.log",
+    "sha256": "33194a4f679165a74fc27b827114ea9e5e4101cd8d872e8d57f9628f6327896c"
+  },
+  {
+    "name": "dependencies",
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "log": "repair-dependencies.log",
+    "sha256": "4aa6e90b731c116cbc70f8f9752286077afd387b35ca9bd524160d44f1a78441"
+  }
+]

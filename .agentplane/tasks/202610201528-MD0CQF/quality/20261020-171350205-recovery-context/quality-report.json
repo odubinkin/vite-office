@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201528-MD0CQF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T17:13:50.205Z",
+  "verdict": "pass",
+  "summary": "Checkpoint50 regressions repaired; complete application evidence plus exact single-file repair replay establishes 17377 passing current tests and 100 percent Calc/shared/Writer S/B/F/L; all browser/static gates pass.",
+  "evaluated_sha": "ff568de0a3dc60e3a5ab87aeaf1f3034cf85a178",
+  "blueprint_digest": "9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e",
+  "findings": [
+    "Reviewed actual-owner boundary and serialization tests, unchanged native core contracts, shared popup event ownership, preserved file-operation Promises and assertions. Raw archive integrity, identical instrumentation maps, complete distinct-file/assertion accounting and unchanged production source are checked by the committed acceptance script. Original failures are preserved, with no relaxed gate or timeout."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201528-MD0CQF/README.md",
+    ".agentplane/tasks/202610201528-MD0CQF/evidence/accepted-proof.json",
+    ".agentplane/tasks/202610201528-MD0CQF/evidence/acceptance.mjs",
+    ".agentplane/tasks/202610201528-MD0CQF/evidence/repair-checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

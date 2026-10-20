@@ -1,0 +1,231 @@
+{
+  "task": "202610201528-MD0CQF",
+  "finishedAt": "2026-10-20T17:12:20.291Z",
+  "fullSnapshotCommit": "01c0941ccd76ea073d6ff1ccceee984938e4b1b6",
+  "sourceChangesAfterFullRun": [
+    "apps/office/src/sc/browser/presentation/calc-files.test.tsx"
+  ],
+  "productionSourceUnchanged": true,
+  "repair": "Test-only deterministic await of genuine SaveCopy/OpenStored operation, unchanged assertions and timeouts",
+  "originalFullFailures": 1,
+  "repairTests": 4,
+  "files": 1081,
+  "tests": 17377,
+  "passed": 17377,
+  "failed": 0,
+  "pending": 0,
+  "owners": {
+    "calc": {
+      "lines": {
+        "total": 9292,
+        "covered": 9292,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 10358,
+        "covered": 10358,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1932,
+        "covered": 1932,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 6437,
+        "covered": 6437,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "shared": {
+      "lines": {
+        "total": 24585,
+        "covered": 24585,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 26921,
+        "covered": 26921,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4770,
+        "covered": 4770,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 15839,
+        "covered": 15839,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "writer": {
+      "lines": {
+        "total": 14569,
+        "covered": 14569,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 16038,
+        "covered": 16038,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3527,
+        "covered": 3527,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11601,
+        "covered": 11601,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "summary": {
+    "lines": {
+      "total": 48446,
+      "covered": 48446,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 53317,
+      "covered": 53317,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 10229,
+      "covered": 10229,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 33877,
+      "covered": 33877,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "coverageMapsCompatible": true,
+  "browser": {
+    "startTime": "2026-10-20T17:02:23.496Z",
+    "duration": 469170.871,
+    "expected": 432,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "rawSha256": "5d95d69a2043fa0587e242335022ca9addcadcff2b25ea21230174d20299ea74",
+  "stages": [
+    {
+      "name": "tooling",
+      "exit": 0
+    },
+    {
+      "name": "inventory",
+      "exit": 0
+    },
+    {
+      "name": "format",
+      "exit": 0
+    },
+    {
+      "name": "lint",
+      "exit": 0
+    },
+    {
+      "name": "types",
+      "exit": 0
+    },
+    {
+      "name": "dependencies",
+      "exit": 0
+    },
+    {
+      "name": "writer-resources",
+      "exit": 0
+    },
+    {
+      "name": "calc-resources",
+      "exit": 0
+    },
+    {
+      "name": "docs",
+      "exit": 0
+    },
+    {
+      "name": "size",
+      "exit": 0
+    },
+    {
+      "name": "tree",
+      "exit": 0
+    },
+    {
+      "name": "provenance",
+      "exit": 0
+    },
+    {
+      "name": "registry",
+      "exit": 0
+    },
+    {
+      "name": "routing",
+      "exit": 0
+    },
+    {
+      "name": "doctor",
+      "exit": 0
+    },
+    {
+      "name": "build",
+      "exit": 0
+    },
+    {
+      "name": "browser",
+      "exit": 0
+    },
+    {
+      "name": "static",
+      "exit": 0
+    }
+  ]
+}
