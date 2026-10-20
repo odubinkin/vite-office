@@ -4,7 +4,7 @@ title: "Connect native Calc Wrap Text command through shared UI and ODS"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T18:01:45.255Z"
+  updated_by: "CODER"
+  note: "Task52 bounded Wrap Text UI/native-item/ODS slice passes 497 Calc tests with 100 percent S/B/F/L,30 related tests and13 distinct current browser cases after the documented two-case fixture-only title correction. Complete shared100 coverage reuses only unchanged source hashes and fresh XML vocabulary counters. Build and14 current static gates pass;screenshots inspected. Native automatic wrapped-height/device/rich-edit layout remains explicitly unported;the full UI goal remains active. Evidence committed at6c938516e61f."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T18:01:46.118Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded native Wrap Text attribute/command,shared Writer toolbar,manual-row browser painting and ODS slice passes declared gates without claiming complete automatic wrapped layout or full Calc UI completion."
+  evaluated_sha: "6c938516e61f9265c4d168cbd4bb5fa826ffe949"
+  blueprint_digest: "5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c"
+  evidence_refs:
+    - ".agentplane/tasks/202610201738-ANN4R2/README.md"
+    - ".agentplane/tasks/202610201738-ANN4R2/quality/20261020-180146118-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201738-ANN4R2/quality/20261020-180146118-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201738-ANN4R2/quality/20261020-180146118-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201738-ANN4R2/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201738-ANN4R2/evidence/proof.json"
+    - ".agentplane/tasks/202610201738-ANN4R2/evidence/audit-archives.mjs"
+    - ".agentplane/tasks/202610201738-ANN4R2/evidence/wrap-reopened-1280.png"
+    - ".agentplane/tasks/202610201738-ANN4R2/evidence/wrap-reopened-390.png"
+  findings:
+    - "Reviewed original SID_ATTR_ALIGN_LINEBREAK139/10230 mapping,no-argument API completion and typed API distinction,actual selection/filtered/grouped operation/history owners and strict XML wrap/no-wrap conversion. Browser uses actual canonical item and existing shared toolbar. Raw archives and source-hash baseline replacement prove current Calc/shared100 S/B/F/L;497 Calc,30 related and13 distinct browser cases pass,with original fixture failures retained. Device-based automatic wrapped-height remains an explicit remaining goal requirement,not replaced by browser model or synthetic metrics."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: resume approved native Calc UI delivery with genuine Wrap Text slot, original ODS handler and shared Writer toolbar; retain source ownership and fixed/manual geometry contracts."
+  -
+    type: "verify"
+    at: "2026-10-20T18:01:45.255Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task52 bounded Wrap Text UI/native-item/ODS slice passes 497 Calc tests with 100 percent S/B/F/L,30 related tests and13 distinct current browser cases after the documented two-case fixture-only title correction. Complete shared100 coverage reuses only unchanged source hashes and fresh XML vocabulary counters. Build and14 current static gates pass;screenshots inspected. Native automatic wrapped-height/device/rich-edit layout remains explicitly unported;the full UI goal remains active. Evidence committed at6c938516e61f."
 doc_version: 3
-doc_updated_at: "2026-10-20T18:00:29.066Z"
+doc_updated_at: "2026-10-20T18:01:45.337Z"
 doc_updated_by: "CODER"
 description: "Continue approved Calc UI delivery after the user merge. Connect the existing native line-break cell item to its real formatting command, selection state, undo and ODS owners, and the existing shared Writer toolbar and menus. Preserve native defaults and mixed-selection behavior; do not introduce browser document state or a substitute text layout engine."
 sections:
@@ -67,6 +92,39 @@ sections:
     Result: pass, all14 current static gates plus production build exit0. Original formatting failure remains in its log;final format log is green. Initial fixture/API/type errors were corrected against actual public contracts without changing native semantics or relaxing checks.
     Evidence: stage logs, `format-final.log`, `build2.log`, `native-source-hashes.json`, `source-snapshot.json`, and `proof.mjs`/`proof.json`.
     Scope: all changed production/test/data paths and repository dependency/resource/provenance boundaries. This is task52;full checkpoint51 remains valid for unchanged shared owners and next complete run is60. No full app replay was scheduled now.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T18:01:45.255Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task52 bounded Wrap Text UI/native-item/ODS slice passes 497 Calc tests with 100 percent S/B/F/L,30 related tests and13 distinct current browser cases after the documented two-case fixture-only title correction. Complete shared100 coverage reuses only unchanged source hashes and fresh XML vocabulary counters. Build and14 current static gates pass;screenshots inspected. Native automatic wrapped-height/device/rich-edit layout remains explicitly unported;the full UI goal remains active. Evidence committed at6c938516e61f.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:00:29.066Z, excerpt_hash=sha256:2011f66d8423f9fe53d5b435cb5f7a1f4451c7bb69e8df27bdecd8d68147c71d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201738-ANN4R2/blueprint/resolved-snapshot.json
+    - old_digest: 5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c
+    - current_digest: 5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201738-ANN4R2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201738-ANN4R2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit; retain native reference and test evidence. Do not rewrite history or modify other branches."
   Findings: |-
     The user explicitly resumed the UI goal after merging. Preflight confirmed clean branch calc at b2197fa4c;only the current calc checkout was modified. Task52 connects a concrete existing disabled toolbar action to the original cell attribute and existing Sfx/view/undo/filter ownership. The real Writer toolbar and WrapText Lucide resource are reused without a new Calc-specific toolbar widget or browser document model.
@@ -117,6 +175,39 @@ Command: `npm run build`; changed-source ESLint/Prettier; `npm run typecheck`; d
 Result: pass, all14 current static gates plus production build exit0. Original formatting failure remains in its log;final format log is green. Initial fixture/API/type errors were corrected against actual public contracts without changing native semantics or relaxing checks.
 Evidence: stage logs, `format-final.log`, `build2.log`, `native-source-hashes.json`, `source-snapshot.json`, and `proof.mjs`/`proof.json`.
 Scope: all changed production/test/data paths and repository dependency/resource/provenance boundaries. This is task52;full checkpoint51 remains valid for unchanged shared owners and next complete run is60. No full app replay was scheduled now.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T18:01:45.255Z — VERIFY — ok
+
+By: CODER
+
+Note: Task52 bounded Wrap Text UI/native-item/ODS slice passes 497 Calc tests with 100 percent S/B/F/L,30 related tests and13 distinct current browser cases after the documented two-case fixture-only title correction. Complete shared100 coverage reuses only unchanged source hashes and fresh XML vocabulary counters. Build and14 current static gates pass;screenshots inspected. Native automatic wrapped-height/device/rich-edit layout remains explicitly unported;the full UI goal remains active. Evidence committed at6c938516e61f.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T18:00:29.066Z, excerpt_hash=sha256:2011f66d8423f9fe53d5b435cb5f7a1f4451c7bb69e8df27bdecd8d68147c71d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201738-ANN4R2/blueprint/resolved-snapshot.json
+- old_digest: 5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c
+- current_digest: 5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201738-ANN4R2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201738-ANN4R2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
