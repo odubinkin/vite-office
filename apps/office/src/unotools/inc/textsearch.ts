@@ -2,6 +2,8 @@
 export {
   SearchParam,
   TextSearch,
+  WLD_THRESHOLD,
+  SMALL_STRING_THRESHOLD,
   type SearchType,
   type SearchParamBooleanReference,
   type SearchParamFlags,

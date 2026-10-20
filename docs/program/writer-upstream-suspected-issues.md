@@ -459,6 +459,36 @@ pending. Decision: preserve its initialized bit and original conditional when
 that owner is ported, rather than silently correcting the constructor to clear
 the bit or presenting a fabricated item behavior as completed.
 
+## WRITER-018: Ampersand replacement retains forward offsets for a backward result
+
+Status: suspicious directional asymmetry; pinned source expressions and portable
+initialized examples verified. Compiled native helper, full regex backend and
+all Writer caller invariants remain unverified.
+
+Original `utl::TextSearch::ReplaceBackReferences` in
+`unotools/source/i18n/textsearch.cxx` uses `startOffset[0]` and
+`endOffset[0] - startOffset[0]` directly for `&`. The `$0` through `$9` branch
+instead swaps reversed capture endpoints before taking a substring. Native
+`std::u16string_view::substr` converts a negative signed count to `size_t`,
+therefore selecting the remainder from the original high start offset.
+
+Initialized example: text `abcdef`, start `4`, end `1`, replacement `&|$0`.
+Ampersand selects `ef`, while dollar-zero selects `bcd`, giving `ef|bcd`.
+An actual portable backward search for `ab` in `x ab y` supplies start `4`,
+end `2`; expansion of `&:$0` produces ` y:ab`. Forward expansion yields
+`ab:ab`. The public wrapper normalizes its caller start/end outputs but retains
+the raw directional `SearchResult`, as upstream does.
+
+Evidence: original helper and `TextSearch::SearchBackward` definitions; tests in
+`apps/office/src/unotools/source/i18n/textsearch-helpers.test.ts` cover raw pairs,
+actual wrapper results and unchanged replacement on a throwing out-of-range
+view start. No incomplete capture sequence or undefined native arithmetic is
+certified. Writer consumer normalization or restrictions may prevent this
+condition in some call paths and remain to be audited during integration.
+
+Decision: preserve the exact separate ampersand and dollar-reference branches;
+do not normalize ampersand or silently replace it with dollar-zero.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,
