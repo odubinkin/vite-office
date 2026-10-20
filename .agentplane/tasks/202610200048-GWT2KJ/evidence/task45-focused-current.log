@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- native-delete-hardattr calc-clear-format ui-resources
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts native-delete-hardattr calc-clear-format ui-resources
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Start at  08:11:22
+   Duration  3.47s (transform 2.34s, setup 270ms, import 3.17s, tests 1.54s, environment 1.40s)
+

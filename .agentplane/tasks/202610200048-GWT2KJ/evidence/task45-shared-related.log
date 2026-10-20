@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- menu popup native-attribute-toggle undo document-store document-autosave
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts menu popup native-attribute-toggle undo document-store document-autosave
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  10 passed (10)
+      Tests  110 passed (110)
+   Start at  07:59:10
+   Duration  9.14s (transform 2.28s, setup 1.39s, import 2.97s, tests 4.12s, environment 7.61s)
+

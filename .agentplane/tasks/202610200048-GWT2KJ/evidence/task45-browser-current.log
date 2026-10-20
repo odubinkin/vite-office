@@ -1,0 +1,12 @@
+[WebServer] (node:76100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:76234) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 1280px (11.8s)
+  ✓  2 [calc] › apps/office/e2e/calc/clear-format.spec.ts:28:3 › native Clear menu and shortcut with primary ODS reopen at 390px (11.3s)
+  ✓  3 [calc] › apps/office/e2e/calc/clear-format.spec.ts:100:1 › keeps native Clear deletion/history and actual ODS in a DOM-free Worker (734ms)
+
+  3 passed (24.9s)
