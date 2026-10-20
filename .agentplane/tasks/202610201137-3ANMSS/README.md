@@ -1,10 +1,11 @@
 ---
 id: "202610201137-3ANMSS"
 title: "Implement native Calc cell border toolbar and ODS workflows"
-status: "DOING"
+result_summary: "verified-202610201137-3ANMSS"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T13:35:36.538Z"
+  updated_at: "2026-10-20T13:36:06.187Z"
   updated_by: "CODER"
   note: "verified-202610201137-3ANMSS"
   attempts: 0
@@ -43,11 +44,16 @@ quality_review:
     - "Source-shaped item/cache/view/operation/history owners retain pinned defaults,validity masks,adjacent envelope ordering,admitted-success returns and documented CALC227-234 branches. Native anchors and current authored/test hashes are verified."
     - "Actual shared Writer toolbar/palette/lazy popup and common border converter are reused. Production1280/390 tests and inspected screenshots demonstrate viewport bounds,Undo/Redo,preset/style/color/diagonal interaction,keyboard focus and dismissal. Independent ODF and genuine DOM-free Worker tests prove real package/history state."
     - "All declared local gates pass;148non-task paths remain within180approved. Full all-app run intentionally remains checkpoint50 under the approved cadence. Existing shim advisory is informational;doctor exits0."
-commit: null
+commit:
+  hash: "2b7c04e957fb3fdc6c1896af278d53bdf1390d17"
+  message: "✨ 3ANMSS calc: wire native border toolbar and ODS properties"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native Calc border toolbar,selection history and ODS block in calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610201137-3ANMSS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610201137-3ANMSS"
+  -
+    type: "verify"
+    at: "2026-10-20T13:36:06.187Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610201137-3ANMSS"
+  -
+    type: "status"
+    at: "2026-10-20T13:36:06.420Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610201137-3ANMSS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T13:35:59.150Z"
+doc_updated_at: "2026-10-20T13:37:25.118Z"
 doc_updated_by: "CODER"
 description: "Task48 continues authorized Calc UI work only in calc checkout/branch. Deliver native cell border presets,line style/color and actual selection-frame mutation/history,using real shared box/line items,source default frame line and shared Writer browser controls. Port consumed missing border pool/cache/frame/mark owners and native ODS properties;actual grid borders and desktop/mobile/Worker acceptance. Canonicalize shared Writer helpers directly when required. Up to180 non-task paths with source-backed registries/docs/tests. Preserve native suspicious behavior and established primary/autosave/open/no-recovery policy. Only related module tests;last full all-app checkpoint40,next50. No branch,merge,network,outside files or fake native protection/device/UNO services."
 sections:
@@ -141,6 +160,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-20T13:36:06.187Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610201137-3ANMSS
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T13:35:59.150Z, excerpt_hash=sha256:0f61d903ce21d41e87a309e71b451760fc25552711da43a297c5150e0e54dac6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201137-3ANMSS/blueprint/resolved-snapshot.json
+    - old_digest: 275c51f28d51230d0431b8aaedf4160fcaeab091983bd270ed9f01cb4a87953d
+    - current_digest: 275c51f28d51230d0431b8aaedf4160fcaeab091983bd270ed9f01cb4a87953d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201137-3ANMSS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610201137-3ANMSS --result verified-202610201137-3ANMSS --commit 0976d1b61f8e1e4a3df6e505d96cb73a431986f1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task through a separately scoped authorized change;do not reset unrelated work or alter pinned native references."
   Findings: |-
@@ -160,6 +209,10 @@ sections:
     Stop condition from user: pause the active goal immediately after the next full all-app run, regardless of success/failure. Last full checkpoint40;next50. This task did not run the full suite or advance that checkpoint. The three historical DOING records remain untouched and do not constitute live parallel work.
 
     Closeout observation: the route-oracle task complete command exited5 before mutation because verification/evaluator records made the active task README dirty. No implementation checks failed. Persist the active task verification/quality artifacts in a task-only commit,then repeat the unchanged oracle close command. No approval scope or verification criteria change is needed.
+
+    Closeout follow-up: task complete marked the task DONE but its generated close subject was rejected as too generic;the exact recommended commit --close repeated the same exit5. Implementation/verification/quality remain intact. Use the supported explicit commit message with the same active-task close scope;do not change policy or hooks.
+
+    The installed CLI rejects --close combined with --message(E_USAGE),so the documented plain ap commit --message/--allow-tasks path persists the already-DONE task artifacts with a concrete subject. This is task-local manual artifact cleanup,without changing task verification,quality,implementation or policy.
 id_source: "generated"
 ---
 ## Summary
@@ -243,6 +296,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-20T13:36:06.187Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610201137-3ANMSS
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T13:35:59.150Z, excerpt_hash=sha256:0f61d903ce21d41e87a309e71b451760fc25552711da43a297c5150e0e54dac6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201137-3ANMSS/blueprint/resolved-snapshot.json
+- old_digest: 275c51f28d51230d0431b8aaedf4160fcaeab091983bd270ed9f01cb4a87953d
+- current_digest: 275c51f28d51230d0431b8aaedf4160fcaeab091983bd270ed9f01cb4a87953d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201137-3ANMSS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610201137-3ANMSS --result verified-202610201137-3ANMSS --commit 0976d1b61f8e1e4a3df6e505d96cb73a431986f1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -267,3 +350,7 @@ Scope: current approved task48 only; full native parity is not claimed. Initial 
 Stop condition from user: pause the active goal immediately after the next full all-app run, regardless of success/failure. Last full checkpoint40;next50. This task did not run the full suite or advance that checkpoint. The three historical DOING records remain untouched and do not constitute live parallel work.
 
 Closeout observation: the route-oracle task complete command exited5 before mutation because verification/evaluator records made the active task README dirty. No implementation checks failed. Persist the active task verification/quality artifacts in a task-only commit,then repeat the unchanged oracle close command. No approval scope or verification criteria change is needed.
+
+Closeout follow-up: task complete marked the task DONE but its generated close subject was rejected as too generic;the exact recommended commit --close repeated the same exit5. Implementation/verification/quality remain intact. Use the supported explicit commit message with the same active-task close scope;do not change policy or hooks.
+
+The installed CLI rejects --close combined with --message(E_USAGE),so the documented plain ap commit --message/--allow-tasks path persists the already-DONE task artifacts with a concrete subject. This is task-local manual artifact cleanup,without changing task verification,quality,implementation or policy.
