@@ -27,6 +27,21 @@ function report(name) { return JSON.parse(contents.get("output/playwright/" + na
 const focused = report("task57-owner-repaired-results.json");
 assert.equal(focused.numPassedTests, 25);
 assert.equal(focused.numFailedTests, 0);
+const focusedCoverage = report("task57-focused-owner-coverage-results.json");
+assert.equal(focusedCoverage.numPassedTests, 32);
+assert.equal(focusedCoverage.numFailedTests, 0);
+const coverage = JSON.parse(contents.get("output/playwright/task57-focused-owner-coverage/coverage-final.json").toString("utf8"));
+assert.equal(Object.keys(coverage).length, 8);
+for (const value of Object.values(coverage)) {
+  for (const counter of [...Object.values(value.s), ...Object.values(value.f), ...Object.values(value.b).flat()])
+    assert.ok(counter > 0, value.path);
+}
+const total = JSON.parse(contents.get("output/playwright/task57-focused-owner-coverage/coverage-summary.json").toString("utf8")).total;
+for (const [kind, count] of [["statements", 406], ["branches", 194], ["functions", 126], ["lines", 369]]) {
+  assert.equal(total[kind].total, count);
+  assert.equal(total[kind].covered, count);
+  assert.equal(total[kind].pct, 100);
+}
 const failed = report("task57-owner-first-results.json");
 assert.equal(failed.numPassedTests, 19);
 assert.equal(failed.numFailedTests, 2);

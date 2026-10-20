@@ -73,7 +73,7 @@
   },
   "archive": {
     "path": "partial-pool-owner-reports.gz",
-    "sha256": "30464b34aa40da69a486051ce71bfaa036942354fbf435720866717b86a71ce2"
+    "sha256": "9e2fbbd9020c57fc750fcb28cce92b6c56f209900ebdf94f6b35a540d91333e1"
   },
   "results": {
     "focusedTests": 25,
@@ -94,7 +94,8 @@
     "npm run build",
     "node scripts/check-static-build.mjs",
     "npm run test:coverage:shared -- --reporter=json --outputFile=../../output/playwright/task57-shared-first-results.json",
-    "npm run test:coverage:calc -- --maxWorkers=1 --reporter=json --outputFile=../../output/playwright/task57-calc-repaired-results.json"
+    "npm run test:coverage:calc -- --maxWorkers=1 --reporter=json --outputFile=../../output/playwright/task57-calc-repaired-results.json",
+    "node ../../node_modules/vitest/vitest.mjs run src/editeng/source/editeng/native-content-values.test.ts src/editeng/source/editeng/native-content-normalize.test.ts src/editeng/source/editeng/native-sections.test.ts src/editeng/source/editeng/native-edit-text-object.test.ts src/editeng/source/editeng/native-edit-engine-pool.test.ts src/editeng/source/items/native-bullet-item.test.ts src/editeng/source/items/native-font-variations-item.test.ts --maxWorkers=1 --coverage --coverage.include='src/editeng/source/editeng/{editobj,editobj.owner,editdoc,editeng,eerdll,fieldupdater}.ts' --coverage.include='src/editeng/source/items/{bulitem,textitem.variations}.ts' --coverage.reportsDirectory=../../output/playwright/task57-focused-owner-coverage --coverage.reportOnFailure --reporter=json --outputFile=../../output/playwright/task57-focused-owner-coverage-results.json"
   ],
   "pending": [
     "Complete shared100 and Calc100 raw coverage reports and any required repairs",
@@ -108,5 +109,20 @@
     "Initial browser command used variadic --project syntax incorrectly;corrected invocation passed.",
     "First Calc screenshots were cleared by subsequent Writer runner output cleanup;replayed to an isolated output folder and inspected all4 screenshots.",
     "During first shared coverage execution,new tests received type-only lint repairs and one additional native field assertion;production runtime sources did not change."
-  ]
+  ],
+  "focusedCoverage": {
+    "owners": 8,
+    "tests": 32,
+    "statements": 406,
+    "branches": 194,
+    "functions": 126,
+    "lines": 369,
+    "percentages": [
+      100,
+      100,
+      100,
+      100
+    ],
+    "rawZeroCounters": 0
+  }
 }
