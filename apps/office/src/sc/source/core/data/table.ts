@@ -1,4 +1,7 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import type { ScLineFlags } from "../../../inc/attarray";
+import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
@@ -34,6 +37,81 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Native table layout direction;the constructor default matches the non-visible core-document path. */
+  private bLayoutRTL = false;
+  /** Original actual layout-direction query. @returns RTL flag. */
+  IsLayoutRTL(): boolean {
+    return this.bLayoutRTL;
+  }
+  /** Original table1.cxx actual flag update. @param set - RTL state. @returns Nothing. */
+  SetLayoutRTL(set: boolean): void {
+    this.bLayoutRTL = set;
+  }
+  /** Original line-style mutation visits allocated columns only. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
+  ApplySelectionLineStyle(
+    marks: ScMarkData,
+    line: SvxBorderLine | undefined,
+    colorOnly: boolean,
+  ): void {
+    if (colorOnly && !line) return;
+    for (const column of this.aCol) column.ApplySelectionLineStyle(marks, line, colorOnly);
+  }
+  /** Original query clamps its final column to allocated storage before calculating right distances. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Shared flags. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
+  MergeBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    flags: ScLineFlags,
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+  ): void {
+    if (
+      this.rDocument.ValidColRow(firstCol, firstRow) &&
+      this.rDocument.ValidColRow(lastCol, lastRow)
+    ) {
+      if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
+      if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
+      lastCol = this.ClampToAllocatedColumns(lastCol);
+      for (let col = firstCol; col <= lastCol; col++)
+        (this.aCol[col] as ScColumn).MergeBlockFrame(
+          outer,
+          inner,
+          flags,
+          firstRow,
+          lastRow,
+          col === firstCol,
+          lastCol - col,
+        );
+    }
+  }
+  /** Original validated block frame allocates through the real last column. @param outer - Outer lines. @param inner - Inner lines. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Nothing. */
+  ApplyBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+  ): void {
+    if (
+      this.rDocument.ValidColRow(firstCol, firstRow) &&
+      this.rDocument.ValidColRow(lastCol, lastRow)
+    ) {
+      if (firstCol > lastCol) [firstCol, lastCol] = [lastCol, firstCol];
+      if (firstRow > lastRow) [firstRow, lastRow] = [lastRow, firstRow];
+      this.CreateColumnIfNotExists(lastCol);
+      for (let col = firstCol; col <= lastCol; col++)
+        (this.aCol[col] as ScColumn).ApplyBlockFrame(
+          outer,
+          inner,
+          firstRow,
+          lastRow,
+          col === firstCol,
+          lastCol - col,
+        );
+    }
+  }
   /** Original table.hxx Apply traverses selected runs in one real column. @param marks - Marks. @param col - Column. @param apply - Mutation. @returns Nothing. */
   private Apply(marks: ScMarkData, col: number, apply: ColumnDataApply): void {
     if (marks.IsMultiMarked()) {

@@ -1,4 +1,14 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemLine as InnerEdge,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
+import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { SfxItemState } from "../../../../svl/inc/itemset";
@@ -41,6 +51,171 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
+  IsLayoutRTL(tab: number): boolean {
+    return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
+  }
+  /** Original represented table flag dispatch;drawing/visibility services remain unported. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
+  SetLayoutRTL(tab: number, set: boolean): void {
+    this.FetchTable(tab)?.SetLayoutRTL(set);
+  }
+  /** Original existing-line style/color dispatch. @param marks - Actual multi marks. @param line - Source style or absence. @param colorOnly - Color mode. @returns Nothing. */
+  ApplySelectionLineStyle(
+    marks: ScMarkData,
+    line: SvxBorderLine | undefined,
+    colorOnly: boolean,
+  ): void {
+    if (colorOnly && !line) return;
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.ApplySelectionLineStyle(marks, line, colorOnly);
+    }
+  }
+  /** Original selection-frame query preserves traversal order and six independent mixed states. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
+  GetSelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
+    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
+      outer.SetLine(undefined, edge);
+    outer.SetAllDistances(0);
+    inner.SetLine(undefined, InnerEdge.HORI);
+    inner.SetLine(undefined, InnerEdge.VERT);
+    inner.SetTable(true);
+    inner.SetDist(true);
+    inner.SetMinDist(false);
+    const flags = new ScLineFlags();
+    if (marks.IsMultiMarked()) {
+      const ranges = new ScRangeList();
+      marks.FillRangeListWithMarks(ranges, false);
+      let rows = false,
+        cols = false;
+      for (const range of ranges) {
+        rows = rows || range.aStart.Row() !== range.aEnd.Row();
+        cols = cols || range.aStart.Col() !== range.aEnd.Col();
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          this.FetchTable(tab)?.MergeBlockFrame(
+            outer,
+            inner,
+            flags,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        }
+      }
+      inner.EnableHor(rows);
+      inner.EnableVer(cols);
+    } else if (marks.IsMarked()) {
+      const range = marks.GetMarkArea();
+      inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
+      inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        this.FetchTable(tab)?.MergeBlockFrame(
+          outer,
+          inner,
+          flags,
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+        );
+      }
+    }
+    inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+  }
+  /** Original marked selection frames and adjacent-envelope border removal. @param marks - Actual native marks. @param outer - Requested outer lines. @param inner - Requested inner lines and validity. @returns Nothing. */
+  ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      const table = this.FetchTable(tab);
+      if (table)
+        for (const range of ranges)
+          table.ApplyBlockFrame(
+            outer,
+            inner,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+    }
+    if (!outer.IsRemoveAdjacentCellBorder()) return;
+    const blank = new SvxBoxItem(outer);
+    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
+      blank.SetLine(undefined, edge);
+    const left = new SvxBoxItem(blank),
+      right = new SvxBoxItem(blank),
+      top = new SvxBoxItem(blank),
+      bottom = new SvxBoxItem(blank),
+      base = new SvxBoxInfoItem(inner);
+    base.SetTable(false);
+    base.SetLine(undefined, InnerEdge.HORI);
+    base.SetLine(undefined, InnerEdge.VERT);
+    base.SetValid(Valid.ALL, false);
+    base.SetValid(Valid.DISTANCE);
+    const leftInfo = new SvxBoxInfoItem(base),
+      rightInfo = new SvxBoxInfoItem(base),
+      topInfo = new SvxBoxInfoItem(base),
+      bottomInfo = new SvxBoxInfoItem(base);
+    if (inner.IsValid(Valid.TOP) && !outer.GetTop()) topInfo.SetValid(Valid.BOTTOM);
+    if (inner.IsValid(Valid.BOTTOM) && !outer.GetBottom()) bottomInfo.SetValid(Valid.TOP);
+    if (inner.IsValid(Valid.LEFT) && !outer.GetLeft()) leftInfo.SetValid(Valid.RIGHT);
+    if (inner.IsValid(Valid.RIGHT) && !outer.GetRight()) rightInfo.SetValid(Valid.LEFT);
+    const topRanges = marks.GetTopEnvelope(),
+      bottomRanges = marks.GetBottomEnvelope(),
+      leftRanges = marks.GetLeftEnvelope(),
+      rightRanges = marks.GetRightEnvelope();
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      const table = this.FetchTable(tab);
+      if (table) {
+        for (const range of topRanges)
+          table.ApplyBlockFrame(
+            top,
+            topInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of bottomRanges)
+          table.ApplyBlockFrame(
+            bottom,
+            bottomInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of leftRanges)
+          table.ApplyBlockFrame(
+            left,
+            leftInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of rightRanges)
+          table.ApplyBlockFrame(
+            right,
+            rightInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+      }
+    }
+  }
   /** Original selected-sheet indentation with removed-tab boundary. @param increment - Direction. @param marks - Real marks. @returns Nothing. */
   ChangeSelectionIndent(increment: boolean, marks: ScMarkData): void {
     for (const tab of marks.GetSelectedTabs()) {

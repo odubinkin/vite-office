@@ -3269,3 +3269,18 @@ string path depend on cache refresh ordering. Do not invent a corrected native c
 the full string-output/device/cache machinery remains unported. The browser projects current
 native margin/indent items using the represented margin arithmetic;full native paint/cache parity
 is explicitly unverified.
+
+## CALC227 — Rectangular frame redo loses adjacent-border envelopes
+
+Pinned `ScViewFunc::ApplyPatternLines` (`sc/source/ui/view/viewfunc.cxx`) computes
+`GetSelectionCover` before recording `ScUndoSelectionAttr`, so Undo restores both the
+selected cells and their adjacent borders. `ScUndoSelectionAttr::DoChange(false)`
+(`sc/source/ui/undo/undoblk3.cxx`) calls `MarkToMulti`, applies the pattern, then calls
+`MarkToSimple` before `ApplySelectionFrame`. For a rectangular mark, `MarkToSimple`
+calls `ResetMark`, clearing all four envelope lists (`sc/source/core/data/markdata.cxx`).
+`ScDocument::ApplySelectionFrame` consumes these lists without rebuilding them
+(`sc/source/core/data/document.cxx`). Thus Redo clears the selected rectangle again
+but leaves the adjacent borders restored by Undo. Preserve this source ordering;
+do not regenerate envelopes to silently repair it. `border-history.test.ts` verifies
+the selected and neighboring edges independently, including retained request-item copies.
+Native drawing, merged-cell paint extents and rich-edit history remain unported.

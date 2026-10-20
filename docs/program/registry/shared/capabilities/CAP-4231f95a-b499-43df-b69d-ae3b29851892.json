@@ -45,7 +45,7 @@
           "marker": "Color"
         },
         {
-          "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+          "path": "apps/office/src/svx/browser/dialog/border-line.ts",
           "marker": "Color"
         },
         {

@@ -194,9 +194,16 @@ export class SvxBoxItem extends SfxPoolItem {
   ];
   private readonly distances = [0, 0, 0, 0];
   private removeAdjacent = false;
-  /** Creates a zero-distance, borderless native item. @param which - Item identity. @returns Nothing. */
-  public constructor(which: number) {
-    super(which);
+  /** Original borderless or deep-copy constructor. @param source - Identity or original item. @returns Nothing. */
+  public constructor(source: number | Readonly<SvxBoxItem>) {
+    super(typeof source === "number" ? source : source.Which());
+    if (typeof source !== "number") {
+      for (const edge of [0, 1, 2, 3]) {
+        this.SetLine(source.GetLine(edge), edge);
+        this.SetDistance(source.GetDistance(edge, true), edge);
+      }
+      this.removeAdjacent = source.IsRemoveAdjacentCellBorder();
+    }
   }
   /** Reads an owned native line. @param edge - Native edge. @returns Line or absent. */
   public GetLine(edge: SvxBoxItemLine): SvxBorderLine | undefined {
@@ -263,11 +270,11 @@ export class SvxBoxItem extends SfxPoolItem {
     );
   }
   /** Sets the native adjacent-cell border removal flag. @param value - Removal policy. @returns Nothing. */
-  public SetRemoveAdjCellBorder(value: boolean): void {
+  public SetRemoveAdjacentCellBorder(value: boolean): void {
     this.removeAdjacent = value;
   }
   /** Reads the adjacent-cell border removal flag. @returns Policy. */
-  public GetRemoveAdjCellBorder(): boolean {
+  public IsRemoveAdjacentCellBorder(): boolean {
     return this.removeAdjacent;
   }
   /** Copies all represented state and owned line objects. @returns Independent item. */
@@ -475,9 +482,19 @@ export class SvxBoxInfoItem extends SfxPoolItem {
   private minimum = false;
   private defaultDistance = 0;
   private validFlags = 127;
-  /** Creates the native default inner-border item. @param which - Slot identity. @returns Nothing. */
-  public constructor(which: number) {
-    super(which);
+  /** Original inner-border default/copy constructor. @param source - Slot identity or actual item. @returns Nothing. */
+  public constructor(source: number | SvxBoxInfoItem) {
+    super(typeof source === "number" ? source : source.Which());
+    if (typeof source !== "number") {
+      this.SetLine(source.GetHori(), 0);
+      this.SetLine(source.GetVert(), 1);
+      this.horizontal = source.IsHor();
+      this.vertical = source.IsVer();
+      this.distance = source.IsDist();
+      this.minimum = source.IsMinDist();
+      this.defaultDistance = source.GetDefDist();
+      this.validFlags = source.validFlags;
+    }
   }
   /** Reads an owned inner line. @param edge - Inner direction. @returns Line or absent. */
   public GetLine(edge: SvxBoxInfoItemLine): SvxBorderLine | undefined {

@@ -1,4 +1,6 @@
 /** @fileoverview Consumed ScViewFunc selection-pattern query and source whole-sheet data-area clipping. Alternate sheet views remain unported. */
+import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
+import { ScUndoSelectionAttr } from "../undo/undoblk3";
 import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
@@ -73,6 +75,58 @@ export class ScViewFunc extends ScTabView {
     private readonly shell: ScDocShell,
   ) {
     super(data);
+  }
+  /** Original ApplyPatternLines records the full adjacent envelope and applies frames before pattern deltas. Device painting and rich-text services remain unported. @param attr - Borrowed pattern delta. @param outer - Actual outer frame. @param inner - Actual inner frame and validity. @returns Nothing. */
+  ApplyPatternLines(attr: ScPatternAttr, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
+    const doc = this.data.GetDocument(),
+      marks = new ScMarkData(this.data.GetMarkData());
+    ScViewUtil.UnmarkFiltered(marks, doc);
+    marks.MarkToSimple();
+    const multi = marks.IsMultiMarked();
+    let range: ScRange;
+    if (multi) range = new ScRange(marks.GetMultiMarkArea());
+    else if (marks.IsMarked()) range = new ScRange(marks.GetMarkArea());
+    else {
+      range = new ScRange(
+        new ScAddress(this.data.GetCurX(), this.data.GetCurY(), this.data.GetTabNumber()),
+      );
+      this.data.GetMarkData().SetMarkArea(range);
+      marks.SetMarkArea(range);
+    }
+    const removeAdjacent = outer.IsRemoveAdjacentCellBorder(),
+      cover = new ScRange(range);
+    if (removeAdjacent) marks.GetSelectionCover(cover);
+    const undo = new ScDocument(),
+      name = new OUString();
+    for (let tab = 0; tab < doc.GetTableCount(); tab++) {
+      doc.GetName(tab, name);
+      undo.InsertTab(tab, name);
+    }
+    name.dispose();
+    const copy = new ScRange(cover),
+      copyOnlyMarked = !removeAdjacent && multi;
+    copy.aStart.SetTab(0);
+    copy.aEnd.SetTab(doc.GetTableCount() - 1);
+    doc.CopyToDocument(copy, InsertDeleteFlags.ATTRIB, copyOnlyMarked, undo, marks);
+    this.shell
+      .GetUndoManager()
+      .AddUndoAction(
+        new ScUndoSelectionAttr(
+          this.shell,
+          marks,
+          range,
+          undo,
+          attr,
+          copyOnlyMarked,
+          outer,
+          inner,
+          cover,
+        ),
+      );
+    doc.ApplySelectionFrame(marks, outer, inner);
+    marks.MarkToMulti();
+    doc.ApplySelectionPattern(attr, marks);
+    this.shell.SetDocumentModified();
   }
   /** Original indentation works on copied marks with filtered rows removed. @param increment - Direction. @returns Operation result. */
   ChangeIndent(increment: boolean): boolean {

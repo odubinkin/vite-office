@@ -197,7 +197,7 @@ function encodeBoxFormat(value: SwTableBoxFormat): WriterBoxFormatRecord {
                 edge,
               ) => box.GetDistance(edge, true),
             ),
-            removeAdjacent: box.GetRemoveAdjCellBorder(),
+            removeAdjacent: box.IsRemoveAdjacentCellBorder(),
           },
     vertOrient:
       vertOrient === undefined
@@ -323,7 +323,7 @@ function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
       throw new Error("Stored Writer native border line is invalid.");
     item.SetLine(SvxBorderLine.FromRecord(line as unknown as BorderLineRecord), edge);
   }
-  item.SetRemoveAdjCellBorder(record.removeAdjacent);
+  item.SetRemoveAdjacentCellBorder(record.removeAdjacent);
   return item;
 }
 

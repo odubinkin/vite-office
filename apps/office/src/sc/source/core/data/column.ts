@@ -1,4 +1,7 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import type { ScLineFlags } from "../../../inc/attarray";
+import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import {
   CellStoreType,
   element_type_empty,
@@ -45,6 +48,42 @@ import { ScAttrArray } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
 export class ScColumnData {
+  /** Original existing-line mutation traverses only actual multi marks. @param marks - Marks. @param line - Style or absence. @param colorOnly - Color mode. @returns Nothing. */
+  ApplySelectionLineStyle(
+    marks: ScMarkData,
+    line: SvxBorderLine | undefined,
+    colorOnly: boolean,
+  ): void {
+    if (colorOnly && !line) return;
+    if (marks.IsMultiMarked()) {
+      const iter = new ScMultiSelIter(marks.GetMultiSelData(), this.nCol);
+      for (let span = iter.Next(0, 0); span[0]; span = iter.Next(0, 0))
+        this.pAttrArray.ApplyLineStyleArea(span[1], span[2], line, colorOnly);
+    }
+  }
+  /** Original native frame accumulation delegation. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Shared flags. @param first - First row. @param last - Last row. @param left - First column. @param right - Right distance. @returns Nothing. */
+  MergeBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    flags: ScLineFlags,
+    first: number,
+    last: number,
+    left: boolean,
+    right: number,
+  ): void {
+    this.pAttrArray.MergeBlockFrame(outer, inner, flags, first, last, left, right);
+  }
+  /** Original frame delegation to actual attribute runs. @param outer - Outer lines. @param inner - Inner lines. @param first - First row. @param last - Last row. @param left - Left column. @param distance - Distance to right edge. @returns Nothing. */
+  ApplyBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    first: number,
+    last: number,
+    left: boolean,
+    distance: number,
+  ): void {
+    this.pAttrArray.ApplyBlockFrame(outer, inner, first, last, left, distance);
+  }
   /** Original selection indentation delegates to actual attributes. @param first - First row. @param last - Last row. @param increment - Direction. @returns Nothing. */
   ChangeSelectionIndent(first: number, last: number, increment: boolean): void {
     this.pAttrArray.ChangeIndent(first, last, increment);

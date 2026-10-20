@@ -4,7 +4,7 @@ import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
-import { ScViewFunc } from "../../source/ui/view/viewfunc";
+import { ScTabViewShell } from "../../source/ui/inc/tabvwsh";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
@@ -60,18 +60,13 @@ export class CalcViewController {
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
-    const changed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ChangeIndent(
-      increment,
-    );
+    const changed = new ScCellShell(this.viewShell).ChangeIndent(increment);
     this.Changed();
     return changed;
   }
   /** Native row-height request routing. @param request - Source request. @returns Typed height present. */
   ExecuteRowHeight(request: SfxRequest): boolean {
-    const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteRowHeight(
-      request,
-      this.viewData,
-    );
+    const consumed = new ScCellShell(this.viewShell).ExecuteRowHeight(request, this.viewData);
     if (consumed) {
       this.addressText = this.Address();
       this.Changed();
@@ -80,9 +75,7 @@ export class CalcViewController {
   }
   /** Native accepted row-height result. @param twips - Height. @returns Recorded request. */
   CompleteRowHeight(twips: number): SfxRequest {
-    const request = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).CompleteRowHeight(
-      twips,
-    );
+    const request = new ScCellShell(this.viewShell).CompleteRowHeight(twips);
     this.addressText = this.Address();
     this.Changed();
     return request;
@@ -90,16 +83,13 @@ export class CalcViewController {
   /** Native row visibility. @param show - Visible. @returns Nothing. */
   ShowRows(show: boolean): void {
     if (!this.Commit()) return;
-    new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ShowRows(show);
+    new ScCellShell(this.viewShell).ShowRows(show);
     this.addressText = this.Address();
     this.Changed();
   }
   /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
   ExecuteColumnWidth(request: SfxRequest): boolean {
-    const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteColumnWidth(
-      request,
-      this.viewData,
-    );
+    const consumed = new ScCellShell(this.viewShell).ExecuteColumnWidth(request, this.viewData);
     if (consumed) {
       this.addressText = this.Address();
       this.Changed();
@@ -108,9 +98,7 @@ export class CalcViewController {
   }
   /** Applies accepted native dialog twips and returns its separate completed recording request. @param twips - Input twips. @returns Recording request. */
   CompleteColumnWidth(twips: number): SfxRequest {
-    const request = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).CompleteColumnWidth(
-      twips,
-    );
+    const request = new ScCellShell(this.viewShell).CompleteColumnWidth(twips);
     this.addressText = this.Address();
     this.Changed();
     return request;
@@ -118,14 +106,14 @@ export class CalcViewController {
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {
     if (!this.Commit()) return;
-    new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ShowColumns(show);
+    new ScCellShell(this.viewShell).ShowColumns(show);
     this.addressText = this.Address();
     this.Changed();
   }
   /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
   ResetAttributes(): boolean {
     if (!this.Commit()) return false;
-    const changed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ResetAttributes();
+    const changed = new ScCellShell(this.viewShell).ResetAttributes();
     this.Changed();
     return changed;
   }
@@ -176,6 +164,7 @@ export class CalcViewController {
     return changed;
   }
   viewData: ScViewData;
+  private viewShell: ScTabViewShell;
   private readonly detachShell: () => void;
   readonly inputHandler = new ScInputHandler();
   /** Exposes the canonical native input mode. @returns Mode. */
@@ -204,11 +193,13 @@ export class CalcViewController {
   private anchor = new ScAddress();
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
-    this.viewData = new ScViewData(shell.GetDocument());
+    this.viewShell = new ScTabViewShell(shell);
+    this.viewData = this.viewShell.GetViewData();
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
-          this.viewData = new ScViewData(shell.GetDocument());
+          this.viewShell = new ScTabViewShell(shell);
+          this.viewData = this.viewShell.GetViewData();
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputHandler.ResetInputState();

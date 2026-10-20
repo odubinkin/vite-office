@@ -138,7 +138,7 @@ it("structured transport retains signed distances, custom double ratios, scale, 
   custom.SetMirrorWidths();
   f.item.SetLine(custom, 0);
   f.item.SetDistance(-99, 2);
-  f.item.SetRemoveAdjCellBorder(true);
+  f.item.SetRemoveAdjacentCellBorder(true);
   f.box.SetFormat({ box: f.item });
   const record = structuredClone(encodeWriterDocument(f.doc)),
     doc = decodeWriterDocument(record);
@@ -148,7 +148,7 @@ it("structured transport retains signed distances, custom double ratios, scale, 
     expect(item.GetTop()?.toJSON()).toEqual(custom.toJSON());
     expect(item.GetDistance(2, true)).toBe(-99);
     expect(item.GetDistance(2)).toBe(0);
-    expect(item.GetRemoveAdjCellBorder()).toBe(true);
+    expect(item.IsRemoveAdjacentCellBorder()).toBe(true);
     expect(item.GetTop()).toBeInstanceOf(SvxBorderLine);
     expect(item.GetTop()).not.toBe(f.item.GetTop());
     item.GetTop()?.SetWidth(999);

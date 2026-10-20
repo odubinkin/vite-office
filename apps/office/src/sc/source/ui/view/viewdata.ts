@@ -1,4 +1,5 @@
 /** @fileoverview Document-bound ScViewData cursor subset. Geometry, zoom, hidden sheets, alternate sheet views, window services and persistence remain separate; no cell data is copied into this owner. */
+import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocument } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
 import { ValidTab } from "../../../inc/address";
@@ -27,6 +28,12 @@ export class ScViewData {
   static ToPixel(twips: number, factor: number): number {
     const result = Math.trunc(twips * factor);
     return !result && twips ? 1 : result;
+  }
+  /** Original borrowed pView,absent in the standalone headless view-data constructor. */
+  private pView: ScTabViewShell | undefined;
+  /** Original native view-shell borrow. @returns Actual owner or absence for headless fixtures. */
+  GetViewShell(): ScTabViewShell | undefined {
+    return this.pView;
   }
   private readonly maMarkData: ScMarkData;
   private readonly maTabData: (ScViewDataTable | undefined)[] = [new ScViewDataTable()];
