@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T22:01:03.568Z"
+doc_updated_at: "2026-10-20T22:08:44.681Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -79,7 +79,7 @@ sections:
 
     Related additional source-contract regressions: XCS30, search62, configuration/SAL/helpers133, Writer find10 and bookmark history15 scenarios pass in their focused logs. Formatting-only undo suite passes17 scenarios in format-replace-regression.log. Scoped ESLint, Prettier, policy routing and diff checks pass. Native info-depth observation WRITER-023 is preserved, not repaired. Remaining strict coverage gaps, complete browser verdict, canonical static run, final review and closure remain outstanding.
 
-    Command: scoped configmgr Istanbul replay (exact command in config-coverage-regression.log context; include five configmgr runtime modules, reportsDirectory coverage/xcs-regression).
+    Command: npx vitest run src/configmgr/source --root apps/office --coverage --coverage.include='src/configmgr/source/{parsemanager,propertynode,valueparser,xcsparser,xmldata}.ts' --coverage.reportsDirectory=coverage/xcs-regression
     Result: all130 tests /11 files pass; strict coverage still fails at98.62% lines and97.14% branches.
     Evidence: output/playwright/writer-xcs-schema/config-coverage-regression.log and apps/office/coverage/xcs-regression.
     Scope: diagnostic replay after additional native XML/metadata histories; does not replace complete coverage and does not weaken thresholds. Remaining gaps include debug invariants and private compiler-binding fallbacks; no injected private state or mocked core peers introduced.
@@ -88,6 +88,28 @@ sections:
     Result: pass.
     Evidence: regression-typecheck.log, regression-dependencies.log, regression-docs.log, regression-lint.log, writer-regression-lint.log.
     Scope: both tool/application types, all authored JSDoc and runtime edges, changed style and routing. This checkpoint remains unverified overall pending strict full gates and browser/static results.
+
+    Command: npm run test:e2e
+    Result: pass,432 scenarios in12.7 minutes after JSON import fixes.
+    Evidence: output/playwright/writer-xcs-schema/full-e2e-repaired.log.
+    Scope: complete browser run on checkpoint68009c55d4c3; later internal concrete-template binding/private constructor refactors are separately exercised by156 tests/13 files in native-specialization-regression.log.
+
+    Command: npm run test:static
+    Result: pass after current application runtime changes.
+    Evidence: output/playwright/writer-xcs-schema/final-static.log.
+    Scope: fresh production build, relative local assets,two JavaScript bundles,no backend addresses.
+
+    Command: npm run test:inventory:coverage
+    Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt is currently running in session59051 after a real parser complexity repair.
+    Evidence: full-inventory-coverage-repaired.log and full-inventory-coverage-optimized.log.
+    Scope: complete deterministic inventory; no timeouts or strict thresholds changed. Cppunit parsing now counts only text since preceding match, retaining exact source lines/sort/all8072 declarations. Focused three-file coverage invocation passed7 tests in1.25s, but its global inventory coverage gate intentionally fails because unrelated suites were absent; it is not full coverage evidence.
+
+    Command: npx vitest run src/configmgr/source --root apps/office --coverage --coverage.include='src/configmgr/source/{parsemanager,propertynode,valueparser,xcsparser,xmldata}.ts' --coverage.reportsDirectory=coverage/xcs-regression-final
+    Result: tests pass; strict scoped coverage fails at98.96% lines,97.84% branches,100% functions.
+    Evidence: config-coverage-specializations.log and coverage/xcs-regression-final JSON.
+    Scope: seven concrete C++ scalar specializations are bound at compile time, original sal_Int32 parser is shared directly for unicode scalar values; no synthetic Any extraction failure. Genuine source debug invariants and runtime fallback responsibilities remain. Full application coverage remains unresolved and this task must stay DOING.
+
+    Current scoped lint, tools/application typechecks, source provenance(987 runtime modules), JSDoc(2551 files), formatting and diff checks pass. Evidence: native-specialization-lint.log,native-specialization-typecheck.log,cppunit-lint.log,cppunit-typecheck.log,final-provenance.log,final-docs.log.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -157,7 +179,7 @@ Scope: complete inventory collection; obsolete GetPosition calls replaced with c
 
 Related additional source-contract regressions: XCS30, search62, configuration/SAL/helpers133, Writer find10 and bookmark history15 scenarios pass in their focused logs. Formatting-only undo suite passes17 scenarios in format-replace-regression.log. Scoped ESLint, Prettier, policy routing and diff checks pass. Native info-depth observation WRITER-023 is preserved, not repaired. Remaining strict coverage gaps, complete browser verdict, canonical static run, final review and closure remain outstanding.
 
-Command: scoped configmgr Istanbul replay (exact command in config-coverage-regression.log context; include five configmgr runtime modules, reportsDirectory coverage/xcs-regression).
+Command: npx vitest run src/configmgr/source --root apps/office --coverage --coverage.include='src/configmgr/source/{parsemanager,propertynode,valueparser,xcsparser,xmldata}.ts' --coverage.reportsDirectory=coverage/xcs-regression
 Result: all130 tests /11 files pass; strict coverage still fails at98.62% lines and97.14% branches.
 Evidence: output/playwright/writer-xcs-schema/config-coverage-regression.log and apps/office/coverage/xcs-regression.
 Scope: diagnostic replay after additional native XML/metadata histories; does not replace complete coverage and does not weaken thresholds. Remaining gaps include debug invariants and private compiler-binding fallbacks; no injected private state or mocked core peers introduced.
@@ -166,6 +188,28 @@ Command: npm run typecheck; npm run check:dependencies; npm run check:docs; scop
 Result: pass.
 Evidence: regression-typecheck.log, regression-dependencies.log, regression-docs.log, regression-lint.log, writer-regression-lint.log.
 Scope: both tool/application types, all authored JSDoc and runtime edges, changed style and routing. This checkpoint remains unverified overall pending strict full gates and browser/static results.
+
+Command: npm run test:e2e
+Result: pass,432 scenarios in12.7 minutes after JSON import fixes.
+Evidence: output/playwright/writer-xcs-schema/full-e2e-repaired.log.
+Scope: complete browser run on checkpoint68009c55d4c3; later internal concrete-template binding/private constructor refactors are separately exercised by156 tests/13 files in native-specialization-regression.log.
+
+Command: npm run test:static
+Result: pass after current application runtime changes.
+Evidence: output/playwright/writer-xcs-schema/final-static.log.
+Scope: fresh production build, relative local assets,two JavaScript bundles,no backend addresses.
+
+Command: npm run test:inventory:coverage
+Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt is currently running in session59051 after a real parser complexity repair.
+Evidence: full-inventory-coverage-repaired.log and full-inventory-coverage-optimized.log.
+Scope: complete deterministic inventory; no timeouts or strict thresholds changed. Cppunit parsing now counts only text since preceding match, retaining exact source lines/sort/all8072 declarations. Focused three-file coverage invocation passed7 tests in1.25s, but its global inventory coverage gate intentionally fails because unrelated suites were absent; it is not full coverage evidence.
+
+Command: npx vitest run src/configmgr/source --root apps/office --coverage --coverage.include='src/configmgr/source/{parsemanager,propertynode,valueparser,xcsparser,xmldata}.ts' --coverage.reportsDirectory=coverage/xcs-regression-final
+Result: tests pass; strict scoped coverage fails at98.96% lines,97.84% branches,100% functions.
+Evidence: config-coverage-specializations.log and coverage/xcs-regression-final JSON.
+Scope: seven concrete C++ scalar specializations are bound at compile time, original sal_Int32 parser is shared directly for unicode scalar values; no synthetic Any extraction failure. Genuine source debug invariants and runtime fallback responsibilities remain. Full application coverage remains unresolved and this task must stay DOING.
+
+Current scoped lint, tools/application typechecks, source provenance(987 runtime modules), JSDoc(2551 files), formatting and diff checks pass. Evidence: native-specialization-lint.log,native-specialization-typecheck.log,cppunit-lint.log,cppunit-typecheck.log,final-provenance.log,final-docs.log.
 
 ## Rollback Plan
 

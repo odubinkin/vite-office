@@ -37,8 +37,21 @@ function bytes(text: Span): Uint8Array {
 function hexPrefix(text: Uint8Array): boolean {
   return text.length >= 2 && text[0] === 48 && (text[1] === 88 || text[1] === 120);
 }
+/** Original seven concrete parseSingleValue<T>/convertItems<T> instantiations; unsupported runtime schema types are rejected by the outer dispatcher. */
+type ScalarType =
+  | Type.TYPE_BOOLEAN
+  | Type.TYPE_SHORT
+  | Type.TYPE_INT
+  | Type.TYPE_LONG
+  | Type.TYPE_DOUBLE
+  | Type.TYPE_STRING
+  | Type.TYPE_HEXBINARY;
+/** Original sal_Int32 parseValue overload, whose lexical TODO deliberately accepts invalid prefixes as zero. @param data - Exact original lexical bytes. @returns Parsed signed32 value. */
+function parseInt32Value(data: Uint8Array): number {
+  return hexPrefix(data) ? toUInt32(data.subarray(2), 16) | 0 : toInt32(data);
+}
 /** Source template arguments and sizeof(T), never inferred from values. @param type - Scalar native schema type. @returns Actual compiler binding. */
-function binding(type: Type): readonly [Exclude<UnoTypeArgument, "Any">, number] {
+function binding(type: ScalarType): readonly [Exclude<UnoTypeArgument, "Any">, number] {
   switch (type) {
     case Type.TYPE_BOOLEAN:
       return ["sal_Bool", 1];
@@ -54,12 +67,10 @@ function binding(type: Type): readonly [Exclude<UnoTypeArgument, "Any">, number]
       return ["OUString", 8];
     case Type.TYPE_HEXBINARY:
       return [["Sequence", "sal_Int8"], 8];
-    default:
-      throw valueError("this cannot happen");
   }
 }
 /** Original typed scalar parsing followed by Any(val); numeric lexical TODOs deliberately remain permissive. @param text - Native lexical span. @param type - Scalar schema type. @returns Actual typed Any. */
-function parseSingleValue(text: Span, type: Type): Any {
+function parseSingleValue(text: Span, type: ScalarType): Any {
   const data = bytes(text);
   switch (type) {
     case Type.TYPE_BOOLEAN:
@@ -80,10 +91,7 @@ function parseSingleValue(text: Span, type: Type): Any {
       return new Any([n], "sal_Int16");
     }
     case Type.TYPE_INT:
-      return new Any(
-        [hexPrefix(data) ? toUInt32(data.subarray(2), 16) | 0 : toInt32(data)],
-        "sal_Int32",
-      );
+      return new Any([parseInt32Value(data)], "sal_Int32");
     case Type.TYPE_LONG: {
       let n: bigint;
       if (hexPrefix(data)) {
@@ -121,13 +129,11 @@ function parseSingleValue(text: Span, type: Type): Any {
         value.dispose();
       }
     }
-    default:
-      throw valueError("this cannot happen");
   }
 }
 /** Original convertItems<T> initialized Sequence and Any extraction; also erases containerToSequence of the parsed typed list. @param items - Actual scalar Any values. @param type - Native list type. @returns Actual sequence-valued Any. */
 function sequenceValue(items: readonly Any[], type: Type): Any {
-  const [argument, size] = binding(elementType(type)),
+  const [argument, size] = binding(elementType(type) as ScalarType),
     Values = Sequence.specialize(argument, size),
     seq = new Values(items.length);
   try {
@@ -157,7 +163,8 @@ function findSeparator(data: Uint8Array, separator: Uint8Array): number {
 /** Original complete scalar/list dispatcher; unknown/any/nil types retain native exceptions. @param separator - Owned OString byte projection, empty selects a single ASCII space. @param text - Present native lexical span. @param type - Schema type. @returns Typed actual Any value. */
 export function parseValue(separator: Uint8Array, text: Span, type: Type): Any {
   if (type === Type.TYPE_ANY) throw valueError("invalid value of type any");
-  if (type >= Type.TYPE_BOOLEAN && type <= Type.TYPE_HEXBINARY) return parseSingleValue(text, type);
+  if (type >= Type.TYPE_BOOLEAN && type <= Type.TYPE_HEXBINARY)
+    return parseSingleValue(text, type as ScalarType);
   if (type < Type.TYPE_BOOLEAN_LIST || type > Type.TYPE_HEXBINARY_LIST)
     throw valueError("this cannot happen");
   const items: Any[] = [],
@@ -168,7 +175,7 @@ export function parseValue(separator: Uint8Array, text: Span, type: Type): Any {
       for (;;) {
         const index = findSeparator(data, sep),
           length = index === -1 ? data.length : index;
-        items.push(parseSingleValue(new Span(data, length), elementType(type)));
+        items.push(parseSingleValue(new Span(data, length), elementType(type) as ScalarType));
         if (index < 0) break;
         data = data.subarray(index + sep.length);
       }
@@ -278,13 +285,7 @@ export class ValueParser {
           attrNs[0] === NAMESPACE_OOR &&
           attrName.operatorEquals(new Uint8Array([115, 99, 97, 108, 97, 114, 0]))
         ) {
-          const value = parseValue(new Uint8Array(), reader.getAttributeValue(true), Type.TYPE_INT);
-          try {
-            const result: [number] = [-1];
-            scalar = value.extract(result, "sal_Int32") ? result[0] : -1;
-          } finally {
-            value.dispose();
-          }
+          scalar = parseInt32Value(bytes(reader.getAttributeValue(true)));
           break;
         }
       }

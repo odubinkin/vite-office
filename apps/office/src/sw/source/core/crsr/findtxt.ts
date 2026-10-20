@@ -129,7 +129,7 @@ class SwFindParaText implements SwFindParas {
   /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @returns Search strategy. */
   public constructor(
     private readonly m_rSearchOpt: SearchOptions2,
-    private readonly m_bReplace = false,
+    private readonly m_bReplace: boolean,
   ) {
     this.m_aSText = new TextSearch(m_rSearchOpt);
   }
