@@ -1,6 +1,6 @@
 {
   "task": "202610202009-NF91KY",
-  "status": "deterministic scope verified;final evaluator and closure pending;broader goal active",
+  "status": "deterministic approved scope verified;broader UI goal remains incomplete",
   "productionCodeCommit": "54fe9d3c76e0",
   "nativeBaseline": "9bc445578031fecf56086729d8e4940c77e14d65",
   "sourceHashes": {

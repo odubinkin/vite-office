@@ -4,7 +4,7 @@ title: "Implement native shared EditEngine pool and rich-text object ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T22:42:51.290Z"
+  updated_by: "CODER"
+  note: "verified-202610202009-NF91KY"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T22:41:23.343Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native EditEngine pool/rich-text ownership slice satisfies source contracts,real owner boundaries and complete Calc/shared100 with exact unchanged-source coverage aggregation;broader UI goal remains incomplete."
+  evaluated_sha: "8ceda10ab6b4af26036c33ff7cbac05cf0f57df3"
+  blueprint_digest: "fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa"
+  evidence_refs:
+    - ".agentplane/tasks/202610202009-NF91KY/README.md"
+    - ".agentplane/tasks/202610202009-NF91KY/quality/20261020-224123343-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610202009-NF91KY/quality/20261020-224123343-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610202009-NF91KY/quality/20261020-224123343-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610202009-NF91KY/evidence/final-pool-owner.json"
+    - ".agentplane/tasks/202610202009-NF91KY/evidence/audit-final-pool-owner.mjs"
+    - ".agentplane/tasks/202610202009-NF91KY/evidence/final-pool-owner-reports.gz"
+    - ".agentplane/tasks/202610202009-NF91KY/evidence/partial-pool-owner-reports.gz"
+  findings:
+    - "All61native package entries retain original slots/flags/default ownership;pool resolution requires actual derived EditEngineItemPool and preserves base Clone slicing."
+    - "Real ContentInfo/string/item/field/style owners retain native copy/equality,field selection,style/cache and callback asymmetries;no fake renderer/device/UNO/lifetime provider is introduced."
+    - "Final audit verifies45current task files,69historical source pins,50native blobs and every actual counter in495shared plus129Calc owners. The17453-test baseline plus10-test supplement has exact identical source/maps and exact counter sums;no thresholds or observations were rewritten."
+    - "Calc523tests,related Writer35tests,Chromium/DOM-freeWorker7Calc cases,6Writer regressions and4inspected screenshots pass. Current45-file source lint/format,types,source/provenance/registry/build gates are recorded."
 commit: null
 comments:
   -
@@ -35,8 +57,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement genuine shared EditEngine pool/rich-text owners and missing native value dependencies under continuing user approval;preserve explicit unported service boundaries."
+  -
+    type: "verify"
+    at: "2026-10-20T22:39:40.138Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: genuine61-entry EditEngine pool and rich-text ownership retain pinned contracts;Calc523tests/129owners and complete495shared owners have every raw counter positive100. Original17453-test observations plus10-test numbering repair use identical runtime blobs/maps and exact actual counter sums. Source/browser/Worker gates and portable native/history audit pass;full layout,graphics and broader UI remain explicitly outside this bounded slice."
+  -
+    type: "verify"
+    at: "2026-10-20T22:42:51.290Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610202009-NF91KY"
 doc_version: 3
-doc_updated_at: "2026-10-20T22:38:22.129Z"
+doc_updated_at: "2026-10-20T22:44:06.933Z"
 doc_updated_by: "CODER"
 description: "Block57: port actual EditEngine item package/pool and consumed EditTextObject ownership from pinned upstream,including missing value prerequisites. Preserve native static/dynamic defaults,secondary-pool resolution,copy/equality/cache/style semantics and real shared classes;do not invent renderer,UNO,numbering or graphic services. Keep unported responsibilities explicit until real source owners exist."
 sections:
@@ -48,7 +82,7 @@ sections:
   Plan: "Implement block57 as one coherent prerequisite for genuine Calc styles/rich text: missing native bullet/numbering/font-variation values and their existing shared dependencies;complete original EditEngine ItemInfoPackage/ItemPool construction with static versus pool-local defaults;original EditTextObject owner,copy/equality,paragraph/attribute/field/style and cache rules over actual ContentInfo. Keep source filenames/header boundaries. Up to40 source/test files plus registry/provenance/readiness/evidence. No fabricated graphics,numbering,locale,UNO,layout or default-pool facade. Port required dependencies rather than replacing missing owners. Then related shared tests and full shared100/Calc100,14 static gates/build,Chromium and DOM-free Worker plus current Calc font/wrap/ODS and Writer regression;portable raw reports/source hashes/evaluator/clean finish. Full all-app replay next60. Task may span turns;do not close before complete approved scope passes."
   Verify Steps: "Compare pinned eerdll.cxx,editdoc.cxx,editobj.cxx/hxx,editobj2.hxx and actual value headers/bodies. Verify exact defaults/slots/flags/static sharing/dynamic pool ownership,secondary resolution,real strings/paragraph/field/style/cache copy and equality. Run related shared tests,complete shared100 and Calc100 with original counters/thresholds;types,lint/format,dependencies,Writer/Calc resources,docs,tree,size,provenance,registry,routing,doctor,build/static-build. Genuine Chromium/DOM-free Worker owner acceptance and current Calc font/wrap/ODS desktop/mobile plus Writer regression;inspect screenshots. Preserve original failures and repairs;archive commands/raw reports/current source/native hashes with portable audit. Separate evaluator pass,traceable commits and clean calc state required. No all-app replay until60."
   Verification: |-
-    PASS deterministic verification for the approved native pool/rich-text ownership slice;final evaluator and closure pending.
+    PASS deterministic verification for the approved native pool/rich-text ownership slice. Evaluator verdict and lifecycle are recorded in the task metadata.
 
     Command: node .agentplane/tasks/202610202009-NF91KY/evidence/audit-final-pool-owner.mjs
     Result: pass. Evidence:45current task source/test pins,69historical source pins resolved at their explicit commits,50native blobs checked against9bc445578031fecf56086729d8e4940c77e14d65,and35final archived reports/logs plus original prerequisite archives. Scope: exact current495shared and129Calc owners,unaltered counter maps and actual counter sums.
@@ -60,6 +94,69 @@ sections:
     Browser:7Calc scenarios including genuine Chromium/DOM-freeWorker ownership,font/wrap/ODS;6Writer regressions;5additional visual replays. All4desktop/mobile screenshots inspected. Types,all45task source/test lint/format,dependencies,resources,JSDoc,tree,size,source provenance,registry,routing,doctor,build/static-build pass. Unqualified npm lint also scans historical ignored output helpers and fails;targeted source lint passes without changing rules or ignores. Doctor retains its preexisting hook-readiness warning.
 
     The narrower365-file experiment passes2476tests but reaches95.05% branch coverage;it is retained as a failed scope experiment and is not used as acceptance. Full shared coverage requires actual application integration consumers. Earlier prerequisite lost raw failure evidence remains explicitly disclosed rather than recreated. Broader native layout/graphics/ABI and Calc style UI remain unimplemented;broader goal stays active. Next all-app checkpoint remains60.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T22:39:40.138Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: genuine61-entry EditEngine pool and rich-text ownership retain pinned contracts;Calc523tests/129owners and complete495shared owners have every raw counter positive100. Original17453-test observations plus10-test numbering repair use identical runtime blobs/maps and exact actual counter sums. Source/browser/Worker gates and portable native/history audit pass;full layout,graphics and broader UI remain explicitly outside this bounded slice.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:38:22.129Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+    - old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610202009-NF91KY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-20T22:42:51.290Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610202009-NF91KY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:41:16.944Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+    - old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 8ceda10ab6b4af26036c33ff7cbac05cf0f57df3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task implementation commits after inspecting task-scoped changes;preserve existing Calc/shared owners and source identities. User performs branch integration."
   Findings: |-
     In-progress block57 source checkpoint: native SvxFontVariationsItem owns ordered copied Variation values,Clone and IEEE equality;actual VariationsToString uses shared OUStringBuffer.appendFloat. Presentation and real UNO Any share the native serialization;PutValue rejects non-string Any unchanged and replaces vector on extracted empty/invalid strings. Fixed featureCodeAsString uses the actual SAL ASCII_US descriptor/converter at the original known read site,without a generic conversion facade. Native table maps upper bytes through MS1252(CALC242). Float hashing and the actual remaining pool/rich-text owners are not yet ported;task must stay DOING.
@@ -88,6 +185,8 @@ sections:
     The first final-audit attempt compared the unmeasured branchesTrue presentation percentage (Unknown in memory versus printed100). The repair checks the actual four measured dimensions and the empty bucket sizes;both logs remain archived and no coverage observations changed.
     The shared config selects all1098application/common test files;this explains the long run. A365-file common/related selection passes2476tests but reaches95.05% branches because actual Writer/Calc consumers cover shared browser and ODF paths. The failed scope experiment is retained,not promoted as100. Future ordinary blocks should scope coverage to affected owners and their genuine consumers rather than silently replaying all application tests;the next planned all-app checkpoint remains60.
     Full task scope stays within45source/test paths (approved40plus5),with current registry/provenance/readiness updated. Native graphics,formatted cache/device/layout and remaining numbering/UNO services are explicitly absent. No fake engine,provider,device or lifetime facade was created. Code and browser acceptance are bounded to represented responsibilities;broader UI/native parity remains incomplete.
+
+    Evaluator phase records PASS at implementation8ceda10ab6b4 with the final portable audit and actual raw coverage evidence. The first exact task-complete route command was refused before state mutation because active task README/final-manifest changes and quality artifacts were not yet committed. This was lifecycle persistence,not a source/test failure. Persisting only this task subtree resolves the clean tracked-state guard;no source,criteria or native/runtime evidence changes are required. The original CLI error is retained in the conversation tool output rather than claimed as an archived raw file.
 id_source: "generated"
 ---
 ## Summary
@@ -110,7 +209,7 @@ Compare pinned eerdll.cxx,editdoc.cxx,editobj.cxx/hxx,editobj2.hxx and actual va
 
 ## Verification
 
-PASS deterministic verification for the approved native pool/rich-text ownership slice;final evaluator and closure pending.
+PASS deterministic verification for the approved native pool/rich-text ownership slice. Evaluator verdict and lifecycle are recorded in the task metadata.
 
 Command: node .agentplane/tasks/202610202009-NF91KY/evidence/audit-final-pool-owner.mjs
 Result: pass. Evidence:45current task source/test pins,69historical source pins resolved at their explicit commits,50native blobs checked against9bc445578031fecf56086729d8e4940c77e14d65,and35final archived reports/logs plus original prerequisite archives. Scope: exact current495shared and129Calc owners,unaltered counter maps and actual counter sums.
@@ -122,6 +221,69 @@ Calc:523tests pass,129owners at S10640/B6600/F1984/L9553,all100 with no zero cou
 Browser:7Calc scenarios including genuine Chromium/DOM-freeWorker ownership,font/wrap/ODS;6Writer regressions;5additional visual replays. All4desktop/mobile screenshots inspected. Types,all45task source/test lint/format,dependencies,resources,JSDoc,tree,size,source provenance,registry,routing,doctor,build/static-build pass. Unqualified npm lint also scans historical ignored output helpers and fails;targeted source lint passes without changing rules or ignores. Doctor retains its preexisting hook-readiness warning.
 
 The narrower365-file experiment passes2476tests but reaches95.05% branch coverage;it is retained as a failed scope experiment and is not used as acceptance. Full shared coverage requires actual application integration consumers. Earlier prerequisite lost raw failure evidence remains explicitly disclosed rather than recreated. Broader native layout/graphics/ABI and Calc style UI remain unimplemented;broader goal stays active. Next all-app checkpoint remains60.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T22:39:40.138Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: genuine61-entry EditEngine pool and rich-text ownership retain pinned contracts;Calc523tests/129owners and complete495shared owners have every raw counter positive100. Original17453-test observations plus10-test numbering repair use identical runtime blobs/maps and exact actual counter sums. Source/browser/Worker gates and portable native/history audit pass;full layout,graphics and broader UI remain explicitly outside this bounded slice.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:38:22.129Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+- old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610202009-NF91KY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T22:42:51.290Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610202009-NF91KY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T22:41:16.944Z, excerpt_hash=sha256:02316c811aa707a7c5d34310b2fb8168e86c0266d5499165590a21153634b878
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610202009-NF91KY/blueprint/resolved-snapshot.json
+- old_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- current_digest: fb3fbd63b18a3817e5151dd8b6f5f1e53d1292482da9f3452eb47418ff4976aa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610202009-NF91KY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610202009-NF91KY --result verified-202610202009-NF91KY --commit 8ceda10ab6b4af26036c33ff7cbac05cf0f57df3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -155,3 +317,5 @@ The35-test Writer numbering replay and all45task source/test lint/format pass. F
 The first final-audit attempt compared the unmeasured branchesTrue presentation percentage (Unknown in memory versus printed100). The repair checks the actual four measured dimensions and the empty bucket sizes;both logs remain archived and no coverage observations changed.
 The shared config selects all1098application/common test files;this explains the long run. A365-file common/related selection passes2476tests but reaches95.05% branches because actual Writer/Calc consumers cover shared browser and ODF paths. The failed scope experiment is retained,not promoted as100. Future ordinary blocks should scope coverage to affected owners and their genuine consumers rather than silently replaying all application tests;the next planned all-app checkpoint remains60.
 Full task scope stays within45source/test paths (approved40plus5),with current registry/provenance/readiness updated. Native graphics,formatted cache/device/layout and remaining numbering/UNO services are explicitly absent. No fake engine,provider,device or lifetime facade was created. Code and browser acceptance are bounded to represented responsibilities;broader UI/native parity remains incomplete.
+
+Evaluator phase records PASS at implementation8ceda10ab6b4 with the final portable audit and actual raw coverage evidence. The first exact task-complete route command was refused before state mutation because active task README/final-manifest changes and quality artifacts were not yet committed. This was lifecycle persistence,not a source/test failure. Persisting only this task subtree resolves the clean tracked-state guard;no source,criteria or native/runtime evidence changes are required. The original CLI error is retained in the conversation tool output rather than claimed as an archived raw file.
