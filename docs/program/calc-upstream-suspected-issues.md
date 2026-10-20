@@ -3478,3 +3478,15 @@ item to `UpdatePageRelativeURLs`, including table and unspecified fields. The
 callback owns semantic selection. Neither it nor `updateTableFields` clears
 portion info. Task57 tests actual field holders and cache identity through these
 operations. These are source observations, not confirmed upstream defects.
+
+## CALC246: Default header/footer areas are null but the XML diagnostic dereferences them
+
+Pinned `sc/source/core/data/attrib.cxx` constructs ScPageHFItem with three empty
+unique_ptr areas. Its `dumpAsXml` calls GetLeftArea/GetCenterArea/GetRightArea
+and dereferences each result without a null guard. The separate successful UNO
+PutValue path materializes missing areas through a real ScEditEngineDefaulter.
+A caller may guarantee initialized areas before requesting diagnostics;that
+precondition has not been established here,so this is a suspected issue rather
+than a confirmed upstream defect. Task58 preserves default null areas and their
+distinction from a real empty text value. The diagnostic and UNO content paths
+remain unported;no normalization or replacement engine is added.

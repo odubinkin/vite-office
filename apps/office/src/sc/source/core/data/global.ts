@@ -3,9 +3,22 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { getConfiguredSystemUILanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
 import { getScriptType, ScriptType } from "../../../../i18nlangtag/source/isolang/mslangid.script";
 import { LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
+import { EditTextObject, type EditTextObjectConstReference } from "../../../../editeng/inc/editobj";
 /** Original ScGlobal state owner, with the source-initialized threaded-group flag. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original ScGlobal static state owner.
 export class ScGlobal {
+  /** Original nullable rich-text comparison,including same-pointer fast path and nonvirtual base pool-insensitive Equals. @param left - Actual borrowed text or null. @param right - Actual borrowed text or null. @returns Native equality. */
+  static EETextObjEqual(
+    left: EditTextObjectConstReference | null,
+    right: EditTextObjectConstReference | null,
+  ): boolean {
+    if (left === right) return true;
+    return (
+      left !== null &&
+      right !== null &&
+      EditTextObject.prototype.Equals.call(left as EditTextObject, right as EditTextObject)
+    );
+  }
   /** Original office-UI-language fallback for entirely weak cell strings. The real configured language is supplied by the existing browser settings port. @returns Nonempty native script flags. */
   static GetDefaultScriptType(): SvtScriptType {
     const script = getScriptType(getConfiguredSystemUILanguage());

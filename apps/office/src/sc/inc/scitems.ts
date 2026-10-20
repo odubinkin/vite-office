@@ -211,3 +211,33 @@ export const ATTR_PAGE_SCALETOPAGES = 175;
 
 /** Original static cell/page attribute identity. */
 export const ATTR_PAGE_FIRSTPAGENO = 176;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_HEADERLEFT = 177;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_FOOTERLEFT = 178;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_HEADERRIGHT = 179;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_FOOTERRIGHT = 180;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_HEADERFIRST = 181;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_FOOTERFIRST = 182;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_FORMULAS = 185;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_PAGE_NULLVALS = 186;
+
+/** Original page/header/footer or hidden-value WhichId. */
+export const ATTR_HIDDEN = 188;
+
+/** Original end of the complete Calc item pool. */
+export const ATTR_ENDINDEX = ATTR_HIDDEN;

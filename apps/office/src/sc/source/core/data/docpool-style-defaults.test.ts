@@ -25,8 +25,8 @@ it("registers the original contiguous static prefix and preserves exact slot/def
     infos = Reflect.get(a, "maItemInfos") as readonly ItemInfo[];
   expect([a.GetFirstWhich(), a.GetLastWhich(), a.GetMergedIdRanges()]).toEqual([
     100,
-    176,
-    [[100, 176]],
+    188,
+    [[100, 188]],
   ]);
   for (let which = 152; which <= 176; which++) {
     const item = a.GetPoolDefaultItem(which),
@@ -42,10 +42,10 @@ it("registers the original contiguous static prefix and preserves exact slot/def
     if (slots[which - 152])
       expect(a.GetWhichIDFromSlotID(slots[which - 152] as number)).toBe(which);
   }
-  expect(a.IsInRange(177)).toBe(false);
+  expect(a.IsInRange(189)).toBe(false);
   expect(
-    /** Native rich-header owner is not invented. @returns Never. */ () =>
-      a.GetPoolDefaultItem(177),
+    /** Rejects an ID beyond the original pool range. @returns Never. */ () =>
+      a.GetPoolDefaultItem(189),
   ).toThrow();
 });
 it("retains actual cell-tail values,zero margins,default page metadata,printer tray sentinel and zero paper size", /** Checks literal pinned constructor defaults rather than guessed print settings. @returns Nothing. */ () => {

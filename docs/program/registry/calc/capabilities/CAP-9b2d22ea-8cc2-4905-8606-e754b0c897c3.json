@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9b2d22ea-8cc2-4905-8606-e754b0c897c3",
+    "capabilityId": "CAP-9b2d22ea-8cc2-4905-8606-e754b0c897c3",
+    "suite": "calc",
+    "subsystem": "document-pool-ownership",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native physical allocation/shutdown is erased under GC;actual text-value destruction is explicit and the const-reference alias erases C++ qualifiers. No replacement engine or header/footer content service."
+    },
+    "capability": "Complete Calc document default package and nullable header/footer value ownership",
+    "gaps": [
+      "ScPageHFItem UNO QueryValue/PutValue,XML diagnostics,full native presentation and physical shutdown bookkeeping remain unported or erased under GC. Calc style/helper/standard-style and EditEngine editing/layout services remain subsequent actual owners. Bounded acceptance passes528Calc tests and58related tests,with100percent Calc and changed-owner coverage,plus actual Chromium/Worker ownership and existing font/wrap/ODS regressions. No broad parity promotion."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+          "marker": "getItemInfoPackageScDocument"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attrib.cxx",
+          "marker": "ScPageHFItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global.cxx",
+          "marker": "EETextObjEqual"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test4.cxx",
+          "marker": "ScPageHFItem"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/attrib.hxx",
+          "marker": "ScPageHFItem"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.page.ts",
+          "marker": "ScPageHFItem"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/docpool.ts",
+          "marker": "getItemInfoPackageScDocument"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/native-page-hf.test.ts",
+          "marker": "ScPageHFItem"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/native-document-pool-complete.test.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task58"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-calc-document-pool-ownership",
+    "scopeLimitations": [
+      "ScPageHFItem UNO QueryValue/PutValue,XML diagnostics,full native presentation and physical shutdown bookkeeping remain unported or erased under GC. Calc style/helper/standard-style and EditEngine editing/layout services remain subsequent actual owners. Bounded acceptance passes528Calc tests and58related tests,with100percent Calc and changed-owner coverage,plus actual Chromium/Worker ownership and existing font/wrap/ODS regressions. No broad parity promotion."
+    ]
+  }
+}

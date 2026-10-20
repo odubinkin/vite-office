@@ -1,5 +1,23 @@
 # Calc UI and ODS implementation critical path
 
+## Current default-pool ownership — task58
+
+Task `202610202254-D9RYSD` completes the actual ScDocumentPool package100..188:
+89entries,87shared static items and two pool-local header/footer sets.
+ScPageHFItem owns three genuine optional EditTextObject values,including native
+null defaults,independent copies,alias-safe replacement and pool-insensitive
+ScGlobal equality. Existing ScPageScaleToItem remains the value owner;its pool
+default1,1 deliberately differs from standalone0,0. Adjacent native ranges remain
+separate. Const text borrowing adds a type-only alias with identical emitted JS.
+
+All528Calc tests pass with100% coverage across130runtime owners. All58related
+tests pass;the four changed runtime owners have100% coverage. Chromium and DOM-free
+Worker acceptance plus Calc font/wrap/ODS regressions pass(7tests). Types,source lint,
+format,build/static and repository gates pass. Header/footer UNO content and diagnostics remain unported;
+there is no style or editing-engine substitute. The shared style bases already exist;
+Calc derived style/pool/helper and actual standard-style creation remain subsequent
+source owners. No complete UI or native parity claim.
+
 ## Current EditEngine owners — task57 pool and rich-text ownership
 
 Task `202610202009-NF91KY` adds the actual
