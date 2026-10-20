@@ -4,7 +4,7 @@ title: "Implement native shared EditEngine pool and rich-text object ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement genuine shared EditEngine pool/rich-text owners and missing native value dependencies under continuing user approval;preserve explicit unported service boundaries."
 doc_version: 3
-doc_updated_at: "2026-10-20T21:56:03.756Z"
+doc_updated_at: "2026-10-20T22:05:30.717Z"
 doc_updated_by: "CODER"
 description: "Block57: port actual EditEngine item package/pool and consumed EditTextObject ownership from pinned upstream,including missing value prerequisites. Preserve native static/dynamic defaults,secondary-pool resolution,copy/equality/cache/style semantics and real shared classes;do not invent renderer,UNO,numbering or graphic services. Keep unported responsibilities explicit until real source owners exist."
 sections:
@@ -68,6 +68,8 @@ sections:
     Targeted owner coverage checkpoint passes32tests/7files and all8actual source owners at100: raw S406/B194/F126/L369,zero zero-valued counters. Original Istanbul thresholds are unchanged. The current portable evidence archive now retains43reports/logs/images,including original coverage-final and coverage-summary. Full serial Calc100 and complete shared100 remain in progress;task57 and goal stay active.
 
     Complete Calc coverage now passes523tests and all129runtime owners at100,raw S10640/B6600/F1984/L9553 with no zero counters. The exact original file-dialog scenario also passed in the25-test focused replay;no Calc implementation/test file was modified to obtain the serial success. Native vendor HEAD matches9bc445578031fecf56086729d8e4940c77e14d65. Original failures remain archived. Current portable archive47entries includes full Calc raw JSON and all129source hashes;the audit checks each positive counter directly. The separate source review confirms original holder replacement,all-field callbacks,style/cache asymmetry and scalar/value equality within documented represented states. Full shared100 still runs;no final evaluator pass or closure yet.
+
+    Continuation source audit corrects stale readiness claims:CharFontName already uses the actual source-selected scripts and shared Writer font control;ScDocumentPool static prefix is100..176. Genuine shared SfxStyleSheetBasePool/SfxStyleSheetPool,index and notification owners already exist and must be reused by Calc rather than reimplemented. Native ScPageHFItem default areas are null;copy/setters clone actual rich-text objects and equality uses pool-insensitive EETextObjEqual. Native CreateStandardStyles is separate from the style-pool constructor and constructs ScEditEngineDefaulter with layout disabled,then inserts genuine fields;the required text-editing owner cannot be replaced by an EditTextObject value. These current-state/source findings are recorded in calc-ui-readiness.md for the next coherent style block. No runtime sources changed while complete shared coverage was running. git diff --check and the current portable audit pass. Shared job17488 is confirmed live;no restart or completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -116,3 +118,5 @@ Audit: node .agentplane/tasks/202610202009-NF91KY/evidence/audit-partial-pool-ow
 Targeted owner coverage checkpoint passes32tests/7files and all8actual source owners at100: raw S406/B194/F126/L369,zero zero-valued counters. Original Istanbul thresholds are unchanged. The current portable evidence archive now retains43reports/logs/images,including original coverage-final and coverage-summary. Full serial Calc100 and complete shared100 remain in progress;task57 and goal stay active.
 
 Complete Calc coverage now passes523tests and all129runtime owners at100,raw S10640/B6600/F1984/L9553 with no zero counters. The exact original file-dialog scenario also passed in the25-test focused replay;no Calc implementation/test file was modified to obtain the serial success. Native vendor HEAD matches9bc445578031fecf56086729d8e4940c77e14d65. Original failures remain archived. Current portable archive47entries includes full Calc raw JSON and all129source hashes;the audit checks each positive counter directly. The separate source review confirms original holder replacement,all-field callbacks,style/cache asymmetry and scalar/value equality within documented represented states. Full shared100 still runs;no final evaluator pass or closure yet.
+
+Continuation source audit corrects stale readiness claims:CharFontName already uses the actual source-selected scripts and shared Writer font control;ScDocumentPool static prefix is100..176. Genuine shared SfxStyleSheetBasePool/SfxStyleSheetPool,index and notification owners already exist and must be reused by Calc rather than reimplemented. Native ScPageHFItem default areas are null;copy/setters clone actual rich-text objects and equality uses pool-insensitive EETextObjEqual. Native CreateStandardStyles is separate from the style-pool constructor and constructs ScEditEngineDefaulter with layout disabled,then inserts genuine fields;the required text-editing owner cannot be replaced by an EditTextObject value. These current-state/source findings are recorded in calc-ui-readiness.md for the next coherent style block. No runtime sources changed while complete shared coverage was running. git diff --check and the current portable audit pass. Shared job17488 is confirmed live;no restart or completion claim.

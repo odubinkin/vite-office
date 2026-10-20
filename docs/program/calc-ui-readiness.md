@@ -20,8 +20,11 @@ follow source. FieldUpdater uses the actual attribute holders. CALC245 records
 the native style/cache and all-field callback asymmetries. Remaining NumberFormat
 providers,nonempty bullet graphics,formatted portion payloads and real device/layout
 operations remain explicitly unported.
-No style UI,pool or renderer facade is introduced. Full task coverage and browser
-acceptance are pending;focused value tests do not certify the complete block.
+No style UI,pool or renderer facade is introduced. Current acceptance passes523Calc
+tests with all129Calc runtime owners at100% coverage,and32related tests with the8
+checked EditEngine source owners at100%. Chromium/DOM-freeWorker ownership and existing font/wrap/ODS
+checks pass,as do6Writer browser regressions. Complete shared coverage and final
+task verification remain pending;the narrower results do not certify that gate.
 
 ## Current style-owner inputs — task56 naming and static defaults
 
@@ -201,17 +204,20 @@ single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
 | Sheet navigation,grouping,Go to Sheet | Real Sfx slots and current ScTabView/ScMarkData;shared menus and tab popup | Connect further sheet actions only to actual document operations |
 | Select Row,Select Column | Task33 connects normal simple range expansion to shared Edit/Select and native grid accelerators | Preserve active cell/group and independent input ownership;parameterized/reference-mode APIs remain pending |
 | Font size | Task34 connects exact shared Writer FontSizeSelect to actual FontHeight10015, three-script native attributes, uniform/mixed state, undo/redo, grid CSS and same-model ODS/autosave | Automatic row-height layout and script-aware foreign formatting still need their real consumed owners |
-| Font name | Exact shared Writer FontNameSelect is rendered; CharFontName remains unavailable | Implement native selection-script application/readback using the now-connected attribute path, then enable this same shared control |
-| Cell styles | ScPatternAttr and shared itemset/value owners exist;document/column style application and Calc style-command owner remain missing | Implement the consumed cell-style path,then reuse the shared style-control presentation;do not substitute browser-only style state |
+| Font name | Exact shared Writer FontNameSelect is connected to CharFontName,actual selection-script font application/readback,uniform/mixed state,history and same-model ODS | Preserve the shared control and native script ownership;real device/layout services remain necessary for automatic row measurement |
+| Cell styles | ScPatternAttr and CellAttributeHelper retain genuine style association,inheritance and registered rename/delete;Calc style-pool/standard-style resolution and StyleApply remain missing | Implement the consumed Calc style owners and document/column application,then reuse the shared style-control presentation;do not substitute browser-only style state |
 | Other formatting/menu actions | Native resource composition is generated;unimplemented commands remain disabled | Audit each action against existing document/view operations and implement the available UI paths before broader prerequisite work |
 
-The consumed cell-attribute path is now connected for font size: ScColumnData owns canonical
+The consumed cell-attribute path is connected for font size and family: ScColumnData owns canonical
 ScAttrArray runs,including a real default column for unallocated column tails. ScDocumentPool
-registers the original contiguous character prefix100..124 with genuine defaults and slot metadata.
-This is not the full pool constructor. CharFontName and StyleApply remain unregistered;family
-selection-script handling,named-style resolution,remaining cell/page defaults and full layout remain
-concrete gaps. Standalone items do not make these other actions ready. Continue implementing
-available UI actions on this same owner chain rather than requiring every codec/constructor first.
+registers the original contiguous static prefix100..176 with genuine defaults and slot metadata.
+This is not the full Calc pool constructor:rich header/footer177+ defaults remain absent.
+The independent EditEngine pool now has all61original entries and real rich-text ownership;
+it does not supply the missing Calc ScStyleSheetPool or standard styles. CharFontName uses
+the actual selection-script path;StyleApply remains unavailable until its consumed owner chain
+exists. Named-style resolution,remaining Calc pool defaults and real layout remain concrete gaps.
+Continue implementing available UI actions on this same owner chain rather than requiring
+every codec/constructor first.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not
@@ -234,7 +240,8 @@ subset only when an actual supported operation consumes another dependency.
 | [ScDocument constructor](../../vendor/libreoffice-reference/sc/source/core/data/documen2.cxx) | Normal document mode immediately constructs SharedStringPool, ScPoolHelper, interpreter context, link/table-style helpers and other document services. | A normal document cannot be obtained merely by adding a maTabs array; audit and implement the constructor's actual required services. |
 | [ScPoolHelper constructor and getters](../../vendor/libreoffice-reference/sc/source/core/data/poolhelp.cxx) | Constructor creates ScDocumentPool and ScStyleSheetPool. GetEditEnginePool and GetFormTable create their services on first use. | Complete EditEngine and number-formatter families are not eager prerequisites of this constructor. Preserve the actual lazy boundaries. |
 | [ScDocumentPool package](../../vendor/libreoffice-reference/sc/source/core/data/docpool.cxx) | Registers real defaults; package construction resolves Latin/CJK/CTL spreadsheet fonts using spell settings and OutputDevice::GetDefaultFont. Six page header/footer items also occur in the static defaults. | Font defaults and real header/footer value ownership are required; arbitrary font strings and a named generic pool do not implement this contract. |
-| [ScStyleSheetPool constructor](../../vendor/libreoffice-reference/sc/source/core/data/stlpool.cxx) | Initializes its shared SfxStyleSheetPool base and document pointer, with bHasStandardStyles false. | Do not move all standard-style creation into construction. The shared base is itself missing. |
+| [ScPageHFItem value ownership](../../vendor/libreoffice-reference/sc/source/core/data/attrib.cxx) | Default construction leaves all3unique_ptr text areas null;copy and SetLeft/Center/RightArea clone actual EditTextObject values. Equality calls ScGlobal::EETextObjEqual and therefore the base pool-insensitive Equals. QueryValue separately constructs ScHeaderFooterContentObj. | The actual task57 rich-text owner supplies the value dependency for the remaining Calc pool defaults. Default construction does not require a renderer. UNO content operations still require their genuine owner when consumed. |
+| [ScStyleSheetPool constructor](../../vendor/libreoffice-reference/sc/source/core/data/stlpool.cxx) | Initializes its shared SfxStyleSheetPool base and document pointer, with bHasStandardStyles false. | Do not move all standard-style creation into construction. The actual shared SfxStyleSheetBasePool/SfxStyleSheetPool,style index and native notification owners already exist in svl;reuse them. Calc ScStyleSheet/ScStyleSheetPool and standard-style creation remain missing. |
 | [ScTable constructor](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx) | Creates the column array, default ScAttrArray, conditional formats and sheet view manager; optionally allocates row/column geometry and initializes columns. | Existing compressed arrays and row segments are reusable; sheet/default-attribute and other eager owners remain required. |
 | [ScColumn constructor and Init](../../vendor/libreoffice-reference/sc/source/core/data/column.cxx) | Creates separate cell, metadata, note, broadcaster and sparkline stores; Init attaches a real ScAttrArray. | A numeric Map cannot stand in for the original stores and attribute ownership. |
 | [ScAttrArray constructor](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx) | Default column or absent/empty inherited attributes returns before pattern copying and width invalidation. | Preserve this real early return; do not force the entire formatting engine into every empty-column constructor. |
@@ -243,6 +250,15 @@ This table is a priority map, not an exhaustive constructor implementation
 specification. In particular, finding a lazy getter does not prove that later
 operations never call it. Each implementation slice must inspect its reachable
 methods and preserve its own full contracts/defaults.
+
+The next style slice can reuse the existing genuine shared style base/pool,index
+and notification classes. It must supply Calc's own derived style,pool and document
+ownership instead of reimplementing those shared classes. `CreateStandardStyles`
+in `stlpool.cxx` is a separate consumed operation:it constructs a real
+ScEditEngineDefaulter,disables layout,and uses text/field insertion to create page
+header/footer values. Disabling layout does not remove the required text-editing
+owner. Task57's EditTextObject value is not a substitute for that engine. Preserve
+this boundary when deciding which style actions the current kernel can expose.
 
 ## Cell editing is more than storing a value
 
