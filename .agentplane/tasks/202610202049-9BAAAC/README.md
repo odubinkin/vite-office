@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T22:08:44.681Z"
+doc_updated_at: "2026-10-20T22:09:09.340Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -100,7 +100,7 @@ sections:
     Scope: fresh production build, relative local assets,two JavaScript bundles,no backend addresses.
 
     Command: npm run test:inventory:coverage
-    Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt is currently running in session59051 after a real parser complexity repair.
+    Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt passes all scenarios and strict100% statements/branches/functions/lines after the parser complexity repair.
     Evidence: full-inventory-coverage-repaired.log and full-inventory-coverage-optimized.log.
     Scope: complete deterministic inventory; no timeouts or strict thresholds changed. Cppunit parsing now counts only text since preceding match, retaining exact source lines/sort/all8072 declarations. Focused three-file coverage invocation passed7 tests in1.25s, but its global inventory coverage gate intentionally fails because unrelated suites were absent; it is not full coverage evidence.
 
@@ -110,6 +110,8 @@ sections:
     Scope: seven concrete C++ scalar specializations are bound at compile time, original sal_Int32 parser is shared directly for unicode scalar values; no synthetic Any extraction failure. Genuine source debug invariants and runtime fallback responsibilities remain. Full application coverage remains unresolved and this task must stay DOING.
 
     Current scoped lint, tools/application typechecks, source provenance(987 runtime modules), JSDoc(2551 files), formatting and diff checks pass. Evidence: native-specialization-lint.log,native-specialization-typecheck.log,cppunit-lint.log,cppunit-typecheck.log,final-provenance.log,final-docs.log.
+
+    Final inventory coverage result: npm run test:inventory:coverage exits0. Complete final report in output/playwright/writer-xcs-schema/full-inventory-coverage-optimized.log: statements1733/1733,branches1290/1290,functions436/436,lines1669/1669. No live test processes remain from this task. Implementation checkpointcf9bc565e849 follows regression checkpoint68009c55d4c3. Full application coverage remains the outstanding cadence gate; do not finish or restart the entire application suite until related remaining branch tests/refactors are prepared. Original complete application report remains in apps/office/coverage/all; diagnostic config reports are separate directories.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -200,7 +202,7 @@ Evidence: output/playwright/writer-xcs-schema/final-static.log.
 Scope: fresh production build, relative local assets,two JavaScript bundles,no backend addresses.
 
 Command: npm run test:inventory:coverage
-Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt is currently running in session59051 after a real parser complexity repair.
+Result: second complete attempt passed122/123 scenarios; one Cppunit CLI timeout remained. Third complete attempt passes all scenarios and strict100% statements/branches/functions/lines after the parser complexity repair.
 Evidence: full-inventory-coverage-repaired.log and full-inventory-coverage-optimized.log.
 Scope: complete deterministic inventory; no timeouts or strict thresholds changed. Cppunit parsing now counts only text since preceding match, retaining exact source lines/sort/all8072 declarations. Focused three-file coverage invocation passed7 tests in1.25s, but its global inventory coverage gate intentionally fails because unrelated suites were absent; it is not full coverage evidence.
 
@@ -210,6 +212,8 @@ Evidence: config-coverage-specializations.log and coverage/xcs-regression-final 
 Scope: seven concrete C++ scalar specializations are bound at compile time, original sal_Int32 parser is shared directly for unicode scalar values; no synthetic Any extraction failure. Genuine source debug invariants and runtime fallback responsibilities remain. Full application coverage remains unresolved and this task must stay DOING.
 
 Current scoped lint, tools/application typechecks, source provenance(987 runtime modules), JSDoc(2551 files), formatting and diff checks pass. Evidence: native-specialization-lint.log,native-specialization-typecheck.log,cppunit-lint.log,cppunit-typecheck.log,final-provenance.log,final-docs.log.
+
+Final inventory coverage result: npm run test:inventory:coverage exits0. Complete final report in output/playwright/writer-xcs-schema/full-inventory-coverage-optimized.log: statements1733/1733,branches1290/1290,functions436/436,lines1669/1669. No live test processes remain from this task. Implementation checkpointcf9bc565e849 follows regression checkpoint68009c55d4c3. Full application coverage remains the outstanding cadence gate; do not finish or restart the entire application suite until related remaining branch tests/refactors are prepared. Original complete application report remains in apps/office/coverage/all; diagnostic config reports are separate directories.
 
 ## Rollback Plan
 
