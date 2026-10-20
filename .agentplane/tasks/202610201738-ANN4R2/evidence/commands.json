@@ -1,0 +1,37 @@
+[
+  {
+    "name": "calc",
+    "cwd": "repository root",
+    "command": "npm run test:coverage:calc -- --maxWorkers=1 --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-results.json",
+    "exit": 0
+  },
+  {
+    "name": "related",
+    "cwd": "apps/office",
+    "command": "node ../../node_modules/vitest/vitest.mjs run --config vite.config.ts src/xmloff/source/core/xmlimp.test.ts src/xmloff/source/core/calc-namespace-binding.test.ts src/sw/browser/presentation/WriterCommandToolbar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/WriterFileDialog.test.tsx src/sc/browser/presentation/calc-wrap-text.test.tsx --maxWorkers=1 --coverage --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-related-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-related-results.json",
+    "exit": 0
+  },
+  {
+    "name": "browser-initial",
+    "command": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-browser-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/wrap-text.spec.ts apps/office/e2e/calc/formatting-toolbar.spec.ts apps/office/e2e/calc/indent-row-height.spec.ts apps/office/e2e/shared/popup-pointer.spec.ts apps/office/e2e/foundation.spec.ts --workers=1 --reporter=line,json",
+    "exit": 1,
+    "note": "11 pass,2 new fixture title failures preserved;production unchanged by repair."
+  },
+  {
+    "name": "browser-repair",
+    "command": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-browser-repair-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/wrap-text.spec.ts --grep 'primary ODS' --workers=2 --reporter=line,json",
+    "exit": 0,
+    "note": "Both repaired current cases pass;13 distinct browser cases accepted without duplicate counts."
+  },
+  {
+    "name": "build",
+    "command": "npm run build",
+    "exit": 0,
+    "log": "build2.log"
+  },
+  {
+    "name": "proof",
+    "command": "node output/playwright/task52-proof.mjs",
+    "exit": 0
+  }
+]

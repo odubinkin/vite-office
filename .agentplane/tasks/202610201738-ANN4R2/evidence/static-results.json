@@ -1,0 +1,192 @@
+[
+  {
+    "name": "format",
+    "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+    "args": [
+      "node_modules/prettier/bin/prettier.cjs",
+      "--check",
+      "apps/office/e2e/calc/formatting-toolbar.spec.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "apps/office/src/sc/sdi/formatsh.ts",
+      "apps/office/src/sc/sdi/scalc.ts",
+      "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "apps/office/e2e/calc/wrap-text.spec.ts",
+      "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "apps/office/src/sc/source/filter/xml/wrap-text.test.ts"
+    ],
+    "log": "output/playwright/task52-format.log",
+    "exit": 1,
+    "startedAt": "2026-10-20T17:55:11.987Z",
+    "finishedAt": "2026-10-20T17:55:12.536Z"
+  },
+  {
+    "name": "lint",
+    "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+    "args": [
+      "node_modules/eslint/bin/eslint.js",
+      "apps/office/e2e/calc/formatting-toolbar.spec.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "apps/office/src/sc/sdi/formatsh.ts",
+      "apps/office/src/sc/sdi/scalc.ts",
+      "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "apps/office/e2e/calc/wrap-text.spec.ts",
+      "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "apps/office/src/sc/source/filter/xml/wrap-text.test.ts",
+      "--max-warnings",
+      "0"
+    ],
+    "log": "output/playwright/task52-lint.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:11.983Z",
+    "finishedAt": "2026-10-20T17:55:15.227Z"
+  },
+  {
+    "name": "dependencies",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:dependencies"
+    ],
+    "log": "output/playwright/task52-dependencies.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:15.228Z",
+    "finishedAt": "2026-10-20T17:55:19.577Z"
+  },
+  {
+    "name": "writer-resources",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:writer-resources"
+    ],
+    "log": "output/playwright/task52-writer-resources.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:19.578Z",
+    "finishedAt": "2026-10-20T17:55:23.342Z"
+  },
+  {
+    "name": "calc-resources",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:calc-resources"
+    ],
+    "log": "output/playwright/task52-calc-resources.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:23.345Z",
+    "finishedAt": "2026-10-20T17:55:24.542Z"
+  },
+  {
+    "name": "types",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "typecheck"
+    ],
+    "log": "output/playwright/task52-types.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:12.537Z",
+    "finishedAt": "2026-10-20T17:55:27.872Z"
+  },
+  {
+    "name": "file-size",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:file-size"
+    ],
+    "log": "output/playwright/task52-file-size.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:27.873Z",
+    "finishedAt": "2026-10-20T17:55:28.389Z"
+  },
+  {
+    "name": "docs",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:docs"
+    ],
+    "log": "output/playwright/task52-docs.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:24.543Z",
+    "finishedAt": "2026-10-20T17:55:28.536Z"
+  },
+  {
+    "name": "source-tree",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:source-tree"
+    ],
+    "log": "output/playwright/task52-source-tree.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:28.390Z",
+    "finishedAt": "2026-10-20T17:55:28.583Z"
+  },
+  {
+    "name": "source-provenance",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "check:source-provenance"
+    ],
+    "log": "output/playwright/task52-source-provenance.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:28.536Z",
+    "finishedAt": "2026-10-20T17:55:30.541Z"
+  },
+  {
+    "name": "routing",
+    "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+    "args": [
+      ".agentplane/policy/check-routing.mjs"
+    ],
+    "log": "output/playwright/task52-routing.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:30.542Z",
+    "finishedAt": "2026-10-20T17:55:30.591Z"
+  },
+  {
+    "name": "doctor",
+    "cmd": "/Users/odubinkin/.local/bin/ap",
+    "args": [
+      "doctor"
+    ],
+    "log": "output/playwright/task52-doctor.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:30.591Z",
+    "finishedAt": "2026-10-20T17:55:32.917Z"
+  },
+  {
+    "name": "static",
+    "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+    "args": [
+      "scripts/check-static-build.mjs"
+    ],
+    "log": "output/playwright/task52-static.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:32.917Z",
+    "finishedAt": "2026-10-20T17:55:32.971Z"
+  },
+  {
+    "name": "registry",
+    "cmd": "npm",
+    "args": [
+      "run",
+      "inventory:registry:check"
+    ],
+    "log": "output/playwright/task52-registry.log",
+    "exit": 0,
+    "startedAt": "2026-10-20T17:55:28.584Z",
+    "finishedAt": "2026-10-20T17:55:33.018Z"
+  }
+]

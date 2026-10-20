@@ -4,7 +4,7 @@ import {
   exportCellBorderProperties,
   importCellBorderProperties,
 } from "./xmlstyle.borders";
-import { ScIndentItem } from "../../../inc/attrib";
+import { ScIndentItem, ScLineBreakCell } from "../../../inc/attrib";
 import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
@@ -135,7 +135,7 @@ const lineGroups = [
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
   100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 107, 109, 129, 132,
-  148, 150, 141, 142, 108, 124,
+  148, 150, 141, 142, 108, 124, 139,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -338,6 +338,11 @@ export function exportCellProperties(pattern: ScPatternAttr): string {
   const alignmentValue = new Any(),
     alignmentOutput: [string] = [""];
   try {
+    if (pattern.GetItemSet().GetItemState(139, false) === SfxItemState.SET) {
+      (pattern.GetItem(139) as ScLineBreakCell).QueryValue(alignmentValue);
+      textWrapped.exportXML(alignmentOutput, alignmentValue, unitConverter);
+      result += ` fo:wrap-option="${alignmentOutput[0]}"`;
+    }
     if (pattern.GetItemSet().GetItemState(129, false) === SfxItemState.SET) {
       (pattern.GetItem(129) as SvxHorJustifyItem).QueryValue(alignmentValue);
       horiSource.exportXML(alignmentOutput, alignmentValue, unitConverter);
@@ -382,11 +387,24 @@ export function importCellProperties(
       XMLToken.STYLE_TEXT_ALIGN_SOURCE,
       XMLToken.STYLE_REPEAT_CONTENT,
       XMLToken.STYLE_VERTICAL_ALIGN,
+      XMLToken.FO_WRAP_OPTION,
     ],
     "Calc cell properties",
   );
   importCellBorderProperties(pattern, attributes, unsupported);
   for (const [token, source] of attributes) {
+    if (token === XMLToken.FO_WRAP_OPTION) {
+      const value = new Any();
+      try {
+        if (textWrapped.importXML(source, value, unitConverter)) {
+          const item = new ScLineBreakCell();
+          item.PutValue(value, 0);
+          pattern.ItemSetPut(item);
+        } else unsupported("invalid cell wrap option");
+      } finally {
+        value.dispose();
+      }
+    }
     const handler =
       token === XMLToken.STYLE_TEXT_ALIGN_SOURCE
         ? horiSource
@@ -570,6 +588,34 @@ export class XmlScPropHdl_VertJustify {
     return true;
   }
 }
+/** Original strict wrap-option handler from xmlstyle.cxx;equals/export consume the native bool Any precondition. */
+export class XmlScPropHdl_IsTextWrapped {
+  /** Compares actual native boolean Any values. @param left - First bool. @param right - Second bool. @returns Equality. */
+  equals(left: Any, right: Any): boolean {
+    const a: [boolean] = [false],
+      b: [boolean] = [false];
+    left.extract(a, "bool");
+    right.extract(b, "bool");
+    return a[0] === b[0];
+  }
+  /** Imports only the two exact native tokens, preserving the Any on lexical failure. @param input - XML token. @param value - Destination Any. @param converter - Original unused unit converter. @returns Conversion success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    if (input === "wrap") value.insert([true], "bool");
+    else if (input === "no-wrap") value.insert([false], "bool");
+    else return false;
+    return true;
+  }
+  /** Exports both native boolean values, including explicit false. @param output - XML destination. @param value - Actual bool Any. @param converter - Original unused converter. @returns Original success. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const current: [boolean] = [false];
+    value.extract(current, "bool");
+    output[0] = current[0] ? "wrap" : "no-wrap";
+    return true;
+  }
+}
+const textWrapped = new XmlScPropHdl_IsTextWrapped();
 const horiJustify = new XmlScPropHdl_HoriJustify(),
   horiSource = new XmlScPropHdl_HoriJustifySource(),
   horiRepeat = new XmlScPropHdl_HoriJustifyRepeat(),

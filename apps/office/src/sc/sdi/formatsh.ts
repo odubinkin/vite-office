@@ -1,5 +1,7 @@
 /** @fileoverview Native Calc border slot adapter;typed browser arguments are converted into actual mapped native items before ScFormatShell dispatch. */
 import { SvxShadowedItem, SvxCharReliefItem } from "../../editeng/source/items/textitem";
+import { ScLineBreakCell } from "../inc/attrib";
+import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
@@ -8,6 +10,49 @@ import { SvxLineItem } from "../../editeng/inc/lineitem";
 import { SvxColorItem } from "../../editeng/inc/colritem";
 import type { SfxRequest } from "../../sfx2/source/control/request";
 import type { SfxSlotState as SlotState } from "../../sfx2/source/control/bindings";
+/** Native line-break formatting shell contract. */
+export interface CalcWrapTextCommandTarget {
+  GetWrapTextState(): boolean | undefined;
+  ExecuteWrapText(request: SfxRequest): boolean;
+}
+/** Original scalc.sdi WrapText/SID_ATTR_ALIGN_LINEBREAK identity. */
+export const calcWrapTextCommand = {
+  id: ".uno:WrapText",
+  slotId: 10230,
+  label: "Wrap Text",
+} as const;
+/** Maps the shared browser bool transport into the original cell item before native dispatch. @returns Native slot. */
+export function createCalcWrapTextSlot(): SfxSlotDefinition<CalcWrapTextCommandTarget> {
+  return {
+    commandUrl: calcWrapTextCommand.id,
+    slotId: calcWrapTextCommand.slotId,
+    label: calcWrapTextCommand.label,
+    getState:
+      /** Reads the actual source state. @param target - Native owner. @returns Binding. */ (
+        target,
+      ) => {
+        const checked = target.GetWrapTextState();
+        return { enabled: true, ...(checked === undefined ? { mixed: true } : { checked }) };
+      },
+    execute:
+      /** Adapts typed bool identities without changing native operation semantics. @param target - Native owner. @param request - Actual request. @returns Native result. */ (
+        target,
+        request,
+      ) => {
+        if (request.GetArgs().length) {
+          const input = request.GetArgs().find(
+            /** Resolves the native slot or mapped attribute. @param item - Input item. @returns Identity match. */
+            (item) => item.Which() === 10230 || item.Which() === 139,
+          );
+          if (!(input instanceof SfxBoolItem))
+            throw new TypeError("WrapText requires a native boolean item");
+          request.RemoveItem(input.Which());
+          request.AppendItem(new ScLineBreakCell(input.GetValue()));
+        }
+        return target.ExecuteWrapText(request);
+      },
+  };
+}
 /** Source border command surface consumed by the real active view controller. */
 export interface CalcBorderCommandTarget {
   ExecuteBorder(request: SfxRequest): boolean;

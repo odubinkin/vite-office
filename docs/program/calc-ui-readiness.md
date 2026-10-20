@@ -1,6 +1,24 @@
 # Calc UI and ODS implementation critical path
 
-## Current UI delivery priority — task47 indentation and manual row geometry
+## Current UI delivery priority — task52 native Wrap Text
+
+Task `202610201738-ANN4R2` connects the existing shared Writer Wrap Text toolbar
+button to native SID_ATTR_ALIGN_LINEBREAK10230 and ScLineBreakCell139. Actual
+selection patterns retain mixed/default state;native attribute operations preserve
+filtered and grouped marks,history and direct-format reset. Original no-argument
+requests complete and record the resulting item even for API calls;typed API
+requests retain their separate completion contract (CALC237).
+
+Actual ODS table-cell properties use the original XmlScPropHdl_IsTextWrapped and
+exact fo:wrap-option spellings,including explicit no-wrap versus default absence.
+The grid reads the canonical item for wrapping and retains actual manual row
+geometry. Device-based automatic wrapped-height layout remains unported;this does
+not add a CSS measurement substitute or claim complete native text layout.
+Fonts,named cell styles and other available UI actions remain the delivery priority.
+The repaired complete checkpoint51 passed before the user merge. This is task52;
+related checks and Calc100 coverage are required now;next complete checkpoint60.
+
+## Historical task47 indentation and manual row geometry
 
 Task `202610201055-QMVA57` adds Increase/Decrease Indent and Row Height/Hide Rows/Show Rows
 through the actual shared Writer toolbar,menus and dialog styling. Indentation uses native

@@ -242,6 +242,7 @@ it("renders native formatting placements with the bound shared font-size control
         "Align Bottom",
         "Increase",
         "Decrease",
+        "Wrap Text",
         "Borders (Shift to overwrite)",
         "Border Color",
       ].includes(button.getAttribute("aria-label") as string)

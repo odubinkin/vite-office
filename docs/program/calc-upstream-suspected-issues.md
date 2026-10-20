@@ -3368,3 +3368,10 @@ Full merged/device/alternate-view paint parity remains unverified.
 - Observation: after successful enum/integer extraction,the original handler checks the0..65535 range. The out-of-range branch emits a diagnostic but leaves the success bool true and the caller's existing output unchanged. An in-range unmapped constant instead returns false and assigns empty output when no default token exists.
 - Impact: callers can receive success together with stale XML text for invalid numeric input.
 - Local preservation: the common handler retains both original return/output branches. Actual Any tests independently assert negative,oversized and unmapped values.
+
+### CALC237 — no-argument Wrap Text completes API requests while typed arguments do not
+
+- Pinned source: `sc/source/ui/view/formatsh.cxx`, `ScFormatShell::ExecuteAttr`, `SID_ATTR_ALIGN_LINEBREAK` branches.
+- Observation: the no-argument toggle reads the actual selection pattern,applies its negated boolean and unconditionally calls `rReq.Done(aNewSet)` with the resulting cell item. The argument-present branch applies the mapped item and reaches the ordinary final completion guard,which does not complete API requests.
+- Impact: otherwise equivalent API operations have different completion and argument-recording states. This asymmetry may be intentional recording behavior;it is preserved rather than normalized by the browser adapter.
+- Local preservation: actual SfxRequest tests independently assert the unconditional API toggle completion,recorded Which139 value and unfinished typed API request,alongside normal typed completion and existing completed requests. Full native macro/UNO recording remains unported.

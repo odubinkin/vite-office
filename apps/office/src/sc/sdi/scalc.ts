@@ -4,6 +4,11 @@ import {
   calcTextEffectCommands,
   type CalcTextEffectCommandTarget,
 } from "./formatsh";
+import {
+  createCalcWrapTextSlot,
+  calcWrapTextCommand,
+  type CalcWrapTextCommandTarget,
+} from "./formatsh";
 
 import {
   createCalcBorderSlots,
@@ -25,7 +30,8 @@ import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
-export interface CalcCommandTarget extends CalcBorderCommandTarget, CalcTextEffectCommandTarget {
+export interface CalcCommandTarget
+  extends CalcBorderCommandTarget, CalcTextEffectCommandTarget, CalcWrapTextCommandTarget {
   ResetAttributes(): boolean;
   ChangeIndent(increment: boolean): boolean;
   GetOutlineState(): boolean | undefined;
@@ -334,6 +340,7 @@ export const calcUserCommands = [
   ...calcEditCommands,
   calcInputModeCommand,
   ...calcTextEffectCommands,
+  calcWrapTextCommand,
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
@@ -345,45 +352,47 @@ export const calcUserCommands = [
     id: item.id,
     label: item.label,
     capabilityId:
-      item.id === ".uno:Shadowed"
-        ? ("CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448" as const)
-        : calcBorderCommands.some(
-              /** Identifies native border commands. @param command - Original border resource. @returns Match. */ (
-                command,
-              ) => command.id === item.id,
-            )
-          ? ("CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f" as const)
-          : item.id === ".uno:ResetAttributes"
-            ? ("CAP-d7aef795-0709-4ea9-9f92-079142960ada" as const)
-            : item.id === ".uno:OutlineFont"
-              ? ("CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875" as const)
-              : item.id === ".uno:Strikeout"
-                ? ("CAP-8bbfa850-4c4a-4935-8322-773d074dd3be" as const)
-                : item.id === ".uno:Overline"
-                  ? ("CAP-2be21078-2d50-4abe-a26d-73c695894d95" as const)
-                  : "grow" in item
-                    ? ("CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e" as const)
-                    : "axis" in item
-                      ? ("CAP-0bb796a3-9483-445d-aef3-1deeb40f990a" as const)
-                      : "colorKind" in item
-                        ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
-                        : "format" in item || "line" in item
-                          ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
-                          : item.id === ".uno:CharFontName"
-                            ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
-                            : item.id === ".uno:FontHeight"
-                              ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-                              : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
-                                ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
-                                : item.id === ".uno:JumpToTable"
-                                  ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-                                  : "direction" in item ||
-                                      item.id === ".uno:TableSelectAll" ||
-                                      item.id === ".uno:TableDeselectAll"
-                                    ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-                                    : "kind" in item
-                                      ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-                                      : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      item.id === ".uno:WrapText"
+        ? ("CAP-e6381cc3-df2e-476c-b5b2-ddac14310d35" as const)
+        : item.id === ".uno:Shadowed"
+          ? ("CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448" as const)
+          : calcBorderCommands.some(
+                /** Identifies native border commands. @param command - Original border resource. @returns Match. */ (
+                  command,
+                ) => command.id === item.id,
+              )
+            ? ("CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f" as const)
+            : item.id === ".uno:ResetAttributes"
+              ? ("CAP-d7aef795-0709-4ea9-9f92-079142960ada" as const)
+              : item.id === ".uno:OutlineFont"
+                ? ("CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875" as const)
+                : item.id === ".uno:Strikeout"
+                  ? ("CAP-8bbfa850-4c4a-4935-8322-773d074dd3be" as const)
+                  : item.id === ".uno:Overline"
+                    ? ("CAP-2be21078-2d50-4abe-a26d-73c695894d95" as const)
+                    : "grow" in item
+                      ? ("CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e" as const)
+                      : "axis" in item
+                        ? ("CAP-0bb796a3-9483-445d-aef3-1deeb40f990a" as const)
+                        : "colorKind" in item
+                          ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
+                          : "format" in item || "line" in item
+                            ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
+                            : item.id === ".uno:CharFontName"
+                              ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
+                              : item.id === ".uno:FontHeight"
+                                ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
+                                : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+                                  ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+                                  : item.id === ".uno:JumpToTable"
+                                    ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+                                    : "direction" in item ||
+                                        item.id === ".uno:TableSelectAll" ||
+                                        item.id === ".uno:TableDeselectAll"
+                                      ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+                                      : "kind" in item
+                                        ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+                                        : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @param resolveShortcuts - Optional host configuration projection; native slot handlers remain unchanged. @returns Interface. */
@@ -393,6 +402,7 @@ export function createCalcInterface(
   const definitions: SfxSlotDefinition<CalcCommandTarget>[] = [
     ...createCalcBorderSlots(),
     ...createCalcTextEffectSlots(),
+    createCalcWrapTextSlot(),
     ...calcFontSizeStepCommands.map(
       /** Native no-argument slots retain source no-op behavior when a request contains arguments. @param resource - Source slot. @returns Dispatcher definition. */
       (resource): SfxSlotDefinition<CalcCommandTarget> => ({

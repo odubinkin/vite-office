@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e6381cc3-df2e-476c-b5b2-ddac14310d35",
+    "capabilityId": "CAP-e6381cc3-df2e-476c-b5b2-ddac14310d35",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskANN4R2 connects native WrapText10230/ATTR_LINEBREAK139 to actual merged selection state,source no-argument toggle/typed-bool branches,request completion,filtered/grouped marks,attribute history and existing Writer shared toolbar placement. Original XmlScPropHdl_IsTextWrapped exact wrap/no-wrap spellings retain failure-side Any and explicit false/default distinctions in genuine ODS. Browser whitespace reads the real cell item and preserves native manual row heights;no browser document state or substitute measurement engine is added. Device-based optimal wrapped-height layout,rich edit,merged/rotated text layout and full native service/UNO parity remain unported. Writer primary saving/open/no-recovery policies remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native Wrap Text command,selection,history,manual-row browser painting and ODS",
+    "gaps": [
+      "Device-based optimal wrapped row height,rich edit and complete native layout/service/UNO parity remain unported."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_ATTR_ALIGN_LINEBREAK"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_IsTextWrapped"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "WrapText"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "ScPatternAttr"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
+          "marker": ".uno:WrapText"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "ExecuteWrapText"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+          "marker": "XmlScPropHdl_IsTextWrapped"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+          "marker": "whiteSpace"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/wrap-text.test.ts",
+          "marker": "wrap"
+        },
+        {
+          "path": "apps/office/e2e/calc/wrap-text.spec.ts",
+          "marker": "DOM-free Worker"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task52"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-native-wrap-text",
+    "scopeLimitations": [
+      "TaskANN4R2 connects native WrapText10230/ATTR_LINEBREAK139 to actual merged selection state,source no-argument toggle/typed-bool branches,request completion,filtered/grouped marks,attribute history and existing Writer shared toolbar placement. Original XmlScPropHdl_IsTextWrapped exact wrap/no-wrap spellings retain failure-side Any and explicit false/default distinctions in genuine ODS. Browser whitespace reads the real cell item and preserves native manual row heights;no browser document state or substitute measurement engine is added. Device-based optimal wrapped-height layout,rich edit,merged/rotated text layout and full native service/UNO parity remain unported. Writer primary saving/open/no-recovery policies remain."
+    ]
+  }
+}

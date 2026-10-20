@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 inventory:registry:build
+> tsx scripts/libreoffice-inventory/registry-cli.ts build
+
+{"status":"generated","viewCount":4}

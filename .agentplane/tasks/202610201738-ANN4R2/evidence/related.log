@@ -1,0 +1,13 @@
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-related-results.json
+ % Coverage report from istanbul
+-------------|---------|----------|---------|---------|-------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------|---------|----------|---------|---------|-------------------
+-------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 246/246 )
+Branches     : 100% ( 2/2 )
+Functions    : 100% ( 3/3 )
+Lines        : 100% ( 246/246 )
+================================================================================

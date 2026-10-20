@@ -1,0 +1,111 @@
+[WebServer] (node:73273) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 13 tests using 1 worker
+
+(node:73274) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/13] [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome
+(node:73292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[2/13] [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800
+[3/13] [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600
+[4/13] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 1280px
+[5/13] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 390px
+[6/13] [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:79:1 › preserves indentation,row history,visibility and ODS in a genuine DOM-free Worker
+[7/13] [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 1280px
+  1) [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 1280px 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    Expected: [true, 1440]
+    Received: null
+
+    Call Log:
+    - Timeout 20000ms exceeded while waiting on the predicate
+
+      90 |         { timeout: 20_000 },
+      91 |       )
+    > 92 |       .toEqual([true, 1440]);
+         |        ^
+      93 |     await page.reload();
+      94 |     await page.getByRole("button", { name: "Open", exact: true }).click();
+      95 |     await page
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/wrap-text.spec.ts:92:8
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-wrap-text-wraps-real--83f21-opens-primary-ODS-at-1280px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-wrap-text-wraps-real--83f21-opens-primary-ODS-at-1280px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-wrap-text-wraps-real--83f21-opens-primary-ODS-at-1280px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-wrap-text-wraps-real--83f21-opens-primary-ODS-at-1280px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+(node:74418) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[8/13] [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 390px
+  2) [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 390px 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    Expected: [true, 1440]
+    Received: null
+
+    Call Log:
+    - Timeout 20000ms exceeded while waiting on the predicate
+
+      90 |         { timeout: 20_000 },
+      91 |       )
+    > 92 |       .toEqual([true, 1440]);
+         |        ^
+      93 |     await page.reload();
+      94 |     await page.getByRole("button", { name: "Open", exact: true }).click();
+      95 |     await page
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/wrap-text.spec.ts:92:8
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/calc-wrap-text-wraps-real--5fa95-eopens-primary-ODS-at-390px-calc/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/calc-wrap-text-wraps-real--5fa95-eopens-primary-ODS-at-390px-calc/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/calc-wrap-text-wraps-real--5fa95-eopens-primary-ODS-at-390px-calc/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/calc-wrap-text-wraps-real--5fa95-eopens-primary-ODS-at-390px-calc/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+(node:75156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[9/13] [calc] › apps/office/e2e/calc/wrap-text.spec.ts:106:1 › retains native wrap request,history and ODS behavior in a DOM-free Worker
+(node:75205) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[10/13] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 1280px
+[11/13] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › writer popup pointer ownership at 390px
+[12/13] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 1280px
+[13/13] [shared] › apps/office/e2e/shared/popup-pointer.spec.ts:5:5 › calc popup pointer ownership at 390px
+  2 failed
+    [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 1280px 
+    [calc] › apps/office/e2e/calc/wrap-text.spec.ts:24:3 › wraps real text in native manual row geometry and reopens primary ODS at 390px 
+  11 passed (1.3m)

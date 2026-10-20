@@ -120,6 +120,17 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
+  /** Queries the actual merged native wrap item. @returns Wrapped or mixed. */
+  GetWrapTextState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetWrapTextState();
+  }
+  /** Admits pending input before the source line-break command and publishes actual source state. @param request - Mapped native request. @returns Native operation admission. */
+  ExecuteWrapText(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const result = new ScFormatShell(this.viewData, this.shell).ExecuteWrapText(request);
+    this.Changed();
+    return result;
+  }
   /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetAlignment(axis);

@@ -1,0 +1,14 @@
+
+> vite-office@0.1.0 inventory:registry:build
+> tsx scripts/libreoffice-inventory/registry-cli.ts build
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-validation.ts:174
+    if (!known.has(identity)) throw new Error(`Unknown registry capability: ${identity}`);
+                                    ^
+
+Error: Unknown registry capability: CAP-e6381cc3-df2e-476c-b5b2-ddac14310d35
+    at parseInventoryRegistry (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-validation.ts:174:37)
+    at runRegistryCli (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:63:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:89:3)
+
+Node.js v24.13.1
