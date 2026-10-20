@@ -4,7 +4,7 @@ title: "Implement native Calc column widths,visibility,metric dialog and ODS geo
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T02:45:43.885Z"
+  updated_by: "CODER"
+  note: "Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T02:47:40.023Z"
+  updated_by: "EVALUATOR"
+  note: "Approved finite Calc column-geometry and common numeric/request slice is implemented and verified at fee73c7085d3;ready for direct closeout."
+  evaluated_sha: "fee73c7085d3f134eeb099d929833f4bf402bcf0"
+  blueprint_digest: "ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e"
+  evidence_refs:
+    - ".agentplane/tasks/202610200120-RV75WR/README.md"
+    - ".agentplane/tasks/202610200120-RV75WR/quality/20261020-024740023-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610200120-RV75WR/quality/20261020-024740023-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610200120-RV75WR/quality/20261020-024740023-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610200120-RV75WR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/calc-current-proof.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/changed-owners-proof.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/native-source-audit.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/shared-proof.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/writer-proof.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/browser-current-commands.json"
+    - ".agentplane/tasks/202610200120-RV75WR/evidence/checks.json"
+  findings:
+    - "Native source hashes/anchors,1280twip defaults,UInt16/HMM casts,signed ODS widths,hidden-range ownership,actual geometry undo documents and native metric/current/default/recording quirks agree with the declared consumed source slice. Unsupported column parent styles are diagnosed."
+    - "All425 Calc cases pass;complete current controller,metric-dialog and XML-style maps replace their earlier complete owners without counter merging. Every other Calc source hash is retained. All37 modified executable owners100;shared152 and Writer57 cases pass with complete current owner coverage."
+    - "17 unique actual-browser cases pass,with four affected cases rerun on the final build;primary ODS reopens,Undo/Redo,spin arrows,axe and DOM-free Worker are exercised. Native ICU/LibreOffice classification matches all1114112 codepoints. Tooling93 and all declared deterministic gates pass. Exactly100 non-task paths remain in calc;no network,merge or full-all-app run occurred."
 commit: null
 comments:
   -
@@ -35,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native column width/visibility storage,metric dialog,shared UI,geometry history and ODS with exact source defaults and declared scoped100 evidence."
+  -
+    type: "verify"
+    at: "2026-10-20T02:45:43.885Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50."
 doc_version: 3
-doc_updated_at: "2026-10-20T02:44:31.778Z"
+doc_updated_at: "2026-10-20T02:45:43.947Z"
 doc_updated_by: "CODER"
 description: "Task46 continues the authorized Calc UI goal. Replace fixed browser96px columns with source ScCompressedArray width/visibility storage and native1280twip default. Connect ColumnWidth and related Hide/Show source commands through actual marked/grouped ranges and width/history owners,shared Writer dialog/menu components and original metric/typed-HMM boundaries. Persist real column styles/visibility in ODS and verify browser scrolling/selection/history. Only calc checkout/branch;no network,branches,integration or full all-app run before checkpoint50."
 sections:
@@ -49,6 +79,39 @@ sections:
     Result: pass.
     Evidence: Calc138files425cases,raw S9040/B5626/F1758/L8095 all100%;all three complete current owner/maps replace earlier complete owners without counter merging,with every unchanged owner hash retained. Shared19files152cases,S1134/B450/F101/L1077 all100% over16 complete owners. Writer2files57cases and complete docst owner S51/B54/F9/L44 all100%. All37 changed executable application owners100%;one additional static re-export header has no executable body. Native unchanged ICU78.3/LibreOffice character-type protocol matches1114112 codepoints. Tooling3files93cases passes. Browser17unique cases pass at1280/390 including primary ODS,reopen,Undo/Redo,shared controls,axe and genuine DOM-free Worker;4 affected ODS/column cases also pass on the final current build. Types,root lint,root Prettier plus all100 current changed paths,dependency directions,JSDoc,size,Calc/Writer resources,source tree/provenance,invariants,scoped parity,static build,routing,doctor and diff pass. Exact raw maps,results,source hashes,logs and commands are retained under evidence/;calc-current-proof.json,ui-proof.json,shared-proof.json,writer-proof.json and changed-owners-proof.json are authoritative. Earlier profile files are historical contexts,not current-owner substitutes.
     Scope: exactly100 non-task paths inside calc checkout/branch;no network,outside files,merges or full all-app run. Last broad checkpoint40,next50. Native source quirks CALC218..223 are preserved. Remaining native services/layout/optimal-sizing/UNO transforms and broad parity remain unverified. Ready for implementation commit,verification record and quality gate.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T02:45:43.885Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T02:44:31.778Z, excerpt_hash=sha256:9f540a14a3711e0929ce095f2f9a71e0f1b60882cd8bf2d9f24e15bbcd9410d7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200120-RV75WR/blueprint/resolved-snapshot.json
+    - old_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+    - current_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610200120-RV75WR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610200120-RV75WR
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/registration commits through a new scoped authorized task;never reset unrelated work or edit the pinned upstream reference."
   Findings: |-
     Preflight clean calc;previous task45 is verified progress. Native widths use ScCompressedArray<SCCOL,UInt16> initialized1280twips;zero setter restores standard width while source view direct size0 hides without changing the previous stored width. Existing browser fixed96px columns must be replaced by actual source geometry. Native FID_COL_WIDTH typed SfxUInt16 payload is HMM;dialog result is twips and native macro recording converts through TwipsToEvenHMM. Metric dialog default/current values are normalized in its actual selected field unit;inspect conversion/default/range quirks rather than substituting raw twips or invented metrics. Existing compressed arrays,boolean column segments,o3tl conversions and shared Writer dialog/menu infrastructure can be reused. Full device optimal widths,outline/drawing/protection/alternate views remain unported.
@@ -85,6 +148,39 @@ Command: scoped Calc coverage plus complete-current controller,metric-dialog and
 Result: pass.
 Evidence: Calc138files425cases,raw S9040/B5626/F1758/L8095 all100%;all three complete current owner/maps replace earlier complete owners without counter merging,with every unchanged owner hash retained. Shared19files152cases,S1134/B450/F101/L1077 all100% over16 complete owners. Writer2files57cases and complete docst owner S51/B54/F9/L44 all100%. All37 changed executable application owners100%;one additional static re-export header has no executable body. Native unchanged ICU78.3/LibreOffice character-type protocol matches1114112 codepoints. Tooling3files93cases passes. Browser17unique cases pass at1280/390 including primary ODS,reopen,Undo/Redo,shared controls,axe and genuine DOM-free Worker;4 affected ODS/column cases also pass on the final current build. Types,root lint,root Prettier plus all100 current changed paths,dependency directions,JSDoc,size,Calc/Writer resources,source tree/provenance,invariants,scoped parity,static build,routing,doctor and diff pass. Exact raw maps,results,source hashes,logs and commands are retained under evidence/;calc-current-proof.json,ui-proof.json,shared-proof.json,writer-proof.json and changed-owners-proof.json are authoritative. Earlier profile files are historical contexts,not current-owner substitutes.
 Scope: exactly100 non-task paths inside calc checkout/branch;no network,outside files,merges or full all-app run. Last broad checkpoint40,next50. Native source quirks CALC218..223 are preserved. Remaining native services/layout/optimal-sizing/UNO transforms and broad parity remain unverified. Ready for implementation commit,verification record and quality gate.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T02:45:43.885Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified fee73c7085d3: Calc425 cases and current complete maps S9040/B5626/F1758/L8095 all100;shared152 and Writer57 cases,all37 changed executable owners100;native1114112-codepoint protocol;17 unique browser cases plus4 affected cases on final build;93 tooling checks and all declared static/source gates pass. Exact evidence under task evidence/. Full all-app checkpoint40 retained,next50.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T02:44:31.778Z, excerpt_hash=sha256:9f540a14a3711e0929ce095f2f9a71e0f1b60882cd8bf2d9f24e15bbcd9410d7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200120-RV75WR/blueprint/resolved-snapshot.json
+- old_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+- current_digest: ba6f765fb953d51c0029329c47bce69ffcaa08b94d4858fabbc8667d559a864e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610200120-RV75WR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610200120-RV75WR
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
