@@ -95,6 +95,12 @@ it("preserves explicit native merge invariant assertions", /** Debug guard outco
   const a = group(0),
     b = group(1);
   b.setFinalized(4);
+  expect(
+    /** Null original is a native empty reference. @returns Nothing. */ () => merge(null, a),
+  ).toThrow("assert(");
+  expect(
+    /** Null update is checked before dereference. @returns Nothing. */ () => merge(a, null),
+  ).toThrow("assert(");
   expect(/** Rejects finalized update. @returns Nothing. */ () => merge(a, b)).toThrow();
   expect(/** Rejects kind mismatch. @returns Nothing. */ () => merge(a, prop(0))).toThrow();
   expect(

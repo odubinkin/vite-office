@@ -1,5 +1,6 @@
 /** @fileoverview Original configmgr xmldata type/boolean/template lexical contracts over actual XMLReader namespaces and Data names. */
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
+import { assert } from "../../sal/inc/cassert";
 import { Reference } from "../../cppu/inc/com/sun/star/uno/Reference";
 import { OUString, type OUStringConstReference } from "../../sal/inc/rtl/ustring";
 import type { XmlReader } from "../../xmlreader/inc/xmlreader";
@@ -27,7 +28,7 @@ function equals(span: Span, literal: string): boolean {
 }
 /** Original QName classifier requires a colon and a registered OOR/XS prefix; aliases are resolved through actual reader state. @param reader - Actual namespace scope. @param value - Present lexical bytes. @returns Schema type. */
 export function parseType(reader: XmlReader, value: Span): Type {
-  if (!value.is()) throw new Error("assert(text.is())");
+  assert(value.is(), "text.is()");
   let colon = -1;
   for (let i = 0; i < value.length; i++)
     if ((value.begin as ByteView)[i] === 58) {
@@ -73,7 +74,7 @@ export function parseType(reader: XmlReader, value: Span): Type {
 }
 /** Original schema boolean only accepts true/false, unlike valueparser's true/false/0/1 grammar. @param value - Present lexical span. @returns Boolean. */
 export function parseBoolean(value: Span): boolean {
-  if (!value.is()) throw new Error("assert(text.is())");
+  assert(value.is(), "text.is()");
   if (equals(value, "true")) return true;
   if (equals(value, "false")) return false;
   const converted = value.convertFromUtf8();

@@ -1,5 +1,7 @@
 /** @fileoverview Original XCS schema/templates, property values, descriptions and conservative merge over actual configmgr nodes and event/value parsers. */
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
+import { assert } from "../../sal/inc/cassert";
+import { SAL_MAX_INT64 } from "../../sal/inc/types";
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Reference } from "../../cppu/inc/com/sun/star/uno/Reference";
 import { OUString, type OUStringConstReference } from "../../sal/inc/rtl/ustring";
@@ -41,14 +43,14 @@ function equals(value: Span, literal: string): boolean {
   return value.equals(bytes, bytes.length);
 }
 /** Original anonymous-namespace conservative merge kernel. Export binds this source responsibility for initialized kernel tests, not a new UNO service API. @param original - Actual existing node. @param update - Actual same-kind unfinalized update. @returns Nothing. */
-export function merge(original: Node, update: Node): void {
-  if (
-    original === null ||
-    update === null ||
-    original.kind() !== update.kind() ||
-    update.getFinalized() !== Data.NO_LAYER
-  )
-    throw new Error("assert(original/update merge invariants)");
+export function merge(original: Node | null, update: Node | null): void {
+  assert(
+    original !== null &&
+      update !== null &&
+      original.kind() === update.kind() &&
+      update.getFinalized() === Data.NO_LAYER,
+    "original/update merge invariants",
+  );
   if (update.getLayer() < original.getLayer() || update.getLayer() > original.getFinalized())
     return;
   switch (original.kind()) {
@@ -84,7 +86,7 @@ export function merge(original: Node, update: Node): void {
       }
       break;
     case Node.KIND_ROOT:
-      throw new Error("assert(false)");
+      assert(false, "false");
   }
 }
 /** Original parser states in declaration order. */
@@ -107,7 +109,7 @@ export class XcsParser extends Parser {
   private readonly data_: Data;
   private readonly componentName_ = new OUString();
   private state_ = State.START;
-  private ignoring_ = 0;
+  private ignoring_ = 0n;
   private readonly elements_: Element[] = [];
   private bIsParsingInfo_ = false;
   private readonly description_ = new OUStringBuffer();
@@ -131,13 +133,15 @@ export class XcsParser extends Parser {
     void existingDependencies;
     const plain = nsId === XmlReader.NAMESPACE_NONE;
     if (
-      this.ignoring_ > 0 ||
+      this.ignoring_ > 0n ||
       (plain &&
         ["import", "uses", "constraints", "desc", "deprecated", "author", "label"].some(
           /** Compares one original ignored tag. @param tag - Literal. @returns Match. */ (tag) =>
             equals(name, tag),
         ))
     ) {
+      // Original long counter uses the selected native LP64 model.
+      assert(this.ignoring_ < SAL_MAX_INT64, "ignoring_ < LONG_MAX");
       this.ignoring_++;
       return true;
     }
@@ -147,7 +151,7 @@ export class XcsParser extends Parser {
       if (nsId === NAMESPACE_OOR && equals(name, "component-schema")) {
         this.handleComponentSchema(reader);
         this.state_ = State.COMPONENT_SCHEMA;
-        this.ignoring_ = 0;
+        this.ignoring_ = 0n;
         return true;
       }
     } else {
@@ -164,7 +168,7 @@ export class XcsParser extends Parser {
       if (this.state_ === State.COMPONENT_SCHEMA || this.state_ === State.TEMPLATES_DONE) {
         if (plain && equals(name, "component")) {
           this.state_ = State.COMPONENT;
-          if (this.elements_.length !== 0) throw new Error("assert(elements_.empty())");
+          assert(this.elements_.length === 0, "elements_.empty()");
           this.elements_.push({
             node: new GroupNode(this.valueParser_.getLayer(), false, new OUString()),
             name: new OUString(this.componentName_),
@@ -199,6 +203,7 @@ export class XcsParser extends Parser {
   }
   /** Erases the original STATE_TEMPLATES to STATE_COMPONENT fallthrough without a second owner or parser state. @param reader - Actual reader. @param nsId - Namespace. @param name - Element. @returns Whether a source member branch matched. */
   private startMember(reader: XmlReader, nsId: number, name: Span): boolean {
+    assert(this.elements_.length !== 0, "!elements_.empty()");
     const top = this.elements_[this.elements_.length - 1] as Element,
       node = top.node as Node;
     if (nsId !== XmlReader.NAMESPACE_NONE) return false;
@@ -239,13 +244,13 @@ export class XcsParser extends Parser {
         }
         break;
       default:
-        throw new Error("assert(false)");
+        assert(false, "false");
     }
     return false;
   }
   /** Original end transitions insert completed nodes immediately, retaining partial tree state on later errors. @param reader - Actual reader for diagnostics. @returns Nothing. */
   public override endElement(reader: XmlReader): void {
-    if (this.ignoring_ > 0) {
+    if (this.ignoring_ > 0n) {
       this.ignoring_--;
       return;
     }
@@ -279,17 +284,12 @@ export class XcsParser extends Parser {
           }
         }
         if (this.elements_.length === 0) {
-          let entry;
-          switch (this.state_) {
-            case State.TEMPLATES:
-              entry = this.data_.templates.insert({ first: top.name, second: top.node });
-              break;
-            case State.COMPONENT:
-              entry = this.data_.getComponents().insert({ first: top.name, second: top.node });
-              break;
-            default:
-              throw error("this cannot happen");
-          }
+          // Original two concrete insertion cases. Its default assert(false) is fatal in
+          // this checked compiler binding; the NDEBUG-only RuntimeException is not emulated.
+          assert(this.state_ === State.TEMPLATES || this.state_ === State.COMPONENT, "false");
+          const members =
+              this.state_ === State.TEMPLATES ? this.data_.templates : this.data_.getComponents(),
+            entry = members.insert({ first: top.name, second: top.node });
           if (!entry[1]) merge(entry[0].second as Node, top.node);
           if (this.state_ === State.COMPONENT) this.state_ = State.COMPONENT_DONE;
         } else {
@@ -311,7 +311,7 @@ export class XcsParser extends Parser {
         case State.COMPONENT_DONE:
           break;
         default:
-          throw new Error("assert(false)");
+          assert(false, "false");
       }
   }
   /** Original characters do not consult ignoring_; info text is accumulated across nested desc tags. @param value - Borrowed bytes. @returns Nothing. */

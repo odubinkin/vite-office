@@ -124,7 +124,7 @@ export function FindTextImpl(
 }
 
 /** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Normal same-node replacement uses the actual document/history owner; other search modes remain unported. */
-class SwFindParaText implements SwFindParas {
+export class SwFindParaText implements SwFindParas {
   private readonly m_aSText: TextSearch;
   /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @returns Search strategy. */
   public constructor(

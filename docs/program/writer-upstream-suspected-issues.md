@@ -594,6 +594,30 @@ Decision: retain the original depth-free info flag and close ordering. Do not
 introduce nested-info depth tracking. Intended acceptance of unknown nested
 markup and the effect on extension schemas remain unverified.
 
+## WRITER-024: Failed whole-body FindAll retains its saved cursor ring member
+
+Status: original control-flow and constructor/destructor source proof; full
+compiled native Writer reproduction remains unverified.
+Pinned `sw/source/core/crsr/swcrsr.cxx`, `SwCursor::FindAll`, creates
+`pSav = Create(this)` in its `InSelAll` branch after selection/other-area
+branches. `SwCursor::Create` constructs a point-only cursor linked to that
+ring. On no match, FindAll restores the point, clears the primary mark when
+the saved cursor has none, then returns before the successful-path ring
+deletion. The saved cursor therefore remains linked.
+
+`SwCursorSaveState` in `sw/inc/swcrsr.hxx` calls `RestoreState` at scope exit,
+but that operation only pops `m_vSavePos`; it does not remove ring members.
+For a single marked cursor on text `abc`, whole-body find-all for `z` can
+return zero while leaving two unmarked cursors at the original point.
+Plain single-match and selection-only branches have different control flow.
+
+Decision: retain the saved member and mark loss on this exact failed branch;
+do not silently restore the previous ring shape. The normal
+`SwCursorShell` destructor in `crsrsh.cxx` separately deletes every cursor in
+the ring before its head, and the portable shell close must do the same.
+Higher-level UI cleanup, UNO cursor overrides and the intended reason for
+retaining the saved cursor remain unverified.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

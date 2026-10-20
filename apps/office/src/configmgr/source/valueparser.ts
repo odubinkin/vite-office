@@ -1,5 +1,6 @@
 /** @fileoverview Original complete configmgr ValueParser text/it/unicode automaton over actual configuration nodes, XMLReader, Pad, Any and Sequence. Local OString separator syntax uses an owned exact byte value. */
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
+import { assert } from "../../sal/inc/cassert";
 import { Reference } from "../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Sequence, asNonConstRange } from "../../cppu/inc/com/sun/star/uno/Sequence";
@@ -27,7 +28,7 @@ export function valueError(message: string): RuntimeException {
 }
 /** Borrows byte-backed spans or materializes an equivalent logical view for existing ArrayLike pointer bindings. @param text - Present native span. @returns Exact bytes without decoding or normalization. */
 function bytes(text: Span): Uint8Array {
-  if (!text.is()) throw new Error("assert(text.is())");
+  assert(text.is(), "text.is()");
   if (text.begin instanceof Uint8Array) return text.begin.subarray(0, text.length);
   const result = new Uint8Array(text.length);
   for (let i = 0; i < text.length; ++i) result[i] = (text.begin as ByteView)[i] as number;
@@ -144,7 +145,7 @@ function sequenceValue(items: readonly Any[], type: Type): Any {
       const destination =
         argument === "OUString" ? (OUString.unacquired(cell as rtl_uStringSlot) as OUString) : cell;
       const ok = (items[i] as Any).extract(destination, argument);
-      if (!ok) throw new Error("assert(ok)");
+      assert(ok, "ok");
     }
     return new Any(seq.getAddress(), ["Sequence", argument]);
   } finally {
@@ -243,8 +244,8 @@ export class ValueParser {
   }
 
   /** Original start accepts only one active nonnull property; other state fields are intentionally not reset. @param node - Actual ordinary/localized property. @param localizedName - Original empty default. @returns Nothing. */
-  public start(node: Node, localizedName: OUStringConstReference = new OUString()): void {
-    if (node === null || this.node_ !== null) throw new Error("assert(node.is() && !node_.is())");
+  public start(node: Node | null, localizedName: OUStringConstReference = new OUString()): void {
+    assert(node !== null && this.node_ === null, "node.is() && !node_.is()");
     this.node_ = node;
     this.localizedName_.assign(localizedName);
     this.state_ = State.Text;
@@ -252,8 +253,10 @@ export class ValueParser {
   /** Original node-active text append, borrowing source bytes until Pad mutation. @param value - Actual XML span. @returns Nothing. */
   public characters(value: Span): void {
     if (this.node_ !== null) {
-      if (this.state_ !== State.Text && this.state_ !== State.IT)
-        throw new Error("assert(state_ == State::Text || state_ == State::IT)");
+      assert(
+        this.state_ === State.Text || this.state_ === State.IT,
+        "state_ == State::Text || state_ == State::IT",
+      );
       this.pad_.add(value.begin as ByteView, value.length);
     }
   }
@@ -332,7 +335,8 @@ export class ValueParser {
             break;
           }
           default:
-            return false;
+            // Native NDEBUG fallback returns false; the checked compiler binding is fatal.
+            assert(false, "false");
         }
         const value =
           this.items_.length === 0

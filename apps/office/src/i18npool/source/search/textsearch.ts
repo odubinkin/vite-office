@@ -13,7 +13,10 @@ import {
   NORM_WORD_ONLY,
   WILD_MATCH_SELECTION,
 } from "../../../offapi/com/sun/star/util/SearchFlags";
-import type { SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  asNonConstRange,
+  type SequenceElements,
+} from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { ALPHA, DIGIT, LETTER } from "../../../offapi/com/sun/star/i18n/KCharacterType";
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
@@ -31,6 +34,39 @@ function setWildcardMatch(result: SearchResult, start: number, end: number): voi
   result.endOffset.realloc(1);
   ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = start;
   ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = end;
+}
+/** Original searchForward/searchBackward group-offset remapping blocks, with their duplicated directional syntax erased. This initialized kernel export is not a new UNO search interface or a regex backend. @param original - Untransliterated source. @param offsets - Existing transliteration output-to-source binding. @param result - Actual caller-owned native result. @param forward - Source direction. @returns Nothing; all native groups are updated in place. */
+export function replaceTransliterationOffsets(
+  original: OUStringConstReference,
+  offsets: readonly number[],
+  result: SearchResult,
+  forward: boolean,
+): void {
+  if (offsets.length === 0) return;
+  const source = original.getStr().subarray(0, original.getLength()),
+    starts = asNonConstRange(result.startOffset),
+    ends = asNonConstRange(result.endOffset),
+    lows = forward ? starts : ends,
+    highs = forward ? ends : starts;
+  for (let k = 0; k < result.startOffset.getLength(); k++) {
+    const low = lows.operatorIndex(k, 4),
+      high = highs.operatorIndex(k, 4);
+    if (low[0] >= 0) {
+      if (low[0] < offsets.length) low[0] = offsets[low[0]] as number;
+      else {
+        const position: [number] = [offsets[offsets.length - 1] as number];
+        iterateCodePoints(source, position, 1);
+        low[0] = position[0];
+      }
+    }
+    if (high[0] >= 0) {
+      if (high[0] > 0) {
+        const position: [number] = [offsets[Math.min(high[0], offsets.length) - 1] as number];
+        iterateCodePoints(source, position, 1);
+        high[0] = position[0];
+      } else high[0] = offsets[0] as number;
+    }
+  }
 }
 /** Native punctuation detection, independent of whether the key contains an ASCII quote. @param text - UTF-16 text. @returns Whether a typographic quote occurs. */
 function isReplacePunctuation(text: Uint16Array): boolean {
@@ -211,27 +247,7 @@ export class TextSearch {
       : forward
         ? this.NSrchFrwrd(prepared, lo, hi)
         : this.NSrchBkwrd(prepared, hi, lo);
-    if (result.subRegExpressions === 0 || offsets === undefined || offsets.length === 0)
-      return result;
-    const low = (
-      forward ? result.startOffset.operatorIndex(0)[0] : result.endOffset.operatorIndex(0)[0]
-    ) as number;
-    const high = (
-      forward ? result.endOffset.operatorIndex(0)[0] : result.startOffset.operatorIndex(0)[0]
-    ) as number;
-    const position: [number] = [offsets[offsets.length - 1] as number];
-    iterateCodePoints(original, position, 1);
-    const mappedLow = low < offsets.length ? (offsets[low] as number) : position[0];
-    if (high > 0) {
-      position[0] = offsets[Math.min(high, offsets.length) - 1] as number;
-      iterateCodePoints(original, position, 1);
-    } else position[0] = offsets[0] as number;
-    ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = forward
-      ? mappedLow
-      : position[0];
-    ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = forward
-      ? position[0]
-      : mappedLow;
+    if (offsets !== undefined) replaceTransliterationOffsets(text, offsets, result, forward);
     return result;
   }
   /** Native FindPosInSeq_Impl first offset not less than the source position. @param offsets - Output-to-source map. @param position - Source offset. @returns Output offset. */

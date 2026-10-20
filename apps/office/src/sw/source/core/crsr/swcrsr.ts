@@ -107,12 +107,14 @@ export class SwCursor extends SwPaM {
       !inSelection && !all && ranges === FindRanges.InBody && this.HasMark()
         ? this.GetMark().clone()
         : undefined;
+    let savedBodyCursor: SwCursor | undefined;
     try {
       if (inSelection) {
         for (const selection of this.GetRingContainer())
           if (selection.HasMark())
             regions.push(new SwPaM(selection.GetPoint(), selection.GetMark()));
       } else {
+        if (all && (ranges & FindRanges.InOther) === 0) savedBodyCursor = this.Create(this);
         const low = this.GetPoint().clone(),
           high = this.GetPoint().clone();
         try {
@@ -171,7 +173,23 @@ export class SwCursor extends SwPaM {
           new SwPaM(working.GetPoint(), working.HasMark() ? working.GetMark() : undefined),
         );
       const first = found[0];
-      if (first === undefined) return 0;
+      if (first === undefined) {
+        if (savedBodyCursor !== undefined) {
+          this.GetPoint().Assign(
+            savedBodyCursor.GetPoint().GetNode(),
+            savedBodyCursor.GetPoint().GetContentIndex(),
+          );
+          if (savedBodyCursor.HasMark()) {
+            this.SetMark();
+            this.GetMark().Assign(
+              savedBodyCursor.GetMark().GetNode(),
+              savedBodyCursor.GetMark().GetContentIndex(),
+            );
+          } else this.DeleteMark();
+          // Original early return keeps the saved cursor linked in the ring (WRITER-024).
+        }
+        return 0;
+      }
       if (all) while (this.GetNext() !== this) this.GetNext().Dispose();
       this.Assign(first.GetPoint(), oldMark ?? first.GetMark());
       if (all)

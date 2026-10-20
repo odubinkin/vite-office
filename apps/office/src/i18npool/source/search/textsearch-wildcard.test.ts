@@ -45,6 +45,20 @@ function match(
         value.endOffset.operatorIndex(0)[0] as number,
       ];
 }
+it.each(["a*?", "?*a"])(
+  "retains exhausted input after a star in %j",
+  /** A literal/question requirement remains after the single input character is consumed. @param pattern - Native pattern. @returns Nothing. */ (
+    pattern,
+  ) => {
+    const engine = new TextSearch(options(pattern));
+    expect(match(engine, "a")).toBeUndefined();
+    expect(match(engine, "a", true)).toBeUndefined();
+  },
+);
+it("rejects a non-star requirement in an empty wildcard interval", /** Native empty-interval handling accepts only a complete star run. @returns Nothing. */ () => {
+  expect(match(new TextSearch(options("*?")), "")).toBeUndefined();
+  expect(match(new TextSearch(options("?*")), "", true)).toBeUndefined();
+});
 it.each([
   ["abAca", "a", [0, 1], [5, 4]],
   ["abAca", "a?", [0, 2], [4, 2]],

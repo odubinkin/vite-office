@@ -16,7 +16,8 @@
       "WildcardSrchBkwrd",
       "setWildcardMatch",
       "setOptions",
-      "setOptions2"
+      "setOptions2",
+      "replaceTransliterationOffsets"
     ],
     "upstreamSymbols": [
       "TextSearch",
@@ -35,7 +36,8 @@
       "Native WildcardSrchFrwrd/WildcardSrchBkwrd code-point rewind loops, implicit substring asterisks, WILD_MATCH_SELECTION greedy retry, original escape/reordered-backward-pattern cache and UTF16 source endpoint remapping are implemented. Existing native iterator, frozen casefold data and wrapper/cache remain the consumed owners. Reverse-pattern preparation is a private same-file extraction of the original WildcardSrchBkwrd block, not a different wildcard compiler. Source trailing-escape/NUL/empty-folded-interval quirks are retained (WRITER-012/013/014). Original test_textsearch.cxx QA values, supplementary cases, independent bounded dynamic-programming language checks and actual wrapper/Writer replacement integration provide portable evidence only. Regex/approximate and other transliterations, secondary key/service/native compiled QA and full Writer view/UI remain unverified; no parity status/default/classification promotion.",
       "Independent whole-selection recognition identifies native overlapping greedy-retry false negatives; preserve and explicitly enumerate them as WRITER-015 rather than changing the reference language or native matching loop.",
       "LeafMMAQEF adds the actual legacy setOptions branch: original switch/default upgrades legacy enum, constructs a newer UNO value with escape zero and delegates setOptions2. Newer wire values are copied through the real typed assignment owner and newer AlgorithmType2 always controls dispatch, regardless of inherited obsolete algorithmType. Known unsupported regex/approximate/transliteration modes still reject before altering previous prepared state. Actual normal/wildcard and wrapper/Writer regressions pass; no configuration/item/UI or full service parity promotion.",
-      "PC6WK7 migrates all represented normal/wildcard/no-match/remapping results to actual generated SearchResult and shared Sequence<sal_Int32> values. Original wildcard setter mutates the caller result; folded offsets update actual mutable sequence cells. Returned snapshots remain independent under real COW. Algorithms and original directional quirks remain unchanged."
+      "PC6WK7 migrates all represented normal/wildcard/no-match/remapping results to actual generated SearchResult and shared Sequence<sal_Int32> values. Original wildcard setter mutates the caller result; folded offsets update actual mutable sequence cells. Returned snapshots remain independent under real COW. Algorithms and original directional quirks remain unchanged.",
+      "Original forward/backward transliteration result remapping is represented for every real SearchResult group, preserving negative endpoints, empty maps, sequence-length iteration independent of scalar count, endpoint clipping, code-point advancement and field owners. replaceTransliterationOffsets exports this initialized source-block kernel for tests, not a new UNO API or regex backend. Its offset argument retains the existing transliteration compiler binding; original service/ICU/regex and full ABI remain unverified."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."

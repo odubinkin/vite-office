@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "status": "local-only",
+    "localPath": "apps/office/src/sal/inc/cassert.ts",
+    "rationale": "Pure compiler binding for checked C/C++ assert predicates, shared by native-shaped configmgr and CPPU call sites. Relocates the existing CPPU Error boundary without adding another assertion owner, an injected configuration service, or a native SAL API. Exact conditions/evaluation order/diagnostic strings are preserved; original native process abort, NDEBUG mode, stack layout and post-abort recovery are not certified.",
+    "responsibilities": [
+      "Pure compiler binding for checked C/C++ assert predicates, shared by native-shaped configmgr and CPPU call sites. Relocates the existing CPPU Error boundary without adding another assertion owner, an injected configuration service, or a native SAL API. Exact conditions/evaluation order/diagnostic strings are preserved; original native process abort, NDEBUG mode, stack layout and post-abort recovery are not certified."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "C/C++ checked compiler assertion maps to the existing portable Error behavior in the JavaScript realm; it requires no browser globals or host services."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/cassert.ts",
+          "marker": "assert"
+        },
+        {
+          "path": "apps/office/src/sal/inc/cassert.test.ts",
+          "marker": "preserves single predicate evaluation"
+        }
+      ]
+    }
+  }
+}

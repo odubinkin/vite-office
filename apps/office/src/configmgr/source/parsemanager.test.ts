@@ -70,6 +70,12 @@ class Recorder extends Parser {
     this.events.push(["text", text(value)]);
   }
 }
+it("retains the original nullable parser-reference checked boundary", /** A null native reference is rejected before event dispatch, without a fake parser implementation. @returns Nothing. */ () => {
+  expect(
+    /** Invokes the actual checked constructor. @returns Driver. */ () =>
+      new ParseManager(u("null-parser"), null, new TextEncoder().encode("<r/>")),
+  ).toThrow("assert(parser.is())");
+});
 it("replays the pending begin on false, forwards dependencies and retains original copied input", /** Driver does not restart the XML reader or consume the pending event. @returns Nothing. */ () => {
   const parser = new Recorder(),
     url = u("source"),

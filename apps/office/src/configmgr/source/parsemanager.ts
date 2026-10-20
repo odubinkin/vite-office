@@ -1,5 +1,6 @@
 /** @fileoverview Original ParseManager namespace registration, pull-event dispatch and pending-begin resume contract. Native URL mapping uses the existing XmlReader loaded-byte browser boundary. */
 import type { OUStringConstReference } from "../../sal/inc/rtl/ustring";
+import { assert } from "../../sal/inc/cassert";
 import { XmlReader, Result } from "../../xmlreader/inc/xmlreader";
 import { Span } from "../../xmlreader/inc/span";
 import type { Parser } from "./parser";
@@ -19,8 +20,8 @@ export class ParseManager {
   private readonly itemData_ = new Span();
   private readonly itemNamespaceId_: [number] = [-1];
   /** Original URL/parser ownership plus the explicit host-loaded bytes already required by actual XmlReader. @param url - Native file URL value. @param parser - Actual event owner. @param bytes - Loaded private input binding. @returns Driver. */
-  constructor(url: OUStringConstReference, parser: Parser, bytes: Uint8Array) {
-    if (parser === null) throw new Error("assert(parser.is())");
+  constructor(url: OUStringConstReference, parser: Parser | null, bytes: Uint8Array) {
+    assert(parser !== null, "parser.is()");
     this.reader_ = new XmlReader(url, bytes);
     this.parser_ = parser;
     for (const [iri, expected] of [
@@ -29,8 +30,8 @@ export class ParseManager {
       ["http://www.w3.org/2001/XMLSchema-instance", NAMESPACE_XSI],
     ] as const) {
       const value = new TextEncoder().encode(iri);
-      if (this.reader_.registerNamespaceIri(new Span(value, value.length)) !== expected)
-        throw new Error("assert(id == namespace)");
+      const id = this.reader_.registerNamespaceIri(new Span(value, value.length));
+      assert(id === expected, "id == namespace");
     }
   }
   /** Original loop retains itemData on a false/throwing start, then replays the same Begin on the next call. @param existingDependencies - Borrowed caller set. @returns Whether reader reached Done. */

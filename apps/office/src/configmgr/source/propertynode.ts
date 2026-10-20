@@ -1,5 +1,6 @@
 /** @fileoverview Original ordinary configuration property state and value contracts over actual Node, Any and OUString owners. */
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
+import { assert } from "../../sal/inc/cassert";
 import { OUString, type OUStringConstReference } from "../../sal/inc/rtl/ustring";
 import { Node } from "./node";
 import type { Type } from "./type";
@@ -92,7 +93,7 @@ export class PropertyNode extends Node {
   }
   /** Original pending descriptor assignment does not alter value or modified state. @param layer - Native layer. @param descriptor - Nonempty original descriptor. @returns Nothing. */
   public setExternal(layer: number, descriptor: OUStringConstReference): void {
-    if (descriptor.isEmpty()) throw new Error("assert(!descriptor.isEmpty())");
+    assert(!descriptor.isEmpty(), "!descriptor.isEmpty()");
     this.setLayer(layer);
     this.externalDescriptor_.assign(descriptor);
   }

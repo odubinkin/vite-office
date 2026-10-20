@@ -1,5 +1,5 @@
 /** @fileoverview Original weighted Levenshtein distance and relaxed SplitCount from pinned i18npool/source/search/levdis.cxx and levdis.hxx. Works on UTF-16 units and a NUL-terminated pattern; word segmentation/service dispatch remain separate responsibilities. */
-/** Erases std::lcm over the original nonnegative, representable native integer domain. @param left - First integer. @param right - Second integer. @returns Least common multiple. */
+/** Erases std::lcm for the strictly positive, representable operands selected by original CalcLPQR guards. Zero-count cases are resolved before this compiler binding is called. @param left - Positive first integer. @param right - Positive second integer. @returns Least common multiple. */
 function lcm(left: number, right: number): number {
   let a = left,
     b = right;
@@ -8,7 +8,7 @@ function lcm(left: number, right: number): number {
     a = b;
     b = remainder;
   }
-  return a === 0 ? 0 : (left / a) * right;
+  return (left / a) * right;
 }
 /** Native weighted distance owner. JS-owned arrays erase only unique_ptr allocation/destruction; no substitute distance or Unicode normalization is used. */
 export class WLevDistance {

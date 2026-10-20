@@ -9,6 +9,7 @@ import { Span } from "../../xmlreader/inc/span";
 import { Type, elementType, getDynamicType } from "./type";
 import { Data } from "./data";
 import { PropertyNode, type PropertyNodeComponents } from "./propertynode";
+import { GroupNode } from "./groupnode";
 import { LocalizedPropertyNode } from "./localizedpropertynode";
 import { LocalizedValueNode } from "./localizedvaluenode";
 import { ValueParser, parseValue } from "./valueparser";
@@ -25,10 +26,41 @@ function s(value: string): Span {
   const bytes = new TextEncoder().encode(value);
   return new Span(bytes, bytes.length);
 }
+it("checks incompatible value targets and characters delivered inside a unicode element", /** Public callback preconditions use real initialized nodes and XML reader events; no private parser state is overwritten. @returns Nothing. */ () => {
+  const wrongTarget = new ValueParser(0);
+  wrongTarget.type_ = Type.TYPE_STRING;
+  wrongTarget.start(new GroupNode(0, false, new OUString()));
+  expect(
+    /** A group has no property Any slot. @returns Active flag. */ () => wrongTarget.endElement(),
+  ).toThrow("assert(false)");
+  const parser = new ValueParser(0),
+    reader = new XmlReader(
+      u("unicode-callback"),
+      new TextEncoder().encode(
+        '<unicode xmlns:oor="http://openoffice.org/2001/registry" oor:scalar="0"/>',
+      ),
+    ),
+    name = new Span(),
+    ns: [number] = [0];
+  reader.registerNamespaceIri(s("http://openoffice.org/2001/registry"));
+  expect(reader.nextItem(Text.NONE, name, ns)).toBe(Result.Begin);
+  parser.type_ = Type.TYPE_STRING;
+  parser.start(new PropertyNode(0, Type.TYPE_STRING, true, new Any(), false));
+  expect(parser.startElement(reader, ns[0], name)).toBe(true);
+  expect(parser.getTextMode()).toBe(Text.NONE);
+  expect(
+    /** Text reporting is suppressed until unicode close. @returns Nothing. */ () =>
+      parser.characters(s("wrong callback order")),
+  ).toThrow("assert(state_ == State::Text || state_ == State::IT)");
+});
 it("retains inactive callbacks, present lexical bytes and single-active-node preconditions", /** Original public callback ordering is checked without replacing library owners. @returns Nothing. */ () => {
   const parser = new ValueParser(0),
     node = new PropertyNode(0, Type.TYPE_STRING, true, new Any(), false);
   parser.characters(s("inactive"));
+  expect(
+    /** Original rtl::Reference can be empty at the checked boundary. @returns Nothing. */ () =>
+      parser.start(null),
+  ).toThrow("assert(node.is() && !node_.is())");
   expect(parser.endElement()).toBe(false);
   expect(
     /** A missing lexical buffer cannot bind a native scalar view. @returns Any. */ () =>

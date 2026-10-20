@@ -13,6 +13,7 @@ import { LocalizedPropertyNode } from "./localizedpropertynode";
 import { LocalizedValueNode } from "./localizedvaluenode";
 import { XcsParser } from "./xcsparser";
 import { ParseManager } from "./parsemanager";
+import { XmlReader } from "../../xmlreader/inc/xmlreader";
 /** Real UTF16 caller value. @param value - Exact text. @returns Native owner. */
 function u(value: string): OUString {
   const units = Uint16Array.from(
@@ -62,6 +63,28 @@ function parse(xml: string, layer = 0, data = new Data()): Data {
   ).toBe(true);
   return data;
 }
+it("retains the checked end-callback precondition before component-schema begins", /** This tests an invalid public event order without editing private state or replacing the XML reader. @returns Nothing. */ () => {
+  const parser = new XcsParser(0, new Data()),
+    reader = new XmlReader(u("callback-order"), new TextEncoder().encode("<r/>"));
+  expect(
+    /** No begin event has initialized the schema state. @returns Nothing. */ () =>
+      parser.endElement(reader),
+  ).toThrow("assert(false)");
+});
+it("checks an incompatible template kind supplied through the actual Data map", /** Data owns native Node references; a localized value cannot act as a template containing properties. @returns Nothing. */ () => {
+  const data = new Data();
+  data.templates.insert({ first: u("test.Schema:T"), second: new LocalizedValueNode(0) });
+  expect(
+    /** Original node-kind assertion rejects incompatible provider input. @returns Data. */ () =>
+      parse(
+        schema(
+          '<component><node-ref oor:name="R" oor:node-type="T"><prop oor:name="P" oor:type="xs:string"/></node-ref></component>',
+        ),
+        0,
+        data,
+      ),
+  ).toThrow("assert(false)");
+});
 /** Asserts actual UNO diagnostic fields. @param run - Original call. @param message - Source diagnostic fragment. @returns Nothing. */
 function throwsMessage(run: () => unknown, message: string): void {
   let caught: unknown;

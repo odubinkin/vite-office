@@ -18,6 +18,10 @@ it("retains the pattern terminator precondition and asymmetric insertion/deletio
   expect(calculator.GetLimit()).toBe(6);
   expect(calculator.WLD(units(""), 0)).toBe(2);
   expect(calculator.WLD(units("aa"), 2)).toBe(6);
+  const zeroLonger = new WLevDistance(units("a"), 2, 3, 0, false);
+  expect(zeroLonger.GetLimit()).toBe(6);
+  expect(zeroLonger.WLD(units(""), 0)).toBe(2);
+  expect(zeroLonger.WLD(units("aa"), 2)).toBe(7);
 });
 it.each(cases.settings)(
   "matches original compiled WLD $other/$shorter/$longer relaxed=$relaxed",

@@ -266,7 +266,17 @@ it.each([false, true])(
         ),
       ).toBe(0);
       expect(cursor.GetPoint()).toBe(primary);
-      expect([...cursor.GetRingContainer()]).toEqual(siblings);
+      const retained = [...cursor.GetRingContainer()];
+      expect(retained).toHaveLength(siblings.length + 1);
+      for (const sibling of siblings) expect(retained).toContain(sibling);
+      const saved = retained.find(
+        /** Identifies the source Create(this) saved cursor (WRITER-024). @param member - Ring cursor. @returns Whether newly retained. */ (
+          member,
+        ) => !siblings.includes(member),
+      );
+      expect(saved?.HasMark()).toBe(false);
+      expect(saved?.GetPoint().compare(primary)).toBe(0);
+      expect(cursor.HasMark()).toBe(false);
     } finally {
       while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
       cursor.Dispose();

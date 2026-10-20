@@ -62,6 +62,7 @@ import {
   SplitParagraph,
   MergeParagraphWithPrevious,
   MergeParagraphWithNext,
+  AdjustParagraphRulerIndent,
 } from "./wrtsh-editing";
 import { isMoveLeftMargin, moveLeftMarginAtShell } from "../../core/edit/edattr";
 import { pasteWriterTransfer, type WriterPasteDocument } from "../dochdl/swdtflvr";
@@ -111,7 +112,12 @@ export class SwWrtShell extends SwFEShell {
   ) {
     super(viewOptions, layout);
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
-    this.cursor = new SwCursor(new SwPosition(paragraph, paragraph.Len()));
+    const position = new SwPosition(paragraph, paragraph.Len());
+    try {
+      this.cursor = new SwCursor(position);
+    } finally {
+      position.Dispose();
+    }
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.undoContext = {
       GetDoc: /** Returns the shell's current SwDoc. @returns Active document. */ () =>
@@ -367,6 +373,7 @@ export class SwWrtShell extends SwFEShell {
       /* Release registered native stack positions. */
     }
     this.ClearTableCursor();
+    while (this.cursor.GetNext() !== this.cursor) this.cursor.GetNext().Dispose();
     this.cursor.Dispose();
     this.DisposeModify();
   }
@@ -854,26 +861,7 @@ export class SwWrtShell extends SwFEShell {
   }
   /** Applies one paragraph ruler drag to the active paragraph. @param edge - Dragged marker. @param delta - Twip drag delta. @returns Whether changed. */
   public AdjustParagraphRulerIndent(edge: "left" | "firstLine" | "right", delta: number): boolean {
-    if (!Number.isFinite(delta)) return false;
-    const paragraph = this.GetActiveParagraph();
-    const before = {
-      firstLine: (
-        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-      ).ResolveTextFirstLineOffset(),
-      left: paragraph.GetParagraphTextLeftMargin(),
-      right: paragraph.GetParagraphRightMargin(),
-    };
-    switch (edge) {
-      case "left":
-        return this.SetParagraphRulerIndents({ ...before, left: Math.max(0, before.left + delta) });
-      case "firstLine":
-        return this.SetParagraphRulerIndents({ ...before, firstLine: before.firstLine + delta });
-      case "right":
-        return this.SetParagraphRulerIndents({
-          ...before,
-          right: Math.max(0, before.right - delta),
-        });
-    }
+    return AdjustParagraphRulerIndent(this, edge, delta);
   }
 
   /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */

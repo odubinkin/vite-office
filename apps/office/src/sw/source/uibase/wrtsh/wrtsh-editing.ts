@@ -22,6 +22,36 @@ import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
+import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+
+/** Applies the existing shell ruler-margin algorithm through actual paragraph items and shell history. @param shell - Original shell owner. @param edge - Dragged marker. @param delta - Original twip delta. @returns Whether paragraph attributes changed. */
+export function AdjustParagraphRulerIndent(
+  shell: SwWrtShell,
+  edge: "left" | "firstLine" | "right",
+  delta: number,
+): boolean {
+  if (!Number.isFinite(delta)) return false;
+  const paragraph = shell.GetActiveParagraph();
+  const before = {
+    firstLine: (
+      paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+    ).ResolveTextFirstLineOffset(),
+    left: paragraph.GetParagraphTextLeftMargin(),
+    right: paragraph.GetParagraphRightMargin(),
+  };
+  switch (edge) {
+    case "left":
+      return shell.SetParagraphRulerIndents({ ...before, left: Math.max(0, before.left + delta) });
+    case "firstLine":
+      return shell.SetParagraphRulerIndents({ ...before, firstLine: before.firstLine + delta });
+    case "right":
+      return shell.SetParagraphRulerIndents({
+        ...before,
+        right: Math.max(0, before.right - delta),
+      });
+  }
+}
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
