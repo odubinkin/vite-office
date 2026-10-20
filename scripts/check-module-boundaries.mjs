@@ -237,6 +237,8 @@ const originalCharacterValueImports = new Map([
       "offapi/com/sun/star/util/SearchAlgorithms2.ts",
       "offapi/com/sun/star/util/SearchFlags.ts",
       "offapi/com/sun/star/util/SearchResult.ts",
+      // Original SearchResult sequence fields expose cppu Sequence mutable scalar addresses.
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
       "offapi/com/sun/star/i18n/KCharacterType.ts",
       "o3tl/inc/string_view.ts",
     ]),

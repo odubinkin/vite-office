@@ -1,4 +1,5 @@
 /** @fileoverview Source-contract tests for absolute search, folding, offset recovery and native directional punctuation. */
+import { offsets } from "../../../test/search-result-values";
 import { describe, expect, it } from "vitest";
 import { TextSearch } from "./textsearch";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
@@ -35,7 +36,7 @@ function both(source: string, key: string, fold = false, words = false): readonl
   ].map(
     /** Extracts initialized result fields. @param found - Native result. @returns Comparable fields. */ (
       found,
-    ) => [found.subRegExpressions, found.startOffset, found.endOffset],
+    ) => [found.subRegExpressions, offsets(found.startOffset), offsets(found.endOffset)],
   );
 }
 
@@ -117,17 +118,19 @@ describe("native absolute TextSearch", /** Registers initialized native source e
               last = slice.lastIndexOf(key);
             const f = engine.searchForward(string(text), low, high),
               b = engine.searchBackward(string(text), high, low);
-            expect(f.startOffset).toEqual(first < 0 ? [] : [low + first]);
-            expect(f.endOffset).toEqual(first < 0 ? [] : [low + first + key.length]);
+            expect(offsets(f.startOffset)).toEqual(first < 0 ? [] : [low + first]);
+            expect(offsets(f.endOffset)).toEqual(first < 0 ? [] : [low + first + key.length]);
             if (low === text.length) {
               // Source NSrchBkwrd treats endPos == full length as a whole-string search.
               const nativeLast = text.lastIndexOf(key);
-              expect(b.startOffset).toEqual(nativeLast < 0 ? [] : [nativeLast + key.length]);
-              expect(b.endOffset).toEqual(nativeLast < 0 ? [] : [nativeLast]);
+              expect(offsets(b.startOffset)).toEqual(
+                nativeLast < 0 ? [] : [nativeLast + key.length],
+              );
+              expect(offsets(b.endOffset)).toEqual(nativeLast < 0 ? [] : [nativeLast]);
               continue;
             }
-            expect(b.startOffset).toEqual(last < 0 ? [] : [low + last + key.length]);
-            expect(b.endOffset).toEqual(last < 0 ? [] : [low + last]);
+            expect(offsets(b.startOffset)).toEqual(last < 0 ? [] : [low + last + key.length]);
+            expect(offsets(b.endOffset)).toEqual(last < 0 ? [] : [low + last]);
           }
       }
     }
@@ -197,8 +200,8 @@ describe("native absolute TextSearch", /** Registers initialized native source e
       [0, [], []],
     ]);
     const engine = new TextSearch(options("cat", false, true));
-    expect(engine.searchForward(string("cats"), 0, 3).startOffset).toEqual([0]);
-    expect(engine.searchBackward(string("cats"), 3, 0).startOffset).toEqual([3]);
+    expect(offsets(engine.searchForward(string("cats"), 0, 3).startOffset)).toEqual([0]);
+    expect(offsets(engine.searchBackward(string("cats"), 3, 0).startOffset)).toEqual([3]);
   });
   it("preserves the original punctuation asymmetry without transliteration", /** Source searchForward's no-transliteration branch only changes U+2019. @returns Nothing. */ () => {
     for (const quote of ["‘", "’", "‚", "‛", "“", "”", "„", "‟"]) {
@@ -221,13 +224,13 @@ describe("native absolute TextSearch", /** Registers initialized native source e
     const config = options("a"),
       engine = new TextSearch(config);
     config.searchString.assign(string("b"));
-    expect(engine.searchForward(string("ab"), 0, 2).startOffset).toEqual([0]);
+    expect(offsets(engine.searchForward(string("ab"), 0, 2).startOffset)).toEqual([0]);
     engine.setOptions2(config);
-    expect(engine.searchBackward(string("ab"), 2, 0).startOffset).toEqual([2]);
-    expect(engine.searchForward(string("ab"), 0, 2).startOffset).toEqual([1]);
+    expect(offsets(engine.searchBackward(string("ab"), 2, 0).startOffset)).toEqual([2]);
+    expect(offsets(engine.searchForward(string("ab"), 0, 2).startOffset)).toEqual([1]);
     config.AlgorithmType2 = 999;
     engine.setOptions2(config);
-    expect(engine.searchForward(string("ab"), 0, 2).startOffset).toEqual([1]);
+    expect(offsets(engine.searchForward(string("ab"), 0, 2).startOffset)).toEqual([1]);
     for (const algorithm of [2, 3]) {
       config.AlgorithmType2 = algorithm;
       expect(

@@ -13,7 +13,8 @@ import {
   NORM_WORD_ONLY,
   WILD_MATCH_SELECTION,
 } from "../../../offapi/com/sun/star/util/SearchFlags";
-import type { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
+import type { SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { ALPHA, DIGIT, LETTER } from "../../../offapi/com/sun/star/i18n/KCharacterType";
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
 import { getCharacterType } from "../characterclassification/cclass_unicode";
@@ -21,11 +22,15 @@ import { transliterateCaseFolding } from "../transliteration/transliteration_bod
 
 /** Native result default: no expressions and empty offset sequences. @returns Unsuccessful search result. */
 function notFound(): SearchResult {
-  return { subRegExpressions: 0, startOffset: [], endOffset: [] };
+  return new SearchResult();
 }
-/** Native one-expression wildcard result setter, retaining directional UTF-16 offsets. @param start - Directional start. @param end - Directional end. @returns Original one-expression result value. */
-function setWildcardMatch(start: number, end: number): SearchResult {
-  return { subRegExpressions: 1, startOffset: [start], endOffset: [end] };
+/** Original setWildcardMatch updates the caller result with actual one-element sequences. @param result - Caller-owned result. @param start - Directional start. @param end - Directional end. @returns Nothing. */
+function setWildcardMatch(result: SearchResult, start: number, end: number): void {
+  result.subRegExpressions = 1;
+  result.startOffset.realloc(1);
+  result.endOffset.realloc(1);
+  ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = start;
+  ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = end;
 }
 /** Native punctuation detection, independent of whether the key contains an ASCII quote. @param text - UTF-16 text. @returns Whether a typographic quote occurs. */
 function isReplacePunctuation(text: Uint16Array): boolean {
@@ -208,8 +213,12 @@ export class TextSearch {
         : this.NSrchBkwrd(prepared, hi, lo);
     if (result.subRegExpressions === 0 || offsets === undefined || offsets.length === 0)
       return result;
-    const low = (forward ? result.startOffset[0] : result.endOffset[0]) as number;
-    const high = (forward ? result.endOffset[0] : result.startOffset[0]) as number;
+    const low = (
+      forward ? result.startOffset.operatorIndex(0)[0] : result.endOffset.operatorIndex(0)[0]
+    ) as number;
+    const high = (
+      forward ? result.endOffset.operatorIndex(0)[0] : result.startOffset.operatorIndex(0)[0]
+    ) as number;
     const position: [number] = [offsets[offsets.length - 1] as number];
     iterateCodePoints(original, position, 1);
     const mappedLow = low < offsets.length ? (offsets[low] as number) : position[0];
@@ -217,11 +226,13 @@ export class TextSearch {
       position[0] = offsets[Math.min(high, offsets.length) - 1] as number;
       iterateCodePoints(original, position, 1);
     } else position[0] = offsets[0] as number;
-    return {
-      subRegExpressions: 1,
-      startOffset: [forward ? mappedLow : position[0]],
-      endOffset: [forward ? position[0] : mappedLow],
-    };
+    ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = forward
+      ? mappedLow
+      : position[0];
+    ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = forward
+      ? position[0]
+      : mappedLow;
+    return result;
   }
   /** Native FindPosInSeq_Impl first offset not less than the source position. @param offsets - Output-to-source map. @param position - Source offset. @returns Output offset. */
   private FindPos(offsets: readonly number[], position: number): number {
@@ -256,7 +267,13 @@ export class TextSearch {
         )
       )
         continue;
-      return { subRegExpressions: 1, startOffset: [index], endOffset: [index + size] };
+      const result = new SearchResult();
+      result.subRegExpressions = 1;
+      result.startOffset.realloc(1);
+      result.endOffset.realloc(1);
+      ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = index;
+      ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = index + size;
+      return result;
     }
     return notFound();
   }
@@ -280,7 +297,13 @@ export class TextSearch {
         )
       )
         continue;
-      return { subRegExpressions: 1, startOffset: [index], endOffset: [index - size] };
+      const result = new SearchResult();
+      result.subRegExpressions = 1;
+      result.startOffset.realloc(1);
+      result.endOffset.realloc(1);
+      ((result.startOffset.getArray() as SequenceElements).get(0) as [number])[0] = index;
+      ((result.endOffset.getArray() as SequenceElements).get(0) as [number])[0] = index - size;
+      return result;
     }
     return notFound();
   }
@@ -292,7 +315,7 @@ export class TextSearch {
     nEndPos: number,
   ): SearchResult {
     const input = searchStr.getStr().subarray(0, searchStr.getLength());
-    let aRes = notFound();
+    const aRes = notFound();
     let nStartOffset = nStartPos;
     const nEndOffset = nEndPos;
 
@@ -316,7 +339,7 @@ export class TextSearch {
     if (nStartPos == nEndPos) {
       let i = 0;
       while (i < nPatternLen && rPattern[i] == 42) ++i;
-      if (i == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+      if (i == nPatternLen) setWildcardMatch(aRes, nStartOffset, nEndOffset);
       return aRes;
     }
 
@@ -373,7 +396,7 @@ export class TextSearch {
         // A trailing '*' is handled below.
         if (this.mbWildcardAllowSubstring) {
           // If the pattern is consumed and substring match allowed we're good.
-          aRes = setWildcardMatch(nStartOffset, nString[0]);
+          setWildcardMatch(aRes, nStartOffset, nString[0]);
           return aRes;
         } else if (nString[0] < nEndPos && nLastAsterisk >= 0) {
           // If substring match is not allowed try a greedy '*' match.
@@ -388,7 +411,7 @@ export class TextSearch {
 
         if (nPattern[0] >= nPatternLen) {
           // Last pattern is '*', remaining string matches.
-          aRes = setWildcardMatch(nStartOffset, nEndOffset);
+          setWildcardMatch(aRes, nStartOffset, nEndOffset);
           return aRes;
         }
 
@@ -447,7 +470,7 @@ export class TextSearch {
     // '*' is one code unit, so not using iterateCodePoints() is ok.
     while (nPattern[0] < nPatternLen && rPattern[nPattern[0]] == 42) ++nPattern[0];
 
-    if (nPattern[0] == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+    if (nPattern[0] == nPatternLen) setWildcardMatch(aRes, nStartOffset, nEndOffset);
     return aRes;
   }
   /** Native WildcardSrchBkwrd code-point/backtracking loop with original directional offsets and escape state. @param searchStr - Prepared native text. @param nStartPos - Directional start. @param nEndPos - Directional end. @returns Original wildcard match. */
@@ -457,7 +480,7 @@ export class TextSearch {
     nEndPos: number,
   ): SearchResult {
     const input = searchStr.getStr().subarray(0, searchStr.getLength());
-    let aRes = notFound();
+    const aRes = notFound();
 
     let nStartOffset = nStartPos;
     const nEndOffset = nEndPos;
@@ -482,7 +505,7 @@ export class TextSearch {
     if (nStartPos == nEndPos) {
       let i = 0;
       while (i < nPatternLen && rPattern[i] == 42) ++i;
-      if (i == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+      if (i == nPatternLen) setWildcardMatch(aRes, nStartOffset, nEndOffset);
       return aRes;
     }
 
@@ -534,7 +557,7 @@ export class TextSearch {
         // A trailing '*' is handled below.
         if (this.mbWildcardAllowSubstring) {
           // If the pattern is consumed and substring match allowed we're good.
-          aRes = setWildcardMatch(nStartOffset, nString[0]);
+          setWildcardMatch(aRes, nStartOffset, nString[0]);
           return aRes;
         } else if (nString[0] > nEndPos && nLastAsterisk >= 0) {
           // If substring match is not allowed try a greedy '*' match.
@@ -549,7 +572,7 @@ export class TextSearch {
 
         if (nPattern[0] <= 0) {
           // First pattern is '*', remaining string matches.
-          aRes = setWildcardMatch(nStartOffset, nEndOffset);
+          setWildcardMatch(aRes, nStartOffset, nEndOffset);
           return aRes;
         }
 
@@ -604,7 +627,7 @@ export class TextSearch {
     // '*' is one code unit, so not using iterateCodePoints() is ok.
     while (nPattern[0] > 0 && rReversePattern[nPattern[0] - 1] == 42) --nPattern[0];
 
-    if (nPattern[0] == 0) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+    if (nPattern[0] == 0) setWildcardMatch(aRes, nStartOffset, nEndOffset);
     return aRes;
   }
   /** Native backward pattern preparation moves each escape after its code point; a trailing escape is eliminated. The cache is reset only by setOptions2. @returns Reordered original UTF-16 units. */

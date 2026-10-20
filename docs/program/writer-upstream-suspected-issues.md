@@ -489,6 +489,29 @@ condition in some call paths and remain to be audited during integration.
 Decision: preserve the exact separate ampersand and dollar-reference branches;
 do not normalize ampersand or silently replace it with dollar-zero.
 
+## WRITER-019: Forward and backward wrappers test expression count differently
+
+Status: suspicious source-condition asymmetry; no evidence that an original
+search service returns a negative expression count in normal execution.
+Original `utl::TextSearch::SearchForward` in
+`unotools/source/i18n/textsearch.cxx` accepts `subRegExpressions > 0`;
+`SearchBackward` instead accepts any nonzero signed count.
+
+Initialized boundary example: an injected generated `SearchResult` with count
+`-2` and one valid capture is rejected forward but accepted backward. Backward
+wrapper caller bounds are normalized and the negative raw count is copied.
+Current represented normal/wildcard engines only return zero or one, so this
+example does not assert an observed end-user defect or native backend result.
+
+Evidence: pinned wrapper source and source-derived boundary tests in
+`apps/office/src/i18npool/source/search/native-search-result.test.ts`, using a
+real result/sequence value returned by a temporary test spy. Compiled native
+service behavior and backend producers of negative counts remain unverified.
+
+Decision: keep the separate exact conditions and avoid an invented common
+positive-count guard. Neither the struct nor sequence owner validates that the
+count equals its offset sequence lengths.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

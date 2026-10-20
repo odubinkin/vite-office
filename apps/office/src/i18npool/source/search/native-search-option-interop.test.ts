@@ -1,4 +1,5 @@
 /** @fileoverview Actual legacy/new UNO TextSearch entrypoint contracts through the existing backend and typed wrapper. */
+import { offsets, searchResult } from "../../../test/search-result-values";
 import { expect, it, vi } from "vitest";
 import { TextSearch } from "./textsearch";
 import { SearchOptions } from "../../../offapi/com/sun/star/util/SearchOptions";
@@ -41,16 +42,8 @@ it("legacy setOptions delegates actual upgraded fields with zero escape and inde
     arg?.insertedChars,
   ]).toEqual([1, 0, 2, 3, 4]);
   legacy.searchString = string("missing");
-  expect(engine.searchForward(string("x CAT y"), 0, 7)).toEqual({
-    subRegExpressions: 1,
-    startOffset: [2],
-    endOffset: [5],
-  });
-  expect(engine.searchBackward(string("x CAT y"), 7, 0)).toEqual({
-    subRegExpressions: 1,
-    startOffset: [5],
-    endOffset: [2],
-  });
+  expect(engine.searchForward(string("x CAT y"), 0, 7)).toEqual(searchResult(1, [2], [5]));
+  expect(engine.searchBackward(string("x CAT y"), 7, 0)).toEqual(searchResult(1, [5], [2]));
   spy.mockRestore();
 });
 it.each([-1, 3, 999])(
@@ -63,7 +56,7 @@ it.each([-1, 3, 999])(
     legacy.algorithmType = algorithm as Legacy;
     legacy.searchString = string("a.b");
     engine.setOptions(legacy);
-    expect(engine.searchForward(string("xa.by"), 0, 5).startOffset).toEqual([1]);
+    expect(offsets(engine.searchForward(string("xa.by"), 0, 5).startOffset)).toEqual([1]);
     expect(engine.searchForward(string("xaXby"), 0, 5).subRegExpressions).toBe(0);
   },
 );
@@ -84,7 +77,7 @@ it("newer setOptions2 uses AlgorithmType2 while legacy setOptions reads only the
     engine = new TextSearch();
   engine.setOptions2(options);
   expect(engine.searchForward(string("aXb"), 0, 3).subRegExpressions).toBe(1);
-  expect(engine.searchBackward(string("aXb"), 3, 0).startOffset).toEqual([3]);
+  expect(offsets(engine.searchBackward(string("aXb"), 3, 0).startOffset)).toEqual([3]);
   engine.setOptions(options);
   expect(engine.searchForward(string("aXb"), 0, 3).subRegExpressions).toBe(0);
   expect(engine.searchForward(string("a?b"), 0, 3).subRegExpressions).toBe(1);
@@ -130,14 +123,6 @@ it("uses actual typed-to-wire conversion without losing wildcard escape or suppl
   engine.setOptions2(wire);
   typed.searchString.clear();
   wire.searchString.clear();
-  expect(engine.searchForward(string("x🌴ay"), 0, 5)).toEqual({
-    subRegExpressions: 1,
-    startOffset: [1],
-    endOffset: [4],
-  });
-  expect(engine.searchBackward(string("x🌴ay"), 5, 0)).toEqual({
-    subRegExpressions: 1,
-    startOffset: [4],
-    endOffset: [1],
-  });
+  expect(engine.searchForward(string("x🌴ay"), 0, 5)).toEqual(searchResult(1, [1], [4]));
+  expect(engine.searchBackward(string("x🌴ay"), 5, 0)).toEqual(searchResult(1, [4], [1]));
 });

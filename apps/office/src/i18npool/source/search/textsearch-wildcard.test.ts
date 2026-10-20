@@ -40,7 +40,10 @@ function match(
     : engine.searchForward(string(text), low, high);
   return value.subRegExpressions === 0
     ? undefined
-    : [value.startOffset[0] as number, value.endOffset[0] as number];
+    : [
+        value.startOffset.operatorIndex(0)[0] as number,
+        value.endOffset.operatorIndex(0)[0] as number,
+      ];
 }
 it.each([
   ["abAca", "a", [0, 1], [5, 4]],

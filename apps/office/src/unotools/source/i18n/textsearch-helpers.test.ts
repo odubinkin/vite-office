@@ -1,4 +1,5 @@
 /** @fileoverview Source-derived public replacement-reference and similarity contracts; these tests do not claim compiled UNO or regex backend fidelity. */
+import { searchResult } from "../../../test/search-result-values";
 import { describe, expect, it } from "vitest";
 import { TextSearch, WLD_THRESHOLD, SMALL_STRING_THRESHOLD } from "../../inc/textsearch";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -22,15 +23,11 @@ function units(owner: OUString): number[] {
 }
 /** Constructs a native result from original directional pairs. @param pairs - Capture pairs. @returns Result. */
 function result(...pairs: [number, number][]): SearchResult {
-  return {
-    subRegExpressions: pairs.length,
-    startOffset: pairs.map(
-      /** Selects start. @param pair - Native pair. @returns Start. */ (pair) => pair[0],
-    ),
-    endOffset: pairs.map(
-      /** Selects end. @param pair - Native pair. @returns End. */ (pair) => pair[1],
-    ),
-  };
+  return searchResult(
+    pairs.length,
+    pairs.map(/** Selects start. @param pair - Native pair. @returns Start. */ (pair) => pair[0]),
+    pairs.map(/** Selects end. @param pair - Native pair. @returns End. */ (pair) => pair[1]),
+  );
 }
 describe("native replacement reference parser", /** Verifies the source-defined UTF16 contract. @returns Nothing. */ () => {
   it.each([
@@ -60,17 +57,9 @@ describe("native replacement reference parser", /** Verifies the source-defined 
   it("leaves replacement storage untouched without expressions", /** Verifies the source-defined UTF16 contract. @returns Nothing. */ () => {
     const replacement = string("&$0\\t"),
       before = replacement.getStr();
-    TextSearch.ReplaceBackReferences(replacement, new Uint16Array(), {
-      subRegExpressions: 0,
-      startOffset: [],
-      endOffset: [],
-    });
+    TextSearch.ReplaceBackReferences(replacement, new Uint16Array(), searchResult(0, [], []));
     expect(replacement.getStr()).toBe(before);
-    TextSearch.ReplaceBackReferences(replacement, new Uint16Array(), {
-      subRegExpressions: -1,
-      startOffset: [],
-      endOffset: [],
-    });
+    TextSearch.ReplaceBackReferences(replacement, new Uint16Array(), searchResult(-1, [], []));
     expect(replacement.getStr()).toBe(before);
   });
   it("normalizes reversed dollar captures while ampersand retains native unsigned-count remainder", /** Verifies the source-defined UTF16 contract. @returns Nothing. */ () => {

@@ -2,6 +2,7 @@
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
 import { TextSearch as TextSearchService } from "../../../i18npool/source/search/textsearch";
 import type { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
@@ -166,20 +167,22 @@ export class TextSearch {
       for (let i = 0; i < replacement.getLength(); ++i) {
         const current = units[i] as number;
         if (current === 38) {
-          const start = result.startOffset[0] as number;
-          buffer.append(substrView(text, start, (result.endOffset[0] as number) - start));
+          const start = result.startOffset.operatorIndex(0)[0] as number;
+          buffer.append(
+            substrView(text, start, (result.endOffset.operatorIndex(0)[0] as number) - start),
+          );
         } else if (i < replacement.getLength() - 1 && current === 36) {
           const next = units[i + 1] as number;
           if (next >= 48 && next <= 57) {
             const j = next - 48;
             if (j < result.subRegExpressions) {
-              let start = result.startOffset[j] as number;
-              let count = result.endOffset[j] as number;
+              let start = result.startOffset.operatorIndex(j)[0] as number;
+              let count = result.endOffset.operatorIndex(j)[0] as number;
               if (start < 0 || count < 0) start = count = 0;
               else if (count >= start) count -= start;
               else {
                 count = start - count;
-                start = result.endOffset[j] as number;
+                start = result.endOffset.operatorIndex(j)[0] as number;
               }
               buffer.append(substrView(text, start, count));
             }
@@ -307,12 +310,20 @@ export class TextSearch {
     end: [number],
     result?: { value: SearchResult },
   ): boolean {
-    const found = this.xTextSearch.searchForward(text, start[0], end[0]);
-    if (found.subRegExpressions <= 0) return false;
-    start[0] = found.startOffset[0] as number;
-    end[0] = found.endOffset[0] as number;
-    if (result !== undefined) result.value = found;
-    return true;
+    let found: SearchResult | undefined;
+    try {
+      found = this.xTextSearch.searchForward(text, start[0], end[0]);
+      if (found.subRegExpressions <= 0) return false;
+      start[0] = found.startOffset.operatorIndex(0)[0] as number;
+      end[0] = found.endOffset.operatorIndex(0)[0] as number;
+      if (result !== undefined) result.value.assign(found);
+      return true;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    } finally {
+      found?.dispose();
+    }
   }
   /** Reverses raw backward outputs into the wrapper's increasing start/end convention. @param text - Original input. @param start - High bound on entry, low match bound on success. @param end - Low bound on entry, high match bound on success. @param result - Optional unnormalized raw result. @returns Whether found. */
   public SearchBackward(
@@ -321,12 +332,20 @@ export class TextSearch {
     end: [number],
     result?: { value: SearchResult },
   ): boolean {
-    const found = this.xTextSearch.searchBackward(text, start[0], end[0]);
-    if (found.subRegExpressions <= 0) return false;
-    end[0] = found.startOffset[0] as number;
-    start[0] = found.endOffset[0] as number;
-    if (result !== undefined) result.value = found;
-    return true;
+    let found: SearchResult | undefined;
+    try {
+      found = this.xTextSearch.searchBackward(text, start[0], end[0]);
+      if (found.subRegExpressions === 0) return false;
+      end[0] = found.startOffset.operatorIndex(0)[0] as number;
+      start[0] = found.endOffset.operatorIndex(0)[0] as number;
+      if (result !== undefined) result.value.assign(found);
+      return true;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    } finally {
+      found?.dispose();
+    }
   }
   /** Searches the full original value in the forward direction. @param text - Input string. @returns Whether found. */
   public searchForward(text: OUStringConstReference): boolean {

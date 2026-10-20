@@ -19,7 +19,8 @@
       "endOffset"
     ],
     "preservedResponsibilities": [
-      "Original result fields and backward high/exclusive start, low/inclusive end offsets; TypeScript interface erases UNO marshalling."
+      "Original result fields and backward high/exclusive start, low/inclusive end offsets. The earlier JS-array interface is superseded by the generated struct/sequence value contract below; UNO ABI and marshalling remain unverified.",
+      "PC6WK7 replaces the earlier readonly JS-array interface with the actual generated struct value contract: default zero count and two empty Sequence<sal_Int32> owners, full/copy construction, stable member assignment, generated equality/inequality and erased destruction. Existing shared Sequence supplies copy sharing, primitive cells and COW; no parallel offset arrays or sequence implementation. IDL field/directional semantics and codemaker generated copy/default responsibilities are source-inspected; portable owner tests do not certify compiled ABI/marshalling, complete library or UI parity."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
@@ -33,12 +34,20 @@
         {
           "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
           "marker": "native absolute TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/native-search-result.test.ts",
+          "marker": "constructs zero/default values with distinct owned sequence fields"
         }
       ],
       "upstream": [
         {
           "path": "offapi/com/sun/star/util/SearchResult.idl",
           "marker": "SearchResult"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "PlainStructType::dumpHppFile"
         }
       ]
     }

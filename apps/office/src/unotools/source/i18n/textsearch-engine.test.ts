@@ -1,4 +1,5 @@
 /** @fileoverview Contract checks for the native utl::TextSearch cache and directional pointer outputs. */
+import { offsets, searchResult } from "../../../test/search-result-values";
 import { expect, it } from "vitest";
 import { TextSearch } from "../../inc/textsearch";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
@@ -17,24 +18,21 @@ it("normalizes backward pointer outputs while retaining raw reversed offsets", /
   options.searchString.assign(string("ab"));
   const search = new TextSearch(options),
     raw = {
-      value: {
-        subRegExpressions: 0,
-        startOffset: [] as readonly number[],
-        endOffset: [] as readonly number[],
-      },
+      value: searchResult(0, [] as readonly number[], [] as readonly number[]),
     };
   const start: [number] = [7],
     end: [number] = [0];
   expect(search.SearchBackward(string("ab x ab"), start, end, raw)).toBe(true);
-  expect([start[0], end[0], raw.value]).toEqual([
-    5,
-    7,
-    { subRegExpressions: 1, startOffset: [7], endOffset: [5] },
-  ]);
+  expect([start[0], end[0], raw.value]).toEqual([5, 7, searchResult(1, [7], [5])]);
   start[0] = 2;
   end[0] = 7;
   expect(search.SearchForward(string("ab x ab"), start, end, raw)).toBe(true);
-  expect([start[0], end[0], raw.value.startOffset, raw.value.endOffset]).toEqual([5, 7, [5], [7]]);
+  expect([start[0], end[0], offsets(raw.value.startOffset), offsets(raw.value.endOffset)]).toEqual([
+    5,
+    7,
+    [5],
+    [7],
+  ]);
   const before = raw.value;
   start[0] = 2;
   end[0] = 4;

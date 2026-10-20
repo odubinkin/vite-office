@@ -31,6 +31,7 @@ it("admits only native search and character classification value edges", /** Pre
         "offapi/com/sun/star/util/SearchAlgorithms2.ts",
         "offapi/com/sun/star/util/SearchFlags.ts",
         "offapi/com/sun/star/util/SearchResult.ts",
+        "cppu/inc/com/sun/star/uno/Sequence.ts",
         "offapi/com/sun/star/i18n/KCharacterType.ts",
         "o3tl/inc/string_view.ts",
       ],
@@ -49,6 +50,7 @@ it("admits only native search and character classification value edges", /** Pre
   }
   expect(isForbiddenModuleEdge("unotools", "i18nutil")).toBe(true);
   expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(true);
+  expect(isForbiddenModuleEdge("i18npool", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("i18npool", "external")).toBe(true);
   expect(isForbiddenModuleEdge("offapi", "udkapi")).toBe(true);
 });
