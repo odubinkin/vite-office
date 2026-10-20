@@ -1,0 +1,4298 @@
+[
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/comphelper/inc/extract.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/comphelper/source/xml/attributelist.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/configuration-tree.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/data-paths.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/data-tree.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/localizednodes.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/modifications.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/configmgr/source/type.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/exception-initialization.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/generated-interfaces.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/genfunc.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Reference-query.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Reference.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type-index.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Sequence.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/com/sun/star/uno/Type.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/Enterable.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/uno/dispatcher.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/unotype-overloads.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/inc/unotype.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/registry-assertions.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/registry.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/static_types.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-assignability.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-complete.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-member-factories.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib-members.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/typelib/typelib.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/assign.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/constr.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/copy.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/destr.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/EnvDcp.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/eq.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/lbenv.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/lbmap.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/prim.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppu/source/uno/sequence-engine.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppuhelper/inc/detail/XExceptionThrower.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppuhelper/source/service-helpers.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cppuhelper/source/weakref.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cui/source/tabpages/native-border-page.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/cui/source/tabpages/native-collapsing-border-page.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/docmodel/inc/color/ComplexColor.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/docmodel/inc/color/Transformation.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/docmodel/inc/theme/ThemeColorType.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/browser/text-line-item-codec.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/inc/ESelection.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/editeng/native-content-normalize.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/editeng/native-content-values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/editeng/native-sections.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/editeng/native-wrong-list.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/boxitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/font-effects.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/frame-direction.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/frmitems.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/justifyitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-adjust-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-brush-color.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-escapement.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-field-values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-first-line-indent-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-color.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-family.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-height-transport.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-height.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-posture.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-font-weight.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-language-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-line-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-line-spacing.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-lr-font-units.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-lr-space-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-lr-space-value.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-right-margin-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-ruby-feature-values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-script-set-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-shadow-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-size-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-tab-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-tab-transport.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-tab-values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-text-left-margin-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-text-line.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-text-modes.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-text-spacing.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/native-ul-space-value.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/numitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/paraitem.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/pbinitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/strikeout-emphasis.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/textitem.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/editeng/source/items/xmlcnitm.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/icu/source/common/native-character-types.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/icu/source/common/script-native-branches.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/icu/source/common/ucase.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/extensions/lt-ext-ldml-u.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-registry.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-tag.data.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-tag.errors.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-tag.qa.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-tag.scanner.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-tag.values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-utils.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/liblangtag/liblangtag/lt-xml.cldr.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/flat_segment_tree.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_matrix-geometry.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_matrix-walk.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_matrix.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/block_funcs.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/macro.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/object_value_ownership.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/block_util.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-append.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range-owned.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-set-owned.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-set.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-value.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/iterator.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/types_managed.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/types.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/util.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_value_ownership.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/errorcodes.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/grammar.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/native-token.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/opcode.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/token.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/inc/tokenarray.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/formula/source/core/api/compiler-output.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/accelerators/keymapping.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/app/bootstrap.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/app/desktop.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/app/modulemanager.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/dispatch/browser-dispatcher.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/localization/browser-localization.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/localization/messages.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandToolbar.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/use-command-shortcuts.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/workers/worker-protocol.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/source/dispatch/dispatchprovider.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/isolang.names.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/mslangid.script.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nutil/source/utility/casefolding_data.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nutil/source/utility/casefolding-iterator.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nutil/source/utility/casefolding-value.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nutil/source/utility/casefolding.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nutil/source/utility/scriptclass.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/main.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/hash_combine.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/sorted_vector.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/string_view-codepoints.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/string_view-views.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/string_view.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/o3tl/inc/unit_conversion.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/frame/status/FontHeight.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/style/NumberingType.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/table/BorderLine.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/table/ShadowFormat.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/util/CellProtection.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/util/native-color-interfaces.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/manifest/ManifestExport.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/manifest/native-manifest-import.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/zipapi/CRC32.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/zipapi/ZipFile.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/inc/rtl/character.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/osl/unx/interlck.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/approx.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/ascii-create.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/ascii-equality.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/double-format.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/float-format.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/integer-format.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/math.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/native-terminated-int64.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/oustringbuffer.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/string-length-realms.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/string-search.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/string-subview.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/stringbuffer.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/stringconcat.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/strtmpl.math.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/ustring-ownership.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/rtl/ustring.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/textenc/singlebyte-reverse.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sal/textenc/singlebyte.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/fastparser/fastparser.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter-bool.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter-double.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter-number.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sax/source/tools/converter.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-alignment.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-color.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-sheet-popup.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/column-geometry.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/address.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/fstalgorithm.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-append.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-callback.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-range.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-set.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-store.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/ref-address.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/sheetlimits.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/alignmentattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/asianattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attrib.values.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/background-brush.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/bigrange.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/border-frame.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/celltextattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cellvalue.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/color-defaults.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/compressedarray.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/diagonalattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/dociter.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.formula.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.references.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.scalar.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/font-family-defaults.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/fonteffectsattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/heightattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/indentattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/language-item.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/marginattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markarr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markdata.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markmulti.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/mergeattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/mergeflag.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/namespace-map.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-column-width.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/pageattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/patattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/postureattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/protectionattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/refcellvalue.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/rotateattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/rowheight.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/script-type.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/segmenttree.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/selection-pattern.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/shadowattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/strikeout-emphasisattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/text-line-items.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/weightattr.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/xml-attributes.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/address.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/docoptio.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/external-token.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formula-output.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formularesult.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/native-address.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/range-extension.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/range-matrix.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangelst.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangepair.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refdata.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/reference-token.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refupdat.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refupdate.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refwrap.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/stringutil.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token-clone.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/native-alignment-handlers.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-borders.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-columns.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-fonts.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/app/inputhdl.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/undo/undocell.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/border-history.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/column-width.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/tabview3.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/viewdata.test.ts",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+    "projectName": "calc"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/bindings.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/dispatch.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/native-attribute-toggle.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/native-popup-owner.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/request.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/control/unoctitm.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/dialog/basedlgs.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/doc/docfile.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/doc/native-recent-colors.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sfx2/source/doc/objsh.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/inc/languageoptions.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/cintitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/enum-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/iteminfo.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/itempool-default-registration.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/itemset-equality.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/itemset.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-bool-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-byte-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-grab-bag.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-int16-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-itemset-merge.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-itemset-set-holder.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-pool-chain.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-pool-copy.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-signed-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-style-first-import.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-style-iterator.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-style-model.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-style-sheet-first-import.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-style-sheet.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-unsigned-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-user-defaults.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/poolitem-comparison.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/sitem.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/stylepool.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/misc/native-sharedstringpool.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/misc/recovery.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/misc/sharedstring.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/misc/sharedstringpool.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/notify/native-svt-notifier.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/notify/notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/undo/undo.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svtools/source/control/ctrlbox.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svtools/source/misc/native-unitconv.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/browser/dialog/border-line.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/browser/tbxctrls/ColorControl.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/framelinkarray.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/native-column-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/native-frame-selector.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/native-grid-copy-binding.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/native-table-ruler.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/dialog/optgrid.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/items/algitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/items/pageitem.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/items/rotmodit.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svx/source/svdraw/angle-item.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/composition/writer-module.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-box-frame-format.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cell-list-backspace.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cell-list-enter.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-context-menu.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-editor-layout-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-change.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-construction.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-death.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-notifier.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-format-parent.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-formatted-cursor-frame-reuse.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-frame-position-mapping.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-frame-root-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-headline-selection.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-hyperlink-begin-edit.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-hyperlink-mixed-remove.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-internet-edit-range.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-internet-state-query.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-label-affinity.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-last-row-frame-size.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-line-margin.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-list-tab.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-margin-frame-query.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-marked-list-paint.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-none-numbering.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-numbering-font.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-numbering-tab.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-object-dying.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-painter-frame-borrow.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-paragraph-lines.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-root-owned-table.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-row-format-client.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-select-all.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-attribute-headline.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-delete.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-editing.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-flow-item-transport-history.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-follow.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-frame-item-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-frame-lifetime.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-frame-reuse.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-headline-command.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-headline-counter.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-headlines.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-hori-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-layout-split.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-linear-drag.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-mouse.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-paste.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-print-area.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-root-constructor.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-ul-space-transport-history.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-table-ulspace-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-text-frame-follow.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-text-frame-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/native-ul-space-complete-history.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/writer-font-family.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/writer-geometry.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/writer-line-measurement.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/writer-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/writer-table-geometry.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-font-metadata.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-table-geometry-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/FontCommandSelects.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-cell-alignment-state.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-collapsing-border-item.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-column-frame-normalization.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-command-popup.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-disabled-menubar.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-disabled-popup.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-empty-menubar.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-empty-popup.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-format-notifier-store.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-headline-dialog-input.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-independent-table-properties.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-insert-table-dialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-layout-split-item.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-menubar-auxclick.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-menubar-chain.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-menubar-document-key.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-popup-delay.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-popup-highlight.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-popup-mouse.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-popup-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-row-cell-export-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-row-split-dialog-input.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-attr-notify.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-attribute-set.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-export-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-geometry-transport.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-height-delta.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-import-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-itemset-restore.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-name-page.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-property-output.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-split-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-text-flow-headline.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/native-workbench-view-owner.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-command-presentation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-default-tabs.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-tab-glyphs.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-tab-pixels.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-title-collision.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterCommandToolbar.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterPageStyleDialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterPropertiesPanel.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/presentation/WriterUpstreamQuickControls.test.tsx",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/storage/writer-odt-store.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/workflows/writer-autosave.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/workflows/writer-odt-io.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/browser/workflows/writer-workflows.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/fmtfsize.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/fmtornt.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/lineinfo.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/native-frame-size-members.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/native-hori-orient-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/native-table-split-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/inc/poolfmt.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/sdi/swriter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/internet-pool-default.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/list-restart-default.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-format-change.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-format-construction.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-format-death.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-format-parent.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-object-dying.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-paragraph-first-line-indent.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-paragraph-right-margin.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-paragraph-text-left-margin.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-pool-input-boundaries.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/attr/native-writer-client-list.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/bastyp/index.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/bastyp/tabcol.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/native-margin-frame-query.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/native-marked-list-cursor.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/native-table-cursor-stack.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/crsr/pam-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/automatic-style-handles.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/default-font.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/item-codec.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/list-invariants.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/list.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-font-family-state.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-font-height-state.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-marked-list-level.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number-format.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number-list-format.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/number.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/writer-boundaries.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/doc/writer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-cell-alignment-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-column-frame-normalization.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-row-split-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-row-split-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-table-border-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-table-headline-command.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/native-tabrows.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/eddel.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/edfcol.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-internet-edit-range.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-internet-state-query.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-margin-admission.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/edit/native-numbering-indent.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/inc/native-frame-area.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-cell-format-client.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-collapsing-border-notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-content-frame-query.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-formatted-cursor-frame-reuse.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-frame-attribute-notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-frame-invalidation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-frame-root-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-last-row-frame-size.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-layout-split-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-painter-frame-borrow.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-painter-outer-links.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-root-owned-table.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-row-format-client.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-attr-notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-follow.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-frame-hierarchy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-headlines.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-layout-split.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-print-area.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-table-root-constructor.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-text-frame-follow.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/newfrm.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/layout/pagedesc.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-independent-column-insertion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-independent-table-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-lr-member-routing.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-attribute-headline.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-frame-item-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-frame-width.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-headline-counter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-hori-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-lr-font-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-lr-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-lr-value.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/table/native-table-ulspace-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-frame-position-mapping.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-marked-list-paint.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-numbering-tab.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/native-paragraph-lines.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/text/txtfrm.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/automatic-itemset-equality.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/hint-owner-notifications.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/hyperlink-metadata-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/internet-item-defaults.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/internet-node-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/internet-style-id-transport.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/list-restart-contract.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/list-restart-getter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-hint-order.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-insert-flags.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-split-list-defaults.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/native-text-hint-update.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/ndhints.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/ndtxt.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/owned-hint-notifications.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/owned-hyperlink-metadata.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/secondary-hint-maps.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/text-attribute-hierarchy.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/thints.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/txtnode/txtedt-stylepool.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-box-frame-format-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-cell-format-client-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-collapsing-border-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-cursor-range-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-delete-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-change-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-death-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-format-parent-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-headline-dialog-input.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-independent-column-insertion-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-last-row-frame-size.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-layout-split-item.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-numeric-row-insertion-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-object-dying.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-row-format-client-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-row-split-dialog-input.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-attr-notify.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-attribute-headline-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-frame-item-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-headline-command-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-headline-counter-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-hori-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-itemset-restore.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-lr-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/native-table-ulspace-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/unocore/native-numbering-publication.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/core/unocore/unosett.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/ascii/ascatr.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/html/swhtml.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/hyperlink-item-codec.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-optional-streams.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-row-cell-export-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-table-export-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/native-table-import-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-alignment-validation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-canonical-state.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-declarations.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-embedded-fonts.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-font-input-boundaries.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-font-style-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-hyperlink-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-import-diagnostics.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-start-normalization.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-markers.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-scale.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-table-alignment.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-table-print-area.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-worker-client.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/xmltbli-default-cell.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-headline-dialog-input.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-hidden-table-column-page.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-insert-table-dialog.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-row-height-dialog.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-row-split-dialog-input.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-property-output.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-text-flow-headline.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/ui/table/native-table-text-flow-split.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/app/docsh.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/app/docst.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/edtwin.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-context-menu.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-edit-view-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-label-affinity.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-row-modifier-drag.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-ruler-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-table-linear-drag.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-table-proportional-drag.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/native-hyperlink-begin-edit.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/native-hyperlink-mixed-remove.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/native-table-attribute-set.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/native-table-property-item-input.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/paragraph-line-mode.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/shells/textsh1.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/table/native-hidden-table-representation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/uiview/native-popup-resource-owner.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/uiview/view.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/uiview/viewfunc.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/utlui/native-pointer-items.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-font-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-line-margin.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-row-split-owner-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-shell-insert-modes.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-height-command-separation.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-height-delta.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-layout-split-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-name-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-headline-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-text-flow-split-history.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/wrtsh-paragraph-ruler.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/wrtsh-transfer.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/test/language-tag-intl-audit.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/test/language-tag-parser-contract.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/tools/inc/color.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/tools/inc/gen.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/udkapi/com/sun/star/lang/Locale.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/config/native-default-fonts.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/i18n/measurement.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/i18n/native-uppercase.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/i18n/textsearch.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/misc/native-font-names.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/unotools/source/misc/native-font-token.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/browser-clipboard.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/browser-default-environments.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/browser-download.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/browser-file.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/default-font-device.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/default-font-metadata.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/embedded-font-loader.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/font-list.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/font-metadata-codec.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/outlined-text.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/pointer.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/browser/special-text.test.tsx",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/source/control/field.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/source/font/FontVariation.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/source/font/native-font-metadata.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/source/font/native-font-values.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/vcl/source/outdev/font.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/calc-namespace-binding.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/namespacemap.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmlcnimp.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmlimp.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmluconv.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/character-hdl.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-auto-color.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-boolean-handler.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-bullet-font.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-bullet-scalar.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-color-handlers.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-crossedout-handlers.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-font-face-metadata.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+    "projectName": "writer"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/native-shadow-constants.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/styleexp.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlbahdl.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/XMLFontAutoStylePool.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlnume.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/table/native-empty-orientation.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/table/XMLTableExport-header-count.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtimp.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtlists.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtpara.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtparae-calc-reuse.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtparae.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtparai.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/txtprmap.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmlreader/source/span-pad.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmlreader/source/xmlreader-errors.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmlreader/source/xmlreader-events.test.ts",
+    "projectName": "shared"
+  },
+  {
+    "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmlreader/source/xmlreader-text.test.ts",
+    "projectName": "shared"
+  }
+]

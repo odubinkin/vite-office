@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts --maxWorkers=2 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-tooling-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-tooling-results.json

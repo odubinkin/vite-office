@@ -4,7 +4,7 @@ title: "Run checkpoint50 complete regression and pause goal"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute checkpoint50 complete regression once,retain all outcomes without fixes,and pause the goal afterward as explicitly requested."
 doc_version: 3
-doc_updated_at: "2026-10-20T14:09:05.596Z"
+doc_updated_at: "2026-10-20T15:12:38.867Z"
 doc_updated_by: "CODER"
 description: "Execute the user-authorized next full all-application,tooling,inventory and browser regression once;retain exact outcomes and coverage without changing implementation or test criteria;pause the active goal after run completion regardless of result."
 sections:
@@ -46,7 +46,17 @@ sections:
   Verify Steps: "Application: use actual vite.config.ts/test-projects.ts discovery without exclusions. Execute every discovered file exactly once with Istanbul coverage.reporter=json/text and reportOnFailure=true;keep100 S/B/F/L thresholds unchanged. Record per-batch command/exit/result JSON and compressed raw coverage,verify exact file union and compatible statement/function/branch maps,then report aggregate raw percentages and failures. No test/source edits or retries. Tooling: npm run test:tooling. Inventory: npm run test:inventory:coverage. Build/browser: npm run build;all projects via npx playwright test --config apps/office/playwright.config.ts;node scripts/check-static-build.mjs. Run full authored format/lint using existing .gitignore/generated-output boundaries,types,dependencies,Writer/Calc resources,JSDoc,size,source tree/provenance,registry invariants/parity,routing and doctor. Execute later suites even if earlier tests fail;retain failures and actual limits. Acceptance for this ops task is complete honest run accounting,unchanged tested source,retained evidence and requested pause;test or coverage failures are reported rather than repaired or relabeled green. Final source/test hashes and git status must show no implementation mutation. Finish operational task documentation,then update_goal paused and stop."
   Verification: "Pending complete execution;no green product verdict is assumed."
   Rollback Plan: "No implementation changes are planned. Retain all evidence;only remove this run's disposable derived coverage directories after checked raw/report archiving. Never remove source or unrelated artifacts."
-  Findings: "User explicitly authorizes the next full run and requests stopping the goal afterward regardless of outcomes. Last full checkpoint40 used sequential100file batches after monolithic Istanbul temporary files exhausted disk. Current free disk is16GiB;reuse bounded batches from the outset and preserve configured coverage criteria. Three stale historical DOING records remain untouched. Application discovery is captured in output/playwright/task50-discovery.json. No source references will be moved:current complete tests/tooling include source-backed fixture and registry checks. No production/test fixes belong to this task."
+  Findings: |-
+    Checkpoint50 complete on unchanged tested source. No production,test,configuration,policy,threshold,timeout,retry or snapshot changes were made. Only operational task evidence was written.
+
+    Command: exact application batch and full tooling/inventory/browser/static/source gate commands/exits are retained in progress.json,full-runner.mjs and full-run-summary.json.
+    Result: full run executed;product quality FAILED. Application1074distinct files,17341cases:17339passed,2failed,0pending. Exact discovery equality and compatible raw coverage maps verified. Full raw S53137/53317=99.66%,B33643/33879=99.30%,F10215/10229=99.86%,L48328/48446=99.75%;configured100thresholds remain unchanged.32owners have gaps,enumerated in application-uncovered.json.
+    Evidence: evidence/full-run-summary.json;application-proof.json;application-raw.json.gz;all11batch raw/result archives and logs;tested-source-snapshot.json;application-discovery.json.
+    Scope: all application Writer/Calc/shared projects. Failures are docpool.test.ts original contiguous-prefix/default-range case(attribute149expected absent but now registered),and Calc ui-resources.test.tsx formatting-control label list mismatch. No fixes or failed-test reruns were performed.
+
+    Complete tooling130/130passed;inventory123/123passed with raw S/B/F/L100. All16pre-browser stages and final static smoke pass. Browser432distinct cases:428expected,4unexpected,0skipped,0flaky. Failures:Calc formatting-toolbar button count at1280/390(expected31,actual30);shared popup-pointer Calc Shadow expectation at1280/390(expected disabled,actual enabled). Full errors,trace/screenshot references and source locations are retained in browser-results.json.gz and full-run-summary.json. No browser retries were configured or performed.
+
+    Final independent source hash audit confirms all tracked tested files unchanged;the complete run preserves the source baseline and clean calc implementation. Formatting/lint use the existing generated-output/gitignore artifact boundary,without altering rules or exclusions. No source references were moved. Three stale historical DOING records remain untouched. Operational acceptance is honest complete execution and retained failed outcomes,not a green product verdict. The active UI goal must now be paused exactly as the user requested;no further implementation or remediation is authorized before resumption.
 id_source: "generated"
 ---
 ## Summary
@@ -75,4 +85,13 @@ No implementation changes are planned. Retain all evidence;only remove this run'
 
 ## Findings
 
-User explicitly authorizes the next full run and requests stopping the goal afterward regardless of outcomes. Last full checkpoint40 used sequential100file batches after monolithic Istanbul temporary files exhausted disk. Current free disk is16GiB;reuse bounded batches from the outset and preserve configured coverage criteria. Three stale historical DOING records remain untouched. Application discovery is captured in output/playwright/task50-discovery.json. No source references will be moved:current complete tests/tooling include source-backed fixture and registry checks. No production/test fixes belong to this task.
+Checkpoint50 complete on unchanged tested source. No production,test,configuration,policy,threshold,timeout,retry or snapshot changes were made. Only operational task evidence was written.
+
+Command: exact application batch and full tooling/inventory/browser/static/source gate commands/exits are retained in progress.json,full-runner.mjs and full-run-summary.json.
+Result: full run executed;product quality FAILED. Application1074distinct files,17341cases:17339passed,2failed,0pending. Exact discovery equality and compatible raw coverage maps verified. Full raw S53137/53317=99.66%,B33643/33879=99.30%,F10215/10229=99.86%,L48328/48446=99.75%;configured100thresholds remain unchanged.32owners have gaps,enumerated in application-uncovered.json.
+Evidence: evidence/full-run-summary.json;application-proof.json;application-raw.json.gz;all11batch raw/result archives and logs;tested-source-snapshot.json;application-discovery.json.
+Scope: all application Writer/Calc/shared projects. Failures are docpool.test.ts original contiguous-prefix/default-range case(attribute149expected absent but now registered),and Calc ui-resources.test.tsx formatting-control label list mismatch. No fixes or failed-test reruns were performed.
+
+Complete tooling130/130passed;inventory123/123passed with raw S/B/F/L100. All16pre-browser stages and final static smoke pass. Browser432distinct cases:428expected,4unexpected,0skipped,0flaky. Failures:Calc formatting-toolbar button count at1280/390(expected31,actual30);shared popup-pointer Calc Shadow expectation at1280/390(expected disabled,actual enabled). Full errors,trace/screenshot references and source locations are retained in browser-results.json.gz and full-run-summary.json. No browser retries were configured or performed.
+
+Final independent source hash audit confirms all tracked tested files unchanged;the complete run preserves the source baseline and clean calc implementation. Formatting/lint use the existing generated-output/gitignore artifact boundary,without altering rules or exclusions. No source references were moved. Three stale historical DOING records remain untouched. Operational acceptance is honest complete execution and retained failed outcomes,not a green product verdict. The active UI goal must now be paused exactly as the user requested;no further implementation or remediation is authorized before resumption.

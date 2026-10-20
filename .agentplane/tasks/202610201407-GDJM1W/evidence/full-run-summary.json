@@ -1,0 +1,630 @@
+{
+  "task": "202610201407-GDJM1W",
+  "checkpoint": 50,
+  "runComplete": true,
+  "testedCommit": "ea940972b9f1f39228b837bb02a8b1ff8360608b",
+  "branch": "calc",
+  "application": {
+    "fileAccounting": true,
+    "observedFiles": 1074,
+    "uniqueFiles": 1074,
+    "tests": 17341,
+    "passed": 17339,
+    "failed": 2,
+    "pending": 0,
+    "summary": {
+      "lines": {
+        "total": 48446,
+        "covered": 48328,
+        "skipped": 0,
+        "pct": 99.75
+      },
+      "statements": {
+        "total": 53317,
+        "covered": 53137,
+        "skipped": 0,
+        "pct": 99.66
+      },
+      "functions": {
+        "total": 10229,
+        "covered": 10215,
+        "skipped": 0,
+        "pct": 99.86
+      },
+      "branches": {
+        "total": 33879,
+        "covered": 33643,
+        "skipped": 0,
+        "pct": 99.3
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageComplete": true,
+    "rawSha256": "871c0fb2df6afcb88f83a0f6fee19ed5331e053b08e7855d276efd76fe6e327a",
+    "uncoveredOwners": 32
+  },
+  "applicationAssertionStatuses": {
+    "passed": 17339,
+    "failed": 2
+  },
+  "applicationFailedFiles": [
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx"
+  ],
+  "applicationFailures": [
+    {
+      "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts",
+      "name": "registers the original contiguous character prefix with source slot IDs and defaults",
+      "messages": [
+        "AssertionError: expected true to be false // Object.is equality\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts:32:28\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64"
+      ]
+    },
+    {
+      "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "name": "renders native formatting placements with the bound shared font-size control and unavailable actions disabled",
+      "messages": [
+        "AssertionError: expected [ 'Font Name', 'Font Size', \u2026(30) ] to deeply equal [ 'Font Name', 'Font Size', \u2026(31) ]\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx:210:5\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///Users/odubinkin/Projects/vite-office-calc/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64"
+      ]
+    }
+  ],
+  "tooling": {
+    "numTotalTests": 130,
+    "numPassedTests": 130,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "inventory": {
+    "numTotalTests": 123,
+    "numPassedTests": 123,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1668,
+      "covered": 1668,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1734,
+      "covered": 1734,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 436,
+      "covered": 436,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1292,
+      "covered": 1292,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "browser": {
+    "stats": {
+      "startTime": "2026-10-20T15:00:39.345Z",
+      "duration": 576614.75,
+      "expected": 428,
+      "skipped": 0,
+      "unexpected": 4,
+      "flaky": 0
+    },
+    "filesAndTitlesAccounted": 432,
+    "failures": [
+      {
+        "file": "apps/office/e2e/calc/formatting-toolbar.spec.ts",
+        "line": 43,
+        "name": "native cell formatting toolbar at 1280x800",
+        "project": "calc",
+        "status": "unexpected",
+        "results": [
+          {
+            "workerIndex": 4,
+            "parallelIndex": 0,
+            "status": "failed",
+            "duration": 6290,
+            "error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts:59:43",
+              "location": {
+                "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+                "column": 43,
+                "line": 59
+              },
+              "snippet": "  57 |     const bar = page.getByRole(\"toolbar\", { name: \"Calc formatting toolbar\" });\n  58 |     await expect(bar.getByRole(\"combobox\")).toHaveCount(2);\n> 59 |     await expect(bar.getByRole(\"button\")).toHaveCount(31);\n     |                                           ^\n  60 |     expect(\n  61 |       await bar\n  62 |         .locator(\"button,select\")"
+            },
+            "errors": [
+              {
+                "location": {
+                  "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+                  "column": 43,
+                  "line": 59
+                },
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n\n\n  57 |     const bar = page.getByRole(\"toolbar\", { name: \"Calc formatting toolbar\" });\n  58 |     await expect(bar.getByRole(\"combobox\")).toHaveCount(2);\n> 59 |     await expect(bar.getByRole(\"button\")).toHaveCount(31);\n     |                                           ^\n  60 |     expect(\n  61 |       await bar\n  62 |         .locator(\"button,select\")\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts:59:43"
+              }
+            ],
+            "stdout": [],
+            "stderr": [],
+            "retry": 0,
+            "startTime": "2026-10-20T15:07:55.549Z",
+            "annotations": [],
+            "attachments": [
+              {
+                "name": "screenshot",
+                "contentType": "image/png",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-91977-matting-toolbar-at-1280x800-calc/test-failed-1.png"
+              },
+              {
+                "name": "error-context",
+                "contentType": "text/markdown",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-91977-matting-toolbar-at-1280x800-calc/error-context.md"
+              },
+              {
+                "name": "trace",
+                "contentType": "application/zip",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-91977-matting-toolbar-at-1280x800-calc/trace.zip"
+              }
+            ],
+            "errorLocation": {
+              "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+              "column": 43,
+              "line": 59
+            }
+          }
+        ]
+      },
+      {
+        "file": "apps/office/e2e/calc/formatting-toolbar.spec.ts",
+        "line": 43,
+        "name": "native cell formatting toolbar at 390x600",
+        "project": "calc",
+        "status": "unexpected",
+        "results": [
+          {
+            "workerIndex": 5,
+            "parallelIndex": 0,
+            "status": "failed",
+            "duration": 6175,
+            "error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts:59:43",
+              "location": {
+                "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+                "column": 43,
+                "line": 59
+              },
+              "snippet": "  57 |     const bar = page.getByRole(\"toolbar\", { name: \"Calc formatting toolbar\" });\n  58 |     await expect(bar.getByRole(\"combobox\")).toHaveCount(2);\n> 59 |     await expect(bar.getByRole(\"button\")).toHaveCount(31);\n     |                                           ^\n  60 |     expect(\n  61 |       await bar\n  62 |         .locator(\"button,select\")"
+            },
+            "errors": [
+              {
+                "location": {
+                  "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+                  "column": 43,
+                  "line": 59
+                },
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\nExpected: \u001b[32m31\u001b[39m\nReceived: \u001b[31m30\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('toolbar', { name: 'Calc formatting toolbar' }).getByRole('button')\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to 30 elements\u001b[22m\n\u001b[2m       - unexpected value \"30\"\u001b[22m\n\n\n  57 |     const bar = page.getByRole(\"toolbar\", { name: \"Calc formatting toolbar\" });\n  58 |     await expect(bar.getByRole(\"combobox\")).toHaveCount(2);\n> 59 |     await expect(bar.getByRole(\"button\")).toHaveCount(31);\n     |                                           ^\n  60 |     expect(\n  61 |       await bar\n  62 |         .locator(\"button,select\")\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts:59:43"
+              }
+            ],
+            "stdout": [],
+            "stderr": [],
+            "retry": 0,
+            "startTime": "2026-10-20T15:08:02.813Z",
+            "annotations": [],
+            "attachments": [
+              {
+                "name": "screenshot",
+                "contentType": "image/png",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-5e22d-rmatting-toolbar-at-390x600-calc/test-failed-1.png"
+              },
+              {
+                "name": "error-context",
+                "contentType": "text/markdown",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-5e22d-rmatting-toolbar-at-390x600-calc/error-context.md"
+              },
+              {
+                "name": "trace",
+                "contentType": "application/zip",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/calc-formatting-toolbar-na-5e22d-rmatting-toolbar-at-390x600-calc/trace.zip"
+              }
+            ],
+            "errorLocation": {
+              "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/calc/formatting-toolbar.spec.ts",
+              "column": 43,
+              "line": 59
+            }
+          }
+        ]
+      },
+      {
+        "file": "apps/office/e2e/shared/popup-pointer.spec.ts",
+        "line": 5,
+        "name": "calc popup pointer ownership at 1280px",
+        "project": "shared",
+        "status": "unexpected",
+        "results": [
+          {
+            "workerIndex": 7,
+            "parallelIndex": 1,
+            "status": "failed",
+            "duration": 6761,
+            "error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts:52:32",
+              "location": {
+                "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+                "column": 32,
+                "line": 52
+              },
+              "snippet": "  50 |           exact: true,\n  51 |         });\n> 52 |         await expect(disabled).toBeDisabled();\n     |                                ^\n  53 |         await disabled.hover();\n  54 |         const disabledRect = await disabled.boundingBox();\n  55 |         expect(disabledRect).not.toBeNull();"
+            },
+            "errors": [
+              {
+                "location": {
+                  "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+                  "column": 32,
+                  "line": 52
+                },
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  50 |           exact: true,\n  51 |         });\n> 52 |         await expect(disabled).toBeDisabled();\n     |                                ^\n  53 |         await disabled.hover();\n  54 |         const disabledRect = await disabled.boundingBox();\n  55 |         expect(disabledRect).not.toBeNull();\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts:52:32"
+              }
+            ],
+            "stdout": [],
+            "stderr": [],
+            "retry": 0,
+            "startTime": "2026-10-20T15:10:01.367Z",
+            "annotations": [],
+            "attachments": [
+              {
+                "name": "screenshot",
+                "contentType": "image/png",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-1280px-shared/test-failed-1.png"
+              },
+              {
+                "name": "error-context",
+                "contentType": "text/markdown",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-1280px-shared/error-context.md"
+              },
+              {
+                "name": "trace",
+                "contentType": "application/zip",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-1280px-shared/trace.zip"
+              }
+            ],
+            "errorLocation": {
+              "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+              "column": 32,
+              "line": 52
+            }
+          }
+        ]
+      },
+      {
+        "file": "apps/office/e2e/shared/popup-pointer.spec.ts",
+        "line": 5,
+        "name": "calc popup pointer ownership at 390px",
+        "project": "shared",
+        "status": "unexpected",
+        "results": [
+          {
+            "workerIndex": 9,
+            "parallelIndex": 0,
+            "status": "failed",
+            "duration": 6519,
+            "error": {
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts:52:32",
+              "location": {
+                "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+                "column": 32,
+                "line": 52
+              },
+              "snippet": "  50 |           exact: true,\n  51 |         });\n> 52 |         await expect(disabled).toBeDisabled();\n     |                                ^\n  53 |         await disabled.hover();\n  54 |         const disabledRect = await disabled.boundingBox();\n  55 |         expect(disabledRect).not.toBeNull();"
+            },
+            "errors": [
+              {
+                "location": {
+                  "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+                  "column": 32,
+                  "line": 52
+                },
+                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('menu', { name: 'Text menu', exact: true }).getByRole('menuitemcheckbox', { name: 'Shadow', exact: true })\u001b[22m\n\u001b[2m    14 \u00d7 locator resolved to <button tabindex=\"-1\" type=\"button\" aria-checked=\"false\" role=\"menuitemcheckbox\" class=\"flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  50 |           exact: true,\n  51 |         });\n> 52 |         await expect(disabled).toBeDisabled();\n     |                                ^\n  53 |         await disabled.hover();\n  54 |         const disabledRect = await disabled.boundingBox();\n  55 |         expect(disabledRect).not.toBeNull();\n    at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts:52:32"
+              }
+            ],
+            "stdout": [],
+            "stderr": [],
+            "retry": 0,
+            "startTime": "2026-10-20T15:10:08.889Z",
+            "annotations": [],
+            "attachments": [
+              {
+                "name": "screenshot",
+                "contentType": "image/png",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-390px-shared/test-failed-1.png"
+              },
+              {
+                "name": "error-context",
+                "contentType": "text/markdown",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-390px-shared/error-context.md"
+              },
+              {
+                "name": "trace",
+                "contentType": "application/zip",
+                "path": "/Users/odubinkin/Projects/vite-office-calc/test-results/e2e/shared-popup-pointer-calc-popup-pointer-ownership-at-390px-shared/trace.zip"
+              }
+            ],
+            "errorLocation": {
+              "file": "/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/popup-pointer.spec.ts",
+              "column": 32,
+              "line": 52
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "stages": [
+    {
+      "name": "tooling",
+      "command": "npm",
+      "args": [
+        "run",
+        "test:tooling",
+        "--",
+        "--maxWorkers=2",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-tooling-results.json"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-tooling.log",
+      "startedAt": "2026-10-20T14:54:24.806Z",
+      "finishedAt": "2026-10-20T14:54:55.632Z"
+    },
+    {
+      "name": "inventory",
+      "command": "npm",
+      "args": [
+        "run",
+        "test:inventory:coverage",
+        "--",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reporter=text",
+        "--coverage.reportOnFailure=true",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-inventory-coverage",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-inventory-results.json"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-inventory.log",
+      "startedAt": "2026-10-20T14:54:56.037Z",
+      "finishedAt": "2026-10-20T14:56:01.130Z"
+    },
+    {
+      "name": "format",
+      "command": "npm",
+      "args": [
+        "run",
+        "format:check",
+        "--",
+        "--ignore-path",
+        ".prettierignore",
+        "--ignore-path",
+        ".gitignore"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-format.log",
+      "startedAt": "2026-10-20T14:56:01.547Z",
+      "finishedAt": "2026-10-20T14:58:47.881Z"
+    },
+    {
+      "name": "lint",
+      "command": "npm",
+      "args": [
+        "run",
+        "lint",
+        "--",
+        "--ignore-pattern",
+        "output/playwright/**"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-lint.log",
+      "startedAt": "2026-10-20T14:58:48.276Z",
+      "finishedAt": "2026-10-20T14:59:27.151Z"
+    },
+    {
+      "name": "types",
+      "command": "npm",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-types.log",
+      "startedAt": "2026-10-20T14:59:27.586Z",
+      "finishedAt": "2026-10-20T14:59:46.752Z"
+    },
+    {
+      "name": "dependencies",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-dependencies.log",
+      "startedAt": "2026-10-20T14:59:47.132Z",
+      "finishedAt": "2026-10-20T14:59:50.550Z"
+    },
+    {
+      "name": "writer-resources",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:writer-resources"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-writer-resources.log",
+      "startedAt": "2026-10-20T14:59:50.949Z",
+      "finishedAt": "2026-10-20T14:59:54.956Z"
+    },
+    {
+      "name": "calc-resources",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:calc-resources"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-calc-resources.log",
+      "startedAt": "2026-10-20T14:59:55.342Z",
+      "finishedAt": "2026-10-20T14:59:56.529Z"
+    },
+    {
+      "name": "docs",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-docs.log",
+      "startedAt": "2026-10-20T14:59:56.885Z",
+      "finishedAt": "2026-10-20T15:00:01.272Z"
+    },
+    {
+      "name": "size",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-size.log",
+      "startedAt": "2026-10-20T15:00:01.687Z",
+      "finishedAt": "2026-10-20T15:00:02.665Z"
+    },
+    {
+      "name": "tree",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-tree.log",
+      "startedAt": "2026-10-20T15:00:03.045Z",
+      "finishedAt": "2026-10-20T15:00:03.610Z"
+    },
+    {
+      "name": "provenance",
+      "command": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-provenance.log",
+      "startedAt": "2026-10-20T15:00:03.985Z",
+      "finishedAt": "2026-10-20T15:00:07.000Z"
+    },
+    {
+      "name": "registry",
+      "command": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-registry.log",
+      "startedAt": "2026-10-20T15:00:07.383Z",
+      "finishedAt": "2026-10-20T15:00:12.617Z"
+    },
+    {
+      "name": "routing",
+      "command": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-routing.log",
+      "startedAt": "2026-10-20T15:00:13.012Z",
+      "finishedAt": "2026-10-20T15:00:13.418Z"
+    },
+    {
+      "name": "doctor",
+      "command": "/Users/odubinkin/.local/bin/ap",
+      "args": [
+        "doctor"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-doctor.log",
+      "startedAt": "2026-10-20T15:00:13.799Z",
+      "finishedAt": "2026-10-20T15:00:16.807Z"
+    },
+    {
+      "name": "build",
+      "command": "npm",
+      "args": [
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-build.log",
+      "startedAt": "2026-10-20T15:00:17.203Z",
+      "finishedAt": "2026-10-20T15:00:37.905Z"
+    },
+    {
+      "name": "browser",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--reporter=line,json"
+      ],
+      "exit": 1,
+      "log": "output/playwright/task50-browser.log",
+      "startedAt": "2026-10-20T15:00:38.297Z",
+      "finishedAt": "2026-10-20T15:10:17.033Z"
+    },
+    {
+      "name": "static",
+      "command": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        "scripts/check-static-build.mjs"
+      ],
+      "exit": 0,
+      "log": "output/playwright/task50-static.log",
+      "startedAt": "2026-10-20T15:10:17.507Z",
+      "finishedAt": "2026-10-20T15:10:17.957Z"
+    }
+  ],
+  "qualityPassed": false,
+  "sourceStable": true,
+  "verifiedSourceFiles": 2820,
+  "implementationChanges": [],
+  "noRetriesOrRepairs": true,
+  "pauseRequested": true,
+  "notes": [
+    "Complete application discovery1074files executed once;source/map-compatible raw coverage preserved without changing configured100thresholds.",
+    "All18post-application stages executed;browser failed,other17stages exited0.",
+    "Operational task acceptance is completed truthful run accounting;product regression/coverage gates did not pass.",
+    "User requested pausing the active goal after this complete run regardless of result."
+  ]
+}
