@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/propertynode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/propertynode.ts#PropertyNode",
+        "apps/office/src/configmgr/source/propertynode.test.ts#retains native ordinary property defaults and pointer/self-set metadata"
+      ],
+      "justification": "Ordinary native property schema/value/extension/modified/layer contracts, defaulted clone with base description omission, stable Any pointer and lazy external lookup retry/clear/type-permissive transitions. Components is only a borrowed original receiver contract; no provider/service implementation is supplied. Existing Any/OUString values are reused. Optional<Any> result field lifetime is consumed as the original local temporary; native Components/UNO ABI/logging/assertions and whole services remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PropertyNode",
+        "getValue",
+        "setValue",
+        "getValuePtr",
+        "setExternal",
+        "clone",
+        "kind"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/propertynode.cxx",
+      "upstreamSymbols": [
+        "PropertyNode",
+        "getValue",
+        "setValue",
+        "getValuePtr",
+        "setExternal",
+        "clone",
+        "kind"
+      ]
+    }
+  }
+}

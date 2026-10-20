@@ -207,6 +207,11 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Original valueparser.hxx/cxx directly owns XmlReader, Span and Pad contracts.
+  [
+    "configmgr/source/valueparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts", "xmlreader/inc/pad.ts"]),
+  ],
   // Native swcrsr.hxx declares Find_Text with i18nutil::SearchOptions2.
   ["sw/source/core/crsr/swcrsr.ts", new Set(["i18nutil/inc/searchopt.ts"])],
   // Native findtxt.cxx consumes i18nutil::SearchOptions2 through its original search contracts.
@@ -551,6 +556,8 @@ const originalSalO3tlBindings = new Map([
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
+  // Original byte view overloads call the SAL byte signed64 entry point.
+  ["o3tl/inc/string_view.ts -> sal/inc/rtl/string.h.ts", ["rtl_str_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],
 ]);
 

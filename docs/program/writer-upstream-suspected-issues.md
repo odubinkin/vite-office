@@ -512,6 +512,47 @@ Decision: keep the separate exact conditions and avoid an invented common
 positive-count guard. Neither the struct nor sequence owner validates that the
 count equals its offset sequence lengths.
 
+## WRITER-020: Numeric configuration lexical errors can become valid zero values
+
+Status: source expressions and initialized portable examples verified; complete
+compiled configuration-service behavior remains unverified. Original
+`configmgr/source/valueparser.cxx` numeric `parseValue` overloads retain TODOs
+for lexical validity. Int/long/double return success even when their underlying
+numeric parser produces zero for an invalid prefix or overflow. Short only
+checks the resulting signed32 range.
+
+Examples: short text `garbage` becomes zero, hex short `0xffffffff` converts
+unsigned32 to signed32 `-1` and is admitted, whereas `0xffff` is rejected as
+65535. Int `4294967295` becomes zero through the bounded signed32 helper.
+Long hex `0xffffffffffffffff` becomes signed64 `-1`. The unicode scalar
+attribute also uses the int overload, so `oor:scalar="garbage"` becomes NUL,
+which passes the original scalar whitelist. Booleans and hexBinary retain
+their separate strict lexical checks.
+
+Evidence: pinned value parser and SAL/o3tl conversion definitions; literal
+expectations in `configmgr/source/valueparser.test.ts` and
+`sal/rtl/byte-integer.test.ts`. Full schema constraints, service/caller
+validation and native compiled outcomes remain unverified. Decision: retain
+these conversions and success flags; do not add strict whole-token parsing.
+
+## WRITER-021: Unicode control-byte accumulation can borrow a block-local byte
+
+Status: suspected native lifetime issue from source inspection; no native
+undefined-memory outcome is certified. In `ValueParser::startElement`, an
+admitted control scalar creates block-local `char c` and calls
+`pad_.add(&c, 1)`. Original `xmlreader::Pad::add` stores a borrowed Span when
+its buffer is empty. With no prior buffered content, that borrowed byte may
+outlive `c`'s block when parsing continues. The noncharacter UTF8 alternatives
+use static string literals instead.
+
+Evidence: pinned `configmgr/source/valueparser.cxx` and
+`xmlreader/source/pad.cxx`. A preceding nonempty buffer can force immediate
+copying, so this is conditional; actual optimized native caller lifetimes and
+sanitizer reproduction remain unverified. Decision: preserve the call to
+`Pad.add`, not substitute `addEphemeral`. The browser binding retains the
+single-byte array through ordinary GC references; this is a stack lifetime
+difference, not a claim to reproduce or repair undefined native memory.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

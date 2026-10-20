@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/parsemanager.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/parsemanager.ts#NAMESPACE_OOR",
+        "apps/office/src/configmgr/source/valueparser.test.ts#retains original unicode scalar whitelist"
+      ],
+      "justification": "Original namespace enum identities 1/2/3 only, consumed by actual ValueParser. No ParseManager parser orchestration/provider or default service state is invented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NAMESPACE_OOR",
+        "NAMESPACE_XS",
+        "NAMESPACE_XSI"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/parsemanager.hxx",
+      "upstreamSymbols": [
+        "NAMESPACE_OOR",
+        "NAMESPACE_XS",
+        "NAMESPACE_XSI"
+      ]
+    }
+  }
+}
