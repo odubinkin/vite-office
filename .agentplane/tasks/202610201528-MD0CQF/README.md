@@ -4,7 +4,7 @@ title: "Repair checkpoint50 regressions and restore Calc shared complete coverag
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T17:13:39.830Z"
+  updated_by: "CODER"
+  note: "Complete application regression plus the documented single-file test-only repair replay passes 17377 current tests across 1081 distinct files. Calc/shared/Writer coverage is 100 percent S/B/F/L with exact-map and source-hash checks. Browser 432/432, tooling 130/130, inventory 123/123, all 18 full gates and six post-repair static checks pass; immutable original failure retained in evidence. Implementation ff568de0a3dc."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T17:13:50.205Z"
+  updated_by: "EVALUATOR"
+  note: "Checkpoint50 regressions repaired; complete application evidence plus exact single-file repair replay establishes 17377 passing current tests and 100 percent Calc/shared/Writer S/B/F/L; all browser/static gates pass."
+  evaluated_sha: "ff568de0a3dc60e3a5ab87aeaf1f3034cf85a178"
+  blueprint_digest: "9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e"
+  evidence_refs:
+    - ".agentplane/tasks/202610201528-MD0CQF/README.md"
+    - ".agentplane/tasks/202610201528-MD0CQF/quality/20261020-171350205-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201528-MD0CQF/quality/20261020-171350205-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201528-MD0CQF/quality/20261020-171350205-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201528-MD0CQF/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201528-MD0CQF/evidence/accepted-proof.json"
+    - ".agentplane/tasks/202610201528-MD0CQF/evidence/acceptance.mjs"
+    - ".agentplane/tasks/202610201528-MD0CQF/evidence/repair-checks.json"
+  findings:
+    - "Reviewed actual-owner boundary and serialization tests, unchanged native core contracts, shared popup event ownership, preserved file-operation Promises and assertions. Raw archive integrity, identical instrumentation maps, complete distinct-file/assertion accounting and unchanged production source are checked by the committed acceptance script. Original failures are preserved, with no relaxed gate or timeout."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: repair checkpoint50 failures and restore full Calc/shared coverage under the clarified user stop condition."
+  -
+    type: "verify"
+    at: "2026-10-20T17:13:39.830Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete application regression plus the documented single-file test-only repair replay passes 17377 current tests across 1081 distinct files. Calc/shared/Writer coverage is 100 percent S/B/F/L with exact-map and source-hash checks. Browser 432/432, tooling 130/130, inventory 123/123, all 18 full gates and six post-repair static checks pass; immutable original failure retained in evidence. Implementation ff568de0a3dc."
 doc_version: 3
-doc_updated_at: "2026-10-20T17:13:11.549Z"
+doc_updated_at: "2026-10-20T17:13:39.942Z"
 doc_updated_by: "CODER"
 description: "User clarified stop condition: repair the complete-run test failures and obtain 100 percent statements branches functions and lines for Calc and shared owners before pausing. Preserve native contracts and coverage gates. Work solely in calc checkout and branch."
 sections:
@@ -72,6 +96,39 @@ sections:
     Result: pass, all six checks exit 0.
     Evidence: `repair-*.log` and `repair-checks.json`.
     Scope: the final test-only change. Full production/browser gates remain applicable because no production file changed after that run. No additional feature work is authorized after closure; pause the goal as requested.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T17:13:39.830Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete application regression plus the documented single-file test-only repair replay passes 17377 current tests across 1081 distinct files. Calc/shared/Writer coverage is 100 percent S/B/F/L with exact-map and source-hash checks. Browser 432/432, tooling 130/130, inventory 123/123, all 18 full gates and six post-repair static checks pass; immutable original failure retained in evidence. Implementation ff568de0a3dc.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T17:13:11.549Z, excerpt_hash=sha256:79fbf8010e8acf119b2dfbeb64b7be010b57acf6b04da21509f78a6deb683960
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201528-MD0CQF/blueprint/resolved-snapshot.json
+    - old_digest: 9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e
+    - current_digest: 9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201528-MD0CQF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201528-MD0CQF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task implementation commit if needed; retain evidence and original checkpoint50 results. No history rewrite or source reference changes."
   Findings: |-
     Checkpoint50 regressions are repaired: contiguous native pool prefix includes protection and borders; toolbar expectations include the real shared line-style summary and enabled indent/border actions; the keyboard popup regression uses a genuinely disabled Superscript command. Added meaningful native boundary, formatting history, RTL/merge, XML/ODS failure and UI ownership tests closing all 32 originally uncovered Calc/shared owners. Shared details popup state reads the actual toggle event currentTarget; no native core behavior changed.
@@ -127,6 +184,39 @@ Command: post-repair lint for calc-files.test.tsx, project typecheck, docs, file
 Result: pass, all six checks exit 0.
 Evidence: `repair-*.log` and `repair-checks.json`.
 Scope: the final test-only change. Full production/browser gates remain applicable because no production file changed after that run. No additional feature work is authorized after closure; pause the goal as requested.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T17:13:39.830Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete application regression plus the documented single-file test-only repair replay passes 17377 current tests across 1081 distinct files. Calc/shared/Writer coverage is 100 percent S/B/F/L with exact-map and source-hash checks. Browser 432/432, tooling 130/130, inventory 123/123, all 18 full gates and six post-repair static checks pass; immutable original failure retained in evidence. Implementation ff568de0a3dc.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T17:13:11.549Z, excerpt_hash=sha256:79fbf8010e8acf119b2dfbeb64b7be010b57acf6b04da21509f78a6deb683960
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201528-MD0CQF/blueprint/resolved-snapshot.json
+- old_digest: 9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e
+- current_digest: 9780d7b14c0fcb367425eb1fb7fb208fa23ebf80bee08d1a24e8a8792b40f12e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201528-MD0CQF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201528-MD0CQF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
