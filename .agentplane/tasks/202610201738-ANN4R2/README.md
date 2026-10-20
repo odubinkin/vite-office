@@ -1,10 +1,11 @@
 ---
 id: "202610201738-ANN4R2"
 title: "Connect native Calc Wrap Text command through shared UI and ODS"
-status: "DOING"
+result_summary: "Native Wrap Text attribute command,shared Writer toolbar,manual-row rendering and ODS slice implemented and verified;automatic wrapped-height layout remains pending in the active UI goal."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610201738-ANN4R2/evidence/wrap-reopened-390.png"
   findings:
     - "Reviewed original SID_ATTR_ALIGN_LINEBREAK139/10230 mapping,no-argument API completion and typed API distinction,actual selection/filtered/grouped operation/history owners and strict XML wrap/no-wrap conversion. Browser uses actual canonical item and existing shared toolbar. Raw archives and source-hash baseline replacement prove current Calc/shared100 S/B/F/L;497 Calc,30 related and13 distinct browser cases pass,with original fixture failures retained. Device-based automatic wrapped-height remains an explicit remaining goal requirement,not replaced by browser model or synthetic metrics."
-commit: null
+commit:
+  hash: "896df9d4d2dbc3ffb5211909844caf036817eee2"
+  message: "🧩 ANN4R2 task: persist verified native wrap UI review"
 comments:
   -
     author: "CODER"
     body: "Start: resume approved native Calc UI delivery with genuine Wrap Text slot, original ODS handler and shared Writer toolbar; retain source ownership and fixed/manual geometry contracts."
+  -
+    author: "CODER"
+    body: "Verified: connected native Wrap Text10230/139 to actual Calc selection,request,history and ODS owners and reused the existing Writer shared toolbar. Current Calc497/497 and related30/30 tests pass with Calc/shared100 percent S/B/F/L;all13 distinct browser cases pass after the transparent fixture-only auto-title correction. Build and14 current static gates pass;desktop/mobile screenshots and DOM-free Worker verified. Automatic wrapped-height/device/rich-edit layout remains explicitly unported and the broader user-resumed UI goal remains active. Evidence/source hashes and evaluator pass are committed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task52 bounded Wrap Text UI/native-item/ODS slice passes 497 Calc tests with 100 percent S/B/F/L,30 related tests and13 distinct current browser cases after the documented two-case fixture-only title correction. Complete shared100 coverage reuses only unchanged source hashes and fresh XML vocabulary counters. Build and14 current static gates pass;screenshots inspected. Native automatic wrapped-height/device/rich-edit layout remains explicitly unported;the full UI goal remains active. Evidence committed at6c938516e61f."
+  -
+    type: "status"
+    at: "2026-10-20T18:02:52.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected native Wrap Text10230/139 to actual Calc selection,request,history and ODS owners and reused the existing Writer shared toolbar. Current Calc497/497 and related30/30 tests pass with Calc/shared100 percent S/B/F/L;all13 distinct browser cases pass after the transparent fixture-only auto-title correction. Build and14 current static gates pass;desktop/mobile screenshots and DOM-free Worker verified. Automatic wrapped-height/device/rich-edit layout remains explicitly unported and the broader user-resumed UI goal remains active. Evidence/source hashes and evaluator pass are committed."
 doc_version: 3
-doc_updated_at: "2026-10-20T18:01:45.337Z"
+doc_updated_at: "2026-10-20T18:02:52.141Z"
 doc_updated_by: "CODER"
 description: "Continue approved Calc UI delivery after the user merge. Connect the existing native line-break cell item to its real formatting command, selection state, undo and ODS owners, and the existing shared Writer toolbar and menus. Preserve native defaults and mixed-selection behavior; do not introduce browser document state or a substitute text layout engine."
 sections:
@@ -134,6 +147,10 @@ sections:
     Browser whitespace reads the canonical ScLineBreakCell;manual row geometry survives real history and ODS/primary-store reopen. Automatic wrapped-height metrics remain unported,so this task does not claim complete Wrap Text layout or satisfy the entire Calc UI objective. That broader goal remains active. Complete native automatic layout and named-style delivery still require their consumed owners.
 
     New focused fixtures initially used unsupported multiline input and mistaken public method names;they were corrected to genuine supported plain input and actual document/mark APIs. A TypeScript-only RTL selector-option mistake was fixed. Two new e2e fixtures incorrectly expected the full input as auto-title;the existing Writer-shared first-two-word naming policy was retained and the tests corrected. All original failure reports are preserved. The final results are497 Calc,30 related and13 distinct browser cases passing,with current Calc and complete hash-verified shared coverage100 percent S/B/F/L. No thresholds,exclusions,timeouts,retries,dependencies,network,branches,merges or subagents changed.
+extensions:
+  implementation_commit:
+    hash: "6c938516e61f9265c4d168cbd4bb5fa826ffe949"
+    message: "🧩 ANN4R2 feat: bind native Wrap Text to shared Calc toolbar and ODS"
 id_source: "generated"
 ---
 ## Summary
