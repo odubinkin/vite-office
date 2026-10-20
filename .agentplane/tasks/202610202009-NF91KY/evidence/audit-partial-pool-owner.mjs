@@ -10,7 +10,7 @@ const root = resolve(folder, "../../../..");
 /** Calculates an actual blob digest. @param bytes - Raw bytes. @returns Digest. */
 function digest(bytes) { return createHash("sha256").update(bytes).digest("hex"); }
 const proof = JSON.parse(readFileSync(resolve(folder, "partial-pool-owner.json"), "utf8"));
-for (const [path, expected] of Object.entries({ ...proof.sourceHashes, ...proof.nativeHashes }))
+for (const [path, expected] of Object.entries({ ...proof.sourceHashes, ...proof.nativeHashes, ...proof.calcCoverageSourceHashes }))
   assert.equal(digest(readFileSync(resolve(root, path))), expected, path);
 const archive = readFileSync(resolve(folder, proof.archive.path));
 assert.equal(digest(archive), proof.archive.sha256);
@@ -48,6 +48,20 @@ assert.equal(failed.numFailedTests, 2);
 const calc = report("task57-calc-first-results.json");
 assert.equal(calc.numPassedTests, 522);
 assert.equal(calc.numFailedTests, 1);
+const calcFinal = report("task57-calc-repaired-results.json");
+assert.equal(calcFinal.numPassedTests, 523);
+assert.equal(calcFinal.numFailedTests, 0);
+const calcCoverage = JSON.parse(contents.get("apps/office/coverage/calc/coverage-final.json").toString("utf8"));
+assert.equal(Object.keys(calcCoverage).length, 129);
+for (const value of Object.values(calcCoverage))
+  for (const counter of [...Object.values(value.s), ...Object.values(value.f), ...Object.values(value.b).flat()])
+    assert.ok(counter > 0, value.path);
+const calcTotal = JSON.parse(contents.get("apps/office/coverage/calc/coverage-summary.json").toString("utf8")).total;
+for (const [kind, count] of [["statements", 10640], ["branches", 6600], ["functions", 1984], ["lines", 9553]]) {
+  assert.equal(calcTotal[kind].total, count);
+  assert.equal(calcTotal[kind].covered, count);
+  assert.equal(calcTotal[kind].pct, 100);
+}
 for (const [name, count] of [["task57-owner-browser-repaired.json", 7], ["task57-owner-writer-browser.json", 6], ["task57-owner-visual-browser.json", 5]]) {
   const result = report(name);
   assert.equal(result.stats.expected, count);
