@@ -4,7 +4,7 @@ title: "Port native Calc built-in style-name conversion and static page defaults
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-20T20:06:03.678Z"
+  updated_by: "CODER"
+  note: "Native style-name conversion and defaults100..176 verified:523 Calc,111 related,8 distinct browser cases;Calc100 and unchanged-source shared100;14 static checks/build pass;portable raw archive audit and screenshot inspection pass. Missing actual style owners/UI and layout explicitly retained."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-20T20:06:24.043Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native style naming and static defaults slice satisfies source contracts and reproducible verification at fc1eb4c9dddb."
+  evaluated_sha: "fc1eb4c9dddb1ad0856b6154748bab2988db6533"
+  blueprint_digest: "97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675"
+  evidence_refs:
+    - ".agentplane/tasks/202610201944-B9WXKD/README.md"
+    - ".agentplane/tasks/202610201944-B9WXKD/quality/20261020-200624043-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610201944-B9WXKD/quality/20261020-200624043-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610201944-B9WXKD/quality/20261020-200624043-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610201944-B9WXKD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610201944-B9WXKD/evidence/proof.json"
+    - ".agentplane/tasks/202610201944-B9WXKD/evidence/audit-archives.mjs"
+    - ".agentplane/tasks/202610201944-B9WXKD/evidence/commands.json"
+  findings:
+    - "Ordered alias and suffix semantics,real native string ownership,borrowed resource inputs and contiguous static defaults through176 retain explicit unported boundaries. Portable audit independently reconstructs523 Calc/111 related/8 unique browser successes,raw Calc100/shared100 and source/native/screenshot hashes. Original registry and signed-query fixture failures remain archived with successful repairs. Four visual replays are not double-counted. Fourteen static checks/build pass;doctor has only existing managed-shim warning."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port source style-name maps/escaping and contiguous static cell/page defaults through176 as actual Calc style-owner inputs;no fabricated service or rich header/footer."
+  -
+    type: "verify"
+    at: "2026-10-20T20:06:03.678Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native style-name conversion and defaults100..176 verified:523 Calc,111 related,8 distinct browser cases;Calc100 and unchanged-source shared100;14 static checks/build pass;portable raw archive audit and screenshot inspection pass. Missing actual style owners/UI and layout explicitly retained."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:05:50.531Z"
+doc_updated_at: "2026-10-20T20:06:03.762Z"
 doc_updated_by: "CODER"
 description: "Advance real Calc style-owner prerequisites with original ordered built-in/programmatic naming rules and complete contiguous static ScDocumentPool defaults through first page number176. Preserve legacy alias priority,user suffix escaping,actual native item classes,slot IDs and defaults. Resolve English style resources from the pinned native catalog used at the current English browser UI boundary;explicit borrowed resource values do not emulate ScModule/gettext. Real style owners,standard style creation and UI application remain required."
 sections:
@@ -52,6 +76,39 @@ sections:
     Result: pass.
     Evidence: Complete stock Calc coverage replay passed 523 tests in 159 files, zero skipped/failed. Raw Istanbul statements10640/branches6600/functions1984/lines9553 all100%. Related existing shared-value tests passed111 in6 files. Shared complete four-metric100 coverage from task55 is reused only after matching every recorded shared runtime source hash; no shared implementation changed. Fourteen static checks and production build passed. Initial registry symbol ownership failure was corrected to actual header constants, retaining original failure logs. Browser acceptance comprises8 distinct successful cases (7 initially passed,1 repaired fixture passed); raw paper-bin255 correctly exposes signed UNO QueryValue -1, so only fixture expectation changed. Original failed report retained. Four visual replays regenerate persistent desktop/mobile font/wrap/ODS screenshots, not additional distinct cases. Inspected mobile font and desktop reopened-wrap images. Portable archive audit passed with source/native/screenshot hashes and original reports.
     Scope: Ordered native style naming, aliases, suffix escaping, UTF16/native value ownership, borrowed resolved English resource data and contiguous ScDocumentPool static defaults100..176. No test exclusions, thresholds, retry settings or timeout policies weakened. All-app suite is not due until block60 under approved cadence; last repaired full checkpoint51 retained. Actual Calc style owners/pool/standard-style construction, rich defaults177+, named-style UI/history/ODS, native locale services and automatic wrapped-height remain unported.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-20T20:06:03.678Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native style-name conversion and defaults100..176 verified:523 Calc,111 related,8 distinct browser cases;Calc100 and unchanged-source shared100;14 static checks/build pass;portable raw archive audit and screenshot inspection pass. Missing actual style owners/UI and layout explicitly retained.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T20:05:50.531Z, excerpt_hash=sha256:97c677a497e831f9da020e8fa5979de0209eed7f0604fa2dadb2ec138ee5951b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201944-B9WXKD/blueprint/resolved-snapshot.json
+    - old_digest: 97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675
+    - current_digest: 97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201944-B9WXKD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610201944-B9WXKD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit while preserving prior verified pattern-style and formatting work;no branch/merge/history changes."
   Findings: |-
     Observation: original stylehelper.hxx/cxx exposes stable programmatic names and ordered cell/page/frame maps. Builtin entries precede API compatibility aliases;display collision detection and exact UTF16 suffix escaping are source value operations. Decoding removes one suffix before family lookup. Default maps initialize lazily and native returned strings have independent ownership.
@@ -93,6 +150,39 @@ Command: Exact commands and structured static argv are archived in evidence/comm
 Result: pass.
 Evidence: Complete stock Calc coverage replay passed 523 tests in 159 files, zero skipped/failed. Raw Istanbul statements10640/branches6600/functions1984/lines9553 all100%. Related existing shared-value tests passed111 in6 files. Shared complete four-metric100 coverage from task55 is reused only after matching every recorded shared runtime source hash; no shared implementation changed. Fourteen static checks and production build passed. Initial registry symbol ownership failure was corrected to actual header constants, retaining original failure logs. Browser acceptance comprises8 distinct successful cases (7 initially passed,1 repaired fixture passed); raw paper-bin255 correctly exposes signed UNO QueryValue -1, so only fixture expectation changed. Original failed report retained. Four visual replays regenerate persistent desktop/mobile font/wrap/ODS screenshots, not additional distinct cases. Inspected mobile font and desktop reopened-wrap images. Portable archive audit passed with source/native/screenshot hashes and original reports.
 Scope: Ordered native style naming, aliases, suffix escaping, UTF16/native value ownership, borrowed resolved English resource data and contiguous ScDocumentPool static defaults100..176. No test exclusions, thresholds, retry settings or timeout policies weakened. All-app suite is not due until block60 under approved cadence; last repaired full checkpoint51 retained. Actual Calc style owners/pool/standard-style construction, rich defaults177+, named-style UI/history/ODS, native locale services and automatic wrapped-height remain unported.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-20T20:06:03.678Z — VERIFY — ok
+
+By: CODER
+
+Note: Native style-name conversion and defaults100..176 verified:523 Calc,111 related,8 distinct browser cases;Calc100 and unchanged-source shared100;14 static checks/build pass;portable raw archive audit and screenshot inspection pass. Missing actual style owners/UI and layout explicitly retained.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T20:05:50.531Z, excerpt_hash=sha256:97c677a497e831f9da020e8fa5979de0209eed7f0604fa2dadb2ec138ee5951b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610201944-B9WXKD/blueprint/resolved-snapshot.json
+- old_digest: 97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675
+- current_digest: 97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201944-B9WXKD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610201944-B9WXKD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

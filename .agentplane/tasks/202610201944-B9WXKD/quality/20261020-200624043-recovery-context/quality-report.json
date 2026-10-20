@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201944-B9WXKD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T20:06:24.043Z",
+  "verdict": "pass",
+  "summary": "Approved native style naming and static defaults slice satisfies source contracts and reproducible verification at fc1eb4c9dddb.",
+  "evaluated_sha": "fc1eb4c9dddb1ad0856b6154748bab2988db6533",
+  "blueprint_digest": "97e66fbd02d11a31155c60d215082adb1fef0c889ebd72f243c25eafe1138675",
+  "findings": [
+    "Ordered alias and suffix semantics,real native string ownership,borrowed resource inputs and contiguous static defaults through176 retain explicit unported boundaries. Portable audit independently reconstructs523 Calc/111 related/8 unique browser successes,raw Calc100/shared100 and source/native/screenshot hashes. Original registry and signed-query fixture failures remain archived with successful repairs. Four visual replays are not double-counted. Fourteen static checks/build pass;doctor has only existing managed-shim warning."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201944-B9WXKD/README.md",
+    ".agentplane/tasks/202610201944-B9WXKD/evidence/proof.json",
+    ".agentplane/tasks/202610201944-B9WXKD/evidence/audit-archives.mjs",
+    ".agentplane/tasks/202610201944-B9WXKD/evidence/commands.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Actual ScStyleSheet/Pool/Helper,standard styles,named-style UI/history/ODS,rich defaults177+,native localization services and automatic wrapped-height are still unported;this slice does not claim their readiness."
+  ]
+}
