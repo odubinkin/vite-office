@@ -1,10 +1,11 @@
 ---
 id: "202610200048-GWT2KJ"
 title: "Implement Calc clear direct formatting through native hard-attribute deletion and history"
-status: "DOING"
+result_summary: "verified-202610200048-GWT2KJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T01:14:24.112Z"
+  updated_at: "2026-10-20T01:15:48.896Z"
   updated_by: "CODER"
-  note: "Implementation5a25fd39ca7c. Calc132 files408 cases raw100 plus current helper3 files13 cases raw100 reconcile all current maps/hashes. All16 complete changed application owners S/B/F/L100. Current focused13,related Writer9/shared110/tooling92;17 unique related browser cases and final fresh-build Clear3-case rerun pass. Native style/merge/run deletion,marks/history/savepoint,STRING undo restoration/removal/re-interning/lifetime,independent ODS scalar/formula preservation and DOM-free Worker pass. Types/lint/format/dependencies/docs/size/resources/source/provenance/invariants/scoped parity/static/routing/doctor/diff pass. Exact argv/exits/raw/current hashes/logs/screenshots retained in evidence/verification-checks.json and proof files. No broad parity;full checkpoint40 retained,next50."
+  note: "verified-202610200048-GWT2KJ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610200048-GWT2KJ/evidence/native-source-audit.json"
   findings:
     - "Audited raw full132-file408-case success and fresh3-file13-case helper-owner100 replacement,current aggregate SHA/all source hashes and16 complete changed application owners100. Native anchors support preserved style/merge fields,allocated-column tail behavior,STRING snapshot flags/empty markers/re-interning and owned snapshot lifetime. Real UI9 related plus8 shared cases and final current-build Clear3-case rerun cover menu/toolbar/shortcut,history,primary ODS and DOM-free Worker. Existing toolbar expectation changes only for actual newly enabled Clear;no verification gates weakened. Exact check argv/exit0/logs and declared limitations retained."
-commit: null
+commit:
+  hash: "35dac32c0426925eb61ac198741180bcef29fd34"
+  message: "🧩 GWT2KJ task: retain evaluated Clear formatting verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-shaped Clear direct formatting through real hard-attribute deletion/history and existing shared Writer UI;verify declared scoped100 and actual ODS/browser behavior."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610200048-GWT2KJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation5a25fd39ca7c. Calc132 files408 cases raw100 plus current helper3 files13 cases raw100 reconcile all current maps/hashes. All16 complete changed application owners S/B/F/L100. Current focused13,related Writer9/shared110/tooling92;17 unique related browser cases and final fresh-build Clear3-case rerun pass. Native style/merge/run deletion,marks/history/savepoint,STRING undo restoration/removal/re-interning/lifetime,independent ODS scalar/formula preservation and DOM-free Worker pass. Types/lint/format/dependencies/docs/size/resources/source/provenance/invariants/scoped parity/static/routing/doctor/diff pass. Exact argv/exits/raw/current hashes/logs/screenshots retained in evidence/verification-checks.json and proof files. No broad parity;full checkpoint40 retained,next50."
+  -
+    type: "verify"
+    at: "2026-10-20T01:15:48.896Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610200048-GWT2KJ"
+  -
+    type: "status"
+    at: "2026-10-20T01:15:49.028Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610200048-GWT2KJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T01:14:24.167Z"
+doc_updated_at: "2026-10-20T01:15:49.028Z"
 doc_updated_by: "CODER"
 description: "Task45 of the continuing authorized Calc UI goal. Wire existing shared Writer Clear command and shortcut to the actual native SID_CELL_FORMAT_RESET HARDATTR|EDITATTR path for represented plain cells. Preserve styles,merge fields,cell data,selection/grouping and native attribute Undo/Redo;extend original document/table/column/attribute-array deletion owners and real ODS verification. Stay only in calc checkout/branch;no network,branches or integration;next full checkpoint50."
 sections:
@@ -103,9 +122,43 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T01:15:48.896Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610200048-GWT2KJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T01:14:24.167Z, excerpt_hash=sha256:e4f45979dfc1a271b5ffeb09625979c70534699e0be214803f5a807ed9b4ac07
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200048-GWT2KJ/blueprint/resolved-snapshot.json
+    - old_digest: 12851b37f491171f51996655faabfa4ba95fa71ac71eb5400a243ef3df770d31
+    - current_digest: 12851b37f491171f51996655faabfa4ba95fa71ac71eb5400a243ef3df770d31
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610200048-GWT2KJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610200048-GWT2KJ --result verified-202610200048-GWT2KJ --commit 35dac32c0426925eb61ac198741180bcef29fd34
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation and registration commits through a new authorized task;never reset unrelated user work or alter upstream reference."
   Findings: "Source ScCellShell26067 passes HARDATTR|EDITATTR through real ScViewFunc/ScDocFunc and DeleteCell/DeleteContent operation owners. ScAttrArray clears every direct item except merge/merge-flag,retains style names/parents and reuses canonical defaults. Source table deletion touches allocated columns only;CALC217 records the retained default-tail behavior. Source EDITATTR also snapshots ordinary STRING payloads: actual typed-store copying preserves re-interning,empty-string removal markers and lack of setter broadcasts. Discarded undo graphs release owned string stores/pool;native refcounts verify lifetime. An early implementation candidate incorrectly used an attribute-only snapshot and was corrected against the source before final evidence;late original flag bits are retained and the whole helper owner has fresh raw100. Full raw132/408 plus current helper3/13 reconcile whole current maps/hashes,never incompatible maps or stale code hashes. Initial fixture candidates used a wrong ScMF import,nonexistent GetString helper and nonfresh XML document;these were corrected to real owners. Existing viewfunc query code was temporarily replaced during extension;typecheck caught it and original functions were restored from HEAD before verification. Initial raw missed one unselected-sheet branch and old toolbar fixture still expected Clear disabled;meaningful selection test and actual newly enabled command expectation fix both. No thresholds,exclusions or tests were reduced. Only current plain/default-view hard/edit-attribute deletion is certified;rich text,style resolution,protection,matrix/merged-range expansion,conditional formats,drawing/alternate views/full services remain unverified. Related native sparkline deletion QA is a call-boundary reference,not executed full sparkline acceptance. Existing Writer primary-save/open/no-recovery deviations remain. No network,outside-repo files,branches or integration. Known deterministic close-subject CLI failure,if repeated,is recovered through the route and a meaningful task-artifact closure subject. Overall goal stays active;next full all-app checkpoint50."
+extensions:
+  implementation_commit:
+    hash: "5a25fd39ca7c1e29270b39c7545ceba99657fec5"
+    message: "✨ GWT2KJ calc: implement native Clear formatting and string-aware undo"
 id_source: "generated"
 ---
 ## Summary
@@ -157,6 +210,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T01:15:48.896Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610200048-GWT2KJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T01:14:24.167Z, excerpt_hash=sha256:e4f45979dfc1a271b5ffeb09625979c70534699e0be214803f5a807ed9b4ac07
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200048-GWT2KJ/blueprint/resolved-snapshot.json
+- old_digest: 12851b37f491171f51996655faabfa4ba95fa71ac71eb5400a243ef3df770d31
+- current_digest: 12851b37f491171f51996655faabfa4ba95fa71ac71eb5400a243ef3df770d31
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610200048-GWT2KJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610200048-GWT2KJ --result verified-202610200048-GWT2KJ --commit 35dac32c0426925eb61ac198741180bcef29fd34
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
