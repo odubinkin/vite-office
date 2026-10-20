@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
 import type { CalcAlignmentAxis } from "../../source/ui/view/formatsh";
 import type { SvxCellHorJustify, SvxCellVerJustify } from "../../../editeng/inc/svxenum";
@@ -283,6 +284,17 @@ export class CalcViewController {
   SetOverline(item?: SvxOverlineItem): boolean {
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetOverline(item);
+    this.Changed();
+    return changed;
+  }
+  /** Reads actual native strikeout state. @returns Active or mixed. */
+  GetStrikeoutState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetStrikeoutState();
+  }
+  /** Commits pending text before original strikeout attribute execution. @param item - Complete native item. @returns Whether changed. */
+  SetStrikeout(item?: SvxCrossedOutItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetStrikeout(item);
     this.Changed();
     return changed;
   }

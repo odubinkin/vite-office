@@ -238,6 +238,10 @@ export enum XMLToken {
   STYLE_TEXT_OVERLINE_TYPE,
   STYLE_TEXT_OVERLINE_WIDTH,
   STYLE_TEXT_OVERLINE_COLOR,
+  STYLE_TEXT_LINE_THROUGH_STYLE,
+  STYLE_TEXT_LINE_THROUGH_TYPE,
+  STYLE_TEXT_LINE_THROUGH_WIDTH,
+  STYLE_TEXT_LINE_THROUGH_TEXT,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -468,6 +472,10 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.meta, "editing-duration", XMLToken.META_EDITING_DURATION],
   [ODF_NAMESPACES.meta, "document-statistic", XMLToken.META_DOCUMENT_STATISTIC],
   [ODF_NAMESPACES.xml, "id", XMLToken.XML_ID],
+  [ODF_NAMESPACES.style, "text-line-through-style", XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE],
+  [ODF_NAMESPACES.style, "text-line-through-type", XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE],
+  [ODF_NAMESPACES.style, "text-line-through-width", XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH],
+  [ODF_NAMESPACES.style, "text-line-through-text", XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT],
 ];
 
 const tokens = new Map(

@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify, SvxCellVerJustify } from "../../../../editeng/inc/svxenum";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -209,18 +210,30 @@ export class ScFormatShell {
   GetOverlineState(): boolean | undefined {
     return (this.SelectionItem(105) as SvxOverlineItem | undefined)?.GetBoolValue();
   }
-  /** Applies the prepared Sfx toggle or original typed ExecuteAttr request,retaining complete line metadata. @param value - Optional complete item. @returns Whether attributes changed. */
+  /** Applies the original complete overline item or bound toggle. @param value - Native optional request. @returns Whether changed. */
   SetOverline(value?: SvxOverlineItem): boolean {
+    return this.ApplyToggleAttr(105, SvxOverlineItem.CreateDefault, value);
+  }
+  /** Reads the original strikeout boolean interface from merged native selection state. @returns Active or mixed. */
+  GetStrikeoutState(): boolean | undefined {
+    return (this.SelectionItem(106) as SvxCrossedOutItem | undefined)?.GetBoolValue();
+  }
+  /** Applies original Strikeout ExecuteAttr with the shared bound-toggle preparation. @param value - Native complete request. @returns Whether changed. */
+  SetStrikeout(value?: SvxCrossedOutItem): boolean {
+    return this.ApplyToggleAttr(106, SvxCrossedOutItem.CreateDefault, value);
+  }
+  /** Shared consumed ExecuteAttr cases receive a concrete native toggleable item. @param which - Known mapped attribute. @param factory - Concrete native factory. @param value - Optional complete request. @returns Whether changed. */
+  private ApplyToggleAttr(which: number, factory: () => SfxPoolItem, value?: SfxPoolItem): boolean {
     const item =
       value ??
       (createAttributeToggleItem(
         this.SelectionPattern().GetItemSet(),
-        105,
-        SvxOverlineItem.CreateDefault,
-      ) as SvxOverlineItem);
+        which,
+        factory,
+      ) as SfxPoolItem);
     const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper()),
-      copy = item.Clone() as SvxOverlineItem;
-    copy.SetWhich(105);
+      copy = item.Clone() as SfxPoolItem;
+    copy.SetWhich(which);
     delta.ItemSetPut(copy);
     return this.ApplySelectionPattern(delta);
   }

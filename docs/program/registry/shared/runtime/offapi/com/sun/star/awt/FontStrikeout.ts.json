@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-strikeout-properties",
+    "capabilityIds": [
+      "CAP-8bbfa850-4c4a-4935-8322-773d074dd3be"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts",
+        "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx"
+      ],
+      "justification": "Task5474K9 implements native Strikeout10013/Which106 using actual SvxCrossedOutItem and the existing shared Sfx attribute-toggle preparation,with source bool projection,mixed/default factory and complete enum requests. Actual selection patterns,grouped/disjoint marks and attribute history own all state. Shared Writer menu controls publish checked/mixed state. Original shared cdouthdl type/style/width/text handlers and FontStrikeout IDL constants preserve Any extraction,ordered maps,SAX merge precedence and native text first-codeunit behavior in real ODS automatic styles. Plain-cell strikeout decoration is independent of underline/overline;script font glyph spans retain source values. Full native dash/slash/X/thickness device painting,rich edit,line modes,UNO services and broad parity remain unverified;Writer primary-save/open/no-recovery deviations remain.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FontStrikeout"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/awt/FontStrikeout.idl",
+      "upstreamSymbols": [
+        "FontStrikeout",
+        "SLASH"
+      ]
+    }
+  }
+}

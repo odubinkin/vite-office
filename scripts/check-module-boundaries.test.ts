@@ -935,7 +935,7 @@ it("admits only pinned character-handler value imports without widening module o
   expect(isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/numeric")).toBe(
     true,
   );
-  for (const name of ["weighhdl", "postuhdl", "undlihdl", "xmlbahdl"])
+  for (const name of ["weighhdl", "postuhdl", "undlihdl", "cdouthdl", "xmlbahdl"])
     expect(isOriginalCharacterValueImport(`xmloff/source/style/${name}.ts`, any)).toBe(true);
   expect(isOriginalCharacterValueImport("xmloff/source/text/txtprmap.ts", any)).toBe(true);
   expect(
@@ -962,6 +962,15 @@ it("admits only pinned character-handler value imports without widening module o
   ).toBe(false);
   expect(
     isOriginalCharacterValueImport("xmloff/source/style/postuhdl.ts", "vcl/browser/font-list.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/cdouthdl.ts", "vcl/browser/font-list.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/cdouthdl.ts",
+      "cppu/inc/typelib/typedescription.ts",
+    ),
   ).toBe(false);
   expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("xmloff", "vcl")).toBe(true);

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/cdouthdl.ts",
+    "upstreamPath": "xmloff/source/style/cdouthdl.cxx",
+    "localSymbols": [
+      "XMLCrossedOutTypePropHdl",
+      "XMLCrossedOutStylePropHdl",
+      "XMLCrossedOutWidthPropHdl",
+      "XMLCrossedOutTextPropHdl"
+    ],
+    "upstreamSymbols": [
+      "XMLCrossedOutTypePropHdl",
+      "XMLCrossedOutStylePropHdl",
+      "XMLCrossedOutWidthPropHdl",
+      "XMLCrossedOutTextPropHdl"
+    ],
+    "preservedResponsibilities": [
+      "Task5474K9 implements native Strikeout10013/Which106 using actual SvxCrossedOutItem and the existing shared Sfx attribute-toggle preparation,with source bool projection,mixed/default factory and complete enum requests. Actual selection patterns,grouped/disjoint marks and attribute history own all state. Shared Writer menu controls publish checked/mixed state. Original shared cdouthdl type/style/width/text handlers and FontStrikeout IDL constants preserve Any extraction,ordered maps,SAX merge precedence and native text first-codeunit behavior in real ODS automatic styles. Plain-cell strikeout decoration is independent of underline/overline;script font glyph spans retain source values. Full native dash/slash/X/thickness device painting,rich edit,line modes,UNO services and broad parity remain unverified;Writer primary-save/open/no-recovery deviations remain."
+    ],
+    "omittedResponsibilities": [
+      "Full original UNO property-set/service/factory graph,native widget/device rendering and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/cdouthdl.ts",
+          "marker": "XMLCrossedOutTypePropHdl"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/cdouthdl.cxx",
+          "marker": "XMLCrossedOutTypePropHdl"
+        }
+      ]
+    }
+  }
+}

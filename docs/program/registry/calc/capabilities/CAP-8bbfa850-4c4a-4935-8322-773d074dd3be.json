@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8bbfa850-4c4a-4935-8322-773d074dd3be",
+    "capabilityId": "CAP-8bbfa850-4c4a-4935-8322-773d074dd3be",
+    "suite": "calc",
+    "subsystem": "cell-formatting",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task5474K9 implements native Strikeout10013/Which106 using actual SvxCrossedOutItem and the existing shared Sfx attribute-toggle preparation,with source bool projection,mixed/default factory and complete enum requests. Actual selection patterns,grouped/disjoint marks and attribute history own all state. Shared Writer menu controls publish checked/mixed state. Original shared cdouthdl type/style/width/text handlers and FontStrikeout IDL constants preserve Any extraction,ordered maps,SAX merge precedence and native text first-codeunit behavior in real ODS automatic styles. Plain-cell strikeout decoration is independent of underline/overline;script font glyph spans retain source values. Full native dash/slash/X/thickness device painting,rich edit,line modes,UNO services and broad parity remain unverified;Writer primary-save/open/no-recovery deviations remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native strikethrough toggle and complete ODF crossed-out properties",
+    "gaps": [
+      "Plain browser glyph decoration represents NONE/SINGLE/DOUBLE;native bold thickness,slash/X glyph repetition and pixel/device geometry remain unverified.",
+      "Full native SfxBindings/UNO services,rich edit,line modes,filtered/alternate views and broad UI/filter parity remain outside this consumed slice.",
+      "Native testRichTextExportODS is inspected for strikeout expectations;the entire native EditEngine QA is not an executed certificate."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/cdouthdl.cxx",
+          "marker": "XMLCrossedOutTypePropHdl::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+          "marker": "SID_ATTR_CHAR_STRIKEOUT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "PROP_CharStrikeout"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testRichTextExportODS"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/awt/FontStrikeout.idl",
+          "marker": "FontStrikeout"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/xmloff/source/style/cdouthdl.ts",
+          "marker": "XMLCrossedOutTypePropHdl"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+          "marker": "SetStrikeout"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts",
+          "marker": "importStrikeoutProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/native-crossedout-handlers.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/strikeout.spec.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610192359-5474K9/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-strikeout-ui",
+    "scopeLimitations": [
+      "Plain browser glyph decoration represents NONE/SINGLE/DOUBLE;native bold thickness,slash/X glyph repetition and pixel/device geometry remain unverified.",
+      "Full native SfxBindings/UNO services,rich edit,line modes,filtered/alternate views and broad UI/filter parity remain outside this consumed slice.",
+      "Native testRichTextExportODS is inspected for strikeout expectations;the entire native EditEngine QA is not an executed certificate."
+    ]
+  }
+}

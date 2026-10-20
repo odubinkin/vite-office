@@ -1,4 +1,9 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
+import {
+  exportStrikeoutProperties,
+  importStrikeoutProperties,
+  strikeoutPropertyTokens,
+} from "./xmlstyle.strikeout";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
 import {
   CellHoriJustify as HJ,
@@ -119,14 +124,14 @@ const lineGroups = [
 ] as const;
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
-  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 109, 129, 132, 148,
+  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 109, 129, 132, 148,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
   pattern: ScPatternAttr,
   fontPool: XMLFontAutoStylePool,
 ): string {
-  let result = "";
+  let result = exportStrikeoutProperties(pattern);
   if (pattern.GetItemSet().GetItemState(109, false) === SfxItemState.SET) {
     const value = new Any(),
       output: [string] = [""];
@@ -215,11 +220,13 @@ export function importCellTextProperties(
           group.color,
         ],
       ),
+      ...strikeoutPropertyTokens,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
     ],
     "Calc text properties",
   );
+  importStrikeoutProperties(pattern, attributes, unsupported);
   const fontColor = (pattern.GetItem(109) as SvxColorItem).Clone(),
     fontValue = new Any();
   let hasFontColor = false;

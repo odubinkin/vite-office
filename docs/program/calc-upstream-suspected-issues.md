@@ -3101,3 +3101,49 @@ Decision: preserve the original factory branch. The shared toggle preparation an
 Calc selection/history tests check the distinct uniform-color-preserving and mixed-color-
 resetting outcomes. This is a source-based consumed contract, not a full native bindings,
 UNO dispatch or device-painting certificate.
+
+## CALC-212: strikeout text treats every nonempty non-slash value as X
+
+Status: pinned `XMLCrossedOutTextPropHdl::importXML` and native-handler/Calc XML regressions.
+
+The text handler tests only whether the string is empty and whether its first UTF16 code
+unit is `/`. Every other nonempty value, including lowercase x, whitespace, arbitrary
+words and a leading surrogate, successfully assigns `FontStrikeout::X`. It does not validate
+that the text is the literal uppercase X.
+
+Decision: preserve that conversion exactly in the shared handler and in the real Calc
+style importer. Tests include slash suffixes, whitespace, an emoji and arbitrary words;
+empty input returns false without changing the accumulated Any.
+
+## CALC-213: strikeout none properties can preserve an already active accumulated style
+
+Status: pinned crossed-out type/style/width handlers and independently authored Calc XML.
+
+When a non-NONE short is already present, the type handler retains it for incoming NONE or
+SINGLE; the style handler retains it for both recognized incoming style values. Width NONE
+also preserves the existing style. Thus `style=solid,width=bold,type=none` retains BOLD in
+actual XML attribute order rather than clearing strikeout. DOUBLE overrides SINGLE/BOLD
+but retains SLASH/X; BOLD width upgrades SINGLE but retains DOUBLE/SLASH/X.
+
+Decision: retain original ordered maps, actual SAX order, signed/unsigned Any projections
+and no-write behavior. Shared and Calc tests verify the explicit contradictory-property
+examples. Native DONTKNOW is not present in the export maps and is not invented as a new
+ODF token. No full mapper/service or rich-text device certificate is claimed.
+
+## CALC-214: a negative signed projection can force a SHORT Any writeback
+
+Status: pinned `cdouthdl.cxx` integer declarations/casts and genuine Any tests in managed and
+browser/Worker runtimes.
+
+Type and width merge candidates are `sal_uInt16`, while the extracted old value is
+`sal_Int16`. Retaining a negative signed projection assigns its unsigned representation to
+the candidate. Their subsequent promoted comparison is unequal, so the handler casts back
+to `sal_Int16` and writes the Any. For an original UNSIGNED_SHORT Any carrying65535, the
+native signed extraction yields-1 and the merge writes SHORT-1. The style handler's direct
+preservation path does not perform that assignment and retains the original UNSIGNED_SHORT.
+
+Decision: preserve unsigned candidates, signed comparison and final short writeback. Tests
+initialize real unsigned-short Any values65535/32768 and verify their signed projections
+and final type identities. LONG-to-SHORT narrowing is not assumed: the existing original
+Any extraction rules do not admit LONG. These are initialized native value-contract
+witnesses;ordinary valid ODF strikeout tokens do not produce negative enum values.

@@ -27,7 +27,7 @@ for (const width of [1280, 390]) {
     await font.selectOption("Liberation Mono");
     await expect(font).toHaveValue("Liberation Mono");
     await expect(a1).toHaveText("Latin漢عربي😀");
-    const runs = a1.locator("span");
+    const runs = a1.locator("span:not(:has(span))");
     await expect(runs).toHaveCount(3);
     for (const run of await runs.all())
       await expect(run).toHaveCSS("font-family", /Liberation Mono/);

@@ -243,6 +243,8 @@ const originalCharacterValueImports = new Map([
     new Set(["cppu/inc/com/sun/star/uno/Any.ts", "vcl/inc/unohelp.ts"]),
   ],
   ["xmloff/source/style/undlihdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  // Pinned cdouthdl.cxx includes com/sun/star/uno/Any.hxx and mutates the caller-owned native Any.
+  ["xmloff/source/style/cdouthdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   ["xmloff/source/style/xmlbahdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   ["xmloff/source/text/txtprmap.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
 ]);
