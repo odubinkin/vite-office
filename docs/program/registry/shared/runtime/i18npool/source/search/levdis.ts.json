@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/search/levdis.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/search/levdis.ts#WLevDistance",
+        "apps/office/src/i18npool/source/search/levdis.test.ts",
+        "apps/office/src/i18npool/source/search/native-levdis-cases.json",
+        "i18npool/source/search/levdis.cxx#WLD"
+      ],
+      "justification": "Original complete weighted Levenshtein kernel: UTF16/NUL pointer pattern, escaped joker flags/star counts, std::lcm-derived user weights, strict and relaxed SplitCount including negative success, first-column/row limits, character balance correction, buffer growth at 2048 and independent copy constructor. JS arrays erase native unique_ptr allocation only; the input constructor overload still requires all original user counts and relaxed flag. Compared with 19600 results from the original isolated C++ kernel compiled at the pin; original algorithm body/header unchanged except sal scalar typedef/include-path adaptation. Frozen native fixture, independent strict mathematical matrix and long-buffer/copy checks establish bounded kernel evidence. This does not implement approximate TextSearch word segmentation, ICU/service integration or Writer similarity UI. No native whole-library/module/UI parity or status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WLevDistance",
+        "WLD",
+        "CalcLPQR",
+        "Mid3",
+        "InitData",
+        "levdisbalance",
+        "GetLimit"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18npool/source/search/levdis.cxx",
+      "upstreamSymbols": [
+        "WLevDistance",
+        "WLD",
+        "CalcLPQR",
+        "Mid3",
+        "InitData",
+        "levdisbalance"
+      ]
+    }
+  }
+}
