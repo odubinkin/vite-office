@@ -1,4 +1,8 @@
 /** @fileoverview Original shared SearchParam values and search-mode conversions from textsearch.hxx/textsearch.cxx; search engine responsibilities remain with TextSearch. */
+import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
+import { TextSearch as TextSearchService } from "../../../i18npool/source/search/textsearch";
+import type { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 /** Original caller boolean reference grouped at the JS boundary. */
 export interface SearchParamBooleanReference {
@@ -99,5 +103,78 @@ export class SearchParam {
         flags.regexp = false;
         break;
     }
+  }
+}
+
+/** The native shared one-entry cache; wrappers retain their chosen backend after cache replacement. */
+let cached: { options: SearchOptions2; backend: TextSearchService } | undefined;
+/** Native cache equality includes replacement, approximate and wildcard fields even in absolute mode. @param left - Cached value. @param right - Requested value. @returns Complete option equality. */
+function equalSearchOptions(left: SearchOptions2, right: SearchOptions2): boolean {
+  return (
+    left.AlgorithmType2 === right.AlgorithmType2 &&
+    left.WildcardEscapeCharacter === right.WildcardEscapeCharacter &&
+    left.searchFlag === right.searchFlag &&
+    left.searchString.equals(right.searchString) &&
+    left.replaceString.equals(right.replaceString) &&
+    left.changedChars === right.changedChars &&
+    left.deletedChars === right.deletedChars &&
+    left.insertedChars === right.insertedChars &&
+    left.transliterateFlags === right.transliterateFlags &&
+    left.Locale.Language.equals(right.Locale.Language) &&
+    left.Locale.Country.equals(right.Locale.Country) &&
+    left.Locale.Variant.equals(right.Locale.Variant)
+  );
+}
+/** Original utl::TextSearch option constructor and direction-normalizing wrapper over XTextSearch2. */
+export class TextSearch {
+  private xTextSearch: TextSearchService;
+  /** Borrows the native options-based cache entry; SearchParam/LanguageTag constructors are not yet implemented. @param options - Complete native search options. @returns Wrapper value. */
+  public constructor(options: SearchOptions2) {
+    this.xTextSearch = TextSearch.getXTextSearch(options);
+  }
+  /** Native cache replaces its backend rather than mutating the previously borrowed instance. @param options - New option value. @returns Prepared backend. */
+  private static getXTextSearch(options: SearchOptions2): TextSearchService {
+    if (cached !== undefined && equalSearchOptions(cached.options, options)) return cached.backend;
+    const backend = new TextSearchService(options);
+    cached = { options: new SearchOptions2(options), backend };
+    return backend;
+  }
+  /** Native locale override copies all options before choosing another cache entry. @param options - Original option value. @param locale - Replacement locale. @returns Nothing. */
+  public SetLocale(options: SearchOptions2, locale: LocaleConstReference): void {
+    const copy = new SearchOptions2(options);
+    copy.Locale.assign(locale);
+    this.xTextSearch = TextSearch.getXTextSearch(copy);
+  }
+  /** Normalizes a successful forward result and leaves caller outputs untouched on failure. @param text - Original UTF-16 input. @param start - Inclusive lower bound, then match start. @param end - Exclusive upper bound, then match end. @param result - Optional raw XTextSearch result. @returns Whether found. */
+  public SearchForward(
+    text: OUStringConstReference,
+    start: [number],
+    end: [number],
+    result?: { value: SearchResult },
+  ): boolean {
+    const found = this.xTextSearch.searchForward(text, start[0], end[0]);
+    if (found.subRegExpressions <= 0) return false;
+    start[0] = found.startOffset[0] as number;
+    end[0] = found.endOffset[0] as number;
+    if (result !== undefined) result.value = found;
+    return true;
+  }
+  /** Reverses raw backward outputs into the wrapper's increasing start/end convention. @param text - Original input. @param start - High bound on entry, low match bound on success. @param end - Low bound on entry, high match bound on success. @param result - Optional unnormalized raw result. @returns Whether found. */
+  public SearchBackward(
+    text: OUStringConstReference,
+    start: [number],
+    end: [number],
+    result?: { value: SearchResult },
+  ): boolean {
+    const found = this.xTextSearch.searchBackward(text, start[0], end[0]);
+    if (found.subRegExpressions <= 0) return false;
+    end[0] = found.startOffset[0] as number;
+    start[0] = found.endOffset[0] as number;
+    if (result !== undefined) result.value = found;
+    return true;
+  }
+  /** Searches the full original value in the forward direction. @param text - Input string. @returns Whether found. */
+  public searchForward(text: OUStringConstReference): boolean {
+    return this.SearchForward(text, [0], [text.getLength()]);
   }
 }

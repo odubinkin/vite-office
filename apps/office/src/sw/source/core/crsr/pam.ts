@@ -227,6 +227,16 @@ export class SwPaM {
     if (this.mark !== undefined) [this.point, this.mark] = [this.mark, this.point];
   }
 
+  /** Native Normalize changes endpoint orientation without changing the selection extent. @param bPointFirst - Keep point before mark when true, after mark otherwise. @returns Nothing. */
+  public Normalize(bPointFirst: boolean): void {
+    if (
+      this.HasMark() &&
+      ((bPointFirst && this.point.compare(this.GetMark()) > 0) ||
+        (!bPointFirst && this.point.compare(this.GetMark()) < 0))
+    )
+      this.Exchange();
+  }
+
   /** Sets mark to the current point. @returns Nothing. */
   public SetMark(): void {
     this.mark?.Dispose();

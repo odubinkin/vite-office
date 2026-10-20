@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/SearchAlgorithms2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/SearchAlgorithms2.ts#ABSOLUTE",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts",
+        "offapi/com/sun/star/util/SearchAlgorithms2.idl#ABSOLUTE"
+      ],
+      "justification": "Original numeric algorithm identities; no engine implementation is implied.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ABSOLUTE",
+        "REGEXP",
+        "APPROXIMATE",
+        "WILDCARD"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/util/SearchAlgorithms2.idl",
+      "upstreamSymbols": [
+        "ABSOLUTE",
+        "REGEXP",
+        "APPROXIMATE",
+        "WILDCARD"
+      ]
+    }
+  }
+}

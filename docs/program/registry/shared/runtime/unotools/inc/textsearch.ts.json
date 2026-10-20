@@ -18,15 +18,17 @@
       "evidence": [
         "apps/office/src/unotools/inc/textsearch.ts#SearchParam",
         "apps/office/src/unotools/source/i18n/textsearch.test.ts#matches complete original shared search parameter stream",
-        "vendor/libreoffice-reference/include/unotools/textsearch.hxx#SearchParam"
+        "vendor/libreoffice-reference/include/unotools/textsearch.hxx#SearchParam",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts"
       ],
-      "justification": "Task94 ports actual shared utl SearchParam complete value class operation family: original text/copy constructors and defaults, implicit memberwise copy_assign, stable borrowed const OUString member, search/case/selection getters, UInt32 escape storage with signed32 API result and original SearchType/ConvertToSearchType/ConvertToBool caller-output behavior. Wildcards take precedence and clear regex only when both enabled; unknown scoped modes convert to false/false. Genuine shared OUString values reused, ordinary JS refs/GC replace parameter owner lifetime; existing SAL string cleanup remains separate unchanged boundary, no new dispose/count/pool/finalizer. Complete original class declaration and unchanged ctor/destructor definitions over verified real dependencies produce17252byte normal stream,446source hashes/six ordinary commands. Native string values, copy retention/member identity and public assignment outputs are compared, not native ownership counts/ABI/assertion/invalid lifetime/whole QA. Full TextSearch engine/backend/cache and diagnostic ostream, actual document options/config/locale/year defaults, compiler/document/UI/ODS remain pending; no configuration constants or fake peers. UI/ODS dependency priority and pause after full101/repairs retained.",
+      "justification": "Task94 ports actual shared utl SearchParam complete value class operation family: original text/copy constructors and defaults, implicit memberwise copy_assign, stable borrowed const OUString member, search/case/selection getters, UInt32 escape storage with signed32 API result and original SearchType/ConvertToSearchType/ConvertToBool caller-output behavior. Wildcards take precedence and clear regex only when both enabled; unknown scoped modes convert to false/false. Genuine shared OUString values reused, ordinary JS refs/GC replace parameter owner lifetime; existing SAL string cleanup remains separate unchanged boundary, no new dispose/count/pool/finalizer. Complete original class declaration and unchanged ctor/destructor definitions over verified real dependencies produce17252byte normal stream,446source hashes/six ordinary commands. Native string values, copy retention/member identity and public assignment outputs are compared, not native ownership counts/ABI/assertion/invalid lifetime/whole QA. Full TextSearch engine/backend/cache and diagnostic ostream, actual document options/config/locale/year defaults, compiler/document/UI/ODS remain pending; no configuration constants or fake peers. UI/ODS dependency priority and pause after full101/repairs retained. The current search task exports the actual options-based TextSearch owner alongside unchanged SearchParam. Other constructors and full engine/service surface remain pending.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/unotools/textsearch.hxx",
       "upstreamSymbols": [
-        "SearchParam"
+        "SearchParam",
+        "TextSearch"
       ]
     }
   }

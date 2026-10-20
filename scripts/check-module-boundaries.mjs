@@ -207,6 +207,36 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Native swcrsr.hxx declares Find_Text with i18nutil::SearchOptions2.
+  ["sw/source/core/crsr/swcrsr.ts", new Set(["i18nutil/inc/searchopt.ts"])],
+  // Native findtxt.cxx consumes i18nutil::SearchOptions2 through its original search contracts.
+  ["sw/source/core/crsr/findtxt.ts", new Set(["i18nutil/inc/searchopt.ts"])],
+  // Native textsearch.hxx/cxx includes i18nutil/searchopt.hxx and generated util/SearchResult.hpp.
+  [
+    "unotools/source/i18n/textsearch.ts",
+    new Set(["i18nutil/inc/searchopt.ts", "offapi/com/sun/star/util/SearchResult.ts"]),
+  ],
+  // Native cclass_unicode.cxx calls ICU u_charType and o3tl::iterateCodePoints and uses KCharacterType.hpp.
+  [
+    "i18npool/source/characterclassification/cclass_unicode.ts",
+    new Set([
+      "external/icu/source/common/uchar.ts",
+      "external/icu/source/common/unicode/uchar.ts",
+      "o3tl/inc/string_view.ts",
+      "offapi/com/sun/star/i18n/KCharacterType.ts",
+    ]),
+  ],
+  // Native TextSearch uses published util/i18n values and o3tl code-point stepping.
+  [
+    "i18npool/source/search/textsearch.ts",
+    new Set([
+      "offapi/com/sun/star/util/SearchAlgorithms2.ts",
+      "offapi/com/sun/star/util/SearchFlags.ts",
+      "offapi/com/sun/star/util/SearchResult.ts",
+      "offapi/com/sun/star/i18n/KCharacterType.ts",
+      "o3tl/inc/string_view.ts",
+    ]),
+  ],
   // patattr.cxx::fillColor owns and returns actual model::ComplexColor values.
   ["sc/source/core/data/patattr.ts", new Set(["docmodel/inc/color/ComplexColor.ts"])],
   ["sc/browser/presentation/ScGridWindow.tsx", new Set(["docmodel/inc/color/ComplexColor.ts"])],

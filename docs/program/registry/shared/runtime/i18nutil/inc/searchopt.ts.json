@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/inc/searchopt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nutil/inc/searchopt.ts#SearchOptions2",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts",
+        "include/i18nutil/searchopt.hxx#SearchOptions2"
+      ],
+      "justification": "Actual search option value defaults and independent copy of every field, reusing real OUString and Locale. Native zero default algorithm is retained. UNO downgrade/upgrade conversion and full native constructor overloads are pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchOptions2"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/i18nutil/searchopt.hxx",
+      "upstreamSymbols": [
+        "SearchOptions2",
+        "AlgorithmType2",
+        "WildcardEscapeCharacter"
+      ]
+    }
+  }
+}

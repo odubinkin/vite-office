@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/cshtyp.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/inc/cshtyp.hxx",
+    "localSymbols": [
+      "FindRanges",
+      "SwDocPositions"
+    ],
+    "upstreamSymbols": [
+      "FindRanges",
+      "SwDocPositions"
+    ],
+    "preservedResponsibilities": [
+      "Original FindRanges bit identities and SwDocPositions selector order. InSelAll denotes all matches, not selection-only search. No full search traversal or UI capability is claimed from these values."
+    ],
+    "omittedResponsibilities": [
+      "Other cshtyp declarations and complete search/service contracts remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/cshtyp.ts",
+          "marker": "FindRanges"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findtxt.test.ts",
+          "marker": "Find_Text"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/inc/cshtyp.hxx",
+          "marker": "enum class FindRanges"
+        },
+        {
+          "path": "sw/inc/cshtyp.hxx",
+          "marker": "enum class SwDocPositions"
+        }
+      ]
+    }
+  }
+}

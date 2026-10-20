@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/search/textsearch.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/search/textsearch.ts#TextSearch",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts",
+        "i18npool/source/search/textsearch.cxx#TextSearch"
+      ],
+      "justification": "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TextSearch",
+        "NSrchFrwrd",
+        "NSrchBkwrd",
+        "IsDelimiter",
+        "GetDiff"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18npool/source/search/textsearch.cxx",
+      "upstreamSymbols": [
+        "TextSearch",
+        "NSrchFrwrd",
+        "NSrchBkwrd",
+        "IsDelimiter",
+        "GetDiff"
+      ]
+    }
+  }
+}

@@ -18,17 +18,21 @@
       "evidence": [
         "apps/office/src/i18npool/source/characterclassification/cclass_unicode.ts#toUpper",
         "apps/office/src/unotools/source/i18n/native-uppercase.test.ts#it(",
-        "i18npool/source/characterclassification/cclass_unicode.cxx#toUpper"
+        "i18npool/source/characterclassification/cclass_unicode.cxx#toUpper",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts"
       ],
-      "justification": "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending.",
+      "justification": "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending. The current search task also implements getCharacterType with the exact native category switch over existing pinned ICU u_charType data and actual UTF16 codepoint iteration. It deliberately retains the source default-zero branches for categories not enumerated. Full character classification services and other operations remain unported.",
       "knownViolations": [],
       "localSymbols": [
-        "toUpper"
+        "toUpper",
+        "getCharacterType"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "i18npool/source/characterclassification/cclass_unicode.cxx",
       "upstreamSymbols": [
-        "cclass_Unicode::toUpper"
+        "cclass_Unicode::toUpper",
+        "getCharacterType",
+        "getCharType"
       ]
     }
   }

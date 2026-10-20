@@ -244,6 +244,58 @@ Native consumer invariants and a compiled native differential remain unverified.
 Decision: preserve zero-origin fallback, inclusive predicates and distinct size
 and rectangle emptiness. Do not add an area guard or normalize negative sizes.
 
+## WRITER-007: Absolute search normalizes typographic quotes differently by direction
+
+Pinned `i18npool/source/search/textsearch.cxx`, `searchForward` and
+`searchBackward`, tests `bSearchApostrophe && isReplacePunctuation(in_str)` in
+both directions. Without a transliteration service, the forward branch replaces
+only U+2019 with ASCII apostrophe. The backward branch calls
+`replacePunctuation`, which maps all U+2018..U+201F quote forms. With a simple
+transliteration service both directions call the complete helper.
+
+Source-derived initialized example: searching ASCII apostrophe in the one-unit
+string U+2018, with absolute algorithm and no transliteration, fails forward but
+matches [1,0] backward. With IGNORE_CASE it matches in both directions. An ASCII
+double quote similarly finds U+201C backward only without transliteration.
+Portable tests in `i18npool/source/search/textsearch.test.ts` preserve all eight
+quote forms; they do not execute the native implementation. Native consumer
+invariants and a compiled differential remain unverified. Decision: retain the
+original directional asymmetry, without broadening forward normalization.
+
+## WRITER-008: Backward absolute search special-cases a lower bound at string end
+
+Pinned `i18npool/source/search/textsearch.cxx`, `NSrchBkwrd`, assigns
+`nEnd = sSearchKey.getLength()` when `endPos == searchStr.getLength()`, instead
+of adding the key length to the lower bound as in the other branch.
+
+Source-derived initialized example: source `abc`, key `b`, startPos=3 and
+endPos=3 returns raw offsets [2,1], although the input interval appears empty.
+The transliterated path prepares an empty string first and does not produce
+this match. Normal callers may exclude this endpoint combination; that
+consumer invariant and compiled native behavior remain unverified. Portable
+exhaustive interval checks retain the literal source condition. Decision:
+keep the backend condition; Writer range traversal must not call a text search
+for an empty interval.
+
+## WRITER-009: Search restores filtered soft-hyphen boundaries differently by direction
+
+Pinned `sw/source/core/crsr/findtxt.cxx`, `DoSearch`, temporarily swaps the
+wrapper-normalized match endpoints during backward filtered-position recovery.
+The first boundary counts removed positions using `<=`; the second uses `<`.
+After swapping back and exchanging point/mark, a soft hyphen exactly on a match
+boundary can be included backward and excluded forward.
+
+Source-derived examples: searching `ab` in `U+00AD ab` (without the separating
+space in the actual input) yields forward point/mark [3,1], backward [0,3].
+Searching `ab` in `ab U+00AD` (again with no space) yields forward [2,0], backward
+[0,3]. An internal soft hyphen belongs to both matches. A one-character
+U+00AD pattern disables stripping, while a multi-character literal pattern
+containing U+00AD does not. These source predicates and cursor endpoints are
+preserved in `sw/source/core/crsr/findtxt.test.ts`. Tests are portable source
+contract checks; compiled upstream execution and complete consumer invariants
+are unverified. Decision: retain the exact directional predicates and the
+single-character-only literal exception.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

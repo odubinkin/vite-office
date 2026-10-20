@@ -1,13 +1,157 @@
 /** @fileoverview Implements Writer cell traversal over the actual SwPaM/SwNodes owners from swcrsr.cxx. */
-import { SwPaM } from "./pam";
+import { SwPaM, SwPosition } from "./pam";
+import { FindText } from "./findtxt";
+import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
+import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
 import { SwEndNode, SwTableBoxStartNode, SwTableNode, type SwStartNode } from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFrame } from "../text/txtfrm";
 import { SwTable, type SwTableBox } from "../table/swtable";
 import type { SwRootFrame } from "../layout/newfrm";
 
+/** Native strategy result flags from swcrsr.hxx. */
+export const FIND_NOT_FOUND = 0;
+export const FIND_FOUND = 1;
+export const FIND_NO_RING = 2;
+/** Native search-strategy virtual contract for represented model ranges. Drawing/LOK search-item state remains unported. */
+export interface SwFindParas {
+  /** Searches one model range. @param cursor - Result cursor. @param backward - Direction. @param region - Registered region. @param readOnly - Read-only permission. @returns Native find flag. */
+  DoFind(cursor: SwPaM, backward: boolean, region: SwPaM, readOnly: boolean): number;
+  /** Reports whether the strategy mutates document content. @returns Replace mode. */
+  IsReplaceMode(): boolean;
+}
+
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
 export class SwCursor extends SwPaM {
+  /** Native boundary resolution uses actual content nodes, including table text. @param position - Native boundary selector. @param target - Registered result position. @returns Nothing. */
+  public FillFindPos(position: SwDocPositions, target: SwPosition): void {
+    if (
+      ![
+        SwDocPositions.Start,
+        SwDocPositions.End,
+        SwDocPositions.OtherStart,
+        SwDocPositions.OtherEnd,
+      ].includes(position)
+    ) {
+      target.Assign(this.GetPoint().GetNode(), this.GetPoint().GetContentIndex());
+      return;
+    }
+    const nodes = this.GetPoint().GetNode().GetNodes();
+    const start = position === SwDocPositions.Start || position === SwDocPositions.OtherStart;
+    const boundary =
+      position === SwDocPositions.Start
+        ? nodes.GetEndOfContent().StartOfSectionNode()
+        : position === SwDocPositions.End
+          ? nodes.GetEndOfContent()
+          : position === SwDocPositions.OtherStart
+            ? nodes.at(0)
+            : nodes.GetEndOfContent().StartOfSectionNode();
+    for (
+      let i = boundary.GetIndex() + (start ? 1 : -1);
+      i >= 0 && i < nodes.Count();
+      i += start ? 1 : -1
+    ) {
+      const node = nodes.at(i);
+      if (node.IsTextNode()) {
+        target.Assign(node, start ? 0 : (node as SwTextNode).Len());
+        return;
+      }
+      if (!start && i === 0) break;
+    }
+    target.Assign(boundary, 0);
+  }
+  /** Native Find_Text entry point for represented absolute model-text search. Notes, merged layout and replacement remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @returns Number of matches. */
+  public Find_Text(
+    options: SearchOptions2,
+    searchInNotes: boolean,
+    start: SwDocPositions,
+    end: SwDocPositions,
+    cancel: [boolean],
+    ranges: FindRanges,
+    replace = false,
+    layout?: SwRootFrame,
+  ): number {
+    if (searchInNotes || replace || layout !== undefined)
+      throw new Error("Writer notes, replacement and layout-text search are not implemented.");
+    return FindText(this, options, start, end, cancel, ranges);
+  }
+  /** Native FindAll/lcl_FindSelection find-only traversal and ring ownership. Replacement/readonly/layout services remain separate incomplete responsibilities. @param paras - Native search strategy. @param start - Start selector. @param end - End selector. @param ranges - Scope/all flags. @param cancel - Cancellation output. @returns Match count. */
+  public FindAll(
+    paras: SwFindParas,
+    start: SwDocPositions,
+    end: SwDocPositions,
+    ranges: FindRanges,
+    cancel: [boolean],
+  ): number {
+    if (paras.IsReplaceMode()) throw new Error("Writer replacement search is not implemented.");
+    cancel[0] = false;
+    const backward = !(
+      start === SwDocPositions.Start ||
+      start === SwDocPositions.OtherStart ||
+      (start === SwDocPositions.Curr &&
+        (end === SwDocPositions.End || end === SwDocPositions.OtherEnd))
+    );
+    const all = (ranges & FindRanges.InSelAll) !== 0;
+    const inSelection = (ranges & FindRanges.InSel) !== 0;
+    const regions: SwPaM[] = [],
+      found: SwPaM[] = [];
+    const working = new SwPaM(this.GetPoint());
+    const oldMark =
+      !inSelection && !all && ranges === FindRanges.InBody && this.HasMark()
+        ? this.GetMark().clone()
+        : undefined;
+    try {
+      if (inSelection) {
+        for (const selection of this.GetRingContainer())
+          if (selection.HasMark())
+            regions.push(new SwPaM(selection.GetPoint(), selection.GetMark()));
+      } else {
+        const low = this.GetPoint().clone(),
+          high = this.GetPoint().clone();
+        try {
+          this.FillFindPos(all ? SwDocPositions.Start : start, low);
+          this.FillFindPos(all ? SwDocPositions.End : end, high);
+          if ((ranges & FindRanges.InOther) !== 0) {
+            const nodes = low.GetNode().GetNodes();
+            low.Assign(nodes.GetEndOfPostIts().StartOfSectionNode());
+            high.Assign(nodes.GetEndOfExtras());
+          }
+          regions.push(new SwPaM(low, high));
+        } finally {
+          low.Dispose();
+          high.Dispose();
+        }
+      }
+      for (const region of regions) {
+        while (
+          region.Start().compare(region.End()) < 0 &&
+          paras.DoFind(working, backward, region, false) !== 0
+        ) {
+          found.push(new SwPaM(working.GetPoint(), working.GetMark()));
+          if (!all) break;
+          if (backward)
+            region.End().Assign(working.Start().GetNode(), working.Start().GetContentIndex());
+          else region.Start().Assign(working.End().GetNode(), working.End().GetContentIndex());
+        }
+        if (found.length > 0 && !all) break;
+      }
+      const first = found[0];
+      if (first === undefined) return 0;
+      if (all) while (this.GetNext() !== this) this.GetNext().Dispose();
+      this.Assign(first.GetPoint(), oldMark ?? first.GetMark());
+      if (all)
+        for (let i = 1; i < found.length; i++) {
+          const next = found[i] as SwPaM,
+            member = this.Create(this);
+          member.Assign(next.GetPoint(), next.GetMark());
+        }
+      return found.length;
+    } finally {
+      oldMark?.Dispose();
+      working.Dispose();
+      for (const range of [...regions, ...found]) range.Dispose();
+    }
+  }
   /** Queries the original node and native position for its registered frame; native geometric Calc/bidi/selection-overlap remain unported. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */
   public LeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
     const point = this.GetPoint(),
@@ -36,7 +180,7 @@ export class SwCursor extends SwPaM {
     }
   }
   /** Creates a native editing cursor attached to an existing selection ring. @param ring - Native ring owner. @returns New registered cursor. */
-  public Create(ring: SwPaM): SwCursor {
+  public Create(ring?: SwPaM): SwCursor {
     return new SwCursor(this.GetPoint(), undefined, ring);
   }
   /** Moves to a current section endpoint, reporting false if already there. @param start - Beginning direction. @returns Whether the point changed. */

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/SearchResult.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/util/SearchResult.idl",
+    "localSymbols": [
+      "SearchResult",
+      "subRegExpressions",
+      "startOffset",
+      "endOffset"
+    ],
+    "upstreamSymbols": [
+      "SearchResult",
+      "subRegExpressions",
+      "startOffset",
+      "endOffset"
+    ],
+    "preservedResponsibilities": [
+      "Original result fields and backward high/exclusive start, low/inclusive end offsets; TypeScript interface erases UNO marshalling."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/SearchResult.ts",
+          "marker": "SearchResult"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
+          "marker": "native absolute TextSearch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/util/SearchResult.idl",
+          "marker": "SearchResult"
+        }
+      ]
+    }
+  }
+}

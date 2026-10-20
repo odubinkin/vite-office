@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/crsr/findtxt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/crsr/findtxt.ts#FindTextImpl",
+        "apps/office/src/sw/source/core/crsr/findtxt.test.ts",
+        "sw/source/core/crsr/findtxt.cxx#FindTextImpl",
+        "apps/office/src/sw/source/core/crsr/findtxt.test.ts#Find_Text"
+      ],
+      "justification": "Actual model-node text traversal within registered SwPaM bounds, including table text, source soft-hyphen filtering and directional <=/< restoration before point/mark exchange. Failure preserves cursor state. No flattened body projection. Merged layout, fields/dummy characters, notes, hidden/redline sections, regex, replacement/history/view/UI and the complete generic search services remain pending; task stays open. The current checkpoint also introduces the actual find-only SwFindParaText strategy, native FIND_FOUND/FIND_NOT_FOUND outputs, and Find_Text option-to-selection flag handling. Generic FindAll/ring traversal stays with the original swcrsr owner. Source MakeRegion uses region endpoints rather than the result cursor; a regression test checks this distinction. Full replacement/notes/layout/UI scope is pending, so this task remains active.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FindTextImpl",
+        "DoSearch",
+        "lcl_CleanStr",
+        "SwFindParaText",
+        "FindText"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/source/core/crsr/findtxt.cxx",
+      "upstreamSymbols": [
+        "FindTextImpl",
+        "DoSearch",
+        "lcl_CleanStr",
+        "SwFindParaText",
+        "Find_Text"
+      ]
+    }
+  }
+}

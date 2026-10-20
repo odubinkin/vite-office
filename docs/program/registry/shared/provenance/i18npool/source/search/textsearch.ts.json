@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/search/textsearch.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/search/textsearch.cxx",
+    "localSymbols": [
+      "TextSearch",
+      "NSrchFrwrd",
+      "NSrchBkwrd",
+      "IsDelimiter",
+      "GetDiff"
+    ],
+    "upstreamSymbols": [
+      "TextSearch",
+      "NSrchFrwrd",
+      "NSrchBkwrd",
+      "IsDelimiter",
+      "GetDiff"
+    ],
+    "preservedResponsibilities": [
+      "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.ts",
+          "marker": "TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
+          "marker": "native absolute TextSearch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/search/textsearch.cxx",
+          "marker": "TextSearch"
+        }
+      ]
+    }
+  }
+}

@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/unotools/source/i18n/textsearch.ts#SearchParam",
         "apps/office/src/unotools/source/i18n/textsearch.test.ts#matches complete original shared search parameter stream",
-        "vendor/libreoffice-reference/unotools/source/i18n/textsearch.cxx#SearchParam"
+        "vendor/libreoffice-reference/unotools/source/i18n/textsearch.cxx#SearchParam",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts"
       ],
-      "justification": "Task94 ports actual shared utl SearchParam complete value class operation family: original text/copy constructors and defaults, implicit memberwise copy_assign, stable borrowed const OUString member, search/case/selection getters, UInt32 escape storage with signed32 API result and original SearchType/ConvertToSearchType/ConvertToBool caller-output behavior. Wildcards take precedence and clear regex only when both enabled; unknown scoped modes convert to false/false. Genuine shared OUString values reused, ordinary JS refs/GC replace parameter owner lifetime; existing SAL string cleanup remains separate unchanged boundary, no new dispose/count/pool/finalizer. Complete original class declaration and unchanged ctor/destructor definitions over verified real dependencies produce17252byte normal stream,446source hashes/six ordinary commands. Native string values, copy retention/member identity and public assignment outputs are compared, not native ownership counts/ABI/assertion/invalid lifetime/whole QA. Full TextSearch engine/backend/cache and diagnostic ostream, actual document options/config/locale/year defaults, compiler/document/UI/ODS remain pending; no configuration constants or fake peers. UI/ODS dependency priority and pause after full101/repairs retained.",
+      "justification": "Task94 ports actual shared utl SearchParam complete value class operation family: original text/copy constructors and defaults, implicit memberwise copy_assign, stable borrowed const OUString member, search/case/selection getters, UInt32 escape storage with signed32 API result and original SearchType/ConvertToSearchType/ConvertToBool caller-output behavior. Wildcards take precedence and clear regex only when both enabled; unknown scoped modes convert to false/false. Genuine shared OUString values reused, ordinary JS refs/GC replace parameter owner lifetime; existing SAL string cleanup remains separate unchanged boundary, no new dispose/count/pool/finalizer. Complete original class declaration and unchanged ctor/destructor definitions over verified real dependencies produce17252byte normal stream,446source hashes/six ordinary commands. Native string values, copy retention/member identity and public assignment outputs are compared, not native ownership counts/ABI/assertion/invalid lifetime/whole QA. Full TextSearch engine/backend/cache and diagnostic ostream, actual document options/config/locale/year defaults, compiler/document/UI/ODS remain pending; no configuration constants or fake peers. UI/ODS dependency priority and pause after full101/repairs retained. The current search task adds the options-based TextSearch constructor, full-field one-entry backend cache, independent retained backend instances, SetLocale copies, forward outputs and backward output reversal. SearchParam itself is unchanged. LanguageTag/SearchParam constructors, regex/backreference replacement, non-absolute modes and full engine/UI remain pending. Existing historical Task94 engine-pending statements refer to that earlier checkpoint.",
       "knownViolations": [],
       "localSymbols": [
         "SearchParam",
@@ -31,12 +32,20 @@
         "IsWildMatchSel",
         "GetWildEscChar",
         "ConvertToSearchType",
-        "ConvertToBool"
+        "ConvertToBool",
+        "TextSearch",
+        "SearchForward",
+        "SearchBackward",
+        "SetLocale"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "unotools/source/i18n/textsearch.cxx",
       "upstreamSymbols": [
-        "SearchParam"
+        "SearchParam",
+        "TextSearch",
+        "SearchForward",
+        "SearchBackward",
+        "SetLocale"
       ]
     }
   }
