@@ -11,17 +11,25 @@
       "NSrchFrwrd",
       "NSrchBkwrd",
       "IsDelimiter",
-      "GetDiff"
+      "GetDiff",
+      "WildcardSrchFrwrd",
+      "WildcardSrchBkwrd",
+      "setWildcardMatch"
     ],
     "upstreamSymbols": [
       "TextSearch",
       "NSrchFrwrd",
       "NSrchBkwrd",
       "IsDelimiter",
-      "GetDiff"
+      "GetDiff",
+      "WildcardSrchFrwrd",
+      "WildcardSrchBkwrd",
+      "setWildcardMatch"
     ],
     "preservedResponsibilities": [
-      "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim."
+      "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim.",
+      "Native WildcardSrchFrwrd/WildcardSrchBkwrd code-point rewind loops, implicit substring asterisks, WILD_MATCH_SELECTION greedy retry, original escape/reordered-backward-pattern cache and UTF16 source endpoint remapping are implemented. Existing native iterator, frozen casefold data and wrapper/cache remain the consumed owners. Reverse-pattern preparation is a private same-file extraction of the original WildcardSrchBkwrd block, not a different wildcard compiler. Source trailing-escape/NUL/empty-folded-interval quirks are retained (WRITER-012/013/014). Original test_textsearch.cxx QA values, supplementary cases, independent bounded dynamic-programming language checks and actual wrapper/Writer replacement integration provide portable evidence only. Regex/approximate and other transliterations, secondary key/service/native compiled QA and full Writer view/UI remain unverified; no parity status/default/classification promotion.",
+      "Independent whole-selection recognition identifies native overlapping greedy-retry false negatives; preserve and explicitly enumerate them as WRITER-015 rather than changing the reference language or native matching loop."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
@@ -35,12 +43,20 @@
         {
           "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
           "marker": "native absolute TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch-wildcard.test.ts",
+          "marker": "testWildcardSearch"
         }
       ],
       "upstream": [
         {
           "path": "i18npool/source/search/textsearch.cxx",
           "marker": "TextSearch"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_textsearch.cxx",
+          "marker": "testWildcardSearch"
         }
       ]
     }

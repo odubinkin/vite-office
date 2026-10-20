@@ -44,16 +44,17 @@ function range(node: SwTextNode, low: number, high: number): SwPaM {
     end.Dispose();
   }
 }
-/** Executes the actual native search entry point. @param shell - Actual cursor shell. @param search - Pattern. @param replacement - Native literal replacement. @param backward - Direction. @param selected - Restrict to selected ranges. @returns Match count. */
+/** Executes the actual native search entry point. @param shell - Actual cursor shell. @param search - Pattern. @param replacement - Native literal replacement. @param backward - Direction. @param selected - Restrict to selected ranges. @param algorithm - Native shared search algorithm. @returns Match count. */
 function replaceAll(
   shell: SwWrtShell,
   search: string,
   replacement: string,
   backward = false,
   selected = false,
+  algorithm = 1,
 ): number {
   const options = new SearchOptions2();
-  options.AlgorithmType2 = 1;
+  options.AlgorithmType2 = algorithm;
   options.searchString.assign(string(search));
   options.replaceString.assign(string(replacement));
   return shell
@@ -317,6 +318,27 @@ it.each([2, 0, 3])(
       expect(f.doc.GetUndoManager().DoesUndo()).toBe(true);
     } finally {
       reply.mockRestore();
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
+
+it.each([false, true])(
+  "consumes the real wildcard backend through Writer replacement/history backward=%s",
+  /** Backend wildcards still use literal native replacement and actual cursor/undo owners. @param backward - Direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const f = fixture("cat cot cut");
+    try {
+      expect(replaceAll(f.shell, "c?t", "dog🌴", backward, false, 4)).toBe(3);
+      expect(f.node.GetText()).toBe("dog🌴 dog🌴 dog🌴");
+      expect([...f.shell.GetCursor().GetRingContainer()]).toHaveLength(1);
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("cat cot cut");
+      expect(f.shell.Redo()).toBe(true);
+      expect(f.node.GetText()).toBe("dog🌴 dog🌴 dog🌴");
+    } finally {
       f.shell.Close();
       f.docShell.Close();
     }

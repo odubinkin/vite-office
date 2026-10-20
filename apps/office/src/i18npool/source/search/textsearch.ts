@@ -1,9 +1,12 @@
-/** @fileoverview Native absolute TextSearch backend: directional Boyer-Moore, full folding, punctuation and source offsets. ICU regex, approximate and wildcard algorithms remain separate unported responsibilities. */
+/** @fileoverview Native absolute/wildcard TextSearch backend: directional native loops, full folding, punctuation and source offsets. ICU regex and approximate algorithms remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import * as Algorithms from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
-import { NORM_WORD_ONLY } from "../../../offapi/com/sun/star/util/SearchFlags";
+import {
+  NORM_WORD_ONLY,
+  WILD_MATCH_SELECTION,
+} from "../../../offapi/com/sun/star/util/SearchFlags";
 import type { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { ALPHA, DIGIT, LETTER } from "../../../offapi/com/sun/star/i18n/KCharacterType";
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
@@ -13,6 +16,10 @@ import { transliterateCaseFolding } from "../transliteration/transliteration_bod
 /** Native result default: no expressions and empty offset sequences. @returns Unsuccessful search result. */
 function notFound(): SearchResult {
   return { subRegExpressions: 0, startOffset: [], endOffset: [] };
+}
+/** Native one-expression wildcard result setter, retaining directional UTF-16 offsets. @param start - Directional start. @param end - Directional end. @returns Original one-expression result value. */
+function setWildcardMatch(start: number, end: number): SearchResult {
+  return { subRegExpressions: 1, startOffset: [start], endOffset: [end] };
 }
 /** Native punctuation detection, independent of whether the key contains an ASCII quote. @param text - UTF-16 text. @returns Whether a typographic quote occurs. */
 function isReplacePunctuation(text: Uint16Array): boolean {
@@ -30,13 +37,16 @@ function replacePunctuation(text: Uint16Array): Uint16Array {
     ) => (c >= 0x2018 && c <= 0x201b ? 39 : c >= 0x201c && c <= 0x201f ? 34 : c),
   );
 }
-/** Native primary absolute-search owner; realm-local Map storage replaces the native jump-table allocation. */
+/** Native primary absolute/wildcard-search owner; realm-local Map storage replaces the native jump-table allocation. */
 export class TextSearch {
   private aSrchPara = new SearchOptions2();
   private sSrchStr = new Uint16Array();
   private bSearchApostrophe = false;
   private pJumpTable: Map<number, number> | undefined;
   private bIsForwardTab = true;
+  private mcWildcardEscapeChar = 0;
+  private mbWildcardAllowSubstring = true;
+  private maWildcardReversePattern = new Uint16Array();
 
   /** Initializes source options before the first search. @param options - Native option value. @returns Search owner. */
   public constructor(options = new SearchOptions2()) {
@@ -44,11 +54,7 @@ export class TextSearch {
   }
   /** Copies options and resets native prepared key/jump state. @param options - New native options. @returns Nothing. */
   public setOptions2(options: SearchOptions2): void {
-    if (
-      [Algorithms.REGEXP, Algorithms.APPROXIMATE, Algorithms.WILDCARD].includes(
-        options.AlgorithmType2,
-      )
-    )
+    if ([Algorithms.REGEXP, Algorithms.APPROXIMATE].includes(options.AlgorithmType2))
       throw new Error("This TextSearch algorithm is not implemented.");
     if ((options.transliterateFlags & ~TransliterationFlags.IGNORE_CASE) !== 0)
       throw new Error("This TextSearch transliteration is not implemented.");
@@ -67,6 +73,9 @@ export class TextSearch {
     this.sSrchStr = key.getStr().slice(0, key.getLength());
     this.aSrchPara = para;
     this.pJumpTable = undefined;
+    this.maWildcardReversePattern = new Uint16Array();
+    this.mcWildcardEscapeChar = para.WildcardEscapeCharacter >>> 0;
+    this.mbWildcardAllowSubstring = (para.searchFlag & WILD_MATCH_SELECTION) === 0;
   }
   /** Calls the forward engine and remaps transliterated UTF-16 endpoints. @param text - Original text. @param startPos - Inclusive lower bound. @param endPos - Exclusive upper bound. @returns Directional result. */
   public searchForward(
@@ -155,14 +164,25 @@ export class TextSearch {
           ? this.FindPos(offsets, upper)
           : input.length;
     const prepared = new OUString(input, input.length);
-    const result = forward ? this.NSrchFrwrd(prepared, lo, hi) : this.NSrchBkwrd(prepared, hi, lo);
+    const wildcard = this.aSrchPara.AlgorithmType2 === Algorithms.WILDCARD;
+    const result = wildcard
+      ? forward
+        ? this.WildcardSrchFrwrd(prepared, lo, hi)
+        : this.WildcardSrchBkwrd(prepared, hi, lo)
+      : forward
+        ? this.NSrchFrwrd(prepared, lo, hi)
+        : this.NSrchBkwrd(prepared, hi, lo);
     if (result.subRegExpressions === 0 || offsets === undefined || offsets.length === 0)
       return result;
     const low = (forward ? result.startOffset[0] : result.endOffset[0]) as number;
     const high = (forward ? result.endOffset[0] : result.startOffset[0]) as number;
-    const mappedLow = offsets[low] as number;
-    const position: [number] = [offsets[Math.min(high, offsets.length) - 1] as number];
+    const position: [number] = [offsets[offsets.length - 1] as number];
     iterateCodePoints(original, position, 1);
+    const mappedLow = low < offsets.length ? (offsets[low] as number) : position[0];
+    if (high > 0) {
+      position[0] = offsets[Math.min(high, offsets.length) - 1] as number;
+      iterateCodePoints(original, position, 1);
+    } else position[0] = offsets[0] as number;
     return {
       subRegExpressions: 1,
       startOffset: [forward ? mappedLow : position[0]],
@@ -229,5 +249,353 @@ export class TextSearch {
       return { subRegExpressions: 1, startOffset: [index], endOffset: [index - size] };
     }
     return notFound();
+  }
+
+  /** Native WildcardSrchFrwrd code-point/backtracking loop with original directional offsets and escape state. @param searchStr - Prepared native text. @param nStartPos - Directional start. @param nEndPos - Directional end. @returns Original wildcard match. */
+  private WildcardSrchFrwrd(
+    searchStr: OUStringConstReference,
+    nStartPos: number,
+    nEndPos: number,
+  ): SearchResult {
+    const input = searchStr.getStr().subarray(0, searchStr.getLength());
+    let aRes = notFound();
+    let nStartOffset = nStartPos;
+    const nEndOffset = nEndPos;
+
+    const nStringLen = searchStr.getLength();
+
+    // Forward nStartPos inclusive, nEndPos exclusive, but allow for empty
+    // string match with [0,0).
+    if (
+      nStartPos < 0 ||
+      nEndPos > nStringLen ||
+      nEndPos < nStartPos ||
+      (nStartPos == nStringLen && (nStringLen != 0 || nStartPos != nEndPos))
+    )
+      return aRes;
+
+    const rPattern = this.sSrchStr;
+    const nPatternLen = rPattern.length;
+
+    // Handle special cases empty pattern and/or string outside of the loop to
+    // not add performance penalties there and simplify.
+    if (nStartPos == nEndPos) {
+      let i = 0;
+      while (i < nPatternLen && rPattern[i] == 42) ++i;
+      if (i == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+      return aRes;
+    }
+
+    // Empty pattern does not match any non-empty string.
+    if (!nPatternLen) return aRes;
+
+    let bRewind = false;
+    let cPattern = 0;
+    const nPattern: [number] = [0];
+    const nAfterFakePattern: [number] = [nPattern[0]];
+    if (this.mbWildcardAllowSubstring) {
+      // Fake a leading '*' wildcard.
+      cPattern = 42;
+      bRewind = true;
+      // Assume a non-'*' pattern character follows. If it is a '*' instead
+      // that will be handled in the loop by setting nPat.
+      const cu = iterateCodePoints(rPattern, nAfterFakePattern, 1);
+      if (
+        cu == this.mcWildcardEscapeChar &&
+        this.mcWildcardEscapeChar &&
+        nAfterFakePattern[0] < nPatternLen
+      )
+        iterateCodePoints(rPattern, nAfterFakePattern, 1);
+    }
+
+    const nString: [number] = [nStartPos],
+      nStr: [number] = [-1];
+    let nPat = -1,
+      nLastAsterisk = -1;
+    let cPatternAfterAsterisk = 0;
+    let bEscaped = false,
+      bEscapedAfterAsterisk = false;
+
+    // The loop code tries to avoid costly calls to iterateCodePoints() when
+    // possible.
+
+    do {
+      if (bRewind) {
+        // Reuse cPattern after '*', nPattern was correspondingly
+        // incremented to point behind cPattern.
+        bRewind = false;
+      } else if (nPattern[0] < nPatternLen) {
+        // nPattern will be incremented by iterateCodePoints().
+        cPattern = iterateCodePoints(rPattern, nPattern, 1);
+        if (
+          cPattern == this.mcWildcardEscapeChar &&
+          this.mcWildcardEscapeChar &&
+          nPattern[0] < nPatternLen
+        ) {
+          bEscaped = true;
+          cPattern = iterateCodePoints(rPattern, nPattern, 1);
+        }
+      } else {
+        // A trailing '*' is handled below.
+        if (this.mbWildcardAllowSubstring) {
+          // If the pattern is consumed and substring match allowed we're good.
+          aRes = setWildcardMatch(nStartOffset, nString[0]);
+          return aRes;
+        } else if (nString[0] < nEndPos && nLastAsterisk >= 0) {
+          // If substring match is not allowed try a greedy '*' match.
+          nPattern[0] = nLastAsterisk;
+          continue; // do
+        } else return aRes;
+      }
+
+      if (cPattern == 42 && !bEscaped) {
+        // '*' is one code unit, so not using iterateCodePoints() is ok.
+        while (nPattern[0] < nPatternLen && rPattern[nPattern[0]] == 42) ++nPattern[0];
+
+        if (nPattern[0] >= nPatternLen) {
+          // Last pattern is '*', remaining string matches.
+          aRes = setWildcardMatch(nStartOffset, nEndOffset);
+          return aRes;
+        }
+
+        nLastAsterisk = nPattern[0]; // Remember last encountered '*'.
+
+        // cPattern will be the next non-'*' character, nPattern
+        // incremented.
+        cPattern = iterateCodePoints(rPattern, nPattern, 1);
+        if (
+          cPattern == this.mcWildcardEscapeChar &&
+          this.mcWildcardEscapeChar &&
+          nPattern[0] < nPatternLen
+        ) {
+          bEscaped = true;
+          cPattern = iterateCodePoints(rPattern, nPattern, 1);
+        }
+
+        cPatternAfterAsterisk = cPattern;
+        bEscapedAfterAsterisk = bEscaped;
+        nPat = nPattern[0]; // Remember position of pattern behind '*', already incremented.
+        nStr[0] = nString[0]; // Remember the current string to be matched.
+      }
+
+      if (nString[0] >= nEndPos)
+        // Whatever follows in pattern, string will not match.
+        return aRes;
+
+      // nString[0] will be incremented by iterateCodePoints().
+      const cString = iterateCodePoints(input, nString, 1);
+
+      if ((cPattern != 63 || bEscaped) && cPattern != cString) {
+        if (nPat == -1)
+          // Non-match already without any '*' pattern.
+          return aRes;
+
+        bRewind = true;
+        nPattern[0] = nPat; // Rewind pattern to character behind '*', already incremented.
+        cPattern = cPatternAfterAsterisk;
+        bEscaped = bEscapedAfterAsterisk;
+        iterateCodePoints(input, nStr, 1);
+        nString[0] = nStr[0]; // Restore incremented remembered string position.
+        if (nPat == nAfterFakePattern[0]) {
+          // Next start offset will be the next character.
+          nStartOffset = nString[0];
+        }
+      } else {
+        // An unescaped '?' pattern matched any character, or characters
+        // matched. Reset only escaped state.
+        bEscaped = false;
+      }
+    } while (nString[0] < nEndPos);
+
+    if (bRewind) return aRes;
+
+    // Eat trailing '*' pattern that matches anything, including nothing.
+    // '*' is one code unit, so not using iterateCodePoints() is ok.
+    while (nPattern[0] < nPatternLen && rPattern[nPattern[0]] == 42) ++nPattern[0];
+
+    if (nPattern[0] == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+    return aRes;
+  }
+  /** Native WildcardSrchBkwrd code-point/backtracking loop with original directional offsets and escape state. @param searchStr - Prepared native text. @param nStartPos - Directional start. @param nEndPos - Directional end. @returns Original wildcard match. */
+  private WildcardSrchBkwrd(
+    searchStr: OUStringConstReference,
+    nStartPos: number,
+    nEndPos: number,
+  ): SearchResult {
+    const input = searchStr.getStr().subarray(0, searchStr.getLength());
+    let aRes = notFound();
+
+    let nStartOffset = nStartPos;
+    const nEndOffset = nEndPos;
+
+    const nStringLen = searchStr.getLength();
+
+    // Backward nStartPos exclusive, nEndPos inclusive, but allow for empty
+    // string match with (0,0].
+    if (
+      nStartPos > nStringLen ||
+      nEndPos < 0 ||
+      nStartPos < nEndPos ||
+      (nEndPos == nStringLen && (nStringLen != 0 || nStartPos != nEndPos))
+    )
+      return aRes;
+
+    const rPattern = this.sSrchStr;
+    let nPatternLen = rPattern.length;
+
+    // Handle special cases empty pattern and/or string outside of the loop to
+    // not add performance penalties there and simplify.
+    if (nStartPos == nEndPos) {
+      let i = 0;
+      while (i < nPatternLen && rPattern[i] == 42) ++i;
+      if (i == nPatternLen) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+      return aRes;
+    }
+
+    // Empty pattern does not match any non-empty string.
+    if (!nPatternLen) return aRes;
+
+    const rReversePattern = this.GetWildcardReversePattern();
+    nPatternLen = rReversePattern.length;
+
+    let bRewind = false;
+    let cPattern = 0;
+    const nPattern: [number] = [nPatternLen];
+    const nAfterFakePattern: [number] = [nPattern[0]];
+    if (this.mbWildcardAllowSubstring) {
+      // Fake a trailing '*' wildcard.
+      cPattern = 42;
+      bRewind = true;
+      // Assume a non-'*' pattern character follows. If it is a '*' instead
+      // that will be handled in the loop by setting nPat.
+      const cu = iterateCodePoints(rReversePattern, nAfterFakePattern, -1);
+      if (cu == this.mcWildcardEscapeChar && this.mcWildcardEscapeChar && nAfterFakePattern[0] > 0)
+        iterateCodePoints(rReversePattern, nAfterFakePattern, -1);
+    }
+
+    const nString: [number] = [nStartPos],
+      nStr: [number] = [-1];
+    let nPat = -1,
+      nLastAsterisk = -1;
+    let cPatternAfterAsterisk = 0;
+    let bEscaped = false,
+      bEscapedAfterAsterisk = false;
+
+    // The loop code tries to avoid costly calls to iterateCodePoints() when
+    // possible.
+
+    do {
+      if (bRewind) {
+        // Reuse cPattern after '*', nPattern was correspondingly
+        // decremented to point before cPattern.
+        bRewind = false;
+      } else if (nPattern[0] > 0) {
+        // nPattern will be decremented by iterateCodePoints().
+        cPattern = iterateCodePoints(rReversePattern, nPattern, -1);
+        if (cPattern == this.mcWildcardEscapeChar && this.mcWildcardEscapeChar && nPattern[0] > 0) {
+          bEscaped = true;
+          cPattern = iterateCodePoints(rReversePattern, nPattern, -1);
+        }
+      } else {
+        // A trailing '*' is handled below.
+        if (this.mbWildcardAllowSubstring) {
+          // If the pattern is consumed and substring match allowed we're good.
+          aRes = setWildcardMatch(nStartOffset, nString[0]);
+          return aRes;
+        } else if (nString[0] > nEndPos && nLastAsterisk >= 0) {
+          // If substring match is not allowed try a greedy '*' match.
+          nPattern[0] = nLastAsterisk;
+          continue; // do
+        } else return aRes;
+      }
+
+      if (cPattern == 42 && !bEscaped) {
+        // '*' is one code unit, so not using iterateCodePoints() is ok.
+        while (nPattern[0] > 0 && rReversePattern[nPattern[0] - 1] == 42) --nPattern[0];
+
+        if (nPattern[0] <= 0) {
+          // First pattern is '*', remaining string matches.
+          aRes = setWildcardMatch(nStartOffset, nEndOffset);
+          return aRes;
+        }
+
+        nLastAsterisk = nPattern[0]; // Remember last encountered '*'.
+
+        // cPattern will be the previous non-'*' character, nPattern
+        // decremented.
+        cPattern = iterateCodePoints(rReversePattern, nPattern, -1);
+        if (cPattern == this.mcWildcardEscapeChar && this.mcWildcardEscapeChar && nPattern[0] > 0) {
+          bEscaped = true;
+          cPattern = iterateCodePoints(rReversePattern, nPattern, -1);
+        }
+
+        cPatternAfterAsterisk = cPattern;
+        bEscapedAfterAsterisk = bEscaped;
+        nPat = nPattern[0]; // Remember position of pattern before '*', already decremented.
+        nStr[0] = nString[0]; // Remember the current string to be matched.
+      }
+
+      if (nString[0] <= nEndPos)
+        // Whatever leads in pattern, string will not match.
+        return aRes;
+
+      // nString[0] will be decremented by iterateCodePoints().
+      const cString = iterateCodePoints(input, nString, -1);
+
+      if ((cPattern != 63 || bEscaped) && cPattern != cString) {
+        if (nPat == -1)
+          // Non-match already without any '*' pattern.
+          return aRes;
+
+        bRewind = true;
+        nPattern[0] = nPat; // Rewind pattern to character before '*', already decremented.
+        cPattern = cPatternAfterAsterisk;
+        bEscaped = bEscapedAfterAsterisk;
+        iterateCodePoints(input, nStr, -1);
+        nString[0] = nStr[0]; // Restore decremented remembered string position.
+        if (nPat == nAfterFakePattern[0]) {
+          // Next start offset will be this character (exclusive).
+          nStartOffset = nString[0];
+        }
+      } else {
+        // An unescaped '?' pattern matched any character, or characters
+        // matched. Reset only escaped state.
+        bEscaped = false;
+      }
+    } while (nString[0] > nEndPos);
+
+    if (bRewind) return aRes;
+
+    // Eat leading '*' pattern that matches anything, including nothing.
+    // '*' is one code unit, so not using iterateCodePoints() is ok.
+    while (nPattern[0] > 0 && rReversePattern[nPattern[0] - 1] == 42) --nPattern[0];
+
+    if (nPattern[0] == 0) aRes = setWildcardMatch(nStartOffset, nEndOffset);
+    return aRes;
+  }
+  /** Native backward pattern preparation moves each escape after its code point; a trailing escape is eliminated. The cache is reset only by setOptions2. @returns Reordered original UTF-16 units. */
+  private GetWildcardReversePattern(): Uint16Array {
+    if (this.maWildcardReversePattern.length === 0) {
+      const rPattern = this.sSrchStr,
+        buffer = Array.from(rPattern),
+        nIndex: [number] = [0];
+      while (nIndex[0] < rPattern.length) {
+        const nOld = nIndex[0],
+          cu = iterateCodePoints(rPattern, nIndex);
+        if (cu === this.mcWildcardEscapeChar) {
+          if (nIndex[0] < rPattern.length) {
+            const escape = rPattern.slice(nOld, nIndex[0]),
+              nOld2 = nIndex[0];
+            iterateCodePoints(rPattern, nIndex);
+            for (let i = 0; i < nIndex[0] - nOld2; ++i)
+              buffer[nOld + i] = rPattern[nOld2 + i] as number;
+            for (let i = 0; i < escape.length; ++i)
+              buffer[nIndex[0] - escape.length + i] = escape[i] as number;
+          } else buffer.splice(nOld, nIndex[0] - nOld);
+        }
+      }
+      this.maWildcardReversePattern = Uint16Array.from(buffer);
+    }
+    return this.maWildcardReversePattern;
   }
 }

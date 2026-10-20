@@ -65,3 +65,28 @@ it("keeps wrappers independent when the single-entry native cache is replaced", 
   end[0] = 0;
   expect(one.SearchBackward(string("first"), start, end)).toBe(true);
 });
+it("normalizes wildcard outputs and isolates backward caches across option values", /** Uses the actual shared cached wildcard backend with UTF-16 source coordinates. @returns Nothing. */ () => {
+  const options = new SearchOptions2();
+  options.AlgorithmType2 = 4;
+  options.WildcardEscapeCharacter = 126;
+  options.searchString.assign(string("?~*?"));
+  const one = new TextSearch(options),
+    start: [number] = [5],
+    end: [number] = [0];
+  expect(one.SearchBackward(string("ab*ca"), start, end)).toBe(true);
+  expect([start[0], end[0]]).toEqual([1, 4]);
+  options.searchString.assign(string("*🌴"));
+  const two = new TextSearch(options);
+  start[0] = 0;
+  end[0] = 4;
+  expect(two.SearchForward(string("xa🌴"), start, end)).toBe(true);
+  expect([start[0], end[0]]).toEqual([0, 4]);
+  start[0] = 0;
+  end[0] = 5;
+  expect(one.SearchForward(string("ab*ca"), start, end)).toBe(true);
+  expect([start[0], end[0]]).toEqual([1, 4]);
+  start[0] = 0;
+  end[0] = 3;
+  expect(two.SearchForward(string("abc"), start, end)).toBe(false);
+  expect([start[0], end[0]]).toEqual([0, 3]);
+});

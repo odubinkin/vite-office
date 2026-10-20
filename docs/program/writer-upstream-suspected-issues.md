@@ -337,6 +337,82 @@ full native UI behavior or a confirmed bug. Decision: preserve original node
 movement and boundary predicates rather than silently implementing character
 movement or bypassing this guard for empty replacements.
 
+## WRITER-012: Backward wildcard preparation drops a trailing escape
+
+Pinned `i18npool/source/search/textsearch.cxx`, `WildcardSrchBkwrd`, moves
+an escape behind its following code point before negative iteration. If it is
+the final code point, the branch explicitly removes it. `WildcardSrchFrwrd`
+only treats the escape specially when another pattern code point follows.
+Source-derived example with escape `~`: pattern `a~` matches literal `a~`
+forward but matches `a` backward. In whole-selection mode, text `a` therefore
+matches backward and fails forward. An escape-only pattern leaves an empty
+reverse pattern, but substring setup still requests a negative iteration from
+zero; the original shared iterator's debug precondition is violated. The
+portable owner retains this iterator precondition rather than inventing a
+match; native release behavior for that invalid request is not claimed.
+
+Literal source-contract regressions in `textsearch-wildcard.test.ts` preserve
+both branches. These are source-derived portable results, not a compiled
+native differential or confirmed UI defect. Decision: do not synthesize a
+literal trailing escape in backward preparation or repair the empty-pattern
+setup absent an upstream change.
+
+## WRITER-013: Disabled wildcard escape still reorders NUL backward
+
+Pinned `i18npool/source/search/textsearch.cxx`, `WildcardSrchBkwrd`, checks
+`cu == mcWildcardEscapeChar` when preparing the reversed pattern, without
+the nonzero guard present in its matching loop and in `WildcardSrchFrwrd`.
+With disabled escape zero, source pattern `a` + NUL + `b` remains literal
+forward but is reordered to `ab` + NUL for backward traversal. It can match
+that reordered string backward while failing the original literal string.
+
+Portable source-contract checks retain this condition. The browser UI does
+not yet expose this option/profile; native compiled execution and complete
+consumer invariants remain unverified. Decision: preserve the missing nonzero
+guard, rather than silently aligning preparation with the forward matcher.
+
+## WRITER-014: Folded empty wildcard intervals can report zero offsets
+
+Pinned `i18npool/source/search/textsearch.cxx`, `searchForward` and
+`searchBackward`, transliterate only the requested interval. An empty interval
+therefore produces empty prepared text and an empty offset sequence. The
+wildcard loop can match an empty pattern or only asterisks at prepared `(0,0)`;
+the caller does not map offsets back when the offset sequence is empty.
+For text `ab`, a folded empty interval at source `(1,1)` can consequently
+report `(0,0)`, whereas the nonfolded loop reports `(1,1)`. Folding can also
+turn the nonfolded outer-boundary rejection at `(2,2)` into an empty match.
+
+`textsearch-wildcard.test.ts` records both directions and folding states.
+These observations apply to the shared engine; Writer's existing DoSearch
+rejects zero-length results and the view/UI consumer is not yet implemented.
+No native binary was executed. Decision: preserve original preparation and
+conditional mapping instead of adding an unprovided base offset for an empty
+map or an early original-text boundary rejection.
+
+## WRITER-015: Whole-selection wildcard retry can miss overlapping matches
+
+Pinned `i18npool/source/search/textsearch.cxx`, `WildcardSrchFrwrd`, enters
+the greedy retry branch when the pattern is exhausted before the selected
+string and a previous asterisk exists. It sets `nPattern = nLastAsterisk`
+and continues without rewinding `nString` to the remembered suffix start.
+The backward loop uses the symmetric branch. A suffix or prefix of two
+characters already consumed before the retry may therefore be lost.
+
+Source-derived example: whole-selection pattern `*aa` against `aaa` consumes
+the first two characters, retries `aa` against the one remaining character,
+and returns no match. Backward pattern `aa*` has the analogous result. An
+independent dynamic-programming recognizer accepts both strings. The portable
+bounded exhaustive check records 32 such directional false negatives across
+5270 pattern/text/interval combinations (10540 directional comparisons), while
+requiring all other results and every positive offset to match the independent
+language recognizer. These exceptions are explicit fixed source-derived cases;
+the reference recognizer is not changed to use the native rewind algorithm.
+
+The original substring-mode QA fixtures still pass. Source proof and portable
+checks do not establish a compiled native result, full service invariant or
+UI defect. Decision: retain both original greedy retry branches; do not reset
+`nString`, substitute a dynamic-programming matcher or add a special-case fix.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

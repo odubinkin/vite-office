@@ -228,7 +228,7 @@ describe("native absolute TextSearch", /** Registers initialized native source e
     config.AlgorithmType2 = 999;
     engine.setOptions2(config);
     expect(engine.searchForward(string("ab"), 0, 2).startOffset).toEqual([1]);
-    for (const algorithm of [2, 3, 4]) {
+    for (const algorithm of [2, 3]) {
       config.AlgorithmType2 = algorithm;
       expect(
         /** Attempts an unported native engine. @returns Search owner. */ () =>
