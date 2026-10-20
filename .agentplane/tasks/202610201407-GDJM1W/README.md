@@ -1,10 +1,11 @@
 ---
 id: "202610201407-GDJM1W"
 title: "Run checkpoint50 complete regression and pause goal"
-status: "DOING"
+result_summary: "Complete checkpoint50 regression outcomes retained before requested goal pause"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610201407-GDJM1W/evidence/full-run-summary.json"
   findings:
     - "17339 application cases passed and 2 failed; 428 browser cases passed and 4 failed. Coverage below 100 percent. No repairs or retries."
-commit: null
+commit:
+  hash: "98819bbd982e22c622e81b86eddd67511cd5613f"
+  message: "🧪 GDJM1W calc: record operational verification and retained failures"
 comments:
   -
     author: "CODER"
     body: "Start: execute checkpoint50 complete regression once,retain all outcomes without fixes,and pause the goal afterward as explicitly requested."
+  -
+    author: "CODER"
+    body: "Verified: complete operational checkpoint50 regression with exact file accounting and unchanged tested source. Product gates failed; all 2 application and 4 browser failures and sub-100 coverage retained without repairs or retries before requested goal pause."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Operational full-run scope complete with unchanged source and exact accounting. Product quality FAILED: 2 application failures, 4 browser failures, coverage below 100 percent. All outcomes retained; no repairs or retries; pause requested."
+  -
+    type: "status"
+    at: "2026-10-20T15:15:52.967Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete operational checkpoint50 regression with exact file accounting and unchanged tested source. Product gates failed; all 2 application and 4 browser failures and sub-100 coverage retained without repairs or retries before requested goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-20T15:15:35.028Z"
+doc_updated_at: "2026-10-20T15:15:52.969Z"
 doc_updated_by: "CODER"
 description: "Execute the user-authorized next full all-application,tooling,inventory and browser regression once;retain exact outcomes and coverage without changing implementation or test criteria;pause the active goal after run completion regardless of result."
 sections:
@@ -113,6 +126,10 @@ sections:
     Complete tooling130/130passed;inventory123/123passed with raw S/B/F/L100. All16pre-browser stages and final static smoke pass. Browser432distinct cases:428expected,4unexpected,0skipped,0flaky. Failures:Calc formatting-toolbar button count at1280/390(expected31,actual30);shared popup-pointer Calc Shadow expectation at1280/390(expected disabled,actual enabled). Full errors,trace/screenshot references and source locations are retained in browser-results.json.gz and full-run-summary.json. No browser retries were configured or performed.
 
     Final independent source hash audit confirms all tracked tested files unchanged;the complete run preserves the source baseline and clean calc implementation. Formatting/lint use the existing generated-output/gitignore artifact boundary,without altering rules or exclusions. No source references were moved. Three stale historical DOING records remain untouched. Operational acceptance is honest complete execution and retained failed outcomes,not a green product verdict. The active UI goal must now be paused exactly as the user requested;no further implementation or remediation is authorized before resumption.
+extensions:
+  implementation_commit:
+    hash: "834cf1ed1ccf5bb792a9e1e12f2cab63340b45cf"
+    message: "🧪 GDJM1W calc: preserve checkpoint50 complete regression outcomes"
 id_source: "generated"
 ---
 ## Summary
