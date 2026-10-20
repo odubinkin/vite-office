@@ -1,10 +1,11 @@
 ---
 id: "202610202322-0HHKNT"
 title: "Implement shared native paper geometry and reuse Writer page sizes"
-status: "DOING"
+result_summary: "Share native paper geometry and original matching with Writer page sizes"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610202322-0HHKNT/evidence/raw-results.json.gz"
   findings:
     - "Checked86ordered enum/table entries,original rounding,normal-before-rotated/duplicate-first matching,strict44mm100 tolerance,orientation-preserving sloppy fit,ASCII byte alias handling and actual Locale country equality. Writer sizes remain11906x16838 and12240x15840twips using actual shared values. Only native source-backed module edges added;48current guard tests pass."
-commit: null
+commit:
+  hash: "167cf1724b8264d08213c8a68142705a53e43d2c"
+  message: "🧩 0HHKNT code: share native paper geometry with Writer pages"
 comments:
   -
     author: "CODER"
     body: "Start: port native shared paper geometry and original matching/locale algorithms;reuse that genuine owner for Writer physical page sizes and preserve explicit absent services."
+  -
+    author: "CODER"
+    body: "Verified: original86format portable paper geometry and real Writer page-size reuse;528 Calc,33 owner/page/menu,19 XML and48 current guard tests pass,130+4owners100percent,3 real Chromium/Worker/dialog cases and source/native audit pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "528 Calc,33 related owner/page/menu,19 XML/ODT and48 current guard tests pass;130Calc+4changed owners100percent;3 real Chromium/Worker/dialog cases and all static/source/native audit gates pass."
+  -
+    type: "status"
+    at: "2026-10-20T23:37:11.053Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original86format portable paper geometry and real Writer page-size reuse;528 Calc,33 owner/page/menu,19 XML and48 current guard tests pass,130+4owners100percent,3 real Chromium/Worker/dialog cases and source/native audit pass."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:36:05.454Z"
+doc_updated_at: "2026-10-20T23:37:11.058Z"
 doc_updated_by: "CODER"
 description: "Block59: original i18nutil Paper enum/table and PaperInfo physical-size,exact/rotated matching,sloppy matching/dimension snapping and locale defaults. Reuse actual Locale and o3tl conversions;derive existing Writer A4/Letter geometry from the shared native owner. Preserve source order,rounding and strict tolerance. Native platform paper discovery,OString PS-name return and printer/map-device services stay explicitly unported;no fake provider. This unblocks Calc page-style construction. Only calc checkout/branch;full all-app checkpoint60."
 sections:
