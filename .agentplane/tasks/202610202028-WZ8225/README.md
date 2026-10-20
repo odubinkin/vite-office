@@ -1,10 +1,11 @@
 ---
 id: "202610202028-WZ8225"
 title: "Implement native configuration property values and XML value parsing"
-status: "DOING"
+result_summary: "implement native configuration property values and XML value parsing"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reviewed ordinary property metadata/clone/lazy external transitions, scalar/list conversions, ValueParser XML states and SAL/o3tl signedness bindings against the pinned source. Existing Any/Sequence/XMLReader are reused; Components is only the original borrowed receiver contract, with no service/default provider substitute."
     - "140 cases across 18 related files pass, including old numeric/XML/configuration fixtures; final ValueParser replay passes 50 cases and exact boundary tooling passes 50 cases. Build, style, source registries, docs and policy checks pass. Dependency changes are only precise original import data, and fidelity statuses remain unverified."
-commit: null
+commit:
+  hash: "e974ffe99982adace45bc66974d4a8645d047f0e"
+  message: "🧩 WZ8225 config: implement native property values and XML value parsing"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved ordinary property and complete XML value parser family using genuine shared values and original byte lexical specializations."
+  -
+    author: "CODER"
+    body: "Verified: implemented native ordinary configuration properties, scalar/list XML value parser and required byte numeric specializations; 140 related tests, 50 boundary tests, build and required static checks passed. Kept source quirks and parent service/UI integration open."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "140 related tests in 18 files and 50 boundary cases pass; 50 parser cases replay after owner-method alignment pass. Build/static/source/registry checks pass. Source/portable scope only; configuration services/UI stay open."
+  -
+    type: "status"
+    at: "2026-10-20T20:48:04.197Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: implemented native ordinary configuration properties, scalar/list XML value parser and required byte numeric specializations; 140 related tests, 50 boundary tests, build and required static checks passed. Kept source quirks and parent service/UI integration open."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:46:56.587Z"
+doc_updated_at: "2026-10-20T20:48:04.199Z"
 doc_updated_by: "CODER"
 description: "Unblock original Writer search configuration by porting ordinary PropertyNode and complete ValueParser scalar/list/XML state contracts over actual shared XMLReader, Any and Sequence owners, including required byte integer conversion specializations."
 sections:
@@ -129,6 +142,10 @@ sections:
     Bounded initial corrections: unsigned DivMod parameter annotation and RuntimeException empty Context binding; erase native getTextMode fallthrough into an equivalent common predicate rather than change compiler enforcement. Correct new test's NBSP expectation to native non-whitespace zero and its NUL escape spelling. Bind Any string extraction to the actual OUString owner/borrowed writable sequence-element view instead of passing a pointer cell to its concrete optimized overload. Existing core Any/Sequence behavior was unchanged. Header runtime metadata claims declarations rather than functions merely re-exported there; corrected only its local symbol list. Added only precise source-backed XML-value imports and SAL/o3tl named-import data; existing forbidden edges and cycle algorithm remain unchanged and tested. All failed checks pass after these in-scope repairs.
 
     Eight earlier completions since full 6a7dd8660, so this is ninth; full run follows the next completion. Authorized local LibreOffice source reads suffice; no ICU/network or other outside-repository access was used. XCS/XCU parser orchestration, configuration services, actual search item/default integration, advanced search backend and browser UI remain open under the parent. Changes stay on writer in vite-office-writer; no merge/publication or policy changes.
+extensions:
+  implementation_commit:
+    hash: "e974ffe99982adace45bc66974d4a8645d047f0e"
+    message: "🧩 WZ8225 config: implement native property values and XML value parsing"
 id_source: "generated"
 ---
 ## Summary
