@@ -26,7 +26,13 @@ export function getConfiguredDefaultFont(
     country = text(locale.Country),
     variant = text(locale.Variant);
   const key = DefaultFontType[type] ?? "";
-  const tag = text(convertToBcp47(locale));
+  const tagValue = convertToBcp47(locale);
+  let tag: string;
+  try {
+    tag = text(tagValue);
+  } finally {
+    tagValue.dispose();
+  }
   let result = configuration[tag]?.[key] ?? "";
   if (!result) {
     if (language !== "qlt") {

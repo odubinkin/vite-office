@@ -7,8 +7,13 @@ SvxFontVariationsItem vector/copy/equality,typed string Any and presentation,
 plus native VariationsToString using OUStringBuffer's real float overload.
 The fixed tag conversion uses the existing original ASCII_US table/converter;
 CALC242 records its upper-byte behavior. Native float hashing is still missing.
-The complete EditEngine item package/pool and EditTextObject owners,including
-remaining bullet/numbering dependencies,are the rest of this same task.
+Original numbering-rule slot storage,geometry,validity,copy/conversion and pooled
+rule ownership are now present as the next prerequisite. Shared NumberFormat
+alignment,color,relative size,style name and legal fields now retain original
+copy/equality. Native ordered three-script GetDefaultFonts uses the genuine VCL
+metadata path,including original UI-font fallback and NONE/OnlyOne selection.
+Remaining NumberFormat fields/providers,graphics,UNO rule wrappers,the complete EditEngine item package
+and EditTextObject owners are the rest of this same task.
 No style UI,pool or renderer facade is introduced. Full task coverage and browser
 acceptance are pending;focused value tests do not certify the complete block.
 

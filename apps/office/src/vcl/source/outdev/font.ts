@@ -1,5 +1,6 @@
 /** @fileoverview Represented OutputDevice::GetDefaultFont metadata and its genuine no-device OnlyOne branch; physical font substitution and unrepresented Font fields remain separate. */
 import { Font } from "../font/font";
+import { GetDefaultFontFlags } from "../../rendercontext/GetDefaultFontFlags";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
 import {
   RTL_TEXTENCODING_DONTKNOW,
@@ -60,17 +61,28 @@ export function createDefaultFontMetadata(
   return font;
 }
 
-/** Uses the original no-output-device OnlyOne selection of the first configured token. CSS device substitution remains a renderer responsibility. @param type - Known configured native role. @param locale - Resolved prepared locale. @param threadEncoding - Platform encoding. @returns Logical default metadata. */
+/** Uses original no-output-device candidate selection and UI-font fallback. Existing browser callers retain their OnlyOne default;native NONE callers keep the complete candidate string. CSS device substitution remains a renderer responsibility. @param type - Native role. @param locale - Resolved prepared locale. @param threadEncoding - Platform encoding. @param flags - Original native selection bits at this consumed read site. @returns Logical default metadata. */
 export function getDefaultFontWithoutDevice(
   type: DefaultFontType,
   locale: LocaleConstReference,
   threadEncoding: rtl_TextEncoding,
+  flags: GetDefaultFontFlags = GetDefaultFontFlags.OnlyOne,
 ): Font {
-  const candidates = getConfiguredDefaultFont(locale, type);
+  let candidates = getConfiguredDefaultFont(locale, type);
+  if (candidates.isEmpty()) {
+    candidates.dispose();
+    // Original GetDefaultFont -> getUserInterfaceFont read site. For this shipped
+    // immutable resource,the original getDefaultFont(UI_SANS) lookup always finds
+    // its real en fallback;no missing-provider or translated settings facade.
+    candidates = getConfiguredDefaultFont(locale, DefaultFontType.UI_SANS);
+  }
   try {
     const names = text(candidates);
-    if (!names) throw new Error("Default font role has no configured family");
-    return createDefaultFontMetadata(names.split(";")[0] as string, type, threadEncoding);
+    return createDefaultFontMetadata(
+      (flags & GetDefaultFontFlags.OnlyOne) !== 0 ? (names.split(";")[0] as string) : names,
+      type,
+      threadEncoding,
+    );
   } finally {
     candidates.dispose();
   }

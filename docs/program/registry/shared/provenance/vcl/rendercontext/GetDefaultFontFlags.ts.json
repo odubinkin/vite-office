@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/rendercontext/GetDefaultFontFlags.ts",
+    "status": "mapped",
+    "upstreamPath": "include/vcl/rendercontext/GetDefaultFontFlags.hxx",
+    "localSymbols": [
+      "GetDefaultFontFlags",
+      "OnlyOne",
+      "NONE"
+    ],
+    "upstreamSymbols": [
+      "GetDefaultFontFlags",
+      "OnlyOne",
+      "NONE"
+    ],
+    "preservedResponsibilities": [
+      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Complete shared SvxNumberFormat fields/providers,graphic and UNO rule-wrapper/stream responsibilities,EditEngine pool/rich-text owners and Calc named-style UI/layout remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/rendercontext/GetDefaultFontFlags.ts",
+          "marker": "GetDefaultFontFlags"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/rendercontext/GetDefaultFontFlags.hxx",
+          "marker": "GetDefaultFontFlags"
+        }
+      ]
+    }
+  }
+}

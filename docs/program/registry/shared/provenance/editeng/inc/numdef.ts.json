@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/inc/numdef.ts",
+    "status": "mapped",
+    "upstreamPath": "include/editeng/numdef.hxx",
+    "localSymbols": [
+      "SVX_MAX_NUM",
+      "SVX_DEF_BULLET"
+    ],
+    "upstreamSymbols": [
+      "SVX_MAX_NUM",
+      "SVX_DEF_BULLET"
+    ],
+    "preservedResponsibilities": [
+      "TaskNF91KY in-progress genuine EditEngine item-pool prerequisite: original SvxNumRule ten-slot storage,source Writer/Draw initial geometry,feature/continuous flags,Get versus GetLevel,reference and pointer SetLevel ordering,copy/assignment,active-count equality,SvxNodeNum fixed storage,SvxNumBulletItem owned rule and SvxConvertNumRule. Existing shared SvxNumberFormat remains the actual value dependency,not a substitute numbering facade;its unrepresented fields/services still require canonical porting. Original numdef constants have one shared owner. Native static cleanup is erased under GC. Original SetLevel/convert validity asymmetries remain(CALC243). Full stream/number-string/graphic/UNO wrapper,complete EditEngine pool/rich-text owner and Calc style/UI/layout remain unported;no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Complete shared SvxNumberFormat fields/providers,graphic and UNO rule-wrapper/stream responsibilities,EditEngine pool/rich-text owners and Calc named-style UI/layout remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/numdef.ts",
+          "marker": "SVX_MAX_NUM"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-num-rule.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/numdef.hxx",
+          "marker": "SVX_MAX_NUM"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/numitem.hxx",
+          "marker": "SvxNodeNum"
+        }
+      ]
+    }
+  }
+}

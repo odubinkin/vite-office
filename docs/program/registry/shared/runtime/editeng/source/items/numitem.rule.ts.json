@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/numitem.rule.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "numbering-rule-values",
+    "capabilityIds": [
+      "CAP-0632178e-fd22-47ef-b65f-f7c7582d30a6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/numitem.rule.ts",
+        "apps/office/src/editeng/source/items/native-num-rule.test.ts"
+      ],
+      "justification": "TaskNF91KY in-progress genuine EditEngine item-pool prerequisite: original SvxNumRule ten-slot storage,source Writer/Draw initial geometry,feature/continuous flags,Get versus GetLevel,reference and pointer SetLevel ordering,copy/assignment,active-count equality,SvxNodeNum fixed storage,SvxNumBulletItem owned rule and SvxConvertNumRule. Existing shared SvxNumberFormat remains the actual value dependency,not a substitute numbering facade;its unrepresented fields/services still require canonical porting. Original numdef constants have one shared owner. Native static cleanup is erased under GC. Original SetLevel/convert validity asymmetries remain(CALC243). Full stream/number-string/graphic/UNO wrapper,complete EditEngine pool/rich-text owner and Calc style/UI/layout remain unported;no broad parity promotion. TaskNF91KY preserves nonvirtual SvxNumberFormat base assignment/comparison over stored represented fields,including the base stored style name behind Writer virtual GetCharFormatName. SvxNumRule.SetLevel explicitly binds base comparison when passed a genuine SwNumFormat,then slices an owned base copy. Actual SwNumFormat now implements its original virtual name query through the registered actual SwFormat base GetName read site;no SwCharFormat owner or name-provider facade is fabricated. Tests initialize the real composed SwClient member against a real SwFormat to verify registration,name changes,copy and base-field distinctions. Full SwCharFormat and broader missing native fields/services remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxNumRule",
+        "SvxNumBulletItem",
+        "SvxNodeNum",
+        "SvxConvertNumRule"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "editeng/source/items/numitem.cxx",
+      "upstreamSymbols": [
+        "SvxNumRule",
+        "SvxNumBulletItem",
+        "SvxNodeNum",
+        "SvxConvertNumRule"
+      ]
+    }
+  }
+}

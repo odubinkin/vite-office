@@ -3423,3 +3423,43 @@ incorrectly assumed private-use mapping;source inspection corrected that
 expectation while leaving the implementation and native descriptor unchanged.
 Decision: retain original table selection,terminator behavior and float output;
 do not introduce a host decoder or normalize malformed aggregate tags.
+
+## CALC243: Numbering validity depends on SetLevel overload and conversion
+
+Status: source-confirmed asymmetry;consumer consequences remain to be reviewed.
+
+Pinned `editeng/source/items/numitem.cxx::SvxNumRule::SetLevel` reference overload
+replaces a format only when the old slot is invalid or the new format differs.
+Calling SetLevel(i,equalFormat,false) on an already valid slot therefore keeps
+it valid. The pointer overload sets validity before calling the reference
+overload;it can expose an equal previously invalid physical value without a
+replacement. Get returns only valid formats;GetLevel ignores the validity bit.
+`SvxConvertNumRule` uses GetLevel and writes every overlapping level with the
+default true validity,so invalid physical source values become valid destination
+values. Null source slots use source-kind fallbacks during this conversion.
+
+Evidence: the original bodies and literal storage/identity/value assertions in
+`apps/office/src/editeng/source/items/native-num-rule.test.ts`.
+Decision: retain all three behaviors and the original overload ordering.
+Do not normalize the validity bit or convert through the valid-only getter.
+
+## CALC244: English EditEngine Asian defaults use the interface-font fallback
+
+Status: source-confirmed default selection whose rationale is uncertain;preserved.
+
+Pinned `editeng/source/items/textitem.cxx::GetDefaultFonts` requests CJK_TEXT with
+LANGUAGE_ENGLISH_US. The shipped English DefaultFonts node in
+`officecfg/registry/data/org/openoffice/VCL.xcu` has no CJK_TEXT property.
+`DefaultFontConfiguration::getDefaultFont` therefore returns empty and
+`vcl/source/outdev/font.cxx::OutputDevice::GetDefaultFont` calls
+getUserInterfaceFont. Its configured UI_SANS lookup succeeds,so the no-device
+OnlyOne branch uses the first configured interface font token,Segoe UI.
+This is logical metadata;actual device substitution and glyph fallback can differ.
+
+Evidence: original role/language array,config node and VCL fallback,plus literal
+three-family assertions in `native-default-fonts.test.ts`. The prior shared helper
+threw an invented exception for missing configured roles;the first new two tests
+exposed that mismatch and their failing raw report is retained. The implementation
+now follows the original fallback. Unknown enum roles also retain this release
+fallback instead of that exception. No CJK family was hardcoded into production.
+Decision: preserve these defaults and separate actual device font selection.

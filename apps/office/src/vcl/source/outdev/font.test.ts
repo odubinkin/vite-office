@@ -7,6 +7,7 @@ import { getConfiguredDefaultFont } from "../../../unotools/source/config/fontcf
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_SYMBOL } from "../../../sal/inc/rtl/textenc";
 import { FontFamily as F, FontPitch as P } from "../../../tools/inc/fontenum";
+import { GetDefaultFontFlags } from "../../rendercontext/GetDefaultFontFlags";
 it("uses actual configured first-family tokens without claiming a physical face", /** Covers source logical-only spreadsheet defaults. @returns Nothing. */ () => {
   for (const role of [D.LATIN_SPREADSHEET, D.CJK_SPREADSHEET, D.CTL_SPREADSHEET]) {
     const locale = createDefaultFontLocale(
@@ -19,14 +20,17 @@ it("uses actual configured first-family tokens without claiming a physical face"
     expect(font.GetFontHeight()).toBe(12);
     configured.dispose();
   }
-  expect(
-    /** Rejects an unknown native default-font role with no configured family. @returns Never. */ () =>
-      getDefaultFontWithoutDevice(
-        999 as D,
-        createDefaultFontLocale("en-US"),
-        RTL_TEXTENCODING_UTF8,
-      ),
-  ).toThrow(/configured family/);
+  for (const role of [D.CJK_TEXT, 999 as D]) {
+    const locale = createDefaultFontLocale("en-US"),
+      configured = getConfiguredDefaultFont(locale, D.UI_SANS);
+    try {
+      const font = getDefaultFontWithoutDevice(role, locale, RTL_TEXTENCODING_UTF8);
+      expect(font.GetFamilyName()).toBe(text(configured).split(";")[0]);
+    } finally {
+      configured.dispose();
+      locale.dispose();
+    }
+  }
 });
 it("projects represented role metadata independently of browser face installation", /** All native type families use existing Font values. @returns Nothing. */ () => {
   for (const role of Object.values(D).filter(
@@ -53,4 +57,34 @@ it("projects represented role metadata independently of browser face installatio
   expect(
     createDefaultFontMetadata("Unknown", 999 as D, RTL_TEXTENCODING_UTF8).GetFamilyType(),
   ).toBe(F.FAMILY_DONTKNOW);
+});
+
+it("retains the complete configured candidate list for the native NONE flag", /** Original no-device NONE keeps all tokens;OnlyOne selects the first. @returns Nothing. */ () => {
+  const locale = createDefaultFontLocale("en-US"),
+    configured = getConfiguredDefaultFont(locale, D.FIXED);
+  try {
+    expect(GetDefaultFontFlags.NONE).toBe(0);
+    expect(GetDefaultFontFlags.OnlyOne).toBe(1);
+    const names = text(configured);
+    expect(names).toContain(";");
+    expect(
+      getDefaultFontWithoutDevice(
+        D.FIXED,
+        locale,
+        RTL_TEXTENCODING_UTF8,
+        GetDefaultFontFlags.NONE,
+      ).GetFamilyName(),
+    ).toBe(names);
+    expect(
+      getDefaultFontWithoutDevice(
+        D.FIXED,
+        locale,
+        RTL_TEXTENCODING_UTF8,
+        GetDefaultFontFlags.OnlyOne,
+      ).GetFamilyName(),
+    ).toBe(names.split(";")[0]);
+  } finally {
+    configured.dispose();
+    locale.dispose();
+  }
 });

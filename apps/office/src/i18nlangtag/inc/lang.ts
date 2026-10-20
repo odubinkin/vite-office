@@ -26,6 +26,8 @@ export const LANGUAGE_GERMAN = LanguageType(0x0407);
 
 /** Original US English fallback/fast-path identity. */
 export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);
+/** Original Saudi Arabic identity consumed by EditEngine's complex-script defaults. */
+export const LANGUAGE_ARABIC_SAUDI_ARABIA = LanguageType(0x0401);
 
 /** Original process/user preferred-language alias. */
 export const LANGUAGE_PROCESS_OR_USER_DEFAULT = LanguageType(0x0400);

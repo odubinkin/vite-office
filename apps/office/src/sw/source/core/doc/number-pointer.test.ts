@@ -15,10 +15,41 @@ import { createWriterDocument } from "./doc";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { applyWriterParagraphList } from "./list";
+import { SwFormat } from "../attr/format";
 import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+
+it("retains virtual Writer name lookup while native base copy and equality read stored base fields", /** Only GetName is borrowed from an actual SwFormat;no SwCharFormat service or mock owner is constructed. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  const owner = new SwFormat(doc.GetAttrPool(), "Original registered name", [[1, 1]]);
+  const writer = new SwNumFormat();
+  writer.SetCharFormatName("Stored base name");
+  expect(writer.GetCharFormatName()).toBe("");
+  // Initialize the actual composed native SwClient member at its native
+  // registration boundary;do not replace a production method or owner.
+  const client = (writer as unknown as { readonly client: SwClient }).client;
+  client.RegisterToModify(owner);
+  const copied = writer.clone();
+  const copiedClient = (copied as unknown as { readonly client: SwClient }).client;
+  try {
+    expect(writer.GetCharFormatName()).toBe("Original registered name");
+    expect(copied.GetCharFormatName()).toBe("Original registered name");
+    owner.SetFormatName("Renamed native owner");
+    expect(writer.GetCharFormatName()).toBe("Renamed native owner");
+    expect(copied.GetCharFormatName()).toBe("Renamed native owner");
+    const base = new SvxNumberFormat(writer);
+    expect(base.GetCharFormatName()).toBe("Stored base name");
+    expect(SvxNumberFormat.prototype.Equals.call(writer, base)).toBe(true);
+    base.SetCharFormatName("Renamed native owner");
+    expect(SvxNumberFormat.prototype.Equals.call(writer, base)).toBe(false);
+  } finally {
+    copiedClient.Dispose();
+    client.Dispose();
+  }
+  expect(writer.GetCharFormatName()).toBe("");
+});
 /** Reads every implemented native primitive, including raw pattern and inactive geometry. @param format - Const format. @returns State. */
 function state(format: ConstSvxNumberFormat) {
   const p = format.GetPositionProperties();

@@ -1,9 +1,11 @@
 /** @fileoverview Owns implemented numbering marker and independent position state from pinned SvxNumberFormat. */
 
-import { SvxNumType } from "../../inc/svxenum";
+import { SvxNumType, SvxAdjust } from "../../inc/svxenum";
+import { Color, COL_BLACK } from "../../../tools/inc/color";
 import { Font, type ConstFont } from "../../../vcl/source/font/font";
-/** Native initial glyph, independent of configured list-rule bullets. */
-export const SVX_DEF_BULLET = 0xf000 + 149;
+import { SVX_DEF_BULLET } from "../../inc/numdef";
+import { SVX_NUM_REL_SIZE_MIN } from "../../inc/numitem";
+export { SVX_DEF_BULLET } from "../../inc/numdef";
 /** Native type and show-symbol ownership; formatting is bounded to the existing decimal/bullet/disabled families. */
 export class SvxNumberType {
   private nNumType: SvxNumType;
@@ -104,6 +106,11 @@ export class SvxNumberFormat extends SvxNumberType {
   private start = 1;
   private suffix = "";
   private listFormat: string | undefined;
+  private eNumAdjust = SvxAdjust.Left;
+  private nBulletRelSize = 100;
+  private readonly nBulletColor = new Color(COL_BLACK);
+  private sCharStyleName = "";
+  private mbIsLegal = false;
   /** Initializes native defaults, then delegates copy construction to the nonvirtual base assignment responsibility. @param format - Native type or const source. @returns Nothing. */
   public constructor(format: SvxNumType | ConstSvxNumberFormat = SvxNumType.SVX_NUM_ARABIC) {
     super(format);
@@ -112,16 +119,30 @@ export class SvxNumberFormat extends SvxNumberType {
   /** Implements native value assignment without re-deriving raw pattern compatibility or inactive geometry. @param other - Const source. @returns This assigned value. */
   public Assign(other: ConstSvxNumberFormat): this {
     if (other === this) return this;
-    this.SetNumberingType(other.GetNumberingType());
-    this.includeUpperLevels = other.GetIncludeUpperLevels();
-    this.start = other.GetStart();
-    this.cBullet = other.GetBulletChar();
-    this.position = other.GetPositionProperties();
-    this.prefix = other.GetPrefix();
-    this.suffix = other.GetSuffix();
-    this.listFormat = other.GetMarkerProperties().listFormat;
-    this.SetShowSymbol(other.IsShowSymbol());
-    this.SetBulletFont(other.GetBulletFont());
+    // Native assignment reads these base members directly,including the stored
+    // name behind the virtual GetCharFormatName override used by Writer.
+    const source = other as SvxNumberFormat;
+    SvxNumberType.prototype.SetNumberingType.call(
+      this,
+      SvxNumberType.prototype.GetNumberingType.call(source),
+    );
+    this.includeUpperLevels = source.includeUpperLevels;
+    this.start = source.start;
+    this.cBullet = source.cBullet;
+    this.position = { ...source.position };
+    this.prefix = source.prefix;
+    this.suffix = source.suffix;
+    this.listFormat = source.listFormat;
+    SvxNumberType.prototype.SetShowSymbol.call(
+      this,
+      SvxNumberType.prototype.IsShowSymbol.call(source),
+    );
+    SvxNumberFormat.prototype.SetBulletFont.call(this, source.pBulletFont);
+    this.eNumAdjust = source.eNumAdjust;
+    this.nBulletRelSize = source.nBulletRelSize;
+    this.nBulletColor.assign(source.nBulletColor);
+    this.sCharStyleName = source.sCharStyleName;
+    this.mbIsLegal = source.mbIsLegal;
     return this;
   }
   /** Decodes the existing raw position/marker record without re-deriving inactive fields or ListFormat compatibility state. This is a browser transfer/assembly adapter, not a native constructor. @param properties - Raw fields. @param type - Native type. @returns Format. */
@@ -172,16 +193,22 @@ export class SvxNumberFormat extends SvxNumberType {
   }
   /** Compares all implemented base-format marker and position fields without conflating active geometry or optional patterns. @param other - Const base format. @returns Implemented value equality. */
   public Equals(other: ConstSvxNumberFormat): boolean {
-    const position = this.GetPositionProperties(),
-      otherPosition = other.GetPositionProperties();
-    const marker = this.GetMarkerProperties(),
-      otherMarker = other.GetMarkerProperties();
+    const source = other as SvxNumberFormat;
+    const position = this.position,
+      otherPosition = source.position;
     const font = this.pBulletFont,
-      otherFont = other.GetBulletFont();
+      otherFont = source.pBulletFont;
     return (
-      this.GetNumberingType() === other.GetNumberingType() &&
-      this.IsShowSymbol() === other.IsShowSymbol() &&
-      this.cBullet === other.GetBulletChar() &&
+      SvxNumberType.prototype.GetNumberingType.call(this) ===
+        SvxNumberType.prototype.GetNumberingType.call(source) &&
+      SvxNumberType.prototype.IsShowSymbol.call(this) ===
+        SvxNumberType.prototype.IsShowSymbol.call(source) &&
+      this.cBullet === source.cBullet &&
+      this.eNumAdjust === source.eNumAdjust &&
+      this.nBulletRelSize === source.nBulletRelSize &&
+      this.nBulletColor.equals(source.nBulletColor) &&
+      this.sCharStyleName === source.sCharStyleName &&
+      this.mbIsLegal === source.mbIsLegal &&
       (font === undefined
         ? otherFont === undefined
         : otherFont !== undefined && font.Equals(otherFont)) &&
@@ -189,11 +216,11 @@ export class SvxNumberFormat extends SvxNumberType {
         /** Compares one independently stored geometry field. @param key - Field. @returns Equality. */
         (key) => position[key] === otherPosition[key],
       ) &&
-      marker.includeUpperLevels === otherMarker.includeUpperLevels &&
-      marker.start === otherMarker.start &&
-      marker.prefix === otherMarker.prefix &&
-      marker.suffix === otherMarker.suffix &&
-      marker.listFormat === otherMarker.listFormat
+      this.includeUpperLevels === source.includeUpperLevels &&
+      this.start === source.start &&
+      this.prefix === source.prefix &&
+      this.suffix === source.suffix &&
+      this.listFormat === source.listFormat
     );
   }
   /** Returns the stored compatibility count. @returns Unsigned byte. */
@@ -366,6 +393,46 @@ export class SvxNumberFormat extends SvxNumberType {
   /** Copies raw fields for Writer copy construction and the browser snapshot port, including inactive geometry. @returns Independent property record. */
   public GetPositionProperties(): Required<NumberingPositionProperties> {
     return { ...this.position };
+  }
+  /** Original numbering alignment. @returns Stored enum. */
+  public GetNumAdjust(): SvxAdjust {
+    return this.eNumAdjust;
+  }
+  /** Original alignment assignment without additional validation. @param value - Native enum. @returns Nothing. */
+  public SetNumAdjust(value: SvxAdjust): void {
+    this.eNumAdjust = value | 0;
+  }
+  /** Original unsigned16 relative symbol size. @returns Percentage. */
+  public GetBulletRelSize(): number {
+    return this.nBulletRelSize;
+  }
+  /** Original unsigned16 narrowing precedes the25percent minimum. @param value - Native unsigned16 input. @returns Nothing. */
+  public SetBulletRelSize(value: number): void {
+    this.nBulletRelSize = Math.max(value & 0xffff, SVX_NUM_REL_SIZE_MIN);
+  }
+  /** Original stable const color-member reference. @returns Borrowed actual color. */
+  public GetBulletColor(): Readonly<Color> {
+    return this.nBulletColor;
+  }
+  /** Original Color value assignment keeps the recipient member identity. @param value - Actual color. @returns Nothing. */
+  public SetBulletColor(value: Readonly<Color>): void {
+    this.nBulletColor.assign(value);
+  }
+  /** Original by-value immutable character-style name. @returns Name. */
+  public GetCharFormatName(): string {
+    return this.sCharStyleName;
+  }
+  /** Original Unicode name assignment without lookup. @param value - Style name. @returns Nothing. */
+  public SetCharFormatName(value: string): void {
+    this.sCharStyleName = value;
+  }
+  /** Original legal-numbering flag. @returns Stored flag. */
+  public GetIsLegal(): boolean {
+    return this.mbIsLegal;
+  }
+  /** Original independent legal-numbering setter. @param value - Flag. @returns Nothing. */
+  public SetIsLegal(value: boolean): void {
+    this.mbIsLegal = value;
   }
 }
 
