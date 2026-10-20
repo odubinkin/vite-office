@@ -1,10 +1,11 @@
 ---
 id: "202610201913-6GG949"
 title: "Restore native Calc cell-pattern style association and registered-style lifecycle"
-status: "DOING"
+result_summary: "Native cell-pattern style inheritance and registered-style lifecycle implemented with actual shared style operations and verified mounted/Worker acceptance;full named-style UI and broader Calc goal remain active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Tests use genuine shared SfxStyleSheet/SfxStyleSheetPool and actual Calc pool/helper/holders. Inherited/default/INVALID states,copy/equality,same-named other identities,failed rename,empty/nonempty registry groups,canonical release,independent copied names and default-pattern separation are covered. No fake Calc style owner,pool,resolver,cache invalidator or browser style model exists."
     - "Mounted actual Calc reads three-script fonts through the registered column pattern and detaches to stored names on deletion. Worker/browser executes the same genuine classes. Explicit projection rerender does not claim missing native repaint/StyleApply behavior. Source asymmetries preserved and documented as CALC240."
     - "Portable archive audit proves515 distinct Calc cases,46related cases,8fresh packaged browser cases and exact raw Calc/shared four-metric100. Shared54 owners are individually source-hash unchanged. Latest7test-only guard cases replace identical prior IDs without duplicate counting;full production raw maps unchanged. Build,14final static checks,source/native hashes and screenshots pass;original lint failures retained."
-commit: null
+commit:
+  hash: "81bc54301c7a78ecc91f8c769cd3b99d65aa7e23"
+  message: "🧩 6GG949 feat: restore native cell-pattern style association and lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: restore original native pattern style inheritance and registered-style rename/delete lifecycle using genuine shared style values;no replacement Calc style or browser-only model."
+  -
+    author: "CODER"
+    body: "Verified: original pattern style association,copy,parent inheritance,default clearing,symbol-font and registered rename/delete/to-name lifecycle.515Calc,46related and8fresh browser cases pass;Calc/shared100 raw coverage audited.14static stages and build pass. Actual Calc style owner/application/UI/history/ODS and automatic-height remain required;broader goal active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:515 distinct Calc cases,46related style/pool cases,8fresh Chromium/Worker cases,14final static checks and build. Fresh full Calc raw100 and hash-verified unchanged shared54 raw100 audited from committed archives. Same7test guard cases replayed without duplicate counting after lint-only rewrite;production maps unchanged. Actual native style association/lifecycle and mounted inherited fonts verified. Missing Calc style owners/resolution/UI/history/ODS/repaint and automatic-height remain explicit;goal active."
+  -
+    type: "status"
+    at: "2026-10-20T19:38:30.327Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original pattern style association,copy,parent inheritance,default clearing,symbol-font and registered rename/delete/to-name lifecycle.515Calc,46related and8fresh browser cases pass;Calc/shared100 raw coverage audited.14static stages and build pass. Actual Calc style owner/application/UI/history/ODS and automatic-height remain required;broader goal active."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:38:11.168Z"
+doc_updated_at: "2026-10-20T19:38:30.329Z"
 doc_updated_by: "CODER"
 description: "Advance the required named-cell-style UI path with original ScPatternAttr style pointer/name inheritance,copy,clear-direct-format and symbol-font contracts plus CellAttributeHelper rename/delete/all-styles-to-names ownership. Reuse genuine shared SfxStyleSheet values through erased borrowed base operations;do not invent ScStyleSheet,ScStyleSheetPool,document style resolution or browser style state."
 sections:
