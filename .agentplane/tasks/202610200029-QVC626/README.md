@@ -1,10 +1,11 @@
 ---
 id: "202610200029-QVC626"
 title: "Implement Calc outline font UI with native raster stencil and shared XML boolean handler"
-status: "DOING"
+result_summary: "verified-202610200029-QVC626"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T00:44:59.491Z"
+  updated_at: "2026-10-20T00:45:44.346Z"
   updated_by: "CODER"
-  note: "Implementation30471b5c8c64. Calc130 files/398 cases raw S/B/F/L100;shared7 files/15 cases raw100;complete9 changed application owners100,current hashes. Current Calc12,related Writer14/shared100,tooling92;23 unique browser cases with final4-case current-build outline rerun. Native stencil/white-center/color pixels,actual ODS bool/history/marks and DOM-free Worker pass. Types/lint/format/dependencies/docs/size/resources/source/provenance/invariants/scoped parity/static/routing/doctor/diff pass. Exact commands,exit0,raw/current hash/log/screenshot evidence retained in evidence/verification-checks.json and proof files. Full checkpoint40 retained;next50. No broad parity claim."
+  note: "verified-202610200029-QVC626"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610200029-QVC626/evidence/browser/actual-raster-pixels.json"
   findings:
     - "Audited actual raw Calc398/shared15 success results,nonempty S/B/F/L100 summaries and all9 complete changed application owner hashes against current source;native pinned hashes/anchors and five actual screenshot interior colors validate retained evidence. Writer/shared related tests and23 unique browser cases cover actual menu/history/ODS/Worker paths;current final4-case run uses fresh build. No verification thresholds/exclusions weakened and no broad parity flags promoted."
-commit: null
+commit:
+  hash: "d12cd7fbcc3282dee327dc7ecf39e6663b29c8a6"
+  message: "🧩 QVC626 task: retain outline verification and evaluated evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement native contour menu,shared XML bool and original outline raster stencil with actual text/selection/history/ODS owners;retain current-owner100 evidence and calc-only scope."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610200029-QVC626. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation30471b5c8c64. Calc130 files/398 cases raw S/B/F/L100;shared7 files/15 cases raw100;complete9 changed application owners100,current hashes. Current Calc12,related Writer14/shared100,tooling92;23 unique browser cases with final4-case current-build outline rerun. Native stencil/white-center/color pixels,actual ODS bool/history/marks and DOM-free Worker pass. Types/lint/format/dependencies/docs/size/resources/source/provenance/invariants/scoped parity/static/routing/doctor/diff pass. Exact commands,exit0,raw/current hash/log/screenshot evidence retained in evidence/verification-checks.json and proof files. Full checkpoint40 retained;next50. No broad parity claim."
+  -
+    type: "verify"
+    at: "2026-10-20T00:45:44.346Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610200029-QVC626"
+  -
+    type: "status"
+    at: "2026-10-20T00:45:44.475Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610200029-QVC626. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T00:44:59.550Z"
+doc_updated_at: "2026-10-20T00:45:44.476Z"
 doc_updated_by: "CODER"
 description: "Task44 of the authorized Calc UI goal after verified task43. Connect native OutlineFont10012/Which107 and shared XMLBoolPropHdl to actual selection/history/ODS and shared Writer menu. Implement source eight-offset plus white-center outline raster composition at the common VCL browser boundary using actual text pixels. Calc checkout/branch only,targeted Calc and related/current-owner100,next full checkpoint50."
 sections:
@@ -103,9 +122,43 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-20T00:45:44.346Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610200029-QVC626
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:44:59.550Z, excerpt_hash=sha256:789341e97f6389145c21c29b1fe2d623ea74029b977ba989825e003ffd0871d5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200029-QVC626/blueprint/resolved-snapshot.json
+    - old_digest: 77791a0e7956fbbf2f7f0deb6130b32f12fea17dda2a6c91eee62aead0d66e11
+    - current_digest: 77791a0e7956fbbf2f7f0deb6130b32f12fea17dda2a6c91eee62aead0d66e11
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610200029-QVC626
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610200029-QVC626 --result verified-202610200029-QVC626 --commit d12cd7fbcc3282dee327dc7ecf39e6663b29c8a6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task44 implementation commits if necessary;retain evidence and unrelated tasks. User owns branch integration."
   Findings: "Native source preserves contour false default,typed SvxContourItem,mixed/default factories and actual attribute history/marks. Native XMLBoolPropHdl writes initialized false Any even when strict lexical conversion fails;mapper honors false return. Shared browser raster applies exact8 native colored offsets then white center to actual glyph/line pixels once;actual browser measurements are not a font/device substitute. CALC215/216 document preserved source quirks. Raster witness verifies independent blue glyph/red underline/green overline pixels and white center on yellow. Initial local candidates failed a boundary cast,JSDoc,CSS color assertion and React Fast Refresh export rule;each was corrected with current relevant checks. Initial wrong shared-browser filename patterns matched zero tests;correct actual files pass8 cases and only those count. Font32pt witness exposed preexisting fixed-row clipping;final10pt witness stays inside existing row. Broad native services/device scaling/rich edit remain unverified. Entire Writer suite was not rerun;only related module tests per approved cadence. All Calc owner raw hashes remain current;shared component export removal reconciled with fresh shared coverage,current Calc integration and final production browser run. Overall goal remains active. No network,outside-repository access,branches or integration. Known deterministic close-subject CLI bug,if repeated,is handled only through route-guided meaningful closure commit;no implementation shortcuts."
+extensions:
+  implementation_commit:
+    hash: "30471b5c8c64578a5f1588da1880945f51167d05"
+    message: "✨ QVC626 calc: implement native outline font UI and shared raster/ODS contracts"
 id_source: "generated"
 ---
 ## Summary
@@ -157,6 +210,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-20T00:45:44.346Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610200029-QVC626
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T00:44:59.550Z, excerpt_hash=sha256:789341e97f6389145c21c29b1fe2d623ea74029b977ba989825e003ffd0871d5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610200029-QVC626/blueprint/resolved-snapshot.json
+- old_digest: 77791a0e7956fbbf2f7f0deb6130b32f12fea17dda2a6c91eee62aead0d66e11
+- current_digest: 77791a0e7956fbbf2f7f0deb6130b32f12fea17dda2a6c91eee62aead0d66e11
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610200029-QVC626
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610200029-QVC626 --result verified-202610200029-QVC626 --commit d12cd7fbcc3282dee327dc7ecf39e6663b29c8a6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
