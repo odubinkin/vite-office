@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-20T17:18:21.503Z",
+  "fullRunSkipped": "User explicitly requested no full rerun; corrected Calc acceptance is retained in task 202610201528-MD0CQF.",
+  "main": "df40b4d29ffb20f77fed986c89ead95bfc3216d8",
+  "checks": [
+    {
+      "dir": "vite-office",
+      "branch": "main",
+      "tip": "df40b4d29ffb20f77fed986c89ead95bfc3216d8",
+      "clean": true,
+      "equalsMain": true
+    },
+    {
+      "dir": "vite-office-writer",
+      "branch": "writer",
+      "tip": "df40b4d29ffb20f77fed986c89ead95bfc3216d8",
+      "clean": true,
+      "equalsMain": true
+    },
+    {
+      "dir": "vite-office-calc",
+      "branch": "calc",
+      "tip": "df40b4d29ffb20f77fed986c89ead95bfc3216d8",
+      "clean": true,
+      "equalsMain": true
+    }
+  ]
+}

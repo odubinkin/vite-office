@@ -4,7 +4,7 @@ title: "Integrate current Calc and Writer changes and synchronize branches"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -50,7 +50,7 @@ events:
     to: "DOING"
     note: "Start: Resume the user-approved corrected branch integration and synchronization without repeating the full test run."
 doc_version: 3
-doc_updated_at: "2026-10-20T17:17:10.430Z"
+doc_updated_at: "2026-10-20T17:18:38.107Z"
 doc_updated_by: "CODER"
 description: "Publish corrected writer/calc histories, merge into main and synchronize all three branches. User revised the scope on 2026-10-21: tests already repaired in Calc; do not repeat full verification. Preserve prior partial edits as evidence, use corrected branch versions, verify Git integrity and clean remote synchronization."
 sections:
@@ -61,9 +61,7 @@ sections:
   Scope: "All three user-named checkouts, writer/calc/main Git synchronization, integration fixes and regression tests, and task evidence. Preserve existing development task records. Network pushes are expressly authorized."
   Plan: "User-approved revised plan (2026-10-21): preserve previous incomplete local test patch as task evidence, restore only those agent-authored edits, publish repaired calc and writer, fetch and merge their current tips into main, resolve conflicts if present, run Git integrity/whitespace and AgentPlane checks only, publish main, merge main back into writer/calc and publish both. Leave each checkout clean on its named branch with all tips synchronized. Do not repeat full project tests; use existing MD0CQF acceptance evidence for repaired tests. No force push or destructive history edits."
   Verify Steps: "1. git diff --check and confirm no unmerged paths after merging corrected writer/calc into main. 2. Run ap doctor and node .agentplane/policy/check-routing.mjs. 3. Confirm input tips are ancestors of main, main is ancestor of final writer/calc, all working trees are clean on their intended branches and each local tip equals the actual remote branch tip. 4. Full npm run verify and application/browser/coverage reruns are explicitly skipped at the user request on 2026-10-21; existing MD0CQF acceptance evidence belongs to Calc fixes and is not claimed as a new run."
-  Verification: |-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    <!-- END VERIFICATION RESULTS -->
+  Verification: "Command: git diff --check; ancestry, tree equality, checkout and remote synchronization checks recorded in evidence/synchronization.json. Result: pass. Corrected Calc input 6cdcf6529 and Writer dd5047ff7 are included in merge df40b4d29; main/writer/calc were clean and all local/remote tips matched df40b4d29 before this task-closure documentation. Application/tooling/package trees exactly equal corrected Calc. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass (doctor has zero errors and one existing hook-shim warning). Skipped: npm run verify and all full application/browser/coverage reruns. Reason/Approval: user explicitly requested merge without a full rerun on 2026-10-21. Risk: this integration does not independently revalidate tests; source is identical to repaired Calc, whose complete acceptance is retained under MD0CQF. After task closure, publish and fast-forward all three branches again and recheck actual remote tips and clean worktrees."
   Rollback Plan: "Retain starting tips main/writer dd5047ff7 and calc d0b6e787c. Abort unresolved merges if necessary; use forward corrective/revert commits only after publication. Never reset or force-push user branches."
   Findings: "The original interrupted attempt merged Calc at d0b6e787c into main b05745299 and left four partial agent-authored test edits. Corrected Calc tip 6cdcf6529 now supersedes those edits. Preserve their patch with prior failure logs, restore those four files to the existing merge tip, then merge corrected Calc. User explicitly removed the full-run requirement on 2026-10-21. No prior full-suite success is claimed for this integration."
 id_source: "generated"
@@ -88,8 +86,7 @@ User-approved revised plan (2026-10-21): preserve previous incomplete local test
 
 ## Verification
 
-<!-- BEGIN VERIFICATION RESULTS -->
-<!-- END VERIFICATION RESULTS -->
+Command: git diff --check; ancestry, tree equality, checkout and remote synchronization checks recorded in evidence/synchronization.json. Result: pass. Corrected Calc input 6cdcf6529 and Writer dd5047ff7 are included in merge df40b4d29; main/writer/calc were clean and all local/remote tips matched df40b4d29 before this task-closure documentation. Application/tooling/package trees exactly equal corrected Calc. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass (doctor has zero errors and one existing hook-shim warning). Skipped: npm run verify and all full application/browser/coverage reruns. Reason/Approval: user explicitly requested merge without a full rerun on 2026-10-21. Risk: this integration does not independently revalidate tests; source is identical to repaired Calc, whose complete acceptance is retained under MD0CQF. After task closure, publish and fast-forward all three branches again and recheck actual remote tips and clean worktrees.
 
 ## Rollback Plan
 
