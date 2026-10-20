@@ -1,10 +1,11 @@
 ---
 id: "202610201522-3F5N65"
 title: "Integrate current Calc and Writer changes and synchronize branches"
-status: "DOING"
+result_summary: "verified-202610201522-3F5N65"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,7 +23,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-20T17:18:49.519Z"
+  updated_at: "2026-10-20T17:19:03.217Z"
   updated_by: "CODER"
   note: "verified-202610201522-3F5N65"
   attempts: 0
@@ -42,7 +43,9 @@ quality_review:
     - ".agentplane/tasks/202610201522-3F5N65/evidence/synchronization.json"
   findings:
     - "Production/test/tooling trees exactly match corrected Calc 6cdcf6529. No test source edits from interrupted attempt were carried forward. Doctor passes with existing hook-shim warning; routing passes. Only task-closure metadata remains to publish and synchronize."
-commit: null
+commit:
+  hash: "74d935217f880e49d1abc585f48ba9c234d8fd5b"
+  message: "🧾 3F5N65 task: persist verified synchronization and review"
 comments:
   -
     author: "CODER"
@@ -50,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Resume the user-approved corrected branch integration and synchronization without repeating the full test run."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610201522-3F5N65. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -77,8 +83,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610201522-3F5N65"
+  -
+    type: "verify"
+    at: "2026-10-20T17:19:03.217Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610201522-3F5N65"
+  -
+    type: "status"
+    at: "2026-10-20T17:19:03.402Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610201522-3F5N65. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-20T17:18:49.599Z"
+doc_updated_at: "2026-10-20T17:19:03.403Z"
 doc_updated_by: "CODER"
 description: "Publish corrected writer/calc histories, merge into main and synchronize all three branches. User revised the scope on 2026-10-21: tests already repaired in Calc; do not repeat full verification. Preserve prior partial edits as evidence, use corrected branch versions, verify Git integrity and clean remote synchronization."
 sections:
@@ -153,9 +172,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-20T17:19:03.217Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610201522-3F5N65
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T17:18:49.599Z, excerpt_hash=sha256:2788dfa58f32e8c401f84610e80257af95280f5478d4e550f72022ba9df4c1bf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610201522-3F5N65/blueprint/resolved-snapshot.json
+    - old_digest: 58f0eb1ace7f91786279b402423f96390319fa3935ef6272438087e11bdac1ec
+    - current_digest: 58f0eb1ace7f91786279b402423f96390319fa3935ef6272438087e11bdac1ec
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610201522-3F5N65
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610201522-3F5N65 --result verified-202610201522-3F5N65 --commit 74d935217f880e49d1abc585f48ba9c234d8fd5b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain starting tips main/writer dd5047ff7 and calc d0b6e787c. Abort unresolved merges if necessary; use forward corrective/revert commits only after publication. Never reset or force-push user branches."
   Findings: "The original interrupted attempt merged Calc at d0b6e787c into main b05745299 and left four partial agent-authored test edits. Corrected Calc tip 6cdcf6529 now supersedes those edits. Preserve their patch with prior failure logs, restore those four files to the existing merge tip, then merge corrected Calc. User explicitly removed the full-run requirement on 2026-10-21. No prior full-suite success is claimed for this integration."
+extensions:
+  implementation_commit:
+    hash: "df40b4d29ffb20f77fed986c89ead95bfc3216d8"
+    message: "🔀 3F5N65 integrate: merge repaired Calc regressions into main"
 id_source: "generated"
 ---
 ## Summary
@@ -234,6 +287,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610201522-3F5N65 --result verified-202610201522-3F5N65 --commit 8ca564a272ea5e3090c5f273f79bab87d91e2d39
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-20T17:19:03.217Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610201522-3F5N65
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-20T17:18:49.599Z, excerpt_hash=sha256:2788dfa58f32e8c401f84610e80257af95280f5478d4e550f72022ba9df4c1bf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610201522-3F5N65/blueprint/resolved-snapshot.json
+- old_digest: 58f0eb1ace7f91786279b402423f96390319fa3935ef6272438087e11bdac1ec
+- current_digest: 58f0eb1ace7f91786279b402423f96390319fa3935ef6272438087e11bdac1ec
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610201522-3F5N65
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610201522-3F5N65 --result verified-202610201522-3F5N65 --commit 74d935217f880e49d1abc585f48ba9c234d8fd5b
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
