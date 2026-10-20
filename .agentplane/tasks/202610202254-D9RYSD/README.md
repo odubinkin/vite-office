@@ -1,10 +1,11 @@
 ---
 id: "202610202254-D9RYSD"
 title: "Complete native Calc document pool and header-footer ownership"
-status: "DOING"
+result_summary: "Complete native Calc default pool and owned header-footer text"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610202254-D9RYSD/evidence/raw-results.json.gz"
   findings:
     - "Verified89entries100..188,static/dynamic split,slots10057/10058,five source range pairs,base Clone and real text null/copy/alias semantics. Raw528Calc/58related tests and130+4owners100percent are reproducible by audit. Chromium/Worker and Writer regressions pass;shared emitted JS identical."
-commit: null
+commit:
+  hash: "08bc40fd2bc0cb386fa0163b38d5c47235897bdd"
+  message: "🧩 D9RYSD code: complete native Calc defaults and header-footer ownership"
 comments:
   -
     author: "CODER"
     body: "Start: complete actual Calc document pool100..188 and native nullable header/footer ownership using task57 real text objects and existing shared set/scale values;preserve explicit unported service boundaries."
+  -
+    author: "CODER"
+    body: "Verified: complete native Calc document defaults and nullable header-footer ownership;528 Calc and58 related tests,100percent Calc/changed-owner coverage,13 browser regressions and portable upstream/source evidence pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "528 Calc and58 related tests pass;Calc130 and changed4 owners100%;7 Calc/Worker and6 Writer browser regressions,static gates and portable source/native/raw coverage audit pass. Actual services left explicitly unported."
+  -
+    type: "status"
+    at: "2026-10-20T23:19:57.114Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete native Calc document defaults and nullable header-footer ownership;528 Calc and58 related tests,100percent Calc/changed-owner coverage,13 browser regressions and portable upstream/source evidence pass."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:19:45.792Z"
+doc_updated_at: "2026-10-20T23:19:57.116Z"
 doc_updated_by: "CODER"
 description: "Block58: complete original ScDocumentPool package100..188 using actual ScPageHFItem value ownership,ScGlobal EETextObjEqual and existing shared EditTextObject/SvxSetItem/ScPageScaleToItem. Preserve static versus per-pool dynamic defaults,ranges,slots,copy/base Clone and native null/text equality. No fake style pool,UNO header/footer content,renderer or lifetime service. Reuse actual shared values and document unported APIs. Work only calc checkout/branch;user performs integration."
 sections:
