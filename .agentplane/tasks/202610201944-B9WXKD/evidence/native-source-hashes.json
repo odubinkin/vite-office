@@ -1,0 +1,14 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": {
+    "vendor/libreoffice-reference/sc/source/core/tool/stylehelper.cxx": "e31c7a5a04a2ad013bcba744cf2555a47efab696ca5311421c765116e15094c5",
+    "vendor/libreoffice-reference/sc/inc/stylehelper.hxx": "9e60e9513efc77a31d7098a400ec4c0586d83e23ce330cc9f1e8c7f34aa165aa",
+    "vendor/libreoffice-reference/sc/inc/globstr.hrc": "9a8254d17946b02c5581a656e87a134bdc64d68785a1b40c4862d621f725ea07",
+    "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327",
+    "vendor/libreoffice-reference/sc/inc/scitems.hxx": "d1cf0f1a427d51f1913a8e1ba9f0bce6f0997756a4dcf0050de216c8fd45fc59",
+    "vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx": "b714b438480e3886f47d3f6a219225388c6c38531bd1863a041b5e307c2ed955",
+    "vendor/libreoffice-reference/include/editeng/editids.hrc": "440f1a9d6a31e35126528b50a560d61e916d02829a1a4b2a2632e304d1d38831",
+    "vendor/libreoffice-reference/include/svx/svxids.hrc": "8490030f09b56de06bba37683b28301900358b4d67aa8fdc7966878f09487d21",
+    "vendor/libreoffice-reference/include/svl/solar.hrc": "73c3aeb9a7ed1e0762a89dff9e1f0fcd82497dc61e509bd8176cee37a07e4ba2"
+  }
+}
