@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/stylehelper.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/stylehelper.hxx",
+    "localSymbols": [
+      "SC_STYLE_PROG_STANDARD",
+      "SC_STYLE_PROG_RESULT",
+      "SC_STYLE_PROG_RESULT1",
+      "SC_STYLE_PROG_HEADING",
+      "SC_STYLE_PROG_HEADING1",
+      "SC_STYLE_PROG_REPORT",
+      "SC_PIVOT_STYLE_PROG_INNER",
+      "SC_PIVOT_STYLE_PROG_RESULT",
+      "SC_PIVOT_STYLE_PROG_CATEGORY",
+      "SC_PIVOT_STYLE_PROG_TITLE",
+      "SC_PIVOT_STYLE_PROG_FIELDNAME",
+      "SC_PIVOT_STYLE_PROG_TOP"
+    ],
+    "upstreamSymbols": [
+      "SC_STYLE_PROG_STANDARD",
+      "SC_STYLE_PROG_RESULT",
+      "SC_STYLE_PROG_RESULT1",
+      "SC_STYLE_PROG_HEADING",
+      "SC_STYLE_PROG_HEADING1",
+      "SC_STYLE_PROG_REPORT",
+      "SC_PIVOT_STYLE_PROG_INNER",
+      "SC_PIVOT_STYLE_PROG_RESULT",
+      "SC_PIVOT_STYLE_PROG_CATEGORY",
+      "SC_PIVOT_STYLE_PROG_TITLE",
+      "SC_PIVOT_STYLE_PROG_FIELDNAME",
+      "SC_PIVOT_STYLE_PROG_TOP"
+    ],
+    "preservedResponsibilities": [
+      "TaskB9WXKD ports original ScStyleNameConversion ordered cell/page/frame maps,stable programmatic constants,legacy alias priority,exact UTF16 user suffix escaping,suffix-first decoding,invalid-family fallthrough and independent native string returns. Default English resources are actual pinned globstr.hrc values at the existing English UI boundary;alternate resolved labels are explicit borrowed read-site values. Native default maps retain lazy static lifetime and scoped alternate map handles are released. No ScModule/gettext/locale/cache service is emulated. ScDocumentPool static metadata is extended contiguously from152 through176 with original Which/slot/flags and existing real native shared shadow,validation,conditional,hyperlink,spacing,page,tray,size,bool,object-mode and unsigned items. Earlier identities remain unchanged;rich-header177+ defaults are not fabricated. Source alias and pool-versus-style default asymmetries remain(CALC241). Actual ScStyleSheet/ScStyleSheetPool/ScPoolHelper,standard-style construction,full named-style UI/history/ODS,rich edit/header services and automatic wrapped-height remain required and unported. Full UI/global resource localization/device/UNO/ABI parity remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Native ScModule/gettext/locale service and global locale reinitialization are not implemented;actual resolved resource values are borrowed explicitly. Full Calc style owner/application and standard styles remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/stylehelper.ts",
+          "marker": "ScStyleNameConversion"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/stylehelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/stylehelper.hxx",
+          "marker": "ScStyleNameConversion"
+        }
+      ]
+    }
+  }
+}

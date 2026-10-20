@@ -6,7 +6,7 @@
   "build": "npm run build",
   "browser": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-browser-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/style-naming-defaults.spec.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/wrap-text.spec.ts apps/office/e2e/native-line-margin.spec.ts --workers=1 --reporter=line,json",
   "browserRepair": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-browser-repair-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/style-naming-defaults.spec.ts --workers=1 --reporter=line,json",
-  "visual": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-visual-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/wrap-text.spec.ts --grep Calc shared font-family selection|wraps real text --output output/playwright/task56-visual-artifacts --workers=1 --reporter=line,json",
+  "visual": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-visual-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/wrap-text.spec.ts --grep 'Calc shared font-family selection|wraps real text' --output output/playwright/task56-visual-artifacts --workers=1 --reporter=line,json",
   "static": [
     {
       "name": "format",

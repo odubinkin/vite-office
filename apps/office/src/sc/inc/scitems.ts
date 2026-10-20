@@ -157,3 +157,57 @@ export const ATTR_PATTERN_END = 155;
 export const ATTR_BORDER = 150;
 /** Original inner cell border identity. */
 export const ATTR_BORDER_INNER = 151;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_VALIDDATA = 153;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_HYPERLINK = 155;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_LRSPACE = 156;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_ULSPACE = 157;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_SIZE = 160;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_HORCENTER = 161;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_VERCENTER = 162;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_ON = 163;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_DYNAMIC = 164;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_SHARED = 165;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_SHARED_FIRST = 166;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_NOTES = 167;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_GRID = 168;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_HEADERS = 169;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_TOPDOWN = 173;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_SCALE = 174;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_SCALETOPAGES = 175;
+
+/** Original static cell/page attribute identity. */
+export const ATTR_PAGE_FIRSTPAGENO = 176;

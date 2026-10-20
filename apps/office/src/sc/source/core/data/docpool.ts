@@ -1,4 +1,13 @@
-/** @fileoverview Consumed ScDocumentPool cell-item package (ATTR_FONT..ATTR_BORDER_INNER); remaining cell/page defaults and native pool services are unported. */
+/** @fileoverview Original contiguous ScDocumentPool static defaults through page-first-number176;rich header/footer and remaining pool services are unported. */
+import { SvxShadowItem } from "../../../../editeng/inc/shaditem";
+import { ScCondFormatItem, ScViewObjectModeItem } from "../../../inc/attrib";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxPageItem } from "../../../../svx/inc/pageitem";
+import { SvxPaperBinItem } from "../../../../editeng/inc/pbinitem";
+import { SvxSizeItem } from "../../../../editeng/inc/sizeitem";
 import { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import { ScProtectionAttr } from "../../../inc/attrib";
 import {
@@ -102,7 +111,7 @@ function createGlobalBorderInnerAttr(): SvxBoxInfoItem {
   item.SetMinDist(false);
   return item;
 }
-/** Original static metadata for the consumed contiguous cell-attribute prefix. Unsupported IDs are not given fabricated defaults. */
+/** Original static metadata for the contiguous static cell/page prefix. Unsupported IDs are not given fabricated defaults. */
 class ItemInfoPackageScDocument extends ItemInfoPackage {
   private readonly maItemInfos: ItemInfoStatic[];
   /** Constructs original item values, slot mappings and surrogate flags. @returns Package. */
@@ -161,6 +170,31 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
       [new ScProtectionAttr(), 26036, 0],
       [new SvxBoxItem(150), 10024, 0],
       [createGlobalBorderInnerAttr(), 10023, 0],
+      [new SvxShadowItem(152), 10025, 0],
+      [new SfxUInt32Item(153, 0), 0, 0],
+      [new ScCondFormatItem(), 0, 0],
+      [new SfxStringItem(155, ""), 0, 0],
+      [new SvxLRSpaceItem(156), 10048, 0],
+      [new SvxULSpaceItem(157), 10049, 0],
+      [new SvxPageItem(158), 10050, 0],
+      [new SvxPaperBinItem(159), 10054, 0],
+      [new SvxSizeItem(160), 10051, 0],
+      [new SfxBoolItem(161), 10055, 0],
+      [new SfxBoolItem(162), 10056, 0],
+      [new SfxBoolItem(163, true), 10059, 0],
+      [new SfxBoolItem(164, true), 10060, 0],
+      [new SfxBoolItem(165, true), 10061, 0],
+      [new SfxBoolItem(166, true), 11114, 0],
+      [new SfxBoolItem(167, false), 0, 0],
+      [new SfxBoolItem(168, false), 0, 0],
+      [new SfxBoolItem(169, false), 0, 0],
+      [new ScViewObjectModeItem(170), 0, 0],
+      [new ScViewObjectModeItem(171), 0, 0],
+      [new ScViewObjectModeItem(172), 0, 0],
+      [new SfxBoolItem(173, true), 0, 0],
+      [new SfxUInt16Item(174, 100), 0, 0],
+      [new SfxUInt16Item(175, 1), 0, 0],
+      [new SfxUInt16Item(176, 1), 0, 0],
     ];
     this.maItemInfos = values.map(
       /** Constructs native static metadata. @param value - Item, slot and flags. @returns Entry. */ ([
@@ -185,7 +219,7 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
   }
 }
 let packageScDocument: ItemInfoPackageScDocument | undefined;
-/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through inner border. */
+/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous static prefix through first page number. */
 export class ScDocumentPool extends SfxItemPool {
   /** Registers the shared original cell-attribute prefix. @returns Pool. */
   constructor() {

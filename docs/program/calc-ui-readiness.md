@@ -1,5 +1,22 @@
 # Calc UI and ODS implementation critical path
 
+## Current style-owner inputs — task56 naming and static defaults
+
+Task `202610201944-B9WXKD` adds original ScStyleNameConversion and stable
+programmatic names,including ordered builtin/API aliases and exact user-suffix
+escaping. Actual pinned English resources match the current browser UI boundary;
+resolved alternate labels are borrowed values,not a translation/module facade.
+Default maps retain native lazy lifetime and unknown names retain native value
+ownership. Native global locale/gettext services remain unported.
+
+ScDocumentPool now owns the original contiguous static prefix100..176 with actual
+shared item classes,Which/slot/flags and defaults. All earlier identities remain
+stable. Rich header/footer177+ defaults are still absent rather than invented.
+Native alias priority and pool-versus-style scale defaults are recorded as CALC241.
+Actual Calc style/pool/helper,standard styles,full named-style UI/history/ODS and
+automatic-height still require their source owners. Broader goal remains active;
+next all-app checkpoint stays60.
+
 ## Current cell-style path — task55 native pattern association
 
 Task `202610201913-6GG949` adds original style-pointer/name association to
