@@ -1,10 +1,11 @@
 ---
 id: "202610201944-B9WXKD"
 title: "Port native Calc built-in style-name conversion and static page defaults"
-status: "DOING"
+result_summary: "Ported ordered Calc built-in style-name conversion and native static cell/page item defaults through176 with actual shared value classes;verified source-shaped boundaries and retained missing style owner/UI services explicitly."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610201944-B9WXKD/evidence/commands.json"
   findings:
     - "Ordered alias and suffix semantics,real native string ownership,borrowed resource inputs and contiguous static defaults through176 retain explicit unported boundaries. Portable audit independently reconstructs523 Calc/111 related/8 unique browser successes,raw Calc100/shared100 and source/native/screenshot hashes. Original registry and signed-query fixture failures remain archived with successful repairs. Four visual replays are not double-counted. Fourteen static checks/build pass;doctor has only existing managed-shim warning."
-commit: null
+commit:
+  hash: "fc1eb4c9dddb1ad0856b6154748bab2988db6533"
+  message: "🧩 B9WXKD feat: port native style naming and static page defaults"
 comments:
   -
     author: "CODER"
     body: "Start: port source style-name maps/escaping and contiguous static cell/page defaults through176 as actual Calc style-owner inputs;no fabricated service or rich header/footer."
+  -
+    author: "CODER"
+    body: "Verified: native style-name conversion and static defaults100..176 match pinned source;523 Calc and111 related tests,8 distinct browser cases,Calc/shared100 coverage,14 static checks/build and portable evidence audit pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native style-name conversion and defaults100..176 verified:523 Calc,111 related,8 distinct browser cases;Calc100 and unchanged-source shared100;14 static checks/build pass;portable raw archive audit and screenshot inspection pass. Missing actual style owners/UI and layout explicitly retained."
+  -
+    type: "status"
+    at: "2026-10-20T20:06:26.529Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native style-name conversion and static defaults100..176 match pinned source;523 Calc and111 related tests,8 distinct browser cases,Calc/shared100 coverage,14 static checks/build and portable evidence audit pass."
 doc_version: 3
-doc_updated_at: "2026-10-20T20:06:03.762Z"
+doc_updated_at: "2026-10-20T20:06:26.531Z"
 doc_updated_by: "CODER"
 description: "Advance real Calc style-owner prerequisites with original ordered built-in/programmatic naming rules and complete contiguous static ScDocumentPool defaults through first page number176. Preserve legacy alias priority,user suffix escaping,actual native item classes,slot IDs and defaults. Resolve English style resources from the pinned native catalog used at the current English browser UI boundary;explicit borrowed resource values do not emulate ScModule/gettext. Real style owners,standard style creation and UI application remain required."
 sections:
