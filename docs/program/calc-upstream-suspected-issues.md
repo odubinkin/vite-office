@@ -3242,3 +3242,30 @@ The complete native character-type witness includes the original fast path and a
 `external/icu/source/common/native-character-types.test.ts` compares the unchanged native byte
 protocol,then checks the later NUL lookup. Native OS threading and full Unicode utilities remain
 unported;this is a bounded shared numeric-field prerequisite.
+
+## CALC224 — Indentation ODF property narrows to signed16 HMM
+
+Pinned `cellsuno.cxx` publishes ATTR_INDENT as signed16 HMM even though ScIndentItem stores
+UInt16 twips. XML uses XML_TYPE_MEASURE16 and `fo:margin-left`. Large positive indentation
+therefore wraps when exported;negative imported HMM converts to twips then narrows to UInt16.
+Preserve this boundary instead of adding a positive clamp or silently widening the ODF property.
+`ods-indent-rows.test.ts` independently exercises signed input and native saturation.
+The full UNO property-service graph remains unported.
+
+## CALC225 — Fully filtered indentation selection falls back to the cursor
+
+Pinned `ScViewFunc::ChangeIndent` removes filtered rows from copied marks,then converts them
+to multi marks. If no multi mark remains,it marks the current cell without rechecking its filter
+state. Thus a fully filtered selection can still indent the cursor cell. Preserve this original
+ordering;`cell-indent-row-height.test.ts` records the resulting attribute change. Protection,
+merged cells and alternate sheet views remain outside the represented operation.
+
+## CALC226 — Text-output cache refresh drops right indentation
+
+Pinned `output2.cxx` initializes its string-output cache indentation for Left or Right alignment,
+but its later pattern refresh only retains Left indentation. `DrawEditParam::calcMargins`
+independently includes indentation on the actual aligned side. This appears to make the native
+string path depend on cache refresh ordering. Do not invent a corrected native cache here:
+the full string-output/device/cache machinery remains unported. The browser projects current
+native margin/indent items using the represented margin arithmetic;full native paint/cache parity
+is explicitly unverified.

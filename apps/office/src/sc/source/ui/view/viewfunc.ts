@@ -1,4 +1,5 @@
-/** @fileoverview Consumed ScViewFunc selection-pattern query and source whole-sheet data-area clipping. Filtered cells and alternate sheet views remain unported. */
+/** @fileoverview Consumed ScViewFunc selection-pattern query and source whole-sheet data-area clipping. Alternate sheet views remain unported. */
+import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
 import { InsertDeleteFlags, ScSizeMode } from "../../../inc/global";
@@ -10,6 +11,21 @@ import { ScDocument } from "../../../inc/document";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { ColRowSpan } from "../../../inc/columnspanset";
 import type { ScViewData } from "../inc/viewdata";
+/** Original ShowFilteredRows skips actual filter runs when manually resizing or hiding. @param doc - Actual document. @param tab - Sheet. @param first - First row. @param last - Last row. @param show - Visibility. @returns Nothing. */
+function ShowFilteredRows(
+  doc: ScDocument,
+  tab: number,
+  first: number,
+  last: number,
+  show: boolean,
+): void {
+  const end: [number] = [first];
+  do {
+    if (!doc.RowFiltered(first, tab, undefined, end))
+      doc.ShowRows(first, Math.min(end[0], last), tab, show);
+    first = end[0] + 1;
+  } while (first <= last);
+}
 /** Restricts only an exact whole-sheet simple mark, preserving the source ignored clipping result. @param marks - Copied view marks. @param doc - Actual document. @returns Nothing. */
 function ShrinkToDataArea(marks: ScMarkData, doc: ScDocument): void {
   if (!marks.IsMarked()) return;
@@ -58,6 +74,19 @@ export class ScViewFunc extends ScTabView {
   ) {
     super(data);
   }
+  /** Original indentation works on copied marks with filtered rows removed. @param increment - Direction. @returns Operation result. */
+  ChangeIndent(increment: boolean): boolean {
+    const marks = new ScMarkData(this.data.GetMarkData());
+    ScViewUtil.UnmarkFiltered(marks, this.data.GetDocument());
+    marks.MarkToMulti();
+    if (!marks.IsMultiMarked())
+      marks.SetMultiMarkArea(
+        new ScRange(
+          new ScAddress(this.data.GetCurX(), this.data.GetCurY(), this.data.GetTabNumber()),
+        ),
+      );
+    return this.shell.GetDocFunc().ChangeIndent(marks, increment, false);
+  }
   /** Original marked width dispatch converts actual view marks to spans and back. @param width - Column axis. @param mode - Native size mode. @param twips - UInt16 size. @returns Nothing. */
   SetMarkedWidthOrHeight(width: boolean, mode: ScSizeMode, twips: number): void {
     const marks = this.data.GetMarkData();
@@ -68,10 +97,15 @@ export class ScViewFunc extends ScTabView {
           new ScAddress(this.data.GetCurX(), this.data.GetCurY(), this.data.GetTabNumber()),
         ),
       );
-    this.SetWidthOrHeight(width, marks.GetMarkedColSpans(), mode, twips);
+    this.SetWidthOrHeight(
+      width,
+      width ? marks.GetMarkedColSpans() : marks.GetMarkedRowSpans(),
+      mode,
+      twips,
+    );
     marks.MarkToSimple();
   }
-  /** Consumed original explicit column-size path; device-dependent optimal widths and row resizing are not represented. @param width - Column axis. @param ranges - Inclusive source spans. @param mode - DIRECT,SHOW or ORIGINAL. @param twips - UInt16 size. @param record - Record actual geometry document. @param suppliedMarks - Original redo marks. @returns Nothing. */
+  /** Original explicit row/column geometry; device-dependent optimal sizing remains unported. @param width - Column axis. @param ranges - Inclusive source spans. @param mode - DIRECT,SHOW or ORIGINAL. @param twips - UInt16 size. @param record - Record actual geometry document. @param suppliedMarks - Original redo marks. @returns Nothing. */
   SetWidthOrHeight(
     width: boolean,
     ranges: readonly ColRowSpan[],
@@ -82,12 +116,11 @@ export class ScViewFunc extends ScTabView {
   ): void {
     if (ranges.length === 0) return;
     if (
-      !width ||
-      (mode !== ScSizeMode.SC_SIZE_DIRECT &&
-        mode !== ScSizeMode.SC_SIZE_SHOW &&
-        mode !== ScSizeMode.SC_SIZE_ORIGINAL)
+      mode !== ScSizeMode.SC_SIZE_DIRECT &&
+      mode !== ScSizeMode.SC_SIZE_SHOW &&
+      mode !== ScSizeMode.SC_SIZE_ORIGINAL
     )
-      throw new Error("Only explicit column geometry is implemented");
+      throw new Error("Only explicit geometry is implemented");
     const marks = new ScMarkData(suppliedMarks ?? this.data.GetMarkData()),
       doc = this.shell.GetDocument(),
       first = (ranges[0] as ColRowSpan).mnStart,
@@ -105,7 +138,9 @@ export class ScViewFunc extends ScTabView {
       name.dispose();
       for (const tab of marks.GetSelectedTabs())
         doc.CopyToDocument(
-          new ScRange(first, 0, tab, last, doc.MaxRow(), tab),
+          width
+            ? new ScRange(first, 0, tab, last, doc.MaxRow(), tab)
+            : new ScRange(0, first, tab, doc.MaxCol(), last, tab),
           InsertDeleteFlags.NONE,
           false,
           undo,
@@ -114,12 +149,29 @@ export class ScViewFunc extends ScTabView {
     const show = twips > 0 || mode !== ScSizeMode.SC_SIZE_DIRECT;
     let hiddenCursor = false;
     for (const tab of marks.GetSelectedTabs())
-      for (const range of ranges)
-        for (let column = range.mnStart; column <= range.mnEnd; column++) {
-          if (twips) doc.SetColWidth(column, tab, twips);
-          doc.ShowCol(column, tab, show);
-          if (!show && column === this.data.GetCurX() && tab === currentTab) hiddenCursor = true;
-        }
+      for (const range of ranges) {
+        if (width) {
+          for (let column = range.mnStart; column <= range.mnEnd; column++) {
+            if (twips) doc.SetColWidth(column, tab, twips);
+            doc.ShowCol(column, tab, show);
+            if (!show && column === this.data.GetCurX() && tab === currentTab) hiddenCursor = true;
+          }
+        } else if (mode === ScSizeMode.SC_SIZE_DIRECT) {
+          if (twips) {
+            doc.SetRowHeightRange(range.mnStart, range.mnEnd, tab, twips);
+            doc.SetManualHeight(range.mnStart, range.mnEnd, tab, true);
+          }
+          ShowFilteredRows(doc, tab, range.mnStart, range.mnEnd, twips !== 0);
+          if (
+            !show &&
+            range.mnStart <= this.data.GetCurY() &&
+            this.data.GetCurY() <= range.mnEnd &&
+            tab === currentTab
+          )
+            hiddenCursor = true;
+        } else if (mode === ScSizeMode.SC_SIZE_SHOW)
+          doc.ShowRows(range.mnStart, range.mnEnd, tab, true);
+      }
     if (undo)
       this.shell
         .GetUndoManager()
@@ -131,6 +183,7 @@ export class ScViewFunc extends ScTabView {
             last,
             currentTab,
             undo,
+            width,
             ranges,
             mode,
             twips,
@@ -138,9 +191,13 @@ export class ScViewFunc extends ScTabView {
           ),
         );
     if (hiddenCursor) {
-      const old = this.data.GetCurX(),
-        proposed = Math.min(old + 1, doc.MaxCol());
-      this.data.SetCurX(this.SkipCursorHorizontal(proposed, old, 1));
+      if (width) {
+        const old = this.data.GetCurX();
+        this.data.SetCurX(this.SkipCursorHorizontal(Math.min(old + 1, doc.MaxCol()), old, 1));
+      } else {
+        const old = this.data.GetCurY();
+        this.data.SetCurY(this.SkipCursorVertical(Math.min(old + 1, doc.MaxRow()), old, 1));
+      }
     }
     this.shell.SetDocumentModified();
   }

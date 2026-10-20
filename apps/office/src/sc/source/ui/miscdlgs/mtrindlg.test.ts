@@ -3,8 +3,8 @@ import { expect, it } from "vitest";
 import { ScMetricInputDlg } from "./mtrindlg";
 import { FieldUnit as F } from "../../../../tools/inc/fldunit";
 it("preserves original unit quantization,default comparison and user-toggle current restoration", /** Actual native metric model. @returns Nothing. */ () => {
-  const cm = new ScMetricInputDlg(1280, F.CM),
-    inch = new ScMetricInputDlg(1280, F.INCH);
+  const cm = new ScMetricInputDlg("ColWidthDialog", 1280, 1280, F.CM, 2, 56693, 2),
+    inch = new ScMetricInputDlg("ColWidthDialog", 1280, 1280, F.INCH, 2, 56693, 2);
   expect(cm.IsDefault()).toBe(true);
   expect(cm.value.get_value(F.NONE)).toBe(226n);
   expect(cm.GetInputValue()).toBe(1281);

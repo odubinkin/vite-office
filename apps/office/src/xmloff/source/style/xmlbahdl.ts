@@ -118,3 +118,33 @@ export class XMLBoolPropHdl {
     return true;
   }
 }
+
+/** Original signed measure property handler with native byte-width saturation and genuine UNO Any. */
+export class XMLMeasurePropHdl {
+  /** Original native width. @param bytes - Signed scalar width. @returns Handler. */
+  constructor(private readonly bytes: 1 | 2 | 4) {}
+  /** Native import assigns zero on conversion failure and saturates the destination scalar. @param input - XML measure. @param value - Native Any. @param converter - Configured XML converter. @returns Conversion success. */
+  importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    const parsed = converter.convertMeasureToCore(input),
+      number = parsed ?? 0,
+      limit = 2 ** (this.bytes * 8 - 1);
+    value.insert(
+      [Math.max(-limit, Math.min(limit - 1, number))],
+      this.bytes === 1 ? "sal_Int8" : this.bytes === 2 ? "sal_Int16" : "sal_Int32",
+    );
+    return parsed !== null;
+  }
+  /** Native export requires matching typed extraction. @param output - XML output. @param value - Native Any. @param converter - Configured XML converter. @returns Emitted. */
+  exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    const number: [number] = [0];
+    if (
+      !value.extract(
+        number,
+        this.bytes === 1 ? "sal_Int8" : this.bytes === 2 ? "sal_Int16" : "sal_Int32",
+      )
+    )
+      return false;
+    output[0] = converter.convertMeasureToXML(number[0]);
+    return true;
+  }
+}

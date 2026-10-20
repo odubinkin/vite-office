@@ -1,4 +1,5 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScUndoIndent } from "../../source/ui/undo/undoblk";
 import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
@@ -56,6 +57,43 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
+  ChangeIndent(increment: boolean): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ChangeIndent(
+      increment,
+    );
+    this.Changed();
+    return changed;
+  }
+  /** Native row-height request routing. @param request - Source request. @returns Typed height present. */
+  ExecuteRowHeight(request: SfxRequest): boolean {
+    const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteRowHeight(
+      request,
+      this.viewData,
+    );
+    if (consumed) {
+      this.addressText = this.Address();
+      this.Changed();
+    }
+    return consumed;
+  }
+  /** Native accepted row-height result. @param twips - Height. @returns Recorded request. */
+  CompleteRowHeight(twips: number): SfxRequest {
+    const request = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).CompleteRowHeight(
+      twips,
+    );
+    this.addressText = this.Address();
+    this.Changed();
+    return request;
+  }
+  /** Native row visibility. @param show - Visible. @returns Nothing. */
+  ShowRows(show: boolean): void {
+    if (!this.Commit()) return;
+    new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ShowRows(show);
+    this.addressText = this.Address();
+    this.Changed();
+  }
   /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
   ExecuteColumnWidth(request: SfxRequest): boolean {
     const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteColumnWidth(
@@ -252,7 +290,15 @@ export class CalcViewController {
       column = columns
         ? new ScTabView(this.viewData).SkipCursorHorizontal(proposed, old, columns)
         : proposed;
-    return this.Select(column, this.viewData.GetCurY() + rows, extend);
+    const oldRow = this.viewData.GetCurY(),
+      proposedRow = Math.max(0, Math.min(this.shell.GetDocument().MaxRow(), oldRow + rows));
+    return this.Select(
+      column,
+      rows
+        ? new ScTabView(this.viewData).SkipCursorVertical(proposedRow, oldRow, rows)
+        : proposedRow,
+      extend,
+    );
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
@@ -598,6 +644,7 @@ export class CalcViewController {
     }
     const position =
       cursorAction instanceof ScUndoSetCell ||
+      cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents
         ? cursorAction.getAffectedRange().aStart
@@ -609,6 +656,7 @@ export class CalcViewController {
     this.SelectTab(position.Tab());
     this.Select(position.Col(), position.Row());
     if (
+      cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents
     ) {

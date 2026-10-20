@@ -1,4 +1,8 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import { ScIndentItem } from "../../inc/attrib";
+import { SvxMarginItem } from "../../../svx/source/items/algitem";
+import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
+import { visibleRows } from "./row-geometry";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { OutlinedText } from "../../../vcl/browser/outlined-text";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
@@ -100,12 +104,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     viewport.firstColumn,
     Math.min(document.MaxCol(), viewport.firstColumn + viewport.columns - 1),
   );
-  const rows = Array.from(
-    { length: Math.min(viewport.rows, document.MaxRow() - viewport.firstRow + 1) },
-    /** Projects one visible row coordinate. @param unused - Unused entry. @param offset - Visible index. @returns Native row. */ (
-      _,
-      offset,
-    ) => viewport.firstRow + offset,
+  const rows = visibleRows(
+    table,
+    viewport.firstRow,
+    Math.min(document.MaxRow(), viewport.firstRow + viewport.rows - 1),
   );
   const activeVisible = columns.includes(column) && rows.includes(row);
   useLayoutEffect(
@@ -305,8 +307,24 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           if (event.target !== input.current) props.onEdit(position);
                         }
                       }
-                      className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
+                      className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        paddingLeft: Math.trunc(
+                          ((pattern.GetItem(143) as SvxMarginItem).GetLeftMargin() +
+                            ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                            SvxCellHorJustify.Left
+                              ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                              : 0)) /
+                            15,
+                        ),
+                        paddingRight: Math.trunc(
+                          ((pattern.GetItem(143) as SvxMarginItem).GetRightMargin() +
+                            ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                            SvxCellHorJustify.Right
+                              ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                              : 0)) /
+                            15,
+                        ),
                         color: browserColor(fontColor.getFinalColor()),
                         backgroundColor:
                           (pattern.GetItem(148) as SvxBrushItem).GetColor().GetAlpha() === 0

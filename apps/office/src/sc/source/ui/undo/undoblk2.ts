@@ -1,4 +1,4 @@
-/** @fileoverview Original ScUndoWidthOrHeight explicit-column path;actual undo document and borrowed active view replace unported global VCL view lookup. */
+/** @fileoverview Original ScUndoWidthOrHeight explicit row/column path;actual undo document and borrowed active view replace unported global VCL view lookup. */
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
 import type { ScDocument } from "../../../inc/document";
@@ -11,7 +11,7 @@ import type { ScViewFunc } from "../view/viewfunc";
 export class ScUndoWidthOrHeight extends SfxUndoAction<ScDocShell> {
   private readonly marks: ScMarkData;
   private readonly ranges: readonly ColRowSpan[];
-  /** Owns a real geometry document and source spans. @param shell - Document shell. @param marks - Selected sheets. @param first - First column. @param last - Last column. @param tab - Original active sheet. @param undo - Owned geometry document. @param ranges - Original spans. @param mode - Size mode. @param size - UInt16 width. @param view - Actual active view when present. @returns Action. */
+  /** Owns a real geometry document and source spans. @param shell - Document shell. @param marks - Selected sheets. @param first - First row or column. @param last - Last row or column. @param tab - Original active sheet. @param undo - Owned geometry document. @param width - Column versus row axis. @param ranges - Original spans. @param mode - Size mode. @param size - UInt16 dimension. @param view - Actual active view when present. @returns Action. */
   constructor(
     private readonly shell: ScDocShell,
     marks: ScMarkData,
@@ -19,6 +19,7 @@ export class ScUndoWidthOrHeight extends SfxUndoAction<ScDocShell> {
     private readonly last: number,
     readonly tab: number,
     private readonly undo: ScDocument,
+    private readonly width: boolean,
     ranges: readonly ColRowSpan[],
     private readonly mode: ScSizeMode,
     private readonly size: number,
@@ -38,7 +39,9 @@ export class ScUndoWidthOrHeight extends SfxUndoAction<ScDocShell> {
     for (const tab of this.marks.GetSelectedTabs()) {
       if (tab >= doc.GetTableCount()) break;
       this.undo.CopyToDocument(
-        new ScRange(this.first, 0, tab, this.last, doc.MaxRow(), tab),
+        this.width
+          ? new ScRange(this.first, 0, tab, this.last, doc.MaxRow(), tab)
+          : new ScRange(0, this.first, tab, doc.MaxCol(), this.last, tab),
         InsertDeleteFlags.NONE,
         false,
         doc,
@@ -51,11 +54,11 @@ export class ScUndoWidthOrHeight extends SfxUndoAction<ScDocShell> {
   override RedoWithContext(): void {
     if (this.view && this.view.GetViewData().GetTabNumber() !== this.tab)
       this.view.SetTabNo(this.tab);
-    this.view?.SetWidthOrHeight(true, this.ranges, this.mode, this.size, false, this.marks);
+    this.view?.SetWidthOrHeight(this.width, this.ranges, this.mode, this.size, false, this.marks);
   }
   /** Original STR_UNDO_COLWIDTH resource. @returns Label. */
   override GetComment(): string {
-    return "Column Width";
+    return this.width ? "Column Width" : "Row Height";
   }
   /** Releases the actual owned document resources. @returns Nothing. */
   override Dispose(): void {

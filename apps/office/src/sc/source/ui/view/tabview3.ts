@@ -72,6 +72,21 @@ export class ScTabView {
     }
     return column;
   }
+  /** Original SkipCursorVertical hidden-row branch;protected/merged cells remain outside this slice. @param row - Proposed row. @param old - Old cursor. @param movement - Direction. @returns Native cursor with boundary reversal. */
+  SkipCursorVertical(row: number, old: number, movement: number): number {
+    const doc = this.aViewData.GetDocument(),
+      tab = this.aViewData.GetTabNumber();
+    let flipped = false;
+    while (doc.RowHidden(row, tab)) {
+      if (row <= 0 || row >= doc.MaxRow()) {
+        if (flipped) return old;
+        movement = -movement;
+        flipped = true;
+      }
+      row += movement > 0 ? 1 : -1;
+    }
+    return row;
+  }
   /** Expands the simple selection to complete columns using original no-argument MarkColumns rules. Browser notifications stay with the owning controller;reference/window block services remain outside this slice. @returns Nothing. */
   MarkColumns(): void {
     const mark = this.aViewData.GetMarkData(),

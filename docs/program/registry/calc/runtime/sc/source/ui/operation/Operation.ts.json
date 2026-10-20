@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "native-direct-format-deletion",
     "capabilityIds": [
-      "CAP-d7aef795-0709-4ea9-9f92-079142960ada"
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/ui/operation/Operation.ts",
-        "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts"
       ],
-      "justification": "TaskGWT2KJ enables native SID_CELL_FORMAT_RESET26067 through existing shared Writer Clear menu/shortcut,ScCellShell,ScViewFunc,ScDocFunc and original concrete DeleteCell/DeleteContent operation owners. Actual ScAttrArray::DeleteHardAttr clears direct item ids except merge/merge flags,retains unbound style names and source parent itemsets,reuses default patterns and re-searches coalesced runs. Source table deletion visits only allocated columns;default-column tails remain unchanged. Actual ScUndoDeleteContents owns attribute snapshots,marks,flags and native Delete history;scalar text/numbers/formulas and listeners remain with original cell owners. Independently authored ODS and repeated package reopen exercise cleared properties. Only the represented plain-cell/default-sheet-view HARDATTR|EDITATTR path is supported;rich edit,style resolution,protection,matrix/merged-range expansion,conditional formatting,drawing,alternate views and full native service/parity are unverified. Existing browser primary saving/open/no-recovery policies remain.",
+      "justification": "TaskGWT2KJ enables native SID_CELL_FORMAT_RESET26067 through existing shared Writer Clear menu/shortcut,ScCellShell,ScViewFunc,ScDocFunc and original concrete DeleteCell/DeleteContent operation owners. Actual ScAttrArray::DeleteHardAttr clears direct item ids except merge/merge flags,retains unbound style names and source parent itemsets,reuses default patterns and re-searches coalesced runs. Source table deletion visits only allocated columns;default-column tails remain unchanged. Actual ScUndoDeleteContents owns attribute snapshots,marks,flags and native Delete history;scalar text/numbers/formulas and listeners remain with original cell owners. Independently authored ODS and repeated package reopen exercise cleared properties. Only the represented plain-cell/default-sheet-view HARDATTR|EDITATTR path is supported;rich edit,style resolution,protection,matrix/merged-range expansion,conditional formatting,drawing,alternate views and full native service/parity are unverified. Existing browser primary saving/open/no-recovery policies remain. TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
       "knownViolations": [],
       "localSymbols": [
         "Operation",

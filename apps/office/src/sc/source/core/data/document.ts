@@ -31,7 +31,7 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -41,9 +41,56 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original selected-sheet indentation with removed-tab boundary. @param increment - Direction. @param marks - Real marks. @returns Nothing. */
+  ChangeSelectionIndent(increment: boolean, marks: ScMarkData): void {
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.ChangeSelectionIndent(marks, increment);
+    }
+  }
   /** Original document column-domain query. @param column - Native column. @returns Whether valid. */
   ValidCol(column: number): boolean {
     return ValidCol(column, MAXCOL);
+  }
+  /** Original row-height dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - UInt16 twips. @returns Nothing. */
+  SetRowHeightRange(first: number, last: number, tab: number, height: number): void {
+    this.FetchTable(tab)?.SetRowHeightRange(first, last, height, 1.0, true);
+  }
+  /** Original import/raw height setter. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - Twips. @returns Nothing. */
+  SetRowHeightOnly(first: number, last: number, tab: number, height: number): void {
+    this.FetchTable(tab)?.SetRowHeightOnly(first, last, height);
+  }
+  /** Original manual flag dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param manual - Flag. @returns Nothing. */
+  SetManualHeight(first: number, last: number, tab: number, manual: boolean): void {
+    this.FetchTable(tab)?.SetManualHeight(first, last, manual);
+  }
+  /** Original missing-table row-height zero. @param row - Row. @param tab - Sheet. @param hiddenAsZero - Source default,true. @returns Twips. */
+  GetRowHeight(row: number, tab: number, hiddenAsZero = true): number {
+    return this.FetchTable(tab)?.GetRowHeight(row, hiddenAsZero) ?? 0;
+  }
+  /** Original per-sheet minimum query. @param tab - Sheet. @returns Minimum twips or native standard height. */
+  GetSheetOptimalMinRowHeight(tab: number): number {
+    return this.FetchTable(tab)?.GetOptimalMinRowHeight() ?? ScGlobal.nStdRowHeight;
+  }
+  /** Original missing-table hidden query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Hidden. */
+  RowHidden(row: number, tab: number, first?: [number], last?: [number]): boolean {
+    return this.FetchTable(tab)?.RowHidden(row, first, last) ?? false;
+  }
+  /** Original missing-table filtered query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Filtered. */
+  RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
+    return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
+  }
+  /** Original hidden row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param hidden - Flag. @returns Nothing. */
+  SetRowHidden(first: number, last: number, tab: number, hidden: boolean): void {
+    this.FetchTable(tab)?.SetRowHidden(first, last, hidden);
+  }
+  /** Original filtered row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param filtered - Flag. @returns Nothing. */
+  SetRowFiltered(first: number, last: number, tab: number, filtered: boolean): void {
+    this.FetchTable(tab)?.getFilterData().setRowFiltered(first, last, filtered);
+  }
+  /** Original show rows dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param show - Flag. @returns Nothing. */
+  ShowRows(first: number, last: number, tab: number, show: boolean): void {
+    this.FetchTable(tab)?.ShowRows(first, last, show);
   }
   /** Original selected-table width assignment. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
   SetColWidth(column: number, tab: number, width: number): void {

@@ -45,6 +45,10 @@ import { ScAttrArray } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
 export class ScColumnData {
+  /** Original selection indentation delegates to actual attributes. @param first - First row. @param last - Last row. @param increment - Direction. @returns Nothing. */
+  ChangeSelectionIndent(first: number, last: number, increment: boolean): void {
+    this.pAttrArray.ChangeIndent(first, last, increment);
+  }
   /** Original column.hxx forwarding to the actual attribute array. @param state - Selection accumulator. @param first - First row. @param last - Last row. @param deep - Include inherited items. @returns Nothing. */
   MergePatternArea(state: ScMergePatternState, first: number, last: number, deep: boolean): void {
     this.pAttrArray.MergePatternArea(first, last, state, deep);
@@ -66,6 +70,7 @@ export class ScColumnData {
   /** Updates source sheet position. @param tab - Sheet. @returns Nothing. */
   SetTabNo(tab: number): void {
     this.nTab = tab;
+    this.pAttrArray.SetTab(tab);
   }
   /** Releases real canonical registrations. @returns Nothing. */
   DisposeAttributes(): void {

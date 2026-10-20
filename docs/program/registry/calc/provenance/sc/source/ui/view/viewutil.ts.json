@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/viewutil.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/viewutil.cxx",
+    "localSymbols": [
+      "ScViewUtil"
+    ],
+    "upstreamSymbols": [
+      "ScViewUtil::UnmarkFiltered"
+    ],
+    "preservedResponsibilities": [
+      "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50."
+    ],
+    "omittedResponsibilities": [
+      "Full native services and device/widget parity remain unported; shared item ownership uses existing JS lifetime rules."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewutil.ts",
+          "marker": "ScViewUtil"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewutil.cxx",
+          "marker": "ScViewUtil::UnmarkFiltered"
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScDocFunc attribute-only delete operation dispatch;other native document operations remain with their existing owners. */
+import { ChangeIndentOperation } from "../operation/ChangeIndentOperation";
 import type { ScDocShell } from "./docsh";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ScAddress } from "../../../inc/address";
@@ -9,6 +10,10 @@ import { DeleteCellOperation } from "../operation/DeleteCellOperation";
 export class ScDocFunc {
   /** Borrows the actual shell. @param shell - Document owner. @returns Function owner. */
   constructor(private readonly shell: ScDocShell) {}
+  /** Original indent operation dispatch. @param marks - Native marks. @param increment - Direction. @param api - API. @returns Result. */
+  ChangeIndent(marks: ScMarkData, increment: boolean, api: boolean): boolean {
+    return new ChangeIndentOperation(this.shell, marks, increment, api).run();
+  }
   /** Original marked DeleteContents operation dispatch. @param marks - Selected marks. @param flags - Attribute-only flags. @param record - Record history. @param api - API request. @returns Actual result. */
   DeleteContents(
     marks: ScMarkData,

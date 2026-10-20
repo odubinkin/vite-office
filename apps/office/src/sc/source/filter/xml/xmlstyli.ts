@@ -77,6 +77,7 @@ class XMLTableStyleContext extends ScXMLImportContext {
   ): SvXMLImportContext {
     if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES) {
       importCellParagraphProperties(
+        this.pattern,
         attributes,
         this.horizontal,
         /** Reports actual import diagnostics. @param name - Failed property. @returns Nothing. */ (

@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { ScMultiSelIter } from "../../../inc/markmulti";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -29,8 +30,44 @@ import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { FilterData } from "../../../inc/FilterData";
 import { SetOptimalHeightsToRows } from "./table1";
+/** Original ColumnDataApply callable contract. */
+type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table.hxx Apply traverses selected runs in one real column. @param marks - Marks. @param col - Column. @param apply - Mutation. @returns Nothing. */
+  private Apply(marks: ScMarkData, col: number, apply: ColumnDataApply): void {
+    if (marks.IsMultiMarked()) {
+      const column = this.GetColumnData(col),
+        iter = new ScMultiSelIter(marks.GetMultiSelData(), col);
+      for (let span = iter.Next(0, 0); span[0]; span = iter.Next(0, 0))
+        apply(column, span[1], span[2]);
+    } else if (marks.IsMarked()) {
+      const area = marks.GetMarkArea();
+      if (area.aStart.Col() <= col && col <= area.aEnd.Col())
+        apply(this.GetColumnData(col), area.aStart.Row(), area.aEnd.Row());
+    }
+  }
+  /** Original minimal allocation also mutates actual equal default-column tail. @param marks - Native marks. @param apply - Mutation. @returns Nothing. */
+  private ApplyWithAllocation(marks: ScMarkData, apply: ColumnDataApply): void {
+    if (!marks.GetTableSelect(this.nTab) || !(marks.IsMultiMarked() || marks.IsMarked())) return;
+    if (marks.GetArea().aEnd.Col() === this.rDocument.MaxCol()) {
+      const last = marks.GetStartOfEqualColumns(this.rDocument.MaxCol(), this.aCol.length) - 1;
+      if (last >= 0) this.CreateColumnIfNotExists(last);
+      this.Apply(marks, this.rDocument.MaxCol(), apply);
+    } else this.CreateColumnIfNotExists(marks.GetArea().aEnd.Col());
+    for (let col = 0; col < this.aCol.length; col++) this.Apply(marks, col, apply);
+  }
+  /** Original selected indentation. @param marks - Marks. @param increment - Direction. @returns Nothing. */
+  ChangeSelectionIndent(marks: ScMarkData, increment: boolean): void {
+    this.ApplyWithAllocation(
+      marks,
+      /** Mutates real column attributes. @param column - Actual owner. @param first - First row. @param last - Last row. @returns Nothing. */ (
+        column,
+        first,
+        last,
+      ) => column.ChangeSelectionIndent(first, last, increment),
+    );
+  }
   /** Original table2.cxx DeleteArea clamps to allocated columns and never mutates the default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param flags - Consumed attribute-only flags. @returns Nothing. */
   DeleteArea(
     firstCol: number,
@@ -171,10 +208,17 @@ export class ScTable {
     lastRow: number,
     target: ScTable,
   ): void {
-    if (firstRow !== 0 || lastRow !== this.rDocument.MaxRow()) return;
-    target.mpColWidth.CopyFrom(this.mpColWidth, firstCol, lastCol);
-    target.mpColFlags.CopyFrom(this.mpColFlags, firstCol, lastCol);
-    target.maFilterData.copyColHidden(this.maFilterData, firstCol, lastCol);
+    if (firstRow === 0 && lastRow === this.rDocument.MaxRow()) {
+      target.mpColWidth.CopyFrom(this.mpColWidth, firstCol, lastCol);
+      target.mpColFlags.CopyFrom(this.mpColFlags, firstCol, lastCol);
+      target.maFilterData.copyColHidden(this.maFilterData, firstCol, lastCol);
+    }
+    if (firstCol === 0 && lastCol === this.rDocument.MaxCol()) {
+      target.CopyRowHeight(this, firstRow, lastRow, 0);
+      target.pRowFlags.CopyFrom(this.pRowFlags, firstRow, lastRow);
+      target.maFilterData.copyRowHidden(this.maFilterData, firstRow, lastRow);
+      target.maFilterData.copyRowFiltered(this.maFilterData, firstRow, lastRow);
+    }
   }
   /** Reads native per-sheet override or startup minimum; device-dependent global initialization remains separate. @returns Twips. */
   GetOptimalMinRowHeight(): number {
@@ -184,11 +228,39 @@ export class ScTable {
   SetOptimalMinRowHeight(height: number): void {
     this.mnOptimalMinRowHeight = height & 0xffff;
   }
-  /** Reads actual visible-row geometry; hidden-row storage is outside this slice. @param row - Row. @returns Twips or source invalid-row minimum. */
-  GetRowHeight(row: number): number {
+  /** Reads actual visible/raw row geometry from native segments. @param row - Row. @param hiddenAsZero - Original visibility default,true. @returns Twips or source invalid-row minimum. */
+  GetRowHeight(row: number, hiddenAsZero = true): number {
+    if (this.rDocument.ValidRow(row) && hiddenAsZero && this.RowHidden(row)) return 0;
     return this.rDocument.ValidRow(row)
       ? this.mpRowHeights.getValue(row)
       : this.GetOptimalMinRowHeight();
+  }
+  /** Original independent row-hidden query. @param row - Row. @param first - Span output. @param last - Span output. @returns Hidden. */
+  RowHidden(row: number, first?: [number], last?: [number]): boolean {
+    return this.maFilterData.rowHidden(row, first, last);
+  }
+  /** Original FilterData borrow;filtered-row state belongs to this actual owner. @returns Native filter data. */
+  getFilterData(): FilterData {
+    return this.maFilterData;
+  }
+  /** Original hidden mutation. @param first - First row. @param last - Last row. @param hidden - State. @returns Changed. */
+  SetRowHidden(first: number, last: number, hidden: boolean): boolean {
+    return this.maFilterData.setRowHidden(first, last, hidden);
+  }
+  /** Original ShowRows visibility mutation retains heights. @param first - First row. @param last - Last row. @param show - Visible state. @returns Nothing. */
+  ShowRows(first: number, last: number, show: boolean): void {
+    this.SetRowHidden(first, last, !show);
+    if (show) this.maFilterData.setRowFiltered(first, last, false);
+  }
+  /** Original CopyRowHeight reads compressed raw heights,not hidden-as-zero queries. @param source - Source table. @param first - Destination start. @param last - Destination end. @param offset - Source row offset. @returns Nothing. */
+  CopyRowHeight(source: ScTable, first: number, last: number, offset: number): void {
+    for (let row = first; row <= last;) {
+      const run: ScFlatUInt16RowRangeData = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
+      if (!source.mpRowHeights.getRangeData(row + offset, run)) return;
+      const end = Math.min(last, run.mnRow2 - offset);
+      this.mpRowHeights.setValue(row, end, run.mnValue);
+      row = end + 1;
+    }
   }
   /** Borrows real compressed geometry boundaries for valid rows. @param row - Valid row. @returns Native range. */
   GetRowHeightRange(row: number): ScFlatUInt16RowRangeData {

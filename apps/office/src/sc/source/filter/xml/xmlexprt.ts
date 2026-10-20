@@ -124,8 +124,17 @@ export class ScXMLExport {
       for (let r = 0; r <= MAXROW;) {
         const h = table.GetRowHeightRange(r),
           f = table.GetRowFlagsRange(r),
-          end = Math.min(h.mnRow2, f.mnRow2);
-        if (h.mnValue !== table.GetOptimalMinRowHeight() || f.maValue & CRFlags.ManualSize)
+          hiddenEnd: [number] = [0],
+          filteredEnd: [number] = [0],
+          hidden = table.RowHidden(r, undefined, hiddenEnd),
+          filtered = table.getFilterData().rowFiltered(r, undefined, filteredEnd),
+          end = Math.min(h.mnRow2, f.mnRow2, hiddenEnd[0], filteredEnd[0]);
+        if (
+          hidden ||
+          filtered ||
+          h.mnValue !== table.GetOptimalMinRowHeight() ||
+          f.maValue & CRFlags.ManualSize
+        )
           maxRow = Math.max(maxRow, end);
         r = end + 1;
       }
@@ -137,7 +146,17 @@ export class ScXMLExport {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
         const heightRun = table.GetRowHeightRange(currentRow),
           flagsRun = table.GetRowFlagsRange(currentRow);
-        let endRow = Math.min(maxRow, heightRun.mnRow2, flagsRun.mnRow2);
+        const hiddenEnd: [number] = [0],
+          filteredEnd: [number] = [0],
+          hidden = table.RowHidden(currentRow, undefined, hiddenEnd),
+          filtered = table.getFilterData().rowFiltered(currentRow, undefined, filteredEnd);
+        let endRow = Math.min(
+          maxRow,
+          heightRun.mnRow2,
+          flagsRun.mnRow2,
+          hiddenEnd[0],
+          filteredEnd[0],
+        );
         const key =
           heightRun.mnValue + "," + (flagsRun.maValue & CRFlags.ManualSize ? "false" : "true");
         let rowStyle = this.rowStyles.get(key);
@@ -151,7 +170,7 @@ export class ScXMLExport {
         }
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
         const repeat = endRow - currentRow + 1;
-        body += `<table:table-row table:style-name="${rowStyle}"${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
+        body += `<table:table-row table:style-name="${rowStyle}"${hidden ? ` table:visibility="${filtered ? "filter" : "collapse"}"` : ""}${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
         const defaultPattern = table.GetDefaultColumnData().GetPattern(currentRow) as ScPatternAttr;
         const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
         for (let column = 0; column <= endColumn;) {

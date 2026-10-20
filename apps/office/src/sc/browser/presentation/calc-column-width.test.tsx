@@ -91,7 +91,7 @@ it("uses shared menus,actual width history and source hide/show without losing w
   }
 });
 it("presents native centimetre precision,default restoration and decimal spin increments", /** Real metric control in shared styled presentation. @returns Nothing. */ () => {
-  const model = new NativeDialog(1440, FieldUnit.CM),
+  const model = new NativeDialog("ColWidthDialog", 1440, 1280, FieldUnit.CM, 2, 56693, 2),
     values: number[] = [];
   render(
     <ScMetricInputDlg
@@ -146,18 +146,18 @@ it("routes typed width commands,blocked input,duplicate dialogs and cancellation
   c.ShowColumns(false);
   expect(c.shell.GetDocument().ColHidden(0, 0)).toBe(false);
   await completed(d.Execute(".uno:ColumnWidth"));
-  expect(session.sheetWorkflows.widthDialogs.GetSnapshot()).toBeUndefined();
+  expect(session.sheetWorkflows.metricDialogs.GetSnapshot()).toBeUndefined();
   c.Cancel();
   const pending = d.Execute(".uno:ColumnWidth");
   expect(d.QueryState(".uno:ColumnWidth").enabled).toBe(false);
   expect(d.Execute(".uno:ColumnWidth").status).toBe("disabled");
   session.Close();
   await completed(pending);
-  expect(session.sheetWorkflows.widthDialogs.GetSnapshot()).toBeUndefined();
+  expect(session.sheetWorkflows.metricDialogs.GetSnapshot()).toBeUndefined();
 });
 
 it("renders the source inch suffix and cancels through the shared dialog close button", /** Real native inch initialization. @returns Nothing. */ () => {
-  const model = new NativeDialog(1440, FieldUnit.INCH),
+  const model = new NativeDialog("ColWidthDialog", 1440, 1280, FieldUnit.INCH, 2, 56693, 2),
     cancelled: boolean[] = [];
   render(
     <ScMetricInputDlg
@@ -183,7 +183,7 @@ it("uses the actual configured metric locale for the native no-argument width di
   const session = createCalcSession();
   try {
     const pending = session.frame.GetDispatcher().Execute(".uno:ColumnWidth"),
-      request = session.sheetWorkflows.widthDialogs.GetSnapshot();
+      request = session.sheetWorkflows.metricDialogs.GetSnapshot();
     expect(request?.request.unit).toBe(FieldUnit.CM);
     session.Close();
     await completed(pending);

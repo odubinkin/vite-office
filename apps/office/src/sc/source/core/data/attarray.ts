@@ -1,4 +1,9 @@
 /** @fileoverview ScAttrArray canonical pattern row runs, default-column inheritance and native split/merge algorithm. VCL width caches, stream-copy validity and rich edit-text stripping are outside this document slice. */
+import { ScIndentItem } from "../../../inc/attrib";
+import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
+import { SC_INDENT_STEP } from "../../../inc/global";
+import { ATTR_INDENT, ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
@@ -81,18 +86,71 @@ export class ScAttrArray {
   }
   /** Copies the source default column's runs, retaining real canonical holders. @param nCol - Column or default-column sentinel. @param nTab - Sheet. @param rDocument - Owner. @param defaults - Actual default-column array. @returns Array. */
   constructor(
-    nCol: number,
-    nTab: number,
+    private readonly nCol: number,
+    private nTab: number,
     private readonly rDocument: ScDocument,
     defaults?: ScAttrArray,
   ) {
-    void nTab;
     if (nCol !== -1 && defaults !== undefined)
       for (const old of defaults.mvData) {
         const entry = new ScAttrEntry(old);
         entry.nEndRow = old.nEndRow;
         this.mvData.push(entry);
       }
+  }
+  /** Original sheet-position update. @param tab - Sheet. @returns Nothing. */
+  SetTab(tab: number): void {
+    this.nTab = tab;
+  }
+  /** Original ChangeIndent over canonical pattern runs;alignment coercion is independent of numeric changes. @param first - First row. @param last - Last row. @param increment - Increase versus decrease. @returns Nothing. */
+  ChangeIndent(first: number, last: number, increment: boolean): void {
+    this.SetDefaultIfNotInit();
+    const index: [number] = [0];
+    this.Search(first, index);
+    let row = Math.max(
+      first,
+      index[0] > 0 ? (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0,
+    );
+    while (row <= last) {
+      const entry = this.mvData[index[0]] as ScAttrEntry,
+        old = entry.getScPatternAttr() as ScPatternAttr,
+        set = old.GetItemSet(),
+        justify = set.GetItemIfSet(ATTR_HOR_JUSTIFY, false) as SvxHorJustifyItem | undefined,
+        needJust =
+          !justify ||
+          (justify.GetValue() !== SvxCellHorJustify.Left &&
+            justify.GetValue() !== SvxCellHorJustify.Right),
+        oldValue = (set.Get(ATTR_INDENT) as ScIndentItem).GetValue(),
+        width = this.rDocument.GetColWidth(
+          this.nCol === -1 ? this.rDocument.MaxCol() : this.nCol,
+          this.nTab,
+        );
+      let value = oldValue;
+      if (increment) {
+        if (value < width - SC_INDENT_STEP) {
+          value = (value + SC_INDENT_STEP) & 0xffff;
+          if (value > width - SC_INDENT_STEP) value = width - SC_INDENT_STEP;
+        }
+      } else if (value > 0) value = value > SC_INDENT_STEP ? value - SC_INDENT_STEP : 0;
+      const end = entry.nEndRow;
+      if (needJust || value !== oldValue) {
+        const next = new ScPatternAttr(old);
+        next.ItemSetPut(new ScIndentItem(value));
+        if (needJust)
+          next.ItemSetPut(new SvxHorJustifyItem(SvxCellHorJustify.Left, ATTR_HOR_JUSTIFY));
+        const holder = new CellAttributeHolder(next, true);
+        try {
+          this.SetPatternArea(row, Math.min(end, last), holder);
+        } finally {
+          holder.Dispose();
+        }
+        row = end + 1;
+        this.Search(row, index);
+      } else {
+        row = end + 1;
+        ++index[0];
+      }
+    }
   }
   /** Releases actual logical registrations when a sheet/document is discarded. @returns Nothing. */
   Dispose(): void {

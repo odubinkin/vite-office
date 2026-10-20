@@ -1,11 +1,20 @@
-/** @fileoverview Consumed original FilterData column visibility ownership over actual ScFlatBoolColSegments;filtered rows,objects and alternate-view synchronization remain unported. */
-import { ScFlatBoolColSegments, type ScFlatBoolColRangeData } from "../../../inc/segmenttree";
+/** @fileoverview Consumed original FilterData hidden/filtered row and hidden-column ownership over native compressed segments;objects and alternate-view synchronization remain unported. */
+import {
+  ScFlatBoolRowSegments,
+  type ScFlatBoolRowRangeData,
+  ScFlatBoolColSegments,
+  type ScFlatBoolColRangeData,
+} from "../../../inc/segmenttree";
 import type { ScTable } from "../../../inc/table";
 /** Original column-hidden subset keeps its source owner and segmented storage. */
 export class FilterData {
+  readonly mpHiddenRows: ScFlatBoolRowSegments;
+  readonly mpFilteredRows: ScFlatBoolRowSegments;
   readonly mpHiddenCols: ScFlatBoolColSegments;
   /** Borrows the actual table and creates the original all-visible column domain. @param mrTable - Actual sheet. @returns Filter data. */
   constructor(private readonly mrTable: ScTable) {
+    this.mpHiddenRows = new ScFlatBoolRowSegments(mrTable.GetDoc().MaxRow());
+    this.mpFilteredRows = new ScFlatBoolRowSegments(mrTable.GetDoc().MaxRow());
     this.mpHiddenCols = new ScFlatBoolColSegments(mrTable.GetDoc().MaxCol());
   }
   /** Original invalid-column true result retains output slots;valid segmented owners cover the entire validated domain. @param column - Column. @param first - Optional first-column output. @param last - Optional last-column output. @returns Hidden flag. */
@@ -31,6 +40,60 @@ export class FilterData {
       if (end[0] > last) end[0] = last;
       this.mrTable.SetColHidden(column, end[0], hidden);
       column = end[0] + 1;
+    }
+  }
+  /** Original invalid hidden-row query returns true and publishes the requested row;initialized valid owners cover the entire domain. @param row - Row. @param first - Span start output. @param last - Span end output. @returns Hidden. */
+  rowHidden(row: number, first?: [number], last?: [number]): boolean {
+    if (!this.mrTable.GetDoc().ValidRow(row)) {
+      if (first) first[0] = row;
+      if (last) last[0] = row;
+      return true;
+    }
+    const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };
+    this.mpHiddenRows.getRangeData(row, data);
+    if (first) first[0] = data.mnRow1;
+    if (last) last[0] = data.mnRow2;
+    return data.mbValue;
+  }
+  /** Original invalid filtered-row query returns false without touching outputs. @param row - Row. @param first - Span start output. @param last - Span end output. @returns Filtered. */
+  rowFiltered(row: number, first?: [number], last?: [number]): boolean {
+    if (!this.mrTable.GetDoc().ValidRow(row)) return false;
+    const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };
+    this.mpFilteredRows.getRangeData(row, data);
+    if (first) first[0] = data.mnRow1;
+    if (last) last[0] = data.mnRow2;
+    return data.mbValue;
+  }
+  /** Original hidden-segment mutation without unrepresented object callbacks. @param first - First row. @param last - Last row. @param hidden - State. @returns Changed. */
+  setRowHidden(first: number, last: number, hidden: boolean): boolean {
+    return hidden
+      ? this.mpHiddenRows.setTrue(first, last)
+      : this.mpHiddenRows.setFalse(first, last);
+  }
+  /** Original filtered segments remain independent from hidden flags. @param first - First row. @param last - Last row. @param filtered - State. @returns Changed. */
+  setRowFiltered(first: number, last: number, filtered: boolean): boolean {
+    return filtered
+      ? this.mpFilteredRows.setTrue(first, last)
+      : this.mpFilteredRows.setFalse(first, last);
+  }
+  /** Original segmented hidden copy. @param source - Source owner. @param first - First row. @param last - Last row. @returns Nothing. */
+  copyRowHidden(source: FilterData, first: number, last: number): void {
+    for (let row = first; row <= last;) {
+      const end: [number] = [-1],
+        hidden = source.rowHidden(row, undefined, end);
+      if (end[0] > last) end[0] = last;
+      this.mrTable.SetRowHidden(row, end[0], hidden);
+      row = end[0] + 1;
+    }
+  }
+  /** Original segmented filtered copy. @param source - Source owner. @param first - First row. @param last - Last row. @returns Nothing. */
+  copyRowFiltered(source: FilterData, first: number, last: number): void {
+    for (let row = first; row <= last;) {
+      const end: [number] = [-1],
+        filtered = source.rowFiltered(row, undefined, end);
+      if (end[0] > last) end[0] = last;
+      this.setRowFiltered(row, end[0], filtered);
+      row = end[0] + 1;
     }
   }
 }

@@ -69,9 +69,9 @@ export function CalcWorkbench({
     sheetWorkflows.dialogs.GetSnapshot,
   );
   const widthDialog = useSyncExternalStore(
-    sheetWorkflows.widthDialogs.Subscribe,
-    sheetWorkflows.widthDialogs.GetSnapshot,
-    sheetWorkflows.widthDialogs.GetSnapshot,
+    sheetWorkflows.metricDialogs.Subscribe,
+    sheetWorkflows.metricDialogs.GetSnapshot,
+    sheetWorkflows.metricDialogs.GetSnapshot,
   );
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
@@ -528,7 +528,7 @@ export function CalcWorkbench({
           model={widthDialog.request}
           onCancel={
             /** Cancels native width request and restores actual grid focus. @returns Nothing. */ () => {
-              sheetWorkflows.widthDialogs.Cancel(widthDialog.id);
+              sheetWorkflows.metricDialogs.Cancel(widthDialog.id);
               focusGrid();
             }
           }
@@ -536,7 +536,7 @@ export function CalcWorkbench({
             /** Returns integral native twips to the originating command. @param twips - Native result. @returns Nothing. */ (
               twips,
             ) => {
-              sheetWorkflows.widthDialogs.Complete(widthDialog.id, twips);
+              sheetWorkflows.metricDialogs.Complete(widthDialog.id, twips);
               focusGrid();
             }
           }

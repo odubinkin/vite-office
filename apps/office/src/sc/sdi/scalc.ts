@@ -16,6 +16,7 @@ import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
 export interface CalcCommandTarget {
   ResetAttributes(): boolean;
+  ChangeIndent(increment: boolean): boolean;
   GetOutlineState(): boolean | undefined;
   SetOutlineFont(item?: SvxContourItem): boolean;
   GetStrikeoutState(): boolean | undefined;
@@ -427,6 +428,25 @@ export function createCalcInterface(
           return target.SetStrikeout(item);
         },
     },
+    ...(
+      [
+        [".uno:IncrementIndent", 10462, true],
+        [".uno:DecrementIndent", 10461, false],
+      ] as const
+    ).map(
+      /** Binds original indent slots. @param entry - Native identity. @returns Slot. */ ([
+        commandUrl,
+        slotId,
+        increment,
+      ]) => ({
+        commandUrl,
+        slotId,
+        label: increment ? "Increase Indent" : "Decrease Indent",
+        execute: /** Delegates native change. @param target - Controller. @returns Result. */ (
+          target: CalcCommandTarget,
+        ) => target.ChangeIndent(increment),
+      }),
+    ),
     {
       commandUrl: ".uno:ResetAttributes",
       slotId: 26067,

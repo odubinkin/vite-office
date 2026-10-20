@@ -1,4 +1,4 @@
-/** @fileoverview React presentation of native ColWidthDialog over the source ScMetricInputDlg and shared Writer dialog styling. */
+/** @fileoverview React presentation of native ColWidthDialog/RowHeightDialog over the source ScMetricInputDlg and shared Writer dialog styling. */
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState, useId, type MouseEvent } from "react";
 import { DialogHeader } from "../../../framework/browser/presentation/DialogHeader";
@@ -14,12 +14,17 @@ export interface ScMetricInputDlgProps {
   readonly onCancel: () => void;
   readonly onSubmit: (twips: number) => void;
 }
-/** Presents native width/default controls;only temporary text is React state. @param props - Actual dialog and completion. @returns Modal. */
+/** Presents native dimension/default controls;only temporary text is React state. @param props - Actual dialog and completion. @returns Modal. */
 export function ScMetricInputDlg({
   model,
   onCancel,
   onSubmit,
 }: ScMetricInputDlgProps): React.JSX.Element {
+  const width = model.dialogName === "ColWidthDialog",
+    title = width ? "Column Width" : "Row Height",
+    label = width ? "Width" : "Height",
+    scale = 10 ** model.decimals,
+    increment = model.value.normalize(1n);
   const decimal = getSystemDecimalSeparator(),
     alternate = getSystemDecimalSeparatorAlternate(),
     valueId = useId(),
@@ -29,7 +34,7 @@ export function ScMetricInputDlg({
   function format(): string {
     const value = model.value.get_value(FieldUnit.NONE);
     return (
-      (Number(value) / 100).toFixed(2).replace(".", decimal) +
+      (Number(value) / scale).toFixed(model.decimals).replace(".", decimal) +
       (model.unit === FieldUnit.INCH ? "″" : " cm")
     );
   }
@@ -62,7 +67,7 @@ export function ScMetricInputDlg({
   return (
     <div
       role="dialog"
-      aria-label="Column Width"
+      aria-label={title}
       aria-modal="true"
       data-office-modal="true"
       className="fixed inset-0 z-[60] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
@@ -88,21 +93,25 @@ export function ScMetricInputDlg({
           }
         }
       >
-        <DialogHeader title="Column Width" onClose={onCancel} />
+        <DialogHeader title={title} onClose={onCancel} />
         <div className="office-dialog-content grid gap-4">
           <div className="grid gap-1 text-sm font-semibold text-slate-700">
-            <label htmlFor={valueId}>Width</label>
+            <label htmlFor={valueId}>{label}</label>
             <div className="flex overflow-hidden rounded-md border border-slate-300">
               <input
                 ref={input}
                 id={valueId}
                 role="spinbutton"
-                aria-valuemin={Number(minimum) / 100}
-                aria-valuemax={Number(maximum) / 100}
-                aria-valuenow={Number(model.value.get_value(FieldUnit.NONE)) / 100}
+                aria-valuemin={Number(minimum) / scale}
+                aria-valuemax={Number(maximum) / scale}
+                aria-valuenow={Number(model.value.get_value(FieldUnit.NONE)) / scale}
                 aria-valuetext={text}
-                aria-label="Width"
-                aria-description="Enter the column width that you want to use."
+                aria-label={label}
+                aria-description={
+                  width
+                    ? "Enter the column width that you want to use."
+                    : "Enter the row height that you want to use."
+                }
                 className="min-w-0 flex-1 px-3 py-2 font-normal outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                 value={text}
                 onBlur={update}
@@ -122,8 +131,9 @@ export function ScMetricInputDlg({
                     const key = event.key;
                     if (["ArrowUp", "ArrowDown", "PageUp", "PageDown"].includes(key)) {
                       event.preventDefault();
-                      const increment = key === "PageUp" || key === "PageDown" ? 100n : 10n;
-                      step(key === "ArrowUp" || key === "PageUp" ? increment : -increment);
+                      const delta =
+                        key === "PageUp" || key === "PageDown" ? increment : increment / 10n;
+                      step(key === "ArrowUp" || key === "PageUp" ? delta : -delta);
                     }
                   }
                 }
@@ -137,7 +147,9 @@ export function ScMetricInputDlg({
                       key={String(direction)}
                       type="button"
                       tabIndex={-1}
-                      aria-label={direction > 0n ? "Increase width" : "Decrease width"}
+                      aria-label={
+                        (direction > 0n ? "Increase " : "Decrease ") + label.toLowerCase()
+                      }
                       disabled={
                         direction > 0n
                           ? model.value.get_value(FieldUnit.NONE) >= maximum
@@ -147,7 +159,7 @@ export function ScMetricInputDlg({
                       onMouseDown={retainInputFocus}
                       onClick={
                         /** Applies the native one-tenth display-unit increment. @returns Nothing. */ () =>
-                          step(direction * 10n)
+                          step(direction * (increment / 10n))
                       }
                     >
                       {direction > 0n ? (

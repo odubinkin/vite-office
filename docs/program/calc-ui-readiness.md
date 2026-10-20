@@ -1,26 +1,26 @@
 # Calc UI and ODS implementation critical path
 
-## Current UI delivery priority — task46 column geometry
+## Current UI delivery priority — task47 indentation and manual row geometry
 
-Task `202610200120-RV75WR` implements native Column Width,Hide Columns and Show Columns
-through shared Writer menus and dialog presentation. Compressed widths default to1280twips;
-hidden columns retain their stored width. Actual geometry owns grid/header positions,bounded
-scrolling and keyboard skipping. Real geometry undo documents preserve the original grouped
-sheets without resetting cell marks or cursor. Typed HMM requests,optional one-based columns,
-two-decimal metric/default behavior and separate even-HMM recording requests follow source.
-ODS imports/exports actual repeated column styles and visibility,including native signed-width
-narrowing. Device-dependent optimal widths remain unavailable.
+Task `202610201055-QMVA57` adds Increase/Decrease Indent and Row Height/Hide Rows/Show Rows
+through the actual shared Writer toolbar,menus and dialog styling. Indentation uses native
+200-twip steps,actual column-width caps,alignment coercion,filtered copied marks,minimal
+column allocation and real ScUndoIndent snapshots. Row geometry keeps independent compressed
+hidden/filtered spans,stored heights and manual flags. Direct sizing skips filtered visibility;
+explicit Show Rows clears filtering. Real geometry undo documents preserve grouped/disjoint
+spans and actual cursor semantics. Grid projection and keyboard navigation skip hidden rows.
 
-The common request separates SetReturnValue from Done;both dispatch adapters and the actual
-Writer style caller use the corrected contract. Shared VCL numeric fields reuse native unit
-conversion,RTL trim/number parsing and pinned Unicode classification. The complete character
-type/alpha/control scalar protocol matches unchanged native ICU78.3 and LibreOffice bodies.
-This does not certify complete native widgets,UNO transforms,macro recording or application parity.
+The existing ScMetricInputDlg now accepts original dialog/current/default/unit/digits/range
+inputs for both dimensions. Shared XMLMeasurePropHdl owns native signed scalar conversion;
+ODS indentation uses signed16 HMM and UInt16 twips. Independent ODF input and actual ZIP
+reopens cover indentation,manual heights,filtered and hidden rows. Native edge cases are
+recorded as CALC224/CALC225. Optimal/device layout,protection,merged/outline/drawing/alternate
+views,global undo enablement and complete UNO/native service parity remain unported.
 
-Task46 verification and exact raw/current-owner/browser evidence live in its task README and
-`evidence/`. Full all-app checkpoint40 remains the last broad run;the next is50. Existing primary
-save/open/no-recovery policies remain. Next UI work can use actual column widths for indentation;
-row-height controls and remaining feasible native commands remain further work.
+Verification uses related-module tests and focused desktop/mobile/Worker browser scenarios.
+Per current user instruction,full all-app checkpoint40 remains the last broad run;the next
+is50. Primary save/open/no-recovery behavior remains the established Writer policy. Remaining
+feasible UI commands and broader named-style application continue after this coherent block.
 
 ## Historical task37 delivery priority
 
