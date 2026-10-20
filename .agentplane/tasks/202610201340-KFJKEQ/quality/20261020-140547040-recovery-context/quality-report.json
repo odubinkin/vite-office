@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201340-KFJKEQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T14:05:47.040Z",
+  "verdict": "pass",
+  "summary": "Reviewed commit36cf91269a43 against approved scoped native text-effect implementation and concrete evidence;criteria pass with explicit browser device limits.",
+  "evaluated_sha": "36cf91269a43ede8ad36444521da75de2450f294",
+  "blueprint_digest": "2626794ed05943edc7c8ee0674dfa84d889a4bd8edf2bbac99759002cde584a8",
+  "findings": [
+    "Actual source shadow108/relief124 items,default/mixed states,complete typed arguments and real selection/history are consumed. Shadow uses the existing Writer menu control;native nonconfigurable CharacterRelief receives no invented placement.",
+    "Canonical shared XML handlers preserve original constructor,Any,exact lexical and unusual output branches. Independent XML fixtures and repeated real packages prove persistence;CALC235/236 retain suspicious upstream behavior.",
+    "Common browser raster owner preserves relief precedence,exact black-to-white changes,independent line colors,source luminance/offset and shadow/outline order over one accessible text raster. Desktop/mobile primary ODS and genuine Worker acceptance pass;four screenshots inspected. Obsolete outline-only production owner was removed with references migrated.",
+    "49non-task paths fit120approved. Only exact native Any/TypeClass dependency data was added;general guard algorithms/restrictions remain unchanged and91related tooling cases pass. Types,authored lint/format,resources,docs,size,source/provenance,scoped registry,build/static,routing and doctor pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201340-KFJKEQ/README.md",
+    ".agentplane/tasks/202610201340-KFJKEQ/evidence/text-effects-final.json",
+    ".agentplane/tasks/202610201340-KFJKEQ/evidence/native-value-edge-diff.patch",
+    ".agentplane/tasks/202610201340-KFJKEQ/evidence/shadow-reopened-390.png",
+    ".agentplane/tasks/202610201340-KFJKEQ/evidence/relief-black-lines-raster.png",
+    "36cf91269a43ede8ad36444521da75de2450f294"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser CSS96dpi and measured bounds replace actual native device/font/printer geometry explicitly. Full Sfx/UNO/widget/rich-edit/mixed-script/device parity remains unverified;all broad parity flags remain false."
+  ]
+}
