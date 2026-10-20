@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-dd173e95-2d39-4255-b452-d123aa168067",
+    "capabilityId": "CAP-dd173e95-2d39-4255-b452-d123aa168067",
+    "suite": "calc",
+    "subsystem": "edit-formatting",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task9K7PXS ports native ScPatternAttr FillToEditItemSet/FillEditItemSet,GetFromEditItemSet,FillEditParaItems and GetCellOrientation. Original input snapshots are read before target Changed hooks,and forward/reverse insertion order is preserved. Three independent script fonts,absolute height conversion using genuine integral o3tl rounding,complex color/underline payloads,conditional/table/direct precedence and parent SET handling are preserved. Original asymmetries remain:automatic color clears direct EditEngine color,table style participates in family/height/weight/color but not posture/line/language,script spacing is forced off,and reverse left adjustment leaves existing cell alignment(CALC239). The real shared SfxItemSet const-reference PutAsTargetWhich clones for the destination pool and adopts the remapped clone without changing its source. No fake EditEngine pool,layout service,formatted-number provider or document state is added. Render/number/hash caches are absent in this data slice;no fake invalidation hook is supplied. Actual EditEngine/GetNeededSize/GetOptimalHeight and automatic wrapped-height remain required and unported. Full native UI/device/font/UNO/ABI parity remains unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Native Calc EditEngine attribute and orientation transfer with shared target-Which insertion",
+    "gaps": [
+      "Actual EditEngine,GetNeededSize/GetOptimalHeight,formatted script cache and automatic wrapped-height remain required and unported.",
+      "Full rendering caches,device services,UNO and native ABI remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
+          "marker": "ScPatternAttr::FillToEditItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+          "marker": "SfxItemSet::PutImplAsTargetWhich"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testDefaultFontHeight"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/itemset.hxx",
+          "marker": "PutAsTargetWhich"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/patattr.ts",
+          "marker": "FillToEditItemSet"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "PutAsTargetWhich"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/edit-item-transfer.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-target-which.test.ts",
+          "marker": "Which"
+        },
+        {
+          "path": "apps/office/e2e/calc/edit-item-transfer.spec.ts",
+          "marker": "Worker"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task54"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-native-edit-format-transfer",
+    "scopeLimitations": [
+      "Task9K7PXS ports native ScPatternAttr FillToEditItemSet/FillEditItemSet,GetFromEditItemSet,FillEditParaItems and GetCellOrientation. Original input snapshots are read before target Changed hooks,and forward/reverse insertion order is preserved. Three independent script fonts,absolute height conversion using genuine integral o3tl rounding,complex color/underline payloads,conditional/table/direct precedence and parent SET handling are preserved. Original asymmetries remain:automatic color clears direct EditEngine color,table style participates in family/height/weight/color but not posture/line/language,script spacing is forced off,and reverse left adjustment leaves existing cell alignment(CALC239). The real shared SfxItemSet const-reference PutAsTargetWhich clones for the destination pool and adopts the remapped clone without changing its source. No fake EditEngine pool,layout service,formatted-number provider or document state is added. Render/number/hash caches are absent in this data slice;no fake invalidation hook is supplied. Actual EditEngine/GetNeededSize/GetOptimalHeight and automatic wrapped-height remain required and unported. Full native UI/device/font/UNO/ABI parity remains unverified."
+    ]
+  }
+}

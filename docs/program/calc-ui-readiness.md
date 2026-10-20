@@ -1,5 +1,21 @@
 # Calc UI and ODS implementation critical path
 
+## Current EditEngine dependency path — task54 native formatting transfer
+
+Task `202610201844-9K7PXS` ports the source Calc/EditEngine item transfer in both
+directions,paragraph alignment and original orientation queries. Actual shared
+SfxItemSet owns target-Which insertion;there is no Calc-local remapping facade.
+Original pre-mutation input snapshots and insertion order are retained.
+Three script fonts,rounded twip/mm100 heights,inherited SET states and source
+conditional/table/direct precedence are preserved,including CALC239 asymmetries.
+The tests use actual native item classes and pools without inventing EditEngine
+pool defaults. Native caches absent from this data slice remain absent.
+
+This is a required GetNeededSize input boundary. Actual EditEngine layout,formatted
+script-cache updates and automatic wrapped height still require their source
+owners and services. No browser row-height estimate is substituted. The broader
+UI goal stays active and next full checkpoint remains60.
+
 ## Current automatic-height path — task53 native context and shared measurement
 
 Task `202610201812-JT4A81` restores the complete original RowHeightContext inputs

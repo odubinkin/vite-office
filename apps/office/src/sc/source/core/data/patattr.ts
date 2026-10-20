@@ -3,6 +3,17 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import * as ATTR from "../../../inc/scitems";
+import * as EE from "../../../../editeng/inc/eeitem";
+import { SvxCellOrientation, SvxCellHorJustify, SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxScriptSpaceItem } from "../../../../editeng/inc/scriptspaceitem";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import type { ScRotateValueItem } from "../../../inc/attrib";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -33,8 +44,8 @@ export interface ScPatternColorEnvironment {
   readonly systemTextColor: Readonly<Color>;
   readonly rawSystemTextColor: Readonly<Color>;
 }
-/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source color or brush identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
-function populateColorResult(
+/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source attribute identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
+function populateResult(
   which: number,
   source: SfxItemSet,
   conditional: SfxItemSet | undefined,
@@ -54,6 +65,50 @@ function populateColorResult(
   }
   return item ?? source.Get(which);
 }
+/** Original copied attributes. Table style participates only in color,family,height and weight;posture/effects/language retain source/conditional ownership. */
+const editCopyItems: readonly (readonly [number, number, boolean])[] = [
+  [ATTR.ATTR_FONT_COLOR, EE.EE_CHAR_COLOR, true],
+  [ATTR.ATTR_FONT, EE.EE_CHAR_FONTINFO, true],
+  [ATTR.ATTR_CJK_FONT, EE.EE_CHAR_FONTINFO_CJK, true],
+  [ATTR.ATTR_CTL_FONT, EE.EE_CHAR_FONTINFO_CTL, true],
+  [ATTR.ATTR_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT, true],
+  [ATTR.ATTR_CJK_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CJK, true],
+  [ATTR.ATTR_CTL_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CTL, true],
+  [ATTR.ATTR_FONT_WEIGHT, EE.EE_CHAR_WEIGHT, true],
+  [ATTR.ATTR_CJK_FONT_WEIGHT, EE.EE_CHAR_WEIGHT_CJK, true],
+  [ATTR.ATTR_CTL_FONT_WEIGHT, EE.EE_CHAR_WEIGHT_CTL, true],
+  [ATTR.ATTR_FONT_UNDERLINE, EE.EE_CHAR_UNDERLINE, false],
+  [ATTR.ATTR_FONT_OVERLINE, EE.EE_CHAR_OVERLINE, false],
+  [ATTR.ATTR_FONT_WORDLINE, EE.EE_CHAR_WLM, false],
+  [ATTR.ATTR_FONT_CROSSEDOUT, EE.EE_CHAR_STRIKEOUT, false],
+  [ATTR.ATTR_FONT_POSTURE, EE.EE_CHAR_ITALIC, false],
+  [ATTR.ATTR_CJK_FONT_POSTURE, EE.EE_CHAR_ITALIC_CJK, false],
+  [ATTR.ATTR_CTL_FONT_POSTURE, EE.EE_CHAR_ITALIC_CTL, false],
+  [ATTR.ATTR_FONT_CONTOUR, EE.EE_CHAR_OUTLINE, false],
+  [ATTR.ATTR_FONT_SHADOWED, EE.EE_CHAR_SHADOW, false],
+  [ATTR.ATTR_FORBIDDEN_RULES, EE.EE_PARA_FORBIDDENRULES, false],
+  [ATTR.ATTR_FONT_EMPHASISMARK, EE.EE_CHAR_EMPHASISMARK, false],
+  [ATTR.ATTR_FONT_RELIEF, EE.EE_CHAR_RELIEF, false],
+  [ATTR.ATTR_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE, false],
+  [ATTR.ATTR_CJK_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE_CJK, false],
+  [ATTR.ATTR_CTL_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE_CTL, false],
+  [ATTR.ATTR_HYPHENATE, EE.EE_PARA_HYPHENATE, false],
+  [ATTR.ATTR_WRITINGDIR, EE.EE_PARA_WRITINGDIR, false],
+];
+/** Original reverse transfer intentionally excludes paragraph-only hyphenation,direction and forbidden rules. */
+const reverseEditItems = editCopyItems.filter(
+  /** Selects native GetFromEditItemSet attributes. @param pair - Source/destination pair. @returns Native reverse membership. */
+  ([which]) =>
+    which !== ATTR.ATTR_FORBIDDEN_RULES &&
+    which !== ATTR.ATTR_HYPHENATE &&
+    which !== ATTR.ATTR_WRITINGDIR,
+);
+/** Source script-height identities require absolute integral unit conversion rather than copied payloads. */
+const editHeightWhichs = new Set<number>([
+  ATTR.ATTR_FONT_HEIGHT,
+  ATTR.ATTR_CJK_FONT_HEIGHT,
+  ATTR.ATTR_CTL_FONT_HEIGHT,
+]);
 /** Original fixed cell-pattern schema,independent of the source set or pool ranges. */
 export const aScPatternAttrSchema: WhichRangesContainer = [[ATTR_PATTERN_START, ATTR_PATTERN_END]];
 /** Original C++ friendship over logical pattern registration fields;no public mutation API is invented. */
@@ -147,7 +202,7 @@ export class ScPatternAttr {
     textConfig: Readonly<Color> | undefined,
     environment: ScPatternColorEnvironment,
   ): void {
-    const item = populateColorResult(109, itemSet, conditional, table) as SvxColorItem,
+    const item = populateResult(109, itemSet, conditional, table) as SvxColorItem,
       color = new Color(item.GetValue()),
       complex = new ComplexColor();
     complex.assign(item.getComplexColor());
@@ -157,7 +212,7 @@ export class ScPatternAttr {
       mode === ScAutoFontColorMode.IgnoreFont ||
       mode === ScAutoFontColorMode.IgnoreAll
     ) {
-      const brush = populateColorResult(148, itemSet, conditional, table) as SvxBrushItem,
+      const brush = populateResult(148, itemSet, conditional, table) as SvxBrushItem,
         back = new Color(brush.GetColor());
       if (
         back.equals(COL_TRANSPARENT) ||
@@ -257,6 +312,128 @@ export class ScPatternAttr {
     if (left === right) return true;
     if (left === null || right === null) return false;
     return left.equals(right);
+  }
+  /** Original standard/stacked/right-angle orientation;arbitrary rotation stays Standard. @param set - Source attributes. @param conditional - Optional override. @returns Orientation. */
+  static GetCellOrientation(
+    set: SfxItemSet,
+    conditional: SfxItemSet | null = null,
+  ): SvxCellOrientation {
+    if ((ScPatternAttr.GetItem(ATTR.ATTR_STACKED, set, conditional) as SfxBoolItem).GetValue())
+      return SvxCellOrientation.Stacked;
+    const angle = (
+      ScPatternAttr.GetItem(ATTR.ATTR_ROTATE_VALUE, set, conditional) as ScRotateValueItem
+    ).GetValue();
+    if (angle === 9000) return SvxCellOrientation.BottomUp;
+    if (angle === 27000) return SvxCellOrientation.TopBottom;
+    return SvxCellOrientation.Standard;
+  }
+  /** Borrows this pattern's original orientation. @param conditional - Optional source override. @returns Orientation. */
+  GetCellOrientation(conditional: SfxItemSet | null = null): SvxCellOrientation {
+    return ScPatternAttr.GetCellOrientation(this.maLocalSfxItemSet, conditional);
+  }
+  /** Original complete cell-to-edit attribute transfer. Concrete item clones preserve complex color,font and line payloads. @param edit - Actual EditEngine item set. @param source - Cell attributes. @param conditional - Conditional attributes. @param table - Table style. @returns Nothing. */
+  static FillToEditItemSet(
+    edit: SfxItemSet,
+    source: SfxItemSet,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+  ): void {
+    // Native code reads/copies every input before the first destination mutation.
+    const inputs = editCopyItems.map(
+      /** Snapshots original scalars/copy values before any target Changed hook. @param pair - Source field. @returns Independent native input. */
+      ([which, target, tableAware]) => {
+        const effective = tableAware
+          ? populateResult(which, source, conditional ?? undefined, table ?? undefined)
+          : ScPatternAttr.GetItem(which, source, conditional);
+        return { which, target, item: effective.Clone(source.GetPool()) as SfxPoolItem };
+      },
+    );
+    for (const { which, target, item } of inputs) {
+      if (editHeightWhichs.has(which))
+        edit.Put(
+          new SvxFontHeightItem(
+            Number(convertTwipToMm100(BigInt((item as SvxFontHeightItem).GetHeight()))),
+            100,
+            target,
+          ),
+        );
+      else if (which === ATTR.ATTR_FONT_COLOR && (item as SvxColorItem).GetValue().equals(COL_AUTO))
+        edit.ClearItem(target);
+      else if (which === ATTR.ATTR_HYPHENATE)
+        edit.Put(new SfxBoolItem(target, (item as SfxBoolItem).GetValue()));
+      else edit.PutAsTargetWhich(item, target);
+    }
+    // Original intentionally ignores the cell ATTR_SCRIPTSPACE value.
+    edit.Put(new SvxScriptSpaceItem(false, EE.EE_PARA_ASIANCJKSPACING));
+  }
+  /** Original null-tolerant instance entry. @param edit - EditEngine destination. @param conditional - Conditional attributes. @param table - Table style. @returns Nothing. */
+  FillEditItemSet(
+    edit: SfxItemSet | null,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+  ): void {
+    if (edit !== null)
+      ScPatternAttr.FillToEditItemSet(edit, this.maLocalSfxItemSet, conditional, table);
+  }
+  /** Original direct-or-inherited SET reverse transfer;default and INVALID attributes do not become direct cell formatting. @param destination - Cell set. @param edit - EditEngine source. @returns Nothing. */
+  static GetFromEditItemSet(destination: SfxItemSet, edit: SfxItemSet): void {
+    for (const [which, target] of reverseEditItems) {
+      const item = edit.GetItemIfSet(target);
+      if (item !== undefined) {
+        if (editHeightWhichs.has(which))
+          destination.Put(
+            new SvxFontHeightItem(
+              Number(
+                convert(BigInt((item as SvxFontHeightItem).GetHeight()), Length.mm100, Length.twip),
+              ),
+              100,
+              which,
+            ),
+          );
+        else destination.PutAsTargetWhich(item, which);
+      }
+    }
+    const adjust = edit.GetItemIfSet(EE.EE_PARA_JUST) as SvxAdjustItem | undefined;
+    if (adjust === undefined) return;
+    let value = SvxCellHorJustify.Standard;
+    switch (adjust.GetAdjust()) {
+      case SvxAdjust.Right:
+      case SvxAdjust.End:
+        value = SvxCellHorJustify.Right;
+        break;
+      case SvxAdjust.Block:
+      case SvxAdjust.BlockLine:
+        value = SvxCellHorJustify.Block;
+        break;
+      case SvxAdjust.Center:
+        value = SvxCellHorJustify.Center;
+        break;
+    }
+    if (value !== SvxCellHorJustify.Standard)
+      destination.Put(new SvxHorJustifyItem(value, ATTR.ATTR_HOR_JUSTIFY));
+  }
+  /** Original null guard and mutation of the real cell item set. Render/number/hash caches are absent in this existing data slice,so no fake invalidation service is added. @param edit - Source or native null. @returns Nothing. */
+  GetFromEditItemSet(edit: SfxItemSet | null): void {
+    if (edit !== null) ScPatternAttr.GetFromEditItemSet(this.maLocalSfxItemSet, edit);
+  }
+  /** Original paragraph alignment entry is deliberately separate from FillEditItemSet. @param edit - Actual paragraph destination. @returns Nothing. */
+  FillEditParaItems(edit: SfxItemSet): void {
+    const horizontal = (
+      this.maLocalSfxItemSet.Get(ATTR.ATTR_HOR_JUSTIFY) as SvxHorJustifyItem
+    ).GetValue();
+    let adjust = SvxAdjust.Left;
+    switch (horizontal) {
+      case SvxCellHorJustify.Right:
+        adjust = SvxAdjust.Right;
+        break;
+      case SvxCellHorJustify.Center:
+        adjust = SvxAdjust.Center;
+        break;
+      case SvxCellHorJustify.Block:
+        adjust = SvxAdjust.Block;
+        break;
+    }
+    edit.Put(new SvxAdjustItem(adjust, EE.EE_PARA_JUST));
   }
   /** Original conditional SET precedence including parent lookup. @param which - Item identity. @param itemSet - Base set. @param conditional - Optional conditional set. @returns Effective item. */
   static GetItem(
