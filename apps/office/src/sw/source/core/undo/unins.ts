@@ -16,6 +16,8 @@ import {
   GetUndoTextNode,
   ReplaceUndoRange,
   SwUndo,
+  SwUndoSaveContent,
+  DelContentType,
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "./undobj";
@@ -111,82 +113,38 @@ export class SwUndoInsert extends SwUndo {
   }
 }
 
-/** Actual normal same-node SwUndoReplace responsibility from native unins.cxx: source strings, completed end and whole-node attribute history. Native multi-node/regex/content-index histories remain unported. */
+/** Native replacement undo wrapper; the SaveContent-derived implementation owns source strings, ranges and partitioned history. */
 export class SwUndoReplace extends SwUndo {
-  private readonly m_rDoc: SwDoc;
-  private readonly m_nSttNd: number;
-  private readonly m_nSttCnt: number;
-  private readonly m_nSelEnd: number;
-  private m_nEndCnt: number;
-  private readonly m_sOld: string;
-  private readonly m_pHistory: SwHistory | undefined;
-  /** Captures the original native selection and complete supported hint history before mutation. @param range - Marked same-node range. @param m_sIns - Original replacement string. @param regExp - Native regex replacement mode, not implemented here. @returns Undo payload. */
-  public constructor(
-    range: SwPaM,
-    private readonly m_sIns: string,
-    regExp = false,
-  ) {
+  private readonly m_pImpl: SwUndoReplaceImpl;
+  /** Creates the original normal marked same-node replacement payload. @param range - Original range. @param inserted - Requested string. @param regExp - Unsupported regex mode. @returns Undo action. */
+  public constructor(range: SwPaM, inserted: string, regExp = false) {
     super("Replace");
-    if (regExp || !range.HasMark() || range.Start().GetNode() !== range.End().GetNode())
-      throw new Error("Writer replacement undo requires a normal marked same-node range.");
-    const node = range.Start().GetNode() as SwTextNode;
-    this.m_rDoc = node.GetDoc();
-    this.m_nSttNd = node.GetIndex();
-    this.m_nSttCnt = range.Start().GetContentIndex();
-    this.m_nSelEnd = this.m_nEndCnt = range.End().GetContentIndex();
-    this.m_sOld = node.GetText().slice(this.m_nSttCnt, this.m_nSelEnd);
-    const history = new SwHistory();
-    history.CopyAttr(node.GetpSwpHints(), node.GetIndex(), 0, node.Len(), true);
-    this.m_pHistory = history.Count() === 0 ? undefined : history;
+    this.m_pImpl = new SwUndoReplaceImpl(range, inserted, regExp);
   }
-  /** Records the actual completed replacement end rather than assuming the requested string was fully inserted. @param range - Completed native selection. @returns Nothing. */
+  /** Records completed insertion coordinates. @param range - Completed range. @returns Nothing. */
   public SetEnd(range: SwPaM): void {
-    this.m_nEndCnt = range.End().GetContentIndex();
+    this.m_pImpl.SetEnd(range);
   }
-  /** Reports retained text/hint payload without inventing native allocations or ABI sizes. @returns Logical payload units. */
+  /** Logical represented payload units, without native ABI allocations. @returns Payload units. */
   public override GetPayloadSize(): number {
-    return this.m_sOld.length + this.m_sIns.length + (this.m_pHistory?.Count() ?? 0) * 4;
+    return this.m_pImpl.GetPayloadSize();
   }
-  /** Restores source text through the same document API, then the original complete hint history in forward history order. @param context - Active undo context. @returns Nothing. */
+  /** Delegates source text/history restoration and adapts the completed PaM to the current shell context. @param context - Current context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    const range = this.MakeRange(this.m_nEndCnt);
+    const range = this.m_pImpl.UndoImpl(context.GetDoc());
     try {
-      context
-        .GetDoc()
-        .GetDocumentContentOperationsManager()
-        .ReplaceRange(range, this.m_sOld, false);
-      if (this.m_pHistory !== undefined) {
-        (range.GetPoint().GetNode() as SwTextNode).ClearSwpHintsArr(true);
-        this.m_pHistory.TmpRollback(context.GetDoc(), 0, false);
-      }
       this.RestoreCursor(context, range);
     } finally {
       range.Dispose();
     }
   }
-  /** Repeats the original string replacement. Native history Move with an empty DelContentIndex history does not reset its temporary end; preserve that source behavior. @param context - Active redo context. @returns Nothing. */
+  /** Delegates original redo recollection and replacement. @param context - Current context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    const range = this.MakeRange(this.m_nSelEnd);
+    const range = this.m_pImpl.RedoImpl(context.GetDoc());
     try {
-      context
-        .GetDoc()
-        .GetDocumentContentOperationsManager()
-        .ReplaceRange(range, this.m_sIns, false);
       this.RestoreCursor(context, range);
     } finally {
       range.Dispose();
-    }
-  }
-  /** Builds actual registered source coordinates against the current document array. @param end - Current source end. @returns Marked replacement range. */
-  private MakeRange(end: number): SwPaM {
-    const node = this.m_rDoc.GetNodes().at(this.m_nSttNd),
-      start = new SwPosition(node, this.m_nSttCnt),
-      stop = new SwPosition(node, end);
-    try {
-      return new SwPaM(stop, start);
-    } finally {
-      start.Dispose();
-      stop.Dispose();
     }
   }
   /** Native undo/redo normalizes a nonempty replacement selection forward and collapses equal endpoints. @param context - Active context. @param range - Completed range. @returns Nothing. */
@@ -206,6 +164,121 @@ export class SwUndoReplace extends SwUndo {
         node.GetCharacterItemsAt(point.GetContentIndex()),
       ),
     );
+  }
+}
+
+/** Original SwUndoReplace::Impl responsibility on SwUndoSaveContent. Only normal same-node text and the existing collapsed ordinary bookmark model are represented. */
+class SwUndoReplaceImpl extends SwUndoSaveContent {
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nSttNd: number;
+  private readonly m_nSttCnt: number;
+  private readonly m_nSelEnd: number;
+  private m_nEndCnt: number;
+  private readonly m_sOld: string;
+  private m_nSetPos: number;
+  /** Captures original coordinates, deletes/stores affected content indices, then copies complete node hint history. @param range - Native source range. @param m_sIns - Requested string. @param regExp - Native regex mode, not represented. @returns Payload. */
+  public constructor(
+    range: SwPaM,
+    private readonly m_sIns: string,
+    regExp: boolean,
+  ) {
+    super();
+    if (regExp || !range.HasMark() || range.Start().GetNode() !== range.End().GetNode())
+      throw new Error("Writer replacement undo requires a normal marked same-node range.");
+    const node = range.Start().GetNode() as SwTextNode;
+    this.m_rDoc = node.GetDoc();
+    this.m_nSttNd = node.GetIndex();
+    this.m_nSttCnt = range.Start().GetContentIndex();
+    this.m_nSelEnd = this.m_nEndCnt = range.End().GetContentIndex();
+    this.m_pHistory = new SwHistory();
+    this.DelContentIndex(
+      range.GetMark(),
+      range.GetPoint(),
+      DelContentType.AllMask | DelContentType.Replace,
+    );
+    this.m_nSetPos = this.m_pHistory.Count();
+    this.m_pHistory.CopyAttr(node.GetpSwpHints(), node.GetIndex(), 0, node.Len(), true);
+    if (this.m_pHistory.Count() === 0) this.m_pHistory = undefined;
+    this.m_sOld = node.GetText().slice(this.m_nSttCnt, this.m_nSelEnd);
+  }
+  /** Stores actual completed end. @param range - Completed range. @returns Nothing. */
+  public SetEnd(range: SwPaM): void {
+    this.m_nEndCnt = range.End().GetContentIndex();
+  }
+  /** Reports represented payload units. @returns Logical units. */
+  public override GetPayloadSize(): number {
+    return this.m_sOld.length + this.m_sIns.length + (this.m_pHistory?.Count() ?? 0) * 4;
+  }
+  /** Original hint suffix temporary restoration precedes destructive bookmark prefix rollback and ownership moves. @param doc - Owning graph. @returns Owned completed range for wrapper adaptation. */
+  public UndoImpl(doc: SwDoc): SwPaM {
+    const range = this.MakeRange(this.m_nEndCnt);
+    try {
+      doc.GetDocumentContentOperationsManager().ReplaceRange(range, this.m_sOld, false);
+      if (this.m_pHistory !== undefined) {
+        (range.GetPoint().GetNode() as SwTextNode).ClearSwpHintsArr(true);
+        this.m_pHistory.TmpRollback(doc, this.m_nSetPos, false);
+        if (this.m_nSetPos !== 0) {
+          if (this.m_nSetPos < this.m_pHistory.Count()) {
+            const history = new SwHistory();
+            history.Move(0, this.m_pHistory, this.m_nSetPos);
+            this.m_pHistory.Rollback(doc);
+            this.m_pHistory.Move(0, history);
+          } else {
+            this.m_pHistory.Rollback(doc);
+            this.m_pHistory = undefined;
+          }
+        }
+      }
+      return range;
+    } catch (error) {
+      range.Dispose();
+      throw error;
+    }
+  }
+  /** Recollects fresh content-index history before reusing source strings; Move does not reset consumed hint ends. @param doc - Owning graph. @returns Owned completed range. */
+  public RedoImpl(doc: SwDoc): SwPaM {
+    const range = this.MakeRange(this.m_nSelEnd);
+    try {
+      if (this.m_pHistory !== undefined) {
+        const saved = this.m_pHistory;
+        this.m_pHistory = new SwHistory();
+        this.DelContentIndex(
+          range.GetMark(),
+          range.GetPoint(),
+          DelContentType.AllMask | DelContentType.Replace,
+        );
+        this.m_nSetPos = this.m_pHistory.Count();
+        const fresh = this.m_pHistory;
+        this.m_pHistory = saved;
+        this.m_pHistory.Move(0, fresh);
+      } else {
+        this.m_pHistory = new SwHistory();
+        this.DelContentIndex(
+          range.GetMark(),
+          range.GetPoint(),
+          DelContentType.AllMask | DelContentType.Replace,
+        );
+        this.m_nSetPos = this.m_pHistory.Count();
+        if (this.m_nSetPos === 0) this.m_pHistory = undefined;
+      }
+      doc.GetDocumentContentOperationsManager().ReplaceRange(range, this.m_sIns, false);
+      return range;
+    } catch (error) {
+      range.Dispose();
+      throw error;
+    }
+  }
+  /** Reconstructs native numeric source coordinates against current node slots. @param end - Saved content end. @returns Actual range. */
+  private MakeRange(end: number): SwPaM {
+    const node = this.m_rDoc.GetNodes().at(this.m_nSttNd),
+      start = new SwPosition(node, this.m_nSttCnt),
+      stop = new SwPosition(node, end);
+    try {
+      return new SwPaM(stop, start);
+    } finally {
+      start.Dispose();
+      stop.Dispose();
+    }
   }
 }
 

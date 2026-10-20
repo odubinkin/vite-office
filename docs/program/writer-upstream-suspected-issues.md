@@ -413,6 +413,32 @@ checks do not establish a compiled native result, full service invariant or
 UI defect. Decision: retain both original greedy retry branches; do not reset
 `nString`, substitute a dynamic-programming matcher or add a special-case fix.
 
+## WRITER-016: Normal replacement can delete bookmarks only when undo records
+
+Pinned `sw/source/core/doc/DocumentContentOperationsManager.cxx`, normal
+`ReplaceRangeImpl`, constructs `SwUndoReplace` only when `DoesUndo()` is true.
+`SwUndoReplace::Impl` in `unins.cxx` immediately calls `DelContentIndex` with
+`AllMask | Replace`, before replacing text. The ordinary collapsed bookmark
+branch in `undobj.cxx` stores and deletes bookmarks at positions in the
+half-open replacement range, including its start but excluding its end.
+The no-recording branch has no corresponding `DelContentIndex` call and
+uses `ReplaceText` directly.
+
+Source-derived example: text `abc`, collapsed marks at offsets 0, 1 and 2,
+replacing `[0,2)` with `xy`. With recording enabled, marks at 0 and 1 are
+removed and restored by undo; the mark at 2 survives. With recording disabled,
+equal-length `ReplaceText` leaves all three positions unchanged. The same
+recording-dependent deletion can therefore occur for identical replacement
+text. This follows source constructor side effects, not the search service.
+
+Portable checks in `native-bookmark-replace-history.test.ts` retain both
+states, boundary movement, actual history ownership and repeated undo/redo.
+No compiled native bookmark implementation was executed and expanded/typed
+marks, metadata, redlines and complete service/UI consumers remain unverified.
+Decision: preserve the original constructor ownership and recording gate;
+do not move bookmark deletion into the unconditional document replacement
+path or silently preserve affected marks in the recording branch.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

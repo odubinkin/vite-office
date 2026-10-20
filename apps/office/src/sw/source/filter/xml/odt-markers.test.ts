@@ -46,19 +46,19 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
     marks.MakeMark(paragraph, 2, "inside-link");
     marks.AddSoftPageBreak(paragraph, 4);
     paragraph.InsertText("X", 0);
-    expect(marks.FindMark("inside-link")?.GetPosition().GetContentIndex()).toBe(3);
+    expect(marks.FindMark("inside-link")?.GetMarkPos().GetContentIndex()).toBe(3);
     expect(marks.GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(5);
     paragraph.EraseText(0, 1);
-    expect(marks.FindMark("inside-link")?.GetPosition().GetContentIndex()).toBe(2);
+    expect(marks.FindMark("inside-link")?.GetMarkPos().GetContentIndex()).toBe(2);
     const trailing = document
       .GetDocumentContentOperationsManager()
       .SplitNode(new SwPosition(paragraph, 1));
-    expect(marks.FindMark("inside-link")?.GetPosition().GetNode()).toBe(trailing);
-    expect(marks.FindMark("inside-link")?.GetPosition().GetContentIndex()).toBe(1);
+    expect(marks.FindMark("inside-link")?.GetMarkPos().GetNode()).toBe(trailing);
+    expect(marks.FindMark("inside-link")?.GetMarkPos().GetContentIndex()).toBe(1);
     expect(marks.GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(3);
     const transferred = decodeWriterDocument(encodeWriterDocument(document));
     expect(
-      transferred.GetIDocumentMarkAccess().FindMark("inside-link")?.GetPosition().GetContentIndex(),
+      transferred.GetIDocumentMarkAccess().FindMark("inside-link")?.GetMarkPos().GetContentIndex(),
     ).toBe(1);
     expect(transferred.GetIDocumentMarkAccess().GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(3);
     const bytes = writeOdtDocument(transferred, metadata);

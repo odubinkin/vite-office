@@ -4,11 +4,12 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
   - "202610201815-4586BY"
+  - "202610201912-V6W22V"
 tags:
   - "code"
 verify: []
@@ -37,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement the user-approved source-backed Writer search and replace core, view contracts and browser UI on writer with local upstream reading and targeted verification."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:09:14.624Z"
+doc_updated_at: "2026-10-20T19:35:31.273Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
@@ -114,6 +115,8 @@ sections:
     - Native approximate search is not enabled early: full word segmentation/BreakIterator, service/locale and UI dependencies remain unimplemented. This owner is the real independent numerical prerequisite used by native TextSearch; no fake word segmentation, regex conversion, configured option provider or new public fallback was introduced. Kernel evidence is distinguished from full native app/service parity. Parent state remains DOING.
     - Initial lint caught two source-style separately declared constants; made them const without changing the loop order. Initial translation duplicated a this prefix in three threshold returns; corrected before the passing native matrix/build. Vite's JSON transformer rejected a lone surrogate in the fixture string table; storing all fixture text as explicit UTF16 unit arrays preserves embedded NUL/isolated-surrogate cases without changing native results. Provenance initially named GetLimit under levdis.cxx although it is inline in levdis.hxx; the class/header evidence remains, and the .cxx symbol list now names only actual .cxx symbols. All affected checks pass after those corrections; no validation gate was weakened.
     - Five new non-task paths implement this checkpoint (runtime owner, test, frozen native values and two provenance/runtime records), within the approved parent allowance plus the gateway's five-file scope tolerance. This checkpoint does not close an AgentPlane task or advance the ten-task full-run counter. Future substantial state/view/UI work should continue in a separately scoped implementation leaf when adding beyond this boundary, preserving the approved overall feature.
+
+    Bookmark/history implementation leaf V6W22V now implements the previously pending ordinary collapsed bookmark profile: native DelContentIndex/SwHistoryBookmark, replacement wrapper/Impl, prefix/suffix rollback and fresh redo recollection. Blanket bookmark rejection is removed for the actual represented model; expanded/typed/metadata histories remain pending. Native Replace index exceptions and old ordinary fragment/construction adapter mode separation preserve bookmark endpoints and ODT/browser consumers. Required leaf checks pass (5059 core, 96 integration, final focused checks, production build/static/registries). WRITER-016 recording-dependent deletion is preserved/documented, and WRITER-010 remains unchanged. The parent feature/UI and whole Writer goal remain active; this leaf's closure increments the cadence to five completed tasks since the last full run.
 id_source: "generated"
 ---
 ## Summary
@@ -206,3 +209,5 @@ Weighted distance prerequisite progress:
 - Native approximate search is not enabled early: full word segmentation/BreakIterator, service/locale and UI dependencies remain unimplemented. This owner is the real independent numerical prerequisite used by native TextSearch; no fake word segmentation, regex conversion, configured option provider or new public fallback was introduced. Kernel evidence is distinguished from full native app/service parity. Parent state remains DOING.
 - Initial lint caught two source-style separately declared constants; made them const without changing the loop order. Initial translation duplicated a this prefix in three threshold returns; corrected before the passing native matrix/build. Vite's JSON transformer rejected a lone surrogate in the fixture string table; storing all fixture text as explicit UTF16 unit arrays preserves embedded NUL/isolated-surrogate cases without changing native results. Provenance initially named GetLimit under levdis.cxx although it is inline in levdis.hxx; the class/header evidence remains, and the .cxx symbol list now names only actual .cxx symbols. All affected checks pass after those corrections; no validation gate was weakened.
 - Five new non-task paths implement this checkpoint (runtime owner, test, frozen native values and two provenance/runtime records), within the approved parent allowance plus the gateway's five-file scope tolerance. This checkpoint does not close an AgentPlane task or advance the ten-task full-run counter. Future substantial state/view/UI work should continue in a separately scoped implementation leaf when adding beyond this boundary, preserving the approved overall feature.
+
+Bookmark/history implementation leaf V6W22V now implements the previously pending ordinary collapsed bookmark profile: native DelContentIndex/SwHistoryBookmark, replacement wrapper/Impl, prefix/suffix rollback and fresh redo recollection. Blanket bookmark rejection is removed for the actual represented model; expanded/typed/metadata histories remain pending. Native Replace index exceptions and old ordinary fragment/construction adapter mode separation preserve bookmark endpoints and ODT/browser consumers. Required leaf checks pass (5059 core, 96 integration, final focused checks, production build/static/registries). WRITER-016 recording-dependent deletion is preserved/documented, and WRITER-010 remains unchanged. The parent feature/UI and whole Writer goal remain active; this leaf's closure increments the cadence to five completed tasks since the last full run.

@@ -286,7 +286,7 @@ export class SwTextShell {
     if (result.action === "navigate") {
       const mark = marks.FindMark(result.name);
       if (mark === undefined) return false;
-      return this.target.SetPaM(mark.GetPosition().clone());
+      return this.target.SetPaM(mark.GetMarkPos().clone());
     }
     if (result.action === "remove") return marks.DeleteMark(result.name);
     if (result.action === "rename") return marks.RenameMark(result.name, result.newName);

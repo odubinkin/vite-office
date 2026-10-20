@@ -24,7 +24,8 @@
       "Actual model-node text traversal within registered SwPaM bounds, including table text, source soft-hyphen filtering and directional <=/< restoration before point/mark exchange. Failure preserves cursor state. No flattened body projection. Merged layout, fields/dummy characters, notes, hidden/redline sections, regex, replacement/history/view/UI and the complete generic search services remain pending; task stays open.",
       "The current checkpoint also introduces the actual find-only SwFindParaText strategy, native FIND_FOUND/FIND_NOT_FOUND outputs, and Find_Text option-to-selection flag handling. Generic FindAll/ring traversal stays with the original swcrsr owner. Source MakeRegion uses region endpoints rather than the result cursor; a regression test checks this distinction. Full replacement/notes/layout/UI scope is pending, so this task remains active.",
       "Leaf4586BY extends the actual SwFindParaText strategy with normal literal replacement through DocumentContentOperationsManager::ReplaceRange and FIND_NO_RING, restores the original match start, opens one Replace history group only when native recording is enabled, and closes it before model publication. Other algorithms, notes, fields, merged layout and regex replacement remain unported. Parent6B984M remains open for UI/config/advanced modes.",
-      "Replacement rejects documents containing bookmarks before opening a search undo list or mutating text: native DelContentIndex/SwHistoryBookmark history is not ported. The normal no-bookmark profile is implemented; this boundary remains parent work, not native bookmark parity."
+      "Replacement rejects documents containing bookmarks before opening a search undo list or mutating text: native DelContentIndex/SwHistoryBookmark history is not ported. The normal no-bookmark profile is implemented; this boundary remains parent work, not native bookmark parity.",
+      "LeafV6W22V removes checkpoint4586BY blanket bookmark guard now that normal replacement uses actual bookmark/content-index undo history. Both directions and real body/cell search retain original grouping/no-ring and source progress behavior. Unsupported engine/notes/layout/typed responsibilities remain pending; no view/UI completion claim."
     ],
     "omittedResponsibilities": [
       "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
@@ -45,6 +46,10 @@
         },
         {
           "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-bookmark-replace-history.test.ts",
           "marker": "it("
         }
       ],

@@ -35,8 +35,6 @@ export class DocumentContentOperationsManager {
     }
     if (regExp) throw new Error("Writer regex replacement is not implemented.");
     if (!range.HasMark()) return false;
-    if (this.document.GetIDocumentMarkAccess().GetBookmarks().length !== 0)
-      throw new Error("Writer bookmark replacement history is not implemented.");
     const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
     for (const hint of node.GetpSwpHints()?.entries() ?? [])
       if (hint.HasDummyChar()) throw new Error("Writer structured replacement is not implemented.");

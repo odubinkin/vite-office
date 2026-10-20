@@ -141,9 +141,13 @@ it("searches/replaces actual table-cell content and keeps one history command", 
     /** Creates a native cell. @returns Native paragraph. */ () =>
       f.doc.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetParagraphs()[0] as SwTextNode,
   );
-  for (const cell of cells) cell.SetText("x cat y");
+  for (const [index, cell] of cells.entries()) {
+    cell.SetText("x cat y");
+    f.doc.GetIDocumentMarkAccess().MakeMark(cell, 2, `cell ${index}`);
+  }
   try {
     expect(replaceAll(f.shell, "cat", "dog")).toBe(2);
+    expect(f.doc.GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0);
     expect(
       cells.map(
         /** Reads native cell values. @param cell - Cell paragraph. @returns Text. */ (cell) =>
@@ -153,6 +157,16 @@ it("searches/replaces actual table-cell content and keeps one history command", 
     expect(f.node.GetText()).toBe("body");
     expect(f.shell.Undo()).toBe(true);
     expect(cells[0]?.GetText()).toBe("x cat y");
+    expect(
+      f.doc
+        .GetIDocumentMarkAccess()
+        .GetBookmarks()
+        .map(
+          /** Reads restored real cell positions. @param mark - Actual native mark. @returns Source offset. */ (
+            mark,
+          ) => mark.GetMarkPos().GetContentIndex(),
+        ),
+    ).toEqual([2, 2]);
     expect(cells[1]?.GetText()).toBe("x cat y");
     expect(f.shell.Redo()).toBe(true);
     expect(cells[1]?.GetText()).toBe("x dog y");
@@ -239,28 +253,31 @@ it("handles no-mark, empty marked and unsupported regex ranges before partial mu
     f.docShell.Close();
   }
 });
-it("rejects unported bookmark replacement history before changing content or undo", /** Keeps a valid existing bookmark graph intact until native DelContentIndex/SwHistoryBookmark is ported. @returns Nothing. */ () => {
-  const f = fixture("a a");
-  f.doc.GetIDocumentMarkAccess().MakeMark(f.node, 1, "native mark");
-  const selected = range(f.node, 0, 1);
-  try {
-    expect(
-      /** Attempts a source responsibility not yet implemented. @returns Match count. */ () =>
-        replaceAll(f.shell, "a", "x"),
-    ).toThrow("bookmark replacement history");
-    expect(
-      /** Attempts the same unsupported direct document operation. @returns Native success. */ () =>
-        f.doc.GetDocumentContentOperationsManager().ReplaceRange(selected, "x", false),
-    ).toThrow("bookmark replacement history");
-    expect(f.node.GetText()).toBe("a a");
-    expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
-    expect(f.doc.GetUndoManager().GetListActionDepth()).toBe(0);
-  } finally {
-    selected.Dispose();
-    f.shell.Close();
-    f.docShell.Close();
-  }
-});
+it.each([false, true])(
+  "replaces text with ordinary bookmarks through grouped history backward=%s",
+  /** Captures affected collapsed marks through either native traversal direction. @param backward - Native direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const f = fixture("a a");
+    f.doc.GetIDocumentMarkAccess().MakeMark(f.node, 0, "native mark");
+    try {
+      expect(replaceAll(f.shell, "a", "x", backward)).toBe(2);
+      expect(f.node.GetText()).toBe("x x");
+      expect(f.doc.GetIDocumentMarkAccess().FindMark("native mark")).toBeUndefined();
+      expect(f.shell.Undo()).toBe(true);
+      expect(f.node.GetText()).toBe("a a");
+      expect(
+        f.doc.GetIDocumentMarkAccess().FindMark("native mark")?.GetMarkPos().GetContentIndex(),
+      ).toBe(0);
+      expect(f.shell.Redo()).toBe(true);
+      expect(f.doc.GetIDocumentMarkAccess().FindMark("native mark")).toBeUndefined();
+      expect(f.doc.GetUndoManager().GetListActionDepth()).toBe(0);
+    } finally {
+      f.shell.Close();
+      f.docShell.Close();
+    }
+  },
+);
 it("retains backward native zero-offset previous-node progress after empty replacement", /** Mirrors GoPreviousPos(GetMark(),false) without replacing it by text-end or character movement. @returns Nothing. */ () => {
   const f = fixture("next"),
     last = f.doc.nodes.MakeTextNode("aa");

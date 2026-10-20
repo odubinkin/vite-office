@@ -169,8 +169,6 @@ export function FindText(
   if ((options.searchFlag & REG_NOT_BEGINOFLINE) !== 0) ranges |= FindRanges.InSel;
   const doc = cursor.GetPoint().GetNode().GetDoc(),
     undo = doc.GetUndoManager();
-  if (replace && doc.GetIDocumentMarkAccess().GetBookmarks().length !== 0)
-    throw new Error("Writer bookmark replacement history is not implemented.");
   // Prepare the actual backend before opening history, so unported engine modes do not mutate undo state.
   const strategy = new SwFindParaText(options, replace);
   return doc.RunModelTransaction(

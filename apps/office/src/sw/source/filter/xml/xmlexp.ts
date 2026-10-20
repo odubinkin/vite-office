@@ -479,14 +479,14 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
       .GetBookmarks()
       .filter(
         /** Selects bookmarks on this paragraph. @param mark - Mark. @returns Whether owned. */
-        (mark) => mark.GetPosition().GetNode() === node,
+        (mark) => mark.GetMarkPos().GetNode() === node,
       )
       .map(
         /** Projects a bookmark to ODF. @param mark - Mark. @returns Neutral marker. */
         (mark) => ({
           kind: "bookmark" as const,
           name: mark.GetName(),
-          offset: mark.GetPosition().GetContentIndex(),
+          offset: mark.GetMarkPos().GetContentIndex(),
         }),
       ),
     ...marks

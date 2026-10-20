@@ -57,7 +57,7 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     );
     expect(await create).toBe(true);
     const marks = shell.GetDoc().GetIDocumentMarkAccess();
-    expect(marks.FindMark("Middle")?.GetPosition().GetContentIndex()).toBe(5);
+    expect(marks.FindMark("Middle")?.GetMarkPos().GetContentIndex()).toBe(5);
     shell.SetPaM(new SwPosition(paragraph, 0));
     expect(
       runValue(WRITER_COMMAND_IDS.insertBookmark, {
@@ -70,7 +70,7 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
         bookmark: { action: "rename", name: "Middle", newName: "Renamed" },
       }),
     ).toBe(true);
-    expect(marks.FindMark("Renamed")?.GetPosition().GetContentIndex()).toBe(5);
+    expect(marks.FindMark("Renamed")?.GetMarkPos().GetContentIndex()).toBe(5);
     expect(
       runValue(WRITER_COMMAND_IDS.insertBookmark, {
         bookmark: { action: "remove", name: "Renamed" },

@@ -380,7 +380,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
             .GetDoc()
             .GetIDocumentMarkAccess()
             .FindMark("Middle")
-            ?.GetPosition()
+            ?.GetMarkPos()
             .GetContentIndex(),
         ).toBe(5),
     );
@@ -422,7 +422,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       reopened.document
         .GetIDocumentMarkAccess()
         .FindMark("Renamed")
-        ?.GetPosition()
+        ?.GetMarkPos()
         .GetContentIndex(),
     ).toBe(5);
     openInsert(/Bookmark/);

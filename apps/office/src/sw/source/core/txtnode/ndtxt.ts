@@ -761,7 +761,7 @@ export class SwTextNode extends SwContentNode {
       this.UpdateContentIndices(
         start + removedLength,
         replacementText.length - removedLength,
-        SwContentIndexUpdateMode.Replace,
+        SwContentIndexUpdateMode.Default,
       );
     }
     this.GetDoc().NotifyModelChange({
@@ -786,7 +786,7 @@ export class SwTextNode extends SwContentNode {
       this.UpdateContentIndices(
         previousLength,
         text.length - previousLength,
-        SwContentIndexUpdateMode.Replace,
+        SwContentIndexUpdateMode.Default,
       );
     if (previousText !== text)
       this.GetDoc().NotifyModelChange({
