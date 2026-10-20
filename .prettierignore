@@ -1,5 +1,6 @@
 .agentplane/
 .git/
+.playwright-mcp/
 AGENTS.md
 apps/*/coverage/
 apps/*/dist/
