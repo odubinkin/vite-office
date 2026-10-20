@@ -1,10 +1,11 @@
 ---
 id: "202610201844-9K7PXS"
 title: "Port native Calc EditEngine formatting transfer and shared target-Which insertion"
-status: "DOING"
+result_summary: "Native Calc/EditEngine attribute transfer and shared nonvirtual target-Which insertion implemented and verified with original units,precedence,snapshot/order and source asymmetries;broader UI and automatic-height goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Shared const PutAsTargetWhich clones for the actual destination pool and adopts the remapped clone;zero/same-Which follows private native insertion rather than a shadowed public nonvirtual method. Source immutability,fixed-Which Clone behavior,equality/out-of-range returns and derived-method shadow are exercised with actual classes."
     - "Portable committed archive audit independently proves fresh508-case complete Calc acceptance,107related cases,8fresh packaged browser cases and raw Calc/shared four-metric100 coverage. Complete shared uses hash-verified unchanged53owners plus fresh changed owner. Final shared zero/same-Which adjustment is covered by107related cases and fresh browser integration;Calc production has only cross-domain remaps and Calc source maps remained unchanged. Initial old-source failures/replays remain diagnostic and are not merged into final Calc raw maps."
     - "Build,14final static checks,current source/native hashes and screenshot inspection pass. Scope remains native pattern and shared itemset owners plus declared tests/records;no EditEngine,number-format,device or cache facade is introduced. CALC239 documents source asymmetries without normalizing them."
-commit: null
+commit:
+  hash: "bc43536c38a39c1e230809c82ff2becfefcf4c68"
+  message: "🧩 9K7PXS feat: port native Calc EditEngine formatting transfer"
 comments:
   -
     author: "CODER"
     body: "Start: port source Calc EditEngine formatting transfer and genuine shared target-Which insertion as required GetNeededSize dependencies;preserve original asymmetries and native ownership."
+  -
+    author: "CODER"
+    body: "Verified: source Calc EditEngine formatting transfer,pre-mutation snapshots,insertion order,orientation and shared const target-Which insertion. Fresh508Calc and107related tests,8packaged browser cases,14static checks and build pass;Calc/shared100 raw coverage archived. Actual EditEngine/automatic wrapped-height remains required;goal active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:fresh508-case complete Calc profile,107related cases,8fresh packaged Chromium/Worker cases,14final static stages and build. Raw Calc and shared S/B/F/L100 verified by portable archive audit;unchanged shared53 hashes retained. Original snapshot/order/units/attribute and nonvirtual target-Which contracts verified. Earlier source revision failures remain diagnostic only;final Calc coverage uses fresh maps. Automatic wrapped-height and real EditEngine services remain unported;broader goal active."
+  -
+    type: "status"
+    at: "2026-10-20T19:09:57.314Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source Calc EditEngine formatting transfer,pre-mutation snapshots,insertion order,orientation and shared const target-Which insertion. Fresh508Calc and107related tests,8packaged browser cases,14static checks and build pass;Calc/shared100 raw coverage archived. Actual EditEngine/automatic wrapped-height remains required;goal active."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:09:36.569Z"
+doc_updated_at: "2026-10-20T19:09:57.316Z"
 doc_updated_by: "CODER"
 description: "Continue the actual GetNeededSize dependency path with the original complete Calc-to-EditEngine item transfer,reverse transfer,paragraph alignment and orientation contracts. Add the real shared SfxItemSet const-reference PutAsTargetWhich operation rather than local clone/remap helpers. Preserve all three script fonts,original integral unit rounding,conditional/table/direct precedence and source asymmetries. This is a required native formatting boundary,not a substitute automatic row-height implementation."
 sections:
