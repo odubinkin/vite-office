@@ -1,10 +1,11 @@
 ---
 id: "202610201528-MD0CQF"
 title: "Repair checkpoint50 regressions and restore Calc shared complete coverage"
-status: "DOING"
+result_summary: "Checkpoint50 regressions repaired; Calc and shared coverage reaches 100 percent across all four metrics; complete current application, browser and static acceptance passes."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610201528-MD0CQF/evidence/repair-checks.json"
   findings:
     - "Reviewed actual-owner boundary and serialization tests, unchanged native core contracts, shared popup event ownership, preserved file-operation Promises and assertions. Raw archive integrity, identical instrumentation maps, complete distinct-file/assertion accounting and unchanged production source are checked by the committed acceptance script. Original failures are preserved, with no relaxed gate or timeout."
-commit: null
+commit:
+  hash: "d17b53628db33bbaa9c88af9ead1ba619d3aeaef"
+  message: "🧩 MD0CQF task: persist verified acceptance and quality review"
 comments:
   -
     author: "CODER"
     body: "Start: repair checkpoint50 failures and restore full Calc/shared coverage under the clarified user stop condition."
+  -
+    author: "CODER"
+    body: "Verified: repaired checkpoint50 regressions and remaining Calc file-operation test wait. Complete regression plus transparent four-case repair replay establishes 17377 passing tests across 1081 distinct application files and exact 100 percent S/B/F/L for Calc, shared and Writer. All 432 browser cases, 130 tooling cases, 123 inventory cases, 18 full gates and six post-repair static checks pass. Original failure, raw maps, source hashes and evaluator pass are committed. User stop condition is satisfied; pause the goal after closure."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete application regression plus the documented single-file test-only repair replay passes 17377 current tests across 1081 distinct files. Calc/shared/Writer coverage is 100 percent S/B/F/L with exact-map and source-hash checks. Browser 432/432, tooling 130/130, inventory 123/123, all 18 full gates and six post-repair static checks pass; immutable original failure retained in evidence. Implementation ff568de0a3dc."
+  -
+    type: "status"
+    at: "2026-10-20T17:14:15.638Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: repaired checkpoint50 regressions and remaining Calc file-operation test wait. Complete regression plus transparent four-case repair replay establishes 17377 passing tests across 1081 distinct application files and exact 100 percent S/B/F/L for Calc, shared and Writer. All 432 browser cases, 130 tooling cases, 123 inventory cases, 18 full gates and six post-repair static checks pass. Original failure, raw maps, source hashes and evaluator pass are committed. User stop condition is satisfied; pause the goal after closure."
 doc_version: 3
-doc_updated_at: "2026-10-20T17:13:39.942Z"
+doc_updated_at: "2026-10-20T17:14:15.640Z"
 doc_updated_by: "CODER"
 description: "User clarified stop condition: repair the complete-run test failures and obtain 100 percent statements branches functions and lines for Calc and shared owners before pausing. Preserve native contracts and coverage gates. Work solely in calc checkout and branch."
 sections:
@@ -138,6 +151,10 @@ sections:
     At the user request, remaining independent application batches ran as two concurrent Vitest jobs, each with one worker and isolated report/coverage directories. Six finished batches were retained; the unfinished batch alone was restarted. No subagents, threshold changes, excludes, ignore directives, skips, retry changes, timeout increases, branches, merges, network calls or feature expansion were used.
 
     Final acceptance: 17377/17377 application tests, 432/432 browser cases, 130/130 tooling and 123/123 inventory tests. Calc, shared, Writer and aggregate Istanbul coverage are 100 percent in all four metrics. All 18 complete-run gates and six post-repair static checks pass. Raw maps, source hashes, command logs and exact current assertion accounting are retained. The user stop condition is satisfied; pause after task closure.
+extensions:
+  implementation_commit:
+    hash: "ff568de0a3dc60e3a5ab87aeaf1f3034cf85a178"
+    message: "🧩 MD0CQF test: await Calc file operations and record complete acceptance"
 id_source: "generated"
 ---
 ## Summary
