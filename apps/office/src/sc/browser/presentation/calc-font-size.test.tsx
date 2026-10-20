@@ -45,8 +45,8 @@ it("binds the real shared font widget,mixed state,paint and native repeated-oper
   const count = c.shell.GetUndoManager().GetUndoActionCount(),
     generation = c.shell.GetContentGeneration();
   act(
-    /** Source records repeated formatting even when stored attributes are unchanged. @returns Nothing. */ () => {
-      expect(c.SetFontSize(18)).toBe(false);
+    /** Native attribute operations report success and record history even when stored attributes are unchanged. @returns Nothing. */ () => {
+      expect(c.SetFontSize(18)).toBe(true);
     },
   );
   expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);

@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "font-script-selection",
     "capabilityIds": [
-      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e"
+      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,10 +20,11 @@
         "apps/office/src/sc/inc/attarray.ts",
         "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx"
       ],
-      "justification": "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed.",
+      "justification": "Task89YNKC connects native grow/shrink slots11042/11043, complete typed font-height requests and shared SvxScriptSetItem to real script-specific selection patterns, attribute history, ODS and browser glyph spans. Native mixed/default/invalid states, unsigned growth/signed shrink limits, metadata reset, identical-format history, disjoint marks and whole-sheet data-area query clipping are retained. Default formatobjectbar Grow/Shrink placements remain hidden as upstream. Existing Writer font/menu/toolbar controls and primary-save/open/no-recovery deviations remain. Native rich edit, filtered/alternate sheet views, device text metrics, full pool-cache/border services and complete application parity are not claimed. Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
       "knownViolations": [],
       "localSymbols": [
-        "ScMergePatternState"
+        "ScMergePatternState",
+        "ScLineFlags"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/attarray.hxx",

@@ -1,0 +1,12 @@
+[WebServer] (node:21455) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:21459) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/borders.spec.ts:7:3 › uses shared Writer border controls and viewport-safe popups at 1280px (4.1s)
+  ✓  2 [calc] › apps/office/e2e/calc/borders.spec.ts:7:3 › uses shared Writer border controls and viewport-safe popups at 390px (3.3s)
+  ✓  3 [calc] › apps/office/e2e/calc/borders.spec.ts:83:1 › runs actual native border history and ODS reopens in a DOM-free Worker (3.1s)
+
+  3 passed (14.7s)

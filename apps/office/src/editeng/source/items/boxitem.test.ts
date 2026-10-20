@@ -247,10 +247,10 @@ it("keeps four owned lines and signed distances with native negative-read and ov
   copy.SetDistance(99, 1);
   expect(copy.equals(item)).toBe(false);
   copy.SetDistance(11, 1);
-  copy.SetRemoveAdjCellBorder(true);
+  copy.SetRemoveAdjacentCellBorder(true);
   expect(copy.equals(item)).toBe(false);
-  expect(copy.GetRemoveAdjCellBorder()).toBe(true);
-  expect(copy.Clone().GetRemoveAdjCellBorder()).toBe(true);
+  expect(copy.IsRemoveAdjacentCellBorder()).toBe(true);
+  expect(copy.Clone().IsRemoveAdjacentCellBorder()).toBe(true);
   item.SetDistance(-30, 0);
   expect(item.GetDistance(0)).toBe(0);
   expect(item.GetDistance(0, true)).toBe(-30);

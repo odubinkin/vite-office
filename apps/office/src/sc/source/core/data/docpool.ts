@@ -1,4 +1,6 @@
-/** @fileoverview Consumed ScDocumentPool cell-item package (ATTR_FONT..ATTR_BACKGROUND); remaining cell/page defaults and native pool services are unported. */
+/** @fileoverview Consumed ScDocumentPool cell-item package (ATTR_FONT..ATTR_BORDER_INNER); remaining cell/page defaults and native pool services are unported. */
+import { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
+import { ScProtectionAttr } from "../../../inc/attrib";
 import {
   SfxItemPool,
   ItemInfoPackage,
@@ -92,6 +94,14 @@ function getDefaultFontItem(script: number, role: DefaultFontType, which: number
     which,
   );
 }
+/** Original initialized global inner-border item. @returns Native table/distance default. */
+function createGlobalBorderInnerAttr(): SvxBoxInfoItem {
+  const item = new SvxBoxInfoItem(151);
+  item.SetTable(true);
+  item.SetDist(true);
+  item.SetMinDist(false);
+  return item;
+}
 /** Original static metadata for the consumed contiguous cell-attribute prefix. Unsupported IDs are not given fabricated defaults. */
 class ItemInfoPackageScDocument extends ItemInfoPackage {
   private readonly maItemInfos: ItemInfoStatic[];
@@ -148,6 +158,9 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
       [new SfxUInt32Item(146, 0), 10085, 0],
       [new SvxLanguageItem(ScGlobal.eLnge, 147), 0, 0],
       [new SvxBrushItem(COL_TRANSPARENT, 148), 10001, 1],
+      [new ScProtectionAttr(), 26036, 0],
+      [new SvxBoxItem(150), 10024, 0],
+      [createGlobalBorderInnerAttr(), 10023, 0],
     ];
     this.maItemInfos = values.map(
       /** Constructs native static metadata. @param value - Item, slot and flags. @returns Entry. */ ([
@@ -172,7 +185,7 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
   }
 }
 let packageScDocument: ItemInfoPackageScDocument | undefined;
-/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through background. */
+/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through inner border. */
 export class ScDocumentPool extends SfxItemPool {
   /** Registers the shared original cell-attribute prefix. @returns Pool. */
   constructor() {

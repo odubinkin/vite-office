@@ -1,4 +1,8 @@
-/** @fileoverview ScUndoSetCell typed-content subset from undocell.cxx. Source value/range ownership is retained;ScSimpleUndo/change tracking,format metadata,sheet views,spill resolution and VCL cursor/painting services remain unported. Browser cursor adaptation uses native getAffectedRange. */
+/** @fileoverview ScUndoSetCell typed-content and ScUndoCursorAttr scalar-attribute subset from undocell.cxx. Source value/range ownership is retained;ScSimpleUndo/change tracking,format metadata,sheet views,spill resolution and VCL cursor/painting services remain unported. Browser cursor adaptation uses native getAffectedRange. */
+import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
+import type { ScViewData } from "../inc/viewdata";
+import { ScMarkData } from "../../../inc/markdata";
+import { AdjustBlockHeight } from "../view/viewfun2";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScAddress, ScRange } from "../../../inc/address";
@@ -67,5 +71,64 @@ export class ScUndoSetCell extends SfxUndoAction<ScDocShell> {
   override Dispose(): void {
     this.maOldValue.clear();
     this.maNewValue.clear();
+  }
+}
+
+/** Original cursor action retains complete canonical old/new patterns and the repeat delta. */
+export class ScUndoCursorAttr extends SfxUndoAction<ScDocShell> {
+  private readonly aOldPattern: CellAttributeHolder;
+  private readonly aNewPattern: CellAttributeHolder;
+  private readonly aApplyPattern: CellAttributeHolder;
+  private readonly position: ScAddress;
+  /** Borrows the actual active view in place of native global view lookup;absence retains native headless behavior. @param shell - Shell. @param position - Cursor. @param oldPattern - Original complete attributes. @param newPattern - Applied complete attributes. @param apply - Original delta. @param view - Actual active view. @returns Action. */
+  constructor(
+    private readonly shell: ScDocShell,
+    position: ScAddress,
+    oldPattern: ScPatternAttr,
+    newPattern: ScPatternAttr,
+    apply: ScPatternAttr,
+    private readonly view?: ScViewData,
+  ) {
+    super();
+    this.position = new ScAddress(position);
+    this.aOldPattern = new CellAttributeHolder(oldPattern);
+    this.aNewPattern = new CellAttributeHolder(newPattern);
+    this.aApplyPattern = new CellAttributeHolder(apply);
+  }
+  /** Original complete-pattern restoration and actual active-view height adjustment. @param pattern - Retained old/new value. @returns Nothing. */
+  private DoChange(pattern: CellAttributeHolder): void {
+    const p = this.position,
+      doc = this.shell.GetDocument();
+    doc.SetPattern(p.Col(), p.Row(), p.Tab(), pattern);
+    if (this.view) {
+      this.view.SetTabNo(p.Tab());
+      this.view.SetCurX(p.Col());
+      this.view.SetCurY(p.Row());
+      const marks = new ScMarkData(this.view.GetMarkData());
+      marks.SelectOneTable(p.Tab());
+      AdjustBlockHeight(doc, marks, p.Row(), p.Row());
+    }
+  }
+  /** Restores actual old attributes. @returns Nothing. */
+  override UndoWithContext(): void {
+    this.DoChange(this.aOldPattern);
+  }
+  /** Restores actual new attributes rather than remerging a delta. @returns Nothing. */
+  override RedoWithContext(): void {
+    this.DoChange(this.aNewPattern);
+  }
+  /** Original cursor attribute English resource. @returns Label. */
+  override GetComment(): string {
+    return "Attributes";
+  }
+  /** Supplies original cursor to the browser view restoration. @returns Native range copy. */
+  getAffectedRange(): ScRange {
+    return new ScRange(this.position);
+  }
+  /** Releases real canonical registrations. @returns Nothing. */
+  override Dispose(): void {
+    this.aOldPattern.Dispose();
+    this.aNewPattern.Dispose();
+    this.aApplyPattern.Dispose();
   }
 }

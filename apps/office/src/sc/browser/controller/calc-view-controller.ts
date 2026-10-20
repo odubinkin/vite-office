@@ -1,9 +1,12 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
+
+import { ScUndoIndent } from "../../source/ui/undo/undoblk";
 import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
-import { ScViewFunc } from "../../source/ui/view/viewfunc";
+import { ScTabViewShell } from "../../source/ui/inc/tabvwsh";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxOverlineItem } from "../../../editeng/source/items/textitem";
@@ -17,6 +20,7 @@ import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
+import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
@@ -56,12 +60,39 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
+  ChangeIndent(increment: boolean): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScCellShell(this.viewShell).ChangeIndent(increment);
+    this.Changed();
+    return changed;
+  }
+  /** Native row-height request routing. @param request - Source request. @returns Typed height present. */
+  ExecuteRowHeight(request: SfxRequest): boolean {
+    const consumed = new ScCellShell(this.viewShell).ExecuteRowHeight(request, this.viewData);
+    if (consumed) {
+      this.addressText = this.Address();
+      this.Changed();
+    }
+    return consumed;
+  }
+  /** Native accepted row-height result. @param twips - Height. @returns Recorded request. */
+  CompleteRowHeight(twips: number): SfxRequest {
+    const request = new ScCellShell(this.viewShell).CompleteRowHeight(twips);
+    this.addressText = this.Address();
+    this.Changed();
+    return request;
+  }
+  /** Native row visibility. @param show - Visible. @returns Nothing. */
+  ShowRows(show: boolean): void {
+    if (!this.Commit()) return;
+    new ScCellShell(this.viewShell).ShowRows(show);
+    this.addressText = this.Address();
+    this.Changed();
+  }
   /** Routes typed source width arguments through the actual cell shell. @param request - Native request. @returns Typed width consumed. */
   ExecuteColumnWidth(request: SfxRequest): boolean {
-    const consumed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ExecuteColumnWidth(
-      request,
-      this.viewData,
-    );
+    const consumed = new ScCellShell(this.viewShell).ExecuteColumnWidth(request, this.viewData);
     if (consumed) {
       this.addressText = this.Address();
       this.Changed();
@@ -70,9 +101,7 @@ export class CalcViewController {
   }
   /** Applies accepted native dialog twips and returns its separate completed recording request. @param twips - Input twips. @returns Recording request. */
   CompleteColumnWidth(twips: number): SfxRequest {
-    const request = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).CompleteColumnWidth(
-      twips,
-    );
+    const request = new ScCellShell(this.viewShell).CompleteColumnWidth(twips);
     this.addressText = this.Address();
     this.Changed();
     return request;
@@ -80,14 +109,14 @@ export class CalcViewController {
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {
     if (!this.Commit()) return;
-    new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ShowColumns(show);
+    new ScCellShell(this.viewShell).ShowColumns(show);
     this.addressText = this.Address();
     this.Changed();
   }
   /** Admits pending input then delegates native Clear through cell/view/document operation owners. @returns Whether admitted. */
   ResetAttributes(): boolean {
     if (!this.Commit()) return false;
-    const changed = new ScCellShell(new ScViewFunc(this.viewData, this.shell)).ResetAttributes();
+    const changed = new ScCellShell(this.viewShell).ResetAttributes();
     this.Changed();
     return changed;
   }
@@ -107,6 +136,21 @@ export class CalcViewController {
     return changed;
   }
 
+  /** Reads original selected diagonal attribute state. @param which - Native diagonal identity. @returns Original binding. */
+  GetDiagonalState(which: 141 | 142): import("../../../sfx2/source/control/bindings").SfxSlotState {
+    return new ScFormatShell(this.viewData, this.shell).GetDiagonalState(which);
+  }
+  /** Reads source border-style/color bindings. @param color - Color slot. @returns Native state. */
+  GetFrameLineState(color: boolean): import("../../../sfx2/source/control/bindings").SfxSlotState {
+    return new ScFormatShell(this.viewData, this.shell).GetFrameLineState(color);
+  }
+  /** Commits actual input before original border formatting. @param request - Typed native request. @returns Result. */
+  ExecuteBorder(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const result = new ScFormatShell(this.viewData, this.shell).ExecuteBorder(request);
+    this.Changed();
+    return result;
+  }
   /** Reads genuine source color state. @param kind - Native slot kind. @returns Native item or mixed. */
   GetColor(kind: CalcColorKind): SvxColorItem | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetColor(kind);
@@ -138,6 +182,7 @@ export class CalcViewController {
     return changed;
   }
   viewData: ScViewData;
+  private viewShell: ScTabViewShell;
   private readonly detachShell: () => void;
   readonly inputHandler = new ScInputHandler();
   /** Exposes the canonical native input mode. @returns Mode. */
@@ -166,11 +211,13 @@ export class CalcViewController {
   private anchor = new ScAddress();
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
-    this.viewData = new ScViewData(shell.GetDocument());
+    this.viewShell = new ScTabViewShell(shell);
+    this.viewData = this.viewShell.GetViewData();
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
-          this.viewData = new ScViewData(shell.GetDocument());
+          this.viewShell = new ScTabViewShell(shell);
+          this.viewData = this.viewShell.GetViewData();
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputHandler.ResetInputState();
@@ -252,7 +299,15 @@ export class CalcViewController {
       column = columns
         ? new ScTabView(this.viewData).SkipCursorHorizontal(proposed, old, columns)
         : proposed;
-    return this.Select(column, this.viewData.GetCurY() + rows, extend);
+    const oldRow = this.viewData.GetCurY(),
+      proposedRow = Math.max(0, Math.min(this.shell.GetDocument().MaxRow(), oldRow + rows));
+    return this.Select(
+      column,
+      rows
+        ? new ScTabView(this.viewData).SkipCursorVertical(proposedRow, oldRow, rows)
+        : proposedRow,
+      extend,
+    );
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
@@ -358,6 +413,28 @@ export class CalcViewController {
   SetOutlineFont(item?: SvxContourItem): boolean {
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetOutlineFont(item);
+    this.Changed();
+    return changed;
+  }
+  /** Original shadow selection state. @returns Shadow or mixed. */
+  GetShadowState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetShadowState();
+  }
+  /** Commits input before original shadow mutation. @param item - Optional native item. @returns Admitted success. */
+  SetShadowed(item?: SvxShadowedItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetShadowed(item);
+    this.Changed();
+    return changed;
+  }
+  /** Original relief state. @returns Enum or mixed. */
+  GetReliefState(): number | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetReliefState();
+  }
+  /** Commits input before original relief mutation. @param item - Native item. @returns Admitted success. */
+  SetCharacterRelief(item: SvxCharReliefItem): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetCharacterRelief(item);
     this.Changed();
     return changed;
   }
@@ -598,6 +675,8 @@ export class CalcViewController {
     }
     const position =
       cursorAction instanceof ScUndoSetCell ||
+      cursorAction instanceof ScUndoCursorAttr ||
+      cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents
         ? cursorAction.getAffectedRange().aStart
@@ -609,6 +688,7 @@ export class CalcViewController {
     this.SelectTab(position.Tab());
     this.Select(position.Col(), position.Row());
     if (
+      cursorAction instanceof ScUndoIndent ||
       cursorAction instanceof ScUndoSelectionAttr ||
       cursorAction instanceof ScUndoDeleteContents
     ) {

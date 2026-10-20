@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "indent-row-geometry",
+    "capabilityIds": [
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts"
+      ],
+      "justification": "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ChangeIndentOperation"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/operation/ChangeIndentOperation.cxx",
+      "upstreamSymbols": [
+        "ChangeIndentOperation::runImplementation"
+      ]
+    }
+  }
+}

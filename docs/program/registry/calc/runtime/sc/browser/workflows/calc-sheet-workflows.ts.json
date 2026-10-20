@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "sheet-dialog",
     "capabilityIds": [
-      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256"
+      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
-        "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts"
       ],
-      "justification": "Task1J8SQQ connects native JumpToTable/SID_CURRENTTAB26042 and one-based UInt16 Nr to actual Calc sheet view ownership. The asynchronous menu path uses the existing shared SfxDialogController,actual document sheet names and native selected-name result semantics. ScGoToTabDlg retains native ordered single selection,initial active sheet,case-sensitive untrimmed substring mask,selection clearing after filter rebuild,double-click acceptance,empty acceptance with no movement and cancellation. Shared Writer DialogHeader and office-dialog styles render the original entry/list/OK/Cancel/Help composition;Help stays disabled because its service is unported. Pending input must commit before opening;modal background is inert and file/page accelerators are suppressed;session closure cancels the request before destroying the model. This is not hidden-sheet/reference/VCL service parity or full Calc UI completion.",
+      "justification": "Task1J8SQQ connects native JumpToTable/SID_CURRENTTAB26042 and one-based UInt16 Nr to actual Calc sheet view ownership. The asynchronous menu path uses the existing shared SfxDialogController,actual document sheet names and native selected-name result semantics. ScGoToTabDlg retains native ordered single selection,initial active sheet,case-sensitive untrimmed substring mask,selection clearing after filter rebuild,double-click acceptance,empty acceptance with no movement and cancellation. Shared Writer DialogHeader and office-dialog styles render the original entry/list/OK/Cancel/Help composition;Help stays disabled because its service is unported. Pending input must commit before opening;modal background is inert and file/page accelerators are suppressed;session closure cancels the request before destroying the model. This is not hidden-sheet/reference/VCL service parity or full Calc UI completion. TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
       "knownViolations": [],
       "localSymbols": [
         "CalcSheetWorkflows"

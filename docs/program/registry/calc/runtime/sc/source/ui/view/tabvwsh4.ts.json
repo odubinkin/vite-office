@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-borders",
+    "capabilityIds": [
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+        "apps/office/src/sc/source/core/data/border-frame.test.ts",
+        "apps/office/src/sc/source/ui/view/border-history.test.ts"
+      ],
+      "justification": "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScTabViewShell"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/tabvwsh4.cxx",
+      "upstreamSymbols": [
+        "ScTabViewShell::ScTabViewShell"
+      ]
+    }
+  }
+}

@@ -21,6 +21,12 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
     super(table.owner);
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_REPEATED);
     this.start = table.row;
+    const visibility = attributes.get(XMLToken.TABLE_VISIBILITY),
+      doc = table.owner.GetDocument(),
+      last = Math.min(doc.MaxRow(), this.start + this.repeat - 1);
+    if (visibility === "collapse" || visibility === "filter")
+      doc.SetRowHidden(this.start, last, table.tab, true);
+    if (visibility === "filter") doc.SetRowFiltered(this.start, last, table.tab, true);
     const style = attributes.get(XMLToken.TABLE_STYLE_NAME);
     if (style !== null)
       table.owner.ApplyRowStyle(

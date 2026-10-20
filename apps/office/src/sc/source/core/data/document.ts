@@ -1,4 +1,15 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScItemPoolCache } from "../../../inc/poolcach";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemLine as InnerEdge,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
+import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { SfxItemState } from "../../../../svl/inc/itemset";
@@ -31,7 +42,7 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -41,9 +52,221 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
+  IsLayoutRTL(tab: number): boolean {
+    return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
+  }
+  /** Original represented table flag dispatch;drawing/visibility services remain unported. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
+  SetLayoutRTL(tab: number, set: boolean): void {
+    this.FetchTable(tab)?.SetLayoutRTL(set);
+  }
+  /** Original existing-line style/color dispatch. @param marks - Actual multi marks. @param line - Source style or absence. @param colorOnly - Color mode. @returns Nothing. */
+  ApplySelectionLineStyle(
+    marks: ScMarkData,
+    line: SvxBorderLine | undefined,
+    colorOnly: boolean,
+  ): void {
+    if (colorOnly && !line) return;
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.ApplySelectionLineStyle(marks, line, colorOnly);
+    }
+  }
+  /** Original selection-frame query preserves traversal order and six independent mixed states. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
+  GetSelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
+    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
+      outer.SetLine(undefined, edge);
+    outer.SetAllDistances(0);
+    inner.SetLine(undefined, InnerEdge.HORI);
+    inner.SetLine(undefined, InnerEdge.VERT);
+    inner.SetTable(true);
+    inner.SetDist(true);
+    inner.SetMinDist(false);
+    const flags = new ScLineFlags();
+    if (marks.IsMultiMarked()) {
+      const ranges = new ScRangeList();
+      marks.FillRangeListWithMarks(ranges, false);
+      let rows = false,
+        cols = false;
+      for (const range of ranges) {
+        rows = rows || range.aStart.Row() !== range.aEnd.Row();
+        cols = cols || range.aStart.Col() !== range.aEnd.Col();
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          this.FetchTable(tab)?.MergeBlockFrame(
+            outer,
+            inner,
+            flags,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        }
+      }
+      inner.EnableHor(rows);
+      inner.EnableVer(cols);
+    } else if (marks.IsMarked()) {
+      const range = marks.GetMarkArea();
+      inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
+      inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        this.FetchTable(tab)?.MergeBlockFrame(
+          outer,
+          inner,
+          flags,
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+        );
+      }
+    }
+    inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
+    inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+  }
+  /** Original marked selection frames and adjacent-envelope border removal. @param marks - Actual native marks. @param outer - Requested outer lines. @param inner - Requested inner lines and validity. @returns Nothing. */
+  ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      const table = this.FetchTable(tab);
+      if (table)
+        for (const range of ranges)
+          table.ApplyBlockFrame(
+            outer,
+            inner,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+    }
+    if (!outer.IsRemoveAdjacentCellBorder()) return;
+    const blank = new SvxBoxItem(outer);
+    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
+      blank.SetLine(undefined, edge);
+    const left = new SvxBoxItem(blank),
+      right = new SvxBoxItem(blank),
+      top = new SvxBoxItem(blank),
+      bottom = new SvxBoxItem(blank),
+      base = new SvxBoxInfoItem(inner);
+    base.SetTable(false);
+    base.SetLine(undefined, InnerEdge.HORI);
+    base.SetLine(undefined, InnerEdge.VERT);
+    base.SetValid(Valid.ALL, false);
+    base.SetValid(Valid.DISTANCE);
+    const leftInfo = new SvxBoxInfoItem(base),
+      rightInfo = new SvxBoxInfoItem(base),
+      topInfo = new SvxBoxInfoItem(base),
+      bottomInfo = new SvxBoxInfoItem(base);
+    if (inner.IsValid(Valid.TOP) && !outer.GetTop()) topInfo.SetValid(Valid.BOTTOM);
+    if (inner.IsValid(Valid.BOTTOM) && !outer.GetBottom()) bottomInfo.SetValid(Valid.TOP);
+    if (inner.IsValid(Valid.LEFT) && !outer.GetLeft()) leftInfo.SetValid(Valid.RIGHT);
+    if (inner.IsValid(Valid.RIGHT) && !outer.GetRight()) rightInfo.SetValid(Valid.LEFT);
+    const topRanges = marks.GetTopEnvelope(),
+      bottomRanges = marks.GetBottomEnvelope(),
+      leftRanges = marks.GetLeftEnvelope(),
+      rightRanges = marks.GetRightEnvelope();
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      const table = this.FetchTable(tab);
+      if (table) {
+        for (const range of topRanges)
+          table.ApplyBlockFrame(
+            top,
+            topInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of bottomRanges)
+          table.ApplyBlockFrame(
+            bottom,
+            bottomInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of leftRanges)
+          table.ApplyBlockFrame(
+            left,
+            leftInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+        for (const range of rightRanges)
+          table.ApplyBlockFrame(
+            right,
+            rightInfo,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+          );
+      }
+    }
+  }
+  /** Original selected-sheet indentation with removed-tab boundary. @param increment - Direction. @param marks - Real marks. @returns Nothing. */
+  ChangeSelectionIndent(increment: boolean, marks: ScMarkData): void {
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.ChangeSelectionIndent(marks, increment);
+    }
+  }
   /** Original document column-domain query. @param column - Native column. @returns Whether valid. */
   ValidCol(column: number): boolean {
     return ValidCol(column, MAXCOL);
+  }
+  /** Original row-height dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - UInt16 twips. @returns Nothing. */
+  SetRowHeightRange(first: number, last: number, tab: number, height: number): void {
+    this.FetchTable(tab)?.SetRowHeightRange(first, last, height, 1.0, true);
+  }
+  /** Original import/raw height setter. @param first - First row. @param last - Last row. @param tab - Sheet. @param height - Twips. @returns Nothing. */
+  SetRowHeightOnly(first: number, last: number, tab: number, height: number): void {
+    this.FetchTable(tab)?.SetRowHeightOnly(first, last, height);
+  }
+  /** Original manual flag dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param manual - Flag. @returns Nothing. */
+  SetManualHeight(first: number, last: number, tab: number, manual: boolean): void {
+    this.FetchTable(tab)?.SetManualHeight(first, last, manual);
+  }
+  /** Original missing-table row-height zero. @param row - Row. @param tab - Sheet. @param hiddenAsZero - Source default,true. @returns Twips. */
+  GetRowHeight(row: number, tab: number, hiddenAsZero = true): number {
+    return this.FetchTable(tab)?.GetRowHeight(row, hiddenAsZero) ?? 0;
+  }
+  /** Original per-sheet minimum query. @param tab - Sheet. @returns Minimum twips or native standard height. */
+  GetSheetOptimalMinRowHeight(tab: number): number {
+    return this.FetchTable(tab)?.GetOptimalMinRowHeight() ?? ScGlobal.nStdRowHeight;
+  }
+  /** Original missing-table hidden query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Hidden. */
+  RowHidden(row: number, tab: number, first?: [number], last?: [number]): boolean {
+    return this.FetchTable(tab)?.RowHidden(row, first, last) ?? false;
+  }
+  /** Original missing-table filtered query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Filtered. */
+  RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
+    return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
+  }
+  /** Original hidden row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param hidden - Flag. @returns Nothing. */
+  SetRowHidden(first: number, last: number, tab: number, hidden: boolean): void {
+    this.FetchTable(tab)?.SetRowHidden(first, last, hidden);
+  }
+  /** Original filtered row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param filtered - Flag. @returns Nothing. */
+  SetRowFiltered(first: number, last: number, tab: number, filtered: boolean): void {
+    this.FetchTable(tab)?.getFilterData().setRowFiltered(first, last, filtered);
+  }
+  /** Original show rows dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param show - Flag. @returns Nothing. */
+  ShowRows(first: number, last: number, tab: number, show: boolean): void {
+    this.FetchTable(tab)?.ShowRows(first, last, show);
   }
   /** Original selected-table width assignment. @param column - Column. @param tab - Sheet. @param width - UInt16 twips. @returns Nothing. */
   SetColWidth(column: number, tab: number, width: number): void {
@@ -212,6 +435,14 @@ export class ScDocument {
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
+  /** Original document.cxx cursor-pattern assignment delegates through the actual sheet. @param col - Column. @param row - Row. @param tab - Sheet. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(col: number, row: number, tab: number, holder: CellAttributeHolder): void {
+    this.FetchTable(tab)?.SetPattern(col, row, holder);
+  }
+  /** Original document.cxx cursor delta applies to exactly one sheet cell. @param col - Column. @param row - Row. @param tab - Sheet. @param pattern - Borrowed delta. @returns Nothing. */
+  ApplyPattern(col: number, row: number, tab: number, pattern: ScPatternAttr): void {
+    this.FetchTable(tab)?.ApplyPattern(col, row, pattern);
+  }
   /** Applies an actual source pattern delta on a single sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Pattern delta. @returns Whether changed. */
   ApplyPatternAreaTab(
     startCol: number,
@@ -225,16 +456,17 @@ export class ScDocument {
       this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false
     );
   }
-  /** Native selection-pattern application over actual mark spans;attribute-only range decomposition replaces the unported physical pool-cache search. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Whether stored attributes changed. */
+  /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
     let set = false;
     for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
       set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
     if (!set) return false;
     let changed = false;
-    for (const tab of marks.GetSelectedTabs()) {
-      if (tab >= this.GetTableCount()) break;
-      for (const range of marks.GetMarkedRangesForTab(tab))
+    if (marks.IsMarked() && !marks.IsMultiMarked()) {
+      const range = marks.GetMarkArea();
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
         changed =
           this.ApplyPatternAreaTab(
             range.aStart.Col(),
@@ -244,6 +476,17 @@ export class ScDocument {
             tab,
             delta,
           ) || changed;
+      }
+    } else {
+      const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
+      try {
+        for (const tab of marks.GetSelectedTabs()) {
+          if (tab >= this.GetTableCount()) break;
+          changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
+        }
+      } finally {
+        cache.Dispose();
+      }
     }
     return changed;
   }

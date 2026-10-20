@@ -152,3 +152,8 @@ export const ATTR_BACKGROUND = 148;
 export const ATTR_PATTERN_START = 100;
 /** Original end of the cell-attribute pattern schema. */
 export const ATTR_PATTERN_END = 155;
+
+/** Original outer cell border identity. */
+export const ATTR_BORDER = 150;
+/** Original inner cell border identity. */
+export const ATTR_BORDER_INNER = 151;

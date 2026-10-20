@@ -1,4 +1,22 @@
 /** @fileoverview ScAttrArray canonical pattern row runs, default-column inheritance and native split/merge algorithm. VCL width caches, stream-copy validity and rich edit-text stripping are outside this document slice. */
+import { SvxLineItem } from "../../../../editeng/inc/lineitem";
+import { ScLineFlags, SC_LINE_EMPTY, SC_LINE_SET, SC_LINE_DONTCARE } from "../../../inc/attarray";
+import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { SvxBoxInfoItemLine as InnerEdge } from "../../../../editeng/source/items/frmitems";
+import { ScItemPoolCache } from "../../../inc/poolcach";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
+import { ScMergeAttr } from "../../../inc/attrib";
+import { ATTR_BORDER } from "../../../inc/scitems";
+import { ScIndentItem } from "../../../inc/attrib";
+import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
+import { SC_INDENT_STEP } from "../../../inc/global";
+import { ATTR_INDENT, ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
@@ -32,6 +50,65 @@ function lcl_MergeDeep(merged: SfxItemSet, source: SfxItemSet): void {
     }
   }
 }
+/** Original lcl_TestAttr records first values and sticky mixed states. @param old - Accumulator line. @param next - Cell line. @param flags - Native flags. @param key - Native member. @param result - Borrowed line output. @returns Replace accumulator. */
+function lcl_TestAttr(
+  old: SvxBorderLine | undefined,
+  next: SvxBorderLine | undefined,
+  flags: ScLineFlags,
+  key: keyof ScLineFlags,
+  result: [SvxBorderLine | undefined],
+): boolean {
+  if (flags[key] === SC_LINE_DONTCARE) return false;
+  if (flags[key] === SC_LINE_EMPTY) {
+    flags[key] = SC_LINE_SET;
+    result[0] = next;
+    return true;
+  }
+  if (old === next || (old !== undefined && next !== undefined && old.equals(next))) {
+    result[0] = old;
+    return false;
+  }
+  flags[key] = SC_LINE_DONTCARE;
+  result[0] = undefined;
+  return true;
+}
+/** Original frame perimeter/interior accumulation including real merge extents. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Native six-way flags. @param pattern - Actual cell pattern. @param left - First column. @param right - Right distance. @param top - First row. @param bottom - Bottom distance. @returns Nothing. */
+function lcl_MergeToFrame(
+  outer: SvxBoxItem,
+  inner: SvxBoxInfoItem,
+  flags: ScLineFlags,
+  pattern: ScPatternAttr,
+  left: boolean,
+  right: number,
+  top: boolean,
+  bottom: number,
+): void {
+  const merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr;
+  if (merge.GetColMerge() === right + 1) right = 0;
+  if (merge.GetRowMerge() === bottom + 1) bottom = 0;
+  const frame = pattern.GetItem(ATTR_BORDER) as SvxBoxItem,
+    result: [SvxBorderLine | undefined] = [undefined];
+  if (top) {
+    if (lcl_TestAttr(outer.GetTop(), frame.GetTop(), flags, "nTop", result))
+      outer.SetLine(result[0], Edge.TOP);
+  } else if (lcl_TestAttr(inner.GetHori(), frame.GetTop(), flags, "nHori", result))
+    inner.SetLine(result[0], InnerEdge.HORI);
+  if (bottom === 0) {
+    if (lcl_TestAttr(outer.GetBottom(), frame.GetBottom(), flags, "nBottom", result))
+      outer.SetLine(result[0], Edge.BOTTOM);
+  } else if (lcl_TestAttr(inner.GetHori(), frame.GetBottom(), flags, "nHori", result))
+    inner.SetLine(result[0], InnerEdge.HORI);
+  if (left) {
+    if (lcl_TestAttr(outer.GetLeft(), frame.GetLeft(), flags, "nLeft", result))
+      outer.SetLine(result[0], Edge.LEFT);
+  } else if (lcl_TestAttr(inner.GetVert(), frame.GetLeft(), flags, "nVert", result))
+    inner.SetLine(result[0], InnerEdge.VERT);
+  if (right === 0) {
+    if (lcl_TestAttr(outer.GetRight(), frame.GetRight(), flags, "nRight", result))
+      outer.SetLine(result[0], Edge.RIGHT);
+  } else if (lcl_TestAttr(inner.GetVert(), frame.GetRight(), flags, "nVert", result))
+    inner.SetLine(result[0], InnerEdge.VERT);
+}
 /** Original end-row entry with actual canonical holder ownership. */
 class ScAttrEntry extends CellAttributeHolder {
   nEndRow = 0;
@@ -39,6 +116,305 @@ class ScAttrEntry extends CellAttributeHolder {
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
   private readonly mvData: ScAttrEntry[] = [];
+  /** Original Concat joins canonical neighboring runs after an in-place pattern change. @param position - Changed entry index. @returns Whether joined. */
+  private Concat(position: number): boolean {
+    let changed = false;
+    if (position < this.mvData.length) {
+      if (
+        position > 0 &&
+        ScPatternAttr.areSame(
+          (this.mvData[position - 1] as ScAttrEntry).getScPatternAttr(),
+          (this.mvData[position] as ScAttrEntry).getScPatternAttr(),
+        )
+      ) {
+        (this.mvData[position - 1] as ScAttrEntry).nEndRow = (
+          this.mvData[position] as ScAttrEntry
+        ).nEndRow;
+        (this.mvData.splice(position, 1)[0] as ScAttrEntry).Dispose();
+        --position;
+        changed = true;
+      }
+      if (
+        position + 1 < this.mvData.length &&
+        ScPatternAttr.areSame(
+          (this.mvData[position + 1] as ScAttrEntry).getScPatternAttr(),
+          (this.mvData[position] as ScAttrEntry).getScPatternAttr(),
+        )
+      ) {
+        (this.mvData[position] as ScAttrEntry).nEndRow = (
+          this.mvData[position + 1] as ScAttrEntry
+        ).nEndRow;
+        (this.mvData.splice(position + 1, 1)[0] as ScAttrEntry).Dispose();
+        changed = true;
+      }
+    }
+    return changed;
+  }
+  /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
+  ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
+    if (!(this.rDocument.ValidRow(first) && this.rDocument.ValidRow(last))) return;
+    const position: [number] = [0];
+    let start = 0;
+    this.SetDefaultIfNotInit();
+    if (!this.Search(first, position)) return;
+    do {
+      const old = this.mvData[position[0]] as ScAttrEntry,
+        next = cache.ApplyTo(old);
+      if (!CellAttributeHolder.areSame(next, old)) {
+        if (changed) changed[0] = true;
+        let from = start,
+          to = old.nEndRow;
+        start = old.nEndRow + 1;
+        if (from < first || to > last) {
+          from = Math.max(from, first);
+          to = Math.min(to, last);
+          this.SetPatternArea(from, to, next);
+          this.Search(start, position);
+        } else {
+          old.assign(next);
+          if (this.Concat(position[0])) this.Search(start, position);
+          else ++position[0];
+        }
+      } else {
+        start = old.nEndRow + 1;
+        ++position[0];
+      }
+    } while (start <= last);
+  }
+  /** Original existing-line style/color mutation;no absent lines are created and valid runs are re-searched after coalescing. @param first - First row. @param last - Last row. @param line - New style or absent for removal. @param colorOnly - Change color only. @returns Nothing. */
+  ApplyLineStyleArea(
+    first: number,
+    last: number,
+    line: SvxBorderLine | undefined,
+    colorOnly: boolean,
+  ): void {
+    if (colorOnly && !line) return;
+    if (!(this.rDocument.ValidRow(first) && this.rDocument.ValidRow(last))) return;
+    const position: [number] = [0];
+    let start = 0;
+    this.SetDefaultIfNotInit();
+    if (!this.Search(first, position)) return;
+    do {
+      const entry = this.mvData[position[0]] as ScAttrEntry,
+        old = entry.getScPatternAttr() as ScPatternAttr,
+        set = old.GetItemSet(),
+        box = set.GetItemIfSet(ATTR_BORDER) as SvxBoxItem | undefined,
+        tlbr = set.GetItemIfSet(141) as SvxLineItem | undefined,
+        bltr = set.GetItemIfSet(142) as SvxLineItem | undefined;
+      if (box || tlbr || bltr) {
+        const next = new ScPatternAttr(old),
+          newBox = box?.Clone(),
+          newTLBR = tlbr?.Clone(),
+          newBLTR = bltr?.Clone();
+        let from = start,
+          to = entry.nEndRow;
+        if (!line) {
+          if (newBox)
+            for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
+              if (newBox.GetLine(edge)) newBox.SetLine(undefined, edge);
+          if (newTLBR?.GetLine()) newTLBR.SetLine(null);
+          if (newBLTR?.GetLine()) newBLTR.SetLine(null);
+        } else {
+          const lines = [
+            newBox?.GetTop(),
+            newBox?.GetBottom(),
+            newBox?.GetLeft(),
+            newBox?.GetRight(),
+            newTLBR?.GetLine(),
+            newBLTR?.GetLine(),
+          ];
+          for (const destination of lines)
+            if (destination) {
+              if (colorOnly) destination.SetColor(line.GetColor());
+              else {
+                destination.SetBorderLineStyle(line.GetBorderLineStyle());
+                destination.SetWidth(line.GetWidth());
+              }
+            }
+        }
+        if (newBox) next.ItemSetPut(newBox);
+        if (newTLBR) next.ItemSetPut(newTLBR);
+        if (newBLTR) next.ItemSetPut(newBLTR);
+        start = entry.nEndRow + 1;
+        if (from < first || to > last) {
+          from = Math.max(from, first);
+          to = Math.min(to, last);
+          const holder = new CellAttributeHolder(next, true);
+          try {
+            this.SetPatternArea(from, to, holder);
+          } finally {
+            holder.Dispose();
+          }
+          this.Search(start, position);
+        } else {
+          entry.setScPatternAttr(next, true);
+          if (this.Concat(position[0])) this.Search(start, position);
+          else ++position[0];
+        }
+      } else {
+        start = entry.nEndRow + 1;
+        ++position[0];
+      }
+    } while (start <= last && position[0] < this.mvData.length);
+  }
+  /** Original frame query over compressed runs,including native default-pattern and edge ordering. @param outer - Outer accumulator. @param inner - Inner accumulator. @param flags - Shared flags. @param first - First row. @param last - Last row. @param left - First column. @param right - Right distance. @returns Nothing. */
+  MergeBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    flags: ScLineFlags,
+    first: number,
+    last: number,
+    left: boolean,
+    right: number,
+  ): void {
+    if (first === last)
+      lcl_MergeToFrame(
+        outer,
+        inner,
+        flags,
+        this.GetPattern(first) as ScPatternAttr,
+        left,
+        right,
+        true,
+        0,
+      );
+    else if (this.mvData.length !== 0) {
+      lcl_MergeToFrame(
+        outer,
+        inner,
+        flags,
+        this.GetPattern(first) as ScPatternAttr,
+        left,
+        right,
+        true,
+        last - first,
+      );
+      const start: [number] = [0],
+        end: [number] = [0];
+      this.Search(first + 1, start);
+      this.Search(last - 1, end);
+      for (let index = start[0]; index <= end[0]; index++) {
+        const entry = this.mvData[index] as ScAttrEntry;
+        lcl_MergeToFrame(
+          outer,
+          inner,
+          flags,
+          entry.getScPatternAttr() as ScPatternAttr,
+          left,
+          right,
+          false,
+          last - Math.min(entry.nEndRow, last - 1),
+        );
+      }
+      lcl_MergeToFrame(
+        outer,
+        inner,
+        flags,
+        this.GetPattern(last) as ScPatternAttr,
+        left,
+        right,
+        false,
+        0,
+      );
+    } else
+      lcl_MergeToFrame(
+        outer,
+        inner,
+        flags,
+        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+        left,
+        right,
+        true,
+        0,
+      );
+  }
+  /** Original frame update consumes real validity flags,merge extents and sheet direction. @param outer - Requested outer lines. @param inner - Native inner lines/validity. @param first - First row. @param last - Last row. @param left - Left edge column. @param rightDistance - Distance to right column. @param top - Top row. @param bottomDistance - Distance to bottom row. @returns Changed. */
+  private ApplyFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    first: number,
+    last: number,
+    left: boolean,
+    rightDistance: number,
+    top: boolean,
+    bottomDistance: number,
+  ): boolean {
+    const pattern = this.GetPattern(first) as ScPatternAttr,
+      old = pattern.GetItem(ATTR_BORDER) as SvxBoxItem,
+      merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr;
+    if (merge.GetColMerge() === rightDistance + 1) rightDistance = 0;
+    if (merge.GetRowMerge() === bottomDistance + 1) bottomDistance = 0;
+    const next = new SvxBoxItem(old);
+    if (this.rDocument.IsLayoutRTL(this.nTab)) {
+      if (left && rightDistance === 0) {
+        if (inner.IsValid(Valid.LEFT)) next.SetLine(outer.GetLeft(), Edge.RIGHT);
+        if (inner.IsValid(Valid.RIGHT)) next.SetLine(outer.GetRight(), Edge.LEFT);
+      } else {
+        if (inner.IsValid(rightDistance === 0 ? Valid.LEFT : Valid.VERT))
+          next.SetLine(rightDistance === 0 ? outer.GetLeft() : inner.GetVert(), Edge.RIGHT);
+        if (inner.IsValid(left ? Valid.RIGHT : Valid.VERT))
+          next.SetLine(left ? outer.GetRight() : inner.GetVert(), Edge.LEFT);
+      }
+    } else {
+      if (inner.IsValid(left ? Valid.LEFT : Valid.VERT))
+        next.SetLine(left ? outer.GetLeft() : inner.GetVert(), Edge.LEFT);
+      if (inner.IsValid(rightDistance === 0 ? Valid.RIGHT : Valid.VERT))
+        next.SetLine(rightDistance === 0 ? outer.GetRight() : inner.GetVert(), Edge.RIGHT);
+    }
+    if (inner.IsValid(top ? Valid.TOP : Valid.HORI))
+      next.SetLine(top ? outer.GetTop() : inner.GetHori(), Edge.TOP);
+    if (inner.IsValid(bottomDistance === 0 ? Valid.BOTTOM : Valid.HORI))
+      next.SetLine(bottomDistance === 0 ? outer.GetBottom() : inner.GetHori(), Edge.BOTTOM);
+    if (next.equals(old)) return false;
+    const cache = new ScItemPoolCache(this.rDocument.getCellAttributeHelper(), next);
+    try {
+      this.ApplyCacheArea(first, last, cache);
+    } finally {
+      cache.Dispose();
+    }
+    return true;
+  }
+  /** Original block-frame perimeter/interior traversal re-searches coalesced runs after changes. @param outer - Outer lines. @param inner - Inner lines/validity. @param first - First row. @param last - Last row. @param left - Left column. @param rightDistance - Distance to right column. @returns Nothing. */
+  ApplyBlockFrame(
+    outer: SvxBoxItem,
+    inner: SvxBoxInfoItem,
+    first: number,
+    last: number,
+    left: boolean,
+    rightDistance: number,
+  ): void {
+    this.SetDefaultIfNotInit();
+    if (first === last) this.ApplyFrame(outer, inner, first, last, left, rightDistance, true, 0);
+    else {
+      this.ApplyFrame(outer, inner, first, first, left, rightDistance, true, last - first);
+      if (last > first + 1) {
+        const start: [number] = [0],
+          end: [number] = [0];
+        this.Search(first + 1, start);
+        this.Search(last - 1, end);
+        let from = first + 1;
+        while (start[0] <= end[0]) {
+          const to = Math.min(last - 1, (this.mvData[start[0]] as ScAttrEntry).nEndRow),
+            changed = this.ApplyFrame(
+              outer,
+              inner,
+              from,
+              to,
+              left,
+              rightDistance,
+              false,
+              last - to,
+            );
+          from = to + 1;
+          if (changed) {
+            this.Search(from, start);
+            this.Search(last - 1, end);
+          } else ++start[0];
+        }
+      }
+      this.ApplyFrame(outer, inner, last, last, left, rightDistance, false, 0);
+    }
+  }
   /** Original pattern-run selection merge without allocating cells or traversing individual rows. @param startRow - First row. @param endRow - Last row. @param state - Shared accumulator. @param deep - Whether inherited items participate. @returns Nothing. */
   MergePatternArea(
     startRow: number,
@@ -81,18 +457,71 @@ export class ScAttrArray {
   }
   /** Copies the source default column's runs, retaining real canonical holders. @param nCol - Column or default-column sentinel. @param nTab - Sheet. @param rDocument - Owner. @param defaults - Actual default-column array. @returns Array. */
   constructor(
-    nCol: number,
-    nTab: number,
+    private readonly nCol: number,
+    private nTab: number,
     private readonly rDocument: ScDocument,
     defaults?: ScAttrArray,
   ) {
-    void nTab;
     if (nCol !== -1 && defaults !== undefined)
       for (const old of defaults.mvData) {
         const entry = new ScAttrEntry(old);
         entry.nEndRow = old.nEndRow;
         this.mvData.push(entry);
       }
+  }
+  /** Original sheet-position update. @param tab - Sheet. @returns Nothing. */
+  SetTab(tab: number): void {
+    this.nTab = tab;
+  }
+  /** Original ChangeIndent over canonical pattern runs;alignment coercion is independent of numeric changes. @param first - First row. @param last - Last row. @param increment - Increase versus decrease. @returns Nothing. */
+  ChangeIndent(first: number, last: number, increment: boolean): void {
+    this.SetDefaultIfNotInit();
+    const index: [number] = [0];
+    this.Search(first, index);
+    let row = Math.max(
+      first,
+      index[0] > 0 ? (this.mvData[index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0,
+    );
+    while (row <= last) {
+      const entry = this.mvData[index[0]] as ScAttrEntry,
+        old = entry.getScPatternAttr() as ScPatternAttr,
+        set = old.GetItemSet(),
+        justify = set.GetItemIfSet(ATTR_HOR_JUSTIFY, false) as SvxHorJustifyItem | undefined,
+        needJust =
+          !justify ||
+          (justify.GetValue() !== SvxCellHorJustify.Left &&
+            justify.GetValue() !== SvxCellHorJustify.Right),
+        oldValue = (set.Get(ATTR_INDENT) as ScIndentItem).GetValue(),
+        width = this.rDocument.GetColWidth(
+          this.nCol === -1 ? this.rDocument.MaxCol() : this.nCol,
+          this.nTab,
+        );
+      let value = oldValue;
+      if (increment) {
+        if (value < width - SC_INDENT_STEP) {
+          value = (value + SC_INDENT_STEP) & 0xffff;
+          if (value > width - SC_INDENT_STEP) value = width - SC_INDENT_STEP;
+        }
+      } else if (value > 0) value = value > SC_INDENT_STEP ? value - SC_INDENT_STEP : 0;
+      const end = entry.nEndRow;
+      if (needJust || value !== oldValue) {
+        const next = new ScPatternAttr(old);
+        next.ItemSetPut(new ScIndentItem(value));
+        if (needJust)
+          next.ItemSetPut(new SvxHorJustifyItem(SvxCellHorJustify.Left, ATTR_HOR_JUSTIFY));
+        const holder = new CellAttributeHolder(next, true);
+        try {
+          this.SetPatternArea(row, Math.min(end, last), holder);
+        } finally {
+          holder.Dispose();
+        }
+        row = end + 1;
+        this.Search(row, index);
+      } else {
+        row = end + 1;
+        ++index[0];
+      }
+    }
   }
   /** Releases actual logical registrations when a sheet/document is discarded. @returns Nothing. */
   Dispose(): void {
@@ -201,6 +630,10 @@ export class ScAttrArray {
     } finally {
       defaults.Dispose();
     }
+  }
+  /** Original attarray.hxx cursor assignment wraps the same complete-pattern area owner. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
+  SetPattern(row: number, holder: CellAttributeHolder): void {
+    this.SetPatternArea(row, row, holder);
   }
   /** Original SetPatternAreaImpl logical split/shrink/replace/combine operations. Rich text is not a represented cell alternative. @param start - Ordered first row. @param end - Ordered last row. @param holder - Canonical source. @returns Nothing. */
   SetPatternArea(start: number, end: number, holder: CellAttributeHolder): void {

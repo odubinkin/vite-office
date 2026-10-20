@@ -1,0 +1,19 @@
+[WebServer] (node:43596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 2 workers
+
+(node:43598) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:43599) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 1280px (13.7s)
+  ✓  2 [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:37:3 › native Shadow menu and ODS reopen at 1280px (13.6s)
+  ✓  4 [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:37:3 › native Shadow menu and ODS reopen at 390px (12.3s)
+  ✓  3 [calc] › apps/office/e2e/calc/outline.spec.ts:37:3 › native Outline menu and ODS reopen at 390px (12.3s)
+  ✓  6 [calc] › apps/office/e2e/calc/outline.spec.ts:122:1 › preserves native Outline item metadata,history and ODS in a DOM-free Worker (1.2s)
+  ✓  5 [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:121:1 › preserves native Shadow item metadata,history and ODS in a DOM-free Worker (1.2s)
+  ✓  8 [calc] › apps/office/e2e/calc/shadow-relief.spec.ts:220:1 › paints the native white center on colored background with independently colored lines (1.5s)
+  ✓  7 [calc] › apps/office/e2e/calc/outline.spec.ts:221:1 › paints the native white center on colored background with independently colored lines (1.5s)
+
+  8 passed (31.0s)

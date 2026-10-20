@@ -1,25 +1,29 @@
-/** @fileoverview Original ScMetricInputDlg width initialization,default toggle and twip result over real shared MetricSpinButton. */
+/** @fileoverview Original ScMetricInputDlg dimension initialization,default toggle and twip result over real shared MetricSpinButton. */
 import { MetricSpinButton } from "../../../../vcl/source/weld/MetricSpinButton";
 import { FieldUnit } from "../../../../tools/inc/fldunit";
-import { STD_COL_WIDTH, MAX_COL_WIDTH } from "../../../inc/global";
 /** Native dialog numeric owner;React owns only presentation and temporary text. */
 export class ScMetricInputDlg {
   readonly value = new MetricSpinButton();
   private readonly defaultValue: bigint;
   private currentValue: bigint;
-  /** Native ColWidthDialog factory values including two digits and two-twip minimum. @param current - Actual current width. @param unit - Actual configured metric unit. @returns Dialog model. */
+  /** Original metric dialog initialization including factory-provided digits and range. @param dialogName - Original dialog resource identity. @param current - Actual current dimension. @param defaultValue - Original default dimension. @param unit - Actual configured metric unit. @param decimals - Display digits. @param maximum - Maximum twips. @param minimum - Minimum twips. @returns Dialog model. */
   constructor(
+    readonly dialogName: string,
     current: number,
+    defaultValue: number,
     readonly unit: FieldUnit,
+    readonly decimals: number,
+    maximum: number,
+    minimum: number,
   ) {
     this.value.set_unit(unit);
-    this.value.set_digits(2);
+    this.value.set_digits(decimals);
     this.value.set_range(
-      this.value.normalize(2n),
-      this.value.normalize(BigInt(MAX_COL_WIDTH)),
+      this.value.normalize(BigInt(minimum)),
+      this.value.normalize(BigInt(maximum)),
       FieldUnit.TWIP,
     );
-    this.value.set_value(this.value.normalize(BigInt(STD_COL_WIDTH)), FieldUnit.TWIP);
+    this.value.set_value(this.value.normalize(BigInt(defaultValue)), FieldUnit.TWIP);
     this.defaultValue = this.value.get_value(FieldUnit.NONE);
     this.value.set_value(this.value.normalize(BigInt(current)), FieldUnit.TWIP);
     this.currentValue = this.value.get_value(FieldUnit.NONE);

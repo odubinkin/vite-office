@@ -123,3 +123,26 @@ it("keeps actual native sentinels and alpha at the browser boundary", /** Verifi
     "rgba(17, 34, 51, 0.5019607843137255)",
   );
 });
+
+it("creates actual popup contents on demand and restores its connected summary owner on Escape", /** Native lazy popup lifecycle shared by Writer and Calc. @returns Nothing. */ () => {
+  const mounted = render(
+    <ColorControl
+      label="Font Color"
+      property="color"
+      value="#000000"
+      fallback="#000000"
+      disabled={false}
+      onColor={vi.fn()}
+    />,
+  );
+  const summary = screen.getByLabelText("Font Color palette");
+  expect(screen.queryByLabelText("Font Color custom color")).toBeNull();
+  fireEvent.click(summary);
+  expect(screen.getByLabelText("Font Color custom color")).toBeInTheDocument();
+  const automatic = screen.getByRole("button", { name: "Automatic" });
+  automatic.focus();
+  fireEvent.keyDown(automatic, { key: "Escape" });
+  expect(summary).toHaveFocus();
+  expect(screen.queryByLabelText("Font Color custom color")).toBeNull();
+  mounted.unmount();
+});

@@ -94,13 +94,9 @@ it("retains disjoint column geometry on original grouped sheets and native histo
     expect(c.viewData.GetTabNumber()).toBe(0);
     view.SetWidthOrHeight(true, [], ScSizeMode.SC_SIZE_DIRECT, 0);
     expect(
-      /** Unsupported row sizing is explicit. @returns Nothing. */ () =>
-        view.SetWidthOrHeight(false, ranges, ScSizeMode.SC_SIZE_DIRECT, 10),
-    ).toThrow("explicit column");
-    expect(
       /** Device-dependent optimal sizing is explicit. @returns Nothing. */ () =>
         view.SetWidthOrHeight(true, ranges, ScSizeMode.SC_SIZE_OPTIMAL, 10),
-    ).toThrow("explicit column");
+    ).toThrow("explicit geometry");
     view.SetWidthOrHeight(true, ranges, ScSizeMode.SC_SIZE_ORIGINAL, 0, false);
     expect(doc.GetColWidth(1, 0)).toBe(1800);
     const undo = new ScDocument(),
@@ -114,6 +110,7 @@ it("retains disjoint column geometry on original grouped sheets and native histo
       3,
       0,
       undo,
+      true,
       ranges,
       ScSizeMode.SC_SIZE_DIRECT,
       1000,
@@ -140,6 +137,7 @@ it("retains disjoint column geometry on original grouped sheets and native histo
       3,
       0,
       oneTabUndo,
+      true,
       ranges,
       ScSizeMode.SC_SIZE_DIRECT,
       1000,

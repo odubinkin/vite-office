@@ -1,4 +1,13 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
+import {
+  cellBorderTokens,
+  exportCellBorderProperties,
+  importCellBorderProperties,
+} from "./xmlstyle.borders";
+import { ScIndentItem } from "../../../inc/attrib";
+import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { exportFontEffectProperties, importFontEffectProperties } from "./xmlstyle.font-effects";
 import {
   exportStrikeoutProperties,
@@ -126,7 +135,7 @@ const lineGroups = [
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
   100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 107, 109, 129, 132,
-  148,
+  148, 150, 141, 142, 108, 124,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -224,6 +233,8 @@ export function importCellTextProperties(
       ),
       ...strikeoutPropertyTokens,
       XMLToken.STYLE_TEXT_OUTLINE,
+      XMLToken.FO_TEXT_SHADOW,
+      XMLToken.STYLE_FONT_RELIEF,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
     ],
@@ -323,7 +334,7 @@ export function importCellTextProperties(
 
 /** Emits the original table-cell background property group. @param pattern - Native pattern. @returns Cell-property attributes. */
 export function exportCellProperties(pattern: ScPatternAttr): string {
-  let result = "";
+  let result = exportCellBorderProperties(pattern);
   const alignmentValue = new Any(),
     alignmentOutput: [string] = [""];
   try {
@@ -366,6 +377,7 @@ export function importCellProperties(
 ): void {
   attributes.assertOnly(
     [
+      ...cellBorderTokens,
       XMLToken.FO_BACKGROUND_COLOR,
       XMLToken.STYLE_TEXT_ALIGN_SOURCE,
       XMLToken.STYLE_REPEAT_CONTENT,
@@ -373,6 +385,7 @@ export function importCellProperties(
     ],
     "Calc cell properties",
   );
+  importCellBorderProperties(pattern, attributes, unsupported);
   for (const [token, source] of attributes) {
     const handler =
       token === XMLToken.STYLE_TEXT_ALIGN_SOURCE
@@ -563,25 +576,64 @@ const horiJustify = new XmlScPropHdl_HoriJustify(),
   vertJustify = new XmlScPropHdl_VertJustify();
 /** Exports the original paragraph-property group. @param pattern - Actual native pattern. @returns XML attributes. */
 export function exportCellParagraphProperties(pattern: ScPatternAttr): string {
-  if (pattern.GetItemSet().GetItemState(129, false) !== SfxItemState.SET) return "";
+  const indentValue = new Any(),
+    indentOutput: [string] = [""],
+    measure = new XMLMeasurePropHdl(2),
+    metric = new SvXMLUnitConverter("mm100");
+  let indent = "";
+  try {
+    if (pattern.GetItemSet().GetItemState(131, false) === SfxItemState.SET) {
+      const hmm = Number(
+        convertTwipToMm100(BigInt((pattern.GetItem(131) as ScIndentItem).GetValue())),
+      );
+      indentValue.insert([((hmm + 32768) & 0xffff) - 32768], "sal_Int16");
+      if (measure.exportXML(indentOutput, indentValue, metric))
+        indent = ` fo:margin-left="${indentOutput[0]}"`;
+    }
+  } finally {
+    indentValue.dispose();
+  }
+  if (pattern.GetItemSet().GetItemState(129, false) !== SfxItemState.SET) return indent;
   const value = new Any(),
     output: [string] = [""];
   try {
     (pattern.GetItem(129) as SvxHorJustifyItem).QueryValue(value);
-    return horiJustify.exportXML(output, value, unitConverter)
-      ? ` fo:text-align="${output[0]}"`
-      : "";
+    return (
+      indent +
+      (horiJustify.exportXML(output, value, unitConverter) ? ` fo:text-align="${output[0]}"` : "")
+    );
   } finally {
     value.dispose();
   }
 }
-/** Imports the native paragraph side of the merged horizontal property. @param attributes - Actual SAX attributes. @param horizontal - Style-owned shared merged Any. @param unsupported - Import diagnostic. @returns Nothing. */
+/** Imports the native paragraph side of the merged horizontal property. @param pattern - Native destination pattern. @param attributes - Actual SAX attributes. @param horizontal - Style-owned shared merged Any. @param unsupported - Import diagnostic. @returns Nothing. */
 export function importCellParagraphProperties(
+  pattern: ScPatternAttr,
   attributes: FastAttributeList,
   horizontal: Any,
   unsupported: (name: string) => void,
 ): void {
-  attributes.assertOnly([XMLToken.FO_TEXT_ALIGN], "Calc paragraph properties");
+  attributes.assertOnly(
+    [XMLToken.FO_TEXT_ALIGN, XMLToken.FO_MARGIN_LEFT],
+    "Calc paragraph properties",
+  );
+  const indent = attributes.get(XMLToken.FO_MARGIN_LEFT);
+  if (indent !== null) {
+    const value = new Any(),
+      number: [number] = [0];
+    try {
+      if (
+        new XMLMeasurePropHdl(2).importXML(indent, value, new SvXMLUnitConverter("mm100")) &&
+        value.extract(number, "sal_Int16")
+      )
+        pattern.ItemSetPut(
+          new ScIndentItem(Number(toTwips(BigInt(number[0]), Length.mm100)) & 0xffff),
+        );
+      else unsupported("invalid cell indentation");
+    } finally {
+      value.dispose();
+    }
+  }
   const source = attributes.get(XMLToken.FO_TEXT_ALIGN);
   if (source !== null && !horiJustify.importXML(source, horizontal, unitConverter))
     unsupported("invalid cell paragraph alignment");

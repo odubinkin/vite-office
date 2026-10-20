@@ -224,7 +224,8 @@ it("validates explicit host arguments and commits input before native character 
       ).toThrow(/boolean enabled/);
     expect(d.Execute(command, { enabled: true })).toMatchObject({ value: true });
     const count = c.shell.GetUndoManager().GetUndoActionCount();
-    expect(d.Execute(command, { enabled: true })).toMatchObject({ value: false });
+    // Native attribute operations report admitted success even when an equal delta is recorded.
+    expect(d.Execute(command, { enabled: true })).toMatchObject({ value: true });
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count + 1);
     expect(d.Execute(command, { enabled: false })).toMatchObject({ value: true });
   }

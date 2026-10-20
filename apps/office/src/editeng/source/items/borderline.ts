@@ -148,7 +148,7 @@ export class SvxBorderLine {
     return this.implementation.IsDouble();
   }
   /** Infers native double variants and custom ratios from ODF components. @param style - Requested style. @param outer - Outer twips. @param inner - Inner twips. @param gap - Gap twips. @returns Nothing. */
-  public GuessLinesWidths(style: BorderLineStyle, outer: number, inner: number, gap: number): void {
+  public GuessLinesWidths(style: BorderLineStyle, outer: number, inner = 0, gap = 0): void {
     if (style === BorderLineStyle.NONE)
       style = outer > 0 && inner > 0 ? BorderLineStyle.DOUBLE : BorderLineStyle.SOLID;
     if (style === BorderLineStyle.DOUBLE) {

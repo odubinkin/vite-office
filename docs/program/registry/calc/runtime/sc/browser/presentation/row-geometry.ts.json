@@ -9,7 +9,8 @@
     "subsystem": "spreadsheet-browser-geometry",
     "capabilityIds": [
       "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6",
-      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5"
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/browser/presentation/row-geometry.ts",
-        "apps/office/src/sc/source/core/data/rowheight.test.ts"
+        "apps/office/src/sc/source/core/data/rowheight.test.ts",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts"
       ],
-      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
+      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified. TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
       "knownViolations": [],
       "localSymbols": [
         "rowPixels"

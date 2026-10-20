@@ -3242,3 +3242,129 @@ The complete native character-type witness includes the original fast path and a
 `external/icu/source/common/native-character-types.test.ts` compares the unchanged native byte
 protocol,then checks the later NUL lookup. Native OS threading and full Unicode utilities remain
 unported;this is a bounded shared numeric-field prerequisite.
+
+## CALC224 — Indentation ODF property narrows to signed16 HMM
+
+Pinned `cellsuno.cxx` publishes ATTR_INDENT as signed16 HMM even though ScIndentItem stores
+UInt16 twips. XML uses XML_TYPE_MEASURE16 and `fo:margin-left`. Large positive indentation
+therefore wraps when exported;negative imported HMM converts to twips then narrows to UInt16.
+Preserve this boundary instead of adding a positive clamp or silently widening the ODF property.
+`ods-indent-rows.test.ts` independently exercises signed input and native saturation.
+The full UNO property-service graph remains unported.
+
+## CALC225 — Fully filtered indentation selection falls back to the cursor
+
+Pinned `ScViewFunc::ChangeIndent` removes filtered rows from copied marks,then converts them
+to multi marks. If no multi mark remains,it marks the current cell without rechecking its filter
+state. Thus a fully filtered selection can still indent the cursor cell. Preserve this original
+ordering;`cell-indent-row-height.test.ts` records the resulting attribute change. Protection,
+merged cells and alternate sheet views remain outside the represented operation.
+
+## CALC226 — Text-output cache refresh drops right indentation
+
+Pinned `output2.cxx` initializes its string-output cache indentation for Left or Right alignment,
+but its later pattern refresh only retains Left indentation. `DrawEditParam::calcMargins`
+independently includes indentation on the actual aligned side. This appears to make the native
+string path depend on cache refresh ordering. Do not invent a corrected native cache here:
+the full string-output/device/cache machinery remains unported. The browser projects current
+native margin/indent items using the represented margin arithmetic;full native paint/cache parity
+is explicitly unverified.
+
+## CALC227 — Rectangular frame redo loses adjacent-border envelopes
+
+Pinned `ScViewFunc::ApplyPatternLines` (`sc/source/ui/view/viewfunc.cxx`) computes
+`GetSelectionCover` before recording `ScUndoSelectionAttr`, so Undo restores both the
+selected cells and their adjacent borders. `ScUndoSelectionAttr::DoChange(false)`
+(`sc/source/ui/undo/undoblk3.cxx`) calls `MarkToMulti`, applies the pattern, then calls
+`MarkToSimple` before `ApplySelectionFrame`. For a rectangular mark, `MarkToSimple`
+calls `ResetMark`, clearing all four envelope lists (`sc/source/core/data/markdata.cxx`).
+`ScDocument::ApplySelectionFrame` consumes these lists without rebuilding them
+(`sc/source/core/data/document.cxx`). Thus Redo clears the selected rectangle again
+but leaves the adjacent borders restored by Undo. Preserve this source ordering;
+do not regenerate envelopes to silently repair it. `border-history.test.ts` verifies
+the selected and neighboring edges independently, including retained request-item copies.
+Native drawing, merged-cell paint extents and rich-edit history remain unported.
+
+## CALC228 — Mixed frame-style changes bypass attribute undo
+
+Pinned `ScViewFunc::SetSelectionFrameLines` (`sc/source/ui/view/viewfun2.cxx`) sends
+uniform outer/diagonal items through `ApplyAttributes`, which records attribute history.
+If any of those selected items is INVALID, it instead converts working marks to multi
+and calls `ScDocument::ApplySelectionLineStyle` directly. That branch records no undo
+operation before marking the document modified. Preserve the branch and existing history;
+do not silently add a synthetic undo action. `calc-borders.test.tsx` distinguishes
+uniform single-cell history from genuinely different perimeter items in a rectangle.
+Protection, rich edit, alternate views and native paint services remain unported.
+
+## CALC229 — Toolbar preset lines bypass Calc's current default line
+
+Pinned `DispatchBorderItem` (`svx/source/tbxctrls/tbcontrl.cxx`) now calls
+`GuessLinesWidths` with `SvxBorderLineWidth::Thin` (15twips) for non-diagonal presets.
+Calc's `ScFormatShell::ExecuteAttr` (`sc/source/ui/view/formatsh.cxx`) still substitutes
+its stored current frame line only for requested lines whose outer width is zero.
+Thus toolbar presets apply black solid 0.75pt edges even after changing the current
+frame color/style; they do not use the remembered default line. The diagonal presets
+independently use Hairline (1twip). Preserve these actual source values and the zero-width
+substitution branch. `calc-borders.test.tsx` checks preset widths/colors after a real
+style/color workflow. Full UNO argument transformation and native widgets remain unported.
+
+## CALC230 — None line style retains empty diagonal line pointers
+
+Pinned `ScViewFunc::SetSelectionFrameLines` (`sc/source/ui/view/viewfun2.cxx`) clears
+outer edge pointers when the requested line is absent. Its diagonal branch instead
+calls `UpdateLineAttrs` with that absent source,which returns without changing the
+shared temporary line,and then stores the temporary through `SvxLineItem::SetLine`.
+For the None request this leaves a present zero-width diagonal rather than a null
+pointer. Preserve both the empty value and explicit item state;do not normalize them
+to the No Borders preset's null diagonal items. `calc-borders.test.tsx` checks the
+actual native diagonal binding after removing outer/diagonal lines with None.
+Full native widget,UNO and rendering-service parity remain unverified.
+
+## CALC231 — Border set-cache inheritance collapses independent distances
+
+Pinned `ScItemPoolCache::ApplyTo` (`sc/source/core/data/poolcach.cxx`) merges an
+incoming SET border with an existing border item. If the incoming right distance is
+zero,it assigns the old right distance to all four sides. Thus an old left distance
+of3 and right distance of8 become8 on every side,rather than retaining independent
+old distances. Preserve this right-side test and SetAllDistances call. The real
+set-cache case in `border-frame.test.ts` checks the resulting left distance;the
+single-item cache path remains a different whole-item replacement operation.
+
+## CALC232 — Frame query treats the last allocated column as the selection end
+
+Pinned `ScTable::MergeBlockFrame` (`sc/source/core/data/table2.cxx`) clamps the end
+column to allocated columns before calculating each column's right-edge distance.
+A selection extending into unallocated columns can therefore report the right border
+of its last allocated column as the outer right border. Preserve the clamp and the
+resulting validity/color/style query behavior;do not substitute the logical selection
+end or synthesize allocated cells. `border-frame.test.ts` checks an extended actual
+selection whose reported right line still comes from the last allocated column.
+Full merged/device/alternate-view paint parity remains unverified.
+
+### CALC233 — diagonal width-only XML properties remain active without diagonal shorthand
+
+- Pinned source: `sc/source/filter/xml/xmlstyli.cxx`, `ScXMLCellImportPropertyMapper::finished`; `sc/source/filter/xml/xmlstyle.cxx`, `aXMLScCellStylesProperties`; `editeng/source/items/frmitems.cxx`, `SvxLineItem::PutValue`.
+- Observation: outer per-side width properties are disabled independently of whether a border shorthand exists. Diagonal old/new width properties are disabled only inside the branch requiring a diagonal shorthand. A width-only diagonal declaration therefore remains an active property for the original line item. New-spelling preference applies inside the shorthand merge branch; otherwise original SAX property order remains observable.
+- Impact: a diagonal width-only declaration can create a solid line even though the same component widths supplied without an outer border do not create outer lines. This asymmetry looks accidental but is retained.
+- Local preservation: the Calc border property importer retains this original branch and the existing actual SvxLineItem conversion. Independent ODF fixtures assert the resulting width-only diagonal. Full native UNO property services remain outside the consumed slice.
+
+### CALC234 — compound border width parsing ignores trailing tokens
+
+- Pinned source: `xmloff/source/style/bordrhdl.cxx`, `XMLBorderWidthHdl::importXML`.
+- Observation: the shared original handler reads exactly three measures and never checks for a fourth token. Additional trailing text is accepted while only inner width, distance and outer width are assigned.
+- Impact: malformed compound width declarations can be imported without rejection. The browser port formerly rejected them, which differed from the pinned source.
+- Local preservation: the shared handler now consumes the original first three measures. An independent Calc ODF fixture includes a trailing token and verifies the original resulting component widths. Writer uses the same handler.
+
+### CALC235 — XML text shadow accepts every value except exact none
+
+- Pinned source: `xmloff/source/style/shdwdhdl.cxx`, `XMLShadowedPropHdl::importXML`.
+- Observation: the original handler does not parse a shadow color or displacement. It writes true for every string other than the exact token `none`,including empty text,whitespace,uppercase variants and malformed declarations,and always returns success.
+- Impact: malformed or differently spaced ODF shadow values enable the shadow effect;export subsequently canonicalizes them to `1pt 1pt`.
+- Local preservation: the shared actual-Any handler retains the exact comparison and fixed export spelling. Literal lexical tests cover these inputs;no browser normalization is added.
+
+### CALC236 — XML constants handler returns success without output for out-of-range values
+
+- Pinned source: `xmloff/source/style/XMLConstantsPropertyHandler.cxx`, `XMLConstantsPropertyHandler::exportXML`.
+- Observation: after successful enum/integer extraction,the original handler checks the0..65535 range. The out-of-range branch emits a diagnostic but leaves the success bool true and the caller's existing output unchanged. An in-range unmapped constant instead returns false and assigns empty output when no default token exists.
+- Impact: callers can receive success together with stale XML text for invalid numeric input.
+- Local preservation: the common handler retains both original return/output branches. Actual Any tests independently assert negative,oversized and unmapped values.

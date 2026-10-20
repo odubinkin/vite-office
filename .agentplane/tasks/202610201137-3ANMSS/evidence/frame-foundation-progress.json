@@ -1,0 +1,146 @@
+{
+  "task": "202610201137-3ANMSS",
+  "status": "partial-progress-not-final-verification",
+  "branch": "calc",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "command": "npm run test:calc -- border-history.test border-frame.test calc-alignment.test calc-character-format.test calc-clear-format.test",
+      "exit": 0,
+      "files": 5,
+      "tests": 27,
+      "log": "output/playwright/task48-history-related.log"
+    },
+    {
+      "command": "npm run test:shared -- border-line.test boxitem.test",
+      "exit": 0,
+      "files": 2,
+      "tests": 31,
+      "log": "output/playwright/task48-shared-paint.log"
+    },
+    {
+      "command": "npm run test:writer -- native-cell-box-roundtrip.test native-table-border-common-state.test native-table-border-changed-items.test",
+      "exit": 0,
+      "files": 4,
+      "tests": 89,
+      "log": "output/playwright/task48-writer-related.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0
+    },
+    {
+      "command": "npm run inventory:parity:calc",
+      "exit": 0
+    },
+    {
+      "command": "eslint <changed-authored-TS-files> --max-warnings 0",
+      "exit": 0
+    },
+    {
+      "command": "prettier --write <changed-authored-TS-and-registry-files>",
+      "exit": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "sourceFinding": "CALC227: native MarkToSimple clears adjacent envelopes before rectangular border redo; retained and separately asserted. Initial failing expectation corrected after inspecting the complete native call chain.",
+  "remaining": [
+    "Native ApplyAttributes and format-shell border/style/color/diagonal dispatch",
+    "Native border toolbox/preset controls through shared Writer widgets",
+    "Actual grid frame projection and ODS border properties",
+    "Browser desktop/mobile/DOM-free Worker acceptance and final declared gates",
+    "Task verification,quality review and final closure"
+  ],
+  "nextFullCheckpoint": 50,
+  "lastFullCheckpoint": 40,
+  "hashes": {
+    "apps/office/src/editeng/source/items/boxitem.test.ts": "3242fbdd121b4dfb41a44858d4a23d8d13d922629ceb02d38dafc9838505a1ef",
+    "apps/office/src/editeng/source/items/frmitems.ts": "fdbcd6a6a8f8202503803172febf6f0d8ca028769c2b8edf1a887c17f93a39d1",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "5223fa147f2dc368fd9fe62e51753db78a8ce6b1bc82bff37d939bcea0a9453d",
+    "apps/office/src/sc/inc/attarray.ts": "6a228b65e511bdcc7012dd9c44764148dab36307c51c0e42a2c6d2a29f29328c",
+    "apps/office/src/sc/inc/poolcach.ts": "218ee20834154fe7d4995250295451abba65f3c9c3cbdad219c261a060b4e90d",
+    "apps/office/src/sc/inc/scitems.ts": "dced5440df18d6607b2c16272076c87b85ebc5a478bba32acf4c1b2265dfcf1e",
+    "apps/office/src/sc/source/core/data/attarray.ts": "b23ace4e95ffc98a56813c53e3ae5b323d8737ab167995ac9753517e01822c8a",
+    "apps/office/src/sc/source/core/data/border-frame.test.ts": "a4c9e184fda20a1d335a225551504eadcbc20a8d5c41c60113104925ab7780a6",
+    "apps/office/src/sc/source/core/data/column.ts": "263657029026d05a96492029d7995146e67793355576ac7c9bd7865b301c26c0",
+    "apps/office/src/sc/source/core/data/docpool.ts": "48fab98c23e4c746f29666b4ba70aa00ab5739a34d7f81a193bcd0ee06c2927c",
+    "apps/office/src/sc/source/core/data/document.ts": "15270be4bf517456330efa2d238a0e70339ebbe8e2788bed4b4bb32348b5efe2",
+    "apps/office/src/sc/source/core/data/poolcach.ts": "e0664ef45f71fcb5046cb0f6b80dff999a653d519511bf97a3d48f309e56fe1f",
+    "apps/office/src/sc/source/core/data/table.ts": "60d3ea95c3485b353cf7b8967f64c27ec828716bad7b7c5ef7829e4f4e38b30e",
+    "apps/office/src/sc/source/ui/inc/tabvwsh.ts": "b166b11042d2ee2d08729822c3502f2a34db71f22d96ac02d56fdd0bb8e2f431",
+    "apps/office/src/sc/source/ui/undo/undoblk3.ts": "3cb32dd7ce815959c2e4f4c0d4aaacc783d70638238de019d904783e8a54c652",
+    "apps/office/src/sc/source/ui/view/border-history.test.ts": "f21aee272ce74c1f8e1f6db41e7a371b7c563641393df37c62f03ad3664c30b4",
+    "apps/office/src/sc/source/ui/view/tabvwsh4.ts": "4fcd4bfac258b9ad48b775cfac029a3a738d4cd2bbcc6e5edca96e619336b6b5",
+    "apps/office/src/sc/source/ui/view/viewdata.ts": "f77038999dd106be18a010bf435f6feca1a8e19aaa06fae4120cf77b2ed0b726",
+    "apps/office/src/sc/source/ui/view/viewfunc.ts": "c4412e719fbfb2d5005fecab19567a414fd99b6ff3e628add01d88dbf49f94f4",
+    "apps/office/src/svx/browser/dialog/border-line.test.ts": "896b3b7af355d5ea3f7940c067a6ee9a0f5ecfd96745b39a8495278d0cefae0d",
+    "apps/office/src/svx/browser/dialog/border-line.ts": "440b1264f9f83b6a062f65b7e1cc9c3aa8cb6d37dc45d24b2bbbec5b7e699d90",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "c361b3903aa075156c0793a68c5086e3669ed144f101308b0c8547dfd11b0405",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "4fe95b3fd8723e9978c3dc8499c2a61b2645b8f4fa54c7281f0de12f3790f11f",
+    "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts": "ae119484bcebd7513dc5c315cbdad7e86bdc063f65097ced14e40db239f371dd",
+    "docs/program/calc-upstream-suspected-issues.md": "1f722e66e2badb65cee6db6869b7332a522010d3901687c37e510920325aabd4",
+    "docs/program/registry/calc/capabilities/CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f.json": "ac3d96fc142a6db90fe962d5d09ac8c6e0fabd54f8ef6c3e16d45f7b7de56a9d",
+    "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json": "5d71af5085a1fddc8f086e9280e184d182299f48dd87a0beccd424defb21431f",
+    "docs/program/registry/calc/provenance/sc/inc/attarray.ts.json": "56b4466c9e87fdb1b82493164ee1538c80ec20bf52d01004f0ce03398ffd7496",
+    "docs/program/registry/calc/provenance/sc/inc/poolcach.ts.json": "842a280ee40febcbe5299425b6ab1f3c7ccddcf2c023a6a7016b362671f49110",
+    "docs/program/registry/calc/provenance/sc/inc/scitems.ts.json": "48b714cf5e17d99c46931ae58226f182dd0881136e22f4e1536c8c364c49afdf",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json": "df23ff276cbbb2731d22375f317c0eec402945bd01d3f83a19b18f5647739dde",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json": "dfd8d33a09ff49f58af3c500a590bf899509b9187f37e6ca4d9f9c2da04cb3ba",
+    "docs/program/registry/calc/provenance/sc/source/core/data/docpool.ts.json": "cdd301fcdb486940c567a9010de2d042397c112450e091661b81f958f6e9d399",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json": "57936847367a55aac91635f4b93f95ee0042f762f2039b607e228dc6a008e0b2",
+    "docs/program/registry/calc/provenance/sc/source/core/data/poolcach.ts.json": "3b1b58d85cb64cb30a7d8eb146f8b93db047363dc4c8e30ea2f32a4482350a9f",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json": "58ab515c2e6bd1af789a16af04497f6c0fa59914bc54329565fdeafba80dcd42",
+    "docs/program/registry/calc/provenance/sc/source/ui/inc/tabvwsh.ts.json": "d39b598a769737a252b03e84326d0840ccd8f920c00ef9a5d4c2f67e1613391f",
+    "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk3.ts.json": "d6bc6ce792de4d389f17d00a0156fb9c1f5e432feda3f37f61c886f9339397fb",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/tabvwsh4.ts.json": "bc3a24e72c1c4cb57e3a0b7a99a668c84d03b950e11f1030c78b6a396ff4cea0",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/viewdata.ts.json": "138075ab8980e8118f6e77526cd38cc1e2c158fb260f8185636088a792bdc6e3",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json": "719a09e182791c1be2d1dcb61048d6c9f16d4563a0dd0b06f6ddb908aa8561a6",
+    "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json": "54e46b1c4065bcd35456196a74e58005386f63ccee91c91dc468b7e2f1015139",
+    "docs/program/registry/calc/runtime/sc/inc/attarray.ts.json": "6cc77fb3a661acf1b094c9a9fcfda8c4a7753c609e81b572e7d127ae8d93695b",
+    "docs/program/registry/calc/runtime/sc/inc/poolcach.ts.json": "a49bf3e619884cf657a027a84295cb3329a482fd53583f4ae9372ecdeadfa232",
+    "docs/program/registry/calc/runtime/sc/inc/scitems.ts.json": "2b4c5bebeb2461efb3a857c98089c3c1f9b3ff8bf2ffb83eaa9f549ec3a7cc96",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json": "51398374e9d69ac2074540ca2bce1935f56ea84e749bea403e4e35163d4aa4b0",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json": "04cb93a006a9df7f9d3165350a53afdfc3c32f359ce951cfb15048954089a8d5",
+    "docs/program/registry/calc/runtime/sc/source/core/data/docpool.ts.json": "6a38c658cf600a4dd65a66dd6e4312a6276bd1d930aa0a53bc575bc04c3d6534",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json": "3b288def9141530f7405dd9f14074244dc1d4fc8af463f65d6e256c3d7a0f04c",
+    "docs/program/registry/calc/runtime/sc/source/core/data/poolcach.ts.json": "47cad17b42bbf6b457d796b4c55c5ca891706d1516ed9ef345972668f3d9a509",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json": "464c812645014822f0e540d159e81603cb4c81d3f834880c5b09331644965d37",
+    "docs/program/registry/calc/runtime/sc/source/ui/inc/tabvwsh.ts.json": "2c96e5fd9b9950704d97f0a3bdd4391051e52aa6188c7c58a0c68e05ed5550e4",
+    "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk3.ts.json": "078a656696f5e98f59c0f3dee81bf2a18f2fb1fec5237816c9f80df8812c7a5f",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/tabvwsh4.ts.json": "ac34951e153f372a6f2c4d8fbe082d733e8751d317196b65c834b29c391e2926",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/viewdata.ts.json": "ee5952e034bb174184186fdefc062350e1fd76afa84022b4b906919997814e9f",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json": "1b107db9cdbf7f38c22d62e59f697cb1ec52c0d925064e8434b0520ea6a4b08d",
+    "docs/program/registry/shared/capabilities/CAP-4231f95a-b499-43df-b69d-ae3b29851892.json": "7319849ae99143badb21465112df7794436ace2d87b5569e0646b2af80ac7742",
+    "docs/program/registry/shared/provenance/editeng/source/items/frmitems.ts.json": "e6421d928ad9ea05fb0b4ea00deeb618475d0e9334c83ab6951d8c05584d23fe",
+    "docs/program/registry/shared/provenance/svx/browser/dialog/border-line.ts.json": "04c6a8cbff35612de0c63dc68fab3784992d3a1a195ecec8409ec4effb3da9b1",
+    "docs/program/registry/shared/runtime/editeng/source/items/frmitems.ts.json": "1a0131a464b69cb5106b337ebfc030b5c8c52909b49d58b92fc3f0fca5ea502b",
+    "docs/program/registry/shared/runtime/svx/browser/dialog/border-line.ts.json": "4d580b14bdc1705378dcbe8d51d1a5a72bfae3c8b1afed9a3e83c648aad4612f",
+    "docs/program/registry/writer/provenance/sw/browser/editor/WriterEditableTable.tsx.json": "0eab2ca6c50fa83cb4bb345ac06dd3d45830ff8ef69af3e0af3004ddc3c1b848",
+    "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json": "5d3fd481744f7362fd8e2e3948e2bbe31022ffb46871872443ab7896b61f6eac",
+    "docs/program/registry/writer/runtime/sw/browser/editor/WriterEditableTable.tsx.json": "025d932f126d843b2eef68c0ecbc9b2b090ea5009385458d470a8dad419a631c",
+    "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json": "da06484bf94bf8eec797232923cbc8353260742f543fe17707d75476f48fc6f3"
+  }
+}

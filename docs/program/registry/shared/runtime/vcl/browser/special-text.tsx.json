@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/special-text.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-special-text",
+    "capabilityIds": [
+      "CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448",
+      "CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/special-text.tsx",
+        "apps/office/src/vcl/browser/special-text.test.tsx"
+      ],
+      "justification": "TaskKFJKEQ consumes native Calc Shadowed10010/Which108 and parameterized CharacterRelief10920/Which124 with actual source attribute operations,default/mixed state,complete typed items and real selection history. Shadow uses the existing shared Writer Format/Text menu placement;native nonconfigurable CharacterRelief receives no invented menu/toolbar placement. Common XMLShadowedPropHdl and XMLConstantsPropertyHandler preserve actual Any,exact lexical matching,original failure/output branches and ODS text properties(CALC235/236). Shared browser VCL special text composition preserves relief-before-shadow/outline selection,black-to-white relief foreground,native luminance tint,signed integer offset and original shadow/eight-outline/white-center draw order over one accessible text raster. Actual browser text bounds and CSS96dpi are browser paint inputs,not simulated native device/font metrics. Full Sfx/UNO/widget/device/font services,rich edit,mixed-script per-device drawing,printer DPI and complete native parity remain unverified. Production browser/Worker and ODS acceptance pass with inspected raster screenshots;Writer saving/open/no-recovery policies remain.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SpecialText",
+        "outlineTextOffsets"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

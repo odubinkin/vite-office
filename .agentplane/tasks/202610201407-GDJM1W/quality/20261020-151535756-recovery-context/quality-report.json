@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201407-GDJM1W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T15:15:35.756Z",
+  "verdict": "pass",
+  "summary": "Operational checkpoint50 execution and failed-outcome retention complete; product gates remain failed.",
+  "evaluated_sha": "834cf1ed1ccf5bb792a9e1e12f2cab63340b45cf",
+  "blueprint_digest": "46d5d67d5a9d3fd8dda6eee1cf6e456603b8d1d0c574733ac043d735f652417a",
+  "findings": [
+    "17339 application cases passed and 2 failed; 428 browser cases passed and 4 failed. Coverage below 100 percent. No repairs or retries."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201407-GDJM1W/README.md",
+    ".agentplane/tasks/202610201407-GDJM1W/evidence/full-run-summary.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Known test failures and coverage gaps remain unresolved because user requested pause after the complete run."
+  ]
+}

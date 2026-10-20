@@ -16,3 +16,19 @@ export class ScMergePatternState {
     this.aOld1.Dispose();
   }
 }
+
+/** Original frame-line accumulation states. */
+export const SC_LINE_EMPTY = 0;
+/** Original observed uniform line state. */
+export const SC_LINE_SET = 1;
+/** Original mixed-line state. */
+export const SC_LINE_DONTCARE = 2;
+/** Original six independently accumulated outer/inner line flags. */
+export class ScLineFlags {
+  nLeft = SC_LINE_EMPTY;
+  nRight = SC_LINE_EMPTY;
+  nTop = SC_LINE_EMPTY;
+  nBottom = SC_LINE_EMPTY;
+  nHori = SC_LINE_EMPTY;
+  nVert = SC_LINE_EMPTY;
+}

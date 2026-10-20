@@ -96,6 +96,14 @@ it("uses native extended/legacy converters, signed components and preserves exis
     absent.LineStyle,
     absent.LineWidth,
   ]).toEqual([0, 0, 0, 0, 32767, 0]);
+  for (const [twips, expected] of [
+    [1, 2],
+    [15, 26],
+    [40, 71],
+  ]) {
+    const metric = Box.SvxLineToLine(new Line(null, twips), true);
+    expect([metric.OuterLineWidth, metric.LineWidth]).toEqual([expected, expected]);
+  }
   const line = new Line(new Color(0x123456), 65535),
     raw = Box.SvxLineToLine(line, false),
     converted = Box.SvxLineToLine(line, true);

@@ -1,7 +1,7 @@
 /** @fileoverview Browser outline raster stencil and real React platform-observer lifecycle. */
 import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { OutlinedText } from "./outlined-text";
+import { SpecialText } from "./special-text";
 /** Independently transcribed original device-pixel stencil. */
 const outlineTextOffsets = [
   [-1, -1],
@@ -21,12 +21,12 @@ afterEach(
 );
 it("keeps a single accessible text and exact native ordered raster draws with a white center", /** Observes actual rendered SVG primitives. @returns Nothing. */ () => {
   vi.stubGlobal("ResizeObserver", undefined);
-  const view = render(<OutlinedText enabled={false}>Text</OutlinedText>);
+  const view = render(<SpecialText enabled={false}>Text</SpecialText>);
   expect(view.container.querySelector("svg")).toBeNull();
   view.rerender(
-    <OutlinedText enabled paintStyle={{ textDecorationColor: "red" }}>
+    <SpecialText enabled paintStyle={{ textDecorationColor: "red" }}>
       Text
-    </OutlinedText>,
+    </SpecialText>,
   );
   expect(screen.getAllByText("Text")).toHaveLength(1);
   expect(
@@ -76,7 +76,7 @@ it("updates filter bounds from platform observations and disconnects on disable"
     disconnect = disconnect;
   }
   vi.stubGlobal("ResizeObserver", Observer);
-  const view = render(<OutlinedText enabled>Observed text</OutlinedText>),
+  const view = render(<SpecialText enabled>Observed text</SpecialText>),
     target = screen.getByText("Observed text");
   expect(observe).toHaveBeenCalledWith(target);
   act(
@@ -91,6 +91,6 @@ it("updates filter bounds from platform observations and disconnects on disable"
   );
   expect(view.container.querySelector("filter")).toHaveAttribute("width", "122");
   expect(view.container.querySelector("filter")).toHaveAttribute("height", "26");
-  view.rerender(<OutlinedText enabled={false}>Observed text</OutlinedText>);
+  view.rerender(<SpecialText enabled={false}>Observed text</SpecialText>);
   expect(disconnect).toHaveBeenCalledOnce();
 });

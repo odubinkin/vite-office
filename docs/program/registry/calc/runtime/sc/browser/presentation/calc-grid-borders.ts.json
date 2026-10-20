@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/calc-grid-borders.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "browser-cell-borders",
+    "capabilityIds": [
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/calc-grid-borders.ts",
+        "apps/office/src/sc/browser/presentation/calc-borders.test.tsx"
+      ],
+      "justification": "Task3ANMSS UI checkpoint connects all12native Calc border presets,last-used repetition,Shift-only validity reset,line style/color and diagonal slots to shared Writer buttons,palette and popup lifecycle. Native ScViewFunc ApplyAttributes routes frames separately from scalar attributes;original marked/cursor operation classes and ScUndoCursorAttr retain actual snapshots,complete patterns and normal enabled-undo ordering. Existing input history remains. Native cursor/marked operations report admitted success even for repeated equal attributes. Real canonical selection caches replace range-list mutation,retaining minimal default-column allocation. Popup contents are created only while actually open,using the shared Writer/SVX lifecycle,viewport placement and connected-owner Escape focus. Native completion preserves ordinary Done versus API requests and the explicit line-style Done branch. Empty argument requests remain ignored. CALC230 retains present empty diagonal line pointers after None. Source mixed-style no-history and black15twip/Hairline preset behavior are preserved as CALC228/229. The native unmerged SVX frame Array resolves actual neighbor styles and clipping;browser grid CSS and diagonals reuse the actual Writer line projection. Existing primary saving/open/no-recovery behavior remains. ODS border conversion and production browser/mobile/Worker acceptance are covered by task48 final evidence;complete native parity remains unverified. Native rich edit,merged/rotation/device primitives,global undo enablement,protection,alternate views,UNO argument/service graphs and complete native parity are unverified. Actual view references replace native global active-view lookup;physical cell interning is erased under GC.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcGridFrames",
+        "createCalcGridFrames",
+        "calcGridBorderStyle"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,4 +1,18 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import { SvxShadowedItem, SvxCharReliefItem } from "../../../../editeng/source/items/textitem";
+
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemLine as Inner,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
+import { SvxLineItem } from "../../../../editeng/inc/lineitem";
+import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
+import { SfxItemSet } from "../../../../svl/inc/itemset";
+import type { SfxRequest } from "../../../../sfx2/source/control/request";
+import type { SfxSlotState } from "../../../../sfx2/source/control/bindings";
 import { SvxContourItem } from "../../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/justifyitem";
@@ -7,7 +21,7 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
-import { COL_TRANSPARENT } from "../../../../tools/inc/color";
+import { COL_TRANSPARENT, COL_AUTO, COL_BLACK } from "../../../../tools/inc/color";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import {
   SvxWeightItem,
@@ -17,18 +31,13 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { FontWeight, FontItalic, FontLineStyle } from "../../../../tools/inc/fontenum";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
-import { GetSelectionPattern } from "./viewfunc";
+import { GetSelectionPattern, ScViewFunc } from "./viewfunc";
 import { AdjustBlockHeight } from "./viewfun2";
-import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxScriptSetItem } from "../../../../editeng/inc/scriptsetitem";
 import { SfxItemState } from "../../../../svl/inc/itemset";
-import { ScMarkData } from "../../../inc/markdata";
-import { ScUndoSelectionAttr } from "../undo/undoblk3";
-import { InsertDeleteFlags } from "../../../inc/global";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScRange } from "../../../inc/address";
 import type { ScViewData } from "../inc/viewdata";
 import type { ScDocShell } from "../docshell/docsh";
@@ -42,6 +51,219 @@ export type CalcColorKind = "font" | "background";
 export const calcColorSlots = { font: 10017, background: 10186 } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Original GetAttrState copies actual selected diagonal items and INVALID state. @param which - Native diagonal attribute. @returns Native binding. */
+  GetDiagonalState(which: 141 | 142): SfxSlotState {
+    const set = this.SelectionPattern().GetItemSet();
+    return set.GetItemState(which) === SfxItemState.INVALID
+      ? { enabled: true, mixed: true }
+      : { enabled: true, value: (set.Get(which) as SvxLineItem).Clone() };
+  }
+  /** Original shared line-style/color GetState reads actual frame geometry;different colors also make style mixed. @param color - Color slot versus style slot. @returns Native binding state. */
+  GetFrameLineState(color: boolean): SfxSlotState {
+    const [box, info] = (
+      this.viewData.GetViewShell() ?? new ScViewFunc(this.viewData, this.shell)
+    ).GetSelectionFrame();
+    const line = new SvxBorderLine(),
+      lines = [
+        box.GetTop(),
+        box.GetBottom(),
+        box.GetLeft(),
+        box.GetRight(),
+        info.GetVert(),
+        info.GetHori(),
+      ];
+    let found = false,
+      colorMixed = false,
+      styleMixed = false;
+    for (const value of lines) {
+      if (!value) continue;
+      if (!found) {
+        found = true;
+        line.SetColor(value.GetColor());
+        line.SetWidth(value.GetWidth());
+        line.SetBorderLineStyle(value.GetBorderLineStyle());
+      } else {
+        if (!line.GetColor().equals(value.GetColor())) colorMixed = true;
+        if (!line.equals(value)) styleMixed = true;
+      }
+    }
+    if (
+      [Valid.VERT, Valid.HORI, Valid.LEFT, Valid.RIGHT, Valid.TOP, Valid.BOTTOM].some(
+        /** Reads original frame validity. @param flag - Native side. @returns Mixed edge. */ (
+          flag,
+        ) => !info.IsValid(flag),
+      )
+    ) {
+      colorMixed = true;
+      styleMixed = true;
+    }
+    if (color)
+      return {
+        enabled: true,
+        value: new SvxColorItem(
+          colorMixed ? COL_TRANSPARENT : found ? line.GetColor() : COL_AUTO,
+          10202,
+        ),
+        mixed: colorMixed,
+      };
+    if (styleMixed) line.SetWidth(1);
+    const item = new SvxLineItem(10201);
+    item.SetLine(line);
+    return { enabled: styleMixed || line.GetWidth() !== 0, value: item, mixed: styleMixed };
+  }
+  /** Original border/style/color and diagonal ExecuteAttr cases consume real typed request items. @param request - Native request after browser boundary conversion. @returns Whether a represented command was handled. */
+  ExecuteBorder(request: SfxRequest): boolean {
+    const handled = this.ExecuteBorderItems(request);
+    if (handled && !request.IsAPI() && !request.IsDone()) request.Done();
+    return handled;
+  }
+  /** Original argument-present ExecuteAttr branches;line-style explicitly completes even API requests. @param request - Genuine typed native arguments. @returns Handled. */
+  private ExecuteBorderItems(request: SfxRequest): boolean {
+    const view = this.viewData.GetViewShell();
+    if (!view) return false;
+    const doc = this.shell.GetDocument(),
+      args = request.GetArgs(),
+      slot = request.GetSlot();
+    if (args.length === 0) return false;
+    if (slot === 10201) {
+      const item = args.find(
+        /** Finds original line-style request. @param value - Native item. @returns Match. */ (
+          value,
+        ) => value.Which() === 10201,
+      ) as SvxLineItem | undefined;
+      let line = item?.GetLine()?.Clone();
+      if (line) {
+        const widths = [
+          args.find(
+            /** Finds FN_PARAM_1. @param value - Request item. @returns Match. */ (value) =>
+              value.Which() === 21160,
+          ),
+          args.find(
+            /** Finds FN_PARAM_2. @param value - Request item. @returns Match. */ (value) =>
+              value.Which() === 21161,
+          ),
+          args.find(
+            /** Finds FN_PARAM_3. @param value - Request item. @returns Match. */ (value) =>
+              value.Which() === 21162,
+          ),
+        ];
+        if (
+          widths.every(
+            /** Tests original three-width presence. @param value - Item. @returns Present. */ (
+              value,
+            ) => value !== undefined,
+          )
+        ) {
+          const value = new SvxBorderLine();
+          value.GuessLinesWidths(
+            line.GetBorderLineStyle(),
+            ...(widths.map(
+              /** Borrows original UInt16 width item. @param value - Native width item. @returns Width. */ (
+                value,
+              ) =>
+                (value as import("../../../../svl/source/items/intitem").SfxUInt16Item).GetValue(),
+            ) as [number, number, number]),
+          );
+          line = value;
+        }
+        const current = view.GetDefaultFrameLine();
+        if (current) {
+          current.SetBorderLineStyle(line.GetBorderLineStyle());
+          current.SetWidth(line.GetWidth());
+          view.SetSelectionFrameLines(current, false);
+        } else {
+          view.SetDefaultFrameLine(line);
+          view.GetDefaultFrameLine()?.SetColor(COL_BLACK);
+          view.SetSelectionFrameLines(line, false);
+        }
+      } else {
+        view.SetDefaultFrameLine(new SvxBorderLine(COL_BLACK, 20, SvxBorderLineStyle.SOLID));
+        view.SetSelectionFrameLines(undefined, false);
+      }
+      request.Done();
+      return true;
+    }
+    if (slot === 10202) {
+      const color = (
+          args.find(
+            /** Finds actual border color. @param value - Item. @returns Match. */ (value) =>
+              value.Which() === 10202,
+          ) as SvxColorItem
+        ).GetValue(),
+        current = view.GetDefaultFrameLine();
+      if (current) {
+        current.SetColor(color);
+        view.SetSelectionFrameLines(current, true);
+      } else {
+        const line = new SvxBorderLine(color, 20, SvxBorderLineStyle.SOLID);
+        view.SetDefaultFrameLine(line);
+        view.SetSelectionFrameLines(line, false);
+      }
+      return true;
+    }
+    if (slot === 10188 || slot === 10024) {
+      const oldSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+        next = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+        current = view.GetDefaultFrameLine();
+      try {
+        const outer = args.find(
+            /** Finds actual mapped outer border. @param value - Item. @returns Match. */ (value) =>
+              value.Which() === 150,
+          ) as SvxBoxItem | undefined,
+          inner = args.find(
+            /** Finds actual mapped inner border. @param value - Item. @returns Match. */ (value) =>
+              value.Which() === 151,
+          ) as SvxBoxInfoItem | undefined;
+        if (outer) {
+          const box = outer.Clone();
+          for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT]) {
+            const line = box.GetLine(edge);
+            if (line && line.GetOutWidth() === 0) box.SetLine(current, edge);
+          }
+          next.Put(box);
+          request.AppendItem(box);
+        }
+        if (inner) {
+          const info = inner.Clone();
+          for (const edge of [Inner.HORI, Inner.VERT]) {
+            const line = info.GetLine(edge);
+            if (line && line.GetOutWidth() === 0) info.SetLine(current, edge);
+          }
+          next.Put(info);
+          request.AppendItem(info);
+        } else next.Put(new SvxBoxInfoItem(151));
+        oldSet.Put(this.SelectionPattern().GetItemSet().Get(150));
+        view.ApplyAttributes(next, oldSet);
+        return true;
+      } finally {
+        next.ClearItem();
+        oldSet.ClearItem();
+      }
+    }
+    if (slot === 11013 || slot === 11014) {
+      const which = slot === 11013 ? 141 : 142,
+        item = args.find(
+          /** Finds actual mapped diagonal border. @param value - Item. @returns Match. */ (
+            value,
+          ) => value.Which() === which,
+        ) as SvxLineItem | undefined;
+      if (!item) return false;
+      const oldSet = new SfxItemSet(this.SelectionPattern().GetItemSet()),
+        next = new SfxItemSet(oldSet);
+      try {
+        const value = new SvxLineItem(which);
+        value.SetLine(item.GetLine());
+        next.Put(value);
+        request.AppendItem(value);
+        view.ApplyAttributes(next, oldSet);
+        return true;
+      } finally {
+        next.ClearItem();
+        oldSet.ClearItem();
+      }
+    }
+    return false;
+  }
   /** Reads original uniform selected alignment;INVALID is represented by undefined. @param axis - Native axis. @returns Actual enum or mixed state. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
     return (
@@ -231,6 +453,26 @@ export class ScFormatShell {
   SetOutlineFont(value?: SvxContourItem): boolean {
     return this.ApplyToggleAttr(107, SvxContourItem.CreateDefault, value);
   }
+  /** Original merged shadow bool/default state. @returns Shadow or mixed. */
+  GetShadowState(): boolean | undefined {
+    return (this.SelectionItem(108) as SvxShadowedItem | undefined)?.GetValue();
+  }
+  /** Original complete shadow item or generic bound toggle. @param value - Optional request. @returns Admitted success. */
+  SetShadowed(value?: SvxShadowedItem): boolean {
+    return this.ApplyToggleAttr(108, SvxShadowedItem.CreateDefault, value);
+  }
+  /** Original relief item state retains all enum values. @returns Relief or mixed. */
+  GetReliefState(): number | undefined {
+    return (this.SelectionItem(124) as SvxCharReliefItem | undefined)?.GetValue();
+  }
+  /** Original parameterized relief ExecuteAttr case. @param value - Complete native item. @returns Admitted success. */
+  SetCharacterRelief(value: SvxCharReliefItem): boolean {
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper()),
+      copy = value.Clone();
+    copy.SetWhich(124);
+    delta.ItemSetPut(copy);
+    return this.ApplySelectionPattern(delta);
+  }
   /** Shared consumed ExecuteAttr cases receive a concrete native toggleable item. @param which - Known mapped attribute. @param factory - Concrete native factory. @param value - Optional complete request. @returns Whether changed. */
   private ApplyToggleAttr(which: number, factory: () => SfxPoolItem, value?: SfxPoolItem): boolean {
     const item =
@@ -304,30 +546,24 @@ export class ScFormatShell {
     }
     return this.ApplySelectionPattern(delta);
   }
-  /** Shared native ApplySelectionPattern responsibility with original attribute snapshot/history ownership. @param delta - Owned native pattern. @param adjustBlockHeight - Source ApplyAttr flag,disabled for color commands. @returns Whether changed. */
+  /** Delegates owned format deltas to the original view owner,then performs the caller's height adjustment. @param delta - Owned native pattern. @param adjustBlockHeight - Original ApplyAttr flag. @returns Native operation result. */
   private ApplySelectionPattern(delta: ScPatternAttr, adjustBlockHeight = true): boolean {
-    const doc = this.shell.GetDocument(),
-      marks = new ScMarkData(this.viewData.GetMarkData()),
-      range = this.AttributeRange(),
-      undo = new ScDocument(),
-      name = new OUString();
-    for (let tab = 0; tab < doc.GetTableCount(); tab++) {
-      doc.GetName(tab, name);
-      undo.InsertTab(tab, name);
+    try {
+      const result = (
+        this.viewData.GetViewShell() ?? new ScViewFunc(this.viewData, this.shell)
+      ).ApplySelectionPattern(delta);
+      if (adjustBlockHeight) {
+        const range = this.AttributeRange();
+        AdjustBlockHeight(
+          this.shell.GetDocument(),
+          this.viewData.GetMarkData(),
+          range.aStart.Row(),
+          range.aEnd.Row(),
+        );
+      }
+      return result;
+    } finally {
+      delta.Dispose();
     }
-    name.dispose();
-    if (!marks.IsMarked() && !marks.IsMultiMarked()) marks.SetMarkArea(range);
-    const copyRange = new ScRange(range);
-    copyRange.aStart.SetTab(0);
-    copyRange.aEnd.SetTab(doc.GetTableCount() - 1);
-    doc.CopyToDocument(copyRange, InsertDeleteFlags.ATTRIB, marks.IsMultiMarked(), undo, marks);
-    const changed = doc.ApplySelectionPattern(delta, marks);
-    if (adjustBlockHeight) AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
-    this.shell
-      .GetUndoManager()
-      .AddUndoAction(new ScUndoSelectionAttr(this.shell, marks, range, undo, delta));
-    this.shell.SetDocumentModified();
-    delta.Dispose();
-    return changed;
   }
 }

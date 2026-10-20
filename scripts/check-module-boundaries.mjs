@@ -259,6 +259,12 @@ const originalCharacterValueImports = new Map([
   ["xmloff/source/style/undlihdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   // Pinned cdouthdl.cxx includes com/sun/star/uno/Any.hxx and mutates the caller-owned native Any.
   ["xmloff/source/style/cdouthdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  // Original shdwdhdl.cxx includes Any.hxx; constants handler also reads the original UNO TypeClass_ENUM payload.
+  ["xmloff/source/style/shdwdhdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  [
+    "xmloff/source/style/XMLConstantsPropertyHandler.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Any.ts", "udkapi/com/sun/star/uno/TypeClass.ts"]),
+  ],
   ["xmloff/source/style/xmlbahdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   ["xmloff/source/text/txtprmap.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
 ]);

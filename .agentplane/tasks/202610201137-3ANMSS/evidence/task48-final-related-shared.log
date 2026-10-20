@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:shared
+> npm run test:shared --workspace @vite-office/office -- framelinkarray.test ColorControl.test border-line.test ctrlbox.test native-frame-style.test boxitem.test native-line-item.test --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:shared
+> vitest run --config vitest.shared.config.ts framelinkarray.test ColorControl.test border-line.test ctrlbox.test native-frame-style.test boxitem.test native-line-item.test --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  7 passed (7)
+      Tests  48 passed (48)
+   Start at  20:29:46
+   Duration  11.92s (transform 3.51s, setup 1.79s, import 5.03s, tests 2.54s, environment 11.41s)
+

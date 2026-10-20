@@ -78,6 +78,10 @@ export interface CommandToolbarItemsProps<
   readonly getButtonContent?: (commandUrl: string) => ReactNode;
   readonly icons?: ReadonlyMap<string, CommandIcon>;
   readonly items: readonly Placement[];
+  readonly renderCommandItem?: (
+    item: Extract<Placement, { kind: "command" }>,
+    index: number,
+  ) => ReactNode;
   readonly renderSpecialItem?: (
     item: Exclude<Placement, { kind: "command" | "separator" }>,
     index: number,
@@ -95,6 +99,7 @@ export function CommandToolbarItems<
   icons,
   items,
   renderSpecialItem,
+  renderCommandItem,
   resolveArguments,
 }: CommandToolbarItemsProps<Placement>): React.JSX.Element {
   return (
@@ -119,6 +124,11 @@ export function CommandToolbarItems<
                 index,
               ) ?? null
             );
+          const custom = renderCommandItem?.(
+            item as Extract<Placement, { kind: "command" }>,
+            index,
+          );
+          if (custom !== undefined) return custom;
           const content = getButtonContent?.(item.commandId);
           const icon = icons?.get(item.commandId);
           return (

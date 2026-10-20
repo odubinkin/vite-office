@@ -1,6 +1,13 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
+import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
+import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
+import { ScIndentItem } from "../../inc/attrib";
+import { SvxMarginItem } from "../../../svx/source/items/algitem";
+import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
+import { visibleRows } from "./row-geometry";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
-import { OutlinedText } from "../../../vcl/browser/outlined-text";
+import { SpecialText } from "../../../vcl/browser/special-text";
+import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
 import { columnPixels, visibleColumns } from "./column-geometry";
@@ -100,13 +107,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     viewport.firstColumn,
     Math.min(document.MaxCol(), viewport.firstColumn + viewport.columns - 1),
   );
-  const rows = Array.from(
-    { length: Math.min(viewport.rows, document.MaxRow() - viewport.firstRow + 1) },
-    /** Projects one visible row coordinate. @param unused - Unused entry. @param offset - Visible index. @returns Native row. */ (
-      _,
-      offset,
-    ) => viewport.firstRow + offset,
+  const rows = visibleRows(
+    table,
+    viewport.firstRow,
+    Math.min(document.MaxRow(), viewport.firstRow + viewport.rows - 1),
   );
+  const frames = createCalcGridFrames(viewData, columns, rows);
   const activeVisible = columns.includes(column) && rows.includes(row);
   useLayoutEffect(
     /** Follows native table/inline input focus on editing transitions, without retaining edit content. @returns Nothing. */ () => {
@@ -257,7 +263,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   const pattern = document.GetPattern(position) as ScPatternAttr;
                   const weight = (pattern.GetItem(102) as SvxWeightItem).GetWeight();
                   const posture = (pattern.GetItem(103) as SvxPostureItem).GetPosture();
-                  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue();
+                  const outlined = (pattern.GetItem(107) as SvxContourItem).GetValue(),
+                    shadowed = (pattern.GetItem(108) as SvxShadowedItem).GetValue(),
+                    relief = (pattern.GetItem(124) as SvxCharReliefItem).GetValue(),
+                    special = outlined || shadowed || relief !== 0;
                   const lineItem = pattern.GetItem(104) as SvxUnderlineItem;
                   const underline = lineItem.GetLineStyle(),
                     lineColor = lineItem.GetColor();
@@ -305,8 +314,31 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           if (event.target !== input.current) props.onEdit(position);
                         }
                       }
-                      className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
+                      className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        ...calcGridBorderStyle(
+                          frames,
+                          col,
+                          r,
+                          col === columns[columns.length - 1],
+                          r === rows[rows.length - 1],
+                        ),
+                        paddingLeft: Math.trunc(
+                          ((pattern.GetItem(143) as SvxMarginItem).GetLeftMargin() +
+                            ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                            SvxCellHorJustify.Left
+                              ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                              : 0)) /
+                            15,
+                        ),
+                        paddingRight: Math.trunc(
+                          ((pattern.GetItem(143) as SvxMarginItem).GetRightMargin() +
+                            ((pattern.GetItem(129) as SvxHorJustifyItem).GetValue() ===
+                            SvxCellHorJustify.Right
+                              ? (pattern.GetItem(131) as ScIndentItem).GetValue()
+                              : 0)) /
+                            15,
+                        ),
                         color: browserColor(fontColor.getFinalColor()),
                         backgroundColor:
                           (pattern.GetItem(148) as SvxBrushItem).GetColor().GetAlpha() === 0
@@ -335,7 +367,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         textDecorationStyle:
                           underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
                         textDecorationLine:
-                          outlined || underline === FontLineStyle.LINESTYLE_NONE
+                          special || underline === FontLineStyle.LINESTYLE_NONE
                             ? "none"
                             : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
@@ -349,6 +381,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         lineHeight: "normal",
                       }}
                     >
+                      <ScCellDiagonalBorders
+                        pattern={pattern}
+                        width={NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15)}
+                        height={NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15)}
+                      />
                       {editing && active ? (
                         <input
                           ref={input}
@@ -364,8 +401,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         />
                       ) : (
                         <div className="w-full shrink-0">
-                          <OutlinedText
+                          <SpecialText
                             enabled={outlined}
+                            shadow={shadowed}
+                            relief={relief}
+                            color={fontColor.getFinalColor()}
+                            lineColor={lineColor}
                             paintStyle={{
                               textDecorationColor:
                                 lineColor.GetAlpha() === 255
@@ -378,7 +419,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             }}
                           >
                             <ScCellText text={cell.text} pattern={pattern} />
-                          </OutlinedText>
+                          </SpecialText>
                         </div>
                       )}
                     </div>

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201055-QMVA57",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T11:32:53.840Z",
+  "verdict": "pass",
+  "summary": "Implementation6df0c5fb7016 satisfies the approved native indentation/manual-row layout block with shared Writer controls and actual ODS/native history. Recommend direct closure;continuing UI goal remains active.",
+  "evaluated_sha": "6df0c5fb7016fd0427d7b9e69a1b8fcee8b11889",
+  "blueprint_digest": "eb52e9390720fc6108ae4d4c4bf1e395bd8f87c446aa02d22d891db8706137ac",
+  "findings": [
+    "Compared pinned attr/table/view/operation/undo/filter/metric/ODF source anchors and reviewed actual implementation diff. Native defaults,200twip caps,alignment coercion,stable filtered-mark coordinates,manual row flags and independent hidden/filter ownership are retained in the represented normal-document branch.",
+    "Reconciled committed95 non-task path hashes against immutable evidence. Nonduplicated73 related module cases,95 focused tooling cases and6 latest production-browser/Worker cases pass. Static/type/lint/format/dependency/resource/provenance/invariant/parity/routing/doctor/diff gates pass;desktop/mobile screenshots inspected.",
+    "No broad native parity or blanket coverage claim. CALC224–226 and full device/cache/protection/merged/outline/drawing/alternate-view/global undo/UNO-service gaps are explicit. Only related tests between checkpoint40 and planned all-app checkpoint50 match the latest user instruction."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201055-QMVA57/README.md",
+    ".agentplane/tasks/202610201055-QMVA57/evidence/verification.json",
+    ".agentplane/tasks/202610201055-QMVA57/evidence/native-audit.md",
+    ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-1280.png",
+    ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-390.png"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Optimal/device sizing and complete native paint/cache/protection/merged/outline/drawing/alternate-view/global undo enablement/UNO services remain outside this approved represented slice. Existing build bundle-size advisory remains."
+  ]
+}

@@ -69,8 +69,8 @@
           "marker": "XMLBoolPropHdl"
         },
         {
-          "path": "apps/office/src/vcl/browser/outlined-text.tsx",
-          "marker": "OutlinedText"
+          "path": "apps/office/src/vcl/browser/special-text.tsx",
+          "marker": "SpecialText"
         }
       ],
       "tests": [

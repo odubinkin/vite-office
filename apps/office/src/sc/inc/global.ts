@@ -62,6 +62,8 @@ export function TwipsToEvenHMM(twips: number): number {
 export const STD_COL_WIDTH = 1280;
 /** Original1m maximum column width rounded to integral twips. */
 export const MAX_COL_WIDTH = 56693;
+/** Original maximum row height in twips. */
+export const MAX_ROW_HEIGHT = 56693;
 /** Original direct/optimal/show/visible-optimal/original size mode identities. */
 export enum ScSizeMode {
   SC_SIZE_DIRECT = 0,
@@ -70,3 +72,6 @@ export enum ScSizeMode {
   SC_SIZE_VISOPT = 3,
   SC_SIZE_ORIGINAL = 4,
 }
+
+/** Original indentation step in twips. */
+export const SC_INDENT_STEP = 200;

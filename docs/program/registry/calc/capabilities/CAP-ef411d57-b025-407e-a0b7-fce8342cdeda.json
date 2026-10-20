@@ -1,0 +1,113 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+    "capabilityId": "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+    "suite": "calc",
+    "subsystem": "indent-row-geometry",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared Writer React controls bind actual native items and source slot identities; intentional primary storage and no-recovery behavior is retained."
+    },
+    "capability": "Calc native cell indentation and manual row height/visibility",
+    "gaps": [
+      "Only the represented default-view unprotected/unmerged normal-document path is implemented;global undo enable/disable and full native services remain unported.",
+      "Device-dependent optimal sizes,protection,merged/outline/drawing/alternate-view services and complete native parity remain unverified.",
+      "The original signed16 HMM indentation export narrowing and filtered-selection fallback to current cursor remain preserved."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/ChangeIndentOperation.cxx",
+          "marker": "ChangeIndentOperation::runImplementation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk.cxx",
+          "marker": "ScUndoIndent::Undo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewutil.cxx",
+          "marker": "ScViewUtil::UnmarkFiltered"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::ChangeIndent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+          "marker": "ShowFilteredRows"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+          "marker": "XMLMeasurePropHdl::importXML"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "SetRowHeightRange"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxUInt16Item ColumnWidth"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+          "marker": "ChangeIndentOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undoblk.ts",
+          "marker": "ScUndoIndent"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewutil.ts",
+          "marker": "ScViewUtil"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/calc/indent-row-height.spec.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610200120-RV75WR/README.md",
+          "marker": "Findings"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-indent-row-geometry",
+    "scopeLimitations": [
+      "Only the represented default-view unprotected/unmerged normal-document path is implemented;global undo enable/disable and full native services remain unported.",
+      "Device-dependent optimal sizes,protection,merged/outline/drawing/alternate-view services and complete native parity remain unverified.",
+      "The original signed16 HMM indentation export narrowing and filtered-selection fallback to current cursor remain preserved."
+    ]
+  }
+}

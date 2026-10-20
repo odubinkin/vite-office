@@ -1,0 +1,865 @@
+{
+  "task": "202610201055-QMVA57",
+  "branch": "calc",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "nonTaskPaths": 95,
+  "checks": [
+    {
+      "command": "npm run test:calc -- cell-indent-row-height.test row-visibility.test ods-indent-rows.test column-width.test mtrindlg.test calc-column-width.test ods-native-alignment.test ods-native-columns.test",
+      "exit": 0,
+      "log": "task47-related-current.log",
+      "sha256": "9a90067790423d450fc8f9e5dd656d4339f2fd84224ebccc80599aa38e498619",
+      "summary": "\n> vite-office@0.1.0 test:calc\n> npm run test:calc --workspace @vite-office/office -- cell-indent-row-height.test row-visibility.test ods-indent-rows.test column-width.test mtrindlg.test calc-column-width.test ods-native-alignment.test ods-native-columns.test\n\n\n> @vite-office/office@0.1.0 test:calc\n> vitest run --config vitest.calc.config.ts cell-indent-row-height.test row-visibility.test ods-indent-rows.test column-width.test mtrindlg.test calc-column-width.test ods-native-alignment.test ods-native-columns.test\n\n\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office\n\n\n Test Files  9 passed (9)\n      Tests  31 passed (31)\n   Start at  18:28:52\n   Duration  16.30s (transform 8.04s, setup 1.56s, import 14.34s, tests 5.12s, environment 8.74s)\n\n"
+    },
+    {
+      "command": "npm run test:calc -- attarray.test selection-pattern.test rowheight.test column-geometry.test calc-clear-format.test calc-cell-selection.test calc-sheet-commands.test",
+      "exit": 0,
+      "log": "task47-related-regression.log",
+      "sha256": "4ca8ca8377e818717491c6a6e3a53421bd3bb4893c5cc8dd568bfbeb0b2c12a1",
+      "summary": "\n> vite-office@0.1.0 test:calc\n> npm run test:calc --workspace @vite-office/office -- attarray.test selection-pattern.test rowheight.test column-geometry.test calc-clear-format.test calc-cell-selection.test calc-sheet-commands.test\n\n\n> @vite-office/office@0.1.0 test:calc\n> vitest run --config vitest.calc.config.ts attarray.test selection-pattern.test rowheight.test column-geometry.test calc-clear-format.test calc-cell-selection.test calc-sheet-commands.test\n\n\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office\n\n\n Test Files  7 passed (7)\n      Tests  41 passed (41)\n   Start at  18:20:33\n   Duration  25.26s (transform 8.58s, setup 1.51s, import 15.40s, tests 21.85s, environment 9.08s)\n\n"
+    },
+    {
+      "command": "npm run test:shared -- xmlbahdl.test",
+      "exit": 0,
+      "log": "task47-shared.log",
+      "sha256": "269646efebf836caa25a9e75cfa53e296284cf9433c6782bb877b810ad9c9b41",
+      "summary": "\n> vite-office@0.1.0 test:shared\n> npm run test:shared --workspace @vite-office/office -- xmlbahdl.test\n\n\n> @vite-office/office@0.1.0 test:shared\n> vitest run --config vitest.shared.config.ts xmlbahdl.test\n\n\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n   Start at  18:17:01\n   Duration  13.22s (transform 3.17s, setup 1.29s, import 3.54s, tests 36ms, environment 7.18s)\n\n"
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "exit": 0,
+      "log": "task47-tooling-focused.log",
+      "sha256": "3ea103d9e59177445f1fae2fae7f055cfdecbfd1000e01a3b17c01ece6eee4ce",
+      "summary": "\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc\n\n\n Test Files  4 passed (4)\n      Tests  95 passed (95)\n   Start at  18:24:43\n   Duration  6.47s (transform 589ms, setup 0ms, import 13.34s, tests 76ms, environment 1ms)\n\n"
+    },
+    {
+      "command": "npx playwright test --config apps/office/playwright.config.ts --project calc --workers=2 apps/office/e2e/calc/indent-row-height.spec.ts apps/office/e2e/calc/column-width.spec.ts",
+      "exit": 0,
+      "log": "task47-browser-current.log",
+      "sha256": "288b2d91b6a89a843f82338d65eea4587964bbb37cb8b0a2038fc89e675d708a",
+      "summary": "[WebServer] (node:16087) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n\nRunning 6 tests using 2 workers\n\n(node:16091) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:16092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ✓  1 [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 1280px (18.4s)\n  ✓  2 [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 1280px (23.7s)\n  ✓  3 [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:23:3 › keeps Writer controls,native indentation and row geometry at 390px (7.9s)\n  ✓  5 [calc] › apps/office/e2e/calc/indent-row-height.spec.ts:79:1 › preserves indentation,row history,visibility and ODS in a genuine DOM-free Worker (3.2s)\n  ✓  4 [calc] › apps/office/e2e/calc/column-width.spec.ts:38:3 › native column width,visibility and primary ODS reopen at 390px (15.2s)\n  ✓  6 [calc] › apps/office/e2e/calc/column-width.spec.ts:127:1 › keeps native column width/visibility/history and actual ODS in a DOM-free Worker (2.5s)\n\n  6 passed (46.0s)\n"
+    },
+    {
+      "command": "npm run build",
+      "exit": 0,
+      "log": "task47-build-current.log",
+      "sha256": "553c813274df5f4fa5555d888dd85560da7e291aaa16575165ac90c2c13caefb",
+      "summary": "/office\n\n\n> @vite-office/office@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v8.2.1 building client environment for production...\n\u001b[2K\ntransforming...✓ 2591 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                         0.54 kB │ gzip:   0.33 kB\ndist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB\ndist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB\ndist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB\ndist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB\ndist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB\ndist/assets/odt-worker-Cx7IkZd0.js    713.42 kB\ndist/assets/index-DwqSedOM.css         68.25 kB │ gzip:  10.99 kB\ndist/assets/index-BEtVP_N5.js       2,716.31 kB │ gzip: 601.80 kB\n\n✓ built in 5.62s\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n\u001b[33m[PLUGIN_TIMINGS] \u001b[0mYour build spent 83% of 5.6s inside plugin hooks (4.7s).\nMeasured inside the callback, so queue time is excluded and time the callback itself awaited is not:\n  - vite:worker-import-meta-url transform (69%, 3.9s, 1 call)\n  - @tailwindcss/vite:generate:build transform (53%, 3.0s, 1 call)\nThose rows are 100% of the build; the rest of the 83% is below.\nNot measurable — 1 hook whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:\n  - vite:asset load (5 calls)\nSee https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.\n\n"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "exit": 0,
+      "log": "task47-static-current.log",
+      "sha256": "c347442cc5580450b6c775ac143f052b626f355a24a238f04f9918856fb753b0",
+      "summary": "Static build smoke passed: relative assets, 2 JavaScript bundle(s), no backend endpoints.\n"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "log": "task47-dependencies.log",
+      "sha256": "1db2af1a8df504d27b3411e0a32d0d8cb5a895c7a2107d1f207fe2e0630f9101",
+      "summary": "\n> vite-office@0.1.0 check:dependencies\n> node scripts/check-module-boundaries.mjs\n\nModule boundary check passed: 950 runtime sources, 4327 relative imports, 142 allowed cross-module edges.\n"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "log": "task47-size.log",
+      "sha256": "f43e894c903f242b40a62eac8c1a81703b9ca510fa874fe85c77fe5a986d4947",
+      "summary": ".ts: 943 lines\napps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts: 526 lines\napps/office/src/sw/source/filter/xml/xmlexp.ts: 938 lines\napps/office/src/sw/source/filter/xml/xmlimp.ts: 983 lines\napps/office/src/sw/source/ui/table/tabledlg.ts: 649 lines\napps/office/src/sw/source/uibase/app/docsh.ts: 533 lines\napps/office/src/sw/source/uibase/docvw/edtwin.ts: 555 lines\napps/office/src/sw/source/uibase/shells/textsh1.ts: 909 lines\napps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts: 544 lines\napps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts: 586 lines\napps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts: 981 lines\napps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts: 999 lines\napps/office/src/test/uno-native-values.ts: 584 lines\napps/office/src/vcl/browser/lo-runtime-fonts.css: 963 lines\napps/office/src/xmloff/source/core/xmltoken.ts: 506 lines\napps/office/src/xmloff/source/style/xmlstyle.ts: 629 lines\napps/office/src/xmloff/source/text/txtparae.ts: 951 lines\napps/office/src/xmloff/source/text/txtparai.test.ts: 757 lines\napps/office/src/xmloff/source/text/txtparai.ts: 600 lines\nscripts/calc-markmulti-native-probe.mjs: 517 lines\nscripts/check-module-boundaries.mjs: 808 lines\nscripts/check-module-boundaries.test.ts: 991 lines\nscripts/check-source-provenance.ts: 717 lines\nscripts/generate-writer-ui-resources.ts: 618 lines\nscripts/libreoffice-inventory/contracts.ts: 536 lines\nscripts/libreoffice-inventory/parity-mappings.test.ts: 887 lines\nscripts/libreoffice-inventory/parity-mappings.ts: 997 lines\nscripts/libreoffice-inventory/runtime-inventory.test.ts: 592 lines\nscripts/libreoffice-inventory/runtime-inventory.ts: 807 lines\nscripts/mdds-container-native-probe.mjs: 992 lines\nscripts/uno-type-primitives-native-probe.mjs: 612 lines\n"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "log": "task47-source-tree.log",
+      "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "summary": "\n> vite-office@0.1.0 check:source-tree\n> node scripts/check-lo-source-tree.mjs\n\nLibreOffice source-tree check passed for 114 required paths and 33 retired roots.\n"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exit": 0,
+      "log": "task47-invariants.log",
+      "sha256": "373bab205834c456af8d57ce36c00723aaeeb5b5ded798498d0f6b1d1e149200",
+      "summary": "ation and unused-private diagnostics; native private access, deleted-copy enforcement, debug assertions, invalid ranges, pointer/address/ABI/postmutation borrow behavior and native file I/O are excluded. Out-of-range invalid native accesses retain host DataView RangeError, not a promised native outcome. Native JS single-byte parseInt hex conversion is checked for all256bytes; the source hex accumulation omission/sentinel, normalized CDATA prefix markup and attribute CR global peek remain unchanged and are recorded as CALC-094..096. The native hex overflow check is unreachable after valid0..15 digits or invalid-sentinel break and is source-reviewed rather than reproduced as a dead throw. Source-backed tests, not compiled native differential/full configuration QA. Configmgr schema/backend/defaults, Calc document/grid/ODS integration remain pending. Existing Writer SAX/document XML remains shared separately, as upstream does. Nextfull111 then requestedpause after relevant repairs; no Writer-only repair.\",\n          \"knownViolations\": [],\n          \"localSymbols\": [\n            \"XmlReader\",\n            \"registerNamespaceIri\",\n            \"nextItem\",\n            \"nextAttribute\",\n            \"getAttributeValue\",\n            \"getNamespaceId\",\n            \"getUrl\"\n          ],\n          \"sourceResponsibility\": \"divergent\",\n          \"upstreamFile\": \"xmlreader/source/xmlreader.cxx\",\n          \"upstreamSymbols\": [\n            \"XmlReader::nextItem\",\n            \"XmlReader::registerNamespaceIri\"\n          ]\n        },\n        \"state\": \"foundation\",\n        \"subsystem\": \"xmlreader-parser\",\n        \"suite\": \"shared\",\n        \"exportedOperations\": []\n      }\n    ],\n    \"placeholderSuiteCount\": 5,\n    \"schemaVersion\": 3,\n    \"semanticViolationCount\": 0,\n    \"uiBehaviorCount\": 10\n  }\n}\n"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exit": 0,
+      "log": "task47-calc-resources.log",
+      "sha256": "58a628ed15b1f63f61e1fabb4a9e7b06cd2233c833980690dd80bb99c3785a42",
+      "summary": "\n> vite-office@0.1.0 check:calc-resources\n> tsx scripts/generate-calc-ui-resources.ts --check\n\nCalc resources: 463 commands;11 top menus;17 policy dispositions.\n"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exit": 0,
+      "log": "task47-writer-resources.log",
+      "sha256": "961544dbe0cf201293c68c81908f04f21117c2d8f8ef53f0d5c62692068964df",
+      "summary": "\n> vite-office@0.1.0 check:writer-resources\n> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts\n\n\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc\n\n\n Test Files  1 passed (1)\n      Tests  2 passed (2)\n   Start at  18:20:31\n   Duration  710ms (transform 252ms, setup 0ms, import 334ms, tests 18ms, environment 0ms)\n\n"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "log": "task47-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "summary": "policy routing OK\n"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "log": "task47-typecheck-final.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "summary": "\n> vite-office@0.1.0 typecheck\n> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office\n\n\n> vite-office@0.1.0 typecheck:tools\n> tsc --project tsconfig.tools.json\n\n\n> @vite-office/office@0.1.0 typecheck\n> tsc --noEmit\n\n"
+    },
+    {
+      "command": "npm run inventory:parity:shared",
+      "exit": 0,
+      "log": "task47-parity-shared.log",
+      "sha256": "dbd8310b0850bc45ba38701b1fe504a9bf7858e390ba3f9c16fe43661a058471",
+      "summary": "tation and unused-private diagnostics; native private access, deleted-copy enforcement, debug assertions, invalid ranges, pointer/address/ABI/postmutation borrow behavior and native file I/O are excluded. Out-of-range invalid native accesses retain host DataView RangeError, not a promised native outcome. Native JS single-byte parseInt hex conversion is checked for all256bytes; the source hex accumulation omission/sentinel, normalized CDATA prefix markup and attribute CR global peek remain unchanged and are recorded as CALC-094..096. The native hex overflow check is unreachable after valid0..15 digits or invalid-sentinel break and is source-reviewed rather than reproduced as a dead throw. Source-backed tests, not compiled native differential/full configuration QA. Configmgr schema/backend/defaults, Calc document/grid/ODS integration remain pending. Existing Writer SAX/document XML remains shared separately, as upstream does. Nextfull111 then requestedpause after relevant repairs; no Writer-only repair.\",\n          \"knownViolations\": [],\n          \"localSymbols\": [\n            \"XmlReader\",\n            \"registerNamespaceIri\",\n            \"nextItem\",\n            \"nextAttribute\",\n            \"getAttributeValue\",\n            \"getNamespaceId\",\n            \"getUrl\"\n          ],\n          \"sourceResponsibility\": \"divergent\",\n          \"upstreamFile\": \"xmlreader/source/xmlreader.cxx\",\n          \"upstreamSymbols\": [\n            \"XmlReader::nextItem\",\n            \"XmlReader::registerNamespaceIri\"\n          ]\n        },\n        \"state\": \"foundation\",\n        \"subsystem\": \"xmlreader-parser\",\n        \"suite\": \"shared\",\n        \"exportedOperations\": []\n      }\n    ],\n    \"placeholderSuiteCount\": 5,\n    \"schemaVersion\": 3,\n    \"semanticViolationCount\": 0,\n    \"uiBehaviorCount\": 0\n  }\n}\n"
+    },
+    {
+      "command": "npm run inventory:parity:calc",
+      "exit": 0,
+      "log": "task47-parity-first.log",
+      "sha256": "e684079998afc9c26933412a66545bc298de880e3a999f041759eb0467227747",
+      "summary": "tation and unused-private diagnostics; native private access, deleted-copy enforcement, debug assertions, invalid ranges, pointer/address/ABI/postmutation borrow behavior and native file I/O are excluded. Out-of-range invalid native accesses retain host DataView RangeError, not a promised native outcome. Native JS single-byte parseInt hex conversion is checked for all256bytes; the source hex accumulation omission/sentinel, normalized CDATA prefix markup and attribute CR global peek remain unchanged and are recorded as CALC-094..096. The native hex overflow check is unreachable after valid0..15 digits or invalid-sentinel break and is source-reviewed rather than reproduced as a dead throw. Source-backed tests, not compiled native differential/full configuration QA. Configmgr schema/backend/defaults, Calc document/grid/ODS integration remain pending. Existing Writer SAX/document XML remains shared separately, as upstream does. Nextfull111 then requestedpause after relevant repairs; no Writer-only repair.\",\n          \"knownViolations\": [],\n          \"localSymbols\": [\n            \"XmlReader\",\n            \"registerNamespaceIri\",\n            \"nextItem\",\n            \"nextAttribute\",\n            \"getAttributeValue\",\n            \"getNamespaceId\",\n            \"getUrl\"\n          ],\n          \"sourceResponsibility\": \"divergent\",\n          \"upstreamFile\": \"xmlreader/source/xmlreader.cxx\",\n          \"upstreamSymbols\": [\n            \"XmlReader::nextItem\",\n            \"XmlReader::registerNamespaceIri\"\n          ]\n        },\n        \"state\": \"foundation\",\n        \"subsystem\": \"xmlreader-parser\",\n        \"suite\": \"shared\",\n        \"exportedOperations\": []\n      }\n    ],\n    \"placeholderSuiteCount\": 5,\n    \"schemaVersion\": 3,\n    \"semanticViolationCount\": 0,\n    \"uiBehaviorCount\": 0\n  }\n}\n"
+    },
+    {
+      "command": [
+        "node_modules/.bin/eslint",
+        "apps/office/e2e/calc/indent-row-height.spec.ts",
+        "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+        "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+        "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+        "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+        "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+        "apps/office/src/sc/browser/presentation/row-geometry.ts",
+        "apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+        "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+        "apps/office/src/sc/inc/global.ts",
+        "apps/office/src/sc/sdi/scalc.ts",
+        "apps/office/src/sc/source/core/data/FilterData.ts",
+        "apps/office/src/sc/source/core/data/attarray.ts",
+        "apps/office/src/sc/source/core/data/column.ts",
+        "apps/office/src/sc/source/core/data/document.ts",
+        "apps/office/src/sc/source/core/data/table.ts",
+        "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+        "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+        "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+        "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+        "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+        "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+        "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+        "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+        "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+        "apps/office/src/sc/source/ui/operation/Operation.ts",
+        "apps/office/src/sc/source/ui/undo/undoblk.ts",
+        "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+        "apps/office/src/sc/source/ui/view/cellsh3.ts",
+        "apps/office/src/sc/source/ui/view/column-width.test.ts",
+        "apps/office/src/sc/source/ui/view/tabview3.ts",
+        "apps/office/src/sc/source/ui/view/viewfunc.ts",
+        "apps/office/src/sc/source/ui/view/viewutil.ts",
+        "apps/office/src/xmloff/source/style/xmlbahdl.test.ts",
+        "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "exit": 0,
+      "log": "task47-lint-current.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": ""
+    },
+    {
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/e2e/calc/indent-row-height.spec.ts",
+        "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+        "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+        "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+        "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+        "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+        "apps/office/src/sc/browser/presentation/row-geometry.ts",
+        "apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+        "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+        "apps/office/src/sc/inc/global.ts",
+        "apps/office/src/sc/sdi/scalc.ts",
+        "apps/office/src/sc/source/core/data/FilterData.ts",
+        "apps/office/src/sc/source/core/data/attarray.ts",
+        "apps/office/src/sc/source/core/data/column.ts",
+        "apps/office/src/sc/source/core/data/document.ts",
+        "apps/office/src/sc/source/core/data/table.ts",
+        "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+        "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+        "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+        "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+        "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+        "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+        "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+        "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+        "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+        "apps/office/src/sc/source/ui/operation/Operation.ts",
+        "apps/office/src/sc/source/ui/undo/undoblk.ts",
+        "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+        "apps/office/src/sc/source/ui/view/cellsh3.ts",
+        "apps/office/src/sc/source/ui/view/column-width.test.ts",
+        "apps/office/src/sc/source/ui/view/tabview3.ts",
+        "apps/office/src/sc/source/ui/view/viewfunc.ts",
+        "apps/office/src/sc/source/ui/view/viewutil.ts",
+        "apps/office/src/xmloff/source/style/xmlbahdl.test.ts",
+        "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+        "docs/program/calc-ui-readiness.md",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/registry/calc/capabilities/CAP-ef411d57-b025-407e-a0b7-fce8342cdeda.json",
+        "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+        "docs/program/registry/calc/provenance/sc/browser/presentation/ScGridWindow.tsx.json",
+        "docs/program/registry/calc/provenance/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+        "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+        "docs/program/registry/calc/provenance/sc/browser/presentation/row-geometry.ts.json",
+        "docs/program/registry/calc/provenance/sc/browser/workflows/calc-sheet-workflows.ts.json",
+        "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+        "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/core/data/FilterData.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlrowi.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyle.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyli.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/docshell/docfunc.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/operation/ChangeIndentOperation.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/operation/Operation.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk2.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json",
+        "docs/program/registry/calc/provenance/sc/source/ui/view/viewutil.ts.json",
+        "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+        "docs/program/registry/calc/runtime/sc/browser/presentation/ScGridWindow.tsx.json",
+        "docs/program/registry/calc/runtime/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+        "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+        "docs/program/registry/calc/runtime/sc/browser/presentation/row-geometry.ts.json",
+        "docs/program/registry/calc/runtime/sc/browser/workflows/calc-sheet-workflows.ts.json",
+        "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+        "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/core/data/FilterData.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlrowi.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyle.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyli.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/docshell/docfunc.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/operation/ChangeIndentOperation.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/operation/Operation.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk2.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json",
+        "docs/program/registry/calc/runtime/sc/source/ui/view/viewutil.ts.json",
+        "docs/program/registry/shared/provenance/xmloff/source/style/xmlbahdl.ts.json",
+        "docs/program/registry/shared/runtime/xmloff/source/style/xmlbahdl.ts.json"
+      ],
+      "exit": 0,
+      "log": "task47-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "summary": "Checking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exit": 0,
+      "log": "task47-docs-current.log",
+      "sha256": "66b232e75d96f17d27558a3ba45d1321de909baab076c8ac87d67ece0f380699",
+      "summary": "\n> vite-office@0.1.0 check:docs\n> node scripts/check-jsdoc.mjs\n\nJSDoc validation passed for 2475 authored source files.\n"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exit": 0,
+      "log": "task47-provenance-current.log",
+      "sha256": "5579075629a78adaf3d6434265e25f9f1859c7422061f72c49c5f55a2d555059",
+      "summary": "\n> vite-office@0.1.0 check:source-provenance\n> tsx scripts/check-source-provenance.ts\n\nSource provenance check passed for 951 runtime modules (814 mapped, 118 browser adaptations, 19 local infrastructure).\n"
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "log": "task47-doctor.log",
+      "sha256": "924d376a45ed248d0c543f1693e4423e5e21ab7e0671068719597b792965e4f2",
+      "summary": "doctor (OK)\n"
+    }
+  ],
+  "relatedModules": {
+    "files": 17,
+    "cases": 73
+  },
+  "focusedTooling": {
+    "files": 4,
+    "cases": 95
+  },
+  "browser": {
+    "cases": 6,
+    "widths": [
+      1280,
+      390
+    ],
+    "actualWorker": true
+  },
+  "fullAllAppCheckpoint": {
+    "last": 40,
+    "next": 50,
+    "runThisTask": false,
+    "authority": "Current explicit user goal: only related-module tests between full checkpoints."
+  },
+  "nativeAudit": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+      "marker": "void ScAttrArray::ChangeIndent",
+      "line": 1701,
+      "sha256": "dfd43a44c441b5723501c8424891220caa68a954817bb1fbda0b224bb59664dd"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+      "marker": "void ScTable::ApplyWithAllocation",
+      "line": 1483,
+      "sha256": "8960902f512b806a8776a2cada0b659215c622f91e45958b65665f4383fc223e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "marker": "void ScTable::ShowRows",
+      "line": 3835,
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "marker": "void ScTable::CopyToTable",
+      "line": 1337,
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table5.cxx",
+      "marker": "void ScTable::CopyRowHeight",
+      "line": 596,
+      "sha256": "77af7b774748decb521f51ec414019f9031fd5b2a84da39c7a1d3c7cfbb709d1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/FilterData.cxx",
+      "marker": "bool FilterData::setRowHidden",
+      "line": 325,
+      "sha256": "a2742e204bf2d41e09d176dbec7b63e2864209626d69a52cce6b1236257b6a58"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+      "marker": "void ScDocument::SetRowFiltered",
+      "line": 4646,
+      "sha256": "e89ce72a7e618225be9d61e531e36175787a32e246d5cbb0b4738a93f7e3d9da"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/operation/ChangeIndentOperation.cxx",
+      "marker": "bool ChangeIndentOperation::runImplementation",
+      "line": 35,
+      "sha256": "378d5b998f1d4aa7d3c950130a6e259a0bcf33b7d4e515de21ada343355e6a3a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/undo/undoblk.cxx",
+      "marker": "void ScUndoIndent::Undo",
+      "line": 2131,
+      "sha256": "1c703ca905fead3be2ddfb4b647ff2304ba17490715997f0a8365fc02ca309db"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "marker": "static void ShowFilteredRows",
+      "line": 89,
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfunc.cxx",
+      "marker": "void ScViewFunc::ChangeIndent",
+      "line": 3108,
+      "sha256": "cdf4e2940ceb1d585b3acf672bdbd21213e16cf09c67bd55f23b070e7bee3260"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewutil.cxx",
+      "marker": "void ScViewUtil::UnmarkFiltered",
+      "line": 223,
+      "sha256": "47856c9d8100c4abc6bfa516ad0fead9d32fe9d044c1ef7ab4aeb023a99d23bc"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx",
+      "marker": "case FID_ROW_HEIGHT:",
+      "line": 580,
+      "sha256": "92959feb0ed284ea03da5cb864ab99c7a86e0f076db4205ce00fe3f165612b4d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/mtrindlg.cxx",
+      "marker": "ScMetricInputDlg::ScMetricInputDlg",
+      "line": 26,
+      "sha256": "19e46c30e3c9456ed71d54d22ce1dd33e17d88e08824506530f5d45506eb0d6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/inc/mtrindlg.hxx",
+      "marker": "tools::Long           nMinimum",
+      "line": 37,
+      "sha256": "43dbeb315e4cda6f7aa68ad990818be572c276fe305b89f024e321967a2d56a6"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/unoobj/cellsuno.cxx",
+      "marker": "case ATTR_INDENT:",
+      "line": 1885,
+      "sha256": "55c8357e6ad0b4c98ada78da72262c151e35a8e5e230d91c5ef5c3b71f817304"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "marker": "SC_UNONAME_PINDENT",
+      "line": 102,
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlrowi.cxx",
+      "marker": "bool bFiltered (false)",
+      "line": 198,
+      "sha256": "9ce1129be5f861dfe21cd0cb68c7feda699aef3a0e27c3cc6cd37ce801ae39cc"
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+      "marker": "bool XMLMeasurePropHdl::importXML",
+      "line": 185,
+      "sha256": "008d43838ad2bf131230277f3a4dc3e9b5bd2ca4331f83e1778e010ad4b3aefd"
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/inc/xmlbahdl.hxx",
+      "marker": "explicit XMLMeasurePropHdl",
+      "line": 64,
+      "sha256": "62101ff943e9856dd3f04f31701a4a09434ea3d216930059085201b744a175c8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/output2.cxx",
+      "marker": "void ScOutputData::DrawEditParam::calcMargins",
+      "line": 2661,
+      "sha256": "6cdeea262b4fcd0aed313a76ebf222142a5e885bed5d6be766e994c2e009d4d3"
+    }
+  ],
+  "changedFiles": [
+    {
+      "path": "apps/office/e2e/calc/indent-row-height.spec.ts",
+      "sha256": "6209e77f5a2734b2b4c93c563909585314fc08238041e18262cd8e93983dff11"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "dac30280b2f947e26c078916d61fd5d3ff9af0d1d9adfd9974330e6e1992f9e1"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "8557707ee1a4f77859a66ff99aa1d96f01362b31478fa13cc80d5e646ce80dcf"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+      "sha256": "933c0cd750d998be4a7c73987eeb737c8ca85cd06823da3e6909548bfa5b2534"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+      "sha256": "508be62c5ab61c161dab3362c79897a2cef67e0759164e69c06bdd3fced06a2b"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "6d1dd7e169d2d73107ad11a514f708cac57a59671c9a14b2027b7c69de28ba72"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/row-geometry.ts",
+      "sha256": "53b3dff776419b171febadd1c94105b21ef8829d9f00e0db64b39b5d46a8a4ad"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+      "sha256": "0b20678cf3690b650dfea9817cca84e8dbaf54e004fb40e7b9be479fa0fb94cd"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+      "sha256": "685a525db127cb251efabc479f60f9d7764bb0fc6fe3d3de348804b7f384ec4d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "75d0c22e8b05b0c75108eed3817660adb93ff74ce85e97c39baaf438d71732a5"
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "2d33209c3a6d36e819fdb9efa054061f4269f747b42ca4853d7ced5ff3d8d620"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/FilterData.ts",
+      "sha256": "6f04f9ac0c29a8c43ff4dcc917df344c3cb50700ed0a39e4bea27040e9f81aef"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "9f41a79fdf124776d1dd59e8b82c0399ee407ea92a9cf09da86ab4e7b366acc6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "5813950d0e5c957f0437934e6de97da42b77f5e9fb0c90d40344099029a266ab"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "1318356f57cb2c99f5c46334deb17a4464dcf37b2f57d931e8ca960794595b98"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "8587ebe3fd74f6c3a6b88166dfbfa2696846a4e725983de7458fc74c3422a1c7"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+      "sha256": "12e5ed18d9327c12e71984491a26e1b1a2574160966330103debfa032cf0bf25"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "e2e09184ac1bf04a66e4b358ed51598601db5b93784e56cc8333b8ecc126d361"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+      "sha256": "e23e68528d1a2c72a24e4090d205107cd41e7aaf9809d4bee470f85025427b49"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "bdd2ce8b32da7da72228d02caeda7aeec954a89fb1b72feabc6c0d162a888939"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "bd1366ff72c28681fd6dc3b215b1a2859b842f73d940dbf9c1e70326e33b91a0"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+      "sha256": "1ff320fb788dc890d46852743488fd49f86b9123f3fdeefa5005488fa020faae"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+      "sha256": "2e95b92f7df7f3aee6f5429236a07ac0cd229782500e1dd68c4e43b486c33bb0"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+      "sha256": "de7823a31dcd8f3f10db39109e654b648523f2e2a89a0fabfab9ee4cc31e56ae"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+      "sha256": "ad6355bd1f0621f269330813fd5dde4f706b62c4d1e5fb5ecf753b524bdc47dd"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+      "sha256": "1fc32ed052ead95b4d8f8d541ae48a760aab6f7455f87934057e9e0827bfb637"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk.ts",
+      "sha256": "78eedde9b1a7cb977934c121aee2877514365141a24f1955761b41c0369ba9c7"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+      "sha256": "53626a0ed2726c2c1213fe97803dba081a9b7fd642b28ea15d169affd4ccc4e6"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+      "sha256": "6ba73f7e08f93294bcc4f0f7c2ab51d863db7752223263a45610bb19a8872b95"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cellsh3.ts",
+      "sha256": "b8a06cda735a5b618da3f471ab1be28e5bff771bf025669d6bd6453997a5fd3a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/column-width.test.ts",
+      "sha256": "5813ebd83ac382f4c36ffd61bb6c0c7d10dc230ea1dbeea870042ba704910e94"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "8fb812996742ddeea04679c573fbb0805c7250f2e276a30fb9b0df02e2b485ba"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "957e4cda4ce9a69e31addfcf5377a5ce13afa83ef856c2cfcd57aea84ac2f132"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewutil.ts",
+      "sha256": "461f242ba62daf585a03373bb485a8444c1a3645a1c3074ec3a2a77156c2aab7"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlbahdl.test.ts",
+      "sha256": "a97002ec885fa6638594811aa07deb3730b5e639cc0bba555fe07ee5a9083ce6"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlbahdl.ts",
+      "sha256": "9f71a5ffbf3af198bd537b066ebe3963c084118a2c2e90ee48371597b049584e"
+    },
+    {
+      "path": "docs/program/calc-ui-readiness.md",
+      "sha256": "68caae5b705322de147233af3b6775b3941b290dd630c20cba1e6090391a81f0"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "edd054a9c5458e498d6d9899d312692341343c8d6281485cdd0f9048a85a27b0"
+    },
+    {
+      "path": "docs/program/registry/calc/capabilities/CAP-ef411d57-b025-407e-a0b7-fce8342cdeda.json",
+      "sha256": "f9f75b0edabf10a3dfcf153800638a9b326faf437a87ea3c8ac5f6fe1c55dba7"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "be284a73564ea0a786c0b9b32b28fd5558f425cb304bb72cc11c9a687cf03161"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/ScGridWindow.tsx.json",
+      "sha256": "d066437a464adcca35ae6df89f918b5baf420eea07bcc4e376251c5aee80379e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+      "sha256": "cf7259976e50fa4c191be056c69087a353c820be5637405fd6538d157e081bde"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "a58bb283f4cbac4406a50154e576854e661c5105091d9efbc0a6772d6f6a8cfb"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/row-geometry.ts.json",
+      "sha256": "6551cb535d206e8e52985247afb4bcc13dc7a5151935c2cd6487e6178e6abe9f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/workflows/calc-sheet-workflows.ts.json",
+      "sha256": "9503ab4134d98cef246db324c257171c72af6b46cb0e2cabb6deda580449bf25"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+      "sha256": "bb8baae1f798abfeb7c96b041b50eff88f08694070437e4874cee4b295c79593"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json",
+      "sha256": "5051199e1eddbe5002b2e6a63527bf6f2acf0acc1a936c4c967b590884fc7ead"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/FilterData.ts.json",
+      "sha256": "34dc948baf224189209980a50e0c359e8609b2cd0deaccc796b68327c3539cf3"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+      "sha256": "0c4c17acf24fa16a43267ad1e3ca642280a01694f146bb284bd5ee7e2bd21833"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "sha256": "35c0eb3b2e623dda3e7231ef32379732eef5e2b1f401c22c5d803627cb4fc0a4"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "7d112c8bae27b36528fc4adc1084cdddfad923f124bcc888ff7e11f00a806574"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "sha256": "b3d51121a1f500f0fbbf8a56d81448ff80b2b8327fefeccc9e80de4b52d6772d"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.ts.json",
+      "sha256": "dbd596349904f1d7558a1ccecb45e8542fbd413c8210138494d8d4b7ebb1e40e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlrowi.ts.json",
+      "sha256": "9732de1e468dce1117c67295c4b735f7c99d79386944e566ef318e74d2b3e6cd"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyle.ts.json",
+      "sha256": "acbac84b740db85580dcd8b401f86c36c6203ae9f9b773e85bb707c88174612f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyli.ts.json",
+      "sha256": "a8b15ace0ae5f06c206426736450d867739eb99043e288b51cca2fdcf429d7ad"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/docshell/docfunc.ts.json",
+      "sha256": "a153da1ec8df2ba4041a9079e3c766c1fb5e322f6e765c77d42f9596630dc830"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+      "sha256": "f012fa46c693f1593ca3c65030e94a5202bb9f8225d799049a26d250583aaf9c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/operation/ChangeIndentOperation.ts.json",
+      "sha256": "b4a6d0c675352ee805394a4306c5214002cb3cecc94227b1e246ed05ee5aae72"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/operation/Operation.ts.json",
+      "sha256": "b5d8d4aa07eea94bf28d7a17e760eb391791f19cef5f58093f5b0d937681d929"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk.ts.json",
+      "sha256": "5731291300f016125d676cbe314cce300c164aae24b7f3633d6ba8353dd83f49"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk2.ts.json",
+      "sha256": "5060733fdd74a18e552327ff34431fdaef866f54161e949ebc4991eb9d9c8987"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json",
+      "sha256": "cfc70de38f5f20a0672a2378d3b0fcbc1284599fb34b87fd83dca5dce92efe50"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "04339294edfaccc81dc0784fefb82a24a889356690a1f49d64333ce9ce060173"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json",
+      "sha256": "040335acc907978c36b09bdca5aee3caf7dd2251c6f5c4e38ed02f1484d461d5"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewutil.ts.json",
+      "sha256": "82a36ab0d9218f626003e7fb286a75fcc40a6c609b638929d5b60ebb9f0a80c6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "b6c2d1b1c348bbe670095392ee3a8199412e41b3dfbd84df5cbe5b012db2ba38"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/ScGridWindow.tsx.json",
+      "sha256": "b158eb23ddb4a293e243e55fcef8e8c568258dd7018d19263aff8d4772fae81c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/ScMetricInputDlg.tsx.json",
+      "sha256": "919567d1970148cd45ae25874171d9171dd3d252817fc131ceea0826d3439d52"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "5726290150a37f75cd71e736b8470fdb35ab0ba5988ee5ca89bd06c488c2f63e"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/row-geometry.ts.json",
+      "sha256": "e2e112f60bc2d7150d3d4409bc5e0e6864530c9c70aa41f33f21bc7aad8cce32"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/workflows/calc-sheet-workflows.ts.json",
+      "sha256": "c0f092d142d8a75d13579b875f6d1dceaaed61b2b19d3496351f251219b8ed8c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+      "sha256": "30deb3542392628d93ab1c4a4268aa5d048ed3775c334aa8dd1c336141ddfa59"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json",
+      "sha256": "cbad5c5681594de89bfd15b6d47214c731cb9daf5727c0ca75ef6f39514f5936"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/FilterData.ts.json",
+      "sha256": "4f6ed50f5ccc9a99d794368fbb14031d61457a5b33a2376e3c802ff1f2a83cb7"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+      "sha256": "469498f6098d37a082c2c39ab50f4fd0c6e1ff64476d4ac8ce5345d45af85fc4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "sha256": "86ad60322af66c46503d340f38190aac3ec9a7b45dfc4a52936c2f682ab104f0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "dc38fffec1953b690fee7db1bf41efb6ba43d79eb8e8a942349383f5e5246b3b"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "sha256": "045e86af115472a1fb0e342263e40bbcb375a4c0fd2e2e1564d9a2b76aa0951c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.ts.json",
+      "sha256": "05a1ab0b5236f44baeabdb0f2ecaa08bb673f589deaee9cbd81f28a38a615a05"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlrowi.ts.json",
+      "sha256": "189415069ad1414093ad68effe582e5619cc877bdd3693094038fbb7200d6a10"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyle.ts.json",
+      "sha256": "fc560cae4cd7c2c2112193e496db279962b125ac35327a1b0ff4337be41eaf3c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyli.ts.json",
+      "sha256": "985606230844d6b879cb4ecfce19f10feaf79ab2d7b29a219df70bc70f944095"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/docshell/docfunc.ts.json",
+      "sha256": "a48936d54c7edeaf54e418a43fe9328e365056f4dfb14aca3ceaa450ee2deff3"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/miscdlgs/mtrindlg.ts.json",
+      "sha256": "f92d09eed6ad89394c771de39e9ec6fa7ddbafcb2f82195c24f9ace2bfd6ccdf"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/operation/ChangeIndentOperation.ts.json",
+      "sha256": "8d52ac3856e359ea1a279df6e9265aefd9e732b9b46434d5f45b3732730bfbb5"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/operation/Operation.ts.json",
+      "sha256": "dec88f3e8fd4f0c25e38dd4ba5154f1ac93090fab14a6f34b70b3b935abf15ab"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk.ts.json",
+      "sha256": "2216adcc8ea08bc6b24d6e4c661c8a9935d8dc72471b099e5abfc07934b04e95"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk2.ts.json",
+      "sha256": "521cc342bd73e9b0117eaa783f7522029630b02bf18dae9573e6ba2f6b50a481"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json",
+      "sha256": "a38526961e8756442501f4427985fc949861bd3afac3919b55ab3004a2a1523b"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "b0dbfd1af8c970051d63c17c5789c62d66ca8be7f0ffefce37bcd746970b408a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json",
+      "sha256": "d41829b956782f286fe9a4f31b6e54ac1498783fffb61fb2cf76e57ad5e091f6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewutil.ts.json",
+      "sha256": "d9456c79b8ddf0cf156c869b49b6021fb41947ef99689c3cce3ea3d87c1b540c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/style/xmlbahdl.ts.json",
+      "sha256": "1b372f82a9d71d1125a1c2bcabbe0eddb7cbdb21cc562e76a429da94ef2c4a62"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/style/xmlbahdl.ts.json",
+      "sha256": "3999d8fb67dcbc4c3453239cb9031f2ffa41becf03425c4e0fd674fce95ce392"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-1280.png",
+      "sha256": "78c51a34232b259c50a932cb892e9cec16b91a8e8911d6747baf13e35aaf1367",
+      "inspected": true
+    },
+    {
+      "path": ".agentplane/tasks/202610201055-QMVA57/evidence/indent-rows-390.png",
+      "sha256": "ca79272a85de55166624d19c58d649223b1a088be41f3b3130302c2176d865a8",
+      "inspected": true
+    }
+  ],
+  "initialRepairs": [
+    "Review fixed ScViewUtil to retain the original captured coordinates when filter subtraction expands the mark rectangle;new grouped-sheet regression passes.",
+    "Removed obsolete regression assertion that row sizing must throw now that native row sizing is represented.",
+    "Applied the original implicit UInt16 cast at the signed-HMM indentation setter boundary.",
+    "Independent ODF fixture uses repeated empty hidden rows for compressed export;nonempty repeated rows retain their actual contents.",
+    "Preserved original static ScViewUtil source owner with the same narrow lint exception used by ScGlobal."
+  ],
+  "residualRisk": [
+    "Full native painting/cache,device sizing,protection,merged/outline/drawing/alternate-view/global undo enablement and complete UNO service graphs remain unported.",
+    "Source quirks CALC224/CALC225/CALC226 documented;no blanket native application or coverage certification.",
+    "An auxiliary tooling smoke also ran129 cases;the nonduplicated focused evidence is95 tooling cases."
+  ]
+}

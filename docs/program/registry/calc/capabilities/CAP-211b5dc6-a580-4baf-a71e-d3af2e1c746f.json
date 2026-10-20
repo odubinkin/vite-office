@@ -1,0 +1,158 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native JS value/holder ownership and common Writer CSS paint projection;full VCL services are unported."
+    },
+    "capability": "Calc native border toolbar,selection frames and attribute history",
+    "gaps": [
+      "Native protection,merged/rich-edit/drawing/device/alternate-view/complete UNO services,padding margin properties and complex colors remain outside the consumed slice;complete native parity is unverified.",
+      "Native protection,merged/rich-edit/drawing/device/alternate-view services and full parity remain unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/poolcach.ts",
+          "marker": "ScItemPoolCache"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/poolcach.ts",
+          "marker": "ScItemPoolCache"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/inc/tabvwsh.ts",
+          "marker": "ScTabViewShell"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+          "marker": "ScTabViewShell"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/operation/ApplyAttributesOperation.ts",
+          "marker": "ApplyAttributesWithChangedRangeOperation"
+        },
+        {
+          "path": "apps/office/src/sc/sdi/formatsh.ts",
+          "marker": "CalcBorderCommandTarget"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.ts",
+          "marker": "BorderDispatch"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/framelinkarray.ts",
+          "marker": "Cell"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts",
+          "marker": "exportCellBorderProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/border-frame.test.ts",
+          "marker": "actual"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/border-history.test.ts",
+          "marker": "actual"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-borders.test.ts",
+          "marker": "independent"
+        },
+        {
+          "path": "apps/office/e2e/calc/borders.spec.ts",
+          "marker": "DOM-free Worker"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC227"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/poolcach.hxx",
+          "marker": "ScItemPoolCache"
+        },
+        {
+          "path": "sc/source/core/data/poolcach.cxx",
+          "marker": "ScItemPoolCache::ApplyTo"
+        },
+        {
+          "path": "sc/source/ui/inc/tabvwsh.hxx",
+          "marker": "ScTabViewShell"
+        },
+        {
+          "path": "sc/source/ui/view/tabvwsh4.cxx",
+          "marker": "ScTabViewShell::ScTabViewShell"
+        },
+        {
+          "path": "sc/source/ui/undo/undoblk3.cxx",
+          "marker": "ScUndoSelectionAttr::DoChange"
+        },
+        {
+          "path": "sc/source/ui/operation/ApplyAttributesOperation.cxx",
+          "marker": "ApplyAttributesWithChangedRangeOperation::runImplementation"
+        },
+        {
+          "path": "sc/sdi/formatsh.sdi",
+          "marker": "SID_FRAME_LINESTYLE"
+        },
+        {
+          "path": "svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "DispatchBorderItem"
+        },
+        {
+          "path": "svx/source/dialog/framelinkarray.cxx",
+          "marker": "Array::GetCellStyleLeft"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "ScPatternAttr"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/poolcach.hxx",
+          "marker": "ScItemPoolCache"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-selection-frame-foundation",
+    "scopeLimitations": [
+      "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
+      "Task3ANMSS consumes original Calc cell border map,ContextFilter equal-side/equal-width reduction and finished shorthand/compound merge with real box150 and diagonal141/142 items. Side attributes override general shorthand;new diagonal widths override deprecated spelling only when a shorthand is present. Original unmerged diagonal width-only properties remain applied in SAX order(CALC233). Shared XMLBorderHdl/XMLBorderWidthHdl own parsing and XML values;actual ZIP reopens preserve border presets,diagonal hairlines,independent sides and compounds. Shared SvxLineToLine explicitly selects native integral twip conversion before IDL narrowing,correcting the former floating overload selection for both Calc and Writer. Full UNO mapping/service graphs,padding margin properties,complex colors,native rich edits/merged drawing/devices and complete parity remain unverified. Desktop/mobile production acceptance and DOM-free Worker are covered by final task evidence;complete native parity remains unverified.",
+      "Task3ANMSS final scoped evidence:176 related Calc/shared/Writer module cases pass across25files;production desktop1280/mobile390 border controls and DOM-free Worker history/ODS acceptance pass3cases with inspected screenshots. Source XML border width parsing retains the original three-token consumption and ignores trailing tokens(CALC234). Original native branches CALC227-234 are documented and preserved. Native protection,merged/rich-edit/drawing/device/alternate-view/complete UNO services,padding margin properties and complex colors remain outside the consumed slice;complete native parity is unverified. Full all-app checkpoint remains40,next50;user requests pausing the goal after that next full run regardless of result."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "capabilityId": "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f",
+    "id": "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f",
+    "suite": "calc",
+    "subsystem": "cell-borders",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
+      "Task3ANMSS UI checkpoint connects all12native Calc border presets,last-used repetition,Shift-only validity reset,line style/color and diagonal slots to shared Writer buttons,palette and popup lifecycle. Native ScViewFunc ApplyAttributes routes frames separately from scalar attributes;original marked/cursor operation classes and ScUndoCursorAttr retain actual snapshots,complete patterns and normal enabled-undo ordering. Existing input history remains. Source mixed-style no-history and black15twip/Hairline preset behavior are preserved as CALC228/229. The native unmerged SVX frame Array resolves actual neighbor styles and clipping;browser grid CSS and diagonals reuse the actual Writer line projection. Existing primary saving/open/no-recovery behavior remains. ODS border conversion and production browser/mobile/Worker acceptance are covered by task48 final evidence;complete native parity remains unverified. Native rich edit,merged/rotation/device primitives,global undo enablement,protection,alternate views,UNO argument/service graphs and complete native parity are unverified. Actual view references replace native global active-view lookup;physical cell interning is erased under GC.",
+      "Task3ANMSS UI checkpoint connects all12native Calc border presets,last-used repetition,Shift-only validity reset,line style/color and diagonal slots to shared Writer buttons,palette and popup lifecycle. Native ScViewFunc ApplyAttributes routes frames separately from scalar attributes;original marked/cursor operation classes and ScUndoCursorAttr retain actual snapshots,complete patterns and normal enabled-undo ordering. Existing input history remains. Native cursor/marked operations report admitted success even for repeated equal attributes. Real canonical selection caches replace range-list mutation,retaining minimal default-column allocation. Popup contents are created only while actually open,using the shared Writer/SVX lifecycle,viewport placement and connected-owner Escape focus. Native completion preserves ordinary Done versus API requests and the explicit line-style Done branch. Empty argument requests remain ignored. CALC230 retains present empty diagonal line pointers after None. Source mixed-style no-history and black15twip/Hairline preset behavior are preserved as CALC228/229. The native unmerged SVX frame Array resolves actual neighbor styles and clipping;browser grid CSS and diagonals reuse the actual Writer line projection. Existing primary saving/open/no-recovery behavior remains. ODS border conversion and production browser/mobile/Worker acceptance are covered by task48 final evidence;complete native parity remains unverified. Native rich edit,merged/rotation/device primitives,global undo enablement,protection,alternate views,UNO argument/service graphs and complete native parity are unverified. Actual view references replace native global active-view lookup;physical cell interning is erased under GC."
+    ]
+  }
+}

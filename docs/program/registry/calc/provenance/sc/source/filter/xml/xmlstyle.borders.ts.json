@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlstyle.cxx",
+    "localSymbols": [
+      "exportCellBorderProperties",
+      "importCellBorderProperties"
+    ],
+    "upstreamSymbols": [
+      "aXMLScCellStylesProperties",
+      "ScXMLCellExportPropertyMapper::ContextFilter"
+    ],
+    "preservedResponsibilities": [
+      "Task3ANMSS consumes original Calc cell border map,ContextFilter equal-side/equal-width reduction and finished shorthand/compound merge with real box150 and diagonal141/142 items. Side attributes override general shorthand;new diagonal widths override deprecated spelling only when a shorthand is present. Original unmerged diagonal width-only properties remain applied in SAX order(CALC233). Shared XMLBorderHdl/XMLBorderWidthHdl own parsing and XML values;actual ZIP reopens preserve border presets,diagonal hairlines,independent sides and compounds. Shared SvxLineToLine explicitly selects native integral twip conversion before IDL narrowing,correcting the former floating overload selection for both Calc and Writer. Full UNO mapping/service graphs,padding margin properties,complex colors,native rich edits/merged drawing/devices and complete parity remain unverified. Desktop/mobile production acceptance and DOM-free Worker are covered by final task evidence;complete native parity remains unverified.",
+      "Task3ANMSS final scoped evidence:176 related Calc/shared/Writer module cases pass across25files;production desktop1280/mobile390 border controls and DOM-free Worker history/ODS acceptance pass3cases with inspected screenshots. Source XML border width parsing retains the original three-token consumption and ignores trailing tokens(CALC234). Original native branches CALC227-234 are documented and preserved. Native protection,merged/rich-edit/drawing/device/alternate-view/complete UNO services,padding margin properties and complex colors remain outside the consumed slice;complete native parity is unverified. Full all-app checkpoint remains40,next50;user requests pausing the goal after that next full run regardless of result."
+    ],
+    "omittedResponsibilities": [
+      "Full original UNO property-set/service/factory graph,native widget/device rendering and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts",
+          "marker": "exportCellBorderProperties"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "aXMLScCellStylesProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyli.cxx",
+          "marker": "ScXMLCellImportPropertyMapper::finished"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original border property map and import/export merging are split from the existing large Calc XML style owner while actual shared native items and XML border handlers remain canonical."
+    }
+  }
+}

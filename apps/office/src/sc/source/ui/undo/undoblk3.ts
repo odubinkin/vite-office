@@ -1,4 +1,6 @@
-/** @fileoverview ScUndoSelectionAttr consumed single/multi-mark pattern path over a real attribute-only undo document;rich text,borders,merge and VCL painting remain unported. */
+/** @fileoverview ScUndoSelectionAttr consumed single/multi-mark pattern path over a real attribute-only undo document;rich text,merge and VCL painting remain unported. */
+import { SfxPoolItemHolder } from "../../../../svl/source/items/itemset";
+import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import { AdjustBlockHeight } from "../view/viewfun2";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
@@ -12,28 +14,39 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   private readonly aMarkData: ScMarkData;
   private readonly aRange: ScRange;
   private readonly aApplyPattern: CellAttributeHolder;
-  /** Takes ownership of the genuine pre-change attribute document and original selection. @param shell - Live owner. @param marks - Original marks. @param range - Original rectangle. @param pUndoDoc - Actual attribute undo document. @param apply - Redo delta. @returns Action. */
+  private readonly aRangeCover: ScRange;
+  private readonly maLineOuter: SfxPoolItemHolder;
+  private readonly maLineInner: SfxPoolItemHolder;
+  /** Takes ownership of the genuine pre-change attribute document and original selection. @param shell - Live owner. @param marks - Original marks. @param range - Original rectangle. @param pUndoDoc - Actual attribute undo document. @param apply - Redo delta. @param bMulti - Snapshot copies marked cells only. @param outer - Optional native frame. @param inner - Inner lines paired with outer. @param cover - Adjacent-cell snapshot envelope. @returns Action. */
   constructor(
     private readonly shell: ScDocShell,
     marks: ScMarkData,
     range: ScRange,
     private readonly pUndoDoc: ScDocument,
     apply: ScPatternAttr,
+    private readonly bMulti = marks.IsMultiMarked(),
+    outer?: SvxBoxItem,
+    inner?: SvxBoxInfoItem,
+    cover: ScRange = range,
   ) {
     super();
     this.aMarkData = new ScMarkData(marks);
     this.aRange = new ScRange(range);
     this.aApplyPattern = new CellAttributeHolder(apply);
+    this.aRangeCover = new ScRange(cover);
+    const pool = shell.GetDocument().GetPool();
+    this.maLineOuter = new SfxPoolItemHolder(pool, outer ?? null);
+    this.maLineInner = new SfxPoolItemHolder(pool, inner ?? null);
   }
   /** Restores the source rectangle on exactly its original sheets. @returns Nothing. */
   override UndoWithContext(): void {
-    const range = new ScRange(this.aRange);
+    const range = new ScRange(this.aRangeCover);
     range.aStart.SetTab(0);
     range.aEnd.SetTab(this.shell.GetDocument().GetTableCount() - 1);
     this.pUndoDoc.CopyToDocument(
       range,
       InsertDeleteFlags.ATTRIB,
-      this.aMarkData.IsMultiMarked(),
+      this.bMulti,
       this.shell.GetDocument(),
       this.aMarkData,
     );
@@ -48,25 +61,19 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   override RedoWithContext(): void {
     const start = this.aRange.aStart,
       end = this.aRange.aEnd;
-    if (this.aMarkData.IsMultiMarked())
-      this.shell
-        .GetDocument()
-        .ApplySelectionPattern(
-          this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
-          this.aMarkData,
-        );
-    else
-      for (const tab of this.aMarkData.GetSelectedTabs())
-        this.shell
-          .GetDocument()
-          .ApplyPatternAreaTab(
-            start.Col(),
-            start.Row(),
-            end.Col(),
-            end.Row(),
-            tab,
-            this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
-          );
+    const doc = this.shell.GetDocument();
+    this.aMarkData.MarkToMulti();
+    doc.ApplySelectionPattern(
+      this.aApplyPattern.getScPatternAttr() as ScPatternAttr,
+      this.aMarkData,
+    );
+    this.aMarkData.MarkToSimple();
+    if (this.maLineOuter.is())
+      doc.ApplySelectionFrame(
+        this.aMarkData,
+        this.maLineOuter.getItem() as SvxBoxItem,
+        this.maLineInner.getItem() as SvxBoxInfoItem,
+      );
     AdjustBlockHeight(this.shell.GetDocument(), this.aMarkData, start.Row(), end.Row());
   }
   /** Borrows the original native mark data for the browser view restoration. @returns Marks. */
@@ -79,7 +86,7 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   }
   /** Original STR_UNDO_SELATTR English resource. @returns Label. */
   override GetComment(): string {
-    return "Attributes";
+    return this.maLineOuter.is() ? "Attributes/Lines" : "Attributes";
   }
   /** Releases real canonical history registrations. @returns Nothing. */
   override Dispose(): void {
