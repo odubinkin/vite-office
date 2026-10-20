@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/SearchOptions2.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/util/SearchOptions2.idl",
+    "localSymbols": [
+      "SearchOptions2"
+    ],
+    "upstreamSymbols": [
+      "SearchOptions2",
+      "AlgorithmType2",
+      "WildcardEscapeCharacter"
+    ],
+    "preservedResponsibilities": [
+      "Original SearchOptions inheritance and two extra fields, default/copy/full constructor shape and independent value ownership. New AlgorithmType2 defaults to zero and remains independent of inherited obsolete algorithmType; wildcard escape defaults to zero. This is a real value struct, not an initialized search/configuration service."
+    ],
+    "omittedResponsibilities": [
+      "Complete generated UNO ABI/service and whole application/UI fidelity remain unverified; source/portable value tests do not promote full parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/SearchOptions2.ts",
+          "marker": "SearchOptions2"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+          "marker": "retains distinct old/new/typed zero defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/util/SearchOptions2.idl",
+          "marker": "SearchOptions2"
+        }
+      ]
+    }
+  }
+}

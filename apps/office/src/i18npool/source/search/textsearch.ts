@@ -1,6 +1,12 @@
 /** @fileoverview Native absolute/wildcard TextSearch backend: directional native loops, full folding, punctuation and source offsets. ICU regex and approximate algorithms remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SearchOptions2 } from "../../../i18nutil/inc/searchopt";
+import { SearchAlgorithms } from "../../../offapi/com/sun/star/util/SearchAlgorithms";
+import type { SearchOptionsConstReference } from "../../../offapi/com/sun/star/util/SearchOptions";
+import {
+  SearchOptions2 as UnoSearchOptions2,
+  type SearchOptions2ConstReference,
+} from "../../../offapi/com/sun/star/util/SearchOptions2";
 import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import * as Algorithms from "../../../offapi/com/sun/star/util/SearchAlgorithms2";
 import {
@@ -52,13 +58,41 @@ export class TextSearch {
   public constructor(options = new SearchOptions2()) {
     this.setOptions2(options);
   }
+  /** Original legacy XTextSearch entry point: upgrade its algorithm, copy all fields and set wildcard escape to zero before calling setOptions2. @param options - Legacy UNO value. @returns Nothing. */
+  public setOptions(options: SearchOptionsConstReference): void {
+    let algorithm: number;
+    switch (options.algorithmType) {
+      case SearchAlgorithms.REGEXP:
+        algorithm = Algorithms.REGEXP;
+        break;
+      case SearchAlgorithms.APPROXIMATE:
+        algorithm = Algorithms.APPROXIMATE;
+        break;
+      default:
+        algorithm = Algorithms.ABSOLUTE;
+    }
+    const upgraded = new UnoSearchOptions2(
+      options.algorithmType,
+      options.searchFlag,
+      options.searchString,
+      options.replaceString,
+      options.Locale,
+      options.changedChars,
+      options.deletedChars,
+      options.insertedChars,
+      options.transliterateFlags,
+      algorithm,
+      0,
+    );
+    this.setOptions2(upgraded);
+  }
   /** Copies options and resets native prepared key/jump state. @param options - New native options. @returns Nothing. */
-  public setOptions2(options: SearchOptions2): void {
+  public setOptions2(options: SearchOptions2 | SearchOptions2ConstReference): void {
     if ([Algorithms.REGEXP, Algorithms.APPROXIMATE].includes(options.AlgorithmType2))
       throw new Error("This TextSearch algorithm is not implemented.");
     if ((options.transliterateFlags & ~TransliterationFlags.IGNORE_CASE) !== 0)
       throw new Error("This TextSearch transliteration is not implemented.");
-    const para = new SearchOptions2(options);
+    const para = new SearchOptions2().assign(options);
     const original = para.searchString.getStr().subarray(0, para.searchString.getLength());
     this.bSearchApostrophe = original.includes(39) || original.includes(34);
     let key =

@@ -25,6 +25,9 @@ it("admits only native search and character classification value edges", /** Pre
     [
       "i18npool/source/search/textsearch.ts",
       [
+        "offapi/com/sun/star/util/SearchAlgorithms.ts",
+        "offapi/com/sun/star/util/SearchOptions.ts",
+        "offapi/com/sun/star/util/SearchOptions2.ts",
         "offapi/com/sun/star/util/SearchAlgorithms2.ts",
         "offapi/com/sun/star/util/SearchFlags.ts",
         "offapi/com/sun/star/util/SearchResult.ts",
@@ -32,6 +35,7 @@ it("admits only native search and character classification value edges", /** Pre
         "o3tl/inc/string_view.ts",
       ],
     ],
+    ["offapi/com/sun/star/util/SearchOptions.ts", ["udkapi/com/sun/star/lang/Locale.ts"]],
   ] as const) {
     for (const target of targets) {
       expect(isOriginalCharacterValueImport(source, target)).toBe(true);
@@ -46,4 +50,5 @@ it("admits only native search and character classification value edges", /** Pre
   expect(isForbiddenModuleEdge("unotools", "i18nutil")).toBe(true);
   expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(true);
   expect(isForbiddenModuleEdge("i18npool", "external")).toBe(true);
+  expect(isForbiddenModuleEdge("offapi", "udkapi")).toBe(true);
 });

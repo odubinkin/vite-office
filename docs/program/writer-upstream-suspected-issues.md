@@ -439,6 +439,26 @@ Decision: preserve the original constructor ownership and recording gate;
 do not move bookmark deletion into the unconditional document replacement
 path or silently preserve affected marks in the recording branch.
 
+## WRITER-017: Search item construction may retain ignore-case for match-case
+
+Pinned `svl/source/items/srchitem.cxx`, `SvxSearchItem(nId)`, initializes
+`m_aSearchOpt.transliterateFlags` with `IGNORE_CASE`. After loading the
+configured options, it only ORs that bit when `!aOpt.IsMatchCase()`; there is
+no corresponding clear when the configured match-case value is true. The
+constructor's Asian-options branch does not clear it either. In contrast,
+`SvxSearchItem::Notify` calls `SetTransliterationFlags` with a new configured
+`SvtSearchOptions().GetTransliterationFlags()`, whose match-case branch omits
+the ignore-case bit when match-case is true.
+
+This is source proof of different construction/notification expressions, not
+a compiled native item/UI observation. Notification ordering, configuration
+providers, other source consumers and complete native UI invariants remain
+unverified. The current leaf implements only search value/service and public
+command/member boundaries; the actual item/configuration constructor is still
+pending. Decision: preserve its initialized bit and original conditional when
+that owner is ported, rather than silently correcting the constructor to clear
+the bit or presenting a fabricated item behavior as completed.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

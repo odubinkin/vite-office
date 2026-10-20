@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/SearchAlgorithms.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/SearchAlgorithms.ts#SearchAlgorithms",
+        "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+        "offapi/com/sun/star/util/SearchAlgorithms.idl#SearchAlgorithms"
+      ],
+      "justification": "Original legacy ABSOLUTE/REGEXP/APPROXIMATE enum identities 0/1/2, distinct from the newer 1/2/3/4 constants. Value declarations only; no algorithm support is invented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchAlgorithms"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/util/SearchAlgorithms.idl",
+      "upstreamSymbols": [
+        "SearchAlgorithms"
+      ]
+    }
+  }
+}

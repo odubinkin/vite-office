@@ -230,6 +230,10 @@ const originalCharacterValueImports = new Map([
   [
     "i18npool/source/search/textsearch.ts",
     new Set([
+      // Original XTextSearch2/XTextSearch signatures and SearchOptions inheritance carry these native values.
+      "offapi/com/sun/star/util/SearchAlgorithms.ts",
+      "offapi/com/sun/star/util/SearchOptions.ts",
+      "offapi/com/sun/star/util/SearchOptions2.ts",
       "offapi/com/sun/star/util/SearchAlgorithms2.ts",
       "offapi/com/sun/star/util/SearchFlags.ts",
       "offapi/com/sun/star/util/SearchResult.ts",
@@ -237,6 +241,8 @@ const originalCharacterValueImports = new Map([
       "o3tl/inc/string_view.ts",
     ]),
   ],
+  // Original SearchOptions.idl owns ::com::sun::star::lang::Locale; generated struct fields use Locale value semantics.
+  ["offapi/com/sun/star/util/SearchOptions.ts", new Set(["udkapi/com/sun/star/lang/Locale.ts"])],
   // patattr.cxx::fillColor owns and returns actual model::ComplexColor values.
   ["sc/source/core/data/patattr.ts", new Set(["docmodel/inc/color/ComplexColor.ts"])],
   ["sc/browser/presentation/ScGridWindow.tsx", new Set(["docmodel/inc/color/ComplexColor.ts"])],

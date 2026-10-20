@@ -18,19 +18,27 @@
       "evidence": [
         "apps/office/src/i18nutil/inc/searchopt.ts#SearchOptions2",
         "apps/office/src/i18npool/source/search/textsearch.test.ts",
-        "include/i18nutil/searchopt.hxx#SearchOptions2"
+        "include/i18nutil/searchopt.hxx#SearchOptions2",
+        "apps/office/src/i18nutil/source/utility/native-search-options.test.ts"
       ],
-      "justification": "Actual search option value defaults and independent copy of every field, reusing real OUString and Locale. Native zero default algorithm is retained. UNO downgrade/upgrade conversion and full native constructor overloads are pending.",
+      "justification": "Actual search option value defaults and independent copy of every field, reusing real OUString and Locale. Native zero default algorithm is retained. UNO downgrade/upgrade conversion and full native constructor overloads are pending. LeafMMAQEF implements original legacy/new algorithm bridges, complete typed-field constructor, native implicit copy and newer-UNO assignment plus toUnoSearchOptions2. Assignment ignores obsolete algorithmType; conversion downgrades only that field while retaining original AlgorithmType2/escape and signed transliteration cast. Zero typed default is unchanged; independent stable OUString/Locale field owners now support actual public value assignment. No preference initialization, locale canonicalization or engine capability fallback is added.",
       "knownViolations": [],
       "localSymbols": [
-        "SearchOptions2"
+        "SearchOptions2",
+        "upgradeSearchAlgorithms",
+        "downgradeSearchAlgorithms2",
+        "assign",
+        "toUnoSearchOptions2"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/i18nutil/searchopt.hxx",
       "upstreamSymbols": [
         "SearchOptions2",
         "AlgorithmType2",
-        "WildcardEscapeCharacter"
+        "WildcardEscapeCharacter",
+        "upgradeSearchAlgorithms",
+        "downgradeSearchAlgorithms2",
+        "toUnoSearchOptions2"
       ]
     }
   }

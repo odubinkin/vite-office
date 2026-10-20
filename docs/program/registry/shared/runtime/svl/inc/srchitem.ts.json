@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/srchitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/inc/srchitem.ts#SvxSearchCmd",
+        "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+        "include/svl/srchitem.hxx#SvxSearchCmd"
+      ],
+      "justification": "Original public search command, cell-family and application identities. The actual SvxSearchItem/configuration and UI owners remain pending; no empty class hierarchy, preference provider, unimplemented slot success or UI capability is fabricated.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxSearchCmd",
+        "SvxSearchCellType",
+        "SvxSearchApp"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svl/srchitem.hxx",
+      "upstreamSymbols": [
+        "SvxSearchCmd",
+        "SvxSearchCellType",
+        "SvxSearchApp"
+      ]
+    }
+  }
+}
