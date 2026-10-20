@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:shared
+> npm run test:coverage:shared --workspace @vite-office/office -- src/xmloff/source/style/native-crossedout-handlers.test.ts src/xmloff/source/core src/sfx2/source/control/native-attribute-toggle.test.ts src/sw/source/filter/xml/odt-native-character-values.test.ts --coverage.include=src/xmloff/source/style/cdouthdl.ts --coverage.include=src/offapi/com/sun/star/awt/FontStrikeout.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task43-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-shared-final-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:shared
+> vitest run --config vitest.shared-coverage.config.ts --coverage src/xmloff/source/style/native-crossedout-handlers.test.ts src/xmloff/source/core src/sfx2/source/control/native-attribute-toggle.test.ts src/sw/source/filter/xml/odt-native-character-values.test.ts --coverage.include=src/xmloff/source/style/cdouthdl.ts --coverage.include=src/offapi/com/sun/star/awt/FontStrikeout.ts --coverage.include=src/xmloff/source/core/xmltoken.ts --coverage.reportsDirectory=coverage/task43-shared-final --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --reporter=json --outputFile=../../output/playwright/task43-shared-final-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task43-shared-final-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 282/282 )
+Branches     : 100% ( 40/40 )
+Functions    : 100% ( 16/16 )
+Lines        : 100% ( 278/278 )
+================================================================================

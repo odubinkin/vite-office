@@ -1,0 +1,33 @@
+{
+  "result": "pass",
+  "calcFiles": 129,
+  "calcCases": 394,
+  "sharedFiles": 8,
+  "sharedCases": 27,
+  "completeExecutableOwners": 9,
+  "owners": [
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx",
+    "apps/office/src/sc/sdi/scalc.ts",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "apps/office/src/sc/source/ui/view/formatsh.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts",
+    "apps/office/src/xmloff/source/style/cdouthdl.ts"
+  ],
+  "allSourceHashesCurrent": true,
+  "allRawCountsPositive": true,
+  "coverageReduction": false,
+  "sourceHashes": {
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "fce2c43ccb3ace51144ffcb187be4f5433c393d457b757d767a4a2454adac32a",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx": "fa2597659e09c45a3cd4b77cb99b41c6e52542157ed4a788a2d91fbeceff5b32",
+    "apps/office/src/sc/sdi/scalc.ts": "b8d159a7ae5f35044544355e954062330c2a22661d99870fc253b0c7b2f2753c",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "f7eeb7cd7ee6c4fe4f85f227b21b52e2f8d88ba2a41852f010a5089997d3a0a3",
+    "apps/office/src/sc/source/ui/view/formatsh.ts": "c0a1a76846e7639aaeb92967085332dce8b8543070fb17d45a7f9460624ba3c7",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "db4d755f7a1918a54bf43ff652ed1fc901b30a0dc7bcb2d7df2435542a8b8ca6",
+    "apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts": "7f49b908686a65175e6c29b425b47aa7648d7e39e3f93906fe49ceef68c220f9",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts": "04dfa8ccca8344b74961c899b3c211e89b5919d5081a722f8cba8acd52388724",
+    "apps/office/src/xmloff/source/style/cdouthdl.ts": "3cc03675a1baa019939b0943d6104373fe7d48a6fe95eff07d28eb0b2d3547a4"
+  }
+}

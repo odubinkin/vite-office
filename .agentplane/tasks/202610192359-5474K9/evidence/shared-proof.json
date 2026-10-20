@@ -1,0 +1,44 @@
+{
+  "result": "pass",
+  "files": 8,
+  "tests": 27,
+  "passed": 27,
+  "summary": {
+    "lines": {
+      "total": 278,
+      "covered": 278,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 282,
+      "covered": 282,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 16,
+      "covered": 16,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 40,
+      "covered": 40,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "rawSha256": "e0ad5455d6ae190fabc66b87a094e5161dc26f8623c67c8a181f212b2a2574aa",
+  "sourceHashes": {
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/offapi/com/sun/star/awt/FontStrikeout.ts": "7f49b908686a65175e6c29b425b47aa7648d7e39e3f93906fe49ceef68c220f9",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/core/xmltoken.ts": "db4d755f7a1918a54bf43ff652ed1fc901b30a0dc7bcb2d7df2435542a8b8ca6",
+    "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/xmloff/source/style/cdouthdl.ts": "3cc03675a1baa019939b0943d6104373fe7d48a6fe95eff07d28eb0b2d3547a4"
+  }
+}

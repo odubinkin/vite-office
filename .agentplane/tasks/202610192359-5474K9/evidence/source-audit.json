@@ -1,0 +1,208 @@
+{
+  "task": "202610192359-5474K9",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceReferences": [
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/cdouthdl.cxx",
+      "sha256": "5e2cdf58469edbfd65dabe1e5f3af0c6452f727c58a291209560ede2d252fe2f",
+      "anchors": [
+        {
+          "marker": "pXML_CrossedoutType_Enum",
+          "lines": [
+            34,
+            86,
+            142
+          ]
+        },
+        {
+          "marker": "pXML_CrossedoutStyle_Enum",
+          "lines": [
+            45,
+            160,
+            189
+          ]
+        },
+        {
+          "marker": "pXML_CrossedoutWidth_Enum",
+          "lines": [
+            62,
+            207,
+            258
+          ]
+        },
+        {
+          "marker": "XMLCrossedOutTypePropHdl::importXML",
+          "lines": [
+            82
+          ]
+        },
+        {
+          "marker": "XMLCrossedOutTextPropHdl::importXML",
+          "lines": [
+            272
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/awt/FontStrikeout.idl",
+      "sha256": "4b2e5d43ed4bc9fb1655e50d8aa5cd5e6b52446ca16218fc6c2eee2fa8d59c78",
+      "anchors": [
+        {
+          "marker": "FontStrikeout",
+          "lines": [
+            29
+          ]
+        },
+        {
+          "marker": "const short SLASH = 5",
+          "lines": [
+            59
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+      "sha256": "f62b23dea2f77c012f98b8afd13d05f18d9079ab690eb60d0336cdc323e1b4d6",
+      "anchors": [
+        {
+          "marker": "SvxCrossedOutItem::GetBoolValue",
+          "lines": [
+            1350
+          ]
+        },
+        {
+          "marker": "SvxCrossedOutItem::SetBoolValue",
+          "lines": [
+            1356
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/formatsh.cxx",
+      "sha256": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+      "anchors": [
+        {
+          "marker": "SID_ATTR_CHAR_STRIKEOUT",
+          "lines": [
+            1052
+          ]
+        },
+        {
+          "marker": "ScFormatShell::GetAttrState",
+          "lines": [
+            1300
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx",
+      "sha256": "196ce969202be94a6f4677f7f884a24f169f586e3ce7502946095fe7e85173bc",
+      "anchors": [
+        {
+          "marker": "SfxBindings::Execute_Impl",
+          "lines": [
+            887,
+            964
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+      "sha256": "06e707be14bb818761eeb362f71d1e3d47e8938bf952e1ce06fd80cf718c3cdf",
+      "anchors": [
+        {
+          "marker": "PROP_CharStrikeout",
+          "lines": [
+            146,
+            147,
+            148,
+            149,
+            531,
+            532,
+            533,
+            534,
+            1085,
+            1086,
+            1087,
+            1088
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/prhdlfac.cxx",
+      "sha256": "c65efef6a83d87d5deecf198faba46a6ee7e2e429a1e1e32486141bbc58aca64",
+      "anchors": [
+        {
+          "marker": "XML_TYPE_TEXT_CROSSEDOUT_TYPE",
+          "lines": [
+            291
+          ]
+        },
+        {
+          "marker": "XML_TYPE_TEXT_CROSSEDOUT_TEXT",
+          "lines": [
+            300
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df",
+      "anchors": [
+        {
+          "marker": "XMLScPropHdlFactory::GetPropertyHandler",
+          "lines": [
+            836
+          ]
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+      "sha256": "cb114b512cff15ea3df06ad8dec0d419649f82925fe34ccce7f2027782ff378b",
+      "anchors": [
+        {
+          "marker": "testRichTextExportODS",
+          "lines": [
+            1311
+          ]
+        },
+        {
+          "marker": "EE_CHAR_STRIKEOUT",
+          "lines": [
+            1192,
+            1337,
+            1716
+          ]
+        }
+      ]
+    }
+  ],
+  "preserved": [
+    "Original native10013/106 slot/Which and NONE default",
+    "Existing shared toggle creates concrete source factory on INVALID and clones uniform items",
+    "Complete native enum and IDL values;no boolean-only ODS payload",
+    "Original ordered type/style/width/text maps,actual short/unsigned Any extraction and source no-write/failure/precedence",
+    "Real SAX property order,actual auto-style registration106 and independent document/history owners",
+    "Shared Writer UI,plain-cell independent strikeout/underline/overline decorations"
+  ],
+  "adaptation": "Calc strikeout mapper is split from the existing577line xmlstyle owner;source shared cdouthdl handlers remain canonical. Browser glyph spans retain their original font/overline values inside an independent strikeout decoration parent. Existing font browser test addresses leaf glyph spans rather than all decoration wrappers.",
+  "limitations": [
+    "Native bold line thickness,slash/X glyph repetition and full device/pixel geometry remain unverified;NONE/SINGLE/DOUBLE browser decoration is represented.",
+    "Native line modes,rich edit,complete bindings/UNO services and filtered/alternate sheet views remain unported.",
+    "Inspected native EditEngine export QA is a source reference,not an executed full-native certificate.",
+    "Shared XMLPropertyHandler base/factory service graph is not fabricated by these consumed handler classes.",
+    "Intentional Writer primary-save/open/no-recovery policy remains."
+  ],
+  "suspectedIssues": [
+    "CALC-212",
+    "CALC-213"
+  ]
+}
