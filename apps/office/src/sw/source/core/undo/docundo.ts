@@ -101,6 +101,18 @@ export class UndoManager extends SfxUndoManager<SwUndoRedoContext> {
     return this.groupUndo;
   }
 
+  /** Native DelAllUndoObj clears every history level on unwind and invalidates the save mark under UndoGuard. @returns Nothing. */
+  public DelAllUndoObj(): void {
+    const enabled = this.DoesUndo();
+    this.DoUndo(false);
+    try {
+      this.ClearAllLevels();
+      this.ClearSavePosition();
+    } finally {
+      this.DoUndo(enabled);
+    }
+  }
+
   /** Begins one Writer command group using Sfx list-action mechanics. @param comment - Command label. @returns Nothing. */
   public StartUndo(comment: string): void {
     this.EnterListAction(comment);

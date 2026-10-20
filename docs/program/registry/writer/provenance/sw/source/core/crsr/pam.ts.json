@@ -36,6 +36,10 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/findtxt.test.ts",
           "marker": "Find_Text"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -82,7 +86,9 @@
       "getWriterSelectedTextRange",
       "isWriterCursorOffset",
       "getWriterSelectedTextRanges",
-      "Normalize"
+      "Normalize",
+      "GoNextPos",
+      "GoPreviousPos"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
@@ -95,7 +101,8 @@
       "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution.",
       "Iteration216 pending: label affinity relocated to native SwPaM (pam.hxx192,225-226), preserving default false and constructor/assignment contracts. Browser roundtrip and native Insert2 clearing are under verification; full Move/marked-list/RTL/layout behavior remains unverified.",
       "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
-      "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections."
+      "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections.",
+      "Leaf4586BY adds the actual consumed bChk=false content-node movement of GoNextPos/GoPreviousPos, both assigning content offset zero. These are real node moves across represented content sections; checked movement and full native range validation are not claimed."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",
@@ -104,7 +111,9 @@
       "SwPosition",
       "SwPaM",
       "SwPosition::SwPosition",
-      "Normalize"
+      "Normalize",
+      "GoNextPos",
+      "GoPreviousPos"
     ]
   },
   "legacyOrder": 153

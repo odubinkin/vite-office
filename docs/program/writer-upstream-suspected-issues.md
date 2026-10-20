@@ -296,6 +296,47 @@ contract checks; compiled upstream execution and complete consumer invariants
 are unverified. Decision: retain the exact directional predicates and the
 single-character-only literal exception.
 
+## WRITER-010: Normal replacement history can remain consumed after redo
+
+Pinned `sw/source/core/undo/unins.cxx`, `SwUndoReplace::Impl::UndoImpl`, clears
+current hints and calls `m_pHistory->TmpRollback(rDoc, m_nSetPos, false)`.
+`SwHistory::TmpRollback` increases `m_nEndDiff` for every restored entry.
+In the normal no-footnote/fly/mark profile `m_nSetPos` is zero. Redo swaps this
+history out while gathering an empty `DelContentIndex` history, swaps it back,
+and calls `Move(0, emptyHistory)`. The inline `SwHistory::Move` in
+`sw/source/core/inc/rolbck.hxx` immediately returns for an empty source and
+never resets the destination's `m_nEndDiff`.
+
+Source-derived initialized example: replace `b` in bold `abc`, undo, redo and
+undo again, with no other content-index history. The first undo restores the
+whole original hint. On the second undo the hint array is cleared, while
+`TmpRollback` has no active entries, so the original hint is not restored.
+Portable checks in `native-search-replace.test.ts` retain that consumed-end
+state. They do not execute the native binary; full consumer invariants and a
+compiled native differential remain unverified. Decision: do not add a
+`SetTmpEnd(Count())` reset that does not exist in this source branch.
+
+## WRITER-011: Empty replacement can advance to the next content node
+
+Pinned `sw/source/core/crsr/swcrsr.cxx`, `lcl_FindSelection`, compares the live
+region start with the working cursor's end after a successful forward match.
+When equal, it calls `fnMove.fnPos(GetPoint(), false)`. `paminit.cxx` binds
+that function to `GoNextPos`; `pam.cxx` moves it to the next content node at
+offset zero. This is a node move, not a one-character advance. The backward
+branch uses `GoPreviousPos(GetMark(), false)`, also assigning offset zero.
+
+Source-derived initialized example: body paragraphs `aa` and `next`, searching
+`a` with an empty replacement, start-to-end and all-body scope. Deleting the
+first match leaves the working end and region start at zero. The native
+progress branch moves to `next`, leaving the remaining `a` in the first
+paragraph. If there is no next content node, the move fails without changing
+the cursor and the remaining matches can still be removed. This conditional
+is preserved in `native-search-replace.test.ts`, including successful undo/redo
+of the actual replacement count. Portable tests/source proof do not establish
+full native UI behavior or a confirmed bug. Decision: preserve original node
+movement and boundary predicates rather than silently implementing character
+movement or bypassing this guard for empty replacements.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

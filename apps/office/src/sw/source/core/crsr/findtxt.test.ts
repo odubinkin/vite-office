@@ -289,10 +289,7 @@ it("Find_Text honors native selection flags, current bounds and preserved ordina
     expect(point.GetContentIndex()).toBe(5);
     cursor.FillFindPos(999 as SwDocPositions, point);
     expect(point.GetContentIndex()).toBe(5);
-    for (const [notes, replace, layout] of [
-      [true, false, undefined],
-      [false, true, undefined],
-    ] as const)
+    for (const [notes, replace, layout] of [[true, false, undefined]] as const)
       expect(
         /** Rejects unported native operation modes without changing content/history. @returns Match count. */ () =>
           cursor.Find_Text(

@@ -1,6 +1,12 @@
 /** @fileoverview Writer model-text FindTextImpl and soft-hyphen cleanup from native findtxt.cxx; layout-merged text, fields/notes and regex modes remain unported. */
 import { SwPaM, SwPosition } from "./pam";
-import { FIND_FOUND, FIND_NOT_FOUND, type SwCursor, type SwFindParas } from "./swcrsr";
+import {
+  FIND_FOUND,
+  FIND_NOT_FOUND,
+  FIND_NO_RING,
+  type SwCursor,
+  type SwFindParas,
+} from "./swcrsr";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import { REG_NOT_BEGINOFLINE } from "../../../../offapi/com/sun/star/util/SearchFlags";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -117,25 +123,40 @@ export function FindTextImpl(
   return false;
 }
 
-/** Native SwFindParaText find-only strategy over the actual shared TextSearch owner. Replacement mode is rejected at the public cursor boundary until its native document/history contracts are implemented. */
+/** Native SwFindParaText normal strategy over the actual shared TextSearch owner. Normal same-node replacement uses the actual document/history owner; other search modes remain unported. */
 class SwFindParaText implements SwFindParas {
   private readonly m_aSText: TextSearch;
-  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @returns Search strategy. */
-  public constructor(private readonly m_rSearchOpt: SearchOptions2) {
+  /** Initializes actual search state, once for all visited ranges. @param m_rSearchOpt - Native options. @param m_bReplace - Native replacement mode. @returns Search strategy. */
+  public constructor(
+    private readonly m_rSearchOpt: SearchOptions2,
+    private readonly m_bReplace = false,
+  ) {
     this.m_aSText = new TextSearch(m_rSearchOpt);
   }
   /** Calls the native represented model-text search. @param cursor - Result PaM. @param backward - Direction. @param region - Current native region. @returns Native find result flag. */
   public DoFind(cursor: SwPaM, backward: boolean, region: SwPaM): number {
-    return FindTextImpl(cursor, this.m_rSearchOpt, this.m_aSText, backward, region)
-      ? FIND_FOUND
-      : FIND_NOT_FOUND;
+    if (!FindTextImpl(cursor, this.m_rSearchOpt, this.m_aSText, backward, region))
+      return FIND_NOT_FOUND;
+    if (!this.m_bReplace) return FIND_FOUND;
+    const start = cursor.Start().GetContentIndex();
+    let replacement = "";
+    for (let i = 0; i < this.m_rSearchOpt.replaceString.getLength(); i++)
+      replacement += String.fromCharCode(this.m_rSearchOpt.replaceString.getStr()[i] as number);
+    cursor
+      .GetPoint()
+      .GetNode()
+      .GetDoc()
+      .GetDocumentContentOperationsManager()
+      .ReplaceRange(cursor, replacement, false);
+    cursor.Start().SetContent(start);
+    return FIND_NO_RING;
   }
-  /** Reports the supported strategy's actual mode. @returns False for this find-only strategy. */
+  /** Reports the supported strategy's actual mode. @returns Whether replacement is enabled. */
   public IsReplaceMode(): boolean {
-    return false;
+    return this.m_bReplace;
   }
 }
-/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @returns Match count. */
+/** Native Find_Text prepares the strategy and applies the selection flag before generic cursor traversal. @param cursor - Actual cursor. @param options - Search value. @param start - First boundary. @param end - Last boundary. @param cancel - Cancellation output. @param ranges - Scope flags. @param replace - Native replacement mode. @returns Match count. */
 export function FindText(
   cursor: SwCursor,
   options: SearchOptions2,
@@ -143,7 +164,24 @@ export function FindText(
   end: SwDocPositions,
   cancel: [boolean],
   ranges: FindRanges,
+  replace = false,
 ): number {
   if ((options.searchFlag & REG_NOT_BEGINOFLINE) !== 0) ranges |= FindRanges.InSel;
-  return cursor.FindAll(new SwFindParaText(options), start, end, ranges, cancel);
+  const doc = cursor.GetPoint().GetNode().GetDoc(),
+    undo = doc.GetUndoManager();
+  if (replace && doc.GetIDocumentMarkAccess().GetBookmarks().length !== 0)
+    throw new Error("Writer bookmark replacement history is not implemented.");
+  // Prepare the actual backend before opening history, so unported engine modes do not mutate undo state.
+  const strategy = new SwFindParaText(options, replace);
+  return doc.RunModelTransaction(
+    /** Completes native replacement history before publishing the model. @returns Match count. */ () => {
+      const record = replace && undo.DoesUndo();
+      if (record) undo.StartUndo("Replace");
+      try {
+        return cursor.FindAll(strategy, start, end, ranges, cancel);
+      } finally {
+        if (record) undo.EndUndo();
+      }
+    },
+  );
 }

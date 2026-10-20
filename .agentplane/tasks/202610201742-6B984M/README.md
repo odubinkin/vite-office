@@ -7,7 +7,8 @@ owner: "CODER"
 revision: 7
 origin:
   system: "manual"
-depends_on: []
+depends_on:
+  - "202610201815-4586BY"
 tags:
   - "code"
 verify: []

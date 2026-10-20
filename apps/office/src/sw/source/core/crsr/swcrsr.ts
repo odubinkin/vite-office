@@ -1,5 +1,5 @@
 /** @fileoverview Implements Writer cell traversal over the actual SwPaM/SwNodes owners from swcrsr.cxx. */
-import { SwPaM, SwPosition } from "./pam";
+import { SwPaM, SwPosition, GoNextPos, GoPreviousPos } from "./pam";
 import { FindText } from "./findtxt";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -60,7 +60,7 @@ export class SwCursor extends SwPaM {
     }
     target.Assign(boundary, 0);
   }
-  /** Native Find_Text entry point for represented absolute model-text search. Notes, merged layout and replacement remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @returns Number of matches. */
+  /** Native Find_Text entry point for represented absolute model-text search. Notes and merged layout remain unported and reject explicitly. @param options - Native option value. @param searchInNotes - Search annotations. @param start - Start selector. @param end - End selector. @param cancel - Native cancellation output. @param ranges - Scope/all flags. @param replace - Native replace mode. @param layout - Optional layout owner for merged-text searching. @returns Number of matches. */
   public Find_Text(
     options: SearchOptions2,
     searchInNotes: boolean,
@@ -71,11 +71,15 @@ export class SwCursor extends SwPaM {
     replace = false,
     layout?: SwRootFrame,
   ): number {
-    if (searchInNotes || replace || layout !== undefined)
-      throw new Error("Writer notes, replacement and layout-text search are not implemented.");
-    return FindText(this, options, start, end, cancel, ranges);
+    if (searchInNotes || layout !== undefined)
+      throw new Error("Writer notes and layout-text search are not implemented.");
+    return FindText(this, options, start, end, cancel, ranges, replace);
   }
-  /** Native FindAll/lcl_FindSelection find-only traversal and ring ownership. Replacement/readonly/layout services remain separate incomplete responsibilities. @param paras - Native search strategy. @param start - Start selector. @param end - End selector. @param ranges - Scope/all flags. @param cancel - Cancellation output. @returns Match count. */
+  /** Native default threshold response, RET_YES=2: continue after discarding undo. Shell/UNO overrides may return RET_CANCEL=0 or RET_NO=3. @returns Native VCL response identity. */
+  public MaxReplaceArived(): number {
+    return 2;
+  }
+  /** Native FindAll/lcl_FindSelection traversal, no-ring replacement, threshold and ring ownership. Readonly/layout services remain incomplete. @param paras - Native search strategy. @param start - Start selector. @param end - End selector. @param ranges - Scope/all flags. @param cancel - Cancellation output. @returns Match count. */
   public FindAll(
     paras: SwFindParas,
     start: SwDocPositions,
@@ -83,7 +87,6 @@ export class SwCursor extends SwPaM {
     ranges: FindRanges,
     cancel: [boolean],
   ): number {
-    if (paras.IsReplaceMode()) throw new Error("Writer replacement search is not implemented.");
     cancel[0] = false;
     const backward = !(
       start === SwDocPositions.Start ||
@@ -91,6 +94,10 @@ export class SwCursor extends SwPaM {
       (start === SwDocPositions.Curr &&
         (end === SwDocPositions.End || end === SwDocPositions.OtherEnd))
     );
+    const undo = this.GetPoint().GetNode().GetDoc().GetUndoManager(),
+      undoEnabled = undo.DoesUndo();
+    let nFound = 0,
+      stopped = false;
     const all = (ranges & FindRanges.InSelAll) !== 0;
     const inSelection = (ranges & FindRanges.InSel) !== 0;
     const regions: SwPaM[] = [],
@@ -123,18 +130,46 @@ export class SwCursor extends SwPaM {
         }
       }
       for (const region of regions) {
-        while (
-          region.Start().compare(region.End()) < 0 &&
-          paras.DoFind(working, backward, region, false) !== 0
-        ) {
-          found.push(new SwPaM(working.GetPoint(), working.GetMark()));
+        const lower = region.Start(),
+          upper = region.End();
+        while (lower.compare(upper) <= 0) {
+          const result = paras.DoFind(working, backward, region, false);
+          const previous = found[0];
+          if (
+            result === 0 ||
+            (previous !== undefined &&
+              previous.GetPoint().compare(working.GetPoint()) === 0 &&
+              previous.GetMark().compare(working.GetMark()) === 0)
+          )
+            break;
+          if ((result & FIND_NO_RING) === 0)
+            found.push(new SwPaM(working.GetPoint(), working.GetMark()));
+          nFound++;
           if (!all) break;
-          if (backward)
-            region.End().Assign(working.Start().GetNode(), working.Start().GetContentIndex());
-          else region.Start().Assign(working.End().GetNode(), working.End().GetContentIndex());
+          if (nFound === 60000 && undo.DoesUndo() && paras.IsReplaceMode()) {
+            const reply = this.MaxReplaceArived();
+            if (reply === 2) {
+              undo.DelAllUndoObj();
+              undo.DoUndo(false);
+            } else {
+              cancel[0] = reply === 0;
+              stopped = true;
+              break;
+            }
+          }
+          // Preserve the source's content-node movement when a replacement leaves a boundary unchanged.
+          if (backward && upper.compare(working.Start()) === 0) GoPreviousPos(working.GetMark());
+          else if (!backward && lower.compare(working.End()) === 0) GoNextPos(working.GetPoint());
+          if (lower.compare(upper) === 0) break;
+          if (backward) upper.Assign(working.Start().GetNode(), working.Start().GetContentIndex());
+          else lower.Assign(working.End().GetNode(), working.End().GetContentIndex());
         }
-        if (found.length > 0 && !all) break;
+        if ((nFound > 0 && !all) || stopped) break;
       }
+      if (nFound > 0 && found.length === 0)
+        found.push(
+          new SwPaM(working.GetPoint(), working.HasMark() ? working.GetMark() : undefined),
+        );
       const first = found[0];
       if (first === undefined) return 0;
       if (all) while (this.GetNext() !== this) this.GetNext().Dispose();
@@ -145,8 +180,9 @@ export class SwCursor extends SwPaM {
             member = this.Create(this);
           member.Assign(next.GetPoint(), next.GetMark());
         }
-      return found.length;
+      return nFound;
     } finally {
+      undo.DoUndo(undoEnabled);
       oldMark?.Dispose();
       working.Dispose();
       for (const range of [...regions, ...found]) range.Dispose();

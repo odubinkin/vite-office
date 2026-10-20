@@ -3,6 +3,7 @@
  * LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` ownership boundary.
  */
 
+import { SwUndoReplace } from "../undo/unins";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
@@ -22,13 +23,56 @@ export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
-  /** Replaces a same-node point-and-mark range with native Writer text and hints. @param range - Model range to replace. @param replacement - Replacement content. @returns Whether content changed. */
-  public ReplaceRange(range: SwPaM, replacement: SwTextFragment): boolean {
+  /** Replaces a native marked string range, or applies an already formatted fragment through the existing fragment adapter. Native regex/structured replacement remains unported. @param range - Original native range. @param replacement - Literal string or formatted fragment. @param regExp - Native regex replacement policy. @returns Native success for strings, content-change result for fragment adaptation. */
+  public ReplaceRange(range: SwPaM, replacement: string | SwTextFragment, regExp = false): boolean {
+    if (typeof replacement !== "string") {
+      const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
+      const current = node.CaptureTextFragment(start, end);
+      if (current.text === replacement.text && current.hints.equals(replacement.hints))
+        return false;
+      node.ReplaceRange(start, end, replacement);
+      return true;
+    }
+    if (regExp) throw new Error("Writer regex replacement is not implemented.");
+    if (!range.HasMark()) return false;
+    if (this.document.GetIDocumentMarkAccess().GetBookmarks().length !== 0)
+      throw new Error("Writer bookmark replacement history is not implemented.");
     const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
-    const current = node.CaptureTextFragment(start, end);
-    if (current.text === replacement.text && current.hints.equals(replacement.hints)) return false;
-    node.ReplaceRange(start, end, replacement);
-    return true;
+    for (const hint of node.GetpSwpHints()?.entries() ?? [])
+      if (hint.HasDummyChar()) throw new Error("Writer structured replacement is not implemented.");
+    return this.document.RunModelTransaction(
+      /** Runs native replacement/history/modified publication in one model action. @returns Native success. */ () => {
+        const undo = this.document.GetUndoManager();
+        const action = undo.DoesUndo() ? new SwUndoReplace(range, replacement, false) : undefined;
+        if (action !== undefined) undo.AddUndoAction(action);
+        const enabled = undo.DoesUndo(),
+          oldLength = node.Len();
+        undo.DoUndo(false);
+        try {
+          const position = new SwPosition(node, start);
+          try {
+            if (start === node.Len()) this.InsertString(position, replacement);
+            else if (start < end || replacement.length !== 0)
+              node.ReplaceText(position, end - start, replacement);
+          } finally {
+            position.Dispose();
+          }
+          const first = new SwPosition(node, start),
+            last = new SwPosition(node, start + node.Len() - oldLength + end - start);
+          try {
+            range.Assign(first, last);
+          } finally {
+            first.Dispose();
+            last.Dispose();
+          }
+          action?.SetEnd(range);
+        } finally {
+          undo.DoUndo(enabled);
+        }
+        this.document.NotifyModelChange({ kind: "document-modified", modified: true });
+        return true;
+      },
+    );
   }
 
   /** Inserts plain text at the point of one Writer range. @param range - Collapsed or selected model range. @param text - Inserted plain text. @param mode - Native flags,default EMPTYEXPAND. @returns Whether content changed. */

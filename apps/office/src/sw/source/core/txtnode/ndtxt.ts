@@ -8,7 +8,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -43,7 +43,8 @@ import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
-import { SwContentIndexUpdateMode } from "../bastyp/index";
+import type { SwPosition } from "../crsr/pam";
+import { SwContentIndexUpdateMode, type SwContentIndex } from "../bastyp/index";
 import type { WriterHyperlink } from "./fmtatr2";
 import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
@@ -71,6 +72,11 @@ import {
   SplitTextNodeEndHints,
   MoveTextAttrToAttrSet,
   AssertTextNodeRange,
+  getSvxAdjust,
+  getWriterParagraphAlignment,
+  CreateTextNodeFontFamilyFragment,
+  CreateTextNodeFontSizeFragment,
+  CreateTextNodeColorFragment,
 } from "./ndtxt-hints";
 import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
@@ -668,6 +674,56 @@ export class SwTextNode extends SwContentNode {
     return { text, hints };
   }
 
+  /** Native capacity reserves two signed32 positions beyond the final text character. @returns Remaining native text units. */
+  public GetSpaceLeft(): number {
+    return 0x7ffffffd - this.mText.length;
+  }
+  /** Native ReplaceText retains actual hints and applies differential Update modes; the supplied start index advances over inserted text. Dummy-character deletion remains unported. @param rStart - Actual registered content index or native position. @param nDelLen - Deleted UTF-16 count. @param rStr - Replacement string. @returns Nothing. */
+  public ReplaceText(rStart: SwContentIndex | SwPosition, nDelLen: number, rStr: string): void {
+    const index = "nContent" in rStart ? rStart.nContent : rStart;
+    const start = index.GetIndex(),
+      oldLength = this.mText.length;
+    if (index.GetContentNode() !== this || start >= oldLength)
+      throw new Error("Writer ReplaceText needs an index inside its own node.");
+    AssertTextNodeRange(this, start, start + nDelLen);
+    const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
+    if (inserted.length === 0 && nDelLen === 0) return;
+    const hints = this.pSwpHints;
+    for (const hint of hints?.entries() ?? [])
+      if (hint.HasDummyChar() && hint.GetStart() >= start && hint.GetStart() < start + nDelLen)
+        throw new Error("Writer dummy-character replacement is not implemented.");
+    const oldIgnore = this.IsIgnoreDontExpand();
+    this.SetIgnoreDontExpand(true);
+    try {
+      this.mText = this.mText.slice(0, start) + inserted + this.mText.slice(start + nDelLen);
+      if (nDelLen !== 0 && inserted.length !== 0) {
+        const difference = inserted.length - nDelLen;
+        if (difference !== 0) {
+          const offset = start + Math.min(nDelLen, inserted.length);
+          hints?.Update(oldLength, offset, Math.abs(difference), difference < 0);
+          this.UpdateContentIndices(
+            offset,
+            Math.abs(difference),
+            difference < 0 ? SwContentIndexUpdateMode.Negative : SwContentIndexUpdateMode.Replace,
+          );
+        }
+        index.Assign(this, index.GetIndex() + inserted.length);
+      } else {
+        hints?.Update(oldLength, start, nDelLen, true);
+        this.UpdateContentIndices(start, nDelLen, SwContentIndexUpdateMode.Negative);
+        hints?.Update(oldLength - nDelLen, start, inserted.length);
+        this.UpdateContentIndices(start, inserted.length, SwContentIndexUpdateMode.Replace);
+      }
+      if (hints?.CanBeDeleted()) this.pSwpHints = undefined;
+    } finally {
+      this.SetIgnoreDontExpand(oldIgnore);
+    }
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
+  }
+
   /** Replaces one text range with a native fragment. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement content. @param transferHints - Whether to consume same-pool owned hints instead of copying snapshots. @returns Nothing. */
   public ReplaceRange(
     start: number,
@@ -893,17 +949,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     family: string | SvxFontItem,
   ): SwTextFragment {
-    const fragment = this.CaptureTextFragment(start, end);
-    return {
-      text: fragment.text,
-      hints: fragment.hints.setFontFamily(
-        fragment.text.length,
-        0,
-        fragment.text.length,
-        family,
-        this.GetSwAttrSet(),
-      ),
-    };
+    return CreateTextNodeFontFamilyFragment(this, start, end, family);
   }
 
   /** Creates a native fragment with a requested font height. @param start - Inclusive source offset. @param end - Exclusive source offset. @param fontSizeTwips - Requested height in twips. @returns Native formatted fragment. */
@@ -912,17 +958,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     fontSizeTwips: number,
   ): SwTextFragment {
-    const fragment = this.CaptureTextFragment(start, end);
-    return {
-      text: fragment.text,
-      hints: fragment.hints.setFontSize(
-        fragment.text.length,
-        0,
-        fragment.text.length,
-        fontSizeTwips,
-        this.GetSwAttrSet(),
-      ),
-    };
+    return CreateTextNodeFontSizeFragment(this, start, end, fontSizeTwips);
   }
 
   /** Creates a native fragment with a requested foreground or highlight color. */
@@ -932,18 +968,7 @@ export class SwTextNode extends SwContentNode {
     property: "color" | "highlight",
     value: string,
   ): SwTextFragment {
-    const fragment = this.CaptureTextFragment(start, end);
-    return {
-      text: fragment.text,
-      hints: fragment.hints.setCharacterColor(
-        fragment.text.length,
-        0,
-        fragment.text.length,
-        property,
-        value,
-        this.GetSwAttrSet(),
-      ),
-    };
+    return CreateTextNodeColorFragment(this, start, end, property, value);
   }
 
   /** Creates a native fragment with replacement hyperlink metadata. @param start - Inclusive source offset. @param end - Exclusive source offset. @param hyperlink - Replacement hyperlink or undefined. @returns Native formatted fragment. */
@@ -964,35 +989,4 @@ export class SwTextNode extends SwContentNode {
 /** Checks a paragraph adjustment item read from storage or UI. @param value - Unknown runtime value. @returns True for a supported alignment. */
 export function isWriterParagraphAlignment(value: unknown): value is WriterParagraphAlignment {
   return WRITER_PARAGRAPH_ALIGNMENTS.includes(value as WriterParagraphAlignment);
-}
-
-/** Converts a UI alignment to Writer's paragraph adjustment enum. @param alignment - Browser alignment. @returns SvxAdjust value. */
-function getSvxAdjust(alignment: WriterParagraphAlignment): SvxAdjust {
-  switch (alignment) {
-    case "center":
-      return SvxAdjust.Center;
-    case "right":
-      return SvxAdjust.Right;
-    case "justify":
-      return SvxAdjust.Block;
-    default:
-      return SvxAdjust.Left;
-  }
-}
-
-/** Converts Writer's paragraph adjustment enum to the current browser projection. @param adjust - Effective SvxAdjust value. @returns Browser alignment. */
-function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignment {
-  switch (adjust) {
-    case SvxAdjust.Center:
-      return "center";
-    case SvxAdjust.Right:
-    case SvxAdjust.ParaEnd:
-    case SvxAdjust.End:
-      return "right";
-    case SvxAdjust.Block:
-    case SvxAdjust.BlockLine:
-      return "justify";
-    default:
-      return "left";
-  }
 }

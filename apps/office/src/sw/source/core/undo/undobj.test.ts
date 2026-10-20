@@ -13,10 +13,10 @@ import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt
 import { createWriterTextFragment, type WriterTextRun } from "../../filter/basflt/writer-transfer";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
-import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
+import { SwUndoDelete, SwUndoJoinParagraphs } from "./undel";
 import { SwUndoFormatColl } from "./unfmco";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
-import { SwUndoInsert } from "./unins";
+import { SwUndoInsert, SwUndoReplace } from "./unins";
 import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unattr";
 import { SwUndoInsNum, SwUndoNumUpDown } from "./unnum";
 import { SwUndoSplitNode } from "./unspnd";
@@ -87,7 +87,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(undoNodes.Count()).toBe(0);
     expect(manager.GetRedoActionCount()).toBe(0);
     fixtureReplaceRange(shell, { paragraphId: "p-1", start: 0, end: 1 }, [run("Y")]);
-    expect(undoNodes.Count()).toBe(1);
+    expect(undoNodes.Count()).toBe(0);
     manager.Clear();
     expect(undoNodes.Count()).toBe(0);
 
@@ -226,7 +226,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   it("undoes paste and cut as range actions with exact direct formatting" /** Verifies compound replacement semantics without document snapshots. @returns Nothing. */, function replacesRanges(): void {
     const { docShell, document, shell } = createSession("hello");
     fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 4 }, [run("EY", true)]);
-    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoReplace);
+    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([
       run("h"),
       run("EY", true),
@@ -493,15 +493,9 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       cursorState(target, 1),
       state,
     );
-    const replacement = new SwUndoReplace(
-      target,
-      0,
-      fragment(target, [run("a")]),
-      fragment(target, [run("B", true)]),
-      "Replace",
-      state,
-      cursorState(target, 1),
-    );
+    const replacementRange = new SwPaM(new SwPosition(target, 0), new SwPosition(target, 0));
+    const replacement = new SwUndoReplace(replacementRange, "B", false);
+    replacementRange.Dispose();
     const attr = new SwUndoAttr(
       target,
       0,
@@ -554,7 +548,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([1, 1, 6, 6, 2, 0, 3, 6, 1, expect.any(Number)]);
+    ]).toEqual([1, 1, 1, 6, 2, 0, 3, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
       deletion.Merge(

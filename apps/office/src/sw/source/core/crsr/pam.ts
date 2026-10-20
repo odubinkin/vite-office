@@ -340,3 +340,24 @@ function getWriterSinglePaMTextRanges(cursor: SwPaM): readonly WriterTextRange[]
       ) => range.start < range.end,
     );
 }
+
+/** Native GoNextPos's consumed bChk=false branch: move to the next content node, at offset zero. @param position - Registered position to move. @returns Found content node or undefined. */
+export function GoNextPos(position: SwPosition): SwContentNode | undefined {
+  return GoAdjacentPos(position, 1);
+}
+/** Native GoPreviousPos's consumed bChk=false branch also assigns zero, not the previous node's end. @param position - Registered position to move. @returns Found content node or undefined. */
+export function GoPreviousPos(position: SwPosition): SwContentNode | undefined {
+  return GoAdjacentPos(position, -1);
+}
+/** Resolves original model content neighbors, including text in table sections. @param position - Registered source. @param direction - Native node direction. @returns Next content owner. */
+function GoAdjacentPos(position: SwPosition, direction: 1 | -1): SwContentNode | undefined {
+  const nodes = position.GetNode().GetNodes();
+  for (let i = position.GetNodeIndex() + direction; i >= 0 && i < nodes.Count(); i += direction) {
+    const node = nodes.at(i);
+    if (node instanceof SwContentNode) {
+      position.Assign(node, 0);
+      return node;
+    }
+  }
+  return undefined;
+}
