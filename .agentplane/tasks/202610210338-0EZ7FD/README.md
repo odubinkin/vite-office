@@ -1,10 +1,11 @@
 ---
 id: "202610210338-0EZ7FD"
 title: "Implement Writer width kana size and traditional-form transliteration family"
-status: "DOING"
+result_summary: "Implemented source width kana size and traditional-form modules with exact offsets and verified complete native corpus"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -46,7 +47,9 @@ quality_review:
     - "Actual Chromium production-module acceptance covers six width variants and kana/size/traditional quirks. Active table order is independently compared with source;complete BMP fingerprints cover31/31/691 active table rows and exclude three commented entries."
     - "Forty-six non-task paths stay within approved54. Actual mutable Sequence/COW/source offsets,scalar exceptions,range behavior and WRITER039-043 remain preserved. Native JavaScript memory/lifetime is retained without a fake aggregate/context/factory."
     - "Types/static/style/source/provenance/docs/size/tree/inventory/tooling/doctor/routing gates pass;source records stay conservative. Production source is1474156e2eae with subsequent test-reader and issue documentation at226556d3e402."
-commit: null
+commit:
+  hash: "226556d3e40201d04d86b92fbf68ab036c436f51"
+  message: "✅ 0EZ7FD tests: preserve complete native corpus with efficient field reads"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Closure evidence correction: finish rejected an implementation-commit pointer to the earlier production-only1474156 snapshot because the formal review evaluates final226556d3e402,which includes the corpus-reader correction and WRITER043 documentation. Use226556d3e402 consistently as final implementation/evidence commit;retain1474156e2eae as the production-owner provenance. No source,test result,quality verdict or scope changes."
+  -
+    author: "CODER"
+    body: "Verified: Width/kana/size/traditional module family,original widthfolding string operations and preserved WRITER039-043 pass373 related tests at strict100 percent target coverage and actual Chromium acceptance. Source table/BMP audits,types/static/style/source/tooling/inventory/policy gates pass. DataView corpus reading retains every input/field/hash/assertion and original timeout;both prior timeout failures remain documented. Parent integration is pending;fifth completed leaf since9BAAAC and next-full-checkpoint stop condition retained."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     at: "2026-10-21T04:11:11.653Z"
     author: "CODER"
     body: "Closure evidence correction: finish rejected an implementation-commit pointer to the earlier production-only1474156 snapshot because the formal review evaluates final226556d3e402,which includes the corpus-reader correction and WRITER043 documentation. Use226556d3e402 consistently as final implementation/evidence commit;retain1474156e2eae as the production-owner provenance. No source,test result,quality verdict or scope changes."
+  -
+    type: "status"
+    at: "2026-10-21T04:11:30.828Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Width/kana/size/traditional module family,original widthfolding string operations and preserved WRITER039-043 pass373 related tests at strict100 percent target coverage and actual Chromium acceptance. Source table/BMP audits,types/static/style/source/tooling/inventory/policy gates pass. DataView corpus reading retains every input/field/hash/assertion and original timeout;both prior timeout failures remain documented. Parent integration is pending;fifth completed leaf since9BAAAC and next-full-checkpoint stop condition retained."
 doc_version: 3
-doc_updated_at: "2026-10-21T04:11:11.653Z"
+doc_updated_at: "2026-10-21T04:11:30.830Z"
 doc_updated_by: "CODER"
 description: "Continue approved search prerequisites with original widthfolding string composition/decomposition,all six width modules,two kana directions,two size directions,ignore Kana/Width/Size and traditional Kana/Kanji tables. Preserve native offsets,range/scalar quirks and JS memory behavior;do not invent missing service infrastructure."
 sections:
@@ -164,6 +177,10 @@ sections:
     The serialized retry also completed with372 passes and only the same120000ms timeout (point replay120926ms,total314.68s). All sources/data matched;no value mismatch was reported. Improve the existing related test-only NativeRows decoder/reader with a DataView over the exact Buffer byteOffset/byteLength and explicit little-endian signed32 access. This replaces per-field JavaScript Buffer access overhead with native DataView operations while retaining every native input/flag/field,stream-consumption assertion,decoded-byte SHA256 check and the original120000ms timeout. No production source or test criterion changes;the one additional related test file stays within approved54-path scope. Revalidate the actual corpus and complete related scope after this test-only change.
 
     The DataView-backed exact-corpus replay completes with all373 scenarios passing and strict S287/287 B88/88 F46/46 L278/278. Both prior timeout logs remain failed gates. The reader changes only native JavaScript signed32 little-endian access to the same decoded Buffer bytes;all corpus content,field assertions,stream completion checks,raw hash checks and120000ms timeouts remain. Production source is unchanged after1474156e2eae. WRITER043 additionally documents the original arithmetic YORI/KOTO digraph exchange,confirmed against the authorized local ICU UnicodeData names/decompositions;the existing complete interval tests cover both units.
+extensions:
+  implementation_commit:
+    hash: "226556d3e40201d04d86b92fbf68ab036c436f51"
+    message: "✅ 0EZ7FD tests: preserve complete native corpus with efficient field reads"
 id_source: "generated"
 ---
 ## Summary
