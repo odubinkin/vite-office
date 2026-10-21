@@ -4,7 +4,7 @@
   "resolverInput": {
     "taskId": "202610210415-45MPFV",
     "title": "Implement contextual Japanese transliteration and locale module catalogs",
-    "description": "Continue approved Writer search prerequisites with IandE/KiKu/iteration/prolonged-sound source loops,complete TransliterationModulesNew enum and source-derived285-locale transliteration catalogs using actual value/Sequence contracts and existing locale fallback. Preserve contextual zeros,source order,defaults and JS lifetime;no aggregate/context substitute.",
+    "description": "Continue approved Writer search prerequisites with four contextual Japanese source loops,complete TransliterationModulesNew enum and ordered catalogs for all284 locales in the actual native library table. Preserve existing285-XML decimal/measurement resources,source ref chains/defaults and JS lifetime;no aggregate/context substitute.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "80390462c59350afbed01178ad93b6ce0abbfa1945da343c1571209f88ea1991"
+    "value": "82058bb5f03c0be27fa52e62d54786d9b9ea6f7a9bc78fa9a32cfc8fa720130f"
   }
 }
