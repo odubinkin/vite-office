@@ -416,6 +416,25 @@ export function CalcWorkbench({
           onAction={inputAction}
         />
         <ScGridWindow
+          headerSizing={{
+            GetEntrySize:
+              /** Reads native header dimensions. @param width - Axis. @param index - Entry. @returns Pixels. */ (
+                width,
+                index,
+              ) => controller.GetHeaderEntrySize(width, index),
+            SetEntrySize:
+              /** Commits native header dimensions. @param width - Axis. @param index - Entry. @param pixels - Size. @returns Nothing. */ (
+                width,
+                index,
+                pixels,
+              ) => controller.SetHeaderEntrySize(width, index, pixels),
+            HideEntries:
+              /** Hides the native dragged range. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */ (
+                width,
+                first,
+                last,
+              ) => controller.HideHeaderEntries(width, first, last),
+          }}
           idPrefix="calc"
           viewData={view}
           viewport={controller.viewport}

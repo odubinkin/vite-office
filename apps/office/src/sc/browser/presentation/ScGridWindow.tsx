@@ -1,5 +1,6 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
 import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
+import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
@@ -66,6 +67,7 @@ export interface CalcCellPresentation {
 }
 /** Controller contracts corresponding to native grid painting and input routing. */
 export interface ScGridWindowProps {
+  readonly headerSizing?: ScHeaderSizing;
   readonly idPrefix: string;
   readonly viewData: ScViewData;
   readonly viewport: CalcGridViewport;
@@ -218,6 +220,16 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   >
                     {columnLabel(col)}
                   </button>
+                  {props.headerSizing && (
+                    <ScHeaderResizeHandle
+                      owner={viewData}
+                      width={true}
+                      index={col}
+                      label={`column ${columnLabel(col)}`}
+                      disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
+                      sizing={props.headerSizing}
+                    />
+                  )}
                 </div>
               ),
             )}
@@ -264,6 +276,16 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   >
                     {r + 1}
                   </button>
+                  {props.headerSizing && (
+                    <ScHeaderResizeHandle
+                      owner={viewData}
+                      width={false}
+                      index={r}
+                      label={`row ${r + 1}`}
+                      disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
+                      sizing={props.headerSizing}
+                    />
+                  )}
                 </div>
               )}
               {columns.map(

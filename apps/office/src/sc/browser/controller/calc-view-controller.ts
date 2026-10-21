@@ -8,6 +8,7 @@ import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
+import { ScColBar, ScRowBar } from "../../source/ui/inc/colrowba";
 import { ScTabViewShell } from "../../source/ui/inc/tabvwsh";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
@@ -121,6 +122,28 @@ export class CalcViewController {
     this.addressText = this.Address();
     this.Changed();
     return request;
+  }
+  /** Borrows real header operations with the current fixed browser96CSSdpi scale. @param width - Column or row axis. @returns Native header geometry. */
+  private HeaderBar(width: boolean): ScColBar | ScRowBar {
+    return width ? new ScColBar(this.viewShell, 1 / 15) : new ScRowBar(this.viewShell, 1 / 15);
+  }
+  /** Reads actual native pixel geometry during header tracking. @param width - Axis. @param index - Entry. @returns Pixels. */
+  GetHeaderEntrySize(width: boolean, index: number): number {
+    return this.HeaderBar(width).GetEntrySize(index);
+  }
+  /** Completes header tracking through native size/history owners;active edit views prohibit resizing. @param width - Axis. @param index - Entry. @param pixels - Native UInt16 pixel size. @returns Nothing. */
+  SetHeaderEntrySize(width: boolean, index: number, pixels: number): void {
+    if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
+    this.HeaderBar(width).SetEntrySize(index, pixels);
+    this.addressText = this.Address();
+    this.Changed();
+  }
+  /** Completes a negative header drag through the original hide-range operation. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */
+  HideHeaderEntries(width: boolean, first: number, last: number): void {
+    if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
+    this.HeaderBar(width).HideEntries(first, last);
+    this.addressText = this.Address();
+    this.Changed();
   }
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {

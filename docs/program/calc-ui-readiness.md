@@ -2,6 +2,23 @@
 
 ## User priority — ordinary ODS, existing-core UI and formula execution
 
+Task `202610210524-5678C0` adds mouse sizing of column and row header boundaries.
+Real ScColBar/ScRowBar size/hide methods retain UInt16 conversion, ten-pixel
+minimum, marked/disjoint spans, grouped sheets and genuine geometry history.
+The browser header follows the original two-pixel tracking threshold, release
+coordinate arithmetic and negative-size hide walk. Model dimensions change only
+on accepted termination. Editing disables sizing. Escape, pointer cancellation,
+blur and owner removal cancel; Enter accepts the last tracking position.
+The existing Writer ruler tracking implementation now lives in shared VCL
+browser ownership, with Writer retaining its API boundary. Native cursor styling
+is shared too. Device optimum, double-click autofit, metric drag tooltip,
+physical RTL, zoom, split views and protection remain outside this slice.
+
+Combined ODS and sizing verification passes all 604 Calc scenarios in 177 files.
+All 135 measured Calc owners reach 100%: S11128/B6909/F2064/L9994. Related
+native header tests and pointer tests also reach 100%; 28 related Writer/common
+tracking scenarios provide 100% coverage of the moved common tracking owner.
+
 Task `202610210506-AKV3ES` fixes opening ordinary scalar ODS documents with
 unused data-style declarations and empty form containers. The original supplied
 `file_example_ODS_10.ods` now opens through the shared browser file dialog, with
@@ -11,8 +28,7 @@ the number-format compiler and formatter remain unported. Actual form controls
 and unsupported cell semantics still fail explicitly. Full-sheet styled empty
 ranges remain compressed in the real document rather than expanded scalar cells.
 
-Near-term work prioritizes mouse-driven column and row sizing over the existing
-dimension/history owners, followed by formula execution: ranges, functions,
+The next functional priority is formula execution: ranges, functions,
 dependency recalculation and error/coercion semantics using the original compiler
 and interpreter owners. Arithmetic and local single-cell references are the
 current executable formula slice. Metric dialogs already parse explicit units
@@ -21,15 +37,15 @@ converter is needed. Generic UNO view-settings prerequisites are deferred behind
 these user-visible features. The block70 full-suite, repair, coverage, final task
 closure and goal-pause checkpoint remains in force.
 
-## Current prerequisite block65 — property-container error/access contracts
+## Prerequisite block65 — property-container error/access contracts
 
 Task `202610210335-7QBK8C` supplies four original generated UNO exception
 value/type owners and seven complete structural access-interface declarations.
 These are prerequisites for native ODS view-settings containers. Actual
 Indexed/NamedPropertyValuesContainer services, WeakImplHelper, Sfx model and
 view-data ownership, interface runtime metadata and settings.xml serialization
-remain subsequent source owners. The current browser UI remains block64 below;
-this block makes no additional UI or view-settings persistence claim.
+remain subsequent source owners in that historical slice; block65 made no
+additional UI or view-settings persistence claim.
 
 The next full-suite checkpoint is block70. After repairing failures, adding
 necessary scenarios and checking coverage, close the current task completely

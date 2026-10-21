@@ -14,7 +14,7 @@
           "marker": "useRulerTracking"
         },
         {
-          "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+          "path": "apps/office/src/vcl/browser/use-window-tracking.ts",
           "marker": "StartTracking"
         },
         {
