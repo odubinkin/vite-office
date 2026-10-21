@@ -11,13 +11,14 @@
     "assertions": [
       "TaskZXWXQ8 connects original no-argument SelectRow/SelectColumn slots26548/26547 to normal-grid ScTabView MarkRows/MarkColumns over actual ScViewData/ScMarkData. Existing simple selection endpoints expand to full axis extents;unmarked selection uses current normal cursor. Cursor and selected sheets remain;selection alone changes neither cells,dirty state nor history. Existing browser input owner commits or rejects pending drafts before selection and publishes real changes. Original ShiftSpace selects rows;column selection uses CtrlSpace on nonMac and AltSpace on Mac,only from the actual grid,not nested editors,composition or modal input. Actual shared Writer menus/resources/dispatch remain reused. Native reference-mode,end-block/window callbacks,parameterized Col/Row/Modifier automation and full native UI/core parity remain unverified.",
       "The existing browser selection anchor now follows original InitBlockMode start independently of the active cursor,so subsequent shift extension starts at the newly selected axis origin. Source window/ref-mode lifecycle and parameterized APIs remain unverified.",
-      "TaskFZA8S9 ports original column range emptiness,occupancy and bounded last-row queries;table/document connected-area expansion and shrinking retain source order,diagonals,includeOld/onlyDown and allocated-column clamping. Table construction now uses actual INITIALCOLCOUNT=1. SelectAll5723 honors SelectRangeBeforeAll=true;SelectData26551,shared Writer menus,Ctrl/Meta+A,keypad multiply,platform Space accelerators and direct whole-sheet corner use actual native marks. Cursor,sheet membership,content generation,dirty state and history remain unchanged by selection. Native rich-edit,reference,device/protection and alternate-view services remain unported. Native cached column-iterator hints are omitted as a lookup optimization;the original uncached occupancy overload reads the same real typed store. Existing Writer browser save/open deviations remain."
+      "TaskFZA8S9 ports original column range emptiness,occupancy and bounded last-row queries;table/document connected-area expansion and shrinking retain source order,diagonals,includeOld/onlyDown and allocated-column clamping. Table construction now uses actual INITIALCOLCOUNT=1. SelectAll5723 honors SelectRangeBeforeAll=true;SelectData26551,shared Writer menus,Ctrl/Meta+A,keypad multiply,platform Space accelerators and direct whole-sheet corner use actual native marks. Cursor,sheet membership,content generation,dirty state and history remain unchanged by selection. Native rich-edit,reference,device/protection and alternate-view services remain unported. Native cached column-iterator hints are omitted as a lookup optimization;the original uncached occupancy overload reads the same real typed store. Existing Writer browser save/open deviations remain.",
+      "TaskDRAYC7 implements original cellsh1 visible-row/column cases26678/26679 in the existing real ScCellShell owner. Original MarkToMulti,selected-sheet hidden subtraction,unclamped hidden-span endpoints,conditional empty reset and MarkToSimple operate on actual ScMarkData. Hidden spans on any grouped sheet subtract from common marks on every selected sheet. Existing shared Writer Edit Select menus and Sfx dispatch reuse the actual input owner and preserve cursor,sheet membership,content generation,dirty state and history. Filter flags remain separate from hidden flags;formatting keeps original working-mark filtering and real pattern undo/ODS owners. No reference,protection,rich-edit or native window/device services are fabricated;complete parity remains unverified."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
     },
-    "capability": "Native normal-grid axis,connected-area and whole-sheet UI selection",
+    "capability": "Native normal-grid axis,connected-area,whole-sheet and visible-cell UI selection",
     "gaps": [
       "Only normal simple marks and current scalar input/view owners are supported;native reference-mode/window block lifecycle and parameterized automation remain unverified.",
       "All remaining available UI actions,especially font/style/formatting integration,remain part of the active goal;this leaf does not certify full UI readiness."
@@ -43,6 +44,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview2.cxx",
           "marker": "ScTabView::SelectAll("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh1.cxx",
+          "marker": "case SID_SELECT_VISIBLE_ROWS:"
         }
       ],
       "tests": [
@@ -98,6 +103,14 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
           "marker": "uses native first-range"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+          "marker": "subtracts original hidden runs"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-visible-selection.test.tsx",
+          "marker": "connects shared visible-"
         }
       ],
       "docs": [

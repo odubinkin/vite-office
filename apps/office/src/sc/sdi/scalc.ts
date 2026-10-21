@@ -64,6 +64,7 @@ export interface CalcCommandTarget
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
   SetInputMode(): boolean;
+  SelectVisibleCells(rows: boolean): boolean;
   SelectCells(request?: SfxRequest): boolean;
   MarkRows(): boolean;
   MarkColumns(): boolean;
@@ -141,6 +142,16 @@ export const calcCellSelectionCommands = [
   { id: ".uno:SelectData", slotId: 26551, label: "Select Data Area" },
   { id: ".uno:SelectColumn", slotId: 26547, label: "Select Column" },
   { id: ".uno:SelectRow", slotId: 26548, label: "Select Row" },
+] as const;
+/** Original SID_NEW_SLOTS=26571 plus107/108;these commands have no configurable accelerator. */
+export const calcVisibleSelectionCommands = [
+  { id: ".uno:SelectVisibleRows", slotId: 26678, label: "Select Visible Rows Only", rows: true },
+  {
+    id: ".uno:SelectVisibleColumns",
+    slotId: 26679,
+    label: "Select Visible Columns Only",
+    rows: false,
+  },
 ] as const;
 /** Native asynchronous Go to Sheet slot and public Nr contract. */
 export const calcGoToSheetCommand = {
@@ -349,6 +360,7 @@ export const calcUserCommands = [
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
   ...calcCellSelectionCommands,
+  ...calcVisibleSelectionCommands,
   calcGoToSheetCommand,
 ].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
@@ -386,7 +398,9 @@ export const calcUserCommands = [
                               ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
                               : item.id === ".uno:FontHeight"
                                 ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-                                : item.id === ".uno:SelectRow" ||
+                                : item.id === ".uno:SelectVisibleRows" ||
+                                    item.id === ".uno:SelectVisibleColumns" ||
+                                    item.id === ".uno:SelectRow" ||
                                     item.id === ".uno:SelectColumn" ||
                                     item.id === ".uno:SelectAll" ||
                                     item.id === ".uno:SelectData"
@@ -774,6 +788,17 @@ export function createCalcInterface(
             resource.id === ".uno:TableSelectAll"
               ? target.SelectAllTables()
               : target.DeselectAllTables(),
+      }),
+    ),
+    ...calcVisibleSelectionCommands.map(
+      /** Binds the original visible-axis cell-shell cases to current source selection. @param resource - Native command. @returns Slot. */
+      (resource): SfxSlotDefinition<CalcCommandTarget> => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        execute:
+          /** Delegates to the actual source owner after input admission. @param target - Current view. @returns Accepted. */
+          (target) => target.SelectVisibleCells(resource.rows),
       }),
     ),
     ...calcCellSelectionCommands.map(

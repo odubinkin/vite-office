@@ -346,6 +346,15 @@ export class CalcViewController {
       );
     this.Changed();
   }
+  /** Admits actual input before source hidden-row/column selection subtraction. @param rows - Row command versus column command. @returns Whether admitted. */
+  SelectVisibleCells(rows: boolean): boolean {
+    if (!this.Commit()) return false;
+    const shell = new ScCellShell(this.viewShell);
+    if (rows) shell.SelectVisibleRows(this.viewData);
+    else shell.SelectVisibleColumns(this.viewData);
+    this.Changed();
+    return true;
+  }
   /** Accepts current input before source connected-area/whole-sheet selection. @param request - Source SelectAll request;omitted for SelectData. @returns Accepted. */
   SelectCells(request?: SfxRequest): boolean {
     if (!this.Commit()) return false;

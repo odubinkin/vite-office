@@ -1,5 +1,30 @@
 # Calc UI and ODS implementation critical path
 
+## Current UI block62 — visible-row and visible-column selection
+
+Task `202610210117-DRAYC7` connects original SelectVisibleRows26678 and
+SelectVisibleColumns26679 to the existing shared Writer Edit Select menu.
+ScCellShell operates directly on real ScMarkData and segmented RowHidden/ColHidden
+state. It retains native conversion to multi-marks,selected-sheet iteration,
+unclamped hidden-span endpoints,empty reset and reduction back to simple marks.
+Because grouped sheets share marks,hiding on any selected sheet subtracts the
+same cells from the common selection. Cursor and sheet membership stay unchanged.
+
+The commands query hidden flags;native filtered-row handling remains separately
+owned by formatting's working-mark copy. Actual disjoint formatting,undo/redo and
+ODS roundtrip tests confirm that hidden cells stay outside the affected runs.
+There is no replacement selection model or native window/reference/protection
+service. Source dispatch cases from cellsh1.cxx live in the existing single
+ScCellShell TypeScript owner alongside its other consumed C++ cases.
+
+All551Calc tests in166files pass. All130measured owners have100% coverage:
+S10881/B6759/F2011/L9769. All34related common-menu/Writer cases pass. No shared
+runtime owner changes in this block. Types,source lint/format,build/static,
+resource,registry,provenance and source gates pass. Actual Chromium desktop row
+and390px column workflows reuse the shared menu and preserve grid focus. Complete
+native UI/core parity remains unverified;the next full all-application checkpoint
+remains70.
+
 ## Current UI block61 — connected-area and whole-sheet selection
 
 Task `202610210052-FZA8S9` connects Select All5723 and Select Data26551 to real
