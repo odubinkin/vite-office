@@ -4,7 +4,7 @@ title: "Implement mouse sizing of Calc column and row headers"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -23,11 +23,16 @@ verification:
   updated_by: "CODER"
   note: "604Calc/135owners100;28relatedWriter/common100;native header and pointer100;real browser resize/undo/Escape;13gates0;immutable audit passed."
   attempts: 0
-commit: null
+commit:
+  hash: "a4c1896e9511e8ac2ae762e8f79a7cf916abe4d7"
+  message: "🧩 5678C0 task: add native mouse sizing and shared Writer window tracking"
 comments:
   -
     author: "CODER"
     body: "Start: implement native header size/hide owners and actual browser pointer integration,with combined final Calc acceptance for tasks67and68."
+  -
+    author: "CODER"
+    body: "Start: pin the existing verified native header sizing source commit for quality review after the related ODS task closure changed HEAD. No implementation or verification scope changes."
 events:
   -
     type: "status"
@@ -42,8 +47,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "604Calc/135owners100;28relatedWriter/common100;native header and pointer100;real browser resize/undo/Escape;13gates0;immutable audit passed."
+  -
+    type: "status"
+    at: "2026-10-21T06:12:18.269Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: pin the existing verified native header sizing source commit for quality review after the related ODS task closure changed HEAD. No implementation or verification scope changes."
 doc_version: 3
-doc_updated_at: "2026-10-21T06:04:25.524Z"
+doc_updated_at: "2026-10-21T06:12:18.269Z"
 doc_updated_by: "CODER"
 description: "User priority: useful existing-core UI after ordinary ODS import. Port the consumed ScColBar/ScRowBar size and hide contracts plus header drag threshold/completion/cancellation from pinned upstream. Wire React header boundaries to actual native dimensions and undo, preserving selection/groups and browser style. No alternate workbook geometry state; native optimal device layout stays an explicit separate unported branch. Limit up to24 implementation/test/registry/doc paths, including new native header boundaries and one browser pointer presenter. Accept related tests and raw changed-owner100, complete Calc100, browser actual drag/undo/cancel and unchanged ODS reload behavior. Full all-app checkpoint70, repair and final closure then pause remain required."
 sections:
