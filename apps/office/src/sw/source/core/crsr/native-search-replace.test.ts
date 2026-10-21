@@ -82,6 +82,8 @@ it.each([false, true])(
       expect(history).toBeInstanceOf(SfxListUndoAction);
       expect((history as SfxListUndoAction<unknown>).GetActionCount()).toBe(2);
       expect([...f.shell.GetCursor().GetRingContainer()]).toHaveLength(1);
+      expect(f.shell.GetCursor().HasMark()).toBe(true);
+      expect(f.shell.GetCursor().GetPoint().compare(f.shell.GetCursor().GetMark())).toBe(0);
       expect(f.docShell.IsModified()).toBe(true);
       for (let cycle = 0; cycle < 3; cycle++) {
         expect(f.shell.Undo()).toBe(true);
@@ -285,8 +287,12 @@ it("retains backward native zero-offset previous-node progress after empty repla
     expect(replaceAll(f.shell, "a", "", true)).toBe(1);
     expect(last.GetText()).toBe("a");
     expect(f.node.GetText()).toBe("next");
-    expect(f.shell.GetCursor().GetMark().GetNode()).toBe(f.node);
-    expect(f.shell.GetCursor().GetMark().GetContentIndex()).toBe(0);
+    // lcl_FindSelection's no-ring fallback calls point-only Create(), then FindAll sets a mark.
+    expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(last);
+    expect(f.shell.GetCursor().GetMark().GetNode()).toBe(last);
+    expect(f.shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
+    expect(f.shell.GetCursor().HasMark()).toBe(true);
+    expect(f.shell.GetCursor().GetMark().GetContentIndex()).toBe(1);
     expect(f.shell.Undo()).toBe(true);
     expect(last.GetText()).toBe("aa");
     expect(f.shell.Redo()).toBe(true);

@@ -1,5 +1,5 @@
 /** @fileoverview Writer model-text FindTextImpl and soft-hyphen cleanup from native findtxt.cxx; layout-merged text, fields/notes and regex modes remain unported. */
-import { SwPaM, SwPosition } from "./pam";
+import { SwPaM } from "./pam";
 import {
   FIND_FOUND,
   FIND_NOT_FOUND,
@@ -82,15 +82,11 @@ function DoSearch(
         index,
       ) => index < endLimit,
     ).length;
-  const mark = new SwPosition(node, backward ? restoredEnd : restoredStart);
-  const point = new SwPosition(node, backward ? restoredStart : restoredEnd);
-  try {
-    target.Assign(point, mark);
-    if (backward) target.Exchange();
-  } finally {
-    point.Dispose();
-    mark.Dispose();
-  }
+  target.GetPoint().Assign(node, backward ? high : low);
+  target.SetMark();
+  target.GetMark().SetContent(backward ? restoredEnd : restoredStart);
+  target.GetPoint().SetContent(backward ? restoredStart : restoredEnd);
+  if (backward) target.Exchange();
   return true;
 }
 /** Native represented model-text traversal through actual SwNodes, including table content. No projection IDs or concatenated document string are used. @param searchPam - Result cursor; the region owns traversal bounds. @param options - Native search options. @param engine - Prepared shared engine. @param backward - Direction. @param region - Registered model bounds. @returns Whether one match was found; failure preserves the caller cursor. */

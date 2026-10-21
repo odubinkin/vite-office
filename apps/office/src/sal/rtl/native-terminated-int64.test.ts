@@ -2,11 +2,15 @@
 import { expect, it } from "vitest";
 import { OUString } from "../inc/rtl/ustring";
 import { rtl_ustr_toInt64 } from "../inc/rtl/ustring.h";
-import { rtl_str_toUInt64 } from "../inc/rtl/string.h";
+import { rtl_str_toInt64, rtl_str_toUInt64 } from "../inc/rtl/string.h";
 import { HandleSignChar } from "./strtmpl";
 it("retains unsigned byte null assertions and the default signed sign-handler contract", /** Exercises actual original public scalar entry points. @returns Nothing. */ () => {
   expect(
     /** Native null pointer assertion. @returns Integer. */ () => rtl_str_toUInt64(null, 10),
+  ).toThrow("assert(pStr)");
+  expect(
+    /** Signed terminated-byte assertion also precedes integer parsing. @returns Integer. */ () =>
+      rtl_str_toInt64(null, 10),
   ).toThrow("assert(pStr)");
   const position: [number] = [0];
   expect(HandleSignChar(terminated("-12"), position)).toBe(true);

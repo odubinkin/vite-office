@@ -618,6 +618,13 @@ the ring before its head, and the portable shell close must do the same.
 Higher-level UI cleanup, UNO cursor overrides and the intended reason for
 retaining the saved cursor remain unverified.
 
+The preceding `InOther` branch also creates a saved point-only cursor. Its
+non-all success branch copies the found result without deleting that saved
+member. Initialized plain-text inserts-section cases therefore retain two
+members after a successful single match. Preserve this related source
+retention as well; complete other-area selection helpers, note/field services
+and higher-level cleanup remain outside this observation's certification.
+
 ## WRITER-025: New transliteration module loading checks a different table index
 
 Status: original table and control-flow source proof; compiled native service
@@ -666,6 +673,31 @@ porting `Partial`; do not initialize the accumulator from the root flag or
 special-case the empty query. The portable owner is not implemented yet.
 Whether XCU or another consumer actually queries this empty path, and why
 the distinction exists, remain unverified; no confirmed defect is claimed.
+
+## WRITER-027: Ordinary mark restoration can move an unmarked find result
+
+Status: initialized generic-strategy source proof; concrete native search
+consumer reachability and compiled execution remain unverified.
+Pinned `sw/source/core/crsr/swcrsr.cxx`, the ordinary `SwCursor::FindAll`
+branch, saves `*GetMark()` before `DoFind(*this, ...)`. If the original cursor
+had a mark and the range flags equal `InBody`, a successful return restores
+that saved value through `*GetMark()` without calling `SetMark()`.
+`sw/inc/pam.hxx` defines an unmarked cursor's mark pointer as its point
+pointer after `DeleteMark()`.
+
+For a real cursor at point 2, mark 0 on `abc`, a generic strategy can move
+the point to 1, delete its mark and return `FIND_NO_RING`. The ordinary
+caller counts one result, then its restoration writes position 0 into the
+aliased point. The result is an unmarked point at 0, rather than a marked
+range from 0 to 1. The managed initialized strategy regression preserves
+this exact result through the actual public cursor operations; it does not
+substitute a TextSearch backend or inject private state.
+
+Decision: retain direct `GetMark()` assignment and the alias effect. Do not
+create a mark while transferring this ordinary result. Whether any concrete
+upstream search strategy returns a successful unmarked cursor under these
+conditions remains unknown, so this is a conditional contract observation,
+not a confirmed user-facing defect.
 
 ## Recording future observations
 

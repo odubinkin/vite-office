@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 31
+revision: 47
 origin:
   system: "manual"
 depends_on: []
@@ -13,20 +13,26 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-20T20:51:10.248Z"
+  updated_at: "2026-10-21T01:46:38.025Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-21T01:48:18.555Z"
+  updated_by: "CODER"
+  note: "Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows."
   attempts: 0
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
+  -
+    author: "CODER"
+    body: "Blocked: Verified candidate needs explicit user reapproval for66 non-task paths instead of65 and exactly two native wildcard coverage exceptions with the documented cadence acceptance. Candidate remains uncommitted. Formal EVALUATOR recording requires a source commit and is deferred until scope approval; no annotation,threshold change or publication applied."
+  -
+    author: "CODER"
+    body: "Start: Human approved the concrete 66-path and two native coverage annotation amendment; resume exact candidate validation and committed formal review on writer."
 events:
   -
     type: "status"
@@ -35,15 +41,50 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
+  -
+    type: "verify"
+    at: "2026-10-21T01:26:22.830Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Candidate core repairs pass5121 related tests with three modules at100 percent; complete inventory124,static and five Chromium cases pass. Scope66 exceeds approved65 and exact native wildcard coverage exceptions/cadence acceptance require explicit user reapproval; candidate remains uncommitted."
+  -
+    type: "status"
+    at: "2026-10-21T01:32:17.627Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: Verified candidate needs explicit user reapproval for66 non-task paths instead of65 and exactly two native wildcard coverage exceptions with the documented cadence acceptance. Candidate remains uncommitted. Formal EVALUATOR recording requires a source commit and is deferred until scope approval; no annotation,threshold change or publication applied."
+  -
+    type: "status"
+    at: "2026-10-21T01:46:45.459Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Human approved the concrete 66-path and two native coverage annotation amendment; resume exact candidate validation and committed formal review on writer."
+  -
+    type: "verify"
+    at: "2026-10-21T01:48:18.555Z"
+    author: "CODER"
+    state: "ok"
+    note: "Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows."
 doc_version: 3
-doc_updated_at: "2026-10-21T00:05:34.586Z"
+doc_updated_at: "2026-10-21T01:48:18.686Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
   Summary: "Port the complete original XCS schema/template responsibility family so actual pinned Common.xcs defaults become real configmgr nodes needed by Writer search. Complete the tenth-task full regression without weakening gates."
-  Scope: "Only vite-office-writer on writer. Up to 65 non-task paths: actual Parser/ParseManager, xmldata and XcsParser owners; unchanged original Common.xcs asset under officecfg; source-shaped tests including real-schema/default/template/merge/resume/error histories; exact import data and runtime/provenance records; suspected issues; relevant repairs/test evidence for changes since full checkpoint 6a7dd8660 if full regression exposes gaps. No global configuration service/provider/locale default substitute, ICU/network reads, branch merge, publication, exclusions or threshold changes. Parser URL/file mapping takes the existing explicit loaded-byte browser boundary used by actual XmlReader."
-  Plan: "1. Inspect pinned parser, parsemanager, xmldata, xcsparser and Common.xcs with existing real Node/Data/ValueParser contracts. 2. Implement original abstract/dispatch/resume/namespace and lexical helpers, complete XcsParser states/attribute handlers/conservative merge, preserving quirks. 3. Bundle unchanged pinned Common.xcs at the matching officecfg path, with source hash/license context, and test actual full schema/defaults plus independent source-derived cases. 4. Run scoped development checks, required static/source registries and full cadence: npm test (application and inventory coverage), npm run test:tooling, npm run test:e2e and npm run test:static, sequential around shared build/browser artifacts. Keep strict gates; address only related in-scope findings with targeted tests/repairs and retain raw failure evidence. 5. Record truthful evidence/review, commit/finish only when declared checks pass, leaving XCU/services/search item and browser UI parent open."
-  Verify Steps: "Run focused xmldata, ParseManager and XcsParser tests plus existing configuration/ValueParser/XMLReader suites. Parse the complete unchanged Common.xcs and independently verify complete SearchOptions property/defaults, ordinary/localized types and template/group/set nodes; verify source hashes and retained license. Test type namespace grammar, strict schema booleans, template references/clones, duplicates, layer/finalized gates, extensible-only conservative merge, ignored/description states, empty schemas and ParseManager false/resume/exception timing. Run build, changed Prettier/ESLint, dependencies, source-provenance/tree/docs/file-size, writer/shared inventories, doctor, policy routing, diff/status. Run exact-edge boundary tooling when import data changes. Full cadence task10: npm test; npm run test:tooling; npm run test:e2e; npm run test:static. Do not overlap rebuild/static mutations with browser runs. Preserve strict coverage thresholds and all existing tests; if full evidence fails, keep task open and repair related gaps without invented native behaviors. No claim to compiled complete native service/ABI or whole Writer fidelity."
+  Scope: |-
+    Only vite-office-writer on writer. Up to 66 non-task paths: actual Parser/ParseManager, xmldata and XcsParser owners; unchanged original Common.xcs asset under officecfg; source-shaped tests including real-schema/default/template/merge/resume/error histories; exact import data and runtime/provenance records; suspected issues; relevant repairs/test evidence for changes since full checkpoint 6a7dd8660 if full regression exposes gaps. No global configuration service/provider/locale default substitute, ICU/network reads, branch merge, publication or threshold changes; coverage exclusions are limited to the two approved native wildcard guards. Parser URL/file mapping takes the existing explicit loaded-byte browser boundary used by actual XmlReader.
+
+    Human approval received on 2026-10-21: the sole added path is apps/office/src/sw/source/core/crsr/native-search-replace.test.ts; exactly two reviewed istanbul ignore if comments in textsearch.ts are allowed. The original conditions and returns, every scenario and all 100-percent thresholds remain unchanged. The approval concerns the concrete stored amendment; no additional external-source or network access is inferred.
+  Plan: |-
+    1. Inspect pinned parser, parsemanager, xmldata, xcsparser and Common.xcs with existing real Node/Data/ValueParser contracts. 2. Implement original abstract/dispatch/resume/namespace and lexical helpers, complete XcsParser states/attribute handlers/conservative merge, preserving quirks. 3. Bundle unchanged pinned Common.xcs at the matching officecfg path, with source hash/license context, and test actual full schema/defaults plus independent source-derived cases. 4. Run scoped development checks, required static/source registries and full cadence: npm test (application and inventory coverage), npm run test:tooling, npm run test:e2e and npm run test:static, sequential around shared build/browser artifacts. Keep strict gates; address only related in-scope findings with targeted tests/repairs and retain raw failure evidence. 5. Record truthful evidence/review, commit/finish only when declared checks pass, leaving XCU/services/search item and browser UI parent open.
+
+    Approved amendment (human confirmation on 2026-10-21): increase the ceiling to 66 paths solely for native-search-replace.test.ts. Apply exactly the two prepared textsearch.ts coverage annotations. Retain the completed full pre-repair cadence run as historical evidence and current scoped ownership-repair validation; rerun complete related search coverage and affected quality checks. Do not describe historical failed global coverage as a current pass. Commit the reviewed candidate, record formal EVALUATOR quality and finish only this child task; parent search/UI work remains open.
+  Verify Steps: |-
+    Run focused xmldata, ParseManager and XcsParser tests plus existing configuration/ValueParser/XMLReader suites. Parse the complete unchanged Common.xcs and independently verify complete SearchOptions property/defaults, ordinary/localized types and template/group/set nodes; verify source hashes and retained license. Test type namespace grammar, strict schema booleans, template references/clones, duplicates, layer/finalized gates, extensible-only conservative merge, ignored/description states, empty schemas and ParseManager false/resume/exception timing. Run build, changed Prettier/ESLint, dependencies, source-provenance/tree/docs/file-size, writer/shared inventories, doctor, policy routing, diff/status. Run exact-edge boundary tooling when import data changes. Full cadence task10: npm test; npm run test:tooling; npm run test:e2e; npm run test:static. Do not overlap rebuild/static mutations with browser runs. Preserve strict coverage thresholds and all existing tests; if full evidence fails, keep task open and repair related gaps without invented native behaviors. No claim to compiled complete native service/ABI or whole Writer fidelity.
+
+    Approved acceptance amendment on 2026-10-21: the full pre-repair run passed 17771 tests but failed strict coverage; preserve that failed report. Accept the already executed complete cadence together with the current 5121 related cases, three-module strict coverage, complete inventory, Close statement proof, static smoke and five related Chromium cases. After the two approved annotations, require fresh complete search-module coverage at unchanged 100-percent thresholds, changed-file style checks, source quality gates, doctor/routing and formal review of the committed candidate. Complete application/browser/tooling results remain checkpoint-scoped; no current whole-application 100-percent coverage claim. Further full runs follow once per ten tasks.
   Verification: |-
     Command: npx vitest run src/configmgr/source/xcsparser.test.ts src/configmgr/source/parsemanager.test.ts src/configmgr/source/xcs-merge.test.ts src/configmgr/source/valueparser.test.ts src/configmgr/source/propertynode.test.ts src/xmlreader/source --root apps/office
     Result: pass, 130 tests / nine files.
@@ -205,6 +246,107 @@ sections:
     Result: pass for the WRITER-026 documentation-only addition.
     Evidence: partial-observation-format.log; native partial.cxx36-129 and data.cxx81-145.
     Scope: initialized source proof only, no compiled Partial or browser consumer certification. Full application coverage still live under session12311 / PID91470, elapsed42:50 with815 temporary reports at latest observation. Runtime snapshot unchanged; no duplicate full test run, coverage exclusion or threshold change.
+
+    Command: npm test
+    Result: application tests pass,1102 files/17771 tests in3185.27 seconds; strict coverage fails with statements55307/55313,branches35189/35194,functions10427/10427,lines50230/50234. Terminal session12311 exit1; PID91470 terminated. Inventory was not reached in the npm chain.
+    Evidence: full-current-native-contracts.log; preserved full-current-coverage-final.json,full-current-coverage-summary.json and full-current-coverage-gaps.json.
+    Scope: entire application at the frozen a7aa5401722e runtime snapshot. Gaps are two original wildcard returns,signed byte null assertion,saved marked cursor restoration/OtherEnd predicate and redundant shell ring-cleanup body. No exclusions or threshold changes. Current targeted source-contract repairs are within the approved65 paths; task remains DOING.
+
+    Command: npm run test:inventory:coverage
+    Result: running separately under session82162 because the application coverage gate stopped the npm chain.
+    Evidence: full-current-inventory.log.
+    Scope: complete current inventory regression; retain its running handle,do not duplicate.
+
+    Command: current related cursor/undo/SAL/search families with strict coverage restricted to swcrsr.ts,findtxt.ts,sal/rtl/string.ts.
+    Result: pass,5121 scenarios/108 files; statements362/362,branches281/281,functions38/38,lines318/318.
+    Evidence: cursor-owner-core-verified.log and preserved cursor-owner-core-verified-coverage-final/summary.json.
+    Scope: exactly the three stated source modules, not full application coverage. Initial source-contract red replay failed six receiver-identity cases. Subsequent existing identity checks exposed point-owner replacement; direct slot assignment fixed them without weakening those tests. InSel single-result red replay failed two old-ring retention cases; source-required ring replacement fixed both. No-ring final-state source proof corrects the earlier mark-node expectation; the newly written offset0 expectation was wrong and is corrected to the unchanged point1 after suffix deletion. Existing text/count/history assertions remain.
+
+    Command: npm run test:inventory:coverage
+    Result: pass,124 tests/38 files,87.74 seconds; all100 percent coverage.
+    Evidence: full-current-inventory.log.
+    Scope: complete inventory regression; session82162 is terminal.
+
+    Command: five-module related coverage diagnostic; current static/build; related Chromium table/cursor scenarios; changed-file Prettier/ESLint; source provenance/dependencies/tree/docs/size,writer/shared inventories and routing.
+    Result: current static smoke,five Chromium cases and mechanical gates pass. The earlier five-module diagnostic passed5114 tests but failed module-wide coverage because it omits unrelated wrtsh1 callers and retains original wildcard guards; its Close function has all eight statements covered,including27 body-ring deletions. Later three-module strict coverage above is the current core result.
+    Evidence: cursor-owner-coverage.log,cursor-owner-close-coverage-proof.json,native-scope-static/browser/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing logs,native-owner-final-format/lint logs.
+    Scope: current runtime; source runtime did not change after the current static/browser checks. No complete new17771-test pass after these repairs is claimed.
+
+    Approval gate: scope audit proves committed65 paths but candidate66; only new path is native-search-replace.test.ts. This drift was caught after preparing that test fix; all candidate edits remain uncommitted. No coverage annotation,threshold change,new native dependency or publication has been applied. All test/build jobs from this task are terminal. Task completion requires explicit reapproval for this one-path extension and the exact coverage/cadence amendment proposed in approval-amendment-proposal.txt.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-21T01:26:22.830Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Candidate core repairs pass5121 related tests with three modules at100 percent; complete inventory124,static and five Chromium cases pass. Scope66 exceeds approved65 and exact native wildcard coverage exceptions/cadence acceptance require explicit user reapproval; candidate remains uncommitted.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T01:26:21.832Z, excerpt_hash=sha256:ffdacb5154cdd951da830bbc18e2a0b38b64c4dd359f9bf1d252d05bc3c0cd80
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610202049-9BAAAC/blueprint/resolved-snapshot.json
+    - old_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+    - current_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610202049-9BAAAC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610202049-9BAAAC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-21T01:48:18.555Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T01:48:17.086Z, excerpt_hash=sha256:bea03e6fce0e1b38f795b585ba3478c3fac40f50ed21693b781733f4686d80ce
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610202049-9BAAAC/blueprint/resolved-snapshot.json
+    - old_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+    - current_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610202049-9BAAAC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610202049-9BAAAC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+
+    Approved amendment acceptance, 2026-10-21:
+    Command: npx vitest run src/i18npool/source/search src/unotools/source/i18n/textsearch --root apps/office --coverage --coverage.include=src/i18npool/source/search/levdis.ts --coverage.include=src/i18npool/source/search/textsearch.ts --coverage.reportsDirectory=coverage/search-approved-native-guards
+    Result: pass, 172 tests / nine files; strict statements531/531, branches403/403, functions32/32, lines470/470.
+    Evidence: output/playwright/writer-xcs-schema/search-approved-native-guards.log and apps/office/coverage/search-approved-native-guards.
+    Scope: the complete represented search/distance modules and wrapper test family after precisely two human-approved annotations. Existing guard conditions/returns remain; emitted JavaScript is identical to the pre-annotation source (approved-annotation-proof.json). No whole-application coverage claim.
+
+    Command: changed-file Prettier/ESLint; npm run check:dependencies; npm run check:source-provenance; npm run check:source-tree; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass; doctor has zero errors with the existing managed hook-shim readiness warning.
+    Evidence: style-approved.log, source-approved.log, policy-approved.log. An initial shell wrapper for style failed to parse before running; the corrected direct Python runner passed both unchanged style checks.
+    Scope: current candidate source/records; exact baseline path audit is 66 non-task paths in approved-scope-paths.json. Historical full application coverage remains failed; current scoped/static/browser evidence and once-per-ten cadence acceptance were explicitly approved. Formal review follows the implementation commit.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -239,6 +381,18 @@ sections:
     Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
 
     Read-only review of the next configuration family found WRITER-026: with includedPaths=["/"] and no exclusions, native Partial sets root_.startInclude=true; contains(empty path) leaves bIncludes=false and returns CONTAINS_SUBNODES, whereas a missing first child on a nonempty query returns CONTAINS_NODE. The adjacent original comment describes an included leaf as CONTAINS_NODE. Added the initialized source proof to the existing suspected-issues file, clearly limiting it to source evidence and unknown consumer reachability. Preserve both native branches and the initial false accumulator in a future Partial port. No runtime/test/config change, new non-task path, external ICU or network read.
+
+    Fresh complete application result is terminal: all17771 tests/1102 files pass,strict coverage fails at six statements/five branches,with no function gaps. Reports are preserved outside coverage/all before any scoped rerun. Native source review identifies a real cursor-contract repair: ordinary FindAll invokes DoFind(*this) and restores GetMark by assignment even when it aliases GetPoint; local code instead routes through a detached temporary PaM and synthesizes a mark during transfer. Search-all helpers also pass the actual cursor. Native shell destruction deletes the table cursor directly before body-ring members; local Close first calls ClearTableCursor,which already collapses that ring,making the following source-shaped cleanup loop redundant. Repair these original ownership/call contracts and cover valid public scalar/selector/ring histories; do not invent private-state tests or change verification criteria.
+
+    Current candidate repairs native receiver identity,existing endpoint-slot assignment,ordinary mark alias restoration (WRITER-027),selection-only ring replacement,plain inserts/body-only scope and saved cursor retention. No-ring fallback uses original point-only Create semantics and produces a collapsed explicit mark; the old final previous-node mark expectation contradicted native fallback,while its text/count/undo/redo checks remain. Shell Close now disposes its table cursor before the body ring instead of invoking the broader ClearTableCursor helper first. Current5121 related cases pass,with three complete core modules at strict100 percent and current Close statement coverage. Complete native Ring/RingContainer merging and full helper/other-area/notes/layout/readonly behavior remain pending,not certified by these tests.
+
+    Scope drift admission: the additional correction in native-search-replace.test.ts is the66th non-task path against the approved65 ceiling. It was mistakenly assumed already in the committed task scope; exact committed/candidate set comparison proves it is the sole additional path. Stop further implementation/commits and request explicit scope reapproval. Keep the prepared candidate reviewable and uncommitted; no user changes were overwritten. The original no-exclusion contract independently needs reapproval for exactly two mathematically unreachable wildcard true branches. No exception has been applied.
+
+    Source proof for the requested two exceptions: native textsearch.cxx1188 rejects end<start and1197 handles equality before the forward loop. Thus the initial counter is strictly below end,and every later entry including continue passes the same strict do/while condition at1333. Before guard1301,only pattern state and a copied nStr change,not nString; its >= guard cannot be true on represented initialized native scalar input. Backward1360 rejects start<end and1369 handles equality; initial and every subsequent entry satisfy nString>end at1562,and nothing changes nString before guard1530. Its <= guard likewise cannot be true. Portable guards remain at454/611 and returns456/613. The prepared two-comment proposal emits byte-identical production JavaScript; thresholds/tests/conditions/returns remain unchanged. This is source proof,not fabricated private state or compiled full-service certification. Full raw application,core and Close coverage evidence is preserved. Approval proposal explicitly distinguishes the old complete run from current scoped validation and requests the user cadence acceptance; do not relabel the failed old global coverage gate as a fresh current pass.
+
+    Formal quality record is pending,not passed: ap evaluator run --verdict human_review was rejected by the CLI E_USAGE guard because11 dirty tracked candidate source paths exist outside the current task artifact subtree. Recording quality_review requires a committed source snapshot. A commit is not authorized until the one-path scope extension is approved. Do not bypass this using --no-record; after user reapproval,commit the exact reviewed candidate and run formal EVALUATOR against that commit. Keep all prepared logs/proofs and the uncommitted diff for review.
+
+    Human confirmation received on 2026-10-21 ("подтверждаю план и чтение") approves the concrete pending plan amendment. The 66th test path, exactly two reviewed wildcard coverage annotations and documented cadence acceptance are now approved. No external-source or network access is inferred beyond the concrete amendment. Approval was recorded before application; all original failures/proofs remain historical evidence. The complete native Ring/helper/notes/layout/readonly and UI work remains in the parent scope.
 id_source: "generated"
 ---
 ## Summary
@@ -247,15 +401,21 @@ Port the complete original XCS schema/template responsibility family so actual p
 
 ## Scope
 
-Only vite-office-writer on writer. Up to 65 non-task paths: actual Parser/ParseManager, xmldata and XcsParser owners; unchanged original Common.xcs asset under officecfg; source-shaped tests including real-schema/default/template/merge/resume/error histories; exact import data and runtime/provenance records; suspected issues; relevant repairs/test evidence for changes since full checkpoint 6a7dd8660 if full regression exposes gaps. No global configuration service/provider/locale default substitute, ICU/network reads, branch merge, publication, exclusions or threshold changes. Parser URL/file mapping takes the existing explicit loaded-byte browser boundary used by actual XmlReader.
+Only vite-office-writer on writer. Up to 66 non-task paths: actual Parser/ParseManager, xmldata and XcsParser owners; unchanged original Common.xcs asset under officecfg; source-shaped tests including real-schema/default/template/merge/resume/error histories; exact import data and runtime/provenance records; suspected issues; relevant repairs/test evidence for changes since full checkpoint 6a7dd8660 if full regression exposes gaps. No global configuration service/provider/locale default substitute, ICU/network reads, branch merge, publication or threshold changes; coverage exclusions are limited to the two approved native wildcard guards. Parser URL/file mapping takes the existing explicit loaded-byte browser boundary used by actual XmlReader.
+
+Human approval received on 2026-10-21: the sole added path is apps/office/src/sw/source/core/crsr/native-search-replace.test.ts; exactly two reviewed istanbul ignore if comments in textsearch.ts are allowed. The original conditions and returns, every scenario and all 100-percent thresholds remain unchanged. The approval concerns the concrete stored amendment; no additional external-source or network access is inferred.
 
 ## Plan
 
 1. Inspect pinned parser, parsemanager, xmldata, xcsparser and Common.xcs with existing real Node/Data/ValueParser contracts. 2. Implement original abstract/dispatch/resume/namespace and lexical helpers, complete XcsParser states/attribute handlers/conservative merge, preserving quirks. 3. Bundle unchanged pinned Common.xcs at the matching officecfg path, with source hash/license context, and test actual full schema/defaults plus independent source-derived cases. 4. Run scoped development checks, required static/source registries and full cadence: npm test (application and inventory coverage), npm run test:tooling, npm run test:e2e and npm run test:static, sequential around shared build/browser artifacts. Keep strict gates; address only related in-scope findings with targeted tests/repairs and retain raw failure evidence. 5. Record truthful evidence/review, commit/finish only when declared checks pass, leaving XCU/services/search item and browser UI parent open.
 
+Approved amendment (human confirmation on 2026-10-21): increase the ceiling to 66 paths solely for native-search-replace.test.ts. Apply exactly the two prepared textsearch.ts coverage annotations. Retain the completed full pre-repair cadence run as historical evidence and current scoped ownership-repair validation; rerun complete related search coverage and affected quality checks. Do not describe historical failed global coverage as a current pass. Commit the reviewed candidate, record formal EVALUATOR quality and finish only this child task; parent search/UI work remains open.
+
 ## Verify Steps
 
 Run focused xmldata, ParseManager and XcsParser tests plus existing configuration/ValueParser/XMLReader suites. Parse the complete unchanged Common.xcs and independently verify complete SearchOptions property/defaults, ordinary/localized types and template/group/set nodes; verify source hashes and retained license. Test type namespace grammar, strict schema booleans, template references/clones, duplicates, layer/finalized gates, extensible-only conservative merge, ignored/description states, empty schemas and ParseManager false/resume/exception timing. Run build, changed Prettier/ESLint, dependencies, source-provenance/tree/docs/file-size, writer/shared inventories, doctor, policy routing, diff/status. Run exact-edge boundary tooling when import data changes. Full cadence task10: npm test; npm run test:tooling; npm run test:e2e; npm run test:static. Do not overlap rebuild/static mutations with browser runs. Preserve strict coverage thresholds and all existing tests; if full evidence fails, keep task open and repair related gaps without invented native behaviors. No claim to compiled complete native service/ABI or whole Writer fidelity.
+
+Approved acceptance amendment on 2026-10-21: the full pre-repair run passed 17771 tests but failed strict coverage; preserve that failed report. Accept the already executed complete cadence together with the current 5121 related cases, three-module strict coverage, complete inventory, Close statement proof, static smoke and five related Chromium cases. After the two approved annotations, require fresh complete search-module coverage at unchanged 100-percent thresholds, changed-file style checks, source quality gates, doctor/routing and formal review of the committed candidate. Complete application/browser/tooling results remain checkpoint-scoped; no current whole-application 100-percent coverage claim. Further full runs follow once per ten tasks.
 
 ## Verification
 
@@ -420,6 +580,107 @@ Result: pass for the WRITER-026 documentation-only addition.
 Evidence: partial-observation-format.log; native partial.cxx36-129 and data.cxx81-145.
 Scope: initialized source proof only, no compiled Partial or browser consumer certification. Full application coverage still live under session12311 / PID91470, elapsed42:50 with815 temporary reports at latest observation. Runtime snapshot unchanged; no duplicate full test run, coverage exclusion or threshold change.
 
+Command: npm test
+Result: application tests pass,1102 files/17771 tests in3185.27 seconds; strict coverage fails with statements55307/55313,branches35189/35194,functions10427/10427,lines50230/50234. Terminal session12311 exit1; PID91470 terminated. Inventory was not reached in the npm chain.
+Evidence: full-current-native-contracts.log; preserved full-current-coverage-final.json,full-current-coverage-summary.json and full-current-coverage-gaps.json.
+Scope: entire application at the frozen a7aa5401722e runtime snapshot. Gaps are two original wildcard returns,signed byte null assertion,saved marked cursor restoration/OtherEnd predicate and redundant shell ring-cleanup body. No exclusions or threshold changes. Current targeted source-contract repairs are within the approved65 paths; task remains DOING.
+
+Command: npm run test:inventory:coverage
+Result: running separately under session82162 because the application coverage gate stopped the npm chain.
+Evidence: full-current-inventory.log.
+Scope: complete current inventory regression; retain its running handle,do not duplicate.
+
+Command: current related cursor/undo/SAL/search families with strict coverage restricted to swcrsr.ts,findtxt.ts,sal/rtl/string.ts.
+Result: pass,5121 scenarios/108 files; statements362/362,branches281/281,functions38/38,lines318/318.
+Evidence: cursor-owner-core-verified.log and preserved cursor-owner-core-verified-coverage-final/summary.json.
+Scope: exactly the three stated source modules, not full application coverage. Initial source-contract red replay failed six receiver-identity cases. Subsequent existing identity checks exposed point-owner replacement; direct slot assignment fixed them without weakening those tests. InSel single-result red replay failed two old-ring retention cases; source-required ring replacement fixed both. No-ring final-state source proof corrects the earlier mark-node expectation; the newly written offset0 expectation was wrong and is corrected to the unchanged point1 after suffix deletion. Existing text/count/history assertions remain.
+
+Command: npm run test:inventory:coverage
+Result: pass,124 tests/38 files,87.74 seconds; all100 percent coverage.
+Evidence: full-current-inventory.log.
+Scope: complete inventory regression; session82162 is terminal.
+
+Command: five-module related coverage diagnostic; current static/build; related Chromium table/cursor scenarios; changed-file Prettier/ESLint; source provenance/dependencies/tree/docs/size,writer/shared inventories and routing.
+Result: current static smoke,five Chromium cases and mechanical gates pass. The earlier five-module diagnostic passed5114 tests but failed module-wide coverage because it omits unrelated wrtsh1 callers and retains original wildcard guards; its Close function has all eight statements covered,including27 body-ring deletions. Later three-module strict coverage above is the current core result.
+Evidence: cursor-owner-coverage.log,cursor-owner-close-coverage-proof.json,native-scope-static/browser/dependencies/provenance/tree/docs/size/writer-inventory/shared-inventory/routing logs,native-owner-final-format/lint logs.
+Scope: current runtime; source runtime did not change after the current static/browser checks. No complete new17771-test pass after these repairs is claimed.
+
+Approval gate: scope audit proves committed65 paths but candidate66; only new path is native-search-replace.test.ts. This drift was caught after preparing that test fix; all candidate edits remain uncommitted. No coverage annotation,threshold change,new native dependency or publication has been applied. All test/build jobs from this task are terminal. Task completion requires explicit reapproval for this one-path extension and the exact coverage/cadence amendment proposed in approval-amendment-proposal.txt.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-21T01:26:22.830Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Candidate core repairs pass5121 related tests with three modules at100 percent; complete inventory124,static and five Chromium cases pass. Scope66 exceeds approved65 and exact native wildcard coverage exceptions/cadence acceptance require explicit user reapproval; candidate remains uncommitted.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T01:26:21.832Z, excerpt_hash=sha256:ffdacb5154cdd951da830bbc18e2a0b38b64c4dd359f9bf1d252d05bc3c0cd80
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610202049-9BAAAC/blueprint/resolved-snapshot.json
+- old_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+- current_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610202049-9BAAAC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610202049-9BAAAC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-21T01:48:18.555Z — VERIFY — ok
+
+By: CODER
+
+Note: Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T01:48:17.086Z, excerpt_hash=sha256:bea03e6fce0e1b38f795b585ba3478c3fac40f50ed21693b781733f4686d80ce
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610202049-9BAAAC/blueprint/resolved-snapshot.json
+- old_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+- current_digest: 1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610202049-9BAAAC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610202049-9BAAAC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+Approved amendment acceptance, 2026-10-21:
+Command: npx vitest run src/i18npool/source/search src/unotools/source/i18n/textsearch --root apps/office --coverage --coverage.include=src/i18npool/source/search/levdis.ts --coverage.include=src/i18npool/source/search/textsearch.ts --coverage.reportsDirectory=coverage/search-approved-native-guards
+Result: pass, 172 tests / nine files; strict statements531/531, branches403/403, functions32/32, lines470/470.
+Evidence: output/playwright/writer-xcs-schema/search-approved-native-guards.log and apps/office/coverage/search-approved-native-guards.
+Scope: the complete represented search/distance modules and wrapper test family after precisely two human-approved annotations. Existing guard conditions/returns remain; emitted JavaScript is identical to the pre-annotation source (approved-annotation-proof.json). No whole-application coverage claim.
+
+Command: changed-file Prettier/ESLint; npm run check:dependencies; npm run check:source-provenance; npm run check:source-tree; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass; doctor has zero errors with the existing managed hook-shim readiness warning.
+Evidence: style-approved.log, source-approved.log, policy-approved.log. An initial shell wrapper for style failed to parse before running; the corrected direct Python runner passed both unchanged style checks.
+Scope: current candidate source/records; exact baseline path audit is 66 non-task paths in approved-scope-paths.json. Historical full application coverage remains failed; current scoped/static/browser evidence and once-per-ten cadence acceptance were explicitly approved. Formal review follows the implementation commit.
+
 ## Rollback Plan
 
 Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge.
@@ -458,3 +719,15 @@ Read-only next-block source analysis while the fresh full application run remain
 Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
 
 Read-only review of the next configuration family found WRITER-026: with includedPaths=["/"] and no exclusions, native Partial sets root_.startInclude=true; contains(empty path) leaves bIncludes=false and returns CONTAINS_SUBNODES, whereas a missing first child on a nonempty query returns CONTAINS_NODE. The adjacent original comment describes an included leaf as CONTAINS_NODE. Added the initialized source proof to the existing suspected-issues file, clearly limiting it to source evidence and unknown consumer reachability. Preserve both native branches and the initial false accumulator in a future Partial port. No runtime/test/config change, new non-task path, external ICU or network read.
+
+Fresh complete application result is terminal: all17771 tests/1102 files pass,strict coverage fails at six statements/five branches,with no function gaps. Reports are preserved outside coverage/all before any scoped rerun. Native source review identifies a real cursor-contract repair: ordinary FindAll invokes DoFind(*this) and restores GetMark by assignment even when it aliases GetPoint; local code instead routes through a detached temporary PaM and synthesizes a mark during transfer. Search-all helpers also pass the actual cursor. Native shell destruction deletes the table cursor directly before body-ring members; local Close first calls ClearTableCursor,which already collapses that ring,making the following source-shaped cleanup loop redundant. Repair these original ownership/call contracts and cover valid public scalar/selector/ring histories; do not invent private-state tests or change verification criteria.
+
+Current candidate repairs native receiver identity,existing endpoint-slot assignment,ordinary mark alias restoration (WRITER-027),selection-only ring replacement,plain inserts/body-only scope and saved cursor retention. No-ring fallback uses original point-only Create semantics and produces a collapsed explicit mark; the old final previous-node mark expectation contradicted native fallback,while its text/count/undo/redo checks remain. Shell Close now disposes its table cursor before the body ring instead of invoking the broader ClearTableCursor helper first. Current5121 related cases pass,with three complete core modules at strict100 percent and current Close statement coverage. Complete native Ring/RingContainer merging and full helper/other-area/notes/layout/readonly behavior remain pending,not certified by these tests.
+
+Scope drift admission: the additional correction in native-search-replace.test.ts is the66th non-task path against the approved65 ceiling. It was mistakenly assumed already in the committed task scope; exact committed/candidate set comparison proves it is the sole additional path. Stop further implementation/commits and request explicit scope reapproval. Keep the prepared candidate reviewable and uncommitted; no user changes were overwritten. The original no-exclusion contract independently needs reapproval for exactly two mathematically unreachable wildcard true branches. No exception has been applied.
+
+Source proof for the requested two exceptions: native textsearch.cxx1188 rejects end<start and1197 handles equality before the forward loop. Thus the initial counter is strictly below end,and every later entry including continue passes the same strict do/while condition at1333. Before guard1301,only pattern state and a copied nStr change,not nString; its >= guard cannot be true on represented initialized native scalar input. Backward1360 rejects start<end and1369 handles equality; initial and every subsequent entry satisfy nString>end at1562,and nothing changes nString before guard1530. Its <= guard likewise cannot be true. Portable guards remain at454/611 and returns456/613. The prepared two-comment proposal emits byte-identical production JavaScript; thresholds/tests/conditions/returns remain unchanged. This is source proof,not fabricated private state or compiled full-service certification. Full raw application,core and Close coverage evidence is preserved. Approval proposal explicitly distinguishes the old complete run from current scoped validation and requests the user cadence acceptance; do not relabel the failed old global coverage gate as a fresh current pass.
+
+Formal quality record is pending,not passed: ap evaluator run --verdict human_review was rejected by the CLI E_USAGE guard because11 dirty tracked candidate source paths exist outside the current task artifact subtree. Recording quality_review requires a committed source snapshot. A commit is not authorized until the one-path scope extension is approved. Do not bypass this using --no-record; after user reapproval,commit the exact reviewed candidate and run formal EVALUATOR against that commit. Keep all prepared logs/proofs and the uncommitted diff for review.
+
+Human confirmation received on 2026-10-21 ("подтверждаю план и чтение") approves the concrete pending plan amendment. The 66th test path, exactly two reviewed wildcard coverage annotations and documented cadence acceptance are now approved. No external-source or network access is inferred beyond the concrete amendment. Approval was recorded before application; all original failures/proofs remain historical evidence. The complete native Ring/helper/notes/layout/readonly and UI work remains in the parent scope.

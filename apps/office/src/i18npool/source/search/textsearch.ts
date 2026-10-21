@@ -451,6 +451,7 @@ export class TextSearch {
         nStr[0] = nString[0]; // Remember the current string to be matched.
       }
 
+      /* istanbul ignore if -- native loop-entry invariant; task9BAAAC proof. */
       if (nString[0] >= nEndPos)
         // Whatever follows in pattern, string will not match.
         return aRes;
@@ -608,6 +609,7 @@ export class TextSearch {
         nStr[0] = nString[0]; // Remember the current string to be matched.
       }
 
+      /* istanbul ignore if -- native loop-entry invariant; task9BAAAC proof. */
       if (nString[0] <= nEndPos)
         // Whatever leads in pattern, string will not match.
         return aRes;

@@ -10,7 +10,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTextINetFormat } from "../txtnode/txtatr2";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoReplace } from "../undo/unins";
 import { SwUndoSaveContent } from "../undo/undobj";
 import { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -58,6 +58,7 @@ it("preserves an unmarked result from the generic point-only strategy contract",
           backward,
           region,
         ) => {
+          expect(target).toBe(cursor);
           const boundary = backward ? region.End() : region.Start();
           target.GetPoint().Assign(boundary.GetNode(), boundary.GetContentIndex());
           return FIND_NO_RING;
@@ -79,6 +80,272 @@ it("preserves an unmarked result from the generic point-only strategy contract",
     cursor.Dispose();
   }
 });
+it.each([false, true])(
+  "retains ordinary mark restoration through its native alias, deleted=%s",
+  /** Original ordinary DoFind receives this cursor; GetMark aliases GetPoint after DeleteMark. @param deleted - Strategy removes the initial mark. @returns Nothing. */ (
+    deleted,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("abc");
+    const selected = range(node, 2, 0),
+      cursor = new SwCursor(selected.GetPoint(), selected.GetMark()),
+      strategy: SwFindParas = {
+        DoFind:
+          /** Changes the actual cursor through the original abstract strategy contract. @param target - Current cursor. @param backward - Direction. @param region - Native MakeFindRange result. @returns Found without a new result ring. */ (
+            target,
+            backward,
+            region,
+          ) => {
+            expect(target).toBe(cursor);
+            expect(target.HasMark()).toBe(true);
+            expect(backward).toBe(false);
+            expect([
+              region.GetMark().GetContentIndex(),
+              region.GetPoint().GetContentIndex(),
+            ]).toEqual([0, 3]);
+            target.GetPoint().SetContent(1);
+            if (deleted) target.DeleteMark();
+            return FIND_NO_RING;
+          },
+        IsReplaceMode:
+          /** This cursor visitor leaves document text unchanged. @returns False. */ () => false,
+      };
+    selected.Dispose();
+    try {
+      expect(
+        cursor.FindAll(strategy, SwDocPositions.Start, SwDocPositions.End, FindRanges.InBody, [
+          false,
+        ]),
+      ).toBe(1);
+      expect(cursor.HasMark()).toBe(!deleted);
+      expect(cursor.GetPoint().GetContentIndex()).toBe(deleted ? 0 : 1);
+      expect(cursor.GetMark().GetContentIndex()).toBe(0);
+      expect(node.GetText()).toBe("abc");
+    } finally {
+      cursor.Dispose();
+    }
+    expect(node.HasAnyContentIndex()).toBe(false);
+  },
+);
+it("uses the native forward direction for Curr to OtherEnd", /** Visits the actual boundary region without substituting a text-search backend or claiming extras-text support. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("abc");
+  const point = new SwPosition(node, 2),
+    cursor = new SwCursor(point),
+    strategy: SwFindParas = {
+      DoFind:
+        /** Observes the source direction predicate and current cursor identity. @param target - Native cursor. @param backward - Source direction. @returns No match. */ (
+          target,
+          backward,
+        ) => {
+          expect(target).toBe(cursor);
+          expect(backward).toBe(false);
+          return 0;
+        },
+      IsReplaceMode: /** A boundary visitor never replaces content. @returns False. */ () => false,
+    };
+  point.Dispose();
+  try {
+    expect(
+      cursor.FindAll(strategy, SwDocPositions.Curr, SwDocPositions.OtherEnd, FindRanges.InBody, [
+        false,
+      ]),
+    ).toBe(0);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(2);
+    expect(cursor.HasMark()).toBe(false);
+  } finally {
+    cursor.Dispose();
+  }
+  expect(node.HasAnyContentIndex()).toBe(false);
+});
+it.each([false, true])(
+  "replaces the original selection ring after one native selection match, backward=%s",
+  /** InSel without InSelAll still replaces the original selection ring upstream. @param backward - Search direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode,
+      options = new SearchOptions2();
+    node.SetText("a a");
+    options.searchString.assign(new OUString(new Uint8Array([97, 0])));
+    const selected = range(node, 3, 0),
+      cursor = new SwCursor(selected.GetPoint(), selected.GetMark()),
+      oldSibling = cursor.Create(cursor);
+    oldSibling.Assign(selected.GetPoint(), selected.GetMark());
+    selected.Dispose();
+    try {
+      expect(
+        cursor.Find_Text(
+          options,
+          false,
+          backward ? SwDocPositions.End : SwDocPositions.Start,
+          backward ? SwDocPositions.Start : SwDocPositions.End,
+          [false],
+          FindRanges.InSel,
+        ),
+      ).toBe(1);
+      expect(Array.from(cursor.GetRingContainer())).toEqual([cursor]);
+      expect([cursor.Start().GetContentIndex(), cursor.End().GetContentIndex()]).toEqual(
+        backward ? [2, 3] : [0, 1],
+      );
+      expect(node.GetText()).toBe("a a");
+    } finally {
+      while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+      cursor.Dispose();
+    }
+    expect(node.HasAnyContentIndex()).toBe(false);
+  },
+);
+it("creates the original explicit selection mark for a point-only selection result", /** The abstract strategy uses public cursor operations; the native selection transfer always sets a mark. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0] as SwTextNode;
+  node.SetText("abc");
+  const selected = range(node, 3, 0),
+    cursor = new SwCursor(selected.GetPoint(), selected.GetMark()),
+    strategy: SwFindParas = {
+      DoFind:
+        /** Visits a real selected boundary and returns no result ring. @param target - Native cursor. @param backward - Direction. @param region - Actual selection. @returns Native no-ring result. */ (
+          target,
+          backward,
+          region,
+        ) => {
+          expect(target).toBe(cursor);
+          expect(backward).toBe(false);
+          const boundary = region.Start();
+          target.DeleteMark();
+          target.GetPoint().Assign(boundary.GetNode(), boundary.GetContentIndex());
+          return FIND_NO_RING;
+        },
+      IsReplaceMode: /** A boundary visit leaves document text unchanged. @returns False. */ () =>
+        false,
+    };
+  selected.Dispose();
+  try {
+    expect(
+      cursor.FindAll(strategy, SwDocPositions.Start, SwDocPositions.End, FindRanges.InSel, [false]),
+    ).toBe(1);
+    expect(cursor.HasMark()).toBe(true);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+    expect(cursor.GetMark().GetContentIndex()).toBe(0);
+    expect(Array.from(cursor.GetRingContainer())).toEqual([cursor]);
+  } finally {
+    cursor.Dispose();
+  }
+  expect(node.HasAnyContentIndex()).toBe(false);
+});
+it.each([
+  [FindRanges.InOther, 1, 2],
+  [FindRanges.InOther | FindRanges.InSelAll, 2, 2],
+  [FindRanges.InSelAll, 3, 3],
+  [FindRanges.InSelAll | FindRanges.InBodyOnly, 1, 1],
+] as const)(
+  "preserves real plain extras text for scope=%s, matches=%s and ring=%s",
+  /** Actual nodes in the inserts section exercise scope and saved-ring ownership, without a notes/fields service. @param scope - Native search flags. @param matches - Source match count. @param ringSize - Source successful ring size. @returns Nothing. */ (
+    scope,
+    matches,
+    ringSize,
+  ) => {
+    for (const backward of [false, true]) {
+      const doc = new SwDoc(),
+        body = doc.paragraphs[0] as SwTextNode,
+        section = doc.nodes.GetEndOfInserts().StartOfSectionNode(),
+        extra = new SwTextNode(doc.nodes, section, doc.GetDfltTextFormatColl(), "needle needle");
+      body.SetText("body needle");
+      doc.nodes.insertTextNodeAfter(section, extra);
+      expect(extra.StartOfSectionNode()).toBe(section);
+      expect(extra.GetIndex()).toBeLessThan(doc.nodes.GetEndOfExtras().GetIndex());
+      const point = new SwPosition(body, 2),
+        cursor = new SwCursor(point),
+        options = new SearchOptions2();
+      point.Dispose();
+      options.searchString.assign(new OUString(new Uint8Array([110, 101, 101, 100, 108, 101, 0])));
+      try {
+        expect(
+          cursor.Find_Text(
+            options,
+            false,
+            backward ? SwDocPositions.End : SwDocPositions.Start,
+            backward ? SwDocPositions.Start : SwDocPositions.End,
+            [false],
+            scope,
+          ),
+        ).toBe(matches);
+        expect(Array.from(cursor.GetRingContainer())).toHaveLength(ringSize);
+        const inExtras =
+          (scope & FindRanges.InOther) !== 0 ||
+          (!backward && (scope & FindRanges.InBodyOnly) === 0);
+        expect(cursor.GetPoint().GetNode()).toBe(inExtras ? extra : body);
+        expect([cursor.Start().GetContentIndex(), cursor.End().GetContentIndex()]).toEqual(
+          inExtras ? (backward ? [7, 13] : [0, 6]) : [5, 11],
+        );
+        expect(extra.GetText()).toBe("needle needle");
+        expect(body.GetText()).toBe("body needle");
+      } finally {
+        while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+        cursor.Dispose();
+      }
+      expect(extra.HasAnyContentIndex()).toBe(false);
+      expect(body.HasAnyContentIndex()).toBe(false);
+    }
+  },
+);
+it.each([false, true])(
+  "restores a saved cursor mark established through the actual search ring, backward=%s",
+  /** A valid generic strategy updates its real linked saved cursor, exercising original restoration without private-state injection. @param backward - Search direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode;
+    node.SetText("abc");
+    const point = new SwPosition(node, 2),
+      cursor = new SwCursor(point),
+      strategy: SwFindParas = {
+        DoFind:
+          /** Mutates an initialized public ring member before returning no match. @param target - Native current cursor. @param direction - Search direction. @returns No match. */ (
+            target,
+            direction,
+          ) => {
+            expect(target).toBe(cursor);
+            expect(direction).toBe(backward);
+            expect(target.HasMark()).toBe(true);
+            expect([
+              target.GetPoint().GetContentIndex(),
+              target.GetMark().GetContentIndex(),
+            ]).toEqual(backward ? [0, 3] : [3, 0]);
+            const saved = target.GetNext();
+            expect(saved).not.toBe(target);
+            expect(saved.HasMark()).toBe(false);
+            saved.SetMark();
+            saved.GetMark().SetContent(1);
+            return 0;
+          },
+        IsReplaceMode: /** A cursor visitor leaves text unchanged. @returns False. */ () => false,
+      };
+    point.Dispose();
+    try {
+      expect(
+        cursor.FindAll(
+          strategy,
+          backward ? SwDocPositions.End : SwDocPositions.Start,
+          backward ? SwDocPositions.Start : SwDocPositions.End,
+          FindRanges.InSelAll,
+          [false],
+        ),
+      ).toBe(0);
+      expect(cursor.GetPoint().GetContentIndex()).toBe(2);
+      expect(cursor.HasMark()).toBe(true);
+      expect(cursor.GetMark().GetContentIndex()).toBe(1);
+      expect(Array.from(cursor.GetRingContainer())).toHaveLength(2);
+      expect(node.GetText()).toBe("abc");
+    } finally {
+      while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+      cursor.Dispose();
+    }
+    expect(node.HasAnyContentIndex()).toBe(false);
+  },
+);
 it.each([false, true])(
   "retains the upstream failed whole-body find-all saved cursor marked=%s",
   /** Source Create(this) produces an unmarked saved member; failure keeps that member and removes the primary mark. @param marked - Original selection presence. @returns Nothing. */ (
@@ -185,50 +452,55 @@ it("keeps selection-only search inert when the real cursor ring has no marked se
     cursor.Dispose();
   }
 });
-it("retains distinct wildcard matches with the same point across overlapping real selections", /** Both matches come from the actual native wildcard backend and initialized cursor ring, not a canned strategy. @returns Nothing. */ () => {
-  const doc = new SwDoc(),
-    node = doc.paragraphs[0] as SwTextNode,
-    options = new SearchOptions2();
-  node.SetText("abc");
-  options.AlgorithmType2 = WILDCARD;
-  options.transliterateFlags = 0;
-  options.searchString.assign(new OUString(new Uint8Array([42, 0])));
-  const high = new SwPosition(node, 3),
-    low = new SwPosition(node, 0),
-    otherLow = new SwPosition(node, 1),
-    cursor = new SwCursor(high, low);
-  cursor.Create(cursor).Assign(high, otherLow);
-  high.Dispose();
-  low.Dispose();
-  otherLow.Dispose();
-  try {
-    expect(
-      cursor.Find_Text(
-        options,
-        false,
-        SwDocPositions.Start,
-        SwDocPositions.End,
-        [false],
-        FindRanges.InSel | FindRanges.InSelAll,
-      ),
-    ).toBe(2);
-    expect(
-      Array.from(
-        cursor.GetRingContainer(),
-        /** Observes actual match bounds. @param member - Live cursor. @returns Native content interval. */ (
-          member,
-        ) => [member.Start().GetContentIndex(), member.End().GetContentIndex()],
-      ),
-    ).toEqual([
-      [0, 3],
-      [1, 3],
-    ]);
-    expect(node.GetText()).toBe("abc");
-  } finally {
-    while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
-    cursor.Dispose();
-  }
-});
+it.each([false, true])(
+  "retains distinct wildcard matches across overlapping real selections, backward=%s",
+  /** Both matches come from the actual native wildcard backend and initialized cursor ring. @param backward - Search direction. @returns Nothing. */ (
+    backward,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0] as SwTextNode,
+      options = new SearchOptions2();
+    node.SetText("abc");
+    options.AlgorithmType2 = WILDCARD;
+    options.transliterateFlags = 0;
+    options.searchString.assign(new OUString(new Uint8Array([42, 0])));
+    const high = new SwPosition(node, 3),
+      low = new SwPosition(node, 0),
+      otherLow = new SwPosition(node, 1),
+      cursor = new SwCursor(high, low);
+    cursor.Create(cursor).Assign(high, otherLow);
+    high.Dispose();
+    low.Dispose();
+    otherLow.Dispose();
+    try {
+      expect(
+        cursor.Find_Text(
+          options,
+          false,
+          backward ? SwDocPositions.End : SwDocPositions.Start,
+          backward ? SwDocPositions.Start : SwDocPositions.End,
+          [false],
+          FindRanges.InSel | FindRanges.InSelAll,
+        ),
+      ).toBe(2);
+      expect(
+        Array.from(
+          cursor.GetRingContainer(),
+          /** Observes actual match bounds. @param member - Live cursor. @returns Native content interval. */ (
+            member,
+          ) => [member.Start().GetContentIndex(), member.End().GetContentIndex()],
+        ),
+      ).toEqual([
+        [0, 3],
+        [1, 3],
+      ]);
+      expect(node.GetText()).toBe("abc");
+    } finally {
+      while (cursor.GetNext() !== cursor) cursor.GetNext().Dispose();
+      cursor.Dispose();
+    }
+  },
+);
 it("retains the native default continue response at the replacement-history threshold", /** Base cursors choose RET_YES=2 before any shell-specific override; this is not a simulated 60000-match backend. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     position = new SwPosition(doc.paragraphs[0] as SwTextNode, 0),

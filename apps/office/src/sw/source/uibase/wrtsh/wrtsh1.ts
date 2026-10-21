@@ -372,7 +372,8 @@ export class SwWrtShell extends SwFEShell {
     while (this.Pop(PopMode.DeleteStack)) {
       /* Release registered native stack positions. */
     }
-    this.ClearTableCursor();
+    this.tableCursor?.Dispose();
+    this.tableCursor = undefined;
     while (this.cursor.GetNext() !== this.cursor) this.cursor.GetNext().Dispose();
     this.cursor.Dispose();
     this.DisposeModify();

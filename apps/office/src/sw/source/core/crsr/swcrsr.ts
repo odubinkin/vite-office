@@ -94,38 +94,69 @@ export class SwCursor extends SwPaM {
       (start === SwDocPositions.Curr &&
         (end === SwDocPositions.End || end === SwDocPositions.OtherEnd))
     );
+    const all = (ranges & FindRanges.InSelAll) !== 0;
+    const inSelection = (ranges & FindRanges.InSel) !== 0;
+    if (!all && !inSelection && (ranges & FindRanges.InOther) === 0) {
+      const region = new SwPaM(this.GetPoint()),
+        savedMark = this.GetMark().clone(),
+        keepMark = this.HasMark() && ranges === FindRanges.InBody;
+      try {
+        region.SetMark();
+        this.FillFindPos(start, region.GetMark());
+        this.FillFindPos(end, region.GetPoint());
+        const count = paras.DoFind(this, backward, region, false) !== 0 ? 1 : 0;
+        // GetMark may alias GetPoint after the strategy removes the initial mark.
+        if (count !== 0 && keepMark)
+          this.GetMark().Assign(savedMark.GetNode(), savedMark.GetContentIndex());
+        return count;
+      } finally {
+        savedMark.Dispose();
+        region.Dispose();
+      }
+    }
     const undo = this.GetPoint().GetNode().GetDoc().GetUndoManager(),
       undoEnabled = undo.DoesUndo();
     let nFound = 0,
       stopped = false;
-    const all = (ranges & FindRanges.InSelAll) !== 0;
-    const inSelection = (ranges & FindRanges.InSel) !== 0;
     const regions: SwPaM[] = [],
       found: SwPaM[] = [];
-    const working = new SwPaM(this.GetPoint());
-    const oldMark =
-      !inSelection && !all && ranges === FindRanges.InBody && this.HasMark()
-        ? this.GetMark().clone()
-        : undefined;
-    let savedBodyCursor: SwCursor | undefined;
+    let savedCursor: SwCursor | undefined;
     try {
       if (inSelection) {
         for (const selection of this.GetRingContainer())
           if (selection.HasMark())
-            regions.push(new SwPaM(selection.GetPoint(), selection.GetMark()));
+            regions.push(
+              new SwPaM(
+                backward ? selection.Start() : selection.End(),
+                backward ? selection.End() : selection.Start(),
+              ),
+            );
       } else {
-        if (all && (ranges & FindRanges.InOther) === 0) savedBodyCursor = this.Create(this);
+        savedCursor = this.Create(this);
         const low = this.GetPoint().clone(),
           high = this.GetPoint().clone();
         try {
-          this.FillFindPos(all ? SwDocPositions.Start : start, low);
+          this.FillFindPos(
+            all && (ranges & FindRanges.InBodyOnly) === 0
+              ? SwDocPositions.OtherStart
+              : all
+                ? SwDocPositions.Start
+                : start,
+            low,
+          );
           this.FillFindPos(all ? SwDocPositions.End : end, high);
           if ((ranges & FindRanges.InOther) !== 0) {
             const nodes = low.GetNode().GetNodes();
             low.Assign(nodes.GetEndOfPostIts().StartOfSectionNode());
             high.Assign(nodes.GetEndOfExtras());
           }
-          regions.push(new SwPaM(low, high));
+          this.DeleteMark();
+          const begin = backward ? high : low,
+            finish = backward ? low : high;
+          this.GetPoint().Assign(begin.GetNode(), begin.GetContentIndex());
+          this.SetMark();
+          this.GetPoint().Assign(finish.GetNode(), finish.GetContentIndex());
+          regions.push(new SwPaM(high, low));
         } finally {
           low.Dispose();
           high.Dispose();
@@ -135,17 +166,16 @@ export class SwCursor extends SwPaM {
         const lower = region.Start(),
           upper = region.End();
         while (lower.compare(upper) <= 0) {
-          const result = paras.DoFind(working, backward, region, false);
+          const result = paras.DoFind(this, backward, region, false);
           const previous = found[0];
           if (
             result === 0 ||
             (previous !== undefined &&
-              previous.GetPoint().compare(working.GetPoint()) === 0 &&
-              previous.GetMark().compare(working.GetMark()) === 0)
+              previous.GetPoint().compare(this.GetPoint()) === 0 &&
+              previous.GetMark().compare(this.GetMark()) === 0)
           )
             break;
-          if ((result & FIND_NO_RING) === 0)
-            found.push(new SwPaM(working.GetPoint(), working.GetMark()));
+          if ((result & FIND_NO_RING) === 0) found.push(new SwPaM(this.GetPoint(), this.GetMark()));
           nFound++;
           if (!all) break;
           if (nFound === 60000 && undo.DoesUndo() && paras.IsReplaceMode()) {
@@ -160,56 +190,48 @@ export class SwCursor extends SwPaM {
             }
           }
           // Preserve the source's content-node movement when a replacement leaves a boundary unchanged.
-          if (backward && upper.compare(working.Start()) === 0) GoPreviousPos(working.GetMark());
-          else if (!backward && lower.compare(working.End()) === 0) GoNextPos(working.GetPoint());
+          if (backward && upper.compare(this.Start()) === 0) GoPreviousPos(this.GetMark());
+          else if (!backward && lower.compare(this.End()) === 0) GoNextPos(this.GetPoint());
           if (lower.compare(upper) === 0) break;
-          if (backward) upper.Assign(working.Start().GetNode(), working.Start().GetContentIndex());
-          else lower.Assign(working.End().GetNode(), working.End().GetContentIndex());
+          if (backward) upper.Assign(this.Start().GetNode(), this.Start().GetContentIndex());
+          else lower.Assign(this.End().GetNode(), this.End().GetContentIndex());
         }
         if ((nFound > 0 && !all) || stopped) break;
       }
-      if (nFound > 0 && found.length === 0)
-        found.push(
-          new SwPaM(working.GetPoint(), working.HasMark() ? working.GetMark() : undefined),
-        );
+      if (nFound > 0 && found.length === 0) found.push(new SwPaM(this.GetPoint()));
       const first = found[0];
       if (first === undefined) {
-        if (savedBodyCursor !== undefined) {
+        if (savedCursor !== undefined) {
           this.GetPoint().Assign(
-            savedBodyCursor.GetPoint().GetNode(),
-            savedBodyCursor.GetPoint().GetContentIndex(),
+            savedCursor.GetPoint().GetNode(),
+            savedCursor.GetPoint().GetContentIndex(),
           );
-          if (savedBodyCursor.HasMark()) {
+          if (savedCursor.HasMark()) {
             this.SetMark();
             this.GetMark().Assign(
-              savedBodyCursor.GetMark().GetNode(),
-              savedBodyCursor.GetMark().GetContentIndex(),
+              savedCursor.GetMark().GetNode(),
+              savedCursor.GetMark().GetContentIndex(),
             );
           } else this.DeleteMark();
           // Original early return keeps the saved cursor linked in the ring (WRITER-024).
         }
         return 0;
       }
-      if (all) while (this.GetNext() !== this) this.GetNext().Dispose();
-      // The ordinary native branch calls DoFind on this cursor and does not synthesize
-      // a mark. Selection/all-result ring transfer explicitly sets one upstream.
-      const mark =
-        oldMark ??
-        (all || inSelection || (ranges & FindRanges.InOther) !== 0 || first.HasMark()
-          ? first.GetMark()
-          : undefined);
-      this.Assign(first.GetPoint(), mark);
+      if (all || inSelection) while (this.GetNext() !== this) this.GetNext().Dispose();
+      this.GetPoint().Assign(first.GetPoint().GetNode(), first.GetPoint().GetContentIndex());
+      this.SetMark();
+      this.GetMark().Assign(first.GetMark().GetNode(), first.GetMark().GetContentIndex());
       if (all)
         for (let i = 1; i < found.length; i++) {
           const next = found[i] as SwPaM,
             member = this.Create(this);
-          member.Assign(next.GetPoint(), next.GetMark());
+          member.GetPoint().Assign(next.GetPoint().GetNode(), next.GetPoint().GetContentIndex());
+          member.SetMark();
+          member.GetMark().Assign(next.GetMark().GetNode(), next.GetMark().GetContentIndex());
         }
       return nFound;
     } finally {
       undo.DoUndo(undoEnabled);
-      oldMark?.Dispose();
-      working.Dispose();
       for (const range of [...regions, ...found]) range.Dispose();
     }
   }
