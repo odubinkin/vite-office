@@ -1,10 +1,11 @@
 ---
 id: "202610210152-BHWWEZ"
 title: "Implement native Writer intrusive rings and search selection ownership"
-status: "DOING"
+result_summary: "Implement native Writer intrusive rings and live search selection ownership"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -51,11 +52,16 @@ quality_review:
     - "FindAll no longer snapshots selections or copies result rings: live sibling ranges are read when visited and virtual Create result objects survive the native merge/head deletion. Strict section admission and current other-area continuation are exercised with real document nodes."
     - "The previous unconditional exception-finally undo restoration is removed to match native normal-exit placement; actual generic strategy visits60000 characters then throws, preserving disabled undo as documented WRITER-029. Normal threshold/cancel/history tests still pass."
     - "5132 related scenarios in110 files pass before the final exception correction;65 current affected cases pass afterwards. Strict Ring coverage is44 statements,11 branches,18 functions and40 lines all covered. Final production static and five current Chromium cases, type/style/docs/dependency/provenance/tree/size/inventory/policy checks pass; no complete application/service parity claim or gate weakening."
-commit: null
+commit:
+  hash: "a0c2dfc84fd401948f083d5635329eef151fd45b"
+  message: "🔧 BHWWEZ cursor: implement native intrusive rings and live search ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Continue approved parent search implementation with native intrusive rings, live selection traversal and result ownership; preserve source predicates and targeted cadence."
+  -
+    author: "CODER"
+    body: "Verified: Native Ring ownership, live FindAll selection traversal, source section admission and actual result-member merge pass the targeted contract. Related5132 then final65 tests and Ring100 percent, final static/five Chromium, source/inventory/style/policy gates pass; formal EVALUATOR recorded againsta0c2dfc84fd4. WRITER028/029 remain preserved, parent search/UI and broader native services remain open."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native intrusive Ring and live FindAll ownership pass5132 related cases before final exception correction, then65 final affected cases at strict Ring100 percent. Final static/five Chromium, type/style/docs/source/inventory/policy gates pass; WRITER028/029 preserved, complete native services and parent UI remain pending."
+  -
+    type: "status"
+    at: "2026-10-21T02:05:07.757Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Ring ownership, live FindAll selection traversal, source section admission and actual result-member merge pass the targeted contract. Related5132 then final65 tests and Ring100 percent, final static/five Chromium, source/inventory/style/policy gates pass; formal EVALUATOR recorded againsta0c2dfc84fd4. WRITER028/029 remain preserved, parent search/UI and broader native services remain open."
 doc_version: 3
-doc_updated_at: "2026-10-21T02:04:24.796Z"
+doc_updated_at: "2026-10-21T02:05:07.761Z"
 doc_updated_by: "CODER"
 description: "Continue the approved Writer search feature with original sw/inc/ring.hxx Ring/RingIterator/RingContainer, consumed SwPaM ownership and native lcl_FindSelection/lcl_MakeSel search region and result-ring transfer. Preserve native predicates, ordering and suspicious contracts; targeted evidence only after the completed full cadence task."
 sections:
@@ -150,6 +163,10 @@ sections:
     Initial focused54 and new11 cases passed. Initial typecheck rejected comparison between genericT and this; an erased explicit native self cast fixes typing. Initial lint rejected non-null assertions and missing method docs; equivalent erased casts and actual callback/method purpose/parameter/return docs repair those checks. The first documentation gate reported missing callback docs; the completed comments pass current docs validation. One login=false shell lacked npx on PATH and ran no style checks; canonical configured-shell checks passed afterwards. No test was deleted, skipped, weakened or relabelled. No assertion threshold/exclusion changed.
 
     Residual boundaries: SwPaM endpoint buffer/Assign representation, FillFindPos default global-section movement, SaveState, progress/UNO, readonly/layout/field/note services and browser Find toolbar/dialog remain unverified/unimplemented. Existing semantic status/classification/default/history fields stay unchanged, and new Ring records remain foundation/unverified. Do not close parent6B984M or the overall Writer goal based on this leaf.
+extensions:
+  implementation_commit:
+    hash: "a0c2dfc84fd401948f083d5635329eef151fd45b"
+    message: "🔧 BHWWEZ cursor: implement native intrusive rings and live search ownership"
 id_source: "generated"
 ---
 ## Summary
