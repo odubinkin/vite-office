@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/container/XIndexReplace.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/container/XIndexReplace.idl",
+    "localSymbols": [
+      "XIndexReplace"
+    ],
+    "upstreamSymbols": [
+      "XIndexReplace",
+      "XIndexAccess",
+      "replaceByIndex"
+    ],
+    "preservedResponsibilities": [
+      "Complete structural type-only original IDL inheritance and method/input/output contracts over actual existing Any/Type/Sequence/OUString owners. No runtime type registration or concrete service/object/provider is supplied. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XIndexReplace.ts",
+          "marker": "XIndexReplace"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts",
+          "marker": "retains native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/container/XIndexReplace.idl",
+          "marker": "interface XIndexReplace"
+        }
+      ]
+    }
+  }
+}

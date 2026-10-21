@@ -1,0 +1,174 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c836e597-c18b-4027-aa25-06b8db56cc53",
+    "capabilityId": "CAP-c836e597-c18b-4027-aa25-06b8db56cc53",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve original generated derived exception class contract, constructor/type ordering, copy/move/assignment and reverse lifetime over existing shared owners.",
+      "Match complete original initialized value/type/catch streams without an exception/value/type provider."
+    ],
+    "capability": "Native property-container exception values and structural access contracts",
+    "gaps": [
+      "Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/lang/IllegalArgumentException.idl",
+          "marker": "IllegalArgumentException"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/IndexOutOfBoundsException.idl",
+          "marker": "IndexOutOfBoundsException"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/ElementExistException.idl",
+          "marker": "ElementExistException"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/NoSuchElementException.idl",
+          "marker": "NoSuchElementException"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XElementAccess.idl",
+          "marker": "XElementAccess"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XIndexAccess.idl",
+          "marker": "XIndexAccess"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XIndexReplace.idl",
+          "marker": "XIndexReplace"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XIndexContainer.idl",
+          "marker": "XIndexContainer"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XNameAccess.idl",
+          "marker": "XNameAccess"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XNameReplace.idl",
+          "marker": "XNameReplace"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XNameContainer.idl",
+          "marker": "XNameContainer"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void ExceptionType::dumpComprehensiveGetCppuType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "comphelper/qa/unit/variadictemplates.cxx",
+          "marker": "IllegalArgumentException"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/lang/IllegalArgumentException.idl",
+          "marker": "identifies the position"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XElementAccess.idl",
+          "marker": "base interface of all collection interfaces"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+          "marker": "IllegalArgumentException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts",
+          "marker": "IndexOutOfBoundsException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.ts",
+          "marker": "ElementExistException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/NoSuchElementException.ts",
+          "marker": "NoSuchElementException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XElementAccess.ts",
+          "marker": "XElementAccess"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XIndexAccess.ts",
+          "marker": "XIndexAccess"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XIndexReplace.ts",
+          "marker": "XIndexReplace"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XIndexContainer.ts",
+          "marker": "XIndexContainer"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XNameAccess.ts",
+          "marker": "XNameAccess"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XNameReplace.ts",
+          "marker": "XNameReplace"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XNameContainer.ts",
+          "marker": "XNameContainer"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.test.ts",
+          "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.test.ts",
+          "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.test.ts",
+          "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/NoSuchElementException.test.ts",
+          "marker": "matches complete original"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Property-container error and access prerequisites"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original generated exception owners and structural IDL declarations over existing shared native values. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    },
+    "scopeLimitations": [
+      "Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "property-container-error-and-access-contracts"
+  }
+}

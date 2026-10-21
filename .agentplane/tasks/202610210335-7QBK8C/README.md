@@ -4,7 +4,7 @@ title: "Implement native property-container UNO error and access contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Implement approved original property-container exception values and structural access contracts,with genuine generated native metadata evidence and no container/service substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:37:16.974Z"
+doc_updated_at: "2026-10-21T04:05:09.904Z"
 doc_updated_by: "CODER"
 description: "Block65: actual normal cppumaker IllegalArgumentException,IndexOutOfBoundsException,ElementExistException,NoSuchElementException value/type owners and complete type-only7container access IDL declarations. Source-backed prerequisite for canonical ODS view-settings containers,without fake service/lifecycle/provider or flattened workbook settings. Containers,interface runtime metadata and settings.xml integration remain separate owners. Calc branch/checkout only. Related shared owners100 and all Calc100;full checkpoint70 then repairs/coverage/close and requested goal pause."
 sections:
@@ -49,7 +49,7 @@ sections:
   Verify Steps: "Generate original4exception normal comprehensive headers with pinned existing cppumaker,read original IDLs/container sources. Replay native default/member/copy/move/self/assignment/member identity/context acquisition/release/reverse destruction,ArgumentPosition signed16/default,actual Exception versus RuntimeException typed catch classification;compare initialized original value/type metadata streams over unchanged native libraries normal/ASan/UBSan. Check all7IDL inheritance/method/type/raises contracts and explicitly absent runtime metadata/implementations. Related generated Exception/Runtime/Disposed/UNO tests plus changed shared owners100 and all Calc132owners100. Source lint/format,tools/app types,dependencies,JSDoc,size/tree/provenance/registry/resources,production build/static,routing/doctor with individual exit codes. Immutable raw/source/native/generated pins,portable audit,quality pass and clean tracked closure. Full all-app checkpoint70;after repairs/scenarios/coverage and final task closure,pause goal."
   Verification: "Pending native evidence and implementation."
   Rollback Plan: "Revert only active task commits,retain native/raw evidence;preserve user history and unrelated tasks,no reset/merge."
-  Findings: ""
+  Findings: "Task-local diagnostics and fixes: (1) default cppumaker bootstrap metadata does not provide member names; the initial diagnostic correctly failed UBSan,so the probe now uses original -C comprehensive generation. (2) Registry requires supported maturity,nonempty documentation/test references,and non-basename provenance; corrected records keep all broad parity/verified flags false. (3) Initial typechecks/static build rejected a nonexistent Exception module type getter; checked subclasses now use the existing actual UnoType.get(Exception). (4) IllegalArgumentException member-name literals initially used cross-realm TextEncoder arrays under jsdom and exhausted a test worker; exact original ASCII const-char bytes now select the real OUString literal overload. All12new scenarios and corrected application TypeScript pass. Original native --write normal/ASan/UBSan10streams pass; --check and allCalc/changed-shared raw100 acceptance are still running. CALC-248 records native zero default versus IDL unknown-position -1 documentation; native behavior retained. No scope expansion or alternative provider/service model. Full checkpoint70,repairs/scenarios/coverage,final current-task closure,then requested goal pause."
 id_source: "generated"
 ---
 ## Summary
@@ -79,3 +79,5 @@ Pending native evidence and implementation.
 Revert only active task commits,retain native/raw evidence;preserve user history and unrelated tasks,no reset/merge.
 
 ## Findings
+
+Task-local diagnostics and fixes: (1) default cppumaker bootstrap metadata does not provide member names; the initial diagnostic correctly failed UBSan,so the probe now uses original -C comprehensive generation. (2) Registry requires supported maturity,nonempty documentation/test references,and non-basename provenance; corrected records keep all broad parity/verified flags false. (3) Initial typechecks/static build rejected a nonexistent Exception module type getter; checked subclasses now use the existing actual UnoType.get(Exception). (4) IllegalArgumentException member-name literals initially used cross-realm TextEncoder arrays under jsdom and exhausted a test worker; exact original ASCII const-char bytes now select the real OUString literal overload. All12new scenarios and corrected application TypeScript pass. Original native --write normal/ASan/UBSan10streams pass; --check and allCalc/changed-shared raw100 acceptance are still running. CALC-248 records native zero default versus IDL unknown-position -1 documentation; native behavior retained. No scope expansion or alternative provider/service model. Full checkpoint70,repairs/scenarios/coverage,final current-task closure,then requested goal pause.

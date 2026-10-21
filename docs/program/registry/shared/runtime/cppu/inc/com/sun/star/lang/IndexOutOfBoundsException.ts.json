@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-c836e597-c18b-4027-aa25-06b8db56cc53"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts#IndexOutOfBoundsException",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.test.ts#matches complete original",
+        "udkapi/com/sun/star/lang/IndexOutOfBoundsException.idl#IndexOutOfBoundsException"
+      ],
+      "justification": "Original comprehensive cppumaker generated exception value/type owner, genuine Exception versus RuntimeException inheritance, original fields/defaults and stable member ownership, copy/move/assignment/reverse lifetime and shared typelib new/register/release with cached Type. IllegalArgumentException retains signed16 ArgumentPosition including native zero default. Native normal-ASan/UBSan differential initialized value/type/catch streams are required. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "IndexOutOfBoundsException",
+        "cppu_detail_getUnoType",
+        "getCppuType",
+        "exceptionValueType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/lang/IndexOutOfBoundsException.idl",
+      "upstreamSymbols": [
+        "IndexOutOfBoundsException",
+        "Exception"
+      ]
+    }
+  }
+}

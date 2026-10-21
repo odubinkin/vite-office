@@ -3503,3 +3503,18 @@ E9:E9 becomes A9:A9 even with include-old=true or only-down=true.
 The complete native consumer/configuration intent is unverified. The port retains
 this clamp and tests it with genuine initial column storage;no coordinate repair
 or eager allocation is added. Task `202610210052-FZA8S9` records the evidence.
+
+## CALC-248: IllegalArgumentException unknown-position documentation and generated zero default
+
+Status: source-confirmed documentation/default discrepancy; not a confirmed defect.
+
+Pinned `udkapi/com/sun/star/lang/IllegalArgumentException.idl` documents -1 when
+ArgumentPosition is unknown. The original comprehensive cppumaker default
+constructor nevertheless initializes the sal_Int16 member to zero, as prescribed
+by the generator's scalar default rules. A default-constructed exception therefore
+carries the first argument's index without the caller supplying a position.
+Whether callers must explicitly assign -1 for unknown arguments is not specified
+by the constructor contract. Task `202610210335-7QBK8C` retains native zero and
+checks default/member/copy/move/assignment plus signed16 boundary values against
+original generated C++ over unchanged libraries. Do not normalize the default to
+-1 in browser code or replace the actual generated exception with a JS Error.

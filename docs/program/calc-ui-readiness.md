@@ -1,5 +1,19 @@
 # Calc UI and ODS implementation critical path
 
+## Current prerequisite block65 — property-container error/access contracts
+
+Task `202610210335-7QBK8C` supplies four original generated UNO exception
+value/type owners and seven complete structural access-interface declarations.
+These are prerequisites for native ODS view-settings containers. Actual
+Indexed/NamedPropertyValuesContainer services, WeakImplHelper, Sfx model and
+view-data ownership, interface runtime metadata and settings.xml serialization
+remain subsequent source owners. The current browser UI remains block64 below;
+this block makes no additional UI or view-settings persistence claim.
+
+The next full-suite checkpoint is block70. After repairing failures, adding
+necessary scenarios and checking coverage, close the current task completely
+and pause the goal as requested by the user.
+
 ## Current UI block64 — native grid,headers and formula view options
 
 Task `202610210246-SRFT0T` connects original View Headers26242,Show Formulas26250
