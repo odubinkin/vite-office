@@ -1,10 +1,11 @@
 ---
 id: "202610210117-DRAYC7"
 title: "Implement native Calc visible-row and visible-column selection"
-status: "DOING"
+result_summary: "Implemented native visible-row/column selection through shared Writer menus with source group-wide subtraction,real formatting/undo/ODS consumers and complete Calc coverage;repaired JSDoc and verified every mandatory gate."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/task62-test-emission-proof.log"
   findings:
     - "Compared original cellsh1 cases with real ScCellShell/ScMarkData owners:captured bounds,group-wide hidden-span subtraction,unclamped endpoints,conditional reset and simple reduction match source. Actual formatting,undo/redo,ODS and shared Writer menu routes pass.551Calc/34related tests pass with130owners100percent. JSDoc-only test repair has byte-identical emitted JS and unchanged130runtime source hashes;14focused tests repeat. Ten independent gate statuses are all0,including required JSDoc/registry/build;source lint/format/routing/doctor pass. Raw JSDoc failure and observer ENOBUFS evidence and superseded reviews remain retained. No threshold/exclusion/counter changes. Existing row-label text highlight remains a separate broader browser-parity followup;no complete UI/core parity claim."
-commit: null
+commit:
+  hash: "33f9a8e9b3198df3a88a12f0ea89c2b30be3e913"
+  message: "🧩 DRAYC7 tests: attach weight helper documentation to arrow"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved original visible-axis selection commands and real Writer-style menu consumers in calc only."
+  -
+    author: "CODER"
+    body: "Verified: Original visible-row and visible-column selection uses real marks and shared Writer menus.551Calc/34related tests pass;130owners100percent;14focused repair tests and all10mandatory gates pass. JSDoc repair emits identicalJS;raw failures,source pins,desktop/mobile proof and superseded reviews are retained."
 events:
   -
     type: "status"
@@ -74,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Accepted after rework:551Calc/34common-Writer tests and130owners100percent retained;14focused tests repeat after JSDoc-only byte-identical-JS repair. All10mandatory gates individually exit0,including docs and production build. Unmodified130runtime source hashes match full acceptance. Portable audit validates92raw artifacts/140source pins/9native pins;prior failed logs and superseded reviews preserved."
+  -
+    type: "status"
+    at: "2026-10-21T01:42:24.874Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original visible-row and visible-column selection uses real marks and shared Writer menus.551Calc/34related tests pass;130owners100percent;14focused repair tests and all10mandatory gates pass. JSDoc repair emits identicalJS;raw failures,source pins,desktop/mobile proof and superseded reviews are retained."
 doc_version: 3
-doc_updated_at: "2026-10-21T01:41:22.687Z"
+doc_updated_at: "2026-10-21T01:42:24.876Z"
 doc_updated_by: "CODER"
 description: "Block62: port source SID_SELECT_VISIBLE_ROWS/COLUMNS behavior into actual ScCellShell/ScMarkData owners and existing Writer menu dispatch. Preserve group-wide subtraction,hidden-span endpoints,MarkToMulti/MarkToSimple and native reset rules. Validate disjoint selections,grouped sheets,pending input and actual formatting/undo consumers;all Calc100 and related tests. Only calc checkout/branch;full all-app next70."
 sections:
