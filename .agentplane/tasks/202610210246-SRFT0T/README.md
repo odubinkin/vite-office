@@ -1,10 +1,11 @@
 ---
 id: "202610210246-SRFT0T"
 title: "Connect native Calc grid headers and formula view commands"
-status: "DOING"
+result_summary: "Connected original per-sheet grid and document/view header/formula owners through Sfx and shared Writer menus;preserved native bool/dirty/input/history boundaries,global-grid conjunction and genuine frames.584Calc tests/173files and132owners100percent;22shared/Writer and17tooling pass with changed shared owners100percent.248raw artifacts,171source and19native pins audited. View-settings XML remains explicitly unported;goal active,next all-app checkpoint70."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610210246-SRFT0T/evidence/audit.mjs"
   findings:
     - "Source bool defaults/copy and current-sheet grid state are real native owners. Headers/formula typed request/recording and asymmetric document-copy boundaries follow source;grid ignores args,changes only current sheet and marks modified. Combined global/sheet paint flags and initial/update no-frame shorthands preserve genuine explicit borders. Actual shared Writer menus and canonical accelerator boundary are reused;readable backtick caption replaces internal key name with identical dispatch.584Calc/132owners,22shared/Writer plus shared key owner100,and17tooling plus shared catalog100 pass. All14gates and3metadata exits0;248raw artifacts and171source/19native pins re-audited. Native configuration/window/modificator service graphs and view-settings XML remain explicitly unported;no complete parity claim or fake service."
-commit: null
+commit:
+  hash: "3bb1b52a55f5eb60542b0f9b40ea226c8caaa983"
+  message: "🧩 SRFT0T calc: connect native grid headers and formula view commands"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved original grid/header/formula view owners and shared menu rendering;preserve per-sheet/local/document boundaries and genuine editing state."
+  -
+    author: "CODER"
+    body: "Verified: Native grid/header/formula commands,shared menu and readable canonical shortcut contracts pass584Calc tests/132owners100percent,shared consumers/tooling100percent,all gates and actual Chromium proof."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "584Calc/173files pass;132owners100 S10995/B6833/F2040/L9875. Shared/Writer22pass,common key owner100;tooling17pass,common catalog100. All10+4+3individual gates0;actual Chromium desktop/mobile/formula/error/shortcut/header/frame/checked-state proof. Portable248artifact/171source/19native-pin audit passes. Original failures retained;view-settings XML remains explicitly unported;full all-app next70."
+  -
+    type: "status"
+    at: "2026-10-21T03:25:13.566Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native grid/header/formula commands,shared menu and readable canonical shortcut contracts pass584Calc tests/132owners100percent,shared consumers/tooling100percent,all gates and actual Chromium proof."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:24:13.966Z"
+doc_updated_at: "2026-10-21T03:25:13.569Z"
 doc_updated_by: "CODER"
 description: "Block64: actual ScViewOptions boolean ownership/defaults/copy and document/view integration;source sheet-local grid flag,view header/formula toggle request contracts and states;shared View menu and real grid/formula projection. Preserve content/history/dirty/input ownership and explicitly unported native configuration/rendering/window services. Calc branch/checkout only;all Calc100 and related tests;next full checkpoint70."
 sections:
