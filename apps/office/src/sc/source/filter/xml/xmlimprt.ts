@@ -209,7 +209,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
       for (let tab = 0; tab < this.document.GetTableCount(); tab++)
         (this.document.FetchTable(tab) as ScTable).SetOptimalHeight(
-          new RowHeightContext(this.document.MaxRow(), 1 / 15),
+          new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
           0,
           this.document.MaxRow(),
           true,

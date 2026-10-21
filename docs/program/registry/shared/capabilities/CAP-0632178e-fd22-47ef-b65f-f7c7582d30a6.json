@@ -1,0 +1,115 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-0632178e-fd22-47ef-b65f-f7c7582d30a6",
+    "capabilityId": "CAP-0632178e-fd22-47ef-b65f-f7c7582d30a6",
+    "suite": "shared",
+    "subsystem": "numbering-rule-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskNF91KY in-progress genuine EditEngine item-pool prerequisite: original SvxNumRule ten-slot storage,source Writer/Draw initial geometry,feature/continuous flags,Get versus GetLevel,reference and pointer SetLevel ordering,copy/assignment,active-count equality,SvxNodeNum fixed storage,SvxNumBulletItem owned rule and SvxConvertNumRule. Existing shared SvxNumberFormat remains the actual value dependency,not a substitute numbering facade;its unrepresented fields/services still require canonical porting. Original numdef constants have one shared owner. Native static cleanup is erased under GC. Original SetLevel/convert validity asymmetries remain(CALC243). Full stream/number-string/graphic/UNO wrapper,complete EditEngine pool/rich-text owner and Calc style/UI/layout remain unported;no broad parity promotion.",
+      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated.",
+      "TaskNF91KY preserves nonvirtual SvxNumberFormat base assignment/comparison over stored represented fields,including the base stored style name behind Writer virtual GetCharFormatName. SvxNumRule.SetLevel explicitly binds base comparison when passed a genuine SwNumFormat,then slices an owned base copy. Actual SwNumFormat now implements its original virtual name query through the registered actual SwFormat base GetName read site;no SwCharFormat owner or name-provider facade is fabricated. Tests initialize the real composed SwClient member against a real SwFormat to verify registration,name changes,copy and base-field distinctions. Full SwCharFormat and broader missing native fields/services remain unported.",
+      "Later in taskNF91KY the actual61-entry EditEngine package,derived pool and rich-text owners are present;earlier prerequisite notes above describe the staged historical checkpoint. Full task acceptance and real layout/device/graphic services remain pending.",
+      "Final taskNF91KY coverage adds actual equal-invalid-flags rules with cleared versus allocated physical slots,and two cleared slots. Native operator== pointer-presence behavior is preserved. All495shared and129Calc runtime owners have positive100% counters in the final bounded acceptance;earlier pending notes describe historical checkpoints. Broader native layout,graphics and ABI gaps remain."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual shared native value classes retain source storage and ordering;SetLevelPointer is an explicit binding of the native pointer overload. No numbering service or pool facade is introduced."
+    },
+    "capability": "Native numbering-rule value ownership for EditEngine pool construction",
+    "gaps": [
+      "Complete shared SvxNumberFormat fields/providers,graphic and UNO rule-wrapper/stream responsibilities,formatted portion/device/layout services and Calc named-style UI remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+          "marker": "SvxNumRule::SetLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "GetDefaultFonts"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/font.cxx",
+          "marker": "getUserInterfaceFont"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumFormat::GetCharFormatName"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sd/qa/unit/import-tests2.cxx",
+          "marker": "SvxNumBulletItem"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/numitem.hxx",
+          "marker": "SvxNumRule"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/numitem.rule.ts",
+          "marker": "SvxNumRule"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.font.ts",
+          "marker": "GetDefaultFonts"
+        },
+        {
+          "path": "apps/office/src/vcl/source/outdev/font.ts",
+          "marker": "getDefaultFontWithoutDevice"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number.ts",
+          "marker": "GetCharFormatName"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-num-rule.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-number-format-scalars.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-default-fonts.test.ts",
+          "marker": "original"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+          "marker": "virtual Writer name"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task57"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-numbering-rule-values",
+    "scopeLimitations": [
+      "TaskNF91KY in-progress genuine EditEngine item-pool prerequisite: original SvxNumRule ten-slot storage,source Writer/Draw initial geometry,feature/continuous flags,Get versus GetLevel,reference and pointer SetLevel ordering,copy/assignment,active-count equality,SvxNodeNum fixed storage,SvxNumBulletItem owned rule and SvxConvertNumRule. Existing shared SvxNumberFormat remains the actual value dependency,not a substitute numbering facade;its unrepresented fields/services still require canonical porting. Original numdef constants have one shared owner. Native static cleanup is erased under GC. Original SetLevel/convert validity asymmetries remain(CALC243). Full stream/number-string/graphic/UNO wrapper,complete EditEngine pool/rich-text owner and Calc style/UI/layout remain unported;no broad parity promotion.",
+      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated.",
+      "TaskNF91KY preserves nonvirtual SvxNumberFormat base assignment/comparison over stored represented fields,including the base stored style name behind Writer virtual GetCharFormatName. SvxNumRule.SetLevel explicitly binds base comparison when passed a genuine SwNumFormat,then slices an owned base copy. Actual SwNumFormat now implements its original virtual name query through the registered actual SwFormat base GetName read site;no SwCharFormat owner or name-provider facade is fabricated. Tests initialize the real composed SwClient member against a real SwFormat to verify registration,name changes,copy and base-field distinctions. Full SwCharFormat and broader missing native fields/services remain unported."
+    ]
+  }
+}

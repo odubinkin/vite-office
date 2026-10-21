@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.tsx",
+    "rationale": "Task5678C0 connects original ScColBar/ScRowBar size/hide methods and hdrcont tracking arithmetic to actual ScViewFunc,marks,document and undo. UInt16 conversion,min10pixels,selected disjoint spans,grouped sheets,negative-size hide,threshold2 and release+2screen-offset are retained. React stores temporary guide coordinates only and uses shared VCL window tracking moved from Writer. Active editing prohibits sizing. The existing96CSSdpi scale is supplied explicitly by the browser,not claimed as a native device default. Device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/alternate views,protection and complete native windows remain unported. No broad parity or save/open/recovery policy change.",
+    "responsibilities": [
+      "Task5678C0 connects original ScColBar/ScRowBar size/hide methods and hdrcont tracking arithmetic to actual ScViewFunc,marks,document and undo. UInt16 conversion,min10pixels,selected disjoint spans,grouped sheets,negative-size hide,threshold2 and release+2screen-offset are retained. React stores temporary guide coordinates only and uses shared VCL window tracking moved from Writer. Active editing prohibits sizing. The existing96CSSdpi scale is supplied explicitly by the browser,not claimed as a native device default. Device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/alternate views,protection and complete native windows remain unported. No broad parity or save/open/recovery policy change."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.tsx",
+          "marker": "ScHeaderResizeHandle"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.test.tsx",
+          "marker": "tracking arithmetic"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/colrowba.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-header-sizing.test.tsx",
+          "marker": "production UI"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task5678C0 connects original ScColBar/ScRowBar size/hide methods and hdrcont tracking arithmetic to actual ScViewFunc,marks,document and undo. UInt16 conversion,min10pixels,selected disjoint spans,grouped sheets,negative-size hide,threshold2 and release+2screen-offset are retained. React stores temporary guide coordinates only and uses shared VCL window tracking moved from Writer. Active editing prohibits sizing. The existing96CSSdpi scale is supplied explicitly by the browser,not claimed as a native device default. Device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/alternate views,protection and complete native windows remain unported. No broad parity or save/open/recovery policy change."
+    }
+  }
+}

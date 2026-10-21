@@ -1,7 +1,9 @@
 /** @fileoverview Native Variation values and complete VariationsFromString from FontVariation.cxx,using actual o3tl/RTL input owners. */
 import { getToken, trim, toDouble } from "../../../o3tl/inc/string_view";
 import { isAsciiAlphanumeric } from "../../../sal/inc/rtl/character";
-import { featureCode } from "../../inc/font/Feature";
+import { featureCode, featureCodeAsString } from "../../inc/font/Feature";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import type { OUString } from "../../../sal/inc/rtl/ustring";
 /** Original aggregate default/copy/equality and public uint32/binary32 fields;JS accessors preserve native field assignment narrowing. */
 export class Variation {
   private tag = 0;
@@ -63,4 +65,28 @@ export function VariationsFromString(text: Uint16Array): Variation[] {
     variations.push(new Variation(tag, toDouble(value)));
   } while (position[0] !== -1);
   return variations;
+}
+
+/** Original ordered quoted-axis serialization through the actual native float overload;duplicates and nonfinite values are not normalized. @param variations - Original ordered vector. @returns Owned native Unicode string. */
+export function VariationsToString(variations: readonly Readonly<Variation>[]): OUString {
+  const buffer = new OUStringBuffer();
+  try {
+    for (let i = 0; i < variations.length; ++i) {
+      if (i > 0) buffer.append(Uint8Array.of(44, 32, 0));
+      const variation = variations[i] as Readonly<Variation>;
+      const tag = featureCodeAsString(variation.nTag);
+      try {
+        buffer
+          .append(Uint8Array.of(34, 0))
+          .append(tag)
+          .append(Uint8Array.of(34, 32, 0));
+      } finally {
+        tag.dispose();
+      }
+      buffer.appendFloat(variation.fValue);
+    }
+    return buffer.makeStringAndClear();
+  } finally {
+    buffer.dispose();
+  }
 }

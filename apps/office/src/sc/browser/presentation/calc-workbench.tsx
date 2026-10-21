@@ -1,4 +1,5 @@
 /** @fileoverview Production Calc workbench over canonical model/view/input owners,shared Sfx controls and Writer visual resources. */
+import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { getBrowserShortcut } from "../../../framework/browser/accelerators/keymapping";
 import type { ScTable } from "../../inc/table";
 import { rowAtPixel, rowPixels } from "./row-geometry";
@@ -15,6 +16,7 @@ import {
 } from "react";
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { CalcViewController } from "../controller/calc-view-controller";
+import { ViewOption } from "../../inc/viewopti";
 import { cellPresentation } from "../editor/cell-input";
 import {
   CommandPopupMenu,
@@ -73,6 +75,20 @@ export function CalcWorkbench({
     sheetWorkflows.metricDialogs.GetSnapshot,
     sheetWorkflows.metricDialogs.GetSnapshot,
   );
+  useBrowserSaveShortcut({
+    isActive: true,
+    autosave: fileWorkflows,
+    onError:
+      /** Records failed immediate primary saves on the actual medium. @param error - Storage or input failure. @returns Nothing. */ (
+        error,
+      ) =>
+        controller.shell.SetMediumOperation(
+          "save",
+          "failed",
+          controller.shell.GetContentGeneration(),
+          error instanceof Error ? error.message : String(error),
+        ),
+  });
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
@@ -81,7 +97,8 @@ export function CalcWorkbench({
   const modal = dialog !== undefined || sheetDialog !== undefined || widthDialog !== undefined;
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
-    tabs = useRef<HTMLDivElement>(null);
+    tabs = useRef<HTMLDivElement>(null),
+    previousModal = useRef(modal);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const cursorColumn = view.GetCurX(),
@@ -102,6 +119,14 @@ export function CalcWorkbench({
   function focusGrid(): void {
     grid().focus();
   }
+  useLayoutEffect(
+    /** Restores the document client only after React removes the modal and its background inert attribute. @returns Nothing. */ () => {
+      const restore = previousModal.current && !modal;
+      previousModal.current = modal;
+      if (restore) grid().focus();
+    },
+    [modal],
+  );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
       /** Measures the actual grid client before projecting visible cells. @returns Nothing. */
@@ -196,7 +221,7 @@ export function CalcWorkbench({
   }
   /** Routes document keys to native-shaped input/view operations or the shared dispatcher. @param event - Grid key. @returns Nothing. */
   function key(event: KeyboardEvent<HTMLDivElement>): void {
-    if (event.nativeEvent.isComposing) return;
+    if (event.defaultPrevented || event.nativeEvent.isComposing) return;
     if (
       (event.ctrlKey || event.metaKey) &&
       (event.key.toLowerCase() === "z" || event.key.toLowerCase() === "y")
@@ -207,6 +232,23 @@ export function CalcWorkbench({
         .Execute(event.key.toLowerCase() === "y" || event.shiftKey ? ".uno:Redo" : ".uno:Undo");
       return;
     }
+    if (
+      event.key === "Backspace" &&
+      event.shiftKey &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      // Backspace is a non-modifier key,so the shared adapter result is defined.
+      const command = frame
+        .GetDispatcher()
+        .FindCommandByShortcut(getBrowserShortcut(event) as string);
+      if (command) {
+        event.preventDefault();
+        frame.GetDispatcher().Execute(command.command.id);
+      }
+      return;
+    }
     if ((event.key === " " || event.code === "Space") && !event.metaKey) {
       const rowSelection = event.shiftKey && !event.ctrlKey && !event.altKey;
       const columnSelection =
@@ -214,9 +256,18 @@ export function CalcWorkbench({
         (/Mac/.test(navigator.platform)
           ? event.altKey && !event.ctrlKey
           : event.ctrlKey && !event.altKey);
-      if (rowSelection || columnSelection) {
+      const allSelection =
+        event.shiftKey &&
+        (/Mac/.test(navigator.platform)
+          ? event.altKey && !event.ctrlKey
+          : event.ctrlKey && !event.altKey);
+      if (rowSelection || columnSelection || allSelection) {
         event.preventDefault();
-        frame.GetDispatcher().Execute(rowSelection ? ".uno:SelectRow" : ".uno:SelectColumn");
+        frame
+          .GetDispatcher()
+          .Execute(
+            allSelection ? ".uno:SelectAll" : rowSelection ? ".uno:SelectRow" : ".uno:SelectColumn",
+          );
         return;
       }
     }
@@ -280,6 +331,11 @@ export function CalcWorkbench({
               ? undefined
               : frame.GetDispatcher().FindCommandByShortcut(shortcut);
           if (command) {
+            if (
+              command.command.id === ".uno:SelectAll" &&
+              (event.target as HTMLElement).closest('input, textarea, [contenteditable="true"]')
+            )
+              return;
             event.preventDefault();
             source.Execute(command.command.id);
           }
@@ -375,6 +431,25 @@ export function CalcWorkbench({
           onAction={inputAction}
         />
         <ScGridWindow
+          headerSizing={{
+            GetEntrySize:
+              /** Reads native header dimensions. @param width - Axis. @param index - Entry. @returns Pixels. */ (
+                width,
+                index,
+              ) => controller.GetHeaderEntrySize(width, index),
+            SetEntrySize:
+              /** Commits native header dimensions. @param width - Axis. @param index - Entry. @param pixels - Size. @returns Nothing. */ (
+                width,
+                index,
+                pixels,
+              ) => controller.SetHeaderEntrySize(width, index, pixels),
+            HideEntries:
+              /** Hides the native dragged range. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */ (
+                width,
+                first,
+                last,
+              ) => controller.HideHeaderEntries(width, first, last),
+          }}
           idPrefix="calc"
           viewData={view}
           viewport={controller.viewport}
@@ -383,7 +458,7 @@ export function CalcWorkbench({
           getCell={
             /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
               pos,
-            ) => cellPresentation(doc, pos)
+            ) => cellPresentation(doc, pos, view.GetOptions().GetOption(ViewOption.FORMULAS))
           }
           onSelect={
             /** Routes pointer selection with shift extension. @param pos - Cell. @param event - Pointer. @returns Nothing. */ (
@@ -517,7 +592,6 @@ export function CalcWorkbench({
           onClose={
             /** Closes the dialog and restores the actual grid focus. @returns Nothing. */ () => {
               fileWorkflows.dialogs.Close();
-              focusGrid();
             }
           }
         />
@@ -529,7 +603,6 @@ export function CalcWorkbench({
           onCancel={
             /** Cancels native width request and restores actual grid focus. @returns Nothing. */ () => {
               sheetWorkflows.metricDialogs.Cancel(widthDialog.id);
-              focusGrid();
             }
           }
           onSubmit={
@@ -537,7 +610,6 @@ export function CalcWorkbench({
               twips,
             ) => {
               sheetWorkflows.metricDialogs.Complete(widthDialog.id, twips);
-              focusGrid();
             }
           }
         />
@@ -549,7 +621,6 @@ export function CalcWorkbench({
           onCancel={
             /** Cancels only this native dialog and restores document focus. @returns Nothing. */ () => {
               sheetWorkflows.dialogs.Cancel(sheetDialog.id);
-              focusGrid();
             }
           }
           onSubmit={
@@ -557,7 +628,6 @@ export function CalcWorkbench({
               name,
             ) => {
               sheetWorkflows.dialogs.Complete(sheetDialog.id, name);
-              focusGrid();
             }
           }
         />

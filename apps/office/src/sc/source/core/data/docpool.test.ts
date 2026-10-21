@@ -29,9 +29,9 @@ it("registers the original contiguous character prefix with source slot IDs and 
   expect((a.GetPoolDefaultItem(111) as SvxFontItem).GetFamilyName()).not.toBe("");
   expect((a.GetPoolDefaultItem(116) as SvxFontItem).GetFamilyName()).not.toBe("");
   expect(a.IsInRange(99)).toBe(false);
-  expect(a.IsInRange(152)).toBe(false);
+  expect(a.IsInRange(189)).toBe(false);
   expect(
-    /** Rejects an unported pool identity rather than inventing a default. @returns Never. */ () =>
-      a.GetPoolDefaultItem(152),
+    /** Rejects an ID beyond the original pool range. @returns Never. */ () =>
+      a.GetPoolDefaultItem(189),
   ).toThrow();
 });

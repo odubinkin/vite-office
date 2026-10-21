@@ -11,6 +11,7 @@ const writerIntegrationTests = [
   "src/editeng/source/items/{paraitem,textitem,frmitems}.test.ts",
   "src/editeng/source/items/native-lr-space-item.test.ts",
   "src/editeng/source/items/native-adjust-item.test.ts",
+  "src/editeng/source/items/native-num-rule.test.ts",
   "src/svl/source/items/itemset.test.ts",
   "src/svl/source/items/{native-bool-item,sitem}.test.ts",
   "src/svl/source/notify/{notify,native-svt-notifier}.test.ts",
@@ -19,8 +20,11 @@ const writerIntegrationTests = [
   "src/xmloff/source/style/native-{legacy-bullet-symbol,bullet-scalar}.test.ts",
 ];
 
-/** Calc integration case colocated with its shared locale owner. */
-const calcIntegrationTests = ["src/i18nlangtag/source/isolang/{isolang,mslangid}.test.ts"];
+/** Calc integration cases colocated with their shared locale and item owners. */
+const calcIntegrationTests = [
+  "src/i18nlangtag/source/isolang/{isolang,mslangid}.test.ts",
+  "src/svl/source/items/native-target-which.test.ts",
+];
 
 /** Creates test projects and a coverage gate restricted to the selected owners. @param scope - Application or complete-suite selection. @param includeApplicationIntegration - Whether shared coverage also collects application integration evidence. @returns Vitest test configuration. */
 export function createOfficeTestOptions(

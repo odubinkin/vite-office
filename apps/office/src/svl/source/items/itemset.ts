@@ -225,11 +225,24 @@ export class SfxItemSet {
 
   /** Stores an independent accepted item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal or out-of-range no-op. */
   public Put(item: SfxPoolItem): SfxPoolItem | undefined {
+    return this.PutImpl(item, false);
+  }
+
+  /** Original const-reference target-Which insertion;the source item is never mutated. Native ownership overloads remain separate. @param item - Borrowed source. @param targetWhich - Target identity or zero for unchanged identity. @returns Stored value or no-op. */
+  public PutAsTargetWhich(item: SfxPoolItem, targetWhich: number): SfxPoolItem | undefined {
+    if (targetWhich === 0 || targetWhich === item.Which()) return this.PutImpl(item, false);
+    const clone = item.Clone(this.GetPool()) as SfxPoolItem;
+    clone.SetWhich(targetWhich);
+    return this.PutImpl(clone, true);
+  }
+
+  /** Original insertion ownership argument over actual JS value adoption. @param item - Input. @param passingOwnership - Adopt an already cloned value. @returns Actual stored item or no-op. */
+  private PutImpl(item: SfxPoolItem, passingOwnership: boolean): SfxPoolItem | undefined {
     if (IsDisabledItem(item)) return undefined;
     if (!this.containsWhich(item.Which())) return undefined;
     const current = this.poolItemMap.get(item.Which());
     if (SfxPoolItem.areSame(current, item)) return undefined;
-    const stored = implCreateItemEntry(this.pool, item, false) as SfxPoolItem;
+    const stored = implCreateItemEntry(this.pool, item, passingOwnership) as SfxPoolItem;
     this.Changed(current, stored);
     this.poolItemMap.set(stored.Which(), stored);
     return stored;

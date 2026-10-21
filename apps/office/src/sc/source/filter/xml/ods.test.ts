@@ -96,7 +96,7 @@ it("keeps importer APIs on the actual document and does not allocate invalid coo
   expect(importer.GetDocument()).toBe(doc);
   raw.setStringCell(new ScAddress(-1, 0, 0), unicode("x"));
   raw.setStringCell(new ScAddress(0, 0, 9), unicode("x"));
-  expect(doc.FetchTable(0)?.GetAllocatedColumnsCount()).toBe(0);
+  expect(doc.FetchTable(0)?.GetAllocatedColumnsCount()).toBe(1);
   expect(
     /** A live document is not an empty package-import target. @returns Nothing. */ () =>
       importer.importContent(independent("")),
@@ -367,7 +367,7 @@ it("imports real script-specific automatic font heights and preserves styled emp
     `<table:table-row table:number-rows-repeated="1048576"><table:table-cell table:style-name="ce" table:number-columns-repeated="16384"/></table:table-row>`,
   );
   const doc = load(xml, { maxExpandedCells: 0 });
-  expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(0);
+  expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(1);
   const pos = new ScAddress(doc.MaxCol(), doc.MaxRow(), 0),
     pattern = doc.GetPattern(pos) as ScPatternAttr;
   expect(

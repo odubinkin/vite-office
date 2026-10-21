@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3",
+    "capabilityId": "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3",
+    "suite": "calc",
+    "subsystem": "text-size-context",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskJT4A81 restores the original complete RowHeightContext six-input contract,independent PPTX/PPTY and zoom values,opaque borrowed device identity,zero/false defaults and UInt16 extra-height storage. ScScriptTypeData owns a lazy XBreakIterator reference per document. The original process-context creation dependency is an explicit borrowed host factory:the browser supplies the existing real BreakIteratorImpl;Calc core imports only the interface. Empty host references can be retried;the empty-string guard and source script loop are preserved. Calc existing font-selection UI now uses that document owner and ScGlobal office-UI-language fallback. Original address-only cached GetScriptType/SetScriptType traverse actual document/table/column CellTextAttr storage,retain UNKNOWN and do not synthesize missing metadata or columns(CALC238). Formatted-cell UpdateScriptType/GetRangeScriptType and actual GetNeededSize/EditEngine automatic wrapped-height layout remain unported. The existing Writer DOM Range algorithm is moved unchanged into shared VCL;Writer retains source node offsets,twip geometry and fallback policy. No browser document model,synthetic row heights or UNO/OutputDevice emulator is added. Full native device/font/ABI/layout and full UI parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Native row-size context and script-service/cache boundaries with shared browser line geometry",
+    "gaps": [
+      "GetNeededSize,formatted script-cache updates and EditEngine automatic wrapped-height layout remain required and unported.",
+      "Full VCL/UNO/font/ABI and complete UI parity remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/rowheightcontext.cxx",
+          "marker": "RowHeightContext::RowHeightContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx",
+          "marker": "ScDocument::GetBreakIterator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
+          "marker": "ScColumn::SetScriptType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testDefaultFontHeight"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/rowheightcontext.hxx",
+          "marker": "getOutputDevice"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+          "marker": "RowHeightContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "GetBreakIterator"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/text-line-measurement.ts",
+          "marker": "measureBrowserTextLines"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+          "marker": "Native"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/text-line-measurement.test.ts",
+          "marker": "Shared"
+        },
+        {
+          "path": "apps/office/e2e/calc/text-size-context.spec.ts",
+          "marker": "Worker"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/writer-line-measurement.test.ts",
+          "marker": "browser"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task53"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-native-text-size-context",
+    "scopeLimitations": [
+      "TaskJT4A81 restores the original complete RowHeightContext six-input contract,independent PPTX/PPTY and zoom values,opaque borrowed device identity,zero/false defaults and UInt16 extra-height storage. ScScriptTypeData owns a lazy XBreakIterator reference per document. The original process-context creation dependency is an explicit borrowed host factory:the browser supplies the existing real BreakIteratorImpl;Calc core imports only the interface. Empty host references can be retried;the empty-string guard and source script loop are preserved. Calc existing font-selection UI now uses that document owner and ScGlobal office-UI-language fallback. Original address-only cached GetScriptType/SetScriptType traverse actual document/table/column CellTextAttr storage,retain UNKNOWN and do not synthesize missing metadata or columns(CALC238). Formatted-cell UpdateScriptType/GetRangeScriptType and actual GetNeededSize/EditEngine automatic wrapped-height layout remain unported. The existing Writer DOM Range algorithm is moved unchanged into shared VCL;Writer retains source node offsets,twip geometry and fallback policy. No browser document model,synthetic row heights or UNO/OutputDevice emulator is added. Full native device/font/ABI/layout and full UI parity remain unverified."
+    ]
+  }
+}

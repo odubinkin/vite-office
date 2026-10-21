@@ -794,6 +794,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:Deselect": {
+      "label": "Undo Selection",
+      "showsDialog": false,
+      "shortcuts": ["Shift+BACKSPACE"],
+      "semantics": "action"
+    },
     ".uno:DesignerDialog": {
       "label": "Styles",
       "showsDialog": false,
@@ -2639,7 +2645,7 @@
     ".uno:ToggleFormula": {
       "label": "Show Formulas",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+QUOTELEFT", "Meta+QUOTELEFT"],
+      "shortcuts": ["Ctrl+`", "Meta+`"],
       "semantics": "action"
     },
     ".uno:ToggleMergeCells": {

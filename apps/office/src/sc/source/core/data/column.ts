@@ -1,4 +1,7 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
+import { celltextattr_block, element_type_celltextattr } from "../../../inc/mtvelements";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScLineFlags } from "../../../inc/attarray";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
@@ -146,6 +149,26 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original cached script getter;UNKNOWN is retained until a real classifier writes metadata. @param row - Row. @returns Cached flags or NONE for absent metadata. */
+  GetScriptType(row: number): SvtScriptType {
+    if (
+      !this.rDocument.ValidRow(row) ||
+      this.maCellTextAttrs.get_type(row) !== element_type_celltextattr
+    )
+      return SvtScriptType.NONE;
+    const position = this.maCellTextAttrs.cposition(row);
+    return celltextattr_block.at(position.first.get().data as base_element_block, position.second)
+      .mnScriptType;
+  }
+  /** Original metadata-only script setter never creates a text-attribute slot. Native grouped-formula cache discard remains unported;no such cache is owned by this slice. @param row - Row. @param type - Native flags. @returns Nothing. */
+  SetScriptType(row: number, type: SvtScriptType): void {
+    if (!this.rDocument.ValidRow(row)) return;
+    const position = this.maCellTextAttrs.position(row),
+      block = position.first.get();
+    if (block.type !== element_type_celltextattr) return;
+    celltextattr_block.at(block.data as base_element_block, position.second).mnScriptType = type;
+  }
+
   /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(row: number, pattern: ScPatternAttr): void {
     const cache = new ScItemPoolCache(
@@ -234,11 +257,21 @@ export class ScColumn extends ScColumnData {
       }
     }
   }
-  /** Reads actual typed-block emptiness, excluding formatting. @returns Whether no cell payload exists. */
-  IsEmptyData(): boolean {
-    return (
-      this.maCells.block_size() === 1 && this.maCells.cbegin().get().type === element_type_empty
-    );
+  /** Original column2.cxx whole-column/range emptiness query over actual typed blocks. @param first - Optional first row. @param last - Inclusive final row. @returns Whether the interval contains no payload. */
+  IsEmptyData(first?: number, last?: number): boolean {
+    if (this.maCells.block_size() === 1 && this.maCells.cbegin().get().type === element_type_empty)
+      return true;
+    if (first === undefined) return false;
+    const position = this.maCells.cposition(first),
+      iterator = position.first;
+    if (iterator.equals(this.maCells.cend())) return false;
+    const block = iterator.get();
+    if (block.type !== element_type_empty) return false;
+    return (last as number) < first + block.size - position.second;
+  }
+  /** Original uncached occupancy overload;notes/drawing extras remain unported. @param row - Valid row. @returns Actual payload presence. */
+  HasDataAt(row: number): boolean {
+    return this.maCells.get_type(row) !== element_type_empty;
   }
   /** Reads the first payload row from the leading native block. @returns Row or native empty zero. */
   GetFirstDataPos(): number {
@@ -246,8 +279,16 @@ export class ScColumn extends ScColumnData {
     const first = this.maCells.cbegin().get();
     return first.type !== element_type_empty ? 0 : first.size;
   }
-  /** Reads the last payload row from the trailing native block. @returns Row or native empty zero. */
-  GetLastDataPos(): number {
+  /** Original full-column and bounded last-payload queries. @param lastRow - Optional inclusive bound. @returns Row or native empty zero. */
+  GetLastDataPos(lastRow?: number): number {
+    if (lastRow !== undefined) {
+      lastRow = Math.min(lastRow, this.rDocument.MaxRow());
+      const position = this.maCells.cposition(lastRow).first,
+        block = position.get();
+      if (block.type !== element_type_empty) return lastRow;
+      if (position.equals(this.maCells.cbegin())) return 0;
+      return block.position - 1;
+    }
     if (this.IsEmptyData()) return 0;
     const last = this.maCells.crbegin().get();
     return last.type !== element_type_empty

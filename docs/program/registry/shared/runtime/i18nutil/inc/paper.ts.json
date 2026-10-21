@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/inc/paper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "paper-geometry",
+    "capabilityIds": [
+      "CAP-63cfb71b-ed58-4a1c-b868-bf15135b6fe5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nutil/inc/paper.ts",
+        "apps/office/src/i18nutil/source/utility/paper.test.ts"
+      ],
+      "justification": "Task0HHKNT ports the original86entry Paper order and physical table with original floating conversion plus0.5 truncation. Actual PaperInfo retains exact-before-rotated search,duplicate first-match order,strict44mm100 tolerance,orientation-preserving sloppy fit,ordered dimension snapping,ASCII-only borrowed-byte PostScript aliases and exact native Locale country defaults. Writer existing A4/Letter sizes derive from this actual common owner through genuine integral o3tl conversions. No printer,platform or string-owner service is imitated. Native getSystemDefaultPaper platform/config/libpaper discovery,toPSName owning OString return and SvxPaperInfo printer/device conversion remain unported. Full Calc styles and broader native/UI parity remain unverified. Bounded verification passes528Calc tests,33related owner/page/menu tests,19XML/ODT cases and3Chromium/Worker/page-dialog cases. Calc and all four changed runtime owners reach100percent coverage;no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Paper",
+        "NUM_PAPER_ENTRIES"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/i18nutil/paper.hxx",
+      "upstreamSymbols": [
+        "Paper",
+        "NUM_PAPER_ENTRIES"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202610210145-Y1NRHK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T02:43:26.459Z",
+  "verdict": "pass",
+  "summary": "Native ordinary-grid deselection and browser selection/modal focus ownership accepted;570 Calc tests and130 owners100percent.",
+  "evaluated_sha": "21d7b8ea67593b910aff4d5a8087ae5d15f069f7",
+  "blueprint_digest": "2f33bcf22c24712802aa259f538a4719c589460e818c10e28ec4c4644d61c4be",
+  "findings": [
+    "Original Unmark normal-grid state effects remain in ScTabView and Deselect in ScCellShell;reference/window/SelectionEngine paths explicitly unported. Canonical active Sfx shortcut lookup respects unbound/reassigned commands. Escape retains native separate ownership. Actual Chromium proves focus restoration after inert removal with marks retained;DOM event regression covers Escape/Cancel/OK. No shared runtime or coverage policy changed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610210145-Y1NRHK/README.md",
+    ".agentplane/tasks/202610210145-Y1NRHK/evidence/audit.mjs",
+    ".agentplane/tasks/202610210145-Y1NRHK/evidence/acceptance.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

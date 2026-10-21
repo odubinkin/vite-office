@@ -41,13 +41,11 @@ it("opens the exact native popup and executes real group commands without changi
   expect(c.viewData.GetTabNumber()).toBe(2);
   expect([...c.viewData.GetMarkData().GetSelectedTabs()]).toEqual([0, 1, 2]);
   expect(
-    within(menu)
-      .getAllByRole("menuitem")
-      .map(
-        /** Reads source order without presentation overrides. @param entry - Actual item. @returns Label. */ (
-          entry,
-        ) => entry.textContent,
-      ),
+    Array.from(menu.querySelectorAll('[role="menuitem"], [role="menuitemcheckbox"]')).map(
+      /** Reads source order without presentation overrides. @param entry - Actual item. @returns Label. */ (
+        entry,
+      ) => entry.textContent,
+    ),
   ).toEqual([
     "Insert Sheet…",
     "Delete Sheet…",
@@ -59,11 +57,12 @@ it("opens the exact native popup and executes real group commands without changi
     "Protect Sheet…",
     "Hide Sheet",
     "Show Sheet…",
-    "View Grid Lines",
+    "✓View Grid Lines",
     "Tab Color…",
     "Sheet Right-To-Left",
     "Sheet Events…",
   ]);
+  expect(within(menu).getByRole("menuitemcheckbox", { name: "View Grid Lines" })).toBeChecked();
   expect(menu.querySelectorAll(":scope > [aria-hidden='true']")).toHaveLength(3);
   expect(within(menu).getByRole("menuitem", { name: "Insert Sheet…" })).toBeDisabled();
   expect(within(menu).getByRole("menuitem", { name: "Deselect All Sheets" })).toBeEnabled();

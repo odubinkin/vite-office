@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/inc/colrowba.ts",
+    "upstreamPath": "sc/source/ui/inc/colrowba.hxx",
+    "localSymbols": [
+      "ScColBar",
+      "ScRowBar"
+    ],
+    "upstreamSymbols": [
+      "ScColBar",
+      "ScRowBar"
+    ],
+    "preservedResponsibilities": [
+      "Task5678C0 connects original ScColBar/ScRowBar size/hide methods and hdrcont tracking arithmetic to actual ScViewFunc,marks,document and undo. UInt16 conversion,min10pixels,selected disjoint spans,grouped sheets,negative-size hide,threshold2 and release+2screen-offset are retained. React stores temporary guide coordinates only and uses shared VCL window tracking moved from Writer. Active editing prohibits sizing. The existing96CSSdpi scale is supplied explicitly by the browser,not claimed as a native device default. Device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/alternate views,protection and complete native windows remain unported. No broad parity or save/open/recovery policy change."
+    ],
+    "omittedResponsibilities": [
+      "Device/window/optimum services outside the consumed header slice remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/inc/colrowba.ts",
+          "marker": "ScColBar"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/colrowba.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/colrowba.hxx",
+          "marker": "ScColBar"
+        }
+      ]
+    }
+  }
+}

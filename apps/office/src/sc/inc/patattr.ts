@@ -4,3 +4,6 @@ export {
   CellAttributeHolder,
   ScPatternAttr,
 } from "../source/core/data/patattr";
+
+/** Erased borrowed style operations;does not implement the missing Calc style owner. */
+export type { ScPatternStyleReference } from "../source/core/data/patattr";

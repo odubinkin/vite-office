@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610202340-96KNS6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T00:45:18.348Z",
+  "verdict": "pass",
+  "summary": "Reviewed f89f29d8e936 implementation and9fe1d9d22f32 acceptance:complete block60 source/tooling/inventory/application checkpoint meets approved criteria with original100thresholds.",
+  "evaluated_sha": "9fe1d9d22f3277fff6ca9b20806325f213c52e72",
+  "blueprint_digest": "75e830672885d839ed7f9aa4f63d76dc59d4117b5d71a1828c329b6000cf9efa",
+  "findings": [
+    "CLI operation body and privacy/exit semantics retained through actual argument runner;entry still executes real diagnostics. Both misplaced integration files remain in the exact1101file complete discovery. Source-derived69/81warning expectations retain marker/roundtrip assertions and add known-token rejection. Complete17463tests and839measured owners100percent are independently replayed from raw artifacts.",
+    "All997runtime records accounted for:839measured,155module-edge/declaration files,two canonical exclusions and one pre-existing Worker annotation matching setup Git blob. Source scopes use actual configured paths and retain15historical consumer-tag differences. No exclusion,timeout,threshold or coverage counter was weakened."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610202340-96KNS6/README.md",
+    ".agentplane/tasks/202610202340-96KNS6/evidence/final-checkpoint.json",
+    ".agentplane/tasks/202610202340-96KNS6/evidence/audit-final.mjs",
+    ".agentplane/tasks/202610202340-96KNS6/evidence/final-raw-results.json.gz"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Main/test-helper and Dedicated Worker bootstrap remain existing coverage exceptions;actual browser/Worker integration passes. Complete native ABI/layout/Calc style UI parity remains unclaimed. Existing managed-hook readiness and build/decomposition advisories remain unchanged. Goal stays active;next all-app checkpoint70."
+  ]
+}

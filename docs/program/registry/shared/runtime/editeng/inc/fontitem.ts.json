@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "font-family-values",
     "capabilityIds": [
-      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b",
+      "CAP-0632178e-fd22-47ef-b65f-f7c7582d30a6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,7 +20,7 @@
         "apps/office/src/editeng/inc/fontitem.ts",
         "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)"
       ],
-      "justification": "Canonical header borrows the one font class; no second implementation. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine. The header reexports SvxFontItem and declares no duplicate local symbol.",
+      "justification": "Canonical header borrows the one font class; no second implementation. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine. The header reexports SvxFontItem and declares no duplicate local symbol. This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "divergent",

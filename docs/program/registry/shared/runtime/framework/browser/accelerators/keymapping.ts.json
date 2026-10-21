@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/framework/browser/accelerators/keymapping.ts#BrowserShortcutEvent"
       ],
-      "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping.",
+      "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping. TaskSRFT0T maps browser backtick to original QUOTELEFT using the same shared canonical accelerator boundary. Native QUOTELEFT captions use the actual backtick glyph in the common Writer/Calc generator;the shared canonical normalizer maps both that glyph and native key identity to QUOTELEFT. Browser events and configured shortcuts therefore resolve identically without raw internal names in menus.",
       "knownViolations": [],
       "localSymbols": [
         "normalizeCommandShortcut",

@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "row-height",
     "capabilityIds": [
-      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5"
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/inc/rowheightcontext.ts",
-        "apps/office/src/sc/source/core/data/rowheight.test.ts"
+        "apps/office/src/sc/source/core/data/rowheight.test.ts",
+        "apps/office/src/sc/source/core/data/text-size-context.test.ts"
       ],
-      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
+      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified. TaskJT4A81 restores the original complete RowHeightContext six-input contract,independent PPTX/PPTY and zoom values,opaque borrowed device identity,zero/false defaults and UInt16 extra-height storage. ScScriptTypeData owns a lazy XBreakIterator reference per document. The original process-context creation dependency is an explicit borrowed host factory:the browser supplies the existing real BreakIteratorImpl;Calc core imports only the interface. Empty host references can be retried;the empty-string guard and source script loop are preserved. Calc existing font-selection UI now uses that document owner and ScGlobal office-UI-language fallback. Original address-only cached GetScriptType/SetScriptType traverse actual document/table/column CellTextAttr storage,retain UNKNOWN and do not synthesize missing metadata or columns(CALC238). Formatted-cell UpdateScriptType/GetRangeScriptType and actual GetNeededSize/EditEngine automatic wrapped-height layout remain unported. The existing Writer DOM Range algorithm is moved unchanged into shared VCL;Writer retains source node offsets,twip geometry and fallback policy. No browser document model,synthetic row heights or UNO/OutputDevice emulator is added. Full native device/font/ABI/layout and full UI parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "unverified",

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/container/XNameReplace.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/container/XNameReplace.idl",
+    "localSymbols": [
+      "XNameReplace",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "interfaceType",
+      "bInitStarted"
+    ],
+    "upstreamSymbols": [
+      "XNameReplace",
+      "XNameAccess",
+      "replaceByName"
+    ],
+    "preservedResponsibilities": [
+      "Original comprehensive cppumaker ADL/StaticWithInit/static_type/deprecated getters,early method initialization gate and actual base/member/method/parameter/return/exception metadata over existing genuine typelib/Type/OUString owners. Seven full normal-ASan/UBSan metadata owners match all9cold/order/hot native streams;raw coverage is100 S481/B28/F21/L481. Original WrappedTargetException adds real owned Any member with actual base-before-member value operations and reverse destruction;payload native validation remains required before task closure. Concrete container/WeakImplHelper/Sfx model/view-data/settings.xml services remain unported. Generic exception Any transport,physical ABI,debug/source-location,thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Concrete container/WeakImplHelper/Sfx model/view-data/settings.xml services remain unported. Generic exception Any transport,physical ABI,debug/source-location,thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/XNameReplace.ts",
+          "marker": "XNameReplace"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/generated-access-interfaces.test.ts",
+          "marker": "matches complete original generated interface"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/container/XNameReplace.idl",
+          "marker": "XNameReplace"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void InterfaceType::dumpComprehensiveGetCppuType"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import {gunzipSync} from 'node:zlib';import coverage from 'istanbul-lib-coverage';
+const dir=new URL('.',import.meta.url),read=n=>JSON.parse(fs.readFileSync(new URL(n,dir))),zip=n=>JSON.parse(gunzipSync(fs.readFileSync(new URL(n,dir)))),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),assert=(v,m)=>{if(!v)throw Error(m);};
+const proof=read('proof.json');for(const a of proof.archives){const b=fs.readFileSync(new URL(a.path,dir));assert(hash(b)===a.compressedSha256&&hash(gunzipSync(b))===a.sha256,'Archive hash '+a.path);}
+for(const [scope,file]of [['calc','calc-raw.json.gz'],['shared','shared-raw.json.gz'],['changedShared','changed-shared-raw.json.gz']]){const s=coverage.createCoverageMap(zip(file)).getCoverageSummary().toJSON();assert(JSON.stringify(s)===JSON.stringify(proof.summaries[scope]),'Coverage summary '+scope);for(const m of ['statements','branches','functions','lines'])assert(s[m].total===s[m].covered,'Incomplete '+scope+' '+m);}
+for(const name of ['calc','related']){const r=zip(name+'-results.json.gz');assert(r.success&&r.numFailedTests===0&&r.numPendingTests===0&&r.numPassedTests===proof[name].passed,'Test results '+name);}
+for(const [path,h]of Object.entries(read('source-snapshot.json')))assert(hash(fs.readFileSync(path))===h,'Changed source '+path);
+assert(proof.browser.passed===13&&proof.browser.failed===0&&proof.static.every(x=>x.exit===0),'Acceptance gates');
+console.log('Verified committed archives, source hashes and exact Calc/shared four-metric100 coverage;497 Calc tests,30 related tests,13 distinct browser cases.');

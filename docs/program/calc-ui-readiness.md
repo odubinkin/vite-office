@@ -1,6 +1,346 @@
 # Calc UI and ODS implementation critical path
 
-## Current UI delivery priority — task47 indentation and manual row geometry
+## User priority — ordinary ODS, existing-core UI and formula execution
+
+Task `202610210524-5678C0` adds mouse sizing of column and row header boundaries.
+Real ScColBar/ScRowBar size/hide methods retain UInt16 conversion, ten-pixel
+minimum, marked/disjoint spans, grouped sheets and genuine geometry history.
+The browser header follows the original two-pixel tracking threshold, release
+coordinate arithmetic and negative-size hide walk. Model dimensions change only
+on accepted termination. Editing disables sizing. Escape, pointer cancellation,
+blur and owner removal cancel; Enter accepts the last tracking position.
+The existing Writer ruler tracking implementation now lives in shared VCL
+browser ownership, with Writer retaining its API boundary. Native cursor styling
+is shared too. Device optimum, double-click autofit, metric drag tooltip,
+physical RTL, zoom, split views and protection remain outside this slice.
+
+Combined ODS and sizing verification passes all 604 Calc scenarios in 177 files.
+All 135 measured Calc owners reach 100%: S11128/B6909/F2064/L9994. Related
+native header tests and pointer tests also reach 100%; 28 related Writer/common
+tracking scenarios provide 100% coverage of the moved common tracking owner.
+
+Task `202610210506-AKV3ES` fixes opening ordinary scalar ODS documents with
+unused data-style declarations and empty form containers. The original supplied
+`file_example_ODS_10.ods` now opens through the shared browser file dialog, with
+all ten rows, eight populated columns, imported font styles and dimensions.
+Unknown automatic-style declarations produce explicit metadata diagnostics;
+the number-format compiler and formatter remain unported. Actual form controls
+and unsupported cell semantics still fail explicitly. Full-sheet styled empty
+ranges remain compressed in the real document rather than expanded scalar cells.
+
+The next functional priority is formula execution: ranges, functions,
+dependency recalculation and error/coercion semantics using the original compiler
+and interpreter owners. Arithmetic and local single-cell references are the
+current executable formula slice. Metric dialogs already parse explicit units
+such as `1in` through the shared native metric control; no alternate browser unit
+converter is needed. Generic UNO view-settings prerequisites are deferred behind
+these user-visible features. The block70 full-suite, repair, coverage, final task
+closure and goal-pause checkpoint remains in force.
+
+## Prerequisite block65 — property-container error/access contracts
+
+Task `202610210335-7QBK8C` supplies four original generated UNO exception
+value/type owners and seven complete structural access-interface declarations.
+These are prerequisites for native ODS view-settings containers. Actual
+Indexed/NamedPropertyValuesContainer services, WeakImplHelper, Sfx model and
+view-data ownership, interface runtime metadata and settings.xml serialization
+remain subsequent source owners in that historical slice; block65 made no
+additional UI or view-settings persistence claim.
+
+The next full-suite checkpoint is block70. After repairing failures, adding
+necessary scenarios and checking coverage, close the current task completely
+and pause the goal as requested by the user.
+
+## Current UI block64 — native grid,headers and formula view options
+
+Task `202610210246-SRFT0T` connects original View Headers26242,Show Formulas26250
+and View Grid Lines25018 through actual ScViewOptions/ScViewData/ScTabViewShell
+and the existing shared Writer View menu. The real boolean owner retains all19
+original defaults and value-copy boundaries;object modes,color,drawing-grid
+aggregation,configuration/window services and full equality remain unported.
+
+Header mode initially changes only the current view. Formula mode copies the
+entire represented view options into the document;new views inherit that copy.
+Grid mode ignores arguments and inverts only current-sheet bShowGrid,allocating
+selected sheet data without applying the flag to the group. Original grid
+modification is preserved;headers/formula commands add no history or input commit.
+Hidden headers remove layout/scroll offsets and accessibility header indices.
+Grid visibility combines the original global GRID option and current-sheet flag.
+Transparent no-frame shorthands suppress implicit lines on initial paint and
+updates while actual frames remain. Formula
+output reads genuine source before result/error display;shared canonical key
+mapping uses original QUOTELEFT for the actual browser backtick.
+
+All584Calc tests in173files pass;all132measured owners reach100% coverage:
+S10995/B6833/F2040/L9875. All22related shared/Writer tests pass;the common
+keyboard adapter reaches100% S25/B24/F6/L23. All17related source/catalog tooling
+cases pass;the shared catalog generator reaches100% S80/B47/F14/L69. Writer
+resource regeneration is byte-identical;only the Calc formula shortcut caption
+changes to the readable backtick glyph,with canonical QUOTELEFT dispatch intact.
+Mandatory gates and production build/static pass. Native view-settings XML
+persistence and complete view/widget/device parity remain unported;next full
+all-app checkpoint70.
+
+## Current UI block63 — pointer/editor ownership and Undo Selection
+
+Task `202610210145-Y1NRHK` confirms and removes browser document text selection
+from grid Shift-click. The grid declares nonselectable text;its real cell input
+explicitly retains native text selection. No global Selection mutation is used.
+Original Deselect26549 is available through source Shift+Backspace and the active
+Sfx shortcut table. Native catalog metadata calls it Undo Selection;all existing
+surface graphs,source pins and17Writer browser-policy dispositions are unchanged.
+There is no invented menu placement. Unbound/reassigned/default shortcut cases use
+actual frame/shell/interface owners and the common canonical keyboard adapter.
+
+The real normal-grid Unmark owner clears marks and invalidates the old cursor only
+when marked. Cursor,sheet group,content,dirty state and history remain unchanged;
+the existing browser movement anchor follows same-position InitOwnBlockMode.
+Reference,SelectionEngine/window/device and full MoveCursorAbs paths remain
+explicitly unported,without service facades. Escape remains distinct from Deselect;
+inline editor,text fields,menus,modals and composition retain their own keys.
+
+All570Calc tests in170files pass;all130measured owners reach100% coverage:
+S10902/B6789/F2015/L9788. All43related common/Writer tests and17current tooling
+cases pass. No shared runtime owner changes. Source lint/format,types,source/
+resource/registry gates and production build/static pass with individual exit codes.
+Actual Chromium demonstrates the before/after DOM selection and native input word
+selection. Chromium also exposed premature focus restoration while the document
+was still inert;the workbench now restores its real grid only after the React
+modal-close commit. Escape,Cancel andOK focus events are checked against actual
+inert state,with no timers or native-window facades. Complete native/browser
+parity remains unverified;next full all-app70.
+
+## Current UI block62 — visible-row and visible-column selection
+
+Task `202610210117-DRAYC7` connects original SelectVisibleRows26678 and
+SelectVisibleColumns26679 to the existing shared Writer Edit Select menu.
+ScCellShell operates directly on real ScMarkData and segmented RowHidden/ColHidden
+state. It retains native conversion to multi-marks,selected-sheet iteration,
+unclamped hidden-span endpoints,empty reset and reduction back to simple marks.
+Because grouped sheets share marks,hiding on any selected sheet subtracts the
+same cells from the common selection. Cursor and sheet membership stay unchanged.
+
+The commands query hidden flags;native filtered-row handling remains separately
+owned by formatting's working-mark copy. Actual disjoint formatting,undo/redo and
+ODS roundtrip tests confirm that hidden cells stay outside the affected runs.
+There is no replacement selection model or native window/reference/protection
+service. Source dispatch cases from cellsh1.cxx live in the existing single
+ScCellShell TypeScript owner alongside its other consumed C++ cases.
+
+All551Calc tests in166files pass. All130measured owners have100% coverage:
+S10881/B6759/F2011/L9769. All34related common-menu/Writer cases pass. No shared
+runtime owner changes in this block. Types,source lint/format,build/static,
+resource,registry,provenance and source gates pass. Actual Chromium desktop row
+and390px column workflows reuse the shared menu and preserve grid focus. Complete
+native UI/core parity remains unverified;the next full all-application checkpoint
+remains70.
+
+## Current UI block61 — connected-area and whole-sheet selection
+
+Task `202610210052-FZA8S9` connects Select All5723 and Select Data26551 to real
+column/table/document occupancy and connected-area owners. With the original
+SelectRangeBeforeAll=true default,the first Select All chooses connected data;
+the next chooses the whole sheet. Shared Writer menus,Ctrl/Meta+A,keypad multiply
+and platform Space combinations use actual Sfx dispatch. The corner selects the
+whole sheet directly and retains the cursor. Text inputs retain platform text
+selection. Selection preserves sheet membership,content,dirty state and history.
+
+The table constructor now follows INITIALCOLCOUNT=1,correcting the previous
+zero-column allocation deviation. Three nonnegative allocation guards are proved
+true by initial-one/grow-only storage and valid coordinates;their bodies remain,
+without inventing zero-column test states or changing coverage exclusions.
+Connected-area lookup uses the original uncached occupancy overload rather than
+native cached iterator hints. Original expansion order,diagonal adjacency,holes,
+shrinking and include-old/only-down semantics are preserved. CALC247 records the
+original allocated-column clamp preceding those modifiers.
+
+All537Calc tests in164files pass;all130measured owners reach100% coverage:
+S10830/B6741/F2006/L9724. Eleven shared/Writer shortcut/menu tests pass,and the
+changed shared key adapter reaches100%:S25/B22/F6/L23. Types,source lint/format,
+build/static,resource,registry,provenance and source gates pass. Actual Chromium
+at1280px and390px confirms area/all/corner/menu behavior;native Mac text selection
+uses Meta+A. Complete native reference/edit/protection/device UI remains unported.
+The next full all-application checkpoint remains70.
+
+## Full verification checkpoint — block60
+
+Task `202610202340-96KNS6` completes the required full application checkpoint:
+17463tests in1101authored files pass,with no failures,pending cases or source changes
+to the application runtime/test/data graph. Raw Istanbul coverage is100%:
+S54390/B34361/F10459/L49438 across839measured modules. Source scopes are
+Calc130(S10688/B6621/F1997/L9599),shared498(S27699/B16162/F4935/L25301),
+and Writer211(S16003/B11578/F3527/L14538),all100%.
+
+All997registered modules are accounted for:839measured,155declaration/reexport
+modules with no executable statements,two existing configuration exclusions(main
+bootstrap and test helper),and the unchanged Dedicated Worker bootstrap annotation.
+The annotation's source hash matches the pre-checkpoint Git commit;no new exclusion
+or threshold change was introduced. Coverage scopes follow the actual source-root
+filters;15historical common-module records retain Writer consumer tags.
+
+The checkpoint fixes two misplaced application integration tests,stale69/81known-token
+diagnostic counts and import-time CLI argument isolation. All87tooling tests and
+123inventory cases pass,with complete inventory coverage100%. All16Calc/Writer/shared
+Chromium and DOM-freeWorker regressions pass. The complete serial application run
+replaces an explicitly interrupted failing concurrent experiment;all raw evidence
+and failures remain retained. Source/native pins and portable audits are recorded
+in the task. This checkpoint does not claim complete Calc UI or native parity.
+The next complete application checkpoint is70;ordinary blocks use affected owners
+and actual consumers.
+
+## Current shared dependency — task59 shared native paper geometry
+
+Task `202610202322-0HHKNT` adds original86entry Paper/PaperInfo physical values,
+exact/rotated recognition,strict sloppy fitting,PostScript alias lookup over real
+borrowed bytes and actual Locale country defaults. Writer A4/Letter dimensions now
+derive from the common owner through original o3tl conversion. Platform default-paper
+discovery,owning OString name returns,printer/device conversion and Calc style owners
+remain explicitly unported. All528Calc tests pass with100% coverage across130owners.
+All33related owner/page/menu tests and19XML/ODT tests pass;the four changed owners
+reach100% coverage. All48current boundary tests pass(the runner also selected43old
+ignored-artifact cases). Chromium/Worker and Writer page-dialog acceptance passes
+at1280/390px. Source/build/static gates pass. No full style UI or native parity claim.
+
+## Current default-pool ownership — task58
+
+Task `202610202254-D9RYSD` completes the actual ScDocumentPool package100..188:
+89entries,87shared static items and two pool-local header/footer sets.
+ScPageHFItem owns three genuine optional EditTextObject values,including native
+null defaults,independent copies,alias-safe replacement and pool-insensitive
+ScGlobal equality. Existing ScPageScaleToItem remains the value owner;its pool
+default1,1 deliberately differs from standalone0,0. Adjacent native ranges remain
+separate. Const text borrowing adds a type-only alias with identical emitted JS.
+
+All528Calc tests pass with100% coverage across130runtime owners. All58related
+tests pass;the four changed runtime owners have100% coverage. Chromium and DOM-free
+Worker acceptance plus Calc font/wrap/ODS regressions pass(7tests). Types,source lint,
+format,build/static and repository gates pass. Header/footer UNO content and diagnostics remain unported;
+there is no style or editing-engine substitute. The shared style bases already exist;
+Calc derived style/pool/helper and actual standard-style creation remain subsequent
+source owners. No complete UI or native parity claim.
+
+## Current EditEngine owners — task57 pool and rich-text ownership
+
+Task `202610202009-NF91KY` adds the actual
+SvxFontVariationsItem vector/copy/equality,typed string Any and presentation,
+plus native VariationsToString using OUStringBuffer's real float overload.
+The fixed tag conversion uses the existing original ASCII_US table/converter;
+CALC242 records its upper-byte behavior. Logical ordered float hashing now uses normalized binary32 bits and coalesces signed zero;native stdlib ABI hash numeric parity remains unverified.
+Original numbering-rule slot storage,geometry,validity,copy/conversion and pooled
+rule ownership are now present as the next prerequisite. Shared NumberFormat
+alignment,color,relative size,style name and legal fields now retain original
+copy/equality. Native ordered three-script GetDefaultFonts uses the genuine VCL
+metadata path,including original UI-font fallback and NONE/OnlyOne selection.
+The complete61-entry original EditEngine package and actual derived pool now exist,
+including per-pool dynamic numbering defaults and source secondary-chain resolution.
+Actual EditTextObjectImpl owns paragraphs,shared strings,styles,fields,attributes and
+cache metadata;its copy/equality,orientation,field selection and style invalidation
+follow source. FieldUpdater uses the actual attribute holders. CALC245 records
+the native style/cache and all-field callback asymmetries. Remaining NumberFormat
+providers,nonempty bullet graphics,formatted portion payloads and real device/layout
+operations remain explicitly unported.
+No style UI,pool or renderer facade is introduced. Current acceptance passes523Calc
+tests with all129Calc runtime owners at100% coverage,and32related tests with the8
+checked EditEngine source owners at100%. Complete shared coverage also reaches100%
+across495runtime owners:raw S27534/B16109/F4921/L25151,all counters positive.
+The original17453-test replay and a10-test numbering supplement use identical runtime
+sources and counter maps;Istanbul combines their actual counts without reducing scope
+or thresholds. The supplement adds the previously missing physical-null comparison.
+Chromium/DOM-freeWorker ownership and existing font/wrap/ODS checks pass,as do6Writer
+browser regressions and35related Writer numbering tests. These are bounded ownership
+and integration results;full layout,graphics and broader native parity remain unclaimed.
+
+## Current style-owner inputs — task56 naming and static defaults
+
+Task `202610201944-B9WXKD` adds original ScStyleNameConversion and stable
+programmatic names,including ordered builtin/API aliases and exact user-suffix
+escaping. Actual pinned English resources match the current browser UI boundary;
+resolved alternate labels are borrowed values,not a translation/module facade.
+Default maps retain native lazy lifetime and unknown names retain native value
+ownership. Native global locale/gettext services remain unported.
+
+ScDocumentPool now owns the original contiguous static prefix100..176 with actual
+shared item classes,Which/slot/flags and defaults. All earlier identities remain
+stable. Rich header/footer177+ defaults are still absent rather than invented.
+Native alias priority and pool-versus-style scale defaults are recorded as CALC241.
+Actual Calc style/pool/helper,standard styles,full named-style UI/history/ODS and
+automatic-height still require their source owners. Broader goal remains active;
+next all-app checkpoint stays60.
+
+## Current cell-style path — task55 native pattern association
+
+Task `202610201913-6GG949` adds original style-pointer/name association to
+ScPatternAttr,including copied parent identity,default clearing of only style SET
+fields and owned-name detachment. Native CellAttributeHelper now handles exact
+style identity during registered-pattern rename/deletion and all-to-name teardown,
+including the default pattern. CALC240 records name/rename asymmetries.
+
+The consumed borrowed base operations use genuine shared native styles. This does
+not implement or replace the missing Calc ScStyleSheet/ScStyleSheetPool/ScPoolHelper,
+standard-style construction or document resolution. Mounted Calc already reads
+three-script fonts through the actual inherited column pattern;no browser style
+model or unsupported StyleApply action is introduced. Full named-style application,
+UI/history/ODS and repaint ownership remain required. Automatic-height also remains
+incomplete;the broader goal stays active. Next full checkpoint remains60.
+
+## Current EditEngine dependency path — task54 native formatting transfer
+
+Task `202610201844-9K7PXS` ports the source Calc/EditEngine item transfer in both
+directions,paragraph alignment and original orientation queries. Actual shared
+SfxItemSet owns target-Which insertion;there is no Calc-local remapping facade.
+Original pre-mutation input snapshots and insertion order are retained.
+Three script fonts,rounded twip/mm100 heights,inherited SET states and source
+conditional/table/direct precedence are preserved,including CALC239 asymmetries.
+The tests use actual native item classes and pools without inventing EditEngine
+pool defaults. Native caches absent from this data slice remain absent.
+
+This is a required GetNeededSize input boundary. Actual EditEngine layout,formatted
+script-cache updates and automatic wrapped height still require their source
+owners and services. No browser row-height estimate is substituted. The broader
+UI goal stays active and next full checkpoint remains60.
+
+## Current automatic-height path — task53 native context and shared measurement
+
+Task `202610201812-JT4A81` restores the complete original RowHeightContext inputs
+and accessors,including independent horizontal/vertical scales,zoom and borrowed
+opaque device identity. Every current caller uses the original six arguments.
+Actual ScDocument script-service ownership now drives the existing font selection
+UI. A borrowed browser factory supplies the genuine BreakIterator backend at the
+original process-context creation site;the kernel imports only its interface.
+ScGlobal owns the office UI-language fallback. Cached address script accessors
+retain existing CellTextAttr data and UNKNOWN,without pretending to implement
+formatted-cell cache updates or creating unallocated column storage (CALC238).
+
+Writer's existing DOM Range line measurement now belongs to shared VCL. Its actual
+node offsets,geometry and fallback algorithm are retained;Writer keeps its own
+frame/pagination packaging. This is the reusable browser device-side measurement
+boundary,not a new row-height engine.
+
+Automatic wrapped height is still incomplete. The next required path is the real
+ScColumn GetNeededSize/GetOptimalHeight and consumed EditEngine services,including
+native numeric-wrap suppression,the90percent direct-text threshold,original paper
+width/margins and manual-height rules. Do not replace these with scrollHeight
+assignment or mark the UI goal complete. Next full checkpoint remains60.
+
+## Current UI delivery priority — task52 native Wrap Text
+
+Task `202610201738-ANN4R2` connects the existing shared Writer Wrap Text toolbar
+button to native SID_ATTR_ALIGN_LINEBREAK10230 and ScLineBreakCell139. Actual
+selection patterns retain mixed/default state;native attribute operations preserve
+filtered and grouped marks,history and direct-format reset. Original no-argument
+requests complete and record the resulting item even for API calls;typed API
+requests retain their separate completion contract (CALC237).
+
+Actual ODS table-cell properties use the original XmlScPropHdl_IsTextWrapped and
+exact fo:wrap-option spellings,including explicit no-wrap versus default absence.
+The grid reads the canonical item for wrapping and retains actual manual row
+geometry. Device-based automatic wrapped-height layout remains unported;this does
+not add a CSS measurement substitute or claim complete native text layout.
+Fonts,named cell styles and other available UI actions remain the delivery priority.
+The repaired complete checkpoint51 passed before the user merge. This is task52;
+related checks and Calc100 coverage are required now;next complete checkpoint60.
+
+## Historical task47 indentation and manual row geometry
 
 Task `202610201055-QMVA57` adds Increase/Decrease Indent and Row Height/Hide Rows/Show Rows
 through the actual shared Writer toolbar,menus and dialog styling. Indentation uses native
@@ -88,17 +428,20 @@ single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
 | Sheet navigation,grouping,Go to Sheet | Real Sfx slots and current ScTabView/ScMarkData;shared menus and tab popup | Connect further sheet actions only to actual document operations |
 | Select Row,Select Column | Task33 connects normal simple range expansion to shared Edit/Select and native grid accelerators | Preserve active cell/group and independent input ownership;parameterized/reference-mode APIs remain pending |
 | Font size | Task34 connects exact shared Writer FontSizeSelect to actual FontHeight10015, three-script native attributes, uniform/mixed state, undo/redo, grid CSS and same-model ODS/autosave | Automatic row-height layout and script-aware foreign formatting still need their real consumed owners |
-| Font name | Exact shared Writer FontNameSelect is rendered; CharFontName remains unavailable | Implement native selection-script application/readback using the now-connected attribute path, then enable this same shared control |
-| Cell styles | ScPatternAttr and shared itemset/value owners exist;document/column style application and Calc style-command owner remain missing | Implement the consumed cell-style path,then reuse the shared style-control presentation;do not substitute browser-only style state |
+| Font name | Exact shared Writer FontNameSelect is connected to CharFontName,actual selection-script font application/readback,uniform/mixed state,history and same-model ODS | Preserve the shared control and native script ownership;real device/layout services remain necessary for automatic row measurement |
+| Cell styles | ScPatternAttr and CellAttributeHelper retain genuine style association,inheritance and registered rename/delete;Calc style-pool/standard-style resolution and StyleApply remain missing | Implement the consumed Calc style owners and document/column application,then reuse the shared style-control presentation;do not substitute browser-only style state |
 | Other formatting/menu actions | Native resource composition is generated;unimplemented commands remain disabled | Audit each action against existing document/view operations and implement the available UI paths before broader prerequisite work |
 
-The consumed cell-attribute path is now connected for font size: ScColumnData owns canonical
+The consumed cell-attribute path is connected for font size and family: ScColumnData owns canonical
 ScAttrArray runs,including a real default column for unallocated column tails. ScDocumentPool
-registers the original contiguous character prefix100..124 with genuine defaults and slot metadata.
-This is not the full pool constructor. CharFontName and StyleApply remain unregistered;family
-selection-script handling,named-style resolution,remaining cell/page defaults and full layout remain
-concrete gaps. Standalone items do not make these other actions ready. Continue implementing
-available UI actions on this same owner chain rather than requiring every codec/constructor first.
+registers the original contiguous static prefix100..176 with genuine defaults and slot metadata.
+This is not the full Calc pool constructor:rich header/footer177+ defaults remain absent.
+The independent EditEngine pool now has all61original entries and real rich-text ownership;
+it does not supply the missing Calc ScStyleSheetPool or standard styles. CharFontName uses
+the actual selection-script path;StyleApply remains unavailable until its consumed owner chain
+exists. Named-style resolution,remaining Calc pool defaults and real layout remain concrete gaps.
+Continue implementing available UI actions on this same owner chain rather than requiring
+every codec/constructor first.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not
@@ -121,7 +464,8 @@ subset only when an actual supported operation consumes another dependency.
 | [ScDocument constructor](../../vendor/libreoffice-reference/sc/source/core/data/documen2.cxx) | Normal document mode immediately constructs SharedStringPool, ScPoolHelper, interpreter context, link/table-style helpers and other document services. | A normal document cannot be obtained merely by adding a maTabs array; audit and implement the constructor's actual required services. |
 | [ScPoolHelper constructor and getters](../../vendor/libreoffice-reference/sc/source/core/data/poolhelp.cxx) | Constructor creates ScDocumentPool and ScStyleSheetPool. GetEditEnginePool and GetFormTable create their services on first use. | Complete EditEngine and number-formatter families are not eager prerequisites of this constructor. Preserve the actual lazy boundaries. |
 | [ScDocumentPool package](../../vendor/libreoffice-reference/sc/source/core/data/docpool.cxx) | Registers real defaults; package construction resolves Latin/CJK/CTL spreadsheet fonts using spell settings and OutputDevice::GetDefaultFont. Six page header/footer items also occur in the static defaults. | Font defaults and real header/footer value ownership are required; arbitrary font strings and a named generic pool do not implement this contract. |
-| [ScStyleSheetPool constructor](../../vendor/libreoffice-reference/sc/source/core/data/stlpool.cxx) | Initializes its shared SfxStyleSheetPool base and document pointer, with bHasStandardStyles false. | Do not move all standard-style creation into construction. The shared base is itself missing. |
+| [ScPageHFItem value ownership](../../vendor/libreoffice-reference/sc/source/core/data/attrib.cxx) | Default construction leaves all3unique_ptr text areas null;copy and SetLeft/Center/RightArea clone actual EditTextObject values. Equality calls ScGlobal::EETextObjEqual and therefore the base pool-insensitive Equals. QueryValue separately constructs ScHeaderFooterContentObj. | The actual task57 rich-text owner supplies the value dependency for the remaining Calc pool defaults. Default construction does not require a renderer. UNO content operations still require their genuine owner when consumed. |
+| [ScStyleSheetPool constructor](../../vendor/libreoffice-reference/sc/source/core/data/stlpool.cxx) | Initializes its shared SfxStyleSheetPool base and document pointer, with bHasStandardStyles false. | Do not move all standard-style creation into construction. The actual shared SfxStyleSheetBasePool/SfxStyleSheetPool,style index and native notification owners already exist in svl;reuse them. Calc ScStyleSheet/ScStyleSheetPool and standard-style creation remain missing. |
 | [ScTable constructor](../../vendor/libreoffice-reference/sc/source/core/data/table1.cxx) | Creates the column array, default ScAttrArray, conditional formats and sheet view manager; optionally allocates row/column geometry and initializes columns. | Existing compressed arrays and row segments are reusable; sheet/default-attribute and other eager owners remain required. |
 | [ScColumn constructor and Init](../../vendor/libreoffice-reference/sc/source/core/data/column.cxx) | Creates separate cell, metadata, note, broadcaster and sparkline stores; Init attaches a real ScAttrArray. | A numeric Map cannot stand in for the original stores and attribute ownership. |
 | [ScAttrArray constructor](../../vendor/libreoffice-reference/sc/source/core/data/attarray.cxx) | Default column or absent/empty inherited attributes returns before pattern copying and width invalidation. | Preserve this real early return; do not force the entire formatting engine into every empty-column constructor. |
@@ -130,6 +474,15 @@ This table is a priority map, not an exhaustive constructor implementation
 specification. In particular, finding a lazy getter does not prove that later
 operations never call it. Each implementation slice must inspect its reachable
 methods and preserve its own full contracts/defaults.
+
+The next style slice can reuse the existing genuine shared style base/pool,index
+and notification classes. It must supply Calc's own derived style,pool and document
+ownership instead of reimplementing those shared classes. `CreateStandardStyles`
+in `stlpool.cxx` is a separate consumed operation:it constructs a real
+ScEditEngineDefaulter,disables layout,and uses text/field insertion to create page
+header/footer values. Disabling layout does not remove the required text-editing
+owner. Task57's EditTextObject value is not a substitute for that engine. Preserve
+this boundary when deciding which style actions the current kernel can expose.
 
 ## Cell editing is more than storing a value
 

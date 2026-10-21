@@ -58,7 +58,17 @@
       "ATTR_CTL_FONT_LANGUAGE",
       "ATTR_BACKGROUND",
       "ATTR_PATTERN_START",
-      "ATTR_PATTERN_END"
+      "ATTR_PATTERN_END",
+      "ATTR_PAGE_HEADERLEFT",
+      "ATTR_PAGE_FOOTERLEFT",
+      "ATTR_PAGE_HEADERRIGHT",
+      "ATTR_PAGE_FOOTERRIGHT",
+      "ATTR_PAGE_HEADERFIRST",
+      "ATTR_PAGE_FOOTERFIRST",
+      "ATTR_PAGE_FORMULAS",
+      "ATTR_PAGE_NULLVALS",
+      "ATTR_HIDDEN",
+      "ATTR_ENDINDEX"
     ],
     "upstreamSymbols": [
       "ATTR_MERGE_FLAG",
@@ -112,7 +122,17 @@
       "ATTR_CTL_FONT_LANGUAGE",
       "ATTR_BACKGROUND",
       "ATTR_PATTERN_START",
-      "ATTR_PATTERN_END"
+      "ATTR_PATTERN_END",
+      "ATTR_PAGE_HEADERLEFT",
+      "ATTR_PAGE_FOOTERLEFT",
+      "ATTR_PAGE_HEADERRIGHT",
+      "ATTR_PAGE_FOOTERRIGHT",
+      "ATTR_PAGE_HEADERFIRST",
+      "ATTR_PAGE_FOOTERFIRST",
+      "ATTR_PAGE_FORMULAS",
+      "ATTR_PAGE_NULLVALS",
+      "ATTR_HIDDEN",
+      "ATTR_ENDINDEX"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
@@ -143,7 +163,9 @@
       "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
       "Task147 ports original SvxBrushItem Which/Color/Color+ComplexColor/copy constructor family for reachable non-graphic GPOS_NONE values, actual transparent Calc ATTR_BACKGROUND148 default, full color/filter/complex/shading/graphic-percent value state, isUsed, copy/clone/equality/logical hash and supported typed scalar Any methods. Reuse shared Color/ComplexColor/Any/hash primitives; no native memory/move/instance manager. Mutable color borrowing, side-effecting complex getter, original0xfe percent scale, byte casts, RGB alpha preservation and failed graphic-percent extraction default0 are preserved. Full original ShadingPattern long constants and brush position/version declarations are represented without pretending they provide graphics. Real Graphic/GraphicObject constructors/positions/links/URL/filter loaders, XGraphic and XComplexColor transport remain unported; their known provider selectors explicitly returnfalse. No fake image/provider/security path or browser snapshot projection is introduced; inherited no-argument query remains undefined. UI-localized presentation is deferred per user direction. Broader native graphic behavior and complete Calc pool/document/connected UI/ODS remain pending, with deliberate I/O/recovery deviations retained.",
       "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced.",
-      "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains."
+      "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
+      "TaskB9WXKD ports original ScStyleNameConversion ordered cell/page/frame maps,stable programmatic constants,legacy alias priority,exact UTF16 user suffix escaping,suffix-first decoding,invalid-family fallthrough and independent native string returns. Default English resources are actual pinned globstr.hrc values at the existing English UI boundary;alternate resolved labels are explicit borrowed read-site values. Native default maps retain lazy static lifetime and scoped alternate map handles are released. No ScModule/gettext/locale/cache service is emulated. ScDocumentPool static metadata is extended contiguously from152 through176 with original Which/slot/flags and existing real native shared shadow,validation,conditional,hyperlink,spacing,page,tray,size,bool,object-mode and unsigned items. Earlier identities remain unchanged;rich-header177+ defaults are not fabricated. Source alias and pool-versus-style default asymmetries remain(CALC241). Actual ScStyleSheet/ScStyleSheetPool/ScPoolHelper,standard-style construction,full named-style UI/history/ODS,rich edit/header services and automatic wrapped-height remain required and unported. Full UI/global resource localization/device/UNO/ABI parity remains unverified.",
+      "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
@@ -163,7 +185,8 @@
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending.",
       "Task139 does not implement localized or numeric presentation, native diagnostics/ABI/lifetime, ScDocumentPool/document/UI/ODS.",
-      "Task140 does not port native lifetime/registration/ABI or full item-pool/type/presentation services, ItemInfoDynamic, Calc document/UI/ODS."
+      "Task140 does not port native lifetime/registration/ABI or full item-pool/type/presentation services, ItemInfoDynamic, Calc document/UI/ODS.",
+      "ScPageHFItem UNO QueryValue/PutValue,XML diagnostics,full native presentation and physical shutdown bookkeeping remain unported or erased under GC. Calc style/helper/standard-style and EditEngine editing/layout services remain subsequent actual owners. Bounded acceptance passes528Calc tests and58related tests,with100percent Calc and changed-owner coverage,plus actual Chromium/Worker ownership and existing font/wrap/ODS regressions. No broad parity promotion."
     ],
     "evidence": {
       "local": [
@@ -254,6 +277,10 @@
         {
           "path": "apps/office/src/sc/inc/scitems.ts",
           "marker": "ATTR_PAGE_HEADERSET"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/docpool-style-defaults.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [

@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --maxWorkers=1 --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-results.json
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --maxWorkers=1 --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-results.json
+
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-calc-results.json
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 10424/10424 )
+Branches     : 100% ( 6469/6469 )
+Functions    : 100% ( 1944/1944 )
+Lines        : 100% ( 9354/9354 )
+================================================================================

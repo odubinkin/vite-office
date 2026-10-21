@@ -1,0 +1,10 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": {
+    "sc/source/ui/view/formatsh.cxx": "2ed3b3562d904544414ad621fc3aeb93f57f1abc30f763b1b4810d24e359e576",
+    "sc/source/filter/xml/xmlstyle.cxx": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df",
+    "sc/sdi/scalc.sdi": "7b24b601115cda9adf8a1ed805c3f9a8ff45dc654603b4e8f1d1d79d0619dcc0",
+    "sc/uiconfig/scalc/toolbar/formatobjectbar.xml": "c6722a5a75189cb61c3ccabb1172fdd3f2ee25d29bcbf89799ca3292030c289b",
+    "sc/source/core/data/column2.cxx": "9e46fdcb1c09fa97dac89a38a540f37e268fe2d4add9e80f77c17f24e3dc7f62"
+  }
+}

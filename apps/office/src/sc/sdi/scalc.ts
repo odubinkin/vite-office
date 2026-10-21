@@ -1,8 +1,15 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
+import { calcViewCommands, createCalcViewSlots, type CalcViewCommandTarget } from "./tabvwsh";
+import type { SfxRequest } from "../../sfx2/source/control/request";
 import {
   createCalcTextEffectSlots,
   calcTextEffectCommands,
   type CalcTextEffectCommandTarget,
+} from "./formatsh";
+import {
+  createCalcWrapTextSlot,
+  calcWrapTextCommand,
+  type CalcWrapTextCommandTarget,
 } from "./formatsh";
 
 import {
@@ -25,7 +32,12 @@ import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
-export interface CalcCommandTarget extends CalcBorderCommandTarget, CalcTextEffectCommandTarget {
+export interface CalcCommandTarget
+  extends
+    CalcViewCommandTarget,
+    CalcBorderCommandTarget,
+    CalcTextEffectCommandTarget,
+    CalcWrapTextCommandTarget {
   ResetAttributes(): boolean;
   ChangeIndent(increment: boolean): boolean;
   GetOutlineState(): boolean | undefined;
@@ -57,6 +69,9 @@ export interface CalcCommandTarget extends CalcBorderCommandTarget, CalcTextEffe
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
   SetInputMode(): boolean;
+  DeselectCells(): boolean;
+  SelectVisibleCells(rows: boolean): boolean;
+  SelectCells(request?: SfxRequest): boolean;
   MarkRows(): boolean;
   MarkColumns(): boolean;
   SelectNextTab(direction: number, extend?: boolean): void;
@@ -129,8 +144,21 @@ export const calcSheetSelectionCommands = [
 ] as const;
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
+  { id: ".uno:Deselect", slotId: 26549, label: "Undo Selection" },
+  { id: ".uno:SelectAll", slotId: 5723, label: "Select All" },
+  { id: ".uno:SelectData", slotId: 26551, label: "Select Data Area" },
   { id: ".uno:SelectColumn", slotId: 26547, label: "Select Column" },
   { id: ".uno:SelectRow", slotId: 26548, label: "Select Row" },
+] as const;
+/** Original SID_NEW_SLOTS=26571 plus107/108;these commands have no configurable accelerator. */
+export const calcVisibleSelectionCommands = [
+  { id: ".uno:SelectVisibleRows", slotId: 26678, label: "Select Visible Rows Only", rows: true },
+  {
+    id: ".uno:SelectVisibleColumns",
+    slotId: 26679,
+    label: "Select Visible Columns Only",
+    rows: false,
+  },
 ] as const;
 /** Native asynchronous Go to Sheet slot and public Nr contract. */
 export const calcGoToSheetCommand = {
@@ -334,10 +362,13 @@ export const calcUserCommands = [
   ...calcEditCommands,
   calcInputModeCommand,
   ...calcTextEffectCommands,
+  calcWrapTextCommand,
+  ...calcViewCommands,
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   ...calcSheetSelectionCommands,
   ...calcCellSelectionCommands,
+  ...calcVisibleSelectionCommands,
   calcGoToSheetCommand,
 ].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
@@ -345,45 +376,55 @@ export const calcUserCommands = [
     id: item.id,
     label: item.label,
     capabilityId:
-      item.id === ".uno:Shadowed"
-        ? ("CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448" as const)
-        : calcBorderCommands.some(
-              /** Identifies native border commands. @param command - Original border resource. @returns Match. */ (
-                command,
-              ) => command.id === item.id,
-            )
-          ? ("CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f" as const)
-          : item.id === ".uno:ResetAttributes"
-            ? ("CAP-d7aef795-0709-4ea9-9f92-079142960ada" as const)
-            : item.id === ".uno:OutlineFont"
-              ? ("CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875" as const)
-              : item.id === ".uno:Strikeout"
-                ? ("CAP-8bbfa850-4c4a-4935-8322-773d074dd3be" as const)
-                : item.id === ".uno:Overline"
-                  ? ("CAP-2be21078-2d50-4abe-a26d-73c695894d95" as const)
-                  : "grow" in item
-                    ? ("CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e" as const)
-                    : "axis" in item
-                      ? ("CAP-0bb796a3-9483-445d-aef3-1deeb40f990a" as const)
-                      : "colorKind" in item
-                        ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
-                        : "format" in item || "line" in item
-                          ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
-                          : item.id === ".uno:CharFontName"
-                            ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
-                            : item.id === ".uno:FontHeight"
-                              ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-                              : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
-                                ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
-                                : item.id === ".uno:JumpToTable"
-                                  ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-                                  : "direction" in item ||
-                                      item.id === ".uno:TableSelectAll" ||
-                                      item.id === ".uno:TableDeselectAll"
-                                    ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-                                    : "kind" in item
-                                      ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-                                      : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      "option" in item
+        ? ("CAP-17e6ea35-6788-440f-af21-d5647d785cd0" as const)
+        : item.id === ".uno:WrapText"
+          ? ("CAP-e6381cc3-df2e-476c-b5b2-ddac14310d35" as const)
+          : item.id === ".uno:Shadowed"
+            ? ("CAP-1e53ab36-5de3-4eae-9a9a-ec1202144448" as const)
+            : calcBorderCommands.some(
+                  /** Identifies native border commands. @param command - Original border resource. @returns Match. */ (
+                    command,
+                  ) => command.id === item.id,
+                )
+              ? ("CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f" as const)
+              : item.id === ".uno:ResetAttributes"
+                ? ("CAP-d7aef795-0709-4ea9-9f92-079142960ada" as const)
+                : item.id === ".uno:OutlineFont"
+                  ? ("CAP-96c5bd1b-d2c3-4c5b-b842-f12bb3bed875" as const)
+                  : item.id === ".uno:Strikeout"
+                    ? ("CAP-8bbfa850-4c4a-4935-8322-773d074dd3be" as const)
+                    : item.id === ".uno:Overline"
+                      ? ("CAP-2be21078-2d50-4abe-a26d-73c695894d95" as const)
+                      : "grow" in item
+                        ? ("CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e" as const)
+                        : "axis" in item
+                          ? ("CAP-0bb796a3-9483-445d-aef3-1deeb40f990a" as const)
+                          : "colorKind" in item
+                            ? ("CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4" as const)
+                            : "format" in item || "line" in item
+                              ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
+                              : item.id === ".uno:CharFontName"
+                                ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
+                                : item.id === ".uno:FontHeight"
+                                  ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
+                                  : item.id === ".uno:Deselect" ||
+                                      item.id === ".uno:SelectVisibleRows" ||
+                                      item.id === ".uno:SelectVisibleColumns" ||
+                                      item.id === ".uno:SelectRow" ||
+                                      item.id === ".uno:SelectColumn" ||
+                                      item.id === ".uno:SelectAll" ||
+                                      item.id === ".uno:SelectData"
+                                    ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+                                    : item.id === ".uno:JumpToTable"
+                                      ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+                                      : "direction" in item ||
+                                          item.id === ".uno:TableSelectAll" ||
+                                          item.id === ".uno:TableDeselectAll"
+                                        ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+                                        : "kind" in item
+                                          ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+                                          : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @param resolveShortcuts - Optional host configuration projection; native slot handlers remain unchanged. @returns Interface. */
@@ -391,8 +432,10 @@ export function createCalcInterface(
   resolveShortcuts?: (command: string) => readonly string[] | undefined,
 ): SfxInterface<CalcCommandTarget> {
   const definitions: SfxSlotDefinition<CalcCommandTarget>[] = [
+    ...createCalcViewSlots(),
     ...createCalcBorderSlots(),
     ...createCalcTextEffectSlots(),
+    createCalcWrapTextSlot(),
     ...calcFontSizeStepCommands.map(
       /** Native no-argument slots retain source no-op behavior when a request contains arguments. @param resource - Source slot. @returns Dispatcher definition. */
       (resource): SfxSlotDefinition<CalcCommandTarget> => ({
@@ -759,16 +802,43 @@ export function createCalcInterface(
               : target.DeselectAllTables(),
       }),
     ),
+    ...calcVisibleSelectionCommands.map(
+      /** Binds the original visible-axis cell-shell cases to current source selection. @param resource - Native command. @returns Slot. */
+      (resource): SfxSlotDefinition<CalcCommandTarget> => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        execute:
+          /** Delegates to the actual source owner after input admission. @param target - Current view. @returns Accepted. */
+          (target) => target.SelectVisibleCells(resource.rows),
+      }),
+    ),
     ...calcCellSelectionCommands.map(
       /** Binds original cell-shell selection slots to the actual current view and mark owner. @param resource - Native slot. @returns Slot definition. */
       (resource) => ({
         commandUrl: resource.id,
         slotId: resource.slotId,
         label: resource.label,
+        shortcuts:
+          resource.id === ".uno:Deselect"
+            ? ["Shift+BACKSPACE"]
+            : resource.id === ".uno:SelectAll"
+              ? ["Control+a"]
+              : resource.id === ".uno:SelectData"
+                ? ["Control+MULTIPLY"]
+                : [],
         execute:
-          /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @returns Whether admitted. */
-          (target: CalcCommandTarget) =>
-            resource.id === ".uno:SelectRow" ? target.MarkRows() : target.MarkColumns(),
+          /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @param request - Native request. @returns Whether admitted. */
+          (target: CalcCommandTarget, request: SfxRequest) =>
+            resource.id === ".uno:Deselect"
+              ? target.DeselectCells()
+              : resource.id === ".uno:SelectAll"
+                ? target.SelectCells(request)
+                : resource.id === ".uno:SelectData"
+                  ? target.SelectCells()
+                  : resource.id === ".uno:SelectRow"
+                    ? target.MarkRows()
+                    : target.MarkColumns(),
       }),
     ),
     {

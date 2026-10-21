@@ -1,15 +1,94 @@
-/** @fileoverview Consumed native ScCellShell SID_CELL_FORMAT_RESET command over the actual view function owner. */
+/** @fileoverview Consumed native ScCellShell selection,geometry and attribute-reset cases from cellsh1/cellsh3/cellsh4 over actual native view/mark owners;window/reference/protection handlers remain unported. */
 import { ScViewFunc } from "./viewfunc";
 import { InsertDeleteFlags, ScSizeMode, TwipsToEvenHMM } from "../../../inc/global";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item, SfxInt32Item } from "../../../../svl/source/items/intitem";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import type { ScViewData } from "../inc/viewdata";
+import { ScRange } from "../../../inc/address";
 import { ColRowSpan } from "../../../inc/columnspanset";
 /** Native cell-shell command boundary;shared browser dispatch performs the existing Sfx slot admission. */
 export class ScCellShell {
   /** Borrows actual native view functions. @param view - Source view owner. @returns Cell shell. */
   constructor(private readonly view: ScViewFunc) {}
+  /** Original cellsh4.cxx SID_SELECT_NONE case. @returns Nothing. */
+  Deselect(): void {
+    this.view.Unmark();
+  }
+  /** Original cellsh1.cxx SID_SELECT_VISIBLE_ROWS case. Hidden ranges are subtracted from the shared mark owner across every selected sheet. @param data - Actual view data. @returns Nothing. */
+  SelectVisibleRows(data: ScViewData): void {
+    const marks = data.GetMarkData(),
+      doc = data.GetDocument();
+    marks.MarkToMulti();
+    const area = marks.GetMultiMarkArea(),
+      firstCol = area.aStart.Col(),
+      firstRow = area.aStart.Row(),
+      lastCol = area.aEnd.Col(),
+      lastRow = area.aEnd.Row();
+    let changed = false;
+    for (const tab of marks)
+      for (let row = firstRow; row <= lastRow; ++row) {
+        const end: [number] = [row];
+        if (doc.RowHidden(row, tab, undefined, end)) {
+          marks.SetMultiMarkArea(new ScRange(firstCol, row, tab, lastCol, end[0], tab), false);
+          changed = true;
+          row = end[0];
+        }
+      }
+    if (changed && !marks.HasAnyMultiMarks()) marks.ResetMark();
+    marks.MarkToSimple();
+  }
+  /** Original cellsh1.cxx SID_SELECT_VISIBLE_COLUMNS case;retains original unclamped hidden-run endpoints and group ordering. @param data - Actual view data. @returns Nothing. */
+  SelectVisibleColumns(data: ScViewData): void {
+    const marks = data.GetMarkData(),
+      doc = data.GetDocument();
+    marks.MarkToMulti();
+    const area = marks.GetMultiMarkArea(),
+      firstCol = area.aStart.Col(),
+      firstRow = area.aStart.Row(),
+      lastCol = area.aEnd.Col(),
+      lastRow = area.aEnd.Row();
+    let changed = false;
+    for (const tab of marks)
+      for (let col = firstCol; col <= lastCol; ++col) {
+        const end: [number] = [col];
+        if (doc.ColHidden(col, tab, undefined, end)) {
+          marks.SetMultiMarkArea(new ScRange(col, firstRow, tab, end[0], lastRow, tab), false);
+          changed = true;
+          col = end[0];
+        }
+      }
+    if (changed && !marks.HasAnyMultiMarks()) marks.ResetMark();
+    marks.MarkToSimple();
+  }
+  /** Original SID_SELECTALL honors Calc Input SelectRangeBeforeAll's true default. @param request - Actual request. @param data - Native view. @param selectFirst - Prepared native configuration value. @returns Nothing. */
+  ExecuteSelectAll(request: SfxRequest, data: ScViewData, selectFirst = true): void {
+    const firstCol: [number] = [data.GetCurX()],
+      firstRow: [number] = [data.GetCurY()],
+      lastCol: [number] = [firstCol[0]],
+      lastRow: [number] = [firstRow[0]];
+    let canMark = false;
+    if (selectFirst && !data.GetMarkData().IsMarked()) {
+      data
+        .GetDocument()
+        .GetDataArea(data.GetTabNumber(), firstCol, firstRow, lastCol, lastRow, true, false);
+      canMark = firstCol[0] !== lastCol[0] || firstRow[0] !== lastRow[0];
+    }
+    if (canMark)
+      this.view.MarkRange(
+        new ScRange(
+          firstCol[0],
+          firstRow[0],
+          data.GetTabNumber(),
+          lastCol[0],
+          lastRow[0],
+          data.GetTabNumber(),
+        ),
+        false,
+      );
+    else this.view.SelectAll();
+    request.Done();
+  }
   /** Original SID_INC_INDENT/SID_DEC_INDENT cell-shell dispatch. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     return this.view.ChangeIndent(increment);

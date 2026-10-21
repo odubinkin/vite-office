@@ -89,7 +89,8 @@ const allowedEdges = new Map([
   // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
   ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
-  ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
+  // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
+  ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
   ["offapi", new Set(["cppu", "sal"])],
@@ -152,6 +153,8 @@ const allowedEdges = new Map([
       "cui",
       "editeng",
       "framework",
+      // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
+      "i18nutil",
       "o3tl",
       "offapi",
       "package",

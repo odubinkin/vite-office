@@ -3974,3 +3974,31 @@ genfunc as independent first imports, actual inherited values, copy/move and
 cached type identity. Existing Reference/query/genfunc/DisposedException and
 related Writer tests cover the shared consumers. This is a language module
 binding correction, not a new full CPPU parity claim or a Calc document owner.
+
+## Property-container error and access prerequisites
+
+Block65 adds original comprehensive cppumaker `IllegalArgumentException`,
+`IndexOutOfBoundsException`, `ElementExistException` and `NoSuchElementException`
+value/type owners. The first derives from RuntimeException; the other three
+are checked Exception subclasses. Native signed16 ArgumentPosition defaults
+to zero. All reuse existing OUString/Reference/Type and typelib owners.
+
+The seven XElementAccess/XIndexAccess/XIndexReplace/XIndexContainer and
+XNameAccess/XNameReplace/XNameContainer declarations preserve original IDL
+inheritance, native input/output owners and documented raises contracts.
+They are structural declarations only; runtime interface metadata and actual
+services are not implemented. Genuine WeakImplHelper and property-value
+container owners must precede the Sfx model/view-data and settings.xml graph.
+The browser does not persist view settings yet. Full exception Any transport,
+physical ABI, debug/source-location, thread/resource/shutdown and complete
+consumer QA remain unverified.
+
+## Native property-container access metadata
+
+Task66 ports actual comprehensive generated metadata for the seven collection
+access interfaces and original WrappedTargetException with a real owned Any
+field. These use existing typelib, Type, Reference, Any and Unicode owners.
+All9cold/order/hot original interface streams match and the7interface owners
+reach raw100 coverage. Wrapped payload and final task validation are in progress.
+Concrete property-value container/WeakImplHelper/Sfx model/view-data/settings.xml
+services and full native ABI/thread/resource/consumer QA remain unported.

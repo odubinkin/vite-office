@@ -1,4 +1,5 @@
 /** @fileoverview Document-bound ScViewData cursor subset. Geometry, zoom, hidden sheets, alternate sheet views, window services and persistence remain separate; no cell data is copied into this owner. */
+import { ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocument } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
@@ -15,6 +16,7 @@ export const ScSplitPos = {
 export type ScSplitPos = (typeof ScSplitPos)[keyof typeof ScSplitPos];
 /** Represented native per-sheet cursor fields. Physical ownership is managed by JS; no split/geometry services are claimed. */
 class ScViewDataTable {
+  bShowGrid = true;
   nCurX = 0;
   nCurY = 0;
   nOldCurX = 0;
@@ -35,14 +37,41 @@ export class ScViewData {
   GetViewShell(): ScTabViewShell | undefined {
     return this.pView;
   }
+  private readonly maOptions: ScViewOptions;
   private readonly maMarkData: ScMarkData;
   private readonly maTabData: (ScViewDataTable | undefined)[] = [new ScViewDataTable()];
   private mnTabNumber = 0;
   private pThisTab = this.maTabData[0] as ScViewDataTable;
   /** Uses the real document limits and native initial selected tab0. @param mrDoc - Borrowed canonical document. @returns View data. */
   constructor(private readonly mrDoc: ScDocument) {
+    this.maOptions = new ScViewOptions(mrDoc.GetViewOptions());
     this.maMarkData = new ScMarkData(mrDoc.GetSheetLimits());
     this.maMarkData.SelectOneTable(0);
+  }
+  /** Original view-owned borrowed option copy. @returns Actual options. */
+  GetOptions(): ScViewOptions {
+    return this.maOptions;
+  }
+  /** Original SetOptions assignment;native scrollbar/graphics window notifications remain unported. @param options - New value. @returns Nothing. */
+  SetOptions(options: ScViewOptions): void {
+    this.maOptions.copy_assign(options);
+  }
+  /** Original local header option query. @returns Visible. */
+  IsHeaderMode(): boolean {
+    return this.maOptions.GetOption(ViewOption.HEADER);
+  }
+  /** Original local header assignment;does not update document options. @param visible - New state. @returns Nothing. */
+  SetHeaderMode(visible: boolean): void {
+    this.maOptions.SetOption(ViewOption.HEADER, visible);
+  }
+  /** Original current-sheet grid query. @returns Visible. */
+  GetShowGrid(): boolean {
+    return this.pThisTab.bShowGrid;
+  }
+  /** Original current-sheet grid assignment. Other selected sheets retain independent state. @param visible - New state. @returns Nothing. */
+  SetShowGrid(visible: boolean): void {
+    for (const tab of this.maMarkData) this.CreateTabData(tab);
+    this.pThisTab.bShowGrid = visible;
   }
   /** Borrows the document rather than projecting another cell model. @returns Actual document. */
   GetDocument(): ScDocument {

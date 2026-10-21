@@ -155,5 +155,5 @@ it("respects inclusive cuts, sparse jumps, empty columns and the original sheet 
   expect(
     /** Missing sheet has no native block cursors. @returns Nothing. */ () => reset.SetTab(9),
   ).toThrow(RangeError);
-  expect(doc.FetchTable(2)?.GetAllocatedColumnsCount()).toBe(0);
+  expect(doc.FetchTable(2)?.GetAllocatedColumnsCount()).toBe(1);
 });

@@ -3368,3 +3368,153 @@ Full merged/device/alternate-view paint parity remains unverified.
 - Observation: after successful enum/integer extraction,the original handler checks the0..65535 range. The out-of-range branch emits a diagnostic but leaves the success bool true and the caller's existing output unchanged. An in-range unmapped constant instead returns false and assigns empty output when no default token exists.
 - Impact: callers can receive success together with stale XML text for invalid numeric input.
 - Local preservation: the common handler retains both original return/output branches. Actual Any tests independently assert negative,oversized and unmapped values.
+
+### CALC237 — no-argument Wrap Text completes API requests while typed arguments do not
+
+- Pinned source: `sc/source/ui/view/formatsh.cxx`, `ScFormatShell::ExecuteAttr`, `SID_ATTR_ALIGN_LINEBREAK` branches.
+- Observation: the no-argument toggle reads the actual selection pattern,applies its negated boolean and unconditionally calls `rReq.Done(aNewSet)` with the resulting cell item. The argument-present branch applies the mapped item and reaches the ordinary final completion guard,which does not complete API requests.
+- Impact: otherwise equivalent API operations have different completion and argument-recording states. This asymmetry may be intentional recording behavior;it is preserved rather than normalized by the browser adapter.
+- Local preservation: actual SfxRequest tests independently assert the unconditional API toggle completion,recorded Which139 value and unfinished typed API request,alongside normal typed completion and existing completed requests. Full native macro/UNO recording remains unported.
+
+### CALC238 — cached script setter checks logical column validity but assumes allocated storage
+
+- Pinned source: `sc/source/core/data/table1.cxx`, `ScTable::SetScriptType`; `sc/inc/colcontainer.hxx`, `ScColContainer::operator[]`; `sc/source/core/data/column2.cxx`, `ScColumn::SetScriptType`.
+- Observation: the table setter only checks ValidCol before directly indexing aCol. The container operator does not grow or allocate its vector. The column setter updates only an already-present CellTextAttr slot. The const table getter instead checks IsColValid before indexing.
+- Impact: a logically valid but unallocated column is not admitted by the setter's storage precondition;calling it can access outside the native vector. This may be a deliberate populated-cell caller assumption,not a defect in normal callers.
+- Local preservation: cached reads return NONE for unallocated columns;setters do not allocate columns or metadata. Existing-column writes retain UNKNOWN/default/reset semantics. The browser's underlying absent-column access throws instead of inventing storage;native undefined accesses and their failure representation are not executed or claimed as parity. Grouped-formula cache discard remains unported and no grouped-formula context is owned by this slice.
+
+### CALC239 — Calc/EditEngine formatting transfer has asymmetric table and alignment ownership
+
+- Pinned source: `sc/source/core/data/patattr.cxx`, `ScPatternAttr::FillToEditItemSet`, `GetFromEditItemSet`, `FillEditParaItems`.
+- Observation: table-style family,height,weight and color participate in transfer,but posture,underline,overline and language ignore table styles. Script spacing is always forced off,even when the cell item is true. Forward automatic color clears a direct EditEngine color item. Reverse Left/default adjustment omits a cell alignment write,so an existing Right alignment survives.
+- Impact: the transfer is not a general inverse operation;table-style bold and italic can have different transfer precedence. Reverse left alignment may retain pre-existing cell alignment. Source comments explain automatic color,script spacing and the default text/number alignment distinction;the table-style asymmetry may be deliberate or incomplete.
+- Local preservation: retain these exact source rules and test absent/default/SET states separately. Do not normalize table-style behavior or clear cell alignment to force round-trip symmetry. Native render/number/hash caches remain absent in the existing data slice;no dummy InvalidateCaches service is added.
+
+### CALC240 — style detachment and rename distinguish pointer ownership from stored names
+
+- Pinned source: `sc/source/core/data/patattr.cxx`, `ScPatternAttr::SetStyleSheet`, `StyleToName`, `CellAttributeHelper::RenameCellStyle`, `CellStyleDeleted`, `AllStylesToNames`; `sc/inc/patattr.hxx` defaults.
+- Observation: SetStyleSheet(null) clears the borrowed style and parent but leaves an existing stored name intact. Default attachment clears only direct fields whose style state is SET,including inherited SET. Rename removes exact matching style pointers from name groups,ignores SetName's boolean return and reinserts using the actual resulting name. Single-style deletion visits registered patterns but not the separately owned default;all-to-name teardown explicitly forces and visits the default.
+- Impact: a nonempty style name does not prove an attached style pointer. Failed rename does not imply the requested name entered the registry. Direct formatting/default-state behavior is not a wholesale reset. These may be intentional ownership/lifecycle rules rather than defects.
+- Local preservation: retain null/name and SET/default distinctions,exact pointer matching,actual-name re-insertion after failed rename and default-pattern separation. Native style resolution and absent derived caches are not emulated.
+
+### CALC241 — builtin/API style aliases are ordered and pool page defaults differ from style setup
+
+- Pinned source: `sc/source/core/tool/stylehelper.cxx`, ordered ScDisplayNameMap and ScStyleNameConversion; `sc/source/core/data/docpool.cxx` static defaults; `sc/source/core/data/stlsheet.cxx`, page GetItemSet setup.
+- Observation: builtin `Heading 1` precedes compatibility programmatic alias `Heading1`. Programmatic `Heading1` resolves to display `Heading 1`,whose display-to-programmatic conversion then chooses `Heading 1`;a custom display `Heading1` is escaped with ` (user)`. Decoding removes one exact suffix before considering family or map. Pool ScaleToPages is1 and paper size is zero;document-backed page-style setup later installs scale-to-pages0 and configured paper size.
+- Impact: alias round trips need not retain the old programmatic spelling,and pool defaults must not be mistaken for configured page style values. Source comments describe the compatibility and escaping intent;these are not asserted defects.
+- Local preservation: keep initializer order,sentinel iteration,case-sensitive UTF16 suffix and one-suffix removal. Do not sort/deduplicate aliases,normalize spelling,replace pool values with style configuration or invent unavailable rich header/footer defaults.
+
+## CALC242: Feature tag ASCII_US decoding retains upper-byte Windows-1252 mappings
+
+Status: source-confirmed compatibility behavior whose relevance to malformed
+font-axis tags is uncertain;preserved,not classified as a confirmed defect.
+
+Pinned `vcl/source/font/Feature.cxx::featureCodeAsString` constructs a terminated
+four-byte string and calls OStringToOUString with RTL_TEXTENCODING_ASCII_US.
+The original `sal/textenc/textenc.cxx::aImplUSASCIIByteCvtData` explicitly uses
+`aImplMS1252ToUniTab` for bytes0x80..0xff. Thus initialized tag0x807fff41 produces
+Euro,U+007F,U+00FF,A rather than strict ASCII rejection or bytewise Unicode.
+An embedded zero truncates the intermediate C string. The axis parser separately
+accepts only ASCII letters,digits and spaces;this concerns direct aggregate tags.
+
+Evidence: actual native table and converter plus literal expected-value tests in
+`apps/office/src/vcl/source/font/FontVariation.test.ts`. The first test expectation
+incorrectly assumed private-use mapping;source inspection corrected that
+expectation while leaving the implementation and native descriptor unchanged.
+Decision: retain original table selection,terminator behavior and float output;
+do not introduce a host decoder or normalize malformed aggregate tags.
+
+## CALC243: Numbering validity depends on SetLevel overload and conversion
+
+Status: source-confirmed asymmetry;consumer consequences remain to be reviewed.
+
+Pinned `editeng/source/items/numitem.cxx::SvxNumRule::SetLevel` reference overload
+replaces a format only when the old slot is invalid or the new format differs.
+Calling SetLevel(i,equalFormat,false) on an already valid slot therefore keeps
+it valid. The pointer overload sets validity before calling the reference
+overload;it can expose an equal previously invalid physical value without a
+replacement. Get returns only valid formats;GetLevel ignores the validity bit.
+`SvxConvertNumRule` uses GetLevel and writes every overlapping level with the
+default true validity,so invalid physical source values become valid destination
+values. Null source slots use source-kind fallbacks during this conversion.
+
+Evidence: the original bodies and literal storage/identity/value assertions in
+`apps/office/src/editeng/source/items/native-num-rule.test.ts`.
+Decision: retain all three behaviors and the original overload ordering.
+Do not normalize the validity bit or convert through the valid-only getter.
+
+## CALC244: English EditEngine Asian defaults use the interface-font fallback
+
+Status: source-confirmed default selection whose rationale is uncertain;preserved.
+
+Pinned `editeng/source/items/textitem.cxx::GetDefaultFonts` requests CJK_TEXT with
+LANGUAGE_ENGLISH_US. The shipped English DefaultFonts node in
+`officecfg/registry/data/org/openoffice/VCL.xcu` has no CJK_TEXT property.
+`DefaultFontConfiguration::getDefaultFont` therefore returns empty and
+`vcl/source/outdev/font.cxx::OutputDevice::GetDefaultFont` calls
+getUserInterfaceFont. Its configured UI_SANS lookup succeeds,so the no-device
+OnlyOne branch uses the first configured interface font token,Segoe UI.
+This is logical metadata;actual device substitution and glyph fallback can differ.
+
+Evidence: original role/language array,config node and VCL fallback,plus literal
+three-family assertions in `native-default-fonts.test.ts`. The prior shared helper
+threw an invented exception for missing configured roles;the first new two tests
+exposed that mismatch and their failing raw report is retained. The implementation
+now follows the original fallback. Unknown enum roles also retain this release
+fallback instead of that exception. No CJK family was hardcoded into production.
+Decision: preserve these defaults and separate actual device font selection.
+
+## CALC245: Rich-text style changes and field updates preserve different cache rules
+
+Pinned `editeng/source/editeng/editobj.cxx` implements `SetStyleSheet` without
+clearing portion info. `ChangeStyleSheetName` delegates to `ImpChangeStyleSheets`
+without clearing it either. `ChangeStyleSheets`, however, clears it whenever
+a paragraph matches, even when the requested name and family already equal the
+previous values. This asymmetry may depend on the callers' layout responsibilities;
+it is preserved rather than normalized.
+
+Pinned `editeng/source/editeng/fieldupdater.cxx` passes every `EE_FEATURE_FIELD`
+item to `UpdatePageRelativeURLs`, including table and unspecified fields. The
+callback owns semantic selection. Neither it nor `updateTableFields` clears
+portion info. Task57 tests actual field holders and cache identity through these
+operations. These are source observations, not confirmed upstream defects.
+
+## CALC246: Default header/footer areas are null but the XML diagnostic dereferences them
+
+Pinned `sc/source/core/data/attrib.cxx` constructs ScPageHFItem with three empty
+unique_ptr areas. Its `dumpAsXml` calls GetLeftArea/GetCenterArea/GetRightArea
+and dereferences each result without a null guard. The separate successful UNO
+PutValue path materializes missing areas through a real ScEditEngineDefaulter.
+A caller may guarantee initialized areas before requesting diagnostics;that
+precondition has not been established here,so this is a suspected issue rather
+than a confirmed upstream defect. Task58 preserves default null areas and their
+distinction from a real empty text value. The diagnostic and UNO content paths
+remain unported;no normalization or replacement engine is added.
+
+## CALC-247: Data-area clamping precedes retain-old and only-down modifiers
+
+Status: source behavior retained;possible contract inconsistency.
+
+In `sc/source/core/data/table1.cxx:940`,the comments say `bIncludeOld` retains
+at least the initial area and `bOnlyDown` modifies only the final row. The method
+nevertheless clamps both input column references to `aCol.size()-1` before either
+modifier is considered. With the native initial one allocated column,an input
+E9:E9 becomes A9:A9 even with include-old=true or only-down=true.
+The complete native consumer/configuration intent is unverified. The port retains
+this clamp and tests it with genuine initial column storage;no coordinate repair
+or eager allocation is added. Task `202610210052-FZA8S9` records the evidence.
+
+## CALC-248: IllegalArgumentException unknown-position documentation and generated zero default
+
+Status: source-confirmed documentation/default discrepancy; not a confirmed defect.
+
+Pinned `udkapi/com/sun/star/lang/IllegalArgumentException.idl` documents -1 when
+ArgumentPosition is unknown. The original comprehensive cppumaker default
+constructor nevertheless initializes the sal_Int16 member to zero, as prescribed
+by the generator's scalar default rules. A default-constructed exception therefore
+carries the first argument's index without the caller supplying a position.
+Whether callers must explicitly assign -1 for unknown arguments is not specified
+by the constructor contract. Task `202610210335-7QBK8C` retains native zero and
+checks default/member/copy/move/assignment plus signed16 boundary values against
+original generated C++ over unchanged libraries. Do not normalize the default to
+-1 in browser code or replace the actual generated exception with a JS Error.

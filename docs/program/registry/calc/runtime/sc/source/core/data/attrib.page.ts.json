@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/attrib.page.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-pool-ownership",
+    "capabilityIds": [
+      "CAP-9b2d22ea-8cc2-4905-8606-e754b0c897c3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/attrib.page.ts",
+        "apps/office/src/sc/source/core/data/native-page-hf.test.ts",
+        "apps/office/src/sc/source/core/data/native-document-pool-complete.test.ts"
+      ],
+      "justification": "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied. ScPageHFItem UNO QueryValue/PutValue,XML diagnostics,full native presentation and physical shutdown bookkeeping remain unported or erased under GC. Calc style/helper/standard-style and EditEngine editing/layout services remain subsequent actual owners. Bounded acceptance passes528Calc tests and58related tests,with100percent Calc and changed-owner coverage,plus actual Chromium/Worker ownership and existing font/wrap/ODS regressions. No broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScPageHFItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/attrib.cxx",
+      "upstreamSymbols": [
+        "ScPageHFItem"
+      ]
+    }
+  }
+}

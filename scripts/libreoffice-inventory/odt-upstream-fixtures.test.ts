@@ -75,9 +75,10 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of [
-    // Table/list attributes and all six Asian/four complex-script font sizes are recognized.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 70 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 82 },
+    // The shared token table also recognizes the single fo:wrap-option in each styles.xml.
+    // Token recognition does not claim complete Writer table-cell wrapping support.
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 69 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 81 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -115,6 +116,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
               "text:list-level-position-and-space-mode",
               "style:font-size-asian",
               "style:font-size-complex",
+              "fo:wrap-option",
             ].includes(diagnostic.name),
         ),
       ).toBe(false);

@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { CalcViewOption } from "../../sdi/tabvwsh";
+import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
@@ -6,6 +8,7 @@ import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
+import { ScColBar, ScRowBar } from "../../source/ui/inc/colrowba";
 import { ScTabViewShell } from "../../source/ui/inc/tabvwsh";
 import type { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
@@ -60,6 +63,20 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Queries genuine per-view/per-sheet options for source Sfx state. @param option - Original command group. @returns Native state. */
+  GetViewOptionState(option: CalcViewOption): boolean {
+    if (option === "headers") return this.viewData.IsHeaderMode();
+    if (option === "grid") return this.viewData.GetShowGrid();
+    return this.viewData.GetOptions().GetOption(ViewOption.FORMULAS);
+  }
+  /** Routes original view cases without committing the current input draft. @param option - Command identity. @param request - Actual native request. @returns Nothing. */
+  ExecuteViewOption(option: CalcViewOption, request: SfxRequest): void {
+    if (option === "headers") this.viewShell.ToggleHeaders(request);
+    else if (option === "grid") this.viewShell.ToggleSheetGrid(request);
+    else this.viewShell.ToggleFormula(request);
+    this.Changed();
+  }
+
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
@@ -106,6 +123,28 @@ export class CalcViewController {
     this.Changed();
     return request;
   }
+  /** Borrows real header operations with the current fixed browser96CSSdpi scale. @param width - Column or row axis. @returns Native header geometry. */
+  private HeaderBar(width: boolean): ScColBar | ScRowBar {
+    return width ? new ScColBar(this.viewShell, 1 / 15) : new ScRowBar(this.viewShell, 1 / 15);
+  }
+  /** Reads actual native pixel geometry during header tracking. @param width - Axis. @param index - Entry. @returns Pixels. */
+  GetHeaderEntrySize(width: boolean, index: number): number {
+    return this.HeaderBar(width).GetEntrySize(index);
+  }
+  /** Completes header tracking through native size/history owners;active edit views prohibit resizing. @param width - Axis. @param index - Entry. @param pixels - Native UInt16 pixel size. @returns Nothing. */
+  SetHeaderEntrySize(width: boolean, index: number, pixels: number): void {
+    if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
+    this.HeaderBar(width).SetEntrySize(index, pixels);
+    this.addressText = this.Address();
+    this.Changed();
+  }
+  /** Completes a negative header drag through the original hide-range operation. @param width - Axis. @param first - First entry. @param last - Last entry. @returns Nothing. */
+  HideHeaderEntries(width: boolean, first: number, last: number): void {
+    if (this.mode !== ScInputMode.SC_INPUT_NONE) return;
+    this.HeaderBar(width).HideEntries(first, last);
+    this.addressText = this.Address();
+    this.Changed();
+  }
   /** Native column visibility command over current marks. @param show - Requested visibility. @returns Nothing. */
   ShowColumns(show: boolean): void {
     if (!this.Commit()) return;
@@ -119,6 +158,17 @@ export class CalcViewController {
     const changed = new ScCellShell(this.viewShell).ResetAttributes();
     this.Changed();
     return changed;
+  }
+  /** Queries the actual merged native wrap item. @returns Wrapped or mixed. */
+  GetWrapTextState(): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetWrapTextState();
+  }
+  /** Admits pending input before the source line-break command and publishes actual source state. @param request - Mapped native request. @returns Native operation admission. */
+  ExecuteWrapText(request: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    const result = new ScFormatShell(this.viewData, this.shell).ExecuteWrapText(request);
+    this.Changed();
+    return result;
   }
   /** Reads actual selected cell alignment. @param axis - Native axis. @returns Original enum or mixed. */
   GetAlignment(axis: CalcAlignmentAxis): SvxCellHorJustify | SvxCellVerJustify | undefined {
@@ -311,6 +361,13 @@ export class CalcViewController {
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
+    if (kind === "all") {
+      if (!this.Commit()) return;
+      this.viewShell.SelectAll();
+      this.anchor = new ScAddress(0, 0, this.viewData.GetTabNumber());
+      this.Changed();
+      return;
+    }
     if (!this.Select(kind === "column" ? index : 0, kind === "row" ? index : 0)) return;
     const doc = this.shell.GetDocument(),
       tab = this.viewData.GetTabNumber();
@@ -321,12 +378,43 @@ export class CalcViewController {
           kind === "column" ? index : 0,
           kind === "row" ? index : 0,
           tab,
-          kind === "row" ? doc.MaxCol() : kind === "column" ? index : doc.MaxCol(),
-          kind === "column" ? doc.MaxRow() : kind === "row" ? index : doc.MaxRow(),
+          kind === "row" ? doc.MaxCol() : index,
+          kind === "column" ? doc.MaxRow() : index,
           tab,
         ),
       );
     this.Changed();
+  }
+  /** Admits pending input before original Deselect and projects InitOwnBlockMode's current-cell anchor without moving the cursor. @returns Whether admitted. */
+  DeselectCells(): boolean {
+    if (!this.Commit()) return false;
+    const marks = this.viewData.GetMarkData(),
+      marked = marks.IsMarked() || marks.IsMultiMarked();
+    new ScCellShell(this.viewShell).Deselect();
+    if (marked) {
+      this.anchor = this.Position();
+      this.Changed();
+    }
+    return true;
+  }
+  /** Admits actual input before source hidden-row/column selection subtraction. @param rows - Row command versus column command. @returns Whether admitted. */
+  SelectVisibleCells(rows: boolean): boolean {
+    if (!this.Commit()) return false;
+    const shell = new ScCellShell(this.viewShell);
+    if (rows) shell.SelectVisibleRows(this.viewData);
+    else shell.SelectVisibleColumns(this.viewData);
+    this.Changed();
+    return true;
+  }
+  /** Accepts current input before source connected-area/whole-sheet selection. @param request - Source SelectAll request;omitted for SelectData. @returns Accepted. */
+  SelectCells(request?: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    if (request) new ScCellShell(this.viewShell).ExecuteSelectAll(request, this.viewData);
+    else this.viewShell.MarkDataArea();
+    const start = this.viewData.GetMarkData().GetMarkArea().aStart;
+    this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
+    this.Changed();
+    return true;
   }
   /** Executes original no-argument row selection after accepting the current input. @returns Whether selection was admitted. */
   MarkRows(): boolean {
@@ -710,14 +798,17 @@ export class CalcViewController {
       table = doc.FetchTable(this.viewData.GetTabNumber());
     // Shell history emits before the controller restores a deleted active sheet.
     if (!table) return;
-    const bodyHeight = Math.max(1, height - this.viewport.rowHeight);
+    const bodyHeight = Math.max(
+      1,
+      height - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0),
+    );
     const logicalTop =
       Math.min(1, Math.max(0, top) / Math.max(1, this.viewport.scrollHeight - height)) *
       Math.max(0, rowPixels(table, 0, doc.MaxRow()) - bodyHeight);
     const firstRow = rowAtPixel(table, logicalTop, doc.MaxRow());
     const lastRow = rowAtPixel(table, logicalTop + bodyHeight, doc.MaxRow());
     const rows = lastRow - firstRow + 1,
-      bodyWidth = Math.max(1, width - 48),
+      bodyWidth = Math.max(1, width - (this.viewData.IsHeaderMode() ? 48 : 0)),
       logicalLeft =
         Math.min(1, Math.max(0, left) / Math.max(1, this.viewport.scrollWidth - width)) *
         Math.max(0, columnPixels(table, 0, doc.MaxCol()) - bodyWidth),
@@ -739,7 +830,11 @@ export class CalcViewController {
   ScrollLeftForColumn(column: number, clientWidth: number): number {
     const doc = this.shell.GetDocument(),
       table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable,
-      maximum = Math.max(1, columnPixels(table, 0, doc.MaxCol()) - Math.max(1, clientWidth - 48));
+      maximum = Math.max(
+        1,
+        columnPixels(table, 0, doc.MaxCol()) -
+          Math.max(1, clientWidth - (this.viewData.IsHeaderMode() ? 48 : 0)),
+      );
     return (
       Math.min(1, columnPixels(table, 0, column - 1) / maximum) *
       Math.max(0, this.viewport.scrollWidth - clientWidth)
@@ -751,7 +846,8 @@ export class CalcViewController {
       table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable;
     const maximum = Math.max(
       1,
-      rowPixels(table, 0, doc.MaxRow()) - Math.max(1, clientHeight - this.viewport.rowHeight),
+      rowPixels(table, 0, doc.MaxRow()) -
+        Math.max(1, clientHeight - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0)),
     );
     return (
       Math.min(1, rowPixels(table, 0, row - 1) / maximum) *

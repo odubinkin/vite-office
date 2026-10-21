@@ -9,3 +9,5 @@ export function featureCode(feature: Int8Array): number {
     0
   );
 }
+
+export { featureCodeAsString } from "../../source/font/Feature";

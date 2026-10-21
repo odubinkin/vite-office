@@ -1,5 +1,5 @@
 /** @fileoverview Original cell types, reference modes, row/column flags and ScGlobal boundary from pinned sc/inc/global.hxx. */
-import { convert } from "../../o3tl/inc/unit_conversion";
+import { convert, Length } from "../../o3tl/inc/unit_conversion";
 export { ScGlobal } from "../source/core/data/global";
 /** Original cell variant discriminator; declaration order defines native values zero through four. */
 export enum CellType {
@@ -60,6 +60,8 @@ export function TwipsToEvenHMM(twips: number): number {
 }
 /** Original64pt standard column width in twips. */
 export const STD_COL_WIDTH = 1280;
+/** Original extra width for optimal columns, two millimetres converted to integral twips. */
+export const STD_EXTRA_WIDTH = Number(convert(2n, Length.mm, Length.twip));
 /** Original1m maximum column width rounded to integral twips. */
 export const MAX_COL_WIDTH = 56693;
 /** Original maximum row height in twips. */

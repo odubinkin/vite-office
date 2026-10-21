@@ -1,0 +1,690 @@
+[
+  {
+    "id": 0,
+    "name": "PAPER_A0",
+    "width": 84100,
+    "height": 118900,
+    "ps": "A0",
+    "alias": null
+  },
+  {
+    "id": 1,
+    "name": "PAPER_A1",
+    "width": 59400,
+    "height": 84100,
+    "ps": "A1",
+    "alias": null
+  },
+  {
+    "id": 2,
+    "name": "PAPER_A2",
+    "width": 42000,
+    "height": 59400,
+    "ps": "A2",
+    "alias": null
+  },
+  {
+    "id": 3,
+    "name": "PAPER_A3",
+    "width": 29700,
+    "height": 42000,
+    "ps": "A3",
+    "alias": null
+  },
+  {
+    "id": 4,
+    "name": "PAPER_A4",
+    "width": 21000,
+    "height": 29700,
+    "ps": "A4",
+    "alias": null
+  },
+  {
+    "id": 5,
+    "name": "PAPER_A5",
+    "width": 14800,
+    "height": 21000,
+    "ps": "A5",
+    "alias": null
+  },
+  {
+    "id": 6,
+    "name": "PAPER_B4_ISO",
+    "width": 25000,
+    "height": 35300,
+    "ps": "ISOB4",
+    "alias": null
+  },
+  {
+    "id": 7,
+    "name": "PAPER_B5_ISO",
+    "width": 17600,
+    "height": 25000,
+    "ps": "ISOB5",
+    "alias": null
+  },
+  {
+    "id": 8,
+    "name": "PAPER_LETTER",
+    "width": 21590,
+    "height": 27940,
+    "ps": "Letter",
+    "alias": "Note"
+  },
+  {
+    "id": 9,
+    "name": "PAPER_LEGAL",
+    "width": 21590,
+    "height": 35560,
+    "ps": "Legal",
+    "alias": null
+  },
+  {
+    "id": 10,
+    "name": "PAPER_TABLOID",
+    "width": 27940,
+    "height": 43180,
+    "ps": "Tabloid",
+    "alias": "11x17"
+  },
+  {
+    "id": 11,
+    "name": "PAPER_USER",
+    "width": 0,
+    "height": 0,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 12,
+    "name": "PAPER_B6_ISO",
+    "width": 12500,
+    "height": 17600,
+    "ps": "ISOB6",
+    "alias": null
+  },
+  {
+    "id": 13,
+    "name": "PAPER_ENV_C4",
+    "width": 22900,
+    "height": 32400,
+    "ps": "EnvC4",
+    "alias": "C4"
+  },
+  {
+    "id": 14,
+    "name": "PAPER_ENV_C5",
+    "width": 16200,
+    "height": 22900,
+    "ps": "EnvC5",
+    "alias": "C5"
+  },
+  {
+    "id": 15,
+    "name": "PAPER_ENV_C6",
+    "width": 11400,
+    "height": 16200,
+    "ps": "EnvC6",
+    "alias": "C6"
+  },
+  {
+    "id": 16,
+    "name": "PAPER_ENV_C65",
+    "width": 11400,
+    "height": 22900,
+    "ps": "EnvC65",
+    "alias": null
+  },
+  {
+    "id": 17,
+    "name": "PAPER_ENV_DL",
+    "width": 11000,
+    "height": 22000,
+    "ps": "EnvDL",
+    "alias": "DL"
+  },
+  {
+    "id": 18,
+    "name": "PAPER_SLIDE_DIA",
+    "width": 18000,
+    "height": 27000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 19,
+    "name": "PAPER_SCREEN_4_3",
+    "width": 21000,
+    "height": 28000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 20,
+    "name": "PAPER_C",
+    "width": 43180,
+    "height": 55880,
+    "ps": "AnsiC",
+    "alias": "CSheet"
+  },
+  {
+    "id": 21,
+    "name": "PAPER_D",
+    "width": 55880,
+    "height": 86360,
+    "ps": "AnsiD",
+    "alias": "DSheet"
+  },
+  {
+    "id": 22,
+    "name": "PAPER_E",
+    "width": 86360,
+    "height": 111760,
+    "ps": "AnsiE",
+    "alias": "ESheet"
+  },
+  {
+    "id": 23,
+    "name": "PAPER_EXECUTIVE",
+    "width": 18415,
+    "height": 26670,
+    "ps": "Executive",
+    "alias": null
+  },
+  {
+    "id": 24,
+    "name": "PAPER_FANFOLD_LEGAL_DE",
+    "width": 21590,
+    "height": 33020,
+    "ps": "FanFoldGermanLegal",
+    "alias": null
+  },
+  {
+    "id": 25,
+    "name": "PAPER_ENV_MONARCH",
+    "width": 9843,
+    "height": 19050,
+    "ps": "EnvMonarch",
+    "alias": "Monarch"
+  },
+  {
+    "id": 26,
+    "name": "PAPER_ENV_PERSONAL",
+    "width": 9208,
+    "height": 16510,
+    "ps": "EnvPersonal",
+    "alias": "Personal"
+  },
+  {
+    "id": 27,
+    "name": "PAPER_ENV_9",
+    "width": 9843,
+    "height": 22543,
+    "ps": "Env9",
+    "alias": null
+  },
+  {
+    "id": 28,
+    "name": "PAPER_ENV_10",
+    "width": 10478,
+    "height": 24130,
+    "ps": "Env10",
+    "alias": "Comm10"
+  },
+  {
+    "id": 29,
+    "name": "PAPER_ENV_11",
+    "width": 11430,
+    "height": 26353,
+    "ps": "Env11",
+    "alias": null
+  },
+  {
+    "id": 30,
+    "name": "PAPER_ENV_12",
+    "width": 12065,
+    "height": 27940,
+    "ps": "Env12",
+    "alias": null
+  },
+  {
+    "id": 31,
+    "name": "PAPER_KAI16",
+    "width": 18400,
+    "height": 26000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 32,
+    "name": "PAPER_KAI32",
+    "width": 13000,
+    "height": 18400,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 33,
+    "name": "PAPER_KAI32BIG",
+    "width": 14000,
+    "height": 20300,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 34,
+    "name": "PAPER_B4_JIS",
+    "width": 25700,
+    "height": 36400,
+    "ps": "B4",
+    "alias": null
+  },
+  {
+    "id": 35,
+    "name": "PAPER_B5_JIS",
+    "width": 18200,
+    "height": 25700,
+    "ps": "B5",
+    "alias": null
+  },
+  {
+    "id": 36,
+    "name": "PAPER_B6_JIS",
+    "width": 12800,
+    "height": 18200,
+    "ps": "B6",
+    "alias": null
+  },
+  {
+    "id": 37,
+    "name": "PAPER_LEDGER",
+    "width": 43180,
+    "height": 27940,
+    "ps": "Ledger",
+    "alias": null
+  },
+  {
+    "id": 38,
+    "name": "PAPER_STATEMENT",
+    "width": 13970,
+    "height": 21590,
+    "ps": "Statement",
+    "alias": null
+  },
+  {
+    "id": 39,
+    "name": "PAPER_QUARTO",
+    "width": 21519,
+    "height": 27517,
+    "ps": "Quarto",
+    "alias": null
+  },
+  {
+    "id": 40,
+    "name": "PAPER_10x14",
+    "width": 25400,
+    "height": 35560,
+    "ps": "10x14",
+    "alias": null
+  },
+  {
+    "id": 41,
+    "name": "PAPER_ENV_14",
+    "width": 13970,
+    "height": 29210,
+    "ps": "Env14",
+    "alias": null
+  },
+  {
+    "id": 42,
+    "name": "PAPER_ENV_C3",
+    "width": 32400,
+    "height": 45800,
+    "ps": "EnvC3",
+    "alias": "C3"
+  },
+  {
+    "id": 43,
+    "name": "PAPER_ENV_ITALY",
+    "width": 11000,
+    "height": 23000,
+    "ps": "EnvItalian",
+    "alias": null
+  },
+  {
+    "id": 44,
+    "name": "PAPER_FANFOLD_US",
+    "width": 37783,
+    "height": 27940,
+    "ps": "FanFoldUS",
+    "alias": null
+  },
+  {
+    "id": 45,
+    "name": "PAPER_FANFOLD_DE",
+    "width": 21590,
+    "height": 33020,
+    "ps": "FanFoldGerman",
+    "alias": null
+  },
+  {
+    "id": 46,
+    "name": "PAPER_POSTCARD_JP",
+    "width": 10000,
+    "height": 14800,
+    "ps": "Postcard",
+    "alias": null
+  },
+  {
+    "id": 47,
+    "name": "PAPER_9x11",
+    "width": 22860,
+    "height": 27940,
+    "ps": "9x11",
+    "alias": null
+  },
+  {
+    "id": 48,
+    "name": "PAPER_10x11",
+    "width": 25400,
+    "height": 27940,
+    "ps": "10x11",
+    "alias": null
+  },
+  {
+    "id": 49,
+    "name": "PAPER_15x11",
+    "width": 38100,
+    "height": 27940,
+    "ps": "15x11",
+    "alias": null
+  },
+  {
+    "id": 50,
+    "name": "PAPER_ENV_INVITE",
+    "width": 22000,
+    "height": 22000,
+    "ps": "EnvInvite",
+    "alias": null
+  },
+  {
+    "id": 51,
+    "name": "PAPER_A_PLUS",
+    "width": 22700,
+    "height": 35600,
+    "ps": "SuperA",
+    "alias": null
+  },
+  {
+    "id": 52,
+    "name": "PAPER_B_PLUS",
+    "width": 30500,
+    "height": 48700,
+    "ps": "SuperB",
+    "alias": null
+  },
+  {
+    "id": 53,
+    "name": "PAPER_LETTER_PLUS",
+    "width": 21590,
+    "height": 32233,
+    "ps": "LetterPlus",
+    "alias": null
+  },
+  {
+    "id": 54,
+    "name": "PAPER_A4_PLUS",
+    "width": 21000,
+    "height": 33000,
+    "ps": "A4Plus",
+    "alias": null
+  },
+  {
+    "id": 55,
+    "name": "PAPER_DOUBLEPOSTCARD_JP",
+    "width": 20000,
+    "height": 14800,
+    "ps": "DoublePostcard",
+    "alias": null
+  },
+  {
+    "id": 56,
+    "name": "PAPER_A6",
+    "width": 10500,
+    "height": 14800,
+    "ps": "A6",
+    "alias": null
+  },
+  {
+    "id": 57,
+    "name": "PAPER_12x11",
+    "width": 30480,
+    "height": 27940,
+    "ps": "12x11",
+    "alias": null
+  },
+  {
+    "id": 58,
+    "name": "PAPER_A7",
+    "width": 7400,
+    "height": 10500,
+    "ps": "A7",
+    "alias": null
+  },
+  {
+    "id": 59,
+    "name": "PAPER_A8",
+    "width": 5200,
+    "height": 7400,
+    "ps": "A8",
+    "alias": null
+  },
+  {
+    "id": 60,
+    "name": "PAPER_A9",
+    "width": 3700,
+    "height": 5200,
+    "ps": "A9",
+    "alias": null
+  },
+  {
+    "id": 61,
+    "name": "PAPER_A10",
+    "width": 2600,
+    "height": 3700,
+    "ps": "A10",
+    "alias": null
+  },
+  {
+    "id": 62,
+    "name": "PAPER_B0_ISO",
+    "width": 100000,
+    "height": 141400,
+    "ps": "ISOB0",
+    "alias": null
+  },
+  {
+    "id": 63,
+    "name": "PAPER_B1_ISO",
+    "width": 70700,
+    "height": 100000,
+    "ps": "ISOB1",
+    "alias": null
+  },
+  {
+    "id": 64,
+    "name": "PAPER_B2_ISO",
+    "width": 50000,
+    "height": 70700,
+    "ps": "ISOB2",
+    "alias": null
+  },
+  {
+    "id": 65,
+    "name": "PAPER_B3_ISO",
+    "width": 35300,
+    "height": 50000,
+    "ps": "ISOB3",
+    "alias": null
+  },
+  {
+    "id": 66,
+    "name": "PAPER_B7_ISO",
+    "width": 8800,
+    "height": 12500,
+    "ps": "ISOB7",
+    "alias": null
+  },
+  {
+    "id": 67,
+    "name": "PAPER_B8_ISO",
+    "width": 6200,
+    "height": 8800,
+    "ps": "ISOB8",
+    "alias": null
+  },
+  {
+    "id": 68,
+    "name": "PAPER_B9_ISO",
+    "width": 4400,
+    "height": 6200,
+    "ps": "ISOB9",
+    "alias": null
+  },
+  {
+    "id": 69,
+    "name": "PAPER_B10_ISO",
+    "width": 3100,
+    "height": 4400,
+    "ps": "ISOB10",
+    "alias": null
+  },
+  {
+    "id": 70,
+    "name": "PAPER_ENV_C2",
+    "width": 45800,
+    "height": 64800,
+    "ps": "EnvC2",
+    "alias": "C2"
+  },
+  {
+    "id": 71,
+    "name": "PAPER_ENV_C7",
+    "width": 8100,
+    "height": 11400,
+    "ps": "EnvC7",
+    "alias": "C7"
+  },
+  {
+    "id": 72,
+    "name": "PAPER_ENV_C8",
+    "width": 5700,
+    "height": 8100,
+    "ps": "EnvC8",
+    "alias": "C8"
+  },
+  {
+    "id": 73,
+    "name": "PAPER_ARCHA",
+    "width": 22860,
+    "height": 30480,
+    "ps": "ARCHA",
+    "alias": null
+  },
+  {
+    "id": 74,
+    "name": "PAPER_ARCHB",
+    "width": 30480,
+    "height": 45720,
+    "ps": "ARCHB",
+    "alias": null
+  },
+  {
+    "id": 75,
+    "name": "PAPER_ARCHC",
+    "width": 45720,
+    "height": 60960,
+    "ps": "ARCHC",
+    "alias": null
+  },
+  {
+    "id": 76,
+    "name": "PAPER_ARCHD",
+    "width": 60960,
+    "height": 91440,
+    "ps": "ARCHD",
+    "alias": null
+  },
+  {
+    "id": 77,
+    "name": "PAPER_ARCHE",
+    "width": 91440,
+    "height": 121920,
+    "ps": "ARCHE",
+    "alias": null
+  },
+  {
+    "id": 78,
+    "name": "PAPER_SCREEN_16_9",
+    "width": 15750,
+    "height": 28000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 79,
+    "name": "PAPER_SCREEN_16_10",
+    "width": 17500,
+    "height": 28000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 80,
+    "name": "PAPER_16K_195x270",
+    "width": 19500,
+    "height": 27000,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 81,
+    "name": "PAPER_16K_197x273",
+    "width": 19700,
+    "height": 27300,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 82,
+    "name": "PAPER_WIDESCREEN",
+    "width": 19050,
+    "height": 33866,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 83,
+    "name": "PAPER_ONSCREENSHOW_4_3",
+    "width": 19050,
+    "height": 25400,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 84,
+    "name": "PAPER_ONSCREENSHOW_16_9",
+    "width": 14288,
+    "height": 25400,
+    "ps": null,
+    "alias": null
+  },
+  {
+    "id": 85,
+    "name": "PAPER_ONSCREENSHOW_16_10",
+    "width": 15875,
+    "height": 25400,
+    "ps": null,
+    "alias": null
+  }
+]

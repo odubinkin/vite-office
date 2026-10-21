@@ -1,7 +1,7 @@
 /** @fileoverview Native Calc sheet context for scalar rows over an actual ScTable. */
 import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
-import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLTableColContext } from "./xmlcoli";
@@ -11,6 +11,16 @@ export class ScXMLTableContext extends ScXMLImportContext {
   readonly tab: number;
   row = 0;
   column = 0;
+  /** Accepts the ordinary empty forms container; real controls still require their form-layer owner. @param namespaceURI - Child namespace. @param localName - Child name. @param attributes - Child attributes. @returns Empty forms context or original rejection. */
+  override createUnknownChildContext(
+    namespaceURI: string,
+    localName: string,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    if (namespaceURI === ODF_NAMESPACES.office && localName === "forms")
+      return new ScXMLImportContext(this.owner);
+    return super.createUnknownChildContext(namespaceURI, localName, attributes);
+  }
   /** Appends a real native sheet with its supplied valid name. @param owner - Owner. @param attributes - Attributes. @returns Context. */
   constructor(
     readonly owner: ScXMLImport,

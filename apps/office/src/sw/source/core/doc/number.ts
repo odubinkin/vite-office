@@ -18,6 +18,7 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import type { SwEditShell } from "../edit/ednumber";
+import type { SwFormat } from "../attr/format";
 import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
@@ -46,6 +47,11 @@ export class SwNumFormat extends SvxNumberFormat {
   /** Reads the composed native SwClient registration; JS has one base class. @returns Registered source, initially undefined. */
   public GetRegisteredIn(): SwModify | undefined {
     return this.client.GetRegisteredIn();
+  }
+  /** Original virtual name query borrows only GetName from the registered native format base;the actual SwCharFormat owner remains unported. @returns Current registered name or empty. */
+  public override GetCharFormatName(): string {
+    const source = this.GetRegisteredIn() as (SwModify & Pick<SwFormat, "GetName">) | undefined;
+    return source === undefined ? "" : source.GetName();
   }
   /** Implements native base assignment followed by Writer registration transfer. @param other - Const source. @returns Assigned format. */
   public override Assign(other: ConstSwNumFormat): this {

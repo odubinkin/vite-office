@@ -1,5 +1,8 @@
 /** @fileoverview Implements the supported SwPageDesc contract from pinned Writer pagedesc/docdesc. */
 
+import { Paper, PaperInfo } from "../../../../i18nutil/inc/paper";
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
+
 /** Supported physical paper identities exposed by the bounded Page tab. */
 export type WriterPaperFormat = "A4" | "Letter" | "custom";
 
@@ -18,9 +21,18 @@ export interface WriterPageDescriptorValue {
 
 /** Common paper sizes used by LibreOffice's SvxPaperInfo boundary, in twips. */
 export const WRITER_PAPER_SIZES = Object.freeze({
-  A4: Object.freeze({ height: 16_838, width: 11_906 }),
-  Letter: Object.freeze({ height: 15_840, width: 12_240 }),
+  A4: physicalPaper(Paper.PAPER_A4),
+  Letter: physicalPaper(Paper.PAPER_LETTER),
 });
+
+/** Borrows actual shared native geometry and converts integer distances with original o3tl rounding. @param paper - Native paper identity. @returns Immutable twip dimensions. */
+function physicalPaper(paper: Paper): Readonly<{ height: number; width: number }> {
+  const info = new PaperInfo(paper);
+  return Object.freeze({
+    height: Number(convert(BigInt(info.getHeight()), Length.mm100, Length.twip)),
+    width: Number(convert(BigInt(info.getWidth()), Length.mm100, Length.twip)),
+  });
+}
 
 const MIN_PAGE_CONTENT_TWIPS = 567;
 const MAX_PAGE_TWIPS = 90_720;

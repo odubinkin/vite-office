@@ -20,6 +20,7 @@ const accelerators = readFileSync(root + "Accelerators.xcu", "utf8");
 it("uses the same source captions and accelerator order for both suite generators", /** Checks actual pinned command resources. @returns Nothing. */ () => {
   expect(stripMnemonic(findEnglishLabel(".uno:OpenFromCalc", calc, generic))).toBe("Open");
   expect(findShortcuts(".uno:OpenFromCalc", accelerators, module)[0]).toBe("Ctrl+O");
+  expect(findShortcuts(".uno:Calculate", accelerators, module)).toEqual(["F9"]);
   expect(findShortcuts(".uno:SaveAs", accelerators, module).slice(0, 2)).toEqual([
     "Ctrl+Shift+S",
     "Meta+Shift+S",
@@ -28,6 +29,7 @@ it("uses the same source captions and accelerator order for both suite generator
     "Ctrl+Shift+Z",
     "Meta+Shift+Z",
   ]);
+  expect(findShortcuts(".uno:ToggleFormula", accelerators, module)).toEqual(["Ctrl+`", "Meta+`"]);
   expect(findShortcuts(".uno:Unknown", accelerators, module)).toEqual([]);
   expect(findCommandPropertyBits(".uno:Bold", calc, generic) & 8).toBe(8);
   expect(findCommandPropertyBits(".uno:Unknown", calc, generic)).toBe(0);
@@ -40,6 +42,7 @@ it("uses the same source captions and accelerator order for both suite generator
 it("preserves shared notation and catalog inheritance without fabricating labels", /** Verifies deterministic pure transformations. @returns Nothing. */ () => {
   expect(convertShortcut("RETURN_MOD1_MOD2_SHIFT")).toBe("Ctrl+Alt+Shift+Enter");
   expect(convertShortcut("F2")).toBe("F2");
+  expect(convertShortcut("QUOTELEFT_MOD1")).toBe("Ctrl+`");
   expect(stripMnemonic("~Save As...")).toBe("Save As");
   expect(decodeXml("&lt;A&amp;B&gt;")).toBe("<A&B>");
   expect(escapeRegExp(".uno:X[1](a)+?")).toBe("\\.uno:X\\[1\\]\\(a\\)\\+\\?");

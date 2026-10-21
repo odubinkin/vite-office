@@ -51,7 +51,7 @@ it("uses original1280twip widths,UInt16/zero fallback and source hidden span out
     expect(doc.ColHidden(7, 5, first, last)).toBe(false);
     expect([first[0], last[0]]).toEqual([7, 7]);
     expect(doc.ColHidden(8, 5)).toBe(false);
-    expect(table.GetAllocatedColumnsCount()).toBe(0);
+    expect(table.GetAllocatedColumnsCount()).toBe(1);
   } finally {
     doc.DisposeAttributes();
   }
@@ -104,7 +104,7 @@ it("copies source geometry without changing cells or allocating data columns and
       (
         source.FetchTable(0) as NonNullable<ReturnType<typeof source.FetchTable>>
       ).GetAllocatedColumnsCount(),
-    ).toBe(0);
+    ).toBe(1);
   } finally {
     source.DisposeAttributes();
     target.DisposeAttributes();

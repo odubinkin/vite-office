@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-61d39be4-828f-4ff8-90b6-7a3f00c05650",
+    "capabilityId": "CAP-61d39be4-828f-4ff8-90b6-7a3f00c05650",
+    "suite": "shared",
+    "subsystem": "font-variation-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskNF91KY in-progress native EditEngine pool prerequisite: actual SvxFontVariationsItem ordered owned vector,copy,Clone,payload IEEE equality,typed string Any and content presentation. VariationsToString uses real OUStringBuffer appendFloat;featureCodeAsString uses original terminated four-byte ASCII_US read site bound directly to the existing SAL descriptor/converter. Original ASCII_US table maps upper bytes through MS1252;no host decoder or alternate string model. Logical ordered hashing now uses normalized binary32 bits with signed-zero coalescing;native stdlib ABI numeric hash parity remains unverified. Actual EditEngine pool/rich-text owners are implemented in this same unfinished task;later Calc styles/layout/UI remain pending. No broad parity promotion."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native value and typed Any ownership use existing shared SAL/CPPU classes;fixed ASCII_US conversion binds the actual source converter/descriptor."
+    },
+    "capability": "Native font variation values for EditEngine pool construction",
+    "gaps": [
+      "Native stdlib ABI numeric float hash parity,Calc style owners/layout/UI and full native ABI/service parity remain unverified or unported."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxFontVariationsItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/font/FontVariation.cxx",
+          "marker": "VariationsToString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/qa/cppunit/complextext.cxx",
+          "marker": "VariationsToString"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/fontvariationsitem.hxx",
+          "marker": "SvxFontVariationsItem"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.variations.ts",
+          "marker": "SvxFontVariationsItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-variations-item.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/FontVariation.test.ts",
+          "marker": "native"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "task57"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-font-variation-values",
+    "scopeLimitations": [
+      "TaskNF91KY in-progress native EditEngine pool prerequisite: actual SvxFontVariationsItem ordered owned vector,copy,Clone,payload IEEE equality,typed string Any and content presentation. VariationsToString uses real OUStringBuffer appendFloat;featureCodeAsString uses original terminated four-byte ASCII_US read site bound directly to the existing SAL descriptor/converter. Original ASCII_US table maps upper bytes through MS1252;no host decoder or alternate string model. Logical ordered hashing now uses normalized binary32 bits with signed-zero coalescing;native stdlib ABI numeric hash parity remains unverified. Actual EditEngine pool/rich-text owners are implemented in this same unfinished task;later Calc styles/layout/UI remain pending. No broad parity promotion."
+    ]
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-17e6ea35-6788-440f-af21-d5647d785cd0",
+    "capabilityId": "CAP-17e6ea35-6788-440f-af21-d5647d785cd0",
+    "suite": "calc",
+    "subsystem": "view-options",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskSRFT0T implements original ScViewOptions19boolean fields/defaults/copy and genuine document/view value boundaries;object modes,color,drawing-grid aggregate,configuration/window services and full equality remain explicitly unported. Native View Headers26242 and Show Formulas26250 accept slot bools or invert;headers initially change only the view,formula copies the entire represented view options into the document. Grid25018 ignores arguments,creates selected tab-data slots,changes only current-sheet bShowGrid and marks the document modified without adding history or committing input. Genuine shared Writer View menus/Sfx bindings render native checked states;header offsets and scroll geometry disappear,implicit grid lines hide while real cell frames remain,formula output reads source before cached errors. Shared quote-key canonicalization consumes original QUOTELEFT accelerator. Browser redraw/invalidation projects native paint/resize callbacks;no fake window/modificator/configuration service or alternate model. Native view-settings XML persistence and complete parity remain unported;Writer IO/no-recovery deviations remain.",
+      "TaskSRFT0T preserves gridwin4 global GRID AND current-sheet bShowGrid paint admission. Initial and updated implicit lines use transparent1px shorthand only as the no-frame fallback,so React shorthand clearing cannot restore lines or hide actual frame sides. New regression covers global visibility separately from per-sheet toggles."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Native grid,header and formula View commands",
+    "gaps": [
+      "Unported native object/color/configuration/window services,view-settings XML and complete Calc/UI parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx",
+          "marker": "case FID_TOGGLEHEADERS:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwshf.cxx",
+          "marker": "case FID_TAB_TOGGLE_GRID:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/viewopti.cxx",
+          "marker": "ScViewOptions::SetDefaults"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/gridwin4.cxx",
+          "marker": "bool bGrid = rOpts.GetOption"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/viewopti.hxx",
+          "marker": "class SC_DLLPUBLIC ScViewOptions"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py",
+          "marker": "controller.ShowGrid"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+          "marker": "MarkRows"
+        },
+        {
+          "path": "apps/office/src/sc/sdi/scalc.ts",
+          "marker": "calcCellSelectionCommands"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+          "marker": "executes real axis slots"
+        },
+        {
+          "path": "apps/office/e2e/calc/cell-selection.spec.ts",
+          "marker": "Calc row and column selection"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/connected-area.test.ts",
+          "marker": "expands all directions"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
+          "marker": "uses native first-range"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+          "marker": "subtracts original hidden runs"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-visible-selection.test.tsx",
+          "marker": "connects shared visible-"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/deselect.test.ts",
+          "marker": "retains original cursor"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-deselect.test.tsx",
+          "marker": "routes exact native grid"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-deselect-bindings.test.tsx",
+          "marker": "honors actual unbound or reassigned ShiftBackspace"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-modal-focus.test.tsx",
+          "marker": "restores actual grid focus after inert removal"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Current UI delivery priority"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-view-options",
+    "scopeLimitations": [
+      "Only declared boolean view fields and3commands;no complete view-options or document persistence claim."
+    ],
+    "evidence": {
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/viewopti.test.ts",
+          "marker": "retains every original boolean"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/view-options.test.ts",
+          "marker": "uses original typed"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+          "marker": "toggles header visibility"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Current UI block64"
+        }
+      ],
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/viewopti.ts",
+          "marker": "ScViewOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+          "marker": "ToggleSheetGrid"
+        }
+      ]
+    }
+  }
+}

@@ -10,7 +10,7 @@ export function AdjustBlockHeight(
   first: number,
   last: number,
 ): boolean {
-  const context = new RowHeightContext(doc.MaxRow(), 1 / 15);
+  const context = new RowHeightContext(doc.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);
   let changed = false;
   for (const tab of marks.GetSelectedTabs())
     changed =

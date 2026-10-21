@@ -47,7 +47,7 @@ export function normalizeCommandShortcut(shortcut: string): string {
   const keys: string[] = [];
   for (const part of parts) {
     const modifier = modifierAliases.get(part.toLowerCase());
-    if (modifier === undefined) keys.push(part.toUpperCase());
+    if (modifier === undefined) keys.push(part === "`" ? "QUOTELEFT" : part.toUpperCase());
     else if (modifiers.has(modifier))
       throw new Error(`Command shortcut repeats modifier: ${modifier}`);
     else modifiers.add(modifier);
@@ -72,7 +72,7 @@ export function normalizeCommandShortcut(shortcut: string): string {
  */
 export function getBrowserShortcut(event: BrowserShortcutEvent): string | undefined {
   if (["Alt", "Control", "Meta", "Shift"].includes(event.key)) return undefined;
-  const key = event.key === " " ? "Space" : event.key;
+  const key = event.key === " " ? "Space" : event.key === "*" ? "MULTIPLY" : event.key;
   return normalizeCommandShortcut(
     [
       event.ctrlKey ? "Ctrl" : undefined,

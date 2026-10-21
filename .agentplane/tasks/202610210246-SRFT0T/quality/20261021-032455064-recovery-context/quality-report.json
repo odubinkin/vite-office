@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202610210246-SRFT0T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T03:24:55.064Z",
+  "verdict": "pass",
+  "summary": "Native three View commands and real boolean/per-sheet/document owners accepted;584Calc tests,132owners100percent,related common modules100percent and actual production browser proof.",
+  "evaluated_sha": "3bb1b52a55f5eb60542b0f9b40ea226c8caaa983",
+  "blueprint_digest": "a60a0cd8eb3973285c557ef46f91563d34fbc55683ade90efedc7c71425ab1e6",
+  "findings": [
+    "Source bool defaults/copy and current-sheet grid state are real native owners. Headers/formula typed request/recording and asymmetric document-copy boundaries follow source;grid ignores args,changes only current sheet and marks modified. Combined global/sheet paint flags and initial/update no-frame shorthands preserve genuine explicit borders. Actual shared Writer menus and canonical accelerator boundary are reused;readable backtick caption replaces internal key name with identical dispatch.584Calc/132owners,22shared/Writer plus shared key owner100,and17tooling plus shared catalog100 pass. All14gates and3metadata exits0;248raw artifacts and171source/19native pins re-audited. Native configuration/window/modificator service graphs and view-settings XML remain explicitly unported;no complete parity claim or fake service."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610210246-SRFT0T/README.md",
+    ".agentplane/tasks/202610210246-SRFT0T/evidence/acceptance.json",
+    ".agentplane/tasks/202610210246-SRFT0T/evidence/audit.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

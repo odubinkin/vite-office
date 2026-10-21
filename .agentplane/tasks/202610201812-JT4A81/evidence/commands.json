@@ -1,0 +1,208 @@
+{
+  "cwd": "/Users/odubinkin/Projects/vite-office-calc",
+  "calcCwd": "/Users/odubinkin/Projects/vite-office-calc/apps/office",
+  "calc": "node ../../node_modules/vitest/vitest.mjs run --config vitest.calc.config.ts --maxWorkers=1 --coverage --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-calc-accepted-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-calc-accepted-results.json",
+  "related": "node ../../node_modules/vitest/vitest.mjs run --config vite.config.ts src/vcl/browser/text-line-measurement.test.ts src/sw/browser/editor/writer-line-measurement.test.ts src/sw/browser/editor/native-line-margin.test.tsx src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/browser/editor/writer-selection.test.ts src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx --maxWorkers=1 --coverage --coverage.include=src/vcl/browser/text-line-measurement.ts --coverage.include=src/sw/browser/editor/writer-line-measurement.ts --coverage.reporter=json --coverage.reporter=text --coverage.reportOnFailure=true --coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-related-coverage --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-related-results.json",
+  "build": "npm run build",
+  "browser": "PLAYWRIGHT_JSON_OUTPUT_NAME=/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-browser-final-results.json npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/font-family.spec.ts apps/office/e2e/calc/wrap-text.spec.ts apps/office/e2e/calc/text-size-context.spec.ts apps/office/e2e/native-line-margin.spec.ts apps/office/e2e/writer-layout-ratios.spec.ts --workers=1 --reporter=line,json",
+  "static": [
+    {
+      "name": "format",
+      "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+        "apps/office/src/sc/inc/rowheightcontext.ts",
+        "apps/office/src/sc/source/core/data/column.ts",
+        "apps/office/src/sc/source/core/data/document.ts",
+        "apps/office/src/sc/source/core/data/global.ts",
+        "apps/office/src/sc/source/core/data/rowheight.test.ts",
+        "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+        "apps/office/src/sc/source/core/data/table.ts",
+        "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+        "apps/office/src/sc/source/ui/view/viewfun2.ts",
+        "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+        "apps/office/e2e/calc/text-size-context.spec.ts",
+        "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+        "apps/office/src/sc/source/core/inc/scrdata.ts",
+        "apps/office/src/vcl/browser/text-line-measurement.test.ts",
+        "apps/office/src/vcl/browser/text-line-measurement.ts"
+      ],
+      "log": "output/playwright/task53-final-format.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:12.331Z",
+      "finishedAt": "2026-10-20T18:36:14.067Z"
+    },
+    {
+      "name": "lint",
+      "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        "node_modules/eslint/bin/eslint.js",
+        "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+        "apps/office/src/sc/inc/rowheightcontext.ts",
+        "apps/office/src/sc/source/core/data/column.ts",
+        "apps/office/src/sc/source/core/data/document.ts",
+        "apps/office/src/sc/source/core/data/global.ts",
+        "apps/office/src/sc/source/core/data/rowheight.test.ts",
+        "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+        "apps/office/src/sc/source/core/data/table.ts",
+        "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+        "apps/office/src/sc/source/ui/view/viewfun2.ts",
+        "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+        "apps/office/e2e/calc/text-size-context.spec.ts",
+        "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+        "apps/office/src/sc/source/core/inc/scrdata.ts",
+        "apps/office/src/vcl/browser/text-line-measurement.test.ts",
+        "apps/office/src/vcl/browser/text-line-measurement.ts",
+        "--max-warnings",
+        "0"
+      ],
+      "log": "output/playwright/task53-final-lint.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:12.326Z",
+      "finishedAt": "2026-10-20T18:36:18.822Z"
+    },
+    {
+      "name": "dependencies",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "log": "output/playwright/task53-final-dependencies.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:18.823Z",
+      "finishedAt": "2026-10-20T18:36:34.467Z"
+    },
+    {
+      "name": "writer-resources",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:writer-resources"
+      ],
+      "log": "output/playwright/task53-final-writer-resources.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:34.469Z",
+      "finishedAt": "2026-10-20T18:36:41.845Z"
+    },
+    {
+      "name": "calc-resources",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:calc-resources"
+      ],
+      "log": "output/playwright/task53-final-calc-resources.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:41.848Z",
+      "finishedAt": "2026-10-20T18:36:44.713Z"
+    },
+    {
+      "name": "docs",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "log": "output/playwright/task53-final-docs.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:44.716Z",
+      "finishedAt": "2026-10-20T18:36:53.901Z"
+    },
+    {
+      "name": "file-size",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "log": "output/playwright/task53-final-file-size.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:53.902Z",
+      "finishedAt": "2026-10-20T18:36:55.352Z"
+    },
+    {
+      "name": "source-tree",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "log": "output/playwright/task53-final-source-tree.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:55.353Z",
+      "finishedAt": "2026-10-20T18:36:55.789Z"
+    },
+    {
+      "name": "types",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "log": "output/playwright/task53-final-types.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:14.068Z",
+      "finishedAt": "2026-10-20T18:36:55.849Z"
+    },
+    {
+      "name": "source-provenance",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "log": "output/playwright/task53-final-source-provenance.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:55.791Z",
+      "finishedAt": "2026-10-20T18:37:04.342Z"
+    },
+    {
+      "name": "routing",
+      "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "log": "output/playwright/task53-final-routing.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:37:04.343Z",
+      "finishedAt": "2026-10-20T18:37:04.479Z"
+    },
+    {
+      "name": "registry",
+      "cmd": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "log": "output/playwright/task53-final-registry.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:36:55.851Z",
+      "finishedAt": "2026-10-20T18:37:09.870Z"
+    },
+    {
+      "name": "doctor",
+      "cmd": "/Users/odubinkin/.local/bin/ap",
+      "args": [
+        "doctor"
+      ],
+      "log": "output/playwright/task53-final-doctor.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:37:04.480Z",
+      "finishedAt": "2026-10-20T18:37:09.901Z"
+    },
+    {
+      "name": "static",
+      "cmd": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node",
+      "args": [
+        "scripts/check-static-build.mjs"
+      ],
+      "log": "output/playwright/task53-final-static.log",
+      "exit": 0,
+      "startedAt": "2026-10-20T18:37:09.871Z",
+      "finishedAt": "2026-10-20T18:37:09.970Z"
+    }
+  ]
+}

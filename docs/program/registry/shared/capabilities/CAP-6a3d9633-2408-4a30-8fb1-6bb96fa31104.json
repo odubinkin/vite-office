@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6a3d9633-2408-4a30-8fb1-6bb96fa31104",
+    "capabilityId": "CAP-6a3d9633-2408-4a30-8fb1-6bb96fa31104",
+    "suite": "shared",
+    "subsystem": "browser-tracking",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task5678C0 moves the existing Writer ruler tracking implementation into shared VCL browser ownership,with Writer retaining a reexport boundary. The same window-global owner admits one left single-button gesture,isolates the initiating pointer or legacy mouse domain,owns all key input,accepts Enter,and cancels Escape,pointercancel,blur,disabled view,owner replacement and unmount. No application model state is stored here. This bounded browser projection does not certify complete native windows."
+    ],
+    "capability": "Common browser VCL window tracking",
+    "gaps": [
+      "Full native device/window and complete UI parity remain unverified.",
+      "The upstream xwindow QA concerns native window mouse/key listeners; direct initialized native tracking differential evidence remains unverified. Local tracking tests and inspected VCL StartTracking/EndTracking/key-priority code supply only bounded evidence."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vcl/source/window/window2.cxx",
+          "marker": "Window::StartTracking"
+        },
+        {
+          "path": "vcl/source/window/winproc.cxx",
+          "marker": "KEY_ESCAPE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/uitest/writer_tests5/xwindow.py",
+          "marker": "XMouseListenerExtended"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vcl/README.md",
+          "marker": "Visual Class Library"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/vcl/browser/use-window-tracking.ts",
+          "marker": "useWindowTracking"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/vcl/browser/use-window-tracking.test.tsx",
+          "marker": "legacy mouse domain"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+          "marker": "ownsPointer"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "User priority"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task5678C0 moves the existing Writer ruler tracking implementation into shared VCL browser ownership,with Writer retaining a reexport boundary. The same window-global owner admits one left single-button gesture,isolates the initiating pointer or legacy mouse domain,owns all key input,accepts Enter,and cancels Escape,pointercancel,blur,disabled view,owner replacement and unmount. No application model state is stored here. This bounded browser projection does not certify complete native windows."
+    },
+    "scopeLimitations": [
+      "Device optimum and full native window parity are not certified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "window-tracking-lifetime"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": {
+    "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx": "6393c66b1c33946c0b8c05a72d2b0386a9986b5aa4f9e85b923a23b3d98e0cde",
+    "vendor/libreoffice-reference/sc/inc/patattr.hxx": "7f3209d1fb4d58eb5e9ba91f30fed7bf85352ced80997942f3c92432437dd15b",
+    "vendor/libreoffice-reference/svl/source/items/style.cxx": "0ddbbaf83a7912b1df4341f807e86db0d09daa3405c7bf48193a1650f433c942"
+  }
+}

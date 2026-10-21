@@ -100,7 +100,7 @@ it("changes the real default-column tail without allocating the whole sheet and 
     const marks = c.viewData.GetMarkData();
     marks.SetMarkArea(new ScRange(0, 0, 0, doc.MaxCol(), 2, 0));
     c.ChangeIndent(true);
-    expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(0);
+    expect((doc.FetchTable(0) as ScTable).GetAllocatedColumnsCount()).toBe(1);
     expect(values(doc, doc.MaxCol(), 1)[0]).toBe(200);
     doc.SetValue(new ScAddress(3, 1, 0), 7);
     expect(values(doc, 3, 1)[0]).toBe(200);

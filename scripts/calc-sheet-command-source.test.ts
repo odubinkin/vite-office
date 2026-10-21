@@ -240,3 +240,24 @@ it("projects the exact cell formatobjectbar visibility and command order indepen
     ),
   ).toBe(true);
 });
+
+it("projects original key-only Undo Selection metadata without adding a surface placement", /** Checks native SDI,accelerator and catalog authority for the hidden command. @returns Nothing. */ () => {
+  expect(source("sc/inc/sc.hrc")).toMatch(/#define SID_SELECT_NONE\s+\(SID_KEYFUNC_START \+ 28\)/);
+  expect(source("sc/sdi/scalc.sdi")).toContain("SfxVoidItem Deselect SID_SELECT_NONE");
+  expect(source("sc/sdi/cellsh.sdi")).toMatch(
+    /SID_SELECT_NONE\s+\[ ExecMethod = ExecuteMove; StateMethod = GetStateCursor;/,
+  );
+  expect(source("officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu")).toMatch(
+    /<node oor:name="\.uno:Deselect"[\s\S]*?<value xml:lang="en-US">Undo Selection<\/value>/,
+  );
+  expect(source("officecfg/registry/data/org/openoffice/Office/Accelerators.xcu")).toMatch(
+    /<node oor:name="BACKSPACE_SHIFT"[\s\S]*?\.uno:Deselect/,
+  );
+  expect(calcResources.commands[".uno:Deselect"]).toEqual({
+    label: "Undo Selection",
+    showsDialog: false,
+    shortcuts: ["Shift+BACKSPACE"],
+    semantics: "action",
+  });
+  expect(JSON.stringify(calcResources.surfaces)).not.toContain(".uno:Deselect");
+});

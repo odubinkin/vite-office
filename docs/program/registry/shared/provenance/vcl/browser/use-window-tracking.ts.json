@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/vcl/browser/use-window-tracking.ts",
+    "rationale": "Task5678C0 moves the existing Writer ruler tracking implementation into shared VCL browser ownership,with Writer retaining a reexport boundary. The same window-global owner admits one left single-button gesture,isolates the initiating pointer or legacy mouse domain,owns all key input,accepts Enter,and cancels Escape,pointercancel,blur,disabled view,owner replacement and unmount. No application model state is stored here. This bounded browser projection does not certify complete native windows.",
+    "responsibilities": [
+      "Task5678C0 moves the existing Writer ruler tracking implementation into shared VCL browser ownership,with Writer retaining a reexport boundary. The same window-global owner admits one left single-button gesture,isolates the initiating pointer or legacy mouse domain,owns all key input,accepts Enter,and cancels Escape,pointercancel,blur,disabled view,owner replacement and unmount. No application model state is stored here. This bounded browser projection does not certify complete native windows."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/use-window-tracking.ts",
+          "marker": "useWindowTracking"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/use-window-tracking.test.tsx",
+          "marker": "legacy mouse domain"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+          "marker": "ownsPointer"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task5678C0 moves the existing Writer ruler tracking implementation into shared VCL browser ownership,with Writer retaining a reexport boundary. The same window-global owner admits one left single-button gesture,isolates the initiating pointer or legacy mouse domain,owns all key input,accepts Enter,and cancels Escape,pointercancel,blur,disabled view,owner replacement and unmount. No application model state is stored here. This bounded browser projection does not certify complete native windows."
+    }
+  }
+}

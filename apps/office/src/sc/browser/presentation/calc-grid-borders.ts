@@ -42,13 +42,14 @@ export function createCalcGridFrames(
   }
   return { array, firstColumn, rowIndexes };
 }
-/** Assigns each interior seam to the following cell's top/left paint edge as native frame primitive traversal does,avoiding doubled CSS widths. @param frames - Actual frame array. @param col - Native column. @param row - Native row. @param lastColumn - Last visible column. @param lastRow - Last visible row. @returns Shared Writer CSS line values. */
+/** Assigns each interior seam to the following cell's top/left paint edge as native frame primitive traversal does,avoiding doubled CSS widths. @param frames - Actual frame array. @param col - Native column. @param row - Native row. @param lastColumn - Last visible column. @param lastRow - Last visible row. @param showGrid - Native combined global/sheet grid visibility. @returns Shared Writer CSS line values. */
 export function calcGridBorderStyle(
   frames: CalcGridFrames,
   col: number,
   row: number,
   lastColumn: boolean,
   lastRow: boolean,
+  showGrid = true,
 ): CSSProperties {
   const x = col - frames.firstColumn,
     y = frames.rowIndexes.get(row) as number,
@@ -64,11 +65,15 @@ export function calcGridBorderStyle(
       ? lastColumn
         ? browserBorderLine(right, false)
         : "none"
-      : undefined,
+      : showGrid
+        ? undefined
+        : "1px solid transparent",
     borderBottom: bottom.GetWidth()
       ? lastRow
         ? browserBorderLine(bottom, false)
         : "none"
-      : undefined,
+      : showGrid
+        ? undefined
+        : "1px solid transparent",
   };
 }

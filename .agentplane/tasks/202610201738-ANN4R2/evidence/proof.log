@@ -1,0 +1,25 @@
+{
+  "calcTests": 497,
+  "relatedTests": 30,
+  "browserPassed": 13,
+  "summaries": {
+    "calc": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "shared": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "changedShared": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  }
+}

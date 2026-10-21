@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/textitem.variations.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-variation-values",
+    "capabilityIds": [
+      "CAP-61d39be4-828f-4ff8-90b6-7a3f00c05650"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/textitem.variations.ts",
+        "apps/office/src/editeng/source/items/native-font-variations-item.test.ts",
+        "apps/office/src/vcl/source/font/FontVariation.test.ts"
+      ],
+      "justification": "TaskNF91KY in-progress native EditEngine pool prerequisite: actual SvxFontVariationsItem ordered owned vector,copy,Clone,payload IEEE equality,typed string Any and content presentation. VariationsToString uses real OUStringBuffer appendFloat;featureCodeAsString uses original terminated four-byte ASCII_US read site bound directly to the existing SAL descriptor/converter. Original ASCII_US table maps upper bytes through MS1252;no host decoder or alternate string model. Logical ordered hashing now uses normalized binary32 bits with signed-zero coalescing;native stdlib ABI numeric hash parity remains unverified. Actual EditEngine pool/rich-text owners are implemented in this same unfinished task;later Calc styles/layout/UI remain pending. No broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxFontVariationsItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "editeng/source/items/textitem.cxx",
+      "upstreamSymbols": [
+        "SvxFontVariationsItem"
+      ]
+    }
+  }
+}

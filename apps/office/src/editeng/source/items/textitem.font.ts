@@ -5,6 +5,11 @@ import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW, type rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 import { rtl_ustr_hashCode_WithLength } from "../../../sal/inc/rtl/ustring.h";
 import { hash_combine } from "../../../o3tl/inc/hash_combine";
+import { getDefaultFontWithoutDevice } from "../../../vcl/source/outdev/font";
+import { DefaultFontType } from "../../../unotools/inc/fontdefs";
+import { LANGUAGE_ENGLISH_US, LANGUAGE_ARABIC_SAUDI_ARABIA } from "../../../i18nlangtag/inc/lang";
+import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 /** Calls the actual shared SAL UTF16 hash over the same immutable string units, including embedded zeros/surrogates. @param value - Native Unicode value at this browser item boundary. @returns Native signed32 string hash. */
 function stringHash(value: string): number {
   const units = new Uint16Array(value.length);
@@ -146,5 +151,31 @@ export class SvxFontItem extends SfxPoolItem {
       pitch: this.ePitch,
       charSet: this.eTextEncoding,
     };
+  }
+}
+
+/** Original ordered GetDefaultFonts item updates at the current actual VCL no-device/OnlyOne metadata boundary. Renderer substitution/AskConfig and the platform thread-encoding service remain unported;the browser boundary uses UTF8. @param latin - Actual Latin item. @param asian - Actual Asian item. @param complex - Actual complex-script item. @returns Nothing. */
+export function GetDefaultFonts(
+  latin: SvxFontItem,
+  asian: SvxFontItem,
+  complex: SvxFontItem,
+): void {
+  const source = [
+    [DefaultFontType.LATIN_TEXT, LANGUAGE_ENGLISH_US, latin],
+    [DefaultFontType.CJK_TEXT, LANGUAGE_ENGLISH_US, asian],
+    [DefaultFontType.CTL_TEXT, LANGUAGE_ARABIC_SAUDI_ARABIA, complex],
+  ] as const;
+  for (const [role, language, item] of source) {
+    const locale = MsLangId.Conversion.convertLanguageToLocale(language, false);
+    try {
+      const font = getDefaultFontWithoutDevice(role, locale, RTL_TEXTENCODING_UTF8);
+      item.SetFamily(font.GetFamilyType());
+      item.SetFamilyName(font.GetFamilyName());
+      item.SetStyleName("");
+      item.SetPitch(font.GetPitch());
+      item.SetCharSet(font.GetCharSet());
+    } finally {
+      locale.dispose();
+    }
   }
 }

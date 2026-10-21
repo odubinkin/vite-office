@@ -32,6 +32,7 @@ import {
 import { FontWeight, FontItalic, FontLineStyle } from "../../../../tools/inc/fontenum";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 import { GetSelectionPattern, ScViewFunc } from "./viewfunc";
+import { ScLineBreakCell } from "../../../inc/attrib";
 import { AdjustBlockHeight } from "./viewfun2";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
@@ -51,6 +52,33 @@ export type CalcColorKind = "font" | "background";
 export const calcColorSlots = { font: 10017, background: 10186 } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Reads original ATTR_LINEBREAK binding, retaining INVALID for mixed selections. @returns Wrapped state or mixed. */
+  GetWrapTextState(): boolean | undefined {
+    return (this.SelectionItem(139) as ScLineBreakCell | undefined)?.GetValue();
+  }
+  /** Original ExecuteAttr line-break branches, including unconditional recording of no-argument toggles. @param request - Actual mapped request. @returns Native operation admission. */
+  ExecuteWrapText(request: SfxRequest): boolean {
+    if (request.GetArgs().length === 0) {
+      const old = (this.SelectionPattern().GetItem(139) as ScLineBreakCell).GetValue(),
+        item = new ScLineBreakCell(!old),
+        delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
+      delta.ItemSetPut(item);
+      const result = this.ApplySelectionPattern(delta);
+      request.AppendItem(item);
+      request.Done();
+      return result;
+    }
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
+    delta.ItemSetPut(
+      request.GetArgs().find(
+        /** Borrows the actual mapped original cell item. @param item - Request item. @returns Native identity. */
+        (item) => item.Which() === 139,
+      ) as ScLineBreakCell,
+    );
+    const result = this.ApplySelectionPattern(delta);
+    if (!request.IsAPI() && !request.IsDone()) request.Done();
+    return result;
+  }
   /** Original GetAttrState copies actual selected diagonal items and INVALID state. @param which - Native diagonal attribute. @returns Native binding. */
   GetDiagonalState(which: 141 | 142): SfxSlotState {
     const set = this.SelectionPattern().GetItemSet();

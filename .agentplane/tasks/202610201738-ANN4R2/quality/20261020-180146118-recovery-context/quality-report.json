@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201738-ANN4R2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T18:01:46.118Z",
+  "verdict": "pass",
+  "summary": "Bounded native Wrap Text attribute/command,shared Writer toolbar,manual-row browser painting and ODS slice passes declared gates without claiming complete automatic wrapped layout or full Calc UI completion.",
+  "evaluated_sha": "6c938516e61f9265c4d168cbd4bb5fa826ffe949",
+  "blueprint_digest": "5d2790c8c6cc0ef91bde138269ebf595e740628bd471286d9e30287ef51e8d6c",
+  "findings": [
+    "Reviewed original SID_ATTR_ALIGN_LINEBREAK139/10230 mapping,no-argument API completion and typed API distinction,actual selection/filtered/grouped operation/history owners and strict XML wrap/no-wrap conversion. Browser uses actual canonical item and existing shared toolbar. Raw archives and source-hash baseline replacement prove current Calc/shared100 S/B/F/L;497 Calc,30 related and13 distinct browser cases pass,with original fixture failures retained. Device-based automatic wrapped-height remains an explicit remaining goal requirement,not replaced by browser model or synthetic metrics."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201738-ANN4R2/README.md",
+    ".agentplane/tasks/202610201738-ANN4R2/evidence/proof.json",
+    ".agentplane/tasks/202610201738-ANN4R2/evidence/audit-archives.mjs",
+    ".agentplane/tasks/202610201738-ANN4R2/evidence/wrap-reopened-1280.png",
+    ".agentplane/tasks/202610201738-ANN4R2/evidence/wrap-reopened-390.png"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

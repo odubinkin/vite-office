@@ -1,8 +1,22 @@
-/** @fileoverview Native Calc cell-pattern itemset and canonical holder ownership;style/VCL/font/number caches and hash prefilters remain unported. */
+/** @fileoverview Native Calc cell-pattern itemsets,borrowed style inheritance and canonical holder lifecycle;Calc style-pool resolution,VCL/font/number caches and hash prefilters remain unported. */
+import type { SfxStyleSheet } from "../../../../svl/inc/style";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import * as ATTR from "../../../inc/scitems";
+import * as EE from "../../../../editeng/inc/eeitem";
+import { SvxCellOrientation, SvxCellHorJustify, SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxScriptSpaceItem } from "../../../../editeng/inc/scriptspaceitem";
+import { SfxBoolItem } from "../../../../svl/inc/eitem";
+import type { ScRotateValueItem } from "../../../inc/attrib";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -33,8 +47,8 @@ export interface ScPatternColorEnvironment {
   readonly systemTextColor: Readonly<Color>;
   readonly rawSystemTextColor: Readonly<Color>;
 }
-/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source color or brush identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
-function populateColorResult(
+/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source attribute identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
+function populateResult(
   which: number,
   source: SfxItemSet,
   conditional: SfxItemSet | undefined,
@@ -54,20 +68,69 @@ function populateColorResult(
   }
   return item ?? source.Get(which);
 }
+/** Original copied attributes. Table style participates only in color,family,height and weight;posture/effects/language retain source/conditional ownership. */
+const editCopyItems: readonly (readonly [number, number, boolean])[] = [
+  [ATTR.ATTR_FONT_COLOR, EE.EE_CHAR_COLOR, true],
+  [ATTR.ATTR_FONT, EE.EE_CHAR_FONTINFO, true],
+  [ATTR.ATTR_CJK_FONT, EE.EE_CHAR_FONTINFO_CJK, true],
+  [ATTR.ATTR_CTL_FONT, EE.EE_CHAR_FONTINFO_CTL, true],
+  [ATTR.ATTR_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT, true],
+  [ATTR.ATTR_CJK_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CJK, true],
+  [ATTR.ATTR_CTL_FONT_HEIGHT, EE.EE_CHAR_FONTHEIGHT_CTL, true],
+  [ATTR.ATTR_FONT_WEIGHT, EE.EE_CHAR_WEIGHT, true],
+  [ATTR.ATTR_CJK_FONT_WEIGHT, EE.EE_CHAR_WEIGHT_CJK, true],
+  [ATTR.ATTR_CTL_FONT_WEIGHT, EE.EE_CHAR_WEIGHT_CTL, true],
+  [ATTR.ATTR_FONT_UNDERLINE, EE.EE_CHAR_UNDERLINE, false],
+  [ATTR.ATTR_FONT_OVERLINE, EE.EE_CHAR_OVERLINE, false],
+  [ATTR.ATTR_FONT_WORDLINE, EE.EE_CHAR_WLM, false],
+  [ATTR.ATTR_FONT_CROSSEDOUT, EE.EE_CHAR_STRIKEOUT, false],
+  [ATTR.ATTR_FONT_POSTURE, EE.EE_CHAR_ITALIC, false],
+  [ATTR.ATTR_CJK_FONT_POSTURE, EE.EE_CHAR_ITALIC_CJK, false],
+  [ATTR.ATTR_CTL_FONT_POSTURE, EE.EE_CHAR_ITALIC_CTL, false],
+  [ATTR.ATTR_FONT_CONTOUR, EE.EE_CHAR_OUTLINE, false],
+  [ATTR.ATTR_FONT_SHADOWED, EE.EE_CHAR_SHADOW, false],
+  [ATTR.ATTR_FORBIDDEN_RULES, EE.EE_PARA_FORBIDDENRULES, false],
+  [ATTR.ATTR_FONT_EMPHASISMARK, EE.EE_CHAR_EMPHASISMARK, false],
+  [ATTR.ATTR_FONT_RELIEF, EE.EE_CHAR_RELIEF, false],
+  [ATTR.ATTR_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE, false],
+  [ATTR.ATTR_CJK_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE_CJK, false],
+  [ATTR.ATTR_CTL_FONT_LANGUAGE, EE.EE_CHAR_LANGUAGE_CTL, false],
+  [ATTR.ATTR_HYPHENATE, EE.EE_PARA_HYPHENATE, false],
+  [ATTR.ATTR_WRITINGDIR, EE.EE_PARA_WRITINGDIR, false],
+];
+/** Original reverse transfer intentionally excludes paragraph-only hyphenation,direction and forbidden rules. */
+const reverseEditItems = editCopyItems.filter(
+  /** Selects native GetFromEditItemSet attributes. @param pair - Source/destination pair. @returns Native reverse membership. */
+  ([which]) =>
+    which !== ATTR.ATTR_FORBIDDEN_RULES &&
+    which !== ATTR.ATTR_HYPHENATE &&
+    which !== ATTR.ATTR_WRITINGDIR,
+);
+/** Source script-height identities require absolute integral unit conversion rather than copied payloads. */
+const editHeightWhichs = new Set<number>([
+  ATTR.ATTR_FONT_HEIGHT,
+  ATTR.ATTR_CJK_FONT_HEIGHT,
+  ATTR.ATTR_CTL_FONT_HEIGHT,
+]);
 /** Original fixed cell-pattern schema,independent of the source set or pool ranges. */
 export const aScPatternAttrSchema: WhichRangesContainer = [[ATTR_PATTERN_START, ATTR_PATTERN_END]];
 /** Original C++ friendship over logical pattern registration fields;no public mutation API is invented. */
 interface PatternFriend {
   mnRefCount: number;
 }
-/** Converts an optional native UTF16 style name to a value-key for the native name-group map. @param pattern - Actual pattern. @returns Name key or null. */
-function styleKey(pattern: ScPatternAttr): string | null {
-  const name = pattern.GetStyleName();
+/** Erased borrowed native base operations consumed by pattern association and rename. This is not a ScStyleSheet implementation or a replacement style pool. Actual shared native style objects supply these operations until the Calc subclass owner is ported. */
+export type ScPatternStyleReference = Pick<SfxStyleSheet, "GetName" | "GetItemSet" | "SetName">;
+/** Converts the native optional UTF16 map key by value without changing its owner. @param name - Borrowed name or absent style. @returns Optional value key. */
+function styleNameKey(name: OUStringConstReference | null): string | null {
   if (name === null) return null;
   let key = "";
   const units = name.getStr();
   for (let i = 0; i < name.getLength(); i++) key += String.fromCharCode(units[i] as number);
   return key;
+}
+/** Reads the original optional name-group key. @param pattern - Native pattern. @returns Value key. */
+function styleKey(pattern: ScPatternAttr): string | null {
+  return styleNameKey(pattern.GetStyleName());
 }
 /** Original pool owner and canonical registration map;GC replaces deletion,while holder counts retain source identity/lifecycle semantics. */
 export class CellAttributeHelper {
@@ -85,6 +148,39 @@ export class CellAttributeHelper {
   getDefaultCellAttribute(): ScPatternAttr {
     if (this.mpDefaultCellAttribute === null) this.mpDefaultCellAttribute = new ScPatternAttr(this);
     return this.mpDefaultCellAttribute;
+  }
+  /** Original deletion detaches only patterns borrowing this exact style;unbound names and same-named other style objects are retained. @param style - Actual native style reference. @returns Nothing. */
+  CellStyleDeleted(style: Pick<ScPatternStyleReference, "GetName">): void {
+    const group = this.maRegisteredCellAttributes.get(styleNameKey(style.GetName()));
+    if (group !== undefined)
+      for (const pattern of group) if (pattern.GetStyleSheet() === style) pattern.StyleToName();
+  }
+  /** Original remove/rename/reinsert ordering,including failed rename retaining the actual old name. @param style - Actual native style reference. @param name - Requested name. @returns Nothing. */
+  RenameCellStyle(style: ScPatternStyleReference, name: OUStringConstReference): void {
+    const changed: ScPatternAttr[] = [],
+      key = styleNameKey(style.GetName()),
+      group = this.maRegisteredCellAttributes.get(key);
+    if (group !== undefined) {
+      for (const pattern of group)
+        if (pattern.GetStyleSheet() === style) {
+          changed.push(pattern);
+          group.delete(pattern);
+        }
+      if (group.size === 0) this.maRegisteredCellAttributes.delete(key);
+    }
+    style.SetName(name);
+    for (const pattern of changed) {
+      const nameKey = styleKey(pattern),
+        target = this.maRegisteredCellAttributes.get(nameKey);
+      if (target === undefined) this.maRegisteredCellAttributes.set(nameKey, new Set([pattern]));
+      else target.add(pattern);
+    }
+  }
+  /** Original pool teardown preparation preserves owned names and drops itemset parents,then forces the default-pattern path. @returns Nothing. */
+  AllStylesToNames(): void {
+    for (const group of this.maRegisteredCellAttributes.values())
+      for (const pattern of group) pattern.StyleToName();
+    this.getDefaultCellAttribute().StyleToName();
   }
   /** Original canonical registration;hash filtering is an unported search optimization,all candidates still use full native equality. @param candidate - Native candidate. @param passingOwnership - Whether adopted. @returns Canonical pattern. */
   private registerAndCheck(candidate: ScPatternAttr, passingOwnership: boolean): ScPatternAttr {
@@ -134,7 +230,7 @@ export class CellAttributeHelper {
     candidate.Dispose();
   }
 }
-/** Original cell-pattern data owner over actual shared itemsets;style-sheet and rendering services are intentionally absent. */
+/** Original cell-pattern owner over actual shared itemsets and borrowed native style operations;Calc style resolution and rendering services remain unported. */
 export class ScPatternAttr {
   /** Original fillColor value algorithm with explicit borrowed ambient read-site values. Conditional/table lookup and raw/print/display modes retain source ordering. @param result - Destination complex value. @param itemSet - Actual cell items. @param mode - Original color mode. @param conditional - Optional conditional items. @param table - Optional table-style items. @param backConfig - Optional cached document color. @param textConfig - Optional cached font color. @param environment - Borrowed native configuration/view values. @returns Nothing. */
   static fillColor(
@@ -147,7 +243,7 @@ export class ScPatternAttr {
     textConfig: Readonly<Color> | undefined,
     environment: ScPatternColorEnvironment,
   ): void {
-    const item = populateColorResult(109, itemSet, conditional, table) as SvxColorItem,
+    const item = populateResult(109, itemSet, conditional, table) as SvxColorItem,
       color = new Color(item.GetValue()),
       complex = new ComplexColor();
     complex.assign(item.getComplexColor());
@@ -157,7 +253,7 @@ export class ScPatternAttr {
       mode === ScAutoFontColorMode.IgnoreFont ||
       mode === ScAutoFontColorMode.IgnoreAll
     ) {
-      const brush = populateColorResult(148, itemSet, conditional, table) as SvxBrushItem,
+      const brush = populateResult(148, itemSet, conditional, table) as SvxBrushItem,
         back = new Color(brush.GetColor());
       if (
         back.equals(COL_TRANSPARENT) ||
@@ -193,6 +289,7 @@ export class ScPatternAttr {
   private readonly maLocalSfxItemSet: SfxItemSet;
   private readonly pCellAttributeHelper: CellAttributeHelper;
   private moName: OUString | null;
+  private pStyle: ScPatternStyleReference | null = null;
   private mnPAKey = 0n;
   private mnRefCount = 0;
   /** Original helper/itemset/name and implicit-copy forms. INVALID entries are preserved. @param source - Helper or pattern. @param itemSet - Source deltas. @param styleName - Optional unbound style name. @returns Pattern. */
@@ -206,6 +303,7 @@ export class ScPatternAttr {
       this.maLocalSfxItemSet = new SfxItemSet(source.maLocalSfxItemSet);
       this.moName = source.moName === null ? null : new OUString(source.moName);
       this.mnPAKey = source.mnPAKey;
+      this.pStyle = source.pStyle;
     } else {
       this.pCellAttributeHelper = source;
       this.maLocalSfxItemSet = new SfxItemSet(source.GetPool(), aScPatternAttrSchema);
@@ -240,9 +338,44 @@ export class ScPatternAttr {
   GetItemSetWritable(): SfxItemSet {
     return this.maLocalSfxItemSet;
   }
-  /** Original unbound style-name borrow;ScStyleSheet resolution remains unported. @returns Name or null. */
+  /** Original stored name takes precedence over the borrowed style name. @returns Native borrowed name or null. */
   GetStyleName(): OUStringConstReference | null {
-    return this.moName;
+    return this.moName ?? this.pStyle?.GetName() ?? null;
+  }
+  /** Original const style pointer borrow;this pattern does not own style lifetime. @returns Native style reference or null. */
+  GetStyleSheet(): Pick<ScPatternStyleReference, "GetName"> | null {
+    return this.pStyle;
+  }
+  /** Original inherited SET clearing and style-parent association. Native null detaches the pointer and parent but deliberately keeps an existing stored name. Derived caches remain absent in this data slice. @param style - Borrowed style or null. @param clearDirectFormat - Clear only fields SET by the style,including its parent chain. @returns Nothing. */
+  SetStyleSheet(style: ScPatternStyleReference | null, clearDirectFormat = true): void {
+    if (style !== null) {
+      const styleSet = style.GetItemSet();
+      if (clearDirectFormat)
+        for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; which++)
+          if (styleSet.GetItemState(which) === SfxItemState.SET)
+            this.maLocalSfxItemSet.ClearItem(which);
+      this.maLocalSfxItemSet.SetParent(style.GetItemSet());
+      this.pStyle = style;
+      this.moName?.dispose();
+      this.moName = null;
+    } else {
+      this.maLocalSfxItemSet.SetParent(undefined);
+      this.pStyle = null;
+    }
+  }
+  /** Original deleted-style transition copies the name before detaching the borrowed style and parent. @returns Nothing. */
+  StyleToName(): void {
+    if (this.pStyle !== null) {
+      this.moName?.dispose();
+      this.moName = new OUString(this.pStyle.GetName());
+      this.pStyle = null;
+      this.maLocalSfxItemSet.SetParent(undefined);
+    }
+  }
+  /** Original direct/inherited font SET query,not the pool default. @returns Whether the effective explicitly set font uses the symbol encoding. */
+  IsSymbolFont(): boolean {
+    const font = this.maLocalSfxItemSet.GetItemIfSet(ATTR.ATTR_FONT) as SvxFontItem | undefined;
+    return font !== undefined ? font.GetCharSet() === RTL_TEXTENCODING_SYMBOL : false;
   }
   /** Original full itemset equality including pool and parent identity. @param other - Compared pattern. @returns Equality. */
   equals(other: ScPatternAttr): boolean {
@@ -257,6 +390,128 @@ export class ScPatternAttr {
     if (left === right) return true;
     if (left === null || right === null) return false;
     return left.equals(right);
+  }
+  /** Original standard/stacked/right-angle orientation;arbitrary rotation stays Standard. @param set - Source attributes. @param conditional - Optional override. @returns Orientation. */
+  static GetCellOrientation(
+    set: SfxItemSet,
+    conditional: SfxItemSet | null = null,
+  ): SvxCellOrientation {
+    if ((ScPatternAttr.GetItem(ATTR.ATTR_STACKED, set, conditional) as SfxBoolItem).GetValue())
+      return SvxCellOrientation.Stacked;
+    const angle = (
+      ScPatternAttr.GetItem(ATTR.ATTR_ROTATE_VALUE, set, conditional) as ScRotateValueItem
+    ).GetValue();
+    if (angle === 9000) return SvxCellOrientation.BottomUp;
+    if (angle === 27000) return SvxCellOrientation.TopBottom;
+    return SvxCellOrientation.Standard;
+  }
+  /** Borrows this pattern's original orientation. @param conditional - Optional source override. @returns Orientation. */
+  GetCellOrientation(conditional: SfxItemSet | null = null): SvxCellOrientation {
+    return ScPatternAttr.GetCellOrientation(this.maLocalSfxItemSet, conditional);
+  }
+  /** Original complete cell-to-edit attribute transfer. Concrete item clones preserve complex color,font and line payloads. @param edit - Actual EditEngine item set. @param source - Cell attributes. @param conditional - Conditional attributes. @param table - Table style. @returns Nothing. */
+  static FillToEditItemSet(
+    edit: SfxItemSet,
+    source: SfxItemSet,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+  ): void {
+    // Native code reads/copies every input before the first destination mutation.
+    const inputs = editCopyItems.map(
+      /** Snapshots original scalars/copy values before any target Changed hook. @param pair - Source field. @returns Independent native input. */
+      ([which, target, tableAware]) => {
+        const effective = tableAware
+          ? populateResult(which, source, conditional ?? undefined, table ?? undefined)
+          : ScPatternAttr.GetItem(which, source, conditional);
+        return { which, target, item: effective.Clone(source.GetPool()) as SfxPoolItem };
+      },
+    );
+    for (const { which, target, item } of inputs) {
+      if (editHeightWhichs.has(which))
+        edit.Put(
+          new SvxFontHeightItem(
+            Number(convertTwipToMm100(BigInt((item as SvxFontHeightItem).GetHeight()))),
+            100,
+            target,
+          ),
+        );
+      else if (which === ATTR.ATTR_FONT_COLOR && (item as SvxColorItem).GetValue().equals(COL_AUTO))
+        edit.ClearItem(target);
+      else if (which === ATTR.ATTR_HYPHENATE)
+        edit.Put(new SfxBoolItem(target, (item as SfxBoolItem).GetValue()));
+      else edit.PutAsTargetWhich(item, target);
+    }
+    // Original intentionally ignores the cell ATTR_SCRIPTSPACE value.
+    edit.Put(new SvxScriptSpaceItem(false, EE.EE_PARA_ASIANCJKSPACING));
+  }
+  /** Original null-tolerant instance entry. @param edit - EditEngine destination. @param conditional - Conditional attributes. @param table - Table style. @returns Nothing. */
+  FillEditItemSet(
+    edit: SfxItemSet | null,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+  ): void {
+    if (edit !== null)
+      ScPatternAttr.FillToEditItemSet(edit, this.maLocalSfxItemSet, conditional, table);
+  }
+  /** Original direct-or-inherited SET reverse transfer;default and INVALID attributes do not become direct cell formatting. @param destination - Cell set. @param edit - EditEngine source. @returns Nothing. */
+  static GetFromEditItemSet(destination: SfxItemSet, edit: SfxItemSet): void {
+    for (const [which, target] of reverseEditItems) {
+      const item = edit.GetItemIfSet(target);
+      if (item !== undefined) {
+        if (editHeightWhichs.has(which))
+          destination.Put(
+            new SvxFontHeightItem(
+              Number(
+                convert(BigInt((item as SvxFontHeightItem).GetHeight()), Length.mm100, Length.twip),
+              ),
+              100,
+              which,
+            ),
+          );
+        else destination.PutAsTargetWhich(item, which);
+      }
+    }
+    const adjust = edit.GetItemIfSet(EE.EE_PARA_JUST) as SvxAdjustItem | undefined;
+    if (adjust === undefined) return;
+    let value = SvxCellHorJustify.Standard;
+    switch (adjust.GetAdjust()) {
+      case SvxAdjust.Right:
+      case SvxAdjust.End:
+        value = SvxCellHorJustify.Right;
+        break;
+      case SvxAdjust.Block:
+      case SvxAdjust.BlockLine:
+        value = SvxCellHorJustify.Block;
+        break;
+      case SvxAdjust.Center:
+        value = SvxCellHorJustify.Center;
+        break;
+    }
+    if (value !== SvxCellHorJustify.Standard)
+      destination.Put(new SvxHorJustifyItem(value, ATTR.ATTR_HOR_JUSTIFY));
+  }
+  /** Original null guard and mutation of the real cell item set. Render/number/hash caches are absent in this existing data slice,so no fake invalidation service is added. @param edit - Source or native null. @returns Nothing. */
+  GetFromEditItemSet(edit: SfxItemSet | null): void {
+    if (edit !== null) ScPatternAttr.GetFromEditItemSet(this.maLocalSfxItemSet, edit);
+  }
+  /** Original paragraph alignment entry is deliberately separate from FillEditItemSet. @param edit - Actual paragraph destination. @returns Nothing. */
+  FillEditParaItems(edit: SfxItemSet): void {
+    const horizontal = (
+      this.maLocalSfxItemSet.Get(ATTR.ATTR_HOR_JUSTIFY) as SvxHorJustifyItem
+    ).GetValue();
+    let adjust = SvxAdjust.Left;
+    switch (horizontal) {
+      case SvxCellHorJustify.Right:
+        adjust = SvxAdjust.Right;
+        break;
+      case SvxCellHorJustify.Center:
+        adjust = SvxAdjust.Center;
+        break;
+      case SvxCellHorJustify.Block:
+        adjust = SvxAdjust.Block;
+        break;
+    }
+    edit.Put(new SvxAdjustItem(adjust, EE.EE_PARA_JUST));
   }
   /** Original conditional SET precedence including parent lookup. @param which - Item identity. @param itemSet - Base set. @param conditional - Optional conditional set. @returns Effective item. */
   static GetItem(

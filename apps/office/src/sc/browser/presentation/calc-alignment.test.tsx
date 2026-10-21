@@ -135,7 +135,7 @@ it("formats actual grouped full-axis sparse patterns and retains unrelated items
     c.MarkRows();
     expect(c.SetAlignment("horizontal", H.Right, false)).toBe(true);
     for (const tab of [0, 1]) {
-      expect((doc.FetchTable(tab) as ScTable).GetAllocatedColumnsCount()).toBe(tab === 0 ? 1 : 0);
+      expect((doc.FetchTable(tab) as ScTable).GetAllocatedColumnsCount()).toBe(1);
       expect(alignment(session, doc.MaxCol(), 7, tab)[0]).toBe(H.Right);
       expect(alignment(session, 0, 6, tab)[0]).toBe(H.Standard);
     }

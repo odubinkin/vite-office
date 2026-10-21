@@ -1,5 +1,10 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScViewOptions } from "../../../inc/viewopti";
 import { ScItemPoolCache } from "../../../inc/poolcach";
+import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
+import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
+import { GetStringScriptType as classifyString } from "./documen6";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
@@ -52,6 +57,57 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private readonly pViewOptions = new ScViewOptions();
+  /** Original documen3 borrowed view options. @returns Actual document-owned options. */
+  GetViewOptions(): ScViewOptions {
+    return this.pViewOptions;
+  }
+  /** Original value assignment preserves the borrowed owner identity. @param options - Source options. @returns Nothing. */
+  SetViewOptions(options: ScViewOptions): void {
+    this.pViewOptions.copy_assign(options);
+  }
+
+  /** Original document.cxx connected-area delegation;missing sheets leave references untouched. @param tab - Sheet. @param firstCol - Start column. @param firstRow - Start row. @param lastCol - End column. @param lastRow - End row. @param includeOld - Retain input. @param onlyDown - Only final row. @returns Nothing. */
+  GetDataArea(
+    tab: number,
+    firstCol: [number],
+    firstRow: [number],
+    lastCol: [number],
+    lastRow: [number],
+    includeOld: boolean,
+    onlyDown: boolean,
+  ): void {
+    this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+  }
+
+  private pScriptTypeData: ScScriptTypeData | undefined;
+  /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
+  GetBreakIterator(factory?: ScScriptServiceFactory): XBreakIterator | null {
+    this.pScriptTypeData ??= new ScScriptTypeData();
+    this.pScriptTypeData.xBreakIter ??= factory?.() ?? null;
+    return this.pScriptTypeData.xBreakIter;
+  }
+  /** Original document string classifier,retaining the empty-string lazy-service guard and consumed source loop. @param string - Actual UTF16 string. @param factory - Borrowed real service creation binding. @returns Native script flags. */
+  GetStringScriptType(
+    string: OUStringConstReference,
+    factory?: ScScriptServiceFactory,
+  ): SvtScriptType {
+    return string.getLength() === 0
+      ? SvtScriptType.NONE
+      : classifyString(string, this.GetBreakIterator(factory));
+  }
+  /** Original address-only const getter reads cached metadata without evaluating or updating it. @param position - Actual coordinate. @returns Stored flags or NONE. */
+  GetScriptType(position: ScAddress): SvtScriptType {
+    return (
+      this.FetchTable(position.Tab())?.GetScriptType(position.Col(), position.Row()) ??
+      SvtScriptType.NONE
+    );
+  }
+  /** Original address setter delegates through the actual sheet/column metadata owners. @param position - Actual coordinate. @param type - Native flags. @returns Nothing. */
+  SetScriptType(position: ScAddress, type: SvtScriptType): void {
+    this.FetchTable(position.Tab())?.SetScriptType(position.Col(), position.Row(), type);
+  }
+
   /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
   IsLayoutRTL(tab: number): boolean {
     return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
@@ -575,7 +631,8 @@ export class ScDocument {
             .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
       }
       if (end.Col() === this.MaxCol()) {
-        if (last >= 0) target.CreateColumnIfNotExists(last);
+        // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
+        target.CreateColumnIfNotExists(last);
         this.CopyColumnAttributes(
           source.GetDefaultColumnData(),
           target.GetDefaultColumnData(),

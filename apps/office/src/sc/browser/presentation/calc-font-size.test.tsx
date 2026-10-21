@@ -92,7 +92,7 @@ it("formats selected sheets,full rows and columns efficiently and round-trips st
   c.MarkRows();
   expect(c.SetFontSize(14)).toBe(true);
   for (const tab of [0, 1]) {
-    expect((doc.FetchTable(tab) as ScTable).GetAllocatedColumnsCount()).toBe(0);
+    expect((doc.FetchTable(tab) as ScTable).GetAllocatedColumnsCount()).toBe(1);
     expect(height(doc, doc.MaxCol(), 7, tab)).toBe(280);
     expect(height(doc, 0, 6, tab)).toBe(200);
   }

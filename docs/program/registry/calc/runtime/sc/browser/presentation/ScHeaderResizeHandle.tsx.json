@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-geometry",
+    "capabilityIds": [
+      "CAP-15ddc750-5b40-4d1a-b26f-33b7a204d1e4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.tsx",
+        "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.test.tsx#tracking arithmetic",
+        "apps/office/src/sc/source/ui/view/colrowba.test.ts#native",
+        "apps/office/src/sc/browser/presentation/calc-header-sizing.test.tsx#production UI"
+      ],
+      "justification": "Task5678C0 connects original ScColBar/ScRowBar size/hide methods and hdrcont tracking arithmetic to actual ScViewFunc,marks,document and undo. UInt16 conversion,min10pixels,selected disjoint spans,grouped sheets,negative-size hide,threshold2 and release+2screen-offset are retained. React stores temporary guide coordinates only and uses shared VCL window tracking moved from Writer. Active editing prohibits sizing. The existing96CSSdpi scale is supplied explicitly by the browser,not claimed as a native device default. Device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/alternate views,protection and complete native windows remain unported. No broad parity or save/open/recovery policy change.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScHeaderResizeHandle"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,7 +1,8 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
 import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
+import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
-import { ScIndentItem } from "../../inc/attrib";
+import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
 import { visibleRows } from "./row-geometry";
@@ -24,6 +25,7 @@ import {
   type PointerEvent,
   type UIEvent,
 } from "react";
+import { ViewOption } from "../../inc/viewopti";
 import { ScInputMode } from "../../inc/global";
 import {
   SvxWeightItem,
@@ -65,6 +67,7 @@ export interface CalcCellPresentation {
 }
 /** Controller contracts corresponding to native grid painting and input routing. */
 export interface ScGridWindowProps {
+  readonly headerSizing?: ScHeaderSizing;
   readonly idPrefix: string;
   readonly viewData: ScViewData;
   readonly viewport: CalcGridViewport;
@@ -112,6 +115,10 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     viewport.firstRow,
     Math.min(document.MaxRow(), viewport.firstRow + viewport.rows - 1),
   );
+  const showGrid = viewData.GetOptions().GetOption(ViewOption.GRID) && viewData.GetShowGrid();
+  const headers = viewData.IsHeaderMode(),
+    headerWidth = headers ? 48 : 0,
+    headerHeight = headers ? viewport.rowHeight : 0;
   const frames = createCalcGridFrames(viewData, columns, rows);
   const activeVisible = columns.includes(column) && rows.includes(row);
   useLayoutEffect(
@@ -130,8 +137,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       ref={grid}
       role="grid"
       aria-label="Spreadsheet"
-      aria-rowcount={document.MaxRow() + 2}
-      aria-colcount={document.MaxCol() + 2}
+      aria-rowcount={document.MaxRow() + 1 + Number(headers)}
+      aria-colcount={document.MaxCol() + 1 + Number(headers)}
       aria-activedescendant={
         activeVisible ? `${props.idPrefix}-${tab}-${column}-${row}` : undefined
       }
@@ -144,7 +151,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           if (event.target === event.currentTarget) props.onKeyDown(event);
         }
       }
-      className="min-h-0 flex-1 overflow-auto bg-white text-[13px] text-slate-900 outline-none"
+      className="min-h-0 flex-1 select-none overflow-auto bg-white text-[13px] text-slate-900 outline-none"
     >
       <div
         className="relative"
@@ -153,69 +160,81 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           height: viewport.scrollHeight,
         }}
       >
-        <div
-          role="row"
-          aria-rowindex={1}
-          className="sticky top-0 z-10 bg-slate-50"
-          style={{
-            height: viewport.rowHeight,
-          }}
-        >
+        {headers && (
           <div
-            role="columnheader"
-            aria-label="Select all cells"
-            className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
-            style={{ width: 48, height: viewport.rowHeight }}
+            role="row"
+            aria-rowindex={1}
+            className="sticky top-0 z-10 bg-slate-50"
+            style={{
+              height: viewport.rowHeight,
+            }}
           >
-            <button
-              type="button"
+            <div
+              role="columnheader"
               aria-label="Select all cells"
-              onClick={
-                /** Routes the corner-header selection intent. @param event - Platform click. @returns Nothing. */ (
-                  event,
-                ) => props.onHeader("all", 0, event)
-              }
-              className="block h-full w-full"
+              className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
+              style={{ width: 48, height: viewport.rowHeight }}
             >
-              <span className="sr-only">Select all cells</span>
-            </button>
-          </div>
-          {columns.map(
-            /** Renders one canonical column heading. @param col - Column coordinate. @returns Heading. */ (
-              col,
-            ) => (
-              <div
-                key={col}
-                role="columnheader"
-                aria-colindex={col + 2}
-                aria-label={`Column ${columnLabel(col)}`}
-                style={{
-                  left:
-                    48 +
-                    viewport.scrollLeft -
-                    viewport.columnOffset +
-                    columnPixels(table, viewport.firstColumn, col - 1),
-                  width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
-                  height: viewport.rowHeight,
-                }}
-                className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
+              <button
+                type="button"
+                aria-label="Select all cells"
+                onClick={
+                  /** Routes the corner-header selection intent. @param event - Platform click. @returns Nothing. */ (
+                    event,
+                  ) => props.onHeader("all", 0, event)
+                }
+                className="block h-full w-full"
               >
-                <button
-                  type="button"
+                <span className="sr-only">Select all cells</span>
+              </button>
+            </div>
+            {columns.map(
+              /** Renders one canonical column heading. @param col - Column coordinate. @returns Heading. */ (
+                col,
+              ) => (
+                <div
+                  key={col}
+                  role="columnheader"
+                  aria-colindex={col + 1 + Number(headers)}
                   aria-label={`Column ${columnLabel(col)}`}
-                  onClick={
-                    /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
-                      event,
-                    ) => props.onHeader("column", col, event)
-                  }
-                  className="block h-full w-full"
+                  style={{
+                    left:
+                      48 +
+                      viewport.scrollLeft -
+                      viewport.columnOffset +
+                      columnPixels(table, viewport.firstColumn, col - 1),
+                    width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
+                    height: viewport.rowHeight,
+                  }}
+                  className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
                 >
-                  {columnLabel(col)}
-                </button>
-              </div>
-            ),
-          )}
-        </div>
+                  <button
+                    type="button"
+                    aria-label={`Column ${columnLabel(col)}`}
+                    onClick={
+                      /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
+                        event,
+                      ) => props.onHeader("column", col, event)
+                    }
+                    className="block h-full w-full"
+                  >
+                    {columnLabel(col)}
+                  </button>
+                  {props.headerSizing && (
+                    <ScHeaderResizeHandle
+                      owner={viewData}
+                      width={true}
+                      index={col}
+                      label={`column ${columnLabel(col)}`}
+                      disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
+                      sizing={props.headerSizing}
+                    />
+                  )}
+                </div>
+              ),
+            )}
+          </div>
+        )}
         {rows.map(
           /** Renders only a visible native row. @param r - Row coordinate. @returns Grid row. */ (
             r,
@@ -223,37 +242,52 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
             <div
               key={r}
               role="row"
-              aria-rowindex={r + 2}
+              aria-rowindex={r + 1 + Number(headers)}
               className="absolute left-0 w-full"
               style={{
                 top:
                   viewport.scrollTop +
-                  viewport.rowHeight -
+                  headerHeight -
                   viewport.rowOffset +
                   rowPixels(table, viewport.firstRow, r - 1),
                 height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
               }}
             >
-              <div
-                role="rowheader"
-                aria-colindex={1}
-                aria-label={`Row ${r + 1}`}
-                style={{ width: 48, height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15) }}
-                className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
-              >
-                <button
-                  type="button"
+              {headers && (
+                <div
+                  role="rowheader"
+                  aria-colindex={1}
                   aria-label={`Row ${r + 1}`}
-                  onClick={
-                    /** Routes row selection. @param event - Platform click. @returns Nothing. */ (
-                      event,
-                    ) => props.onHeader("row", r, event)
-                  }
-                  className="block h-full w-full"
+                  style={{
+                    width: 48,
+                    height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
+                  }}
+                  className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
                 >
-                  {r + 1}
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    aria-label={`Row ${r + 1}`}
+                    onClick={
+                      /** Routes row selection. @param event - Platform click. @returns Nothing. */ (
+                        event,
+                      ) => props.onHeader("row", r, event)
+                    }
+                    className="block h-full w-full"
+                  >
+                    {r + 1}
+                  </button>
+                  {props.headerSizing && (
+                    <ScHeaderResizeHandle
+                      owner={viewData}
+                      width={false}
+                      index={r}
+                      label={`row ${r + 1}`}
+                      disabled={inputMode !== ScInputMode.SC_INPUT_NONE}
+                      sizing={props.headerSizing}
+                    />
+                  )}
+                </div>
+              )}
               {columns.map(
                 /** Paints one cell from the display contract, never from an application array. @param col - Column. @returns Cell or inline editor. */ (
                   col,
@@ -295,7 +329,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       key={col}
                       id={`${props.idPrefix}-${tab}-${col}-${r}`}
                       role="gridcell"
-                      aria-colindex={col + 2}
+                      aria-colindex={col + 1 + Number(headers)}
                       aria-selected={selected}
                       aria-label={`${columnLabel(col)}${r + 1}`}
                       onPointerDown={
@@ -316,12 +350,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       }
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
+                          ? "pre-wrap"
+                          : "nowrap",
+                        overflowWrap: "anywhere",
                         ...calcGridBorderStyle(
                           frames,
                           col,
                           r,
                           col === columns[columns.length - 1],
                           r === rows[rows.length - 1],
+                          showGrid,
                         ),
                         paddingLeft: Math.trunc(
                           ((pattern.GetItem(143) as SvxMarginItem).GetLeftMargin() +
@@ -372,7 +411,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
                         left:
-                          48 +
+                          headerWidth +
                           viewport.scrollLeft -
                           viewport.columnOffset +
                           columnPixels(table, viewport.firstColumn, col - 1),
@@ -397,7 +436,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             ) => props.onInput(event.target.value)
                           }
                           onKeyDown={props.onInputKeyDown}
-                          className="absolute inset-0 h-full w-full border-0 bg-white px-1 text-left outline-none"
+                          className="absolute inset-0 h-full w-full select-text border-0 bg-white px-1 text-left outline-none"
                         />
                       ) : (
                         <div className="w-full shrink-0">
