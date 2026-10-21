@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -52,6 +52,9 @@ comments:
   -
     author: "PLANNER"
     body: "Completed45MPFV at implementation83a7a911cc9f and closure2568dfd68079: four contextual modules,64 enum values and284 registered locale catalogs. Related355 tests,current20 overlap,strict100 coverage,Chromium/types/static and declared gates pass. Sixth completed leaf since9BAAAC. USER PRIORITY CORRECTION: suspend deeper locale/service prerequisite expansion;first audit and repair consistency of the existing Writer slice:measurement-unit settings and dimension controls,upstream sidebar structure/appearance,existing core capabilities connected to UI and import/export. Confirmed hardcoded centimetre formulas in page style,table,row height and line numbering despite existing FieldUnit/MetricSpinButton. Plan coherent user-facing blocks around actual pinned sources and end-to-end contracts;do not add speculative core depth. Search parent remains unfinished. Preserve next-full-run stop:complete necessary fixes/test additions/coverage,finally close active executable task,then pause goal and start no further task."
+  -
+    author: "PLANNER"
+    body: "Current-slice milestone DS8CKD closed at b571a88b8bdb;final implementation/tests62ce04f21f1b (production5122d6d54af5). Actual metric parser and SetFieldUnit now feed Writer page/table/columns/row-height/numbering fields.50 related cases,three-owner strict100 coverage,18 Chromium scenarios plus6 overlapping explicit-mm updates and declared gates pass. Seventh completed leaf since9BAAAC;no full suite here. This is current-slice work,not a new search prerequisite dependency. Search remains unfinished and deferred behind user priority:real module measurement preferences/Options,ruler and remaining paragraph/border fields;then upstream sidebar and existing core/UI/import-export consistency. When exposing MM preferences,preserve native normalized widget state across twip projection so finer-than-one-twip display precision is not reconstructed from rounded document values. No deeper locale/context-service expansion absent a concrete selected user function. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal immediately and start no further task."
 events:
   -
     type: "status"
@@ -80,8 +83,13 @@ events:
     at: "2026-10-21T05:07:13.212Z"
     author: "PLANNER"
     body: "Completed45MPFV at implementation83a7a911cc9f and closure2568dfd68079: four contextual modules,64 enum values and284 registered locale catalogs. Related355 tests,current20 overlap,strict100 coverage,Chromium/types/static and declared gates pass. Sixth completed leaf since9BAAAC. USER PRIORITY CORRECTION: suspend deeper locale/service prerequisite expansion;first audit and repair consistency of the existing Writer slice:measurement-unit settings and dimension controls,upstream sidebar structure/appearance,existing core capabilities connected to UI and import/export. Confirmed hardcoded centimetre formulas in page style,table,row height and line numbering despite existing FieldUnit/MetricSpinButton. Plan coherent user-facing blocks around actual pinned sources and end-to-end contracts;do not add speculative core depth. Search parent remains unfinished. Preserve next-full-run stop:complete necessary fixes/test additions/coverage,finally close active executable task,then pause goal and start no further task."
+  -
+    type: "comment"
+    at: "2026-10-21T05:48:59.925Z"
+    author: "PLANNER"
+    body: "Current-slice milestone DS8CKD closed at b571a88b8bdb;final implementation/tests62ce04f21f1b (production5122d6d54af5). Actual metric parser and SetFieldUnit now feed Writer page/table/columns/row-height/numbering fields.50 related cases,three-owner strict100 coverage,18 Chromium scenarios plus6 overlapping explicit-mm updates and declared gates pass. Seventh completed leaf since9BAAAC;no full suite here. This is current-slice work,not a new search prerequisite dependency. Search remains unfinished and deferred behind user priority:real module measurement preferences/Options,ruler and remaining paragraph/border fields;then upstream sidebar and existing core/UI/import-export consistency. When exposing MM preferences,preserve native normalized widget state across twip projection so finer-than-one-twip display precision is not reconstructed from rounded document values. No deeper locale/context-service expansion absent a concrete selected user function. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal immediately and start no further task."
 doc_version: 3
-doc_updated_at: "2026-10-21T05:07:13.212Z"
+doc_updated_at: "2026-10-21T05:48:59.925Z"
 doc_updated_by: "PLANNER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
