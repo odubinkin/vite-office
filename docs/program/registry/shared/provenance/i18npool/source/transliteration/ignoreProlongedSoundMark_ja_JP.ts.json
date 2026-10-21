@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.cxx",
+    "localSymbols": [
+      "ignoreProlongedSoundMark_ja_JP",
+      "table_normalwidth",
+      "table_halfwidth",
+      "foldingImpl"
+    ],
+    "upstreamSymbols": [
+      "ignoreProlongedSoundMark_ja_JP",
+      "table_normalwidth",
+      "table_halfwidth",
+      "foldingImpl"
+    ],
+    "preservedResponsibilities": [
+      "Original contextual previous/current UTF16 loop,active lookup rows,consumed-pair and transformed-previous behavior,constructor names/null fields,identity iota offsets,mutable Sequence COW/byte strides and inherited ignore scalar/range contracts are retained. Source counts/valid initialized range producer preconditions remain. Native JavaScript arrays and object lifetime erase raw allocation/reference syntax;no new memory/refcount/lifecycle infrastructure or service facade. Both original normalwidth/halfwidth tables retain active zero entries and range boundaries;folding can produce embeddedNUL without shortening the native string or offsets. Aggregate/context/factory registration,configuration/search-item/cursor integration and browser Find UI remain pending;no defaults,engine flags or semantic readiness are promoted."
+    ],
+    "omittedResponsibilities": [
+      "Real service/context/factory aggregation and complete search/UI integration remain pending. Native JavaScript handles memory and object lifetime."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.ts",
+          "marker": "table_normalwidth"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.cxx",
+          "marker": "table_normalwidth"
+        }
+      ]
+    }
+  }
+}

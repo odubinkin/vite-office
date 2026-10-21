@@ -1,4 +1,6 @@
-/** @fileoverview Browser resource binding for the actual LocaleDataImpl numeric decimal field, preserving source first-name/language/default fallback and qlt fallback order. No UNO service facade is fabricated. */
+/** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
+import transliterations from "./data/transliterations.json" with { type: "json" };
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import numeric from "./data/numeric-separators.json" with { type: "json" };
 import separators from "./data/decimal-separators.json" with { type: "json" };
 import measurements from "./data/measurement-systems.json" with { type: "json" };
@@ -11,7 +13,13 @@ import {
   decomposeCanonicalLanguageTag,
 } from "../../../i18nlangtag/source/languagetag/languagetag";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
-/** Actual embedded source resource values; no current Intl decimal data is substituted. */
+/** Original Sequence<OUString> value specialization. */
+const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
+/** Actual ordered LC_TRANSLITERATION resources,including source ref resolution. */
+const transliterationResources = new Map<string, readonly string[]>(
+  Object.entries(transliterations),
+);
+/** Actual embedded decimal resource values;no current Intl data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
 /** Original LC_CTYPE measurement resource values. */
 const measurementResources = new Map<string, string>(Object.entries(measurements));
@@ -24,8 +32,8 @@ function fallbackServiceName(name: string): string {
     ? text(locale.Variant).replaceAll("-", "_")
     : text(locale.Language) + (text(locale.Country) ? "_" + text(locale.Country) : "");
 }
-/** Original lookup-table exact or language-only fallback. @param name - Locale service name. @param values - Source field table. @returns Decimal resource, absent when the native service would not be found. */
-function lookup(name: string, values: ReadonlyMap<string, string>): string | undefined {
+/** Original lookup-table exact or language-only fallback over the selected generated resource field. @param name - Locale service name. @param values - Source field table. @returns Selected field resource, absent when the native service would not be found. */
+function lookup<T>(name: string, values: ReadonlyMap<string, T>): T | undefined {
   return (
     values.get(name) ?? (!name.includes("_") ? values.get(fallbackServiceName(name)) : undefined)
   );
@@ -34,11 +42,8 @@ function lookup(name: string, values: ReadonlyMap<string, string>): string | und
 function text(value: LocaleConstReference["Language"]): string {
   return String.fromCharCode(...value.getStr().slice(0, value.getLength()));
 }
-/** Prepared-locale decimalSeparator field query with actual Locale value input. This is a field-specific browser resource binding, not an implementation of the whole LocaleData service. @param locale - Native locale triplet. @param values - Source field table. @returns Original decimal separator. */
-function getLocaleDataField(
-  locale: LocaleConstReference,
-  values: ReadonlyMap<string, string>,
-): string {
+/** Prepared-locale generated-field query with actual Locale value input. This is a field-specific browser resource binding, not an implementation of the whole LocaleData service. @param locale - Native locale triplet. @param values - Source field table. @returns Original field value. */
+function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap<string, T>): T {
   const language = text(locale.Language),
     country = text(locale.Country),
     variant = text(locale.Variant);
@@ -55,7 +60,7 @@ function getLocaleDataField(
     const value = lookup(language, values);
     if (value !== undefined) return value;
   }
-  return values.get("en_US") as string;
+  return values.get("en_US") as T;
 }
 
 /** Original decimal field through shared locale-name fallback resolution. @param locale - Prepared locale. @returns Separator. */
@@ -94,4 +99,23 @@ export function getLocaleThousandSeparator(locale: LocaleConstReference): string
       ),
     ),
   );
+}
+
+/** Original getTransliterations field resource binding with native fallback and real Sequence string values;not a whole LocaleData service facade. @param locale - Prepared native locale. @returns Owned ordered module-name sequence. */
+export function getLocaleTransliterations(
+  locale: LocaleConstReference,
+): Sequence<ReturnType<OUString["getDataAddress"]>> {
+  const names = getLocaleDataField(locale, transliterationResources);
+  const values: OUString[] = [],
+    cells = new Map<number, ReturnType<OUString["getDataAddress"]>>();
+  try {
+    for (let i = 0; i < names.length; i++) {
+      const value = unicode(names[i] as string);
+      values.push(value);
+      cells.set(i * 8, value.getDataAddress());
+    }
+    return new Strings(cells, names.length);
+  } finally {
+    for (const value of values) value.dispose();
+  }
 }
