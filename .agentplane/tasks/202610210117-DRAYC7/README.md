@@ -4,7 +4,7 @@ title: "Implement native Calc visible-row and visible-column selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -24,21 +24,25 @@ verification:
   note: "Accepted after rework:551Calc/34common-Writer tests and130owners100percent retained;14focused tests repeat after JSDoc-only byte-identical-JS repair. All10mandatory gates individually exit0,including docs and production build. Unmodified130runtime source hashes match full acceptance. Portable audit validates92raw artifacts/140source pins/9native pins;prior failed logs and superseded reviews preserved."
   attempts: 0
 quality_review:
-  state: "rework"
-  updated_at: "2026-10-21T01:36:05.156Z"
+  state: "pass"
+  updated_at: "2026-10-21T01:41:24.903Z"
   updated_by: "EVALUATOR"
-  note: "Final log audit found an unpassed required JSDoc gate in the new test helper;the earlier pass is superseded."
-  evaluated_sha: "11d5d6b68a72010c16b7fa3d7396a9a2842d3f7c"
+  note: "Fresh review supersedes the earlier pass/rework:visible-axis selection and all required verification gates now have complete accepted evidence."
+  evaluated_sha: "33f9a8e9b3198df3a88a12f0ea89c2b30be3e913"
   blueprint_digest: "cee5fbd36ffe1ea5599fbae22551ed39445eeaca90cd91ead9513f6563551549"
   evidence_refs:
     - ".agentplane/tasks/202610210117-DRAYC7/README.md"
-    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-013605156-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-013605156-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-013605156-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-014124903-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-014124903-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210117-DRAYC7/quality/20261021-014124903-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610210117-DRAYC7/blueprint/resolved-snapshot.json"
-    - "output/playwright/task62-jsdoc.log"
+    - ".agentplane/tasks/202610210117-DRAYC7/evidence/acceptance.json"
+    - ".agentplane/tasks/202610210117-DRAYC7/evidence/audit.mjs"
+    - "output/playwright/task62-audit-accepted.log"
+    - "output/playwright/task62-gate-exits.json"
+    - "output/playwright/task62-test-emission-proof.log"
   findings:
-    - "task62-jsdoc.log reports visible-selection.test.ts line168 missing function JSDoc. Earlier command chaining preserved the failed log but returned the later command status;the pass summary incorrectly assumed this gate succeeded. Fix the in-scope test annotation,prove emitted test/runtime behavior unchanged,recheck docs and focused tests,and refresh evidence before fresh quality review."
+    - "Compared original cellsh1 cases with real ScCellShell/ScMarkData owners:captured bounds,group-wide hidden-span subtraction,unclamped endpoints,conditional reset and simple reduction match source. Actual formatting,undo/redo,ODS and shared Writer menu routes pass.551Calc/34related tests pass with130owners100percent. JSDoc-only test repair has byte-identical emitted JS and unchanged130runtime source hashes;14focused tests repeat. Ten independent gate statuses are all0,including required JSDoc/registry/build;source lint/format/routing/doctor pass. Raw JSDoc failure and observer ENOBUFS evidence and superseded reviews remain retained. No threshold/exclusion/counter changes. Existing row-label text highlight remains a separate broader browser-parity followup;no complete UI/core parity claim."
 commit: null
 comments:
   -
