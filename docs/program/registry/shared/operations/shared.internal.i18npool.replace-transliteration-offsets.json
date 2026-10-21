@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.i18npool.replace-transliteration-offsets",
+    "modulePath": "apps/office/src/i18npool/source/search/textsearch.ts",
+    "symbol": "replaceTransliterationOffsets",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48",
+    "description": "Original directional searchForward/searchBackward transliteration result group-remapping blocks over actual SearchResult sequence fields, including negative groups and native source code-point endpoints; initialized kernel export does not implement the regex backend."
+  }
+}

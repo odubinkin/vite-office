@@ -44,26 +44,46 @@ it.each(["Bold", "Italic"] as const)(
     selectMountedTableRow("Grid", 1);
     const table = screen.getByRole("table", { name: "Grid" });
     expect(table.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(2);
-    fireEvent.click(screen.getByRole("button", { name }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name },
+      ),
+    );
     for (const node of [f.first, f.tail, f.second])
       expect(node.GetTextRangeFormatState(0, node.Len(), name === "Bold" ? "bold" : "italic")).toBe(
         "on",
       );
-    expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "true");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name },
+      ),
+    ).toHaveAttribute("aria-pressed", "true");
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     act(
       /** Checks actual table selection behavior.  @returns Operation result. */ () => {
         expect(f.shell.Undo()).toBe(true);
       },
     );
-    expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "false");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name },
+      ),
+    ).toHaveAttribute("aria-pressed", "false");
     expect(table.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(2);
     act(
       /** Checks actual table selection behavior.  @returns Operation result. */ () => {
         expect(f.shell.Redo()).toBe(true);
       },
     );
-    expect(screen.getByRole("button", { name })).toHaveAttribute("aria-pressed", "true");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name },
+      ),
+    ).toHaveAttribute("aria-pressed", "true");
     expect(f.shell.HasBoxSelection()).toBe(true);
     expect([...f.shell.GetCursor().GetRingContainer()]).toHaveLength(2);
     expect(within(table).getByLabelText("Row 1 column 1 paragraph 1")).toHaveTextContent("First");

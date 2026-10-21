@@ -21,6 +21,7 @@ import {
   createBrowserDefaultFontDevice,
   createDefaultFontLocale,
 } from "../../../vcl/browser/default-font-device";
+import { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import { WriterAutosaveController } from "../workflows/writer-autosave";
 import { WriterFileDialogController } from "../workflows/writer-file-dialog-controller";
@@ -35,6 +36,7 @@ import {
   WriterWorkflowCommandShell,
   type WriterSessionServices,
 } from "../workflows/writer-workflows";
+import { SwModule } from "../../source/uibase/app/swmodule";
 import { SwView } from "../../source/uibase/uiview/view";
 import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
@@ -91,6 +93,9 @@ export interface WriterDocumentSession {
 /** Creates the production browser adapters without leaking them into document or Writer shell code. @returns Injected session services. */
 export function createWriterBrowserSessionServices(): WriterSessionServices {
   return {
+    ...(globalThis.localStorage === undefined
+      ? {}
+      : { layoutPreferences: new WriterLayoutPreferenceStore(globalThis.localStorage) }),
     copyRichText,
     createDownloadFilename,
     documentExport: createBrowserDocumentExportPort(),
@@ -100,10 +105,11 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
   };
 }
 
-/** Creates one complete persistent Writer ownership chain. @param services - Browser adapters injected by the composition root. @param odtFilter - Asynchronous ODT filter service. @returns Active document session. */
+/** Creates one complete persistent Writer ownership chain. @param services - Browser adapters injected by the composition root. @param odtFilter - Asynchronous ODT filter service. @param module - Actual shared Writer preference and view owner. @returns Active document session. */
 export function createWriterDocumentSession(
   services: WriterSessionServices = createWriterBrowserSessionServices(),
   odtFilter: OdtFilterService = createInlineOdtFilterService(),
+  module: SwModule = SwModule.get(),
 ): WriterDocumentSession {
   const fontDevice = createBrowserDefaultFontDevice(globalThis.document);
   const documentState = createDocument({
@@ -130,7 +136,7 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell);
+  const view = new SwView(docShell, module);
   const fileDialogs = new WriterFileDialogController();
   const sessionServices = { ...services, fileDialogs };
   const workflowCommandShell = new WriterWorkflowCommandShell(
@@ -204,12 +210,18 @@ function WriterWorkspaceSession({
 export function createWriterModuleFactory(
   options: WriterModuleFactoryOptions = {},
 ): OfficeModuleFactory {
+  let metricsPrepared = false;
   const createSession =
     options.createSession ??
     /** Creates production adapters at workspace-open time. @returns Active Writer session. */
     function createProductionWriterSession(): WriterDocumentSession {
+      const services = createWriterBrowserSessionServices();
+      if (!metricsPrepared) {
+        services.layoutPreferences?.Load(SwModule.get().GetUsrPref(false));
+        metricsPrepared = true;
+      }
       return createWriterDocumentSession(
-        createWriterBrowserSessionServices(),
+        services,
         typeof Worker === "undefined"
           ? createInlineOdtFilterService()
           : createBrowserOdtFilterService(),

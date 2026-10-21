@@ -4,7 +4,7 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { expect, it } from "vitest";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { SwPosition } from "../../source/core/crsr/pam";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
 /** Requires actual UI owner. @param value - Optional owner. @returns Actual owner. */
 function required<T>(value: T | null | undefined): T {
@@ -50,7 +50,10 @@ it("mounted fixed row clips original editable text while minimum row keeps natur
     fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Size" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
-    expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveValue(1.59);
+    expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "1.59",
+    );
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(table.GetTabLines()[0]).toBe(fixed);
     expect(required(fixed.GetTabBoxes()[0]).GetParagraphs()[0]).toBe(fixedNode);

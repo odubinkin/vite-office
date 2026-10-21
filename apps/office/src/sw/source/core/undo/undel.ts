@@ -1,19 +1,15 @@
-/** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
+/** @fileoverview Implements bounded Writer delete and join undo payloads from pinned undel.cxx. */
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwHistory } from "./rolbck";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwUndoNodes } from "./docundo";
 import {
-  CopyUndoFragment,
   DeleteUndoRange,
-  GetFragmentPayloadSize,
-  GetUndoFragmentLength,
   GetUndoTextNode,
-  ReplaceUndoRange,
   SwUndo,
   type SwUndoCursorState,
   type SwUndoRedoContext,
@@ -201,64 +197,6 @@ export class SwUndoDelete extends SwUndo {
       previous = node;
     }
     this.m_pHistory?.TmpRollback(context.GetDoc(), 0, false);
-  }
-}
-
-/** Atomic replacement used by paste and fallback editing without a full-document snapshot. */
-export class SwUndoReplace extends SwUndo {
-  private readonly insertedFragment: SwTextFragment;
-  private readonly undoNodes: SwUndoNodes;
-  private readonly removedNodeId: number;
-
-  /** Creates one range replacement. @param paragraph - Target node. @param start - Replacement start. @param removedFragment - Original native fragment. @param insertedFragment - Replacement native fragment. @param comment - Command label. @param before - Cursor before replacement. @param after - Cursor after replacement. @returns Nothing. */
-  public constructor(
-    private readonly paragraph: SwTextNode,
-    private readonly start: number,
-    removedFragment: SwTextFragment,
-    insertedFragment: SwTextFragment,
-    comment: string,
-    before: SwUndoCursorState,
-    after: SwUndoCursorState,
-  ) {
-    super(comment, before, after);
-    this.undoNodes = paragraph.GetDoc().GetUndoManager().GetUndoNodes();
-    this.removedNodeId = this.undoNodes.RetainText(removedFragment);
-    this.insertedFragment = CopyUndoFragment(insertedFragment);
-  }
-
-  /** Reports the two changed range payloads. @returns Approximate payload units. */
-  public override GetPayloadSize(): number {
-    return (
-      GetFragmentPayloadSize(this.undoNodes.GetText(this.removedNodeId)) +
-      GetFragmentPayloadSize(this.insertedFragment)
-    );
-  }
-
-  /** Releases removed text when history drops this action. @returns Nothing. */
-  public override Dispose(): void {
-    this.undoNodes.Release(this.removedNodeId);
-  }
-
-  /** Restores original range content. @param context - Active Writer context. @returns Nothing. */
-  protected override UndoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.paragraph,
-      this.start,
-      this.start + GetUndoFragmentLength(this.insertedFragment),
-      this.undoNodes.GetText(this.removedNodeId),
-    );
-  }
-
-  /** Reapplies replacement content. @param context - Active Writer context. @returns Nothing. */
-  protected override RedoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.paragraph,
-      this.start,
-      this.start + GetUndoFragmentLength(this.undoNodes.GetText(this.removedNodeId)),
-      this.insertedFragment,
-    );
   }
 }
 

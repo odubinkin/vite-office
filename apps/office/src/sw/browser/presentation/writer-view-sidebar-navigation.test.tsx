@@ -30,6 +30,8 @@ function mountWriter() {
     execute: vi.spyOn(session.view.GetViewFrame().GetDispatcher(), "Execute"),
     generation: session.view.GetDocShell().GetDocumentState().contentGeneration,
     title: sidebar.getByRole("button", { name: "Paragraph" }),
+    firstTitle: sidebar.getByRole("button", { name: "Style" }),
+    previousTitle: sidebar.getByRole("button", { name: "Character" }),
     options: sidebar.getByRole("button", { name: "More Options" }),
     rail: sidebar.getByRole("button", { name: "Properties" }),
     close: sidebar.getByRole("button", { name: "Close Sidebar Deck" }),
@@ -47,7 +49,7 @@ describe("Writer Sidebar managed traversal", /** Groups native owned focus route
     expect(owner.title).toHaveAttribute("aria-expanded", "false");
     expect(fireEvent.keyDown(owner.options, { key: "Tab" })).toBe(false);
     expect(owner.sidebar.getByRole("button", { name: "Start" })).toHaveFocus();
-    expect(owner.title).toHaveAttribute("aria-expanded", "true");
+    expect(owner.firstTitle).toHaveAttribute("aria-expanded", "true");
     expect(owner.execute).not.toHaveBeenCalled();
     expect(owner.session.view.GetDocShell().GetDocumentState().contentGeneration).toBe(
       owner.generation,
@@ -67,8 +69,8 @@ describe("Writer Sidebar managed traversal", /** Groups native owned focus route
     expect(owner.close).toHaveFocus();
     owner.rail.focus();
     expect(fireEvent.keyDown(owner.rail, { key: "Tab" })).toBe(false);
-    expect(owner.title).toHaveFocus();
-    expect(owner.title).toHaveAttribute("aria-expanded", "true");
+    expect(owner.firstTitle).toHaveFocus();
+    expect(owner.firstTitle).toHaveAttribute("aria-expanded", "true");
     expect(owner.rail).toHaveAttribute("aria-pressed", "true");
     expect(owner.execute).not.toHaveBeenCalled();
   });
@@ -80,8 +82,8 @@ describe("Writer Sidebar managed traversal", /** Groups native owned focus route
     owner.rail.focus();
     expect(owner.rail).toHaveAttribute("aria-pressed", "false");
     expect(fireEvent.keyDown(owner.rail, { key: "Tab" })).toBe(false);
-    expect(owner.title).toHaveFocus();
-    expect(owner.title).toHaveAttribute("aria-expanded", "true");
+    expect(owner.firstTitle).toHaveFocus();
+    expect(owner.firstTitle).toHaveAttribute("aria-expanded", "true");
     expect(owner.rail).toHaveAttribute("aria-pressed", "true");
     expect(owner.execute).not.toHaveBeenCalled();
   });
@@ -92,7 +94,9 @@ describe("Writer Sidebar managed traversal", /** Groups native owned focus route
       for (const key of ["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"]) {
         owner[control].focus();
         expect(fireEvent.keyDown(owner[control], { key, ctrlKey: true })).toBe(false);
-        expect(key === "ArrowLeft" || key === "ArrowUp" ? owner.close : owner.rail).toHaveFocus();
+        expect(
+          key === "ArrowLeft" || key === "ArrowUp" ? owner.previousTitle : owner.rail,
+        ).toHaveFocus();
       }
       expect(owner.execute).not.toHaveBeenCalled();
       expect(owner.session.view.GetDocShell().GetDocumentState().contentGeneration).toBe(

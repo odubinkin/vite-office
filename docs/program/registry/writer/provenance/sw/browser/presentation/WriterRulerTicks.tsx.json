@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterRulerTicks.tsx",
+    "rationale": "Actual browser font/cross-axis measurement supplies source tick projection. React DOM paints admitted ticks and labels with ResizeObserver cleanup. Native VCL window painting is a browser adaptation;complete ruler context/protection/writing-mode behavior is not claimed.",
+    "responsibilities": [
+      "TaskXBHM4Z: Actual browser font/cross-axis measurement supplies source tick projection. React DOM paints admitted ticks and labels with ResizeObserver cleanup. Native VCL window painting is a browser adaptation;complete ruler context/protection/writing-mode behavior is not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser presentation and storage adapt the actual native numeric,metric-page and ruler owners without replacing their value contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterRulerTicks.tsx",
+          "marker": "WriterRulerTicks"
+        }
+      ]
+    }
+  }
+}

@@ -515,6 +515,7 @@ export interface SwPrimarySaveEvidence {
 function isContentMutationHint(hint: SwModelHint): boolean {
   if (hint.kind === "model-transaction") return hint.hints.some(isContentMutationHint);
   return (
+    (hint.kind === "document-modified" && hint.modified) ||
     hint.kind === "attribute-set-changed" ||
     hint.kind === "format-inheritance-changed" ||
     hint.kind === "node-content-changed" ||

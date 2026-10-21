@@ -52,7 +52,9 @@ for (const width of [1280, 390])
         buffer: Buffer.from(historyOdt()),
       });
       const editor = page.getByLabel("Writer document body", { exact: true }),
-        select = page.getByRole("combobox", { name: "Paragraph style", exact: true }),
+        select = page
+          .getByRole("toolbar", { name: "Writer formatting toolbar" })
+          .getByRole("combobox", { name: "Paragraph style", exact: true }),
         paragraphs = editor.locator("[data-writer-paragraph-id]"),
         target = paragraphs.nth(1),
         before = paragraphs.nth(0),
@@ -108,7 +110,12 @@ for (const width of [1280, 390])
       await expect(before).toHaveAttribute("style", beforeStyle as string);
       await expect(after).toHaveAttribute("style", afterStyle as string);
       if (width === 1280)
-        await expect(page.locator("p").filter({ hasText: /^History style B$/ })).toHaveCount(1);
+        await expect(
+          page
+            .getByRole("complementary", { name: "Writer properties sidebar" })
+            .getByRole("combobox", { name: "Paragraph style", exact: true })
+            .locator("option:checked"),
+        ).toHaveText("History style B");
       await target.scrollIntoViewIfNeeded();
       await page.screenshot({
         path: testInfo.outputPath("native-style-redo.png"),

@@ -6,7 +6,7 @@ import { SwDoc } from "../../source/core/doc/doc";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { WriterTableDialog } from "./WriterTableDialog";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -44,18 +44,24 @@ it("mounted native default column width compensates its neighbor and clips posit
   const f = fixture();
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).not.toBeChecked();
   expect(screen.getByRole("spinbutton", { name: "Column 4 width (cm)" })).toBeDisabled();
-  expect(screen.getByRole("spinbutton", { name: "Column 4 width (cm)" })).toHaveValue(null);
+  expect(screen.getByRole("spinbutton", { name: "Column 4 width (cm)" })).toHaveValue("");
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveValue(2.05);
+  expect(screen.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "2.05",
+  );
   expect(screen.getByLabelText("Remaining space (cm)")).toHaveTextContent("5.29");
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "0" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(0.04);
+  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "0.04",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({ width: 6000, columnWidths: [23, 3977, 2000] }),
@@ -69,10 +75,16 @@ it("mounted native proportional modes couple, publish shared table width and rea
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Column 3 width (cm)" })).toHaveValue(5);
+  expect(screen.getByRole("spinbutton", { name: "Column 3 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "5",
+  );
   expect(screen.getByLabelText("Remaining space (cm)")).toHaveTextContent("0.87");
   fireEvent.click(screen.getByRole("tab", { name: "Table" }));
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(15);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "15",
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();
   expect(screen.getByRole("checkbox", { name: "Adjust columns proportionally" })).toBeChecked();
@@ -87,7 +99,10 @@ it("mounted native adapt-table mode carries width and side space across all tabs
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
     target: { value: "5" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveValue(3.53);
+  expect(screen.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "3.53",
+  );
   for (const tab of ["Text Flow", "Borders", "Table", "Columns"])
     fireEvent.click(screen.getByRole("tab", { name: tab }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
@@ -101,10 +116,16 @@ it("mounted native five-slot column window navigates a seven-column table one co
   expect(screen.getAllByRole("spinbutton")).toHaveLength(5);
   expect(screen.getByRole("button", { name: "Previous columns" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Next columns" }));
-  expect(screen.getByRole("spinbutton", { name: "Column 6 width (cm)" })).toHaveValue(1.76);
+  expect(screen.getByRole("spinbutton", { name: "Column 6 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "1.76",
+  );
   fireEvent.click(screen.getByRole("button", { name: "Next columns" }));
   expect(screen.getByRole("button", { name: "Next columns" })).toBeDisabled();
-  expect(screen.getByRole("spinbutton", { name: "Column 7 width (cm)" })).toHaveValue(1.76);
+  expect(screen.getByRole("spinbutton", { name: "Column 7 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "1.76",
+  );
   fireEvent.change(screen.getByRole("spinbutton", { name: "Column 7 width (cm)" }), {
     target: { value: "2" },
   });

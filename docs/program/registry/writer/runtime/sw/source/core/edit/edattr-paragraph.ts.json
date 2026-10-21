@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/edit/edattr-paragraph.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-properties-sidebar",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/edit/edattr-paragraph.ts#getParagraphAttributeNodes",
+        "apps/office/src/sw/source/uibase/shells/native-paragraph-sidebar-slots.test.ts#includes empty intermediate paragraphs"
+      ],
+      "justification": "TaskAHJ2M9 consumes inclusive paragraph-node traversal across the actual cursor ring,including empty paragraphs,end offset zero and selected empty table cells. General GetPaMAttr item/layout/protection,number-label and lookup-limit query services remain unported;this helper only enumerates the represented paragraph attribute scope.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getParagraphAttributeNodes"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/edit/edattr.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::GetPaMAttr"
+      ]
+    }
+  }
+}

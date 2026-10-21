@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svx/browser/sidebar/styles/StylesPropertyPanel.tsx",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/sidebar/styles/StylesPropertyPanel.tsx",
+          "marker": "StylesPropertyPanel"
+        }
+      ]
+    },
+    "rationale": "React Style panel reuses actual style toolbox acceptance and native panel focus ports in Sidebar.xcu order100. Native style creation/edit/clear toolbars remain unported.",
+    "responsibilities": [
+      "TaskAHJ2M9: React Style panel reuses actual style toolbox acceptance and native panel focus ports in Sidebar.xcu order100. Native style creation/edit/clear toolbars remain unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React mounted controls replace native weld UI while existing Sfx bindings,typed items and document owners retain state and execution."
+    }
+  }
+}

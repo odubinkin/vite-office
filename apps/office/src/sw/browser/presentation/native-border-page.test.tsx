@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native border-page UI composition and original document/history integration. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { Color } from "../../../tools/inc/color";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -13,7 +14,7 @@ import {
 import { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
@@ -170,7 +171,7 @@ it("native page presents six lines, source presets and separate padding/style/co
     screen.getByRole("combobox", { name: "Border line style" }).querySelectorAll("option"),
   ).toHaveLength(18);
   expect(screen.getByRole("checkbox", { name: "Synchronize" })).not.toBeChecked();
-  expect(screen.getByRole("spinbutton", { name: "Left padding (cm)" })).toHaveValue(0.31);
+  expect(screen.getByRole("spinbutton", { name: "Left padding (cm)" })).toHaveValue("0.31 cm");
   expect(screen.queryByRole("combobox", { name: "Cell border" })).toBeNull();
   expect(screen.queryByRole("spinbutton", { name: "Cell padding (cm)" })).toBeNull();
 });
@@ -254,7 +255,7 @@ it("empty native metric displays blank and transitions through actual browser in
   f.input.InvalidateItem(1);
   const page = new SvxBorderTabPage(f.input, 1);
   render(<Host page={page} />);
-  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(null);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("");
   fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
     target: { value: "0.1" },
   });
@@ -330,4 +331,17 @@ it("actual selected native border page applies inner/outer/padding items to orig
     cleanup();
     session.Close();
   }
+});
+
+it("projects large metric units to the native millimetre border-padding field", /** Checks source M-to-MM normalization with actual border item output. @returns Nothing. */ () => {
+  const f = fixture(),
+    changed = vi.fn();
+  cleanup();
+  render(<WriterBorderPage page={f.page} unit={FieldUnit.M} onChange={changed} />);
+  const top = screen.getByRole("spinbutton", { name: "Top padding (mm)" });
+  fireEvent.change(top, { target: { value: "1 mm" } });
+  expect(changed).toHaveBeenCalled();
+  const output = new SfxItemSet(f.input);
+  expect(f.page.FillItemSet(output)).toBe(true);
+  expect((output.Get(1) as SvxBoxItem).GetDistance(0)).toBe(57);
 });

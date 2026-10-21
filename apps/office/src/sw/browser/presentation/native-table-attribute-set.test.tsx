@@ -1,7 +1,7 @@
 /** @fileoverview Verifies mounted combined native table attributes, reset, original history and real ODT transport. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
@@ -75,7 +75,10 @@ it.each([false, true])(
       expect(screen.getByRole("checkbox", { name: split })).toBeChecked();
       fireEvent.click(screen.getByRole("tab", { name: "Table" }));
       fireEvent.click(screen.getByRole("button", { name: "Reset" }));
-      expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveValue(0.26);
+      expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        "0.26",
+      );
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(0);
       expect(format.GetULSpace()).toEqual(before);

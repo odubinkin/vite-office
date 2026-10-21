@@ -290,21 +290,27 @@ export function getStr(pThis: rtl_uString | null): Uint16Array {
   return pThis.buffer;
 }
 
-/** Original signed-integer sign handler; a mutable offset slot adapts the borrowed iterator reference. @param data - Original known-length input. @param iter - Current non-end iterator offset. @returns Whether the original minus sign was consumed. */
-export function HandleSignChar(data: Uint16Array, iter: [number]): boolean {
-  if (data[iter[0]] === 45) {
+/** Original signed-integer sign handler; a mutable offset slot adapts the borrowed iterator reference. @param data - Original known-length input. @param iter - Current non-end iterator offset. @param signed - Original integral template signedness. @returns Whether the original minus sign was consumed. */
+export function HandleSignChar(
+  data: Uint16Array | Uint8Array,
+  iter: [number],
+  signed = true,
+): boolean {
+  if (signed && data[iter[0]] === 45) {
     iter[0]++;
     return true;
   }
   if (data[iter[0]] === 43) iter[0]++;
   return false;
 }
-/** Original signed64 numeric_limits specialization computes the quotient/remainder overflow guard. @param nRadix - Original admitted radix. @param bNeg - Original negative-input flag. @returns Exact original quotient and small remainder. */
-export function DivMod(nRadix: number, bNeg: boolean): readonly [bigint, number] {
+/** Original signed64 numeric_limits specialization computes the quotient/remainder overflow guard. @param nRadix - Original admitted radix. @param bNeg - Original negative-input flag. @param unsigned - Original unsigned64 template specialization. @returns Exact original quotient and small remainder. */
+export function DivMod(nRadix: number, bNeg: boolean, unsigned = false): readonly [bigint, number] {
   const min = -(1n << 63n),
-    max = (1n << 63n) - 1n,
+    max = (1n << (unsigned ? 64n : 63n)) - 1n,
     radix = BigInt(nRadix);
-  return bNeg ? [-(min / radix), Number(-(min % radix))] : [max / radix, Number(max % radix)];
+  return bNeg && !unsigned
+    ? [-(min / radix), Number(-(min % radix))]
+    : [max / radix, Number(max % radix)];
 }
 /** Original UTF16 digit classifier and radix rejection. @param ch - Original unsigned16 unit. @param nRadix - Original radix. @returns Digit or -1. */
 export function implGetDigit(ch: number, nRadix: number): number {
@@ -314,20 +320,28 @@ export function implGetDigit(ch: number, nRadix: number): number {
   else if (ch >= 65 && ch <= 90) n = ch - 65 + 10;
   return n < nRadix ? n : -1;
 }
-/** Original signed64 known-length toInt specialization. Explicit UTF16 storage and offset adapt the original with_length iterator; its constructor assertion is retained at the public C owner before entry. BigInt preserves native unsigned accumulation and signed64 limits. @param data - Borrowed units, nullable for zero length. @param length - Original known length. @param nRadix - Original signed16 admitted radix. @returns Original signed64 value or overflow-to-zero. */
-export function toInt(data: Uint16Array | null, length: number, nRadix: number): bigint {
+/** Original signed64 known-length toInt specialization. Explicit UTF16 storage and offset adapt the original with_length iterator; its constructor assertion is retained at the public C owner before entry. BigInt preserves native unsigned accumulation and signed64 limits. @param data - Borrowed units, nullable for zero length. @param length - Original known length. @param nRadix - Original signed16 admitted radix. @param unsigned - Original unsigned64 integral specialization. @returns Original signed64 value or overflow-to-zero. */
+export function toInt(
+  data: Uint16Array | Uint8Array | null,
+  length: number,
+  nRadix: number,
+  unsigned = false,
+): bigint {
   if (nRadix < RTL_STR_MIN_RADIX || nRadix > RTL_STR_MAX_RADIX)
     throw new Error("assert(nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX)");
   const iter: [number] = [0];
-  while (iter[0] !== length && implIsWhitespace((data as Uint16Array)[iter[0]] as number))
+  while (
+    iter[0] !== length &&
+    implIsWhitespace((data as Uint16Array | Uint8Array)[iter[0]] as number)
+  )
     iter[0]++;
   if (iter[0] === length) return 0n;
-  const bNeg = HandleSignChar(data as Uint16Array, iter),
-    [nDiv, nMod] = DivMod(nRadix, bNeg);
+  const bNeg = HandleSignChar(data as Uint16Array | Uint8Array, iter, !unsigned),
+    [nDiv, nMod] = DivMod(nRadix, bNeg, unsigned);
   // Original assert(nDiv > 0) is necessarily true for signed64 limits and every admitted radix2..36.
   let n = 0n;
   while (iter[0] !== length) {
-    const nDigit = implGetDigit((data as Uint16Array)[iter[0]] as number, nRadix);
+    const nDigit = implGetDigit((data as Uint16Array | Uint8Array)[iter[0]] as number, nRadix);
     if (nDigit < 0) break;
     if ((nMod < nDigit ? nDiv - 1n : nDiv) < n) return 0n;
     n *= BigInt(nRadix);

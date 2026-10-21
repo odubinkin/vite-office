@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/sidebar/paragraph/ParaPropertyPanel.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "writer-properties-sidebar",
+    "capabilityIds": [
+      "CAP-0125",
+      "CAP-0112",
+      "CAP-0105",
+      "CAP-0107"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/sidebar/paragraph/ParaPropertyPanel.tsx#ParaPropertyPanel"
+      ],
+      "justification": "TaskAHJ2M9: React Writer text/table Paragraph panel binds typed LR/UL slots and native toolbar groups. Fresh metric edits retain native default100 proportions and false automatic/context flags;Writer metric bounds use source units. Hyphenation,writing directions,background and full native device/widget rounding remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParaPropertyPanel"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -26,7 +26,10 @@ for (const text of ["X", "A\nB\n"]) {
       await first.click();
       await page.keyboard.type("First");
       await page.keyboard.press("Enter");
-      await page.getByRole("button", { name: "Bold", exact: true }).click();
+      await page
+        .getByRole("toolbar", { name: "Writer formatting toolbar" })
+        .getByRole("button", { name: "Bold", exact: true })
+        .click();
       await page.getByLabel("Row 1 column 1 paragraph 2", { exact: true }).click();
       await page.keyboard.type("Tail");
       await page.keyboard.press("Tab");

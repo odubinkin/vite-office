@@ -80,17 +80,32 @@ it("Table Reset restores shared native geometry while retaining Borders draft an
   fireEvent.click(screen.getByRole("checkbox", { name: "Adapt table width" }));
   metric("Column 1 width (cm)", "5");
   tab("Table");
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(12.06);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "12.06",
+  );
   metric("Above (cm)", "2");
   reset();
   reset();
   expect(screen.getByRole("tab", { name: "Table" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(10.58);
-  expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveValue(0.21);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "10.58",
+  );
+  expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "0.21",
+  );
   tab("Columns");
-  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(3.53);
+  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "3.53",
+  );
   tab("Borders");
-  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(1);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "1",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -114,10 +129,19 @@ it("Columns Reset restores native columns without discarding local Table vertica
   metric("Column 1 width (cm)", "5");
   reset();
   expect(screen.getByRole("tab", { name: "Columns" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(3.53);
+  expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "3.53",
+  );
   tab("Table");
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(10.58);
-  expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveValue(1);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "10.58",
+  );
+  expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "1",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({ width: 6000, columnWidths: [2000, 2000, 2000], marginTop: 567 }),
@@ -151,7 +175,10 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
   expect(screen.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("3");
   tab("Borders");
   reset();
-  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "0",
+  );
   expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
     "data-writer-border-state",
     "2",

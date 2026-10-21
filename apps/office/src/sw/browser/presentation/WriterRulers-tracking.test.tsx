@@ -3,6 +3,8 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterViewStore } from "./writer-view-projection";
+import { FieldUnit } from "../../../tools/inc/fldunit";
+import { RULER_UNIT_DATA } from "../../../svtools/source/control/ruler";
 import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -201,4 +203,45 @@ describe("ruler handle tracking", /** Groups coordinate preservation and transie
     fireEvent.pointerUp(window, { pointerId: 7, clientX: 280 });
     expect(onTabStopAdd).toHaveBeenCalledOnce();
   });
+});
+
+it("uses independently supplied native ruler units for horizontal and vertical physical drag grids", /** Checks active-axis unit changes preserve physical document contracts. @returns Nothing. */ () => {
+  const data = fixture();
+  const inch = RULER_UNIT_DATA.find(
+    /** Borrows original inch row. @param entry - Native table entry. @returns Whether matched. */ (
+      entry,
+    ) => entry[0] === FieldUnit.INCH,
+  )?.[1];
+  const point = RULER_UNIT_DATA.find(
+    /** Borrows original point row. @param entry - Native table entry. @returns Whether matched. */ (
+      entry,
+    ) => entry[0] === FieldUnit.POINT,
+  )?.[1];
+  if (inch === undefined || point === undefined)
+    throw new Error("Missing original ruler table rows");
+  const rendered = render(
+    <>
+      <WriterRulers {...data} horizontalVisible unitData={inch} />
+      <WriterVerticalRuler page={data.page} onPageChange={data.onPageChange} unitData={point} />
+    </>,
+  );
+  const horizontal = screen.getByRole("button", { name: "Left page margin" });
+  fireEvent.pointerDown(horizontal, { button: 0, pointerId: 31, clientX: 100 });
+  fireEvent.pointerUp(window, { pointerId: 31, clientX: 120 });
+  expect(data.onPageChange).toHaveBeenLastCalledWith("left", 270);
+  const vertical = screen.getByRole("button", { name: "Top page margin" });
+  fireEvent.pointerDown(vertical, { button: 0, pointerId: 32, clientY: 100 });
+  fireEvent.pointerUp(window, { pointerId: 32, clientY: 120 });
+  expect(data.onPageChange).toHaveBeenLastCalledWith("top", 240);
+  expect(data.onPageChange).toHaveBeenCalledTimes(2);
+  expect(horizontal.style.left).toBe(`${data.page.leftMargin / 15}px`);
+  expect(vertical.style.top).toBe(`${data.page.topMargin / 15}px`);
+  rendered.rerender(<WriterRulers {...data} horizontalVisible />);
+  fireEvent.pointerDown(screen.getByRole("button", { name: "Left page margin" }), {
+    button: 0,
+    pointerId: 33,
+    clientX: 100,
+  });
+  fireEvent.pointerUp(window, { pointerId: 33, clientX: 120 });
+  expect(data.onPageChange).toHaveBeenLastCalledWith("left", 283);
 });

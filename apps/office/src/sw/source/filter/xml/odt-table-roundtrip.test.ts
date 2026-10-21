@@ -195,7 +195,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     const encoded = decodeWriterDocument(encodeWriterDocument(document));
     expect(tableShape(encoded)).toEqual(shape);
     expect(encoded.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(1);
-    expect(encoded.GetIDocumentMarkAccess().FindMark("CellBookmark")?.GetPosition().GetNode()).toBe(
+    expect(encoded.GetIDocumentMarkAccess().FindMark("CellBookmark")?.GetMarkPos().GetNode()).toBe(
       encoded.GetTables()[0]?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0],
     );
     const metadata = { title: "Table roundtrip" };
@@ -210,7 +210,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     ).toEqual(["before", "after"]);
     expect(reopened.document.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(1);
     expect(
-      reopened.document.GetIDocumentMarkAccess().FindMark("CellBookmark")?.GetPosition().GetNode(),
+      reopened.document.GetIDocumentMarkAccess().FindMark("CellBookmark")?.GetMarkPos().GetNode(),
     ).toBe(
       reopened.document.GetTables()[0]?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0],
     );

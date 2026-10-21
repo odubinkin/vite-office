@@ -29,7 +29,7 @@ import {
   u_foldCase,
 } from "../../../external/icu/source/common/unicode/uchar";
 import { U_FOLD_CASE_DEFAULT } from "../../../external/icu/source/common/unicode/stringoptions";
-import conditions from "./casefolding_conditions.json";
+import conditions from "./casefolding_conditions.json" with { type: "json" };
 
 /** Initializes the complete native const Mapping array without selecting payload fields. @param rows - Original initialized type/count/three-unit rows. @returns Original mapping owners. */
 function mappingArray(rows: (number | number[])[][]): readonly MappingConstReference[] {

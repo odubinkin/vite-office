@@ -1,4 +1,6 @@
 /** @fileoverview Browser projection of the supported Writer Line Numbering settings. */
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useState } from "react";
 import { LineNumberPosition, type SwLineNumberInfoValue } from "../../inc/lineinfo";
@@ -6,9 +8,11 @@ import { LineNumberPosition, type SwLineNumberInfoValue } from "../../inc/linein
 /** Edits the document-owned line numbering options exposed by the pinned dialog. @param props - Initial value and callbacks. @returns Dialog. */
 export function WriterLineNumberingDialog({
   value,
+  unit = FieldUnit.CM,
   onCancel,
   onSubmit,
 }: Readonly<{
+  unit?: FieldUnit;
   value: SwLineNumberInfoValue;
   onCancel: () => void;
   onSubmit: (value: SwLineNumberInfoValue) => void;
@@ -77,16 +81,16 @@ export function WriterLineNumberingDialog({
               </select>
             </label>
             <label className="grid gap-1 text-sm">
-              Spacing (cm)
-              <input
+              Spacing
+              <MetricSpinButton
+                unit={unit}
+                aria-label={`Spacing (${unit === FieldUnit.INCH ? "in" : "cm"})`}
                 className="rounded border p-1"
-                min="0"
-                step="0.01"
-                type="number"
-                value={Math.round(((draft.posFromLeft * 2.54) / 1440) * 100) / 100}
-                onChange={
-                  /** Updates a setting. @param event - Input event. @returns Nothing. */ (event) =>
-                    update({ posFromLeft: Math.round((Number(event.target.value) * 1440) / 2.54) })
+                value={draft.posFromLeft}
+                onValueChange={
+                  /** Updates physical spacing through the native parser. @param twips - Accepted value. @returns Nothing. */ (
+                    twips,
+                  ) => update({ posFromLeft: twips })
                 }
               />
             </label>

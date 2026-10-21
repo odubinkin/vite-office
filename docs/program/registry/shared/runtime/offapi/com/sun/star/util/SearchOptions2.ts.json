@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/SearchOptions2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/SearchOptions2.ts#SearchOptions2",
+        "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+        "offapi/com/sun/star/util/SearchOptions2.idl#SearchOptions2"
+      ],
+      "justification": "Original SearchOptions inheritance and two extra fields, default/copy/full constructor shape and independent value ownership. New AlgorithmType2 defaults to zero and remains independent of inherited obsolete algorithmType; wildcard escape defaults to zero. This is a real value struct, not an initialized search/configuration service.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchOptions2"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/util/SearchOptions2.idl",
+      "upstreamSymbols": [
+        "SearchOptions2"
+      ]
+    }
+  }
+}

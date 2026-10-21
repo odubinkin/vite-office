@@ -291,3 +291,31 @@ describe("SfxUndoManager" /** Groups generic action-manager behavior. @returns N
     expect(action.GetPayloadSize()).toBe(0);
   });
 });
+
+it("clears native history levels only as each open list unwinds", /** Covers ClearAllLevels' deferred flag, nested payload release and invalid save mark. @returns Nothing. */ () => {
+  const manager = new SfxUndoManager<TextContext>();
+  manager.AddUndoAction(new TextAction("", "old"));
+  manager.SetSavePosition();
+  manager.EnterListAction("outer");
+  manager.AddUndoAction(new TextAction("old", "outer"));
+  manager.EnterListAction("inner");
+  manager.AddUndoAction(new TextAction("outer", "inner"));
+  manager.ClearAllLevels();
+  expect(manager.GetListActionDepth()).toBe(2);
+  expect(manager.GetUndoActionCount()).toBe(1);
+  expect(manager.LeaveListAction()).toBe(0);
+  expect(manager.GetListActionDepth()).toBe(1);
+  expect(manager.GetUndoActionCount()).toBe(1);
+  expect(manager.LeaveListAction()).toBe(0);
+  expect(manager.GetListActionDepth()).toBe(0);
+  expect(manager.GetUndoActionCount()).toBe(0);
+  expect(manager.IsAtSavePosition()).toBe(false);
+  manager.AddUndoAction(new TextAction("", "new"));
+  manager.EnterListAction("after clear");
+  manager.AddUndoAction(new TextAction("new", "next"));
+  expect(manager.LeaveListAction()).toBe(1);
+  expect(manager.GetUndoActionCount()).toBe(2);
+  manager.ClearAllLevels();
+  expect(manager.GetUndoActionCount()).toBe(0);
+  expect(manager.IsAtSavePosition()).toBe(false);
+});

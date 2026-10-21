@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/transliteration/ignoreKashida_CTL.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "capabilityIds": [
+      "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/transliteration/ignoreKashida_CTL.ts#ignoreKashida_CTL",
+        "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts",
+        "apps/office/src/i18npool/source/transliteration/native-caseignore-contracts.test.ts"
+      ],
+      "justification": "Original logical transliteration module algorithms now use actual OUString/Locale/Sequence values and byte-strided output cells. Preserve initialized native scalar/range/pointer producer preconditions,not invented default func/table/map values. Native stack/heap and initializer-list syntax is erased with existing typed-array/Sequence bindings;mutable output uses original getArray/asNonConstRange COW. WeakImplHelper,XExtendedTransliteration interface/query/factory registration and native refcount/process ABI remain unported and are not claimed. The common supportsService cast erases that C++ inheritance only and delegates to the unchanged actual helper on this real receiver;no query/acquire/release stub or wrapper object is supplied. Explicit dispose adapts implicit Locale member destruction for these logical owners. New module load methods retain actual RuntimeException behavior;the module bases are not an aggregate service or default provider. Original function-only Kashida translator returns0xffff for0640,with all pointer fields explicitly initialized by the source constructor. Generic sentinel collision remains preserved;the existence of this owner alone does not activate engine flags or UI defaults.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ignoreKashida_CTL",
+        "ignoreKashida_CTL_translator"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/transliteration/ignoreKashida_CTL.cxx",
+      "upstreamSymbols": [
+        "ignoreKashida_CTL",
+        "ignoreKashida_CTL_translator"
+      ]
+    }
+  }
+}

@@ -108,6 +108,7 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
 export class SfxUndoManager<Context> {
   private readonly actions: SfxUndoAction<Context>[] = [];
   private currentAction = 0;
+  private mbClearUntilTopLevel = false;
   private readonly listActions: SfxListUndoAction<Context>[] = [];
   private mergeAllowed = false;
   private savePosition: number | undefined = 0;
@@ -179,13 +180,17 @@ export class SfxUndoManager<Context> {
     const action = this.listActions.pop();
     if (action === undefined) throw new Error("No Sfx list action is open.");
     const count = action.GetActionCount();
-    if (count === 0) {
-      action.Dispose();
+    if (count === 0) action.Dispose();
+    else {
+      const parent = this.listActions[this.listActions.length - 1];
+      if (parent === undefined) this.AddUndoAction(action);
+      else parent.AddAction(action);
+    }
+    if (this.mbClearUntilTopLevel) {
+      this.ClearAllLevels();
+      if (!this.IsInListAction()) this.mbClearUntilTopLevel = false;
       return 0;
     }
-    const parent = this.listActions[this.listActions.length - 1];
-    if (parent === undefined) this.AddUndoAction(action);
-    else parent.AddAction(action);
     return count;
   }
 
@@ -291,6 +296,19 @@ export class SfxUndoManager<Context> {
     this.historyRootRevision += 1;
     this.mergeAllowed = false;
     this.savePosition = 0;
+  }
+
+  /** Native ClearAllLevels clears the current array now and clears each parent only when its list action closes. @returns Nothing. */
+  public ClearAllLevels(): void {
+    this.ClearSavePosition();
+    const current = this.listActions[this.listActions.length - 1];
+    if (current !== undefined) {
+      current.Dispose();
+      this.mbClearUntilTopLevel = true;
+    } else {
+      this.Clear();
+      this.ClearSavePosition();
+    }
   }
 
   /** Removes the redo branch before a newly executed command is recorded. @returns Nothing. */

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/transliteration/fullwidthToHalfwidth.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "capabilityIds": [
+      "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/transliteration/fullwidthToHalfwidth.ts#fullwidthToHalfwidth",
+        "apps/office/src/i18npool/source/transliteration/native-width-kana-contracts.test.ts",
+        "apps/office/src/i18nutil/source/utility/native-widthfolding-strings.test.ts"
+      ],
+      "justification": "Original directional/ignore constructor names,pointer/table setup,scalar and range contracts are preserved through actual OUString/Sequence values and initialized width/mapping tables. Native JavaScript memory and object lifetime replace C++ reference/allocation machinery;no refcount or service facade is introduced. Full-to-half decomposes Katakana before mapping and retains scalar expansion exceptions including literalFFFF;half-to-full composes an already-copied local string and keeps local offsets for nonzero input starts. All kana-only and ASC/JIS variants preserve their original table masks and VU flag. Interface/service/factory registration,aggregate consumers and browser Find UI remain pending;no readiness/default/semantic-status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "fullwidthToHalfwidth",
+        "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
+        "FULLWIDTH_HALFWIDTH_LIKE_ASC",
+        "transliterateImpl"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/transliteration/fullwidthToHalfwidth.cxx",
+      "upstreamSymbols": [
+        "fullwidthToHalfwidth",
+        "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
+        "FULLWIDTH_HALFWIDTH_LIKE_ASC",
+        "transliterateImpl"
+      ]
+    }
+  }
+}

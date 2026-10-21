@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/TransliterationType.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/i18n/TransliterationType.idl",
+    "localSymbols": [
+      "NONE",
+      "ONE_TO_ONE",
+      "NUMERIC",
+      "ONE_TO_ONE_NUMERIC",
+      "IGNORE",
+      "CASCADE"
+    ],
+    "upstreamSymbols": [
+      "TransliterationType",
+      "ONE_TO_ONE",
+      "IGNORE",
+      "CASCADE"
+    ],
+    "preservedResponsibilities": [
+      "Original six short constants NONE/ONE_TO_ONE/NUMERIC/ONE_TO_ONE_NUMERIC/IGNORE/CASCADE with numeric identities0,1,2,3,4,8;no capability inference."
+    ],
+    "omittedResponsibilities": [
+      "Complete native generated ABI/process integration and full transliteration service remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/TransliterationType.ts",
+          "marker": "NONE"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/i18n/TransliterationType.idl",
+          "marker": "TransliterationType"
+        }
+      ]
+    }
+  }
+}

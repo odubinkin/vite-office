@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/sidebar/text/TextPropertyPanel.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "writer-properties-sidebar",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/sidebar/text/TextPropertyPanel.tsx#TextPropertyPanel"
+      ],
+      "justification": "TaskAHJ2M9: React Character panel binds actual font family,height,effects and color widgets to Sfx state and execution in source order. Strikeout,shadow,super/subscript and advanced typography remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TextPropertyPanel"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

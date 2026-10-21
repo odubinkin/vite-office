@@ -7,36 +7,57 @@
     "status": "mapped",
     "upstreamPath": "i18npool/source/transliteration/transliteration_body.cxx",
     "localSymbols": [
-      "transliterateUppercase"
+      "Transliteration_body",
+      "Transliteration_casemapping",
+      "Transliteration_u2l",
+      "Transliteration_l2u",
+      "Transliteration_togglecase",
+      "transliterateUppercase",
+      "transliterateImpl",
+      "transliterateChar2String",
+      "transliterateChar2Char",
+      "foldingImpl",
+      "equals",
+      "transliterateRange",
+      "getType"
     ],
     "upstreamSymbols": [
-      "Transliteration_body::transliterateImpl"
+      "Transliteration_body",
+      "Transliteration_casemapping",
+      "Transliteration_u2l",
+      "Transliteration_l2u",
+      "Transliteration_togglecase",
+      "transliterateImpl",
+      "transliterateChar2String",
+      "transliterateChar2Char",
+      "foldingImpl",
+      "equals",
+      "transliterateRange",
+      "getType"
     ],
     "preservedResponsibilities": [
-      "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending."
+      "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending.",
+      "The current search task adds the actual FullFolding branch of transliterateImpl, using existing casefolding::getValue and a per-output-unit original-offset sequence. Locale conditionals, expansions and supplementary pairs retain source mapping data. No service/factory or other mapping modes are fabricated.",
+      "Original logical transliteration module algorithms now use actual OUString/Locale/Sequence values and byte-strided output cells. Preserve initialized native scalar/range/pointer producer preconditions,not invented default func/table/map values. Native stack/heap and initializer-list syntax is erased with existing typed-array/Sequence bindings;mutable output uses original getArray/asNonConstRange COW. WeakImplHelper,XExtendedTransliteration interface/query/factory registration and native refcount/process ABI remain unported and are not claimed. The common supportsService cast erases that C++ inheritance only and delegates to the unchanged actual helper on this real receiver;no query/acquire/release stub or wrapper object is supplied. Explicit dispose adapts implicit Locale member destruction for these logical owners. New module load methods retain actual RuntimeException behavior;the module bases are not an aggregate service or default provider. Original body,casemapping,u2l,l2u,toggle classes and scalar/mapping/folding/range/error contracts. Existing uppercase helper now forwards to actual casemapping instead of another loop. Title/sentence word-classifier overrides remain unported. Function transliterateCaseFolding moves to the actual caseignore owner;existing callers use it there. No new language/case defaults or unsupported engine modes are enabled."
     ],
     "omittedResponsibilities": [
-      "Full class/service construction, other classification/transliteration operations, diagnostic logging and actual Calc string pool/document/UI/ODS owners remain unimplemented."
+      "WeakImplHelper/interface/factory/service aggregation,complete generated enum ABI,title/sentence word services,ICU diacritic normalization and full native process/lifetime equivalence remain unverified."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/i18npool/source/transliteration/transliteration_body.ts",
-          "marker": "transliterateUppercase"
+          "marker": "Transliteration_body"
         },
         {
-          "path": "apps/office/src/unotools/source/i18n/native-uppercase.test.ts",
-          "marker": "it("
+          "path": "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts",
+          "marker": "Sequence"
         }
       ],
       "upstream": [
         {
           "path": "i18npool/source/transliteration/transliteration_body.cxx",
-          "marker": "transliterateImpl"
-        },
-        {
-          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
-          "marker": "testTitleCase"
+          "marker": "Transliteration_body"
         }
       ]
     }

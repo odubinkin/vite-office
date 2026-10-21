@@ -23,6 +23,8 @@ import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 
 import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwModule } from "../../source/uibase/app/swmodule";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SwView } from "../../source/uibase/uiview/view";
 
 const owners: SwView[] = [];
@@ -33,6 +35,7 @@ function layoutView(document: ReturnType<typeof createWriterDocument>): SwView {
       document,
       createDocument({ id: "page-layout", suiteId: "writer", title: "Page" }),
     ),
+    new SwModule({ "Other/MeasureUnit": FieldUnit.CM }),
   );
   owners.push(view);
   return view;
@@ -41,8 +44,26 @@ afterEach(
   /** Releases UI before actual native fixture owners. @returns Nothing. */ () => {
     cleanup();
     for (const view of owners.splice(0)) view.Close();
+    vi.restoreAllMocks();
   },
 );
+
+/** Supplies real browser geometry unavailable in jsdom,without replacing native ruler arithmetic. @returns Nothing. */
+function measureRulerFont(): void {
+  const original = HTMLElement.prototype.getBoundingClientRect;
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    /** Measures only the browser tick layer and its font sample. @param this - DOM element. @returns Platform rectangle. */
+    function (this: HTMLElement): DOMRect {
+      if (
+        this.closest('[aria-label="Writer horizontal ruler"],[aria-label="Writer vertical ruler"]')
+      ) {
+        if (this.classList.contains("invisible")) return new DOMRect(0, 0, 8, 12);
+        if (this.classList.contains("pointer-events-none")) return new DOMRect(0, 0, 32, 32);
+      }
+      return original.call(this);
+    },
+  );
+}
 
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
@@ -528,7 +549,8 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(rightIndent.style.bottom).toBe("0px");
   });
 
-  it("shows tenth-centimetre ticks and a snapped drag guide over the page", /** Checks visual and committed ruler positions share one increment. @returns Nothing. */ () => {
+  it("shows native centimetre stroke admission and a snapped drag guide over the page", /** Checks visual and committed ruler positions share one increment. @returns Nothing. */ () => {
+    measureRulerFont();
     const onPageChange = vi.fn();
     const onParagraphIndentChange = vi.fn();
     render(
@@ -556,18 +578,27 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
       </WriterWorkspaceChrome>,
     );
     const ruler = screen.getByRole("toolbar", { name: "Writer horizontal ruler" });
-    const ticks = ruler.querySelectorAll("span");
+    const ticks = ruler.querySelectorAll<HTMLElement>("[data-ruler-tick]");
     const zero = [...ticks].find(
       /** Finds the origin label. @param tick - Ruler tick. @returns Whether it labels zero. */ (
         tick,
       ) => tick.textContent === "0",
     );
     expect(zero).toBeDefined();
+    expect(ruler.querySelector('[data-ruler-tick="10"]')).toHaveTextContent("1");
+    const strokes = [...ruler.querySelectorAll<HTMLElement>("[data-ruler-tick] > span")];
     expect(
-      [...ticks].some(
-        /** Finds a minor division. @param tick - Ruler tick. @returns Whether it is minor. */ (
+      strokes.some(
+        /** Native fine division has at most six pixels and is hidden. @param tick - Stroke. @returns Whether fine. */ (
           tick,
         ) => tick.style.height === "4px",
+      ),
+    ).toBe(false);
+    expect(
+      strokes.some(
+        /** Half-centimetre division is admitted with native cross-axis length. @param tick - Stroke. @returns Whether medium. */ (
+          tick,
+        ) => tick.style.height === "7px",
       ),
     ).toBe(true);
     const handle = screen.getByRole("button", { name: "Left page margin" });
@@ -586,6 +617,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
   });
 
   it("docks page rulers at the canvas edge and keeps their page-relative origins through scrolling", /** Verifies the fixed lane and page origins. @returns Nothing. */ () => {
+    measureRulerFont();
     const tinyPage = { ...page, bottomMargin: 100, height: 650, topMargin: 100 };
     const paragraphs = [paragraph("p1", "first"), paragraph("p2", "second")];
     const { container } = render(
@@ -621,12 +653,12 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     const rulers = lane.querySelectorAll('[aria-label="Writer vertical ruler"]');
     expect(rulers).toHaveLength(2);
     for (const ruler of rulers) {
-      const zero = [...ruler.querySelectorAll("span")].find(
+      const zero = [...ruler.querySelectorAll<HTMLElement>("[data-ruler-tick]")].find(
         /** Finds the page origin. @param tick - Ruler tick. @returns Whether it labels zero. */ (
           tick,
         ) => tick.textContent === "0",
       );
-      expect(zero?.style.top).toBe(`${tinyPage.topMargin / 15}px`);
+      expect(zero?.style.top).toBe(`${Math.round(tinyPage.topMargin / 15)}px`);
     }
     fireEvent.scroll(canvas, { target: { scrollTop: 25 } });
     expect((lane.firstElementChild as HTMLElement).style.transform).toBe("translateY(-25px)");
@@ -636,6 +668,8 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(document.querySelectorAll('[data-ruler-guide="y"]')).toHaveLength(1);
     fireEvent.pointerCancel(window);
     expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
+    // Release the prototype font fixture before installing independent per-element clipping geometry.
+    vi.restoreAllMocks();
     const canvasRect = vi.spyOn(canvas, "getBoundingClientRect").mockReturnValue({
       top: 0,
       bottom: 100,

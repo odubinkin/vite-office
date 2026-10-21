@@ -19,12 +19,21 @@ import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import {
+  SvxIndentValue,
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+  SvxRightMarginItem,
+  SvxLRSpaceItem,
+} from "../../../../editeng/inc/lrspitem";
+import { createSwParagraphLRSpaceItem } from "./txtattr-paragraph";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
   RES_TXTATR_INETFMT,
   RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
   RES_BREAK,
   RES_PAGEDESC,
   RES_PARATR_SPLIT,
@@ -55,6 +64,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undob
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
 import { getWriterINetFormatStateAtCursor } from "../../core/edit/edattr";
+import { getParagraphAttributeNodes } from "../../core/edit/edattr-paragraph";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import { createWriterTextCommandRegistry } from "./textsh1-commands";
@@ -192,7 +202,7 @@ export class SwTextShell {
       createCharacterFormatItems(format, this.GetCharacterFormatState(format) !== "on"),
     );
     if (selected === undefined || selected.length === 0) {
-      if (this.target.GetCursor().HasMark()) this.target.NotifySelectionChanged();
+      this.target.NotifySelectionChanged();
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       return false;
     }
@@ -286,7 +296,7 @@ export class SwTextShell {
     if (result.action === "navigate") {
       const mark = marks.FindMark(result.name);
       if (mark === undefined) return false;
-      return this.target.SetPaM(mark.GetPosition().clone());
+      return this.target.SetPaM(mark.GetMarkPos().clone());
     }
     if (result.action === "remove") return marks.DeleteMark(result.name);
     if (result.action === "rename") return marks.RenameMark(result.name, result.newName);
@@ -476,6 +486,39 @@ export class SwTextShell {
   /** Applies an item to active or selected paragraphs in one history entry. @param item - Paragraph attribute. @returns Whether a paragraph changed. */
   public SetParagraphItem(item: SfxPoolItem): boolean {
     return this.SetParagraphItems([item]);
+  }
+
+  /** Applies Execute's native combined indent item as three Writer attributes. @param item - Accepted slot item. @returns Whether changed. */
+  public ApplyParagraphLRSpace(item: SvxLRSpaceItem): boolean {
+    const first = new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE),
+      left = new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),
+      right = new SvxRightMarginItem(RES_MARGIN_RIGHT);
+    first.SetTextFirstLineOffset(item.GetTextFirstLineOffset(), item.GetPropTextFirstLineOffset());
+    first.SetAutoFirst(item.IsAutoFirst());
+    left.SetTextLeft(item.GetTextLeft(), item.GetPropLeft());
+    right.SetRight(item.GetRight(), item.GetPropRight());
+    return this.SetParagraphItems([first, left, right]);
+  }
+
+  /** Reads GetAttrState's combined native item only for a uniform selection. @returns Independent slot item or invalid mixed state. */
+  public GetParagraphLRSpace(): SvxLRSpaceItem | undefined {
+    return this.GetUniformParagraphItem(createSwParagraphLRSpaceItem);
+  }
+
+  /** Aggregates actual paragraph items using native value equality. @param createItem - Concrete state projection. @returns Uniform item or undefined for mixed state. */
+  public GetUniformParagraphItem<Item extends SfxPoolItem>(
+    createItem: (paragraph: SwTextNode) => Item,
+  ): Item | undefined {
+    const items = getParagraphAttributeNodes(this.target.GetDoc(), this.target.GetCursor()).map(
+        createItem,
+      ),
+      first = items[0] as Item;
+    return items.every(
+      /** Retains only native uniform value state. @param item - Concrete selected value. @returns Whether equal. */
+      (item) => first.equals(item),
+    )
+      ? first
+      : undefined;
   }
 
   /** Applies the supported paragraph dialog through pooled items and one undo entry. @param value - Accepted primitive draft. @returns Whether formatting changed. */
@@ -695,19 +738,7 @@ export class SwTextShell {
   private ApplyParagraphItems(
     createItems: (paragraph: SwTextNode) => readonly SfxPoolItem[],
   ): boolean {
-    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
-    const paragraphs =
-      selected === undefined || selected.length === 0
-        ? [this.target.GetActiveParagraph()]
-        : [
-            ...new Set(
-              selected.map(
-                /** Handles Writer formatting state. @param range - Input value. @returns Callback result. */ (
-                  range,
-                ) => range.node,
-              ),
-            ),
-          ];
+    const paragraphs = getParagraphAttributeNodes(this.target.GetDoc(), this.target.GetCursor());
     const cursor = this.target.CaptureCursorState();
     const actions = paragraphs.flatMap(
       /** Handles Writer formatting state. @param paragraph - Input value. @returns Callback result. */ (

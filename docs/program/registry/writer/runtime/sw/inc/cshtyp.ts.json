@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/cshtyp.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/cshtyp.ts#FindRanges",
+        "apps/office/src/sw/source/core/crsr/findtxt.test.ts",
+        "sw/inc/cshtyp.hxx#FindRanges"
+      ],
+      "justification": "Original FindRanges bit identities and SwDocPositions selector order. InSelAll denotes all matches, not selection-only search. No full search traversal or UI capability is claimed from these values.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FindRanges",
+        "SwDocPositions"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/inc/cshtyp.hxx",
+      "upstreamSymbols": [
+        "FindRanges",
+        "SwDocPositions"
+      ]
+    }
+  }
+}

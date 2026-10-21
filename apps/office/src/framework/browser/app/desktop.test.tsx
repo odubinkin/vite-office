@@ -168,11 +168,21 @@ describe("App" /**
     );
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Start" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
-    fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "default" } });
+    fireEvent.change(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+      { target: { value: "default" } },
+    );
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
-    fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
+    fireEvent.change(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+      { target: { value: "heading-1" } },
+    );
     expect(firstParagraph).toHaveStyle({ fontSize: "18pt" });
     expect(firstParagraph).not.toHaveAccessibleDescription();
     expect(
@@ -181,11 +191,20 @@ describe("App" /**
       ),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-    expect(screen.getByLabelText("Paragraph style")).toHaveValue("default");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+    ).toHaveValue("default");
     fireEvent.click(screen.getByRole("button", { name: "Redo" }));
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
-    expect(screen.getByText("Centered")).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Center" },
+      ),
+    ).toHaveAttribute("aria-pressed", "true");
   });
 
   it("formats same-paragraph text through Writer toolbar, Format Text, shortcuts, pending typing, history, and Copy" /**
@@ -223,16 +242,22 @@ describe("App" /**
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(editor, "Styled");
     selectWriterParagraphText(editor);
-    const fontSelect = screen.getByLabelText("Font name");
+    const fontSelect = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByLabelText("Font name");
     expect(within(fontSelect).getByRole("option", { name: "Noto Serif" })).toBeInTheDocument();
     fireEvent.change(fontSelect, { target: { value: "Noto Serif" } });
     expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
-    const fontSizeSelect = screen.getByLabelText("Font size");
+    const fontSizeSelect = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByLabelText("Font size");
     expect(within(fontSizeSelect).getByRole("option", { name: "14 pt" })).toBeInTheDocument();
     fireEvent.change(fontSizeSelect, { target: { value: "14" } });
     expect(editor.querySelector('[style*="font-size"]')).toHaveStyle({ fontSize: "14pt" });
 
-    const styleSelect = screen.getByLabelText("Paragraph style");
+    const styleSelect = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByLabelText("Paragraph style");
     expect(within(styleSelect).getAllByRole("option")).toHaveLength(10);
     expect(
       within(styleSelect).queryByRole("option", { name: "List Heading" }),

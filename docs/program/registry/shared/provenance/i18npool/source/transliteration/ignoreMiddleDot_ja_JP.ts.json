@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/ignoreMiddleDot_ja_JP.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/ignoreMiddleDot_ja_JP.cxx",
+    "localSymbols": [
+      "ignoreMiddleDot_ja_JP",
+      "ignoreMiddleDot_ja_JP_translator"
+    ],
+    "upstreamSymbols": [
+      "ignoreMiddleDot_ja_JP",
+      "ignoreMiddleDot_ja_JP_translator"
+    ],
+    "preservedResponsibilities": [
+      "Original concrete constructor, exact mapping/normalization and inherited ignore contracts. Native JavaScript memory and lifetime replace C++ ownership infrastructure. All original function cases or table rows and constructor fields are retained, including generic0xffff sentinel deletion and second-unit offsets for pair contractions. This owner alone does not activate engine flags, defaults or browser search UI; no semantic readiness promotion is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Interface/service aggregation, full search consumer integration and browser UI remain pending. Native C++ memory/refcount infrastructure is intentionally replaced by JavaScript behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreMiddleDot_ja_JP.ts",
+          "marker": "ignoreMiddleDot_ja_JP_translator"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/ignoreMiddleDot_ja_JP.cxx",
+          "marker": "ignoreMiddleDot_ja_JP_translator"
+        }
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies mounted column acceptance retains the complete original native table frame-size context. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwFrameFormat } from "../../source/core/layout/atrfrm";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
@@ -70,7 +70,7 @@ it.each([false, true])(
       fireEvent.change(first, { target: { value: "3" } });
       fireEvent.click(screen.getByRole("button", { name: "Reset" }));
       expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(
-        Number(savedWidth),
+        savedWidth,
       );
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       expect(format.GetFrameSize()).toEqual(before);

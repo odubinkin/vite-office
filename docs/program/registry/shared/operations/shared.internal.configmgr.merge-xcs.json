@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.configmgr.merge-xcs",
+    "modulePath": "apps/office/src/configmgr/source/xcsparser.ts",
+    "symbol": "merge",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f",
+    "description": "Original XCS conservative recursive merge retains layer/finalized guards, existing scalar values, extensible-only ordinary property additions and valid-template set members over actual nodes."
+  }
+}

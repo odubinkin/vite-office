@@ -50,12 +50,15 @@ for (const viewport of [1280, 390]) {
     await columns(page);
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).not.toBeChecked();
     await expect(page.getByRole("spinbutton", { name: "Column 4 width (cm)" })).toBeDisabled();
-    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
-    await expect(page.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveValue("2.05");
+    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("50 mm");
+    await expect(page.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "2.05",
+    );
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(rendered).toHaveCSS("width", "400px");
     await columns(page);
-    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
+    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("50 mm");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(
@@ -91,7 +94,10 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("checkbox", { name: "Adapt table width" }).check();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
     await page.getByRole("tab", { name: "Table", exact: true }).click();
-    await expect(page.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue("12.06");
+    await expect(page.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "12.06",
+    );
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(
@@ -104,7 +110,10 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("checkbox", { name: "Adjust columns proportionally" }).check();
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
-    await expect(page.getByRole("spinbutton", { name: "Column 3 width (cm)" })).toHaveValue("5");
+    await expect(page.getByRole("spinbutton", { name: "Column 3 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "5",
+    );
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();
@@ -139,9 +148,14 @@ for (const viewport of [1280, 390]) {
     await page.setViewportSize({ width: viewport, height: 900 });
     const rendered = await open(page, 7);
     await columns(page);
-    await expect(page.getByRole("spinbutton")).toHaveCount(5);
+    await expect(
+      page.getByRole("dialog", { name: "Table Properties", exact: true }).getByRole("spinbutton"),
+    ).toHaveCount(5);
     await page.getByRole("button", { name: "Next columns" }).click();
-    await expect(page.getByRole("spinbutton", { name: "Column 6 width (cm)" })).toHaveValue("1.76");
+    await expect(page.getByRole("spinbutton", { name: "Column 6 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "1.76",
+    );
     await page.getByRole("button", { name: "Next columns" }).click();
     await expect(page.getByRole("button", { name: "Next columns" })).toBeDisabled();
     await page.getByRole("spinbutton", { name: "Column 7 width (cm)" }).fill("2");

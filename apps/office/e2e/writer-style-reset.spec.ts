@@ -91,7 +91,9 @@ for (const width of [1280, 390])
       buffer: Buffer.from(resetOdt()),
     });
     const editor = page.getByLabel("Writer document body", { exact: true }),
-      select = page.getByRole("combobox", { name: "Paragraph style", exact: true }),
+      select = page
+        .getByRole("toolbar", { name: "Writer formatting toolbar" })
+        .getByRole("combobox", { name: "Paragraph style", exact: true }),
       paragraphs = editor.locator("[data-writer-paragraph-id]");
     const whole = paragraphs.filter({ hasText: "WholeResetProof" }),
       partial = paragraphs.filter({ hasText: "PartialResetProof" }),
@@ -117,7 +119,12 @@ for (const width of [1280, 390])
     await expect(link.locator("a")).toHaveAttribute("href", "https://example.test/style-reset");
     await expect(editor).toBeFocused();
     if (width === 1280)
-      await expect(page.locator("p").filter({ hasText: /^Reset style A$/ })).toHaveCount(1);
+      await expect(
+        page
+          .getByRole("complementary", { name: "Writer properties sidebar" })
+          .getByRole("combobox", { name: "Paragraph style", exact: true })
+          .locator("option:checked"),
+      ).toHaveText("Reset style A");
     await select.selectOption("ResetA");
     await page.keyboard.press("Control+z");
     await expect(whole).toHaveCSS("text-indent", "16px");

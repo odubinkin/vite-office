@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/ignoreBaFa_ja_JP.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/ignoreBaFa_ja_JP.cxx",
+    "localSymbols": [
+      "ignoreBaFa_ja_JP",
+      "BaFa"
+    ],
+    "upstreamSymbols": [
+      "ignoreBaFa_ja_JP",
+      "BaFa"
+    ],
+    "preservedResponsibilities": [
+      "Original logical transliteration module algorithms now use actual OUString/Locale/Sequence values and byte-strided output cells. Preserve initialized native scalar/range/pointer producer preconditions,not invented default func/table/map values. Native stack/heap and initializer-list syntax is erased with existing typed-array/Sequence bindings;mutable output uses original getArray/asNonConstRange COW. WeakImplHelper,XExtendedTransliteration interface/query/factory registration and native refcount/process ABI remain unported and are not claimed. The common supportsService cast erases that C++ inheritance only and delegates to the unchanged actual helper on this real receiver;no query/acquire/release stub or wrapper object is supplied. Explicit dispose adapts implicit Locale member destruction for these logical owners. New module load methods retain actual RuntimeException behavior;the module bases are not an aggregate service or default provider. All4 original pair rows plus sentinel and two-to-one mapping/last-consumed-unit offsets,with exact concrete constructor names/pointers."
+    ],
+    "omittedResponsibilities": [
+      "WeakImplHelper/interface/factory/service aggregation,complete generated enum ABI,title/sentence word services,ICU diacritic normalization and full native process/lifetime equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreBaFa_ja_JP.ts",
+          "marker": "ignoreBaFa_ja_JP"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts",
+          "marker": "Sequence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/ignoreBaFa_ja_JP.cxx",
+          "marker": "ignoreBaFa_ja_JP"
+        }
+      ]
+    }
+  }
+}

@@ -4,6 +4,8 @@ import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface, type WriterViewCommandTarget } from "../../../sdi/swriter";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
 
 /** Dedicated view command shell owning Writer view and chrome registration. */
 export class SwViewCommandShell {
@@ -26,6 +28,22 @@ export function createWriterViewCommandRegistry(
     /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
       !target.IsStoragePending();
   return createWriterInterface([
+    {
+      capabilityId: "CAP-0125",
+      id: WRITER_COMMAND_IDS.paragraphSpacing,
+      /** Executes SwView's actual native paragraph spacing branch. @param context - Active view. @param args - Typed request items. @returns Whether changed. */
+      execute: (context, args): boolean => {
+        const item = args.find(
+          /** Resolves the native spacing argument. @param item - Actual request item. @returns Whether this slot. */
+          (item) => item.Which() === SID_ATTR_PARA_ULSPACE,
+        );
+        return item instanceof SvxULSpaceItem && context.ApplyParagraphULSpace(item);
+      },
+      /** Returns uniform native spacing state. @returns Slot item or mixed state. */
+      getStateValue: () => target.GetParagraphULSpace(),
+      /** Reports aggregate invalidation. @returns Whether selected values differ. */
+      isMixed: () => target.GetParagraphULSpace() === undefined,
+    },
     {
       capabilityId: "CAP-0114",
       /** Creates a new document in the persistent shell. @returns Nothing. */

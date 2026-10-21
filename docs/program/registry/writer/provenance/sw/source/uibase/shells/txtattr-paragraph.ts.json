@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/shells/txtattr-paragraph.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/txtattr-paragraph.ts",
+          "marker": "createSwParagraphLRSpaceItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/txtattr.cxx",
+          "marker": "case SID_ATTR_PARA_LRSPACE:"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/uibase/shells/txtattr.cxx",
+    "localSymbols": [
+      "createSwParagraphLRSpaceItem"
+    ],
+    "upstreamSymbols": [
+      "case SID_ATTR_PARA_LRSPACE:"
+    ],
+    "preservedResponsibilities": [
+      "TaskAHJ2M9: Consumed GetAttrState aggregate retains setter order,typed measures,percentage rescaling and automatic-first flag. Full generic GetCurAttr,protected/layout/table-selection aggregation and broad shell state remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Full native component and framework services remain unported;no whole-component parity claim."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/uibase/shells/txtattr-paragraph.ts",
+      "rationale": "Explicit consumed paragraph-state projection avoids restoring the retired generic txtattr facade;full native shell state remains unported.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

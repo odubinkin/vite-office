@@ -1,4 +1,5 @@
 /** @fileoverview Checks the Writer formatting palettes and paragraph dialog. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useMemo, useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -134,6 +135,7 @@ function WriterAdvancedFormattingControls({
         commandSource={source}
         getCommandResource={getWriterCommandResource}
         paragraph={paragraph}
+        unit={FieldUnit.POINT}
         {...(request === undefined ? {} : { dialogRequest: request })}
         onDialogCancel={
           /** Cancels the active test request. @param id - Request identity. @returns Nothing. */ (
@@ -320,7 +322,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     });
     expect(onColor).toHaveBeenCalledWith("highlight", "#00ff00");
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
-    expect(screen.getByLabelText("Value (pt)")).toHaveValue(12);
+    expect(screen.getByLabelText("Value (pt)")).toHaveValue("12.0 pt");
     fireEvent.change(screen.getByLabelText("Below paragraph (pt)"), { target: { value: "8" } });
     fireEvent.click(screen.getByLabelText("Do not add space between paragraphs of the same style"));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "minimum" } });
@@ -331,7 +333,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByText("Cancel"));
     expect(onParagraphFormat).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
-    expect(screen.getByLabelText("Below paragraph (pt)")).toHaveValue(0);
+    expect(screen.getByLabelText("Below paragraph (pt)")).toHaveValue("0.0 pt");
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
     fireEvent.click(screen.getByText("New"));
@@ -340,10 +342,10 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     expect(screen.queryByRole("option", { name: "2000 pt" })).toBeNull();
     fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "24" } });
     fireEvent.click(screen.getByText("New"));
-    expect(screen.getByRole("option", { name: "24 pt" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "24.0 pt" })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Tab stops"), { target: { value: "24" } });
     fireEvent.click(screen.getByText("Delete"));
-    expect(screen.queryByRole("option", { name: "24 pt" })).toBeNull();
+    expect(screen.queryByRole("option", { name: "24.0 pt" })).toBeNull();
     fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);
     expect(screen.queryByRole("dialog")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));

@@ -17,10 +17,11 @@ import type { WriterParagraphProjection } from "./writer-view-projection";
 import { useRulerTracking, type RulerTracking } from "./use-ruler-tracking";
 import type { WriterParagraphIndentValue } from "../../source/uibase/wrtsh/wrtsh1";
 
+import { WriterRulerTicks } from "./WriterRulerTicks";
+import type { RulerUnitData } from "../../../svtools/source/control/ruler";
+import { DEFAULT_RULER_UNIT, getRulerTickTwips } from "./writer-ruler-ticks";
+
 const TWIPS_PER_CSS_PIXEL = 15;
-// LibreOffice's centimetre ruler uses a 1 mm nTick1 division (svtools/source/control/ruler.cxx).
-const MINOR_TICK_TWIPS = 1440 / 2.54 / 10;
-const MINOR_TICK_PIXELS = MINOR_TICK_TWIPS / TWIPS_PER_CSS_PIXEL;
 
 /** Native document-origin indent entry point; copied geometry outlives only the gesture. */
 export interface WriterRulerDocumentDrag {
@@ -33,6 +34,7 @@ export interface WriterRulersProps {
   readonly documentOwner?: object;
   readonly onDocumentIndentChange?: (value: WriterParagraphIndentValue) => void;
   readonly horizontalVisible: boolean;
+  readonly unitData?: RulerUnitData;
   readonly onPageChange: (edge: "left" | "right" | "top" | "bottom", deltaTwips: number) => void;
   readonly onParagraphIndentChange: (
     edge: "left" | "firstLine" | "right",
@@ -44,8 +46,9 @@ export interface WriterRulersProps {
   readonly onTabStopMove?: (index: number, deltaTwips: number) => void;
 }
 
-/** Renders physical centimetre ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
+/** Renders native unit ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
 export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
+  const unitData = props.unitData ?? DEFAULT_RULER_UNIT;
   const tracking = useRulerTracking(props.horizontalVisible, props.documentOwner);
   const rulerSurface = useRef<HTMLDivElement | null>(null);
   const [documentIndent, setDocumentIndent] = useState<WriterParagraphIndentValue | null>(null);
@@ -149,6 +152,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               setDocumentDragEdge(edge);
               setNewTabWorkspace(surface.closest('[aria-label="Writer workspace"]'));
             },
+            unitData,
           ) !== undefined
         );
       },
@@ -216,6 +220,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   tracking,
                   /** Captures document geometry without changing the model. @returns Nothing. */ () =>
                     setNewTabWorkspace(owner.closest('[aria-label="Writer workspace"]')),
+                  unitData,
                 );
               }
             }
@@ -228,13 +233,15 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               className="absolute inset-y-0 right-0 bg-slate-300/80"
               style={{ width: props.page.rightMargin / TWIPS_PER_CSS_PIXEL }}
             />
-            <RulerTicks
+            <WriterRulerTicks
+              unitData={unitData}
               lengthTwips={props.page.width}
               orientation="horizontal"
               originTwips={props.page.leftMargin}
             />
             <RulerHandle
               tracking={tracking}
+              unitData={unitData}
               ariaLabel="Left page margin"
               axis="x"
               className="h-full w-2 bg-indigo-700/70"
@@ -248,6 +255,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             />
             <RulerHandle
               tracking={tracking}
+              unitData={unitData}
               ariaLabel="Right page margin"
               axis="x"
               className="h-full w-2 bg-indigo-700/70"
@@ -261,6 +269,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             />
             <RulerHandle
               tracking={tracking}
+              unitData={unitData}
               ariaLabel="Paragraph left indent"
               axis="x"
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
@@ -276,6 +285,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             {!props.paragraph.computedStyle.autoFirstLineIndent && (
               <RulerHandle
                 tracking={tracking}
+                unitData={unitData}
                 ariaLabel="First line indent"
                 axis="x"
                 className="h-0 w-0 border-x-[6px] border-t-[8px] border-x-transparent border-t-indigo-700"
@@ -290,6 +300,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             )}
             <RulerHandle
               tracking={tracking}
+              unitData={unitData}
               ariaLabel="Paragraph right indent"
               axis="x"
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
@@ -309,6 +320,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               ) => (
                 <RulerHandle
                   tracking={tracking}
+                  unitData={unitData}
                   ariaLabel={`Tab stop ${ordinal + 1}`}
                   axis="x"
                   className="h-3 text-indigo-700"
@@ -378,9 +390,11 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
 export function WriterVerticalRuler({
   onPageChange,
   page,
+  unitData = DEFAULT_RULER_UNIT,
 }: Readonly<{
   onPageChange: (edge: "left" | "right" | "top" | "bottom", deltaTwips: number) => void;
   page: WriterPageDescriptorValue;
+  unitData?: RulerUnitData;
 }>): React.JSX.Element {
   const tracking = useRulerTracking();
   return (
@@ -399,9 +413,15 @@ export function WriterVerticalRuler({
         className="absolute inset-x-0 bottom-0 bg-slate-300/80"
         style={{ height: page.bottomMargin / TWIPS_PER_CSS_PIXEL }}
       />
-      <RulerTicks lengthTwips={page.height} orientation="vertical" originTwips={page.topMargin} />
+      <WriterRulerTicks
+        unitData={unitData}
+        lengthTwips={page.height}
+        orientation="vertical"
+        originTwips={page.topMargin}
+      />
       <RulerHandle
         tracking={tracking}
+        unitData={unitData}
         ariaLabel="Top page margin"
         axis="y"
         className="h-2 w-full bg-indigo-700/70"
@@ -415,6 +435,7 @@ export function WriterVerticalRuler({
       />
       <RulerHandle
         tracking={tracking}
+        unitData={unitData}
         ariaLabel="Bottom page margin"
         axis="y"
         className="h-2 w-full bg-indigo-700/70"
@@ -430,59 +451,6 @@ export function WriterVerticalRuler({
   );
 }
 
-/** Renders centimetre ticks along one physical page axis. @param props - Axis length and orientation. @returns Tick layer. */
-function RulerTicks({
-  lengthTwips,
-  orientation,
-  originTwips,
-}: Readonly<{
-  lengthTwips: number;
-  orientation: "horizontal" | "vertical";
-  originTwips: number;
-}>): React.JSX.Element {
-  const first = Math.ceil(-originTwips / MINOR_TICK_TWIPS);
-  const last = Math.floor((lengthTwips - originTwips) / MINOR_TICK_TWIPS);
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-      {Array.from(
-        { length: last - first + 1 },
-        /** Renders one centimetre tick. @param _value - Unused array value. @param index - Centimetre index. @returns Tick element. */ (
-          _value,
-          offset,
-        ) => {
-          const index = first + offset;
-          const position = (originTwips + index * MINOR_TICK_TWIPS) / TWIPS_PER_CSS_PIXEL;
-          const wholeCentimetre = index % 10 === 0;
-          const halfCentimetre = index % 5 === 0;
-          return (
-            <span
-              className="absolute border-slate-400"
-              key={index}
-              style={
-                orientation === "horizontal"
-                  ? {
-                      borderLeftWidth: 1,
-                      height: wholeCentimetre ? 12 : halfCentimetre ? 8 : 4,
-                      left: position,
-                      top: 0,
-                    }
-                  : {
-                      borderTopWidth: 1,
-                      left: 0,
-                      top: position,
-                      width: wholeCentimetre ? 12 : halfCentimetre ? 8 : 4,
-                    }
-              }
-            >
-              {wholeCentimetre ? Math.abs(index / 10) : ""}
-            </span>
-          );
-        },
-      )}
-    </div>
-  );
-}
-
 /** Renders one accessible drag handle and commits its final delta. @param props - Handle label, axis, style, position, and callback. @returns Handle button. */
 function RulerHandle({
   ariaLabel,
@@ -494,6 +462,7 @@ function RulerHandle({
   position,
   tracking,
   tabAdjustment,
+  unitData,
 }: Readonly<{
   ariaLabel: string;
   axis: "x" | "y";
@@ -504,6 +473,7 @@ function RulerHandle({
   position: number;
   tracking: RulerTracking;
   tabAdjustment?: SvxTabAdjust;
+  unitData: RulerUnitData;
 }>): React.JSX.Element {
   const cancelDrag = useRef<(() => void) | undefined>(undefined);
   useEffect(
@@ -548,6 +518,7 @@ function RulerHandle({
                   pageIndex === null ? null : Number(pageIndex.dataset.rulerPageIndex),
                 );
               },
+              unitData,
             );
             if (cancel !== undefined) cancelDrag.current = cancel;
           }
@@ -717,7 +688,7 @@ function renderDragGuides(
   );
 }
 
-/** Paints one admitted gesture and converts its selected-axis delta to twips. @param event - Pointer-down event. @param axis - Active axis. @param position - Handle position in pixels. @param origin - Tick origin in pixels. @param onPreview - Transient pixel delta callback. @param onCommit - Final twip delta callback. @param tracking - Owning ruler tracking. @param onBegin - Captures presentation ownership. @returns Admitted gesture cancellation. */
+/** Paints one admitted gesture and converts its selected-axis delta to twips. @param event - Pointer-down event. @param axis - Active axis. @param position - Handle position in pixels. @param origin - Tick origin in pixels. @param onPreview - Transient pixel delta callback. @param onCommit - Final twip delta callback. @param tracking - Owning ruler tracking. @param onBegin - Captures presentation ownership. @param unitData - Actual selected ruler map unit. @returns Admitted gesture cancellation. */
 function startDrag(
   event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
   axis: "x" | "y",
@@ -727,7 +698,9 @@ function startDrag(
   onCommit: (deltaTwips: number) => void,
   tracking: RulerTracking,
   onBegin: () => void,
+  unitData: RulerUnitData,
 ): (() => void) | undefined {
+  const tickPixels = getRulerTickTwips(unitData) / TWIPS_PER_CSS_PIXEL;
   const start = axis === "x" ? event.clientX : event.clientY;
   let last = start;
   const snap =
@@ -736,9 +709,7 @@ function startDrag(
     ): number =>
       rawDelta === 0
         ? 0
-        : origin +
-          Math.round((position + rawDelta - origin) / MINOR_TICK_PIXELS) * MINOR_TICK_PIXELS -
-          position;
+        : origin + Math.round((position + rawDelta - origin) / tickPixels) * tickPixels - position;
   return tracking.StartTracking(event, {
     /** Starts transient painting after tracking admission. @returns Nothing. */
     onStart: () => {

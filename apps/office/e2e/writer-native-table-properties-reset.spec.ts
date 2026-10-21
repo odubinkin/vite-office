@@ -49,13 +49,13 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("tab", { name: "Table", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }),
-    ).toHaveValue("12.06");
+    ).toHaveAttribute("aria-valuenow", "12.06");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await page.getByRole("button", { name: "Reset", exact: true }).focus();
     await page.keyboard.press("Space");
     await expect(
       page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }),
-    ).toHaveValue("10.58");
+    ).toHaveAttribute("aria-valuenow", "10.58");
     await page.getByRole("spinbutton", { name: "Above (cm)", exact: true }).fill("1");
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }).fill("5");
@@ -66,9 +66,10 @@ for (const viewport of [1280, 390]) {
     );
     await expect(
       page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }),
-    ).toHaveValue("3.53");
+    ).toHaveAttribute("aria-valuenow", "3.53");
     await page.getByRole("tab", { name: "Table", exact: true }).click();
-    await expect(page.getByRole("spinbutton", { name: "Above (cm)", exact: true })).toHaveValue(
+    await expect(page.getByRole("spinbutton", { name: "Above (cm)", exact: true })).toHaveAttribute(
+      "aria-valuenow",
       "1",
     );
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("5");
@@ -84,11 +85,11 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
-    ).toHaveValue("1");
+    ).toHaveValue("1.00 cm");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
-    ).toHaveValue("0.14");
+    ).toHaveValue("0.14 cm");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(

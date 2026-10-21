@@ -1,5 +1,6 @@
 /** @fileoverview Checks paragraph ruler item metadata, direct inheritance and real Writer history. */
 import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
@@ -37,6 +38,8 @@ afterEach(
 /** Creates direct or fully inherited paragraph items in an actual Writer session. @param automatic - Effective first-line mode. @param inherited - Put attributes in the style only. @returns Model and immutable projection owners. */
 function fixture(automatic = true, inherited = false) {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerIndentItemsProof");

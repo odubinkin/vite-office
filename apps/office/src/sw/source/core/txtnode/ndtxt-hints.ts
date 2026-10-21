@@ -1,7 +1,14 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
+import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwTextNode, SwTextFragment, WriterCharacterFormat } from "./ndtxt";
+import type {
+  SwTextNode,
+  SwTextFragment,
+  WriterCharacterFormat,
+  WriterParagraphAlignment,
+} from "./ndtxt";
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { SetAttrMode } from "../../../inc/swtypes";
@@ -211,5 +218,98 @@ export function CreateTextNodeHyperlinkFragment(
   return {
     text: fragment.text,
     hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
+  };
+}
+
+/** Converts a UI alignment to Writer's paragraph adjustment enum. @param alignment - Browser alignment. @returns SvxAdjust value. */
+export function getSvxAdjust(alignment: WriterParagraphAlignment): SvxAdjust {
+  switch (alignment) {
+    case "center":
+      return SvxAdjust.Center;
+    case "right":
+      return SvxAdjust.Right;
+    case "justify":
+      return SvxAdjust.Block;
+    default:
+      return SvxAdjust.Left;
+  }
+}
+
+/** Converts Writer's paragraph adjustment enum to the current browser projection. @param adjust - Effective SvxAdjust value. @returns Browser alignment. */
+export function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignment {
+  switch (adjust) {
+    case SvxAdjust.Center:
+      return "center";
+    case SvxAdjust.Right:
+    case SvxAdjust.ParaEnd:
+    case SvxAdjust.End:
+      return "right";
+    case SvxAdjust.Block:
+    case SvxAdjust.BlockLine:
+      return "justify";
+    default:
+      return "left";
+  }
+}
+
+/** Creates an immutable character fragment from the existing node without exposing private fields. @param node - Native node. @param start - Inclusive source offset. @param end - Exclusive source offset. @param family - Requested formatting value. @returns Native formatted fragment. */
+export function CreateTextNodeFontFamilyFragment(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  family: string | SvxFontItem,
+): SwTextFragment {
+  const fragment = node.CaptureTextFragment(start, end);
+  return {
+    text: fragment.text,
+    hints: fragment.hints.setFontFamily(
+      fragment.text.length,
+      0,
+      fragment.text.length,
+      family,
+      node.GetSwAttrSet(),
+    ),
+  };
+}
+
+/** Creates an immutable character fragment from the existing node without exposing private fields. @param node - Native node. @param start - Inclusive source offset. @param end - Exclusive source offset. @param fontSizeTwips - Requested formatting value. @returns Native formatted fragment. */
+export function CreateTextNodeFontSizeFragment(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  fontSizeTwips: number,
+): SwTextFragment {
+  const fragment = node.CaptureTextFragment(start, end);
+  return {
+    text: fragment.text,
+    hints: fragment.hints.setFontSize(
+      fragment.text.length,
+      0,
+      fragment.text.length,
+      fontSizeTwips,
+      node.GetSwAttrSet(),
+    ),
+  };
+}
+
+/** Creates an immutable character fragment from the existing node without exposing private fields. @param node - Native node. @param start - Inclusive source offset. @param end - Exclusive source offset. @param property - Requested formatting value. @param value - Requested color. @returns Native formatted fragment. */
+export function CreateTextNodeColorFragment(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  property: "color" | "highlight",
+  value: string,
+): SwTextFragment {
+  const fragment = node.CaptureTextFragment(start, end);
+  return {
+    text: fragment.text,
+    hints: fragment.hints.setCharacterColor(
+      fragment.text.length,
+      0,
+      fragment.text.length,
+      property,
+      value,
+      node.GetSwAttrSet(),
+    ),
   };
 }

@@ -14,7 +14,7 @@ afterEach(
 );
 
 describe("Writer Sidebar ShowPanel", /** Groups real frame focus and adjustment. @returns Nothing. */ () => {
-  for (const route of ["Tab", "Escape"]) {
+  for (const route of ["ArrowDown", "Escape"]) {
     it(`shows the oversized Paragraph panel after ${route} title entry`, /** Checks owned model, viewport and focus without dispatch. @returns Nothing. */ function showsWriterPanel(): void {
       const session = createWriterDocumentSession();
       sessions.push(session);
@@ -45,8 +45,8 @@ describe("Writer Sidebar ShowPanel", /** Groups real frame focus and adjustment.
       const execute = vi.spyOn(session.view.GetViewFrame().GetDispatcher(), "Execute");
       const generation = session.view.GetDocShell().GetDocumentState().contentGeneration;
       const control =
-        route === "Tab"
-          ? sidebar.getByRole("button", { name: "Properties" })
+        route === "ArrowDown"
+          ? sidebar.getByRole("button", { name: "Character" })
           : sidebar.getByRole("button", { name: "Start" });
       control.focus();
       expect(fireEvent.keyDown(control, { key: route })).toBe(false);

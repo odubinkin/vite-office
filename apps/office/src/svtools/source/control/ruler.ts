@@ -1,5 +1,152 @@
 /** @fileoverview Owns represented document ruler tracking from svtools/source/control/ruler.cxx, without a platform window. */
 
+import { FieldUnit } from "../../../tools/inc/fldunit";
+import { MapUnit } from "../../../tools/inc/mapunit";
+/** Original RulerUnitData columns,including source map unit and four logical tick intervals. */
+export interface RulerUnitData {
+  readonly eMapUnit: MapUnit;
+  readonly nTickUnit: number;
+  readonly nTick1: number;
+  readonly nTick2: number;
+  readonly nTick3: number;
+  readonly nTick4: number;
+  readonly aUnitStr: string;
+}
+/** Original aImplRulerUnitTab order and values;CHAR/LINE device overrides remain with formatting. */
+export const RULER_UNIT_DATA = [
+  [
+    FieldUnit.MM,
+    {
+      eMapUnit: MapUnit.Map100thMM,
+      nTickUnit: 100,
+      nTick1: 25,
+      nTick2: 25,
+      nTick3: 50,
+      nTick4: 100,
+      aUnitStr: " mm",
+    },
+  ],
+  [
+    FieldUnit.CM,
+    {
+      eMapUnit: MapUnit.Map100thMM,
+      nTickUnit: 1000,
+      nTick1: 100,
+      nTick2: 500,
+      nTick3: 1000,
+      nTick4: 1000,
+      aUnitStr: " cm",
+    },
+  ],
+  [
+    FieldUnit.M,
+    {
+      eMapUnit: MapUnit.MapMM,
+      nTickUnit: 1000,
+      nTick1: 10,
+      nTick2: 250,
+      nTick3: 500,
+      nTick4: 1000,
+      aUnitStr: " m",
+    },
+  ],
+  [
+    FieldUnit.KM,
+    {
+      eMapUnit: MapUnit.MapCM,
+      nTickUnit: 100000,
+      nTick1: 12500,
+      nTick2: 25000,
+      nTick3: 50000,
+      nTick4: 100000,
+      aUnitStr: " km",
+    },
+  ],
+  [
+    FieldUnit.INCH,
+    {
+      eMapUnit: MapUnit.Map1000thInch,
+      nTickUnit: 1000,
+      nTick1: 62.5,
+      nTick2: 125,
+      nTick3: 500,
+      nTick4: 1000,
+      aUnitStr: '"',
+    },
+  ],
+  [
+    FieldUnit.FOOT,
+    {
+      eMapUnit: MapUnit.Map100thInch,
+      nTickUnit: 1200,
+      nTick1: 120,
+      nTick2: 120,
+      nTick3: 600,
+      nTick4: 1200,
+      aUnitStr: "'",
+    },
+  ],
+  [
+    FieldUnit.MILE,
+    {
+      eMapUnit: MapUnit.Map10thInch,
+      nTickUnit: 633600,
+      nTick1: 63360,
+      nTick2: 63360,
+      nTick3: 316800,
+      nTick4: 633600,
+      aUnitStr: " miles",
+    },
+  ],
+  [
+    FieldUnit.POINT,
+    {
+      eMapUnit: MapUnit.MapPoint,
+      nTickUnit: 1,
+      nTick1: 12,
+      nTick2: 12,
+      nTick3: 12,
+      nTick4: 36,
+      aUnitStr: " pt",
+    },
+  ],
+  [
+    FieldUnit.PICA,
+    {
+      eMapUnit: MapUnit.Map100thMM,
+      nTickUnit: 423,
+      nTick1: 423,
+      nTick2: 423,
+      nTick3: 423,
+      nTick4: 846,
+      aUnitStr: " pc",
+    },
+  ],
+  [
+    FieldUnit.CHAR,
+    {
+      eMapUnit: MapUnit.Map100thMM,
+      nTickUnit: 371,
+      nTick1: 371,
+      nTick2: 371,
+      nTick3: 371,
+      nTick4: 743,
+      aUnitStr: " ch",
+    },
+  ],
+  [
+    FieldUnit.LINE,
+    {
+      eMapUnit: MapUnit.Map100thMM,
+      nTickUnit: 551,
+      nTick1: 551,
+      nTick2: 551,
+      nTick3: 551,
+      nTick4: 1102,
+      aUnitStr: " li",
+    },
+  ],
+] as const satisfies readonly (readonly [FieldUnit, RulerUnitData])[];
 /** Native ruler hit kinds in their source declaration order. */
 export enum RulerType {
   DontKnow,
@@ -43,6 +190,27 @@ export interface RulerSelection {
 
 /** Owns start/move/end/cancel state; source-derived subclasses own their item policy. */
 export abstract class Ruler {
+  private meUnit = FieldUnit.CM;
+  private mnUnitIndex = 1;
+  /** Original SetUnit preserves the previous table index for an unsupported enum while retaining the requested unit. @param unit - Native unit. @returns Nothing. */
+  public SetUnit(unit: FieldUnit): void {
+    if (this.meUnit === unit) return;
+    this.meUnit = unit;
+    const index = RULER_UNIT_DATA.findIndex(
+      /** Original unit-to-table switch projection. @param entry - Native table row. @returns Matching enum. */ (
+        entry,
+      ) => entry[0] === unit,
+    );
+    if (index !== -1) this.mnUnitIndex = index;
+  }
+  /** Original current unit query. @returns Field unit. */
+  public GetUnit(): FieldUnit {
+    return this.meUnit;
+  }
+  /** Original borrowed unit table row. @returns Native unit data. */
+  public GetCurrentRulerUnit(): RulerUnitData {
+    return (RULER_UNIT_DATA[this.mnUnitIndex] as readonly [FieldUnit, RulerUnitData])[1];
+  }
   protected mpBorders: RulerBorder[] = [];
   protected scale = 1;
   protected origin = 0;

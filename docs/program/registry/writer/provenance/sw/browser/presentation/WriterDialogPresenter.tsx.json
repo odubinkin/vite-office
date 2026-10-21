@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx",
+    "rationale": "TaskXBHM4Z extracts actual shell-owned hyperlink,bookmark,break and metric-aware page-style request rendering from WriterWorkbench under the unchanged1000-line limit. The actual WriterDialogController and immutable request ID/payload remain authoritative;no second model,compatibility facade or native controller is introduced.",
+    "responsibilities": [
+      "TaskXBHM4Z extracts actual shell-owned hyperlink,bookmark,break and metric-aware page-style request rendering from WriterWorkbench under the unchanged1000-line limit. The actual WriterDialogController and immutable request ID/payload remain authoritative;no second model,compatibility facade or native controller is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React presents the existing native-controller requests and preserves their exact accepted/cancelled exchange."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx",
+          "marker": "WriterDialogPresenter"
+        }
+      ]
+    }
+  }
+}

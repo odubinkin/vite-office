@@ -1,5 +1,5 @@
 /** @fileoverview Original generated ICU78.3 Unicode17 case data; literal singleton fields and shared index/data16 storage are retained. */
-import data from "./ucase_props_data.json";
+import data from "./ucase_props_data.json" with { type: "json" };
 import type { UCaseProps } from "./ucase.h";
 
 export const ucase_props_dataVersion = new Uint8Array(data.dataVersion);

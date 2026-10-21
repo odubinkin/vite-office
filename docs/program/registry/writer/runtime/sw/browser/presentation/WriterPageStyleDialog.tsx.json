@@ -19,7 +19,7 @@
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx#WriterPageStyleDialog"
       ],
-      "justification": "Adapts the pinned PageFormatPage controls and validation boundary to an accessible React dialog while leaving page geometry in SwDoc.",
+      "justification": "Adapts the pinned PageFormatPage controls and validation boundary to an accessible React dialog while leaving page geometry in SwDoc. TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained.",
       "knownViolations": [],
       "localSymbols": [
         "WriterPageStyleDialog",

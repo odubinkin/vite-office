@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/configmgr/source/xcuparser.ts",
+    "status": "mapped",
+    "upstreamPath": "configmgr/source/xcuparser.cxx",
+    "localSymbols": [
+      "XcuParser",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters",
+      "parseOperation",
+      "isAlreadyFinalized",
+      "handleComponentData",
+      "handleItem",
+      "handlePropValue",
+      "handleLocpropValue",
+      "handleGroupProp",
+      "handleUnknownGroupProp",
+      "handlePlainGroupProp",
+      "handleLocalizedGroupProp",
+      "handleGroupNode",
+      "handleSetNode",
+      "recordModification"
+    ],
+    "upstreamSymbols": [
+      "XcuParser",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters",
+      "parseOperation",
+      "isAlreadyFinalized",
+      "handleComponentData",
+      "handleItem",
+      "handlePropValue",
+      "handleLocpropValue",
+      "handleGroupProp",
+      "handleUnknownGroupProp",
+      "handlePlainGroupProp",
+      "handleLocalizedGroupProp",
+      "handleGroupNode",
+      "handleSetNode",
+      "recordModification"
+    ],
+    "preservedResponsibilities": [
+      "Original complete XCU component-data/items event dispatch, ignored/delayed insertion/path-pop states, property/localized/group/set modify/replace/fuse/remove, nil/external/type/separator values, template/default visibility, layer/finalized/mandatory timing and broadcast/user modifications/addition copies. Reuses actual Parser/ParseManager/ValueParser/Data/Node/Any/OUString owners and existing explicit byte loading. Common.xcu is unchanged at matching officecfg data path (SHA256 6a055abb15d2a8fb4d546488184a98daaba9ec1022920643e81ed9b1d29a9006; MPL/Apache notices retained). Raw install-module metadata is ignored exactly by this parser; parsing does not select installed platform profiles, activate a provider or change conscious recovery/storage/autosave deviations. Preserve localized partial-subnode rejection and metadata mutation before later rejection/errors (WRITER-031/032). Native SAL diagnostics, ABI and full Components/provider/search UI integration remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Native OS/ABI/reference-count/logging services and complete configuration provider/default/search UI integration remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/configmgr/source/xcuparser.ts",
+          "marker": "XcuParser"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/xcuparser.test.ts",
+          "marker": "xcuparser"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "configmgr/source/xcuparser.cxx",
+          "marker": "XcuParser"
+        },
+        {
+          "path": "configmgr/source/xcuparser.hxx",
+          "marker": "XcuParser"
+        }
+      ]
+    }
+  }
+}

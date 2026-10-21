@@ -1,4 +1,5 @@
 /** @fileoverview Original UTF16 token/trim/decimal views,whitespace predicate and bounded toInt32 from include/o3tl/string_view.hxx. */
+import { rtl_str_toInt64_WithLength } from "../../sal/inc/rtl/string.h";
 import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";
 import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
 import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";
@@ -67,8 +68,21 @@ export function implIsWhitespace(c: number): boolean {
   return false;
 }
 /** Original bounded UTF16 string-view conversion through the shared signed64 C owner, retaining signed32 overflow-to-zero. @param str - Borrowed logical UTF16 view. @param radix - Original radix, default10. @returns Exact original signed32 value. */
-export function toInt32(str: Uint16Array, radix = 10): number {
-  let n = rtl_ustr_toInt64_WithLength(str, radix, str.length);
+export function toInt32(str: Uint16Array | Uint8Array, radix = 10): number {
+  let n = toInt64(str, radix);
   if (n < BigInt(SAL_MIN_INT32) || n > BigInt(SAL_MAX_INT32)) n = 0n;
+  return Number(n);
+}
+
+/** Original byte/UTF16 bounded signed64 overloads. @param str - Logical native view. @param radix - Original radix. @returns Signed64 prefix or overflow-to-zero. */
+export function toInt64(str: Uint16Array | Uint8Array, radix = 10): bigint {
+  return str instanceof Uint8Array
+    ? rtl_str_toInt64_WithLength(str, radix, str.length)
+    : rtl_ustr_toInt64_WithLength(str, radix, str.length);
+}
+/** Original unsigned32 view overloads deliberately parse signed64 first, then reject negative/out-of-range values. @param str - Native byte/UTF16 view. @param radix - Original radix. @returns Unsigned32 or zero. */
+export function toUInt32(str: Uint16Array | Uint8Array, radix = 10): number {
+  let n = toInt64(str, radix);
+  if (n < 0n || n > 0xffffffffn) n = 0n;
   return Number(n);
 }

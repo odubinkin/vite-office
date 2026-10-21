@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/TransliterationType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-5adb32f6-de83-4cd8-9332-1dacf851c58d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/TransliterationType.ts",
+        "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts"
+      ],
+      "justification": "Original six short constants NONE/ONE_TO_ONE/NUMERIC/ONE_TO_ONE_NUMERIC/IGNORE/CASCADE with numeric identities0,1,2,3,4,8;no capability inference.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NONE",
+        "ONE_TO_ONE",
+        "NUMERIC",
+        "ONE_TO_ONE_NUMERIC",
+        "IGNORE",
+        "CASCADE"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/i18n/TransliterationType.idl",
+      "upstreamSymbols": [
+        "TransliterationType",
+        "ONE_TO_ONE",
+        "IGNORE",
+        "CASCADE"
+      ]
+    }
+  }
+}

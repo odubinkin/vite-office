@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+    "localSymbols": [
+      "ignoreDiacritics_CTL",
+      "foldingImpl",
+      "transliterateChar2Char"
+    ],
+    "upstreamSymbols": [
+      "ignoreDiacritics_CTL",
+      "foldingImpl",
+      "transliterateChar2Char"
+    ],
+    "preservedResponsibilities": [
+      "Original concrete constructor, exact mapping/normalization and inherited ignore contracts. Native JavaScript memory and lifetime replace C++ ownership infrastructure. Original NFD; [:M:] Remove; NFC uses native JavaScript normalize and Unicode Mark properties after complete ICU78.3 Unicode17 corpus/category conformance in Node24 and Chromium151. Preserve whole-string versus per-codepoint offset normalization, scalar empty/multiunit fallback, full-input iterateCodePoints and absolute repeated UTF16 offsets. ICU factory/allocation/resource-failure infrastructure is erased; interface/service registration and arbitrary older Unicode runtimes are not certified. This owner alone does not activate engine flags, defaults or browser search UI; no semantic readiness promotion is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Interface/service aggregation, full search consumer integration and browser UI remain pending. Native C++ memory/refcount infrastructure is intentionally replaced by JavaScript behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+          "marker": "ignoreDiacritics_CTL"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+          "marker": "foldingImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+          "marker": "ignoreDiacritics_CTL"
+        },
+        {
+          "path": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+          "marker": "foldingImpl"
+        }
+      ]
+    }
+  }
+}

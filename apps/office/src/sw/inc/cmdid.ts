@@ -7,3 +7,7 @@ export const FN_TABLE_SET_VERT_ALIGN = 20588 as const;
 export const FN_PARAM_TABLE_NAME = 21144 as const;
 /** Changed repeated headline count, FN_PARAM +50. */
 export const FN_PARAM_TABLE_HEADLINE = 21150 as const;
+/** Original FN_VIEW20200 plus53,SfxUInt16Item. */
+export const FN_HSCROLL_METRIC = 20253 as const;
+/** Original FN_VIEW20200 plus54,SfxUInt16Item. */
+export const FN_VSCROLL_METRIC = 20254 as const;

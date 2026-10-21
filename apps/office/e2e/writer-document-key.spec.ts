@@ -6,7 +6,9 @@ for (const origin of ["toolbar", "root", "child"] as const) {
     page,
   }) => {
     await page.goto("/writer");
-    const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+    const owner = page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("combobox", { name: "Paragraph style", exact: true });
     await owner.focus();
     if (origin === "root") {
       await page.keyboard.press("F10");
@@ -52,7 +54,10 @@ test("Ctrl-F6 retains the Writer Hyperlink modal's input focus", /** Checks bloc
   await page.keyboard.press("Control+F6");
   await expect(url).toBeFocused();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
-  await page.getByRole("combobox", { name: "Paragraph style", exact: true }).focus();
+  await page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("combobox", { name: "Paragraph style", exact: true })
+    .focus();
   await page.keyboard.press("Control+F6");
   await expect(page.getByLabel("Writer document body", { exact: true })).toBeFocused();
 });

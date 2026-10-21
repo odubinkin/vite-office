@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/ring.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "cursor-ring",
+    "capabilityIds": [
+      "CAP-0111"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/ring.ts#Ring",
+        "apps/office/src/sw/inc/ring.test.ts",
+        "apps/office/src/sw/source/core/crsr/native-search-ring-ownership.test.ts",
+        "sw/inc/ring.hxx#Ring",
+        "sw/qa/core/uwriter.cxx#testIntrusiveRing"
+      ],
+      "justification": "Original sw/inc/ring.hxx intrusive ownership: constructor/link-before, unlink reset, MoveTo/self, iterator begin/end/current sentinel and equality assertion, size and exact two-swap merge with both original adjacency assertions. SwPaM consumes this owner and FindAll merges actual result cursor objects. Native const/template/operator/storage syntax is adapted to TypeScript generics, explicit iterator operations and JavaScript iterable protocol; module-internal public link fields represent native friend access. Checked assert uses the existing SAL compiler binding. Source nonadjacent same-ring merge split is preserved and documented as WRITER-028; no whole native service or Writer fidelity certification.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Ring",
+        "RingIterator",
+        "RingContainer"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/inc/ring.hxx",
+      "upstreamSymbols": [
+        "Ring",
+        "RingIterator",
+        "RingContainer"
+      ]
+    }
+  }
+}

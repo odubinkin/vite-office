@@ -3,7 +3,7 @@ import { Color } from "../../../tools/inc/color";
 import { cleanup, fireEvent, render, screen, act } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { WriterTableDialog } from "./WriterTableDialog";
 import {
@@ -77,8 +77,9 @@ for (const selected of [false, true])
         state = f.shell.CaptureCursorState(),
         revision = f.doc.GetDocumentStateManager().GetModelRevision();
       openBorders();
-      expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(
-        selected ? 0.35 : 0,
+      expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        selected ? "0.35" : "0",
       );
       expect(screen.getByRole("button", { name: "Top border" })).toHaveAttribute(
         "data-writer-border-state",
@@ -155,7 +156,10 @@ it("Reset restores mixed input and unrelated acceptance publishes no border payl
     "data-writer-border-state",
     "2",
   );
-  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "0",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(submit.mock.calls[0]?.[0]?.borderItems?.GetItemIfSet(RES_BOX)).toBeUndefined();
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);

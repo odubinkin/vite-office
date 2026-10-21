@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/TransliterationModulesNew.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/i18n/TransliterationModulesNew.idl",
+    "localSymbols": [
+      "TransliterationModulesNew",
+      "UPPERCASE_LOWERCASE",
+      "IgnoreIandEfollowedByYa_ja_JP"
+    ],
+    "upstreamSymbols": [
+      "TransliterationModulesNew",
+      "UPPERCASE_LOWERCASE",
+      "IgnoreIandEfollowedByYa_ja_JP"
+    ],
+    "preservedResponsibilities": [
+      "Complete original TransliterationModulesNew IDL numeric values and order,including reserved57/58 holes,END_OF_MODULE zero and generated MAKE_FIXED_SIZE sentinel. This enum declaration does not register aggregate services or activate flags;native process/type ABI remains unclaimed."
+    ],
+    "omittedResponsibilities": [
+      "Generated native process/type ABI and consumer service aggregation remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/TransliterationModulesNew.ts",
+          "marker": "UPPERCASE_LOWERCASE"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/i18n/TransliterationModulesNew.idl",
+          "marker": "UPPERCASE_LOWERCASE"
+        }
+      ]
+    }
+  }
+}

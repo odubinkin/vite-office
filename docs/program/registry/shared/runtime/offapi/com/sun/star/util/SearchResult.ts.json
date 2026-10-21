@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/SearchResult.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-search",
+    "capabilityIds": [
+      "CAP-7c62943f-8dba-496e-b4df-b8c30ffe3d48"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/SearchResult.ts#SearchResult",
+        "apps/office/src/i18npool/source/search/textsearch.test.ts",
+        "offapi/com/sun/star/util/SearchResult.idl#SearchResult",
+        "apps/office/src/i18npool/source/search/native-search-result.test.ts#constructs zero/default values with distinct owned sequence fields",
+        "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx#PlainStructType::dumpHppFile"
+      ],
+      "justification": "Original result fields and backward high/exclusive start, low/inclusive end offsets. The earlier JS-array interface is superseded by the generated struct/sequence value contract below; UNO ABI and marshalling remain unverified. PC6WK7 replaces the earlier readonly JS-array interface with the actual generated struct value contract: default zero count and two empty Sequence<sal_Int32> owners, full/copy construction, stable member assignment, generated equality/inequality and erased destruction. Existing shared Sequence supplies copy sharing, primitive cells and COW; no parallel offset arrays or sequence implementation. IDL field/directional semantics and codemaker generated copy/default responsibilities are source-inspected; portable owner tests do not certify compiled ABI/marshalling, complete library or UI parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SearchResult"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/util/SearchResult.idl",
+      "upstreamSymbols": [
+        "SearchResult",
+        "subRegExpressions",
+        "startOffset",
+        "endOffset"
+      ]
+    }
+  }
+}

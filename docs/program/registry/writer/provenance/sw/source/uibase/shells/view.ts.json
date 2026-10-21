@@ -20,7 +20,10 @@
       "kind": "local-infrastructure",
       "rationale": "The TypeScript command composition has no single native implementation unit."
     },
-    "status": "local-only"
+    "status": "local-only",
+    "preservedResponsibilities": [
+      "TaskAHJ2M9: Actual SwView owns paragraph UL slot projection and application;the text shell retains LR ownership. Full native AutoUpdatePara and layout/protection services remain unported."
+    ]
   },
   "legacyOrder": 262
 }

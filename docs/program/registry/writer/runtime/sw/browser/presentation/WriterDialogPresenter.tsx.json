@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx#WriterDialogPresenter"
+      ],
+      "justification": "TaskXBHM4Z extracts actual shell-owned hyperlink,bookmark,break and metric-aware page-style request rendering from WriterWorkbench under the unchanged1000-line limit. The actual WriterDialogController and immutable request ID/payload remain authoritative;no second model,compatibility facade or native controller is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterDialogPresenter"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

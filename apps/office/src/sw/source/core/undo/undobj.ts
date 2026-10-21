@@ -10,6 +10,19 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
+import { SwHistory } from "./rolbck";
+
+/** Original undobj.hxx content-index deletion flags. */
+export enum DelContentType {
+  Ftn = 0x01,
+  Fly = 0x02,
+  Bkm = 0x08,
+  AllMask = 0x0b,
+  Replace = 0x10,
+  WriterfilterHack = 0x20,
+  ExcludeFlyAtStartEnd = 0x40,
+  CheckNoCntnt = 0x80,
+}
 
 /** Native numeric range coordinates; content correction for nontext sentinels remains unverified. */
 export class SwUndRng {
@@ -47,6 +60,35 @@ export class SwUndRng {
 
 /** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
 export class SwUndoSaveContent {
+  protected m_pHistory: SwHistory | undefined;
+  /** Native DelContentIndex bookmark branch for represented collapsed ordinary marks. Footnote/fly/typed/expanded histories are not represented. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
+  protected DelContentIndex(
+    rMark: SwPosition,
+    rPoint: SwPosition,
+    nDelContentType = DelContentType.AllMask,
+  ): void {
+    if ((nDelContentType & DelContentType.Bkm) === 0) return;
+    const doc = rPoint.GetNode().GetDoc();
+    if (rMark.GetNode().GetDoc() !== doc)
+      throw new Error("Writer deletion history endpoints belong to different documents.");
+    const pStart = rMark.compare(rPoint) <= 0 ? rMark : rPoint,
+      pEnd = pStart === rMark ? rPoint : rMark;
+    const access = doc.GetIDocumentMarkAccess();
+    for (const bookmark of access.GetBookmarks()) {
+      const position = bookmark.GetMarkPos();
+      const bSavePos =
+        (nDelContentType & DelContentType.CheckNoCntnt) !== 0
+          ? pStart.GetNodeIndex() <= position.GetNodeIndex() &&
+            position.GetNodeIndex() < pEnd.GetNodeIndex()
+          : pStart.compare(position) <= 0 && position.compare(pEnd) < 0;
+      if (bSavePos) {
+        this.m_pHistory ??= new SwHistory();
+        this.m_pHistory.AddIMark(bookmark, true, false);
+        access.DeleteMark(bookmark.GetName());
+      }
+    }
+  }
+
   private boundaryNodeId: number | undefined;
   private readonly nodeIds: number[] = [];
 

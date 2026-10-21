@@ -14,3 +14,5 @@ export const RTL_STR_MAX_VALUEOFFLOAT = 15;
 
 /** Original double-format buffer bound,including terminating zero. */
 export const RTL_STR_MAX_VALUEOFDOUBLE = 25;
+
+export { rtl_str_toInt64, rtl_str_toInt64_WithLength, rtl_str_toUInt64 } from "../../rtl/string";

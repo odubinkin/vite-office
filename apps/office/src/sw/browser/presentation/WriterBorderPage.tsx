@@ -1,4 +1,6 @@
 /** @fileoverview Presents native border-page widgets without owning their draft or item deltas. */
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { Color } from "../../../tools/inc/color";
 import { useRef } from "react";
 import type { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
@@ -85,8 +87,17 @@ const geometry = {
 /** Presents the owned native border page. @param props - Page and display invalidation. @returns Native widget presentation. */
 export function WriterBorderPage({
   page,
+  unit = FieldUnit.CM,
+  resetKey,
   onChange,
-}: Readonly<{ page: SvxBorderTabPage; onChange: () => void }>): React.JSX.Element {
+}: Readonly<{
+  page: SvxBorderTabPage;
+  unit?: FieldUnit;
+  resetKey?: unknown;
+  onChange: () => void;
+}>): React.JSX.Element {
+  const displayUnit = unit === FieldUnit.M || unit === FieldUnit.KM ? FieldUnit.MM : unit;
+  const unitLabel = displayUnit === FieldUnit.INCH ? "in" : FieldUnit[displayUnit].toLowerCase();
   const selector = page.frameSelector;
   const pointerFocus = useRef(false);
   const color = "#" + (page.GetLineColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0");
@@ -379,24 +390,18 @@ export function WriterBorderPage({
               return (
                 <label key={edge} className="grid gap-1 text-sm">
                   {name}
-                  <input
-                    aria-label={`${name} padding (cm)`}
+                  <MetricSpinButton
+                    aria-label={`${name} padding (${unitLabel})`}
                     className="min-w-0 rounded border px-2 py-1"
-                    type="number"
-                    min={0}
-                    max={5}
-                    step={0.01}
-                    value={
-                      value === undefined ? "" : Math.round(((value * 2.54) / 1440) * 100) / 100
-                    }
-                    onChange={
-                      /** Dispatches source padding and synchronization. @param event - Metric input. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        page.ModifyDistanceHdl_Impl(
-                          edge,
-                          (Number(event.target.value) * 1440) / 2.54,
-                        );
+                    unit={displayUnit}
+                    resetKey={resetKey}
+                    minimum={0}
+                    maximum={Math.round((50 * 1440) / 25.4)}
+                    value={value}
+                    onValueChange={
+                      /** Dispatches physical padding and native synchronization. @param twips - Native distance. @returns Nothing. */
+                      (twips) => {
+                        page.ModifyDistanceHdl_Impl(edge, twips);
                         onChange();
                       }
                     }

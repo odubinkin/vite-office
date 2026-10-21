@@ -32,6 +32,14 @@
         {
           "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
           "marker": "native generic positions and clones keep structural node identity"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/findtxt.test.ts",
+          "marker": "Find_Text"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -77,7 +85,10 @@
       "WriterTextRange",
       "getWriterSelectedTextRange",
       "isWriterCursorOffset",
-      "getWriterSelectedTextRanges"
+      "getWriterSelectedTextRanges",
+      "Normalize",
+      "GoNextPos",
+      "GoPreviousPos"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
@@ -89,7 +100,10 @@
       "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
       "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution.",
       "Iteration216 pending: label affinity relocated to native SwPaM (pam.hxx192,225-226), preserving default false and constructor/assignment contracts. Browser roundtrip and native Insert2 clearing are under verification; full Move/marked-list/RTL/layout behavior remains unverified.",
-      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged."
+      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+      "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections.",
+      "Leaf4586BY adds the actual consumed bChk=false content-node movement of GoNextPos/GoPreviousPos, both assigning content offset zero. These are real node moves across represented content sections; checked movement and full native range validation are not claimed.",
+      "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",
@@ -97,7 +111,10 @@
       "SwNodeIndex",
       "SwPosition",
       "SwPaM",
-      "SwPosition::SwPosition"
+      "SwPosition::SwPosition",
+      "Normalize",
+      "GoNextPos",
+      "GoPreviousPos"
     ]
   },
   "legacyOrder": 153

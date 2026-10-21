@@ -35,18 +35,30 @@ it("mounted native format metrics render local values and publish balanced colum
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "5" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(5);
-  expect(screen.getByRole("spinbutton", { name: "Right (cm)" })).toHaveValue(10.87);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "5",
+  );
+  expect(screen.getByRole("spinbutton", { name: "Right (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "10.87",
+  );
   expect(f.table.GetFormat().width).toBe(6000);
   expect(f.table.GetColumnWidths()).toEqual([2000, 2000, 2000]);
   fireEvent.click(screen.getByRole("radio", { name: "Automatic" }));
   expect(screen.getByRole("radio", { name: "Automatic" })).toBeChecked();
   expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toBeDisabled();
   fireEvent.click(screen.getByRole("radio", { name: "Left" }));
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(5);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "5",
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
   fireEvent.click(screen.getByRole("tab", { name: "Table" }));
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(5);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "5",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -67,11 +79,20 @@ it("mounted native format reactivation reads a columns-published width before au
     target: { value: "5" },
   });
   fireEvent.click(screen.getByRole("tab", { name: "Table" }));
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(12.06);
-  expect(screen.getByRole("spinbutton", { name: "Right (cm)" })).toHaveValue(3.82);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "12.06",
+  );
+  expect(screen.getByRole("spinbutton", { name: "Right (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "3.82",
+  );
   fireEvent.click(screen.getByRole("radio", { name: "Automatic" }));
   fireEvent.click(screen.getByRole("radio", { name: "Left" }));
-  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveValue(12.06);
+  expect(screen.getByRole("spinbutton", { name: "Table width (cm)" })).toHaveAttribute(
+    "aria-valuenow",
+    "12.06",
+  );
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(f.submit).toHaveBeenCalledWith(
     expect.objectContaining({ width: 6835, columnWidths: [2835, 2000, 2000], marginRight: 2165 }),

@@ -8,6 +8,10 @@
         {
           "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT",
           "path": "apps/office/src/svl/source/undo/undo.ts"
+        },
+        {
+          "path": "apps/office/src/svl/source/undo/undo.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -23,14 +27,16 @@
       "SfxUndoAction",
       "SfxListUndoAction",
       "SfxUndoManager",
-      "GetUndoAction"
+      "GetUndoAction",
+      "ClearAllLevels"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SfxUndoAction, SfxListUndoAction, SfxUndoManager, SfxRepeatTarget::~SfxRepeatTarget and the bounded DEFAULT_MAX_UNDO_ACTION_COUNT, SfxUndoAction, SfxListUndoAction contract remain intentionally omitted."
     ],
     "preservedResponsibilities": [
       "Implements the document-facing Sfx undo manager with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention.",
-      "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced."
+      "TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced.",
+      "Native ClearAllLevels clears the currently open list payload immediately and keeps mbClearUntilTopLevel until each parent unwinds through LeaveListAction. The root history and save mark are cleared at the top, without a fake physical history owner. Existing ordinary Clear and browser save-token contracts remain distinct. Targeted nested-level tests cover return counts and a subsequent independent group."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/undo/undo.cxx",
@@ -38,7 +44,8 @@
       "SfxUndoAction",
       "SfxListUndoAction",
       "SfxUndoManager",
-      "SfxRepeatTarget::~SfxRepeatTarget"
+      "SfxRepeatTarget::~SfxRepeatTarget",
+      "SfxUndoManager::ClearAllLevels"
     ]
   },
   "legacyOrder": 66

@@ -33,7 +33,9 @@ test("repeated F10 restores a saved Writer toolbar owner", /** Checks a no-popup
   page,
 }) => {
   await page.goto("/writer");
-  const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+  const owner = page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("combobox", { name: "Paragraph style", exact: true });
   await owner.focus();
   await page.keyboard.press("F10");
   await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();

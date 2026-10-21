@@ -12,6 +12,8 @@ for (const viewport of [
     await page.goto("/writer");
     const sidebar = page.getByRole("complementary", { name: "Writer properties sidebar" });
     const title = sidebar.getByRole("button", { name: "Paragraph", exact: true });
+    const firstTitle = sidebar.getByRole("button", { name: "Style", exact: true });
+    const previousTitle = sidebar.getByRole("button", { name: "Character", exact: true });
     const options = sidebar.getByRole("button", { name: "More Options", exact: true });
     const close = sidebar.getByRole("button", { name: "Close Sidebar Deck", exact: true });
     const rail = sidebar.getByRole("button", { name: "Properties", exact: true });
@@ -31,12 +33,12 @@ for (const viewport of [
     await close.press("Shift+Tab");
     await expect(rail).toBeFocused();
     await rail.press("Tab");
-    await expect(title).toBeFocused();
+    await expect(firstTitle).toBeFocused();
     for (const control of [title, options]) {
       for (const key of ["ArrowUp", "ArrowLeft"]) {
         await control.focus();
         await control.press(key);
-        await expect(close).toBeFocused();
+        await expect(previousTitle).toBeFocused();
       }
       for (const key of ["ArrowDown", "ArrowRight"]) {
         await control.focus();
@@ -55,8 +57,8 @@ for (const viewport of [
     await expect(rail).toHaveAttribute("aria-pressed", "false");
     await rail.focus();
     await rail.press("Tab");
-    await expect(title).toBeFocused();
-    await expect(title).toHaveAttribute("aria-expanded", "true");
+    await expect(firstTitle).toBeFocused();
+    await expect(firstTitle).toHaveAttribute("aria-expanded", "true");
     await expect(rail).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByRole("dialog")).toHaveCount(0);
     await title.press("Escape");

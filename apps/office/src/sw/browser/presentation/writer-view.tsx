@@ -6,15 +6,13 @@ import { RES_BOX } from "../../inc/hintids";
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { TableProperties } from "lucide-react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
-import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
-import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
-import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
-import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { WriterDialogPresenter } from "./WriterDialogPresenter";
+import { WriterOptionsDialog } from "./WriterOptionsDialog";
+import { ApplyWriterMetricItemSet } from "../../source/uibase/app/appopt";
 import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
 import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
 import { SwTableHeightDlg } from "../../source/ui/table/rowht";
@@ -34,7 +32,7 @@ import {
   resolveSwListTextLeftMargin,
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
-import { WriterParagraphProperties } from "./WriterPropertiesPanel";
+import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -129,6 +127,7 @@ export function WriterWorkbench({
     (table) => table.GetName(),
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
+  const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [tableBorderItems, setTableBorderItems] =
     useState<ReturnType<typeof TableParamToItemSet>>();
@@ -149,6 +148,11 @@ export function WriterWorkbench({
       const browserDialogShell = createSfxShell(
         null,
         createWriterInterface([
+          {
+            id: WRITER_COMMAND_IDS.optionsDialog,
+            execute: /** Opens real Writer module options. @returns Nothing. */ () =>
+              setOptionsDialog(true),
+          },
           {
             id: WRITER_COMMAND_IDS.insertTable,
             capabilityId: "CAP-0137",
@@ -509,6 +513,7 @@ export function WriterWorkbench({
                 commandSource={commandSource}
                 getCommandResource={getLocalizedCommandResource}
                 paragraph={snapshot.activeParagraph.computedStyle}
+                unit={snapshot.metricUnit}
                 {...(dialogRequest?.request.kind === "paragraph"
                   ? { dialogRequest: { id: dialogRequest.id, request: dialogRequest.request } }
                   : {})}
@@ -556,36 +561,29 @@ export function WriterWorkbench({
         onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
           <>
-            <WriterParagraphProperties
-              alignment={snapshot.activeParagraph.alignment}
+            <WriterPropertiesPanel
+              isTable={currentTable !== undefined}
+              unit={snapshot.metricUnit}
+              paragraphStyleOptions={snapshot.paragraphStyleOptions}
+              embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
+                /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
+                (font) => font.familyName,
+              )}
+              fontAvailability={
+                fontAvailability?.document === activeDocument ? fontAvailability.values : {}
+              }
               commandSource={commandSource}
               focusDocument={
                 /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
                   (editingHostRef.current as HTMLElement).focus()
               }
-              listKind={snapshot.activeParagraph.list.kind}
-              paragraphNumber={snapshot.activeParagraphIndex + 1}
               resolveArguments={resolveCommandArguments}
-              styleDisplayName={snapshot.activeParagraph.styleDisplayName}
             />
-            {currentTable === undefined ? null : (
-              <button
-                aria-label="Table Properties"
-                className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
-                onClick={
-                  /** Opens properties through the native command input route. @returns Dispatch result. */
-                  () => commandSource.Execute(WRITER_COMMAND_IDS.tableDialog)
-                }
-                title="Table Properties"
-                type="button"
-              >
-                <TableProperties aria-hidden={true} size={18} />
-              </button>
-            )}
           </>
         }
         rulers={
           <WriterRulers
+            unitData={snapshot.horizontalRulerUnitData}
             documentDragRef={documentRuler}
             documentOwner={activeDocument}
             horizontalVisible={snapshot.isHorizontalRulerVisible && isActive}
@@ -695,6 +693,7 @@ export function WriterWorkbench({
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler
+                unitData={snapshot.verticalRulerUnitData}
                 onPageChange={
                   /** Commits a vertical-ruler margin gesture. @param edge - Dragged edge. @param delta - Twip delta. @returns Nothing. */
                   (edge, delta) => {
@@ -708,8 +707,25 @@ export function WriterWorkbench({
         />
       </WriterWorkspaceChrome>
       {contextMenu}
+      {optionsDialog ? (
+        <WriterOptionsDialog
+          view={view}
+          onClose={
+            /** Discards remaining option drafts. @returns Nothing. */ () => setOptionsDialog(false)
+          }
+          onApply={
+            /** Applies original metric items before platform persistence. @param items - Native changed fields. @returns Nothing. */ (
+              items,
+            ) => {
+              ApplyWriterMetricItemSet(view.GetModule(), items, view);
+              services?.layoutPreferences?.Save(view.GetModule().GetUsrPref(false));
+            }
+          }
+        />
+      ) : null}
       {tableDialog === undefined ? null : (
         <WriterTableDialog
+          unit={snapshot.metricUnit}
           boxAlign={view.GetWrtShell().GetBoxAlign()}
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
@@ -732,6 +748,7 @@ export function WriterWorkbench({
       )}
       {rowHeightDialog === undefined ? null : (
         <WriterRowHeightDialog
+          unit={snapshot.metricUnit}
           draft={rowHeightDialog}
           onCancel={
             /** Discards the row-height draft. @returns Nothing. */ () =>
@@ -747,6 +764,7 @@ export function WriterWorkbench({
       )}
       {lineNumberingDialog ? (
         <WriterLineNumberingDialog
+          unit={snapshot.metricUnit}
           value={snapshot.lineNumberInfo}
           onCancel={
             /** Discards line-numbering draft. @returns Nothing. */ () =>
@@ -762,79 +780,11 @@ export function WriterWorkbench({
           }
         />
       ) : null}
-      {dialogRequest?.request.kind !== "hyperlink" ? null : (
-        <WriterHyperlinkDialog
-          {...(dialogRequest.request.initialHyperlink === undefined
-            ? {}
-            : { initialHyperlink: dialogRequest.request.initialHyperlink })}
-          onCancel={
-            /** Cancels the exact shell-owned dialog request. @returns Nothing. */ () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Completes the exact shell-owned dialog request. @param hyperlink - Link metadata. @param text - Optional inserted text. @returns Nothing. */
-            (hyperlink, text) => {
-              dialogController.Complete(dialogRequest.id, {
-                hyperlink,
-                text,
-              });
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "bookmark" ? null : (
-        <WriterBookmarkDialog
-          names={dialogRequest.request.names}
-          {...(dialogRequest.request.selectedName === undefined
-            ? {}
-            : { selectedName: dialogRequest.request.selectedName })}
-          onCancel={
-            /** Cancels the bookmark request. @returns Nothing. */
-            () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Applies one bookmark choice. @param result - Accepted operation. @returns Nothing. */
-            (result) => {
-              dialogController.Complete(dialogRequest.id, result);
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "insert-break" ? null : (
-        <WriterInsertBreakDialog
-          onCancel={
-            /** Cancels Insert Break. @returns Nothing. */
-            () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Inserts a hard page break. @returns Nothing. */
-            () => {
-              dialogController.Complete(dialogRequest.id, { breakKind: "page" });
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "page-style" ? null : (
-        <WriterPageStyleDialog
-          initialValue={dialogRequest.request.initialValue}
-          onCancel={
-            /** Cancels the exact Page Style request. @returns Nothing. */ () =>
-              dialogController.Cancel(dialogRequest.id)
-          }
-          onSubmit={
-            /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @returns Nothing. */ (
-              pageDescriptor,
-            ) => {
-              dialogController.Complete(dialogRequest.id, { pageDescriptor });
-            }
-          }
-        />
-      )}
+      <WriterDialogPresenter
+        controller={dialogController}
+        request={dialogRequest}
+        unit={snapshot.metricUnit}
+      />
       {renameCollision === undefined ? null : (
         <div
           aria-label="Resolve document name"

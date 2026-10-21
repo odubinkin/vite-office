@@ -51,7 +51,10 @@ for (const width of [1280, 390])
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        "0",
+      );
       await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
         "data-writer-border-state",
         "2",
@@ -59,7 +62,10 @@ for (const width of [1280, 390])
       await page.getByRole("spinbutton", { name: "Top padding (cm)" }).fill("1");
       await page.getByRole("button", { name: "No Borders", exact: true }).click();
       await page.getByRole("button", { name: "Reset", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        "0",
+      );
       await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
         "data-writer-border-state",
         "2",
@@ -69,7 +75,10 @@ for (const width of [1280, 390])
       await selectBrowserTableRow(page, "CommonBrowser", 2);
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
-      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0.35");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        "0.35",
+      );
       await expect(page.getByRole("button", { name: "Top border", exact: true })).toHaveAttribute(
         "data-writer-border-state",
         "0",

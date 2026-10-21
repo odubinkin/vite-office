@@ -372,8 +372,8 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         /** Encodes one live collapsed Writer mark. @param mark - Mark. @returns Primitive position. */
         (mark) => ({
           name: mark.GetName(),
-          nodeIndex: allTextNodes(document).indexOf(mark.GetPosition().GetNode() as SwTextNode),
-          offset: mark.GetPosition().GetContentIndex(),
+          nodeIndex: allTextNodes(document).indexOf(mark.GetMarkPos().GetNode() as SwTextNode),
+          offset: mark.GetMarkPos().GetContentIndex(),
         }),
       ),
     documentSettings: document.GetDocumentSettingManager().GetValues(),

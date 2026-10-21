@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/SearchFlags.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/util/SearchFlags.idl",
+    "localSymbols": [
+      "NORM_WORD_ONLY",
+      "ALL_IGNORE_CASE",
+      "LEV_RELAXED",
+      "WILD_MATCH_SELECTION"
+    ],
+    "upstreamSymbols": [
+      "NORM_WORD_ONLY",
+      "ALL_IGNORE_CASE",
+      "LEV_RELAXED",
+      "WILD_MATCH_SELECTION"
+    ],
+    "preservedResponsibilities": [
+      "All original published flag values, including unsupported/deprecated bits; no flag behavior is invented."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/SearchFlags.ts",
+          "marker": "NORM_WORD_ONLY"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
+          "marker": "native absolute TextSearch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/util/SearchFlags.idl",
+          "marker": "NORM_WORD_ONLY"
+        }
+      ]
+    }
+  }
+}

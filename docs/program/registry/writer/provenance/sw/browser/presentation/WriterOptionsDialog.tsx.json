@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/WriterOptionsDialog.tsx",
+    "rationale": "React presents supported General and View metric controls over actual native page models and Sfx item exchange. Apply/Reset/Cancel and independent axes preserve page drafts. Full Options tree,other page controls and WriterWeb remain unported.",
+    "responsibilities": [
+      "TaskXBHM4Z: React presents supported General and View metric controls over actual native page models and Sfx item exchange. Apply/Reset/Cancel and independent axes preserve page drafts. Full Options tree,other page controls and WriterWeb remain unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser presentation and storage adapt the actual native numeric,metric-page and ruler owners without replacing their value contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterOptionsDialog.tsx",
+          "marker": "WriterOptionsDialog"
+        }
+      ]
+    }
+  }
+}

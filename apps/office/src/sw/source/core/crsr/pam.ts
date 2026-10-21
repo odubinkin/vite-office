@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
+import { Ring } from "../../../inc/ring";
 import { SwContentNode, type SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -140,7 +141,7 @@ export class SwPosition {
 }
 
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
-export class SwPaM {
+export class SwPaM extends Ring<SwPaM> {
   private inFrontOfLabel = false;
   /** Reads native list-label cursor affinity. @returns Label position state. */
   public IsInFrontOfLabel(): boolean {
@@ -150,8 +151,6 @@ export class SwPaM {
   public SetInFrontOfLabel_(value: boolean): void {
     this.inFrontOfLabel = value;
   }
-  private next: SwPaM = this;
-  private previous: SwPaM = this;
   private point: SwPosition;
   private mark: SwPosition | undefined;
 
@@ -163,37 +162,24 @@ export class SwPaM {
    * @returns Nothing; initializes this range.
    */
   public constructor(point: SwPosition, mark?: SwPosition, ring?: SwPaM) {
+    super(ring);
     this.point = point.clone();
     this.mark = undefined;
     this.Assign(point, mark);
-    if (ring !== undefined) {
-      this.next = ring;
-      this.previous = ring.previous;
-      ring.previous.next = this;
-      ring.previous = this;
-    }
   }
 
   /** Returns the next native range in the circular selection. @returns Next owner. */
   public GetNext(): SwPaM {
-    return this.next;
+    return this.GetNextInRing();
   }
   /** Returns the previous native range in the circular selection. @returns Previous owner. */
   public GetPrev(): SwPaM {
-    return this.previous;
+    return this.GetPrevInRing();
   }
   /** Reports multiple actual selection owners. @returns Whether ring is nontrivial. */
   public IsMultiSelection(): boolean {
-    return this.next !== this;
+    return !this.unique();
   }
-  /** Iterates actual PaMs once around their native ring. @returns Native range iterator. */
-  public *GetRingContainer(): IterableIterator<SwPaM> {
-    yield this;
-    for (let current = this.next; current !== this; current = current.next) {
-      yield current;
-    }
-  }
-
   /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
   public Assign(point: SwPosition, mark?: SwPosition): void {
     const nextPoint = point.clone();
@@ -227,6 +213,16 @@ export class SwPaM {
     if (this.mark !== undefined) [this.point, this.mark] = [this.mark, this.point];
   }
 
+  /** Native Normalize changes endpoint orientation without changing the selection extent. @param bPointFirst - Keep point before mark when true, after mark otherwise. @returns Nothing. */
+  public Normalize(bPointFirst: boolean): void {
+    if (
+      this.HasMark() &&
+      ((bPointFirst && this.point.compare(this.GetMark()) > 0) ||
+        (!bPointFirst && this.point.compare(this.GetMark()) < 0))
+    )
+      this.Exchange();
+  }
+
   /** Sets mark to the current point. @returns Nothing. */
   public SetMark(): void {
     this.mark?.Dispose();
@@ -241,10 +237,7 @@ export class SwPaM {
 
   /** Unregisters both persistent PaM endpoints. @returns Nothing. */
   public Dispose(): void {
-    this.previous.next = this.next;
-    this.next.previous = this.previous;
-    this.next = this;
-    this.previous = this;
+    this.unlink();
     this.point.Dispose();
     this.mark?.Dispose();
     this.mark = undefined;
@@ -329,4 +322,25 @@ function getWriterSinglePaMTextRanges(cursor: SwPaM): readonly WriterTextRange[]
         range,
       ) => range.start < range.end,
     );
+}
+
+/** Native GoNextPos's consumed bChk=false branch: move to the next content node, at offset zero. @param position - Registered position to move. @returns Found content node or undefined. */
+export function GoNextPos(position: SwPosition): SwContentNode | undefined {
+  return GoAdjacentPos(position, 1);
+}
+/** Native GoPreviousPos's consumed bChk=false branch also assigns zero, not the previous node's end. @param position - Registered position to move. @returns Found content node or undefined. */
+export function GoPreviousPos(position: SwPosition): SwContentNode | undefined {
+  return GoAdjacentPos(position, -1);
+}
+/** Resolves original model content neighbors, including text in table sections. @param position - Registered source. @param direction - Native node direction. @returns Next content owner. */
+function GoAdjacentPos(position: SwPosition, direction: 1 | -1): SwContentNode | undefined {
+  const nodes = position.GetNode().GetNodes();
+  for (let i = position.GetNodeIndex() + direction; i >= 0 && i < nodes.Count(); i += direction) {
+    const node = nodes.at(i);
+    if (node instanceof SwContentNode) {
+      position.Assign(node, 0);
+      return node;
+    }
+  }
+  return undefined;
 }

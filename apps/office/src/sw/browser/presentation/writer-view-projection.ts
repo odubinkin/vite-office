@@ -1,4 +1,6 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import type { RulerUnitData } from "../../../svtools/source/control/ruler";
+import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
 
 import { WriterNativeFormatObserver } from "./writer-native-format-observer";
@@ -186,6 +188,11 @@ export interface WriterPresentationProjection {
 
 /** Complete browser external-store snapshot. */
 export interface WriterViewSnapshot extends WriterPresentationProjection {
+  readonly metricUnit: FieldUnit;
+  readonly horizontalRulerUnit: FieldUnit;
+  readonly verticalRulerUnit: FieldUnit;
+  readonly horizontalRulerUnitData: RulerUnitData;
+  readonly verticalRulerUnitData: RulerUnitData;
   readonly isHorizontalRulerVisible: boolean;
   readonly isVerticalRulerVisible: boolean;
   readonly isPropertiesSidebarVisible: boolean;
@@ -582,6 +589,11 @@ export class WriterViewStore {
       );
       this.cachedSnapshot = Object.freeze({
         ...projected,
+        metricUnit: this.view.GetMetric(),
+        horizontalRulerUnit: this.view.GetHRulerMetric(),
+        verticalRulerUnit: this.view.GetVRulerMetric(),
+        horizontalRulerUnitData: this.view.GetHRuler().GetCurrentRulerUnit(),
+        verticalRulerUnitData: this.view.GetVRuler().GetCurrentRulerUnit(),
         isHorizontalRulerVisible: this.view.IsHorizontalRulerVisible(),
         isVerticalRulerVisible: this.view.IsVerticalRulerVisible(),
         isPropertiesSidebarVisible: this.view.IsSidebarVisible(),

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/transliteration_OneToOne.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/transliteration_OneToOne.cxx",
+    "localSymbols": [
+      "transliteration_OneToOne",
+      "getType",
+      "foldingImpl",
+      "equals",
+      "transliterateRange",
+      "transliterateImpl",
+      "transliterateChar2Char"
+    ],
+    "upstreamSymbols": [
+      "transliteration_OneToOne",
+      "getType",
+      "foldingImpl",
+      "equals",
+      "transliterateRange",
+      "transliterateImpl",
+      "transliterateChar2Char"
+    ],
+    "preservedResponsibilities": [
+      "Original logical transliteration module algorithms now use actual OUString/Locale/Sequence values and byte-strided output cells. Preserve initialized native scalar/range/pointer producer preconditions,not invented default func/table/map values. Native stack/heap and initializer-list syntax is erased with existing typed-array/Sequence bindings;mutable output uses original getArray/asNonConstRange COW. WeakImplHelper,XExtendedTransliteration interface/query/factory registration and native refcount/process ABI remain unported and are not claimed. The common supportsService cast erases that C++ inheritance only and delegates to the unchanged actual helper on this real receiver;no query/acquire/release stub or wrapper object is supplied. Explicit dispose adapts implicit Locale member destruction for these logical owners. New module load methods retain actual RuntimeException behavior;the module bases are not an aggregate service or default provider. Original function/table translation,identity offsets and unsupported folding/equality/range methods. Protected pointers remain uninitialized until a legitimate concrete producer initializes them;tests use an explicitly initialized generic subclass with actual oneToOneMapping and a valid Unicode function,not a production search adapter."
+    ],
+    "omittedResponsibilities": [
+      "WeakImplHelper/interface/factory/service aggregation,complete generated enum ABI,title/sentence word services,ICU diacritic normalization and full native process/lifetime equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/transliteration_OneToOne.ts",
+          "marker": "transliteration_OneToOne"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts",
+          "marker": "Sequence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/transliteration_OneToOne.cxx",
+          "marker": "transliteration_OneToOne"
+        }
+      ]
+    }
+  }
+}

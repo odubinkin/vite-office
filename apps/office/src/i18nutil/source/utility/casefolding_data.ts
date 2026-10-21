@@ -1,5 +1,5 @@
 /** @fileoverview Complete original casefolding_data.h arrays, preserving initialized type/value and three-unit extra mappings. */
-import data from "./casefolding_data.json";
+import data from "./casefolding_data.json" with { type: "json" };
 import type { Mapping, Value } from "../../inc/casefolding";
 
 export const CaseMappingIndex = new Int8Array(data.CaseMappingIndex);

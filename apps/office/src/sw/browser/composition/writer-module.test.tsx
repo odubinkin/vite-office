@@ -4,6 +4,7 @@ import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
+  createWriterBrowserSessionServices,
   createWriterDocumentSession,
   createWriterModuleFactory,
   prepareWriterBrowserFonts,
@@ -38,4 +39,16 @@ describe("Writer browser composition", /** Groups Writer browser composition. @r
 
 it("prepares configured role requests without inventing fonts when the host has no font collection", /** Verifies the real composition preparation entry point in a non-font host. @returns Completion. */ async () => {
   await expect(prepareWriterBrowserFonts(document, "en-US")).resolves.toBeUndefined();
+});
+
+it("constructs browser ports without a storage host and reopens one lazy factory", /** Checks unavailable storage and one-time metric preparation through real workspace mounts. @returns Nothing. */ () => {
+  vi.stubGlobal("localStorage", undefined);
+  expect(createWriterBrowserSessionServices().layoutPreferences).toBeUndefined();
+  const factory = createWriterModuleFactory();
+  const first = render(factory.createWorkspace());
+  expect(first.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
+  first.unmount();
+  const second = render(factory.createWorkspace());
+  expect(second.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
+  second.unmount();
 });

@@ -1,4 +1,6 @@
 /** @fileoverview Checks real automatic first-glyph layout independently of authored ruler/dialog values. */
+import { FieldUnit } from "../src/tools/inc/fldunit";
+import { WRITER_LAYOUT_PREFERENCES_KEY } from "../src/sw/browser/storage/writer-layout-preferences-store";
 import { SvxLineSpaceRule } from "../src/editeng/inc/svxenum";
 
 import { expect, test } from "@playwright/test";
@@ -23,6 +25,24 @@ import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh1";
+
+// The authored dialog scenario explicitly selects native point formatting.
+test.use({
+  storageState: {
+    cookies: [],
+    origins: [
+      {
+        origin: "http://127.0.0.1:4173",
+        localStorage: [
+          {
+            name: WRITER_LAYOUT_PREFERENCES_KEY,
+            value: JSON.stringify({ "Other/MeasureUnit": FieldUnit.POINT }),
+          },
+        ],
+      },
+    ],
+  },
+});
 
 for (const width of [1280, 390])
   for (const disregard of [true, false]) {
@@ -172,7 +192,9 @@ for (const width of [1280, 390])
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
-      await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue("18.35");
+      await expect(
+        dialog.getByRole("spinbutton", { name: "First line indent (pt)", exact: true }),
+      ).toHaveValue("18.4 pt");
       await expect(dialog.getByLabel("Automatic first-line indent")).toBeChecked();
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       await checkLayout(automaticPoints);

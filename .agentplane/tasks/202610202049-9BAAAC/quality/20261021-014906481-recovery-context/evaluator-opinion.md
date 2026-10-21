@@ -1,0 +1,30 @@
+# EVALUATOR opinion: pass
+
+Committed candidate 66a22f1f1c0a satisfies the explicitly amended XCS/core-repair scope and acceptance contract; parent Writer search/UI remains open.
+
+## Findings
+- Actual Parser/ParseManager/xmldata/XcsParser and unchanged pinned Common.xcs are implemented with source-shaped schema/default/template/merge/resume/error tests; no provider or locale substitute was introduced.
+- Native cursor receiver and endpoint ownership, mark alias restoration, selection cleanup, point-only result fallback and Close disposal order are repaired against pinned sources; regression expectations preserve text/count/history and native quirks documented as WRITER-027.
+- Human approved exactly66 non-task paths, two native dead-guard instrumentation annotations and checkpoint-scoped cadence acceptance. Fresh search coverage is172 tests and100 percent S/B/F/L; current related5121 cases have three complete core modules at100 percent, with scoped Close proof, inventory124, static/five Chromium and quality gates passing. Full17771 test run passed scenarios but failed historical global coverage; no current full coverage pass is claimed.
+
+## Evidence
+- .agentplane/tasks/202610202049-9BAAAC/README.md
+- output/playwright/writer-xcs-schema/tests-targeted-final.log
+- output/playwright/writer-xcs-schema/cursor-owner-core-verified.log
+- output/playwright/writer-xcs-schema/search-approved-native-guards.log
+- output/playwright/writer-xcs-schema/approved-annotation-proof.json
+- output/playwright/writer-xcs-schema/approved-scope-paths.json
+- output/playwright/writer-xcs-schema/native-scope-browser.log
+- output/playwright/writer-xcs-schema/native-scope-static.log
+- output/playwright/writer-xcs-schema/source-approved.log
+- output/playwright/writer-xcs-schema/policy-approved.log
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Complete native Ring identity transfer and helper entry semantics, notes/fields/layout/readonly, configuration services and browser search UI remain pending in parent work; this child does not certify full Writer equivalence.
+- Full application coverage failure remains historical raw evidence; acceptance uses the explicit human-approved cadence amendment plus fresh related repairs, not a new complete application run.

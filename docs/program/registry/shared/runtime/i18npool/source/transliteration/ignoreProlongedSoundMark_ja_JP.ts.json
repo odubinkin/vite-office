@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "capabilityIds": [
+      "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.ts#ignoreProlongedSoundMark_ja_JP",
+        "apps/office/src/i18npool/source/transliteration/native-context-contracts.test.ts"
+      ],
+      "justification": "Original contextual previous/current UTF16 loop,active lookup rows,consumed-pair and transformed-previous behavior,constructor names/null fields,identity iota offsets,mutable Sequence COW/byte strides and inherited ignore scalar/range contracts are retained. Source counts/valid initialized range producer preconditions remain. Native JavaScript arrays and object lifetime erase raw allocation/reference syntax;no new memory/refcount/lifecycle infrastructure or service facade. Both original normalwidth/halfwidth tables retain active zero entries and range boundaries;folding can produce embeddedNUL without shortening the native string or offsets. Aggregate/context/factory registration,configuration/search-item/cursor integration and browser Find UI remain pending;no defaults,engine flags or semantic readiness are promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ignoreProlongedSoundMark_ja_JP",
+        "table_normalwidth",
+        "table_halfwidth",
+        "foldingImpl"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.cxx",
+      "upstreamSymbols": [
+        "ignoreProlongedSoundMark_ja_JP",
+        "table_normalwidth",
+        "table_halfwidth",
+        "foldingImpl"
+      ]
+    }
+  }
+}

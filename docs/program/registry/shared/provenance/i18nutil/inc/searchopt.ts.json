@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nutil/inc/searchopt.ts",
+    "status": "mapped",
+    "upstreamPath": "include/i18nutil/searchopt.hxx",
+    "localSymbols": [
+      "SearchOptions2",
+      "AlgorithmType2",
+      "WildcardEscapeCharacter",
+      "upgradeSearchAlgorithms",
+      "downgradeSearchAlgorithms2",
+      "assign",
+      "toUnoSearchOptions2"
+    ],
+    "upstreamSymbols": [
+      "SearchOptions2",
+      "AlgorithmType2",
+      "WildcardEscapeCharacter",
+      "upgradeSearchAlgorithms",
+      "downgradeSearchAlgorithms2",
+      "toUnoSearchOptions2"
+    ],
+    "preservedResponsibilities": [
+      "Actual search option value defaults and independent copy of every field, reusing real OUString and Locale. Native zero default algorithm is retained. UNO downgrade/upgrade conversion and full native constructor overloads are pending.",
+      "LeafMMAQEF implements original legacy/new algorithm bridges, complete typed-field constructor, native implicit copy and newer-UNO assignment plus toUnoSearchOptions2. Assignment ignores obsolete algorithmType; conversion downgrades only that field while retaining original AlgorithmType2/escape and signed transliteration cast. Zero typed default is unchanged; independent stable OUString/Locale field owners now support actual public value assignment. No preference initialization, locale canonicalization or engine capability fallback is added."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nutil/inc/searchopt.ts",
+          "marker": "SearchOptions2"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
+          "marker": "native absolute TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+          "marker": "retains distinct old/new/typed zero defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/i18nutil/searchopt.hxx",
+          "marker": "SearchOptions2"
+        }
+      ]
+    }
+  }
+}

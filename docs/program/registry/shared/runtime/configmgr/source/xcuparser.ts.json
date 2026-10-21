@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/xcuparser.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/xcuparser.ts#XcuParser",
+        "apps/office/src/configmgr/source/xcuparser.test.ts",
+        "configmgr/source/xcuparser.cxx"
+      ],
+      "justification": "Original complete XCU component-data/items event dispatch, ignored/delayed insertion/path-pop states, property/localized/group/set modify/replace/fuse/remove, nil/external/type/separator values, template/default visibility, layer/finalized/mandatory timing and broadcast/user modifications/addition copies. Reuses actual Parser/ParseManager/ValueParser/Data/Node/Any/OUString owners and existing explicit byte loading. Common.xcu is unchanged at matching officecfg data path (SHA256 6a055abb15d2a8fb4d546488184a98daaba9ec1022920643e81ed9b1d29a9006; MPL/Apache notices retained). Raw install-module metadata is ignored exactly by this parser; parsing does not select installed platform profiles, activate a provider or change conscious recovery/storage/autosave deviations. Preserve localized partial-subnode rejection and metadata mutation before later rejection/errors (WRITER-031/032). Native SAL diagnostics, ABI and full Components/provider/search UI integration remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XcuParser",
+        "getTextMode",
+        "startElement",
+        "endElement",
+        "characters",
+        "parseOperation",
+        "isAlreadyFinalized",
+        "handleComponentData",
+        "handleItem",
+        "handlePropValue",
+        "handleLocpropValue",
+        "handleGroupProp",
+        "handleUnknownGroupProp",
+        "handlePlainGroupProp",
+        "handleLocalizedGroupProp",
+        "handleGroupNode",
+        "handleSetNode",
+        "recordModification"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/xcuparser.cxx",
+      "upstreamSymbols": [
+        "XcuParser",
+        "getTextMode",
+        "startElement",
+        "endElement",
+        "characters",
+        "parseOperation",
+        "isAlreadyFinalized",
+        "handleComponentData",
+        "handleItem",
+        "handlePropValue",
+        "handleLocpropValue",
+        "handleGroupProp",
+        "handleUnknownGroupProp",
+        "handlePlainGroupProp",
+        "handleLocalizedGroupProp",
+        "handleGroupNode",
+        "handleSetNode",
+        "recordModification"
+      ]
+    }
+  }
+}

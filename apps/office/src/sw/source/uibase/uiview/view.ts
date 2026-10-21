@@ -3,6 +3,8 @@
  * coordination without owning browser workflows or presentation projections.
  */
 
+import { FieldUnit } from "../../../../tools/inc/fldunit";
+import { SwModule } from "../app/swmodule";
 import {
   type CommandDefinition,
   type CommandDispatchResult,
@@ -26,11 +28,18 @@ import { SelectionType } from "../inc/wrtsh";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
 import { SID_RULER_BORDERS, SID_RULER_ROWS_VERTICAL } from "../../../../svx/inc/svxids";
-import { createSwTableColumnItem, createSwTableRowItem } from "./viewtab";
+import {
+  createSwTableColumnItem,
+  createSwTableRowItem,
+  createSwParagraphULSpaceItem,
+  applySwParagraphULSpaceItem,
+} from "./viewtab";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
+  private readonly releaseMetricView: () => void;
   private readonly dialogController = new WriterDialogController();
   private frame: SfxViewFrame<SwView> | undefined;
   private selectionType: SelectionType | undefined;
@@ -44,8 +53,15 @@ export class SwView {
   private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
-  public constructor(private readonly docShell: SwDocShell) {
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param module - Actual module metric preferences and open-view enumeration. @returns Nothing. */
+  public constructor(
+    private readonly docShell: SwDocShell,
+    private readonly module: SwModule = SwModule.get(),
+  ) {
+    const pref = module.GetUsrPref(false);
+    this.horizontalRuler.SetUnit(pref.GetHScrollMetric());
+    this.verticalRuler.SetUnit(pref.GetVScrollMetric());
+    this.releaseMetricView = module.RegisterMetricView(this);
     this.layout = new SwRootFrame(
       /** Resolves the current document after New/Open replaces the shell graph. @returns Active Writer document. */ () =>
         this.docShell.GetDoc(),
@@ -110,6 +126,32 @@ export class SwView {
     if ((selectionType & SelectionType.Table) !== 0) dispatcher.Push(table);
   }
 
+  /** Borrows the real module preference owner. @returns Writer module. */
+  public GetModule(): SwModule {
+    return this.module;
+  }
+  /** Source dialog field unit from the actual module. @returns User metric. */
+  public GetMetric(): FieldUnit {
+    return this.module.GetMetric(false);
+  }
+  /** Original ruler metric query. @returns Horizontal ruler unit. */
+  public GetHRulerMetric(): FieldUnit {
+    return this.horizontalRuler.GetUnit();
+  }
+  /** Original ruler metric query. @returns Vertical ruler unit. */
+  public GetVRulerMetric(): FieldUnit {
+    return this.verticalRuler.GetUnit();
+  }
+  /** Original view ruler update with browser binding invalidation. @param unit - New ruler unit. @returns Nothing. */
+  public ChangeTabMetric(unit: FieldUnit): void {
+    this.horizontalRuler.SetUnit(unit);
+    this.Invalidate("view");
+  }
+  /** Original view ruler update with browser binding invalidation. @param unit - New ruler unit. @returns Nothing. */
+  public ChangeVRulerMetric(unit: FieldUnit): void {
+    this.verticalRuler.SetUnit(unit);
+    this.Invalidate("view");
+  }
   /** Returns the active document shell. @returns Persistent SwDocShell. */
   public GetDocShell(): SwDocShell {
     return this.docShell;
@@ -118,6 +160,16 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Reads the consumed paragraph-spacing StateTabWin branch. @returns Uniform slot item or mixed state. */
+  public GetParagraphULSpace(): SvxULSpaceItem | undefined {
+    return this.wrtShell.GetTextShell().GetUniformParagraphItem(createSwParagraphULSpaceItem);
+  }
+
+  /** Executes the consumed paragraph-spacing ExecTabWin branch through actual paragraph history. @param item - Accepted slot value. @returns Whether changed. */
+  public ApplyParagraphULSpace(item: SvxULSpaceItem): boolean {
+    return this.wrtShell.GetTextShell().SetParagraphItem(applySwParagraphULSpaceItem(item));
   }
 
   /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */
@@ -259,6 +311,7 @@ export class SwView {
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
+    this.releaseMetricView();
     this.editWindow.MouseButtonUp(true);
     this.horizontalRuler.CancelDrag();
     this.verticalRuler.CancelDrag();

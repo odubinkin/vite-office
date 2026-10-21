@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
+import { isSidebarPresentationImport } from "./module-boundaries/sidebar-imports.mjs";
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "comphelper",
@@ -207,6 +208,181 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // The persistent browser binding owns only actual VCL numeric state and source aliases.
+  [
+    "svtools/browser/control/metric-spin-binding.ts",
+    new Set(["vcl/source/weld/MetricSpinButton.ts", "vcl/inc/units.ts"]),
+  ],
+  // React presentation reads the shared system-locale fields;numeric ownership stays in the binding.
+  ["svtools/browser/control/MetricSpinButton.tsx", new Set(["unotools/source/misc/syslocale.ts"])],
+  // Original svtools SetFieldUnit borrows the actual VCL metric widget numeric contract.
+  ["svtools/source/misc/unitconv.ts", new Set(["vcl/source/weld/MetricSpinButton.ts"])],
+  // Generated MultipleCharsOutputException type initialization uses the original UNO TypeClass value.
+  [
+    "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+    new Set(["udkapi/com/sun/star/uno/TypeClass.ts"]),
+  ],
+
+  // Original transliteration headers/cxx use these precise UNO value/type/exception and supportsService contracts.
+  [
+    "i18npool/source/transliteration/transliteration_commonclass.ts",
+    new Set([
+      "cppu/inc/com/sun/star/lang/XServiceInfo.ts",
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "cppuhelper/inc/supportsservice.ts",
+      "offapi/com/sun/star/i18n/TransliterationModules.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_OneToOne.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_Ignore.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_body.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_caseignore.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationModules.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+
+  // Original ignoreDiacritics_CTL consumes actual UNO Sequence/RuntimeException values.
+  [
+    "i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+    ]),
+  ],
+
+  // Original directional and ignore declarations expose actual UNO offset/range Sequence values.
+  [
+    "i18npool/source/transliteration/fullwidthToHalfwidth.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/halfwidthToFullwidth.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreKana.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreWidth.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreSize_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+
+  // Original contextual folding and locale-data signatures use actual UNO Sequence values.
+  [
+    "i18npool/source/transliteration/ignoreIandEfollowedByYa_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreKiKuFollowedBySa_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreIterationMark_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreProlongedSoundMark_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  ["i18npool/source/localedata/localedata.ts", new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"])],
+
+  // Original Parser, ParseManager, xmldata and XcsParser declare/use these XML event/span contracts.
+  ["configmgr/source/parser.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
+  [
+    "configmgr/source/parsemanager.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+  ["configmgr/source/xmldata.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
+  [
+    "configmgr/source/xcsparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+
+  // Original xcuparser.hxx/cxx directly declares the same XmlReader and Span update callbacks.
+  [
+    "configmgr/source/xcuparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+
+  // Original valueparser.hxx/cxx directly owns XmlReader, Span and Pad contracts.
+  [
+    "configmgr/source/valueparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts", "xmlreader/inc/pad.ts"]),
+  ],
+  // Native swcrsr.hxx declares Find_Text with i18nutil::SearchOptions2.
+  ["sw/source/core/crsr/swcrsr.ts", new Set(["i18nutil/inc/searchopt.ts"])],
+  // Native findtxt.cxx consumes i18nutil::SearchOptions2 through its original search contracts.
+  ["sw/source/core/crsr/findtxt.ts", new Set(["i18nutil/inc/searchopt.ts"])],
+  // Native textsearch.hxx/cxx includes i18nutil/searchopt.hxx and generated util/SearchResult.hpp.
+  [
+    "unotools/source/i18n/textsearch.ts",
+    new Set(["i18nutil/inc/searchopt.ts", "offapi/com/sun/star/util/SearchResult.ts"]),
+  ],
+  // Native cclass_unicode.cxx calls ICU u_charType and o3tl::iterateCodePoints and uses KCharacterType.hpp.
+  [
+    "i18npool/source/characterclassification/cclass_unicode.ts",
+    new Set([
+      "external/icu/source/common/uchar.ts",
+      "external/icu/source/common/unicode/uchar.ts",
+      "o3tl/inc/string_view.ts",
+      "offapi/com/sun/star/i18n/KCharacterType.ts",
+    ]),
+  ],
+  // Native TextSearch uses published util/i18n values and o3tl code-point stepping.
+  [
+    "i18npool/source/search/textsearch.ts",
+    new Set([
+      // Original XTextSearch2/XTextSearch signatures and SearchOptions inheritance carry these native values.
+      "offapi/com/sun/star/util/SearchAlgorithms.ts",
+      "offapi/com/sun/star/util/SearchOptions.ts",
+      "offapi/com/sun/star/util/SearchOptions2.ts",
+      "offapi/com/sun/star/util/SearchAlgorithms2.ts",
+      "offapi/com/sun/star/util/SearchFlags.ts",
+      "offapi/com/sun/star/util/SearchResult.ts",
+      // Original SearchResult sequence fields expose cppu Sequence mutable scalar addresses.
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/KCharacterType.ts",
+      "o3tl/inc/string_view.ts",
+    ]),
+  ],
+  // Original SearchOptions.idl owns ::com::sun::star::lang::Locale; generated struct fields use Locale value semantics.
+  ["offapi/com/sun/star/util/SearchOptions.ts", new Set(["udkapi/com/sun/star/lang/Locale.ts"])],
   // patattr.cxx::fillColor owns and returns actual model::ComplexColor values.
   ["sc/source/core/data/patattr.ts", new Set(["docmodel/inc/color/ComplexColor.ts"])],
   ["sc/browser/presentation/ScGridWindow.tsx", new Set(["docmodel/inc/color/ComplexColor.ts"])],
@@ -512,7 +688,11 @@ const originalSalO3tlBindings = new Map([
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
+  // Original sal/rtl/ustring.cxx uses exactly o3tl::iterateCodePoints.
+  ["sal/rtl/ustring.ts -> o3tl/inc/string_view.ts", ["iterateCodePoints"]],
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
+  // Original byte view overloads call the SAL byte signed64 entry point.
+  ["o3tl/inc/string_view.ts -> sal/inc/rtl/string.h.ts", ["rtl_str_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],
 ]);
 
@@ -780,7 +960,8 @@ for (const sourceFile of runtimeSources) {
     }
     if (
       isForbiddenModuleEdge(sourceModule, targetModule) &&
-      !isOriginalCharacterValueImport(relativeSource, relativeTarget)
+      !isOriginalCharacterValueImport(relativeSource, relativeTarget) &&
+      !isSidebarPresentationImport(relativeSource, relativeTarget)
     )
       failures.push(
         `${displayPath(sourceFile)}: non-allowlisted module edge ${sourceModule} -> ${targetModule}`,

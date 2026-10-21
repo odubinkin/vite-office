@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { nativeTableInputForTest, nativeBoxFormat } from "../../../test/table-box-test-helpers";
 import { RES_BOX } from "../../inc/hintids";
@@ -197,7 +198,10 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "0" },
     });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
-    expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(0.04);
+    expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "0.04",
+    );
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({ width: 6803, columnWidths: [23, 6780] }),
     );
@@ -278,4 +282,42 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       fontWeight: "700",
     });
   });
+});
+
+it("resets normalized millimetre text on Table and Columns even when physical twips are unchanged", /** Checks native Reset assignment through actual page owners. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const table = document.nodes.MakeTableNode("PrecisionReset", {
+    width: 2882,
+    align: "left",
+    headerRows: 0,
+    repeatHeaderRows: false,
+  });
+  table.AddColumnWidth(1441);
+  table.AddColumnWidth(1441);
+  document.nodes.AppendTableRow(table, 2);
+  const submit = vi.fn();
+  render(
+    <WriterTableDialog
+      table={table}
+      availableWidth={6000}
+      unit={FieldUnit.MM}
+      onCancel={vi.fn()}
+      onSubmit={submit}
+    />,
+  );
+  const width = screen.getByRole("spinbutton", { name: "Table width (mm)" });
+  fireEvent.change(width, { target: { value: "50.83 mm" } });
+  fireEvent.blur(width);
+  expect(width).toHaveValue("50.83 mm");
+  fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+  expect(width).toHaveValue("50.84 mm");
+  fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
+  const column = screen.getByRole("spinbutton", { name: "Column 1 width (mm)" });
+  fireEvent.change(column, { target: { value: "25.41 mm" } });
+  fireEvent.blur(column);
+  expect(column).toHaveValue("25.41 mm");
+  fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+  expect(column).toHaveValue("25.42 mm");
+  expect(submit).not.toHaveBeenCalled();
+  expect(table.GetFormat().width).toBe(2882);
 });

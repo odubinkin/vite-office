@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/storage/writer-layout-preferences-store.ts",
+    "rationale": "Actual browser Storage transports three original Writer layout properties with signed-int32 extraction and native UInt16 casts. Optional override absence,dirty-state acknowledgment and unrelated keys are retained. No ConfigItem/UNO provider facade or document-package preferences is introduced.",
+    "responsibilities": [
+      "TaskXBHM4Z: Actual browser Storage transports three original Writer layout properties with signed-int32 extraction and native UInt16 casts. Optional override absence,dirty-state acknowledgment and unrelated keys are retained. No ConfigItem/UNO provider facade or document-package preferences is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser presentation and storage adapt the actual native numeric,metric-page and ruler owners without replacing their value contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/storage/writer-layout-preferences-store.ts",
+          "marker": "WriterLayoutPreferenceStore"
+        }
+      ]
+    }
+  }
+}

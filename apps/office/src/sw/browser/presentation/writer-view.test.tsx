@@ -47,7 +47,8 @@ import {
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
 } from "../../inc/hintids";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { FieldUnit } from "../../../tools/inc/fldunit";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { WriterWorkbench } from "./writer-view";
@@ -291,14 +292,18 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const node = doc.paragraphs[0]!;
     session.view.GetWrtShell().SetPaM(new SwPosition(node, node.Len()), new SwPosition(node, 0));
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
-    const selector = screen.getByLabelText("Font name") as HTMLSelectElement;
+    const selector = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByLabelText("Font name") as HTMLSelectElement;
     expect(within(selector).getByRole("option", { name: "Package Serif" })).toBeInTheDocument();
     fireEvent.change(selector, { target: { value: "Package Serif" } });
     await waitFor(
       /** Observes command state and font fallback. @returns Nothing. */ () => {
         expect(selector.value).toBe("Package Serif");
         expect(
-          screen.getByText("Embedded font unavailable; using Liberation Serif fallback"),
+          within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByText(
+            "Embedded font unavailable; using Liberation Serif fallback",
+          ),
         ).toHaveAttribute("role", "status");
       },
     );
@@ -334,10 +339,18 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       },
     );
     expect(
-      within(screen.getByLabelText("Font name")).getByRole("option", { name: "Replacement Serif" }),
+      within(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Font name",
+        ),
+      ).getByRole("option", { name: "Replacement Serif" }),
     ).toBeInTheDocument();
     expect(
-      within(screen.getByLabelText("Font name")).queryByRole("option", { name: "Package Serif" }),
+      within(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Font name",
+        ),
+      ).queryByRole("option", { name: "Package Serif" }),
     ).toBeNull();
     rendered.unmount();
     session.Close();
@@ -380,7 +393,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
             .GetDoc()
             .GetIDocumentMarkAccess()
             .FindMark("Middle")
-            ?.GetPosition()
+            ?.GetMarkPos()
             .GetContentIndex(),
         ).toBe(5),
     );
@@ -422,7 +435,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       reopened.document
         .GetIDocumentMarkAccess()
         .FindMark("Renamed")
-        ?.GetPosition()
+        ?.GetMarkPos()
         .GetContentIndex(),
     ).toBe(5);
     openInsert(/Bookmark/);
@@ -458,14 +471,28 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   });
   it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ async () => {
     const session = createWriterDocumentSession();
+    session.view.GetModule().ApplyUserMetric(FieldUnit.POINT, false);
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     const shell = session.view.GetWrtShell();
-    fireEvent.click(screen.getByLabelText("Font Color palette"));
-    fireEvent.click(screen.getByLabelText("Font Color #ff0000"));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Font Color palette",
+      ),
+    );
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Font Color #ff0000",
+      ),
+    );
     expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).color).toBe(
       "#ff0000",
     );
-    expect(screen.getByRole("button", { name: "Line Spacing" })).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Line Spacing" },
+      ),
+    ).toBeInTheDocument();
     openParagraphDialog();
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "preset-150" } });
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
@@ -529,7 +556,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       (shell.GetActiveParagraph().GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
     ).toBe(2);
     openParagraphDialog();
-    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(9);
+    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue("9.0 pt");
     expect(screen.getByLabelText("Automatic first-line indent")).toBeChecked();
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     expect(screen.getByLabelText("Page style")).toHaveValue("Standard");

@@ -54,7 +54,7 @@ import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterTableDialog } from "./WriterTableDialog";
 import { ItemSetToTableParam } from "../../source/uibase/shells/tabsh";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";

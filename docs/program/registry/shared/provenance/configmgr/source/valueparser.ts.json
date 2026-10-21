@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/configmgr/source/valueparser.ts",
+    "status": "mapped",
+    "upstreamPath": "configmgr/source/valueparser.cxx",
+    "localSymbols": [
+      "ValueParser",
+      "parseValue",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters",
+      "start",
+      "convertItems"
+    ],
+    "upstreamSymbols": [
+      "ValueParser",
+      "parseValue",
+      "getTextMode",
+      "startElement",
+      "endElement",
+      "characters",
+      "start",
+      "convertItems"
+    ],
+    "preservedResponsibilities": [
+      "Original full scalar/list conversion responsibility and text/it/unicode state transitions over actual XmlReader/Span/Pad, Node/PropertyNode/localized nodes and Any/Sequence. Native OString local separator/suffix syntax and vector<T> storage are erased into exact copied byte arrays and typed actual Any temporaries, without an OString or configuration provider substitute. Numeric lexical TODOs, metadata-before-parse exceptions, whitespace/raw modes and unicode whitelist are preserved. Original borrowed local unicode byte uses realm GC storage; native dangling-pointer behavior is not certified. Schema/XCU orchestration, global services/defaults, ABI and full UI remain pending. Concrete scalar template specializations use an explicit seven-type compile-time union; the original sal_Int32 lexical overload is shared by scalar properties and unicode attributes without a synthetic Any extraction failure path.",
+      "Original checked callback/target/extraction predicates share the existing portable assertion binding, with source preconditions verified through actual nullable references and public callback events. Native NDEBUG-only return after fatal assertions is not executed or certified."
+    ],
+    "omittedResponsibilities": [
+      "Complete compiled native library/service, ABI/lifetime/logging and application/UI parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/configmgr/source/valueparser.ts",
+          "marker": "ValueParser"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/valueparser.test.ts",
+          "marker": "preserves typed lexical value"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "configmgr/source/valueparser.cxx",
+          "marker": "ValueParser"
+        }
+      ]
+    }
+  }
+}

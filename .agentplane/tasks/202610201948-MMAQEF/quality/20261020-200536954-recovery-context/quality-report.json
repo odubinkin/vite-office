@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610201948-MMAQEF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-20T20:05:36.954Z",
+  "verdict": "pass",
+  "summary": "Native search value and legacy/new service bridge meets approved source-shaped leaf scope at cd07a2ca9954.",
+  "evaluated_sha": "cd07a2ca9954b1c1694d8cc6ce187f307896ec67",
+  "blueprint_digest": "db7a744af6c74b2e0f14890a2c435e3bb4708f272268729a608d45f5139fa256",
+  "findings": [
+    "Inspected value owners, inherited full constructors, typed assignment/conversion and legacy forwarding; exact enum/field mappings and boundary exceptions preserve native contracts without promoting broader service/UI fidelity.",
+    "122 focused search tests and 48 boundary-tooling cases pass; build and required static/registry checks pass. WRITER-017 is explicitly source-only; unimplemented item/configuration and ICU remain outside this leaf."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610201948-MMAQEF/README.md",
+    "output/playwright/writer-search-values-checks/tooling-final.log",
+    "output/playwright/writer-search-values-checks/provenance-final.log",
+    "output/playwright/writer-search-values-checks/check-2.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "No compiled native UNO/component or browser UI parity claim. ICU read approval remains pending for later owner work; pre-existing doctor hook and build chunk-size warnings remain."
+  ]
+}

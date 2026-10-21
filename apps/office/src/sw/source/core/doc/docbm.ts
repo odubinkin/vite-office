@@ -18,7 +18,7 @@ export class SwBookmark {
   }
 
   /** Returns its live model position. @returns Registered position. */
-  public GetPosition(): SwPosition {
+  public GetMarkPos(): SwPosition {
     return this.position;
   }
 
@@ -62,8 +62,8 @@ export class DocumentMarkAccess {
     return [...this.bookmarks.values()].sort(
       /** Orders positions as Writer's mark index does. @param left - Earlier candidate. @param right - Later candidate. @returns Signed order. */
       (left, right) =>
-        left.GetPosition().GetNodeIndex() - right.GetPosition().GetNodeIndex() ||
-        left.GetPosition().GetContentIndex() - right.GetPosition().GetContentIndex(),
+        left.GetMarkPos().GetNodeIndex() - right.GetMarkPos().GetNodeIndex() ||
+        left.GetMarkPos().GetContentIndex() - right.GetMarkPos().GetContentIndex(),
     );
   }
 
@@ -79,8 +79,8 @@ export class DocumentMarkAccess {
     return this.GetBookmarks().find(
       /** Compares document and UTF-16 offsets. @param mark - Bookmark. @returns Whether it matches. */
       (mark) =>
-        mark.GetPosition().GetNode() === position.GetNode() &&
-        mark.GetPosition().GetContentIndex() === position.GetContentIndex(),
+        mark.GetMarkPos().GetNode() === position.GetNode() &&
+        mark.GetMarkPos().GetContentIndex() === position.GetContentIndex(),
     );
   }
 

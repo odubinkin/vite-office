@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/srchitem.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/srchitem.hxx",
+    "localSymbols": [
+      "SvxSearchCmd",
+      "SvxSearchCellType",
+      "SvxSearchApp"
+    ],
+    "upstreamSymbols": [
+      "SvxSearchCmd",
+      "SvxSearchCellType",
+      "SvxSearchApp"
+    ],
+    "preservedResponsibilities": [
+      "Original public search command, cell-family and application identities. The actual SvxSearchItem/configuration and UI owners remain pending; no empty class hierarchy, preference provider, unimplemented slot success or UI capability is fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Complete generated UNO ABI/service and whole application/UI fidelity remain unverified; source/portable value tests do not promote full parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/srchitem.ts",
+          "marker": "SvxSearchCmd"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+          "marker": "retains distinct old/new/typed zero defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/srchitem.hxx",
+          "marker": "SvxSearchCmd"
+        }
+      ]
+    }
+  }
+}

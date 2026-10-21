@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/ui/config/optload.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "measurement-preferences",
+    "capabilityIds": [
+      "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/ui/config/optload.ts#SwLoadOptPage",
+        "vendor/libreoffice-reference/sw/source/ui/config/optload.cxx#SwLoadOptPage::FillItemSet"
+      ],
+      "justification": "TaskXBHM4Z bounded source measurement projection. Original General metric catalog,Reset and changed-only typed metric output;default-tab controls and other General settings remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwLoadOptPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/ui/config/optload.cxx",
+      "upstreamSymbols": [
+        "SwLoadOptPage::FillItemSet"
+      ]
+    }
+  }
+}

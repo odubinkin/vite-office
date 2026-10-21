@@ -27,7 +27,16 @@ const registrationPattern =
  * @returns Canonically ordered registrations with exact source lines and no retained source text.
  */
 export function extractCppunitRegistrations(sourceText: string): readonly CppunitRegistration[] {
-  const registrations = [...sourceText.matchAll(registrationPattern)].map(createRegistration);
+  let previousOffset = 0,
+    line = 1;
+  const registrations = [...sourceText.matchAll(registrationPattern)].map(
+    /** Counts only the source interval since the preceding match, preserving exact LF-based line evidence. @param match - Ordered native regex match. @returns Registration. */
+    (match) => {
+      line += sourceText.slice(previousOffset, match.index).split("\n").length - 1;
+      previousOffset = match.index;
+      return createRegistration(match, line);
+    },
+  );
   return registrations.sort(compareRegistrations);
 }
 
@@ -35,9 +44,10 @@ export function extractCppunitRegistrations(sourceText: string): readonly Cppuni
  * Converts one supported macro regex match into a deterministic Cppunit registration record.
  *
  * @param match - Global regex match containing either fixture and method groups or one test-method group.
+ * @param line - Exact one-based source line accumulated in match order.
  * @returns One parsed registration with its source-line evidence.
  */
-function createRegistration(match: RegExpMatchArray): CppunitRegistration {
+function createRegistration(match: RegExpMatchArray, line: number): CppunitRegistration {
   const fixtureName = match[1];
   const fixtureTestName = match[2];
   const testName = fixtureTestName ?? match[3];
@@ -48,24 +58,9 @@ function createRegistration(match: RegExpMatchArray): CppunitRegistration {
   return {
     fixtureName: fixtureName ?? null,
     kind: fixtureTestName === undefined ? "CPPUNIT_TEST" : "CPPUNIT_TEST_FIXTURE",
-    line: countLineAtOffset(match.input, match.index),
+    line,
     testName,
   };
-}
-
-/**
- * Counts the one-based source line that contains an offset in complete source text.
- *
- * @param sourceText - Complete source text containing the offset.
- * @param offset - Zero-based character offset within sourceText.
- * @returns One-based source line that contains offset.
- */
-function countLineAtOffset(sourceText: string, offset: number): number {
-  let line = 1;
-  for (let index = 0; index < offset; index += 1) {
-    if (sourceText[index] === "\n") line += 1;
-  }
-  return line;
 }
 
 /**

@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/presentation/writer-ruler-ticks.ts",
+    "rationale": "Browser CSS pixel projection consumes actual persistent native ruler table rows and follows ImplDrawTicks cadence,density,relative fallback widths and stroke admission. Native RenderContext/device font services,zoom/DPI changes,overflow domains and configured character/line metrics remain unrepresented;the present96dpi table has no zero-pixel major interval.",
+    "responsibilities": [
+      "TaskXBHM4Z: Browser CSS pixel projection consumes actual persistent native ruler table rows and follows ImplDrawTicks cadence,density,relative fallback widths and stroke admission. Native RenderContext/device font services,zoom/DPI changes,overflow domains and configured character/line metrics remain unrepresented;the present96dpi table has no zero-pixel major interval."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser presentation and storage adapt the actual native numeric,metric-page and ruler owners without replacing their value contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-ruler-ticks.ts",
+          "marker": "projectWriterRulerTicks"
+        }
+      ]
+    }
+  }
+}

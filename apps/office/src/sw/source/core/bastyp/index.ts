@@ -75,7 +75,14 @@ export abstract class SwContentIndexRegistry extends BroadcastingModify {
     }
     for (const index of indices) {
       const current = index.GetIndex();
-      if (current > position || (current === position && index.GetAffinity() === "after"))
+      // Native SwTextNode::Update detaches bookmark ends at ordinary insertion,
+      // but explicitly skips that exclusion for UpdateMode::Replace.
+      if (
+        current > position ||
+        (current === position &&
+          (index.GetAffinity() === "after" ||
+            ((mode & SwContentIndexUpdateMode.Replace) !== 0 && index.GetOwnerKind() === "mark")))
+      )
         index.SetIndexFromRegistry(current + changeLength);
     }
   }

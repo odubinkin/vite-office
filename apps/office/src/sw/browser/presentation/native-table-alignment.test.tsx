@@ -2,7 +2,7 @@
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { it, expect, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwTabFrame } from "../../source/core/layout/tabfrm";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -18,7 +18,7 @@ for (const [label, orient, width, left, right] of [
   ["From left", 7, 3000, 300, 4700],
   ["Right", 1, 3000, 5000, 0],
   ["Center", 2, 3000, 2500, 2500],
-  ["Manual", 0, 7100, 300, 600],
+  ["Manual", 0, 7099, 300, 601],
 ] as const)
   it(`applies native ${label} through actual UI and attribute history`, /** Checks original graph and repeated history. @returns Nothing. */ () => {
     const session = createWriterDocumentSession();

@@ -3,7 +3,7 @@ import { nativeBoxFormat, tableBoxFormatForTest } from "../../../test/table-box-
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { render, cleanup, screen, fireEvent, act } from "@testing-library/react";
 import { afterEach, it, expect, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SwFormatHoriOrient } from "../../inc/fmtornt";

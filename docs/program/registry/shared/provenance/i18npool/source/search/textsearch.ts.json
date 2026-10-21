@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/search/textsearch.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/search/textsearch.cxx",
+    "localSymbols": [
+      "TextSearch",
+      "NSrchFrwrd",
+      "NSrchBkwrd",
+      "IsDelimiter",
+      "GetDiff",
+      "WildcardSrchFrwrd",
+      "WildcardSrchBkwrd",
+      "setWildcardMatch",
+      "setOptions",
+      "setOptions2",
+      "replaceTransliterationOffsets"
+    ],
+    "upstreamSymbols": [
+      "TextSearch",
+      "NSrchFrwrd",
+      "NSrchBkwrd",
+      "IsDelimiter",
+      "GetDiff",
+      "WildcardSrchFrwrd",
+      "WildcardSrchBkwrd",
+      "setWildcardMatch",
+      "setOptions",
+      "setOptions2"
+    ],
+    "preservedResponsibilities": [
+      "Original absolute Boyer-Moore jump order, native category delimiters, full case-folding with original UTF16 offset recovery, all-quote helper and original no-transliteration forward U+2019-only branch. Preserve the backward endPos==length special case. Actual shared ICU category/case mapping data and OUString/Locale reused. Other algorithms/transliterations reject explicitly; no browser regex or whole-string concatenation fallback. Portable source-contract tests are not a compiled native differential; no full engine or UI parity claim.",
+      "Native WildcardSrchFrwrd/WildcardSrchBkwrd code-point rewind loops, implicit substring asterisks, WILD_MATCH_SELECTION greedy retry, original escape/reordered-backward-pattern cache and UTF16 source endpoint remapping are implemented. Existing native iterator, frozen casefold data and wrapper/cache remain the consumed owners. Reverse-pattern preparation is a private same-file extraction of the original WildcardSrchBkwrd block, not a different wildcard compiler. Source trailing-escape/NUL/empty-folded-interval quirks are retained (WRITER-012/013/014). Original test_textsearch.cxx QA values, supplementary cases, independent bounded dynamic-programming language checks and actual wrapper/Writer replacement integration provide portable evidence only. Regex/approximate and other transliterations, secondary key/service/native compiled QA and full Writer view/UI remain unverified; no parity status/default/classification promotion.",
+      "Independent whole-selection recognition identifies native overlapping greedy-retry false negatives; preserve and explicitly enumerate them as WRITER-015 rather than changing the reference language or native matching loop.",
+      "LeafMMAQEF adds the actual legacy setOptions branch: original switch/default upgrades legacy enum, constructs a newer UNO value with escape zero and delegates setOptions2. Newer wire values are copied through the real typed assignment owner and newer AlgorithmType2 always controls dispatch, regardless of inherited obsolete algorithmType. Known unsupported regex/approximate/transliteration modes still reject before altering previous prepared state. Actual normal/wildcard and wrapper/Writer regressions pass; no configuration/item/UI or full service parity promotion.",
+      "PC6WK7 migrates all represented normal/wildcard/no-match/remapping results to actual generated SearchResult and shared Sequence<sal_Int32> values. Original wildcard setter mutates the caller result; folded offsets update actual mutable sequence cells. Returned snapshots remain independent under real COW. Algorithms and original directional quirks remain unchanged.",
+      "Original forward/backward transliteration result remapping is represented for every real SearchResult group, preserving negative endpoints, empty maps, sequence-length iteration independent of scalar count, endpoint clipping, code-point advancement and field owners. replaceTransliterationOffsets exports this initialized source-block kernel for tests, not a new UNO API or regex backend. Its offset argument retains the existing transliteration compiler binding; original service/ICU/regex and full ABI remain unverified.",
+      "LeafQ6QPPB moves existing case-fold consumption to the actual Transliteration_caseignore/Transliteration_body hierarchy and real Sequence output ownership;the bounded array offset projection and supported engine modes remain unchanged. Native aggregate service/factory/default activation and complete lifetime remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream library/API/service and native compiled QA are unverified; task scope remains in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.ts",
+          "marker": "TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch.test.ts",
+          "marker": "native absolute TextSearch"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/textsearch-wildcard.test.ts",
+          "marker": "testWildcardSearch"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/native-search-options.test.ts",
+          "marker": "retains distinct old/new/typed zero defaults"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/search/native-search-result.test.ts",
+          "marker": "constructs zero/default values with distinct owned sequence fields"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/search/textsearch.cxx",
+          "marker": "TextSearch"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_textsearch.cxx",
+          "marker": "testWildcardSearch"
+        }
+      ]
+    }
+  }
+}

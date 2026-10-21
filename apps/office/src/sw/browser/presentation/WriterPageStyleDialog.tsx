@@ -1,6 +1,8 @@
 /** @fileoverview Renders the bounded browser Page tab from LibreOffice's PageFormatPage. */
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useMemo, useState } from "react";
 
@@ -14,6 +16,7 @@ import {
 
 /** Inputs and completion callbacks for the bounded Writer Page tab. */
 export interface WriterPageStyleDialogProps {
+  readonly unit?: FieldUnit;
   readonly initialValue: WriterPageDescriptorValue;
   readonly onCancel: () => void;
   readonly onSubmit: (value: WriterPageDescriptorValue) => void;
@@ -22,6 +25,7 @@ export interface WriterPageStyleDialogProps {
 /** Collects the supported Page Style physical geometry with a live upstream-shaped preview. @param props - Initial geometry and completion callbacks. @returns Page Style dialog. */
 export function WriterPageStyleDialog({
   initialValue,
+  unit = FieldUnit.CM,
   onCancel,
   onSubmit,
 }: WriterPageStyleDialogProps): React.JSX.Element {
@@ -37,9 +41,9 @@ export function WriterPageStyleDialog({
     [draft.height, draft.width, previewScale],
   );
 
-  /** Updates one metric field and marks the paper size custom. @param key - Page field. @param centimetres - Entered length. @returns Nothing. */
-  function updateLength(key: keyof WriterPageDescriptorValue, centimetres: number): void {
-    setDraft({ ...draft, [key]: Math.round((centimetres * 1440) / 2.54), paperFormat: "custom" });
+  /** Updates one metric field and marks the paper size custom. @param key - Page field. @param twips - Accepted physical length. @returns Nothing. */
+  function updateLength(key: keyof WriterPageDescriptorValue, twips: number): void {
+    setDraft({ ...draft, [key]: twips, paperFormat: "custom" });
     setError(undefined);
   }
 
@@ -111,19 +115,21 @@ export function WriterPageStyleDialog({
                   </select>
                 </label>
                 <MetricField
+                  unit={unit}
                   label="Width"
                   value={draft.width}
                   onChange={
-                    /** Updates custom width. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates custom width. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("width", value)
                   }
                 />
                 <MetricField
+                  unit={unit}
                   label="Height"
                   value={draft.height}
                   onChange={
-                    /** Updates custom height. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates custom height. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("height", value)
                   }
@@ -156,37 +162,41 @@ export function WriterPageStyleDialog({
               <fieldset className="grid grid-cols-2 gap-3 rounded-lg border border-slate-200 p-3">
                 <legend className="px-1 text-sm font-bold text-slate-700">Margins</legend>
                 <MetricField
+                  unit={unit}
                   label="Left"
                   value={draft.leftMargin}
                   onChange={
-                    /** Updates the left margin. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates the left margin. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("leftMargin", value)
                   }
                 />
                 <MetricField
+                  unit={unit}
                   label="Right"
                   value={draft.rightMargin}
                   onChange={
-                    /** Updates the right margin. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates the right margin. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("rightMargin", value)
                   }
                 />
                 <MetricField
+                  unit={unit}
                   label="Top"
                   value={draft.topMargin}
                   onChange={
-                    /** Updates the top margin. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates the top margin. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("topMargin", value)
                   }
                 />
                 <MetricField
+                  unit={unit}
                   label="Bottom"
                   value={draft.bottomMargin}
                   onChange={
-                    /** Updates the bottom margin. @param value - Centimetres. @returns Nothing. */ (
+                    /** Updates the bottom margin. @param value - Physical twips. @returns Nothing. */ (
                       value,
                     ) => updateLength("bottomMargin", value)
                   }
@@ -234,35 +244,28 @@ export function WriterPageStyleDialog({
   );
 }
 
-/** Renders one centimetre input backed by a Writer twip value. @param props - Field label, twip value, and callback. @returns Metric input. */
+/** Renders one source metric entry over a physical Writer value. @param props - Label,unit,twips and callback. @returns Metric field. */
 function MetricField({
   label,
   onChange,
   value,
+  unit,
 }: Readonly<{
   label: string;
-  onChange: (value: number) => void;
+  onChange: (twips: number) => void;
   value: number;
+  unit: FieldUnit;
 }>): React.JSX.Element {
   return (
     <label className="grid gap-1 text-sm font-semibold text-slate-700">
       {label}
-      <span className="flex min-w-0 items-center gap-2">
-        <input
-          aria-label={`${label} (cm)`}
-          className="min-w-0 flex-1 rounded-md border border-slate-300 px-2 py-1.5 font-normal"
-          min="0"
-          onChange={
-            /** Reports one changed metric value. @param event - Number input change. @returns Nothing. */ (
-              event,
-            ) => onChange(Number(event.target.value))
-          }
-          step="0.01"
-          type="number"
-          value={Number(((value * 2.54) / 1440).toFixed(2))}
-        />
-        <span className="shrink-0 text-xs font-normal text-slate-500">cm</span>
-      </span>
+      <MetricSpinButton
+        aria-label={`${label} (${unit === FieldUnit.INCH ? "in" : unit === FieldUnit.CM ? "cm" : FieldUnit[unit].toLowerCase()})`}
+        unit={unit}
+        value={value}
+        onValueChange={onChange}
+        className="min-w-0 rounded-md border border-slate-300 px-2 py-1.5 font-normal"
+      />
     </label>
   );
 }

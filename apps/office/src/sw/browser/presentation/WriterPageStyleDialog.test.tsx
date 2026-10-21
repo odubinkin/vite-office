@@ -30,8 +30,9 @@ describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @retur
       ) => opened.document.ChgPageDesc(value),
     );
     render(<WriterPageStyleDialog initialValue={initial} onCancel={vi.fn()} onSubmit={onSubmit} />);
-    expect(screen.getByLabelText("Width (cm)")).toHaveValue(
-      Number(((initial.width * 2.54) / 1440).toFixed(2)),
+    expect(screen.getByLabelText("Width (cm)")).toHaveAttribute(
+      "aria-valuenow",
+      String(Number(((initial.width * 2.54) / 1440).toFixed(2))),
     );
     fireEvent.change(screen.getByLabelText("Left (cm)"), { target: { value: "3" } });
     fireEvent.click(screen.getByText("OK"));

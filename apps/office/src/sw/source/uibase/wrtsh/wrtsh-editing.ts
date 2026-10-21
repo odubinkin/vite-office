@@ -9,15 +9,49 @@ import {
 import {
   SwUndoDelete,
   SwUndoJoinParagraphs,
-  SwUndoReplace,
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
 import { createWriterInsertTextAction } from "../../core/edit/editsh";
 import { createWriterDeleteSelectionOperation } from "../../core/edit/eddel";
 import { createWriterReadTextOperation } from "../../filter/basflt/shellio";
+import { SwUndoInsert } from "../../core/undo/unins";
+import { SwUndoAttr } from "../../core/undo/unattr";
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
+import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { SwWrtShell } from "./wrtsh1";
+import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+
+/** Applies the existing shell ruler-margin algorithm through actual paragraph items and shell history. @param shell - Original shell owner. @param edge - Dragged marker. @param delta - Original twip delta. @returns Whether paragraph attributes changed. */
+export function AdjustParagraphRulerIndent(
+  shell: SwWrtShell,
+  edge: "left" | "firstLine" | "right",
+  delta: number,
+): boolean {
+  if (!Number.isFinite(delta)) return false;
+  const paragraph = shell.GetActiveParagraph();
+  const before = {
+    firstLine: (
+      paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+    ).ResolveTextFirstLineOffset(),
+    left: paragraph.GetParagraphTextLeftMargin(),
+    right: paragraph.GetParagraphRightMargin(),
+  };
+  switch (edge) {
+    case "left":
+      return shell.SetParagraphRulerIndents({ ...before, left: Math.max(0, before.left + delta) });
+    case "firstLine":
+      return shell.SetParagraphRulerIndents({ ...before, firstLine: before.firstLine + delta });
+    case "right":
+      return shell.SetParagraphRulerIndents({
+        ...before,
+        right: Math.max(0, before.right - delta),
+      });
+  }
+}
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
@@ -206,18 +240,41 @@ export function ReplaceRange(
   const removedFragment = paragraph.CaptureTextFragment(range.start, range.end);
   if (removedFragment.text === replacement.text && removedFragment.hints.equals(replacement.hints))
     return false;
-  const nextOffset = range.start + replacement.text.length;
-  return shell.ApplyAction(
-    new SwUndoReplace(
-      paragraph,
-      range.start,
-      removedFragment,
-      replacement,
-      replacement.text.length === 0 ? "Delete" : "Paste",
-      shell.CaptureCursorState(),
-      shell.CreateCollapsedCursorState(paragraph, nextOffset),
-    ),
+  const before = shell.CaptureCursorState(),
+    after = shell.CreateCollapsedCursorState(paragraph, range.start + replacement.text.length);
+  if (removedFragment.text === replacement.text)
+    return shell.ApplyAction(
+      new SwUndoAttr(paragraph, range.start, removedFragment, replacement, before, after),
+    );
+  const action = new SfxListUndoAction<SwUndoRedoContext>(
+    replacement.text.length === 0 ? "Delete" : "Paste",
   );
+  const atStart = shell.CreateCollapsedCursorState(paragraph, range.start);
+  if (removedFragment.text.length !== 0)
+    action.AddAction(
+      new SwUndoDelete(
+        paragraph,
+        range.start,
+        removedFragment.text,
+        "delete",
+        undefined,
+        before,
+        replacement.text.length === 0 ? after : atStart,
+      ),
+    );
+  if (replacement.text.length !== 0)
+    action.AddAction(
+      new SwUndoInsert(
+        paragraph,
+        range.start,
+        replacement,
+        undefined,
+        removedFragment.text.length === 0 ? before : atStart,
+        after,
+        SwInsertFlags.DEFAULT,
+      ),
+    );
+  return shell.ApplyAction(action);
 }
 
 /** Reads plain clipboard text through native cursor rings and document-insertion history. @param text - Plain clipboard text. @param shell - Actual native cursor, document and history owner. @returns Whether imported. */

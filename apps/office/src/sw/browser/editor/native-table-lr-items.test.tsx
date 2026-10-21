@@ -2,7 +2,7 @@
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { SvxLRSpaceItem } from "../../../editeng/source/items/frmitems";
 import { SwFrameFormat } from "../../source/core/layout/atrfrm";
@@ -75,7 +75,10 @@ it.each([false, true])(
           marginRight: "16px",
         });
         fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
-        expect(screen.getByRole("spinbutton", { name: "Left (cm)" })).toHaveValue(-0.21);
+        expect(screen.getByRole("spinbutton", { name: "Left (cm)" })).toHaveAttribute(
+          "aria-valuenow",
+          "-0.21",
+        );
         fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       } finally {
         spy.mockRestore();

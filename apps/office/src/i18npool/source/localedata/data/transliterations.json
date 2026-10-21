@@ -1,0 +1,2090 @@
+{
+  "af_NA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "af_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ak_GH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "am_ET": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "an_ES": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "ar_AE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_BH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_DZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_EG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_IQ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_JO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_KW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_LB": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_LY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_MA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_OM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_QA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_SA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_SY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_TN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ar_YE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "ignoreDiacritics_CTL",
+    "ignoreKashida_CTL"
+  ],
+  "ast_ES": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "axk_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "az_AZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "be_BY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "beq_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bg_BG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bkw_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bm_ML": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "bn_BD": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bn_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bo_CN": ["IGNORE_CASE"],
+  "bo_IN": ["IGNORE_CASE"],
+  "br_FR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bs_BA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "bvx_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ca_ES": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ca_ES_valencia": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "cs_CZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "cu_RU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "cv_RU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "cy_GB": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "da_DK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "dde_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "de_AT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "de_CH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "de_DE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "de_LI": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "de_LU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "dsb_DE": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "dv_MV": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "dz_BT": ["IGNORE_CASE"],
+  "ebo_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ee_GH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "el_GR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_AU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_BW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_BZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_CA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_DK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_GB": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_GH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_GM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_GY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_HK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_IE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_IL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_JM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_KE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_LK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_MU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_MW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_MY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_NA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_NG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_NZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_PH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_TT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_US": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_ZM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "en_ZW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "eo": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_AR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_BO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_CL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_CO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_CR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_DO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_EC": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_ES": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_GT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_HN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_MX": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_NI": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_PA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_PE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_PR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_PY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_SV": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_UY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "es_VE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "et_EE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "eu_ES": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ext_ES": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fa_IR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fi_FI": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fo_FO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_BE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_BF": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_BJ": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_CA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_CH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_CI": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_FR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_GN": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_LU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_MC": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fr_ML": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_NE": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_SN": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fr_TG": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "fur_IT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "fy_NL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ga_IE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "gd_GB": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "gl_ES": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "gos_NL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "gsc_FR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "gu_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "gug_PY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ha_Latn_GH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ha_Latn_NG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "haw_US": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "he_IL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "hi_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "hil_PH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "hr_HR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "hsb_DE": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "ht_HT": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "hu_HU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "hy_AM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ia": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "id_ID": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ilo_PH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "is_IS": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "it_CH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "it_IT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "iyx_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ja_JP": [
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "KATAKANA_HIRAGANA",
+    "HIRAGANA_KATAKANA",
+    "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
+    "HALFWIDTHKATAKANA_FULLWIDTHKATAKANA",
+    "FULLWIDTH_HALFWIDTH_LIKE_ASC",
+    "HALFWIDTH_FULLWIDTH_LIKE_JIS",
+    "smallToLarge_ja_JP",
+    "largeToSmall_ja_JP",
+    "IGNORE_WIDTH",
+    "ignoreTraditionalKana_ja_JP",
+    "ignoreTraditionalKanji_ja_JP",
+    "IGNORE_KANA",
+    "ignoreMinusSign_ja_JP",
+    "ignoreIterationMark_ja_JP",
+    "ignoreSeparator_ja_JP",
+    "ignoreZiZu_ja_JP",
+    "ignoreBaFa_ja_JP",
+    "ignoreTiJi_ja_JP",
+    "ignoreHyuByu_ja_JP",
+    "ignoreSeZe_ja_JP",
+    "ignoreIandEfollowedByYa_ja_JP",
+    "ignoreKiKuFollowedBySa_ja_JP",
+    "ignoreSize_ja_JP",
+    "ignoreProlongedSoundMark_ja_JP",
+    "ignoreMiddleDot_ja_JP",
+    "ignoreSpace_ja_JP"
+  ],
+  "jbo": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "ka_GE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kab_DZ": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "kk_KZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kkw_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kl_GL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "km_KH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kmr_Latn_TR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kn_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "kng_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ko_KR": [
+    "IGNORE_CASE",
+    "IGNORE_WIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "HALFWIDTH_FULLWIDTH",
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextFormalHangul_ko",
+    "NumToTextFormalLower_ko",
+    "NumToTextFormalUpper_ko",
+    "NumToTextInformalHangul_ko",
+    "NumToTextInformalLower_ko",
+    "NumToTextInformalUpper_ko",
+    "NumToCharHangul_ko",
+    "NumToCharLower_ko",
+    "NumToCharUpper_ko"
+  ],
+  "ky_KG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "la_VA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lb_LU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ldi_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lg_UG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lgr_SB": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "lif_NP": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "lij_IT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lld_IT": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "ln_CD": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lo_LA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "lt_LT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ltg_LV": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "lv_LV": [
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE",
+    "LOWERCASE_UPPERCASE"
+  ],
+  "mai_IN": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "mdw_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mfe_MU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "min_ID": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mk_MK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mkw_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ml_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mn_Cyrl_MN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mn_Mong_MN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mos_BF": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "mr_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ms_MY": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "mt_MT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "my_MM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "myv_RU": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "nb_NO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nds_DE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ne_NP": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ngz_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "njx_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "njy_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nl_BE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nl_NL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nn_NO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "no_NO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nr_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "nso_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ny_MW": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "oc_ES_aranes": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "oc_FR_lengadoc": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "om_ET": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "or_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pa_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pap_BQ": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "pap_CW": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "pdc_US": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pjt_AU": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "pl_PL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "plt_MG": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "pt_AO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pt_BR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pt_MZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pt_PT": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "pui_CO": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "puu_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ro_MD": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ro_RO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ru_RU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "rue_SK": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "rw_RW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sat_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sat_Olck_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sc_IT": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "sdj_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sg_CF": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "shs_CA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sid_ET": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "sk_SK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sl_SI": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "so_SO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sq_AL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_CS": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_Latn_CS": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_Latn_ME": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_Latn_RS": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_ME": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sr_RS": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ss_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "st_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sun_ID": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sv_FI": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sv_SE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "sw_TZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "szl_PL": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ta_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "te_IN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tek_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tg_TJ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "th_TH": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ti_ER": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tk_TM": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tn_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tpi_PG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tr_TR": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ts_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tsa_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tt_RU": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "tyx_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ug_CN": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "uk_UA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ur_PK": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "uz_UZ": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "ve_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "vec_IT": ["LOWERCASE_UPPERCASE", "UPPERCASE_LOWERCASE", "IGNORE_CASE"],
+  "vi_VN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "vif_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "vro_EE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "wa_BE": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "xh_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "xku_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "yi_US": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "yom_CG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ],
+  "zh_CN": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextLower_zh_CN",
+    "NumToTextUpper_zh_CN",
+    "NumToCharLower_zh_CN",
+    "NumToCharUpper_zh_CN",
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "IGNORE_CASE",
+    "IGNORE_WIDTH"
+  ],
+  "zh_HK": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextLower_zh_TW",
+    "NumToTextUpper_zh_TW",
+    "NumToCharLower_zh_TW",
+    "NumToCharUpper_zh_TW",
+    "TextToChuyin_zh_TW",
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "IGNORE_CASE",
+    "IGNORE_WIDTH"
+  ],
+  "zh_MO": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextLower_zh_TW",
+    "NumToTextUpper_zh_TW",
+    "NumToCharLower_zh_TW",
+    "NumToCharUpper_zh_TW",
+    "TextToChuyin_zh_TW",
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "IGNORE_CASE",
+    "IGNORE_WIDTH"
+  ],
+  "zh_SG": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextLower_zh_CN",
+    "NumToTextUpper_zh_CN",
+    "NumToCharLower_zh_CN",
+    "NumToCharUpper_zh_CN",
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "IGNORE_CASE",
+    "IGNORE_WIDTH"
+  ],
+  "zh_TW": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "NumToTextLower_zh_TW",
+    "NumToTextUpper_zh_TW",
+    "NumToCharLower_zh_TW",
+    "NumToCharUpper_zh_TW",
+    "TextToChuyin_zh_TW",
+    "HALFWIDTH_FULLWIDTH",
+    "FULLWIDTH_HALFWIDTH",
+    "IGNORE_CASE",
+    "IGNORE_WIDTH"
+  ],
+  "zu_ZA": [
+    "SENTENCE_CASE",
+    "LOWERCASE_UPPERCASE",
+    "UPPERCASE_LOWERCASE",
+    "TITLE_CASE",
+    "TOGGLE_CASE",
+    "IGNORE_CASE"
+  ]
+}
