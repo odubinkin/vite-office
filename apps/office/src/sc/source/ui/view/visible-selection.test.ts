@@ -164,13 +164,14 @@ it("formats only actual visible selection runs and restores them through native 
     c = s.controller,
     doc = c.shell.GetDocument(),
     d = s.frame.GetDispatcher();
-  /** Reads original Latin weight. @param owner - Actual document. @param row - Cell row. @returns Native weight. */
-  const weight = (owner: typeof doc, row: number) =>
-    (
-      (owner.GetPattern(new ScAddress(0, row, 0)) as ScPatternAttr).GetItem(
-        ATTR_FONT_WEIGHT,
-      ) as SvxWeightItem
-    ).GetWeight();
+  const weight =
+    /** Reads original Latin weight. @param owner - Actual document. @param row - Cell row. @returns Native weight. */
+    (owner: typeof doc, row: number) =>
+      (
+        (owner.GetPattern(new ScAddress(0, row, 0)) as ScPatternAttr).GetItem(
+          ATTR_FONT_WEIGHT,
+        ) as SvxWeightItem
+      ).GetWeight();
   try {
     doc.SetRowHidden(2, 3, 0, true);
     d.Execute(".uno:SelectVisibleRows");
