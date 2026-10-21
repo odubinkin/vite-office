@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/sdi/tabvwsh.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/sdi/scalc.sdi",
+    "localSymbols": [
+      "calcViewCommands",
+      "createCalcViewSlots"
+    ],
+    "upstreamSymbols": [
+      "FID_TOGGLEHEADERS",
+      "FID_TOGGLEFORMULA",
+      "FID_TAB_TOGGLE_GRID"
+    ],
+    "preservedResponsibilities": [
+      "TaskSRFT0T implements original ScViewOptions19boolean fields/defaults/copy and genuine document/view value boundaries;object modes,color,drawing-grid aggregate,configuration/window services and full equality remain explicitly unported. Native View Headers26242 and Show Formulas26250 accept slot bools or invert;headers initially change only the view,formula copies the entire represented view options into the document. Grid25018 ignores arguments,creates selected tab-data slots,changes only current-sheet bShowGrid and marks the document modified without adding history or committing input. Genuine shared Writer View menus/Sfx bindings render native checked states;header offsets and scroll geometry disappear,implicit grid lines hide while real cell frames remain,formula output reads source before cached errors. Shared quote-key canonicalization consumes original QUOTELEFT accelerator. Browser redraw/invalidation projects native paint/resize callbacks;no fake window/modificator/configuration service or alternate model. Native view-settings XML persistence and complete parity remain unported;Writer IO/no-recovery deviations remain."
+    ],
+    "omittedResponsibilities": [
+      "Object modes,color,drawing-grid aggregation,configuration,window services,view-settings XML persistence and complete parity remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/sdi/tabvwsh.ts",
+          "marker": "calcViewCommands"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxBoolItem ToggleSheetGrid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/tabvwsh.sdi",
+          "marker": "FID_TOGGLEHEADERS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/docsh.sdi",
+          "marker": "FID_TAB_TOGGLE_GRID"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/sdi/tabvwsh.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Native view command declarations in scalc.sdi and dispatch interfaces in tabvwsh.sdi/docsh.sdi share one consumed browser Sfx binding module."
+    }
+  }
+}

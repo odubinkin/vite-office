@@ -15,6 +15,7 @@ import {
 } from "react";
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { CalcViewController } from "../controller/calc-view-controller";
+import { ViewOption } from "../../inc/viewopti";
 import { cellPresentation } from "../editor/cell-input";
 import {
   CommandPopupMenu,
@@ -423,7 +424,7 @@ export function CalcWorkbench({
           getCell={
             /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
               pos,
-            ) => cellPresentation(doc, pos)
+            ) => cellPresentation(doc, pos, view.GetOptions().GetOption(ViewOption.FORMULAS))
           }
           onSelect={
             /** Routes pointer selection with shift extension. @param pos - Cell. @param event - Pointer. @returns Nothing. */ (

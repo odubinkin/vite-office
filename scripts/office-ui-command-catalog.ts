@@ -136,7 +136,7 @@ export function convertShortcut(value: string): string {
     ...(modifiers.includes("MOD1") ? ["Ctrl"] : []),
     ...(modifiers.includes("MOD2") ? ["Alt"] : []),
     ...(modifiers.includes("SHIFT") ? ["Shift"] : []),
-    key === "RETURN" ? "Enter" : key,
+    key === "RETURN" ? "Enter" : key === "QUOTELEFT" ? "`" : key,
   ].join("+");
 }
 

@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import type { CalcViewOption } from "../../sdi/tabvwsh";
+import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
@@ -60,6 +62,20 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Queries genuine per-view/per-sheet options for source Sfx state. @param option - Original command group. @returns Native state. */
+  GetViewOptionState(option: CalcViewOption): boolean {
+    if (option === "headers") return this.viewData.IsHeaderMode();
+    if (option === "grid") return this.viewData.GetShowGrid();
+    return this.viewData.GetOptions().GetOption(ViewOption.FORMULAS);
+  }
+  /** Routes original view cases without committing the current input draft. @param option - Command identity. @param request - Actual native request. @returns Nothing. */
+  ExecuteViewOption(option: CalcViewOption, request: SfxRequest): void {
+    if (option === "headers") this.viewShell.ToggleHeaders(request);
+    else if (option === "grid") this.viewShell.ToggleSheetGrid(request);
+    else this.viewShell.ToggleFormula(request);
+    this.Changed();
+  }
+
   /** Routes native indentation through view,document operation and history. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     if (!this.Commit()) return false;
@@ -759,14 +775,17 @@ export class CalcViewController {
       table = doc.FetchTable(this.viewData.GetTabNumber());
     // Shell history emits before the controller restores a deleted active sheet.
     if (!table) return;
-    const bodyHeight = Math.max(1, height - this.viewport.rowHeight);
+    const bodyHeight = Math.max(
+      1,
+      height - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0),
+    );
     const logicalTop =
       Math.min(1, Math.max(0, top) / Math.max(1, this.viewport.scrollHeight - height)) *
       Math.max(0, rowPixels(table, 0, doc.MaxRow()) - bodyHeight);
     const firstRow = rowAtPixel(table, logicalTop, doc.MaxRow());
     const lastRow = rowAtPixel(table, logicalTop + bodyHeight, doc.MaxRow());
     const rows = lastRow - firstRow + 1,
-      bodyWidth = Math.max(1, width - 48),
+      bodyWidth = Math.max(1, width - (this.viewData.IsHeaderMode() ? 48 : 0)),
       logicalLeft =
         Math.min(1, Math.max(0, left) / Math.max(1, this.viewport.scrollWidth - width)) *
         Math.max(0, columnPixels(table, 0, doc.MaxCol()) - bodyWidth),
@@ -788,7 +807,11 @@ export class CalcViewController {
   ScrollLeftForColumn(column: number, clientWidth: number): number {
     const doc = this.shell.GetDocument(),
       table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable,
-      maximum = Math.max(1, columnPixels(table, 0, doc.MaxCol()) - Math.max(1, clientWidth - 48));
+      maximum = Math.max(
+        1,
+        columnPixels(table, 0, doc.MaxCol()) -
+          Math.max(1, clientWidth - (this.viewData.IsHeaderMode() ? 48 : 0)),
+      );
     return (
       Math.min(1, columnPixels(table, 0, column - 1) / maximum) *
       Math.max(0, this.viewport.scrollWidth - clientWidth)
@@ -800,7 +823,8 @@ export class CalcViewController {
       table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable;
     const maximum = Math.max(
       1,
-      rowPixels(table, 0, doc.MaxRow()) - Math.max(1, clientHeight - this.viewport.rowHeight),
+      rowPixels(table, 0, doc.MaxRow()) -
+        Math.max(1, clientHeight - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0)),
     );
     return (
       Math.min(1, rowPixels(table, 0, row - 1) / maximum) *

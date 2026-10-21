@@ -103,11 +103,23 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   const value = text((content.getSharedString() as SharedStringConstReference).getString());
   return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
 }
-/** Projects scalar/formula results without evaluating on the browser side. @param doc - Model. @param pos - Cell. @returns Display value. */
+/** Projects scalar/formula results without evaluating on the browser side. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @returns Display value. */
 export function cellPresentation(
   doc: ScDocument,
   pos: ScAddress,
+  showFormulas = false,
 ): Readonly<{ text: string; alignment: "left" | "right" }> {
+  if (showFormulas) {
+    const formula = doc.GetFormulaCell(pos);
+    if (formula) {
+      const expression = formula.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
+      try {
+        return { text: text(expression), alignment: "left" };
+      } finally {
+        expression.dispose();
+      }
+    }
+  }
   const error = doc.GetErrCode(pos);
   if (error) return { text: errorText(error), alignment: "right" };
   const ref = doc.GetRefCellValue(pos);

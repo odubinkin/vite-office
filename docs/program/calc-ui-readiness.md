@@ -1,5 +1,35 @@
 # Calc UI and ODS implementation critical path
 
+## Current UI block64 — native grid,headers and formula view options
+
+Task `202610210246-SRFT0T` connects original View Headers26242,Show Formulas26250
+and View Grid Lines25018 through actual ScViewOptions/ScViewData/ScTabViewShell
+and the existing shared Writer View menu. The real boolean owner retains all19
+original defaults and value-copy boundaries;object modes,color,drawing-grid
+aggregation,configuration/window services and full equality remain unported.
+
+Header mode initially changes only the current view. Formula mode copies the
+entire represented view options into the document;new views inherit that copy.
+Grid mode ignores arguments and inverts only current-sheet bShowGrid,allocating
+selected sheet data without applying the flag to the group. Original grid
+modification is preserved;headers/formula commands add no history or input commit.
+Hidden headers remove layout/scroll offsets and accessibility header indices.
+Grid visibility combines the original global GRID option and current-sheet flag.
+Transparent no-frame shorthands suppress implicit lines on initial paint and
+updates while actual frames remain. Formula
+output reads genuine source before result/error display;shared canonical key
+mapping uses original QUOTELEFT for the actual browser backtick.
+
+All584Calc tests in173files pass;all132measured owners reach100% coverage:
+S10995/B6833/F2040/L9875. All22related shared/Writer tests pass;the common
+keyboard adapter reaches100% S25/B24/F6/L23. All17related source/catalog tooling
+cases pass;the shared catalog generator reaches100% S80/B47/F14/L69. Writer
+resource regeneration is byte-identical;only the Calc formula shortcut caption
+changes to the readable backtick glyph,with canonical QUOTELEFT dispatch intact.
+Mandatory gates and production build/static pass. Native view-settings XML
+persistence and complete view/widget/device parity remain unported;next full
+all-app checkpoint70.
+
 ## Current UI block63 — pointer/editor ownership and Undo Selection
 
 Task `202610210145-Y1NRHK` confirms and removes browser document text selection

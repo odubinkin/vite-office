@@ -1,4 +1,5 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScViewOptions } from "../../../inc/viewopti";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
@@ -56,6 +57,16 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private readonly pViewOptions = new ScViewOptions();
+  /** Original documen3 borrowed view options. @returns Actual document-owned options. */
+  GetViewOptions(): ScViewOptions {
+    return this.pViewOptions;
+  }
+  /** Original value assignment preserves the borrowed owner identity. @param options - Source options. @returns Nothing. */
+  SetViewOptions(options: ScViewOptions): void {
+    this.pViewOptions.copy_assign(options);
+  }
+
   /** Original document.cxx connected-area delegation;missing sheets leave references untouched. @param tab - Sheet. @param firstCol - Start column. @param firstRow - Start row. @param lastCol - End column. @param lastRow - End row. @param includeOld - Retain input. @param onlyDown - Only final row. @returns Nothing. */
   GetDataArea(
     tab: number,
