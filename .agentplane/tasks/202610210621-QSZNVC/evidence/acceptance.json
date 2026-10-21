@@ -1,0 +1,63 @@
+{
+  "task": "202610210621-QSZNVC",
+  "archiveSha256": "6186e70822189c37270fd89b6d0309193eb2e81e52b8e00b4008a39d61fdc1a8",
+  "sources": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+      "sha256": "ab47b6d5fce5f1f77d3bf27c711044cef26f30815dfdda6162f4f5d0025f002f"
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/use-browser-save-shortcut.test.tsx",
+      "sha256": "40b38f8c73e0d826dce69837ffcd89bb9d59cd171542909d996d4149b54a7855"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-primary-save.test.tsx",
+      "sha256": "54750487fe92d7878ca596b06d33c5439b153cc61e66722b7fb1f295e268be64"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "9933039a4f0029c47066ca44e12ca26240a2893b186779911106871ca9925306"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "e799769351e4bfa65b27fb0d5a2953cd48bedfd8aef2caeade24843e165856b8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/framework/browser/presentation/use-command-shortcuts.ts.json",
+      "sha256": "9f04c798eda44dfd794da5bb1bc4d2effdf1357010f3313fae801352dc5eb2f7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/framework/browser/presentation/use-command-shortcuts.ts.json",
+      "sha256": "d2bbfaf64968e127958481ad64adacf80cf02b1b6cd80073e233090e20dd6733"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task69-accepted-shortcut-results.json",
+    "output/playwright/task69-accepted-shortcut-coverage/coverage-final.json",
+    "output/playwright/task69-accepted-shortcut-coverage/coverage-summary.json",
+    "output/playwright/task69-accepted-calc-results.json",
+    "output/playwright/task69-accepted-calc-coverage/coverage-final.json",
+    "output/playwright/task69-accepted-calc-coverage/coverage-summary.json",
+    "output/playwright/task69-gate-exits.json",
+    "output/playwright/task69-browser-save.txt",
+    "output/playwright/task69-browser-saved-list.txt",
+    "output/playwright/task69-browser-reopened-save.txt",
+    "output/playwright/task69-reopened.txt",
+    "output/playwright/task69-browser-primary-save.png",
+    "output/playwright/task69-gate-lint.log",
+    "output/playwright/task69-gate-format.log",
+    "output/playwright/task69-gate-dependencies.log",
+    "output/playwright/task69-gate-jsdoc.log",
+    "output/playwright/task69-gate-size.log",
+    "output/playwright/task69-gate-tree.log",
+    "output/playwright/task69-gate-provenance.log",
+    "output/playwright/task69-gate-registry.log",
+    "output/playwright/task69-gate-calc-resources.log",
+    "output/playwright/task69-gate-writer-resources.log",
+    "output/playwright/task69-gate-static.log",
+    "output/playwright/task69-gate-routing.log",
+    "output/playwright/task69-gate-doctor.log"
+  ],
+  "importFinding": "Original Downloads sample already persists in current branch: present after browser reload and independently reopened; no duplicate autosave implementation added.",
+  "saveFinding": "Actual Writer capture handler extracted into shared hook and used by both views; in-progress input committed before Calc Flush. Actual Meta+S persisted Browser saved, then reopened after reload."
+}

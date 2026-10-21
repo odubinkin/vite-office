@@ -12,7 +12,7 @@ const raw = JSON.parse(zlib.gunzipSync(packed).toString());
 const read = path => Buffer.from(raw[path], 'base64').toString();
 const json = path => JSON.parse(read(path));
 for (const source of acceptance.sources) assert.equal(sha(fs.readFileSync(source.path)), source.sha256, source.path);
-for (const path of acceptance.rawPaths) assert.ok(raw[path], path);
+for (const path of acceptance.rawPaths) assert.ok(Object.hasOwn(raw, path), path);
 for (const [owner, count, files] of [['calc', 607, 135], ['shortcut', 28, 1]]) {
   const result = json(`output/playwright/task69-accepted-${owner}-results.json`);
   assert.equal(result.numPassedTests, count);
