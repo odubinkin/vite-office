@@ -11,17 +11,20 @@
       "CalcToPoint",
       "ItemToControl",
       "ControlToItem",
-      "MapToFieldUnit"
+      "MapToFieldUnit",
+      "SetFieldUnit"
     ],
     "upstreamSymbols": [
       "CalcToUnit",
       "CalcToPoint",
       "ItemToControl",
       "ControlToItem",
-      "MapToFieldUnit"
+      "MapToFieldUnit",
+      "SetFieldUnit"
     ],
     "preservedResponsibilities": [
-      "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause."
+      "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause.",
+      "TaskDS8CKD connects current Writer metric dialogs through original SetFieldUnit:coarse M/KM and FOOT/MILE mapping,POINT precision narrowing,unit-specific normalized increments and denormalized twip range/value preservation. Native numeric getters/increment storage extend actual MetricSpinButton;browser owns temporary text and controls.No global preference/locale service or full widget-parity claim."
     ],
     "omittedResponsibilities": [
       "Native widget/device helpers, checked-overflow TransformMetric, diagnostics/ABI and complete font-height/document/UI/ODS remain unported or excluded."
@@ -31,12 +34,20 @@
         {
           "path": "apps/office/src/svtools/source/misc/native-unitconv.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svtools/source/misc/unitconv.ts",
+          "marker": "SetFieldUnit"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svtools/source/misc/unitconv.cxx",
           "marker": "CalcToUnit"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/misc/unitconv.cxx",
+          "marker": "void SetFieldUnit"
         }
       ]
     }

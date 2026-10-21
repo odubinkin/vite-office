@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svtools/browser/control/MetricSpinButton.tsx",
+    "rationale": "React DOM presents actual native MetricSpinButton/parser;temporary text is browser-owned.",
+    "responsibilities": [
+      "TaskDS8CKD binds physical Writer twips to original metric parsing,unit aliases,range clipping and normalized stepping. Existing source numeric owners retain semantic responsibility;no fake preferences or locale service is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React text and keyboard events replace native weld widget presentation;original numeric/parser owners remain authoritative."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/browser/control/MetricSpinButton.tsx",
+          "marker": "MetricSpinButton"
+        }
+      ]
+    }
+  }
+}

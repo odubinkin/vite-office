@@ -1,27 +1,24 @@
 /** @fileoverview Presents the native SwTableHeightDlg controls from Writer rowheight.ui. */
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useEffect, useRef, useState } from "react";
-import type { SwTableHeightDlg } from "../../source/ui/table/rowht";
+import { useState } from "react";
+import { SwTableHeightDlg } from "../../source/ui/table/rowht";
 
 /** Renders one native height draft, retaining all mutation in Apply. @param props - Native draft and close handlers. @returns Row height modal. */
 export function WriterRowHeightDialog({
   draft,
+  unit = FieldUnit.CM,
   onCancel,
   onSubmit,
 }: Readonly<{
+  unit?: FieldUnit;
   draft: SwTableHeightDlg;
   onCancel: () => void;
   onSubmit: () => void;
 }>): React.JSX.Element {
   const [, refresh] = useState(0);
   const [help, setHelp] = useState(false);
-  const input = useRef<HTMLInputElement>(null);
-  useEffect(
-    /** Focuses the native dialog's height entry without moving the shell cursor. @returns Nothing. */ () => {
-      (input.current as HTMLInputElement).focus();
-    },
-    [],
-  );
   return (
     <div
       role="dialog"
@@ -55,22 +52,22 @@ export function WriterRowHeightDialog({
         <div className="writer-dialog-content">
           <fieldset className="grid gap-3 rounded border p-3">
             <legend className="px-1 font-bold">Height</legend>
-            <input
-              ref={input}
-              aria-label="Height (cm)"
+            <MetricSpinButton
+              autoFocus
+              unit={unit}
+              aria-label={`Height (${unit === FieldUnit.INCH ? "in" : "cm"})`}
               title="Enter the height that you want for the selected row(s)."
               className="w-28 rounded border px-2 py-1"
-              type="number"
-              min="0.04"
-              max="99"
-              step="0.01"
-              value={Math.round(((draft.height * 2.54) / 1440) * 100) / 100}
-              onChange={
-                /** Dispatches metric input to the native draft. @param event - Height input. @returns Nothing. */
-                (event) => {
-                  draft.SetHeight((Number(event.target.value) * 1440) / 2.54);
+              minimum={SwTableHeightDlg.MINLAY}
+              maximum={SwTableHeightDlg.MAX_HEIGHT}
+              value={draft.height}
+              onValueChange={
+                /** Edits the existing source-owned height draft. @param twips - Accepted height. @returns Nothing. */ (
+                  twips,
+                ) => {
+                  draft.SetHeight(twips);
                   refresh(
-                    /** Presents accepted native metric state. @param version - Previous render. @returns Next render. */ (
+                    /** Presents accepted height. @param version - Previous render. @returns Next render. */ (
                       version,
                     ) => version + 1,
                   );

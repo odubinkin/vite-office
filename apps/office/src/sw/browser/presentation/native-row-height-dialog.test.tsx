@@ -40,7 +40,7 @@ for (const selected of [false, true])
           open();
           const height = screen.getByRole("spinbutton", { name: "Height (cm)" }),
             fit = screen.getByRole("checkbox", { name: "Fit to size" });
-          expect(height).toHaveValue(1.06);
+          expect(height).toHaveAttribute("aria-valuenow", "1.06");
           expect(height).toHaveFocus();
           expect(fit).not.toBeChecked();
           fireEvent.change(height, { target: { value: "1.59" } });
@@ -90,7 +90,10 @@ for (const selected of [false, true])
             fireEvent.change(screen.getByRole("spinbutton", { name: "Height (cm)" }), {
               target: { value: "0" },
             });
-            expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveValue(0.04);
+            expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveAttribute(
+              "aria-valuenow",
+              "0.04",
+            );
             fireEvent.click(screen.getByRole("button", { name: "OK" }));
             expect(rows[0]?.GetFrameSize().GetHeight()).toBe(23);
             expect(rows[0]?.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Fixed);

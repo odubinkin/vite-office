@@ -83,7 +83,7 @@ for (const viewport of [1280, 390]) {
     for (const [i, value] of ["1.76", "1.76", "7.06"].entries())
       await expect(
         page.getByRole("spinbutton", { name: "Column " + (i + 1) + " width (cm)", exact: true }),
-      ).toHaveValue(value);
+      ).toHaveAttribute("aria-valuenow", value);
     await expect(
       page.getByRole("spinbutton", { name: "Column 4 width (cm)", exact: true }),
     ).toBeDisabled();

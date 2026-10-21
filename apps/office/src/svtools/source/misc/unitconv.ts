@@ -1,4 +1,5 @@
 /** @fileoverview Original five scalar metric helpers over common Tools/o3tl owners; native tools::Long uses bigint. */
+import type { MetricSpinButton } from "../../../vcl/source/weld/MetricSpinButton";
 import { convert, Length } from "../../../o3tl/inc/unit_conversion";
 import { MapUnit, MapToO3tlLength } from "../../../tools/inc/mapunit";
 import { FieldUnit, FieldToO3tlLength } from "../../../tools/inc/fldunit";
@@ -47,4 +48,45 @@ export function CalcToPoint(input: bigint, unit: MapUnit, factor: number): bigin
   const from = MapToO3tlLength(unit);
   if (from !== Length.invalid) return convert(input * BigInt(factor & 0xffff), from, Length.pt);
   return 0n;
+}
+
+/** Original field-unit change preserves denormalized twip value/range and sets unit-specific digits and increments. @param field - Actual numeric field. @param unit - Requested display unit. @param all - Retain unrestricted units and original normalized range. @returns Nothing. */
+export function SetFieldUnit(field: MetricSpinButton, unit: FieldUnit, all = false): void {
+  const range = field.get_range(FieldUnit.TWIP),
+    minimum = field.denormalize(range[0]),
+    maximum = field.denormalize(range[1]),
+    value = field.denormalize(field.get_value(FieldUnit.TWIP));
+  if (!all) {
+    switch (unit) {
+      case FieldUnit.M:
+      case FieldUnit.KM:
+        unit = FieldUnit.CM;
+        break;
+      case FieldUnit.FOOT:
+      case FieldUnit.MILE:
+        unit = FieldUnit.INCH;
+        break;
+      default:
+        break;
+    }
+  }
+  field.set_unit(unit);
+  if (unit === FieldUnit.POINT) {
+    if (field.get_digits() > 1) field.set_digits(1);
+  } else field.set_digits(2);
+  switch (unit) {
+    case FieldUnit.CHAR:
+    case FieldUnit.LINE:
+    case FieldUnit.MM:
+      field.set_increments(50n, 500n, unit);
+      break;
+    case FieldUnit.INCH:
+      field.set_increments(2n, 20n, unit);
+      break;
+    default:
+      field.set_increments(10n, 100n, unit);
+      break;
+  }
+  if (!all) field.set_range(field.normalize(minimum), field.normalize(maximum), FieldUnit.TWIP);
+  field.set_value(field.normalize(value), FieldUnit.TWIP);
 }

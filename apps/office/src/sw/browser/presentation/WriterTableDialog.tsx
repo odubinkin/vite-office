@@ -1,4 +1,8 @@
 /** @fileoverview Browser Table and Table Properties tabs modeled on pinned Writer table dialogs. */
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { MetricSpinButton as NativeMetricSpinButton } from "../../../vcl/source/weld/MetricSpinButton";
+import { SetFieldUnit } from "../../../svtools/source/misc/unitconv";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
 
@@ -47,6 +51,7 @@ export interface WriterTableDialogValue extends SwTableProperties {
 /** Selects insertion or properties presentation without sharing their native drafts. @param props - Dialog selection. @returns Selected dialog. */
 export function WriterTableDialog(
   props: Readonly<{
+    unit?: FieldUnit;
     table?: SwTable;
     tableColumns?: SwTabCols | undefined;
     selectedBoxes?: readonly SwTableBox[];
@@ -70,6 +75,7 @@ export function WriterTableDialog(
 /** Presents native table properties. @param props - Original table and handlers. @returns Properties dialog. */
 function WriterTablePropertiesDialog({
   table,
+  unit = FieldUnit.CM,
   tableColumns,
   selectedBoxes,
   borderItems,
@@ -79,6 +85,7 @@ function WriterTablePropertiesDialog({
   onCancel,
   onSubmit,
 }: Readonly<{
+  unit?: FieldUnit;
   table: SwTable;
   tableColumns?: SwTabCols | undefined;
   selectedBoxes?: readonly SwTableBox[];
@@ -165,14 +172,16 @@ function WriterTablePropertiesDialog({
   const [activeTab, setActiveTab] = useState<"table" | "columns" | "text-flow" | "borders">(
     "table",
   );
-  const toCm =
-    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-      twips: number,
-    ): number => Math.round(((twips * 2.54) / 1440) * 100) / 100;
-  const toTwips =
-    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-      cm: number,
-    ): number => Math.round((cm * 1440) / 2.54);
+  const unitLabel =
+    unit === FieldUnit.CM ? "cm" : unit === FieldUnit.INCH ? "in" : FieldUnit[unit].toLowerCase();
+  /** Reads rounded native output without a second centimetre conversion formula. @param twips - Physical value. @returns Display magnitude. */
+  function toDisplay(twips: number): number {
+    const field = new NativeMetricSpinButton();
+    field.set_digits(2);
+    SetFieldUnit(field, unit);
+    field.set_value(field.normalize(BigInt(twips)), FieldUnit.TWIP);
+    return Number(field.get_value(FieldUnit.NONE)) / 10 ** field.get_digits();
+  }
   const field =
     /** Renders a metric field. @param label - Accessible label. @param twips - Current value. @param change - Owner handler. @param disabled - Sensitivity. @param signed - Allows negative spacing. @param formatField - Native format metric identity. @returns Input. */ (
       label: string,
@@ -184,20 +193,15 @@ function WriterTablePropertiesDialog({
     ): React.JSX.Element => (
       <label className="grid gap-1 text-sm font-medium text-slate-700" key={label}>
         {label}
-        <input
+        <MetricSpinButton
+          unit={unit}
           aria-label={label}
           data-writer-table-format-field={formatField}
           className="rounded border border-slate-300 px-2 py-1"
           disabled={disabled}
-          min={signed ? "-999999" : "0"}
-          onChange={
-            /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-              event,
-            ) => change(toTwips(Number(event.target.value)))
-          }
-          step="0.01"
-          type="number"
-          value={toCm(twips)}
+          minimum={signed ? -2147483648 : 0}
+          value={twips}
+          onValueChange={change}
         />
       </label>
     );
@@ -400,7 +404,7 @@ function WriterTablePropertiesDialog({
                     )}
                   </fieldset>
                   {field(
-                    "Table width (cm)",
+                    `Table width (${unitLabel})`,
                     width,
                     /** Dispatches native width editing. @param value - Twips. @returns Nothing. */ (
                       value,
@@ -421,7 +425,7 @@ function WriterTablePropertiesDialog({
                       /** Renders the native metric field. @param metric - Native field. @returns Input. */
                       (metric) =>
                         field(
-                          `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (cm)`,
+                          `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (${unitLabel})`,
                           formatPage.GetFieldValue(metric),
                           /** Dispatches spacing editing. @param value - Twips. @returns Nothing. */ (
                             value,
@@ -474,8 +478,8 @@ function WriterTablePropertiesDialog({
                   )}
                   <div className="text-sm">
                     Remaining space:{" "}
-                    <output aria-label="Remaining space (cm)">
-                      {toCm(columnPage.GetRemainingSpace())}
+                    <output aria-label={`Remaining space (${unitLabel})`}>
+                      {toDisplay(columnPage.GetRemainingSpace())}
                     </output>{" "}
                     cm
                   </div>
@@ -511,32 +515,30 @@ function WriterTablePropertiesDialog({
                       /** Renders the native fixed metric slots, including blank disabled fields. @param _unused - Array entry. @param slot - Native field index. @returns Metric input. */
                       (_unused, slot) => {
                         const value = columnPage.GetFieldValue(slot),
-                          label = `Column ${columnPage.GetFieldColumn(slot) + 1} width (cm)`;
+                          label = `Column ${columnPage.GetFieldColumn(slot) + 1} width (${unitLabel})`;
                         return (
                           <label
                             className="grid min-w-0 gap-1 text-sm font-medium text-slate-700"
                             key={slot}
                           >
                             {label}
-                            <input
-                              type="number"
+                            <MetricSpinButton
+                              unit={unit}
                               aria-label={label}
                               className="min-w-0 rounded border border-slate-300 px-2 py-1"
                               disabled={value === undefined}
-                              min={toCm(columnPage.GetMinimum())}
-                              max={toCm(columnPage.GetMaximum())}
-                              step="0.01"
-                              value={value === undefined ? "" : toCm(value)}
-                              onChange={
-                                /** Dispatches metric edits directly to the source policy owner. @param event - Input event. @returns Nothing. */
-                                (event) => {
-                                  columnPage.ValueChangedHdl(
-                                    slot,
-                                    toTwips(Number(event.target.value)),
-                                  );
+                              minimum={columnPage.GetMinimum()}
+                              maximum={columnPage.GetMaximum()}
+                              value={value}
+                              onValueChange={
+                                /** Dispatches native metric edits to original neighbor compensation. @param twips - Accepted width. @returns Nothing. */ (
+                                  twips,
+                                ) => {
+                                  columnPage.ValueChangedHdl(slot, twips);
                                   refreshPage(
-                                    /** Presents native neighbor compensation. @param version - Display version. @returns Next version. */
-                                    (version) => version + 1,
+                                    /** Presents linked widths. @param version - Previous render. @returns Next render. */ (
+                                      version,
+                                    ) => version + 1,
                                   );
                                 }
                               }

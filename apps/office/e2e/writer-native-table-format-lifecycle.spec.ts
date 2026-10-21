@@ -47,7 +47,7 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("radio", { name: "Left", exact: true }).check();
     await expect(
       page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }),
-    ).toHaveValue("5");
+    ).toHaveAttribute("aria-valuenow", "5");
     await page.getByRole("radio", { name: "Manual", exact: true }).check();
     await page.getByRole("spinbutton", { name: "Left (cm)", exact: true }).fill("1");
     for (const tab of ["Columns", "Text Flow", "Borders", "Table"])
@@ -107,12 +107,12 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("tab", { name: "Table", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }),
-    ).toHaveValue("12.06");
+    ).toHaveAttribute("aria-valuenow", "12.06");
     await page.getByRole("radio", { name: "Automatic", exact: true }).check();
     await page.getByRole("radio", { name: "Left", exact: true }).check();
     await expect(
       page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }),
-    ).toHaveValue("12.06");
+    ).toHaveAttribute("aria-valuenow", "12.06");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(

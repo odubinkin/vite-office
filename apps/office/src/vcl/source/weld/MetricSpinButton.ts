@@ -8,6 +8,8 @@ export class MetricSpinButton {
   private minimum = -2147483648n;
   private maximum = 2147483647n;
   private digits = 0;
+  private step = 1n;
+  private page = 10n;
   private unit = FieldUnit.CM;
   /** Native unit change retains the normalized numeric value. @param unit - Display unit. @returns Nothing. */
   set_unit(unit: FieldUnit): void {
@@ -16,6 +18,26 @@ export class MetricSpinButton {
   /** Native digits change retains normalized numeric value. @param digits - Precision. @returns Nothing. */
   set_digits(digits: number): void {
     this.digits = digits;
+  }
+  /** Original current source-unit query. @returns Field unit. */
+  get_unit(): FieldUnit {
+    return this.unit;
+  }
+  /** Original underlying precision query. @returns Decimal digits. */
+  get_digits(): number {
+    return this.digits;
+  }
+  /** Original increment conversion into current field units. @param step - Normalized small step. @param page - Normalized page step. @param unit - Source unit. @returns Nothing. */
+  set_increments(step: bigint, page: bigint, unit: FieldUnit): void {
+    this.step = this.ConvertValue(step, unit, this.unit);
+    this.page = this.ConvertValue(page, unit, this.unit);
+  }
+  /** Original normalized increment query with unit conversion. @param unit - Output unit. @returns Step and page increments. */
+  get_increments(unit: FieldUnit): readonly [bigint, bigint] {
+    return [
+      this.ConvertValue(this.step, this.unit, unit),
+      this.ConvertValue(this.page, this.unit, unit),
+    ];
   }
   /** Original field conversion through vcl::ConvertValue. @param value - Scaled value. @param input - Source unit. @param output - Target unit. @returns Scaled converted value. */
   ConvertValue(value: bigint, input: FieldUnit, output: FieldUnit): bigint {

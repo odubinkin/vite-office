@@ -47,7 +47,7 @@ for (const width of [1280, 390])
       const height = page.getByRole("spinbutton", { name: "Height (cm)", exact: true }),
         fit = page.getByRole("checkbox", { name: "Fit to size", exact: true });
       await expect(height).toBeFocused();
-      await expect(height).toHaveValue("1.06");
+      await expect(height).toHaveAttribute("aria-valuenow", "1.06");
       await expect(fit).not.toBeChecked();
       await height.fill("1.59");
       await fit.check();

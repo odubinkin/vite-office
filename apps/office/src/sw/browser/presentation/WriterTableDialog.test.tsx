@@ -197,7 +197,10 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "0" },
     });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
-    expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(0.04);
+    expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "0.04",
+    );
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({ width: 6803, columnWidths: [23, 6780] }),
     );

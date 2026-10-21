@@ -35,7 +35,8 @@ for (const viewport of [1280, 390])
     await page.getByRole("button", { name: "Table Properties", exact: true }).click();
     let dialog = page.getByRole("dialog", { name: "Table Properties" });
     await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
-    await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(
+    await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+      "aria-valuenow",
       "5.08",
     );
     await dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("4");
@@ -46,7 +47,8 @@ for (const viewport of [1280, 390])
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       dialog = page.getByRole("dialog", { name: "Table Properties" });
       await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
-      await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(
+      await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+        "aria-valuenow",
         "5.08",
       );
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
@@ -54,7 +56,8 @@ for (const viewport of [1280, 390])
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();
       dialog = page.getByRole("dialog", { name: "Table Properties" });
       await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
-      await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(
+      await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
+        "aria-valuenow",
         "4",
       );
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();

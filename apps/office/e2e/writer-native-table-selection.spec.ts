@@ -63,5 +63,5 @@ test("Writer native keyboard box selection and caret properties context agree", 
     page
       .getByRole("dialog", { name: "Table Properties" })
       .getByLabel("Table width (cm)", { exact: true }),
-  ).not.toHaveValue("0");
+  ).not.toHaveAttribute("aria-valuenow", "0");
 });
