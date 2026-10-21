@@ -4,7 +4,7 @@ title: "Implement mouse sizing of Calc column and row headers"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "604Calc/135owners100;28relatedWriter/common100;native header and pointer100;real browser resize/undo/Escape;13gates0;immutable audit passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T06:13:13.019Z"
+  updated_by: "EVALUATOR"
+  note: "Native header sizing and shared browser tracking meet scoped geometry,selection/history and cancel contracts;strict coverage,related Writer checks,real browser gestures and production gates pass."
+  evaluated_sha: "b12b0fd04c68b54cf5c05e891db9918b9c9c78b6"
+  blueprint_digest: "5d4bc1a3bf5e54b67d0787b1d4cb37943982985ab90ddfb66f7b590516c93914"
+  evidence_refs:
+    - ".agentplane/tasks/202610210524-5678C0/README.md"
+    - ".agentplane/tasks/202610210524-5678C0/quality/20261021-061313019-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210524-5678C0/quality/20261021-061313019-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210524-5678C0/quality/20261021-061313019-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210524-5678C0/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610210524-5678C0/evidence/acceptance.json"
+    - ".agentplane/tasks/202610210524-5678C0/evidence/audit.mjs"
+    - "604Calc/177files/135owners100;28tracking100;header7andpointer9cases100;13gates0;real browser resize/undo/Escape"
+  findings:
+    - "Explicit source commit a4c1896e9511 is recorded and persisted. The implementation retains original size arithmetic,marks/groups/history and cancellation,while shared tracking has exact token equivalence to prior Writer code. All135Calc owners and the shared tracking owner have raw100coverage."
 commit:
   hash: "a4c1896e9511e8ac2ae762e8f79a7cf916abe4d7"
   message: "🧩 5678C0 task: add native mouse sizing and shared Writer window tracking"
