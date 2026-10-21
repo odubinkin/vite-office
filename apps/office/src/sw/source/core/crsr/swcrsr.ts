@@ -3,7 +3,13 @@ import { SwPaM, SwPosition, GoNextPos, GoPreviousPos } from "./pam";
 import { FindText } from "./findtxt";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
-import { SwEndNode, SwTableBoxStartNode, SwTableNode, type SwStartNode } from "../docnode/node";
+import {
+  SwEndNode,
+  SwTableBoxStartNode,
+  SwTableNode,
+  type SwNode,
+  type SwStartNode,
+} from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFrame } from "../text/txtfrm";
 import { SwTable, type SwTableBox } from "../table/swtable";
@@ -19,6 +25,118 @@ export interface SwFindParas {
   DoFind(cursor: SwPaM, backward: boolean, region: SwPaM, readOnly: boolean): number;
   /** Reports whether the strategy mutates document content. @returns Replace mode. */
   IsReplaceMode(): boolean;
+}
+
+/** Original selection-loop contract over live cursor and result rings; progress presentation and UNO/layout/readonly services remain unported. @param paras - Native strategy. @param cursor - Actual receiver. @param backward - Direction. @param found - Native result-head reference. @param region - Reused registered region. @param ranges - Search flags. @param cancel - Cancellation output. @returns Match count. */
+function lcl_FindSelection(
+  paras: SwFindParas,
+  cursor: SwCursor,
+  backward: boolean,
+  found: [SwCursor | undefined],
+  region: SwPaM,
+  ranges: FindRanges,
+  cancel: [boolean],
+): number {
+  const undo = cursor.GetPoint().GetNode().GetDoc().GetUndoManager(),
+    enabled = undo.DoesUndo();
+  let count = 0,
+    current: SwPaM = cursor,
+    saved: SwPaM = cursor,
+    end = false;
+  if ((ranges & FindRanges.InSel) === 0) saved = saved.GetPrev();
+  do {
+    region.SetMark();
+    const lower = region.GetMark(),
+      upper = region.GetPoint();
+    lower.Assign(current.Start().GetNode(), current.Start().GetContentIndex());
+    upper.Assign(current.End().GetNode(), current.End().GetContentIndex());
+    if (backward) region.Exchange();
+    while (lower.compare(upper) <= 0) {
+      const result = paras.DoFind(cursor, backward, region, false),
+        head = found[0];
+      if (
+        result === 0 ||
+        (head !== undefined &&
+          head.GetPoint().compare(cursor.GetPoint()) === 0 &&
+          head.GetMark().compare(cursor.GetMark()) === 0)
+      )
+        break;
+      if ((result & FIND_NO_RING) === 0) {
+        const next = cursor.Create(head);
+        if (head === undefined) found[0] = next;
+        next.SetMark();
+        next.GetMark().Assign(cursor.GetMark().GetNode(), cursor.GetMark().GetContentIndex());
+      }
+      count++;
+      if ((ranges & FindRanges.InSelAll) === 0) {
+        end = true;
+        break;
+      }
+      if (count === 60000 && undo.DoesUndo() && paras.IsReplaceMode()) {
+        const reply = cursor.MaxReplaceArived();
+        if (reply === 2) {
+          undo.DelAllUndoObj();
+          undo.DoUndo(false);
+        } else {
+          end = true;
+          if (reply === 0) cancel[0] = true;
+          break;
+        }
+      }
+      if (backward && upper.compare(cursor.Start()) === 0) GoPreviousPos(cursor.GetMark());
+      else if (!backward && lower.compare(cursor.End()) === 0) GoNextPos(cursor.GetPoint());
+      if (lower.compare(upper) === 0) break;
+      if (backward) upper.Assign(cursor.Start().GetNode(), cursor.Start().GetContentIndex());
+      else lower.Assign(cursor.End().GetNode(), cursor.End().GetContentIndex());
+    }
+    if (end || (ranges & (FindRanges.InSelAll | FindRanges.InSel)) === 0) break;
+    current = current.GetNext();
+  } while (current !== saved && current.GetNext() !== current);
+  if (count !== 0 && found[0] === undefined) found[0] = cursor.Create();
+  undo.DoUndo(enabled);
+  return count;
+}
+/** Original forward section admission; preserves strict endpoints and first-entry mutation ordering. @param start - Lower sentinel. @param end - Upper sentinel. @param pam - Actual cursor. @param first - Continue from current point. @returns Valid nonempty region. */
+function lcl_MakeSelFwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean): boolean {
+  if (start.GetIndex() + 1 === end.GetIndex()) return false;
+  pam.DeleteMark();
+  if (!first) {
+    pam.GetPoint().Assign(start);
+    const node = GoNextPos(pam.GetPoint());
+    if (node === undefined) return false;
+    pam.GetPoint().Assign(node, 0);
+  } else if (
+    start.GetIndex() > pam.GetPoint().GetNodeIndex() ||
+    pam.GetPoint().GetNodeIndex() >= end.GetIndex()
+  )
+    return false;
+  pam.SetMark();
+  pam.GetPoint().Assign(end);
+  const node = GoPreviousPos(pam.GetPoint());
+  if (node === undefined) return false;
+  pam.GetPoint().Assign(node, node.Len());
+  return pam.GetMark().compare(pam.GetPoint()) < 0;
+}
+/** Original backward section admission, using cross-boundary content movement. @param start - Upper sentinel. @param end - Lower sentinel. @param pam - Actual cursor. @param first - Continue from current point. @returns Valid nonempty region. */
+function lcl_MakeSelBkwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean): boolean {
+  if (end.GetIndex() + 1 === start.GetIndex()) return false;
+  pam.DeleteMark();
+  if (!first) {
+    pam.GetPoint().Assign(start);
+    const node = GoPreviousPos(pam.GetPoint());
+    if (node === undefined) return false;
+    pam.GetPoint().Assign(node, node.Len());
+  } else if (
+    end.GetIndex() > pam.GetPoint().GetNodeIndex() ||
+    pam.GetPoint().GetNodeIndex() >= start.GetIndex()
+  )
+    return false;
+  pam.SetMark();
+  pam.GetPoint().Assign(end);
+  const node = GoNextPos(pam.GetPoint());
+  if (node === undefined) return false;
+  pam.GetPoint().SetContent(0);
+  return pam.GetPoint().compare(pam.GetMark()) < 0;
 }
 
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
@@ -114,125 +232,61 @@ export class SwCursor extends SwPaM {
         region.Dispose();
       }
     }
-    const undo = this.GetPoint().GetNode().GetDoc().GetUndoManager(),
-      undoEnabled = undo.DoesUndo();
-    let nFound = 0,
-      stopped = false;
-    const regions: SwPaM[] = [],
-      found: SwPaM[] = [];
-    let savedCursor: SwCursor | undefined;
+    const region = new SwPaM(this.GetPoint()),
+      found: [SwCursor | undefined] = [undefined];
     try {
+      let count = 0;
       if (inSelection) {
-        for (const selection of this.GetRingContainer())
-          if (selection.HasMark())
-            regions.push(
-              new SwPaM(
-                backward ? selection.Start() : selection.End(),
-                backward ? selection.End() : selection.Start(),
-              ),
-            );
+        count = lcl_FindSelection(paras, this, backward, found, region, ranges, cancel);
+        if (count === 0) return 0;
       } else {
-        savedCursor = this.Create(this);
-        const low = this.GetPoint().clone(),
-          high = this.GetPoint().clone();
-        try {
-          this.FillFindPos(
-            all && (ranges & FindRanges.InBodyOnly) === 0
-              ? SwDocPositions.OtherStart
-              : all
-                ? SwDocPositions.Start
-                : start,
-            low,
-          );
-          this.FillFindPos(all ? SwDocPositions.End : end, high);
-          if ((ranges & FindRanges.InOther) !== 0) {
-            const nodes = low.GetNode().GetNodes();
-            low.Assign(nodes.GetEndOfPostIts().StartOfSectionNode());
-            high.Assign(nodes.GetEndOfExtras());
-          }
-          this.DeleteMark();
-          const begin = backward ? high : low,
-            finish = backward ? low : high;
-          this.GetPoint().Assign(begin.GetNode(), begin.GetContentIndex());
-          this.SetMark();
-          this.GetPoint().Assign(finish.GetNode(), finish.GetContentIndex());
-          regions.push(new SwPaM(high, low));
-        } finally {
-          low.Dispose();
-          high.Dispose();
-        }
-      }
-      for (const region of regions) {
-        const lower = region.Start(),
-          upper = region.End();
-        while (lower.compare(upper) <= 0) {
-          const result = paras.DoFind(this, backward, region, false);
-          const previous = found[0];
-          if (
-            result === 0 ||
-            (previous !== undefined &&
-              previous.GetPoint().compare(this.GetPoint()) === 0 &&
-              previous.GetMark().compare(this.GetMark()) === 0)
-          )
-            break;
-          if ((result & FIND_NO_RING) === 0) found.push(new SwPaM(this.GetPoint(), this.GetMark()));
-          nFound++;
-          if (!all) break;
-          if (nFound === 60000 && undo.DoesUndo() && paras.IsReplaceMode()) {
-            const reply = this.MaxReplaceArived();
-            if (reply === 2) {
-              undo.DelAllUndoObj();
-              undo.DoUndo(false);
-            } else {
-              cancel[0] = reply === 0;
-              stopped = true;
-              break;
-            }
-          }
-          // Preserve the source's content-node movement when a replacement leaves a boundary unchanged.
-          if (backward && upper.compare(this.Start()) === 0) GoPreviousPos(this.GetMark());
-          else if (!backward && lower.compare(this.End()) === 0) GoNextPos(this.GetPoint());
-          if (lower.compare(upper) === 0) break;
-          if (backward) upper.Assign(this.Start().GetNode(), this.Start().GetContentIndex());
-          else lower.Assign(this.End().GetNode(), this.End().GetContentIndex());
-        }
-        if ((nFound > 0 && !all) || stopped) break;
-      }
-      if (nFound > 0 && found.length === 0) found.push(new SwPaM(this.GetPoint()));
-      const first = found[0];
-      if (first === undefined) {
-        if (savedCursor !== undefined) {
-          this.GetPoint().Assign(
-            savedCursor.GetPoint().GetNode(),
-            savedCursor.GetPoint().GetContentIndex(),
-          );
-          if (savedCursor.HasMark()) {
+        const saved = this.Create(this),
+          nodes = this.GetPoint().GetNode().GetNodes(),
+          other = (ranges & FindRanges.InOther) !== 0,
+          first = other
+            ? nodes.GetEndOfExtras().GetIndex() >= this.GetPoint().GetNodeIndex()
+            : false,
+          lower =
+            other || (ranges & FindRanges.InBodyOnly) === 0
+              ? nodes.GetEndOfPostIts().StartOfSectionNode()
+              : nodes.GetEndOfContent().StartOfSectionNode(),
+          upper = other ? nodes.GetEndOfExtras() : nodes.GetEndOfContent();
+        if (
+          backward
+            ? lcl_MakeSelBkwrd(upper, lower, this, first)
+            : lcl_MakeSelFwrd(lower, upper, this, first)
+        )
+          count = lcl_FindSelection(paras, this, backward, found, region, ranges, cancel);
+        if (count === 0) {
+          this.GetPoint().Assign(saved.GetPoint().GetNode(), saved.GetPoint().GetContentIndex());
+          if (saved.HasMark()) {
             this.SetMark();
-            this.GetMark().Assign(
-              savedCursor.GetMark().GetNode(),
-              savedCursor.GetMark().GetContentIndex(),
-            );
+            this.GetMark().Assign(saved.GetMark().GetNode(), saved.GetMark().GetContentIndex());
           } else this.DeleteMark();
-          // Original early return keeps the saved cursor linked in the ring (WRITER-024).
+          // Source early return keeps the saved point-only cursor linked (WRITER-024).
+          return 0;
         }
-        return 0;
+        if (other && !all) {
+          const head = found[0] as SwCursor;
+          this.GetPoint().Assign(head.GetPoint().GetNode(), head.GetPoint().GetContentIndex());
+          this.SetMark();
+          this.GetMark().Assign(head.GetMark().GetNode(), head.GetMark().GetContentIndex());
+          head.Dispose();
+          found[0] = undefined;
+          return count;
+        }
       }
-      if (all || inSelection) while (this.GetNext() !== this) this.GetNext().Dispose();
-      this.GetPoint().Assign(first.GetPoint().GetNode(), first.GetPoint().GetContentIndex());
+      while (this.GetNext() !== this) this.GetNext().Dispose();
+      const head = found[0] as SwCursor;
+      this.GetPoint().Assign(head.GetPoint().GetNode(), head.GetPoint().GetContentIndex());
       this.SetMark();
-      this.GetMark().Assign(first.GetMark().GetNode(), first.GetMark().GetContentIndex());
-      if (all)
-        for (let i = 1; i < found.length; i++) {
-          const next = found[i] as SwPaM,
-            member = this.Create(this);
-          member.GetPoint().Assign(next.GetPoint().GetNode(), next.GetPoint().GetContentIndex());
-          member.SetMark();
-          member.GetMark().Assign(next.GetMark().GetNode(), next.GetMark().GetContentIndex());
-        }
-      return nFound;
+      this.GetMark().Assign(head.GetMark().GetNode(), head.GetMark().GetContentIndex());
+      head.GetRingContainer().merge(this.GetRingContainer());
+      head.Dispose();
+      found[0] = undefined;
+      return count;
     } finally {
-      undo.DoUndo(undoEnabled);
-      for (const range of [...regions, ...found]) range.Dispose();
+      region.Dispose();
     }
   }
   /** Queries the original node and native position for its registered frame; native geometric Calc/bidi/selection-overlap remain unported. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */

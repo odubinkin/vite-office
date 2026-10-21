@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
+import { Ring } from "../../../inc/ring";
 import { SwContentNode, type SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -140,7 +141,7 @@ export class SwPosition {
 }
 
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
-export class SwPaM {
+export class SwPaM extends Ring<SwPaM> {
   private inFrontOfLabel = false;
   /** Reads native list-label cursor affinity. @returns Label position state. */
   public IsInFrontOfLabel(): boolean {
@@ -150,8 +151,6 @@ export class SwPaM {
   public SetInFrontOfLabel_(value: boolean): void {
     this.inFrontOfLabel = value;
   }
-  private next: SwPaM = this;
-  private previous: SwPaM = this;
   private point: SwPosition;
   private mark: SwPosition | undefined;
 
@@ -163,37 +162,24 @@ export class SwPaM {
    * @returns Nothing; initializes this range.
    */
   public constructor(point: SwPosition, mark?: SwPosition, ring?: SwPaM) {
+    super(ring);
     this.point = point.clone();
     this.mark = undefined;
     this.Assign(point, mark);
-    if (ring !== undefined) {
-      this.next = ring;
-      this.previous = ring.previous;
-      ring.previous.next = this;
-      ring.previous = this;
-    }
   }
 
   /** Returns the next native range in the circular selection. @returns Next owner. */
   public GetNext(): SwPaM {
-    return this.next;
+    return this.GetNextInRing();
   }
   /** Returns the previous native range in the circular selection. @returns Previous owner. */
   public GetPrev(): SwPaM {
-    return this.previous;
+    return this.GetPrevInRing();
   }
   /** Reports multiple actual selection owners. @returns Whether ring is nontrivial. */
   public IsMultiSelection(): boolean {
-    return this.next !== this;
+    return !this.unique();
   }
-  /** Iterates actual PaMs once around their native ring. @returns Native range iterator. */
-  public *GetRingContainer(): IterableIterator<SwPaM> {
-    yield this;
-    for (let current = this.next; current !== this; current = current.next) {
-      yield current;
-    }
-  }
-
   /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
   public Assign(point: SwPosition, mark?: SwPosition): void {
     const nextPoint = point.clone();
@@ -251,10 +237,7 @@ export class SwPaM {
 
   /** Unregisters both persistent PaM endpoints. @returns Nothing. */
   public Dispose(): void {
-    this.previous.next = this.next;
-    this.next.previous = this.previous;
-    this.next = this;
-    this.previous = this;
+    this.unlink();
     this.point.Dispose();
     this.mark?.Dispose();
     this.mark = undefined;

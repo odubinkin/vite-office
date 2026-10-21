@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/ring.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/inc/ring.hxx",
+    "localSymbols": [
+      "Ring",
+      "RingIterator",
+      "RingContainer"
+    ],
+    "upstreamSymbols": [
+      "Ring",
+      "RingIterator",
+      "RingContainer"
+    ],
+    "preservedResponsibilities": [
+      "Original sw/inc/ring.hxx intrusive ownership: constructor/link-before, unlink reset, MoveTo/self, iterator begin/end/current sentinel and equality assertion, size and exact two-swap merge with both original adjacency assertions. SwPaM consumes this owner and FindAll merges actual result cursor objects. Native const/template/operator/storage syntax is adapted to TypeScript generics, explicit iterator operations and JavaScript iterable protocol; module-internal public link fields represent native friend access. Checked assert uses the existing SAL compiler binding. Source nonadjacent same-ring merge split is preserved and documented as WRITER-028; no whole native service or Writer fidelity certification."
+    ],
+    "omittedResponsibilities": [
+      "Native C++ const/template ABI and process-aborting assert are represented by existing language/compiler boundaries; no compiled full native service equivalence is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/ring.ts",
+          "marker": "Ring"
+        },
+        {
+          "path": "apps/office/src/sw/inc/ring.test.ts",
+          "marker": "testIntrusiveRing"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/inc/ring.hxx",
+          "marker": "class SAL_WARN_UNUSED Ring"
+        },
+        {
+          "path": "sw/qa/core/uwriter.cxx",
+          "marker": "testIntrusiveRing"
+        }
+      ]
+    }
+  }
+}
