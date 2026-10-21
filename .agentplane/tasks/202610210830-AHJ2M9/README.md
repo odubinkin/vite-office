@@ -1,10 +1,11 @@
 ---
 id: "202610210830-AHJ2M9"
 title: "Connect native Writer Properties sidebar panels and paragraph metric slots"
-status: "DOING"
+result_summary: "Implemented the approved Writer Properties consistency slice,completed full regression,test repairs and coverage audit;the next action is immediate goal pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -45,7 +46,9 @@ quality_review:
     - "Actual frame bindings connect Style,Character,Paragraph and contextual Table panels;native LR/UL typed items preserve source defaults,percentage rescaling,selection,history and ODT. Empty paragraph and structural-node regressions use real owners;no generic native services or component parity are fabricated."
     - "The complete application suite passes18034 cases. Thirteen added boundary/default cases pass within27 focused cases;standard Istanbul aggregation requires identical full/focused counter maps and verifies57439 statements,36242 branch arms,10773 functions and52210 lines100 percent across890 executable owners. Seventeen source identities match the evaluated commit. All34 initial Chromium failures match successful reruns;the complete443-case browser discovery and86-case repair union are retained."
     - "All124 isolated inventory cases pass100 percent;tooling,build/static,type,lint/format,resource,docs,size,source-tree/provenance,invariant/parity,doctor and routing evidence is present. The116 committed paths contain115 approved non-task paths and the active task README;branch writer and final tracked state are clean. No merge,network or outside-repository write occurred."
-commit: null
+commit:
+  hash: "444affdf62d768730a59a8903bd6e6f153acd086"
+  message: "🧩 AHJ2M9 feat: connect native Writer Properties panels"
 comments:
   -
     author: "CODER"
@@ -53,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Latest explicit user steering: finish this current task,run full regression now,repair/add tests and inspect coverage,close this same task and pause the goal immediately. This supersedes the prior tenth-leaf cadence. No next task or feature expansion."
+  -
+    author: "CODER"
+    body: "Verified: native Writer Properties panels and paragraph slots are connected through actual frames,history and ODT;complete regression and targeted repairs pass with audited100 percent cumulative coverage. Closing this current task and pausing the goal without another task."
 events:
   -
     type: "status"
@@ -78,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: commit444affdf62d7 passes the complete18034-case regression and all scoped repair checks;audited aggregate coverage is100 percent across890 executable owners,all34 Chromium failures are resolved and124 inventory tests pass100 percent. Quality review passes for the implementation SHA. Close this task and immediately pause the goal."
+  -
+    type: "status"
+    at: "2026-10-21T11:17:51.150Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer Properties panels and paragraph slots are connected through actual frames,history and ODT;complete regression and targeted repairs pass with audited100 percent cumulative coverage. Closing this current task and pausing the goal without another task."
 doc_version: 3
-doc_updated_at: "2026-10-21T11:17:18.808Z"
+doc_updated_at: "2026-10-21T11:17:51.152Z"
 doc_updated_by: "CODER"
 description: "Ninth coherent current-slice consistency leaf after checkpoint9BAAAC: replace paragraph status cards with upstream Style,Character,Paragraph panel composition and actual existing controls;connect native typed LR/UL paragraph slot execution and state to metric controls,history and ODT. Preserve source defaults,source limitations and native JS lifetime. All changes remain on writer branch in vite-office-writer;no network,merges or locale expansion. User approved continuing current-slice work. Full regression remains tenth leaf then repairs,coverage,closure and goal pause."
 sections:
