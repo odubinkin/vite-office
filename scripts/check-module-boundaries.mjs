@@ -219,6 +219,12 @@ const originalCharacterValueImports = new Map([
     new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
   ],
 
+  // Original xcuparser.hxx/cxx directly declares the same XmlReader and Span update callbacks.
+  [
+    "configmgr/source/xcuparser.ts",
+    new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"]),
+  ],
+
   // Original valueparser.hxx/cxx directly owns XmlReader, Span and Pad contracts.
   [
     "configmgr/source/valueparser.ts",

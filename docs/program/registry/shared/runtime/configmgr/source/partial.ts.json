@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/partial.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/partial.ts#Partial",
+        "apps/office/src/configmgr/source/partial.test.ts",
+        "configmgr/source/partial.cxx"
+      ],
+      "justification": "Original Partial include-then-exclude tree construction, Data segment grammar/canonicalization and exact containment accumulator/prefix predicates. Map keys erase native OUString unordered content keys to primitive UTF16 strings without exposing iteration policy. Preserve included-root empty-path result (WRITER-026), ignored deep exclusions with missing intermediate nodes (WRITER-030), root exclusion and canonical set-element mismatch behavior. No corrected prefix policy, configuration provider or full native ABI/service equivalence is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Partial",
+        "contains"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "configmgr/source/partial.cxx",
+      "upstreamSymbols": [
+        "Partial",
+        "contains"
+      ]
+    }
+  }
+}
