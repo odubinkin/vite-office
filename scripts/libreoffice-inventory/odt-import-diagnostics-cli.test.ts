@@ -1,16 +1,16 @@
 /** @fileoverview Verifies the local diagnostic CLI's redacted output and argument failures. */
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { runOdtImportDiagnosticsCli } from "./odt-import-diagnostics-cli-runner";
 
 const originalArgv = process.argv;
 const originalExitCode = process.exitCode;
 
 afterEach(
-  /** Restores process state after each CLI import. @returns Nothing. */ () => {
+  /** Restores process state after each CLI execution. @returns Nothing. */ () => {
     process.argv = originalArgv;
     process.exitCode = originalExitCode;
     vi.restoreAllMocks();
-    vi.resetModules();
   },
 );
 
@@ -39,13 +39,12 @@ describe("ODT diagnostic CLI", /** Groups local CLI assertions. @returns Nothing
       .spyOn(process.stderr, "write")
       .mockImplementation(/** Swallows test stderr. @returns Accepted write. */ () => true);
     process.argv = ["node", "odt-import-diagnostics-cli.ts"];
-    await import("./odt-import-diagnostics-cli");
+    await runOdtImportDiagnosticsCli([]);
     expect(process.exitCode).toBe(2);
     expect(String(stderr.mock.calls[0]?.[0])).toContain("Usage:");
 
-    vi.resetModules();
     process.argv = ["node", "odt-import-diagnostics-cli.ts", "/missing-private-path.odt"];
-    await import("./odt-import-diagnostics-cli");
+    await runOdtImportDiagnosticsCli(process.argv.slice(2));
     expect(process.exitCode).toBe(1);
     expect(String(stderr.mock.calls[1]?.[0])).toBe(
       "ODT diagnostic could not read or inspect the package.\n",
