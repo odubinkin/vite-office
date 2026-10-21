@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610210117-DRAYC7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T01:36:05.156Z",
+  "verdict": "rework",
+  "summary": "Final log audit found an unpassed required JSDoc gate in the new test helper;the earlier pass is superseded.",
+  "evaluated_sha": "11d5d6b68a72010c16b7fa3d7396a9a2842d3f7c",
+  "blueprint_digest": "cee5fbd36ffe1ea5599fbae22551ed39445eeaca90cd91ead9513f6563551549",
+  "findings": [
+    "task62-jsdoc.log reports visible-selection.test.ts line168 missing function JSDoc. Earlier command chaining preserved the failed log but returned the later command status;the pass summary incorrectly assumed this gate succeeded. Fix the in-scope test annotation,prove emitted test/runtime behavior unchanged,recheck docs and focused tests,and refresh evidence before fresh quality review."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610210117-DRAYC7/README.md",
+    "output/playwright/task62-jsdoc.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
