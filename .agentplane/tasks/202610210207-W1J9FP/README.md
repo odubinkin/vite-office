@@ -1,10 +1,11 @@
 ---
 id: "202610210207-W1J9FP"
 title: "Implement native XCU updates and partial configuration filtering"
-status: "DOING"
+result_summary: "Implement native XCU updates and partial configuration filtering"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -51,11 +52,16 @@ quality_review:
     - "Partial retains native include/exclude and literal canonical-path predicates. WRITER026 remains preserved; WRITER030-033 document the observed exclusion,locale filtering,metadata-order and canonical-set path quirks with source/portable evidence and consumer reachability limits."
     - "Complete unchanged Common.xcu with original notices and exact SHA is parsed against complete Common.xcs. Tests prove the schema-empty remembered-search value becomes10 and all30 source search bool defaults remain. Raw installation-module metadata is parser-ignored data; this is not platform selection or global settings activation."
     - "255 current related config/XML scenarios in17 files pass; complete XcuParser/Partial coverage is100 percent across551 statements,383 branches,42 functions and507 lines. Source-exact boundary data passes47 tooling cases; current types/static/style/source/docs/inventory/policy gates pass with no exclusion,threshold or verification weakening."
-commit: null
+commit:
+  hash: "ff1a000edf9b64d6c991e4bc418657a0505e912a"
+  message: "🔧 W1J9FP config: implement native XCU updates and partial filtering"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved parent configuration/search prerequisite with complete native XCU update and Partial semantics, real XML/node owners and targeted evidence only."
+  -
+    author: "CODER"
+    body: "Verified: Complete native XCU update/Partial family passes255 related cases and100-percent scoped coverage,actual Common.xcu/schema/default/hash/license and typed sequence checks,47 boundary tests and current types/static/source/style/inventory/policy gates. Formal EVALUATOR passes ff1a000edf9b; WRITER030-033 preserved and parent provider/search UI remains open."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete native XcuParser/Partial family passes255 related scenarios in17 files with strict100 percent coverage (551 statements,383 branches,42 functions,507 lines). Real complete schema/update/default/hash/license and typed sequence checks, static/types/style/source/inventories/policy gates pass. WRITER030-033 preserved; no provider/UI/global I/O activation claim."
+  -
+    type: "status"
+    at: "2026-10-21T02:28:08.249Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete native XCU update/Partial family passes255 related cases and100-percent scoped coverage,actual Common.xcu/schema/default/hash/license and typed sequence checks,47 boundary tests and current types/static/source/style/inventory/policy gates. Formal EVALUATOR passes ff1a000edf9b; WRITER030-033 preserved and parent provider/search UI remains open."
 doc_version: 3
-doc_updated_at: "2026-10-21T02:26:36.740Z"
+doc_updated_at: "2026-10-21T02:28:08.251Z"
 doc_updated_by: "CODER"
 description: "Continue the approved Writer search configuration feature with full original configmgr XcuParser and Partial responsibility family, real XCS node updates, layer/finalization/mandatory operations, localized values and modification/addition paths. Parse unchanged pinned Common.xcu against actual Common.xcs without activating a global provider or I/O policies."
 sections:
@@ -149,6 +162,10 @@ sections:
     Initial dependency check rejected the new configmgr-to-xmlreader imports. Original xcuparser.hxx/cxx explicitly declares XmlReader/Span. Only the exact corresponding source-file allowlist data is added; all47 tooling tests and current dependency enforcement pass. Native SAL_WARN output routing is not supplied by this foundation;ignored-state/exception decisions remain source-shaped. Existing semantic status/default/contract/classification fields remain unchanged;new records stay foundation/unverified.
 
     Residual work: actual Components/provider/access/global configuration lifetime,platform installation selection and external value resolution;SvxSearchItem/SvtSearchOptions integration,transliteration/regex/word services,remaining cursor scopes and browser Find toolbar/dialog all remain pending in parent6B984M. No external ICU read or network permission is inferred;no merges/publication or overall Writer completion claim.
+extensions:
+  implementation_commit:
+    hash: "ff1a000edf9b64d6c991e4bc418657a0505e912a"
+    message: "🔧 W1J9FP config: implement native XCU updates and partial filtering"
 id_source: "generated"
 ---
 ## Summary
