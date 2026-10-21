@@ -1,5 +1,31 @@
 # Calc UI and ODS implementation critical path
 
+## Full verification checkpoint — block60
+
+Task `202610202340-96KNS6` completes the required full application checkpoint:
+17463tests in1101authored files pass,with no failures,pending cases or source changes
+to the application runtime/test/data graph. Raw Istanbul coverage is100%:
+S54390/B34361/F10459/L49438 across839measured modules. Source scopes are
+Calc130(S10688/B6621/F1997/L9599),shared498(S27699/B16162/F4935/L25301),
+and Writer211(S16003/B11578/F3527/L14538),all100%.
+
+All997registered modules are accounted for:839measured,155declaration/reexport
+modules with no executable statements,two existing configuration exclusions(main
+bootstrap and test helper),and the unchanged Dedicated Worker bootstrap annotation.
+The annotation's source hash matches the pre-checkpoint Git commit;no new exclusion
+or threshold change was introduced. Coverage scopes follow the actual source-root
+filters;15historical common-module records retain Writer consumer tags.
+
+The checkpoint fixes two misplaced application integration tests,stale69/81known-token
+diagnostic counts and import-time CLI argument isolation. All87tooling tests and
+123inventory cases pass,with complete inventory coverage100%. All16Calc/Writer/shared
+Chromium and DOM-freeWorker regressions pass. The complete serial application run
+replaces an explicitly interrupted failing concurrent experiment;all raw evidence
+and failures remain retained. Source/native pins and portable audits are recorded
+in the task. This checkpoint does not claim complete Calc UI or native parity.
+The next complete application checkpoint is70;ordinary blocks use affected owners
+and actual consumers.
+
 ## Current shared dependency — task59 shared native paper geometry
 
 Task `202610202322-0HHKNT` adds original86entry Paper/PaperInfo physical values,
