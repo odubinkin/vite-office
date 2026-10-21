@@ -1,10 +1,11 @@
 ---
 id: "202610210509-DS8CKD"
 title: "Connect native metric entry to Writer dimension dialogs"
-status: "DOING"
+result_summary: "Connected Writer page/table/column/row-height/numbering metric fields to actual native unit parsing and SetFieldUnit precision/increments,preserving physical state and ODT/history contracts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/writer-metric-entry/verification.txt"
   findings:
     - "Real SetFieldUnit mapping/precision/increments and native parser own values;browser text/spin controls feed original Writer draft/table/shell policies. Exact physical/ODT/history assertions remain.50 related cases,strict100 three-owner coverage,18 Chromium cases and6 overlapping explicit-unit cases pass."
-commit: null
+commit:
+  hash: "62ce04f21f1b10998be3fbf247e38d052bc78275"
+  message: "✅ DS8CKD verification: exercise explicit units in actual Chromium fields"
 comments:
   -
     author: "CODER"
     body: "Start: connect actual metric parser and conversion owners to existing Writer dimension dialogs with native unit suffixes and physical-value verification."
+  -
+    author: "CODER"
+    body: "Verified: native metric entry in current Writer dimension dialogs;50 related cases,three-owner strict100 coverage,18 Chromium scenarios and6 overlapping explicit-unit updates,types/static and declared gates pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified:20 shared/Calc and30 Writer cases;strict100 for all three metric owners;18 Chromium cases plus6 overlapping suffix updates;types/static/style/inventories/declared gates pass.No full run at seventh leaf."
+  -
+    type: "status"
+    at: "2026-10-21T05:46:30.362Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native metric entry in current Writer dimension dialogs;50 related cases,three-owner strict100 coverage,18 Chromium scenarios and6 overlapping explicit-unit updates,types/static and declared gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-21T05:45:17.671Z"
+doc_updated_at: "2026-10-21T05:46:30.367Z"
 doc_updated_by: "CODER"
 description: "Prioritize existing Writer slice consistency:replace hardcoded centimetre numeric inputs in page,table,column,row-height and line-number dialogs with shared browser presentation of actual MetricSpinButton/parser;support explicit unit suffixes,locale decimals,defined ranges and physical-value preservation through ODT. No deeper locale services or invented settings facade."
 sections:
@@ -142,6 +155,10 @@ sections:
     This is the seventh completed leaf since9BAAAC when closed. All runs here are related/targeted,not the next full test checkpoint. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal immediately and start no further task. Do not mark overall Writer objective complete.
 
     Final current-source acceptance:20 related shared/Calc scenarios at strict S123/B100/F31/L114 all100 percent;30 Writer scenarios and18 selected Chromium scenarios pass. Strengthen existing row/column browser ingress with explicit15.9mm/50mm;all6 cases in those two files pass again,overlapping the18. Final types/build/static/style/provenance/inventories/docs/tree/size/dependency/tooling gates pass. Full test suite is intentionally not run at seventh leaf.
+extensions:
+  implementation_commit:
+    hash: "62ce04f21f1b10998be3fbf247e38d052bc78275"
+    message: "✅ DS8CKD verification: exercise explicit units in actual Chromium fields"
 id_source: "generated"
 ---
 ## Summary
