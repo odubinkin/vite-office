@@ -1,10 +1,11 @@
 ---
 id: "202610210319-37V8XQ"
 title: "Implement Unicode diacritic and Japanese ignore module contracts"
-status: "DOING"
+result_summary: "Implemented Unicode diacritic folding and six Japanese ignore modules with preserved source offsets and verified native JavaScript normalization"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -46,11 +47,16 @@ quality_review:
     - "457 current related tests and85 focused tests pass;seven new modules have100 percent statements branches functions and lines. Added OUString/rtl forwarding functions have complete statement and branch counters. The failed whole-legacy-file coverage run remains reported honestly."
     - "Node24 and Chromium151 each pass200340 ICU78.3 Unicode17 normalization assertions and1114112 category comparisons;actual browser module acceptance preserves original UTF16 offsets,Hangul scope differences and scalar fallback."
     - "Thirty-eight non-task paths fit the approved46;exact named dependency data,source metadata,types,static build,style,docs,tooling,inventory and policy gates pass. WRITER037-038 behavior is preserved. Native JS memory/lifetime is retained."
-commit: null
+commit:
+  hash: "712d08f1ec1228331cbc70125bddd9f3d7f2ac43"
+  message: "🔧 37V8XQ transliteration: preserve Unicode diacritic and Japanese ignore contracts"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved Unicode diacritic and Japanese ignore module prerequisite with native JavaScript memory and equivalent normalization, preserving original UTF16 offset contracts."
+  -
+    author: "CODER"
+    body: "Verified: Original diacritic and six Japanese modules,actual OUString/rtl codepoint forwarding and source quirks pass457 related tests and85 focused tests. Seven new modules have strict100 percent coverage;new forwarding counters are covered. Complete ICU normalization/category conformance passes in Node/Chromium and actual browser module acceptance passes. Types/static/style/source/tooling/inventory/policy gates pass. Parent integration remains pending;fourth leaf since9BAAAC and stop-after-next-full-checkpoint instruction retained."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "457 related and85 focused scenarios pass;seven new modules strict100 percent,all added SAL forwarding counters covered. Node/Chromium ICU78.3 Unicode17 normalization/category corpus passes,actual Chromium module acceptance passes. Types/static/style/source/tooling/inventory/policy gates pass;WRITER037-038 preserved. Parent service/UI work and future full-checkpoint stop remain explicit."
+  -
+    type: "status"
+    at: "2026-10-21T03:35:27.067Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original diacritic and six Japanese modules,actual OUString/rtl codepoint forwarding and source quirks pass457 related tests and85 focused tests. Seven new modules have strict100 percent coverage;new forwarding counters are covered. Complete ICU normalization/category conformance passes in Node/Chromium and actual browser module acceptance passes. Types/static/style/source/tooling/inventory/policy gates pass. Parent integration remains pending;fourth leaf since9BAAAC and stop-after-next-full-checkpoint instruction retained."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:34:30.455Z"
+doc_updated_at: "2026-10-21T03:35:27.071Z"
 doc_updated_by: "CODER"
 description: "Continue approved Writer search dependency plan with native ignoreDiacritics_CTL scalar/string/offset behavior, actual rtl/OUString codepoint iteration and six source Japanese ignore modules. Use native JS normalization only with ICU78.3 conformance evidence; preserve source quirks and JavaScript memory/lifetime behavior."
 sections:
@@ -146,6 +159,10 @@ sections:
     The expanded first coverage scope deliberately included whole old SAL/OUString files: all456 scenarios passed but overall coverage failed (S92.74/B91.54/F86.36/L93.47 percent) on unchanged legacy methods. Retain tests-related.log as a failed coverage gate,not a pass. New forwarding functions' complete counters are verified separately from that report;the first evidence-extraction script failed because class methods have anonymous Istanbul names,then selecting exact source declarations verified both functions with all statements/branches hit. Current related457-scenario and focused85-scenario runs pass the unchanged strict100 thresholds for all seven new modules. No test/threshold/exclusion/skip/timer weakening or new tests merely mirroring old implementation were introduced.
 
     Formal committed EVALUATOR review and final clean status follow implementation persistence. Preserve the user stop-after-next-full-checkpoint instruction;this leaf is the fourth since9BAAAC and does not itself trigger the full-run cadence. Keep parent and goal active until that future checkpoint closure,then use paused rather than claiming the unfinished Writer objective complete.
+extensions:
+  implementation_commit:
+    hash: "712d08f1ec1228331cbc70125bddd9f3d7f2ac43"
+    message: "🔧 37V8XQ transliteration: preserve Unicode diacritic and Japanese ignore contracts"
 id_source: "generated"
 ---
 ## Summary
