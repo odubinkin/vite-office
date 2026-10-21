@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610210633-YZ2Z34",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T07:11:07.189Z",
+  "verdict": "pass",
+  "summary": "Complete final checkpoint passes all application, tooling, inventory and browser acceptance; close and pause under the human stop rule.",
+  "evaluated_sha": "44677aacccfd931c96c011bdb8d12aa11180c157",
+  "blueprint_digest": "2ee02509124bf9f9171d1c7ac967fd1760eb99b6c01929639357b7b6f41376fa",
+  "findings": [
+    "Raw reports prove17569 application cases across1126files and856owners100;443 distinct browser scenarios pass with exact identity-matched repairs for3 initial failures;88tooling and123inventory100 pass;14full gates and5repair checks pass. Source hashes and positive counter maps audit successfully. Browser repairs change only synchronization and native role assertions;all production and unit sources remained unchanged during full coverage."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610210633-YZ2Z34/README.md",
+    ".agentplane/tasks/202610210633-YZ2Z34/evidence/acceptance.json",
+    ".agentplane/tasks/202610210633-YZ2Z34/evidence/audit.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Human-reported ODS export size limit exceeded for5000rows is explicitly deferred;do not investigate or fix until the human resumes the goal. This checkpoint does not claim broad Calc or all-size storage parity."
+  ]
+}
