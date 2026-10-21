@@ -8,7 +8,7 @@ import { SvxBorderLine } from "../../../editeng/source/items/borderline";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { RES_BOX } from "../../inc/hintids";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterTableDialog } from "../presentation/WriterTableDialog";
 
@@ -70,7 +70,10 @@ it("native empty box guides preserve column geometry and dialog retains a custom
       "data-writer-border-state",
       "1",
     );
-    expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(0);
+    expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
   } finally {
     session.Close();
   }

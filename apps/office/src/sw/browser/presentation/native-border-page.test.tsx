@@ -13,7 +13,7 @@ import {
 import { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
@@ -170,7 +170,7 @@ it("native page presents six lines, source presets and separate padding/style/co
     screen.getByRole("combobox", { name: "Border line style" }).querySelectorAll("option"),
   ).toHaveLength(18);
   expect(screen.getByRole("checkbox", { name: "Synchronize" })).not.toBeChecked();
-  expect(screen.getByRole("spinbutton", { name: "Left padding (cm)" })).toHaveValue(0.31);
+  expect(screen.getByRole("spinbutton", { name: "Left padding (cm)" })).toHaveValue("0.31 cm");
   expect(screen.queryByRole("combobox", { name: "Cell border" })).toBeNull();
   expect(screen.queryByRole("spinbutton", { name: "Cell padding (cm)" })).toBeNull();
 });
@@ -254,7 +254,7 @@ it("empty native metric displays blank and transitions through actual browser in
   f.input.InvalidateItem(1);
   const page = new SvxBorderTabPage(f.input, 1);
   render(<Host page={page} />);
-  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue(null);
+  expect(screen.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("");
   fireEvent.change(screen.getByRole("spinbutton", { name: "Top padding (cm)" }), {
     target: { value: "0.1" },
   });

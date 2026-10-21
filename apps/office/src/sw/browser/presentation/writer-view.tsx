@@ -11,10 +11,9 @@ import { TableProperties } from "lucide-react";
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
-import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
-import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
-import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
-import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { WriterDialogPresenter } from "./WriterDialogPresenter";
+import { WriterOptionsDialog } from "./WriterOptionsDialog";
+import { ApplyWriterMetricItemSet } from "../../source/uibase/app/appopt";
 import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
 import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
 import { SwTableHeightDlg } from "../../source/ui/table/rowht";
@@ -129,6 +128,7 @@ export function WriterWorkbench({
     (table) => table.GetName(),
   );
   const suggestedTableName = activeDocument.GetUniqueTableName();
+  const [optionsDialog, setOptionsDialog] = useState(false);
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [tableBorderItems, setTableBorderItems] =
     useState<ReturnType<typeof TableParamToItemSet>>();
@@ -149,6 +149,11 @@ export function WriterWorkbench({
       const browserDialogShell = createSfxShell(
         null,
         createWriterInterface([
+          {
+            id: WRITER_COMMAND_IDS.optionsDialog,
+            execute: /** Opens real Writer module options. @returns Nothing. */ () =>
+              setOptionsDialog(true),
+          },
           {
             id: WRITER_COMMAND_IDS.insertTable,
             capabilityId: "CAP-0137",
@@ -509,6 +514,7 @@ export function WriterWorkbench({
                 commandSource={commandSource}
                 getCommandResource={getLocalizedCommandResource}
                 paragraph={snapshot.activeParagraph.computedStyle}
+                unit={snapshot.metricUnit}
                 {...(dialogRequest?.request.kind === "paragraph"
                   ? { dialogRequest: { id: dialogRequest.id, request: dialogRequest.request } }
                   : {})}
@@ -586,6 +592,7 @@ export function WriterWorkbench({
         }
         rulers={
           <WriterRulers
+            unitData={snapshot.horizontalRulerUnitData}
             documentDragRef={documentRuler}
             documentOwner={activeDocument}
             horizontalVisible={snapshot.isHorizontalRulerVisible && isActive}
@@ -695,6 +702,7 @@ export function WriterWorkbench({
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler
+                unitData={snapshot.verticalRulerUnitData}
                 onPageChange={
                   /** Commits a vertical-ruler margin gesture. @param edge - Dragged edge. @param delta - Twip delta. @returns Nothing. */
                   (edge, delta) => {
@@ -708,8 +716,25 @@ export function WriterWorkbench({
         />
       </WriterWorkspaceChrome>
       {contextMenu}
+      {optionsDialog ? (
+        <WriterOptionsDialog
+          view={view}
+          onClose={
+            /** Discards remaining option drafts. @returns Nothing. */ () => setOptionsDialog(false)
+          }
+          onApply={
+            /** Applies original metric items before platform persistence. @param items - Native changed fields. @returns Nothing. */ (
+              items,
+            ) => {
+              ApplyWriterMetricItemSet(view.GetModule(), items, view);
+              services?.layoutPreferences?.Save(view.GetModule().GetUsrPref(false));
+            }
+          }
+        />
+      ) : null}
       {tableDialog === undefined ? null : (
         <WriterTableDialog
+          unit={snapshot.metricUnit}
           boxAlign={view.GetWrtShell().GetBoxAlign()}
           occupiedNames={occupiedTableNames}
           suggestedName={suggestedTableName}
@@ -732,6 +757,7 @@ export function WriterWorkbench({
       )}
       {rowHeightDialog === undefined ? null : (
         <WriterRowHeightDialog
+          unit={snapshot.metricUnit}
           draft={rowHeightDialog}
           onCancel={
             /** Discards the row-height draft. @returns Nothing. */ () =>
@@ -747,6 +773,7 @@ export function WriterWorkbench({
       )}
       {lineNumberingDialog ? (
         <WriterLineNumberingDialog
+          unit={snapshot.metricUnit}
           value={snapshot.lineNumberInfo}
           onCancel={
             /** Discards line-numbering draft. @returns Nothing. */ () =>
@@ -762,79 +789,11 @@ export function WriterWorkbench({
           }
         />
       ) : null}
-      {dialogRequest?.request.kind !== "hyperlink" ? null : (
-        <WriterHyperlinkDialog
-          {...(dialogRequest.request.initialHyperlink === undefined
-            ? {}
-            : { initialHyperlink: dialogRequest.request.initialHyperlink })}
-          onCancel={
-            /** Cancels the exact shell-owned dialog request. @returns Nothing. */ () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Completes the exact shell-owned dialog request. @param hyperlink - Link metadata. @param text - Optional inserted text. @returns Nothing. */
-            (hyperlink, text) => {
-              dialogController.Complete(dialogRequest.id, {
-                hyperlink,
-                text,
-              });
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "bookmark" ? null : (
-        <WriterBookmarkDialog
-          names={dialogRequest.request.names}
-          {...(dialogRequest.request.selectedName === undefined
-            ? {}
-            : { selectedName: dialogRequest.request.selectedName })}
-          onCancel={
-            /** Cancels the bookmark request. @returns Nothing. */
-            () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Applies one bookmark choice. @param result - Accepted operation. @returns Nothing. */
-            (result) => {
-              dialogController.Complete(dialogRequest.id, result);
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "insert-break" ? null : (
-        <WriterInsertBreakDialog
-          onCancel={
-            /** Cancels Insert Break. @returns Nothing. */
-            () => {
-              dialogController.Cancel(dialogRequest.id);
-            }
-          }
-          onSubmit={
-            /** Inserts a hard page break. @returns Nothing. */
-            () => {
-              dialogController.Complete(dialogRequest.id, { breakKind: "page" });
-            }
-          }
-        />
-      )}
-      {dialogRequest?.request.kind !== "page-style" ? null : (
-        <WriterPageStyleDialog
-          initialValue={dialogRequest.request.initialValue}
-          onCancel={
-            /** Cancels the exact Page Style request. @returns Nothing. */ () =>
-              dialogController.Cancel(dialogRequest.id)
-          }
-          onSubmit={
-            /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @returns Nothing. */ (
-              pageDescriptor,
-            ) => {
-              dialogController.Complete(dialogRequest.id, { pageDescriptor });
-            }
-          }
-        />
-      )}
+      <WriterDialogPresenter
+        controller={dialogController}
+        request={dialogRequest}
+        unit={snapshot.metricUnit}
+      />
       {renameCollision === undefined ? null : (
         <div
           aria-label="Resolve document name"

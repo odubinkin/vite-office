@@ -33,6 +33,7 @@ interface CommandSpec {
 const upstreamRoot = "vendor/libreoffice-reference";
 const outputPath = "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json";
 const specs: readonly CommandSpec[] = [
+  { commandUrl: ".uno:OptionsTreeDialog", showsDialog: true },
   { commandUrl: ".uno:CenterPara", semantics: "radio" },
   { commandUrl: ".uno:JustifyPara", semantics: "radio" },
   { commandUrl: ".uno:StartPara", semantics: "radio" },
@@ -101,6 +102,7 @@ const specs: readonly CommandSpec[] = [
 ];
 
 const commandAliases = {
+  optionsDialog: ".uno:OptionsTreeDialog",
   alignCenter: ".uno:CenterPara",
   alignJustify: ".uno:JustifyPara",
   alignLeft: ".uno:StartPara",
@@ -201,6 +203,7 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:LineNumberingDialog": "CAP-0125",
   ".uno:JustifyPara": "CAP-0112",
   ".uno:Open": "CAP-0113",
+  ".uno:OptionsTreeDialog": "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033",
   ".uno:PageDialog": "CAP-0136",
   ".uno:ParagraphDialog": "CAP-0125",
   ".uno:Paste": "CAP-0110",
@@ -260,6 +263,7 @@ const inventoryAliasNames = [
   "insertColumnsAfter",
   "newDocument",
   "openOdt",
+  "optionsDialog",
   "pageDialog",
   "paragraphDialog",
   "orderedList",

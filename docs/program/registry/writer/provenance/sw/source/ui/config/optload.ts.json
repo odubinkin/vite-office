@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/ui/config/optload.ts",
+    "upstreamPath": "sw/source/ui/config/optload.cxx",
+    "localSymbols": [
+      "SwLoadOptPage"
+    ],
+    "upstreamSymbols": [
+      "SwLoadOptPage::FillItemSet"
+    ],
+    "preservedResponsibilities": [
+      "TaskXBHM4Z: Original General metric catalog,Reset and changed-only typed metric output;default-tab controls and other General settings remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly consumed measurement responsibilities are represented;full native module and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/ui/config/optload.ts",
+          "marker": "SwLoadOptPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/config/optload.cxx",
+          "marker": "SwLoadOptPage::FillItemSet"
+        }
+      ]
+    }
+  }
+}

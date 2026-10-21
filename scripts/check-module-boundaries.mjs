@@ -207,15 +207,13 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
-  // Browser projection of svtools SetFieldUnit consumes only the real VCL numeric owner,unit aliases and shared system-locale fields.
+  // The persistent browser binding owns only actual VCL numeric state and source aliases.
   [
-    "svtools/browser/control/MetricSpinButton.tsx",
-    new Set([
-      "vcl/source/weld/MetricSpinButton.ts",
-      "vcl/inc/units.ts",
-      "unotools/source/misc/syslocale.ts",
-    ]),
+    "svtools/browser/control/metric-spin-binding.ts",
+    new Set(["vcl/source/weld/MetricSpinButton.ts", "vcl/inc/units.ts"]),
   ],
+  // React presentation reads the shared system-locale fields;numeric ownership stays in the binding.
+  ["svtools/browser/control/MetricSpinButton.tsx", new Set(["unotools/source/misc/syslocale.ts"])],
   // Original svtools SetFieldUnit borrows the actual VCL metric widget numeric contract.
   ["svtools/source/misc/unitconv.ts", new Set(["vcl/source/weld/MetricSpinButton.ts"])],
   // Generated MultipleCharsOutputException type initialization uses the original UNO TypeClass value.

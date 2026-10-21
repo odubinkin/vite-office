@@ -1,4 +1,5 @@
 /** @fileoverview Writer-style color palettes and paragraph formatting controls. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection";
 import type {
   WriterParagraphDialogRequest,
@@ -18,6 +19,7 @@ export function WriterAdvancedFormattingControls({
   commandSource,
   getCommandResource,
   paragraph,
+  unit = FieldUnit.CM,
   dialogRequest,
   onDialogCancel,
   onDialogSubmit,
@@ -25,6 +27,7 @@ export function WriterAdvancedFormattingControls({
   commandSource: BrowserCommandSource;
   getCommandResource: (commandUrl: string) => WriterCommandResource;
   paragraph: WriterParagraphComputedStyle;
+  unit?: FieldUnit;
   dialogRequest?: Readonly<{ id: number; request: WriterParagraphDialogRequest }>;
   onDialogCancel: (id: number) => void;
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
@@ -80,6 +83,7 @@ export function WriterAdvancedFormattingControls({
         <WriterParagraphDialog
           dialogRequest={dialogRequest}
           fontSizePt={paragraph.fontSizePt}
+          unit={unit}
           onDialogCancel={onDialogCancel}
           onDialogSubmit={onDialogSubmit}
         />

@@ -1,15 +1,19 @@
 /** @fileoverview Browser text/spin presentation of the actual weld metric parser and normalized numeric owner. */
-import { useRef, useState, type InputHTMLAttributes } from "react";
-import { MetricSpinButton as NativeMetricSpinButton } from "../../../vcl/source/weld/MetricSpinButton";
-import { SetFieldUnit } from "../../source/misc/unitconv";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type InputHTMLAttributes,
+} from "react";
+import { MetricSpinBinding } from "./metric-spin-binding";
 import { FieldUnit } from "../../../tools/inc/fldunit";
-import { SV_FUNIT_STRINGS } from "../../../vcl/inc/units";
 import {
   getSystemDecimalSeparator,
   getSystemDecimalSeparatorAlternate,
 } from "../../../unotools/source/misc/syslocale";
 
-/** Physical twip binding;only temporary editable text belongs to React. */
+/** Physical twip binding;the browser adapter retains editable text and the actual native numeric owner. */
 export interface MetricSpinButtonProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   "value" | "defaultValue" | "onChange" | "min" | "max" | "step"
@@ -19,6 +23,8 @@ export interface MetricSpinButtonProps extends Omit<
   readonly unit?: FieldUnit;
   readonly minimum?: number;
   readonly maximum?: number;
+  /** Native page Reset/assignment identity;ordinary twip notifications do not reset normalized input. */
+  readonly resetKey?: unknown;
 }
 
 /** Presents native unit suffix entry without rounding untouched physical values back into the document. @param props - Twip binding,display unit and native bounds. @returns Metric entry. */
@@ -28,6 +34,7 @@ export function MetricSpinButton({
   unit = FieldUnit.CM,
   minimum = 0,
   maximum = 2147483647,
+  resetKey,
   disabled = false,
   onBlur,
   onKeyDown,
@@ -36,60 +43,21 @@ export function MetricSpinButton({
   const decimal = getSystemDecimalSeparator(),
     alternate = getSystemDecimalSeparatorAlternate();
   const input = useRef<HTMLInputElement>(null);
-  const model = new NativeMetricSpinButton();
-  model.set_digits(2);
-  model.set_range(
-    model.normalize(BigInt(minimum)),
-    model.normalize(BigInt(maximum)),
-    FieldUnit.TWIP,
+  const [binding] = useState(
+    /** Creates the native owner once for this mounted entry. @returns Binding. */ () =>
+      new MetricSpinBinding({ value, unit, minimum, maximum, decimal, alternate, resetKey }),
   );
-  SetFieldUnit(model, unit);
-  const displayUnit = model.get_unit();
-  const scale = 10 ** model.get_digits();
-  if (value !== undefined)
-    model.set_value(model.normalize(BigInt(Math.round(value))), FieldUnit.TWIP);
-  /** Formats the native display value with the original first resource alias. @returns Metric text. */
-  function format(): string {
-    const suffix = SV_FUNIT_STRINGS.find(
-      /** Locates the source's first display alias. @param entry - Resource pair. @returns Matching unit. */
-      (entry) => entry[1] === displayUnit,
-    )?.[0];
-    return (
-      (Number(model.get_value(FieldUnit.NONE)) / scale)
-        .toFixed(model.get_digits())
-        .replace(".", decimal) +
-      (suffix === undefined
-        ? ""
-        : (displayUnit === FieldUnit.INCH ||
-          displayUnit === FieldUnit.NONE ||
-          displayUnit === FieldUnit.DEGREE
-            ? ""
-            : " ") + suffix)
-    );
-  }
-  const [edit, setEdit] = useState({
-    source: value,
-    unit,
-    text: value === undefined ? "" : format(),
-  });
-  const text =
-    edit.source === value && edit.unit === unit ? edit.text : value === undefined ? "" : format();
-  /** Publishes accepted native twips while retaining the user's editable text. @param next - Entry text. @returns Whether native parsing succeeded. */
-  function parse(next: string): boolean {
-    const accepted = model.set_text(next, decimal, alternate);
-    const result = Number(model.denormalize(model.get_value(FieldUnit.TWIP)));
-    setEdit({ source: accepted ? result : value, unit, text: next });
-    if (accepted) onValueChange(result);
-    return accepted;
-  }
-  /** Applies a normalized native increment after parsing pending input. @param increment - Signed display-unit hundredths. @returns Nothing. */
-  function step(increment: bigint): void {
-    model.set_text(text, decimal, alternate);
-    model.set_value(model.get_value(FieldUnit.NONE) + increment, FieldUnit.NONE);
-    const result = Number(model.denormalize(model.get_value(FieldUnit.TWIP)));
-    setEdit({ source: result, unit, text: format() });
-    onValueChange(result);
-  }
+  useLayoutEffect(
+    /** Applies genuine native parent assignments before paint;feedback keeps normalized precision. @returns Nothing. */ () => {
+      binding.Update({ value, unit, minimum, maximum, decimal, alternate, resetKey });
+    },
+    [binding, value, unit, minimum, maximum, decimal, alternate, resetKey],
+  );
+  const snapshot = useSyncExternalStore(
+    binding.Subscribe,
+    binding.GetSnapshot,
+    binding.GetSnapshot,
+  );
   return (
     <span className="inline-flex min-w-0 items-stretch">
       <input
@@ -99,25 +67,24 @@ export function MetricSpinButton({
         type="text"
         role="spinbutton"
         inputMode="decimal"
-        aria-valuemin={Number(model.get_range(FieldUnit.NONE)[0]) / scale}
-        aria-valuemax={Number(model.get_range(FieldUnit.NONE)[1]) / scale}
-        aria-valuenow={
-          value === undefined ? undefined : Number(model.get_value(FieldUnit.NONE)) / scale
-        }
-        aria-valuetext={text}
-        value={text}
+        aria-valuemin={snapshot.minimum}
+        aria-valuemax={snapshot.maximum}
+        aria-valuenow={snapshot.value}
+        aria-valuetext={snapshot.text}
+        value={snapshot.text}
         onChange={
           /** Retains incomplete input and forwards only parsed values. @param event - Text edit. @returns Nothing. */ (
             event,
           ) => {
-            parse(event.target.value);
+            const result = binding.SetText(event.target.value);
+            if (result !== undefined) onValueChange(result);
           }
         }
         onBlur={
           /** Restores native formatting without rewriting untouched geometry. @param event - Focus departure. @returns Nothing. */ (
             event,
           ) => {
-            setEdit({ source: value, unit, text: value === undefined ? "" : format() });
+            binding.CommitText();
             onBlur?.(event);
           }
         }
@@ -130,10 +97,12 @@ export function MetricSpinButton({
             const key = event.key;
             if (!["ArrowUp", "ArrowDown", "PageUp", "PageDown"].includes(key)) return;
             event.preventDefault();
-            const increments = model.get_increments(FieldUnit.NONE);
-            const increment =
-              key === "PageUp" || key === "PageDown" ? increments[1] : increments[0];
-            step(key === "ArrowDown" || key === "PageDown" ? -increment : increment);
+            onValueChange(
+              binding.Step(
+                key === "ArrowDown" || key === "PageDown" ? -1 : 1,
+                key === "PageUp" || key === "PageDown",
+              ),
+            );
           }
         }
       />
@@ -151,10 +120,10 @@ export function MetricSpinButton({
               }
               disabled={
                 disabled ||
-                value === undefined ||
+                snapshot.value === undefined ||
                 (direction > 0n
-                  ? model.get_value(FieldUnit.NONE) >= model.get_range(FieldUnit.NONE)[1]
-                  : model.get_value(FieldUnit.NONE) <= model.get_range(FieldUnit.NONE)[0])
+                  ? snapshot.value >= snapshot.maximum
+                  : snapshot.value <= snapshot.minimum)
               }
               className="border border-slate-300 px-1 text-[9px] leading-none disabled:text-slate-300"
               onMouseDown={
@@ -165,7 +134,7 @@ export function MetricSpinButton({
               onClick={
                 /** Applies a configured native step in the mounted entry. @returns Nothing. */ () => {
                   (input.current as HTMLInputElement).focus();
-                  step(direction * model.get_increments(FieldUnit.NONE)[0]);
+                  onValueChange(binding.Step(direction > 0n ? 1 : -1));
                 }
               }
             >

@@ -190,3 +190,57 @@ it("uses source millimetre/point precision and increments and degree suffix spac
   f.rerender(<MetricSpinButton value={1440} unit={U.DEGREE} onValueChange={vi.fn()} />);
   expect(screen.getByRole("spinbutton")).toHaveValue("1440.00°");
 });
+
+it("retains hundredth-millimetre numeric state through rounded parent feedback and repeated blur/step", /** Checks genuine native precision instead of reconstructing it from integral twips. @returns Nothing. */ () => {
+  render(<Binding unit={U.MM} />);
+  const field = screen.getByRole("spinbutton");
+  fireEvent.change(field, { target: { value: "25.41 mm" } });
+  expect(screen.getByTestId("physical").textContent).toBe("1441");
+  fireEvent.blur(field);
+  expect(field).toHaveValue("25.41 mm");
+  fireEvent.keyDown(field, { key: "ArrowUp" });
+  expect(field).toHaveValue("25.91 mm");
+  fireEvent.blur(field);
+  expect(field).toHaveValue("25.91 mm");
+  fireEvent.keyDown(field, { key: "ArrowDown" });
+  expect(field).toHaveValue("25.41 mm");
+});
+it("distinguishes explicit same-value Reset from feedback and reconfigures range without document callbacks", /** Checks original assignment semantics and incoming unit changes. @returns Nothing. */ () => {
+  const change = vi.fn(),
+    f = render(<MetricSpinButton value={1441} unit={U.MM} resetKey={0} onValueChange={change} />),
+    field = screen.getByRole("spinbutton");
+  fireEvent.change(field, { target: { value: "25.41 mm" } });
+  fireEvent.blur(field);
+  expect(field).toHaveValue("25.41 mm");
+  f.rerender(<MetricSpinButton value={1441} unit={U.MM} resetKey={1} onValueChange={change} />);
+  expect(field).toHaveValue("25.42 mm");
+  f.rerender(
+    <MetricSpinButton
+      value={1441}
+      unit={U.INCH}
+      resetKey={1}
+      minimum={0}
+      maximum={720}
+      onValueChange={change}
+    />,
+  );
+  expect(field).toHaveValue("0.50″");
+  expect(change).toHaveBeenCalledOnce();
+});
+
+it("applies an explicit blank Reset without assigning a fabricated numeric zero", /** Checks mixed-value field Reset keeps native numeric state distinct from empty presentation. @returns Nothing. */ () => {
+  const change = vi.fn();
+  const rendered = render(
+    <MetricSpinButton value={1441} unit={U.MM} resetKey={0} onValueChange={change} />,
+  );
+  rendered.rerender(
+    <MetricSpinButton value={undefined} unit={U.MM} resetKey={1} onValueChange={change} />,
+  );
+  const field = screen.getByRole("spinbutton");
+  expect(field).toHaveValue("");
+  expect(field).not.toHaveAttribute("aria-valuenow");
+  expect(change).not.toHaveBeenCalled();
+  fireEvent.keyDown(field, { key: "ArrowUp" });
+  expect(field).toHaveValue("25.92 mm");
+  expect(change).toHaveBeenCalledExactlyOnceWith(1469);
+});

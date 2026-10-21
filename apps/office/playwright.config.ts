@@ -3,6 +3,8 @@
  */
 
 import { defineConfig, devices } from "@playwright/test";
+import { FieldUnit } from "./src/tools/inc/fldunit";
+import { WRITER_LAYOUT_PREFERENCES_KEY } from "./src/sw/browser/storage/writer-layout-preferences-store";
 
 export default defineConfig({
   expect: {
@@ -13,6 +15,23 @@ export default defineConfig({
   projects: [
     {
       name: "writer",
+      // Historical physical-geometry fixtures explicitly select CM;fresh-profile specs override this storage state.
+      use: {
+        storageState: {
+          cookies: [],
+          origins: [
+            {
+              origin: "http://127.0.0.1:4173",
+              localStorage: [
+                {
+                  name: WRITER_LAYOUT_PREFERENCES_KEY,
+                  value: JSON.stringify({ "Other/MeasureUnit": FieldUnit.CM }),
+                },
+              ],
+            },
+          ],
+        },
+      },
       testMatch: "**/*.spec.ts",
       testIgnore: ["**/shared/**", "**/calc/**"],
     },

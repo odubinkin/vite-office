@@ -6,7 +6,7 @@ import { SwDoc } from "../../source/core/doc/doc";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { HoriOrientation as H } from "../../../offapi/com/sun/star/text/HoriOrientation";
 import { WriterTableDialog } from "./WriterTableDialog";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];

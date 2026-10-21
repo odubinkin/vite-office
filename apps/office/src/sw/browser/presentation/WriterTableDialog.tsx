@@ -152,6 +152,7 @@ function WriterTablePropertiesDialog({
     },
   );
   const [, refreshPage] = useState(0);
+  const [metricReset, setMetricReset] = useState(0);
   const width = formatPage.GetFieldValue("width");
   const columnCount = formatPage.data.GetColCount();
   const [initial] = useState(
@@ -195,6 +196,7 @@ function WriterTablePropertiesDialog({
         {label}
         <MetricSpinButton
           unit={unit}
+          resetKey={metricReset}
           aria-label={label}
           data-writer-table-format-field={formatField}
           className="rounded border border-slate-300 px-2 py-1"
@@ -524,6 +526,7 @@ function WriterTablePropertiesDialog({
                             {label}
                             <MetricSpinButton
                               unit={unit}
+                              resetKey={metricReset}
                               aria-label={label}
                               className="min-w-0 rounded border border-slate-300 px-2 py-1"
                               disabled={value === undefined}
@@ -669,6 +672,8 @@ function WriterTablePropertiesDialog({
               {activeTab === "borders" ? (
                 <WriterBorderPage
                   page={borderPage}
+                  unit={unit}
+                  resetKey={metricReset}
                   onChange={
                     /** Presents accepted native border widgets. @returns Nothing. */ () =>
                       refreshPage(
@@ -699,6 +704,10 @@ function WriterTablePropertiesDialog({
                 } else {
                   borderPage.Reset();
                 }
+                setMetricReset(
+                  /** Marks actual current-page Reset assignments,including unchanged physical values. @param version - Previous reset. @returns New identity. */
+                  (version) => version + 1,
+                );
                 for (const which of activeTab === "table"
                   ? [FN_TABLE_REP, FN_PARAM_TABLE_NAME, RES_UL_SPACE]
                   : activeTab === "columns"

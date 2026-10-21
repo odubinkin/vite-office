@@ -1,7 +1,7 @@
 /** @fileoverview Verifies mounted properties publish native changed items without snapshot-default history. */
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { SfxItemSet } from "../../../svl/source/items/itemset";

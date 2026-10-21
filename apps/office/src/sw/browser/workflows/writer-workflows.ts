@@ -3,6 +3,7 @@
  * operation-presentation workflows outside the SwView model/view-shell boundary.
  */
 
+import type { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
@@ -18,6 +19,7 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
+  readonly layoutPreferences?: WriterLayoutPreferenceStore;
   readonly copyRichText: (selection: WriterClipboardSelection) => Promise<void>;
   readonly documentOpen: DocumentOpenPort;
   readonly documentExport: DocumentExportPort;

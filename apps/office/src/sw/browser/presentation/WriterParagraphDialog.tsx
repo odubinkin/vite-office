@@ -1,4 +1,11 @@
 /** @fileoverview Browser paragraph dialog driven by one Writer controller request. */
+import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
+import { MetricSpinBinding } from "../../../svtools/browser/control/metric-spin-binding";
+import {
+  getSystemDecimalSeparator,
+  getSystemDecimalSeparatorAlternate,
+} from "../../../unotools/source/misc/syslocale";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
@@ -11,11 +18,13 @@ import type {
 export function WriterParagraphDialog({
   dialogRequest,
   fontSizePt,
+  unit = FieldUnit.CM,
   onDialogCancel,
   onDialogSubmit,
 }: Readonly<{
   dialogRequest: Readonly<{ id: number; request: WriterParagraphDialogRequest }>;
   fontSizePt: number;
+  unit?: FieldUnit;
   onDialogCancel: (id: number) => void;
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
@@ -27,7 +36,25 @@ export function WriterParagraphDialog({
     /** Handles Writer formatting state.  @returns Callback result. */ () =>
       dialogRequest.request.initialValue,
   );
-  const [tabPositionText, setTabPositionText] = useState("");
+  const [tabPosition, setTabPosition] = useState<number | undefined>();
+  const [tabReset, setTabReset] = useState(0);
+  const unitLabel =
+    unit === FieldUnit.INCH
+      ? "in"
+      : unit === FieldUnit.POINT
+        ? "pt"
+        : FieldUnit[unit].toLowerCase();
+  /** Formats the actual native tab list entry using its metric owner. @param points - Physical position. @returns Formatted position. */
+  function formatTab(points: number): string {
+    return new MetricSpinBinding({
+      value: Math.round(points * 20),
+      unit,
+      minimum: 0,
+      maximum: 32767,
+      decimal: getSystemDecimalSeparator(),
+      alternate: getSystemDecimalSeparatorAlternate(),
+    }).GetSnapshot().text;
+  }
   const [selectedTab, setSelectedTab] = useState<number | undefined>();
   return (
     <div
@@ -95,8 +122,9 @@ export function WriterParagraphDialog({
             >
               {activeTab === "spacing" ? (
                 <>
-                  <NumberField
-                    label="First line indent (pt)"
+                  <ParagraphMetricField
+                    unit={unit}
+                    label="First line indent"
                     value={draft.firstLineIndentPt ?? 0}
                     min={-1638.35}
                     onChange={
@@ -117,8 +145,9 @@ export function WriterParagraphDialog({
                     />
                     Automatic first-line indent
                   </label>
-                  <NumberField
-                    label="Above paragraph (pt)"
+                  <ParagraphMetricField
+                    unit={unit === FieldUnit.CHAR ? FieldUnit.LINE : unit}
+                    label="Above paragraph"
                     value={draft.upperPt}
                     min={0}
                     onChange={
@@ -127,8 +156,9 @@ export function WriterParagraphDialog({
                       ) => setDraft({ ...draft, upperPt: value })
                     }
                   />
-                  <NumberField
-                    label="Below paragraph (pt)"
+                  <ParagraphMetricField
+                    unit={unit === FieldUnit.CHAR ? FieldUnit.LINE : unit}
+                    label="Below paragraph"
                     value={draft.lowerPt}
                     min={0}
                     onChange={
@@ -188,40 +218,46 @@ export function WriterParagraphDialog({
                       <option value="leading">Leading</option>
                     </select>
                   </label>
-                  <NumberField
-                    label={draft.lineMode === "proportional" ? "Value (%)" : "Value (pt)"}
-                    value={
-                      draft.lineMode === "proportional" ? draft.lineValue : draft.lineValue / 20
-                    }
-                    min={0}
-                    onChange={
-                      /** Handles Writer formatting state. @param value - Input value. @returns Callback result. */ (
-                        value,
-                      ) =>
-                        setDraft({
-                          ...draft,
-                          lineValue:
-                            draft.lineMode === "proportional" ? value : Math.round(value * 20),
-                        })
-                    }
-                  />
+                  {draft.lineMode === "proportional" ? (
+                    <NumberField
+                      label="Value (%)"
+                      value={draft.lineValue}
+                      min={0}
+                      onChange={
+                        /** Changes proportional line spacing. @param value - Percent. @returns Nothing. */
+                        (value) => setDraft({ ...draft, lineValue: value })
+                      }
+                    />
+                  ) : (
+                    <ParagraphMetricField
+                      label="Value"
+                      unit={unit === FieldUnit.CHAR ? FieldUnit.POINT : unit}
+                      value={draft.lineValue / 20}
+                      min={0}
+                      onChange={
+                        /** Changes dimensional line spacing. @param value - Points. @returns Nothing. */
+                        (value) => setDraft({ ...draft, lineValue: Math.round(value * 20) })
+                      }
+                    />
+                  )}
                 </>
               ) : null}
               {activeTab === "tabs" ? (
                 <>
                   <label className="flex flex-col gap-1">
-                    Position (pt)
-                    <input
-                      className="rounded border px-2 py-1"
-                      type="number"
-                      min="0"
-                      max="1638.35"
-                      onChange={
-                        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
-                          event,
-                        ) => setTabPositionText(event.target.value)
+                    {`Position (${unitLabel})`}
+                    <MetricSpinButton
+                      aria-label={`Position (${unitLabel})`}
+                      className="min-w-0 rounded border px-2 py-1"
+                      unit={unit}
+                      minimum={0}
+                      maximum={32767}
+                      value={tabPosition === undefined ? undefined : Math.round(tabPosition * 20)}
+                      resetKey={tabReset}
+                      onValueChange={
+                        /** Retains the controller's point contract. @param twips - Physical tab position. @returns Nothing. */
+                        (twips) => setTabPosition(twips / 20)
                       }
-                      value={tabPositionText}
                     />
                   </label>
                   <select
@@ -235,7 +271,11 @@ export function WriterParagraphDialog({
                       ) => {
                         const value = Number(event.target.value);
                         setSelectedTab(value);
-                        setTabPositionText(String(value));
+                        setTabPosition(value);
+                        setTabReset(
+                          /** Applies a native tab-list selection assignment. @param version - Previous assignment. @returns New identity. */
+                          (version) => version + 1,
+                        );
                       }
                     }
                   >
@@ -244,7 +284,7 @@ export function WriterParagraphDialog({
                         position,
                       ) => (
                         <option key={position} value={position}>
-                          {position} pt
+                          {formatTab(position)}
                         </option>
                       ),
                     )}
@@ -254,7 +294,7 @@ export function WriterParagraphDialog({
                       className="rounded border px-2 py-1"
                       onClick={
                         /** Adds a position to the current tab-stop list. @returns Nothing. */ () => {
-                          const position = Number(tabPositionText);
+                          const position = tabPosition ?? 0;
                           if (!Number.isFinite(position) || position <= 0 || position * 20 > 32767)
                             return;
                           setDraft({
@@ -283,7 +323,7 @@ export function WriterParagraphDialog({
                             ),
                           });
                           setSelectedTab(undefined);
-                          setTabPositionText("");
+                          setTabPosition(undefined);
                         }
                       }
                       type="button"
@@ -296,7 +336,7 @@ export function WriterParagraphDialog({
                         /** Deletes all tab stops. @returns Nothing. */ () => {
                           setDraft({ ...draft, tabStopsPt: [] });
                           setSelectedTab(undefined);
-                          setTabPositionText("");
+                          setTabPosition(undefined);
                         }
                       }
                       type="button"
@@ -536,6 +576,45 @@ function NumberField({
         step="0.05"
         type="number"
         value={value}
+      />
+    </label>
+  );
+}
+
+/** Presents a physical paragraph value through the native metric owner. @param props - Point contract and module display unit. @returns Metric entry. */
+function ParagraphMetricField({
+  label,
+  value,
+  min,
+  unit,
+  onChange,
+}: Readonly<{
+  label: string;
+  value: number;
+  min: number;
+  unit: FieldUnit;
+  onChange: (value: number) => void;
+}>): React.JSX.Element {
+  const suffix =
+    unit === FieldUnit.INCH
+      ? "in"
+      : unit === FieldUnit.POINT
+        ? "pt"
+        : FieldUnit[unit].toLowerCase();
+  return (
+    <label className="flex flex-col gap-1">
+      {`${label} (${suffix})`}
+      <MetricSpinButton
+        aria-label={`${label} (${suffix})`}
+        className="min-w-0 rounded border px-2 py-1"
+        unit={unit}
+        value={Math.round(value * 20)}
+        minimum={Math.round(min * 20)}
+        maximum={65535}
+        onValueChange={
+          /** Preserves the paragraph controller's point contract. @param twips - Native physical value. @returns Nothing. */
+          (twips) => onChange(twips / 20)
+        }
       />
     </label>
   );

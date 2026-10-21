@@ -1,7 +1,7 @@
 /** @fileoverview Verifies mounted Writer consumes original native table spacing, native property history and ODT. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import { RES_UL_SPACE } from "../../inc/hintids";
@@ -69,8 +69,14 @@ it.each([false, true])(
           marginBottom: "20px",
         });
         fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
-        expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveValue(0.26);
-        expect(screen.getByRole("spinbutton", { name: "Below (cm)" })).toHaveValue(0.53);
+        expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveAttribute(
+          "aria-valuenow",
+          "0.26",
+        );
+        expect(screen.getByRole("spinbutton", { name: "Below (cm)" })).toHaveAttribute(
+          "aria-valuenow",
+          "0.53",
+        );
         fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       } finally {
         stale.mockRestore();

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/optload.ts",
+    "upstreamPath": "sw/inc/optload.hrc",
+    "localSymbols": [
+      "STR_ARR_METRIC"
+    ],
+    "upstreamSymbols": [
+      "STR_ARR_METRIC"
+    ],
+    "preservedResponsibilities": [
+      "TaskXBHM4Z: Original metric resource ordering and English labels;other option resources remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly consumed measurement responsibilities are represented;full native module and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/optload.ts",
+          "marker": "STR_ARR_METRIC"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/optload.hrc",
+          "marker": "STR_ARR_METRIC"
+        }
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies generated row-height command and modal over native selected rows. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { getWriterSlotId } from "../../sdi/swriter";

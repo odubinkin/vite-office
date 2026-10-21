@@ -85,11 +85,11 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
-    ).toHaveValue("1");
+    ).toHaveValue("1.00 cm");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await expect(
       page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }),
-    ).toHaveValue("0.14");
+    ).toHaveValue("0.14 cm");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/uibase/app/swmodule.ts",
+    "upstreamPath": "sw/source/uibase/app/swmodul1.cxx",
+    "localSymbols": [
+      "SwModule"
+    ],
+    "upstreamSymbols": [
+      "SwModule::ApplyUserMetric"
+    ],
+    "preservedResponsibilities": [
+      "TaskXBHM4Z: Original text/web metric owners,conditional global update,V-before-H matching-view application and independent ruler updates;logical actual-view registration uses JS lifetime. Full application singleton/bootstrap,VCL window and services remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly consumed measurement responsibilities are represented;full native module and broad parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/uibase/app/swmodule.ts",
+          "marker": "SwModule"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
+          "marker": "SwModule::ApplyUserMetric"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/uibase/app/swmodule.ts",
+      "rationale": "One consumed SwModule metric owner retains its native class name while original implementations span swmodule.cxx,swmodul1.cxx and apphdl.cxx;full application services are unported.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

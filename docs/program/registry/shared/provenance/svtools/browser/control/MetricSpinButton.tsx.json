@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/svtools/browser/control/MetricSpinButton.tsx",
     "rationale": "React DOM presents actual native MetricSpinButton/parser;temporary text is browser-owned.",
     "responsibilities": [
-      "TaskDS8CKD binds physical Writer twips to original metric parsing,unit aliases,range clipping and normalized stepping. Existing source numeric owners retain semantic responsibility;no fake preferences or locale service is introduced."
+      "TaskDS8CKD binds physical Writer twips to original metric parsing,unit aliases,range clipping and normalized stepping. Existing source numeric owners retain semantic responsibility;no fake preferences or locale service is introduced.",
+      "TaskXBHM4Z delegates to one persistent MetricSpinBinding and actual VCL numeric owner;rounded physical feedback no longer recreates normalized values,while actual Reset identities reassign them. General module metrics now come from the real Writer preference owner;full native widget services remain unported."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

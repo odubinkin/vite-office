@@ -1,0 +1,117 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033",
+    "capabilityId": "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033",
+    "suite": "writer",
+    "subsystem": "measurement-preferences",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [],
+    "manualContract": "Writer measurement preferences retain source locale defaults,independent axis overrides,typed option item exchange and native unit tables. Actual browser controls preserve normalized numeric state and physical document values. This bounded implementation does not attest complete native application,configuration,widget or ruler parity.",
+    "capability": "Writer module measurement preferences and unit-aware controls",
+    "gaps": [
+      "Full Options pages,ConfigItem/UNO services,VCL device/font/zoom contexts and complete ruler snapping/margins/protection remain unported.",
+      "The cited upstream HTML-export metric fixture is related source evidence only;native QA is not executed or fully ported by this capability."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React metric controls and browser Storage consume actual native owners;JS manages object lifetime. Intentional document IO policies remain unchanged."
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodul1.cxx",
+          "marker": "SwModule::ApplyUserMetric"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/htmlexport/htmlexport.cxx",
+          "marker": "pPref->SetMetric(FieldUnit::CM)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/ui/optgeneralpage.ui",
+          "marker": "Specifies the unit of measurement for text documents."
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/uibase/config/usrpref.ts",
+          "marker": "SwMasterUsrPref"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/swmodule.ts",
+          "marker": "ApplyUserMetric"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/appopt.ts",
+          "marker": "ApplyWriterMetricItemSet"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/config/optload.ts",
+          "marker": "SwLoadOptPage"
+        },
+        {
+          "path": "apps/office/src/sw/source/ui/config/optpage.ts",
+          "marker": "SwContentOptPage"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterOptionsDialog.tsx",
+          "marker": "WriterOptionsDialog"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx",
+          "marker": "WriterDialogPresenter"
+        },
+        {
+          "path": "apps/office/src/svtools/browser/control/metric-spin-binding.ts",
+          "marker": "MetricSpinBinding"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/uibase/config/native-metric-preferences.test.ts",
+          "marker": "uses source US/metric locale defaults"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterOptionsDialog.test.tsx",
+          "marker": "applies global units without changing document geometry"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterRulerTicks.test.tsx",
+          "marker": "remeasures actual font and cross-axis changes"
+        },
+        {
+          "path": "apps/office/src/svtools/browser/control/MetricSpinButton.test.tsx",
+          "marker": "retains hundredth-millimetre numeric state"
+        },
+        {
+          "path": "apps/office/e2e/writer-measurement-preferences.spec.ts",
+          "marker": "Options preserve units through reload,New and genuine ODT reopen"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610210557-XBHM4Z/README.md",
+          "marker": "## Scope"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "scopeLimitations": [
+      "Full Options pages,ConfigItem/UNO services,VCL device/font/zoom contexts and complete ruler snapping/margins/protection remain unported."
+    ],
+    "atomicOperation": "Apply Writer global measurement units and independent ruler overrides through actual native metric option items.",
+    "aspect": "model-operation"
+  }
+}

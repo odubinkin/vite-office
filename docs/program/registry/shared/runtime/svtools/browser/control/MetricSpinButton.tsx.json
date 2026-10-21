@@ -20,7 +20,7 @@
         "apps/office/src/vcl/source/weld/MetricSpinButton.ts",
         "apps/office/src/svtools/browser/control/MetricSpinButton.test.tsx"
       ],
-      "justification": "TaskDS8CKD supplies browser text/spin presentation over the actual native numeric owner and source unit aliases. React owns temporary input only;native parsing and normalized conversion own values/ranges. Untouched physical values are never written from rounded display. Global module preferences,complete native widget accessibility and sizing services remain unported;no service or parity claim.",
+      "justification": "TaskDS8CKD supplies browser text/spin presentation over the actual native numeric owner and source unit aliases. React owns temporary input only;native parsing and normalized conversion own values/ranges. Untouched physical values are never written from rounded display. Global module preferences,complete native widget accessibility and sizing services remain unported;no service or parity claim. TaskXBHM4Z delegates to one persistent MetricSpinBinding and actual VCL numeric owner;rounded physical feedback no longer recreates normalized values,while actual Reset identities reassign them. General module metrics now come from the real Writer preference owner;full native widget services remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "MetricSpinButton"

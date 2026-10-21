@@ -47,7 +47,8 @@ import {
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
 } from "../../inc/hintids";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { FieldUnit } from "../../../tools/inc/fldunit";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { WriterWorkbench } from "./writer-view";
@@ -458,6 +459,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   });
   it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ async () => {
     const session = createWriterDocumentSession();
+    session.view.GetModule().ApplyUserMetric(FieldUnit.POINT, false);
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     const shell = session.view.GetWrtShell();
     fireEvent.click(screen.getByLabelText("Font Color palette"));
@@ -529,7 +531,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       (shell.GetActiveParagraph().GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
     ).toBe(2);
     openParagraphDialog();
-    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(9);
+    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue("9.0 pt");
     expect(screen.getByLabelText("Automatic first-line indent")).toBeChecked();
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     expect(screen.getByLabelText("Page style")).toHaveValue("Standard");

@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svtools/browser/control/metric-spin-binding.ts",
+    "rationale": "Persistent actual VCL numeric owner retains normalized precision across rounded twip feedback;explicit Reset identity reseeds values. React external-store transport owns text and listener lifecycle;full native widget services are unported.",
+    "responsibilities": [
+      "TaskXBHM4Z: Persistent actual VCL numeric owner retains normalized precision across rounded twip feedback;explicit Reset identity reseeds values. React external-store transport owns text and listener lifecycle;full native widget services are unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser presentation and storage adapt the actual native numeric,metric-page and ruler owners without replacing their value contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/browser/control/metric-spin-binding.ts",
+          "marker": "MetricSpinBinding"
+        }
+      ]
+    }
+  }
+}

@@ -2,7 +2,7 @@
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { cleanup, render, screen, fireEvent, act, within } from "@testing-library/react";
 import { afterEach, it, expect } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -106,7 +106,7 @@ it("caret alone sets table properties context without painting a selected row", 
     within(screen.getByRole("dialog", { name: "Table Properties" })).getByLabelText(
       "Table width (cm)",
     ),
-  ).toHaveValue(7.06);
+  ).toHaveAttribute("aria-valuenow", "7.06");
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   const second = required(
     required(required(f.other.GetTabLines()[0]).GetTabBoxes()[0]).GetParagraphs()[0],
@@ -121,7 +121,7 @@ it("caret alone sets table properties context without painting a selected row", 
     within(screen.getByRole("dialog", { name: "Table Properties" })).getByLabelText(
       "Table width (cm)",
     ),
-  ).toHaveValue(12.35);
+  ).toHaveAttribute("aria-valuenow", "12.35");
   expect(painted("First")).toHaveLength(0);
   expect(painted("Second")).toHaveLength(0);
 });

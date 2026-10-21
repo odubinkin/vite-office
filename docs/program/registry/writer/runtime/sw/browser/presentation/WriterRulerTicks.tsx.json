@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterRulerTicks.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "measurement-preferences",
+    "capabilityIds": [
+      "CAP-8957da57-63f2-4989-8f91-9bb0b4c6c033"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterRulerTicks.tsx#WriterRulerTicks"
+      ],
+      "justification": "TaskXBHM4Z: Actual browser font/cross-axis measurement supplies source tick projection. React DOM paints admitted ticks and labels with ResizeObserver cleanup. Native VCL window painting is a browser adaptation;complete ruler context/protection/writing-mode behavior is not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterRulerTicks"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

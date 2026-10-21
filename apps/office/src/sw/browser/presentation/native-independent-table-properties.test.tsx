@@ -1,7 +1,7 @@
 /** @fileoverview Mounted table properties use current-row native geometry and preserve hidden constraints. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
-import { createWriterDocumentSession } from "../composition/writer-module";
+import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwPosition } from "../../source/core/crsr/pam";
 import { SwTableRep } from "../../source/uibase/table/swtablerep";
@@ -101,10 +101,10 @@ it.each([
       const field = screen.getByRole("spinbutton", { name: "Column " + (i + 1) + " width (cm)" });
       if (i < expected.length) {
         expect(field).toBeEnabled();
-        expect(field).toHaveValue(expected[i]);
+        expect(field).toHaveAttribute("aria-valuenow", String(expected[i]));
       } else {
         expect(field).toBeDisabled();
-        expect(field).toHaveValue(null);
+        expect(field).toHaveValue("");
       }
     }
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
