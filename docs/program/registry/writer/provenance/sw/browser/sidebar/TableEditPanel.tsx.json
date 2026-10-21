@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/sidebar/TableEditPanel.tsx",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/sidebar/TableEditPanel.tsx",
+          "marker": "TableEditPanel"
+        }
+      ]
+    },
+    "rationale": "React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported.",
+    "responsibilities": [
+      "TaskAHJ2M9: React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React mounted controls replace native weld UI while existing Sfx bindings,typed items and document owners retain state and execution."
+    }
+  }
+}

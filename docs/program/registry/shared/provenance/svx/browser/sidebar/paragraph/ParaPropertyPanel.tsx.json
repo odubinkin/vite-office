@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svx/browser/sidebar/paragraph/ParaPropertyPanel.tsx",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/sidebar/paragraph/ParaPropertyPanel.tsx",
+          "marker": "ParaPropertyPanel"
+        }
+      ]
+    },
+    "rationale": "React Writer text/table Paragraph panel binds typed LR/UL slots and native toolbar groups. Fresh metric edits retain native default100 proportions and false automatic/context flags;Writer metric bounds use source units. Hyphenation,writing directions,background and full native device/widget rounding remain unported.",
+    "responsibilities": [
+      "TaskAHJ2M9: React Writer text/table Paragraph panel binds typed LR/UL slots and native toolbar groups. Fresh metric edits retain native default100 proportions and false automatic/context flags;Writer metric bounds use source units. Hyphenation,writing directions,background and full native device/widget rounding remain unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React mounted controls replace native weld UI while existing Sfx bindings,typed items and document owners retain state and execution."
+    }
+  }
+}

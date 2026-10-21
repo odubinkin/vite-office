@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/svtools/browser/control/metric-spin-binding.ts",
     "rationale": "Persistent actual VCL numeric owner retains normalized precision across rounded twip feedback;explicit Reset identity reseeds values. React external-store transport owns text and listener lifecycle;full native widget services are unported.",
     "responsibilities": [
-      "TaskXBHM4Z: Persistent actual VCL numeric owner retains normalized precision across rounded twip feedback;explicit Reset identity reseeds values. React external-store transport owns text and listener lifecycle;full native widget services are unported."
+      "TaskXBHM4Z: Persistent actual VCL numeric owner retains normalized precision across rounded twip feedback;explicit Reset identity reseeds values. React external-store transport owns text and listener lifecycle;full native widget services are unported.",
+      "TaskAHJ2M9: Genuine undefined same-unit assignment clears stale numeric presentation;only defined numeric feedback can acknowledge a pending value. No JS/native object lifetime emulation."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

@@ -96,7 +96,10 @@ for (const width of [1280, 390])
     await page.mouse.up();
     await page.mouse.click(x - 7, y - 7);
     await expect(selected).toHaveCount(9);
-    await page.getByRole("button", { name: "Bold", exact: true }).click();
+    await page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("button", { name: "Bold", exact: true })
+      .click();
     await expect(displayed.locator("strong")).toHaveCount(9);
     await page.keyboard.press("Control+z");
     await expect(displayed.locator("strong")).toHaveCount(0);

@@ -1,5 +1,6 @@
 /** @fileoverview Checks typed tab glyphs and their anchored ownership through the actual Writer projection. */
 import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -72,6 +73,8 @@ afterEach(
 /** Mounts all four explicit types after a hidden default in a real Writer session. @returns Editing owners and immutable projection store. */
 function fixture() {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabGlyphProof");

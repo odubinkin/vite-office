@@ -1,4 +1,5 @@
 /** @fileoverview Checks authored first-line items and resolved automatic layout across the real Writer boundary. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
@@ -239,6 +240,7 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
     const owner = fixture();
     const before = state(owner);
     const retained = owner.store.GetSnapshot().activeParagraph;
+    owner.session.view.GetModule().ApplyUserMetric(FieldUnit.POINT, false);
     render(<WriterWorkbench isActive view={owner.session.view} />);
     expect(screen.getByRole("textbox", { name: "Writer document text" }).style.textIndent).toBe(
       "24pt",
@@ -246,7 +248,10 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
     expect(screen.queryByRole("button", { name: "First line indent" })).toBeNull();
     fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Paragraph…" }));
-    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(18.35);
+    expect(screen.getByRole("spinbutton", { name: "First line indent (pt)" })).toHaveAttribute(
+      "aria-valuenow",
+      "18.4",
+    );
     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     await waitFor(

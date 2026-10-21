@@ -1,4 +1,6 @@
 /** @fileoverview Measures independent counted list axes through actual body/cell paragraph edits. */
+import { FieldUnit } from "../src/tools/inc/fldunit";
+import { WRITER_LAYOUT_PREFERENCES_KEY } from "../src/sw/browser/storage/writer-layout-preferences-store";
 import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import { expect, test } from "@playwright/test";
 import { SvxTextLeftMarginItem } from "../src/editeng/source/items/frmitems";
@@ -8,6 +10,28 @@ import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { createWriterNumFormat } from "../src/sw/source/core/doc/number";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
+// The authored draft uses points;the independent ruler geometry scenario uses its native CM grid.
+test.use({
+  storageState: {
+    cookies: [],
+    origins: [
+      {
+        origin: "http://127.0.0.1:4173",
+        localStorage: [
+          {
+            name: WRITER_LAYOUT_PREFERENCES_KEY,
+            value: JSON.stringify({
+              "Other/MeasureUnit": FieldUnit.POINT,
+              "Window/HorizontalRulerUnit": FieldUnit.CM,
+              "Window/VerticalRulerUnit": FieldUnit.CM,
+            }),
+          },
+        ],
+      },
+    ],
+  },
+});
+
 for (const cell of [false, true])
   test(`Writer counted axes stay independent through paragraph history cell=${cell}`, /** Checks real import,marker geometry,dialog edits and history. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
     page,
@@ -88,7 +112,7 @@ for (const cell of [false, true])
     await page.getByRole("menuitem", { name: "Format", exact: true }).click();
     await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
-    await dialog.getByLabel("First line indent (pt)").fill("6");
+    await dialog.getByRole("spinbutton", { name: "First line indent (pt)", exact: true }).fill("6");
     await dialog.getByRole("button", { name: "OK", exact: true }).click();
     await expect(dialog).toHaveCount(0);
     await expect.poll(measure).toBeCloseTo(cell ? 56 : 120, 1);

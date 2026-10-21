@@ -73,7 +73,9 @@ for (const width of [1280, 390]) {
       name: "style-range.odt",
     });
     const editor = page.getByLabel("Writer document body", { exact: true }),
-      select = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+      select = page
+        .getByRole("toolbar", { name: "Writer formatting toolbar" })
+        .getByRole("combobox", { name: "Paragraph style", exact: true });
     const first = editor
         .locator("[data-writer-paragraph-id]")
         .filter({ hasText: "FirstStyleRange" }),
@@ -104,7 +106,12 @@ for (const width of [1280, 390]) {
     for (const paragraph of [first, empty, last])
       await expect(paragraph).toHaveAttribute("data-style", "OwnedB");
     if (width === 1280)
-      await expect(page.locator("p").filter({ hasText: /^Owned range B$/ })).toHaveCount(1);
+      await expect(
+        page
+          .getByRole("complementary", { name: "Writer properties sidebar" })
+          .getByRole("combobox", { name: "Paragraph style", exact: true })
+          .locator("option:checked"),
+      ).toHaveText("Owned range B");
     await last.click();
     await page.keyboard.press("End");
     await page.keyboard.insertText(":AfterRangeStyle");

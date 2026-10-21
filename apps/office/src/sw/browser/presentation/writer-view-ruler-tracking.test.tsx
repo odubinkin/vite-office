@@ -1,6 +1,7 @@
 /** @fileoverview Checks ruler tracking against owned Writer model and undo history. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
@@ -16,6 +17,8 @@ afterEach(
 /** Creates an actual Writer view with a retained paragraph. @returns Owned frame fixture. */
 function mountWriter() {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   session.view.GetWrtShell().Insert("RulerTrackingProof");
   const rendered = render(

@@ -148,7 +148,7 @@ export function SidebarDeck({
           </button>
         </header>
         <div
-          className="max-h-[32vh] overflow-auto p-4 lg:h-[calc(100%_-_2.5rem)] lg:max-h-none"
+          className="max-h-[32vh] overflow-auto px-2 lg:h-[calc(100%_-_2.5rem)] lg:max-h-none"
           ref={viewportRef}
         >
           <SidebarFocusContext.Provider value={focusManager}>

@@ -148,7 +148,9 @@ for (const viewport of [1280, 390]) {
     await page.setViewportSize({ width: viewport, height: 900 });
     const rendered = await open(page, 7);
     await columns(page);
-    await expect(page.getByRole("spinbutton")).toHaveCount(5);
+    await expect(
+      page.getByRole("dialog", { name: "Table Properties", exact: true }).getByRole("spinbutton"),
+    ).toHaveCount(5);
     await page.getByRole("button", { name: "Next columns" }).click();
     await expect(page.getByRole("spinbutton", { name: "Column 6 width (cm)" })).toHaveAttribute(
       "aria-valuenow",

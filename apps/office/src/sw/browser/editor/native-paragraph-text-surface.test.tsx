@@ -1,5 +1,5 @@
 /** @fileoverview Checks native paragraph text stays free of synthetic descriptions in actual body and cell selections. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -224,7 +224,11 @@ describe("native paragraph text surface", /** Registers actual model, range and 
     );
     expect(f.firstEditor).toHaveAttribute("data-writer-paragraph-id", id);
     expect(f.firstEditor).toHaveStyle({ fontSize: "18pt", fontWeight: "700" });
-    expect(screen.getByLabelText("Paragraph style")).toHaveValue("heading-1");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+    ).toHaveValue("heading-1");
     expect(screen.getByTestId("writer-list-marker-" + id)).toHaveTextContent("1.");
     select(f, false);
     expect(window.getSelection()?.toString()).toBe("lphaOmeg");

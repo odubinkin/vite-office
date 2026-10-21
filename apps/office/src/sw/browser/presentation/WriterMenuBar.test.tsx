@@ -3,8 +3,10 @@
  */
 
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { FieldUnit } from "../../../tools/inc/fldunit";
+import { WRITER_LAYOUT_PREFERENCES_KEY } from "../storage/writer-layout-preferences-store";
 import { Desktop } from "../../../framework/browser/app/desktop";
 import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
 import { createWriterModuleFactory } from "../composition/writer-module";
@@ -65,11 +67,25 @@ class WriterClipboardItemFixture {
   }
 }
 
+let previousMetricConfiguration: string | null;
+afterEach(
+  /** Restores the actual browser preference boundary. @returns Nothing. */ () => {
+    if (previousMetricConfiguration === null)
+      localStorage.removeItem(WRITER_LAYOUT_PREFERENCES_KEY);
+    else localStorage.setItem(WRITER_LAYOUT_PREFERENCES_KEY, previousMetricConfiguration);
+  },
+);
+
 describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterMenuBarTests(): void {
   beforeEach(
     /** Opens the dedicated Writer page used by application-shell menu tests. @returns Nothing. */
     function openWriterRoute(): void {
       globalThis.history.replaceState(null, "", "/writer");
+      previousMetricConfiguration = localStorage.getItem(WRITER_LAYOUT_PREFERENCES_KEY);
+      localStorage.setItem(
+        WRITER_LAYOUT_PREFERENCES_KEY,
+        JSON.stringify({ "Other/MeasureUnit": FieldUnit.CM }),
+      );
     },
   );
 
@@ -326,9 +342,14 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
       enterWriterParagraphText(editor, "Formatted Writer body");
-      fireEvent.change(screen.getByLabelText("Paragraph style"), {
-        target: { value: "heading-1" },
-      });
+      fireEvent.change(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Paragraph style",
+        ),
+        {
+          target: { value: "heading-1" },
+        },
+      );
       fireEvent.click(
         within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
           "button",
@@ -338,7 +359,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
-      fireEvent.change(screen.getByLabelText("Font name"), { target: { value: "Noto Serif" } });
+      fireEvent.change(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Font name",
+        ),
+        { target: { value: "Noto Serif" } },
+      );
       fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
@@ -505,9 +531,14 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.copy(documentBody, { clipboardData: { setData: emptySelectionSetData } });
     expect(emptySelectionSetData).not.toHaveBeenCalled();
     enterWriterParagraphText(editor, "Keyboard copied heading");
-    fireEvent.change(screen.getByLabelText("Paragraph style"), {
-      target: { value: "heading-1" },
-    });
+    fireEvent.change(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+      {
+        target: { value: "heading-1" },
+      },
+    );
     fireEvent.click(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
         "button",

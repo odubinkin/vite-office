@@ -59,6 +59,7 @@ export function WriterLineSpacingControl({
       <button
         aria-expanded={open}
         aria-label="Line Spacing"
+        disabled={!presentation.enabled}
         className="grid size-8 cursor-pointer list-none place-items-center rounded-md border border-slate-300 bg-white text-sm hover:border-indigo-400"
         title="Line Spacing"
         type="button"

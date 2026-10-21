@@ -81,6 +81,11 @@ export interface WriterHyperlinkCommandArguments {
 
 /** Bounded view-shell target for generated Writer view slots. */
 export interface WriterViewCommandTarget {
+  readonly GetParagraphULSpace: () =>
+    import("../../editeng/inc/ulspitem").SvxULSpaceItem | undefined;
+  readonly ApplyParagraphULSpace: (
+    item: import("../../editeng/inc/ulspitem").SvxULSpaceItem,
+  ) => boolean;
   readonly IsHorizontalRulerVisible: () => boolean;
   readonly IsVerticalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;

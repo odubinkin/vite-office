@@ -34,6 +34,8 @@ const upstreamRoot = "vendor/libreoffice-reference";
 const outputPath = "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json";
 const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:OptionsTreeDialog", showsDialog: true },
+  { commandUrl: ".uno:LeftRightParaMargin", browserLabel: "Paragraph Indent" },
+  { commandUrl: ".uno:ULSpacing", browserLabel: "Paragraph Spacing" },
   { commandUrl: ".uno:CenterPara", semantics: "radio" },
   { commandUrl: ".uno:JustifyPara", semantics: "radio" },
   { commandUrl: ".uno:StartPara", semantics: "radio" },
@@ -102,6 +104,8 @@ const specs: readonly CommandSpec[] = [
 ];
 
 const commandAliases = {
+  paragraphMargins: ".uno:LeftRightParaMargin",
+  paragraphSpacing: ".uno:ULSpacing",
   optionsDialog: ".uno:OptionsTreeDialog",
   alignCenter: ".uno:CenterPara",
   alignJustify: ".uno:JustifyPara",
@@ -199,6 +203,8 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:IncrementLevel": "CAP-0107",
   ".uno:IncrementIndent": "CAP-0107",
   ".uno:Italic": "CAP-0109",
+  ".uno:LeftRightParaMargin": "CAP-0125",
+  ".uno:ULSpacing": "CAP-0125",
   ".uno:LineSpacing": "CAP-0125",
   ".uno:LineNumberingDialog": "CAP-0125",
   ".uno:JustifyPara": "CAP-0112",
@@ -266,6 +272,8 @@ const inventoryAliasNames = [
   "optionsDialog",
   "pageDialog",
   "paragraphDialog",
+  "paragraphMargins",
+  "paragraphSpacing",
   "orderedList",
   "continueNumbering",
   "paste",

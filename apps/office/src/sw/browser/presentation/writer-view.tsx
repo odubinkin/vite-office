@@ -6,7 +6,6 @@ import { RES_BOX } from "../../inc/hintids";
 import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { TableProperties } from "lucide-react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
@@ -33,7 +32,7 @@ import {
   resolveSwListTextLeftMargin,
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
-import { WriterParagraphProperties } from "./WriterPropertiesPanel";
+import { WriterPropertiesPanel } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { useWriterContextMenu } from "./WriterContextMenu";
@@ -562,32 +561,24 @@ export function WriterWorkbench({
         onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
           <>
-            <WriterParagraphProperties
-              alignment={snapshot.activeParagraph.alignment}
+            <WriterPropertiesPanel
+              isTable={currentTable !== undefined}
+              unit={snapshot.metricUnit}
+              paragraphStyleOptions={snapshot.paragraphStyleOptions}
+              embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
+                /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
+                (font) => font.familyName,
+              )}
+              fontAvailability={
+                fontAvailability?.document === activeDocument ? fontAvailability.values : {}
+              }
               commandSource={commandSource}
               focusDocument={
                 /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
                   (editingHostRef.current as HTMLElement).focus()
               }
-              listKind={snapshot.activeParagraph.list.kind}
-              paragraphNumber={snapshot.activeParagraphIndex + 1}
               resolveArguments={resolveCommandArguments}
-              styleDisplayName={snapshot.activeParagraph.styleDisplayName}
             />
-            {currentTable === undefined ? null : (
-              <button
-                aria-label="Table Properties"
-                className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
-                onClick={
-                  /** Opens properties through the native command input route. @returns Dispatch result. */
-                  () => commandSource.Execute(WRITER_COMMAND_IDS.tableDialog)
-                }
-                title="Table Properties"
-                type="button"
-              >
-                <TableProperties aria-hidden={true} size={18} />
-              </button>
-            )}
           </>
         }
         rulers={

@@ -28,7 +28,13 @@ import { SelectionType } from "../inc/wrtsh";
 import type { SwTabCols } from "../../core/bastyp/tabcol";
 import type { SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
 import { SID_RULER_BORDERS, SID_RULER_ROWS_VERTICAL } from "../../../../svx/inc/svxids";
-import { createSwTableColumnItem, createSwTableRowItem } from "./viewtab";
+import {
+  createSwTableColumnItem,
+  createSwTableRowItem,
+  createSwParagraphULSpaceItem,
+  applySwParagraphULSpaceItem,
+} from "./viewtab";
+import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxRuler } from "../../../../svx/source/dialog/svxruler";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
@@ -154,6 +160,16 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Reads the consumed paragraph-spacing StateTabWin branch. @returns Uniform slot item or mixed state. */
+  public GetParagraphULSpace(): SvxULSpaceItem | undefined {
+    return this.wrtShell.GetTextShell().GetUniformParagraphItem(createSwParagraphULSpaceItem);
+  }
+
+  /** Executes the consumed paragraph-spacing ExecTabWin branch through actual paragraph history. @param item - Accepted slot value. @returns Whether changed. */
+  public ApplyParagraphULSpace(item: SvxULSpaceItem): boolean {
+    return this.wrtShell.GetTextShell().SetParagraphItem(applySwParagraphULSpaceItem(item));
   }
 
   /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */

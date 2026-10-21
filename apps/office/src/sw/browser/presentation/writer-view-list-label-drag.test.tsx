@@ -2,6 +2,7 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, expect, it, vi } from "vitest";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { SwPosition } from "../../source/core/crsr/pam";
@@ -24,6 +25,8 @@ afterEach(
 /** Mounts an actual plain cursor and a separate list-label node. @param left - Current paragraph raw margin. @param legacy - Native legacy label geometry. @returns Actual owners and label. */
 function fixture(left = 300, legacy = false) {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const doc = session.docShell.GetDoc(),
     shell = session.view.GetWrtShell(),

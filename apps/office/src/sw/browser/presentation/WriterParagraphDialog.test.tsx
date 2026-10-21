@@ -1,5 +1,5 @@
 /** @fileoverview Verifies paragraph dimensional fields retain physical values across display units. */
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { WriterParagraphDialog } from "./WriterParagraphDialog";
 import { FieldUnit as F } from "../../../tools/inc/fldunit";
@@ -90,4 +90,37 @@ it("keeps proportional spacing as a percent when module units change", /** Check
     lineMode: "proportional",
     lineValue: 135,
   });
+});
+
+it("uses native default metric labels and routes character-unit vertical fields independently", /** Checks actual dialog unit routing without changing the initial physical draft on Cancel. @returns Nothing. */ () => {
+  for (const unit of [undefined, F.CHAR]) {
+    const cancel = vi.fn(),
+      submit = vi.fn();
+    render(
+      <WriterParagraphDialog
+        dialogRequest={{ id: 21, request }}
+        fontSizePt={12}
+        {...(unit === undefined ? {} : { unit })}
+        onDialogCancel={cancel}
+        onDialogSubmit={submit}
+      />,
+    );
+    expect(
+      screen.getByRole("spinbutton", {
+        name: unit === undefined ? "Above paragraph (cm)" : "Above paragraph (line)",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("spinbutton", {
+        name: unit === undefined ? "Below paragraph (cm)" : "Below paragraph (line)",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("spinbutton", { name: unit === undefined ? "Value (cm)" : "Value (pt)" }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(cancel).toHaveBeenCalledWith(21);
+    expect(submit).not.toHaveBeenCalled();
+    cleanup();
+  }
 });

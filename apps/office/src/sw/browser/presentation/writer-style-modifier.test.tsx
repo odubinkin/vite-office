@@ -1,5 +1,5 @@
 /** @fileoverview Checks explicit native StyleApply modifiers through mounted Writer UI, real frame commands, editing and ODT. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
@@ -67,7 +67,9 @@ function mount() {
   );
   const editor = screen.getByLabelText("Writer document body");
   const paragraph = required(editor.querySelector(`[data-writer-node-index="${node.GetIndex()}"]`));
-  const select = screen.getByRole("combobox", { name: "Paragraph style", hidden: true });
+  const select = within(
+    screen.getByRole("toolbar", { name: "Writer formatting toolbar", hidden: true }),
+  ).getByRole("combobox", { name: "Paragraph style", hidden: true });
   return {
     session,
     doc,

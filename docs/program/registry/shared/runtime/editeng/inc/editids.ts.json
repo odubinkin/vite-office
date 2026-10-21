@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/editids.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "writer-properties-sidebar",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/inc/editids.ts#SID_ATTR_PARA_LRSPACE",
+        "vendor/libreoffice-reference/include/editeng/editids.hrc#SID_ATTR_PARA_LRSPACE"
+      ],
+      "justification": "TaskAHJ2M9: Native consumed10042/10043 paragraph slot identities only;no command or pool service facade.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SID_ATTR_PARA_LRSPACE"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/editeng/editids.hrc",
+      "upstreamSymbols": [
+        "SID_ATTR_PARA_LRSPACE"
+      ]
+    }
+  }
+}

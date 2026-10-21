@@ -1,4 +1,5 @@
 /** @fileoverview Checks rounded paragraph ruler coordinates preserve precise Writer items and history. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
@@ -35,6 +36,8 @@ afterEach(
 /** Builds actual logical paragraph attributes before creating the immutable store. @param left - Signed text margin. @param firstLine - Signed first-line offset. @param right - Signed right margin. @returns Writer owners. */
 function fixture(left = 487, firstLine = 367, right = 6503) {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerIndentPixelsProof");

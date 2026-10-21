@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native border-page UI composition and original document/history integration. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { Color } from "../../../tools/inc/color";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -330,4 +331,17 @@ it("actual selected native border page applies inner/outer/padding items to orig
     cleanup();
     session.Close();
   }
+});
+
+it("projects large metric units to the native millimetre border-padding field", /** Checks source M-to-MM normalization with actual border item output. @returns Nothing. */ () => {
+  const f = fixture(),
+    changed = vi.fn();
+  cleanup();
+  render(<WriterBorderPage page={f.page} unit={FieldUnit.M} onChange={changed} />);
+  const top = screen.getByRole("spinbutton", { name: "Top padding (mm)" });
+  fireEvent.change(top, { target: { value: "1 mm" } });
+  expect(changed).toHaveBeenCalled();
+  const output = new SfxItemSet(f.input);
+  expect(f.page.FillItemSet(output)).toBe(true);
+  expect((output.Get(1) as SvxBoxItem).GetDistance(0)).toBe(57);
 });

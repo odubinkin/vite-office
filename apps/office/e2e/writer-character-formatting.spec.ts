@@ -33,7 +33,10 @@ test("Writer direct character formatting" /**
       selection.addRange(range);
     },
   );
-  await page.getByRole("button", { name: "Bold" }).click();
+  await page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("button", { name: "Bold" })
+    .click();
   await expect(writerEditor.locator("strong")).toHaveText("Formatted Writer body");
   await writerEditor.evaluate(
     /** Restores a complete selection after React renders direct-format run elements. @param element - Writer editing host that owns the runs. @returns Nothing; browser selection is replaced. */

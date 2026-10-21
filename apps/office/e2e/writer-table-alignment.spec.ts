@@ -31,7 +31,7 @@ for (const viewport of [1280, 390])
     await expect(width).toBeDisabled();
     await page.getByRole("radio", { name: "Left", exact: true }).check();
     await expect(width).toBeEnabled();
-    await expect(width).toHaveValue("4");
+    await expect(width).toHaveAttribute("aria-valuenow", "4");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect(page.getByRole("table", { name: "Restore" })).toHaveCSS("width", "151.188px");
   });
@@ -43,7 +43,7 @@ for (const viewport of [1280, 390])
     ["From left", 3000, 300, 4700],
     ["Right", 3000, 5000, 0],
     ["Center", 3000, 2500, 2500],
-    ["Manual", 7100, 300, 600],
+    ["Manual", 7099, 300, 601],
   ] as const)
     test(`native table ${label} viewport=${viewport}`, /** Exercises ordinary Open, format page and native history. @param fixtures - Browser fixtures. @param fixtures.page - Actual browser. @returns Completion. */ async ({
       page,

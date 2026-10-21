@@ -4,7 +4,9 @@ test("native root Ctrl-F6 closes the Writer popup and focuses its document", /**
   page,
 }) => {
   await page.goto("/writer");
-  const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true }),
+  const owner = page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("combobox", { name: "Paragraph style", exact: true }),
     editor = page.getByLabel("Writer document body", { exact: true });
   await owner.focus();
   await page.keyboard.press("F10");
@@ -20,7 +22,9 @@ test("native menubar trigger Ctrl-F6 resets the Writer activation cycle", /** Ch
   page,
 }) => {
   await page.goto("/writer");
-  const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true }),
+  const owner = page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("combobox", { name: "Paragraph style", exact: true }),
     editor = page.getByLabel("Writer document body", { exact: true });
   await owner.focus();
   await page.keyboard.press("F10");

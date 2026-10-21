@@ -1,5 +1,5 @@
 /** @fileoverview Verifies cell list-level commands use the actual native selection,bindings and delta history. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -53,7 +53,12 @@ describe("native cell list level UI", /** Registers mounted actual-owner contrac
   it("enables and renders demote,promote and indent on the actual cell with Undo/Redo", /** Checks dispatch bindings share the core operation. @returns Nothing. */ () => {
     const owner = fixture(),
       toolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
-    expect(screen.getByRole("button", { name: "Decrease" })).toBeDisabled();
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Decrease" },
+      ),
+    ).toBeDisabled();
     expect(owner.cell).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
@@ -65,7 +70,12 @@ describe("native cell list level UI", /** Registers mounted actual-owner contrac
     expect(owner.first.GetActualListLevel()).toBe(1);
     expect(owner.second.GetActualListLevel()).toBe(0);
     expect(toolbar).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Decrease" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Decrease" },
+      ),
+    );
     expect(owner.cell).toHaveAttribute("data-list-level", "0");
     act(
       /** Reverses native indent. @returns Nothing. */ () => {

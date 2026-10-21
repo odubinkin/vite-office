@@ -52,7 +52,9 @@ test("outside pointer focus belongs to the clicked Writer control", /** Checks m
   await page.goto("/writer");
   await page.getByLabel("Writer document body", { exact: true }).focus();
   await page.getByRole("menuitem", { name: "View", exact: true }).click();
-  const control = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+  const control = page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("combobox", { name: "Paragraph style", exact: true });
   await control.click();
   await expect(control).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);

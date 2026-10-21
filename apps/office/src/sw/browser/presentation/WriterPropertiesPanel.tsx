@@ -1,196 +1,124 @@
-/**
- * @fileoverview Displays focused paragraph formatting in the browser Properties panel without
- * claiming LibreOffice Writer Inspector ownership.
- */
-/* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
-
-import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { useRef } from "react";
-import { SidebarPanel } from "../../../sfx2/browser/presentation/SidebarPanel";
-import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
+/** @fileoverview Composes the consumed native Writer Style,Character and Paragraph Properties panels over the active frame. */
+import { TableEditPanel } from "../sidebar/TableEditPanel";
+import { Ellipsis } from "lucide-react";
+import { StylesPropertyPanel } from "../../../svx/browser/sidebar/styles/StylesPropertyPanel";
+import { TextPropertyPanel } from "../../../svx/browser/sidebar/text/TextPropertyPanel";
+import { ParaPropertyPanel } from "../../../svx/browser/sidebar/paragraph/ParaPropertyPanel";
 import { CommandButton } from "../../../framework/browser/presentation/CommandToolbar";
 import {
-  AlignCenter,
-  AlignJustify,
-  AlignLeft,
-  AlignRight,
-  List,
-  ListOrdered,
-  ListX,
-  Ellipsis,
-  type LucideIcon,
-} from "lucide-react";
-import type { WriterParagraphListKind } from "../../source/core/doc/list";
-import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
+  useBrowserCommandPresentation,
+  type BrowserCommandSurfaceProps,
+} from "../../../framework/browser/presentation/command-surface";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import type { WriterParagraphStyleOption } from "./writer-view-projection";
+import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { selectWriterCommandResource } from "./writer-command-presentation";
+import { WriterLineSpacingControl } from "./WriterLineSpacingControl";
 
-const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
-  center: "Centered",
-  justify: "Justified",
-  left: "Left",
-  right: "Right",
-};
-
-const listLabels: Readonly<Record<WriterParagraphListKind, string>> = {
-  bullet: "Unordered List",
-  none: "No List",
-  numbered: "Ordered List",
-};
-
-const sidebarIcons: Readonly<Record<string, LucideIcon>> = {
-  [WRITER_COMMAND_IDS.alignLeft]: AlignLeft,
-  [WRITER_COMMAND_IDS.alignCenter]: AlignCenter,
-  [WRITER_COMMAND_IDS.alignRight]: AlignRight,
-  [WRITER_COMMAND_IDS.alignJustify]: AlignJustify,
-  [WRITER_COMMAND_IDS.removeBullets]: ListX,
-  [WRITER_COMMAND_IDS.unorderedList]: List,
-  [WRITER_COMMAND_IDS.orderedList]: ListOrdered,
-};
-
-/** Resolves the required icon for one fixed sidebar command placement. @param commandId - Writer command. @returns Sidebar icon. */
-export function getSidebarIcon(commandId: string): LucideIcon {
-  const icon = sidebarIcons[commandId];
-  if (icon === undefined) throw new Error(`Writer sidebar icon is missing for ${commandId}.`);
-  return icon;
-}
-
-/** Defines the focused paragraph details rendered by the Writer properties sidebar. */
+/** Supplies the actual frame and module unit to the Paragraph panel. */
 export interface WriterParagraphPropertiesProps extends BrowserCommandSurfaceProps {
   readonly focusDocument?: () => void;
-  readonly alignment: WriterParagraphAlignment;
-  readonly listKind: WriterParagraphListKind;
-  /** One-based document position of the focused Writer paragraph. */
-  readonly paragraphNumber: number;
-  readonly styleDisplayName: string;
+  readonly unit: FieldUnit;
 }
 
-/**
- * Renders focused paragraph formatting feedback in the Writer properties sidebar.
- *
- * @param props - Immutable selected paragraph information supplied by the Writer workbench.
- * @param props.alignment - Current paragraph alignment.
- * @param props.commandSource - Active bindings-backed command source.
- * @param props.focusDocument - Returns panel header focus to the owning Writer client.
- * @param props.listKind - Current paragraph list kind.
- * @param props.paragraphNumber - One-based visible position for the active paragraph.
- * @param props.resolveArguments - Browser argument adapter.
- * @param props.styleDisplayName - Current paragraph style display name.
- * @returns A command- and bindings-backed paragraph sidebar.
- */
-export function WriterParagraphProperties({
-  alignment,
-  commandSource,
-  focusDocument,
-  listKind,
-  paragraphNumber,
-  resolveArguments,
-  styleDisplayName,
-}: WriterParagraphPropertiesProps): React.JSX.Element {
+/** Renders Writer's consumed Paragraph panel without presentation-owned formatting state. @param props - Active frame and actual unit. @returns Native panel projection. */
+export function WriterParagraphProperties(
+  props: WriterParagraphPropertiesProps,
+): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const paragraphControls = useRef<HTMLDivElement>(null);
-  const getCommandResource =
-    /** Localizes one generated sidebar command. @param commandUrl - Command URL. @returns Localized resource. */ (
-      commandUrl: string,
-    ) => {
-      return selectWriterCommandResource(localization, commandUrl);
-    };
+  /** Resolves the actual localized command resource. @param url - Native slot URL. @returns Resource. */
+  function resource(url: string) {
+    return selectWriterCommandResource(localization, url);
+  }
   return (
-    <SidebarPanel
-      focusDocument={focusDocument}
+    <ParaPropertyPanel
+      {...props}
       title={localization.GetText("writer.properties.paragraph", "Paragraph")}
-      focusContent={
-        /** Focuses this panel's first eligible paragraph-content widget. @returns Nothing. */ () =>
-          (paragraphControls.current as HTMLDivElement)
-            .querySelector<HTMLButtonElement>("button:not(:disabled)")
-            ?.focus()
+      getCommandResource={resource}
+      lineSpacing={
+        <WriterLineSpacingControl
+          commandSource={props.commandSource}
+          getCommandResource={resource}
+        />
       }
       moreOptions={
         <CommandButton
+          {...props}
           commandId={WRITER_COMMAND_IDS.paragraphDialog}
-          commandSource={commandSource}
+          icon={Ellipsis}
           getCommandResource={
-            /** Applies the native panel toolbar label to the existing dialog command. @param commandId - Existing dialog slot. @returns Localized resource. */ (
-              commandId,
+            /** Applies the native panel toolbar label. @param url - Actual paragraph dialog slot. @returns Localized resource. */ (
+              url,
             ) => ({
-              ...getCommandResource(commandId),
+              ...resource(url),
               label: localization.GetText("sidebar.panel.more-options", "More Options"),
             })
           }
-          icon={Ellipsis}
-          resolveArguments={resolveArguments}
         />
       }
-    >
-      <p className="mt-1 text-sm text-slate-600">
-        {localization.GetText(
-          "writer.properties.active-paragraph",
-          "Paragraph {number} is active.",
-          { number: paragraphNumber },
-        )}
-      </p>
-      <div
-        className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3"
-        ref={paragraphControls}
-      >
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          {localization.GetText("writer.properties.alignment", "Alignment")}
-        </p>
-        <p className="mt-1 text-sm font-bold text-slate-900">
-          {localization.GetText(`writer.alignment.${alignment}`, alignmentLabels[alignment])}
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {[
-            WRITER_COMMAND_IDS.alignLeft,
-            WRITER_COMMAND_IDS.alignCenter,
-            WRITER_COMMAND_IDS.alignRight,
-            WRITER_COMMAND_IDS.alignJustify,
-          ].map(
-            /** Renders one alignment command. @param commandId - Generated command URL. @returns Command button. */ (
-              commandId,
-            ) => (
-              <CommandButton
-                commandId={commandId}
-                commandSource={commandSource}
-                getCommandResource={getCommandResource}
-                icon={getSidebarIcon(commandId)}
-                key={commandId}
-                resolveArguments={resolveArguments}
-              />
-            ),
-          )}
-        </div>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          {localization.GetText("writer.properties.style", "Style")}
-        </p>
-        <p className="mt-1 text-sm font-bold text-slate-900">{styleDisplayName}</p>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          {localization.GetText("writer.properties.list", "List")}
-        </p>
-        <p className="mt-1 text-sm font-bold text-slate-900">
-          {localization.GetText(`writer.list.${listKind}`, listLabels[listKind])}
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {[
-            WRITER_COMMAND_IDS.removeBullets,
-            WRITER_COMMAND_IDS.unorderedList,
-            WRITER_COMMAND_IDS.orderedList,
-          ].map(
-            /** Renders one list command. @param commandId - Generated command URL. @returns Command button. */ (
-              commandId,
-            ) => (
-              <CommandButton
-                commandId={commandId}
-                commandSource={commandSource}
-                getCommandResource={getCommandResource}
-                icon={getSidebarIcon(commandId)}
-                key={commandId}
-                resolveArguments={resolveArguments}
-              />
-            ),
-          )}
-        </div>
-      </div>
-    </SidebarPanel>
+    />
+  );
+}
+
+/** Composes native Sidebar.xcu order100/120/200 with actual selection and font ports. @param props - Persistent frame projections. @returns Supported Writer Properties deck content. */
+export function WriterPropertiesPanel(
+  props: WriterParagraphPropertiesProps &
+    Readonly<{
+      paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+      isTable: boolean;
+      embeddedFontFamilies: readonly string[];
+      fontAvailability: Readonly<Record<string, boolean>>;
+    }>,
+): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  /** Resolves the actual localized command resource. @param url - Native slot URL. @returns Resource. */
+  function resource(url: string) {
+    return selectWriterCommandResource(localization, url);
+  }
+  const style = useBrowserCommandPresentation(
+    props.commandSource,
+    WRITER_COMMAND_IDS.styleApply,
+    resource,
+  );
+  return (
+    <>
+      <StylesPropertyPanel
+        title={localization.GetText("writer.properties.style", "Style")}
+        label={resource(WRITER_COMMAND_IDS.styleApply).controlLabel}
+        options={props.paragraphStyleOptions}
+        value={String(style.selectedValue ?? "")}
+        enabled={style.enabled}
+        {...(props.focusDocument === undefined ? {} : { focusDocument: props.focusDocument })}
+        getLabel={
+          /** Localizes original pool styles while retaining custom names. @param entry - Actual style entry. @returns Display label. */ (
+            entry,
+          ) => (entry.resourceId === undefined ? entry.name : resource(entry.resourceId).label)
+        }
+        applyStyle={
+          /** Applies through the actual Sfx style slot. @param entry - Accepted native name. @returns Nothing. */ (
+            entry,
+          ) => {
+            props.commandSource.Execute(WRITER_COMMAND_IDS.styleApply, {
+              Style: entry.name,
+              FamilyName: "ParagraphStyles",
+            });
+          }
+        }
+      />
+      <TextPropertyPanel
+        {...props}
+        title={localization.GetText("writer.properties.character", "Character")}
+        getCommandResource={resource}
+      />
+      <WriterParagraphProperties {...props} />
+      {props.isTable && (
+        <TableEditPanel
+          {...props}
+          title={localization.GetText("writer.properties.table", "Table")}
+          getCommandResource={resource}
+        />
+      )}
+    </>
   );
 }

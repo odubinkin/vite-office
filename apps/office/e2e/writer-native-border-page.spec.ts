@@ -101,7 +101,10 @@ for (const width of [1280, 390])
         "data-writer-border-state",
         "1",
       );
-      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveValue("0.18");
+      await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
+        "aria-valuenow",
+        "0.18",
+      );
       await page.getByRole("button", { name: "Cancel", exact: true }).click();
       await expect(cells.nth(2)).toHaveCSS("padding-top", "6.66667px");
       await page.getByRole("button", { name: "Table Properties", exact: true }).click();

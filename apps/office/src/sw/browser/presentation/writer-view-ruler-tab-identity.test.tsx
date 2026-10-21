@@ -5,6 +5,7 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP } from "../../inc/hintids";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { WriterViewStore } from "./writer-view-projection";
@@ -21,6 +22,8 @@ afterEach(
 /** Builds mixed default/explicit tab items in their native sorted order. @param collision - Whether the destination already has an explicit tab. @returns Actual Writer owner. */
 function fixture(collision = false) {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabIdentityProof");

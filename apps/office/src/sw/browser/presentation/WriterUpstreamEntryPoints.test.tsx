@@ -59,7 +59,12 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
         name: "Cancel",
       }),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Line Spacing" },
+      ),
+    );
     fireEvent.pointerDown(screen.getByRole("button", { name: "Spacing: 1.15" }));
     expect(screen.getByRole("button", { name: "Spacing: 1.15" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Spacing: 1.15" }));
@@ -71,7 +76,12 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
           .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
       ).GetPropLineSpace(),
     ).toBe(115);
-    fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Line Spacing" },
+      ),
+    );
     fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {
       target: { value: "175" },
     });
@@ -84,14 +94,24 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
           .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
       ).GetPropLineSpace(),
     ).toBe(175);
-    fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Line Spacing" },
+      ),
+    );
     fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {
       target: { value: "0" },
     });
     expect(screen.getByRole("button", { name: "Apply" })).toBeDisabled();
     fireEvent.keyDown(document, { key: "Escape" });
     expect(screen.queryByRole("button", { name: "Apply" })).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Line Spacing" },
+      ),
+    );
     fireEvent.pointerDown(document.body);
     expect(screen.queryByRole("button", { name: "Apply" })).toBeNull();
     rendered.unmount();

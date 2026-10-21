@@ -24,7 +24,9 @@ test("unopened menu Escape restores its saved Writer toolbar control", /** Check
   page,
 }) => {
   await page.goto("/writer");
-  const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+  const owner = page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("combobox", { name: "Paragraph style", exact: true });
   await owner.focus();
   const trigger = page.getByRole("menuitem", { name: "View", exact: true });
   await trigger.focus();

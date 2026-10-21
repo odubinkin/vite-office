@@ -106,6 +106,7 @@ export class MetricSpinBinding {
     if (!changedValue && !changedUnit && !changedRange && !reset && !changedLocale) return;
     if (
       changedValue &&
+      next.value !== undefined &&
       next.value === this.pendingFeedback &&
       !changedUnit &&
       !changedRange &&

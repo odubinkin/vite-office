@@ -46,7 +46,9 @@ function mount(name = "first", active = true) {
   const rendered = render(tree(active)),
     frame = within(screen.getByLabelText(`${name} frame`));
   const editor = frame.getByLabelText("Writer document body"),
-    select = frame.getByRole("combobox", { name: "Paragraph style", hidden: true });
+    select = within(
+      frame.getByRole("toolbar", { name: "Writer formatting toolbar", hidden: true }),
+    ).getByRole("combobox", { name: "Paragraph style", hidden: true });
   return {
     session,
     document,

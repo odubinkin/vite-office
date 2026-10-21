@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/sidebar/TableEditPanel.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-properties-sidebar",
+    "capabilityIds": [
+      "CAP-0137"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/sidebar/TableEditPanel.tsx#TableEditPanel"
+      ],
+      "justification": "TaskAHJ2M9: React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TableEditPanel"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

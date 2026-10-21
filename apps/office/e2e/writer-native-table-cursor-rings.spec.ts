@@ -26,7 +26,9 @@ test("Writer selected row character formatting covers full cells and survives Un
   await page.keyboard.type("Second");
   await selectBrowserTableRow(page, "Table1", 1);
   const table = page.getByRole("table", { name: "Table1" }),
-    bold = page.getByRole("button", { name: "Bold", exact: true });
+    bold = page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("button", { name: "Bold", exact: true });
   await bold.click();
   await expect(bold).toHaveAttribute("aria-pressed", "true");
   for (const cell of [first, tail, second]) await expect(cell.locator("strong")).toHaveCount(1);

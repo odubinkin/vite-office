@@ -18,6 +18,8 @@ import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { RES_PARATR_LINESPACING } from "../../../inc/hintids";
+import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
+import { SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
 
 /** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
@@ -40,7 +42,44 @@ export function createWriterTextCommandRegistry(
       /** Reports a mixed direct-format selection. @returns True when selected text has both values. */
       isMixed: (): boolean => target.GetCharacterFormatState(format) === "mixed",
     });
+  /** Opens Execute's paragraph dialog branch for the original requesting slot. @param commandId - Native originating slot. @returns Whether accepted formatting changed. */
+  function openParagraphDialog(commandId: string): Promise<boolean> {
+    return dialogController
+      .RequestParagraphDialog(
+        commandId,
+        target.GetParagraphFormat(),
+        target.IsPaintLineNumbers(),
+        target.GetPageStyleNames(),
+      )
+      .then(
+        /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
+        (result) => {
+          if (result === undefined) return false;
+          const paragraphChanged = target.ApplyParagraphFormat(result.paragraphFormat);
+          const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
+          return paragraphChanged || lineNumbersChanged;
+        },
+      );
+  }
   return createWriterInterface([
+    {
+      capabilityId: "CAP-0125",
+      id: WRITER_COMMAND_IDS.paragraphMargins,
+      /** Executes the native typed item path without opening a dialog. @param context - Bound text shell. @param args - Actual request items. @returns Whether changed. */
+      execute: (context, args): boolean | Promise<boolean> => {
+        const item = args.find(
+          /** Resolves the native indent argument. @param item - Actual request item. @returns Whether this slot. */
+          (item) => item.Which() === SID_ATTR_PARA_LRSPACE,
+        );
+        return item instanceof SvxLRSpaceItem
+          ? context.ApplyParagraphLRSpace(item)
+          : openParagraphDialog(WRITER_COMMAND_IDS.paragraphMargins);
+      },
+      /** Reads uniform native indent state. @returns Independent slot item or mixed state. */
+      getStateValue: () => target.GetParagraphLRSpace(),
+      /** Reports invalid aggregate state. @returns Whether the selection differs. */
+      isMixed: () => target.GetParagraphLRSpace() === undefined,
+    },
     ...(["bullet", "numbered", "none"] as const).map(
       /** Creates one list-kind command owned by listsh. @param kind - Requested list kind. @returns Descriptor. */ (
         kind,
@@ -241,24 +280,8 @@ export function createWriterTextCommandRegistry(
     },
     {
       capabilityId: "CAP-0125",
-      /** Opens one shell-owned paragraph dialog and applies only accepted values. @returns Whether formatting changed. */
-      execute: (): Promise<boolean> =>
-        dialogController
-          .RequestParagraphDialog(
-            WRITER_COMMAND_IDS.paragraphDialog,
-            target.GetParagraphFormat(),
-            target.IsPaintLineNumbers(),
-            target.GetPageStyleNames(),
-          )
-          .then(
-            /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
-            (result) => {
-              if (result === undefined) return false;
-              const paragraphChanged = target.ApplyParagraphFormat(result.paragraphFormat);
-              const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
-              return paragraphChanged || lineNumbersChanged;
-            },
-          ),
+      /** Opens the native paragraph dialog. @returns Whether accepted formatting changed. */
+      execute: () => openParagraphDialog(WRITER_COMMAND_IDS.paragraphDialog),
       /** Exposes current paragraph values to bindings. @returns Current format. */
       getStateValue: (): WriterParagraphFormatValue => target.GetParagraphFormat(),
       id: WRITER_COMMAND_IDS.paragraphDialog,

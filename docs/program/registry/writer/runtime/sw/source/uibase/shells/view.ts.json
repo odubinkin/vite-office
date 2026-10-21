@@ -20,7 +20,7 @@
       "evidence": [
         "apps/office/src/sw/source/uibase/shells/view.ts#SwViewCommandShell"
       ],
-      "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners.",
+      "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners. TaskAHJ2M9: Actual SwView owns paragraph UL slot projection and application;the text shell retains LR ownership. Full native AutoUpdatePara and layout/protection services remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "SwViewCommandShell",

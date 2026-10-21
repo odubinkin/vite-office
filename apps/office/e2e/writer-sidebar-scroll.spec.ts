@@ -10,7 +10,6 @@ for (const width of [1280, 390]) {
     const sidebar = page.getByRole("complementary", { name: "Writer properties sidebar" });
     const panel = sidebar.getByRole("region", { name: "Paragraph" });
     const title = sidebar.getByRole("button", { name: "Paragraph", exact: true });
-    const rail = sidebar.getByRole("button", { name: "Properties", exact: true });
     await panel.evaluate(
       /** Constrains the existing scrollport to exercise measured overflow. @param element - Owned panel root. @returns Nothing. */
       (element) => {
@@ -19,7 +18,7 @@ for (const width of [1280, 390]) {
         viewport.style.maxHeight = "100px";
       },
     );
-    for (const route of ["Tab", "Escape"]) {
+    for (const route of ["ArrowDown", "Escape"]) {
       await panel.evaluate(
         /** Resets only the owned viewport before focus entry. @param element - Panel root. @returns Nothing. */
         (element) => {
@@ -27,7 +26,9 @@ for (const width of [1280, 390]) {
         },
       );
       const control =
-        route === "Tab" ? rail : sidebar.getByRole("button", { name: "Start", exact: true });
+        route === "ArrowDown"
+          ? sidebar.getByRole("button", { name: "Character", exact: true })
+          : sidebar.getByRole("button", { name: "Start", exact: true });
       await control.focus();
       await control.press(route);
       await expect(title).toBeFocused();

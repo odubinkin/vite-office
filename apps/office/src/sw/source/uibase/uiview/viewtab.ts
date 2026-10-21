@@ -1,6 +1,26 @@
 /** @fileoverview Ports table column and row values from SwView::StateTabWin, without claiming full slot/frame dispatch. */
 import { SvxColumnDescription, SvxColumnItem } from "../../../../svx/source/dialog/rulritem";
 import { SwTabCols } from "../../core/bastyp/tabcol";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SID_ATTR_PARA_ULSPACE } from "../../../../editeng/inc/editids";
+import { RES_UL_SPACE } from "../../../inc/hintids";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+
+/** Projects StateTabWin's independent paragraph spacing slot item. @param paragraph - Actual text node. @returns Concrete slot state. */
+export function createSwParagraphULSpaceItem(paragraph: SwTextNode): SvxULSpaceItem {
+  const item = (paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).Clone();
+  item.SetWhich(SID_ATTR_PARA_ULSPACE);
+  return item;
+}
+
+/** Retains ExecTabWin's self-assignment normalization and item remapping. @param input - Actual accepted slot item. @returns Independent Writer attribute. */
+export function applySwParagraphULSpaceItem(input: SvxULSpaceItem): SvxULSpaceItem {
+  const item = input.Clone();
+  item.SetUpper(item.GetUpper());
+  item.SetLower(item.GetLower());
+  item.SetWhich(RES_UL_SPACE);
+  return item;
+}
 
 /** Creates native ruler columns from borrowed Writer separators. @param columns - Original native geometry. @param active - Active native column. @param pageExtent - Native page width or vertical page height. @param which - Ruler item slot. @param rightToLeft - Mirror table descriptions. @returns Independent native column item. */
 export function createSwTableColumnItem(

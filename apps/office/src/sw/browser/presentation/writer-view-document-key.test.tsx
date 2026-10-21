@@ -40,7 +40,9 @@ function mountFrame(active = true, name = "first") {
     fileDialogs,
     frame,
     editor: frame.getByLabelText("Writer document body"),
-    owner: frame.getByRole("combobox", { name: "Paragraph style", hidden: true }),
+    owner: within(
+      frame.getByRole("toolbar", { name: "Writer formatting toolbar", hidden: true }),
+    ).getByRole("combobox", { name: "Paragraph style", hidden: true }),
     unmount: rendered.unmount,
     setActive:
       /** Updates only frame eligibility. @param next - Next active state. @returns Nothing. */ (

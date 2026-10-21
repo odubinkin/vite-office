@@ -1,4 +1,6 @@
 /** @fileoverview Checks native manual offset wrapping in the real browser without rewriting authored ODT values. */
+import { FieldUnit } from "../src/tools/inc/fldunit";
+import { WRITER_LAYOUT_PREFERENCES_KEY } from "../src/sw/browser/storage/writer-layout-preferences-store";
 import { expect, test } from "@playwright/test";
 import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
@@ -11,6 +13,28 @@ import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh1";
+
+// The authored draft uses points;the independent ruler geometry scenario uses its native CM grid.
+test.use({
+  storageState: {
+    cookies: [],
+    origins: [
+      {
+        origin: "http://127.0.0.1:4173",
+        localStorage: [
+          {
+            name: WRITER_LAYOUT_PREFERENCES_KEY,
+            value: JSON.stringify({
+              "Other/MeasureUnit": FieldUnit.POINT,
+              "Window/HorizontalRulerUnit": FieldUnit.CM,
+              "Window/VerticalRulerUnit": FieldUnit.CM,
+            }),
+          },
+        ],
+      },
+    ],
+  },
+});
 
 for (const width of [1280, 390])
   for (const raw of [65537, -65537])
@@ -92,7 +116,10 @@ for (const width of [1280, 390])
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
-      await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue(String(raw / 20));
+      // The widget projects its configured minimum;Cancel must retain the complete imported raw item.
+      await expect(
+        dialog.getByRole("spinbutton", { name: "First line indent (pt)", exact: true }),
+      ).toHaveValue(raw > 0 ? "3276.9 pt" : "-1638.5 pt");
       await expect(dialog.getByLabel("Automatic first-line indent")).not.toBeChecked();
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       await checkLayout(wrappedPoints);
@@ -100,7 +127,9 @@ for (const width of [1280, 390])
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       // The existing authoring command admits signed16 values only. Choose
       // a valid new draft; Undo must restore the complete imported raw item.
-      await dialog.getByLabel("First line indent (pt)").fill("1");
+      await dialog
+        .getByRole("spinbutton", { name: "First line indent (pt)", exact: true })
+        .fill("1");
       await dialog.getByLabel("Automatic first-line indent").check();
       await dialog.getByRole("button", { name: "OK", exact: true }).click();
       await expect(dialog).toHaveCount(0);

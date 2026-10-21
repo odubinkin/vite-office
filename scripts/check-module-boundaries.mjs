@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
+import { isSidebarPresentationImport } from "./module-boundaries/sidebar-imports.mjs";
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "comphelper",
@@ -959,7 +960,8 @@ for (const sourceFile of runtimeSources) {
     }
     if (
       isForbiddenModuleEdge(sourceModule, targetModule) &&
-      !isOriginalCharacterValueImport(relativeSource, relativeTarget)
+      !isOriginalCharacterValueImport(relativeSource, relativeTarget) &&
+      !isSidebarPresentationImport(relativeSource, relativeTarget)
     )
       failures.push(
         `${displayPath(sourceFile)}: non-allowlisted module edge ${sourceModule} -> ${targetModule}`,

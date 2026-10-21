@@ -1,6 +1,8 @@
 {
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "commandAliases": {
+    "paragraphMargins": ".uno:LeftRightParaMargin",
+    "paragraphSpacing": ".uno:ULSpacing",
     "optionsDialog": ".uno:OptionsTreeDialog",
     "alignCenter": ".uno:CenterPara",
     "alignJustify": ".uno:JustifyPara",
@@ -109,6 +111,8 @@
     },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
     { "capabilityId": "CAP-0125", "commandUrl": ".uno:ParagraphDialog" },
+    { "capabilityId": "CAP-0125", "commandUrl": ".uno:LeftRightParaMargin" },
+    { "capabilityId": "CAP-0125", "commandUrl": ".uno:ULSpacing" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:ContinueNumbering" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
@@ -143,6 +147,30 @@
       "showsDialog": true,
       "shortcuts": ["Alt+F12"],
       "slotId": 31630
+    },
+    ".uno:LeftRightParaMargin": {
+      "browserOwned": true,
+      "argumentSchema": ["LRSpace:SvxLRSpaceItem"],
+      "capabilityId": "CAP-0125",
+      "controlLabel": "Paragraph Indent",
+      "label": "Paragraph Indent",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10043
+    },
+    ".uno:ULSpacing": {
+      "browserOwned": true,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0125",
+      "controlLabel": "Paragraph Spacing",
+      "label": "Paragraph Spacing",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10042
     },
     ".uno:CenterPara": {
       "browserOwned": false,
@@ -1054,6 +1082,16 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:OptionsTreeDialog",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:LeftRightParaMargin",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:ULSpacing",
+      "sources": ["browser-extension:file-menu"]
     },
     {
       "classification": "supported-upstream",

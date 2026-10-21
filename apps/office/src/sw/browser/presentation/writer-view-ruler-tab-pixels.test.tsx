@@ -1,5 +1,6 @@
 /** @fileoverview Checks native integer tab anchors without rounding logical Writer items. */
 import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
@@ -26,6 +27,8 @@ afterEach(
 /** Creates real logical items with a hidden default and one explicit typed stop. @param position - Signed twip offset. @param adjustment - Tab type. @param left - Text indent. @param relative - Origin setting. @returns Editing and projection owners. */
 function fixture(position: number, adjustment = SvxTabAdjust.Right, left = 0, relative = true) {
   const session = createWriterDocumentSession();
+  // This geometry scenario explicitly selects the native CM snapping grid.
+  session.view.GetModule().ApplyUserMetric(FieldUnit.CM, false);
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabPixelsProof");

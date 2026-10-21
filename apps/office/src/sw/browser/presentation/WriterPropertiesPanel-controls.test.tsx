@@ -5,6 +5,7 @@ import type { BrowserCommandSource } from "../../../framework/browser/presentati
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -118,12 +119,9 @@ describe("Paragraph panel header controls", /** Groups native panel expansion an
       };
       render(
         <WriterParagraphProperties
-          alignment="left"
+          unit={FieldUnit.CM}
           commandSource={source}
-          listKind="none"
-          paragraphNumber={1}
           resolveArguments={/** Supplies no dialog draft. @returns Undefined. */ () => undefined}
-          styleDisplayName="Standard"
         />,
       );
       const title = screen.getByRole("button", { name: "Paragraph" });
@@ -133,7 +131,7 @@ describe("Paragraph panel header controls", /** Groups native panel expansion an
       expect(
         allDisabled
           ? title
-          : screen.getByRole("button", { name: alignmentDisabled ? "No List" : "Center" }),
+          : screen.getByRole("button", { name: alignmentDisabled ? "Unordered List" : "Center" }),
       ).toHaveFocus();
       if (allDisabled) {
         expect(screen.getByRole("button", { name: "More Options" })).toBeDisabled();

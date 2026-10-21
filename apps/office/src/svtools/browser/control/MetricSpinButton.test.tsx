@@ -228,6 +228,18 @@ it("distinguishes explicit same-value Reset from feedback and reconfigures range
   expect(change).toHaveBeenCalledOnce();
 });
 
+it("clears a genuine mixed assignment without mistaking absent feedback for numeric acknowledgement", /** Checks same-unit selection invalidation independently of Reset. @returns Nothing. */ () => {
+  const change = vi.fn(),
+    rendered = render(<MetricSpinButton value={1440} unit={U.MM} onValueChange={change} />),
+    field = screen.getByRole("spinbutton");
+  rendered.rerender(<MetricSpinButton value={undefined} unit={U.MM} onValueChange={change} />);
+  expect(field).toHaveValue("");
+  expect(field).not.toHaveAttribute("aria-valuenow");
+  fireEvent.blur(field);
+  expect(field).toHaveValue("");
+  expect(change).not.toHaveBeenCalled();
+});
+
 it("applies an explicit blank Reset without assigning a fabricated numeric zero", /** Checks mixed-value field Reset keeps native numeric state distinct from empty presentation. @returns Nothing. */ () => {
   const change = vi.fn();
   const rendered = render(

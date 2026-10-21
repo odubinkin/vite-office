@@ -31,7 +31,9 @@ async function openOwnedStyleDocument(page: Page, width: number) {
     name: "style-focus.odt",
   });
   const editor = page.getByLabel("Writer document body", { exact: true }),
-    select = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+    select = page
+      .getByRole("toolbar", { name: "Writer formatting toolbar" })
+      .getByRole("combobox", { name: "Paragraph style", exact: true });
   const paragraph = page
       .locator("[data-writer-paragraph-id]")
       .filter({ hasText: "FirstStyleFocus" }),
@@ -124,7 +126,11 @@ for (const width of [1280, 390]) {
     await fixture.select.focus();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Tab");
-    await expect(page.getByRole("combobox", { name: "Font name", exact: true })).toBeFocused();
+    await expect(
+      page
+        .getByRole("toolbar", { name: "Writer formatting toolbar" })
+        .getByRole("combobox", { name: "Font name", exact: true }),
+    ).toBeFocused();
     await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
     await page.keyboard.press("Shift+Tab");
     await expect(fixture.select).toBeFocused();
