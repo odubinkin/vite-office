@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 47
+revision: 48
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T01:49:06.481Z"
+  updated_by: "EVALUATOR"
+  note: "Committed candidate 66a22f1f1c0a satisfies the explicitly amended XCS/core-repair scope and acceptance contract; parent Writer search/UI remains open."
+  evaluated_sha: "66a22f1f1c0a4ee406b21572e3961801c214645e"
+  blueprint_digest: "1c804f73221cc508100e0f225626bcd580932eef1d30092eeaee541f4e756d17"
+  evidence_refs:
+    - ".agentplane/tasks/202610202049-9BAAAC/README.md"
+    - ".agentplane/tasks/202610202049-9BAAAC/quality/20261021-014906481-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610202049-9BAAAC/quality/20261021-014906481-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610202049-9BAAAC/quality/20261021-014906481-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610202049-9BAAAC/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-xcs-schema/tests-targeted-final.log"
+    - "output/playwright/writer-xcs-schema/cursor-owner-core-verified.log"
+    - "output/playwright/writer-xcs-schema/search-approved-native-guards.log"
+    - "output/playwright/writer-xcs-schema/approved-annotation-proof.json"
+    - "output/playwright/writer-xcs-schema/approved-scope-paths.json"
+    - "output/playwright/writer-xcs-schema/native-scope-browser.log"
+    - "output/playwright/writer-xcs-schema/native-scope-static.log"
+    - "output/playwright/writer-xcs-schema/source-approved.log"
+    - "output/playwright/writer-xcs-schema/policy-approved.log"
+  findings:
+    - "Actual Parser/ParseManager/xmldata/XcsParser and unchanged pinned Common.xcs are implemented with source-shaped schema/default/template/merge/resume/error tests; no provider or locale substitute was introduced."
+    - "Native cursor receiver and endpoint ownership, mark alias restoration, selection cleanup, point-only result fallback and Close disposal order are repaired against pinned sources; regression expectations preserve text/count/history and native quirks documented as WRITER-027."
+    - "Human approved exactly66 non-task paths, two native dead-guard instrumentation annotations and checkpoint-scoped cadence acceptance. Fresh search coverage is172 tests and100 percent S/B/F/L; current related5121 cases have three complete core modules at100 percent, with scoped Close proof, inventory124, static/five Chromium and quality gates passing. Full17771 test run passed scenarios but failed historical global coverage; no current full coverage pass is claimed."
 commit: null
 comments:
   -
