@@ -22,6 +22,17 @@ export class XMLTableStylesContext extends ScXMLImportContext {
   constructor(private readonly owner: ScXMLImport) {
     super(owner);
   }
+  /** Keeps unknown style declarations at the upstream styles-context boundary, rather than treating them as sheet content. Data-style compilation remains diagnosed until its formatter owner is ported. @param namespaceURI - Declaration namespace. @param localName - Declaration name. @param attributes - Declaration attributes. @returns Ignored metadata subtree. */
+  override createUnknownChildContext(
+    namespaceURI: string,
+    localName: string,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    void namespaceURI;
+    void attributes;
+    this.owner.unsupported(`automatic style declaration: ${localName}`);
+    return new SvXMLIgnoreContext(true);
+  }
   /** Creates only supported real table-cell style state. @param element - Token. @param attributes - Source attributes. @returns Context. */
   override createFastChildContext(
     element: XMLToken,

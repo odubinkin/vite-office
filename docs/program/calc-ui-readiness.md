@@ -1,5 +1,26 @@
 # Calc UI and ODS implementation critical path
 
+## User priority — ordinary ODS, existing-core UI and formula execution
+
+Task `202610210506-AKV3ES` fixes opening ordinary scalar ODS documents with
+unused data-style declarations and empty form containers. The original supplied
+`file_example_ODS_10.ods` now opens through the shared browser file dialog, with
+all ten rows, eight populated columns, imported font styles and dimensions.
+Unknown automatic-style declarations produce explicit metadata diagnostics;
+the number-format compiler and formatter remain unported. Actual form controls
+and unsupported cell semantics still fail explicitly. Full-sheet styled empty
+ranges remain compressed in the real document rather than expanded scalar cells.
+
+Near-term work prioritizes mouse-driven column and row sizing over the existing
+dimension/history owners, followed by formula execution: ranges, functions,
+dependency recalculation and error/coercion semantics using the original compiler
+and interpreter owners. Arithmetic and local single-cell references are the
+current executable formula slice. Metric dialogs already parse explicit units
+such as `1in` through the shared native metric control; no alternate browser unit
+converter is needed. Generic UNO view-settings prerequisites are deferred behind
+these user-visible features. The block70 full-suite, repair, coverage, final task
+closure and goal-pause checkpoint remains in force.
+
 ## Current prerequisite block65 — property-container error/access contracts
 
 Task `202610210335-7QBK8C` supplies four original generated UNO exception
