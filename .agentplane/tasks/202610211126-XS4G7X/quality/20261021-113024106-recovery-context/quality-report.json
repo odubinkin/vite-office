@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610211126-XS4G7X",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-21T11:30:24.106Z",
+  "verdict": "pass",
+  "summary": "Both development histories integrated and all three remote heads equal; build and typecheck passed.",
+  "evaluated_sha": "46ca5978adff4112826de0aaf39733232d02b809",
+  "blueprint_digest": "5040de9a7d38af4c8ff669a4eb608b865f203951b8db49369717383c6f2d7847",
+  "findings": [
+    "No manual conflict resolution required. SSH denied access, HTTPS succeeded. Production bundle size warning is nonfatal."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610211126-XS4G7X/README.md",
+    "npm run typecheck; npm run build; git diff --check; git ls-remote origin refs/heads/main refs/heads/writer refs/heads/calc; node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
