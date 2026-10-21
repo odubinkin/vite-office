@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -19,6 +19,7 @@ depends_on:
   - "202610210207-W1J9FP"
   - "202610210234-Q6QPPB"
   - "202610210319-37V8XQ"
+  - "202610210338-0EZ7FD"
 tags:
   - "code"
 verify: []
@@ -44,6 +45,9 @@ comments:
   -
     author: "PLANNER"
     body: "Completed prerequisite37V8XQ at implementation712d08f1ec12: ignoreDiacritics_CTL with validated native JavaScript normalization,actual OUString/rtl codepoint forwarding and six Japanese modules. Related457 tests,new-module100 percent coverage,added forwarding counters,ICU78.3 Unicode17 Node/Chromium conformance and actual browser module acceptance pass. Source quirks WRITER037-038 preserved. Fourth completed leaf since9BAAAC full checkpoint;after next full run,necessary repairs/test additions/coverage and active-task closure,pause goal and start no new task. Parent remains incomplete: aggregate/interface/service contracts,configuration provider/search-item/word services,cursor integration and Find toolbar/dialog remain. Native JavaScript memory/lifetime is required;do not port native allocators/refcount infrastructure."
+  -
+    author: "PLANNER"
+    body: "Completed prerequisite0EZ7FD: production1474156e2eae and complete-corpus test-reader verification226556d3e402. Original width/kana/size/traditional family and string widthfolding pass373 related scenarios at strict100 percent target coverage and actual Chromium acceptance. Full31/31/691 active source table/BMP projections match;WRITER039-043 preserve original quirks. Both prior120000ms corpus timeout failures remain documented;native DataView little-endian reading preserves all inputs/fields/hashes/assertions/deadlines. Fifth completed leaf after9BAAAC full checkpoint. Next work still requires real context/factory/locale-data contracts,remaining contextual/numeric modules and aggregate/provider/search-item/cursor/Find UI integration;do not invent service substitutes or native C++ memory/lifetime machinery. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal and start no further task."
 events:
   -
     type: "status"
@@ -62,8 +66,13 @@ events:
     at: "2026-10-21T03:35:43.878Z"
     author: "PLANNER"
     body: "Completed prerequisite37V8XQ at implementation712d08f1ec12: ignoreDiacritics_CTL with validated native JavaScript normalization,actual OUString/rtl codepoint forwarding and six Japanese modules. Related457 tests,new-module100 percent coverage,added forwarding counters,ICU78.3 Unicode17 Node/Chromium conformance and actual browser module acceptance pass. Source quirks WRITER037-038 preserved. Fourth completed leaf since9BAAAC full checkpoint;after next full run,necessary repairs/test additions/coverage and active-task closure,pause goal and start no new task. Parent remains incomplete: aggregate/interface/service contracts,configuration provider/search-item/word services,cursor integration and Find toolbar/dialog remain. Native JavaScript memory/lifetime is required;do not port native allocators/refcount infrastructure."
+  -
+    type: "comment"
+    at: "2026-10-21T04:10:39.304Z"
+    author: "PLANNER"
+    body: "Completed prerequisite0EZ7FD: production1474156e2eae and complete-corpus test-reader verification226556d3e402. Original width/kana/size/traditional family and string widthfolding pass373 related scenarios at strict100 percent target coverage and actual Chromium acceptance. Full31/31/691 active source table/BMP projections match;WRITER039-043 preserve original quirks. Both prior120000ms corpus timeout failures remain documented;native DataView little-endian reading preserves all inputs/fields/hashes/assertions/deadlines. Fifth completed leaf after9BAAAC full checkpoint. Next work still requires real context/factory/locale-data contracts,remaining contextual/numeric modules and aggregate/provider/search-item/cursor/Find UI integration;do not invent service substitutes or native C++ memory/lifetime machinery. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal and start no further task."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:35:43.878Z"
+doc_updated_at: "2026-10-21T04:10:39.304Z"
 doc_updated_by: "PLANNER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
