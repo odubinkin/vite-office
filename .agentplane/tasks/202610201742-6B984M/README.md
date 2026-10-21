@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -37,6 +37,9 @@ comments:
   -
     author: "CODER"
     body: "Start: implement the user-approved source-backed Writer search and replace core, view contracts and browser UI on writer with local upstream reading and targeted verification."
+  -
+    author: "CODER"
+    body: "User stop condition (2026-10-21): After the NEXT full test run, complete necessary fixes and added test scenarios, verify coverage and all required gates, then perform final closure of the executable task active at that checkpoint and pause the goal immediately. Do not start another implementation task after that closure. Preserve the existing one-full-run-per-ten-completed-leaves cadence unless the user changes it; Q6QPPB was the third completed leaf after the 9BAAAC full-run checkpoint. Do not mark this search/UI parent or the overall Writer objective complete unless its actual scope is satisfied; unfinished parent scope remains recorded when the goal is paused. Use goal status paused under this explicit user instruction once the checkpoint closure is finished."
 events:
   -
     type: "status"
@@ -45,8 +48,13 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the user-approved source-backed Writer search and replace core, view contracts and browser UI on writer with local upstream reading and targeted verification."
+  -
+    type: "comment"
+    at: "2026-10-21T03:16:26.040Z"
+    author: "CODER"
+    body: "User stop condition (2026-10-21): After the NEXT full test run, complete necessary fixes and added test scenarios, verify coverage and all required gates, then perform final closure of the executable task active at that checkpoint and pause the goal immediately. Do not start another implementation task after that closure. Preserve the existing one-full-run-per-ten-completed-leaves cadence unless the user changes it; Q6QPPB was the third completed leaf after the 9BAAAC full-run checkpoint. Do not mark this search/UI parent or the overall Writer objective complete unless its actual scope is satisfied; unfinished parent scope remains recorded when the goal is paused. Use goal status paused under this explicit user instruction once the checkpoint closure is finished."
 doc_version: 3
-doc_updated_at: "2026-10-20T19:35:31.273Z"
+doc_updated_at: "2026-10-21T03:16:26.040Z"
 doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
