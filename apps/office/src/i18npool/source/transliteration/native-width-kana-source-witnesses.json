@@ -1,0 +1,20 @@
+{
+  "smallToLarge_ja_JP": {
+    "upstreamPath": "i18npool/source/transliteration/smallToLarge_ja_JP.cxx",
+    "sourceSha256": "3fa30a574f26845efe26ffbcbc2b2886aea7bf0d86e7bdd570992a55bdc1d3e1",
+    "rowCount": 31,
+    "bmpOutputSha256": "a84237b858b9f62157c1a3388ce587c5a0ea2fc8bdc97cedbe4d5e5b9b94984a"
+  },
+  "largeToSmall_ja_JP": {
+    "upstreamPath": "i18npool/source/transliteration/largeToSmall_ja_JP.cxx",
+    "sourceSha256": "cf6f68392ef7d0ebe0c4c09879cc0eaf2ae5c85a8edd713555690c0d8285f4b3",
+    "rowCount": 31,
+    "bmpOutputSha256": "a84237b858b9f62157c1a3388ce587c5a0ea2fc8bdc97cedbe4d5e5b9b94984a"
+  },
+  "ignoreTraditionalKanji_ja_JP": {
+    "upstreamPath": "i18npool/source/transliteration/ignoreTraditionalKanji_ja_JP.cxx",
+    "sourceSha256": "dd48da1b1e601e292e70c498db485595f153486f2834b881ed0477d1ede852da",
+    "rowCount": 691,
+    "bmpOutputSha256": "0950bf258e54be7237f795244169319e037de72ddf3ae4b8d9c839fb16016c5f"
+  }
+}

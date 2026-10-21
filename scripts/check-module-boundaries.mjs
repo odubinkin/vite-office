@@ -268,6 +268,31 @@ const originalCharacterValueImports = new Map([
     ]),
   ],
 
+  // Original directional and ignore declarations expose actual UNO offset/range Sequence values.
+  [
+    "i18npool/source/transliteration/fullwidthToHalfwidth.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/halfwidthToFullwidth.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreKana.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreWidth.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+  [
+    "i18npool/source/transliteration/ignoreSize_ja_JP.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Sequence.ts"]),
+  ],
+
   // Original Parser, ParseManager, xmldata and XcsParser declare/use these XML event/span contracts.
   ["configmgr/source/parser.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
   [

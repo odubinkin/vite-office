@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/transliteration/ignoreSize_ja_JP.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/transliteration/ignoreSize_ja_JP.cxx",
+    "localSymbols": [
+      "ignoreSize_ja_JP",
+      "foldingImpl",
+      "transliterateRange",
+      "transliterateChar2Char"
+    ],
+    "upstreamSymbols": [
+      "ignoreSize_ja_JP",
+      "foldingImpl",
+      "transliterateRange",
+      "transliterateChar2Char"
+    ],
+    "preservedResponsibilities": [
+      "Original directional/ignore constructor names,pointer/table setup,scalar and range contracts are preserved through actual OUString/Sequence values and initialized width/mapping tables. Native JavaScript memory and object lifetime replace C++ reference/allocation machinery;no refcount or service facade is introduced. Interface/service/factory registration,aggregate consumers and browser Find UI remain pending;no readiness/default/semantic-status promotion."
+    ],
+    "omittedResponsibilities": [
+      "Aggregate/context/factory registration,complete search consumer integration and browser UI remain pending. Native JavaScript replaces C++ memory/lifetime machinery."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/ignoreSize_ja_JP.ts",
+          "marker": "foldingImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18npool/source/transliteration/ignoreSize_ja_JP.cxx",
+          "marker": "foldingImpl"
+        }
+      ]
+    }
+  }
+}
