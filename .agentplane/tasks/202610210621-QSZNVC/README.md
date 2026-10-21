@@ -4,7 +4,7 @@ title: "Align Calc browser Save shortcut and imported document persistence with 
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,23 @@ verification:
   updated_by: "CODER"
   note: "607Calc/135owners100;28related tests/shared accelerator100;13gates0;real Chrome Cmd+S and original ODS persistence/reopen confirmed;portable raw audit passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T06:37:37.801Z"
+  updated_by: "EVALUATOR"
+  note: "Shared Writer primary Save now serves Calc;strict Calc/common coverage and actual browser persistence checks pass."
+  evaluated_sha: "c1f9a3f4b8e7877568f368e147e4896d15cff97d"
+  blueprint_digest: "420eb9143cbe64aac6d6e3d14d1d8bb4fe45e5084a658c10c0e8d4a554b6a93c"
+  evidence_refs:
+    - ".agentplane/tasks/202610210621-QSZNVC/README.md"
+    - ".agentplane/tasks/202610210621-QSZNVC/quality/20261021-063737801-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210621-QSZNVC/quality/20261021-063737801-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210621-QSZNVC/quality/20261021-063737801-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210621-QSZNVC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610210621-QSZNVC/evidence/acceptance.json"
+    - ".agentplane/tasks/202610210621-QSZNVC/evidence/audit.mjs"
+  findings:
+    - "The actual Writer capture listener is extracted rather than duplicated. Mounted regression confirms in-progress input commits,primary writes,error feedback and session-independent import persistence.607Calc and28related tests pass at100;13gates pass. Original ODS persistence already works and is truthfully recorded as not reproduced."
 commit:
   hash: "761441f90427c9ffaf7b01a48a770d98e9c22c57"
   message: "🧩 QSZNVC task: share Writer primary browser Save with Calc"
