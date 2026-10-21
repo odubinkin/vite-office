@@ -1,10 +1,11 @@
 ---
 id: "202610210557-XBHM4Z"
 title: "Connect Writer module measurement preferences across options fields and rulers"
-status: "DOING"
+result_summary: "Implemented and source-canonicalized the bounded Writer metric preference and UI integration slice,with exact15-owner100% coverage,153 related cases,6 genuine browser/ODT scenarios,source issue documentation and explicit unported native services. Eighth completed leaf since9BAAAC;broader Writer goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed the pinned SwMasterUsrPref,SwModule,SwLoadOptPage,SwContentOptPage and Ruler responsibilities against the actual source code and literal tests;partial projections and browser adaptations are explicit rather than fake full services."
     - "Independent101-test15-owner coverage is100 on statements,branches,functions and lines,with complete positive counter maps and current-source HTML identity;153 related original scenarios,3 composition tests,6 real Chromium/ODT cases and52 tooling cases pass. Initial failures remain documented and their tests/gates were corrected without weakening source behavior."
     - "Actual desktop/mobile screenshots were inspected and the missing selected-category highlight corrected. The size gate drove a real dialog-request presenter split retaining the original controller and payloads;WriterWorkbench is956 lines. All95 non-task paths are coherent approved-slice changes within the gateway five-path material-drift margin."
-commit: null
+commit:
+  hash: "09be8968e7170fec37d5cce31359c5cbbf7acc0d"
+  message: "🧩 XBHM4Z feat: connect Writer measurement preferences and native metric controls"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved coherent Writer measurement-preference ownership,Options UI and current field/ruler propagation with native defaults and actual configuration boundaries."
+  -
+    author: "CODER"
+    body: "Verified: connected native Writer measurement preferences,Options,dimension fields and independent rulers;preserved normalized metric state,source quantization and physical ODT geometry. Scoped coverage,unit,Chromium,tooling and all required gates pass;full suite remains scheduled at tenth leaf."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native metric contracts and all approved integration checks pass:101 targeted tests with exact15-owner100% coverage and complete current-source counter proof;153 related geometry/dialog/history tests;3 composition tests;6 genuine Chromium/ODT cases;52 related tooling tests;types/build/style/resources/provenance/inventories/docs/tree/size/static/doctor/routing/diff gates. Full suite not due at eighth leaf. See Verification and retained Findings for initial failures and source-preserved limitations."
+  -
+    type: "status"
+    at: "2026-10-21T08:20:47.853Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected native Writer measurement preferences,Options,dimension fields and independent rulers;preserved normalized metric state,source quantization and physical ODT geometry. Scoped coverage,unit,Chromium,tooling and all required gates pass;full suite remains scheduled at tenth leaf."
 doc_version: 3
-doc_updated_at: "2026-10-21T08:15:17.241Z"
+doc_updated_at: "2026-10-21T08:20:47.854Z"
 doc_updated_by: "CODER"
 description: "Current-slice consistency:source-backed metric preference owner and option item contracts,persistent browser configuration boundary,actual Options command/page,dimension/paragraph/border field and ruler propagation,persistent normalized numeric state,US/metric source defaults and explicit legacy centimetre fixtures.No search/locale-depth expansion."
 sections:
@@ -152,6 +165,10 @@ sections:
     Eighteen historical mounted test fixtures now construct actual independent SwModule owners with explicit CM;the historical Chromium Writer project uses actual serialized native CM settings. Fresh-default specs override that baseline with empty storage. A point-based paragraph contract fixture explicitly sets POINT. Initial146-case run exposed obsolete numeric input assertions,source integer ruler rounding/stroke admission and Manual right-spacing quantization. Assertions retain exact physical/model checks and now use aria-valuenow or native formatted text. Original1.058333cm input quantizes to1.06cm/601twips,so Manual geometry is7099width/601right,not7100/600. No kernel arithmetic was weakened to preserve the obsolete expected values. A prototype measurement fixture initially interfered with element-specific clipping mocks;it is released before those mocks. A one-column precision fixture hit the actual original field maximum1440;the corrected two-column fixture verifies same-physical-value normalized Reset without changing native limits.
     Native Table/Columns/Borders Reset now carries actual assignment identity into persistent numeric bindings. Same physical2882/1441twip values retain50.83/25.41mm editing precision until Reset correctly reseeds50.84/25.42mm. Initial type/style/docs failures were repaired by explicit malformed-enum fixture casts,correct Testing Library options,nonnull captured DOM ownership,documented function implementations and browser observer fixtures with actual retained callback identity. WriterWorkbench reached1028lines;actual existing Sfx dialog request rendering moved to WriterDialogPresenter,retaining the same controller,request IDs and payloads under the unchanged1000-line limit. Current writer-view.tsx is956lines. Total non-task scope is95paths,the approved90-path estimate plus five routine fixture/decomposition paths,within the gateway material-drift threshold;no feature/risk/verification expansion or new native facade was introduced.
     Final code checks: exact15-owner coverage passes101 tests/9 files,S469/B303/F127/L434 all100. Complete statement/function/branch counter maps and zero negative counters were checked;the HTML source matches current source for all15 modules. Istanbul JSON does not include inputSourceMap,so no nonexistent raw-map certificate is claimed. Related19-file CM/Reset suite passes153 tests;composition3 tests pass. Related boundary/provenance/resource tooling passes52 tests. App build and tools types pass;scoped ESLint/format,docs,source-tree,file-size,dependencies,provenance,Writer/shared registries,resource generation/check,static smoke,policy routing and doctor pass. Doctor has an existing informational hook-shim startup-readiness suggestion and reports OK;no hook/policy changes belong to this task. Full application suite is not due at eighth leaf and was not run. Thirteen new runtime files plus two existing shared owners are covered exactly;existing semantic/default/parity attestations and intentional IO policies remain unchanged. New measurement capability is implemented with full native service/widget/context gaps still explicit,not parity-certified.
+extensions:
+  implementation_commit:
+    hash: "09be8968e7170fec37d5cce31359c5cbbf7acc0d"
+    message: "🧩 XBHM4Z feat: connect Writer measurement preferences and native metric controls"
 id_source: "generated"
 ---
 ## Summary
