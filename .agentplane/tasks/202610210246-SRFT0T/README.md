@@ -4,7 +4,7 @@ title: "Connect native Calc grid headers and formula view commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "584Calc/173files pass;132owners100 S10995/B6833/F2040/L9875. Shared/Writer22pass,common key owner100;tooling17pass,common catalog100. All10+4+3individual gates0;actual Chromium desktop/mobile/formula/error/shortcut/header/frame/checked-state proof. Portable248artifact/171source/19native-pin audit passes. Original failures retained;view-settings XML remains explicitly unported;full all-app next70."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T03:24:55.064Z"
+  updated_by: "EVALUATOR"
+  note: "Native three View commands and real boolean/per-sheet/document owners accepted;584Calc tests,132owners100percent,related common modules100percent and actual production browser proof."
+  evaluated_sha: "3bb1b52a55f5eb60542b0f9b40ea226c8caaa983"
+  blueprint_digest: "a60a0cd8eb3973285c557ef46f91563d34fbc55683ade90efedc7c71425ab1e6"
+  evidence_refs:
+    - ".agentplane/tasks/202610210246-SRFT0T/README.md"
+    - ".agentplane/tasks/202610210246-SRFT0T/quality/20261021-032455064-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210246-SRFT0T/quality/20261021-032455064-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210246-SRFT0T/quality/20261021-032455064-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210246-SRFT0T/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610210246-SRFT0T/evidence/acceptance.json"
+    - ".agentplane/tasks/202610210246-SRFT0T/evidence/audit.mjs"
+  findings:
+    - "Source bool defaults/copy and current-sheet grid state are real native owners. Headers/formula typed request/recording and asymmetric document-copy boundaries follow source;grid ignores args,changes only current sheet and marks modified. Combined global/sheet paint flags and initial/update no-frame shorthands preserve genuine explicit borders. Actual shared Writer menus and canonical accelerator boundary are reused;readable backtick caption replaces internal key name with identical dispatch.584Calc/132owners,22shared/Writer plus shared key owner100,and17tooling plus shared catalog100 pass. All14gates and3metadata exits0;248raw artifacts and171source/19native pins re-audited. Native configuration/window/modificator service graphs and view-settings XML remain explicitly unported;no complete parity claim or fake service."
 commit: null
 comments:
   -
