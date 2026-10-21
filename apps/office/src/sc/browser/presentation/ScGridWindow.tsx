@@ -144,7 +144,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           if (event.target === event.currentTarget) props.onKeyDown(event);
         }
       }
-      className="min-h-0 flex-1 overflow-auto bg-white text-[13px] text-slate-900 outline-none"
+      className="min-h-0 flex-1 select-none overflow-auto bg-white text-[13px] text-slate-900 outline-none"
     >
       <div
         className="relative"
@@ -401,7 +401,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                             ) => props.onInput(event.target.value)
                           }
                           onKeyDown={props.onInputKeyDown}
-                          className="absolute inset-0 h-full w-full border-0 bg-white px-1 text-left outline-none"
+                          className="absolute inset-0 h-full w-full select-text border-0 bg-white px-1 text-left outline-none"
                         />
                       ) : (
                         <div className="w-full shrink-0">

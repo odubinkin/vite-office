@@ -64,7 +64,8 @@ const excluded = new Map<string, string>([
   [".uno:VersionDialog", "no-recovery-or-reload"],
   [".uno:Quit", "browser-owned-application-lifecycle"],
 ]);
-const urls = new Set<string>();
+// Original key-only cell-shell command:catalog metadata is required without adding a visible surface placement.
+const urls = new Set<string>([".uno:Deselect"]);
 for (const path of Object.values(surfaces)) {
   /** Collects original leaf identities without guessing labels or slot implementations. @param node - Parsed source. @returns Nothing. */
   function collect(node: ReturnType<typeof parseResourceXml>): void {

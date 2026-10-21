@@ -346,6 +346,18 @@ export class CalcViewController {
       );
     this.Changed();
   }
+  /** Admits pending input before original Deselect and projects InitOwnBlockMode's current-cell anchor without moving the cursor. @returns Whether admitted. */
+  DeselectCells(): boolean {
+    if (!this.Commit()) return false;
+    const marks = this.viewData.GetMarkData(),
+      marked = marks.IsMarked() || marks.IsMultiMarked();
+    new ScCellShell(this.viewShell).Deselect();
+    if (marked) {
+      this.anchor = this.Position();
+      this.Changed();
+    }
+    return true;
+  }
   /** Admits actual input before source hidden-row/column selection subtraction. @param rows - Row command versus column command. @returns Whether admitted. */
   SelectVisibleCells(rows: boolean): boolean {
     if (!this.Commit()) return false;

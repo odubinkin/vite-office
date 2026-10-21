@@ -1,5 +1,34 @@
 # Calc UI and ODS implementation critical path
 
+## Current UI block63 — pointer/editor ownership and Undo Selection
+
+Task `202610210145-Y1NRHK` confirms and removes browser document text selection
+from grid Shift-click. The grid declares nonselectable text;its real cell input
+explicitly retains native text selection. No global Selection mutation is used.
+Original Deselect26549 is available through source Shift+Backspace and the active
+Sfx shortcut table. Native catalog metadata calls it Undo Selection;all existing
+surface graphs,source pins and17Writer browser-policy dispositions are unchanged.
+There is no invented menu placement. Unbound/reassigned/default shortcut cases use
+actual frame/shell/interface owners and the common canonical keyboard adapter.
+
+The real normal-grid Unmark owner clears marks and invalidates the old cursor only
+when marked. Cursor,sheet group,content,dirty state and history remain unchanged;
+the existing browser movement anchor follows same-position InitOwnBlockMode.
+Reference,SelectionEngine/window/device and full MoveCursorAbs paths remain
+explicitly unported,without service facades. Escape remains distinct from Deselect;
+inline editor,text fields,menus,modals and composition retain their own keys.
+
+All570Calc tests in170files pass;all130measured owners reach100% coverage:
+S10902/B6789/F2015/L9788. All43related common/Writer tests and17current tooling
+cases pass. No shared runtime owner changes. Source lint/format,types,source/
+resource/registry gates and production build/static pass with individual exit codes.
+Actual Chromium demonstrates the before/after DOM selection and native input word
+selection. Chromium also exposed premature focus restoration while the document
+was still inert;the workbench now restores its real grid only after the React
+modal-close commit. Escape,Cancel andOK focus events are checked against actual
+inert state,with no timers or native-window facades. Complete native/browser
+parity remains unverified;next full all-app70.
+
 ## Current UI block62 — visible-row and visible-column selection
 
 Task `202610210117-DRAYC7` connects original SelectVisibleRows26678 and

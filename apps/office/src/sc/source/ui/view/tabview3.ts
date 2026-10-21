@@ -46,6 +46,14 @@ export class ScTabView {
     else rMark.SelectOneTable(nTab);
     this.aViewData.ResetOldCursor();
   }
+  /** Original Unmark consumed normal-grid effects of same-position MoveCursorAbs(false,false):invalidate old cursor and reset actual marks only when marked. Native reference,SelectionEngine/window and device paths remain unported. @returns Nothing. */
+  Unmark(): void {
+    const marks = this.aViewData.GetMarkData();
+    if (marks.IsMarked() || marks.IsMultiMarked()) {
+      this.aViewData.ResetOldCursor();
+      marks.ResetMark();
+    }
+  }
   /** Original SelectAll normal-grid path,retaining cursor and selected sheets. Native block-window notifications are projected by the browser controller. @returns Nothing. */
   SelectAll(): void {
     const doc = this.aViewData.GetDocument(),

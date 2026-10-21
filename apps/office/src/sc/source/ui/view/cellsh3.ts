@@ -11,6 +11,10 @@ import { ColRowSpan } from "../../../inc/columnspanset";
 export class ScCellShell {
   /** Borrows actual native view functions. @param view - Source view owner. @returns Cell shell. */
   constructor(private readonly view: ScViewFunc) {}
+  /** Original cellsh4.cxx SID_SELECT_NONE case. @returns Nothing. */
+  Deselect(): void {
+    this.view.Unmark();
+  }
   /** Original cellsh1.cxx SID_SELECT_VISIBLE_ROWS case. Hidden ranges are subtracted from the shared mark owner across every selected sheet. @param data - Actual view data. @returns Nothing. */
   SelectVisibleRows(data: ScViewData): void {
     const marks = data.GetMarkData(),

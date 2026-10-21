@@ -64,6 +64,7 @@ export interface CalcCommandTarget
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
   SetInputMode(): boolean;
+  DeselectCells(): boolean;
   SelectVisibleCells(rows: boolean): boolean;
   SelectCells(request?: SfxRequest): boolean;
   MarkRows(): boolean;
@@ -138,6 +139,7 @@ export const calcSheetSelectionCommands = [
 ] as const;
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
+  { id: ".uno:Deselect", slotId: 26549, label: "Undo Selection" },
   { id: ".uno:SelectAll", slotId: 5723, label: "Select All" },
   { id: ".uno:SelectData", slotId: 26551, label: "Select Data Area" },
   { id: ".uno:SelectColumn", slotId: 26547, label: "Select Column" },
@@ -398,7 +400,8 @@ export const calcUserCommands = [
                               ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
                               : item.id === ".uno:FontHeight"
                                 ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-                                : item.id === ".uno:SelectVisibleRows" ||
+                                : item.id === ".uno:Deselect" ||
+                                    item.id === ".uno:SelectVisibleRows" ||
                                     item.id === ".uno:SelectVisibleColumns" ||
                                     item.id === ".uno:SelectRow" ||
                                     item.id === ".uno:SelectColumn" ||
@@ -808,21 +811,25 @@ export function createCalcInterface(
         slotId: resource.slotId,
         label: resource.label,
         shortcuts:
-          resource.id === ".uno:SelectAll"
-            ? ["Control+a"]
-            : resource.id === ".uno:SelectData"
-              ? ["Control+MULTIPLY"]
-              : [],
+          resource.id === ".uno:Deselect"
+            ? ["Shift+BACKSPACE"]
+            : resource.id === ".uno:SelectAll"
+              ? ["Control+a"]
+              : resource.id === ".uno:SelectData"
+                ? ["Control+MULTIPLY"]
+                : [],
         execute:
           /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @param request - Native request. @returns Whether admitted. */
           (target: CalcCommandTarget, request: SfxRequest) =>
-            resource.id === ".uno:SelectAll"
-              ? target.SelectCells(request)
-              : resource.id === ".uno:SelectData"
-                ? target.SelectCells()
-                : resource.id === ".uno:SelectRow"
-                  ? target.MarkRows()
-                  : target.MarkColumns(),
+            resource.id === ".uno:Deselect"
+              ? target.DeselectCells()
+              : resource.id === ".uno:SelectAll"
+                ? target.SelectCells(request)
+                : resource.id === ".uno:SelectData"
+                  ? target.SelectCells()
+                  : resource.id === ".uno:SelectRow"
+                    ? target.MarkRows()
+                    : target.MarkColumns(),
       }),
     ),
     {

@@ -794,6 +794,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:Deselect": {
+      "label": "Undo Selection",
+      "showsDialog": false,
+      "shortcuts": ["Shift+BACKSPACE"],
+      "semantics": "action"
+    },
     ".uno:DesignerDialog": {
       "label": "Styles",
       "showsDialog": false,
