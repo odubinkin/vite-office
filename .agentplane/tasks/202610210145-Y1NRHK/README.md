@@ -1,10 +1,11 @@
 ---
 id: "202610210145-Y1NRHK"
 title: "Align Calc pointer selection and native Deselect ownership"
-status: "DOING"
+result_summary: "Implemented source-owned normal-grid Unmark/Deselect26549 with canonical ShiftBackspace dispatch and configured shortcut ownership;fixed Shift-click browser text selection and post-dialog inert focus timing.570 Calc tests/170files,130owners100percent;43shared/Writer,17tooling,15modal-related pass;immutable139artifact audit and quality pass. Full all-app next70."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610210145-Y1NRHK/evidence/acceptance.json"
   findings:
     - "Original Unmark normal-grid state effects remain in ScTabView and Deselect in ScCellShell;reference/window/SelectionEngine paths explicitly unported. Canonical active Sfx shortcut lookup respects unbound/reassigned commands. Escape retains native separate ownership. Actual Chromium proves focus restoration after inert removal with marks retained;DOM event regression covers Escape/Cancel/OK. No shared runtime or coverage policy changed."
-commit: null
+commit:
+  hash: "21d7b8ea67593b910aff4d5a8087ae5d15f069f7"
+  message: "🧩 Y1NRHK calc: align native deselection and modal focus ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native normal-grid deselection and browser pointer/editor ownership in calc only;retain actual Escape semantics."
+  -
+    author: "CODER"
+    body: "Verified: Native Deselect through active Sfx, pointer text ownership and modal focus restoration pass570 Calc tests,130owners100percent,related consumers and actual Chromium;all required gates accepted."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "570 Calc tests/170 files pass;130 owners all100 S/B/F/L;43 shared/Writer,17 tooling,16 binding and15 modal-related pass. All14 individual gates plus3 metadata checks exit0. Actual Chromium confirms Shift-click text ownership,editor keys and modal closure focus grid/inertfalse/2marks. Portable pinned audit passes;historical failures retained. Full all-app next70."
+  -
+    type: "status"
+    at: "2026-10-21T02:43:44.699Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Deselect through active Sfx, pointer text ownership and modal focus restoration pass570 Calc tests,130owners100percent,related consumers and actual Chromium;all required gates accepted."
 doc_version: 3
-doc_updated_at: "2026-10-21T02:43:14.118Z"
+doc_updated_at: "2026-10-21T02:43:44.701Z"
 doc_updated_by: "CODER"
 description: "Block63: verify and correct browser DOM text selection during native cell Shift-click;connect actual normal-grid Unmark/Deselect26549 through Sfx and original ShiftBackspace accelerator. Preserve Escape input cancellation versus grid behavior,editor text selection,old-cursor/sheet/content/history ownership and genuine shared Writer menus. No invented reference/selection engines. Only calc checkout/branch;all Calc100,related checks;full all-app next70."
 sections:
