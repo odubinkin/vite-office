@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-5adb32f6-de83-4cd8-9332-1dacf851c58d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+        "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts"
+      ],
+      "justification": "Original fieldless MultipleCharsOutputException.idl derives from actual Exception value and reuses inherited Message/Context copy/move/destruction. Explicit constructors initialize the actual cppumaker-style cached type using existing typelib factory/register/release and Type owners;copy/move do not reinitialize. No JavaScript Error replacement or fake RTTI provider is introduced. Native generated ABI/thread/lifetime equivalence remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MultipleCharsOutputException",
+        "cppu_detail_getUnoType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/i18n/MultipleCharsOutputException.idl",
+      "upstreamSymbols": [
+        "MultipleCharsOutputException",
+        "::com::sun::star::uno::Exception"
+      ]
+    }
+  }
+}

@@ -21,7 +21,7 @@ import { SearchResult } from "../../../offapi/com/sun/star/util/SearchResult";
 import { ALPHA, DIGIT, LETTER } from "../../../offapi/com/sun/star/i18n/KCharacterType";
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
 import { getCharacterType } from "../characterclassification/cclass_unicode";
-import { transliterateCaseFolding } from "../transliteration/transliteration_body";
+import { transliterateCaseFolding } from "../transliteration/transliteration_caseignore";
 
 /** Native result default: no expressions and empty offset sequences. @returns Unsuccessful search result. */
 function notFound(): SearchResult {

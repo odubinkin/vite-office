@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/transliteration/transliteration_caseignore.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "capabilityIds": [
+      "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/transliteration/transliteration_caseignore.ts#Transliteration_caseignore",
+        "apps/office/src/i18npool/source/transliteration/native-module-contracts.test.ts",
+        "apps/office/src/i18npool/source/transliteration/native-caseignore-contracts.test.ts"
+      ],
+      "justification": "Original logical transliteration module algorithms now use actual OUString/Locale/Sequence values and byte-strided output cells. Preserve initialized native scalar/range/pointer producer preconditions,not invented default func/table/map values. Native stack/heap and initializer-list syntax is erased with existing typed-array/Sequence bindings;mutable output uses original getArray/asNonConstRange COW. WeakImplHelper,XExtendedTransliteration interface/query/factory registration and native refcount/process ABI remain unported and are not claimed. The common supportsService cast erases that C++ inheritance only and delegates to the unchanged actual helper on this real receiver;no query/acquire/release stub or wrapper object is supplied. Explicit dispose adapts implicit Locale member destruction for these logical owners. New module load methods retain actual RuntimeException behavior;the module bases are not an aggregate service or default provider. Original full-fold class,accumulated module flags,lazy static range owners and getNextChar comparison/match/sign contract. The existing bounded TextSearch helper now uses this actual class and actual output Sequence,before converting only the pre-existing engine offset projection. Final pending-expansion reset is preserved as WRITER036. Full TransliterationImpl cascade/service factory and consumer lifetime remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Transliteration_caseignore",
+        "getType",
+        "loadModule",
+        "transliterateRange",
+        "equals",
+        "compareSubstring",
+        "compareString",
+        "compare",
+        "transliterateCaseFolding"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/transliteration/transliteration_caseignore.cxx",
+      "upstreamSymbols": [
+        "Transliteration_caseignore",
+        "getType",
+        "loadModule",
+        "transliterateRange",
+        "equals",
+        "compareSubstring",
+        "compareString",
+        "compare"
+      ]
+    }
+  }
+}

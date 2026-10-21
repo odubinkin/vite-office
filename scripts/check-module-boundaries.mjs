@@ -207,6 +207,58 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Generated MultipleCharsOutputException type initialization uses the original UNO TypeClass value.
+  [
+    "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+    new Set(["udkapi/com/sun/star/uno/TypeClass.ts"]),
+  ],
+
+  // Original transliteration headers/cxx use these precise UNO value/type/exception and supportsService contracts.
+  [
+    "i18npool/source/transliteration/transliteration_commonclass.ts",
+    new Set([
+      "cppu/inc/com/sun/star/lang/XServiceInfo.ts",
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "cppuhelper/inc/supportsservice.ts",
+      "offapi/com/sun/star/i18n/TransliterationModules.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_OneToOne.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_Ignore.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_body.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+  [
+    "i18npool/source/transliteration/transliteration_caseignore.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "offapi/com/sun/star/i18n/TransliterationModules.ts",
+      "offapi/com/sun/star/i18n/TransliterationType.ts",
+    ]),
+  ],
+
   // Original Parser, ParseManager, xmldata and XcsParser declare/use these XML event/span contracts.
   ["configmgr/source/parser.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
   [
