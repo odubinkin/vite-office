@@ -1,10 +1,11 @@
 ---
 id: "202610210234-Q6QPPB"
 title: "Implement native transliteration module bases and case comparison"
-status: "DOING"
+result_summary: "Implemented source-shaped transliteration module bases, case comparison and mapping families with verified offset contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "Actual OUString Locale Sequence operations preserve mutable COW offsets, source mapping tables, exception values, comparison counters and range behavior; existing uppercase and engine folding callers use real module operations."
     - "338 related scenarios pass; the final current 61 scenarios pass with 100 percent scope coverage. Diagnostic failed attempts remain recorded and no thresholds or existing expectations were weakened."
     - "Forty non-task paths remain within the approved maximum of fifty-two; provenance, source tree, dependency, static, types, lint, docs, inventory, tooling and routing gates pass."
-commit: null
+commit:
+  hash: "f19877da67ea704a40641ab968f3d1df46724dfe"
+  message: "🔧 Q6QPPB transliteration: implement native module and case comparison contracts"
 comments:
   -
     author: "CODER"
     body: "Start: Execute approved parent search prerequisite with native logical transliteration module bases,actual value/offset owners and source-backed related validation; external ICU access remains pending."
+  -
+    author: "CODER"
+    body: "Verified: Native logical transliteration module family, mutable Sequence offsets, case comparison and exact mapping tables pass 338 related scenarios and the final 61 current owner/caller scenarios at 100 percent scope coverage. Source, types, lint, static, provenance, boundary, inventory and policy checks pass. Three suspected upstream behaviors are documented and preserved. ICU and service/UI integration remain parent work; JavaScript owns memory and lifetime."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Logical native transliteration owner family passes338 related tests and final61 current owner/caller cases at100-percent scope coverage. Actual Sequence COW,source tables/offsets/exception/comparison quirks,types/static/source/style/inventory/policy gates pass. WRITER034-036 preserved;WeakImplHelper/factory/aggregate/ICU/UI integration remain pending and unclaimed."
+  -
+    type: "status"
+    at: "2026-10-21T03:14:36.168Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native logical transliteration module family, mutable Sequence offsets, case comparison and exact mapping tables pass 338 related scenarios and the final 61 current owner/caller scenarios at 100 percent scope coverage. Source, types, lint, static, provenance, boundary, inventory and policy checks pass. Three suspected upstream behaviors are documented and preserved. ICU and service/UI integration remain parent work; JavaScript owns memory and lifetime."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:13:04.176Z"
+doc_updated_at: "2026-10-21T03:14:36.172Z"
 doc_updated_by: "CODER"
 description: "Continue approved Writer search prerequisites with original common/OneToOne/Ignore/body/caseignore module classes, actual offset/value Sequence contracts, Kashida/Space/BaFa/HyuByu modules and IDL type/exception values. Consume source body/case folding from existing search/classification paths without enabling unsupported cascade/default modes or substituting ICU."
 sections:
@@ -145,6 +158,10 @@ sections:
     The initial full new-owner coverage run passed172 scenarios at100 percent. The broad related338 run also passed at100 percent. A narrower table-only replay passed its37 scenarios but correctly failed coverage because it omitted the existing uppercase caller of the still-consumed classifier helper;its failed raw report remains in tests-tables-final.log. Adding that actual caller to the declared related scope yields final61 tests at100 percent without source or threshold changes. Final lint/docs/types/style/source/static/inventory gates pass. Do not relabel the narrower failed gate as a pass or claim complete application coverage.
 
     Residual work: interface/service/factory aggregation with native JavaScript memory and lifetime behavior,complete enum/type contracts,title/sentence word services,ICU diacritic normalization,configuration provider/search-item state and complete readonly/layout/field/note/cursor scopes plus browser Find toolbar/dialog remain pending in parent6B984M. The subsequent explicit user authorization permits local ICU source reading and necessary text-algorithm implementation when JavaScript is not equivalent;no network permission is inferred;unsupported engine flags stay rejected and no default mode is enabled early. Keep parent and whole Writer goal active after closing this leaf.
+extensions:
+  implementation_commit:
+    hash: "f19877da67ea704a40641ab968f3d1df46724dfe"
+    message: "🔧 Q6QPPB transliteration: implement native module and case comparison contracts"
 id_source: "generated"
 ---
 ## Summary
