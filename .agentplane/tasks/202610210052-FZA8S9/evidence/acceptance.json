@@ -1,0 +1,139 @@
+{
+  "task": "202610210052-FZA8S9",
+  "block": 61,
+  "nativeBaseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "apps/office/src/framework/browser/accelerators/keymapping.test.ts": "dfc79549cad3c77fa9efe39241b879261a3b8ab02911abfc89b10a9ce9a6959d",
+    "apps/office/src/framework/browser/accelerators/keymapping.ts": "d3a92a3e5a21a2682ce45a1d68535de1e021299e90cefd5915d2463b2f7c7509",
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "be2a29d04896c7ab5897515e8a850cf60e85180d0ee4e855ab202a37587ca9c6",
+    "apps/office/src/sc/browser/presentation/calc-alignment.test.tsx": "8a4a8a8d424a9cd9977d57fc57f249d0b0ff1e33d2d9c22cd18e56ec141f4b3a",
+    "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx": "9bcbeefcc2fd5cbd46397243544c0142445ba2164a93024bc550cada5e8c41f1",
+    "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx": "822ca372ba9486312659e18ff796a117b6c2f6c8906c5bf13c4ccab0df859b4d",
+    "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx": "40f71c10fefaa05ea00be72f79d7bfe69319d6872b0bf60816117f0147b928e8",
+    "apps/office/src/sc/browser/presentation/calc-workbench.tsx": "8ccee40bd7996d1459916c2971e5585e70ee9819fe885eb8e3fa79bb2233b2e4",
+    "apps/office/src/sc/sdi/scalc.ts": "bbb349c2aae802ff1ca103d81cad74728cba37eebdf85766a5b6b065c3623ca9",
+    "apps/office/src/sc/source/core/data/column.ts": "d5f324dbec5eb6046e62d523b3304d0de0b41b54567b53a898381cab302151a2",
+    "apps/office/src/sc/source/core/data/connected-area.test.ts": "e78bcdc90f3b729a9476e27e9184a3ef3fcd36da61fb172b29bf3853ca15bfce",
+    "apps/office/src/sc/source/core/data/dociter.test.ts": "e825fa2b2a3c4a52c4646a607e6069acaddd0f68d2af4354998a4efa0e33c361",
+    "apps/office/src/sc/source/core/data/document.ts": "db5e4713b8ef44f1240f0c804283a836456caca6b24fc0964841f8cbd60a24a1",
+    "apps/office/src/sc/source/core/data/native-column-width.test.ts": "13a04dde0282cdaba3a15abadb73ca1b205ba628daa9b11c4b33796bdc99f252",
+    "apps/office/src/sc/source/core/data/selection-pattern.test.ts": "5d7b947708990995395413cbc8179af427492045d0bcaa952bfe417fec02b3cb",
+    "apps/office/src/sc/source/core/data/table.ts": "2b473a7dcbfdc6e92002853d48cc2f60d565b87ec1e0c6f8f7bd12fe7ff90155",
+    "apps/office/src/sc/source/core/data/text-size-context.test.ts": "eeb268dfba8fc73090a5e68aa3808ae2e35a761d074fda0413f2605d54780b2d",
+    "apps/office/src/sc/source/filter/xml/ods.test.ts": "ffb65ce9850da77a225a33c6ddbadf8c4d309cdd283b899a4657143650fb1295",
+    "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts": "76b6f3ca20faf8996cca613f54af1b85ad146efc167fdb39790fd39d38e00292",
+    "apps/office/src/sc/source/ui/view/cellsh3.ts": "d33721f3d34278b71e9127da9e2600bc8959ff6b13812f8b90ca7d438730d3a6",
+    "apps/office/src/sc/source/ui/view/tabview3.ts": "14716c762fc4373e7082418dd244540a077467d03ca5d79c2bcc066f9d5df3af",
+    "docs/program/calc-ui-readiness.md": "7fe3c30ac3f794dee39d47713cb33fc6bc6084d48ed6f2e6b47e4f2e4fe042e3",
+    "docs/program/calc-upstream-suspected-issues.md": "06892a8dc4660d84020d0ef4fb3eba8a6b225aef2f666642fe0be2fcdf45813a",
+    "docs/program/registry/calc/capabilities/CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f.json": "a2a22df7e3d1247461b4f57119d2c97db21a1736581b189f51b8715bcdda87da",
+    "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json": "982cafe0a203419d964da5dd09dafb3b450fa3a5af9fb4dcf5726e7871ff24d4",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json": "8797798fb789bf76530ef3b3f1c15fda0ae48c1f25655fc073b0fe6066a6b270",
+    "docs/program/registry/calc/provenance/sc/sdi/scalc.ts.json": "035e4e52122e5216bfb7eb77f88deec69f08c47b038e0732b62900fd85fa28a5",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json": "d4464909a06095be6230ae2be9ba5d44a8d678b986f28ebc20d45690da5aff11",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json": "0ec7564f5956bfefb1df4a82eb0f7d7cf31fd0346d953c7d37f083c6827ea6ac",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json": "e8cdb1ea24aec4e8a2a551860b342762dbac517a150121047721d3dc582874ce",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/cellsh3.ts.json": "5599008ff9ec843d378a4bcafaec59c352e095da9d438795eb6a6d6ee5f2d3d8",
+    "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json": "f1124dedbc6d575aed9976a1db7a40fc7fd0442fca818187639d309c5f8998ca",
+    "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json": "a051f9f4326ffaf81fb494a64ad5d5fb32e71ac405de4d8f8788d3b9997bebdb",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json": "3e59d4382c1f26a1479d7532472c2a05b7cac3d393118f36bdc36cb11809b63d",
+    "docs/program/registry/calc/runtime/sc/sdi/scalc.ts.json": "e3cc7b0bab4f740c3db51a004c38c725e5eff4595eb49136a4a2d35d71ed99ae",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json": "907c51954c7e25406fc1051ce65307f1246c2e8af5187f84608d887e3ae88b4b",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json": "a5dd0cb626c15031ce18bac19498b9a486ff2bf2099224df21153446b4887a9b",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json": "0886d3d18102e371b356a3d5589e2a4eabe40fca824e655ff8cc1237118fab03",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/cellsh3.ts.json": "b4a9cbb9aedf50fe2fb7e6491cfa33b56a212cc12ee23136a8e4ef2b0daee338",
+    "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json": "d48eb11c013aa5f56d37b44bcc69838c2af356aebc03a81269979c83300384c1",
+    "docs/program/registry/shared/provenance/framework/browser/accelerators/keymapping.ts.json": "95d9b15b189bfae00e8cc1426b6d8c9dfef9de1d84e647e35eaafbbc11f224ba"
+  },
+  "nativeHashes": {
+    "vendor/libreoffice-reference/sc/source/core/data/table1.cxx": "4973cc317e940243590f4633d78737a45acdc7fa0fa4d5f7dbb16b975cb44903",
+    "vendor/libreoffice-reference/sc/source/core/data/table2.cxx": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33",
+    "vendor/libreoffice-reference/sc/source/core/data/column2.cxx": "9e46fdcb1c09fa97dac89a38a540f37e268fe2d4add9e80f77c17f24e3dc7f62",
+    "vendor/libreoffice-reference/sc/source/core/data/document.cxx": "e89ce72a7e618225be9d61e531e36175787a32e246d5cbb0b4738a93f7e3d9da",
+    "vendor/libreoffice-reference/sc/inc/table.hxx": "8960902f512b806a8776a2cada0b659215c622f91e45958b65665f4383fc223e",
+    "vendor/libreoffice-reference/sc/inc/address.hxx": "91f214e1702046e7fe1a9cf1ee0b902d9b2e32a7947b07aec952985e059f1038",
+    "vendor/libreoffice-reference/sc/source/ui/view/tabview2.cxx": "d57641c53aee363fd4c13258f7d61ac616b6f4a54a9b08a3523d0e067db1f03d",
+    "vendor/libreoffice-reference/sc/source/ui/view/tabview3.cxx": "eddbf3185fec9cae35c7d190a3831f4270f3f7571ef6d30a97951dc6b40ecb59",
+    "vendor/libreoffice-reference/sc/source/ui/view/cellsh3.cxx": "92959feb0ed284ea03da5cb864ab99c7a86e0f076db4205ce00fe3f165612b4d",
+    "vendor/libreoffice-reference/sc/source/ui/view/cellsh4.cxx": "92f1d183b30d6a592cc3abb03091e6e502ae17888ebaea41f6756d6553919b6a",
+    "vendor/libreoffice-reference/sc/inc/sc.hrc": "2c9a5abad256793695d3e7b2d9e60913ff6e6e011c2c172ee82a415f631bc670",
+    "vendor/libreoffice-reference/include/sfx2/sfxsids.hrc": "1bdf55f8f93136e6700c879ef1dfac3ada472ef1a8aeba3b74df945baf323afc",
+    "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Calc.xcs": "7f26a797a408706b613311233cac1bd4c279f292fdf6c5d2522aac71f02cd54a",
+    "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu": "c1441749f6a4f52c6d64ff38f0f851a309659d4c2a0bc70d9630c86b5de5471f"
+  },
+  "archive": {
+    "sha256": "4eb397da1dd1be11f17cbc638aa9fc980e9014f396c870b4a4a658b2f3117185",
+    "records": 78
+  },
+  "coverage": {
+    "calc": {
+      "lines": {
+        "total": 9724,
+        "covered": 9724,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 10830,
+        "covered": 10830,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2006,
+        "covered": 2006,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 6741,
+        "covered": 6741,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "shared": {
+      "lines": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 25,
+        "covered": 25,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 22,
+        "covered": 22,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "notes": [
+    "Original INITIALCOLCOUNT=1;all real table column storage grows from one. Nonnegative last-column guards specialize proved true branches. No coverage exclusions or thresholds changed.",
+    "Native cached iterator positions are omitted as a lookup optimization;the existing original uncached HasDataAt operation reads actual typed storage.",
+    "Coverage is positive across every original unmodified raw statement/function/branch counter. Full all-app checkpoint remains70."
+  ]
+}
