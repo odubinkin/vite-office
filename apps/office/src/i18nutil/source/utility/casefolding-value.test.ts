@@ -8,6 +8,7 @@ import type { MappingConstReference } from "../../inc/casefolding";
 /** Complete lossless native row reader; comparisons retain every initialized signed field. */
 class NativeRows {
   private bytes: Buffer;
+  private view: DataView;
   private cursor = 0;
   private width: number;
   /** Reconstructs and hashes the whole original stream. @param mode - Original native process mode. @returns Reader. */
@@ -15,19 +16,20 @@ class NativeRows {
     const corpus = fixture.corpora[mode];
     this.width = corpus.width;
     this.bytes = gunzipSync(Buffer.from(corpus.gzipBase64, "base64"));
+    this.view = new DataView(this.bytes.buffer, this.bytes.byteOffset, this.bytes.byteLength);
     expect(this.bytes.length).toBe(corpus.rawBytes);
     const previous = new Int32Array(this.width);
     for (let offset = 0; offset < this.bytes.length; offset += 4) {
       const column = (offset / 4) % this.width;
-      previous[column] = (previous[column] as number) + this.bytes.readInt32LE(offset);
-      this.bytes.writeInt32LE(previous[column] as number, offset);
+      previous[column] = (previous[column] as number) + this.view.getInt32(offset, true);
+      this.view.setInt32(offset, previous[column] as number, true);
     }
     expect(createHash("sha256").update(this.bytes).digest("hex")).toBe(corpus.rawHash);
   }
   /** Compares one complete actual field sequence to original native bytes. @param row - Actual observations. @returns Nothing. */
   emit(row: readonly number[]): void {
     for (const actual of row) {
-      const expected = this.bytes.readInt32LE(this.cursor);
+      const expected = this.view.getInt32(this.cursor, true);
       if (actual !== expected)
         throw new Error(`Native field ${this.cursor / 4}: ${actual} != ${expected}`);
       this.cursor += 4;
