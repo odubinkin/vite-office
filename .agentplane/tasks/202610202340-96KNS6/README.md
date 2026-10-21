@@ -4,7 +4,7 @@ title: "Run block60 complete application verification and repair regressions"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -61,7 +61,7 @@ events:
     state: "ok"
     note: "17463tests/1101files pass;all839measured modules100percent(Calc130/shared498/Writer211);87tooling,123inventory100,16browsers and all source/build/portable native/raw evidence gates pass. Existing bootstrap exclusions unchanged;full checkpoint70next."
 doc_version: 3
-doc_updated_at: "2026-10-21T00:43:26.759Z"
+doc_updated_at: "2026-10-21T00:47:15.233Z"
 doc_updated_by: "CODER"
 description: "Required tenth-block checkpoint for active Calc UI goal. Execute complete Writer/Calc/shared application test discovery with original Istanbul100 thresholds,all tooling and inventory tests,Calc/source/build/browser gates. Repair actual regressions or missing behavioral tests without weakening thresholds or source ownership. Inspect actual native contracts for implementation fixes. Preserve full raw reports/source pins and evaluator. Only calc checkout/branch;no network/global files/merges. Goal stays active after this checkpoint."
 sections:
@@ -143,6 +143,8 @@ sections:
     Final complete acceptance replaces the earlier pending checkpoint:session17783terminates0 after17463passing cases/1101files and all839measured modules100. Calc530,shared2335,Writer14598cases all pass. Independent scope audit accounts for all997registered source modules;155emit only module edges/declarations,two entries are canonical bootstrap/test-helper exclusions,and the existing Dedicated Worker ignore annotation is byte-identical to the setup commit. These exceptions were not added or changed. Initial audit guessed registry consumer tags were coverage owners;15historical shared records are tagged Writer,so the auditor now follows the actual configured source roots and records both dimensions. A second strict audit flagged the pre-existing Worker annotation;it is now explicitly recorded with Git/source proof rather than treated as newly covered code or a new exemption. Original audit failures remain archived. No standalone Istanbul instrumenter was installed;zero-counter module claims are proved from actual TypeScript emission and an import/export-only AST.
 
     Final portable audit passes109raw artifacts,3511source pins and4native blobs. Both native ODT binaries match the pinned source exactly. No application runtime/test/data source bytes changed. The only implementation change is the real diagnostic CLI argument runner;no native service/provider or user UI placeholder was introduced. Whole goal remains active;this closes the required block60quality checkpoint only. Source/native/UI parity beyond represented APIs remains unclaimed;next full application checkpoint70.
+
+    Closure metadata:the first canonical finish referenced the source implementation f89f29d8e936 while EVALUATOR correctly reviewed the later complete acceptance commit9fe1d9d22f32. The CLI refused that mismatch before marking the task DONE. Retrying canonical finish with the reviewed acceptance commit,which contains the implementation as an ancestor,preserves the freshness gate. No force option,criteria change or source/test modification is used.
 id_source: "generated"
 ---
 ## Summary
@@ -240,3 +242,5 @@ Existing Calc FormatCellsDialog requires seven genuine standard pages plus optio
 Final complete acceptance replaces the earlier pending checkpoint:session17783terminates0 after17463passing cases/1101files and all839measured modules100. Calc530,shared2335,Writer14598cases all pass. Independent scope audit accounts for all997registered source modules;155emit only module edges/declarations,two entries are canonical bootstrap/test-helper exclusions,and the existing Dedicated Worker ignore annotation is byte-identical to the setup commit. These exceptions were not added or changed. Initial audit guessed registry consumer tags were coverage owners;15historical shared records are tagged Writer,so the auditor now follows the actual configured source roots and records both dimensions. A second strict audit flagged the pre-existing Worker annotation;it is now explicitly recorded with Git/source proof rather than treated as newly covered code or a new exemption. Original audit failures remain archived. No standalone Istanbul instrumenter was installed;zero-counter module claims are proved from actual TypeScript emission and an import/export-only AST.
 
 Final portable audit passes109raw artifacts,3511source pins and4native blobs. Both native ODT binaries match the pinned source exactly. No application runtime/test/data source bytes changed. The only implementation change is the real diagnostic CLI argument runner;no native service/provider or user UI placeholder was introduced. Whole goal remains active;this closes the required block60quality checkpoint only. Source/native/UI parity beyond represented APIs remains unclaimed;next full application checkpoint70.
+
+Closure metadata:the first canonical finish referenced the source implementation f89f29d8e936 while EVALUATOR correctly reviewed the later complete acceptance commit9fe1d9d22f32. The CLI refused that mismatch before marking the task DONE. Retrying canonical finish with the reviewed acceptance commit,which contains the implementation as an ancestor,preserves the freshness gate. No force option,criteria change or source/test modification is used.
