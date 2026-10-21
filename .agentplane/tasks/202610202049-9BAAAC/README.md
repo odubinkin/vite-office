@@ -1,10 +1,11 @@
 ---
 id: "202610202049-9BAAAC"
 title: "Implement native XCS schema parsing and full cadence regression"
-status: "DOING"
+result_summary: "Implement native XCS schema parsing and cursor ownership repairs with approved cadence evidence"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 48
+revision: 49
 origin:
   system: "manual"
 depends_on: []
@@ -48,7 +49,9 @@ quality_review:
     - "Actual Parser/ParseManager/xmldata/XcsParser and unchanged pinned Common.xcs are implemented with source-shaped schema/default/template/merge/resume/error tests; no provider or locale substitute was introduced."
     - "Native cursor receiver and endpoint ownership, mark alias restoration, selection cleanup, point-only result fallback and Close disposal order are repaired against pinned sources; regression expectations preserve text/count/history and native quirks documented as WRITER-027."
     - "Human approved exactly66 non-task paths, two native dead-guard instrumentation annotations and checkpoint-scoped cadence acceptance. Fresh search coverage is172 tests and100 percent S/B/F/L; current related5121 cases have three complete core modules at100 percent, with scoped Close proof, inventory124, static/five Chromium and quality gates passing. Full17771 test run passed scenarios but failed historical global coverage; no current full coverage pass is claimed."
-commit: null
+commit:
+  hash: "66a22f1f1c0a4ee406b21572e3961801c214645e"
+  message: "🔧 9BAAAC search: preserve native cursor ownership and scope contracts"
 comments:
   -
     author: "CODER"
@@ -59,6 +62,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Human approved the concrete 66-path and two native coverage annotation amendment; resume exact candidate validation and committed formal review on writer."
+  -
+    author: "CODER"
+    body: "Verified: Native XCS schema parsing and cursor ownership repairs pass the amended acceptance contract. Search172 at100 percent, related5121 and recorded inventory/static/browser/source checks are accepted; formal committed EVALUATOR passes. Historical full coverage failure remains explicit and parent search/UI stays open."
 events:
   -
     type: "status"
@@ -93,8 +99,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved amendment satisfied: 172 search cases with strict 100-percent module coverage; prior current 5121 related cases and scoped coverage, inventory, static/browser evidence retained under explicit cadence approval. Current style, source quality, scope66 and policy checks pass; historical failed global coverage remains accurately recorded. Formal committed review follows."
+  -
+    type: "status"
+    at: "2026-10-21T01:50:07.848Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native XCS schema parsing and cursor ownership repairs pass the amended acceptance contract. Search172 at100 percent, related5121 and recorded inventory/static/browser/source checks are accepted; formal committed EVALUATOR passes. Historical full coverage failure remains explicit and parent search/UI stays open."
 doc_version: 3
-doc_updated_at: "2026-10-21T01:48:18.686Z"
+doc_updated_at: "2026-10-21T01:50:07.853Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -419,6 +432,10 @@ sections:
     Formal quality record is pending,not passed: ap evaluator run --verdict human_review was rejected by the CLI E_USAGE guard because11 dirty tracked candidate source paths exist outside the current task artifact subtree. Recording quality_review requires a committed source snapshot. A commit is not authorized until the one-path scope extension is approved. Do not bypass this using --no-record; after user reapproval,commit the exact reviewed candidate and run formal EVALUATOR against that commit. Keep all prepared logs/proofs and the uncommitted diff for review.
 
     Human confirmation received on 2026-10-21 ("подтверждаю план и чтение") approves the concrete pending plan amendment. The 66th test path, exactly two reviewed wildcard coverage annotations and documented cadence acceptance are now approved. No external-source or network access is inferred beyond the concrete amendment. Approval was recorded before application; all original failures/proofs remain historical evidence. The complete native Ring/helper/notes/layout/readonly and UI work remains in the parent scope.
+extensions:
+  implementation_commit:
+    hash: "66a22f1f1c0a4ee406b21572e3961801c214645e"
+    message: "🔧 9BAAAC search: preserve native cursor ownership and scope contracts"
 id_source: "generated"
 ---
 ## Summary
