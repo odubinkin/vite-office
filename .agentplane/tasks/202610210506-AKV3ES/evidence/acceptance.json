@@ -1,0 +1,35 @@
+{
+  "taskId": "202610210506-AKV3ES",
+  "scope": "ordinary-ods-open",
+  "sourceHashes": {
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "d6f796a86ffcd452c9f1247bf9f8b93be3c9525335e3d4bcb8fc411d6aee2be0",
+    "apps/office/src/sc/source/filter/xml/xmltabi.ts": "50d9b3e8f5156ea4ec8a74bba5ad81185f82914664b48fe4c4107a677ebf56e0",
+    "apps/office/src/sc/source/filter/xml/ods-style-routing.test.ts": "09d47525ea244111568bf360d28ce3aa38f82cb0bf8532634556b4587563234b",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyli.ts.json": "b7c63f33506663442db3b16b210a3d873b75325ee8e5981e0719f8e714481e58",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmltabi.ts.json": "2dba7219375c3859776b30e3b5faadc8586aebca3cd13a6e9040aecb6e8140fe",
+    "docs/program/calc-ui-readiness.md": "326529870cd2b8df4ff4eaa1569d06cfdf84678e11b0681ed19ee0fb3fa05448",
+    "apps/office/test-projects.ts": "cb72ab5fe064ca6026ab5808a0555a8dd0a5801be4cf4787d99711aaa519ffb4",
+    "apps/office/vitest.calc.config.ts": "1c8c5afdf48163505d80e9fa192730b074fa9b9a7fa46bfe23bb94dd23257052",
+    "apps/office/vite.config.ts": "2d01eb5206872674e9256d01aa316d683cfd44de1b6285dc2d3b4103902d3c76"
+  },
+  "archive": {
+    "sha256": "3764a37b1d26fe970194ecc9572fcbbf4ddf84d5452058d0e06c598d36f5c879",
+    "records": 46,
+    "bytes": 3012465
+  },
+  "calc": {
+    "cases": 604,
+    "files": 177,
+    "owners": 135,
+    "statements": 11128,
+    "branches": 6909,
+    "functions": 2064,
+    "lines": 9994
+  },
+  "sharedTrackingCases": 28,
+  "sampleSha256": "be74bcfeba5fa5bb3cd400c54c6d0d9172074505b80e1a96e32ac08592f43c75",
+  "limitations": [
+    "Number-format compilation,real form controls,device optimum,double-click autofit,metric drag tooltip,physical RTL,zoom,split/protection and full native window parity remain outside the implemented slice."
+  ],
+  "stopRule": "Full all-app checkpoint70,repair/add scenarios,verify coverage,fully close current task,then pause goal."
+}
