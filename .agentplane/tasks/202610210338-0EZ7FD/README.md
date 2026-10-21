@@ -4,7 +4,7 @@ title: "Implement Writer width kana size and traditional-form transliteration fa
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -51,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Execute approved Writer search prerequisite with original width/kana/size/traditional family,string composition/decomposition,actual Sequence offsets and preserved source quirks."
+  -
+    author: "CODER"
+    body: "Closure evidence correction: finish rejected an implementation-commit pointer to the earlier production-only1474156 snapshot because the formal review evaluates final226556d3e402,which includes the corpus-reader correction and WRITER043 documentation. Use226556d3e402 consistently as final implementation/evidence commit;retain1474156e2eae as the production-owner provenance. No source,test result,quality verdict or scope changes."
 events:
   -
     type: "status"
@@ -65,8 +68,13 @@ events:
     author: "CODER"
     state: "ok"
     note: "373 related scenarios pass in the exact serialized scope at strict S287/B88/F46/L278100 percent;actual Chromium acceptance,source table/BMP fingerprints,types/static/style/source/tooling/inventory/policy gates pass. Retain both prior timeout diagnostics;DataView reader preserves all corpus fields,hashes and deadlines. WRITER039-043 preserved. Parent service/UI work and next-full-checkpoint stop remain explicit."
+  -
+    type: "comment"
+    at: "2026-10-21T04:11:11.653Z"
+    author: "CODER"
+    body: "Closure evidence correction: finish rejected an implementation-commit pointer to the earlier production-only1474156 snapshot because the formal review evaluates final226556d3e402,which includes the corpus-reader correction and WRITER043 documentation. Use226556d3e402 consistently as final implementation/evidence commit;retain1474156e2eae as the production-owner provenance. No source,test result,quality verdict or scope changes."
 doc_version: 3
-doc_updated_at: "2026-10-21T04:08:37.370Z"
+doc_updated_at: "2026-10-21T04:11:11.653Z"
 doc_updated_by: "CODER"
 description: "Continue approved search prerequisites with original widthfolding string composition/decomposition,all six width modules,two kana directions,two size directions,ignore Kana/Width/Size and traditional Kana/Kanji tables. Preserve native offsets,range/scalar quirks and JS memory behavior;do not invent missing service infrastructure."
 sections:
