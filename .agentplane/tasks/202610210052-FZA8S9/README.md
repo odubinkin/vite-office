@@ -4,7 +4,7 @@ title: "Implement native Calc connected-area and whole-sheet selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "All537 Calc tests and130 owners100percent;11 shared/Writer tests and changed shared owner100percent. Types,lint,format,build/static,resources,registry,provenance,routing,doctor pass. Chromium desktop/mobile and native Mac input selection accepted;portable audit rechecks78 raw artifacts,41 source pins and14 native pins. Complete full-app checkpoint next70."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T01:14:58.543Z"
+  updated_by: "EVALUATOR"
+  note: "Native connected-area and whole-sheet selection meets the approved block61 scope with complete Calc and changed shared-owner coverage."
+  evaluated_sha: "e4cfcc8699c0c4a2158f6bb35d35fa48063b6d94"
+  blueprint_digest: "4fe63e239a4c198e0ea51486400fbe0d55a9f507387eb250dbbf9ab3ad058adc"
+  evidence_refs:
+    - ".agentplane/tasks/202610210052-FZA8S9/README.md"
+    - ".agentplane/tasks/202610210052-FZA8S9/quality/20261021-011458543-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210052-FZA8S9/quality/20261021-011458543-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210052-FZA8S9/quality/20261021-011458543-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210052-FZA8S9/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610210052-FZA8S9/evidence/acceptance.json"
+    - ".agentplane/tasks/202610210052-FZA8S9/evidence/audit.mjs"
+    - "output/playwright/task61-audit.log"
+  findings:
+    - "Verified source order,original initial1 allocation,first-range then whole-sheet default,unchanged cursor/sheet/content/history ownership,shared Writer UI routing and native Mac input selection. Three nonnegative allocation guards specialize mathematically invariant conditions under initial1/grow-only storage;no fake zero-column states,coverage counter edits,threshold changes or exclusions. Native cached iterator hints are a declared optimization omission;original uncached typed-store queries are used. Reference/edit/protection/device services and complete parity remain explicit gaps. CALC247 preserves upstream clamping."
 commit: null
 comments:
   -
