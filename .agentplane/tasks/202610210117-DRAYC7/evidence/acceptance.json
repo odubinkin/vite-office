@@ -130,7 +130,7 @@
     "apps/office/src/sc/source/ui/view/viewfun2.ts": "1f32aeccafe5c5801e8675929f7f06c2515819ddfc0855b9f29bcf88a81ef999",
     "apps/office/src/sc/source/ui/view/viewfunc.ts": "7c0e5761e4f4cf322dd628e81508c04c3fa404ac9ff52293e5f25c63a5e95d67",
     "apps/office/src/sc/source/ui/view/viewutil.ts": "461f242ba62daf585a03373bb485a8444c1a3645a1c3074ec3a2a77156c2aab7",
-    "apps/office/src/sc/source/ui/view/visible-selection.test.ts": "807594e2ec37f3c9f9bc23c9a3fc89b45d25e9ea0a72b02abcafe7495d4d3811",
+    "apps/office/src/sc/source/ui/view/visible-selection.test.ts": "84dc27ff3ecdb261e663f6c7d54eaf4e01318d8ac494443a07bcc8e856e4b5ef",
     "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts": "b72605b8e75e7201fac34f7933d28aeabb492ed9295abb6ad64432b5eb00528c",
     "apps/office/src/sc/uiconfig/scalc/popupmenu/sheettab.ts": "3a9ae9af64ddb19544b4960474c9373fc689bf79b4a000249a376aee2a0de8fc",
     "apps/office/src/sc/uiconfig/scalc/toolbar/formatobjectbar.ts": "cae77006af3c94e7f96d192e2d901b3055f3eec1769c2bfee9fdcf2fb75fecb3",
@@ -156,8 +156,8 @@
     "vendor/libreoffice-reference/sc/sdi/scalc.sdi": "7b24b601115cda9adf8a1ed805c3f9a8ff45dc654603b4e8f1d1d79d0619dcc0"
   },
   "archive": {
-    "sha256": "45db501821609f37d9327f4fbb1b19278315f08d8da5879bc40fe623274c8a6c",
-    "records": 63
+    "sha256": "6fc8282d58155b08d11341d0691e4dd8647e2f170c19a09be7f4361d9e0361bc",
+    "records": 92
   },
   "coverage": {
     "lines": {
@@ -195,6 +195,7 @@
     "Original slot derivation:SID_SC_START26000+521+50+107/108=26678/26679.",
     "Original common marks subtract hidden spans across selected sheets;unclamped span endpoints,empty reset and simple reduction remain unchanged.",
     "No shared runtime mutation,no coverage counter/threshold/exclusion changes;all130Calc owner bytes pinned.",
-    "Blue row-label text highlight after Shift-click is an existing browser-interaction followup observation,not a complete browser parity claim. Next all-app checkpoint70."
+    "Blue row-label text highlight after Shift-click is an existing browser-interaction followup observation,not a complete browser parity claim. Next all-app checkpoint70.",
+    "Superseded initial pass/rework preserved in Git. JSDoc-only test repair emits identical JS;all130runtime hashes unchanged.14focused tests repeat;all10gate exits recorded individually0. Original failed JSDoc and observer ENOBUFS logs retained."
   ]
 }

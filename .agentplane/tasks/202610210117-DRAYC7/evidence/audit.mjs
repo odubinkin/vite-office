@@ -17,7 +17,7 @@ const records=JSON.parse(gunzipSync(archive).toString("utf8")),contents=new Map(
 for(const record of records){const data=Buffer.from(record.base64,"base64");assert.equal(data.length,record.bytes);assert.equal(hash(data),record.sha256);contents.set(record.path,data);}
 /** Reads a retained report. @param path - Exact path. @returns Raw JSON. */
 function json(path){return JSON.parse(contents.get(path).toString("utf8"));}
-for(const [name,count] of [["calc",551],["related",34]]){const result=json(`output/playwright/task62-${name}-results.json`);assert.equal(result.success,true);assert.equal(result.numPassedTests,count);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);}
+for(const [name,count] of [["calc",551],["related",34],["repair",14]]){const result=json(`output/playwright/task62-${name}-results.json`);assert.equal(result.success,true);assert.equal(result.numPassedTests,count);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);}
 const coverage=json("output/playwright/task62-calc-coverage/coverage-final.json");assert.equal(Object.keys(coverage).length,130);
 for(const [path,file] of Object.entries(coverage)){
  for(const [counter,map] of [["s","statementMap"],["f","fnMap"],["b","branchMap"]])assert.deepEqual(Object.keys(file[counter]),Object.keys(file[map]));
@@ -25,7 +25,10 @@ for(const [path,file] of Object.entries(coverage)){
 }
 const total=json("output/playwright/task62-calc-coverage/coverage-summary.json").total;
 for(const key of ["statements","branches","functions","lines"])assert.equal(total[key].pct,100);
-assert.match(contents.get("output/playwright/task62-static.log").toString(),/Static build smoke passed/);
+assert.match(contents.get("output/playwright/task62-accepted-static.log").toString(),/Static build smoke passed/);
+assert.match(contents.get("output/playwright/task62-accepted-jsdoc.log").toString(),/JSDoc validation passed/);
+assert.match(contents.get("output/playwright/task62-test-emission-proof.log").toString(),/byte-identical JavaScript/);
+const gates=json("output/playwright/task62-gate-exits.json");assert.equal(gates.length,10);for(const gate of gates){assert.equal(gate.exitCode,0,gate.name);assert.equal(gate.error,null,gate.name);}
 assert.match(contents.get("output/playwright/task62-browser-visible-rows.log").toString(),/gridcell "F6" \[selected\]/);
 assert.match(contents.get("output/playwright/task62-browser-visible-columns.log").toString(),/gridcell "F6" \[selected\]/);
 console.log(`Task62 acceptance:551 Calc+34 common/Writer tests;130 owners100%;${records.length} raw artifacts;${Object.keys(proof.sourceHashes).length} source pins;${Object.keys(proof.nativeHashes).length} pinned native inputs.`);
