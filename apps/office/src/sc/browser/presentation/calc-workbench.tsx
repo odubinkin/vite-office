@@ -1,4 +1,5 @@
 /** @fileoverview Production Calc workbench over canonical model/view/input owners,shared Sfx controls and Writer visual resources. */
+import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { getBrowserShortcut } from "../../../framework/browser/accelerators/keymapping";
 import type { ScTable } from "../../inc/table";
 import { rowAtPixel, rowPixels } from "./row-geometry";
@@ -74,6 +75,20 @@ export function CalcWorkbench({
     sheetWorkflows.metricDialogs.GetSnapshot,
     sheetWorkflows.metricDialogs.GetSnapshot,
   );
+  useBrowserSaveShortcut({
+    isActive: true,
+    autosave: fileWorkflows,
+    onError:
+      /** Records failed immediate primary saves on the actual medium. @param error - Storage or input failure. @returns Nothing. */ (
+        error,
+      ) =>
+        controller.shell.SetMediumOperation(
+          "save",
+          "failed",
+          controller.shell.GetContentGeneration(),
+          error instanceof Error ? error.message : String(error),
+        ),
+  });
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),

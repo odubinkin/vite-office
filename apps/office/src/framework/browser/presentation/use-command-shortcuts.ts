@@ -58,3 +58,44 @@ export function useCommandShortcuts({
     [dispatcher, executeCommand, isActive, resolveArguments],
   );
 }
+
+/** Captures the browser Save accelerator for the mounted document's primary storage policy.
+ * @param options - Active workspace, immediate save port and medium error reporter.
+ * @param options.isActive - Whether this document owns the shortcut.
+ * @param options.autosave - Immediate primary write port, when storage is available.
+ * @param options.onError - Reports failures on the active document medium.
+ * @returns Nothing; React owns listener disposal.
+ */
+export function useBrowserSaveShortcut({
+  isActive,
+  autosave,
+  onError,
+}: Readonly<{
+  isActive: boolean;
+  autosave: Readonly<{ Flush: () => Promise<void> }> | undefined;
+  onError: (error: unknown) => void;
+}>): void {
+  useEffect(
+    /** Installs Writer's capture-phase primary Save policy. @returns Listener cleanup. */ () => {
+      /** Saves the document before browser page Save or local editor handlers. @param event - Browser key. @returns Nothing. */
+      function saveLocally(event: KeyboardEvent): void {
+        if (
+          !isActive ||
+          event.key.toLowerCase() !== "s" ||
+          !(event.ctrlKey || event.metaKey) ||
+          event.altKey ||
+          event.shiftKey
+        )
+          return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (autosave === undefined) return;
+        void autosave.Flush().catch(onError);
+      }
+      window.addEventListener("keydown", saveLocally, true);
+      return /** Releases the document accelerator. @returns Nothing. */ () =>
+        window.removeEventListener("keydown", saveLocally, true);
+    },
+    [autosave, isActive, onError],
+  );
+}

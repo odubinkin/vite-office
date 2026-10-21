@@ -28,6 +28,10 @@
         {
           "path": "apps/office/e2e/writer-accelerator-ownership.spec.ts",
           "marker": "Writer consumed accelerator ownership"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/use-browser-save-shortcut.test.tsx",
+          "marker": "captures only primary Save"
         }
       ]
     },
@@ -35,7 +39,8 @@
     "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
     "responsibilities": [
       "Adapts browser keyboard events to registered Writer command dispatch.",
-      "Already-consumed browser key events now return before accelerator normalization,command lookup,argument resolution and execution, matching inspected SfxDockingWindow local dialog-key-before-global fallback. Actual Writer Ctrl/Meta+A invokes its local SelectAll exactly once without a second registered dispatch. Unconsumed enabled/disabled/unmapped keys and mounted active/disposal behavior retain their existing contracts. Owned native/React-event boundary spies,real Writer model/no-dispatch cases and measured Chromium selection/consumed-versus-unconsumed formatting/editing prove this priority only. Full native accelerator hierarchy,modal/input eligibility,pane F6,platform mapping and complete browser/native parity remain unverified."
+      "Already-consumed browser key events now return before accelerator normalization,command lookup,argument resolution and execution, matching inspected SfxDockingWindow local dialog-key-before-global fallback. Actual Writer Ctrl/Meta+A invokes its local SelectAll exactly once without a second registered dispatch. Unconsumed enabled/disabled/unmapped keys and mounted active/disposal behavior retain their existing contracts. Owned native/React-event boundary spies,real Writer model/no-dispatch cases and measured Chromium selection/consumed-versus-unconsumed formatting/editing prove this priority only. Full native accelerator hierarchy,modal/input eligibility,pane F6,platform mapping and complete browser/native parity remain unverified.",
+      "Shares Writer primary browser Save capture with Calc,including immediate Flush,modifier exclusions,active ownership and error reporting."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

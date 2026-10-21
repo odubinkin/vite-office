@@ -1,4 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { SwFormatVertOrient } from "../../inc/fmtornt";
 import { importBoxProperties } from "../../source/filter/xml/xmlimpit";
 import { RES_BOX } from "../../inc/hintids";
@@ -446,41 +447,22 @@ export function WriterWorkbench({
     },
     [isInputEnabled],
   );
-  useEffect(
-    /** Registers browser Save while this Writer view is mounted. @returns Listener cleanup. */
-    () => {
-      /** Saves the active document immediately through the same local store as autosave. @param event - Browser key event. @returns Nothing. */
-      function saveLocally(event: KeyboardEvent): void {
-        if (
-          !isActive ||
-          event.key.toLowerCase() !== "s" ||
-          !(event.ctrlKey || event.metaKey) ||
-          event.altKey ||
-          event.shiftKey
-        )
-          return;
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        if (autosave === undefined) return;
-        void autosave.Flush().catch(
-          /** Reports immediate save failures in the document medium. @param error - Storage failure. @returns Nothing. */
-          (error: unknown) => {
-            const shell = view.GetDocShell();
-            shell.SetMediumOperation(
-              "save",
-              "failed",
-              shell.GetDocumentState().contentGeneration,
-              error instanceof Error ? error.message : String(error),
-            );
-          },
+  useBrowserSaveShortcut({
+    isActive,
+    autosave,
+    onError:
+      /** Reports primary storage failure through the active shell. @param error - Storage failure. @returns Nothing. */ (
+        error,
+      ) => {
+        const shell = view.GetDocShell();
+        shell.SetMediumOperation(
+          "save",
+          "failed",
+          shell.GetDocumentState().contentGeneration,
+          error instanceof Error ? error.message : String(error),
         );
-      }
-      window.addEventListener("keydown", saveLocally, true);
-      return /** Removes the shortcut listener. @returns Nothing. */ () =>
-        window.removeEventListener("keydown", saveLocally, true);
-    },
-    [autosave, isActive, view],
-  );
+      },
+  });
 
   return (
     <div hidden={!isActive}>
