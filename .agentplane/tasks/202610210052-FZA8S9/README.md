@@ -1,10 +1,11 @@
 ---
 id: "202610210052-FZA8S9"
 title: "Implement native Calc connected-area and whole-sheet selection"
-status: "DOING"
+result_summary: "Implemented source-connected SelectData and first-range/then-whole-sheet SelectAll across core,SDI,shared Writer menus,accelerators and grid corner;restored native initial-one-column allocation and completed100percent Calc/shared-owner coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task61-audit.log"
   findings:
     - "Verified source order,original initial1 allocation,first-range then whole-sheet default,unchanged cursor/sheet/content/history ownership,shared Writer UI routing and native Mac input selection. Three nonnegative allocation guards specialize mathematically invariant conditions under initial1/grow-only storage;no fake zero-column states,coverage counter edits,threshold changes or exclusions. Native cached iterator hints are a declared optimization omission;original uncached typed-store queries are used. Reference/edit/protection/device services and complete parity remain explicit gaps. CALC247 preserves upstream clamping."
-commit: null
+commit:
+  hash: "59a6e430e0766e2f37cc709aa7768534edd072e6"
+  message: "🧩 FZA8S9 evidence: record complete selection acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: Implement original connected-area selection and source UI command routing in calc only under the resumed approved goal."
+  -
+    author: "CODER"
+    body: "Verified: Native connected-area and whole-sheet commands use actual document/view owners and shared Writer UI;537 Calc and11 shared/Writer tests pass with100percent scoped coverage. Browser desktop/mobile,input ownership and all declared gates accepted;immutable audit and evaluator pass retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All537 Calc tests and130 owners100percent;11 shared/Writer tests and changed shared owner100percent. Types,lint,format,build/static,resources,registry,provenance,routing,doctor pass. Chromium desktop/mobile and native Mac input selection accepted;portable audit rechecks78 raw artifacts,41 source pins and14 native pins. Complete full-app checkpoint next70."
+  -
+    type: "status"
+    at: "2026-10-21T01:15:23.468Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native connected-area and whole-sheet commands use actual document/view owners and shared Writer UI;537 Calc and11 shared/Writer tests pass with100percent scoped coverage. Browser desktop/mobile,input ownership and all declared gates accepted;immutable audit and evaluator pass retained."
 doc_version: 3
-doc_updated_at: "2026-10-21T01:14:31.405Z"
+doc_updated_at: "2026-10-21T01:15:23.470Z"
 doc_updated_by: "CODER"
 description: "Block61: port actual column occupancy and table/document connected data-area algorithms; restore original initial one-column allocation; bind SelectData and SelectAll through native view/cell shell and existing shared Writer menus/accelerators/corner. Preserve native first-range then whole-sheet behavior and all document/history invariants. Calc checkout/branch only, no merge/network. Related tests and all Calc coverage100; next full checkpoint70."
 sections:
@@ -109,6 +122,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only source and metadata commits for this task;retain task evidence and do not reset user history or merge branches."
   Findings: "Initial diagnostic Calc run retained ten stale zero-column assertions,all updated to native INITIALCOLCOUNT=1. Second run:537tests pass;coverage statements10831/10832,branches6743/6751. Added genuine missing area/failed-input cases. Three nonnegative column-allocation guards are invariant under actual initial1/grow-only columns and nonnegative valid coordinates;the port specializes these proved true branches without adding synthetic zero-column states or source coverage exclusions. Original conditional bodies and all valid-state behavior remain. Browser initial dev invocation passed --host through npm incorrectly;stopped only that task process and used actual built preview4175. A resized shared menubar recreated item references;refreshed snapshot before mobile acceptance. Known favicon404 is the only console resource error. Full all-app checkpoint60 is retained;next70. CALC247 records original clamping despite includeOld/onlyDown commentary;behavior unchanged."
+extensions:
+  implementation_commit:
+    hash: "e4cfcc8699c0c4a2158f6bb35d35fa48063b6d94"
+    message: "🧩 FZA8S9 calc: implement native connected-area selection"
 id_source: "generated"
 ---
 ## Summary
