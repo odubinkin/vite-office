@@ -49,13 +49,13 @@ for (const width of [1280, 390])
       await expect(height).toBeFocused();
       await expect(height).toHaveAttribute("aria-valuenow", "1.06");
       await expect(fit).not.toBeChecked();
-      await height.fill("1.59");
+      await height.fill("15.9 mm");
       await fit.check();
       await page.keyboard.press("Escape");
       await expect(page.getByRole("dialog", { name: "Row Height", exact: true })).toBeHidden();
       await expect(first.locator("[data-writer-fixed-row-content]")).toHaveCSS("height", "40px");
       await open();
-      await height.fill("1.59");
+      await height.fill("15.9 mm");
       await fit.check();
       await height.press("Enter");
       for (let cycle = 0; cycle < 3; cycle++) {

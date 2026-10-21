@@ -50,7 +50,7 @@ for (const viewport of [1280, 390]) {
     await columns(page);
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).not.toBeChecked();
     await expect(page.getByRole("spinbutton", { name: "Column 4 width (cm)" })).toBeDisabled();
-    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
+    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("50 mm");
     await expect(page.getByRole("spinbutton", { name: "Column 2 width (cm)" })).toHaveAttribute(
       "aria-valuenow",
       "2.05",
@@ -58,7 +58,7 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(rendered).toHaveCSS("width", "400px");
     await columns(page);
-    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("5");
+    await page.getByRole("spinbutton", { name: "Column 1 width (cm)" }).fill("50 mm");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect
       .poll(
