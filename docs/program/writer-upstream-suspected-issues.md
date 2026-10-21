@@ -642,6 +642,31 @@ owner and this initialization path are not implemented yet. Actual service
 loading, valid consumer request restrictions and the intended compatibility
 behavior remain to be established.
 
+## WRITER-026: Partial root inclusion is omitted from an empty-path result
+
+Status: initialized source proof; compiled native execution and consumer
+reachability remain unverified.
+Pinned `configmgr/source/partial.cxx`, `Partial::Partial` (lines 58–102)
+and `Partial::contains` (lines 106–129), accept an included path `/` with
+no exclusions. The helper and `Data::parseSegment` in `data.cxx` parse its
+last segment as empty; `Data::createSegment` keeps that empty value. The
+constructor therefore stays at `root_`, clears its children and sets its
+`startInclude` to true.
+
+For an empty query path vector, `contains` starts with `bIncludes = false`
+and performs no descent. The final expression sees an included root leaf
+but the unchanged false accumulator, returning `CONTAINS_SUBNODES`.
+The adjacent source comment describes an included leaf as `CONTAINS_NODE`.
+A nonempty path whose first segment is absent instead returns
+`CONTAINS_NODE` through the missing-child branch. This comparison follows
+the original initialized values without modifying private state.
+
+Decision: preserve the false accumulator and both result branches when
+porting `Partial`; do not initialize the accumulator from the root flag or
+special-case the empty query. The portable owner is not implemented yet.
+Whether XCU or another consumer actually queries this empty path, and why
+the distinction exists, remain unverified; no confirmed defect is claimed.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

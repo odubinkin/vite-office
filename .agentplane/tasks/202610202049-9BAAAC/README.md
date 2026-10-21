@@ -4,7 +4,7 @@ title: "Implement native XCS schema parsing and full cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port approved complete XCS schema parser and actual Common.xcs default tree, then perform tenth-task full regression without weakening strict gates."
 doc_version: 3
-doc_updated_at: "2026-10-20T23:54:50.670Z"
+doc_updated_at: "2026-10-21T00:05:34.586Z"
 doc_updated_by: "CODER"
 description: "Continue Writer search configuration with complete native Parser/ParseManager driver, xmldata lexical contracts and XcsParser schema/template/merge behavior; parse actual pinned Common.xcs and run the tenth-task full regression."
 sections:
@@ -200,6 +200,11 @@ sections:
     Scope: current source after the point-only FindAll correction and WRITER-025 documentation, including987 runtime dependency sources,988 provenance records,2555 authored JSDoc files and unchanged strict policies. These mechanical gates do not certify complete native service/ABI or whole Writer parity.
 
     Full application coverage still running: session12311 / PID91470,elapsed32:03,562 temporary outputs at latest observation. Complete browser432,tooling91 and static gates already passed at current source; retain pending status until terminal full application/inventory evidence and formal quality/closure. No duplicated full run.
+
+    Command: npx prettier --check docs/program/writer-upstream-suspected-issues.md; git diff --check; local pinned Partial/Data source review.
+    Result: pass for the WRITER-026 documentation-only addition.
+    Evidence: partial-observation-format.log; native partial.cxx36-129 and data.cxx81-145.
+    Scope: initialized source proof only, no compiled Partial or browser consumer certification. Full application coverage still live under session12311 / PID91470, elapsed42:50 with815 temporary reports at latest observation. Runtime snapshot unchanged; no duplicate full test run, coverage exclusion or threshold change.
   Rollback Plan: "Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge."
   Findings: |-
     Nine tasks have completed since full checkpoint 6a7dd8660, including generated task-subject closure commits that a close-only log grep would miss. Full canonical npm test includes strict100 percent application and inventory coverage; no exclusions/threshold changes are authorized. XcsParser source ignores desc nodes even while collecting info text, allows ignored markup at illegal places and conservatively retains existing property values during merges; preserve these source contracts and document suspicious findings. Existing local LibreOffice read approval covers Common.xcs; ICU/network remain unapproved and unused.
@@ -232,6 +237,8 @@ sections:
     Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.
 
     Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
+
+    Read-only review of the next configuration family found WRITER-026: with includedPaths=["/"] and no exclusions, native Partial sets root_.startInclude=true; contains(empty path) leaves bIncludes=false and returns CONTAINS_SUBNODES, whereas a missing first child on a nonempty query returns CONTAINS_NODE. The adjacent original comment describes an included leaf as CONTAINS_NODE. Added the initialized source proof to the existing suspected-issues file, clearly limiting it to source evidence and unknown consumer reachability. Preserve both native branches and the initial false accumulator in a future Partial port. No runtime/test/config change, new non-task path, external ICU or network read.
 id_source: "generated"
 ---
 ## Summary
@@ -408,6 +415,11 @@ Scope: current source after the point-only FindAll correction and WRITER-025 doc
 
 Full application coverage still running: session12311 / PID91470,elapsed32:03,562 temporary outputs at latest observation. Complete browser432,tooling91 and static gates already passed at current source; retain pending status until terminal full application/inventory evidence and formal quality/closure. No duplicated full run.
 
+Command: npx prettier --check docs/program/writer-upstream-suspected-issues.md; git diff --check; local pinned Partial/Data source review.
+Result: pass for the WRITER-026 documentation-only addition.
+Evidence: partial-observation-format.log; native partial.cxx36-129 and data.cxx81-145.
+Scope: initialized source proof only, no compiled Partial or browser consumer certification. Full application coverage still live under session12311 / PID91470, elapsed42:50 with815 temporary reports at latest observation. Runtime snapshot unchanged; no duplicate full test run, coverage exclusion or threshold change.
+
 ## Rollback Plan
 
 Revert only this XCS schema/parser leaf and related repairs/assets/registry changes. Preserve previous real value parser/search work, task history and user files; no destructive checkout or merge.
@@ -444,3 +456,5 @@ Fresh canonical npm test is running after these source repairs: tool session1231
 Read-only next-block source analysis while the fresh full application run remains live: original TransliterationImpl::loadModuleNew checks TMlist[i].tm for compatibility while selecting and loading TMlist[j].implName. Added WRITER-025 as a conditional source proof for [LOWERCASE_UPPERCASE, IGNORE_CASE], with compiled service behavior and consumer constraints explicitly unverified. Preserve the original indices in the future owner port. Only the existing suspected-issues document changes; no runtime/test/config changes during the live run, no new non-task path, no external ICU/network reads. Documentation Prettier and git diff --check pass. Fresh coverage session12311 / PID91470 remains live, with temporary output advancing to161 files at elapsed08:25; no terminal verdict.
 
 Read-only next search block analysis: native svx tbunosearchcontrollers.cxx impl_executeSearch derives IGNORE_CASE and IGNORE_DIACRITICS_CTL directly from the unchecked Match Case/Match Diacritics controls, with conditional Kashida from SvtCTLOptions. checkbuttonbox.ui and controller creation do not activate these toggles. This toolbar path differs from the SvxSearchItem/SvtSearchOptions configured dialog path; do not substitute one default set for the other. Real ICU diacritic transliteration remains needed for the toolbar default, and external ICU source reading is still unapproved. XcuParser plus Partial is a coherent missing native configuration family before the real configuration access owners; these were inspected locally without adding a fake provider or UI implementation.
+
+Read-only review of the next configuration family found WRITER-026: with includedPaths=["/"] and no exclusions, native Partial sets root_.startInclude=true; contains(empty path) leaves bIncludes=false and returns CONTAINS_SUBNODES, whereas a missing first child on a nonempty query returns CONTAINS_NODE. The adjacent original comment describes an included leaf as CONTAINS_NODE. Added the initialized source proof to the existing suspected-issues file, clearly limiting it to source evidence and unknown consumer reachability. Preserve both native branches and the initial false accumulator in a future Partial port. No runtime/test/config change, new non-task path, external ICU or network read.
