@@ -1,10 +1,11 @@
 ---
 id: "202610210524-5678C0"
 title: "Implement mouse sizing of Calc column and row headers"
-status: "DOING"
+result_summary: "Native column and row mouse sizing with shared Writer window tracking"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -42,8 +43,8 @@ quality_review:
   findings:
     - "Explicit source commit a4c1896e9511 is recorded and persisted. The implementation retains original size arithmetic,marks/groups/history and cancellation,while shared tracking has exact token equivalence to prior Writer code. All135Calc owners and the shared tracking owner have raw100coverage."
 commit:
-  hash: "a4c1896e9511e8ac2ae762e8f79a7cf916abe4d7"
-  message: "🧩 5678C0 task: add native mouse sizing and shared Writer window tracking"
+  hash: "b12b0fd04c68b54cf5c05e891db9918b9c9c78b6"
+  message: "🧩 5678C0 task: pin verified native sizing implementation for review"
 comments:
   -
     author: "CODER"
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: pin the existing verified native header sizing source commit for quality review after the related ODS task closure changed HEAD. No implementation or verification scope changes."
+  -
+    author: "CODER"
+    body: "Verified: reviewed tree b12b0fd04c68 contains source implementation a4c1896e9511 with unchanged source hashes;604Calc/135owners100,28tracking100,13gates0,and browser/audit checks pass."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: pin the existing verified native header sizing source commit for quality review after the related ODS task closure changed HEAD. No implementation or verification scope changes."
+  -
+    type: "status"
+    at: "2026-10-21T06:15:46.820Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: reviewed tree b12b0fd04c68 contains source implementation a4c1896e9511 with unchanged source hashes;604Calc/135owners100,28tracking100,13gates0,and browser/audit checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-21T06:12:18.269Z"
+doc_updated_at: "2026-10-21T06:15:46.822Z"
 doc_updated_by: "CODER"
 description: "User priority: useful existing-core UI after ordinary ODS import. Port the consumed ScColBar/ScRowBar size and hide contracts plus header drag threshold/completion/cancellation from pinned upstream. Wire React header boundaries to actual native dimensions and undo, preserving selection/groups and browser style. No alternate workbook geometry state; native optimal device layout stays an explicit separate unported branch. Limit up to24 implementation/test/registry/doc paths, including new native header boundaries and one browser pointer presenter. Accept related tests and raw changed-owner100, complete Calc100, browser actual drag/undo/cancel and unchanged ODS reload behavior. Full all-app checkpoint70, repair and final closure then pause remain required."
 sections:
