@@ -8,6 +8,7 @@ import {
   rtl_uString_newFromLiteral,
   rtl_uString_newFromStr_WithLength,
   rtl_uString_release,
+  rtl_uString_iterateCodePoints,
   rtl_ustr_compare_WithLength,
   rtl_ustr_toInt64,
   rtl_ustr_reverseCompare_WithLength,
@@ -60,6 +61,7 @@ export class OUStringLiteral {
 export type OUStringConstReference = Readonly<
   Pick<
     OUString,
+    | "iterateCodePoints"
     | "toInt64"
     | "getLength"
     | "getStr"
@@ -223,6 +225,10 @@ export class OUString {
   /** Original direct length access, requiring live nonnull data. @returns Logical length. */
   getLength(): number {
     return this.pData.length;
+  }
+  /** Original codepoint forwarding with default increment one. @param indexUtf16 - Mutable unit index. @param incrementCodePoints - Signed codepoint increment. @returns Source codepoint. */
+  iterateCodePoints(indexUtf16: [number], incrementCodePoints = 1): number {
+    return rtl_uString_iterateCodePoints(this.pData, indexUtf16, incrementCodePoints);
   }
   /** Original empty predicate. @returns Whether logical length is zero. */
   isEmpty(): boolean {

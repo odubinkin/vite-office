@@ -1,4 +1,5 @@
 /** @fileoverview Original Unicode C reverse comparator delegates to the SAL string template owner. */
+import { iterateCodePoints } from "../../o3tl/inc/string_view";
 import { CompareNormal, reverseCompare_WithLengths } from "./strtmpl";
 import * as str from "./strtmpl";
 import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
@@ -296,4 +297,18 @@ export function rtl_ustr_toAsciiUpperCase_WithLength(data: Uint16Array, length: 
 /** Original Unicode float C wrapper over the genuine source template specialization. @param data - Native macro-sized borrowed output buffer or checked null pointer. @param value - Original float parameter,explicitly narrowed from the JS number binding. @returns Written length excluding terminating zero. */
 export function rtl_ustr_valueOfFloat(data: Uint16Array | null, value: number): number {
   return str.valueOfFP(data, Math.fround(value));
+}
+
+/** Original codepoint C entry delegates to o3tl over the logical string excluding its terminator. @param string - Live native value. @param indexUtf16 - Mutable unit index. @param incrementCodePoints - Signed codepoint increment. @returns Original codepoint result. */
+export function rtl_uString_iterateCodePoints(
+  string: rtl_uString,
+  indexUtf16: [number],
+  incrementCodePoints: number,
+): number {
+  if (indexUtf16[0] < 0) throw new Error("assert(*indexUtf16 >= 0)");
+  return iterateCodePoints(
+    string.buffer.subarray(0, string.length),
+    indexUtf16,
+    incrementCodePoints,
+  );
 }

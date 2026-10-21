@@ -259,6 +259,15 @@ const originalCharacterValueImports = new Map([
     ]),
   ],
 
+  // Original ignoreDiacritics_CTL consumes actual UNO Sequence/RuntimeException values.
+  [
+    "i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+    new Set([
+      "cppu/inc/com/sun/star/uno/Sequence.ts",
+      "cppu/inc/com/sun/star/uno/RuntimeException.ts",
+    ]),
+  ],
+
   // Original Parser, ParseManager, xmldata and XcsParser declare/use these XML event/span contracts.
   ["configmgr/source/parser.ts", new Set(["xmlreader/inc/xmlreader.ts", "xmlreader/inc/span.ts"])],
   [
@@ -625,6 +634,8 @@ const originalSalO3tlBindings = new Map([
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
+  // Original sal/rtl/ustring.cxx uses exactly o3tl::iterateCodePoints.
+  ["sal/rtl/ustring.ts -> o3tl/inc/string_view.ts", ["iterateCodePoints"]],
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
   // Original byte view overloads call the SAL byte signed64 entry point.
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/string.h.ts", ["rtl_str_toInt64_WithLength"]],

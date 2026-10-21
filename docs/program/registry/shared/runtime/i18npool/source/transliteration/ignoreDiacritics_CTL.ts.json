@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/transliteration/ignoreDiacritics_CTL.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "capabilityIds": [
+      "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/transliteration/ignoreDiacritics_CTL.ts#ignoreDiacritics_CTL",
+        "apps/office/src/i18npool/source/transliteration/native-diacritics-contracts.test.ts"
+      ],
+      "justification": "Original concrete constructor, exact mapping/normalization and inherited ignore contracts. Native JavaScript memory and lifetime replace C++ ownership infrastructure. Original NFD; [:M:] Remove; NFC uses native JavaScript normalize and Unicode Mark properties after complete ICU78.3 Unicode17 corpus/category conformance in Node24 and Chromium151. Preserve whole-string versus per-codepoint offset normalization, scalar empty/multiunit fallback, full-input iterateCodePoints and absolute repeated UTF16 offsets. ICU factory/allocation/resource-failure infrastructure is erased; interface/service registration and arbitrary older Unicode runtimes are not certified. This owner alone does not activate engine flags, defaults or browser search UI; no semantic readiness promotion is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ignoreDiacritics_CTL",
+        "foldingImpl",
+        "transliterateChar2Char"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+      "upstreamSymbols": [
+        "ignoreDiacritics_CTL",
+        "foldingImpl",
+        "transliterateChar2Char"
+      ]
+    }
+  }
+}
