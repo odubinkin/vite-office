@@ -19,7 +19,7 @@ for(const record of records){const data=Buffer.from(record.base64,"base64");asse
 function json(path){return JSON.parse(contents.get(path).toString("utf8"));}
 /** Reads a structured result from actual CLI output. @param name - Exact artifact suffix. @returns Observed browser state. */
 function browser(name){return JSON.parse(contents.get(`output/playwright/task63-browser-${name}.log`).toString().split("### Result\n")[1].split("\n### Ran Playwright code")[0]);}
-for(const[name,count]of[["final-calc",570],["related",43],["tooling",17],["binding-accepted",16]]){const result=json(`output/playwright/task63-${name}-results.json`);assert.equal(result.success,true);assert.equal(result.numPassedTests,count);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);}
+for(const[name,count]of[["final-calc",570],["related",43],["tooling",17],["binding-accepted",16],["modal",15]]){const result=json(`output/playwright/task63-${name}-results.json`);assert.equal(result.success,true);assert.equal(result.numPassedTests,count);assert.equal(result.numFailedTests,0);assert.equal(result.numPendingTests,0);}
 const coverage=json("output/playwright/task63-final-calc-coverage/coverage-final.json");assert.equal(Object.keys(coverage).length,130);
 for(const[path,file]of Object.entries(coverage)){
  for(const[counter,map]of[["s","statementMap"],["f","fnMap"],["b","branchMap"]])assert.deepEqual(Object.keys(file[counter]),Object.keys(file[map]));
