@@ -1,10 +1,11 @@
 ---
 id: "202610210506-AKV3ES"
 title: "Open ordinary ODS spreadsheets through the Calc file workflow"
-status: "DOING"
+result_summary: "Ordinary ODS scalar import with metadata routing and browser file opening"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "node .agentplane/tasks/202610210506-AKV3ES/evidence/audit.mjs:pass;604Calc/177files/135owners100;sample80cells;13gates0"
   findings:
     - "Metadata routing is limited to automatic style declarations;actual form contents and unknown sheet semantics still reject. The sample date cells are strings,so unused date-style compilation is not misrepresented as implemented."
-commit: null
+commit:
+  hash: "a4c1896e9511e8ac2ae762e8f79a7cf916abe4d7"
+  message: "🧩 5678C0 task: add native mouse sizing and shared Writer window tracking"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce and repair ordinary ODS import routing using the supplied file, preserving existing native document and browser contracts."
+  -
+    author: "CODER"
+    body: "Verified: supplied ODS opens through native filter and shared dialog with all80scalar cells;604Calc scenarios and135owners100,13gates0,and immutable audit pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original ODS all80scalar cells and browser chooser pass;48relatedXML cases/twoowners100;shared final604Calc/135owners100;13gates0;immutable audit passed."
+  -
+    type: "status"
+    at: "2026-10-21T06:08:22.096Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: supplied ODS opens through native filter and shared dialog with all80scalar cells;604Calc scenarios and135owners100,13gates0,and immutable audit pass."
 doc_version: 3
-doc_updated_at: "2026-10-21T06:04:26.039Z"
+doc_updated_at: "2026-10-21T06:08:22.097Z"
 doc_updated_by: "CODER"
 description: "User reprioritized working Calc UI over generic UNO expansion. Reproduce opening the explicitly authorized Downloads/file_example_ODS_10.ods, fix the actual import blockers through existing upstream owners without alternate workbook models, and verify content, dimensions and browser open behavior. Follow with separate tasks for mouse sizing, native dialog units and formula gaps. Preserve unfinished task AJY2K0 separately. Full suite at block70 then fixes, coverage, final closure and pause remain required."
 sections:
