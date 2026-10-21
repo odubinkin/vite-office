@@ -4,7 +4,7 @@ title: "Connect native Writer Properties sidebar panels and paragraph metric slo
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-21T11:14:34.579Z"
+  updated_at: "2026-10-21T11:17:18.746Z"
   updated_by: "CODER"
-  note: "Complete application regression18034 cases passed;all Chromium failures repaired with case-identity proof;isolated inventory124 cases100 percent;full plus13 new-case Istanbul aggregation100 percent across890 owners with exact source/counter maps;all build,type,lint,resource,architecture,docs,inventory and repository gates pass. Close this task then pause the goal."
+  note: "Verified: commit444affdf62d7 passes the complete18034-case regression and all scoped repair checks;audited aggregate coverage is100 percent across890 executable owners,all34 Chromium failures are resolved and124 inventory tests pass100 percent. Quality review passes for the implementation SHA. Close this task and immediately pause the goal."
   attempts: 0
 quality_review:
   state: "pass"
@@ -72,8 +72,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete application regression18034 cases passed;all Chromium failures repaired with case-identity proof;isolated inventory124 cases100 percent;full plus13 new-case Istanbul aggregation100 percent across890 owners with exact source/counter maps;all build,type,lint,resource,architecture,docs,inventory and repository gates pass. Close this task then pause the goal."
+  -
+    type: "verify"
+    at: "2026-10-21T11:17:18.746Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: commit444affdf62d7 passes the complete18034-case regression and all scoped repair checks;audited aggregate coverage is100 percent across890 executable owners,all34 Chromium failures are resolved and124 inventory tests pass100 percent. Quality review passes for the implementation SHA. Close this task and immediately pause the goal."
 doc_version: 3
-doc_updated_at: "2026-10-21T11:15:18.912Z"
+doc_updated_at: "2026-10-21T11:17:18.808Z"
 doc_updated_by: "CODER"
 description: "Ninth coherent current-slice consistency leaf after checkpoint9BAAAC: replace paragraph status cards with upstream Style,Character,Paragraph panel composition and actual existing controls;connect native typed LR/UL paragraph slot execution and state to metric controls,history and ODT. Preserve source defaults,source limitations and native JS lifetime. All changes remain on writer branch in vite-office-writer;no network,merges or locale expansion. User approved continuing current-slice work. Full regression remains tenth leaf then repairs,coverage,closure and goal pause."
 sections:
@@ -110,6 +116,39 @@ sections:
     Evidence root: output/playwright/writer-properties-sidebar/. Runtime partial ports remain unverified in semantic registries;full generic GetPaMAttr,AutoUpdatePara,protection/layout,advanced character/style/paragraph/table services are not claimed. Source percentage rescaling is retained and documented as WRITER047.
 
     Stop rule: close only task202610210830-AHJ2M9 after quality review,then immediately pause the goal. No additional task or search/locale direction follows.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-21T11:17:18.746Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: commit444affdf62d7 passes the complete18034-case regression and all scoped repair checks;audited aggregate coverage is100 percent across890 executable owners,all34 Chromium failures are resolved and124 inventory tests pass100 percent. Quality review passes for the implementation SHA. Close this task and immediately pause the goal.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T11:15:18.912Z, excerpt_hash=sha256:a7a59858bb5609475338b2ac5824da25a734929b2b92a71f2f1b4d40f2f97fde
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610210830-AHJ2M9/blueprint/resolved-snapshot.json
+    - old_digest: dec7426532fad5653f7b417d80e06ffc4f1ddb1cd7efcdeb7772ccb518aa55d0
+    - current_digest: dec7426532fad5653f7b417d80e06ffc4f1ddb1cd7efcdeb7772ccb518aa55d0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610210830-AHJ2M9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610210830-AHJ2M9 --result verified-202610210830-AHJ2M9 --commit a5d127a9d7edb29b5b1208a605abb24f9e112d52
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's implementation commits if required;preserve unrelated work and user-managed branch history."
   Findings: |-
     User authorized current-slice priority and safe local execution. Source ListsPropertyPanel is DrawImpress-only;Writer lists remain within Paragraph. Latest user instruction supersedes the cadence: complete this ninth leaf, run full regression and repairs, close this task and pause the goal without another task.
@@ -206,6 +245,39 @@ Verification completed on branch writer in /Users/odubinkin/Projects/vite-office
 Evidence root: output/playwright/writer-properties-sidebar/. Runtime partial ports remain unverified in semantic registries;full generic GetPaMAttr,AutoUpdatePara,protection/layout,advanced character/style/paragraph/table services are not claimed. Source percentage rescaling is retained and documented as WRITER047.
 
 Stop rule: close only task202610210830-AHJ2M9 after quality review,then immediately pause the goal. No additional task or search/locale direction follows.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-21T11:17:18.746Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: commit444affdf62d7 passes the complete18034-case regression and all scoped repair checks;audited aggregate coverage is100 percent across890 executable owners,all34 Chromium failures are resolved and124 inventory tests pass100 percent. Quality review passes for the implementation SHA. Close this task and immediately pause the goal.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T11:15:18.912Z, excerpt_hash=sha256:a7a59858bb5609475338b2ac5824da25a734929b2b92a71f2f1b4d40f2f97fde
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610210830-AHJ2M9/blueprint/resolved-snapshot.json
+- old_digest: dec7426532fad5653f7b417d80e06ffc4f1ddb1cd7efcdeb7772ccb518aa55d0
+- current_digest: dec7426532fad5653f7b417d80e06ffc4f1ddb1cd7efcdeb7772ccb518aa55d0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610210830-AHJ2M9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610210830-AHJ2M9 --result verified-202610210830-AHJ2M9 --commit a5d127a9d7edb29b5b1208a605abb24f9e112d52
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
