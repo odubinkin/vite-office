@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -18,6 +18,7 @@ depends_on:
   - "202610210152-BHWWEZ"
   - "202610210207-W1J9FP"
   - "202610210234-Q6QPPB"
+  - "202610210319-37V8XQ"
 tags:
   - "code"
 verify: []
@@ -40,6 +41,9 @@ comments:
   -
     author: "CODER"
     body: "User stop condition (2026-10-21): After the NEXT full test run, complete necessary fixes and added test scenarios, verify coverage and all required gates, then perform final closure of the executable task active at that checkpoint and pause the goal immediately. Do not start another implementation task after that closure. Preserve the existing one-full-run-per-ten-completed-leaves cadence unless the user changes it; Q6QPPB was the third completed leaf after the 9BAAAC full-run checkpoint. Do not mark this search/UI parent or the overall Writer objective complete unless its actual scope is satisfied; unfinished parent scope remains recorded when the goal is paused. Use goal status paused under this explicit user instruction once the checkpoint closure is finished."
+  -
+    author: "PLANNER"
+    body: "Completed prerequisite37V8XQ at implementation712d08f1ec12: ignoreDiacritics_CTL with validated native JavaScript normalization,actual OUString/rtl codepoint forwarding and six Japanese modules. Related457 tests,new-module100 percent coverage,added forwarding counters,ICU78.3 Unicode17 Node/Chromium conformance and actual browser module acceptance pass. Source quirks WRITER037-038 preserved. Fourth completed leaf since9BAAAC full checkpoint;after next full run,necessary repairs/test additions/coverage and active-task closure,pause goal and start no new task. Parent remains incomplete: aggregate/interface/service contracts,configuration provider/search-item/word services,cursor integration and Find toolbar/dialog remain. Native JavaScript memory/lifetime is required;do not port native allocators/refcount infrastructure."
 events:
   -
     type: "status"
@@ -53,9 +57,14 @@ events:
     at: "2026-10-21T03:16:26.040Z"
     author: "CODER"
     body: "User stop condition (2026-10-21): After the NEXT full test run, complete necessary fixes and added test scenarios, verify coverage and all required gates, then perform final closure of the executable task active at that checkpoint and pause the goal immediately. Do not start another implementation task after that closure. Preserve the existing one-full-run-per-ten-completed-leaves cadence unless the user changes it; Q6QPPB was the third completed leaf after the 9BAAAC full-run checkpoint. Do not mark this search/UI parent or the overall Writer objective complete unless its actual scope is satisfied; unfinished parent scope remains recorded when the goal is paused. Use goal status paused under this explicit user instruction once the checkpoint closure is finished."
+  -
+    type: "comment"
+    at: "2026-10-21T03:35:43.878Z"
+    author: "PLANNER"
+    body: "Completed prerequisite37V8XQ at implementation712d08f1ec12: ignoreDiacritics_CTL with validated native JavaScript normalization,actual OUString/rtl codepoint forwarding and six Japanese modules. Related457 tests,new-module100 percent coverage,added forwarding counters,ICU78.3 Unicode17 Node/Chromium conformance and actual browser module acceptance pass. Source quirks WRITER037-038 preserved. Fourth completed leaf since9BAAAC full checkpoint;after next full run,necessary repairs/test additions/coverage and active-task closure,pause goal and start no new task. Parent remains incomplete: aggregate/interface/service contracts,configuration provider/search-item/word services,cursor integration and Find toolbar/dialog remain. Native JavaScript memory/lifetime is required;do not port native allocators/refcount infrastructure."
 doc_version: 3
-doc_updated_at: "2026-10-21T03:16:26.040Z"
-doc_updated_by: "CODER"
+doc_updated_at: "2026-10-21T03:35:43.878Z"
+doc_updated_by: "PLANNER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
   Summary: "Implement the approved Writer search and replace feature using the pinned LibreOffice source contracts, with real shared search responsibilities, Writer cursor traversal, view-owned search state, replacement history, and browser Find / Find and Replace presentation."
