@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -55,6 +55,9 @@ comments:
   -
     author: "PLANNER"
     body: "Current-slice milestone DS8CKD closed at b571a88b8bdb;final implementation/tests62ce04f21f1b (production5122d6d54af5). Actual metric parser and SetFieldUnit now feed Writer page/table/columns/row-height/numbering fields.50 related cases,three-owner strict100 coverage,18 Chromium scenarios plus6 overlapping explicit-mm updates and declared gates pass. Seventh completed leaf since9BAAAC;no full suite here. This is current-slice work,not a new search prerequisite dependency. Search remains unfinished and deferred behind user priority:real module measurement preferences/Options,ruler and remaining paragraph/border fields;then upstream sidebar and existing core/UI/import-export consistency. When exposing MM preferences,preserve native normalized widget state across twip projection so finer-than-one-twip display precision is not reconstructed from rounded document values. No deeper locale/context-service expansion absent a concrete selected user function. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal immediately and start no further task."
+  -
+    author: "CODER"
+    body: "Milestone: XBHM4Z is DONE. Implementation09be8968e717,quality522089c9dff7 and closure20f74523ad46 connect native Writer module metric defaults/preferences,actual General/View option items,persistent normalized metric controls,dimension/paragraph/tab/border UI and independent rulers. Current-source exact15-owner coverage101 cases is100% on S469/B303/F127/L434;153 related geometry/history cases,3 composition,6 real Chromium/ODT and52 tooling cases pass,with required gates and a clean writer checkout. Source MakePositionSticky half-tick observation is documented as WRITER046 and full native method remains unported. This is the eighth completed leaf since9BAAAC;no full application run occurred at leaf8. Next priorities remain current-slice consistency:canonical sidebar composition/behavior and first-necessity core/UI/ODT connectivity,not deeper locale/search prerequisites. This parent remains unfinished and deferred;do not treat module preferences as a fabricated search dependency or complete the broad goal. At the next full checkpoint after tenth leaf,repair/add tests and finish coverage,close the actual current task,and immediately pause the goal without starting another task."
 events:
   -
     type: "status"
@@ -88,9 +91,14 @@ events:
     at: "2026-10-21T05:48:59.925Z"
     author: "PLANNER"
     body: "Current-slice milestone DS8CKD closed at b571a88b8bdb;final implementation/tests62ce04f21f1b (production5122d6d54af5). Actual metric parser and SetFieldUnit now feed Writer page/table/columns/row-height/numbering fields.50 related cases,three-owner strict100 coverage,18 Chromium scenarios plus6 overlapping explicit-mm updates and declared gates pass. Seventh completed leaf since9BAAAC;no full suite here. This is current-slice work,not a new search prerequisite dependency. Search remains unfinished and deferred behind user priority:real module measurement preferences/Options,ruler and remaining paragraph/border fields;then upstream sidebar and existing core/UI/import-export consistency. When exposing MM preferences,preserve native normalized widget state across twip projection so finer-than-one-twip display precision is not reconstructed from rounded document values. No deeper locale/context-service expansion absent a concrete selected user function. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal immediately and start no further task."
+  -
+    type: "comment"
+    at: "2026-10-21T08:22:34.109Z"
+    author: "CODER"
+    body: "Milestone: XBHM4Z is DONE. Implementation09be8968e717,quality522089c9dff7 and closure20f74523ad46 connect native Writer module metric defaults/preferences,actual General/View option items,persistent normalized metric controls,dimension/paragraph/tab/border UI and independent rulers. Current-source exact15-owner coverage101 cases is100% on S469/B303/F127/L434;153 related geometry/history cases,3 composition,6 real Chromium/ODT and52 tooling cases pass,with required gates and a clean writer checkout. Source MakePositionSticky half-tick observation is documented as WRITER046 and full native method remains unported. This is the eighth completed leaf since9BAAAC;no full application run occurred at leaf8. Next priorities remain current-slice consistency:canonical sidebar composition/behavior and first-necessity core/UI/ODT connectivity,not deeper locale/search prerequisites. This parent remains unfinished and deferred;do not treat module preferences as a fabricated search dependency or complete the broad goal. At the next full checkpoint after tenth leaf,repair/add tests and finish coverage,close the actual current task,and immediately pause the goal without starting another task."
 doc_version: 3
-doc_updated_at: "2026-10-21T05:48:59.925Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-21T08:22:34.109Z"
+doc_updated_by: "CODER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
   Summary: "Implement the approved Writer search and replace feature using the pinned LibreOffice source contracts, with real shared search responsibilities, Writer cursor traversal, view-owned search state, replacement history, and browser Find / Find and Replace presentation."
