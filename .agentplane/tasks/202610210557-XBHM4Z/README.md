@@ -4,7 +4,7 @@ title: "Connect Writer module measurement preferences across options fields and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Native metric contracts and all approved integration checks pass:101 targeted tests with exact15-owner100% coverage and complete current-source counter proof;153 related geometry/dialog/history tests;3 composition tests;6 genuine Chromium/ODT cases;52 related tooling tests;types/build/style/resources/provenance/inventories/docs/tree/size/static/doctor/routing/diff gates. Full suite not due at eighth leaf. See Verification and retained Findings for initial failures and source-preserved limitations."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-21T08:18:22.794Z"
+  updated_by: "EVALUATOR"
+  note: "Approved Writer metric preference slice is implemented and verified on09be8968e717:source defaults/property names/optional axis flags/typed item order and view scope are retained;actual UI,normalized numeric ownership,persistence and ODT geometry are connected. No blocking finding within scope."
+  evaluated_sha: "09be8968e7170fec37d5cce31359c5cbbf7acc0d"
+  blueprint_digest: "3a171cf42b388d100f8711287a4295bbed869f0c9bb337fb9071ab533b28fee0"
+  evidence_refs:
+    - ".agentplane/tasks/202610210557-XBHM4Z/README.md"
+    - ".agentplane/tasks/202610210557-XBHM4Z/quality/20261021-081822794-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610210557-XBHM4Z/quality/20261021-081822794-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610210557-XBHM4Z/quality/20261021-081822794-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610210557-XBHM4Z/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-measurement-preferences/coverage-source-proof.json"
+    - "output/playwright/writer-measurement-preferences/coverage-all-metric-owners/coverage-summary.json"
+    - "output/playwright/writer-measurement-preferences/chromium-final.log"
+    - "output/playwright/writer-measurement-preferences/cm-fixtures-final.log"
+    - "output/playwright/writer-measurement-preferences/tooling-related.log"
+  findings:
+    - "Reviewed the pinned SwMasterUsrPref,SwModule,SwLoadOptPage,SwContentOptPage and Ruler responsibilities against the actual source code and literal tests;partial projections and browser adaptations are explicit rather than fake full services."
+    - "Independent101-test15-owner coverage is100 on statements,branches,functions and lines,with complete positive counter maps and current-source HTML identity;153 related original scenarios,3 composition tests,6 real Chromium/ODT cases and52 tooling cases pass. Initial failures remain documented and their tests/gates were corrected without weakening source behavior."
+    - "Actual desktop/mobile screenshots were inspected and the missing selected-category highlight corrected. The size gate drove a real dialog-request presenter split retaining the original controller and payloads;WriterWorkbench is956 lines. All95 non-task paths are coherent approved-slice changes within the gateway five-path material-drift margin."
 commit: null
 comments:
   -
