@@ -4,7 +4,7 @@ title: "Implement Writer search and replace core and browser UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -20,6 +20,7 @@ depends_on:
   - "202610210234-Q6QPPB"
   - "202610210319-37V8XQ"
   - "202610210338-0EZ7FD"
+  - "202610210415-45MPFV"
 tags:
   - "code"
 verify: []
@@ -48,6 +49,9 @@ comments:
   -
     author: "PLANNER"
     body: "Completed prerequisite0EZ7FD: production1474156e2eae and complete-corpus test-reader verification226556d3e402. Original width/kana/size/traditional family and string widthfolding pass373 related scenarios at strict100 percent target coverage and actual Chromium acceptance. Full31/31/691 active source table/BMP projections match;WRITER039-043 preserve original quirks. Both prior120000ms corpus timeout failures remain documented;native DataView little-endian reading preserves all inputs/fields/hashes/assertions/deadlines. Fifth completed leaf after9BAAAC full checkpoint. Next work still requires real context/factory/locale-data contracts,remaining contextual/numeric modules and aggregate/provider/search-item/cursor/Find UI integration;do not invent service substitutes or native C++ memory/lifetime machinery. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal and start no further task."
+  -
+    author: "PLANNER"
+    body: "Completed45MPFV at implementation83a7a911cc9f and closure2568dfd68079: four contextual modules,64 enum values and284 registered locale catalogs. Related355 tests,current20 overlap,strict100 coverage,Chromium/types/static and declared gates pass. Sixth completed leaf since9BAAAC. USER PRIORITY CORRECTION: suspend deeper locale/service prerequisite expansion;first audit and repair consistency of the existing Writer slice:measurement-unit settings and dimension controls,upstream sidebar structure/appearance,existing core capabilities connected to UI and import/export. Confirmed hardcoded centimetre formulas in page style,table,row height and line numbering despite existing FieldUnit/MetricSpinButton. Plan coherent user-facing blocks around actual pinned sources and end-to-end contracts;do not add speculative core depth. Search parent remains unfinished. Preserve next-full-run stop:complete necessary fixes/test additions/coverage,finally close active executable task,then pause goal and start no further task."
 events:
   -
     type: "status"
@@ -71,8 +75,13 @@ events:
     at: "2026-10-21T04:10:39.304Z"
     author: "PLANNER"
     body: "Completed prerequisite0EZ7FD: production1474156e2eae and complete-corpus test-reader verification226556d3e402. Original width/kana/size/traditional family and string widthfolding pass373 related scenarios at strict100 percent target coverage and actual Chromium acceptance. Full31/31/691 active source table/BMP projections match;WRITER039-043 preserve original quirks. Both prior120000ms corpus timeout failures remain documented;native DataView little-endian reading preserves all inputs/fields/hashes/assertions/deadlines. Fifth completed leaf after9BAAAC full checkpoint. Next work still requires real context/factory/locale-data contracts,remaining contextual/numeric modules and aggregate/provider/search-item/cursor/Find UI integration;do not invent service substitutes or native C++ memory/lifetime machinery. After NEXT full run,necessary fixes/test additions/coverage and final active-task closure,pause goal and start no further task."
+  -
+    type: "comment"
+    at: "2026-10-21T05:07:13.212Z"
+    author: "PLANNER"
+    body: "Completed45MPFV at implementation83a7a911cc9f and closure2568dfd68079: four contextual modules,64 enum values and284 registered locale catalogs. Related355 tests,current20 overlap,strict100 coverage,Chromium/types/static and declared gates pass. Sixth completed leaf since9BAAAC. USER PRIORITY CORRECTION: suspend deeper locale/service prerequisite expansion;first audit and repair consistency of the existing Writer slice:measurement-unit settings and dimension controls,upstream sidebar structure/appearance,existing core capabilities connected to UI and import/export. Confirmed hardcoded centimetre formulas in page style,table,row height and line numbering despite existing FieldUnit/MetricSpinButton. Plan coherent user-facing blocks around actual pinned sources and end-to-end contracts;do not add speculative core depth. Search parent remains unfinished. Preserve next-full-run stop:complete necessary fixes/test additions/coverage,finally close active executable task,then pause goal and start no further task."
 doc_version: 3
-doc_updated_at: "2026-10-21T04:10:39.304Z"
+doc_updated_at: "2026-10-21T05:07:13.212Z"
 doc_updated_by: "PLANNER"
 description: "Implement the approved coherent Writer search-and-replace feature from pinned LibreOffice sources: real shared search engine and options, native paragraph/cursor traversal and replacement/history contracts, view-owned search state and dispatch, Find toolbar and Find and Replace dialog with generated upstream command placement and shortcuts. Preserve source semantics and explicit unsupported boundaries; never substitute DOM text search or browser RegExp for ICU contracts. Work only on writer in vite-office-writer; local upstream reading approved, no network or merges. Keep active until approved scope is verified."
 sections:
