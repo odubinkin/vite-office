@@ -1,10 +1,11 @@
 ---
 id: "202610210621-QSZNVC"
 title: "Align Calc browser Save shortcut and imported document persistence with Writer"
-status: "DOING"
+result_summary: "Shared Writer browser Save shortcut in Calc with verified imported document persistence"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -41,8 +42,8 @@ quality_review:
   findings:
     - "The actual Writer capture listener is extracted rather than duplicated. Mounted regression confirms in-progress input commits,primary writes,error feedback and session-independent import persistence.607Calc and28related tests pass at100;13gates pass. Original ODS persistence already works and is truthfully recorded as not reproduced."
 commit:
-  hash: "761441f90427c9ffaf7b01a48a770d98e9c22c57"
-  message: "🧩 QSZNVC task: share Writer primary browser Save with Calc"
+  hash: "c1f9a3f4b8e7877568f368e147e4896d15cff97d"
+  message: "🧩 QSZNVC task: archive verified browser primary Save acceptance"
 comments:
   -
     author: "CODER"
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: pin the verified shared Save implementation for quality review;all source hashes match607Calc100 and28related checks."
+  -
+    author: "CODER"
+    body: "Verified: shared Save implementation761441f90427 is unchanged in reviewed tree c1f9a3f4b8e7;607Calc100,28related100,13gates and actual browser Save/import persistence pass."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: pin the verified shared Save implementation for quality review;all source hashes match607Calc100 and28related checks."
+  -
+    type: "status"
+    at: "2026-10-21T06:38:22.706Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared Save implementation761441f90427 is unchanged in reviewed tree c1f9a3f4b8e7;607Calc100,28related100,13gates and actual browser Save/import persistence pass."
 doc_version: 3
-doc_updated_at: "2026-10-21T06:37:30.395Z"
+doc_updated_at: "2026-10-21T06:38:22.711Z"
 doc_updated_by: "CODER"
 description: "Block69: fix Cmd/Ctrl+S primary browser saving using shared Writer behavior, reproduce imported ODS persistence failures and fix their actual cause; preserve canonical ODS owners and storage error feedback. Scope up to 12 source/test/registry documentation files plus task artifacts. Verify related tests and changed-owner100 coverage, Calc profile100, production and repository gates. Full-suite checkpoint remains block70."
 sections:
