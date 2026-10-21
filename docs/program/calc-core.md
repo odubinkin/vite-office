@@ -3992,3 +3992,13 @@ container owners must precede the Sfx model/view-data and settings.xml graph.
 The browser does not persist view settings yet. Full exception Any transport,
 physical ABI, debug/source-location, thread/resource/shutdown and complete
 consumer QA remain unverified.
+
+## Native property-container access metadata
+
+Task66 ports actual comprehensive generated metadata for the seven collection
+access interfaces and original WrappedTargetException with a real owned Any
+field. These use existing typelib, Type, Reference, Any and Unicode owners.
+All9cold/order/hot original interface streams match and the7interface owners
+reach raw100 coverage. Wrapped payload and final task validation are in progress.
+Concrete property-value container/WeakImplHelper/Sfx model/view-data/settings.xml
+services and full native ABI/thread/resource/consumer QA remain unported.

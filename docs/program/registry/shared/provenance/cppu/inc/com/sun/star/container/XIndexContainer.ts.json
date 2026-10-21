@@ -7,7 +7,11 @@
     "status": "mapped",
     "upstreamPath": "udkapi/com/sun/star/container/XIndexContainer.idl",
     "localSymbols": [
-      "XIndexContainer"
+      "XIndexContainer",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "interfaceType",
+      "bInitStarted"
     ],
     "upstreamSymbols": [
       "XIndexContainer",
@@ -16,10 +20,10 @@
       "removeByIndex"
     ],
     "preservedResponsibilities": [
-      "Complete structural type-only original IDL inheritance and method/input/output contracts over actual existing Any/Type/Sequence/OUString owners. No runtime type registration or concrete service/object/provider is supplied. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+      "Original comprehensive cppumaker ADL/StaticWithInit/static_type/deprecated getters,early method initialization gate and actual base/member/method/parameter/return/exception metadata over existing genuine typelib/Type/OUString owners. Seven full normal-ASan/UBSan metadata owners match all9cold/order/hot native streams;raw coverage is100 S481/B28/F21/L481. Original WrappedTargetException adds real owned Any member with actual base-before-member value operations and reverse destruction;payload native validation remains required before task closure. Concrete container/WeakImplHelper/Sfx model/view-data/settings.xml services remain unported. Generic exception Any transport,physical ABI,debug/source-location,thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
     ],
     "omittedResponsibilities": [
-      "Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+      "Concrete container/WeakImplHelper/Sfx model/view-data/settings.xml services remain unported. Generic exception Any transport,physical ABI,debug/source-location,thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
     ],
     "evidence": {
       "local": [
@@ -28,14 +32,18 @@
           "marker": "XIndexContainer"
         },
         {
-          "path": "apps/office/src/cppu/inc/com/sun/star/container/AccessInterfaces.test.ts",
-          "marker": "retains native"
+          "path": "apps/office/src/cppu/inc/com/sun/star/container/generated-access-interfaces.test.ts",
+          "marker": "matches complete original generated interface"
         }
       ],
       "upstream": [
         {
           "path": "udkapi/com/sun/star/container/XIndexContainer.idl",
-          "marker": "interface XIndexContainer"
+          "marker": "XIndexContainer"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void InterfaceType::dumpComprehensiveGetCppuType"
         }
       ]
     }
