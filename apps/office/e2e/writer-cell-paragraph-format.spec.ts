@@ -56,6 +56,7 @@ test("Writer cell paragraph alignment and native list display survive history an
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "cell-style.odt",
   });
+  await expect(page.getByRole("dialog", { name: "Open", exact: true })).toHaveCount(0);
   await expect(cell).toHaveText("ListCell");
   await expect(cell).toHaveCSS("text-align", "center");
   await expect(cell).toHaveAttribute("data-list-kind", "numbered");

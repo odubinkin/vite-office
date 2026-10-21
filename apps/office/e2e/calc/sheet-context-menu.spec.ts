@@ -26,7 +26,11 @@ for (const viewport of [
     await first.click({ button: "right" });
     const menu = page.getByRole("menu", { name: "Calc sheet context menu" });
     await expect(menu).toBeFocused();
-    await expect(menu.getByRole("menuitem")).toHaveCount(14);
+    await expect(menu.getByRole("menuitem")).toHaveCount(13);
+    await expect(menu.getByRole("menuitemcheckbox")).toHaveCount(1);
+    await expect(
+      menu.getByRole("menuitemcheckbox", { name: "View Grid Lines", exact: true }),
+    ).toBeChecked();
     await expect(menu.getByRole("menuitem", { name: "Insert Sheet…" })).toBeDisabled();
     await menu.getByRole("menuitem", { name: "Select All Sheets", exact: true }).click();
     for (const name of ["Sheet1", "Sheet2", "Sheet3"])

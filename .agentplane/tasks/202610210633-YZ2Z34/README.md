@@ -4,7 +4,7 @@ title: "Run final all-application test checkpoint and pause Calc goal"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-21T07:10:31.319Z"
+  updated_by: "CODER"
+  note: "17569 application tests/856 owners100;443 distinct browser scenarios pass after3 identity-matched test repairs;88tooling;123inventory100;14gates plus5repair checks pass;raw archive/source audit passed. Deferred large ODS issue untouched."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: run the final complete checkpoint and repair actual failures before closing work and pausing the Calc goal as requested."
+  -
+    type: "verify"
+    at: "2026-10-21T07:10:31.319Z"
+    author: "CODER"
+    state: "ok"
+    note: "17569 application tests/856 owners100;443 distinct browser scenarios pass after3 identity-matched test repairs;88tooling;123inventory100;14gates plus5repair checks pass;raw archive/source audit passed. Deferred large ODS issue untouched."
 doc_version: 3
-doc_updated_at: "2026-10-21T06:58:17.161Z"
+doc_updated_at: "2026-10-21T07:10:31.376Z"
 doc_updated_by: "CODER"
 description: "Block70 final checkpoint requested by user: run full all-application, shared, inventory, tooling and e2e suites; repair failures with meaningful tests and require Calc/common coverage100; finish current tasks69 and70 before pausing goal. No new feature implementation. Keep all changes on calc in vite-office-calc. Run independent suites in parallel within local capacity."
 sections:
@@ -45,7 +51,46 @@ sections:
   Scope: "Block70; full application, shared, tooling, inventory and browser regression coverage. Repair observed failures and missing Calc/common coverage with meaningful scenarios; no new features. Stay on calc in vite-office-calc. Preserve all thresholds and native contracts."
   Plan: "Perform the explicitly requested final full test/coverage checkpoint and repair failures only; close current work and pause the goal immediately after successful acceptance."
   Verify Steps: "Full office Vitest coverage with all projects and unchanged100 thresholds; inventory coverage; tooling tests; complete Playwright e2e over production build. Calc coverage100 and common coverage100 mandatory. Run lint/format,types,dependencies,resources,docs,size,tree,provenance,registry,routing,doctor and static build. Record exact results and source hashes. No failures or unapproved skips; close tasks69and70 with evaluator pass, then update goal paused under explicit user stop rule."
-  Verification: "Pending."
+  Verification: |-
+    Command: exact full coverage, tooling, inventory, browser and static argv/reports are retained in evidence/raw-results.json.gz and evidence/acceptance.json. Reproduce evidence audit with node .agentplane/tasks/202610210633-YZ2Z34/evidence/audit.mjs.
+    Result: pass.
+    Evidence: complete all-project discovery passed 17,569 tests in 1,126 files, zero failures or skipped scenarios. All 856 measured application owners have 100 percent statements, branches, functions and lines: S55455/B34731/F10583/L50441. Calc135 owners S11130/B6911/F2065/L9996; shared511 S28383/B16279/F5006/L25959; Writer210 S15942/B11541/F3512/L14486, all100. The one historical Writer owner now exports aliases only; the actual tracking code moved into the measured shared VCL owner, verified against the preceding full coverage owner set. No coverage exclusions or thresholds changed.
+    Evidence: all88 tooling cases and123 inventory cases pass; inventory S1735/B1292/F437/L1669 all100. Original inventory120/123 timing-failure report is retained; identical complete recheck after formatting finished passed with original limits and no inventory source/assertion changes.
+    Evidence: all443 distinct production Chromium scenarios pass after bounded e2e repairs:440 passed initially, then the3 exact failed identities passed their recheck. The Writer test now awaits actual import completion before reading a reopened paragraph ID. Both Calc viewport tests retain the native14commands and verify13plain menuitems plus1checked grid toggle. Original reports, traces and screenshots are archived. No application runtime or unit-test source changed during complete coverage. All14 full static/build gates and5 post-repair type/lint/format/JSDoc/size checks pass. All2804 source/test/data/config hashes match; portable archive audit passes.
+    Scope: final checkpoint and browser-test repairs only. The reported5000-row ODS export-size failure remains uninvestigated and deferred by the human. Task69 is already DONE; finish this task, then pause the broad goal without claiming product completion.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-21T07:10:31.319Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 17569 application tests/856 owners100;443 distinct browser scenarios pass after3 identity-matched test repairs;88tooling;123inventory100;14gates plus5repair checks pass;raw archive/source audit passed. Deferred large ODS issue untouched.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T07:10:30.610Z, excerpt_hash=sha256:5f9ddec6c96da2a483ecb577cec79acd79b8110dce6a684f22bc0c0af257665a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610210633-YZ2Z34/blueprint/resolved-snapshot.json
+    - old_digest: 2ee02509124bf9f9171d1c7ac967fd1760eb99b6c01929639357b7b6f41376fa
+    - current_digest: 2ee02509124bf9f9171d1c7ac967fd1760eb99b6c01929639357b7b6f41376fa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610210633-YZ2Z34
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610210633-YZ2Z34 -m 🧩 YZ2Z34 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only checkpoint repair commits if required; preserve existing implementations and user changes."
   Findings: |-
     The user asked how long remains before stopping. This checkpoint starts immediately on the committed Save implementation while its final Calc profile completes; no further feature work is scheduled.
@@ -65,6 +110,10 @@ sections:
     - Observation: Deferred human report: an ODS file with5000rows opens,but automatic primary browser saving fails with the exact message ODS export size limit exceeded. This larger-file report is distinct from the small sample persistence checks.
       Impact: Large-table automatic storage remains a reported unresolved limitation;the existing small-sample acceptance must not be presented as all-size persistence parity.
       Resolution: The human explicitly requested no investigation or fix now and reaffirmed pausing the goal after this checkpoint. Preserve the report for investigation only after explicit goal resumption;no export-limit source inspection or changes were made.
+
+    - Observation: Complete browser run finished440of443passed. Two additional failures are the desktop/mobile sheet-context-menu test expecting14plain menuitems. Original native sheettab.xml still has14commands;the actual ToggleSheetGrid now correctly renders one checked menuitemcheckbox plus13ordinary menuitems,as the existing mounted unit test already verifies.
+      Impact: The browser assertion predates the implemented grid toggle;the product retains the complete native14-command composition and proper accessibility role.
+      Resolution: Keep the native total14and strengthen browser checks to13plain items plus exactly1checked View Grid Lines checkbox. Rerun both viewport scenarios and the repaired Writer import synchronization scenario,retaining all original failure artifacts. No application runtime or unit source changes.
 id_source: "generated"
 ---
 ## Summary
@@ -85,7 +134,45 @@ Full office Vitest coverage with all projects and unchanged100 thresholds; inven
 
 ## Verification
 
-Pending.
+Command: exact full coverage, tooling, inventory, browser and static argv/reports are retained in evidence/raw-results.json.gz and evidence/acceptance.json. Reproduce evidence audit with node .agentplane/tasks/202610210633-YZ2Z34/evidence/audit.mjs.
+Result: pass.
+Evidence: complete all-project discovery passed 17,569 tests in 1,126 files, zero failures or skipped scenarios. All 856 measured application owners have 100 percent statements, branches, functions and lines: S55455/B34731/F10583/L50441. Calc135 owners S11130/B6911/F2065/L9996; shared511 S28383/B16279/F5006/L25959; Writer210 S15942/B11541/F3512/L14486, all100. The one historical Writer owner now exports aliases only; the actual tracking code moved into the measured shared VCL owner, verified against the preceding full coverage owner set. No coverage exclusions or thresholds changed.
+Evidence: all88 tooling cases and123 inventory cases pass; inventory S1735/B1292/F437/L1669 all100. Original inventory120/123 timing-failure report is retained; identical complete recheck after formatting finished passed with original limits and no inventory source/assertion changes.
+Evidence: all443 distinct production Chromium scenarios pass after bounded e2e repairs:440 passed initially, then the3 exact failed identities passed their recheck. The Writer test now awaits actual import completion before reading a reopened paragraph ID. Both Calc viewport tests retain the native14commands and verify13plain menuitems plus1checked grid toggle. Original reports, traces and screenshots are archived. No application runtime or unit-test source changed during complete coverage. All14 full static/build gates and5 post-repair type/lint/format/JSDoc/size checks pass. All2804 source/test/data/config hashes match; portable archive audit passes.
+Scope: final checkpoint and browser-test repairs only. The reported5000-row ODS export-size failure remains uninvestigated and deferred by the human. Task69 is already DONE; finish this task, then pause the broad goal without claiming product completion.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-21T07:10:31.319Z — VERIFY — ok
+
+By: CODER
+
+Note: 17569 application tests/856 owners100;443 distinct browser scenarios pass after3 identity-matched test repairs;88tooling;123inventory100;14gates plus5repair checks pass;raw archive/source audit passed. Deferred large ODS issue untouched.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-21T07:10:30.610Z, excerpt_hash=sha256:5f9ddec6c96da2a483ecb577cec79acd79b8110dce6a684f22bc0c0af257665a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610210633-YZ2Z34/blueprint/resolved-snapshot.json
+- old_digest: 2ee02509124bf9f9171d1c7ac967fd1760eb99b6c01929639357b7b6f41376fa
+- current_digest: 2ee02509124bf9f9171d1c7ac967fd1760eb99b6c01929639357b7b6f41376fa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610210633-YZ2Z34
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610210633-YZ2Z34 -m 🧩 YZ2Z34 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -110,3 +197,7 @@ The user asked how long remains before stopping. This checkpoint starts immediat
 - Observation: Deferred human report: an ODS file with5000rows opens,but automatic primary browser saving fails with the exact message ODS export size limit exceeded. This larger-file report is distinct from the small sample persistence checks.
   Impact: Large-table automatic storage remains a reported unresolved limitation;the existing small-sample acceptance must not be presented as all-size persistence parity.
   Resolution: The human explicitly requested no investigation or fix now and reaffirmed pausing the goal after this checkpoint. Preserve the report for investigation only after explicit goal resumption;no export-limit source inspection or changes were made.
+
+- Observation: Complete browser run finished440of443passed. Two additional failures are the desktop/mobile sheet-context-menu test expecting14plain menuitems. Original native sheettab.xml still has14commands;the actual ToggleSheetGrid now correctly renders one checked menuitemcheckbox plus13ordinary menuitems,as the existing mounted unit test already verifies.
+  Impact: The browser assertion predates the implemented grid toggle;the product retains the complete native14-command composition and proper accessibility role.
+  Resolution: Keep the native total14and strengthen browser checks to13plain items plus exactly1checked View Grid Lines checkbox. Rerun both viewport scenarios and the repaired Writer import synchronization scenario,retaining all original failure artifacts. No application runtime or unit source changes.

@@ -29,6 +29,18 @@ for(const profile of ['all-app','inventory-recheck']){
  const total=json(`output/playwright/task70-${profile}-coverage/coverage-summary.json`).total;
  for(const k of ['statements','branches','functions','lines'])assert.equal(total[k].pct,100,`${profile}:${k}`);
 }
+assert.equal(acceptance.scopes.calc.owners,135);
+assert.ok(acceptance.scopes.shared.owners>=498);
+assert.equal(acceptance.scopes.writer.owners,210);
+const previousSummary=json('output/playwright/task60-all-app-coverage/coverage-summary.json');
+const currentSummary=json('output/playwright/task70-all-app-coverage/coverage-summary.json');
+const writerPaths=summary=>Object.keys(summary).filter(p=>p.includes('/src/sw/')).map(p=>p.split('/apps/office/')[1]);
+const oldWriter=writerPaths(previousSummary),newWriter=writerPaths(currentSummary);
+assert.deepEqual(oldWriter.filter(p=>!newWriter.includes(p)),['src/sw/browser/presentation/use-ruler-tracking.ts']);
+assert.deepEqual(newWriter.filter(p=>!oldWriter.includes(p)),[]);
+assert.ok(Object.keys(currentSummary).some(p=>p.endsWith('/src/vcl/browser/use-window-tracking.ts')));
+assert.match(fs.readFileSync('apps/office/src/sw/browser/presentation/use-ruler-tracking.ts','utf8'),/useWindowTracking as useRulerTracking/);
+for(const scope of Object.values(acceptance.scopes))for(const metric of ['statements','branches','functions','lines'])assert.equal(scope[metric].covered,scope[metric].total);
 const initial=json('output/playwright/task70-inventory-results.json');
 assert.equal(initial.numFailedTests,3);
 assert.equal(initial.numPassedTests,120);
@@ -39,12 +51,12 @@ for(const g of gates)assert.equal(g.exitCode,0,g.name);
 const browser=json('output/playwright/task70-e2e-results.json');
 const repaired=json('output/playwright/task70-e2e-recheck-results.json');
 assert.equal(browser.stats.expected+browser.stats.unexpected,443);
-assert.equal(browser.stats.unexpected,1);
+assert.equal(browser.stats.unexpected,3);
 for(const report of [browser,repaired]){
  for(const k of ['skipped','flaky'])assert.equal(report.stats[k],0,k);
  assert.equal(report.errors.length,0);
 }
-assert.equal(repaired.stats.expected,1);
+assert.equal(repaired.stats.expected,3);
 assert.equal(repaired.stats.unexpected,0);
 assert.deepEqual(browser.config.projects.map(p=>p.name).sort(),['calc','shared','writer']);
 /** Reads exact scenario identities from the original reporter tree. @param suites - Reporter suites. @returns Scenarios. */
@@ -55,15 +67,19 @@ function cases(suites){return suites.flatMap(suite=>[
 const originalCases=cases(browser.suites),repairedCases=cases(repaired.suites);
 assert.equal(originalCases.length,443);
 const failures=originalCases.filter(c=>c.status!=='expected');
-assert.equal(failures.length,1);
-assert.equal(repairedCases.length,1);
-assert.equal(failures[0].key,repairedCases[0].key);
-assert.equal(repairedCases[0].status,'expected');
+assert.equal(failures.length,3);
+assert.equal(repairedCases.length,3);
+assert.deepEqual(failures.map(c=>c.key).sort(),repairedCases.map(c=>c.key).sort());
+for(const c of repairedCases)assert.equal(c.status,'expected');
 const changes=json('output/playwright/task70-browser-source-changes.json');
-assert.equal(changes.length,1);
+assert.equal(changes.length,2);
 for(const change of changes){
- assert.equal(change.path,'apps/office/e2e/writer-cell-paragraph-format.spec.ts');
+ assert.ok(['apps/office/e2e/writer-cell-paragraph-format.spec.ts','apps/office/e2e/calc/sheet-context-menu.spec.ts'].includes(change.path));
  assert.equal(sha(Buffer.from(raw[change.originalSourceRawPath],'base64')),change.before);
  assert.equal(sha(fs.readFileSync(change.path)),change.after);
 }
+const repairGates=json('output/playwright/task70-repair-gate-exits.json');
+assert.equal(repairGates.length,5);
+for(const gate of repairGates)assert.equal(gate.exitCode,0,gate.name);
+assert.equal((read('vendor/libreoffice-reference/sc/uiconfig/scalc/popupmenu/sheettab.xml').match(/<menu:menuitem /g)??[]).length,14);
 console.log('Final complete checkpoint accepted: all application/tooling/inventory/browser scenarios pass; raw application and inventory coverage100;14gates pass;source pins match.');
