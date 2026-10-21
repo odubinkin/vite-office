@@ -5,11 +5,40 @@ import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item, SfxInt32Item } from "../../../../svl/source/items/intitem";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import type { ScViewData } from "../inc/viewdata";
+import { ScRange } from "../../../inc/address";
 import { ColRowSpan } from "../../../inc/columnspanset";
 /** Native cell-shell command boundary;shared browser dispatch performs the existing Sfx slot admission. */
 export class ScCellShell {
   /** Borrows actual native view functions. @param view - Source view owner. @returns Cell shell. */
   constructor(private readonly view: ScViewFunc) {}
+  /** Original SID_SELECTALL honors Calc Input SelectRangeBeforeAll's true default. @param request - Actual request. @param data - Native view. @param selectFirst - Prepared native configuration value. @returns Nothing. */
+  ExecuteSelectAll(request: SfxRequest, data: ScViewData, selectFirst = true): void {
+    const firstCol: [number] = [data.GetCurX()],
+      firstRow: [number] = [data.GetCurY()],
+      lastCol: [number] = [firstCol[0]],
+      lastRow: [number] = [firstRow[0]];
+    let canMark = false;
+    if (selectFirst && !data.GetMarkData().IsMarked()) {
+      data
+        .GetDocument()
+        .GetDataArea(data.GetTabNumber(), firstCol, firstRow, lastCol, lastRow, true, false);
+      canMark = firstCol[0] !== lastCol[0] || firstRow[0] !== lastRow[0];
+    }
+    if (canMark)
+      this.view.MarkRange(
+        new ScRange(
+          firstCol[0],
+          firstRow[0],
+          data.GetTabNumber(),
+          lastCol[0],
+          lastRow[0],
+          data.GetTabNumber(),
+        ),
+        false,
+      );
+    else this.view.SelectAll();
+    request.Done();
+  }
   /** Original SID_INC_INDENT/SID_DEC_INDENT cell-shell dispatch. @param increment - Direction. @returns Result. */
   ChangeIndent(increment: boolean): boolean {
     return this.view.ChangeIndent(increment);

@@ -214,9 +214,18 @@ export function CalcWorkbench({
         (/Mac/.test(navigator.platform)
           ? event.altKey && !event.ctrlKey
           : event.ctrlKey && !event.altKey);
-      if (rowSelection || columnSelection) {
+      const allSelection =
+        event.shiftKey &&
+        (/Mac/.test(navigator.platform)
+          ? event.altKey && !event.ctrlKey
+          : event.ctrlKey && !event.altKey);
+      if (rowSelection || columnSelection || allSelection) {
         event.preventDefault();
-        frame.GetDispatcher().Execute(rowSelection ? ".uno:SelectRow" : ".uno:SelectColumn");
+        frame
+          .GetDispatcher()
+          .Execute(
+            allSelection ? ".uno:SelectAll" : rowSelection ? ".uno:SelectRow" : ".uno:SelectColumn",
+          );
         return;
       }
     }
@@ -280,6 +289,11 @@ export function CalcWorkbench({
               ? undefined
               : frame.GetDispatcher().FindCommandByShortcut(shortcut);
           if (command) {
+            if (
+              command.command.id === ".uno:SelectAll" &&
+              (event.target as HTMLElement).closest('input, textarea, [contenteditable="true"]')
+            )
+              return;
             event.preventDefault();
             source.Execute(command.command.id);
           }

@@ -43,7 +43,7 @@ it("merges actual default,explicit and mixed values across sparse columns and gr
       (
         doc.FetchTable(0) as NonNullable<ReturnType<ScDocument["FetchTable"]>>
       ).GetAllocatedColumnsCount(),
-    ).toBe(0);
+    ).toBe(1);
     apply(doc, 0, 0, 240);
     marks.SetMarkArea(new ScRange(0, 0, 0, 0, 0, 0));
     const uniform = doc.CreateSelectionPattern(marks);

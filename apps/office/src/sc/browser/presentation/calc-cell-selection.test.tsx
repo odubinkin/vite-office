@@ -96,8 +96,9 @@ for (const [platform, modifiers, axis] of [
   ["MacIntel", { ctrlKey: true }, "none"],
   ["MacIntel", { altKey: true, ctrlKey: true }, "none"],
   ["Linux", { altKey: true }, "none"],
-  ["Linux", { ctrlKey: true, shiftKey: true }, "none"],
+  ["Linux", { ctrlKey: true, shiftKey: true }, "all"],
   ["Linux", { altKey: true, shiftKey: true }, "none"],
+  ["MacIntel", { altKey: true, shiftKey: true }, "all"],
   ["Linux", { metaKey: true }, "none"],
   ["Linux", { shiftKey: true, isComposing: true }, "none"],
 ] as const) {
@@ -111,9 +112,11 @@ for (const [platform, modifiers, axis] of [
       if (axis === "none") expect(marks.IsMarked()).toBe(false);
       else
         expect(marks.GetMarkArea()).toEqual(
-          axis === "row"
-            ? new ScRange(0, 7, 0, doc.MaxCol(), 7, 0)
-            : new ScRange(4, 0, 0, 4, doc.MaxRow(), 0),
+          axis === "all"
+            ? new ScRange(0, 0, 0, doc.MaxCol(), doc.MaxRow(), 0)
+            : axis === "row"
+              ? new ScRange(0, 7, 0, doc.MaxCol(), 7, 0)
+              : new ScRange(4, 0, 0, 4, doc.MaxRow(), 0),
         );
       expect(s.controller.Address()).toBe("E8");
     } finally {

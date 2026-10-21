@@ -1,4 +1,5 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
+import type { SfxRequest } from "../../sfx2/source/control/request";
 import {
   createCalcTextEffectSlots,
   calcTextEffectCommands,
@@ -63,6 +64,7 @@ export interface CalcCommandTarget
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
   SetInputMode(): boolean;
+  SelectCells(request?: SfxRequest): boolean;
   MarkRows(): boolean;
   MarkColumns(): boolean;
   SelectNextTab(direction: number, extend?: boolean): void;
@@ -135,6 +137,8 @@ export const calcSheetSelectionCommands = [
 ] as const;
 /** Native normal-grid selection slots from SID_KEYFUNC_START+26/+27. */
 export const calcCellSelectionCommands = [
+  { id: ".uno:SelectAll", slotId: 5723, label: "Select All" },
+  { id: ".uno:SelectData", slotId: 26551, label: "Select Data Area" },
   { id: ".uno:SelectColumn", slotId: 26547, label: "Select Column" },
   { id: ".uno:SelectRow", slotId: 26548, label: "Select Row" },
 ] as const;
@@ -382,7 +386,10 @@ export const calcUserCommands = [
                               ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
                               : item.id === ".uno:FontHeight"
                                 ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-                                : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+                                : item.id === ".uno:SelectRow" ||
+                                    item.id === ".uno:SelectColumn" ||
+                                    item.id === ".uno:SelectAll" ||
+                                    item.id === ".uno:SelectData"
                                   ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
                                   : item.id === ".uno:JumpToTable"
                                     ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
@@ -775,10 +782,22 @@ export function createCalcInterface(
         commandUrl: resource.id,
         slotId: resource.slotId,
         label: resource.label,
+        shortcuts:
+          resource.id === ".uno:SelectAll"
+            ? ["Control+a"]
+            : resource.id === ".uno:SelectData"
+              ? ["Control+MULTIPLY"]
+              : [],
         execute:
-          /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @returns Whether admitted. */
-          (target: CalcCommandTarget) =>
-            resource.id === ".uno:SelectRow" ? target.MarkRows() : target.MarkColumns(),
+          /** Applies the original no-argument UI operation without document mutation. @param target - Active input/view owner. @param request - Native request. @returns Whether admitted. */
+          (target: CalcCommandTarget, request: SfxRequest) =>
+            resource.id === ".uno:SelectAll"
+              ? target.SelectCells(request)
+              : resource.id === ".uno:SelectData"
+                ? target.SelectCells()
+                : resource.id === ".uno:SelectRow"
+                  ? target.MarkRows()
+                  : target.MarkColumns(),
       }),
     ),
     {

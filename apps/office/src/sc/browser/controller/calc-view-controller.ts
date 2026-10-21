@@ -322,6 +322,13 @@ export class CalcViewController {
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
+    if (kind === "all") {
+      if (!this.Commit()) return;
+      this.viewShell.SelectAll();
+      this.anchor = new ScAddress(0, 0, this.viewData.GetTabNumber());
+      this.Changed();
+      return;
+    }
     if (!this.Select(kind === "column" ? index : 0, kind === "row" ? index : 0)) return;
     const doc = this.shell.GetDocument(),
       tab = this.viewData.GetTabNumber();
@@ -332,12 +339,22 @@ export class CalcViewController {
           kind === "column" ? index : 0,
           kind === "row" ? index : 0,
           tab,
-          kind === "row" ? doc.MaxCol() : kind === "column" ? index : doc.MaxCol(),
-          kind === "column" ? doc.MaxRow() : kind === "row" ? index : doc.MaxRow(),
+          kind === "row" ? doc.MaxCol() : index,
+          kind === "column" ? doc.MaxRow() : index,
           tab,
         ),
       );
     this.Changed();
+  }
+  /** Accepts current input before source connected-area/whole-sheet selection. @param request - Source SelectAll request;omitted for SelectData. @returns Accepted. */
+  SelectCells(request?: SfxRequest): boolean {
+    if (!this.Commit()) return false;
+    if (request) new ScCellShell(this.viewShell).ExecuteSelectAll(request, this.viewData);
+    else this.viewShell.MarkDataArea();
+    const start = this.viewData.GetMarkData().GetMarkArea().aStart;
+    this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
+    this.Changed();
+    return true;
   }
   /** Executes original no-argument row selection after accepting the current input. @returns Whether selection was admitted. */
   MarkRows(): boolean {

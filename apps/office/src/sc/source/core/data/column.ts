@@ -257,11 +257,21 @@ export class ScColumn extends ScColumnData {
       }
     }
   }
-  /** Reads actual typed-block emptiness, excluding formatting. @returns Whether no cell payload exists. */
-  IsEmptyData(): boolean {
-    return (
-      this.maCells.block_size() === 1 && this.maCells.cbegin().get().type === element_type_empty
-    );
+  /** Original column2.cxx whole-column/range emptiness query over actual typed blocks. @param first - Optional first row. @param last - Inclusive final row. @returns Whether the interval contains no payload. */
+  IsEmptyData(first?: number, last?: number): boolean {
+    if (this.maCells.block_size() === 1 && this.maCells.cbegin().get().type === element_type_empty)
+      return true;
+    if (first === undefined) return false;
+    const position = this.maCells.cposition(first),
+      iterator = position.first;
+    if (iterator.equals(this.maCells.cend())) return false;
+    const block = iterator.get();
+    if (block.type !== element_type_empty) return false;
+    return (last as number) < first + block.size - position.second;
+  }
+  /** Original uncached occupancy overload;notes/drawing extras remain unported. @param row - Valid row. @returns Actual payload presence. */
+  HasDataAt(row: number): boolean {
+    return this.maCells.get_type(row) !== element_type_empty;
   }
   /** Reads the first payload row from the leading native block. @returns Row or native empty zero. */
   GetFirstDataPos(): number {
@@ -269,8 +279,16 @@ export class ScColumn extends ScColumnData {
     const first = this.maCells.cbegin().get();
     return first.type !== element_type_empty ? 0 : first.size;
   }
-  /** Reads the last payload row from the trailing native block. @returns Row or native empty zero. */
-  GetLastDataPos(): number {
+  /** Original full-column and bounded last-payload queries. @param lastRow - Optional inclusive bound. @returns Row or native empty zero. */
+  GetLastDataPos(lastRow?: number): number {
+    if (lastRow !== undefined) {
+      lastRow = Math.min(lastRow, this.rDocument.MaxRow());
+      const position = this.maCells.cposition(lastRow).first,
+        block = position.get();
+      if (block.type !== element_type_empty) return lastRow;
+      if (position.equals(this.maCells.cbegin())) return 0;
+      return block.position - 1;
+    }
     if (this.IsEmptyData()) return 0;
     const last = this.maCells.crbegin().get();
     return last.type !== element_type_empty

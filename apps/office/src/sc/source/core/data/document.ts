@@ -56,6 +56,19 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original document.cxx connected-area delegation;missing sheets leave references untouched. @param tab - Sheet. @param firstCol - Start column. @param firstRow - Start row. @param lastCol - End column. @param lastRow - End row. @param includeOld - Retain input. @param onlyDown - Only final row. @returns Nothing. */
+  GetDataArea(
+    tab: number,
+    firstCol: [number],
+    firstRow: [number],
+    lastCol: [number],
+    lastRow: [number],
+    includeOld: boolean,
+    onlyDown: boolean,
+  ): void {
+    this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+  }
+
   private pScriptTypeData: ScScriptTypeData | undefined;
   /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
   GetBreakIterator(factory?: ScScriptServiceFactory): XBreakIterator | null {
@@ -607,7 +620,8 @@ export class ScDocument {
             .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
       }
       if (end.Col() === this.MaxCol()) {
-        if (last >= 0) target.CreateColumnIfNotExists(last);
+        // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
+        target.CreateColumnIfNotExists(last);
         this.CopyColumnAttributes(
           source.GetDefaultColumnData(),
           target.GetDefaultColumnData(),

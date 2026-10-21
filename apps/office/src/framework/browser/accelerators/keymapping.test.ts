@@ -20,6 +20,7 @@ describe("browser shortcuts" /** Groups browser keyboard shortcut adaptation cas
     expect(getBrowserShortcut(createEvent({ altKey: true }))).toBe("Alt+Z");
     expect(getBrowserShortcut(createEvent({}))).toBe("Z");
     expect(getBrowserShortcut(createEvent({ key: " " }))).toBe("SPACE");
+    expect(getBrowserShortcut(createEvent({ key: "*", ctrlKey: true }))).toBe("Ctrl+MULTIPLY");
     expect(getBrowserShortcut(createEvent({ key: "Control" }))).toBeUndefined();
     expect(normalizeCommandShortcut("option + Enter")).toBe("Alt+ENTER");
     expect(

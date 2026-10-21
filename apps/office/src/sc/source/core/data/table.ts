@@ -12,7 +12,7 @@ import type { SfxHint } from "../../../../svl/inc/hint";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, INITIALCOLCOUNT } from "../../../inc/address";
 import { ScColumn, ScColumnData } from "../../../inc/column";
 import { CellType, InsertDeleteFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -153,7 +153,8 @@ export class ScTable {
     if (!marks.GetTableSelect(this.nTab) || !(marks.IsMultiMarked() || marks.IsMarked())) return;
     if (marks.GetArea().aEnd.Col() === this.rDocument.MaxCol()) {
       const last = marks.GetStartOfEqualColumns(this.rDocument.MaxCol(), this.aCol.length) - 1;
-      if (last >= 0) this.CreateColumnIfNotExists(last);
+      // INITIALCOLCOUNT=1 makes the original nonnegative guard invariant.
+      this.CreateColumnIfNotExists(last);
       this.Apply(marks, this.rDocument.MaxCol(), apply);
     } else this.CreateColumnIfNotExists(marks.GetArea().aEnd.Col());
     for (let col = 0; col < this.aCol.length; col++) this.Apply(marks, col, apply);
@@ -225,6 +226,102 @@ export class ScTable {
       (this.aCol[col] as ScColumn).MergePatternArea(state, firstRow, lastRow, deep);
     if (last !== lastCol) this.aDefaultColData.MergePatternArea(state, firstRow, lastRow, deep);
   }
+  /** Original table1.cxx connected-area expansion and shrinking. Uses the real uncached HasDataAt overload;native iterator hints only optimize lookup. @param firstCol - Start column reference. @param firstRow - Start row reference. @param lastCol - End column reference. @param lastRow - End row reference. @param includeOld - Retain original bounds. @param onlyDown - Change only final row. @returns Nothing. */
+  GetDataArea(
+    firstCol: [number],
+    firstRow: [number],
+    lastCol: [number],
+    lastRow: [number],
+    includeOld: boolean,
+    onlyDown: boolean,
+  ): void {
+    firstCol[0] = Math.min(firstCol[0], this.aCol.length - 1);
+    lastCol[0] = Math.min(lastCol[0], this.aCol.length - 1);
+    let left = false,
+      right = false,
+      top = false,
+      bottom = false,
+      changed: boolean;
+    do {
+      changed = false;
+      if (!onlyDown) {
+        let start = firstRow[0],
+          end = lastRow[0];
+        if (start > 0) --start;
+        if (end < this.rDocument.MaxRow()) ++end;
+        if (
+          lastCol[0] < this.aCol.length - 1 &&
+          !(this.aCol[lastCol[0] + 1] as ScColumn).IsEmptyData(start, end)
+        ) {
+          ++lastCol[0];
+          changed = true;
+          right = true;
+        }
+        if (firstCol[0] > 0 && !(this.aCol[firstCol[0] - 1] as ScColumn).IsEmptyData(start, end)) {
+          --firstCol[0];
+          changed = true;
+          left = true;
+        }
+        if (firstRow[0] > 0) {
+          let extend = false;
+          for (let col = firstCol[0]; col <= lastCol[0] && !extend; col++)
+            if ((this.aCol[col] as ScColumn).HasDataAt(firstRow[0] - 1)) extend = true;
+          if (extend) {
+            --firstRow[0];
+            changed = true;
+            top = true;
+          }
+        }
+      }
+      if (lastRow[0] < this.rDocument.MaxRow()) {
+        let extend = false;
+        for (let col = firstCol[0]; col <= lastCol[0] && !extend; col++)
+          if ((this.aCol[col] as ScColumn).HasDataAt(lastRow[0] + 1)) extend = true;
+        if (extend) {
+          ++lastRow[0];
+          changed = true;
+          bottom = true;
+        }
+      }
+    } while (changed);
+    if (!includeOld && !onlyDown) {
+      if (!left)
+        while (
+          firstCol[0] < lastCol[0] &&
+          firstCol[0] < this.aCol.length - 1 &&
+          (this.aCol[firstCol[0]] as ScColumn).IsEmptyData(firstRow[0], lastRow[0])
+        )
+          ++firstCol[0];
+      if (!right)
+        while (
+          lastCol[0] > 0 &&
+          firstCol[0] < lastCol[0] &&
+          (this.aCol[lastCol[0]] as ScColumn).IsEmptyData(firstRow[0], lastRow[0])
+        )
+          --lastCol[0];
+      if (!top && firstRow[0] < this.rDocument.MaxRow() && firstRow[0] < lastRow[0]) {
+        let shrink = true;
+        do {
+          for (let col = firstCol[0]; col <= lastCol[0] && shrink; col++)
+            if ((this.aCol[col] as ScColumn).HasDataAt(firstRow[0])) shrink = false;
+          if (shrink) ++firstRow[0];
+        } while (shrink && firstRow[0] < this.rDocument.MaxRow() && firstRow[0] < lastRow[0]);
+      }
+    }
+    if (!includeOld && !bottom && lastRow[0] > 0 && firstRow[0] < lastRow[0]) {
+      const last = this.GetLastDataRow(firstCol[0], lastCol[0], lastRow[0]);
+      if (last < lastRow[0]) lastRow[0] = Math.max(firstRow[0], last);
+    }
+  }
+  /** Original bounded last-data-row aggregation. @param first - First allocated column. @param last - Final valid column. @param row - Inclusive row bound. @returns Row or native invalid-column sentinel. */
+  GetLastDataRow(first: number, last: number, row: number): number {
+    if (first < 0 || first >= this.aCol.length || !this.rDocument.ValidCol(last)) return -1;
+    last = Math.min(last, this.aCol.length - 1);
+    let result = 0;
+    for (let col = first; col <= last; col++)
+      result = Math.max(result, (this.aCol[col] as ScColumn).GetLastDataPos(row));
+    return result;
+  }
   /** Finds native first occupied coordinates using actual column stores. @param col - Column output. @param row - Row output. @returns Nothing. */
   GetFirstDataPos(col: [number], row: [number]): void {
     col[0] = 0;
@@ -241,7 +338,6 @@ export class ScTable {
   GetLastDataPos(col: [number], row: [number]): void {
     col[0] = Math.max(0, this.aCol.length - 1);
     row[0] = 0;
-    if (!this.aCol.length) return;
     while ((this.aCol[col[0]] as ScColumn).IsEmptyData() && col[0] > 0) --col[0];
     let current = col[0];
     while (current >= 0 && row[0] < this.rDocument.MaxRow())
@@ -276,6 +372,7 @@ export class ScTable {
     this.pRowFlags = new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32);
     this.aDefaultColData = new ScColumnData(rDocument);
     this.aDefaultColData.Init(-1, nTab);
+    this.CreateColumnIfNotExists(INITIALCOLCOUNT - 1);
   }
   /** Borrows the original document owner. @returns Actual document. */
   GetDoc(): ScDocument {
@@ -496,7 +593,8 @@ export class ScTable {
       changed = false;
     if (endCol === this.rDocument.MaxCol()) {
       maxCol = Math.max(startCol, this.aCol.length) - 1;
-      if (maxCol >= 0) this.CreateColumnIfNotExists(maxCol);
+      // INITIALCOLCOUNT=1 makes the original nonnegative guard invariant.
+      this.CreateColumnIfNotExists(maxCol);
       changed = this.aDefaultColData.ApplyPatternArea(startRow, endRow, delta);
     }
     for (let col = startCol; col <= maxCol; col++)

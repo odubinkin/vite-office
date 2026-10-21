@@ -94,7 +94,7 @@ it("reads UNKNOWN without classifying,updates only existing text metadata,and pr
     if (!table) throw Error("Missing sheet");
     const p = new ScAddress(0, 2, 0);
     expect(d.GetScriptType(p)).toBe(S.NONE);
-    expect(table.GetAllocatedColumnsCount()).toBe(0);
+    expect(table.GetAllocatedColumnsCount()).toBe(1);
     d.SetValue(p, 17);
     expect(d.GetScriptType(p)).toBe(S.UNKNOWN);
     for (const script of [S.NONE, S.LATIN, S.ASIAN, S.COMPLEX, S.LATIN | S.ASIAN | S.COMPLEX]) {

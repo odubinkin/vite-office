@@ -14,7 +14,8 @@
     "localPath": "apps/office/src/framework/browser/accelerators/keymapping.ts",
     "rationale": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. This is a browser-owned adaptation without a direct native source mapping.",
     "responsibilities": [
-      "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary."
+      "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary.",
+      "TaskFZA8S9 maps the actual browser multiply key to original MULTIPLY accelerator identity for shared consumers;modifier ordering and text-control ownership remain unchanged."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

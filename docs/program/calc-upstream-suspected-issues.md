@@ -3490,3 +3490,16 @@ precondition has not been established here,so this is a suspected issue rather
 than a confirmed upstream defect. Task58 preserves default null areas and their
 distinction from a real empty text value. The diagnostic and UNO content paths
 remain unported;no normalization or replacement engine is added.
+
+## CALC-247: Data-area clamping precedes retain-old and only-down modifiers
+
+Status: source behavior retained;possible contract inconsistency.
+
+In `sc/source/core/data/table1.cxx:940`,the comments say `bIncludeOld` retains
+at least the initial area and `bOnlyDown` modifies only the final row. The method
+nevertheless clamps both input column references to `aCol.size()-1` before either
+modifier is considered. With the native initial one allocated column,an input
+E9:E9 becomes A9:A9 even with include-old=true or only-down=true.
+The complete native consumer/configuration intent is unverified. The port retains
+this clamp and tests it with genuine initial column storage;no coordinate repair
+or eager allocation is added. Task `202610210052-FZA8S9` records the evidence.

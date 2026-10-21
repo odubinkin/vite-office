@@ -46,6 +46,38 @@ export class ScTabView {
     else rMark.SelectOneTable(nTab);
     this.aViewData.ResetOldCursor();
   }
+  /** Original SelectAll normal-grid path,retaining cursor and selected sheets. Native block-window notifications are projected by the browser controller. @returns Nothing. */
+  SelectAll(): void {
+    const doc = this.aViewData.GetDocument(),
+      marks = this.aViewData.GetMarkData(),
+      tab = this.aViewData.GetTabNumber(),
+      range = new ScRange(0, 0, tab, doc.MaxCol(), doc.MaxRow(), tab);
+    if (marks.IsMarked() && marks.GetMarkArea().equals(range)) return;
+    marks.ResetMark();
+    marks.SetMarkArea(range);
+  }
+  /** Original MarkRange no-cursor normal-grid path;device alignment and cursor-setting path remain unported. @param range - Native rectangle. @param _setCursor - Supported source false branch. @returns Nothing. */
+  MarkRange(range: ScRange, _setCursor: false): void {
+    void _setCursor;
+    this.SetTabNo(range.aStart.Tab());
+    const marks = this.aViewData.GetMarkData();
+    marks.ResetMark();
+    marks.SetMarkArea(range);
+  }
+  /** Original MarkDataArea normal-grid path. @param includeCursor - Native include-old flag,default true. @returns Nothing. */
+  MarkDataArea(includeCursor = true): void {
+    const tab = this.aViewData.GetTabNumber(),
+      firstCol: [number] = [this.aViewData.GetCurX()],
+      firstRow: [number] = [this.aViewData.GetCurY()],
+      lastCol: [number] = [firstCol[0]],
+      lastRow: [number] = [firstRow[0]];
+    this.aViewData
+      .GetDocument()
+      .GetDataArea(tab, firstCol, firstRow, lastCol, lastRow, includeCursor, false);
+    const marks = this.aViewData.GetMarkData();
+    marks.ResetMark();
+    marks.SetMarkArea(new ScRange(firstCol[0], firstRow[0], tab, lastCol[0], lastRow[0], tab));
+  }
   /** Original SkipCursorHorizontal hidden-column branch for the unprotected,unmerged cell slice. @param column - Proposed column. @param old - Original cursor. @param movement - Nonzero horizontal direction. @returns Source cursor after boundary reversal. */
   SkipCursorHorizontal(column: number, old: number, movement: number): number {
     const doc = this.aViewData.GetDocument(),

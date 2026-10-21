@@ -1,5 +1,32 @@
 # Calc UI and ODS implementation critical path
 
+## Current UI block61 — connected-area and whole-sheet selection
+
+Task `202610210052-FZA8S9` connects Select All5723 and Select Data26551 to real
+column/table/document occupancy and connected-area owners. With the original
+SelectRangeBeforeAll=true default,the first Select All chooses connected data;
+the next chooses the whole sheet. Shared Writer menus,Ctrl/Meta+A,keypad multiply
+and platform Space combinations use actual Sfx dispatch. The corner selects the
+whole sheet directly and retains the cursor. Text inputs retain platform text
+selection. Selection preserves sheet membership,content,dirty state and history.
+
+The table constructor now follows INITIALCOLCOUNT=1,correcting the previous
+zero-column allocation deviation. Three nonnegative allocation guards are proved
+true by initial-one/grow-only storage and valid coordinates;their bodies remain,
+without inventing zero-column test states or changing coverage exclusions.
+Connected-area lookup uses the original uncached occupancy overload rather than
+native cached iterator hints. Original expansion order,diagonal adjacency,holes,
+shrinking and include-old/only-down semantics are preserved. CALC247 records the
+original allocated-column clamp preceding those modifiers.
+
+All537Calc tests in164files pass;all130measured owners reach100% coverage:
+S10830/B6741/F2006/L9724. Eleven shared/Writer shortcut/menu tests pass,and the
+changed shared key adapter reaches100%:S25/B22/F6/L23. Types,source lint/format,
+build/static,resource,registry,provenance and source gates pass. Actual Chromium
+at1280px and390px confirms area/all/corner/menu behavior;native Mac text selection
+uses Meta+A. Complete native reference/edit/protection/device UI remains unported.
+The next full all-application checkpoint remains70.
+
 ## Full verification checkpoint — block60
 
 Task `202610202340-96KNS6` completes the required full application checkpoint:

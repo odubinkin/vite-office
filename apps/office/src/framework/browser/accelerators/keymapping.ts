@@ -72,7 +72,7 @@ export function normalizeCommandShortcut(shortcut: string): string {
  */
 export function getBrowserShortcut(event: BrowserShortcutEvent): string | undefined {
   if (["Alt", "Control", "Meta", "Shift"].includes(event.key)) return undefined;
-  const key = event.key === " " ? "Space" : event.key;
+  const key = event.key === " " ? "Space" : event.key === "*" ? "MULTIPLY" : event.key;
   return normalizeCommandShortcut(
     [
       event.ctrlKey ? "Ctrl" : undefined,
