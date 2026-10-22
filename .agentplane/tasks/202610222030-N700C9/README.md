@@ -1,10 +1,11 @@
 ---
 id: "202610222030-N700C9"
 title: "Connect native Writer strikethrough formatting through UI and ODT"
-status: "DOING"
+result_summary: "Connected native Writer strikethrough across formatting controls, complete numeric attributes, original query and undo history, empty-cell typing and ODT roundtrip; validated scoped coverage and desktop/mobile flows."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Original numeric enum and explicit NONE survive pool/style/hints, partial and zero selections, source state/toggle, actual original cursor owners and undo/redo. Mounted sidebar/body/numbering and Chromium1280/390 ODT download/reopen provide real consumer evidence."
     - "Current4728 related and61 supplemental tests pass;26 executable owner source identities verified with strict S3110/B2524/F677/L2806 all100 via exact unchanged-span carry only. Raw scoped100 failures are preserved and distinguished from fresh whole-module coverage. No lowered thresholds, skipped required checks or full-suite claim."
     - "29 implementation/resource paths meet approved24+5 tolerance;7 tests fit8. Writer branch unchanged, local approved sources only; no network, merges, save/open/recovery change or semantic status promotion. WRITER052 retains source asymmetry with qualified evidence."
-commit: null
+commit:
+  hash: "79f3d074fc43281e68867dc2c692052bf48df785"
+  message: "🧪 N700C9 verify: record native character and ODT evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native Writer crossed-out attribute, source command state, sidebar and ODT flow in writer using local pinned sources and related checks."
+  -
+    author: "CODER"
+    body: "Verified: native strikethrough connects UI, core and ODT with preserved original cursor and hint owners, exact enum history and native partial queries. Current4728 related and61 supplemental cases,7 browser scenarios and all scoped gates pass;26-owner exact-span coverage100. Keep goal active."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native strikeout UI/core/ODT complete for consumed profile. Current81 files4728 cases and supplemental5 files61 cases pass;7 Chromium scenarios1280/390 pass.26-owner exact unchanged-span audit S3110 B2524 F677 L2806 all100 with zero missing; raw profiles retained, no thresholds lowered or full-suite claim. Types/lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff pass. Source2217028cd752; residual services and WRITER052 documented; keep goal active."
+  -
+    type: "status"
+    at: "2026-10-22T21:46:47.754Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native strikethrough connects UI, core and ODT with preserved original cursor and hint owners, exact enum history and native partial queries. Current4728 related and61 supplemental cases,7 browser scenarios and all scoped gates pass;26-owner exact-span coverage100. Keep goal active."
 doc_version: 3
-doc_updated_at: "2026-10-22T21:46:18.892Z"
+doc_updated_at: "2026-10-22T21:46:47.755Z"
 doc_updated_by: "CODER"
 description: "Complete the current character-formatting slice with original crossed-out items, source toggle/state contracts, sidebar/menu placement, browser projection and native XML property mappings; preserve full enum values in history and persistence."
 sections:
@@ -137,6 +150,10 @@ sections:
     - Observation: Native only-text partial-default query has shape-dependent explicitness. Resolution: preserve source result and document WRITER052 in docs/program/writer-upstream-suspected-issues.md with actual portable-owner tests; native producer reachability and intent remain unverified.
 
     Residual boundaries: This slice implements consumed automatic-character query and selected/caret item contracts, not complete GetPaMAttr/GetParaAttr merged/redline/graphic/character-style services. Ordinary no-mark native word/URL expansion needs original BreakIterator and remains the existing pending-character adapter. Full native InsertItemSet/SwHistory scheduling, readonly/auto-update and user-default ItemInfo routing remain unverified. CSS96dpi actual canvas metrics reuse original fallback/repeated-character arithmetic; native HarfBuzz/printer/vertical shaping is not claimed. Intentional browser I/O/recovery/autosave choices preserved. Task fourth after ACR55N: full suite not due. Latest user revokes stop instructions; keep goal active and continue current-slice essentials after task closure.
+extensions:
+  implementation_commit:
+    hash: "2217028cd752a4d53aee1e9e995852df558120ce"
+    message: "🧩 N700C9 fix: preserve native character query, cursor and attribute history"
 id_source: "generated"
 ---
 ## Summary
