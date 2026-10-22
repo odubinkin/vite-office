@@ -54,6 +54,11 @@
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
     "tableDialog": ".uno:TableDialog",
+    "tableRowHeight": ".uno:TableRowHeight",
+    "tableColumnWidth": ".uno:TableColumWidth",
+    "tableAlignment": ".uno:TableAlignment",
+    "tableLeftSpace": ".uno:TableLeftSpace",
+    "tableRightSpace": ".uno:TableRightSpace",
     "setRowHeight": ".uno:SetRowHeight",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
@@ -171,6 +176,66 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10042
+    },
+    ".uno:TableRowHeight": {
+      "browserOwned": true,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Row Height",
+      "label": "Row Height",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20593
+    },
+    ".uno:TableColumWidth": {
+      "browserOwned": true,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Column Width",
+      "label": "Column Width",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21794
+    },
+    ".uno:TableAlignment": {
+      "browserOwned": true,
+      "argumentSchema": ["TableLeftSpace:SfxInt32Item", "TableRightSpace:SfxInt32Item"],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Table Alignment",
+      "label": "Table Alignment",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21760
+    },
+    ".uno:TableLeftSpace": {
+      "browserOwned": true,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Table Left Spacing",
+      "label": "Table Left Spacing",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21761
+    },
+    ".uno:TableRightSpace": {
+      "browserOwned": true,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Table Right Spacing",
+      "label": "Table Right Spacing",
+      "placements": ["browser-extension:file-menu"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21762
     },
     ".uno:CenterPara": {
       "browserOwned": false,
@@ -1091,6 +1156,31 @@
     {
       "classification": "browser-extension",
       "commandUrl": ".uno:ULSpacing",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:TableRowHeight",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:TableColumWidth",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:TableAlignment",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:TableLeftSpace",
+      "sources": ["browser-extension:file-menu"]
+    },
+    {
+      "classification": "browser-extension",
+      "commandUrl": ".uno:TableRightSpace",
       "sources": ["browser-extension:file-menu"]
     },
     {

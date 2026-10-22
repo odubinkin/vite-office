@@ -452,6 +452,19 @@ export class SwTabFrame extends SwLayoutFrame {
     return 0;
   }
 
+  /** Resolves the represented horizontal cell-frame position from original row lowers and print widths. @param box - Original current box. @param upperWidth - Upper print width in twips. @returns Cell left relative to table print area, or absent for a foreign box. */
+  public GetBoxPrintOffset(box: SwTableBox, upperWidth: number): number | undefined {
+    for (let row = this.Lower(); row !== undefined; row = row.GetNext()) {
+      let offset = 0;
+      for (let lower = (row as SwRowFrame).Lower(); lower !== undefined; lower = lower.GetNext()) {
+        const cell = lower as SwCellFrame;
+        if (cell.GetTabBox() === box) return Math.trunc(offset);
+        offset += this.GetBoxPrintWidth(cell.GetTabBox(), upperWidth);
+      }
+    }
+    return undefined;
+  }
+
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
   public IsLayoutSplitAllowed(): boolean {
     return (this.GetFormat().GetAttrSet().Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue();

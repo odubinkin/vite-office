@@ -11,3 +11,14 @@ export const FN_PARAM_TABLE_HEADLINE = 21150 as const;
 export const FN_HSCROLL_METRIC = 20253 as const;
 /** Original FN_VIEW20200 plus54,SfxUInt16Item. */
 export const FN_VSCROLL_METRIC = 20254 as const;
+
+/** Native table sidebar row height slot. */
+export const SID_ATTR_TABLE_ROW_HEIGHT = 20593 as const;
+/** Native table sidebar column width slot. */
+export const SID_ATTR_TABLE_COLUMN_WIDTH = 21794 as const;
+/** Native table sidebar alignment slot. */
+export const SID_ATTR_TABLE_ALIGNMENT = 21760 as const;
+/** Native table sidebar left spacing slot. */
+export const SID_ATTR_TABLE_LEFT_SPACE = 21761 as const;
+/** Native table sidebar right spacing slot. */
+export const SID_ATTR_TABLE_RIGHT_SPACE = 21762 as const;

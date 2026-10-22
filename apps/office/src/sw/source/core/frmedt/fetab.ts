@@ -291,6 +291,32 @@ export abstract class SwFEShell extends SwEditShell {
     return this.GetTabCols_(result, table, start);
   }
 
+  /** Matches the current represented horizontal cell-frame edge against native separators, using fetab.cxx's layout-only COLFUZZY tolerance. @returns Raw separator column number. */
+  public GetCurTabColNum(): number {
+    const table = this.IsCursorInTable()?.GetTable();
+    if (table === undefined) return 0;
+    const node = this.GetCursor().GetPoint().GetNode();
+    const page = this.GetDoc().GetPageDesc().GetValue();
+    const upperWidth = page.width - page.leftMargin - page.rightMargin;
+    const frame = new SwTabFrame(table);
+    try {
+      for (const line of table.GetTabLines())
+        for (const box of line.GetTabBoxes()) {
+          if (!box.GetParagraphs().includes(node as SwTextNode)) continue;
+          const offset = frame.GetBoxPrintOffset(box, upperWidth);
+          if (offset === undefined || Math.abs(offset) <= 20) return 0;
+          const columns = new SwTabCols();
+          this.GetTabCols(columns);
+          const left = columns.GetLeft() + offset;
+          for (let i = 0; i < columns.Count(); i++)
+            if (Math.abs(left - columns.GetEntry(i).nPos) <= 20) return i + 1;
+        }
+      return 0;
+    } finally {
+      frame.DestroyImpl();
+    }
+  }
+
   /** Reads print geometry over the actual native cell-frame owner. @param result - Output geometry. @param table - Connected table. @param start - Actual cell. @returns Whether admitted. */
   private GetTabCols_(result: SwTabCols, table: SwTable, start: SwTableBox): boolean {
     const page = this.GetDoc().GetPageDesc().GetValue();

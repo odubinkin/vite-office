@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/table/tablemgr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "editing-view",
+    "capabilityIds": [
+      "CAP-0137"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/table/tablemgr.ts#SwTableFUNC",
+        "vendor/libreoffice-reference/sw/source/uibase/table/tablemgr.cxx#SwTableFUNC::SetColWidth",
+        "apps/office/src/sw/source/uibase/shells/native-table-sidebar-slots.test.ts"
+      ],
+      "justification": "Consumed native column manager over actual shell geometry and document history; no complete table manager parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwTableFUNC"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/table/tablemgr.cxx",
+      "upstreamSymbols": [
+        "SwTableFUNC::SwTableFUNC",
+        "SwTableFUNC::InitTabCols",
+        "SwTableFUNC::GetCurColNum",
+        "SwTableFUNC::GetColWidth",
+        "SwTableFUNC::SetColWidth"
+      ]
+    }
+  }
+}

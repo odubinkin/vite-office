@@ -36,6 +36,12 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:OptionsTreeDialog", showsDialog: true },
   { commandUrl: ".uno:LeftRightParaMargin", browserLabel: "Paragraph Indent" },
   { commandUrl: ".uno:ULSpacing", browserLabel: "Paragraph Spacing" },
+  { commandUrl: ".uno:TableRowHeight", browserLabel: "Row Height" },
+  { commandUrl: ".uno:TableColumWidth", browserLabel: "Column Width" },
+  { commandUrl: ".uno:TableAlignment", browserLabel: "Table Alignment" },
+  { commandUrl: ".uno:TableLeftSpace", browserLabel: "Table Left Spacing" },
+  { commandUrl: ".uno:TableRightSpace", browserLabel: "Table Right Spacing" },
+
   { commandUrl: ".uno:CenterPara", semantics: "radio" },
   { commandUrl: ".uno:JustifyPara", semantics: "radio" },
   { commandUrl: ".uno:StartPara", semantics: "radio" },
@@ -158,6 +164,12 @@ const commandAliases = {
   selectAll: ".uno:SelectAll",
   styleApply: ".uno:StyleApply",
   tableDialog: ".uno:TableDialog",
+  tableRowHeight: ".uno:TableRowHeight",
+  tableColumnWidth: ".uno:TableColumWidth",
+  tableAlignment: ".uno:TableAlignment",
+  tableLeftSpace: ".uno:TableLeftSpace",
+  tableRightSpace: ".uno:TableRightSpace",
+
   setRowHeight: ".uno:SetRowHeight",
   toggleHorizontalRuler: ".uno:Ruler",
   toggleVerticalRuler: ".uno:VRuler",
@@ -227,6 +239,12 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:Underline": "CAP-0109",
   ".uno:UnderlineSingle": "CAP-0109",
   ".uno:TableDialog": "CAP-0137",
+  ".uno:TableRowHeight": "CAP-0137",
+  ".uno:TableColumWidth": "CAP-0137",
+  ".uno:TableAlignment": "CAP-0137",
+  ".uno:TableLeftSpace": "CAP-0137",
+  ".uno:TableRightSpace": "CAP-0137",
+
   ".uno:SetRowHeight": "CAP-0137",
   ".uno:Undo": "CAP-0102",
   ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":

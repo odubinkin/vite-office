@@ -30,6 +30,11 @@ import {
   RES_ROW_SPLIT,
 } from "../../../inc/hintids";
 import {
+  SID_ATTR_TABLE_ROW_HEIGHT,
+  SID_ATTR_TABLE_COLUMN_WIDTH,
+  SID_ATTR_TABLE_ALIGNMENT,
+  SID_ATTR_TABLE_LEFT_SPACE,
+  SID_ATTR_TABLE_RIGHT_SPACE,
   FN_TABLE_REP,
   FN_PARAM_TABLE_NAME,
   FN_PARAM_TABLE_HEADLINE,
@@ -37,7 +42,9 @@ import {
 } from "../../../inc/cmdid";
 import { SwPtrItem } from "../utlui/uiitems";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxInt32Item, SfxUInt32Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SwTableFUNC } from "../table/tablemgr";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { importBoxProperties } from "../../filter/xml/xmlimpit";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
@@ -327,8 +334,32 @@ export class SwTableShell {
   public constructor(private readonly wrtShell: SwWrtShell) {
     this.commandShell = createSfxShell(
       this,
-      createWriterInterface(
-        [
+      createWriterInterface([
+        ...[
+          WRITER_COMMAND_IDS.tableRowHeight,
+          WRITER_COMMAND_IDS.tableColumnWidth,
+          WRITER_COMMAND_IDS.tableAlignment,
+          WRITER_COMMAND_IDS.tableLeftSpace,
+          WRITER_COMMAND_IDS.tableRightSpace,
+        ].map(
+          /** Binds native table metrics and state-only spacing. @param id - Native slot URL. @returns Handler. */
+          (id) => ({
+            id,
+            capabilityId: "CAP-0137" as const,
+            /** Applies typed native arguments. @param _context - Owning shell. @param items - Actual request items. @returns Whether applied. */
+            execute: (_context: unknown, items: readonly SfxPoolItem[]) =>
+              this.ExecuteMetrics(id, items),
+            /** Reads the native current item. @returns Native state item. */
+            getStateValue: () => this.GetMetricState(id),
+            /** Tests current table context. @returns Whether available. */
+            isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
+            /** Leaves mixed row height blank. @returns Whether unset. */
+            isMixed: () =>
+              id === WRITER_COMMAND_IDS.tableRowHeight &&
+              this.wrtShell.GetRowHeight() === undefined,
+          }),
+        ),
+        ...[
           WRITER_COMMAND_IDS.insertRowsBefore,
           WRITER_COMMAND_IDS.insertRowsAfter,
           WRITER_COMMAND_IDS.insertColumnsBefore,
@@ -361,10 +392,179 @@ export class SwTableShell {
             isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
           }),
         ),
-      ),
+      ]),
     );
     this.commandShell.GetInterface().RegisterPopupMenu("table");
   }
+  /** Queries the exact typed sidebar item from native Table GetState. @param id - Native command. @returns Owned state item or absent mixed row height. */
+  private GetMetricState(id: string): SfxPoolItem | undefined {
+    const table = this.wrtShell.IsCursorInTable()?.GetTable();
+    if (table === undefined) return undefined;
+    if (id === WRITER_COMMAND_IDS.tableRowHeight) {
+      const height = this.wrtShell.GetRowHeight();
+      return height === undefined
+        ? undefined
+        : new SfxUInt32Item(SID_ATTR_TABLE_ROW_HEIGHT, height.GetHeight());
+    }
+    if (id === WRITER_COMMAND_IDS.tableColumnWidth) {
+      const manager = new SwTableFUNC(this.wrtShell);
+      manager.InitTabCols();
+      return new SfxUInt32Item(
+        SID_ATTR_TABLE_COLUMN_WIDTH,
+        manager.GetColWidth(manager.GetCurColNum()),
+      );
+    }
+    const format = table.GetFrameFormat(),
+      alignment = format.GetHoriOrient().GetHoriOrient();
+    if (id === WRITER_COMMAND_IDS.tableAlignment)
+      return new SfxUInt16Item(SID_ATTR_TABLE_ALIGNMENT, alignment);
+    const columns = new SwTabCols();
+    this.wrtShell.GetTabCols(columns);
+    const space = columns.GetRightMax(),
+      lr = format.GetLRSpace();
+    let left = lr.ResolveLeft(),
+      right = lr.ResolveRight();
+    const size = format.GetFrameSize(),
+      percent = size.GetWidthPercent();
+    let width =
+      alignment === HoriOrientation.FULL
+        ? columns.GetRight()
+        : [
+              HoriOrientation.LEFT_AND_WIDTH,
+              HoriOrientation.LEFT,
+              HoriOrientation.RIGHT,
+              HoriOrientation.CENTER,
+            ].includes(alignment)
+          ? size.GetWidth()
+          : space - left - right;
+    if (percent) width = Math.trunc((space * percent) / 100);
+    if (alignment !== HoriOrientation.FULL) {
+      const remainder = space - width;
+      if (alignment === HoriOrientation.CENTER) left = right = Math.trunc(remainder / 2);
+      else if (alignment === HoriOrientation.LEFT) {
+        left = 0;
+        right = remainder;
+      } else if (alignment === HoriOrientation.RIGHT) {
+        left = remainder;
+        right = 0;
+      } else if (alignment === HoriOrientation.LEFT_AND_WIDTH) right = remainder - left;
+    }
+    return id === WRITER_COMMAND_IDS.tableLeftSpace
+      ? new SfxInt32Item(SID_ATTR_TABLE_LEFT_SPACE, left)
+      : new SfxInt32Item(SID_ATTR_TABLE_RIGHT_SPACE, right);
+  }
+
+  /** Executes consumed native table sidebar slots without untyped ingress. @param id - Native command. @param items - Request items. @returns Whether a typed request was accepted. */
+  private ExecuteMetrics(id: string, items: readonly SfxPoolItem[]): boolean {
+    if (this.wrtShell.IsCursorInTable() === undefined) return false;
+    const which =
+      id === WRITER_COMMAND_IDS.tableRowHeight
+        ? SID_ATTR_TABLE_ROW_HEIGHT
+        : id === WRITER_COMMAND_IDS.tableColumnWidth
+          ? SID_ATTR_TABLE_COLUMN_WIDTH
+          : SID_ATTR_TABLE_ALIGNMENT;
+    const item = items.find(
+      /** Finds the exact native request item. @param candidate - Request item. @returns Whether targeted. */
+      (candidate) => candidate.Which() === which,
+    );
+    if (id === WRITER_COMMAND_IDS.tableRowHeight && item instanceof SfxUInt32Item) {
+      const height = this.wrtShell.GetRowHeight();
+      if (height === undefined) return false;
+      if (height.GetHeightSizeType() === SwFrameSize.Variable)
+        height.SetHeightSizeType(SwFrameSize.Minimum);
+      height.SetHeight(item.GetValue());
+      return this.wrtShell.SetRowHeight(height);
+    }
+    if (id === WRITER_COMMAND_IDS.tableColumnWidth && item instanceof SfxUInt32Item) {
+      const manager = new SwTableFUNC(this.wrtShell);
+      manager.InitTabCols();
+      return manager.SetColWidth(manager.GetCurColNum(), item.GetValue());
+    }
+    if (
+      id !== WRITER_COMMAND_IDS.tableAlignment ||
+      !(item instanceof SfxUInt16Item) ||
+      item.GetValue() > HoriOrientation.LEFT_AND_WIDTH
+    )
+      return false;
+    const alignment = item.GetValue();
+    const leftItem = items.find(
+        /** Resolves the optional native left item. @param candidate - Request item. @returns Whether left. */
+        (candidate) => candidate.Which() === SID_ATTR_TABLE_LEFT_SPACE,
+      ),
+      rightItem = items.find(
+        /** Resolves the optional native right item. @param candidate - Request item. @returns Whether right. */
+        (candidate) => candidate.Which() === SID_ATTR_TABLE_RIGHT_SPACE,
+      );
+    let left = leftItem instanceof SfxInt32Item ? leftItem.GetValue() : 0,
+      right = rightItem instanceof SfxInt32Item ? rightItem.GetValue() : 0;
+    const columns = new SwTabCols();
+    this.wrtShell.GetTabCols(columns);
+    const space = columns.GetRightMax();
+    let width = space;
+    switch (alignment) {
+      case HoriOrientation.LEFT:
+        if (23 < space - right) width = space - right;
+        else {
+          width = 23;
+          right = space - 23;
+        }
+        left = 0;
+        break;
+      case HoriOrientation.RIGHT:
+        if (23 < space - left) width = space - left;
+        else {
+          width = 23;
+          left = space - 23;
+        }
+        right = 0;
+        break;
+      case HoriOrientation.LEFT_AND_WIDTH:
+        right = 0;
+        left = Math.min(left, space);
+        break;
+      case HoriOrientation.FULL:
+        left = right = 0;
+        break;
+      case HoriOrientation.CENTER:
+        if (23 < space - 2 * left) width = space - 2 * left;
+        else {
+          width = 23;
+          left = right = Math.trunc((space - 23) / 2);
+        }
+        break;
+      case HoriOrientation.NONE:
+        if (23 < space - left - right) width = space - left - right;
+        else {
+          width = 23;
+          left = right = Math.trunc((space - 23) / 2);
+        }
+        break;
+    }
+    const attributes = new SfxItemSet(this.wrtShell.GetDoc().GetAttrPool(), [
+      [RES_FRM_SIZE, RES_FRM_SIZE],
+      [RES_LR_SPACE, RES_LR_SPACE],
+      [RES_HORI_ORIENT, RES_HORI_ORIENT],
+    ]);
+    attributes.Put(new SwFormatFrameSize(SwFrameSize.Variable, width));
+    const lr = new SvxLRSpaceItem(RES_LR_SPACE);
+    lr.SetLeft(SvxIndentValue.twips(left));
+    lr.SetRight(SvxIndentValue.twips(right));
+    attributes.Put(lr);
+    attributes.Put(new SwFormatHoriOrient(0, alignment));
+    return this.wrtShell.RunNotificationTransaction(
+      /** Groups table frame attributes in native history. @returns Whether applied. */
+      () => {
+        const undo = this.wrtShell.GetDoc().GetUndoManager();
+        undo.StartUndo("Table Properties");
+        try {
+          return this.wrtShell.SetTableAttr(attributes);
+        } finally {
+          undo.EndUndo();
+        }
+      },
+    );
+  }
+
   /** Returns the native dispatcher shell. @returns Command shell. */
   public GetCommandShell(): SfxShell {
     return this.commandShell;

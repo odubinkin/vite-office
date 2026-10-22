@@ -839,3 +839,15 @@ implementation change.
 - Source: pinned `sw/source/uibase/shells/textsh1.cxx`, `SwTextShell::Execute`, `SID_ATTR_PARA_LRSPACE` direct-item branch; `sw/source/uibase/shells/txtattr.cxx`, `SwTextShell::GetAttrState`, combined indent state; `editeng/source/items/frmitems.cxx`, `SetTextLeft`, `SetRight`, `SetTextFirstLineOffset` for combined and split items.
 - Observation: Execute copies each already-scaled measure from the combined item into a split Writer attribute using the original percentage again. GetAttrState copies the split measure back into a combined item with that percentage yet again. For a combined item initialized from1200 twips at75 percent, the item contains900;Execute stores675 in the text-left attribute;state reconstruction stores506.25,which resolves to506 twips. Corresponding900-at125 right spacing goes1125 →1406.25 →1757.8125,while-400-at50 first-line offset goes-200 →-100 →-50. The automatic-first flag is copied independently.
 - Preservation: retain the literal source setter/getter sequence and percentages,without inverse scaling or replacement setters. Independent frame/slot tests assert the literal attribute and state values,including Undo/Redo and independent returned items. Normal sidebar edits create fresh items with100-percent defaults,as in ModifyIndentHdl_Impl. This finding is based on source inspection and the portable implementation;native application reproduction and intent remain unverified.
+
+### WRITER048 — table sidebar From left resets the frame width
+
+- Source: pinned `sw/source/uibase/shells/tabsh.cxx`, `SwTableShell::Execute`, `SID_ATTR_TABLE_ALIGNMENT`; `sw/sdi/swriter.sdi`, `TableAlignment`; `sw/source/uibase/sidebar/TableEditPanel.cxx`, `AlignmentModify`.
+- Observation: the LEFT_AND_WIDTH branch says “width doesn't change” but retains `nWidth = nSpace` initialized before the switch and publishes that width. The old frame width is never read. The SDI declares SfxUInt32Item for this slot, while Execute and the sidebar explicitly exchange SfxUInt16Item. These may be intentional internal conventions; native UI reproduction and intent remain unverified.
+- Preservation: retain the full available width in LEFT_AND_WIDTH and the actual UInt16 handler/sidebar transport. Do not infer the existing frame width or change the typed request to UInt32. Portable slot/history/ODT regressions assert the literal behavior.
+
+### WRITER049 — single-column width uses the right coordinate
+
+- Source: pinned `sw/source/uibase/table/tablemgr.cxx`, `SwTableFUNC::GetColWidth`, zero-separator branch.
+- Observation: multi-column widths subtract the left edge, while the single-column case returns `m_aCols.GetRight()` directly. A table with left=100 and right=6100 therefore reports6100 rather than6000. Native callers or geometry conventions may constrain this asymmetry; native UI reproduction and intent remain unverified.
+- Preservation: retain GetRight without subtracting GetLeft. The consumed native manager regression uses nonzero-left geometry and checks the literal6100 result, plus the native SetColWidth right-maximum cap.
