@@ -1,10 +1,11 @@
 ---
 id: "202610222148-RXH8BN"
 title: "Connect native Writer superscript and subscript through UI and ODT"
-status: "DOING"
+result_summary: "Connected native Writer superscript and subscript across source controls, complete offset and height storage, browser font placement, undo history and original ODT text-position conversion with verified desktop and mobile flows."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Actual mounted sidebar/body/numbering and11 current Chromium scenarios prove auto/manual proportional font and baseline placement, cell typing/history and downloaded ODT/reopen at1280/390. Original XML token/narrowing/percent contracts and independent item PutValue restrictions remain intact; WRITER053 qualifies source anomaly evidence."
     - "Current91 related files4836 tests,6 final files79 tests and12 boundary files77 tests pass.24 executable-owner exact unchanged-span audit is S2393/B1907/F462/L2203 all100; current source hashes match. Raw partial profiles and100 thresholds retained; no new or changed counter inherits historical hits or full-suite coverage claim."
     - "Exact scalar header edge rejects executable/service imports instead of admitting a library cycle. Mechanical checker and XML character splits preserve old responsibilities; moved canonical symbol/evidence ownership is explicit.32 implementation/resource/tooling paths and8 tests match plan, all declared gates pass, no classifications/defaults/native-service statuses promoted. Writer checkout only; no network/merges or deliberate I/O policy changes."
-commit: null
+commit:
+  hash: "75748f4c369cc0d079bafe1361f9fd76fc231f25"
+  message: "🧪 RXH8BN verify: record native character position evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native superscript/subscript item, source command and sidebar placement, complete value codec and ODT text-position with related checks in writer."
+  -
+    author: "CODER"
+    body: "Verified: native super/sub commands connect source sidebar, complete character values, measured body/cell/numbering placement, original item history and ODT.4836 related and79 final cases,77 tooling tests,11 Chromium scenarios and all local gates pass;24-owner exact-span coverage100. Keep broad goal active."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native super/sub UI/core/ODT slice passes4836 related plus79 final focused cases,77 boundary tests and11 Chromium scenarios.24 executable-owner exact unchanged-span audit S2393 B1907 F462 L2203 all100 with zero missing, raw partial profiles retained. All local gates pass, sourceb00edb419944. Complete raw browser storage and native stricter UNO admission distinguished; native-service/transient-binding residuals and WRITER053 documented. Fifth task after full checkpoint; goal active."
+  -
+    type: "status"
+    at: "2026-10-22T22:19:24.566Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native super/sub commands connect source sidebar, complete character values, measured body/cell/numbering placement, original item history and ODT.4836 related and79 final cases,77 tooling tests,11 Chromium scenarios and all local gates pass;24-owner exact-span coverage100. Keep broad goal active."
 doc_version: 3
-doc_updated_at: "2026-10-22T22:18:21.175Z"
+doc_updated_at: "2026-10-22T22:19:24.571Z"
 doc_updated_by: "CODER"
 description: "Complete original escapement commands, complete offset/height storage, source sidebar controls, original horizontal baseline arithmetic and style:text-position import/export over existing Writer native owners."
 sections:
@@ -132,6 +145,10 @@ sections:
     - WRITER053 documents source text-position empty-token/percent admission and later independent item validation. Original ASCII token enumeration, signed16/8 narrowing, half-away rounding and percent-tail behavior are preserved, not sanitized. Native producer reachability and intent remain unverified.
 
     Residual native scope: full SwFont/HarfBuzz/font-cache/printer/vertical and pagination services; complete merged/redline/readonly/auto-update/character-style/GetPaMAttr graph; ordinary no-mark native BreakIterator word/URL expansion; original transient opposing-binding SetState scheduling and request macro recording remain unverified. Existing core/UI boundaries supply final source bool states and native item execution without fabricating those services. Metadata retains every previous classification/status/default/exception and deliberate browser I/O/recovery/autosave policy. Keep goal active after task closure; user stop requests are revoked.
+extensions:
+  implementation_commit:
+    hash: "b00edb41994410ddb3d1d465c603cbcb764ca885"
+    message: "🧩 RXH8BN feat: connect native character position commands and ODT"
 id_source: "generated"
 ---
 ## Summary
