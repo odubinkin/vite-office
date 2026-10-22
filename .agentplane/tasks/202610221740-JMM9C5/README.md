@@ -4,7 +4,7 @@ title: "Compile and evaluate native aggregate functions through Calc formula inp
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "617 Calc cases and46 related cases pass;136Calc and2shared owners raw100 coverage;2browser/Worker cases,2050native rows/138objects and15gates pass;immutable evidence audit verifies actual UI save/reopen."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T18:47:40.966Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native scalar/single-reference aggregate slice satisfies source ownership,actual UI persistence and unchanged100percent coverage gates."
+  evaluated_sha: "54c876ac7cdd227be02f8b0ab631aa36f29aa3a8"
+  blueprint_digest: "49d5bc10e5071c2af136667a237ee26e83c2f31e82c7981efc9d8d0576f626e5"
+  evidence_refs:
+    - ".agentplane/tasks/202610221740-JMM9C5/README.md"
+    - ".agentplane/tasks/202610221740-JMM9C5/quality/20261022-184740966-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610221740-JMM9C5/quality/20261022-184740966-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610221740-JMM9C5/quality/20261022-184740966-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610221740-JMM9C5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610221740-JMM9C5/evidence/audit.mjs"
+    - ".agentplane/tasks/202610221740-JMM9C5/evidence/acceptance.json"
+    - ".agentplane/tasks/202610221740-JMM9C5/evidence/raw-results.json.gz"
+  findings:
+    - "Immutable audit independently checks617Calc and46related passed cases,136Calc and2shared raw-positive owners,2browser/Worker specs,2050identical normal/ASan native rows with138original objects,15successful gates and source hashes. Browser snapshots prove16to22live change,Undo16,Redo22 and actual saved ODS reopen22. Range machinery remains the approved dependent73."
 commit:
   hash: "54c876ac7cdd227be02f8b0ab631aa36f29aa3a8"
   message: "🧩 JMM9C5 calc: compile native aggregate formulas with compensated evaluation"
