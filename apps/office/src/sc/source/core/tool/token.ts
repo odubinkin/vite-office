@@ -2,10 +2,16 @@
 import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { ScDirection } from "../../../inc/global";
-import type { ScAddress } from "../../../inc/address";
+import { ScRange, type ScAddress } from "../../../inc/address";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScSingleRefData } from "../../../inc/refdata";
-import { ScSingleRefToken, ScDoubleRefToken } from "./token.references";
+import {
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScExternalSingleRefToken,
+  ScExternalDoubleRefToken,
+  ScTableRefToken,
+} from "./token.references";
 import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { RangeMatrix } from "../../../inc/types";
@@ -19,6 +25,82 @@ import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 
+/** Native active pointer range over the actual code/RPN buffer;inactive tails remain outside the logical range. */
+interface TokenPointerRange {
+  readonly tokens: readonly FormulaToken[];
+  readonly length: number;
+}
+/** Original AdjustSingleRefData changes only absolute coordinates by the copy-position delta. @param reference - Actual mutable reference. @param oldPosition - Source position. @param newPosition - Destination position. @returns Nothing. */
+function adjustSingleRefData(
+  reference: ScSingleRefData,
+  oldPosition: ScAddress,
+  newPosition: ScAddress,
+): void {
+  if (!reference.IsColRel()) reference.IncCol(newPosition.Col() - oldPosition.Col());
+  if (!reference.IsRowRel()) reference.IncRow(newPosition.Row() - oldPosition.Row());
+  if (!reference.IsTabRel()) reference.IncTab(newPosition.Tab() - oldPosition.Tab());
+}
+/** Native TokenPointers traversal for deep owned token arrays (or discarded shared RPN). Actual active buffer entries and structured-reference fields determine membership;JS GC owns physical lifetime,no reference-count facade is introduced. External retained smart-pointer counts and invalid flat-copy callers are outside this consumed ownership contract. */
+class TokenPointers {
+  readonly maPointerRange: readonly [TokenPointerRange, TokenPointerRange];
+  private readonly memberships = new Map<FormulaToken, number>();
+  /** Borrows original buffers and counts their actual active owning entries plus table-area fields. @param code - Code buffer. @param length - Active code length. @param rpn - RPN buffer. @param rpnLength - Active RPN length. @param mbSkipRelName - Original relative-name skip policy. @returns Borrowed traversal. */
+  constructor(
+    code: readonly FormulaToken[] | null,
+    length: number,
+    rpn: readonly FormulaToken[] | null,
+    rpnLength: number,
+    private readonly mbSkipRelName: boolean,
+  ) {
+    this.maPointerRange = [
+      { tokens: code ?? [], length },
+      { tokens: rpn ?? [], length: rpnLength },
+    ];
+    const tableOwners = new Set<ScTableRefToken>();
+    for (const range of this.maPointerRange)
+      for (let index = 0; index < range.length; index++) {
+        const token = range.tokens[index] as FormulaToken;
+        this.memberships.set(token, (this.memberships.get(token) ?? 0) + 1);
+        if (token instanceof ScTableRefToken) tableOwners.add(token);
+      }
+    for (const table of tableOwners) {
+      const area = table.GetAreaRefRPN();
+      if (area) this.memberships.set(area, (this.memberships.get(area) ?? 0) + 1);
+    }
+  }
+  /** Original RPN-only/ref-sharing and relative-name decisions under the consumed actual ownership graph. @param range - Code0 or RPN1. @param index - Active position. @returns Skip this entry. */
+  private skipToken(range: number, index: number): boolean {
+    if (range === 1) {
+      const token = this.maPointerRange[range].tokens[index] as FormulaToken;
+      if ((this.memberships.get(token) as number) > 1) return true;
+      if (this.mbSkipRelName) {
+        switch (token.GetType()) {
+          case StackVar.svSingleRef:
+            return (token as ScSingleRefToken).GetSingleRef().IsRelName();
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            return reference.Ref1.IsRelName() || reference.Ref2.IsRelName();
+          }
+          default:
+            break;
+        }
+      }
+    }
+    return false;
+  }
+  /** Original structured-reference projection returns its inner area only when it is not handled in RPN. @param range - Code0 or RPN1. @param index - Active position. @returns Actual handled token or null. */
+  getHandledToken(range: 0 | 1, index: number): FormulaToken | null {
+    if (this.skipToken(range, index)) return null;
+    const token = this.maPointerRange[range].tokens[index] as FormulaToken;
+    if (token.GetOpCode() === OpCode.ocTableRef) {
+      if (!(token instanceof ScTableRefToken)) return token;
+      const area = token.GetAreaRefRPN();
+      if (!area || (this.memberships.get(area) as number) > 1) return token;
+      return area;
+    }
+    return token;
+  }
+}
 /** Original empty-cell token retaining inherited and display-as-string flags. */
 export class ScEmptyCellToken extends FormulaToken {
   private readonly bInherited: boolean;
@@ -430,6 +512,97 @@ export class ScTokenArray extends FormulaTokenArray {
       }
     }
     return p;
+  }
+  /** Original by-value true copy;the C++ unique_ptr/by-value allocation-category distinction is erased under JS GC,while the same deep code/RPN identity algorithm is retained. @returns Independent token array. */
+  CloneValue(): ScTokenArray {
+    return this.Clone();
+  }
+  /** Original vertical-group invariance scans source-order references,including actual external reference values and index tokens. @returns No relative row dependency. */
+  IsInvariant(): boolean {
+    for (let index = 0; index < this.nLen; index++) {
+      const token = (this.pCode as FormulaToken[])[index] as FormulaToken;
+      switch (token.GetType()) {
+        case StackVar.svSingleRef:
+          if ((token as ScSingleRefToken).GetSingleRef().IsRowRel()) return false;
+          break;
+        case StackVar.svExternalSingleRef:
+          if ((token as ScExternalSingleRefToken).GetSingleRef().IsRowRel()) return false;
+          break;
+        case StackVar.svDoubleRef: {
+          const reference = (token as ScDoubleRefToken).GetDoubleRef();
+          if (reference.Ref1.IsRowRel() || reference.Ref2.IsRowRel()) return false;
+          break;
+        }
+        case StackVar.svExternalDoubleRef: {
+          const reference = (token as ScExternalDoubleRefToken).GetDoubleRef();
+          if (reference.Ref1.IsRowRel() || reference.Ref2.IsRowRel()) return false;
+          break;
+        }
+        case StackVar.svIndex:
+          return false;
+        default:
+          break;
+      }
+    }
+    return true;
+  }
+  /** Original copy-position ordering visits actual code and RPN-only double references through TokenPointers. No formula text is parsed and no cell model is copied. @param position - New formula position. @returns Nothing. */
+  AdjustReferenceOnCopy(position: ScAddress): void {
+    const pointers = new TokenPointers(this.pCode, this.nLen, this.pRPN, this.nRPN, false);
+    for (const range of [0, 1] as const)
+      for (let index = 0; index < pointers.maPointerRange[range].length; index++) {
+        const token = pointers.getHandledToken(range, index);
+        if (!token) continue;
+        switch (token.GetType()) {
+          case StackVar.svDoubleRef:
+            (token as ScDoubleRefToken).GetDoubleRef().PutInOrder(position);
+            break;
+          default:
+            break;
+        }
+      }
+  }
+  /** Original absolute-reference copy adjustment over actual token ownership. In this loop SkipReference's bRangeName is false and its token kinds are already local references,so its extraction always succeeds;the remaining decision is actual clipboard-range containment. @param oldDocument - Original document owning copy ranges. @param oldPosition - Original formula position. @param newPosition - New formula position. @param checkCopyRange - Original copied-area policy. @returns Nothing. */
+  AdjustAbsoluteRefs(
+    oldDocument: ScDocument,
+    oldPosition: ScAddress,
+    newPosition: ScAddress,
+    checkCopyRange: boolean,
+  ): void {
+    const pointers = new TokenPointers(this.pCode, this.nLen, this.pRPN, this.nRPN, true);
+    for (const range of [0, 1] as const)
+      for (let index = 0; index < pointers.maPointerRange[range].length; index++) {
+        const token = pointers.getHandledToken(range, index);
+        if (!token) continue;
+        switch (token.GetType()) {
+          case StackVar.svSingleRef: {
+            const reference = (token as ScSingleRefToken).GetSingleRef(),
+              address = reference.toAbs(oldDocument, oldPosition);
+            if (
+              !checkCopyRange ||
+              !oldDocument.GetClipParam().maRanges.Contains(new ScRange(address))
+            )
+              continue;
+            adjustSingleRefData(reference, oldPosition, newPosition);
+            break;
+          }
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            if (
+              !checkCopyRange ||
+              !oldDocument
+                .GetClipParam()
+                .maRanges.Contains(reference.toAbs(oldDocument, oldPosition))
+            )
+              continue;
+            adjustSingleRefData(reference.Ref1, oldPosition, newPosition);
+            adjustSingleRefData(reference.Ref2, oldPosition, newPosition);
+            break;
+          }
+          default:
+            break;
+        }
+      }
   }
   /** Original adjacent outer-function parameter inspection over genuine RPN references;axis adjacency intentionally ignores the other axis and sheet as upstream. @param extend - Native output extent,untouched on an early boundary. @param position - Formula position. @param direction - Original scan direction. @returns Adjacent reference found. */
   GetAdjacentExtendOfOuterFuncRefs(

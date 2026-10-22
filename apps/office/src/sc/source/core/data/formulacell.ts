@@ -36,7 +36,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     formula: OUStringConstReference | ScTokenArray,
     grammar: Grammar,
   );
-  /** Original same-document,same-position copy-constructor subset used by Clone;relocation/foreign document reference services remain unsupported. @param source - Copied cell. @param rDocument - Original document. @param position - Original position. @returns Cell. */
+  /** Original copy-constructor local-reference slice used by Clone;foreign pools,named/external/3D services remain unsupported. @param source - Copied cell. @param rDocument - Original document. @param position - Original position. @returns Cell. */
   constructor(source: ScFormulaCell, rDocument: ScDocument, position: ScAddress);
   /** Binds native ordinary/copy constructor families for the current local-reference slice. @param documentOrCell - Document or source cell. @param positionOrDocument - Position or original document. @param formulaOrPosition - Formula or copied position. @param grammar - Ordinary input grammar. @returns Cell. */
   constructor(
@@ -50,20 +50,22 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       const source = documentOrCell,
         doc = positionOrDocument as ScDocument,
         pos = formulaOrPosition as ScAddress;
-      if (doc !== source.rDocument || !pos.equals(source.aPos))
-        throw new Error(
-          "Formula copy relocation and foreign-document services are not implemented",
-        );
+      if (doc.GetPool() !== source.rDocument.GetPool())
+        throw new Error("Formula foreign-document pool conversion is not implemented");
       this.rDocument = doc;
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
       this.pCode = source.pCode.Clone();
       this.aResult = new ScFormulaResult(source.aResult);
       this.bDirty = source.bDirty;
-      if (this.pCode.GetCodeError() !== FormulaError.NONE && this.pCode.GetLen()) {
-        this.pCode.SetCodeError(FormulaError.NONE);
+      const compile = this.pCode.GetCodeError() !== FormulaError.NONE && this.pCode.GetLen() !== 0;
+      if (compile) this.pCode.SetCodeError(FormulaError.NONE);
+      this.pCode.AdjustAbsoluteRefs(source.rDocument, source.aPos, this.aPos, false);
+      // Same-pool copies do not enter foreign-pool/external/name conversion.
+      // Source clipboard/undo and clone-flag branches are added with their actual mode owners separately.
+      this.pCode.AdjustReferenceOnCopy(this.aPos);
+      if (compile)
         new ScCompiler(doc, this.aPos, this.pCode, this.eTempGrammar).CompileTokenArray();
-      }
     } else {
       this.rDocument = documentOrCell;
       this.aPos = new ScAddress(positionOrDocument as ScAddress);
@@ -80,9 +82,9 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       compiler.CompileTokenArray();
     }
   }
-  /** Original same-position Clone delegates to the native copy constructor without starting listeners. @returns Owned formula copy. */
-  Clone(): ScFormulaCell {
-    return new ScFormulaCell(this, this.rDocument, this.aPos);
+  /** Original default and relocated Clone delegate to the native copy constructor without starting listeners. @param position - Optional original relocated-clone argument. @returns Owned formula copy. */
+  Clone(position: ScAddress = this.aPos): ScFormulaCell {
+    return new ScFormulaCell(this, this.rDocument, position);
   }
   /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */
   GetFormula(grammar: Grammar): OUString {

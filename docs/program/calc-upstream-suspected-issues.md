@@ -3622,3 +3622,22 @@ This is a source-derived suspicion rather than a certified whole-application
 failure. Preserve the original axis-only checks;adding a same-column/same-row
 filter would change the upstream contract. The actual-token witness is in
 `sc/source/ui/view/native-autosum.test.ts`.
+
+## CALC-254: a table area retained in RPN can be skipped by both traversal paths
+
+Pinned source: `sc/source/core/tool/token.cxx`, anonymous `TokenPointers`,
+`ScTokenArray::AdjustReferenceOnCopy` and `ScTokenArray::AdjustAbsoluteRefs`.
+
+When a source-order `ScTableRefToken` retains the very same area token that
+also appears in RPN, that area has at least two native owning references.
+`getHandledToken` therefore returns the table token instead of its area,
+with a comment that the area is handled in RPN. However, `skipToken` skips
+an RPN token whose reference count exceeds one. Under this ownership graph,
+neither adjustment loop visits the area reference.
+
+This is a conditional source-derived suspicion. It does not establish that
+the compiler produces this graph for an ordinary table formula, nor that
+the full application exposes a user-visible failure. Keep the original
+skip/projection rules. The actual retained-area/RPN identity vector is in
+`sc/source/core/tool/token-copy.test.ts`;it checks the skipped outcome rather
+than silently changing traversal to visit the area.

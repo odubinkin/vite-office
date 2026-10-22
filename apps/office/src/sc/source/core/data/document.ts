@@ -19,7 +19,7 @@ import {
 } from "../../../../editeng/source/items/frmitems";
 import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
-import { ScMergePatternState } from "../../../inc/attarray";
+import { ScClipParam } from "../../../inc/clipparam";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { ScColumnData } from "../../../inc/column";
@@ -68,6 +68,19 @@ export enum HardRecalcState {
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   static readonly HardRecalcState = HardRecalcState;
+  private mpClipParam: ScClipParam | undefined;
+  /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */
+  GetClipParam(): ScClipParam {
+    return (this.mpClipParam ??= new ScClipParam());
+  }
+  /** Original copied clipboard parameters replace the previous owner. @param parameter - Source parameters. @returns Nothing. */
+  SetClipParam(parameter: ScClipParam): void {
+    this.mpClipParam = new ScClipParam(parameter);
+  }
+  /** Original filtered-row count through actual per-sheet segment storage. @param first - First row. @param last - Last row. @param tab - Sheet. @returns Nonfiltered count or zero for an absent sheet. */
+  CountNonFilteredRows(first: number, last: number, tab: number): number {
+    return this.FetchTable(tab)?.getFilterData().countNonFilteredRows(first, last) ?? 0;
+  }
   private eGrammar: Grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
   /** Original current formula convention,initialized GRAM_NATIVE. @returns Grammar. */
   GetGrammar(): Grammar {
@@ -434,36 +447,7 @@ export class ScDocument {
   private pSelectionAttr: ScPatternAttr | undefined;
   /** Original owned selection pattern assembled by native table/column/run merges. @param marks - Actual sheet and cell marks. @param deep - Include inherited items. @returns Independent pattern. */
   CreateSelectionPattern(marks: ScMarkData, deep = true): ScPatternAttr {
-    const state = new ScMergePatternState();
-    try {
-      if (marks.IsMultiMarked())
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          (this.maTabs[tab] as ScTable).MergeSelectionPattern(state, marks, deep);
-        }
-      if (marks.IsMarked()) {
-        const range = marks.GetMarkArea();
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          (this.maTabs[tab] as ScTable).MergePatternArea(
-            state,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-            deep,
-          );
-        }
-      }
-      if (state.pItemSet !== undefined) {
-        const pattern = new ScPatternAttr(this.getCellAttributeHelper(), state.pItemSet);
-        if (state.mbValidPatternId) pattern.SetPAKey(state.mnPatternId);
-        return pattern;
-      }
-      return new ScPatternAttr(this.getCellAttributeHelper());
-    } finally {
-      state.Dispose();
-    }
+    return documen7.CreateSelectionPattern.call(this, marks, deep);
   }
   /** Original retained native selection result replaces the previous owned value. @param marks - Actual marks. @returns Borrowed current pattern. */
   GetSelectionPattern(marks: ScMarkData): ScPatternAttr {

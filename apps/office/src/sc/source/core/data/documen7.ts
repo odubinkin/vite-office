@@ -1,4 +1,8 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import { ScMergePatternState } from "../../../inc/attarray";
+import { ScPatternAttr } from "../../../inc/patattr";
+import type { ScMarkData } from "../../../inc/markdata";
+import type { ScTable } from "../../../inc/table";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { HasAttrFlags } from "../../../inc/global";
@@ -248,4 +252,42 @@ export function HasAttrib(this: ScDocument, range: ScRange, mask: HasAttrFlags):
       return true;
   }
   return false;
+}
+
+/** Original document.cxx selection-pattern merge on the same document instance. @param this - Actual document owner. @param marks - Actual selection. @param deep - Include inherited items. @returns Independent merged pattern. */
+export function CreateSelectionPattern(
+  this: ScDocument,
+  marks: ScMarkData,
+  deep: boolean,
+): ScPatternAttr {
+  const state = new ScMergePatternState();
+  try {
+    if (marks.IsMultiMarked())
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        (this["maTabs"][tab] as ScTable).MergeSelectionPattern(state, marks, deep);
+      }
+    if (marks.IsMarked()) {
+      const range = marks.GetMarkArea();
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        (this["maTabs"][tab] as ScTable).MergePatternArea(
+          state,
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+          deep,
+        );
+      }
+    }
+    if (state.pItemSet !== undefined) {
+      const pattern = new ScPatternAttr(this.getCellAttributeHelper(), state.pItemSet);
+      if (state.mbValidPatternId) pattern.SetPAKey(state.mnPatternId);
+      return pattern;
+    }
+    return new ScPatternAttr(this.getCellAttributeHelper());
+  } finally {
+    state.Dispose();
+  }
 }

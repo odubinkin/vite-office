@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Consumed area-listening,broadcast,tracking and recalculation methods run on the same actual ScDocument. Literal private-member access bridges TypeScript class-file boundaries without a second state model. SetAllFormulasDirty retains its existing document.cxx responsibility.",
       "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
-      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete."
+      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete.",
+      "Block75 work in progress implements same-pool relocated ScFormulaCell Clone through deep token ownership without reparsing source text;cached result and dirty state survive until actual insertion starts listeners. ScTokenArray CloneValue,IsInvariant,AdjustReferenceOnCopy and local AdjustAbsoluteRefs consume actual code/RPN and retained table-area identities. The TokenPointers adaptation is bounded to deep-owned arrays or callers that discard shared RPN as required by source;it does not simulate global physical smart-pointer refcounts or certify externally retained flat-copy graphs. ScClipParam owns actual independent range lists,source IDs,compressed dimensions and filtered transpose;document lazy parameters and CountNonFilteredRows use real segmented filter storage. These pure parameter prerequisites do not implement clipboard document reset/pooling/paste. Selection-pattern merging moved to an out-of-class definition on the same document instance to retain the file-size boundary. Mode identity,shared formula groups,column splitting/group listening,paste fill/undo and final raw100/browser/Worker/build acceptance remain pending;no broad behavior,contract or default parity is certified."
     ],
     "omittedResponsibilities": [
       "Only the stated consumed slice is implemented;broader native contracts,defaults and behavior remain unverified."
@@ -30,6 +31,10 @@
         },
         {
           "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
           "marker": "native"
         },
         {
@@ -49,6 +54,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::GetScriptType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::CreateSelectionPattern"
         }
       ]
     }

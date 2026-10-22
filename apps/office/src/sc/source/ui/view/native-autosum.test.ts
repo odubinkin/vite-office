@@ -109,6 +109,34 @@ it("retains upstream axis-only adjacency instead of inventing same-column or sam
   doc.Dispose();
 });
 
+it("rejects gaps in each directional reference scan and leaves uncompiled code without RPN adjacency", /** Independent negative reference vectors complement the neighboring-cell cases. @returns Nothing. */ () => {
+  const { doc } = setup(),
+    position = new ScAddress(3, 3, 0);
+  for (const [direction, source] of [
+    [ScDirection.DIR_BOTTOM, "=SUM(D6)"],
+    [ScDirection.DIR_BOTTOM, "=SUM(D6:D8)"],
+    [ScDirection.DIR_RIGHT, "=SUM(F4)"],
+    [ScDirection.DIR_RIGHT, "=SUM(F4:H4)"],
+    [ScDirection.DIR_LEFT, "=SUM(B4)"],
+    [ScDirection.DIR_LEFT, "=SUM(A4:B4)"],
+  ] as const) {
+    const output: [number] = [99];
+    expect(
+      compile(doc, position, source).GetAdjacentExtendOfOuterFuncRefs(output, position, direction),
+    ).toBe(false);
+    expect(output[0]).toBe(3);
+  }
+  const compiler = new ScCompiler(doc, position, doc.GetGrammar()),
+    uncompiled = compiler.CompileString(unicode("=SUM(D3)")),
+    output: [number] = [99];
+  expect(uncompiled.GetCodeLen()).toBe(0);
+  expect(uncompiled.GetAdjacentExtendOfOuterFuncRefs(output, position, ScDirection.DIR_TOP)).toBe(
+    false,
+  );
+  expect(output[0]).toBe(3);
+  doc.Dispose();
+});
+
 it("prefers adjacent vertical data before horizontal data and serializes actual relative range tokens", /** Expected references are independent source-priority vectors. @returns Nothing. */ () => {
   const { doc, view, functions } = setup();
   doc.SetValue(new ScAddress(1, 0, 0), 2);
