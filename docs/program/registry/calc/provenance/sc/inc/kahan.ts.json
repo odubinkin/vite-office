@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/kahan.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/kahan.hxx",
+    "localSymbols": [
+      "KahanSum"
+    ],
+    "upstreamSymbols": [
+      "KahanSum"
+    ],
+    "preservedResponsibilities": [
+      "Block72 consumes the original portable non-SSE2 KahanSum default/value/error/copy constructors,sumNeumaierNormal,add overloads,get and product-assignment. Unchanged full original kahan.hxx plus verified SAL dependencies produce2050 normal/ASan identical observation rows;2048 sequences are compared bit-for-bit. No SSE2,long-double,unconsumed operator or platform-wide parity claim."
+    ],
+    "omittedResponsibilities": [
+      "SSE2/long-double profiles and unconsumed operators remain unsupported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/kahan.ts",
+          "marker": "KahanSum"
+        },
+        {
+          "path": "apps/office/src/sc/inc/kahan.test.ts",
+          "marker": "KahanSum"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/kahan.hxx",
+          "marker": "KahanSum"
+        }
+      ]
+    }
+  }
+}

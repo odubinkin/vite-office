@@ -119,7 +119,7 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
   const array = tokens([1]);
   new RecordingCompiler(array).CompileTokenArray();
   const original = array.GetCode();
-  array.AddToken(new FormulaByteToken(OpCode.ocSum));
+  array.AddToken(new FormulaByteToken(OpCode.ocIf));
   expect(
     /** Rejects missing function compilation. @returns Native subtotal flag. */ () =>
       new RecordingCompiler(array).CompileTokenArray(),
@@ -158,5 +158,25 @@ it("preserves the native expression and token-recursion limits", /** Bounded sou
     new RecordingCompiler(array).CompileTokenArray();
     expect(array.GetCodeError()).toBe(FormulaError.StackOverflow);
     expect(array.GetCode()).toBeNull();
+  }
+});
+
+it("uses native variable-argument Factor arity and close/error boundaries", /** Exercises shared grammar independently of Calc scanner injection. @returns Nothing. */ () => {
+  for (const op of ["ocSum", "ocSumSQ", "ocProduct", "ocAverage"] as const) {
+    const array = tokens([op, "ocOpen", "ocClose"]);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(FormulaError.NONE);
+    expect((Array.from(array.RPNTokens())[0] as FormulaByteToken).GetByte()).toBe(0);
+  }
+  for (const [input, error] of [
+    [["ocSum", 1], FormulaError.OperatorExpected],
+    [["ocSum", "ocOpen", 1, "ocAdd", "ocClose"], FormulaError.ParameterExpected],
+    [["ocSum", "ocOpen", 1], FormulaError.PairExpected],
+    [["ocSum", "ocOpen", 1, "ocSep", "ocMul", 2, "ocClose"], FormulaError.VariableExpected],
+  ] as const) {
+    const array = tokens(input);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(error);
+    expect(array.GetCodeLen()).toBe(0);
   }
 });

@@ -45,7 +45,7 @@ it("records an actual repeated or reverted edit even when its final value is unc
 });
 it("keeps rejected input modified and clears modification on cancellation and fresh input", /** Failed parsing cannot consume the source modification flag. @returns Nothing. */ () => {
   const c = new CalcViewController();
-  c.StartInput(ScInputMode.SC_INPUT_TYPE, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TYPE, "=UNPORTED(A1)");
   expect(c.Commit()).toBe(false);
   expect(c.inputHandler.IsModified()).toBe(true);
   c.SetInputMode();

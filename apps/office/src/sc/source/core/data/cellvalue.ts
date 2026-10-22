@@ -234,6 +234,13 @@ export class ScRefCellValue {
       (this.meType === CellType.CELLTYPE_FORMULA && !(this.mpFormula as ScFormulaCell).IsValue())
     );
   }
+  /** Original numeric predicate evaluates real formula results,including value/error results. @returns Numeric cell. */
+  hasNumeric(): boolean {
+    return (
+      this.meType === CellType.CELLTYPE_VALUE ||
+      (this.meType === CellType.CELLTYPE_FORMULA && (this.mpFormula as ScFormulaCell).IsValue())
+    );
+  }
   /** Original emptiness tests the tag alone. @returns Empty-cell predicate. */
   isEmpty(): boolean {
     return this.meType === CellType.CELLTYPE_NONE;

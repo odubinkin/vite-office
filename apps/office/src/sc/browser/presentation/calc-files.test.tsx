@@ -287,7 +287,7 @@ it("rejects failed source input or unavailable storage,and exposes source comman
   expect(
     /** Rejects an absent resource. @returns Resource. */ () => getCalcCommandResource("missing"),
   ).toThrow(/Unknown/);
-  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=UNPORTED(A1)");
   expect(workflows.Show("open")).toBe(false);
   await expect(workflows.Flush()).rejects.toThrow();
   c.Cancel();

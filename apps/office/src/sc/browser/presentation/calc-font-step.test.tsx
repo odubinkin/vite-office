@@ -154,7 +154,7 @@ it("accepts the complete native FontHeight request and preserves its three-scrip
       /** Verifies the native request type boundary. @returns Admission result. */ () =>
         c.SetFontHeight("invalid" as unknown as Height),
     ).toThrow("SvxFontHeightItem");
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(c.SetFontHeight(item)).toBe(false);
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
@@ -268,7 +268,7 @@ it("applies only disjoint marked spans and restores them through actual attribut
       reopened.DisposeAttributes();
     }
     c.Cancel();
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(c.ChangeFontSize(true)).toBe(false);
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);

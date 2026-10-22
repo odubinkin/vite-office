@@ -3518,3 +3518,27 @@ by the constructor contract. Task `202610210335-7QBK8C` retains native zero and
 checks default/member/copy/move/assignment plus signed16 boundary values against
 original generated C++ over unchanged libraries. Do not normalize the default to
 -1 in browser code or replace the actual generated exception with a JS Error.
+
+## CALC-249: approximate Kahan cancellation can discard an integer remainder
+
+Status: suspicious numerical consequence; original portable native output reproduced.
+
+In the pinned `sc/inc/kahan.hxx`, `KahanSum::get()` returns zero when the delayed
+term and the compensated total have opposite signs and `rtl::math::approxEqual`
+considers them equal in magnitude. This test precedes adding the delayed term.
+The consumed non-SSE2 path consequently returns zero after adding
+`1e16`, `1`, `-1e16` to a default accumulator, although their exact mathematical
+sum is one. Reversing those three input terms produces the same result. This
+may be intentional cancellation policy; the intended numerical contract and
+upstream history have not been established.
+
+Evidence: `scripts/calc-kahan-native-probe.mjs --check` compiles the unchanged
+complete original header with verified full SAL dependencies. Cases zero and
+one in `apps/office/src/sc/inc/native-kahan-cases.json` contain both initialized
+input orders and bit-exact zero outputs from matching normal and ASan/UBSan
+runs. `apps/office/src/sc/inc/kahan.test.ts` compares the actual local owner
+against those original observations. The document aggregate test also retains
+`=SUM(1E16;1;-1E16)` as zero, following the native reverse argument traversal.
+The local accumulator preserves this source behavior; no numerical correction
+is authorized by this observation. SSE2 and long-double paths remain outside
+this native observation profile.

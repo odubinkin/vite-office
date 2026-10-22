@@ -27,6 +27,11 @@ it("preserves output replacement, literal quotes, both whitespace classes and ba
     /** Native unspecified grammar has no symbol service here. @returns Nothing. */ () =>
       compiler.CreateStringFromTokenArray(out),
   ).toThrow(/selected/);
+  const forced = new FormulaTokenArray();
+  forced.AddDouble(1);
+  forced.SetRecalcModeForced();
+  new OdffCompiler(forced).CreateStringFromTokenArray(out);
+  expect(text(out)).toBe("=1");
   const actual = new FormulaTokenArray(),
     configured = new OdffCompiler(actual);
   actual.AddString(new SharedString(unicode('a"b😀\0')));
@@ -43,7 +48,7 @@ it("preserves output replacement, literal quotes, both whitespace classes and ba
       missing.CreateStringFromTokenArray(out),
   ).toThrow(/not implemented/);
   const missingOp = new FormulaTokenArray();
-  missingOp.AddToken(new FormulaByteToken(OpCode.ocSum));
+  missingOp.AddToken(new FormulaByteToken(OpCode.ocIf));
   const opCompiler = new OdffCompiler(missingOp);
   expect(
     /** Missing function output rejects explicitly. @returns Nothing. */ () =>

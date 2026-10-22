@@ -74,7 +74,7 @@ it("retains failed input and admits successful input before the normal-grid comm
   try {
     c.Select(0, 0);
     c.Select(2, 2, true);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     expect(d.Execute(".uno:Deselect")).toMatchObject({ status: "executed", value: false });
     expect(c.viewData.GetMarkData().IsMarked()).toBe(true);
     c.Cancel();

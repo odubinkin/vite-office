@@ -1,4 +1,4 @@
-/** @fileoverview Shared FormulaCompiler scalar arithmetic RPN and ODFF source-token output subsets. Text scanning, functions, reference operators and implicit intersection remain unsupported. */
+/** @fileoverview Shared FormulaCompiler arithmetic/aggregate argument RPN and ODFF output subsets. Reference operators,other functions and implicit intersection remain unsupported. */
 import { OpCode } from "../../../inc/opcode";
 import {
   FormulaToken,
@@ -31,6 +31,12 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocPercentSign,
   OpCode.ocSpaces,
   OpCode.ocWhitespace,
+  OpCode.ocSep,
+  OpCode.ocMissing,
+  OpCode.ocSum,
+  OpCode.ocSumSQ,
+  OpCode.ocProduct,
+  OpCode.ocAverage,
 ]);
 
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
@@ -81,6 +87,7 @@ export class FormulaCompiler {
       if (token.GetType() === StackVar.svSingleRef) return this.CreateStringFromSingleRef(token);
       throw new Error("Formula output token family is not implemented");
     }
+    if (op === OpCode.ocMissing) return "";
     const symbol = RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF.get(op);
     if (symbol === undefined) throw new Error("Formula output opcode is not implemented");
     return symbol;
@@ -171,6 +178,7 @@ export class FormulaCompiler {
     let op = this.mpToken.GetOpCode();
     const needsOperand =
       this.meLastOp === OpCode.ocOpen ||
+      this.meLastOp === OpCode.ocSep ||
       (this.meLastOp >= OpCode.ocStartBinaryOperators &&
         this.meLastOp < OpCode.ocStopUnaryOperators);
     if (op === OpCode.ocPush && !needsOperand) this.SetError(FormulaError.OperatorExpected);
@@ -192,13 +200,44 @@ export class FormulaCompiler {
   private PutCode(token: FormulaToken): void {
     if (this.mpArr.GetCodeError() === FormulaError.NONE) this.mpCode.push(token);
   }
-  /** Emits scalar operands or nested expressions; function and reference-operator grammar is outside the supported token set. @returns Nothing. */
+  /** Emits scalar operands,missing arguments,nested expressions and the consumed native variable-argument function branch. Reference operators remain unsupported. @returns Nothing. */
   private Factor(): void {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
     if (op === OpCode.ocPush) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
+    } else if (op === OpCode.ocMissing) {
+      this.PutCode(this.mpToken);
+      this.NextToken();
+    } else if (
+      op === OpCode.ocSum ||
+      op === OpCode.ocSumSQ ||
+      op === OpCode.ocProduct ||
+      op === OpCode.ocAverage
+    ) {
+      const functionToken = this.mpToken as FormulaByteToken;
+      let terminal = this.NextToken(),
+        noParameters = false;
+      if (terminal === OpCode.ocOpen) {
+        terminal = this.NextToken();
+        if (terminal === OpCode.ocClose) noParameters = true;
+        else terminal = this.Expression();
+      } else this.SetError(FormulaError.PairExpected);
+      let parameterCount = 0;
+      if (!noParameters) {
+        parameterCount++;
+        while (terminal === OpCode.ocSep && this.mpArr.GetCodeError() === FormulaError.NONE) {
+          this.NextToken();
+          parameterCount++;
+          if (parameterCount > 255) this.SetError(FormulaError.CodeOverflow);
+          terminal = this.Expression();
+        }
+      }
+      if (terminal !== OpCode.ocClose) this.SetError(FormulaError.PairExpected);
+      else this.NextToken();
+      functionToken.SetByte(parameterCount);
+      this.PutCode(functionToken);
     } else if (op === OpCode.ocOpen) {
       this.NextToken();
       if (this.Expression() !== OpCode.ocClose) this.SetError(FormulaError.PairExpected);

@@ -1,9 +1,10 @@
-/** @fileoverview Numeric/local-reference RPN execution over actual tokens and cell views. Range/function/matrix and locale-conversion services remain unsupported. */
+/** @fileoverview Numeric/local-reference RPN execution and ordinary scalar aggregate branches from interpr4/interpr6 over actual tokens and cell views. Ranges,matrix and locale-conversion services remain unsupported. */
 import {
   FormulaToken,
   FormulaDoubleToken,
   FormulaErrorToken,
   FormulaStringToken,
+  FormulaByteToken,
   StackVar,
 } from "../../../../formula/inc/token";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -20,6 +21,7 @@ import type { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
 import type { ScTokenArray } from "../../../inc/tokenarray";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { KahanSum } from "../../../inc/kahan";
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
   readonly aPos: ScAddress;
@@ -68,8 +70,72 @@ export class ScInterpreter {
       const address = this.PopSingleRef();
       return this.GetCellValue(address, new ScRefCellValue(this.mrDoc, address));
     }
+    if (token.GetType() === StackVar.svError) {
+      this.PopError();
+      return 0;
+    }
     this.pStack.pop();
+    if (token.GetType() === StackVar.svMissing || token.GetType() === StackVar.svEmptyCell)
+      return 0;
+    if (token.GetType() === StackVar.svString)
+      throw new Error("Locale string-to-number conversion is not implemented");
     return (token as FormulaDoubleToken).GetDouble();
+  }
+  /** Drops the actual top token,assigning its error exactly as native PopError. @returns Nothing. */
+  private PopError(): void {
+    const token = this.pStack.pop();
+    if (!token) this.SetError(FormulaError.UnknownStackVariable);
+    else if (token.GetType() === StackVar.svError)
+      this.nGlobalError = (token as FormulaErrorToken).GetError();
+  }
+  /** Executes ordinary non-subtotal SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. Matrix,range and reference-list branches require their native owners. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
+  private IterateParameters(op: OpCode, parameterCount: number): void {
+    const result = new KahanSum(op === OpCode.ocProduct ? 1 : 0);
+    let count = 0;
+    while (parameterCount-- > 0) {
+      const token = this.pStack[this.pStack.length - 1];
+      if (!token) {
+        this.SetError(FormulaError.UnknownStackVariable);
+        break;
+      }
+      let value: number;
+      switch (token.GetType()) {
+        case StackVar.svString:
+          this.pStack.pop();
+          while (parameterCount-- > 0) this.PopError();
+          this.SetError(FormulaError.NoValue);
+          continue;
+        case StackVar.svDouble:
+        case StackVar.svMissing:
+        case StackVar.svEmptyCell:
+          value = this.GetDouble();
+          break;
+        case StackVar.svSingleRef: {
+          const address = this.PopSingleRef();
+          if (this.nGlobalError === FormulaError.NoRef) {
+            this.PushDouble(0);
+            return;
+          }
+          const cell = new ScRefCellValue(this.mrDoc, address);
+          if (!cell.hasNumeric()) continue;
+          value = this.GetCellValue(address, cell);
+          if (this.nGlobalError !== FormulaError.NONE) continue;
+          break;
+        }
+        case StackVar.svError:
+          this.PopError();
+          continue;
+        default:
+          throw new Error("Aggregate range/matrix/reference-list operands are not implemented");
+      }
+      count++;
+      if (op === OpCode.ocProduct) result.multiply_assign(value);
+      else result.add(op === OpCode.ocSumSQ ? value * value : value);
+    }
+    let value = result.get();
+    if (op === OpCode.ocAverage) value = div(value, count);
+    else if (op === OpCode.ocProduct && count === 0) value = 0;
+    this.PushDouble(value);
   }
   /** Resolves actual initialized reference data through its original owner. @returns Absolute address. */
   private PopSingleRef(): ScAddress {
@@ -179,11 +245,16 @@ export class ScInterpreter {
       if (op === OpCode.ocPush) {
         if (token.GetType() === StackVar.svDouble)
           this.PushDouble((token as FormulaDoubleToken).GetDouble());
-        else if (token.GetType() === StackVar.svSingleRef) this.PushWithoutError(token);
-        else if (token.GetType() === StackVar.svError)
-          this.SetError((token as FormulaErrorToken).GetError());
-        else throw new Error("Nonnumeric interpreter operands are not implemented");
-      } else if (op === OpCode.ocAdd || op === OpCode.ocSub)
+        else this.PushWithoutError(token);
+      } else if (op === OpCode.ocMissing) this.PushWithoutError(token);
+      else if (
+        op === OpCode.ocSum ||
+        op === OpCode.ocSumSQ ||
+        op === OpCode.ocProduct ||
+        op === OpCode.ocAverage
+      )
+        this.IterateParameters(op, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocAdd || op === OpCode.ocSub)
         this.CalculateAddSub(op === OpCode.ocSub);
       else if (op === OpCode.ocNegSub) this.PushDouble(-this.GetDouble());
       else if (op === OpCode.ocPercentSign) this.PushDouble(div(this.GetDouble(), 100));
@@ -209,6 +280,8 @@ export class ScInterpreter {
     }
     if (this.pStack.length !== 1)
       this.SetError(this.pStack.length > 1 ? FormulaError.OperatorExpected : FormulaError.NoCode);
+    else if ((this.pStack[0] as FormulaToken).GetType() === StackVar.svError)
+      this.nGlobalError = (this.pStack[0] as FormulaErrorToken).GetError();
     this.xResult =
       this.nGlobalError !== FormulaError.NONE
         ? new FormulaErrorToken(this.nGlobalError)

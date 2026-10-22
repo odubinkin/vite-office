@@ -1,6 +1,10 @@
-/** @fileoverview Numeric/local-A1 native and ODFF compilation. Names, cross-sheet/range references, functions, string literals and localized input formatting remain unsupported. */
+/** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet/range references,other functions and localized input formatting remain unsupported. */
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
-import { FormulaByteToken, FormulaSpaceToken } from "../../../../formula/inc/token";
+import {
+  FormulaByteToken,
+  FormulaSpaceToken,
+  FormulaMissingToken,
+} from "../../../../formula/inc/token";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
@@ -148,6 +152,53 @@ export class ScCompiler extends FormulaCompiler {
         index++;
         continue;
       }
+      if (ch === '"') {
+        index++;
+        let value = "",
+          closed = false;
+        while (index < source.length) {
+          const character = source[index++] as string;
+          if (character === '"') {
+            if (source[index] === '"') index++;
+            else {
+              closed = true;
+              break;
+            }
+          }
+          if (value.length < 1022) value += character;
+          else this.SetError(FormulaError.StringOverflow);
+        }
+        if (!closed) throw new Error("Unterminated string/name fallback is not implemented");
+        const native = unicode(value);
+        try {
+          const shared = this.rDoc.GetSharedStringPool().intern(native);
+          try {
+            if (!array.AddString(shared)) {
+              this.SetError(FormulaError.CodeOverflow);
+              break;
+            }
+          } finally {
+            shared.dispose();
+          }
+        } finally {
+          native.dispose();
+        }
+        last = OpCode.ocPush;
+        continue;
+      }
+      const identifier = /^[A-Za-z_][A-Za-z0-9_.]*/.exec(source.slice(index));
+      if (identifier && /^[ \t\r\n]*\(/.test(source.slice(index + identifier[0].length))) {
+        const functionCode = symbols[identifier[0].toUpperCase()];
+        if (functionCode === undefined)
+          throw new Error("Formula function/name lookup is not implemented");
+        if (!array.AddOpCode(functionCode)) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+        index += identifier[0].length;
+        last = functionCode;
+        continue;
+      }
       const odf =
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
@@ -198,10 +249,21 @@ export class ScCompiler extends FormulaCompiler {
       if (
         op === OpCode.ocSub &&
         (last === OpCode.ocOpen ||
+          last === OpCode.ocSep ||
           last === OpCode.ocNegSub ||
           (last >= OpCode.ocStartBinaryOperators && last < OpCode.ocStopBinaryOperators))
       )
         op = OpCode.ocNegSub;
+      if (
+        (last !== OpCode.ocOpen || op !== OpCode.ocClose) &&
+        (last === OpCode.ocOpen || last === OpCode.ocSep) &&
+        (op === OpCode.ocSep || op === OpCode.ocClose)
+      ) {
+        if (!array.AddToken(new FormulaMissingToken())) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+      }
       if (op === OpCode.ocOpen) brackets++;
       if (op === OpCode.ocClose) {
         if (brackets === 0) this.SetError(FormulaError.PairExpected);

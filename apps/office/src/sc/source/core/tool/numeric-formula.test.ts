@@ -45,7 +45,7 @@ it("retains native token classes, limits, copy identity and compiler boundaries"
   expect(array.AddOpCode(OpCode.ocClose)?.GetType()).toBe(StackVar.svSep);
   expect(
     /** Rejects absent opcode families. @returns Token or null. */ () =>
-      array.AddOpCode(OpCode.ocSum),
+      array.AddOpCode(OpCode.ocIf),
   ).toThrow(/not implemented/);
   const compiler = new ScCompiler(doc, position, copy, grammar);
   expect(compiler.aPos).not.toBe(position);
@@ -107,15 +107,18 @@ it("executes actual RPN result/error/stack boundaries", /** No private-field acc
   expect(run([new FormulaDoubleToken(Infinity)]).GetError()).toBe(FormulaError.IllegalFPOperation);
   expect(
     /** Rejects missing opcode execution. @returns Interpreter. */ () =>
-      run([new FormulaByteToken(OpCode.ocSum)]),
+      run([new FormulaByteToken(OpCode.ocIf)]),
   ).toThrow(/not implemented/);
   const stringArray = new ScTokenArray(doc);
   stringArray.AddString(new SharedString());
-  stringArray.CreateNewRPNArrayFromData([new FormulaStringToken(new SharedString())], 1);
+  stringArray.CreateNewRPNArrayFromData(
+    [new FormulaStringToken(new SharedString()), new FormulaByteToken(OpCode.ocNegSub)],
+    2,
+  );
   expect(
     /** Rejects absent string conversion. @returns Type. */ () =>
       new ScInterpreter(null, doc, doc.GetNonThreadedContext(), pos, stringArray).Interpret(),
-  ).toThrow(/Nonnumeric/);
+  ).toThrow(/Locale/);
   ok.SetError(FormulaError.NONE);
   expect(ok.GetError()).toBe(FormulaError.NONE);
 });

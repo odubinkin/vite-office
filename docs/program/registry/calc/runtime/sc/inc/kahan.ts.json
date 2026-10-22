@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/kahan.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "numeric-formula-editing",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/kahan.ts",
+        "apps/office/src/sc/inc/kahan.test.ts",
+        "apps/office/src/sc/inc/native-kahan-cases.json",
+        "scripts/calc-kahan-native-probe.mjs"
+      ],
+      "justification": "Block72 consumes the original portable non-SSE2 KahanSum default/value/error/copy constructors,sumNeumaierNormal,add overloads,get and product-assignment. Unchanged full original kahan.hxx plus verified SAL dependencies produce2050 normal/ASan identical observation rows;2048 sequences are compared bit-for-bit. No SSE2,long-double,unconsumed operator or platform-wide parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "KahanSum"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/kahan.hxx",
+      "upstreamSymbols": [
+        "KahanSum"
+      ]
+    }
+  }
+}

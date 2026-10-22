@@ -120,7 +120,7 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   expect(c.Address()).toBe(pos);
   expect(doc.GetTableCount()).toBe(1);
   c.Cancel();
-  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=UNPORTED(A1)");
   expect(c.Commit()).toBe(false);
   c.Cancel();
   const refused = vi.spyOn(doc, "InsertTab").mockReturnValueOnce(false);

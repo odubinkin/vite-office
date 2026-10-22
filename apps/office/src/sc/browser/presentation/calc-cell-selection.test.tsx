@@ -48,7 +48,7 @@ it("executes real axis slots without altering cells,cursor,history or selected s
     c.shell.GetUndoManager().GetUndoActionCount(),
   ]).toEqual([generation, dirty, undo]);
   for (const action of [".uno:SelectRow", ".uno:SelectColumn"]) {
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const current = c.viewData.GetMarkData().GetMarkArea();
     const before = new ScRange(
       current.aStart.Col(),

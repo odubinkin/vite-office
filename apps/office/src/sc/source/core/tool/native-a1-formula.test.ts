@@ -63,7 +63,7 @@ it("rejects unimplemented grammars and semantic reference families without silen
       /** Unavailable convention has no implementation. @returns Compiler. */ () =>
         new ScCompiler(doc, pos, grammar),
     ).toThrow(/not implemented/);
-  for (const source of ["=[.A1]", "=A1:B2", "=Sheet2.A1", "=SUM(A1)", "=XFE1", "=A1048577"])
+  for (const source of ["=[.A1]", "=A1:B2", "=Sheet2.A1", "=UNPORTED(A1)", "=XFE1", "=A1048577"])
     expect(
       /** Unsupported reference families reject. @returns Tokens. */ () =>
         new ScCompiler(doc, pos, G.GRAM_NATIVE).CompileString(unicode(source)),

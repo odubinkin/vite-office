@@ -149,7 +149,7 @@ it("retains native missing-recent defaults,failed input admission and grouped fu
     expect(c.SetColor("font")).toBe(true);
     expect(c.GetColor("font")?.GetValue().equals(COL_AUTO)).toBe(true);
     expect(c.SetColor("font")).toBe(true);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     expect(c.SetColor("background", new SvxColorItem(new Color(0x123456), 10186))).toBe(false);
     c.Cancel();
     for (const args of [null, {}, { color: "red" }])

@@ -119,7 +119,7 @@ it("routes actual typed and dialog row dimensions and declines invalid uncommitt
       required(s.sheetWorkflows.metricDialogs.GetSnapshot()).id,
     );
     await complete(cancelled);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     await complete(d.Execute(".uno:RowHeight"));
     expect(s.sheetWorkflows.metricDialogs.GetSnapshot()).toBeUndefined();
     c.Cancel();

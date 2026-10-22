@@ -147,7 +147,7 @@ for (const rows of [true, false]) {
       marks = c.viewData.GetMarkData();
     try {
       const original = new ScMarkData(marks);
-      c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+      c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
       expect(d.Execute(command)).toMatchObject({ status: "executed", value: false });
       expect(marks.GetMarkArea()).toEqual(original.GetMarkArea());
       c.Cancel();

@@ -44,7 +44,7 @@ it("uses source slots for native wrap,group extension and deselection without do
   d.Execute(".uno:JumpToNextTable");
   expect(c.shell.GetDocument().GetValue(new ScAddress(4, 7, 0))).toBe(42);
   expect(c.viewData.GetTabNumber()).toBe(1);
-  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
   d.Execute(".uno:JumpToNextTable");
   expect(c.viewData.GetTabNumber()).toBe(1);
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);

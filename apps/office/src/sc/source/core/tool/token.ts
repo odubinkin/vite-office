@@ -377,6 +377,10 @@ const operators = new Set<OpCode>([
   OpCode.ocNegSub,
   OpCode.ocPercentSign,
   OpCode.ocStop,
+  OpCode.ocSum,
+  OpCode.ocSumSQ,
+  OpCode.ocProduct,
+  OpCode.ocAverage,
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
 export class ScTokenArray extends FormulaTokenArray {
@@ -430,7 +434,7 @@ export class ScTokenArray extends FormulaTokenArray {
   }
   /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
   AddOpCode(code: OpCode): FormulaToken | null {
-    if (code === OpCode.ocOpen || code === OpCode.ocClose)
+    if (code === OpCode.ocOpen || code === OpCode.ocClose || code === OpCode.ocSep)
       return this.Add(new FormulaToken(StackVar.svSep, code));
     if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
     return this.Add(new FormulaByteToken(code));

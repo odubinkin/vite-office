@@ -102,7 +102,7 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   expect(name).toHaveValue("AA1000");
   fireEvent.keyDown(name, { key: "a" });
   fireEvent.focus(line);
-  fireEvent.change(line, { target: { value: "=SUM(A1)" } });
+  fireEvent.change(line, { target: { value: "=UNPORTED(A1)" } });
   fireEvent.keyDown(line, { key: "Enter" });
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
   expect(screen.getByRole("alert")).toBeVisible();

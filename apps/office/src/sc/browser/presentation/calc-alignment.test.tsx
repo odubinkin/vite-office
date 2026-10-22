@@ -114,7 +114,7 @@ it("preserves native slots,mixed/default state,no-op explicit items and failed-i
     expect(c.GetAlignment("horizontal")).toBe(H.Standard);
     c.Undo();
     expect(c.GetAlignment("horizontal")).toBe(H.Left);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(c.SetAlignment("vertical", V.Center, true)).toBe(false);
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);

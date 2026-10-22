@@ -142,7 +142,7 @@ it("routes typed width commands,blocked input,duplicate dialogs and cancellation
     d = session.frame.GetDispatcher();
   await completed(d.ExecuteRequest(new SfxRequest(26290, [new SfxUInt16Item(26290, 2540)])));
   expect(c.shell.GetDocument().GetColWidth(0, 0)).toBe(1440);
-  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
   c.ShowColumns(false);
   expect(c.shell.GetDocument().ColHidden(0, 0)).toBe(false);
   await completed(d.Execute(".uno:ColumnWidth"));

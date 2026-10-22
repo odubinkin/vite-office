@@ -237,7 +237,7 @@ it("validates explicit host arguments and commits input before native character 
   c.Select(0, 0, true);
   expect(c.GetCharacterState("underline")).toBeUndefined();
   expect(c.SetCharacterFormat("underline")).toBe(true);
-  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
   const count = c.shell.GetUndoManager().GetUndoActionCount();
   expect(c.SetCharacterFormat("bold")).toBe(false);
   expect(c.SetUnderlineStyle(FontLineStyle.LINESTYLE_DOUBLE)).toBe(false);
