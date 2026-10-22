@@ -1,10 +1,11 @@
 ---
 id: "202610221928-3VG8R0"
 title: "Remove browser ZIP storage and unblock Writer Calc document I/O"
-status: "DOING"
+result_summary: "verified-202610221928-3VG8R0"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-22T20:00:17.175Z"
+  updated_at: "2026-10-22T20:01:02.282Z"
   updated_by: "CODER"
   note: "verified-202610221928-3VG8R0"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610221928-3VG8R0/evidence.json"
   findings:
     - "Worker filtering, bounded graph capture/adoption, metadata-only listings and compact empty-cell ODF spans address the observed blocking paths. User and portable 5000-row browser probes pass without page errors."
-commit: null
+commit:
+  hash: "18f0999cd3503975d04751b047b39b28d1bfa67f"
+  message: "✅ 3VG8R0 task: record document I/O verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved XML browser storage and responsive Writer/Calc I/O changes in the main vite-office checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610221928-3VG8R0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610221928-3VG8R0"
+  -
+    type: "verify"
+    at: "2026-10-22T20:01:02.282Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610221928-3VG8R0"
+  -
+    type: "status"
+    at: "2026-10-22T20:01:02.552Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610221928-3VG8R0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-22T20:00:17.313Z"
+doc_updated_at: "2026-10-22T20:01:02.552Z"
 doc_updated_by: "CODER"
 description: "Approved by user: store browser documents as uncompressed XML plus resources without ZIP compatibility; move heavy I/O off the UI thread and verify large ODS responsiveness. Work only in vite-office; the user-provided Downloads ODS is an authorized read-only fixture."
 sections:
@@ -159,9 +178,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-22T20:01:02.282Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610221928-3VG8R0
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T20:00:17.313Z, excerpt_hash=sha256:36c66d3f13885f16158f407684a118fa888532500120a63227dcabe23e15b281
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610221928-3VG8R0/blueprint/resolved-snapshot.json
+    - old_digest: 6fc5f7cd2294fdc708876213c74db0bdbf35d322328bef5d7dc33d77fd72d6aa
+    - current_digest: 6fc5f7cd2294fdc708876213c74db0bdbf35d322328bef5d7dc33d77fd72d6aa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221928-3VG8R0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610221928-3VG8R0 --result verified-202610221928-3VG8R0 --commit 18f0999cd3503975d04751b047b39b28d1bfa67f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's implementation and task closure commits; remove only new browser storage records if required. No compatibility or migration for older ZIP records."
   Findings: "Root causes: Calc called synchronous native XML import/export directly on the UI thread; Writer performed synchronous graph capture/adoption around its worker; browser listings and title checks cloned complete bodies; Calc export expanded identical allocated empty columns instead of coalescing repeat spans. Fixes: raw XML/resource v3 storage with atomic metadata-only listings; production Calc Dedicated Worker for native XML/layout/export computation; bounded main-thread graph transfer in both suites; repeated-empty-column coalescing and style identity caching. The user ODS exports a 4,104,300-byte content.xml instead of exceeding the 64 MiB limit. Scope stayed within approved storage/filter/shell/workflow/test/docs areas in vite-office. No network or publication was used. Earlier ZIP records are deliberately not read or migrated; external ODT/ODS remain standard packages. Initial checks caught stale synchronous worker-test assumptions, v2 fixture expectations, dependency layering and documentation gaps; these were repaired in scope. The first portable browser probe included Playwright base64-buffer file injection, producing a 269 ms harness delay; switching the fixture to a real filesystem file kept the same 200 ms threshold and passed at 29.8 ms for import. No test threshold or production guard was weakened. Existing supported ODF feature limits remain; the full all-app coverage suite was outside the focused verification contract."
+extensions:
+  implementation_commit:
+    hash: "c8783f68b93c3d4368b8c1d80712823b65614164"
+    message: "⚡ 3VG8R0 code: persist browser XML and keep document operations responsive"
 id_source: "generated"
 ---
 ## Summary
@@ -261,6 +314,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610221928-3VG8R0 --result verified-202610221928-3VG8R0 --commit c8783f68b93c3d4368b8c1d80712823b65614164
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-22T20:01:02.282Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610221928-3VG8R0
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T20:00:17.313Z, excerpt_hash=sha256:36c66d3f13885f16158f407684a118fa888532500120a63227dcabe23e15b281
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610221928-3VG8R0/blueprint/resolved-snapshot.json
+- old_digest: 6fc5f7cd2294fdc708876213c74db0bdbf35d322328bef5d7dc33d77fd72d6aa
+- current_digest: 6fc5f7cd2294fdc708876213c74db0bdbf35d322328bef5d7dc33d77fd72d6aa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221928-3VG8R0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610221928-3VG8R0 --result verified-202610221928-3VG8R0 --commit 18f0999cd3503975d04751b047b39b28d1bfa67f
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
