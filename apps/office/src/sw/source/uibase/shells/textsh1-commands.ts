@@ -1,4 +1,6 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
+import { createWriterEscapementCommands } from "./txtattr";
+
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
@@ -74,6 +76,7 @@ export function createWriterTextCommandRegistry(
     return state;
   }
   return createWriterInterface([
+    ...createWriterEscapementCommands(target),
     {
       capabilityId: "CAP-0125",
       id: WRITER_COMMAND_IDS.paragraphMargins,

@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
@@ -97,6 +99,22 @@ export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(
+      new SvxEscapementItem(RES_CHRATR_ESCAPEMENT),
+      /** Restores every stored native offset and height at the browser boundary. @param value - Complete persisted pair. @returns Actual item. */
+      (value) => {
+        if (
+          typeof value !== "object" ||
+          Array.isArray(value) ||
+          !("offset" in value) ||
+          !("height" in value) ||
+          typeof value.offset !== "number" ||
+          typeof value.height !== "number"
+        )
+          throw new Error("Invalid escapement item state.");
+        return new SvxEscapementItem(value.offset, value.height, RES_CHRATR_ESCAPEMENT);
+      },
+    );
     this.RegisterDefaultItem(
       new SvxProtectItem(127),
       /** Restores the existing browser protection snapshot. @param value - Stored flags. @returns Native item. */

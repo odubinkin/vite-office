@@ -1,4 +1,6 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
+import { EscapementText } from "./EscapementText";
+
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { StrikeoutText } from "../../../vcl/browser/strikeout-text";
@@ -51,6 +53,11 @@ export function WriterEditableParagraph({
       : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
   const markerFont = paragraph.listMarkerFont;
+  let markerContent: React.ReactNode = listMarker;
+  if (markerFont?.strikeout !== undefined)
+    markerContent = <StrikeoutText value={markerFont.strikeout}>{markerContent}</StrikeoutText>;
+  if (markerFont?.escapement !== undefined)
+    markerContent = <EscapementText value={markerFont.escapement}>{markerContent}</EscapementText>;
   const markerStartPt =
     listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;
   const contentStartPt =
@@ -208,11 +215,7 @@ export function WriterEditableParagraph({
               />
             ) : null}
             <span ref={labelElement} data-writer-list-label>
-              {markerFont?.strikeout === undefined ? (
-                listMarker
-              ) : (
-                <StrikeoutText value={markerFont.strikeout}>{listMarker}</StrikeoutText>
-              )}
+              {markerContent}
             </span>
           </span>
         )}
@@ -329,6 +332,8 @@ export function WriterTextPortionProjection({
   let content: React.ReactNode = run.text;
   if (run.attributes.strikeout !== undefined)
     content = <StrikeoutText value={run.attributes.strikeout}>{content}</StrikeoutText>;
+  if (run.attributes.escapement !== undefined)
+    content = <EscapementText value={run.attributes.escapement}>{content}</EscapementText>;
   if (run.attributes.highlight !== undefined)
     content = (
       <span
@@ -378,5 +383,5 @@ export function WriterTextPortionProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterPortionProjectionKey(paragraphId: string, run: WriterTextPortion): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

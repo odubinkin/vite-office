@@ -20,6 +20,7 @@ const measureRatios = {
 export const Converter = {
   convertColor,
   convertBool,
+  convertPercent,
   /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
   convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
     output[0] = 0;
@@ -162,5 +163,38 @@ function convertColor(output: [number] | [string], input: string | number): bool
   let color = convertToHex(input.charCodeAt(1), input.charCodeAt(2));
   color = (color << 8) | convertToHex(input.charCodeAt(3), input.charCodeAt(4));
   (output as [number])[0] = (color << 8) | convertToHex(input.charCodeAt(5), input.charCodeAt(6));
+  return true;
+}
+
+/** Native UTF16 percent parse/buffer-append overload. @param output - Retained numeric output. @param input - Original XML view. @returns Source success. */
+function convertPercent(output: [number], input: string): boolean;
+/** Native percent buffer append. @param output - Existing buffer. @param input - Native signed32 value. @returns Nothing. */
+function convertPercent(output: [string], input: number): void;
+/** Original lcl_parseMeasure percent target, including absent digits and percent-tail admission. @param output - Scalar or buffer. @param input - Selected source value. @returns Parsing success or nothing. */
+function convertPercent(output: [number] | [string], input: string | number): boolean | void {
+  if (typeof input === "number") {
+    (output as [string])[0] += `${input}%`;
+    return;
+  }
+  let pos = 0,
+    amount = 0;
+  while (pos < input.length && input.charCodeAt(pos) <= 32) pos++;
+  const negative = input[pos] === "-";
+  if (negative) pos++;
+  while (pos < input.length && input.charCodeAt(pos) >= 48 && input.charCodeAt(pos) <= 57)
+    amount = amount * 10 + input.charCodeAt(pos++) - 48;
+  if (input[pos] === ".") {
+    pos++;
+    let divisor = 1;
+    while (pos < input.length && input.charCodeAt(pos) >= 48 && input.charCodeAt(pos) <= 57) {
+      divisor *= 10;
+      amount += (input.charCodeAt(pos++) - 48) / divisor;
+    }
+  }
+  while (pos < input.length && input.charCodeAt(pos) <= 32) pos++;
+  if (pos < input.length && input[pos] !== "%") return false;
+  amount += 0.5;
+  if (negative) amount = -amount;
+  (output as [number])[0] = Math.max(-2147483648, Math.min(2147483647, Math.trunc(amount))) || 0;
   return true;
 }

@@ -10,6 +10,7 @@ import type { SwTextNode } from "./ndtxt";
 import { createSwFormatAutoFormat, projectWriterCharacterAttributes } from "./txatbase";
 import {
   RES_PARATR_ADJUST,
+  RES_CHRATR_ESCAPEMENT,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -72,7 +73,12 @@ it("preserves complete enums and explicit NONE at the existing character-value b
   const defaults = new SfxItemSet(pool, [[WHICH, WHICH]]);
   expect(projectWriterCharacterAttributes(defaults).strikeout).toBeUndefined();
   const alternatePool = new SfxItemPool();
-  for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE])
+  for (const which of [
+    RES_CHRATR_WEIGHT,
+    RES_CHRATR_POSTURE,
+    RES_CHRATR_UNDERLINE,
+    RES_CHRATR_ESCAPEMENT,
+  ])
     alternatePool.RegisterDefaultItem(pool.GetPoolDefaultItem(which));
   alternatePool.RegisterDefaultItem(new SvxCrossedOutItem(S.STRIKEOUT_SINGLE, WHICH));
   expect(

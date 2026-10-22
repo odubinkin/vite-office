@@ -6,18 +6,20 @@ import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvxEscapement } from "../../inc/svxenum";
 import { MID_ESC, MID_ESC_HEIGHT, MID_AUTO_ESC } from "../../inc/memberids";
 
-/** Original ordinary superscript offset. */
-export const DFLT_ESC_SUPER = 33;
-/** Original ordinary subscript offset. */
-export const DFLT_ESC_SUB = -8;
-/** Original script proportional height. */
-export const DFLT_ESC_PROP = 58;
-/** Original largest manual offset. */
-export const MAX_ESC_POS = 13999;
-/** Original automatic superscript marker. */
-export const DFLT_ESC_AUTO_SUPER = MAX_ESC_POS + 1;
-/** Original automatic subscript marker. */
-export const DFLT_ESC_AUTO_SUB = -DFLT_ESC_AUTO_SUPER;
+import {
+  DFLT_ESC_PROP,
+  MAX_ESC_POS,
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_AUTO_SUB,
+} from "../../inc/escapementitem.constants";
+export {
+  DFLT_ESC_SUPER,
+  DFLT_ESC_SUB,
+  DFLT_ESC_PROP,
+  MAX_ESC_POS,
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_AUTO_SUB,
+} from "../../inc/escapementitem.constants";
 
 /** Original signed16 escapement and unsigned8 proportional-height value. */
 export class SvxEscapementItem extends SfxPoolItem {

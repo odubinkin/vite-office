@@ -1,6 +1,6 @@
 /** @fileoverview Consumed Character panel font/effects/color controls from sidebartextpanel.ui over actual Sfx bindings. */
 import { useRef } from "react";
-import { Bold, Italic, Underline, Strikethrough } from "lucide-react";
+import { Bold, Italic, Underline, Strikethrough, Superscript, Subscript } from "lucide-react";
 import { SidebarPanel } from "../../../../sfx2/browser/presentation/SidebarPanel";
 import { CommandSelectControl } from "../../../../framework/browser/presentation/CommandSelectControl";
 import { CommandButton } from "../../../../framework/browser/presentation/CommandToolbar";
@@ -81,6 +81,26 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 key={commandId as string}
                 commandId={commandId as string}
                 icon={icon as typeof Bold}
+                commandSource={commandSource}
+                resolveArguments={resolveArguments}
+                getCommandResource={getCommandResource}
+              />
+            ),
+          )}
+        </div>
+        <div className="flex gap-1" role="group" aria-label="Character Position">
+          {(
+            [
+              [".uno:SuperScript", Superscript],
+              [".uno:SubScript", Subscript],
+            ] as const
+          ).map(
+            /** Binds the original separate position toolbar in source order. @param entry - Native slot and icon. @returns Command. */
+            ([commandId, icon]) => (
+              <CommandButton
+                key={commandId}
+                commandId={commandId}
+                icon={icon}
                 commandSource={commandSource}
                 resolveArguments={resolveArguments}
                 getCommandResource={getCommandResource}

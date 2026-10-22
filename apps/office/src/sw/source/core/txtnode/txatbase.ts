@@ -1,6 +1,9 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
@@ -63,6 +66,8 @@ export interface WriterCharacterAttributes {
   readonly underline: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
   readonly strikeout?: FontStrikeout;
+  /** Complete native offset and relative height. */
+  readonly escapement?: Readonly<{ offset: number; height: number }>;
 }
 
 /** Creates a canonical character item set from a browser/filter projection at a named boundary. @param pool - Writer attribute pool. @param attributes - Boundary values. @returns Effective character items. */
@@ -451,6 +456,18 @@ export function createSwFormatAutoFormat(
     attributes.strikeout !== (inherited.strikeout ?? FontStrikeout.STRIKEOUT_NONE)
   )
     items.Put(new SvxCrossedOutItem(attributes.strikeout, RES_CHRATR_CROSSEDOUT));
+  if (
+    attributes.escapement !== undefined &&
+    (attributes.escapement.offset !== (inherited.escapement?.offset ?? 0) ||
+      attributes.escapement.height !== (inherited.escapement?.height ?? 100))
+  )
+    items.Put(
+      new SvxEscapementItem(
+        attributes.escapement.offset,
+        attributes.escapement.height,
+        RES_CHRATR_ESCAPEMENT,
+      ),
+    );
   if (attributes.underline !== inherited.underline)
     items.Put(
       new SvxUnderlineItem(
@@ -482,6 +499,10 @@ export function projectWriterCharacterAttributes(
   const highlight =
     items.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, true);
+  const escapement = get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
+  const authoredEscapement =
+    items.GetItemIfSet(RES_CHRATR_ESCAPEMENT, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_ESCAPEMENT, true);
   const strikeout = get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem;
   const authoredStrikeout =
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
@@ -491,6 +512,11 @@ export function projectWriterCharacterAttributes(
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
+    ...(authoredEscapement !== undefined ||
+    escapement.GetEsc() !== 0 ||
+    escapement.GetProportionalHeight() !== 100
+      ? { escapement: { offset: escapement.GetEsc(), height: escapement.GetProportionalHeight() } }
+      : {}),
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),

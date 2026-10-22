@@ -1,4 +1,7 @@
 /** @fileoverview Resolves represented NewNumberPortion font values from original paragraph and numbering owners. */
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+
 import { FontStrikeout, FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   FontLineStyle,
@@ -32,6 +35,7 @@ export interface SwNumberPortionFont {
   readonly posture: FontItalic;
   readonly underline: FontLineStyle;
   readonly strikeout?: FontStrikeout;
+  readonly escapement?: Readonly<{ offset: number; height: number }>;
   readonly color: string;
 }
 
@@ -69,6 +73,16 @@ export function resolveSwNumberPortionFont(
       : (node.GetAttr(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetLineStyle(),
     ...((node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetBoolValue()
       ? { strikeout: (node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetStrikeout() }
+      : {}),
+    ...((node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc() !== 0
+      ? {
+          escapement: Object.freeze({
+            offset: (node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc(),
+            height: (
+              node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem
+            ).GetProportionalHeight(),
+          }),
+        }
       : {}),
     color: (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue(),
   });

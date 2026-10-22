@@ -73,6 +73,8 @@
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "toggleStatusBar": ".uno:StatusBarVisible",
+    "superscript": ".uno:SuperScript",
+    "subscript": ".uno:SubScript",
     "strikeout": ".uno:Strikeout",
     "underline": ".uno:Underline",
     "underlineSingle": ".uno:UnderlineSingle",
@@ -142,6 +144,8 @@
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:SuperScript" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:SubScript" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Strikeout" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:UnderlineSingle" },
@@ -1246,6 +1250,38 @@
       "shortcuts": [],
       "slotId": 20583
     },
+    ".uno:SuperScript": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Superscript",
+      "label": "Superscript",
+      "iconName": "lc_superscript.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+P", "Meta+Shift+P"],
+      "slotId": 20411
+    },
+    ".uno:SubScript": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Subscript",
+      "label": "Subscript",
+      "iconName": "lc_subscript.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+NUMBERSIGN", "Meta+NUMBERSIGN", "Ctrl+Shift+B", "Meta+Shift+B"],
+      "slotId": 20412
+    },
     ".uno:Strikeout": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1836,6 +1872,22 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SuperScript",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SubScript",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ]
     },
     {
@@ -3521,22 +3573,6 @@
       "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:Overline",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:SuperScript",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:SubScript",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6168,22 +6204,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:SuperScript",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:SubScript",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:Shadowed",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -7687,7 +7707,10 @@
               { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
               { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
               { "commandUrl": ".uno:UnderlineSingle", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Text"
@@ -7930,6 +7953,9 @@
       { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
       { "commandUrl": ".uno:CharBackColor", "kind": "command", "visible": true },
@@ -9209,18 +9235,6 @@
         "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:Overline"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SuperScript"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SubScript"
       },
       {
         "classification": "X",
@@ -11143,18 +11157,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:Overline"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SuperScript"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SubScript"
       },
       {
         "classification": "X",

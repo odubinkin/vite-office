@@ -2,6 +2,8 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+
 import {
   encodeTextLineItem,
   decodeTextLineItem,
@@ -119,6 +121,12 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
+  if (item instanceof SvxEscapementItem)
+    return {
+      which: item.Which(),
+      value: { offset: item.GetEsc(), height: item.GetProportionalHeight() },
+    };
+
   const value =
     item instanceof SvxAdjustItem
       ? encodeAdjustment(item)

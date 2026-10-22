@@ -1,4 +1,6 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
+
 import {
   XMLCrossedOutStylePropHdl,
   XMLCrossedOutTypePropHdl,
@@ -22,6 +24,8 @@ import type { OdfCharacterProperties } from "./txtparae.types";
 /** Stateless original handlers and actual owning core unit. */
 const underlineColor = new XMLColorTransparentPropHdl("font-color"),
   underlineHasColor = new XMLIsTransparentPropHdl("font-color", false);
+const escapement = new XMLEscapementPropHdl(),
+  escapementHeight = new XMLEscapementHeightPropHdl();
 const weight = new XMLFontWeightPropHdl(),
   posture = new XMLPosturePropHdl(),
   converter = new SvXMLUnitConverter("twip");
@@ -76,6 +80,7 @@ export const textCharacterPropertyTokens = [
     ([token]) => token,
   ),
   T.STYLE_TEXT_UNDERLINE_COLOR,
+  T.STYLE_TEXT_POSITION,
 ];
 /** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
 export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
@@ -88,6 +93,19 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       if (scalar === undefined) continue;
       value.insert([scalar], type);
       if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+    }
+    if (properties.escapement !== undefined || properties.escapementHeight !== undefined) {
+      output[0] = "";
+      if (properties.escapement !== undefined) {
+        value.insert([properties.escapement], "sal_Int16");
+        escapement.exportXML(output, value, converter);
+      }
+      if (properties.escapementHeight !== undefined) {
+        value.insert([(properties.escapementHeight << 24) >> 24], "sal_Int8");
+        escapementHeight.exportXML(output, value, converter);
+      }
+      // At least one native signed scalar was inserted above; both original handlers necessarily emit numeric text.
+      result += ` style:text-position="${output[0]}"`;
     }
     if (properties.strikeout !== undefined) {
       value.insert([properties.strikeout], "sal_Int16");
@@ -140,6 +158,17 @@ export function importTextCharacterProperties(
           result[key] = scalar[0];
         }
         continue;
+      }
+      if (token === T.STYLE_TEXT_POSITION) {
+        const scalar: [number] = [0];
+        if (escapement.importXML(text, value, converter)) {
+          value.extract(scalar, "sal_Int16");
+          result.escapement = scalar[0];
+        }
+        if (escapementHeight.importXML(text, value, converter)) {
+          value.extract(scalar, "sal_Int8");
+          result.escapementHeight = scalar[0];
+        }
       }
       const strikeout = strikeoutProperties.find(
         /** Resolves one chained strikeout property. @param entry - Mapping. @returns Match. */

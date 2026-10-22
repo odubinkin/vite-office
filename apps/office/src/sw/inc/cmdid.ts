@@ -22,3 +22,8 @@ export const SID_ATTR_TABLE_ALIGNMENT = 21760 as const;
 export const SID_ATTR_TABLE_LEFT_SPACE = 21761 as const;
 /** Native table sidebar right spacing slot. */
 export const SID_ATTR_TABLE_RIGHT_SPACE = 21762 as const;
+
+/** Native FN_FORMAT +11, explicit SfxBoolItem request. */
+export const FN_SET_SUPER_SCRIPT = 20411 as const;
+/** Native FN_FORMAT +12, explicit SfxBoolItem request. */
+export const FN_SET_SUB_SCRIPT = 20412 as const;

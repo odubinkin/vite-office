@@ -40,7 +40,7 @@
     "local": {
       "implementation": [
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
           "marker": "RES_CHRATR_POSTURE"
         }
       ],
@@ -89,7 +89,7 @@
     "closure": {
       "contract": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
           "marker": "RES_CHRATR_POSTURE"
         },
         "method": "api-invariant",
@@ -102,7 +102,7 @@
       },
       "ownership": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
           "marker": "RES_CHRATR_POSTURE"
         },
         "method": "api-invariant",

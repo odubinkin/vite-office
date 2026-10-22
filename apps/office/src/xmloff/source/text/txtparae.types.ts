@@ -35,6 +35,9 @@ export interface OdfCharacterProperties {
   /** Native UNO CharUnderline and its independent color properties. */
   /** Native UNO CharStrikeout, merged from the four original ODF properties. */
   readonly strikeout?: number;
+  /** Native CharEscapement and CharEscapementHeight. */
+  readonly escapement?: number;
+  readonly escapementHeight?: number;
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;
