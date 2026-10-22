@@ -4,7 +4,7 @@ title: "Connect formula ranges to native area recalculation and aggregate execut
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -24,6 +24,24 @@ verification:
   updated_by: "CODER"
   note: "642 Calc and64 related scenarios pass;142 Calc and2 changed shared owners raw100 S/B/F/L;2 Chromium/Worker cases,4097 native rows/138 original objects,15 gates,production build and actual UI history/ODS reopen pass. Immutable source-pinned audit passes."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T20:20:28.072Z"
+  updated_by: "EVALUATOR"
+  note: "Native local range compilation,recalculation and aggregate execution satisfy the approved bounded slice."
+  evaluated_sha: "6135d82cdadf7a04fbbc2a3c922899b341337194"
+  blueprint_digest: "3df2c4aeaec7c24a9c1dcdaa37d7b3f1fc933ed904972f5836f815566d5481bc"
+  evidence_refs:
+    - ".agentplane/tasks/202610221740-98YRBY/README.md"
+    - ".agentplane/tasks/202610221740-98YRBY/quality/20261022-202028072-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610221740-98YRBY/quality/20261022-202028072-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610221740-98YRBY/quality/20261022-202028072-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610221740-98YRBY/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610221740-98YRBY/evidence/acceptance.json"
+    - ".agentplane/tasks/202610221740-98YRBY/evidence/audit.mjs"
+    - ".agentplane/tasks/202610221740-98YRBY/evidence/raw-results.json.gz"
+  findings:
+    - "642 Calc/64 related scenarios,raw100 on142 Calc and2 shared owners;all15 gates,build,2 browser/Worker checks and actual save/reopen pass."
 commit:
   hash: "6135d82cdadf7a04fbbc2a3c922899b341337194"
   message: "🧩 98YRBY calc: execute native range formulas and area recalculation"
