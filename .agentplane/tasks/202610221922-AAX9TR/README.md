@@ -1,10 +1,11 @@
 ---
 id: "202610221922-AAX9TR"
 title: "Complete native Writer column width dialog and table sizing command path"
-status: "DOING"
+result_summary: "Connected native column width dialog and document-bound sizing with verified state history and ODT behavior"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Source GetMaxColWidth retains immediate-neighbor MINLAY arithmetic and single-column GetRight semantics. Draft resets on visible column changes and Apply reinitializes live separators before uint16 ingress."
     - "Actual frame tests cover cursor/history and ODT, cancellation, CM/INCH, first/middle/last widths and document replacement during submit propagation. Browser controls match source grid order and alignment with ordinary menu/ODT flows at1280/390."
     - "Fresh100 coverage for all three sizing owners; current Writer view combines fresh changed counters only with exact-source historical counters. No threshold reductions, no parity/default promotion and no save/open/recovery changes."
-commit: null
+commit:
+  hash: "dc4a6c2d480a738eee852927870280277364346d"
+  message: "🧩 AAX9TR quality: record column sizing verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: complete the authorized native column sizing dialog and actual frame command path using pinned local sources and related tests."
+  -
+    author: "CODER"
+    body: "Verified: native Column Width dialog and sizing document guards pass related tests, strict coverage, desktop/mobile module-unit flows and ODT history checks; active goal continues."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Column sizing verified on implementation14a7991a522b:477 related tests; final24 strict owner tests100;4 CM/INCH desktop/mobile browser/ODT flows pass. Full current4-owner audit100 via exact unchanged-source provenance only. Required scoped/static checks pass; full cadence remains task2 of10."
+  -
+    type: "status"
+    at: "2026-10-22T19:37:16.607Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Column Width dialog and sizing document guards pass related tests, strict coverage, desktop/mobile module-unit flows and ODT history checks; active goal continues."
 doc_version: 3
-doc_updated_at: "2026-10-22T19:36:50.175Z"
+doc_updated_at: "2026-10-22T19:37:16.608Z"
 doc_updated_by: "CODER"
 description: "Connect the existing table width manager to the original SetColumnWidth dialog command; port missing native maximum-width and draft contracts, source controls and module units, and verify real frame selection/history/ODT behavior."
 sections:
@@ -124,6 +137,10 @@ sections:
     - Observation: Focused coverage initially exposed an untested existing last-column separator adjustment; browser integer-inch expectations omitted the configured two decimal digits. Visual review found the numeric and metric fields did not share one grid column.
       Impact: These checks identified missing regression evidence and a source-layout discrepancy within the approved sizing function.
       Resolution: Added actual first/last edge-column Apply/Undo/Redo scenarios, retained native two-digit browser formatting, and placed both controls in the source-shaped common grid with linked labels and unique React IDs. Final24 owner/UI tests achieve fresh100 across90 statements,36 branch arms,21 functions and77 lines; final4 desktop/mobile CM/INCH browser scenarios pass including aligned bounding boxes and ODT. Related39 files /477 tests pass. Exact-source incremental audit adds only unchanged prior Writer view counters and reaches100 over4 current owners:312 statements,191 branch arms,97 functions,288 lines. Raw focused owner-wide failures remain recorded; thresholds are unchanged.
+extensions:
+  implementation_commit:
+    hash: "14a7991a522b47185d19665e418a12c351406a54"
+    message: "🧩 AAX9TR feat: connect native column width dialog and sizing owners"
 id_source: "generated"
 ---
 ## Summary
