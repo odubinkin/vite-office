@@ -1,10 +1,11 @@
 ---
 id: "202610221940-TV1H69"
 title: "Complete native Writer row height balancing and layout publication"
-status: "DOING"
+result_summary: "Connected native row balancing and completed row geometry with verified natural sizing and ODT history flows"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reviewed source selection, registered frame iteration, native integer arithmetic, actual area publication, read-only state query, two-pass shell action completion and source command placements. Tests preserve original format/frame/cursor owners, source two-action undo, natural measurement and actual ODT."
     - "Final45 tests/16 Chromium cases cover latest source; prior1401/60 broader evidence is explicitly version-scoped. Raw partial owner coverage failures remain visible; deterministic exact-span incremental audit reaches100% in all four metrics without changing thresholds or transferring changed-span hits."
-commit: null
+commit:
+  hash: "f4a381cf9ad625b6720e6846474564befa2f23d5"
+  message: "🧪 TV1H69 verify: record native row balancing coverage and browser evidence"
 comments:
   -
     author: "CODER"
     body: "Start: port native row balancing through actual frame geometry and shell layout completion, fix natural device measurement, and connect source sizing controls with related evidence."
+  -
+    author: "CODER"
+    body: "Verified: native row balancing connects actual frame publication, completed shell actions, natural row measurement and original UI commands; focused tests, browser ODT flows and strict incremental audit pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified d3539d3199ec: final45 related tests and16 Chromium scenarios; prior broad1401 tests/60 scenarios labeled before last completion fix. Nine-owner strict exact-span coverage100%; required static/resource/build/provenance checks pass. Evidence output/playwright/writer-row-balancing; task3 after full checkpoint, no full repeat."
+  -
+    type: "status"
+    at: "2026-10-22T20:27:47.704Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native row balancing connects actual frame publication, completed shell actions, natural row measurement and original UI commands; focused tests, browser ODT flows and strict incremental audit pass."
 doc_version: 3
-doc_updated_at: "2026-10-22T20:27:13.888Z"
+doc_updated_at: "2026-10-22T20:27:47.708Z"
 doc_updated_by: "CODER"
 description: "Port native BalanceRowHeight through actual registered row frame areas, synchronous shell layout completion and source UI commands; correct natural row device measurement and remove layout mutation from browser paint."
 sections:
@@ -131,6 +144,10 @@ sections:
     - Observation: Raw focused and broad owner-wide coverage gates remain below100 because they intentionally omit unchanged unrelated callbacks. No raw failure was hidden. Final strict audit reuses only prior counters for byte-identical complete spans at corresponding diff locations; ambiguous maps abort, fresh changed counters are mandatory. Source behavior preserves signed32 total and unsigned64 division, and two optimal undo actions (suspected issues WRITER050/051).
       Impact: Verification establishes the bounded represented flat-row sizing contract; it does not establish full native geometry, generic action/history scheduling, nested rows, RTL/vertical layout, or protected/deleted-table parity. Registry statuses and defaults are not promoted.
       Resolution: Retain raw logs and deterministic audit script/hash evidence under task output. Final focused suite and16 Chromium scenarios run after the last source change. Broader1401/60 runs precede that small action-completion correction and are labeled accordingly. No full suite until ten-task checkpoint; continue active goal after task closure.
+extensions:
+  implementation_commit:
+    hash: "d3539d3199ec33001b9e0e06a155d21954fe7e71"
+    message: "🧩 TV1H69 feat: connect native row balancing and frame layout completion"
 id_source: "generated"
 ---
 ## Summary
