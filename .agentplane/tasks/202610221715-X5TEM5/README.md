@@ -4,7 +4,7 @@ title: "Preserve native sparse ODS export runs for large table browser saving"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -23,11 +23,16 @@ verification:
   updated_by: "CODER"
   note: "610Calc/135owners100;56related cases/exporter100;14gates0;original5000-row default-limit reproduction and bounded output;all10000scalars/styles/geometry plus actual browser storage/reopen pass;portable raw audit passed."
   attempts: 0
-commit: null
+commit:
+  hash: "db96ec6cc422e210cd831493fc6604a2e3d04bea"
+  message: "🧩 X5TEM5 task: preserve native repeated empty-cell runs in large ODS saves"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce the deferred large-table export-size failure and repair native repeated empty-cell writing with real primary save/reopen checks."
+  -
+    author: "CODER"
+    body: "Start: pin the verified sparse export implementation and source-matched raw coverage for final quality review."
 events:
   -
     type: "status"
@@ -42,8 +47,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "610Calc/135owners100;56related cases/exporter100;14gates0;original5000-row default-limit reproduction and bounded output;all10000scalars/styles/geometry plus actual browser storage/reopen pass;portable raw audit passed."
+  -
+    type: "status"
+    at: "2026-10-22T17:30:35.378Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: pin the verified sparse export implementation and source-matched raw coverage for final quality review."
 doc_version: 3
-doc_updated_at: "2026-10-22T17:30:07.430Z"
+doc_updated_at: "2026-10-22T17:30:35.378Z"
 doc_updated_by: "CODER"
 description: "Block71 after explicit goal resumption: reproduce5000-row import/autosave export-size failure with independently authored ODF and allocated/styled empty columns;port native equal-format empty-cell run coalescing from ScXMLExport::WriteRowContent. Preserve cell values/styles/geometry and actual primary save/ODS reopen. No limit increases or alternate serialization. Scope up to14 source/test/registry/doc files plus task evidence. Verify changed owners and Calc100;related tests only between full checkpoints70and80."
 sections:
