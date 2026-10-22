@@ -32,6 +32,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/range-matrix.test.ts",
           "marker": "matches original range matrix, column cell state and range-token value stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+          "marker": "CreateCellGroup"
         }
       ],
       "upstream": [
@@ -46,6 +50,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/types.cxx",
           "marker": "RangeMatrix::RangeMatrix()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
+          "marker": "GroupCalcState"
         }
       ]
     },
@@ -73,7 +81,8 @@
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
       "Original six matrix UInt8 tag values/aliases, used by the real matrix value owner.",
       "Original matrix result references, numeric clone/alias overloads, signed dimensions and result mutations, using ordinary JS references.",
-      "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations."
+      "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations.",
+      "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/types.hxx",

@@ -1,5 +1,9 @@
 /** @fileoverview Scalar/local-reference formula cells with native single-cell subscriptions and logical tracking. Groups, iterative cycles and localized formatting remain unsupported. */
-import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
+import {
+  SvtListener,
+  type SvtDyingHint,
+  type SvtQueryBase,
+} from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScSingleRefToken, ScDoubleRefToken } from "../../../inc/token";
 import { StackVar } from "../../../../formula/inc/token";
@@ -15,25 +19,32 @@ import { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScFormulaCellGroup } from "./formulacellgroup";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+import { OpCode } from "../../../../formula/inc/opcode";
+import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
+import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
 
 /** Formula content is stored as actual code/RPN tokens with the existing result owner. */
 export class ScFormulaCell extends SvtListener<SfxHint> {
+  private mxGroup: ScFormulaCellGroup | null = null;
   private pPrevious: ScFormulaCell | null = null;
   private pNext: ScFormulaCell | null = null;
   private pPreviousTrack: ScFormulaCell | null = null;
   private pNextTrack: ScFormulaCell | null = null;
   private bRunning = false;
-  private readonly pCode: ScTokenArray;
+  private pCode: ScTokenArray;
   private readonly aResult: ScFormulaResult;
   private readonly rDocument: ScDocument;
   private readonly eTempGrammar: Grammar;
   private bDirty = true;
+  private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
   readonly aPos: ScAddress;
   /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
   constructor(
     rDocument: ScDocument,
     position: ScAddress,
-    formula: OUStringConstReference | ScTokenArray,
+    formula: OUStringConstReference | ScTokenArray | ScFormulaCellGroup,
     grammar: Grammar,
   );
   /** Original copy-constructor local-reference slice used by Clone;foreign pools,named/external/3D services remain unsupported. @param source - Copied cell. @param rDocument - Original document. @param position - Original position. @returns Cell. */
@@ -42,7 +53,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   constructor(
     documentOrCell: ScDocument | ScFormulaCell,
     positionOrDocument: ScAddress | ScDocument,
-    formulaOrPosition: OUStringConstReference | ScTokenArray | ScAddress,
+    formulaOrPosition: OUStringConstReference | ScTokenArray | ScFormulaCellGroup | ScAddress,
     grammar?: Grammar,
   ) {
     super();
@@ -55,6 +66,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.rDocument = doc;
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
+      this.nFormatType = source.nFormatType;
       this.pCode = source.pCode.Clone();
       this.aResult = new ScFormulaResult(source.aResult);
       this.bDirty = source.bDirty;
@@ -64,13 +76,25 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       // Same-pool copies do not enter foreign-pool/external/name conversion.
       // Source clipboard/undo and clone-flag branches are added with their actual mode owners separately.
       this.pCode.AdjustReferenceOnCopy(this.aPos);
-      if (compile)
-        new ScCompiler(doc, this.aPos, this.pCode, this.eTempGrammar).CompileTokenArray();
+      if (compile) {
+        const compiler = new ScCompiler(doc, this.aPos, this.pCode, this.eTempGrammar);
+        compiler.CompileTokenArray();
+        if (this.pCode.GetCodeError() === FormulaError.NONE)
+          this.nFormatType = compiler.GetNumFormatType();
+      }
     } else {
       this.rDocument = documentOrCell;
       this.aPos = new ScAddress(positionOrDocument as ScAddress);
       this.eTempGrammar = grammar as Grammar;
       this.aResult = new ScFormulaResult();
+      if (formulaOrPosition instanceof ScFormulaCellGroup) {
+        if (formulaOrPosition.mbSubTotal)
+          throw new Error("Subtotal-cell document registration is not implemented");
+        this.mxGroup = formulaOrPosition;
+        this.nFormatType = formulaOrPosition.mnFormatType;
+        this.pCode = formulaOrPosition.mpCode ?? new ScTokenArray(this.rDocument);
+        return;
+      }
       const formula = formulaOrPosition as OUStringConstReference | ScTokenArray;
       const compiler = new ScCompiler(
         this.rDocument,
@@ -79,7 +103,26 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         this.eTempGrammar,
       );
       this.pCode = formula instanceof ScTokenArray ? formula : compiler.CompileString(formula);
-      compiler.CompileTokenArray();
+      if (formula instanceof ScTokenArray) {
+        this.pCode.Finalize();
+        if (
+          this.pCode.GetLen() &&
+          this.pCode.GetCodeError() === FormulaError.NONE &&
+          !this.pCode.GetCodeLen()
+        ) {
+          compiler.CompileTokenArray();
+          this.nFormatType = compiler.GetNumFormatType();
+        } else if (
+          this.pCode.HasOpCodeRPN(OpCode.ocSubTotal) ||
+          this.pCode.HasOpCodeRPN(OpCode.ocAggregate)
+        )
+          throw new Error("Subtotal-cell document registration is not implemented");
+        this.pCode.GenHash();
+      } else {
+        compiler.CompileTokenArray();
+        if (this.pCode.GetCodeError() === FormulaError.NONE)
+          this.nFormatType = compiler.GetNumFormatType();
+      }
     }
   }
   /** Original default and relocated Clone delegate to the native copy constructor without starting listeners. @param position - Optional original relocated-clone argument. @returns Owned formula copy. */
@@ -103,6 +146,68 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Borrows the actual formula token owner. @returns Code. */
   GetCode(): ScTokenArray {
     return this.pCode;
+  }
+  /** Original hash query delegates to the actual borrowed code owner. @returns Native64-bit hash. */
+  GetHash(): bigint {
+    return this.pCode.GetHash();
+  }
+  /** Original native format metadata is separate from displayed cell formatting. @returns Format flags. */
+  GetFormatType(): SvNumFormatType {
+    return this.nFormatType;
+  }
+  /** Original borrowed owning document. @returns Actual document. */
+  GetDocument(): ScDocument {
+    return this.rDocument;
+  }
+  /** Original group creation moves the token-array value into the group and redirects the borrowed cell code pointer. @param length - Group length. @param invariant - Original caller's invariance result. @returns Actual group or null when already shared. */
+  CreateCellGroup(length: number, invariant: boolean): ScFormulaCellGroup | null {
+    if (this.mxGroup) return null;
+    this.mxGroup = new ScFormulaCellGroup();
+    this.mxGroup.mpTopCell = this;
+    this.mxGroup.mbInvariant = invariant;
+    this.mxGroup.mnLength = length;
+    this.mxGroup.mpCode = ScTokenArray.move(this.pCode);
+    this.pCode = this.mxGroup.mpCode;
+    return this.mxGroup;
+  }
+  /** Original sharing/unsharing redirects real code ownership;leaving a group deep-copies its shared token array. @param group - New group or null. @returns Nothing. */
+  SetCellGroup(group: ScFormulaCellGroup | null): void {
+    if (!group) {
+      if (this.mxGroup) this.pCode = (this.mxGroup.mpCode as ScTokenArray).Clone();
+      this.mxGroup = group;
+      return;
+    }
+    this.mxGroup = group;
+    this.pCode = group.mpCode as ScTokenArray;
+    group.mnWeight = 0;
+  }
+  /** Original borrowed group reference. @returns Group or null. */
+  GetCellGroup(): ScFormulaCellGroup | null {
+    return this.mxGroup;
+  }
+  /** Original group membership query. @returns Shared. */
+  IsShared(): boolean {
+    return this.mxGroup !== null;
+  }
+  /** Original top-cell identity query. @returns Shared top. */
+  IsSharedTop(): boolean {
+    return this.mxGroup !== null && this.mxGroup.mpTopCell === this;
+  }
+  /** Original group top row assumes an initialized top for a live shared group. @returns Row or minus one for a singleton. */
+  GetSharedTopRow(): number {
+    return this.mxGroup ? (this.mxGroup.mpTopCell as ScFormulaCell).aPos.Row() : -1;
+  }
+  /** Original logical group length query. @returns Length or zero. */
+  GetSharedLength(): number {
+    return this.mxGroup?.mnLength ?? 0;
+  }
+  /** Original borrowed shared code query. @returns Code or null. */
+  GetSharedCode(): ScTokenArray | null {
+    return this.mxGroup?.mpCode ?? null;
+  }
+  /** Original pointer synchronization after the group replaces its code value. @returns Nothing. */
+  SyncSharedCode(): void {
+    if (this.mxGroup) this.pCode = this.mxGroup.mpCode as ScTokenArray;
   }
   /** Reports lazy calculation state. @returns Dirty. */
   GetDirty(): boolean {
@@ -157,6 +262,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   }
   /** Binds actual single/double-reference RPN listeners. Other reference families are not represented. @param doc - Document. @returns Nothing. */
   StartListeningTo(doc: ScDocument): void {
+    this.mxGroup?.endAllGroupListening(doc);
     for (const token of this.pCode.RPNTokens())
       if (token.GetType() === StackVar.svSingleRef) {
         const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
@@ -168,6 +274,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   }
   /** Ends the actual source subscriptions and allows empty broadcaster cleanup. @param doc - Document. @returns Nothing. */
   EndListeningTo(doc: ScDocument): void {
+    this.mxGroup?.endAllGroupListening(doc);
     for (const token of this.pCode.RPNTokens())
       if (token.GetType() === StackVar.svSingleRef) {
         const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
@@ -237,7 +344,19 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     this.EndListeningTo(this.rDocument);
     this.rDocument.RemoveFromFormulaTrack(this);
     this.rDocument.RemoveFromFormulaTree(this);
+    if (this.mxGroup?.mpTopCell === this) this.mxGroup.mpTopCell = null;
+    this.mxGroup = null;
     super.Dispose();
+  }
+  /** Original shared-formula position query adds only actual group members. @param query - Native result owner. @returns Nothing. */
+  override Query(query: SvtQueryBase): void {
+    switch (query.getId()) {
+      case SC_LISTENER_QUERY_FORMULA_GROUP_POS:
+        if (this.IsShared()) (query as RefQueryFormulaGroup).add(this.aPos);
+        break;
+      default:
+        break;
+    }
   }
   /** Reads native numeric/error classification after lazy interpretation. @returns Is numeric or error. */
   IsValue(): boolean {

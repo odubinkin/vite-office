@@ -1,4 +1,4 @@
-/** @fileoverview Native ordinary area-slot dependency ownership,logarithmic sheet geometry and bulk/deferred erasure from bcaslot.cxx. Group/inspection services remain unported;JS owns physical allocation. */
+/** @fileoverview Native ordinary/group area-slot ownership,logarithmic sheet geometry and segmented bulk/deferred erasure from bcaslot.cxx;inspection services remain unported and JS owns physical allocation. */
 import { ScAddress, ScRange, BCA_BRDCST_ALWAYS, BCA_LISTEN_ALWAYS } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { ScHint, ScAreaChangedHint } from "../../../inc/brdcst";
@@ -8,6 +8,8 @@ import type { SfxHint } from "../../../../svl/inc/hint";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
+import { ColumnSpanSet } from "../../../inc/columnspanset";
+import { BulkDataHint } from "../../../inc/bulkdatahint";
 /** Original area identity and logical slot membership count;GC replaces native physical deletion. */
 export class ScBroadcastArea {
   private pUpdateChainNext: ScBroadcastArea | null = null;
@@ -15,6 +17,15 @@ export class ScBroadcastArea {
   private readonly aBroadcaster = new SvtBroadcaster<SfxHint>();
   private readonly aRange: ScRange;
   private nRefCount = 0;
+  private mbGroupListening = false;
+  /** Original area group discriminator is part of native area identity. @returns Group mode. */
+  IsGroupListening(): boolean {
+    return this.mbGroupListening;
+  }
+  /** Original flag assignment before area insertion. @param group - Group mode. @returns Nothing. */
+  SetGroupListening(group: boolean): void {
+    this.mbGroupListening = group;
+  }
   /** Copies the native area value. @param range - Area. @returns Area owner. */
   constructor(range: ScRange) {
     this.aRange = new ScRange(range);
@@ -67,9 +78,9 @@ interface ScBroadcastAreaEntry {
 }
 /** Mutable native area pointer reference shared across traversed slots. */
 type AreaReference = [ScBroadcastArea | null];
-/** Native area-value key for ordinary non-grouped listening;Map replaces hash storage only. @param range - Range. @returns Value key. */
-function areaKey(range: ScRange): string {
-  return range.GetVars().join(",");
+/** Native range/group area-value key;Map replaces hash storage only. @param range - Range. @param group - Group discriminator. @returns Value key. */
+function areaKey(range: ScRange, group: boolean): string {
+  return range.GetVars().join(",") + ":" + Number(group);
 }
 /** Native collection of area identities for one logarithmic sheet slot. */
 export class ScBroadcastAreaSlot {
@@ -88,18 +99,18 @@ export class ScBroadcastAreaSlot {
     listener: SvtListener<SfxHint>,
     area: AreaReference,
   ): boolean {
-    if (group) throw new Error("Formula group area listening is not implemented");
     if (this.rDoc.GetHardRecalcState() === ScDocument.HardRecalcState.ETERNAL) return false;
     if (area[0]) {
       this.InsertListeningArea(area[0]);
       return false;
     }
-    const key = areaKey(range),
+    const key = areaKey(range, group),
       found = this.aBroadcastAreaTbl.get(key);
     let created = false;
     if (found) area[0] = found.mpArea;
     else {
       const owner = new ScBroadcastArea(range);
+      owner.SetGroupListening(group);
       this.aBroadcastAreaTbl.set(key, { mpArea: owner, mbErasure: false });
       owner.IncRef();
       area[0] = owner;
@@ -111,7 +122,7 @@ export class ScBroadcastAreaSlot {
   /** Inserts an already shared native area into a subsequent slot. @param area - Actual area. @returns Nothing. */
   InsertListeningArea(area: ScBroadcastArea): void {
     if (this.rDoc.GetHardRecalcState() === ScDocument.HardRecalcState.ETERNAL) return;
-    const key = areaKey(area.GetRange());
+    const key = areaKey(area.GetRange(), area.IsGroupListening());
     if (!this.aBroadcastAreaTbl.has(key)) {
       this.aBroadcastAreaTbl.set(key, { mpArea: area, mbErasure: false });
       area.IncRef();
@@ -124,8 +135,7 @@ export class ScBroadcastAreaSlot {
     listener: SvtListener<SfxHint>,
     area: AreaReference,
   ): void {
-    if (group) throw new Error("Formula group area listening is not implemented");
-    const entry = this.aBroadcastAreaTbl.get(areaKey(range));
+    const entry = this.aBroadcastAreaTbl.get(areaKey(range, group));
     if (!area[0]) {
       if (!entry || entry.mbErasure) return;
       area[0] = entry.mpArea;
@@ -147,8 +157,13 @@ export class ScBroadcastAreaSlot {
       this.mbHasErasedArea = true;
       this.pBASM.PushAreaToBeErased(this, entry);
     } else {
-      this.aBroadcastAreaTbl.delete(areaKey(entry.mpArea.GetRange()));
-      if (!entry.mpArea.DecRef()) entry.mpArea.GetBroadcaster().Dispose();
+      this.aBroadcastAreaTbl.delete(
+        areaKey(entry.mpArea.GetRange(), entry.mpArea.IsGroupListening()),
+      );
+      if (!entry.mpArea.DecRef()) {
+        if (this.pBASM.IsInBulkBroadcast()) this.pBASM.RemoveBulkGroupArea(entry.mpArea);
+        entry.mpArea.GetBroadcaster().Dispose();
+      }
     }
   }
   /** Reports the native reentrant iteration flag. @returns Flag. */
@@ -167,7 +182,15 @@ export class ScBroadcastAreaSlot {
       if (this.mbHasErasedArea && entry.mbErasure) continue;
       const area = entry.mpArea;
       if (!area.GetRange().Intersects(range)) continue;
-      if (this.pBASM.IsInBulkBroadcast() && !this.pBASM.InsertBulkArea(area)) continue;
+      if (area.IsGroupListening()) {
+        if (this.pBASM.IsInBulkBroadcast()) {
+          this.pBASM.InsertBulkGroupArea(
+            area,
+            input instanceof ScHint ? range : area.GetRange().Intersection(range),
+          );
+          continue;
+        }
+      } else if (this.pBASM.IsInBulkBroadcast() && !this.pBASM.InsertBulkArea(area)) continue;
       if (input instanceof ScHint) area.GetBroadcaster().Broadcast(input);
       else {
         const intersection = area.GetRange().Intersection(range),
@@ -233,7 +256,7 @@ export class ScBroadcastAreaSlot {
   }
   /** Original matching-area removal from remaining slots before a hash-key change. @param area - Actual identity. @returns Nothing. */
   UpdateRemoveArea(area: ScBroadcastArea): void {
-    const key = areaKey(area.GetRange()),
+    const key = areaKey(area.GetRange(), area.IsGroupListening()),
       entry = this.aBroadcastAreaTbl.get(key);
     if (!entry) return;
     if (entry.mpArea === area) {
@@ -243,7 +266,7 @@ export class ScBroadcastAreaSlot {
   }
   /** Original reinsertion merges actual reciprocal listeners when another area now has the same key. @param area - Updated area. @returns Nothing. */
   UpdateInsert(area: ScBroadcastArea): void {
-    const key = areaKey(area.GetRange()),
+    const key = areaKey(area.GetRange(), area.IsGroupListening()),
       entry = this.aBroadcastAreaTbl.get(key);
     if (!entry) {
       this.aBroadcastAreaTbl.set(key, { mpArea: area, mbErasure: false });
@@ -283,13 +306,14 @@ class TableSlots {
     this.slots.length = 0;
   }
 }
-/** Original per-document slot machine for ordinary area broadcasts and reference updates;group services remain an explicit boundary. */
+/** Original per-document slot machine for ordinary and grouped area broadcasts,segmented bulk changes and reference updates. */
 export class ScBroadcastAreaSlotMachine {
   private readonly maSlotDistribution: ScSlotData[] = [];
   private mnBcaSlotsCol = 0;
   private mnBcaSlots = 0;
   private readonly aTableSlotsMap = new Map<number, TableSlots>();
   private readonly aBulkBroadcastAreas = new Set<ScBroadcastArea>();
+  private readonly m_BulkGroupAreas = new Map<ScBroadcastArea, ColumnSpanSet>();
   private maAreasToBeErased: [ScBroadcastAreaSlot, ScBroadcastAreaEntry][] = [];
   private pUpdateChain: ScBroadcastArea | null = null;
   private pEOUpdateChain: ScBroadcastArea | null = null;
@@ -369,7 +393,6 @@ export class ScBroadcastAreaSlotMachine {
   }
   /** Starts native shared area identity in the first slot and inserts it into subsequent slots/sheets. @param range - Area. @param group - Group mode. @param listener - Listener. @returns Nothing. */
   StartListeningArea(range: ScRange, group: boolean, listener: SvtListener<SfxHint>): void {
-    if (group) throw new Error("Formula group area listening is not implemented");
     if (range.equals(BCA_LISTEN_ALWAYS())) {
       this.pBCAlways ??= new SvtBroadcaster<SfxHint>();
       listener.StartListening(this.pBCAlways);
@@ -391,7 +414,6 @@ export class ScBroadcastAreaSlotMachine {
   }
   /** Ends native shared subscriptions symmetrically across existing sheets. @param range - Area. @param group - Group mode. @param listener - Listener. @returns Nothing. */
   EndListeningArea(range: ScRange, group: boolean, listener: SvtListener<SfxHint>): void {
-    if (group) throw new Error("Formula group area listening is not implemented");
     if (range.equals(BCA_LISTEN_ALWAYS())) {
       if (this.pBCAlways) {
         listener.EndListening(this.pBCAlways);
@@ -442,7 +464,7 @@ export class ScBroadcastAreaSlotMachine {
   SetEOUpdateChain(area: ScBroadcastArea | null): void {
     this.pEOUpdateChain = area;
   }
-  /** Original ordinary reference update:remove,chain,detach remaining slots,shift tables,update ranges,reinsert and unchain. Group services remain unavailable. @param mode - Update mode. @param range - Update region. @param dx - Column shift. @param dy - Row shift. @param dz - Sheet shift. @returns Nothing. */
+  /** Original reference update:remove,chain,detach remaining slots,shift tables,update ranges,reinsert and unchain. @param mode - Update mode. @param range - Update region. @param dx - Column shift. @param dy - Row shift. @param dz - Sheet shift. @returns Nothing. */
   UpdateBroadcastAreas(
     mode: UpdateRefMode,
     range: ScRange,
@@ -535,7 +557,9 @@ export class ScBroadcastAreaSlotMachine {
     if (this.nInBulkBroadcast <= 0) return;
     if (--this.nInBulkBroadcast === 0) {
       this.aBulkBroadcastAreas.clear();
+      const broadcasted = this.BulkBroadcastGroupAreas();
       if (this.rDoc.IsTrackFormulasPending()) this.rDoc.FinalTrackFormulas(id);
+      else if (broadcasted) this.rDoc.TrackFormulas(id);
     }
   }
   /** Reads actual bulk nesting. @returns Bulk mode. */
@@ -551,6 +575,42 @@ export class ScBroadcastAreaSlotMachine {
   /** Removes native bulk membership for area removal services. @param area - Area. @returns Removed count. */
   RemoveBulkArea(area: ScBroadcastArea): number {
     return Number(this.aBulkBroadcastAreas.delete(area));
+  }
+  /** Original per-area bulk spans retain actual inclusive changed ranges instead of flattening notifications. @param area - Actual area identity. @param range - Changed range. @returns Nothing. */
+  InsertBulkGroupArea(area: ScBroadcastArea, range: ScRange): void {
+    let spans = this.m_BulkGroupAreas.get(area);
+    if (!spans) {
+      spans = new ColumnSpanSet();
+      this.m_BulkGroupAreas.set(area, spans);
+    }
+    spans.set(this.rDoc, range, true);
+  }
+  /** Original sorted pointer-key bulk dispatch;existing allocation identity binds native pointer order under GC. @returns Whether a live broadcaster was notified. */
+  BulkBroadcastGroupAreas(): boolean {
+    if (!this.m_BulkGroupAreas.size) return false;
+    const hint = new BulkDataHint(this.rDoc);
+    let broadcasted = false;
+    const entries = Array.from(this.m_BulkGroupAreas).sort(
+      /** Native pointer ordering uses existing identity rather than a memory manager. @param left - First entry. @param right - Second entry. @returns Order. */ (
+        left,
+        right,
+      ) =>
+        left[0].GetBroadcaster().allocationIdentity - right[0].GetBroadcaster().allocationIdentity,
+    );
+    for (const [area, spans] of entries) {
+      const broadcaster = area.GetBroadcaster();
+      if (broadcaster.HasListeners()) {
+        hint.setSpans(spans);
+        broadcaster.Broadcast(hint);
+        broadcasted = true;
+      }
+    }
+    this.m_BulkGroupAreas.clear();
+    return broadcasted;
+  }
+  /** Original area erasure removes pending grouped spans at the native erase point. @param area - Actual area. @returns Nothing. */
+  RemoveBulkGroupArea(area: ScBroadcastArea): void {
+    this.m_BulkGroupAreas.delete(area);
   }
   /** Defers original set-entry erasure while a slot is iterating. @param slot - Slot. @param entry - Entry. @returns Nothing. */
   PushAreaToBeErased(slot: ScBroadcastAreaSlot, entry: ScBroadcastAreaEntry): void {

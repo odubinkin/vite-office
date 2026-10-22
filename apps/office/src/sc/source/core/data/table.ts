@@ -588,6 +588,12 @@ export class ScTable {
   GetColumnData(col: number): ScColumnData {
     return col < this.aCol.length ? (this.aCol[col] as ScColumn) : this.aDefaultColData;
   }
+  /** Original table2.cxx const FetchColumn overload returns only allocated valid columns without creating storage. The mutable allocation overload is not consumed here. @param col - Requested column. @returns Actual column or null. */
+  FetchColumn(col: number): ScColumn | null {
+    return this.rDocument.ValidCol(col) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn)
+      : null;
+  }
   /** Releases canonical pattern ownership on sheet removal. @returns Nothing. */
   DisposeAttributes(): void {
     for (const col of this.aCol) col.DisposeAttributes();

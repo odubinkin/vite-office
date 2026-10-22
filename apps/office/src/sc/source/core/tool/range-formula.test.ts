@@ -248,14 +248,11 @@ it("retains original full-sheet ending bounds and missing/intersection/group bou
   expect(Array.from(machine["Offsets"](full, true)).at(-1)).toBe(172030);
   machine.EndListeningArea(full, false, listener);
   expect(listener.HasBroadcaster()).toBe(true);
-  expect(
-    /** Rejects native group services that are not represented. @returns Nothing. */ () =>
-      machine.StartListeningArea(range, true, listener),
-  ).toThrow(/group/);
-  expect(
-    /** Rejects matching group teardown services. @returns Nothing. */ () =>
-      machine.EndListeningArea(range, true, listener),
-  ).toThrow(/group/);
+  const grouped = new Listener();
+  machine.StartListeningArea(range, true, grouped);
+  expect(grouped.HasBroadcaster()).toBe(true);
+  machine.EndListeningArea(range, true, grouped);
+  expect(grouped.HasBroadcaster()).toBe(false);
   const slot = new ScBroadcastAreaSlot(doc, machine),
     owner = new ScBroadcastArea(range),
     ref: [ScBroadcastArea | null] = [owner];
@@ -263,14 +260,11 @@ it("retains original full-sheet ending bounds and missing/intersection/group bou
   expect(owner.GetRef()).toBe(1);
   const missing = new ScBroadcastAreaSlot(doc, machine);
   missing.EndListeningArea(range, false, listener, ref);
-  expect(
-    /** Rejects unimplemented group slots. @returns New-area flag. */ () =>
-      slot.StartListeningArea(range, true, listener, [null]),
-  ).toThrow(/group/);
-  expect(
-    /** Rejects unimplemented group ending. @returns Nothing. */ () =>
-      slot.EndListeningArea(range, true, listener, [null]),
-  ).toThrow(/group/);
+  const groupArea: [ScBroadcastArea | null] = [null];
+  expect(slot.StartListeningArea(range, true, grouped, groupArea)).toBe(true);
+  expect(groupArea[0]?.IsGroupListening()).toBe(true);
+  slot.EndListeningArea(range, true, grouped, [null]);
+  expect(grouped.HasBroadcaster()).toBe(false);
   slot.Dispose();
   missing.Dispose();
   doc.Dispose();

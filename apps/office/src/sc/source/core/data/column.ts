@@ -14,6 +14,7 @@ import {
   string_value_type,
   formula_element_callbacks,
   element_type_formula,
+  formula_block,
   CellStoreEvent,
 } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts";
@@ -32,6 +33,7 @@ import {
 } from "../../../inc/mtvelements";
 import { ProcessFormula } from "../../../inc/mtvcellfunc";
 import { ScFormulaCell } from "../../../inc/formulacell";
+import type { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
 import { ScAddress } from "../../../inc/address";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -331,6 +333,24 @@ export class ScColumn extends ScColumnData {
   /** Borrows the actual native typed store; callers preserve the iterator invalidation contract. @returns Cell store. */
   GetCellStore(): CellStoreType {
     return this.maCells;
+  }
+  /** Original column2.cxx formula pointer lookup borrows the existing mdds data iterator at the row offset. The validated full-row-domain column store cannot return end();no malformed-store test state is manufactured for that defensive native guard. @param row - Requested row. @param size - Original full typed-block size output,including any prefix before the returned pointer. @returns Actual borrowed pointer position or null. */
+  GetFormulaCellBlockAddress(
+    row: number,
+    size: [number],
+  ): delayed_delete_vector_iterator<ScFormulaCell | null> | null {
+    if (!this.rDocument.ValidRow(row)) {
+      size[0] = 0;
+      return null;
+    }
+    const position = this.maCells.cposition(row),
+      block = position.first.get();
+    if (block.type !== element_type_formula) {
+      size[0] = 0;
+      return null;
+    }
+    size[0] = block.size;
+    return formula_block.data(block.data as base_element_block).advance(position.second);
   }
   /** Original consumed const block-position initialization;note/sparkline stores are outside this scalar slice. @param position - Native position fields. @returns Nothing. */
   InitBlockPosition(position: import("../../../inc/mtvelements").ColumnBlockConstPosition): void {

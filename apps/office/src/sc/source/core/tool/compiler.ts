@@ -399,6 +399,7 @@ export class ScCompiler extends FormulaCompiler {
         break;
       }
     if (forced >= 2) array.SetRecalcModeForced();
+    array.GenHash();
     return array;
   }
 }

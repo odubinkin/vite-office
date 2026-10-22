@@ -3,5 +3,6 @@ export {
   RowSpan,
   ColRowSpan,
   RangeColumnSpanSet,
+  ColumnSpanSet,
   type ColumnAction,
 } from "../source/core/data/columnspanset";

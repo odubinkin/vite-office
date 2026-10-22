@@ -11,6 +11,7 @@ import {
 import { FormulaTokenArray } from "../../../inc/tokenarray";
 import { ParamClass } from "../../../inc/paramclass";
 import { FormulaError } from "../../../inc/errorcodes";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 
 import { FormulaGrammar, type Grammar } from "../../../inc/grammar";
 import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../inc/core_resource";
@@ -42,6 +43,11 @@ const arithmetic = new Set<OpCode>([
 
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
 export class FormulaCompiler {
+  private mnNumFmt: SvNumFormatType = SvNumFormatType.UNDEFINED;
+  /** Original current return-format type,initialized UNDEFINED before compilation. @returns Native format flags. */
+  GetNumFormatType(): SvNumFormatType {
+    return this.mnNumFmt;
+  }
   protected meGrammar: Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED;
   /** Serializes source-order tokens rather than RPN, preserving the native forced-recalc prefix and output replacement. @param output - Actual mutable Unicode output owner. @returns Nothing. */
   CreateStringFromTokenArray(output: OUString): void {
@@ -141,7 +147,10 @@ export class FormulaCompiler {
     for (const token of this.mpArr.Tokens())
       if (!arithmetic.has(token.GetOpCode()) || token.GetInForceArray() !== ParamClass.Unknown)
         throw new Error("Formula opcode or array context is not implemented by scalar compilation");
-    if (this.mpArr.GetCodeError() !== FormulaError.NONE) return false;
+    if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
+      if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
+      return false;
+    }
     this.mpArr.DelRPN();
     const forced = this.mpArr.IsRecalcModeForced();
     this.mpArr.ClearRecalcMode();
@@ -156,6 +165,7 @@ export class FormulaCompiler {
       this.mpArr.SetHyperLink(false);
     }
     if (forced) this.mpArr.SetRecalcModeForced();
+    if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
     return false;
   }
   /** Reads the next active token, skipping insignificant whitespace for this scalar subset. @returns Whether a token exists. */
@@ -217,6 +227,10 @@ export class FormulaCompiler {
   private Factor(): void {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
+    // Native lcl_GetRetFormat:all other accepted scalar/aggregate factor opcodes return NUMBER.
+    if (op !== OpCode.ocOpen && this.mnNumFmt === SvNumFormatType.UNDEFINED)
+      this.mnNumFmt =
+        op === OpCode.ocPercentSign ? SvNumFormatType.PERCENT : SvNumFormatType.NUMBER;
     if (op === OpCode.ocPush) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);

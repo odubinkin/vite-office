@@ -1,0 +1,18 @@
+{
+  "profile": "libcxx64",
+  "scope": "Only the real standard-library double hash primitive. No original Calc class compilation,GenHash differential or other ABI is certified.",
+  "driverSha256": "445e80aba6eacd26f3255cc81f88e8235925041b23b25a75b135a11fedc4f999",
+  "cases": [
+    { "bits": "0", "hash": "0" },
+    { "bits": "9223372036854775808", "hash": "0" },
+    { "bits": "4607182418800017408", "hash": "4607182418800017408" },
+    { "bits": "13830554455654793216", "hash": "13830554455654793216" },
+    { "bits": "4615063718147915776", "hash": "4615063718147915776" },
+    { "bits": "9218868437227405312", "hash": "9218868437227405312" },
+    { "bits": "18442240474082181120", "hash": "18442240474082181120" },
+    { "bits": "9221120237041090561", "hash": "9221120237041090561" },
+    { "bits": "18444492273895866370", "hash": "18444492273895866370" },
+    { "bits": "1", "hash": "1" },
+    { "bits": "9223372036854775809", "hash": "9223372036854775809" }
+  ]
+}

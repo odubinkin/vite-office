@@ -9,6 +9,13 @@ export type SCTAB = number;
 /** Native signed 32-bit coordinate capable of holding either rows or columns. */
 export type SCCOLROW = number;
 
+/** Native formula-group calculation state values from types.hxx. */
+export const GroupCalcDisabled = 0;
+/** Native enabled state is the shared-group constructor default. */
+export const GroupCalcEnabled = 1;
+/** Native currently evaluating state. */
+export const GroupCalcRunning = 2;
+
 /** Original fixed UInt8 matrix value discriminator and non-value bit mask. */
 export const ScMatValType = {
   Value: 0x00,

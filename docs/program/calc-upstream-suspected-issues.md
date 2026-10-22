@@ -3641,3 +3641,41 @@ the full application exposes a user-visible failure. Keep the original
 skip/projection rules. The actual retained-area/RPN identity vector is in
 `sc/source/core/tool/token-copy.test.ts`;it checks the skipped outcome rather
 than silently changing traversal to visit the area.
+
+## CALC-255: a fixed-end group listener can notify a nonoverlapping member
+
+Pinned source: `sc/source/core/tool/grouparealistener.cxx`,
+`FormulaGroupAreaListener::collectFormulaCells(SCROW,SCROW,...)`.
+
+When the start row is relative and the end row is fixed, the method first
+checks the changed span against the top member's range. Its subsequent loop
+uses `nRefRow1 <= nRefRow2`, where the second value is the fixed reference end;
+it does not stop at the changed span's last row.
+
+For a valid three-cell group referencing row ranges [2,4], [3,4], [4,4],
+a change confined to row3 selects all three formulas. The final member's
+range does not overlap the changed row. This appears to cause excess dirty
+notification rather than an incorrect value by itself. Preserve the original
+loop bound;the actual grouped-cell/column witness is in
+`sc/source/core/tool/group-area-listener.test.ts`. This is source-derived
+evidence,not a whole-application native differential.
+
+## CALC-256: direct area deletion can leave a pending grouped-area pointer
+
+Pinned source: `sc/source/core/data/bcaslot.cxx`,
+`ScBroadcastAreaSlot::DelBroadcastAreasInRange`, `EraseArea`,
+and `ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas`.
+
+When direct range deletion removes an area's last slot membership during a
+bulk broadcast, `DelBroadcastAreasInRange` removes it from the ordinary
+`aBulkBroadcastAreas` set and deletes it. It does not remove the area from
+`m_BulkGroupAreas`. In contrast, the last-membership path in `EraseArea`
+explicitly calls `RemoveBulkGroupArea`. If a grouped area was already queued
+when direct deletion frees it, the grouped map may retain a dangling pointer
+until its later flush.
+
+This is a conditional ownership suspicion. No native use-after-free execution
+or reachable whole-application failure has been established. Retain the
+distinct source removal points. JavaScript GC replaces physical deletion;
+do not manufacture native dangling-memory behavior or silently add the missing
+group-map removal to the direct-deletion path.

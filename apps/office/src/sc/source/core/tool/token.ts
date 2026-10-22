@@ -18,12 +18,33 @@ import { RangeMatrix } from "../../../inc/types";
 import {
   FormulaToken,
   FormulaDoubleToken,
+  FormulaStringToken,
   FormulaByteToken,
   StackVar,
 } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import {
+  OUString,
+  OUStringHash,
+  type OUStringConstReference,
+} from "../../../../sal/inc/rtl/ustring";
+
+/** Binds std::hash<double> to the observed libc++64 size_t profile,matching the existing OUStringHash64 target. Both signed zeros hash to zero;all other doubles retain their actual IEEE bits. This is a platform binding,not a claim about other standard libraries or32-bit ABIs. @param value - Native double value. @returns Unsigned64 hash. */
+function hashDouble64(value: number): bigint {
+  if (value === 0) return 0n;
+  const storage = new DataView(new ArrayBuffer(8));
+  storage.setFloat64(0, value, true);
+  return storage.getBigUint64(0, true);
+}
+/** Original HashSingleRef deliberately hashes flags rather than coordinates so relocated group members can match. @param reference - Actual reference. @returns Original flag sum. */
+function hashSingleRef(reference: ScSingleRefData): bigint {
+  return BigInt(
+    Number(reference.IsColRel()) +
+      (Number(reference.IsRowRel()) << 1) +
+      (Number(reference.IsTabRel()) << 2),
+  );
+}
 
 /** Native active pointer range over the actual code/RPN buffer;inactive tails remain outside the logical range. */
 interface TokenPointerRange {
@@ -469,7 +490,8 @@ const operators = new Set<OpCode>([
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
 export class ScTokenArray extends FormulaTokenArray {
-  readonly mxSheetLimits: ScSheetLimits;
+  mxSheetLimits: ScSheetLimits;
+  private mnHashValue = 0n;
   /** Constructs the represented numeric state or a native shallow token copy. @param source - Document, limits or copied array. @returns Owner. */
   constructor(source: ScDocument | ScSheetLimits | ScTokenArray) {
     super(source instanceof ScTokenArray ? source : undefined);
@@ -479,6 +501,83 @@ export class ScTokenArray extends FormulaTokenArray {
         : source instanceof ScSheetLimits
           ? source
           : source.GetSheetLimits();
+    if (source instanceof ScTokenArray) this.mnHashValue = source.mnHashValue;
+  }
+  /** Original move construction transfers the real buffers and preserves scalar hash state in the moved-from owner. @param source - Moved token array. @returns New token-array owner. */
+  static override move(source: ScTokenArray): ScTokenArray {
+    const result = new ScTokenArray(source.mxSheetLimits);
+    result.mnHashValue = source.mnHashValue;
+    result.Move(source);
+    return result;
+  }
+  /** Original copy assignment clears before Assign,including source self-assignment,and preserves the receiving limits owner. @param source - Copied array. @returns Recipient. */
+  override copy_assign(source: ScTokenArray): this {
+    this.Clear();
+    this.Assign(source);
+    this.mnHashValue = source.mnHashValue;
+    return this;
+  }
+  /** Original move assignment transfers represented limits,hash and buffers without clearing the copied scalar hash on self-move. Physical shared_ptr moved-from lifetime is erased under GC. @param source - Moved array. @returns Recipient. */
+  override move_assign(source: ScTokenArray): this {
+    this.mxSheetLimits = source.mxSheetLimits;
+    this.mnHashValue = source.mnHashValue;
+    this.Move(source);
+    return this;
+  }
+  /** Original source-order token equality ignores RPN and accepts identical pointers before comparing values. @param other - Actual array. @returns Equal code tokens. */
+  EqualTokens(other: ScTokenArray): boolean {
+    if (other.nLen !== this.nLen) return false;
+    for (let index = 0; index < this.nLen; index++) {
+      const left = (this.pCode as FormulaToken[])[index] as FormulaToken,
+        right = (other.pCode as FormulaToken[])[index] as FormulaToken;
+      if (left !== right && !left.equals(right)) return false;
+    }
+    return true;
+  }
+  /** Original Clear resets the hash before clearing the actual token arrays. Vector scheduling flags remain outside this consumed slice. @returns Nothing. */
+  override Clear(): void {
+    this.mnHashValue = 0n;
+    super.Clear();
+  }
+  /** Original borrowed size_t hash value on the represented64-bit target. @returns Unsigned64 hash. */
+  GetHash(): bigint {
+    return this.mnHashValue;
+  }
+  /** Original first20-source-token rolling hash with the existing native string hash and observed libc++64 double binding. RPN and reference coordinates do not participate. @returns Nothing. */
+  GenHash(): void {
+    const hasher = new OUStringHash();
+    let hash = 1n;
+    const count = Math.min(this.nLen, 20);
+    for (let index = 0; index < count; index++) {
+      const token = (this.pCode as FormulaToken[])[index] as FormulaToken,
+        opcode = token.GetOpCode();
+      if (opcode === OpCode.ocPush)
+        switch (token.GetType()) {
+          case StackVar.svByte:
+            hash += BigInt((token as FormulaByteToken).GetByte());
+            break;
+          case StackVar.svDouble:
+            hash += hashDouble64((token as FormulaDoubleToken).GetDouble());
+            break;
+          case StackVar.svString:
+            hash += hasher.call((token as FormulaStringToken).GetString().getString());
+            break;
+          case StackVar.svSingleRef:
+            hash += hashSingleRef((token as ScSingleRefToken).GetSingleRef());
+            break;
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            hash += hashSingleRef(reference.Ref1);
+            hash += hashSingleRef(reference.Ref2);
+            break;
+          }
+          default:
+            hash += BigInt(opcode);
+        }
+      else hash += BigInt(opcode);
+      hash = BigInt.asUintN(64, (hash << 4n) - hash);
+    }
+    this.mnHashValue = hash;
   }
   /** Original deep Clone:independent code tokens;RPN entries reuse the first matching cloned code entry or receive their own clone. Native refcounts are represented by actual JS identity. @returns Deep token-array owner. */
   Clone(): ScTokenArray {
@@ -488,6 +587,7 @@ export class ScTokenArray extends FormulaTokenArray {
     p.nMode = this.nMode;
     p.nError = this.nError;
     p.bHyperLink = this.bHyperLink;
+    p.mnHashValue = this.mnHashValue;
     p.mbFromRangeName = this.mbFromRangeName;
     p.mbShareable = this.mbShareable;
     p.mbDynamicArrayFunction = this.mbDynamicArrayFunction;
