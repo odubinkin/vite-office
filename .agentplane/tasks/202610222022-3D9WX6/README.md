@@ -7,7 +7,8 @@ owner: "CODER"
 revision: 12
 origin:
   system: "manual"
-depends_on: []
+depends_on:
+  - "202610222108-KVGGCR"
 tags:
   - "calc"
   - "code"
