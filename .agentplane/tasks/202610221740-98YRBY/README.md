@@ -1,10 +1,11 @@
 ---
 id: "202610221740-98YRBY"
 title: "Connect formula ranges to native area recalculation and aggregate execution"
-status: "DOING"
+result_summary: "Implemented native local/ODFF ranges,area-slot recalculation and default range aggregates with verified history and ODS persistence."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Start: pin the verified range implementation and immutable evidence for evaluation."
+  -
+    author: "CODER"
+    body: "Verified: native local range formulas,area dependency lifetime and default aggregate execution pass642 Calc and64 related scenarios with raw100 coverage;production/browser/Worker/native and15 gates pass."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: pin the verified range implementation and immutable evidence for evaluation."
+  -
+    type: "status"
+    at: "2026-10-22T20:20:43.894Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native local range formulas,area dependency lifetime and default aggregate execution pass642 Calc and64 related scenarios with raw100 coverage;production/browser/Worker/native and15 gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-22T20:20:25.050Z"
+doc_updated_at: "2026-10-22T20:20:43.896Z"
 doc_updated_by: "CODER"
 description: "Block73 dependent on72: implement native local-A1/ODFF double-reference compilation/output,real area dependency notifications through ScBroadcastArea/Slot/SlotMachine and ScDocument lifetime,then aggregate range traversal through actual RangeColumnSpanSet/NumericCellAccumulator and native array summation. Do not flatten ranges into individual cell listeners or use a browser evaluator. Verify liveSUMrange edits,errors,history,large sparse ranges and ODS/browser reopen. Preserve source slot distribution,bulk/deferred erasure and default non-grouped semantics;unported advanced modes stay explicit. Scope up to80source/test/registry/probe paths. Calc and changed shared100;full checkpoint80."
 sections:
