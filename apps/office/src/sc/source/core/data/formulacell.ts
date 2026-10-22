@@ -1,7 +1,7 @@
 /** @fileoverview Scalar/local-reference formula cells with native single-cell subscriptions and logical tracking. Groups, iterative cycles and localized formatting remain unsupported. */
 import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
-import { ScSingleRefToken } from "../../../inc/token";
+import { ScSingleRefToken, ScDoubleRefToken } from "../../../inc/token";
 import { StackVar } from "../../../../formula/inc/token";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -9,7 +9,7 @@ import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScInterpreter } from "../inc/interpre";
-import { ScFormulaResult } from "../../../inc/formularesult";
+import { ScFormulaResult, type FormulaResultNumber } from "../../../inc/formularesult";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
@@ -153,12 +153,15 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       ? this.aResult.GetString()
       : SharedString.getEmptyString();
   }
-  /** Binds actual single-reference RPN listeners. Other reference families are not represented. @param doc - Document. @returns Nothing. */
+  /** Binds actual single/double-reference RPN listeners. Other reference families are not represented. @param doc - Document. @returns Nothing. */
   StartListeningTo(doc: ScDocument): void {
     for (const token of this.pCode.RPNTokens())
       if (token.GetType() === StackVar.svSingleRef) {
         const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
         if (address.IsValid()) doc.StartListeningCell(address, this);
+      } else if (token.GetType() === StackVar.svDoubleRef) {
+        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(this.rDocument, this.aPos);
+        if (range.IsValid()) doc.StartListeningArea(range, false, this);
       }
   }
   /** Ends the actual source subscriptions and allows empty broadcaster cleanup. @param doc - Document. @returns Nothing. */
@@ -167,6 +170,9 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       if (token.GetType() === StackVar.svSingleRef) {
         const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
         if (address.IsValid()) doc.EndListeningCell(address, this);
+      } else if (token.GetType() === StackVar.svDoubleRef) {
+        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(this.rDocument, this.aPos);
+        if (range.IsValid()) doc.EndListeningArea(range, false, this);
       }
   }
   /** Receives native data-change IDs; unrelated and existing browser-lifecycle hints do not dirty formulas. @param hint - Shared opaque hint. @returns Nothing. */
@@ -248,5 +254,12 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   GetErrCode(): FormulaError {
     this.MaybeInterpret();
     return this.pCode.GetCodeError() || this.aResult.GetResultError();
+  }
+  /** Original value/error classification with native untouched value output on errors or text. @param output - Grouped native error/value references. @returns Has error or numeric value. */
+  GetErrorOrValue(output: FormulaResultNumber): boolean {
+    this.MaybeInterpret();
+    output.error = this.pCode.GetCodeError();
+    if (output.error !== FormulaError.NONE) return true;
+    return this.aResult.GetErrorOrDouble(output);
   }
 }

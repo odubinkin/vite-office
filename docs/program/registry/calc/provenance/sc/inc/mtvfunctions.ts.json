@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/mtvfunctions.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/mtvfunctions.hxx",
+    "localSymbols": [
+      "ParseBlock"
+    ],
+    "upstreamSymbols": [
+      "ParseBlock"
+    ],
+    "preservedResponsibilities": [
+      "Original inclusive typed-block traversal and borrowed const cursor continuation.",
+      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed slice is implemented;broader native contracts,defaults and behavior remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/mtvfunctions.ts",
+          "marker": "ParseBlock"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/mtvfunctions.hxx",
+          "marker": "ParseBlock"
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,13 @@
 /** @fileoverview Consumed native KahanSum value operations from kahan.hxx for the portable non-SSE2 aggregate path. */
 import { approxEqual } from "../../sal/inc/rtl/math";
+/** Mutable native binary64 reference;typed backing retains encoded NaN bits through JS stores. */
+type DoubleReference = [number] | Float64Array;
+/** Materializes a native local double reference without passing through a packed JS number array. @param value - Native value. @returns Mutable binary64 reference. */
+function doubleReference(value: number): Float64Array {
+  const reference = new Float64Array(1);
+  reference[0] = value;
+  return reference;
+}
 /** Original Neumaier accumulator with delayed last nonzero term and mutating get semantics. */
 export class KahanSum {
   private m_fSum = 0;
@@ -18,20 +26,22 @@ export class KahanSum {
     }
   }
   /** Original binary64 specialization of the public Neumaier step. @param sum - Mutable sum. @param error - Mutable compensation. @param value - Summand. @returns Nothing. */
-  static sumNeumaierNormal(sum: [number], error: [number], value: number): void {
-    const next = sum[0] + value;
-    if (Math.abs(sum[0]) >= Math.abs(value)) error[0] += sum[0] - next + value;
-    else error[0] += value - next + sum[0];
+  static sumNeumaierNormal(sum: DoubleReference, error: DoubleReference, value: number): void {
+    const previous = sum[0] as number,
+      next = previous + value;
+    if (Math.abs(previous) >= Math.abs(value))
+      error[0] = (error[0] as number) + (previous - next + value);
+    else error[0] = (error[0] as number) + (value - next + previous);
     sum[0] = next;
   }
   /** Original non-SSE2 add overloads,including explicit compensation when adding another accumulator. @param value - Scalar or source sum. @returns Nothing. */
   add(value: number | KahanSum): void {
     if (value instanceof KahanSum) {
-      const sum: [number] = [value.m_fSum],
-        error: [number] = [value.m_fError];
+      const sum = doubleReference(value.m_fSum),
+        error = doubleReference(value.m_fError);
       if (value.m_fMem !== 0) KahanSum.sumNeumaierNormal(sum, error, value.m_fMem);
-      this.add(sum[0]);
-      this.add(error[0]);
+      this.add(sum[0] as number);
+      this.add(error[0] as number);
       return;
     }
     if (value === 0) return;
@@ -39,11 +49,11 @@ export class KahanSum {
       this.m_fMem = value;
       return;
     }
-    const sum: [number] = [this.m_fSum],
-      error: [number] = [this.m_fError];
+    const sum = doubleReference(this.m_fSum),
+      error = doubleReference(this.m_fError);
     KahanSum.sumNeumaierNormal(sum, error, this.m_fMem);
-    this.m_fSum = sum[0];
-    this.m_fError = error[0];
+    this.m_fSum = sum[0] as number;
+    this.m_fError = error[0] as number;
     this.m_fMem = value;
   }
   /** Original product-assignment overload consumed by aggregate products. @param value - Multiplier. @returns Nothing. */

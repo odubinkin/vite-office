@@ -38,6 +38,7 @@ it("preserves output replacement, literal quotes, both whitespace classes and ba
   actual.AddToken(new FormulaByteToken(OpCode.ocSpaces, 2));
   actual.AddToken(new FormulaSpaceToken(1, 9));
   actual.AddToken(new FormulaToken(StackVar.svSingleRef));
+  actual.AddToken(new FormulaToken(StackVar.svDoubleRef));
   configured.CreateStringFromTokenArray(out);
   expect(text(out)).toBe('"a""b😀\0"  \t');
   const missingType = new FormulaTokenArray();

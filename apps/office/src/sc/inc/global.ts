@@ -77,3 +77,12 @@ export enum ScSizeMode {
 
 /** Original indentation step in twips. */
 export const SC_INDENT_STEP = 200;
+
+/** Original aggregate/subtotal row and error flags;ordinary iterator consumers use NONE. */
+export enum SubtotalFlags {
+  NONE = 0x00,
+  IgnoreNestedStAg = 0x08,
+  IgnoreErrVal = 0x04,
+  IgnoreHidden = 0x02,
+  IgnoreFiltered = 0x01,
+}

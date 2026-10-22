@@ -180,3 +180,28 @@ it("uses native variable-argument Factor arity and close/error boundaries", /** 
     expect(array.GetCodeLen()).toBe(0);
   }
 });
+
+it("retains native range precedence and base nonmerging RPN contracts", /** The shared compiler emits a range operator when its actual virtual extension has no Calc range service. @returns Nothing. */ () => {
+  for (const [input, expected] of [
+    [
+      [1, "ocRange", 2, "ocAdd", 3],
+      [1, 2, "ocRange", 3, "ocAdd"],
+    ],
+    [
+      [1, "ocRange", "ocSum", "ocOpen", 2, "ocClose"],
+      [1, 2, "ocSum", "ocRange"],
+    ],
+    [
+      ["ocNegSub", 1, "ocRange", 2],
+      [1, 2, "ocRange", "ocNegSub"],
+    ],
+  ] as const) {
+    const array = tokens(input);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(FormulaError.NONE);
+    expect(rpn(array)).toEqual(expected);
+  }
+  const malformed = tokens(["ocRange", 1]);
+  new RecordingCompiler(malformed).CompileTokenArray();
+  expect(malformed.GetCodeError()).toBe(FormulaError.VariableExpected);
+});

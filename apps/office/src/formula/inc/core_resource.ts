@@ -5,6 +5,7 @@ export const RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF: ReadonlyMap<OpCode, string
   [OpCode.ocOpen, "("],
   [OpCode.ocClose, ")"],
   [OpCode.ocSep, ";"],
+  [OpCode.ocRange, ":"],
   [OpCode.ocSum, "SUM"],
   [OpCode.ocSumSQ, "SUMSQ"],
   [OpCode.ocProduct, "PRODUCT"],

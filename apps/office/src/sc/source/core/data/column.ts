@@ -327,6 +327,11 @@ export class ScColumn extends ScColumnData {
   GetCellStore(): CellStoreType {
     return this.maCells;
   }
+  /** Original consumed const block-position initialization;note/sparkline stores are outside this scalar slice. @param position - Native position fields. @returns Nothing. */
+  InitBlockPosition(position: import("../../../inc/mtvelements").ColumnBlockConstPosition): void {
+    position.miCellPos = this.maCells.cbegin();
+    position.miCellTextAttrPos = this.maCellTextAttrs.cbegin();
+  }
   /** Reads the native column coordinate. @returns Column. */
   GetCol(): number {
     return this.nCol;

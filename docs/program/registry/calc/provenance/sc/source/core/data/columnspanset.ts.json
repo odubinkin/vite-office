@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sc/inc/fstalgorithm.test.ts",
           "marker": "original flat segment span algorithms"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [
@@ -33,7 +37,8 @@
     "preservedResponsibilities": [
       "Original buildSpan, buildSpanWithValue and both toSpanArray overloads including inclusive endpoints, nonzero value filtering, caller iterator copying and output appending.",
       "Original valid_tree-only start-key overload with failed-search empty output; no index rebuilding fallback.",
-      "Original RowSpan and ColRowSpan signed32 numerical value constructors at their source header/core-data boundaries."
+      "Original RowSpan and ColRowSpan signed32 numerical value constructors at their source header/core-data boundaries.",
+      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/columnspanset.cxx",

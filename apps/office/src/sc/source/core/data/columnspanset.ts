@@ -1,4 +1,5 @@
 /** @fileoverview Original RowSpan and ColRowSpan value constructors from columnspanset.cxx. */
+import { ScRange } from "../../../inc/address";
 import type { SCROW, SCCOLROW } from "../../../inc/types";
 
 /** Original inclusive row endpoint value. */
@@ -21,5 +22,34 @@ export class ColRowSpan {
   ) {
     this.mnStart |= 0;
     this.mnEnd |= 0;
+  }
+}
+
+/** Consumed original ColumnSpanSet::ColumnAction contract. */
+export interface ColumnAction {
+  /** Starts one actual allocated native column. @param column - Column owner. @returns Nothing. */
+  startColumn(column: import("../../../inc/column").ScColumn): void;
+  /** Executes the original inclusive row span. @param first - First row. @param last - Last row. @param value - Native span flag. @returns Nothing. */
+  execute(first: number, last: number, value: boolean): void;
+}
+/** Original optimized single-range column span owner. */
+export class RangeColumnSpanSet {
+  private readonly range: import("../../../inc/address").ScRange;
+  /** Copies the actual range value. @param range - Source range. @returns Span owner. */
+  constructor(range: import("../../../inc/address").ScRange) {
+    this.range = new ScRange(range);
+  }
+  /** Executes original sheet/allocated-column order without expanding sparse rows. @param doc - Document. @param action - Native column action. @returns Nothing. */
+  executeColumnAction(doc: import("../../../inc/document").ScDocument, action: ColumnAction): void {
+    for (let tab = this.range.aStart.Tab(); tab <= this.range.aEnd.Tab(); tab++) {
+      const table = doc.FetchTable(tab);
+      if (!table) continue;
+      const end = table.ClampToAllocatedColumns(this.range.aEnd.Col());
+      for (let col = this.range.aStart.Col(); col <= end; col++) {
+        if (!doc.ValidCol(col)) break;
+        action.startColumn(table.CreateColumnIfNotExists(col));
+        action.execute(this.range.aStart.Row(), this.range.aEnd.Row(), true);
+      }
+    }
   }
 }

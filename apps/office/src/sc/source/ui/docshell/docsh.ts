@@ -16,7 +16,6 @@ import { SfxUndoManager } from "../../../../svl/source/undo/undo";
 import { SfxListener } from "../../../../svl/source/notify/lstner";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScDocument } from "../../../inc/document";
-import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   ScXMLImportWrapper,
@@ -108,21 +107,7 @@ export class ScDocShell extends SfxObjectShell {
   }
   /** Releases semantic subscriptions owned by one displaced model. @param document - Model. @returns Nothing. */
   private DisposeDocument(document: ScDocument): void {
-    document.DisposeAttributes();
-    for (let tab = 0; tab < document.GetTableCount(); tab++) {
-      const iterator = new ScHorizontalCellIterator(
-          document,
-          tab,
-          0,
-          0,
-          document.MaxCol(),
-          document.MaxRow(),
-        ),
-        col: [number] = [0],
-        row: [number] = [0];
-      let cell;
-      while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
-    }
+    document.Dispose();
   }
   /** Atomically installs model,state,medium and a fresh history. @param document - New graph. @param state - Lifecycle. @param medium - Source/destination. @returns Installed model. */
   ReplaceDocument(

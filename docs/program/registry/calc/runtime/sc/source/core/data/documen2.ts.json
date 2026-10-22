@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/documen2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/documen2.ts",
+        "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx"
+      ],
+      "justification": "Consumed observable destructor runs on the actual ScDocument instance. TypeScript same-instance out-of-class functions preserve private owners;GC replaces physical deletion. Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Dispose"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/documen2.cxx",
+      "upstreamSymbols": [
+        "ScDocument::~ScDocument"
+      ]
+    }
+  }
+}

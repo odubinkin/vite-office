@@ -45,3 +45,16 @@ export class ScHint extends SfxHint {
     this.aAddress.SetRow(row);
   }
 }
+/** Original changed-area notification from brdcst.hxx,retaining its copied range. */
+export class ScAreaChangedHint extends SfxHint {
+  private readonly aNewRange: ScRange;
+  /** Copies the source range with its native hint ID. @param range - New area. @returns Hint. */
+  constructor(range: ScRange) {
+    super(SfxHintId.ScAreaChanged);
+    this.aNewRange = new ScRange(range);
+  }
+  /** Borrows the original changed-area value. @returns Range. */
+  GetRange(): ScRange {
+    return this.aNewRange;
+  }
+}

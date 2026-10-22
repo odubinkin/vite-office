@@ -13,7 +13,8 @@
       "ScHorizontalCellIterator"
     ],
     "preservedResponsibilities": [
-      "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration."
+      "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration.",
+      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence."
     ],
     "omittedResponsibilities": [
       "Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/dociter.test.ts",
           "marker": "visits interleaved actual blocks"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [

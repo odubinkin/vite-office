@@ -3542,3 +3542,65 @@ against those original observations. The document aggregate test also retains
 The local accumulator preserves this source behavior; no numerical correction
 is authorized by this observation. SSE2 and long-double paths remain outside
 this native observation profile.
+
+## CALC-250: full-sheet area teardown stops before the last slot
+
+Status: suspicious source condition; exact boundary retained locally.
+
+The optimized whole-sheet branch in `sc/source/core/data/bcaslot.cxx`,
+`ScBroadcastAreaSlotMachine::EndListeningArea`, sets `pStop = ppSlots + nEnd`
+and iterates with `++pp < pStop`. With the inclusive final offset
+`nEnd == mnBcaSlots - 1`, this visits offsets zero through `nEnd - 1`.
+The general range branch uses `nOff <= nEnd` instead. The corresponding
+optimized deletion/update branches use the same ending bound.
+
+The default native logarithmic distribution has 172032 slots per sheet, so
+the optimized end-listening traversal ends at offset 172030. The initialized
+geometry witness in `sc/source/core/data/bcaslot.test.ts` retains that exact
+bound. This is source-derived evidence, not a compiled full-native area
+lifecycle observation. Whether higher-level invariants guarantee an empty
+last slot in these calls has not been established. The local ordinary area
+machine preserves the source ending bound.
+
+## CALC-251: nested area iteration resets the erased-entry shortcut
+
+Status: source-derived reentrant edge; intent not established.
+
+Both `ScBroadcastAreaSlot::AreaBroadcast` overloads set
+`mbHasErasedArea = false` when beginning an iteration, including a nested
+iteration of the same slot. Entries already marked for deferred erasure are
+skipped only when this shortcut is true. A nested iteration after the last
+listeners have been removed can therefore visit those marked entries and
+report a broadcast attempt through their empty Svt broadcasters. Physical
+erasure still waits for the outer iteration to finish.
+
+The reentrant case in `sc/source/core/data/bcaslot.test.ts` retains this
+source behavior: the nested call returns true while no extra listener callback
+runs. Full compiled native area-object observations are not claimed. The
+local code keeps the original reset and deferred-erasure order.
+
+## CALC-252: mixed encoded NaN error payloads vary between native builds
+
+Status: original complete native header observations differ across normal
+and ASan/UBSan builds; no sanitizer error was reported.
+
+`sc/inc/arraysumfunctor.hxx` intentionally sends non-NoValue NaNs back through
+compensated floating arithmetic when rescanning an array containing encoded
+empty values. Its source comment already questions the intended error
+propagation. Multiple distinct encoded NaN errors can then compete through
+ordinary arithmetic. An observation with encoded NoValue, encoded
+DivisionByZero and 42 produces different NaN payloads on the second mutating
+Kahan getter between the normal and instrumented native callers.
+
+Evidence is retained in the task73 numeric observation archive, including
+`ambiguous-driver.cpp` and both `ambiguous-*-caller.values` streams. The caller
+uses unchanged complete original `arraysumfunctor.hxx`/`kahan.hxx` and verified
+original SAL objects. The accepted bit-exact array fixture separately uses
+4096 finite/NoValue-empty and isolated infinity profiles with identical normal/instrumented output.
+Mixed error-NaN payload attribution is not certified by that fixture.
+
+The local implementation retains source arithmetic and rescan ordering.
+Mutable local double references use Float64Array backing so JavaScript packed
+number-array canonicalization does not erase the only encoded NoValue payload
+before the native rescan can recognize it. This storage adaptation preserves
+native scalar bits; it does not resolve the upstream mixed-payload ambiguity.

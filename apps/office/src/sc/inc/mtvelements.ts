@@ -238,3 +238,9 @@ export const BroadcasterStoreType = Object.setPrototypeOf(
 ) as typeof broadcaster_constructor & Omit<typeof multi_type_vector, "prototype">;
 /** Native broadcaster-store instance. */
 export type BroadcasterStoreType = InstanceType<typeof BroadcasterStoreType>;
+
+/** Consumed native ColumnBlockConstPosition fields;default iterator storage is uninitialized until the original InitBlockPosition operation. Note/sparkline cursor families remain unported. */
+export interface ColumnBlockConstPosition {
+  miCellPos?: ReturnType<CellStoreType["cbegin"]>;
+  miCellTextAttrPos?: ReturnType<CellTextAttrStoreType["cbegin"]>;
+}

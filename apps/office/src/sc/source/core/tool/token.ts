@@ -3,7 +3,7 @@ import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScSingleRefData } from "../../../inc/refdata";
-import { ScSingleRefToken } from "./token.references";
+import { ScSingleRefToken, ScDoubleRefToken } from "./token.references";
 import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { RangeMatrix } from "../../../inc/types";
@@ -381,6 +381,7 @@ const operators = new Set<OpCode>([
   OpCode.ocSumSQ,
   OpCode.ocProduct,
   OpCode.ocAverage,
+  OpCode.ocRange,
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
 export class ScTokenArray extends FormulaTokenArray {
@@ -431,6 +432,10 @@ export class ScTokenArray extends FormulaTokenArray {
   /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
   AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
     return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));
+  }
+  /** Original double-reference token append with retained sheet limits. @param reference - Actual complex reference. @returns Token or null. */
+  AddDoubleReference(reference: ScComplexRefData): FormulaToken | null {
+    return this.Add(new ScDoubleRefToken(this.mxSheetLimits, reference));
   }
   /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
   AddOpCode(code: OpCode): FormulaToken | null {

@@ -1,8 +1,14 @@
 /** @fileoverview Numerical ScAddress/ScRange owners from pinned sc/inc/address.hxx and sc/source/core/tool/address.cxx. No browser or Writer state enters these owners. */
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ScRefFlags, MAXTAB, SanitizeCol, SanitizeRow } from "../../../inc/address";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import {
+  ScRefFlags,
+  MAXTAB,
+  SanitizeCol,
+  SanitizeRow,
+  applyStartToEndFlags,
+} from "../../../inc/address";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
 
 /** Structural view of the original ScDocument boundary used by address movement. */
@@ -180,6 +186,97 @@ export class ScAddress {
 
 /** Native value range with independently owned endpoints and inclusive bounds. */
 export class ScRange {
+  /** Original OOO/ODF local A1 cell/entire-axis range parse,including ordered endpoint flags and entire-axis sticky bits. Mixed partial-axis,named,external and sheet-qualified families require their native parser services. @param value - Source range. @param doc - Document. @param details - Convention. @returns Native parse flags. */
+  Parse(
+    value: OUStringConstReference,
+    doc: ScAddressDocument,
+    details: Readonly<ScAddressDetails>,
+  ): ScRefFlags {
+    if (
+      details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
+      details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
+    )
+      throw new Error("Range parsing convention is not implemented");
+    const input = text(value),
+      colon = input.indexOf(":");
+    if (colon < 0) return ScRefFlags.ZERO;
+    const columns = /^(\$?)([A-Za-z]+):(\$?)([A-Za-z]+)$/.exec(input),
+      rows = /^(\$?)([1-9][0-9]*):(\$?)([1-9][0-9]*)$/.exec(input);
+    const first = unicode(
+      columns
+        ? (columns[1] as string) + (columns[2] as string) + "1"
+        : rows
+          ? "A" + rows[1] + rows[2]
+          : input.slice(0, colon),
+    );
+    const second = unicode(
+      columns
+        ? (columns[3] as string) + (columns[4] as string) + "1"
+        : rows
+          ? "A" + rows[3] + rows[4]
+          : input.slice(colon + 1),
+    );
+    let flags1: ScRefFlags, flags2: ScRefFlags;
+    try {
+      flags1 = this.aStart.Parse(first, doc, details);
+      if (!(flags1 & ScRefFlags.VALID)) return ScRefFlags.ZERO;
+      this.aEnd.assign(this.aStart);
+      flags2 = this.aEnd.Parse(second, doc, details);
+    } finally {
+      first.dispose();
+      second.dispose();
+    }
+    if (columns) {
+      this.aStart.SetRow(0);
+      this.aEnd.SetRow(doc.MaxRow());
+      flags1 |= ScRefFlags.ROW_ABS;
+      flags2 |= ScRefFlags.ROW_ABS;
+    } else if (rows) {
+      this.aStart.SetCol(0);
+      this.aEnd.SetCol(doc.MaxCol());
+      flags1 |= ScRefFlags.COL_ABS;
+      flags2 |= ScRefFlags.COL_ABS;
+    }
+    if (!(flags2 & ScRefFlags.VALID)) return ScRefFlags.ZERO;
+    if (
+      this.aStart.Row() === 0 &&
+      this.aEnd.Row() === doc.MaxRow() &&
+      !(flags1 & ScRefFlags.ROW_ABS) &&
+      !(flags2 & ScRefFlags.ROW_ABS)
+    ) {
+      flags1 |= ScRefFlags.ROW_ABS;
+      flags2 |= ScRefFlags.ROW_ABS;
+    } else if (
+      this.aStart.Col() === 0 &&
+      this.aEnd.Col() === doc.MaxCol() &&
+      !(flags1 & ScRefFlags.COL_ABS) &&
+      !(flags2 & ScRefFlags.COL_ABS)
+    ) {
+      flags1 |= ScRefFlags.COL_ABS;
+      flags2 |= ScRefFlags.COL_ABS;
+    }
+    if (this.aEnd.Col() < this.aStart.Col()) {
+      const start = this.aStart.Col();
+      this.aStart.SetCol(this.aEnd.Col());
+      this.aEnd.SetCol(start);
+      const mask = ScRefFlags.COL_VALID | ScRefFlags.COL_ABS,
+        bits1 = flags1 & mask,
+        bits2 = flags2 & mask;
+      flags1 = (flags1 & ~mask) | bits2;
+      flags2 = (flags2 & ~mask) | bits1;
+    }
+    if (this.aEnd.Row() < this.aStart.Row()) {
+      const start = this.aStart.Row();
+      this.aStart.SetRow(this.aEnd.Row());
+      this.aEnd.SetRow(start);
+      const mask = ScRefFlags.ROW_VALID | ScRefFlags.ROW_ABS,
+        bits1 = flags1 & mask,
+        bits2 = flags2 & mask;
+      flags1 = (flags1 & ~mask) | bits2;
+      flags2 = (flags2 & ~mask) | bits1;
+    }
+    return applyStartToEndFlags(flags1, flags2 & ScRefFlags.BITS) | (flags2 & ScRefFlags.VALID);
+  }
   public readonly aStart: ScAddress;
   public readonly aEnd: ScAddress;
 

@@ -34,6 +34,14 @@ export class ScRangePair {
 
 /** Native integer-domain maxima, distinct from spreadsheet bounds. */
 export const SCROW_MAX = 0x7fffffff;
+/** Original fresh-value broadcast sentinel macro. @returns Always-broadcast address. */
+export function BCA_BRDCST_ALWAYS(): ScAddress {
+  return new ScAddress(0, SCROW_MAX, 0);
+}
+/** Original fresh-value always-listen sentinel macro. @returns Always-listen range. */
+export function BCA_LISTEN_ALWAYS(): ScRange {
+  return new ScRange(BCA_BRDCST_ALWAYS(), BCA_BRDCST_ALWAYS());
+}
 export const SCCOL_MAX = 0x7fff;
 export const SCTAB_MAX = 0x7fff;
 export const SCCOLROW_MAX = SCROW_MAX;

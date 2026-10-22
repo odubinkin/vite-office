@@ -33,6 +33,7 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocWhitespace,
   OpCode.ocSep,
   OpCode.ocMissing,
+  OpCode.ocRange,
   OpCode.ocSum,
   OpCode.ocSumSQ,
   OpCode.ocProduct,
@@ -85,6 +86,7 @@ export class FormulaCompiler {
       if (token.GetType() === StackVar.svString)
         return this.AppendString((token as FormulaStringToken).GetString().getString());
       if (token.GetType() === StackVar.svSingleRef) return this.CreateStringFromSingleRef(token);
+      if (token.GetType() === StackVar.svDoubleRef) return this.CreateStringFromDoubleRef(token);
       throw new Error("Formula output token family is not implemented");
     }
     if (op === OpCode.ocMissing) return "";
@@ -106,6 +108,17 @@ export class FormulaCompiler {
   protected CreateStringFromSingleRef(token: FormulaToken): string {
     void token;
     return "";
+  }
+  /** Original empty base double-reference output hook. @param token - Reference token. @returns Empty base fragment. */
+  protected CreateStringFromDoubleRef(token: FormulaToken): string {
+    void token;
+    return "";
+  }
+  /** Original empty base range-extension hook. @param left - Left operand. @param right - Right operand. @returns No base extension. */
+  protected ExtendRangeReference(left: FormulaToken, right: FormulaToken): FormulaToken | null {
+    void left;
+    void right;
+    return null;
   }
   protected mpArr: FormulaTokenArray;
   private mpToken: FormulaToken = new FormulaByteToken(OpCode.ocStop);
@@ -254,7 +267,31 @@ export class FormulaCompiler {
       this.NextToken();
       this.UnaryLine();
       this.PutCode(token);
-    } else this.Factor();
+    } else this.RangeLine();
+  }
+  /** Original range precedence and adjacent-RPN merge over actual token identities. @returns Nothing. */
+  private RangeLine(): void {
+    this.Factor();
+    while (this.mpToken.GetOpCode() === OpCode.ocRange) {
+      const left = this.mpCode.length - 1,
+        operator = this.mpToken;
+      this.NextToken();
+      this.Factor();
+      const right = this.mpCode.length - 1;
+      let merged = false;
+      if (this.mpCode.length >= 2 && right - left === 1) {
+        const token = this.ExtendRangeReference(
+          this.mpCode[left] as FormulaToken,
+          this.mpCode[right] as FormulaToken,
+        );
+        if (token) {
+          this.mpCode[left] = token;
+          this.mpCode.pop();
+          merged = true;
+        }
+      }
+      if (!merged) this.PutCode(operator);
+    }
   }
   /** Emits repeated postfix percent operators. @returns Nothing. */
   private PostOpLine(): void {

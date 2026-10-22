@@ -1,0 +1,436 @@
+{
+  "task": "202610221740-98YRBY",
+  "archiveSha256": "c4cf4b651d83f903a56e54f9d744882023557320d47f4dc5b45e0d028861c414",
+  "sources": [
+    {
+      "path": "apps/office/src/formula/inc/core_resource.ts",
+      "sha256": "8b97f0ae0e4bba1311ad44d09828a1f85c0adeadd31279436e3c83c6057dd24c"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+      "sha256": "26da5c74682287df7f0370199ae19249ac9229dd888ff41beb42639ea3e36017"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts",
+      "sha256": "5b4dd42595c5490fa660fd8a8af9b645d6aff21c2dc21aaabb39658a16a0e887"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/compiler-output.test.ts",
+      "sha256": "e46080735424ff44838d881ef0783451bde123d3798fbf7fad8d81cb4566b9c5"
+    },
+    {
+      "path": "apps/office/src/sc/inc/address.ts",
+      "sha256": "84c6bb85857ff994c6ddbb41af2987775e7c0cbfa6b9be20acd2a0603261b523"
+    },
+    {
+      "path": "apps/office/src/sc/inc/brdcst.ts",
+      "sha256": "887abdce91daaa31967c39642301d4821db2bffa1bafac42b5f6cfd5404c8463"
+    },
+    {
+      "path": "apps/office/src/sc/inc/columnspanset.ts",
+      "sha256": "46014c4b0e630b5d7e362c93455973798f534f622adfde8ee38fc62f36fc2b32"
+    },
+    {
+      "path": "apps/office/src/sc/inc/dociter.ts",
+      "sha256": "18dd4d8b56e74ff48f5960f539aed72be1b2b10c3be09ffeeb34ca8ae3e4d122"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "1e07e25e39e6ae00eb233d444d45874a3d50108078d064073ad4f2aa36837a53"
+    },
+    {
+      "path": "apps/office/src/sc/inc/kahan.ts",
+      "sha256": "d9fd9945b6372d718430064ee772f3035f3f763a62149228c48605f2bf306275"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements.ts",
+      "sha256": "53c47a639dd0aa922d47e2f7285bc3fdf4c262502f1d94c032184aaba4150d1f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "90440ad59426d98ef68171037f7d76c216b44bfe760255521e8496ea31b84f97"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/columnspanset.ts",
+      "sha256": "69c151674e26f68a4568d98cc94a837d0ed57b6735a03ae97b763482949bd66e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/dociter.ts",
+      "sha256": "d585ec20cc782b75a766b5b86f5c605a5179ddd67e5d55bc69fdf80bf875bee1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "076008f53488c0cba847d6189ad925d30f4f8033e699f0f90521ff1fcbc9fbd9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "sha256": "31b4a578a1f1c94a1061fe90a625a73e6a60925d7c911de86c6b177d698358cf"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+      "sha256": "752014fe5127cefc2b0a4e9cf0ebb6f6df87b92111a8027db9711e54f8215f37"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/address.ts",
+      "sha256": "c7b62ee08da28f054c265efe157c307e8467ba9b580e38bd872ee546adbd9e2e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "cc42529433a336cade11dd819c5db34ff29ca53c35f751f1f06f84174d1b4c6c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr4.ts",
+      "sha256": "6e28f9e5ac85f0c1ef6d3fe2f1578a835a8fd70957f922e24abcea4acc2b8b34"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "sha256": "bf9360961f2e3389e39ca352821f60253bc0a790fc9e1b77484b08ec62091aa6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "e0445ec77397d458118579a8332af347c7c9e1538efb984bc5c5d641bc8b3dfb"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "sha256": "e09495da8b2c7397e55376cfbf1821effb39f45e1d7445b57108eafc4bfc7f96"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "931c6be81ee4d885d8117fa5b606945f1e1dae574bb6af41787a9b72fbfe511a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/address.ts.json",
+      "sha256": "2a5f309dc2b11b3274bb0695c76d72bc2d1dc73aa774d343b9a7eb7d5b374cad"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/brdcst.ts.json",
+      "sha256": "6c008f2763bd6028a05da6d28f1c26ac17a8df5a8d4bd5e99ecaf703c37e319a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/columnspanset.ts.json",
+      "sha256": "b6d3358e53cdc96239f31481a8d70c9000f5cef98233c3e4ca64d0ad129ecd9a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/dociter.ts.json",
+      "sha256": "bb389dced8a48868bf79a52d29be1ef285fdb172253168ddcb42ae77526c7bef"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/kahan.ts.json",
+      "sha256": "668b8d7fa6e7bd8f5df154dc90fc32f96a5484a16a3a1a7c155029730cc280fa"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/mtvelements.ts.json",
+      "sha256": "13efe7bafc54171eda40694dcaa0f53d0a5d0e04cfa0418ddf83115309a7a7b7"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "sha256": "34cefee6e0b54970c5eeb74aa94ab9de45eb4463940be04671203f1a12ea9d0c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/columnspanset.ts.json",
+      "sha256": "372b7eef3320814aac6126e408b1bed0a6f9e03fe1699a05b8650b18b7052f0b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/dociter.ts.json",
+      "sha256": "70f7f574a0e9945952c3e398bb1814d6d598ae450156cb6bf50b5f8a2c938c01"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "81d41731756b53578040ed6e92b4ef55e4ad3132942281720aee69ee915d2b91"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "sha256": "c523248874cd3c954bb841dc0faa1c45526b1c07af622e3674304146c51ebe72"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/address.ts.json",
+      "sha256": "f357b8cf762314c6b8a0dafeff80208d6c3c536ea9fdb3659d8e7b183f5e70fb"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/compiler.ts.json",
+      "sha256": "6da9b470a19ffd51269aa81846bff0065fdd6d40903fed0b9763ca4c1940aa96"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/interpr4.ts.json",
+      "sha256": "1662aedb82f6bca2a63417741af3bd4b7e2744824de94089cf9ede547334045b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/token.ts.json",
+      "sha256": "5c2ba5ef8d8c77d107c628bdc65625429eca01fb0c3759a05ce094be71d89dff"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/docshell/docsh.ts.json",
+      "sha256": "b580823b7ce5822926ba0d787f60081fdd15d10d89336328b52adae9ae525846"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/address.ts.json",
+      "sha256": "95368782100a1ad5470515215d4b802d89ef3cc7cce687d653bcbb03b7910e18"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/brdcst.ts.json",
+      "sha256": "e57dc36fc25e4289387773c463d031e8954d69115676eb54e16f878ab1a92a52"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/columnspanset.ts.json",
+      "sha256": "4f21dd91a9a6b20d1f4a5fe119bab2d690d40a754feea4dd1ba76f4b265db5cb"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/dociter.ts.json",
+      "sha256": "a06a6516001e91e1a089eec5f0c6d4f80d7919db8ef6e88b053cb79f567c8d0a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/kahan.ts.json",
+      "sha256": "cee3c8cb93eb3b9d8ca93158fbcf54b225fa0ad863128ec9a10c69b09089219c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/mtvelements.ts.json",
+      "sha256": "2b17e6ec7f37e1001c7ff986219c292a7519c531e2b3c294c846b2f81dfbd37e"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "sha256": "857e44ea4c50b98dab929338ceb0cb70c4b33b818451ff5d4c922073defb2a36"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/columnspanset.ts.json",
+      "sha256": "0392b657cbcae52b65ad9844c6b2ce41fbb176b88940bf17a4036b78dbeafa80"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/dociter.ts.json",
+      "sha256": "d367d8c07b5424879800a77ff3c694c404a1c34366847d989d6482f493903dd4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "6e5131bb37030c74619661aadc01d30ef0f59090275a8b8ef6499bb20e9dd68d"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "sha256": "1049430a7bed6fa0a7180abc2b84213b764ad07cceb84a14c41ff40b4c9dbbc1"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/address.ts.json",
+      "sha256": "92b6adeb45abef92cb4ea0261aaf8d6eb69a3f466e7e4025cc3fb6c63a10fbd8"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/compiler.ts.json",
+      "sha256": "32de83361b8f6605bcc71057b2dbc7d6ea4d5d3ef3e415515b3be97e2d5228af"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/interpr4.ts.json",
+      "sha256": "ddf54b3bc21a3ceed773006d5451308c8233b2a459af409470c8eb9f78ff0b1b"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/token.ts.json",
+      "sha256": "99c8be8398ff89f5bdcd76f80e66c1e381b63028d066fa03cb553d5930aaefc8"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/docshell/docsh.ts.json",
+      "sha256": "c28ba8f4ef377d3282f307b1588f0e41b6b27c4bfb0a7f7a284dadc160522592"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/formula/inc/core_resource.ts.json",
+      "sha256": "ba345a7984b5ff1bfe7e905c443a6498c8d2a376a95c8d34d567efa37f4cf990"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "21dc192a52bb47f0dcaef73a5cccea1c97bdc1387e6ebd9993c4cbdf2af04500"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/formula/inc/core_resource.ts.json",
+      "sha256": "c822bb081ac6bb56ef487eb88ef0aef5a310b4f288342707a8fe48e46938db62"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "54e20bba9a72fe1971d4ffb259b756f41beff4a92df4ef8e55882e8a13b02dfe"
+    },
+    {
+      "path": "apps/office/e2e/calc/range-formulas.spec.ts",
+      "sha256": "4529d8738e81ace1012688ff89eaced3b4d63b5a61b5bdf74545726130230fb8"
+    },
+    {
+      "path": "apps/office/src/sc/inc/arraysumfunctor.ts",
+      "sha256": "420178b982e7e8b851d2551a0c8a5b923a870f5d29406b9a693c5517e0eebd2f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvfunctions.ts",
+      "sha256": "2f37ce7410ba39e697ad222a8d0665be98ea43e8be1c5829a2db691416dd477c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/native-array-sum-cases.json",
+      "sha256": "3f9622a1c4895b9d6ae3b0d3a3394a32898a7e1d6d74aaa836ce6b37c44c1c7a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/bcaslot.ts",
+      "sha256": "6539831954cc7d1bfde2d80d3bb126ad2994b56172192ce45500948d0c77f356"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen2.ts",
+      "sha256": "8de14b2ab3f60afd039ae9280ae34ba9c99f09f030f4310dd19586eb050a2383"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "4c93229b74b4dbdbe6e40fda6f469093cf8bb67e427bfd93d4b88d4eb8aee7ca"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/bcaslot.ts",
+      "sha256": "700008c5e14f6d08e099eb0d1542db3a817381a35759cf93348efcea9db5f7d5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr6.ts",
+      "sha256": "eef13f89dd9db6914f1f7b388618e4ffaa59dc76c2dc8b8fdeb48753c1ad1d21"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+      "sha256": "66077830ac1c92bc535cf157952731dbc7f22bee2d9430f30edb5c860ac93952"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/arraysumfunctor.ts.json",
+      "sha256": "16b5160cfb9b40f98dd4b07d6e8b08b6a50138b16a1394d08d156e178c4bb65b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/mtvfunctions.ts.json",
+      "sha256": "a6180047d9b1441efb70f5733200a7cd0eff5c13e8891455bcc2779c969faad1"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/bcaslot.ts.json",
+      "sha256": "74c0a568f30c05597f00f1e3efd4e8c332d21210647283e4de010cdf276c16b1"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen2.ts.json",
+      "sha256": "8f50d5bed1572fe20d8677800429585c013e5bfe1e56179b5f6835b74ab76dc8"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+      "sha256": "afd92ae9c116a6137d5a7024d7eaee76792e8200331a7751fed4a9de57a5ffa1"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/inc/bcaslot.ts.json",
+      "sha256": "d5bf0a3f2ce3307c1971da1769547c8faedc9aeacf71f6148b62af9cb00fbe04"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/interpr6.ts.json",
+      "sha256": "8ecc98637fa922f1e66104da4140cd8c4ef5c06eee96229a68fb3a2ba974b152"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/arraysumfunctor.ts.json",
+      "sha256": "3ed6563c42af8c2e4d326a6ec54b94b407afd478eeae3c02eacdf8c1a56a046e"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/mtvfunctions.ts.json",
+      "sha256": "950cb3fbf308e5599f242537b3c14046a125caaf1197b9ce93bfc6f6d1b8f0d5"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/bcaslot.ts.json",
+      "sha256": "858e53d694390eb50c18c542ed0b73a2706169606951d8a7a4c8e203c4db7931"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen2.ts.json",
+      "sha256": "0f8565fec4be6b84f09595bd82207e1f0e8481688d3787fbb2e96b20a0c10017"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+      "sha256": "be7713a4457948d350b518c8897c23f39a764bf7342e3ddbe1d85969f863ecc0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/inc/bcaslot.ts.json",
+      "sha256": "e5014a0ab7f44f0105e4060543a0ed8a2a449a0ed209789069ce4dec8e718190"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/interpr6.ts.json",
+      "sha256": "c0841061faf20151470a44d21f9b4083ea8e24e3ed365cad7beb50b3e5b2d945"
+    },
+    {
+      "path": "scripts/calc-array-sum-native-probe.mjs",
+      "sha256": "ccdcbb15f48334b013c639426c4c6c99797bbaec7d990140e04a4f569c892302"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task73-calc-final-results.json",
+    "output/playwright/task73-calc-final-coverage/coverage-final.json",
+    "output/playwright/task73-calc-final-coverage/coverage-summary.json",
+    "output/playwright/task73-calc-final.log",
+    "output/playwright/task73-shared-final-results.json",
+    "output/playwright/task73-shared-final-coverage/coverage-final.json",
+    "output/playwright/task73-shared-final-coverage/coverage-summary.json",
+    "output/playwright/task73-shared-final.log",
+    "output/playwright/task73-calc-contention.log",
+    "output/playwright/task73-calc-contention-results.json",
+    "output/playwright/task73-files-recheck.log",
+    "output/playwright/task73-e2e.log",
+    "output/playwright/task73-build.log",
+    "output/playwright/task73-gate-exits.json",
+    "output/playwright/task73-run-gates.mjs",
+    "output/playwright/task73-gates.log",
+    "output/playwright/task73-gate-lint.log",
+    "output/playwright/task73-gate-format.log",
+    "output/playwright/task73-gate-dependencies.log",
+    "output/playwright/task73-gate-docs.log",
+    "output/playwright/task73-gate-types.log",
+    "output/playwright/task73-gate-tree.log",
+    "output/playwright/task73-gate-size.log",
+    "output/playwright/task73-gate-provenance.log",
+    "output/playwright/task73-gate-calc-resources.log",
+    "output/playwright/task73-gate-writer-resources.log",
+    "output/playwright/task73-gate-registry.log",
+    "output/playwright/task73-gate-static.log",
+    "output/playwright/task73-gate-routing.log",
+    "output/playwright/task73-gate-doctor.log",
+    "output/playwright/task73-gate-native.log",
+    "output/playwright/task73-browser-range.txt",
+    "output/playwright/task73-browser-changed.txt",
+    "output/playwright/task73-browser-undo.txt",
+    "output/playwright/task73-browser-redo.txt",
+    "output/playwright/task73-browser-saved.txt",
+    "output/playwright/task73-browser-reloaded.txt",
+    "output/playwright/task73-browser-open-list.txt",
+    "output/playwright/task73-browser-reopened.txt",
+    "output/playwright/task73-browser-final-open-list.txt",
+    "output/playwright/task73-browser-final-reopened.txt",
+    "output/playwright/task73-browser-final-formula.txt",
+    "output/playwright/task73-browser-saved.png",
+    "output/playwright/task73-browser-reopened.png",
+    "output/playwright/task73-browser-final-formula.png",
+    "output/playwright/calc-array-sum-native/driver.cpp",
+    "output/playwright/calc-array-sum-native/manifest.json",
+    "output/playwright/calc-array-sum-native/normal-caller.values",
+    "output/playwright/calc-array-sum-native/asan-caller.values",
+    "output/playwright/calc-array-sum-native/normal-caller.stderr",
+    "output/playwright/calc-array-sum-native/asan-caller.stderr",
+    "output/playwright/calc-array-sum-native/ambiguous-driver.cpp",
+    "output/playwright/calc-array-sum-native/ambiguous-normal-caller.values",
+    "output/playwright/calc-array-sum-native/ambiguous-asan-caller.values",
+    "output/playwright/calc-array-sum-native/ambiguous-normal-caller.stderr",
+    "output/playwright/calc-array-sum-native/ambiguous-asan-caller.stderr",
+    "output/playwright/task73-native-array-check.log",
+    "vendor/libreoffice-reference/sc/inc/arraysumfunctor.hxx",
+    "vendor/libreoffice-reference/sc/inc/kahan.hxx",
+    "vendor/libreoffice-reference/sc/source/core/data/bcaslot.cxx",
+    "vendor/libreoffice-reference/sc/source/core/inc/bcaslot.hxx",
+    "vendor/libreoffice-reference/sc/source/core/data/dociter.cxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/interpr6.cxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/refupdat.cxx",
+    "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+    "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+    "vendor/libreoffice-reference/sc/source/core/data/documen7.cxx",
+    "vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx"
+  ],
+  "verification": {
+    "calc": {
+      "tests": 642,
+      "files": 184,
+      "owners": 142
+    },
+    "shared": {
+      "tests": 64,
+      "files": 11,
+      "owners": 2
+    },
+    "e2e": 2,
+    "gates": 15,
+    "nativeRows": 4097,
+    "nativeObjects": 138
+  },
+  "scope": "Block73 native local/ODFF double-reference compilation,ordinary area-slot lifetime/update/bulk broadcasts and default range aggregates through actual document/column stores. No per-cell range-listener expansion or browser evaluator.",
+  "limitations": "Foundation only. Other functions,group/3D/external/named-reference expressions,matrix,nondefault subtotal/text-as-zero and number-format services remain unavailable. Missing-table OSL_FAIL diagnostic is outside the initialized ordinary detach contract. Native full-sheet terminal-slot and nested-erasure edge behavior remains preserved in CALC250/251. Mixed encoded NaN error payload arithmetic is not certified;CALC252 retains differing original normal/ASan observations. The independent5000-row autosave regression remains included;the human file name is unknown. Full all-application checkpoint remains scheduled at80."
+}

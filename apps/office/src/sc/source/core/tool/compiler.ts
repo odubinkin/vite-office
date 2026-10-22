@@ -1,4 +1,4 @@
-/** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet/range references,other functions and localized input formatting remain unsupported. */
+/** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet references,other functions and localized input formatting remain unsupported. */
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
 import {
   FormulaByteToken,
@@ -15,12 +15,12 @@ import {
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScDocument } from "../../../inc/document";
-import { ScSingleRefData } from "../../../inc/refdata";
+import { ScSingleRefData, ScComplexRefData } from "../../../inc/refdata";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ScRefFlags, ScAddress } from "../../../inc/address";
+import { ScRefFlags, ScAddress, ScRange } from "../../../inc/address";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../../formula/inc/core_resource";
-import { ScSingleRefToken } from "../../../inc/token";
+import { ScSingleRefToken, ScDoubleRefToken, extendRangeReference } from "../../../inc/token";
 import type { FormulaToken } from "../../../../formula/inc/token";
 
 const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
@@ -39,6 +39,27 @@ const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
 );
 /** Actual shared grammar with the Calc first-error hook and bounded numeric scanner. */
 export class ScCompiler extends FormulaCompiler {
+  /** Original scalar implicit-intersection branch for the consumed local-sheet reference convention. 3D cases remain unported. @param range - Non-singleton native range. @param address - Selected address output. @param position - Formula position. @returns Unique source position. */
+  static DoubleRefToPosSingleRefScalarCase(
+    range: ScRange,
+    address: ScAddress,
+    position: ScAddress,
+  ): boolean {
+    if (range.aStart.Tab() !== range.aEnd.Tab() || range.aStart.Tab() !== position.Tab())
+      throw new Error("3D implicit intersection is not implemented");
+    if (range.aStart.Col() <= position.Col() && position.Col() <= range.aEnd.Col()) {
+      if (range.aStart.Row() === range.aEnd.Row()) {
+        address.Set(position.Col(), range.aStart.Row(), range.aStart.Tab());
+        return true;
+      }
+    } else if (range.aStart.Row() <= position.Row() && position.Row() <= range.aEnd.Row()) {
+      if (range.aStart.Col() === range.aEnd.Col()) {
+        address.Set(range.aStart.Col(), position.Row(), range.aStart.Tab());
+        return true;
+      }
+    }
+    return false;
+  }
   readonly aPos: ScAddress;
   /** Native document/position/array-or-grammar constructor subset. @param rDoc - Document. @param position - Formula position. @param arrayOrGrammar - Existing array or scanning grammar. @param grammar - Existing-array grammar. @returns Compiler. */
   constructor(
@@ -62,15 +83,13 @@ export class ScCompiler extends FormulaCompiler {
       throw new Error("Formula language or reference convention is not implemented");
     this.meGrammar = grammar;
   }
-  /** Emits native ODFF bracket/dot/absolute flags from the actual reference at the formula position. @param token - Single-reference token. @returns Reference text. */
-  protected override CreateStringFromSingleRef(token: FormulaToken): string {
-    const reference = (token as ScSingleRefToken).GetSingleRef();
+  /** Original local native/ODF one-reference convention operation. @param reference - Actual reference data. @param odf - ODF convention. @param singleton - Native none/column/row display. @returns Reference fragment. */
+  private MakeOneRefStrImpl(
+    reference: ScSingleRefData,
+    odf: boolean,
+    singleton: 0 | 1 | 2,
+  ): string {
     const address = reference.toAbs(this.rDoc, this.aPos);
-    const odf =
-      FormulaGrammar.extractRefConvention(this.meGrammar) ===
-      FormulaGrammar.AddressConvention.CONV_ODF;
-    if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
-      return "[#REF!]";
     if (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
       throw new Error("Sheet-qualified formula output is not implemented");
     let column = address.Col() + 1,
@@ -80,18 +99,104 @@ export class ScCompiler extends FormulaCompiler {
       letters = String.fromCharCode(65 + (column % 26)) + letters;
       column = Math.floor(column / 26);
     }
-    return (
-      (odf ? "[." : "") +
-      (reference.IsColRel() ? "" : "$") +
-      (reference.IsColDeleted() || !this.rDoc.GetSheetLimits().ValidCol(address.Col())
-        ? "#REF!"
-        : letters) +
-      (reference.IsRowRel() ? "" : "$") +
-      (reference.IsRowDeleted() || !this.rDoc.GetSheetLimits().ValidRow(address.Row())
-        ? "#REF!"
-        : address.Row() + 1) +
-      (odf ? "]" : "")
-    );
+    let output = odf ? "." : "";
+    if (singleton !== 2)
+      output +=
+        (reference.IsColRel() ? "" : "$") +
+        (reference.IsColDeleted() || !this.rDoc.ValidCol(address.Col()) ? "#REF!" : letters);
+    if (singleton !== 1)
+      output +=
+        (reference.IsRowRel() ? "" : "$") +
+        (reference.IsRowDeleted() || !this.rDoc.ValidRow(address.Row())
+          ? "#REF!"
+          : address.Row() + 1);
+    return output;
+  }
+  /** Emits the actual single-reference convention and native ODFF invalid-reference wrapper. @param token - Source token. @returns Reference text. */
+  protected override CreateStringFromSingleRef(token: FormulaToken): string {
+    const reference = (token as ScSingleRefToken).GetSingleRef(),
+      address = reference.toAbs(this.rDoc, this.aPos),
+      odf =
+        FormulaGrammar.extractRefConvention(this.meGrammar) ===
+        FormulaGrammar.AddressConvention.CONV_ODF;
+    if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
+      return "[#REF!]";
+    const value = this.MakeOneRefStrImpl(reference, odf, 0);
+    return odf ? "[" + value + "]" : value;
+  }
+  /** Emits original two-endpoint range text and entire-axis display with retained relative/absolute flags. @param token - Actual range token. @returns Range source. */
+  protected override CreateStringFromDoubleRef(token: FormulaToken): string {
+    const reference = (token as ScDoubleRefToken).GetDoubleRef(),
+      a = reference.Ref1.toAbs(this.rDoc, this.aPos),
+      b = reference.Ref2.toAbs(this.rDoc, this.aPos),
+      limits = this.rDoc.GetSheetLimits(),
+      odf =
+        FormulaGrammar.extractRefConvention(this.meGrammar) ===
+        FormulaGrammar.AddressConvention.CONV_ODF;
+    if (odf && (reference.IsDeleted() || !limits.ValidAddress(a) || !limits.ValidAddress(b)))
+      return "[#REF!]";
+    let singleton: 0 | 1 | 2 = 0;
+    if (
+      limits.ValidColRow(a.Col(), a.Row()) &&
+      limits.ValidColRow(b.Col(), b.Row()) &&
+      !reference.IsDeleted()
+    ) {
+      const named = this.mpArr.IsFromRangeName();
+      if (
+        reference.IsEntireCol(limits) ||
+        (!named &&
+          a.Row() === 0 &&
+          b.Row() === this.rDoc.MaxRow() &&
+          reference.Ref1.IsRowRel() &&
+          reference.Ref2.IsRowRel())
+      )
+        singleton = 1;
+      else if (
+        reference.IsEntireRow(limits) ||
+        (!named &&
+          a.Col() === 0 &&
+          b.Col() === this.rDoc.MaxCol() &&
+          reference.Ref1.IsColRel() &&
+          reference.Ref2.IsColRel())
+      )
+        singleton = 2;
+    }
+    const value =
+      this.MakeOneRefStrImpl(reference.Ref1, odf, singleton) +
+      ":" +
+      this.MakeOneRefStrImpl(reference.Ref2, odf, singleton);
+    return odf ? "[" + value + "]" : value;
+  }
+  /** Original virtual range merge delegates to existing native token extension. @param left - Left token. @param right - Right token. @returns Extended token or null. */
+  protected override ExtendRangeReference(
+    left: FormulaToken,
+    right: FormulaToken,
+  ): FormulaToken | null {
+    return extendRangeReference(this.rDoc.GetSheetLimits(), left, right, this.aPos, true);
+  }
+  /** Binds the actual local range parser flags to native complex reference data. @param name - Unwrapped range source. @returns Parsed range. */
+  private ParseDoubleReference(name: string): boolean {
+    const range = new ScRange(this.aPos, this.aPos),
+      input = unicode(name);
+    let flags: ScRefFlags;
+    try {
+      flags = range.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
+    } finally {
+      input.dispose();
+    }
+    if (!(flags & ScRefFlags.VALID)) throw new Error("Range/name fallback is not implemented");
+    const reference = new ScComplexRefData();
+    reference.InitRange(range);
+    reference.Ref1.SetColRel(!(flags & ScRefFlags.COL_ABS));
+    reference.Ref1.SetRowRel(!(flags & ScRefFlags.ROW_ABS));
+    reference.Ref1.SetTabRel(!(flags & ScRefFlags.TAB_ABS));
+    reference.Ref2.SetColRel(!(flags & ScRefFlags.COL2_ABS));
+    reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
+    reference.Ref2.SetTabRel(!(flags & ScRefFlags.TAB2_ABS));
+    reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
+    if (!(this.mpArr as ScTokenArray).AddDoubleReference(reference))
+      this.SetError(FormulaError.CodeOverflow);
+    return true;
   }
   /** Records the first actual code error. @param error - Error. @returns Nothing. */
   protected override SetError(error: FormulaError): void {
@@ -203,6 +308,16 @@ export class ScCompiler extends FormulaCompiler {
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
       if (!odf) {
+        const range =
+          /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/.exec(
+            source.slice(index),
+          );
+        if (range) {
+          this.ParseDoubleReference(range[0]);
+          last = OpCode.ocPush;
+          index += range[0].length;
+          continue;
+        }
         const reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/.exec(source.slice(index));
         if (reference) {
           this.ParseSingleReference(reference[0]);
@@ -215,7 +330,9 @@ export class ScCompiler extends FormulaCompiler {
         const close = source.indexOf("]", index + 1);
         if (close < 0 || source[index + 1] !== ".")
           throw new Error("Only bracketed local ODF references are implemented");
-        this.ParseSingleReference(source.slice(index + 2, close));
+        const name = source.slice(index + 2, close);
+        if (name.includes(":")) this.ParseDoubleReference(name.replace(":.", ":"));
+        else this.ParseSingleReference(name);
         last = OpCode.ocPush;
         index = close + 1;
         continue;

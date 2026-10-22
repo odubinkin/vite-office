@@ -1,4 +1,4 @@
-/** @fileoverview Numeric/local-reference RPN execution and ordinary scalar aggregate branches from interpr4/interpr6 over actual tokens and cell views. Ranges,matrix and locale-conversion services remain unsupported. */
+/** @fileoverview Numeric/local-reference RPN execution and ordinary scalar aggregate branches from interpr4/interpr6 over actual tokens and cell views. Matrix and locale-conversion services remain unsupported. */
 import {
   FormulaToken,
   FormulaDoubleToken,
@@ -8,7 +8,12 @@ import {
   StackVar,
 } from "../../../../formula/inc/token";
 import { ScRefCellValue } from "../../../inc/cellvalue";
-import { ScSingleRefToken, ScEmptyCellToken } from "../../../inc/token";
+import { ScSingleRefToken, ScDoubleRefToken, ScEmptyCellToken } from "../../../inc/token";
+import type { ScSingleRefData } from "../../../inc/refdata";
+import { RangeColumnSpanSet } from "../../../inc/columnspanset";
+import { ScValueIterator } from "../../../inc/dociter";
+import { FuncSum } from "./interpr6";
+import { ScCompiler } from "../../../inc/compiler";
 import { CellType } from "../../../inc/global";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
@@ -18,7 +23,7 @@ import { approxAdd, approxSub } from "../../../../sal/inc/rtl/math";
 import { div, power } from "../../../inc/math";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, ScRange } from "../../../inc/address";
 import type { ScTokenArray } from "../../../inc/tokenarray";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { KahanSum } from "../../../inc/kahan";
@@ -69,6 +74,13 @@ export class ScInterpreter {
     if (token.GetType() === StackVar.svSingleRef) {
       const address = this.PopSingleRef();
       return this.GetCellValue(address, new ScRefCellValue(this.mrDoc, address));
+    }
+    if (token.GetType() === StackVar.svDoubleRef) {
+      const range = this.PopDoubleRef(),
+        address = new ScAddress();
+      if (this.nGlobalError === FormulaError.NONE && this.DoubleRefToPosSingleRef(range, address))
+        return this.GetCellValue(address, new ScRefCellValue(this.mrDoc, address));
+      return 0;
     }
     if (token.GetType() === StackVar.svError) {
       this.PopError();
@@ -125,6 +137,37 @@ export class ScInterpreter {
         case StackVar.svError:
           this.PopError();
           continue;
+        case StackVar.svDoubleRef: {
+          const range = this.PopDoubleRef();
+          if (this.nGlobalError === FormulaError.NoRef) {
+            this.PushDouble(0);
+            return;
+          }
+          if (op === OpCode.ocSum) {
+            const action = new FuncSum(this.mrContext);
+            new RangeColumnSpanSet(range).executeColumnAction(this.mrDoc, action);
+            const error = action.getError();
+            if (error !== FormulaError.NONE) {
+              this.SetError(error);
+              this.PushDouble(0);
+              return;
+            }
+            result.add(action.getSum());
+          } else {
+            const iterator = new ScValueIterator(this.mrContext, range),
+              output = { error: FormulaError.NONE, value: 0 };
+            if (iterator.GetFirst(output)) {
+              do {
+                this.SetError(output.error);
+                if (op === OpCode.ocProduct) result.multiply_assign(output.value);
+                else result.add(op === OpCode.ocSumSQ ? output.value * output.value : output.value);
+                count++;
+              } while (iterator.GetNext(output));
+              this.SetError(output.error);
+            }
+          }
+          continue;
+        }
         default:
           throw new Error("Aggregate range/matrix/reference-list operands are not implemented");
       }
@@ -144,6 +187,10 @@ export class ScInterpreter {
       this.SetError(FormulaError.NoRef);
       return new ScAddress();
     }
+    return this.SingleRefToVars(reference);
+  }
+  /** Original absolute coordinate resolution and per-axis error/clamp branches. @param reference - Actual single reference data. @returns Absolute native address. */
+  private SingleRefToVars(reference: ScSingleRefData): ScAddress {
     const address = reference.toAbs(this.mrDoc, this.aPos);
     if (!this.mrDoc.GetSheetLimits().ValidCol(address.Col())) {
       this.SetError(FormulaError.NoRef);
@@ -158,6 +205,25 @@ export class ScInterpreter {
       address.SetTab(0);
     }
     return address;
+  }
+  /** Original ordinary PopDoubleRef/DoubleRefToRange branch with real endpoint resolution and ordering. Reference lists and table operations remain unsupported. @returns Native range. */
+  private PopDoubleRef(): ScRange {
+    const reference = (this.pStack.pop() as ScDoubleRefToken).GetDoubleRef();
+    if (reference.IsDeleted()) {
+      this.SetError(FormulaError.NoRef);
+      return new ScRange();
+    }
+    return new ScRange(this.SingleRefToVars(reference.Ref1), this.SingleRefToVars(reference.Ref2));
+  }
+  /** Original non-matrix singleton/implicit-intersection choice for a scalar range result. @param range - Actual range. @param address - Address output. @returns Selected unique cell. */
+  private DoubleRefToPosSingleRef(range: ScRange, address: ScAddress): boolean {
+    if (range.aStart.equals(range.aEnd)) {
+      address.assign(range.aStart);
+      return true;
+    }
+    const result = ScCompiler.DoubleRefToPosSingleRefScalarCase(range, address, this.aPos);
+    if (!result) this.SetError(FormulaError.NoValue);
+    return result;
   }
   /** Preserves a previous error while reading the actual referenced numeric cell. Locale string coercion remains unsupported. @param address - Position. @param cell - Actual view. @returns Double. */
   private GetCellValue(address: ScAddress, cell: ScRefCellValue): number {
@@ -277,6 +343,15 @@ export class ScInterpreter {
     ) {
       const address = this.PopSingleRef();
       if (this.nGlobalError === FormulaError.NONE) this.PushCellResultToken(address);
+    }
+    if (
+      this.pStack.length === 1 &&
+      (this.pStack[0] as FormulaToken).GetType() === StackVar.svDoubleRef
+    ) {
+      const range = this.PopDoubleRef(),
+        address = new ScAddress();
+      if (this.nGlobalError === FormulaError.NONE && this.DoubleRefToPosSingleRef(range, address))
+        this.PushCellResultToken(address);
     }
     if (this.pStack.length !== 1)
       this.SetError(this.pStack.length > 1 ? FormulaError.OperatorExpected : FormulaError.NoCode);

@@ -1,5 +1,8 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
 import { ScViewOptions } from "../../../inc/viewopti";
+import * as documen2 from "./documen2";
+import * as documen7 from "./documen7";
+import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
@@ -47,7 +50,7 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -55,8 +58,15 @@ import { uppercase } from "../../../../unotools/inc/charclass";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
+/** Native dependency recalculation modes from document.hxx. */
+export enum HardRecalcState {
+  OFF,
+  TEMPORARY,
+  ETERNAL,
+}
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  static readonly HardRecalcState = HardRecalcState;
   private readonly pViewOptions = new ScViewOptions();
   /** Original documen3 borrowed view options. @returns Actual document-owned options. */
   GetViewOptions(): ScViewOptions {
@@ -66,7 +76,6 @@ export class ScDocument {
   SetViewOptions(options: ScViewOptions): void {
     this.pViewOptions.copy_assign(options);
   }
-
   /** Original document.cxx connected-area delegation;missing sheets leave references untouched. @param tab - Sheet. @param firstCol - Start column. @param firstRow - Start row. @param lastCol - End column. @param lastRow - End row. @param includeOld - Retain input. @param onlyDown - Only final row. @returns Nothing. */
   GetDataArea(
     tab: number,
@@ -79,7 +88,6 @@ export class ScDocument {
   ): void {
     this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
   }
-
   private pScriptTypeData: ScScriptTypeData | undefined;
   /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
   GetBreakIterator(factory?: ScScriptServiceFactory): XBreakIterator | null {
@@ -107,7 +115,6 @@ export class ScDocument {
   SetScriptType(position: ScAddress, type: SvtScriptType): void {
     this.FetchTable(position.Tab())?.SetScriptType(position.Col(), position.Row(), type);
   }
-
   /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
   IsLayoutRTL(tab: number): boolean {
     return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
@@ -373,7 +380,6 @@ export class ScDocument {
       this.SetAutoCalc(oldAutoCalc);
     }
   }
-
   /** Original selected-sheet DeleteSelection traversal for the represented hard/edit-attribute flags;cell payload/listener owners are untouched. @param flags - Attribute-only deletion flags. @param marks - Actual multi marks. @returns Nothing. */
   DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
     const oldAutoCalc = this.GetAutoCalc();
@@ -467,6 +473,11 @@ export class ScDocument {
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
   private bAutoCalc = true;
   private readonly maTabs: ScTable[] = [];
+  private pBASM: ScBroadcastAreaSlotMachine | null = new ScBroadcastAreaSlotMachine(this);
+  private eHardRecalcState = HardRecalcState.OFF;
+  private mbTrackFormulasPending = false;
+  private mbFinalTrackFormulas = false;
+  private bExpandRefs = false;
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   private readonly mpCellStringPool: SharedStringPool;
   /** Creates the scalar document's shared pool using the existing prepared-locale uppercase operation. @returns Document. */
@@ -672,9 +683,11 @@ export class ScDocument {
   }
   /** Releases actual attribute registrations at document closure. @returns Nothing. */
   DisposeAttributes(): void {
-    this.pSelectionAttr?.Dispose();
-    this.pSelectionAttr = undefined;
-    for (const table of this.maTabs) table.DisposeAttributes();
+    return documen2.DisposeAttributes.call(this);
+  }
+  /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @returns Nothing. */
+  Dispose(): void {
+    return documen2.Dispose.call(this);
   }
   /** Borrows document-independent native sheet limits. @returns Limits. */
   GetSheetLimits(): ScSheetLimits {
@@ -714,6 +727,30 @@ export class ScDocument {
   EndListeningCell(position: ScAddress, listener: SvtListener<SfxHint>): void {
     this.FetchTable(position.Tab())?.EndListening(position, listener);
   }
+  /** Borrows the actual native area machine;null after observable destruction. @returns Machine. */
+  GetBASM(): ScBroadcastAreaSlotMachine | null {
+    return this.pBASM;
+  }
+  /** Reads native recalculation mode. @returns Mode. */
+  GetHardRecalcState(): HardRecalcState {
+    return this.eHardRecalcState;
+  }
+  /** Sets native recalculation mode. @param state - Mode. @returns Nothing. */
+  SetHardRecalcState(state: HardRecalcState): void {
+    this.eHardRecalcState = state;
+  }
+  /** Clips actual source sheet endpoints symmetrically for area start/end listening. @param range - Source range. @param limited - Output range. @param entirelyOut - Output out-of-bounds flag. @returns Whether clipping is needed. */
+  LimitRangeToAvailableSheets(range: ScRange, limited: ScRange, entirelyOut: [boolean]): boolean {
+    return documen7.LimitRangeToAvailableSheets.call(this, range, limited, entirelyOut);
+  }
+  /** Binds native area subscriptions after central sheet clipping. @param range - Area. @param group - Group mode. @param listener - Actual listener. @returns Nothing. */
+  StartListeningArea(range: ScRange, group: boolean, listener: SvtListener<SfxHint>): void {
+    return documen7.StartListeningArea.call(this, range, group, listener);
+  }
+  /** Ends subscriptions using exactly the original start-listening sheet clipping. @param range - Area. @param group - Group mode. @param listener - Listener. @returns Nothing. */
+  EndListeningArea(range: ScRange, group: boolean, listener: SvtListener<SfxHint>): void {
+    return documen7.EndListeningArea.call(this, range, group, listener);
+  }
   /** Dispatches native hints through existing single-cell broadcasters. Area subscribers remain unsupported. @param hint - Hint. @returns Whether delivered. */
   BroadcastHintInternal(hint: ScHint): boolean {
     let delivered = false,
@@ -732,7 +769,19 @@ export class ScDocument {
   }
   /** Broadcasts a normal single-cell change and tracks its dependent formulas. @param hint - Hint. @returns Nothing. */
   Broadcast(hint: ScHint): void {
-    if (this.BroadcastHintInternal(hint)) this.TrackFormulas(hint.GetId());
+    return documen7.Broadcast.call(this, hint);
+  }
+  /** Original inline flag used by native final tracking. @returns Final-round state. */
+  IsFinalTrackFormulas(): boolean {
+    return this.mbFinalTrackFormulas;
+  }
+  /** Reads actual native deferred tracking state. @returns Pending. */
+  IsTrackFormulasPending(): boolean {
+    return this.mbTrackFormulasPending;
+  }
+  /** Completes native bulk-collected tracking,then performs its final non-bulk round. @param id - Hint ID. @returns Nothing. */
+  FinalTrackFormulas(id: SfxHintId): void {
+    return documen7.FinalTrackFormulas.call(this, id);
   }
   /** Reports native logical formula-tree membership. @param cell - Formula. @returns Membership. */
   IsInFormulaTree(cell: ScFormulaCell): boolean {
@@ -754,16 +803,7 @@ export class ScDocument {
   }
   /** Removes native calculation membership and preserves the normal counter/clamp result. @param cell - Formula. @returns Nothing. */
   RemoveFromFormulaTree(cell: ScFormulaCell): void {
-    const previous = cell.GetPrevious();
-    if (!previous && this.pFormulaTree !== cell) return;
-    const next = cell.GetNext();
-    if (previous) previous.SetNext(next);
-    else this.pFormulaTree = next;
-    if (next) next.SetPrevious(previous);
-    else this.pEOFormulaTree = previous;
-    cell.SetPrevious(null);
-    cell.SetNext(null);
-    this.nFormulaCodeInTree = Math.max(0, this.nFormulaCodeInTree - cell.GetCode().GetCodeLen());
+    return documen7.RemoveFromFormulaTree.call(this, cell);
   }
   /** Reads the actual native RPN count in the calculation list. @returns Count. */
   GetFormulaCodeInTree(): number {
@@ -782,71 +822,19 @@ export class ScDocument {
   }
   /** Removes a formula's native tracking links. @param cell - Formula. @returns Nothing. */
   RemoveFromFormulaTrack(cell: ScFormulaCell): void {
-    const previous = cell.GetPreviousTrack();
-    if (!previous && this.pFormulaTrack !== cell) return;
-    const next = cell.GetNextTrack();
-    if (previous) previous.SetNextTrack(next);
-    else this.pFormulaTrack = next;
-    if (next) next.SetPreviousTrack(previous);
-    else this.pEOFormulaTrack = previous;
-    cell.SetPreviousTrack(null);
-    cell.SetNextTrack(null);
-    this.nFormulaTrackCount = (this.nFormulaTrackCount - 1) & 0xffff;
+    return documen7.RemoveFromFormulaTrack.call(this, cell);
   }
   /** Performs native two-pass single-cell tracking, including contiguous-row hint compression. Bulk/area/group/script services are not represented. @param id - Hint ID. @returns Nothing. */
   TrackFormulas(id: SfxHintId = SfxHintId.ScDataChanged): void {
-    for (let cell = this.pFormulaTrack; cell; cell = cell.GetNextTrack()) {
-      const address = new ScAddress(cell.aPos);
-      let rows = 1;
-      for (let next = cell.GetNextTrack(); next; next = next.GetNextTrack()) {
-        if (!next.aPos.equals(new ScAddress(address.Col(), address.Row() + rows, address.Tab())))
-          break;
-        rows++;
-        cell = next;
-      }
-      this.BroadcastHintInternal(new ScHint(id, address, rows));
-    }
-    let forced = false;
-    while (this.pFormulaTrack) {
-      const cell = this.pFormulaTrack;
-      this.RemoveFromFormulaTrack(cell);
-      this.PutInFormulaTree(cell);
-      if (cell.GetCode().IsRecalcModeForced()) forced = true;
-    }
-    if (forced) {
-      this.bHasForcedFormulas = true;
-      if (this.bAutoCalc && !this.bCalculatingFormulaTree) this.CalcFormulaTree(true);
-    }
+    return documen7.TrackFormulas.call(this, id);
   }
   /** Calculates represented dirty scalar formulas from the real tree; re-scan after recursive reads remove other tree nodes. @param onlyForced - Native forced-only mode. @returns Nothing. */
   CalcFormulaTree(onlyForced = false): void {
-    const oldAutoCalc = this.bAutoCalc;
-    this.bAutoCalc = true;
-    this.bCalculatingFormulaTree = true;
-    try {
-      for (;;) {
-        let cell = this.pFormulaTree;
-        while (cell && (!cell.GetDirty() || (onlyForced && !cell.GetCode().IsRecalcModeForced())))
-          cell = cell.GetNext();
-        if (!cell) break;
-        cell.Interpret();
-      }
-    } finally {
-      this.bAutoCalc = oldAutoCalc;
-      this.bCalculatingFormulaTree = false;
-    }
+    return documen7.CalcFormulaTree.call(this, onlyForced);
   }
   /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
-    if (context.mbClearTabDeletedFlag)
-      throw new Error("Deleted-sheet flag clearing is not implemented");
-    const old = this.bAutoCalc;
-    this.bAutoCalc = false;
-    try {
-      for (const table of this.maTabs) table.SetAllFormulasDirty(context);
-    } finally {
-      this.SetAutoCalc(old);
-    }
+    return documen7.SetAllFormulasDirty.call(this, context);
   }
   /** Writes supported numeric formula content through the existing sheet/column owner chain. @param position - Cell. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(position: ScAddress, source: OUStringConstReference, grammar: Grammar): void {
@@ -881,6 +869,18 @@ export class ScDocument {
   /** Reports the full logical row domain of every column store. @returns Count. */
   GetMaxRowCount(): number {
     return MAXROWCOUNT;
+  }
+  /** Reads the native sheet-limit column count. @returns Count. */
+  GetMaxColCount(): number {
+    return this.mxSheetLimits.GetMaxColCount();
+  }
+  /** Original reference-expansion policy getter. @returns Expand adjacent references. */
+  IsExpandRefs(): boolean {
+    return this.bExpandRefs;
+  }
+  /** Original reference-expansion policy setter. @param value - Policy. @returns Nothing. */
+  SetExpandRefs(value: boolean): void {
+    this.bExpandRefs = value;
   }
   /** Checks native row bounds. @param row - Row. @returns Validity. */
   ValidRow(row: number): boolean {
@@ -928,12 +928,17 @@ export class ScDocument {
     if (!ValidTab(position)) return false;
     this.maTabs.splice(position, 0, new ScTable(this, position, name));
     for (let i = position + 1; i < this.maTabs.length; i++) (this.maTabs[i] as ScTable).SetTabNo(i);
+    const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
+    if (position < this.maTabs.length - 1)
+      this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
     this.SetAllFormulasDirty(new SetFormulaDirtyContext());
     return true;
   }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {
     if (!this.FetchTable(tab) || this.maTabs.length <= 1) return false;
+    const shifted = new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), this.GetTableCount() - 1);
+    this.pBASM?.DelBroadcastAreasInRange(new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), tab));
     const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow());
     const col: [number] = [0],
       row: [number] = [0];
@@ -943,6 +948,7 @@ export class ScDocument {
     this.maTabs.splice(tab, 1);
     for (let index = tab; index < this.maTabs.length; index++)
       (this.maTabs[index] as ScTable).SetTabNo(index);
+    this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, -1);
     this.SetAllFormulasDirty(new SetFormulaDirtyContext());
     return true;
   }
