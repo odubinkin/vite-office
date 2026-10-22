@@ -33,3 +33,9 @@ export interface DocumentExportPort {
   /** Starts one platform export. @param request - Complete export payload. @returns Nothing; completion confirmation is intentionally unavailable. */
   export(request: DocumentExportRequest): void;
 }
+
+/** XML is stored as text, binary resources as bytes, without archive headers, CRCs or compression. */
+export interface XmlPackage {
+  readonly format: "xml";
+  readonly files: Readonly<Record<string, string | Uint8Array>>;
+}

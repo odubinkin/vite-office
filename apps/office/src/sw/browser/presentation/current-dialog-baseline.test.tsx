@@ -34,7 +34,7 @@ function session() {
 }
 /** Supplies an isolated immutable browser record. @param title - Stored title. @param id - Stored identity. @returns Record. */
 function record(title = "Target", id = "target"): BrowserWriterDocument {
-  return { bytes: new Uint8Array([1]), id, title, version: 1 };
+  return { content: { format: "xml", files: {} }, id, title, version: 1 };
 }
 /** Opens the actual inline-title interaction. @param title - Edited title. @returns Nothing. */
 function rename(title: string): void {

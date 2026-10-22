@@ -2,7 +2,7 @@
  * @fileoverview Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with
  * transferables, stale-result rejection, cancellation, timeout, and deterministic termination.
  */
-
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import {
   cancelWorkerRequest,
   classifyWorkerResult,
@@ -23,7 +23,7 @@ import {
   type OdtFilterService,
 } from "../../../source/filter/xml/odt-filter-service";
 import type { OdtWorkerRequestPayload, OdtWorkerResultPayload } from "./odt-worker-runtime";
-import { createOdtWorkerDocument, restoreOdtWorkerDocument } from "./odt-transfer";
+import { createOdtWorkerDocumentAsync, restoreOdtWorkerDocumentAsync } from "./odt-transfer";
 
 /** Default wall-clock ceiling for one browser ODT operation. */
 export const ODT_WORKER_TIMEOUT_MS = 30_000;
@@ -57,6 +57,7 @@ interface PendingRequest {
 export class OdtWorkerClient implements OdtFilterService {
   private active: PendingRequest | undefined;
   private closed = false;
+  private preparationGeneration = 0;
   private state: WorkerClientState = createWorkerClientState();
   private worker: OdtWorkerTransport | undefined;
 
@@ -71,6 +72,7 @@ export class OdtWorkerClient implements OdtFilterService {
 
   /** Cancels and physically terminates current work so synchronous XML cannot outlive cancellation. @returns Nothing. */
   public Cancel(): void {
+    this.preparationGeneration++;
     this.CancelActive("cancelled", "ODT operation was cancelled.");
   }
 
@@ -78,6 +80,7 @@ export class OdtWorkerClient implements OdtFilterService {
   public Close(): void {
     if (this.closed) return;
     this.closed = true;
+    this.preparationGeneration++;
     this.CancelActive("cancelled", "ODT filter service was closed.");
     this.TerminateWorker();
   }
@@ -87,23 +90,57 @@ export class OdtWorkerClient implements OdtFilterService {
     document: OdtFilterDocument,
     options: OdtFilterOperationOptions = {},
   ): Promise<Uint8Array> {
-    const result = await this.Run(
-      { document: createOdtWorkerDocument(document), operation: "export" },
-      [],
-      options,
+    if (this.closed) throw new OdtFilterError("internal", "ODT filter service is closed.");
+    if (options.signal?.aborted)
+      throw new OdtFilterError("cancelled", "ODT operation was cancelled.");
+    this.CancelActive("stale", "ODT operation was superseded by a newer request.");
+    const generation = ++this.preparationGeneration;
+    const snapshot = await createOdtWorkerDocumentAsync(
+      document,
+      /** Cancels graph transfer when the request or document becomes stale.  @returns Operation result. */ () =>
+        this.closed ||
+        generation !== this.preparationGeneration ||
+        options.signal?.aborted === true ||
+        options.isCurrent?.() === false,
     );
+    const result = await this.Run({ document: snapshot, operation: "export" }, [], options);
     if (result.operation !== "export")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
     return new Uint8Array(result.bytes);
   }
 
+  /** Writes XML in the worker after a bounded main-thread snapshot. @param document - Live graph. @param options - Controls. @returns XML streams. */
+  public async ExportXml(
+    document: OdtFilterDocument,
+    options: OdtFilterOperationOptions = {},
+  ): Promise<XmlPackage> {
+    if (this.closed) throw new OdtFilterError("internal", "ODT filter service is closed.");
+    if (options.signal?.aborted)
+      throw new OdtFilterError("cancelled", "ODT operation was cancelled.");
+    this.CancelActive("stale", "ODT operation was superseded by a newer request.");
+    const generation = ++this.preparationGeneration;
+    const snapshot = await createOdtWorkerDocumentAsync(
+      document,
+      /** Cancels graph transfer when the request or document becomes stale.  @returns Operation result. */ () =>
+        this.closed ||
+        generation !== this.preparationGeneration ||
+        options.signal?.aborted === true ||
+        options.isCurrent?.() === false,
+    );
+    const result = await this.Run({ document: snapshot, operation: "export-xml" }, [], options);
+    if (result.operation !== "export-xml")
+      throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
+    return result.data;
+  }
+
   /** Imports transferred package bytes. @param bytes - Complete ODT bytes copied before transfer. @param metadata - Fallback document metadata. @param options - Cancellation/progress/resource controls. @returns Neutral candidate snapshot. */
   public async Import(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: Readonly<{ title: string; locale?: string }>,
     options: OdtFilterOperationOptions = {},
   ): Promise<OdtFilterDocument> {
-    const buffer = bytes.slice().buffer;
+    const generation = ++this.preparationGeneration;
+    const buffer = bytes instanceof Uint8Array ? bytes.slice().buffer : bytes;
     const result = await this.Run(
       {
         bytes: buffer,
@@ -111,12 +148,19 @@ export class OdtWorkerClient implements OdtFilterService {
         operation: "import",
         ...(options.zipLimits === undefined ? {} : { zipLimits: options.zipLimits }),
       },
-      [buffer],
+      buffer instanceof ArrayBuffer ? [buffer] : [],
       options,
     );
     if (result.operation !== "import")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
-    return restoreOdtWorkerDocument(result.document, options.defaultFontDevice);
+    return restoreOdtWorkerDocumentAsync(
+      result.document,
+      options.defaultFontDevice,
+      /** Cancels graph transfer when the request or document becomes stale.  @returns Operation result. */ () =>
+        this.closed ||
+        generation !== this.preparationGeneration ||
+        options.signal?.aborted === true,
+    );
   }
 
   /** Issues one latest-only request. @param payload - Operation payload. @param transfer - Ownership transfers. @param options - Cancellation/progress controls. @returns Terminal worker payload. */

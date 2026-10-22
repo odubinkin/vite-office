@@ -1,4 +1,9 @@
 /** @fileoverview Bounded ScDocShell lifecycle,ODS filter and shared Sfx history ownership. Browser primary media use existing Sfx acknowledgement/generation contracts;native drawing/formatting services remain unported. */
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
+import {
+  createInlineOdsFilterService,
+  type OdsFilterService,
+} from "../../filter/xml/ods-filter-service";
 import { ScDocFunc } from "./docfunc";
 import {
   SfxObjectShell,
@@ -18,12 +23,7 @@ import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScDocument } from "../../../inc/document";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import {
-  ScXMLImportWrapper,
-  writeOdsDocument,
-  ODS_MIMETYPE,
-  type OdsImportOptions,
-} from "../../filter/xml/xmlwrap";
+import { writeOdsDocument, ODS_MIMETYPE, type OdsImportOptions } from "../../filter/xml/xmlwrap";
 /** Confirmed write belongs to the generation captured before persistence begins. */
 export interface ScPrimarySaveEvidence {
   readonly generation: number;
@@ -49,8 +49,11 @@ export class ScDocShell extends SfxObjectShell {
   static readonly ODS_MEDIA_TYPE = ODS_MIMETYPE;
   private readonly undo = new SfxUndoManager<ScDocShell>();
   private openRequest = 0;
-  /** Creates an untitled shell or adopts an existing model. @param document - Actual model. @returns Shell. */
-  constructor(private document: ScDocument = new ScDocument()) {
+  /** Creates an untitled shell or adopts an existing model. @param document - Actual model. @param odsFilter - Asynchronous document filter. @returns Shell. */
+  constructor(
+    private document: ScDocument = new ScDocument(),
+    private readonly odsFilter: OdsFilterService = createInlineOdsFilterService(),
+  ) {
     super(
       createDocument({ id: crypto.randomUUID(), suiteId: "calc", title: "Untitled Calc Document" }),
       { kind: "untitled", name: "Untitled Calc Document" },
@@ -148,7 +151,7 @@ export class ScDocShell extends SfxObjectShell {
   }
   /** Reads a separate ODS candidate and installs it only if the request/model generation remains current. @param bytes - Package. @param metadata - Browser identity. @param medium - Open route. @param options - Filter controls. @returns Installed model. */
   async Open(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: SfxObjectShellState,
     medium?: SfxMediumInput,
     options: OdsImportOptions = {},
@@ -156,13 +159,15 @@ export class ScDocShell extends SfxObjectShell {
     this.EnsureOpen();
     const request = ++this.openRequest,
       generation = this.GetContentGeneration(),
-      candidate = new ScDocument();
+      current = this.document;
+    let candidate: ScDocument | undefined;
     try {
-      await new ScXMLImportWrapper(candidate).Import(bytes, {
+      candidate = await this.odsFilter.Import(bytes, {
         ...options,
         isCancelled: /** Cancels stale source work. @returns Cancelled. */ () =>
           request !== this.openRequest ||
           generation !== this.GetContentGeneration() ||
+          current !== this.document ||
           options.isCancelled?.() === true,
       });
       this.EnsureOpen();
@@ -184,7 +189,7 @@ export class ScDocShell extends SfxObjectShell {
         input,
       );
     } catch (error) {
-      this.DisposeDocument(candidate);
+      if (candidate) this.DisposeDocument(candidate);
       throw error;
     }
   }
@@ -192,6 +197,30 @@ export class ScDocShell extends SfxObjectShell {
   SerializeOds(): Uint8Array {
     this.EnsureOpen();
     return writeOdsDocument(this.document);
+  }
+  /** Serializes browser XML through the injected asynchronous filter. @returns XML streams. */
+  SerializeXml(): Promise<XmlPackage> {
+    this.EnsureOpen();
+    const generation = this.GetContentGeneration(),
+      document = this.document;
+    return this.odsFilter.Export(
+      document,
+      true,
+      /** Rejects graph capture after the live document generation changes.  @returns Operation result. */ () =>
+        generation === this.GetContentGeneration() && document === this.document,
+    );
+  }
+  /** Serializes an external ODS through the browser worker. @returns ODS bytes. */
+  SerializeOdsAsync(): Promise<Uint8Array> {
+    this.EnsureOpen();
+    const generation = this.GetContentGeneration(),
+      document = this.document;
+    return this.odsFilter.Export(
+      document,
+      false,
+      /** Rejects graph capture after the live document generation changes.  @returns Operation result. */ () =>
+        generation === this.GetContentGeneration() && document === this.document,
+    );
   }
   /** Saves to the current confirmed primary destination. @param persist - Confirmed adapter. @returns Completion. */
   Save(
@@ -301,6 +330,7 @@ export class ScDocShell extends SfxObjectShell {
   }
   /** Ends pending imports,formula registrations and native broadcaster/history resources once. @returns Nothing. */
   Close(): void {
+    this.odsFilter.Close();
     if (!this.CloseObjectShell()) return;
     this.openRequest++;
     this.DisposeDocument(this.document);

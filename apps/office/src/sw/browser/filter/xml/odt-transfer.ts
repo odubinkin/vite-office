@@ -8,6 +8,8 @@ import {
 } from "../../../source/filter/xml/odt-filter-service";
 import {
   decodeWriterDocument,
+  decodeWriterDocumentAsync,
+  encodeWriterDocumentAsync,
   encodeWriterDocument,
   type WriterDocumentRecord,
 } from "./writer-document-codec";
@@ -69,4 +71,31 @@ export function restoreOdtWriterTransfer(
   )
     throw new Error("ODT worker transfer schema is unsupported.");
   return decodeWriterDocument(candidate.graph, defaultFontDevice);
+}
+
+/** Captures a stable cloneable graph across bounded browser tasks. @param input - Model and title. @param cancelled - Snapshot guard. @returns Worker payload. */
+export async function createOdtWorkerDocumentAsync(
+  input: OdtFilterDocument,
+  cancelled: () => boolean,
+): Promise<OdtWorkerDocument> {
+  return {
+    document: {
+      graph: await encodeWriterDocumentAsync(input.document, cancelled),
+      transferVersion: 5,
+    },
+    metadata: { title: input.title },
+  };
+}
+/** Rehydrates worker output in bounded browser tasks. @param input - Worker payload. @param device - Font device. @param cancelled - Adoption guard. @returns Candidate model. */
+export async function restoreOdtWorkerDocumentAsync(
+  input: OdtWorkerDocument,
+  device: DefaultFontDevice | undefined,
+  cancelled: () => boolean,
+): Promise<OdtFilterDocument> {
+  if (input.document.transferVersion !== 5 || typeof input.metadata.title !== "string")
+    throw new Error("ODT worker transfer schema is unsupported.");
+  return createOdtFilterDocument(
+    await decodeWriterDocumentAsync(input.document.graph, device, cancelled),
+    input.metadata.title,
+  );
 }

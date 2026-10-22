@@ -105,6 +105,10 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     expect(progress).toEqual(["import:package"]);
 
     const exporting = client.Export(importedSnapshot);
+    await vi.waitFor(
+      /** Waits for bounded snapshot preparation before responding to export.  @returns Operation result. */ () =>
+        expect(worker.posted.at(-1)?.message).toMatchObject({ payload: { operation: "export" } }),
+    );
     const exportId = postedId(worker);
     const buffer = new Uint8Array([0x50, 0x4b]).buffer;
     worker.emit({

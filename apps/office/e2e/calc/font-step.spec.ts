@@ -12,7 +12,10 @@ const fontKernelExports = [
   { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
   { module: "src/editeng/inc/fhgtitem.ts", names: ["SvxFontHeightItem"] },
   { module: "src/svl/inc/languageoptions.ts", names: ["SvtScriptType"] },
-  { module: "src/sc/source/filter/xml/xmlwrap.ts", names: ["writeOdsDocument", "readOdsDocument"] },
+  {
+    module: "src/sc/source/filter/xml/xmlwrap.ts",
+    names: ["writeOdsDocument", "writeOdsXml", "readOdsDocument"],
+  },
   { module: "src/sc/source/filter/xml/xmlimprt.ts", names: ["ScXMLImport"] },
   { module: "src/sc/browser/workflows/calc-ods-io.ts", names: ["createCalcDocumentStore"] },
   { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
@@ -191,7 +194,7 @@ for (const width of [1280, 390])
             id: "script-heights",
             title: "Script sizes",
             version: 1,
-            bytes: n.writeOdsDocument(doc),
+            content: n.writeOdsXml(doc),
           });
         } finally {
           doc.DisposeAttributes();
@@ -227,7 +230,7 @@ for (const width of [1280, 390])
                   .CalcFontStepFixture,
                 record = await n.createCalcDocumentStore().load("script-heights");
               if (!record) return [];
-              const doc = await n.readOdsDocument(record.bytes);
+              const doc = await n.readOdsDocument(record.content);
               try {
                 return [101, 112, 117].map(
                   /** Reads a reopened script height. @param which - Native attribute id. @returns Twips. */ (

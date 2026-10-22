@@ -1,4 +1,4 @@
-/** @fileoverview Writer ODT domain adapter over the shared primary package store;preserves the existing database identity. */
+/** @fileoverview Writer domain adapter over the shared primary XML store;preserves the existing database identity. */
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
 export type {
   BrowserStoredDocument as BrowserWriterDocument,

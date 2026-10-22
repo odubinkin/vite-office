@@ -2,7 +2,7 @@
  * @fileoverview Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns
  * only neutral filter documents or transferable byte buffers to the document-shell client.
  */
-
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import {
   WORKER_PROTOCOL_VERSION,
   type WorkerCancellation,
@@ -18,6 +18,7 @@ import {
   type OdtFilterErrorCategory,
   type OdtFilterProgressStage,
   type OdtFilterService,
+  type OdtFilterDocument,
 } from "../../../source/filter/xml/odt-filter-service";
 import {
   createOdtWorkerDocument,
@@ -27,7 +28,7 @@ import {
 
 /** Import request transferred into the worker. */
 export interface OdtWorkerImportRequest {
-  readonly bytes: ArrayBuffer;
+  readonly bytes: ArrayBuffer | XmlPackage;
   readonly metadata: Readonly<{ title: string; locale?: string }>;
   readonly operation: "import";
   readonly zipLimits?: ZipFileLimits;
@@ -36,7 +37,7 @@ export interface OdtWorkerImportRequest {
 /** Export request carrying a structured-clone Writer snapshot. */
 export interface OdtWorkerExportRequest {
   readonly document: OdtWorkerDocument;
-  readonly operation: "export";
+  readonly operation: "export" | "export-xml";
 }
 
 /** Supported worker request payloads. */
@@ -55,7 +56,10 @@ export interface OdtWorkerExportResult {
 }
 
 /** Supported worker result payloads. */
-export type OdtWorkerResultPayload = OdtWorkerExportResult | OdtWorkerImportResult;
+export type OdtWorkerResultPayload =
+  | OdtWorkerExportResult
+  | OdtWorkerImportResult
+  | { readonly operation: "export-xml"; readonly data: XmlPackage };
 
 /** Minimal Dedicated Worker surface used by the runtime. */
 export interface OdtWorkerRuntimeScope {
@@ -87,10 +91,13 @@ export class OdtWorkerRuntime {
   private async Process(request: WorkerRequest<OdtWorkerRequestPayload>): Promise<void> {
     const service = createInlineOdtFilterService();
     this.active.set(request.id, service);
+    let ownedDocument: OdtFilterDocument | undefined;
     try {
       if (request.payload.operation === "import") {
         const document = await service.Import(
-          new Uint8Array(request.payload.bytes),
+          request.payload.bytes instanceof ArrayBuffer
+            ? new Uint8Array(request.payload.bytes)
+            : request.payload.bytes,
           request.payload.metadata,
           {
             onProgress: this.PostProgress.bind(this, request.id),
@@ -99,12 +106,18 @@ export class OdtWorkerRuntime {
               : { zipLimits: request.payload.zipLimits }),
           },
         );
+        ownedDocument = document;
         this.PostResult(request.id, {
           document: createOdtWorkerDocument(document),
           operation: "import",
         });
+      } else if (request.payload.operation === "export-xml") {
+        ownedDocument = restoreOdtWorkerDocument(request.payload.document);
+        const data = await service.ExportXml(ownedDocument);
+        this.PostResult(request.id, { operation: "export-xml", data });
       } else {
-        const bytes = await service.Export(restoreOdtWorkerDocument(request.payload.document), {
+        ownedDocument = restoreOdtWorkerDocument(request.payload.document);
+        const bytes = await service.Export(ownedDocument, {
           onProgress: this.PostProgress.bind(this, request.id),
         });
         const buffer = exactArrayBuffer(bytes);
@@ -114,6 +127,7 @@ export class OdtWorkerRuntime {
       const failure = normalizeOdtFilterError(error);
       this.PostError(request.id, failure.category, failure.message);
     } finally {
+      ownedDocument?.document.Dispose();
       service.Close();
       this.active.delete(request.id);
     }
@@ -178,8 +192,11 @@ function isRequest(value: unknown): value is WorkerRequest<OdtWorkerRequestPaylo
   )
     return false;
   return value.payload.operation === "import"
-    ? value.payload.bytes instanceof ArrayBuffer && isRecord(value.payload.metadata)
-    : value.payload.operation === "export" && isRecord(value.payload.document);
+    ? (value.payload.bytes instanceof ArrayBuffer ||
+        (isRecord(value.payload.bytes) && value.payload.bytes.format === "xml")) &&
+        isRecord(value.payload.metadata)
+    : (value.payload.operation === "export" || value.payload.operation === "export-xml") &&
+        isRecord(value.payload.document);
 }
 
 /** Extracts a safe request identity for protocol diagnostics. @param value - Untrusted message. @returns Positive id or zero. */

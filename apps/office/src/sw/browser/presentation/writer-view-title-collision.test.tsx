@@ -16,9 +16,14 @@ it("repeats rename collision resolution for an occupied edited alternative", /**
   const session = createWriterDocumentSession();
   session.view.GetWrtShell().Insert("Current body");
   await autosaveWriter(session.docShell, store);
-  await store.save({ bytes: new Uint8Array([1]), id: "target", title: "Target", version: 1 });
   await store.save({
-    bytes: new Uint8Array([2]),
+    content: { format: "xml", files: {} },
+    id: "target",
+    title: "Target",
+    version: 1,
+  });
+  await store.save({
+    content: { format: "xml", files: {} },
     id: "target-1",
     title: "Target (1)",
     version: 1,
@@ -68,7 +73,12 @@ it("overwrites a rename conflict after explicit confirmation", /** Checks the sh
   session.view.GetWrtShell().Insert("Current body");
   await autosaveWriter(session.docShell, store);
   const previousId = session.docShell.GetDocumentId();
-  await store.save({ bytes: new Uint8Array([1]), id: "target", title: "Target", version: 1 });
+  await store.save({
+    content: { format: "xml", files: {} },
+    id: "target",
+    title: "Target",
+    version: 1,
+  });
   const autosave = {
     Flush: /** Persists ordinary title changes. @returns Save completion. */ () =>
       autosaveWriter(session.docShell, store),

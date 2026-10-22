@@ -1,4 +1,5 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -362,7 +363,37 @@ export interface WriterDocumentRecord {
 }
 
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
-export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
+export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, WriterDocumentRecord> {
+  const textNodes: WriterTextNodeRecord[] = [];
+  const tables: WriterTableRecord[] = [];
+  for (const node of document.paragraphs) {
+    textNodes.push(encodeTextNode(document, node));
+    yield;
+  }
+  for (const table of document.GetTables()) {
+    const rows: WriterTableRecord["rows"][number][] = [];
+    for (const row of table.GetTabLines()) {
+      const cells: WriterTableRecord["rows"][number]["cells"][number][] = [];
+      for (const cell of row.GetTabBoxes()) {
+        const paragraphs: WriterTextNodeRecord[] = [];
+        for (const node of cell.GetParagraphs()) {
+          paragraphs.push(encodeTextNode(document, node));
+          yield;
+        }
+        cells.push({ format: encodeBoxFormat(cell.GetFormat()), paragraphs });
+        yield;
+      }
+      rows.push({ format: encodeRowFormat(row.GetFormat()), cells });
+      yield;
+    }
+    tables.push({
+      name: table.GetName(),
+      format: encodeTableFormat(table),
+      columnWidths: table.GetColumnWidths(),
+      softPageBreakRows: table.GetSoftPageBreakRows(),
+      rows,
+    });
+  }
   return {
     embeddedFonts: document.GetEmbeddedFonts(),
     bookmarks: document
@@ -484,42 +515,8 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           node,
         ) => (node instanceof SwTableNode ? "table" : "text"),
       ),
-    tables: document.GetTables().map(
-      /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-        table,
-      ) => ({
-        name: table.GetName(),
-        format: encodeTableFormat(table),
-        columnWidths: table.GetColumnWidths(),
-        softPageBreakRows: table.GetSoftPageBreakRows(),
-        rows: table.GetTabLines().map(
-          /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-            row,
-          ) => ({
-            format: encodeRowFormat(row.GetFormat()),
-            cells: row.GetTabBoxes().map(
-              /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                cell,
-              ) => ({
-                format: encodeBoxFormat(cell.GetFormat()),
-                paragraphs: cell
-                  .GetParagraphs()
-                  .map(
-                    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                      node,
-                    ) => encodeTextNode(document, node),
-                  ),
-              }),
-            ),
-          }),
-        ),
-      }),
-    ),
-    textNodes: document.paragraphs.map(
-      /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-        node,
-      ) => encodeTextNode(document, node),
-    ),
+    tables,
+    textNodes,
   };
 }
 
@@ -582,10 +579,10 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 }
 
 /** Decodes only the current schema; legacy records are intentionally unsupported. @param candidate - Stored value. @param defaultFontDevice - Current output device. @returns Canonical graph. */
-export function decodeWriterDocument(
+export function* decodeWriterDocumentSteps(
   candidate: unknown,
   defaultFontDevice?: DefaultFontDevice,
-): SwDoc {
+): Generator<void, SwDoc> {
   if (
     !isRecord(candidate) ||
     candidate.swModelVersion !== 16 ||
@@ -605,258 +602,267 @@ export function decodeWriterDocument(
     ...(defaultFontDevice === undefined ? {} : { defaultFontDevice }),
     locale: record.locale,
   });
-  for (const font of record.embeddedFonts ?? []) {
+  let complete = false;
+  try {
+    for (const font of record.embeddedFonts ?? []) {
+      if (
+        typeof font.path !== "string" ||
+        typeof font.faceName !== "string" ||
+        typeof font.familyName !== "string" ||
+        typeof font.format !== "string" ||
+        (font.bytes !== undefined && !(font.bytes instanceof Uint8Array))
+      )
+        throw new Error("Stored Writer embedded font is invalid.");
+      document.RegisterEmbeddedFont(font);
+      if (font.bytes !== undefined)
+        document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad === true);
+    }
+    if (record.lineNumberInfo !== undefined)
+      document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
+    const firstPageDescriptor = record.pageDescriptors[0];
     if (
-      typeof font.path !== "string" ||
-      typeof font.faceName !== "string" ||
-      typeof font.familyName !== "string" ||
-      typeof font.format !== "string" ||
-      (font.bytes !== undefined && !(font.bytes instanceof Uint8Array))
-    )
-      throw new Error("Stored Writer embedded font is invalid.");
-    document.RegisterEmbeddedFont(font);
-    if (font.bytes !== undefined)
-      document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad === true);
-  }
-  if (record.lineNumberInfo !== undefined)
-    document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
-  const firstPageDescriptor = record.pageDescriptors[0];
-  if (
-    firstPageDescriptor === undefined ||
-    !isRecord(firstPageDescriptor) ||
-    !isRecord(firstPageDescriptor.value) ||
-    typeof firstPageDescriptor.followName !== "string" ||
-    firstPageDescriptor.value.name !== "Standard"
-  )
-    throw new Error("Stored Writer page descriptor collection is invalid.");
-  document.ChgPageDesc(firstPageDescriptor.value);
-  for (const descriptorRecord of record.pageDescriptors.slice(1)) {
-    if (
-      !isRecord(descriptorRecord) ||
-      !isRecord(descriptorRecord.value) ||
-      typeof descriptorRecord.followName !== "string"
+      firstPageDescriptor === undefined ||
+      !isRecord(firstPageDescriptor) ||
+      !isRecord(firstPageDescriptor.value) ||
+      typeof firstPageDescriptor.followName !== "string" ||
+      firstPageDescriptor.value.name !== "Standard"
     )
       throw new Error("Stored Writer page descriptor collection is invalid.");
-    document.MakePageDesc(descriptorRecord.value.name);
-    document.ChgPageDesc(descriptorRecord.value, descriptorRecord.value.name);
-  }
-  for (const descriptorRecord of record.pageDescriptors) {
-    const descriptor = document.FindPageDesc(descriptorRecord.value.name);
-    const follow = document.FindPageDesc(descriptorRecord.followName);
-    if (descriptor === undefined || follow === undefined)
-      throw new Error("Stored Writer page descriptor follow link is invalid.");
-    descriptor.SetFollow(follow);
-  }
-  const settings = { ...record.documentSettings };
-  // Older browser graph records predate this represented native setting.
-  // All prior fields retain the strict current-schema validation contract.
-  if (!Object.hasOwn(settings, "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT"))
-    settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
-      getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
-  document.GetDocumentSettingManager().SetValues(settings);
-  if (record.textFormatCollections[0]?.id !== "default")
-    throw new Error("Stored Writer style is invalid.");
-  for (const style of record.textFormatCollections) {
-    if (typeof style.id !== "string" || style.id.length === 0)
-      throw new Error("Stored Writer style is invalid.");
-    if (!isWriterParagraphStyle(style.id))
-      document.MakeTextFormatColl(style.name, undefined, style.id);
-  }
-  for (const style of record.textFormatCollections) {
-    const collection = document.GetTextFormatColl(style.id);
-    const factoryOutlineLevel = collection.GetAttrOutlineLevel();
-    const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
-    if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
-      throw new Error("Stored Writer outline assignment is invalid.");
-    if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
-    else if (style.outlineAssignment === true && !factoryAssignment)
-      collection.AssignToListLevelOfOutlineStyle(0);
-    collection.SetFormatName(style.name);
-    collection.ResetAllFormatAttr();
-    decodeSfxItemSet(collection.GetAttrSet(), style.items);
-    if (
-      style.outlineAssignment === undefined &&
-      factoryAssignment &&
-      !style.items.some(
-        /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
-        (item) => item.which === RES_PARATR_OUTLINELEVEL,
-      )
-    )
-      collection.SetAttrOutlineLevel(factoryOutlineLevel);
-  }
-  for (const style of record.textFormatCollections) {
-    const collection = document.GetTextFormatColl(style.id);
-    collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
-    collection.SetDerivedFrom(
-      style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
-    );
-  }
-  for (const rule of record.numRules) {
-    if (
-      rule.ruleType !== undefined &&
-      rule.ruleType !== SwNumRuleType.NUM_RULE &&
-      rule.ruleType !== SwNumRuleType.OUTLINE_RULE
-    )
-      throw new Error("Stored Writer numbering rule type is invalid.");
-    if (
-      rule.formats.length !== 10 ||
-      (rule.ownedLevels !== undefined &&
-        (rule.ownedLevels.length !== 10 ||
-          rule.ownedLevels.some(
-            /** Rejects malformed presence bits. @param owned - Candidate. @returns Invalidity. */
-            (owned) => typeof owned !== "boolean",
-          )))
-    )
-      throw new Error("Stored Writer numbering ownership is invalid.");
-    const mode = rule.defaultPositionAndSpaceMode ?? "label-alignment";
-    if (mode !== "label-alignment" && mode !== "label-width-and-position")
-      throw new Error("Stored Writer numbering default mode is invalid.");
-    const restoredRule = new SwNumRule(rule.name, mode, rule.ruleType ?? SwNumRuleType.NUM_RULE);
-    restoredRule.SetDefaultListId(rule.listId);
-    restoredRule.SetAutoRule(rule.automatic);
-    for (let level = 0; level < 10; level++) {
-      const format = rule.formats[level] as WriterNumberFormatRecord;
+    document.ChgPageDesc(firstPageDescriptor.value);
+    for (const descriptorRecord of record.pageDescriptors.slice(1)) {
       if (
-        format.numberingType !== undefined &&
-        !["arabic", "char-special", "none"].includes(format.numberingType)
+        !isRecord(descriptorRecord) ||
+        !isRecord(descriptorRecord.value) ||
+        typeof descriptorRecord.followName !== "string"
       )
-        throw new Error("Stored Writer numbering format type is invalid.");
-      if (
-        (format.bulletFontPresent !== undefined && typeof format.bulletFontPresent !== "boolean") ||
-        (format.showSymbol !== undefined && typeof format.showSymbol !== "boolean") ||
-        (format.bulletGlyph !== undefined &&
-          (!Number.isInteger(format.bulletGlyph) ||
-            format.bulletGlyph < 0 ||
-            format.bulletGlyph > 0xffffffff))
-      )
-        throw new Error("Stored Writer numbering marker ownership is invalid.");
-      const metadata = format.bulletFontMetadata;
-      if (metadata !== undefined && format.bulletFontPresent !== true)
-        throw new Error("Stored Writer numbering font metadata is invalid.");
-      const decoded = createWriterNumFormat(format.kind, format.bulletChar, {
-        absLSpace: format.absLSpace ?? 0,
-        firstLineOffset: format.firstLineOffset ?? 0,
-        charTextDistance: format.charTextDistance ?? 0,
-        bulletFont: format.bulletFont,
-        ...(format.numberingType === undefined ? {} : { numberingType: format.numberingType }),
-        firstLineIndent: format.firstLineIndent,
-        indentAt: format.indentAt,
-        includeUpperLevels: format.includeUpperLevels,
-        labelFollowedBy: format.labelFollowedBy,
-        listTabPosition: format.listTabPosition,
-        positionAndSpaceMode: format.positionAndSpaceMode,
-        ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
-        prefix: format.prefix,
-        start: format.start,
-        suffix: format.suffix,
-      });
-      if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
-      if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
-      if (format.bulletFontPresent === true) {
-        const font = new Font();
-        font.SetFamilyName(format.bulletFont);
-        if (metadata !== undefined) restoreFontMetadata(font, metadata);
-        decoded.SetBulletFont(font);
-      } else if (format.bulletFontPresent === false) decoded.SetBulletFont(undefined);
-      if (rule.ownedLevels === undefined || rule.ownedLevels[level])
-        restoredRule.Set(level, decoded);
+        throw new Error("Stored Writer page descriptor collection is invalid.");
+      document.MakePageDesc(descriptorRecord.value.name);
+      document.ChgPageDesc(descriptorRecord.value, descriptorRecord.value.name);
     }
-    const owner = document.AddNumRule(restoredRule);
-    const scalar = rule.scalarState;
-    if (scalar !== undefined) {
+    for (const descriptorRecord of record.pageDescriptors) {
+      const descriptor = document.FindPageDesc(descriptorRecord.value.name);
+      const follow = document.FindPageDesc(descriptorRecord.followName);
+      if (descriptor === undefined || follow === undefined)
+        throw new Error("Stored Writer page descriptor follow link is invalid.");
+      descriptor.SetFollow(follow);
+    }
+    const settings = { ...record.documentSettings };
+    // Older browser graph records predate this represented native setting.
+    // All prior fields retain the strict current-schema validation contract.
+    if (!Object.hasOwn(settings, "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT"))
+      settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
+        getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
+    document.GetDocumentSettingManager().SetValues(settings);
+    if (record.textFormatCollections[0]?.id !== "default")
+      throw new Error("Stored Writer style is invalid.");
+    for (const style of record.textFormatCollections) {
+      if (typeof style.id !== "string" || style.id.length === 0)
+        throw new Error("Stored Writer style is invalid.");
+      if (!isWriterParagraphStyle(style.id))
+        document.MakeTextFormatColl(style.name, undefined, style.id);
+    }
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      const factoryOutlineLevel = collection.GetAttrOutlineLevel();
+      const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
+      if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
+        throw new Error("Stored Writer outline assignment is invalid.");
+      if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
+      else if (style.outlineAssignment === true && !factoryAssignment)
+        collection.AssignToListLevelOfOutlineStyle(0);
+      collection.SetFormatName(style.name);
+      collection.ResetAllFormatAttr();
+      decodeSfxItemSet(collection.GetAttrSet(), style.items);
       if (
-        scalar === null ||
-        typeof scalar !== "object" ||
-        [
-          scalar.continusNum,
-          scalar.absSpaces,
-          scalar.hidden,
-          scalar.countPhantoms,
-          scalar.usedByRedline,
-        ].some(
-          /** Rejects malformed native boolean state. @param value - Candidate. @returns Invalidity. */
-          (value) => typeof value !== "boolean",
-        ) ||
-        [scalar.poolFormatId, scalar.poolHelpId, scalar.poolHlpFileId].some(
-          /** Enforces native unsigned fields before restoring their narrowed setters. @param value - Candidate. @param index - Field. @returns Invalidity. */
-          (value, index) =>
-            !Number.isInteger(value) || value < 0 || value > (index === 2 ? 255 : 65535),
+        style.outlineAssignment === undefined &&
+        factoryAssignment &&
+        !style.items.some(
+          /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
+          (item) => item.which === RES_PARATR_OUTLINELEVEL,
         )
       )
-        throw new Error("Stored Writer numbering scalar state is invalid.");
-      owner.SetContinusNum(scalar.continusNum);
-      owner.SetAbsSpaces(scalar.absSpaces);
-      owner.SetHidden(scalar.hidden);
-      owner.SetCountPhantoms(scalar.countPhantoms);
-      owner.SetUsedByRedline(scalar.usedByRedline);
-      owner.SetPoolFormatId(scalar.poolFormatId);
-      owner.SetPoolHelpId(scalar.poolHelpId);
-      owner.SetPoolHlpFileId(scalar.poolHlpFileId);
+        collection.SetAttrOutlineLevel(factoryOutlineLevel);
     }
-  }
-  if (record.textNodes.length === 0)
-    throw new Error("Stored Writer document has no body text node.");
-  const order =
-    record.bodyOrder ??
-    record.textNodes.map(
-      /** Handles the browser table interaction.  @returns Callback result. */ () =>
-        "text" as const,
-    );
-  let textIndex = 0;
-  let tableIndex = 0;
-  for (const kind of order) {
-    if (kind === "text") {
-      const nodeRecord = record.textNodes[textIndex++];
-      if (nodeRecord === undefined) throw new Error("Stored Writer body order is invalid.");
-      decodeTextNode(document, document.nodes.MakeTextNode(), nodeRecord);
-      continue;
-    }
-    const tableRecord = record.tables?.[tableIndex++];
-    if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
-    const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
-    const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
-    restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
-    restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
-    restoreTableFlow(table.GetFrameFormat(), nativeFlow);
-    for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
-    for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
-      if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();
-      const row = document.nodes.AppendTableRow(
-        table,
-        rowRecord.cells.length,
-        decodeRowFormat(rowRecord.format),
-        rowRecord.cells.map(
-          /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-            cell,
-          ) => decodeBoxFormat(cell.format),
-        ),
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
+      collection.SetDerivedFrom(
+        style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
       );
-      for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
-        const cell = row.GetTabBoxes()[cellIndex];
-        if (cell === undefined || cellRecord.paragraphs.length === 0)
-          throw new Error("Stored Writer table cell is invalid.");
-        for (const [paragraphIndex, paragraphRecord] of cellRecord.paragraphs.entries()) {
-          const node =
-            paragraphIndex === 0
-              ? cell.GetParagraphs()[0]
-              : document.nodes.AppendTableCellParagraph(cell);
-          decodeTextNode(document, node as SwTextNode, paragraphRecord);
-        }
+    }
+    for (const rule of record.numRules) {
+      if (
+        rule.ruleType !== undefined &&
+        rule.ruleType !== SwNumRuleType.NUM_RULE &&
+        rule.ruleType !== SwNumRuleType.OUTLINE_RULE
+      )
+        throw new Error("Stored Writer numbering rule type is invalid.");
+      if (
+        rule.formats.length !== 10 ||
+        (rule.ownedLevels !== undefined &&
+          (rule.ownedLevels.length !== 10 ||
+            rule.ownedLevels.some(
+              /** Rejects malformed presence bits. @param owned - Candidate. @returns Invalidity. */
+              (owned) => typeof owned !== "boolean",
+            )))
+      )
+        throw new Error("Stored Writer numbering ownership is invalid.");
+      const mode = rule.defaultPositionAndSpaceMode ?? "label-alignment";
+      if (mode !== "label-alignment" && mode !== "label-width-and-position")
+        throw new Error("Stored Writer numbering default mode is invalid.");
+      const restoredRule = new SwNumRule(rule.name, mode, rule.ruleType ?? SwNumRuleType.NUM_RULE);
+      restoredRule.SetDefaultListId(rule.listId);
+      restoredRule.SetAutoRule(rule.automatic);
+      for (let level = 0; level < 10; level++) {
+        const format = rule.formats[level] as WriterNumberFormatRecord;
+        if (
+          format.numberingType !== undefined &&
+          !["arabic", "char-special", "none"].includes(format.numberingType)
+        )
+          throw new Error("Stored Writer numbering format type is invalid.");
+        if (
+          (format.bulletFontPresent !== undefined &&
+            typeof format.bulletFontPresent !== "boolean") ||
+          (format.showSymbol !== undefined && typeof format.showSymbol !== "boolean") ||
+          (format.bulletGlyph !== undefined &&
+            (!Number.isInteger(format.bulletGlyph) ||
+              format.bulletGlyph < 0 ||
+              format.bulletGlyph > 0xffffffff))
+        )
+          throw new Error("Stored Writer numbering marker ownership is invalid.");
+        const metadata = format.bulletFontMetadata;
+        if (metadata !== undefined && format.bulletFontPresent !== true)
+          throw new Error("Stored Writer numbering font metadata is invalid.");
+        const decoded = createWriterNumFormat(format.kind, format.bulletChar, {
+          absLSpace: format.absLSpace ?? 0,
+          firstLineOffset: format.firstLineOffset ?? 0,
+          charTextDistance: format.charTextDistance ?? 0,
+          bulletFont: format.bulletFont,
+          ...(format.numberingType === undefined ? {} : { numberingType: format.numberingType }),
+          firstLineIndent: format.firstLineIndent,
+          indentAt: format.indentAt,
+          includeUpperLevels: format.includeUpperLevels,
+          labelFollowedBy: format.labelFollowedBy,
+          listTabPosition: format.listTabPosition,
+          positionAndSpaceMode: format.positionAndSpaceMode,
+          ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
+          prefix: format.prefix,
+          start: format.start,
+          suffix: format.suffix,
+        });
+        if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
+        if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
+        if (format.bulletFontPresent === true) {
+          const font = new Font();
+          font.SetFamilyName(format.bulletFont);
+          if (metadata !== undefined) restoreFontMetadata(font, metadata);
+          decoded.SetBulletFont(font);
+        } else if (format.bulletFontPresent === false) decoded.SetBulletFont(undefined);
+        if (rule.ownedLevels === undefined || rule.ownedLevels[level])
+          restoredRule.Set(level, decoded);
+      }
+      const owner = document.AddNumRule(restoredRule);
+      const scalar = rule.scalarState;
+      if (scalar !== undefined) {
+        if (
+          scalar === null ||
+          typeof scalar !== "object" ||
+          [
+            scalar.continusNum,
+            scalar.absSpaces,
+            scalar.hidden,
+            scalar.countPhantoms,
+            scalar.usedByRedline,
+          ].some(
+            /** Rejects malformed native boolean state. @param value - Candidate. @returns Invalidity. */
+            (value) => typeof value !== "boolean",
+          ) ||
+          [scalar.poolFormatId, scalar.poolHelpId, scalar.poolHlpFileId].some(
+            /** Enforces native unsigned fields before restoring their narrowed setters. @param value - Candidate. @param index - Field. @returns Invalidity. */
+            (value, index) =>
+              !Number.isInteger(value) || value < 0 || value > (index === 2 ? 255 : 65535),
+          )
+        )
+          throw new Error("Stored Writer numbering scalar state is invalid.");
+        owner.SetContinusNum(scalar.continusNum);
+        owner.SetAbsSpaces(scalar.absSpaces);
+        owner.SetHidden(scalar.hidden);
+        owner.SetCountPhantoms(scalar.countPhantoms);
+        owner.SetUsedByRedline(scalar.usedByRedline);
+        owner.SetPoolFormatId(scalar.poolFormatId);
+        owner.SetPoolHelpId(scalar.poolHelpId);
+        owner.SetPoolHlpFileId(scalar.poolHlpFileId);
       }
     }
-    if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();
-  }
-  if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
-    throw new Error("Stored Writer body order is invalid.");
-  if (record.bookmarks !== undefined) {
-    if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
-    for (const mark of record.bookmarks) {
-      const node = allTextNodes(document)[mark.nodeIndex];
-      if (node === undefined) throw new Error("Stored Writer bookmark position is invalid.");
-      document.GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
+    if (record.textNodes.length === 0)
+      throw new Error("Stored Writer document has no body text node.");
+    const order =
+      record.bodyOrder ??
+      record.textNodes.map(
+        /** Handles the browser table interaction.  @returns Callback result. */ () =>
+          "text" as const,
+      );
+    let textIndex = 0;
+    let tableIndex = 0;
+    for (const kind of order) {
+      if (kind === "text") {
+        const nodeRecord = record.textNodes[textIndex++];
+        if (nodeRecord === undefined) throw new Error("Stored Writer body order is invalid.");
+        decodeTextNode(document, document.nodes.MakeTextNode(), nodeRecord);
+        yield;
+        continue;
+      }
+      const tableRecord = record.tables?.[tableIndex++];
+      if (tableRecord === undefined) throw new Error("Stored Writer table order is invalid.");
+      const { nativeGeometry, nativeSpacing, nativeFlow, ...legacyFormat } = tableRecord.format;
+      const table = document.nodes.MakeTableNode(tableRecord.name, legacyFormat);
+      restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
+      restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
+      restoreTableFlow(table.GetFrameFormat(), nativeFlow);
+      for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
+      for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
+        if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();
+        const row = document.nodes.AppendTableRow(
+          table,
+          rowRecord.cells.length,
+          decodeRowFormat(rowRecord.format),
+          rowRecord.cells.map(
+            /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+              cell,
+            ) => decodeBoxFormat(cell.format),
+          ),
+        );
+        for (const [cellIndex, cellRecord] of rowRecord.cells.entries()) {
+          const cell = row.GetTabBoxes()[cellIndex];
+          if (cell === undefined || cellRecord.paragraphs.length === 0)
+            throw new Error("Stored Writer table cell is invalid.");
+          for (const [paragraphIndex, paragraphRecord] of cellRecord.paragraphs.entries()) {
+            const node =
+              paragraphIndex === 0
+                ? cell.GetParagraphs()[0]
+                : document.nodes.AppendTableCellParagraph(cell);
+            decodeTextNode(document, node as SwTextNode, paragraphRecord);
+            yield;
+          }
+        }
+      }
+      if (tableRecord.softPageBreakRows.includes(tableRecord.rows.length)) table.AddSoftPageBreak();
     }
+    if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
+      throw new Error("Stored Writer body order is invalid.");
+    if (record.bookmarks !== undefined) {
+      if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
+      for (const mark of record.bookmarks) {
+        const node = allTextNodes(document)[mark.nodeIndex];
+        if (node === undefined) throw new Error("Stored Writer bookmark position is invalid.");
+        document.GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
+      }
+    }
+    complete = true;
+    return document;
+  } finally {
+    if (!complete) document.Dispose();
   }
-  return document;
 }
 
 /** Restores one text node already placed in the correct body or table section. */
@@ -939,4 +945,28 @@ export function decodeWriterDocument(
 /** Checks for a non-array object. @param value - Candidate. @returns Whether a record. */
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Encodes canonical graph synchronously for worker/inline callers. @param document - Model. @returns Graph. */
+export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
+  return runSynchronously(encodeWriterDocumentSteps(document));
+}
+/** Encodes a stable graph while servicing browser tasks. @param document - Model. @param isCancelled - Snapshot guard. @returns Graph. */
+export function encodeWriterDocumentAsync(
+  document: SwDoc,
+  isCancelled: () => boolean,
+): Promise<WriterDocumentRecord> {
+  return runCooperatively(encodeWriterDocumentSteps(document), isCancelled);
+}
+/** Restores canonical graph synchronously for worker/inline callers. @param candidate - Record. @param device - Font device. @returns Model. */
+export function decodeWriterDocument(candidate: unknown, device?: DefaultFontDevice): SwDoc {
+  return runSynchronously(decodeWriterDocumentSteps(candidate, device));
+}
+/** Restores a candidate in bounded browser tasks before atomic adoption. @param candidate - Record. @param device - Font device. @param isCancelled - Staleness guard. @returns Model. */
+export function decodeWriterDocumentAsync(
+  candidate: unknown,
+  device: DefaultFontDevice | undefined,
+  isCancelled: () => boolean,
+): Promise<SwDoc> {
+  return runCooperatively(decodeWriterDocumentSteps(candidate, device), isCancelled);
 }

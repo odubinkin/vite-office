@@ -5,6 +5,7 @@
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
 import { importWriterXml, type ImportedWriterDocument } from "./xmlimp";
@@ -34,28 +35,64 @@ export interface OdtImportControl {
 export class SwXMLReader {
   /** Imports one ODF 1.3 text package. @param bytes - Complete ODT bytes. @param metadata - Caller identity and lifecycle. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
   public async Read(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: Readonly<{ title: string; locale?: string }>,
     limits?: ZipFileLimits,
     control: OdtImportControl = {},
   ): Promise<ImportedWriterDocument> {
     checkpoint(control, "package");
-    const packageFile = limits === undefined ? new ZipFile(bytes) : new ZipFile(bytes, limits);
+    const packageFile =
+      bytes instanceof Uint8Array
+        ? limits === undefined
+          ? new ZipFile(bytes)
+          : new ZipFile(bytes, limits)
+        : {
+            getEntryNames:
+              /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>
+                Object.keys(bytes.files),
+            getEntryMethod:
+              /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>
+                0 as const,
+            readEntry:
+              /** Reads an unpacked Writer stream under the existing import limits. @param name - name. @returns Operation result. */ async (
+                name: string,
+              ) => {
+                const value = bytes.files[name];
+                if (value === undefined) throw new Error(`Missing ODF stream: ${name}`);
+                return typeof value === "string" ? new TextEncoder().encode(value) : value;
+              },
+          };
     const names = packageFile.getEntryNames();
+    const readText =
+      /** Reads an unpacked Writer stream under the existing import limits. @param name - name. @param stage - stage. @returns Operation result. */ (
+        name: string,
+        stage: OdtImportProgressStage,
+      ) =>
+        bytes instanceof Uint8Array
+          ? readXmlEntry(packageFile, name, control, stage)
+          : Promise.resolve(readStoredXml(bytes, name, control, stage));
+    const optionalText =
+      /** Reads an unpacked Writer stream under the existing import limits. @param name - name. @param stage - stage. @returns Operation result. */ (
+        name: string,
+        stage: OdtImportProgressStage,
+      ) =>
+        names.includes(name)
+          ? readText(name, stage)
+          : (checkpoint(control, stage), Promise.resolve(undefined));
     if (names[0] !== "mimetype") throw new Error("ODT mimetype must be the first ZIP entry.");
     if (packageFile.getEntryMethod("mimetype") !== 0)
       throw new Error("ODT mimetype must be stored without compression.");
-    const mimetype = await readXmlEntry(packageFile, "mimetype", control, "package");
+    const mimetype = await readText("mimetype", "package");
     if (mimetype !== ODT_MIMETYPE) throw new Error("ODT mimetype entry is invalid.");
     const packageMetadata = readPlainPackageManifest(
       packageFile,
-      await readXmlEntry(packageFile, "META-INF/manifest.xml", control, "manifest"),
+      await readText("META-INF/manifest.xml", "manifest"),
       mimetype,
     );
     const manifest = packageMetadata.streamMediaTypes;
-    const stylesXml = await readOptionalXmlEntry(packageFile, "styles.xml", control, "styles");
-    const contentXml = await readOptionalXmlEntry(packageFile, "content.xml", control, "content");
-    const metaXml = await readOptionalXmlEntry(packageFile, "meta.xml", control, "metadata");
+    const stylesXml = await optionalText("styles.xml", "styles");
+    const contentXml = await optionalText("content.xml", "content");
+    const metaXml = await optionalText("meta.xml", "metadata");
     checkpoint(control, "mapping");
     const imported = importWriterXml(stylesXml, contentXml, metadata, metaXml, {
       ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
@@ -116,7 +153,7 @@ function isViewableOpenTypeFont(bytes: Uint8Array): boolean {
 
 /** Convenience ODT import boundary. @param bytes - Complete ODT bytes. @param metadata - Caller document identity. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
 export async function readOdtDocument(
-  bytes: Uint8Array,
+  bytes: Uint8Array | XmlPackage,
   metadata: Readonly<{ title: string; locale?: string }>,
   limits?: ZipFileLimits,
   control?: OdtImportControl,
@@ -126,7 +163,7 @@ export async function readOdtDocument(
 
 /** Reads and bounds one UTF-8 package stream. @param packageFile - Validated ZIP. @param name - Entry path. @param control - Cooperative controls. @param stage - Progress stage. @returns Decoded text. */
 async function readXmlEntry(
-  packageFile: ZipFile,
+  packageFile: Pick<ZipFile, "getEntryNames" | "readEntry" | "getEntryMethod">,
   name: string,
   control: OdtImportControl,
   stage: OdtImportProgressStage,
@@ -145,16 +182,19 @@ function checkpoint(control: OdtImportControl, stage: OdtImportProgressStage): v
   control.onProgress?.(stage);
 }
 
-/** Native ReadThroughComponent returns success when a stream does not exist;preserve actual document defaults instead of synthesizing XML. @param archive - Real ZIP. @param name - Stream. @param control - Existing controls. @param stage - Existing stage. @returns XML or native absent-stream selection. */
-async function readOptionalXmlEntry(
-  archive: ZipFile,
+/** Reads browser XML text without archive, byte-copy or decode work. @param data - Stored XML. @param name - Stream. @param control - Limits. @param stage - Progress stage. @returns XML. */
+function readStoredXml(
+  data: XmlPackage,
   name: string,
   control: OdtImportControl,
   stage: OdtImportProgressStage,
-): Promise<string | undefined> {
-  if (!archive.getEntryNames().includes(name)) {
-    checkpoint(control, stage);
-    return undefined;
-  }
-  return readXmlEntry(archive, name, control, stage);
+): string {
+  checkpoint(control, stage);
+  const xml = data.files[name];
+  if (typeof xml !== "string") throw new Error(`Missing ODT XML stream: ${name}`);
+  if (
+    new TextEncoder().encode(xml).length > (control.maxXmlStreamBytes ?? ODT_XML_STREAM_BYTE_LIMIT)
+  )
+    throw new Error(`ODT XML stream exceeds size limit: ${name}`);
+  return xml;
 }

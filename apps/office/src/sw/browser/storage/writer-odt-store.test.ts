@@ -94,7 +94,12 @@ function failingFactory(fault: Fault): IDBFactory {
 
 /** Builds one immutable browser record. @param id - Document ID. @param title - Display title. @param version - Content version. @returns Stored record. */
 function record(id: string, title: string, version = 1): BrowserWriterDocument {
-  return { bytes: new Uint8Array([80, 75, version]), id, title, version };
+  return {
+    content: { format: "xml", files: { "content.xml": `<body>${version}</body>` } },
+    id,
+    title,
+    version,
+  };
 }
 
 /** Opens an IndexedDB database at a specified version. @param factory - Isolated database factory. @param name - Database name. @param version - Requested version. @returns Open database. */
@@ -122,7 +127,8 @@ describe("IndexedDbWriterOdtStore", /** Registers IndexedDB ODT behavior tests. 
     expect(await store.load("missing")).toBeUndefined();
     await store.save(record("one", "Original"));
     expect(await store.load("one")).toMatchObject({ id: "one", title: "Original", version: 1 });
-    expect(Array.from((await store.load("one"))?.bytes ?? [])).toEqual([80, 75, 1]);
+    expect((await store.load("one"))?.content.files["content.xml"]).toBe("<body>1</body>");
+    expect(await store.list()).toEqual([{ id: "one", title: "Original", version: 1 }]);
     await store.save(record("one", "Original", 2));
     await store.saveAs(record("two", "Second"));
     expect(await store.list()).toHaveLength(2);
@@ -189,7 +195,7 @@ describe("IndexedDbWriterOdtStore", /** Registers IndexedDB ODT behavior tests. 
     database.close();
     const store = new IndexedDbWriterOdtStore("retired-json", factory);
     expect(await store.list()).toEqual([]);
-    const reopened = await openDatabase(factory, "retired-json", 2);
+    const reopened = await openDatabase(factory, "retired-json", 3);
     const old = await new Promise<unknown>(
       /** Reads the untouched old record. @param resolve - Read completion. @param reject - Read failure. @returns Nothing. */
       (resolve, reject) => {

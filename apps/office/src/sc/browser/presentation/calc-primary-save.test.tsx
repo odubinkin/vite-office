@@ -60,7 +60,7 @@ it("commits in-progress cell input and forces primary storage with Cmd/Ctrl+S fr
   expect(record.title).toBe("Saved words");
   expect(
     cellPresentation(
-      await readOdsDocument(required(await db.load(record.id)).bytes),
+      await readOdsDocument(required(await db.load(record.id)).content),
       new ScAddress(0, 0, 0),
     ).text,
   ).toBe("Saved words");
@@ -77,7 +77,7 @@ it("commits in-progress cell input and forces primary storage with Cmd/Ctrl+S fr
   );
   expect(
     cellPresentation(
-      await readOdsDocument(required(await db.load(record.id)).bytes),
+      await readOdsDocument(required(await db.load(record.id)).content),
       new ScAddress(0, 0, 0),
     ).text,
   ).toBe("Changed words");

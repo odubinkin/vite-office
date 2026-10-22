@@ -216,12 +216,16 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
         );
     } finally {
       this.document.SetAutoCalc(auto);
-      for (const holder of this.autoStyles.values()) holder.Dispose();
-      this.autoStyles.clear();
-      this.rowStyles.clear();
-      this.columnStyles.clear();
-      this.fontFaces.clear();
+      this.DisposeStyles();
     }
+  }
+  /** Releases temporary style holders after import or worker transfer. @returns Nothing. */
+  DisposeStyles(): void {
+    for (const holder of this.autoStyles.values()) holder.Dispose();
+    this.autoStyles.clear();
+    this.rowStyles.clear();
+    this.columnStyles.clear();
+    this.fontFaces.clear();
   }
   /** Marks the unique spreadsheet body. @returns Context. */
   CreateBodyContext(): ScXMLBodyContext {

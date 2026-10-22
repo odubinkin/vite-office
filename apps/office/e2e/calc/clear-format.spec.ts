@@ -71,7 +71,7 @@ for (const width of [1280, 390]) {
               if (!record) return -1;
               const stored = await store.load(record.id);
               if (!stored) return -1;
-              const doc = await n.readOdsDocument(stored.bytes);
+              const doc = await n.readOdsDocument(stored.content);
               try {
                 return (
                   doc.GetPattern(new n.ScAddress()) as NonNullable<

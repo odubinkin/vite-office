@@ -47,7 +47,6 @@ it("shares Writer naming/empty rules and stores actual ODS bytes before adopting
       id: "missing",
       title: "Empty",
       version: 0,
-      bytes: new Uint8Array(),
     }),
   ).rejects.toThrow(/Empty/);
   c.EnterString("First");
@@ -57,7 +56,6 @@ it("shares Writer naming/empty rules and stores actual ODS bytes before adopting
       id: "missing",
       title: "Copy",
       version: 0,
-      bytes: new Uint8Array(),
     }),
   ).rejects.toThrow(/two words/);
   c.Select(1, 0);
@@ -68,8 +66,9 @@ it("shares Writer naming/empty rules and stores actual ODS bytes before adopting
   const id = shell.GetDocumentId(),
     record = await db.load(id);
   if (record === undefined) throw new Error("Expected committed ODS record.");
-  expect(record.bytes[0]).toBe(80);
-  const loaded = await readOdsDocument(record.bytes);
+  expect(record.content.format).toBe("xml");
+  expect(record.content.files["content.xml"]).toContain("office:document-content");
+  const loaded = await readOdsDocument(record.content);
   expect(hasCalcContent(loaded)).toBe(true);
   expect(shell.IsModified()).toBe(false);
   expect(shell.GetMedium().kind).toBe("primary");
@@ -195,7 +194,7 @@ it("autosaves font attributes on empty ranges in the same primary ODS and restor
   await (session.autosave as NonNullable<typeof session.autosave>).Flush();
   const record = await db.load(c.shell.GetDocumentId());
   if (record === undefined) throw new Error("Expected primary font document");
-  const loaded = await readOdsDocument(record.bytes);
+  const loaded = await readOdsDocument(record.content);
   expect(
     (
       (loaded.GetPattern(new ScAddress(1, loaded.MaxRow(), 0)) as ScPatternAttr).GetItem(
@@ -213,7 +212,7 @@ it("autosaves font attributes on empty ranges in the same primary ODS and restor
   expect(await autosaveCalc(reopened.shell, db)).toBe(true);
   const saved = await db.load(record.id);
   if (saved === undefined) throw new Error("Expected updated primary font document");
-  const again = await readOdsDocument(saved.bytes);
+  const again = await readOdsDocument(saved.content);
   expect(
     (
       (again.GetPattern(new ScAddress(1, 20, 0)) as ScPatternAttr).GetItem(

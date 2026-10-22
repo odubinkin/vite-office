@@ -72,7 +72,7 @@ for (const width of [1280, 390]) {
               if (!record) return null;
               const saved = await store.load(record.id);
               if (!saved) return null;
-              const doc = await n.readOdsDocument(saved.bytes);
+              const doc = await n.readOdsDocument(saved.content);
               try {
                 return [
                   (

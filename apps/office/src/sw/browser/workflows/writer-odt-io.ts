@@ -1,6 +1,9 @@
 /** @fileoverview Primary browser ODT operations around the live Writer shell. */
 
-import { getUniqueDocumentTitle as getUniqueWriterTitle } from "../../../framework/browser/storage/document-store";
+import {
+  type BrowserDocumentSummary,
+  getUniqueDocumentTitle as getUniqueWriterTitle,
+} from "../../../framework/browser/storage/document-store";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SwDoc } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
@@ -61,9 +64,9 @@ export function getImportedWriterTitle(filename: string): string {
     const requestedTitle = state.title === medium.name ? automaticTitle : state.title;
     const title = getUniqueWriterTitle(requestedTitle, await store.list());
     const id = globalThis.crypto.randomUUID();
-    const generation = state.contentGeneration;
-    const bytes = await docShell.SerializeOdt(undefined, title);
-    await store.saveAs({ bytes, id, title, version: generation });
+    const generation = docShell.GetContentGeneration();
+    const content = await docShell.SerializeXml(title);
+    await store.saveAs({ content, id, title, version: generation });
     docShell.AdoptSavedBrowserCopy(id, title, generation);
     return true;
   }
@@ -73,10 +76,14 @@ export function getImportedWriterTitle(filename: string): string {
      * @returns Operation result.
      */ async (): Promise<{ readonly generation: number }> => {
       const captured = docShell.GetDocumentState();
-      const bytes = await docShell.SerializeOdt();
-      const existing = await store.load(captured.id);
+      const content = await docShell.SerializeXml();
+      const existing = (await store.list()).find(
+        /** Selects current browser document metadata by identity. @param record - record. @returns Operation result. */ (
+          record,
+        ) => record.id === captured.id,
+      );
       const record: BrowserWriterDocument = {
-        bytes,
+        content,
         id: captured.id,
         title: captured.title,
         version: captured.contentGeneration,
@@ -117,8 +124,8 @@ export function getImportedWriterTitle(filename: string): string {
   if (!hasWriterContent(docShell.GetDoc())) throw new Error("Empty documents cannot be saved.");
   const generation = docShell.GetDocumentState().contentGeneration;
   const id = globalThis.crypto.randomUUID();
-  const bytes = await docShell.SerializeOdt(undefined, normalized);
-  await store.saveAs({ bytes, id, title: normalized, version: generation });
+  const content = await docShell.SerializeXml(normalized);
+  await store.saveAs({ content, id, title: normalized, version: generation });
   docShell.AdoptSavedBrowserCopy(id, normalized, generation);
   return id;
 }
@@ -138,7 +145,7 @@ export function getImportedWriterTitle(filename: string): string {
   const record = await store.load(id);
   if (record === undefined) return false;
   await docShell.Open(
-    record.bytes,
+    record.content,
     createDocument({ id: record.id, suiteId: "writer", title: record.title }),
     {
       kind: "primary",
@@ -155,7 +162,7 @@ export function getImportedWriterTitle(filename: string): string {
 export async function overwriteBrowserWriterDocument(
   docShell: SwDocShell,
   store: WriterOdtStore,
-  target: BrowserWriterDocument,
+  target: BrowserDocumentSummary,
 ): Promise<void> {
   const state = docShell.GetDocumentState();
   if (!hasWriterContent(docShell.GetDoc())) throw new Error("Empty documents cannot be saved.");
@@ -164,9 +171,9 @@ export async function overwriteBrowserWriterDocument(
     getAutomaticWriterTitle(docShell.GetDoc()) === undefined
   )
     throw new Error("A new document needs at least two words before it can be saved.");
-  const bytes = await docShell.SerializeOdt(undefined, target.title);
+  const content = await docShell.SerializeXml(target.title);
   await store.replace(
-    { bytes, id: target.id, title: target.title, version: state.contentGeneration },
+    { content, id: target.id, title: target.title, version: state.contentGeneration },
     state.id,
   );
   docShell.AdoptSavedBrowserCopy(target.id, target.title, state.contentGeneration);

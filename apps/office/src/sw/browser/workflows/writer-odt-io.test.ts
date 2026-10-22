@@ -7,7 +7,7 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import {
   autosaveWriter,
@@ -39,16 +39,21 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
     shell.Close();
   });
 
-  it("stores a complete ODT package in IndexedDB", /** Checks primary byte format. @returns Completion. */ async () => {
+  it("stores raw XML streams in IndexedDB", /** Checks primary byte format. @returns Completion. */ async () => {
     const store = new IndexedDbWriterOdtStore("odt-writer-test", new IDBFactory());
     const shell = makeShell();
     new SwWrtShell(shell).Insert("Stored ODT body");
     expect(await autosaveWriter(shell, store)).toBe(true);
     const records = await store.list();
     expect(records).toHaveLength(1);
-    const record = records[0];
+    const record = records[0] === undefined ? undefined : await store.load(records[0].id);
     if (record === undefined) throw new Error("Expected one ODT record.");
-    const archive = new ZipFile(record.bytes);
+    const archive = {
+      readTextEntry:
+        /** Reads a raw XML stream from the saved browser record. @param name - name. @returns Operation result. */ async (
+          name: string,
+        ) => record.content.files[name],
+    };
     expect(await archive.readTextEntry("mimetype")).toBe("application/vnd.oasis.opendocument.text");
     expect(await archive.readTextEntry("content.xml")).toContain("Stored<text:s/>ODT<text:s/>body");
     shell.Close();
@@ -105,13 +110,13 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
   it("waits for two trimmed words and allocates a collision-safe automatic title", /** Checks the new-document threshold, whitespace normalization, and indexed naming. @returns Completion. */ async () => {
     const store = new IndexedDbWriterOdtStore("automatic-title", new IDBFactory());
     await store.save({
-      bytes: new Uint8Array([1]),
+      content: { format: "xml", files: {} },
       id: "existing",
       title: "Plan work",
       version: 1,
     });
     await store.save({
-      bytes: new Uint8Array([2]),
+      content: { format: "xml", files: {} },
       id: "existing-copy",
       title: "Plan work (1)",
       version: 1,
@@ -151,7 +156,12 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
     new SwWrtShell(shell).Insert("Current body");
     expect(await autosaveWriter(shell, store)).toBe(true);
     const currentId = shell.GetDocumentId();
-    await store.save({ bytes: new Uint8Array([1]), id: "target", title: "Target", version: 1 });
+    await store.save({
+      content: { format: "xml", files: {} },
+      id: "target",
+      title: "Target",
+      version: 1,
+    });
     const target = await store.load("target");
     if (target === undefined) throw new Error("Expected overwrite target.");
     await overwriteBrowserWriterDocument(shell, store, target);
@@ -160,7 +170,12 @@ describe("Writer browser ODT saving", /** Registers ODT persistence assertions. 
     expect(await store.load(currentId)).toBeUndefined();
     const replaced = await store.load("target");
     if (replaced === undefined) throw new Error("Expected replaced target.");
-    const archive = new ZipFile(replaced.bytes);
+    const archive = {
+      readTextEntry:
+        /** Reads a raw XML stream from the saved browser record. @param name - name. @returns Operation result. */ async (
+          name: string,
+        ) => replaced.content.files[name],
+    };
     expect(await archive.readTextEntry("content.xml")).toContain("Current<text:s/>body");
     shell.Close();
   });

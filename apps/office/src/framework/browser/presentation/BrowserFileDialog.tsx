@@ -4,7 +4,7 @@ import { FileText, HardDrive, MonitorUp, Upload } from "lucide-react";
 import {
   getUniqueDocumentTitle,
   type BrowserDocumentStore,
-  type BrowserStoredDocument,
+  type BrowserDocumentSummary,
 } from "../storage/document-store";
 import type { BrowserFileDialogKind } from "../workflows/file-dialog-controller";
 import { DialogHeader } from "./DialogHeader";
@@ -53,7 +53,7 @@ export interface BrowserFileDialogProps {
 /** Imported file waiting for a primary-name decision. */
 interface PendingImport {
   readonly bytes: Uint8Array;
-  readonly conflicting: BrowserStoredDocument;
+  readonly conflicting: BrowserDocumentSummary;
   readonly file: File;
 }
 /** Presents common primary-document file choices and collision handling. @param props - Suite IO and resources. @returns Dialog. */
@@ -73,7 +73,7 @@ export function BrowserFileDialog({
   modalAttributes,
 }: BrowserFileDialogProps): React.JSX.Element {
   const [tab, setTab] = useState<"browser" | "computer">("browser");
-  const [documents, setDocuments] = useState<readonly BrowserStoredDocument[]>([]);
+  const [documents, setDocuments] = useState<readonly BrowserDocumentSummary[]>([]);
   const [title, setTitle] = useState(`${documentTitle} copy`);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();

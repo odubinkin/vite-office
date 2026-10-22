@@ -4,6 +4,7 @@ import {
   getUniqueDocumentTitle,
   type BrowserDocumentStore,
   type BrowserStoredDocument,
+  type BrowserDocumentSummary,
 } from "../../../framework/browser/storage/document-store";
 import { BrowserAutosaveController } from "../../../framework/browser/workflows/document-autosave";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
@@ -11,7 +12,6 @@ import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScHorizontalCellIterator } from "../../inc/dociter";
 import { ScAddress } from "../../inc/address";
 import type { ScDocument } from "../../inc/document";
-import { writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { cellPresentation } from "../editor/cell-input";
 /** Creates the suite-specific database over the shared package store. @returns Primary store. */
 export function createCalcDocumentStore(): BrowserDocumentStore {
@@ -69,12 +69,10 @@ export async function saveCalcAsBrowserCopy(
       filterId: "calc8",
       mediaType: ScDocShell.ODS_MEDIA_TYPE,
     },
-    /** Writes source package bytes at the shell's captured generation. @param document - Actual model. @returns Confirmed generation. */ async (
-      document,
-    ) => {
+    /** Writes source package bytes at the shell's captured generation. @param document - Actual model. @returns Confirmed generation. */ async () => {
       const generation = shell.GetContentGeneration(),
-        bytes = writeOdsDocument(document);
-      await store.saveAs({ bytes, id, title: normalized, version: generation });
+        content = await shell.SerializeXml();
+      await store.saveAs({ content, id, title: normalized, version: generation });
       return { generation };
     },
   );
@@ -100,12 +98,16 @@ export async function autosaveCalc(
     return true;
   }
   /** Persists the exact source bytes before acknowledging their generation. @param document - Model. @returns Save evidence. */
-  async function persist(document: ScDocument): Promise<{ readonly generation: number }> {
+  async function persist(): Promise<{ readonly generation: number }> {
     const captured = shell.GetDocumentState(),
-      bytes = writeOdsDocument(document),
-      existing = await store.load(captured.id);
+      content = await shell.SerializeXml(),
+      existing = (await store.list()).find(
+        /** Selects current browser document metadata by identity. @param record - record. @returns Operation result. */ (
+          record,
+        ) => record.id === captured.id,
+      );
     const record: BrowserStoredDocument = {
-      bytes,
+      content,
       id: captured.id,
       title: captured.title,
       version: captured.contentGeneration,
@@ -145,7 +147,7 @@ export async function openBrowserCalcDocument(
   const record = await store.load(id);
   if (record === undefined) return false;
   await shell.Open(
-    record.bytes,
+    record.content,
     createDocument({ id: record.id, suiteId: "calc", title: record.title }),
     {
       kind: "primary",
@@ -161,7 +163,7 @@ export async function openBrowserCalcDocument(
 export async function overwriteBrowserCalcDocument(
   shell: ScDocShell,
   store: BrowserDocumentStore,
-  target: BrowserStoredDocument,
+  target: BrowserDocumentSummary,
 ): Promise<void> {
   if (!hasCalcContent(shell.GetDocument())) throw new Error("Empty documents cannot be saved.");
   if (
@@ -178,13 +180,11 @@ export async function overwriteBrowserCalcDocument(
       filterId: "calc8",
       mediaType: ScDocShell.ODS_MEDIA_TYPE,
     },
-    /** Replaces bytes/identity in a single database transaction. @param document - Model. @returns Evidence. */ async (
-      document,
-    ) => {
+    /** Replaces bytes/identity in a single database transaction. @param document - Model. @returns Evidence. */ async () => {
       const generation = shell.GetContentGeneration(),
-        bytes = writeOdsDocument(document);
+        content = await shell.SerializeXml();
       await store.replace(
-        { bytes, id: target.id, title: target.title, version: generation },
+        { content, id: target.id, title: target.title, version: generation },
         previousId,
       );
       return { generation };

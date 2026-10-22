@@ -17,7 +17,6 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { normalizeCommandShortcut } from "../../../framework/browser/accelerators/keymapping";
 import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
-import { writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import type { CalcViewController } from "../controller/calc-view-controller";
 import { calcFileCommands } from "../../sdi/scalc";
 import { autosaveCalc, openBrowserCalcDocument, saveCalcAsBrowserCopy } from "./calc-ods-io";
@@ -110,11 +109,9 @@ export class CalcFileWorkflows {
       name = createDownloadFilename(shell.GetTitle(), ".ods");
     await shell.Export(
       { kind: "export", name, filterId: "calc8", mediaType: ScDocShell.ODS_MEDIA_TYPE },
-      /** Exports committed canonical cells through the shared browser port. @param document - Model. @returns Nothing. */ (
-        document,
-      ) =>
+      /** Exports committed canonical cells through the worker and browser port. @returns Completion. */ async () =>
         this.documentExport.export({
-          data: writeOdsDocument(document),
+          data: await shell.SerializeOdsAsync(),
           mediaType: ScDocShell.ODS_MEDIA_TYPE,
           name,
         }),

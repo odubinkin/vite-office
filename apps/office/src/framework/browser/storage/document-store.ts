@@ -1,18 +1,23 @@
-/** @fileoverview Format-neutral browser primary storage for complete document packages;the package bytes are the only durable body. */
+/** @fileoverview Browser primary storage for raw ODF XML and binary resources; listings read metadata only. */
+import type { XmlPackage } from "../../../svl/source/misc/storage";
+const DOCUMENTS = "xml-documents";
+const METADATA = "document-metadata";
 
-const DOCUMENTS = "documents";
-
-/** One committed browser document; the document package is the only durable body. */
-export interface BrowserStoredDocument {
-  readonly bytes: Uint8Array;
+/** Identity, title and generation needed for browser listings. */
+export interface BrowserDocumentSummary {
   readonly id: string;
   readonly title: string;
   readonly version: number;
 }
 
+/** One browser document with raw XML streams and binary resources. */
+export interface BrowserStoredDocument extends BrowserDocumentSummary {
+  readonly content: XmlPackage;
+}
+
 /** Browser persistence operations required by suite workflows. */
 export interface BrowserDocumentStore {
-  list(): Promise<readonly BrowserStoredDocument[]>;
+  list(): Promise<readonly BrowserDocumentSummary[]>;
   load(id: string): Promise<BrowserStoredDocument | undefined>;
   save(record: BrowserStoredDocument): Promise<void>;
   saveAs(record: BrowserStoredDocument): Promise<void>;
@@ -20,7 +25,7 @@ export interface BrowserDocumentStore {
   replace(record: BrowserStoredDocument, previousId: string): Promise<void>;
 }
 
-/** IndexedDB v2 store with atomic title uniqueness. */
+/** IndexedDB v3 XML store with atomic title uniqueness. */
 export class IndexedDbDocumentStore implements BrowserDocumentStore {
   /**
    * Handles the browser storage operation.
@@ -35,7 +40,7 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
   /**
    * Handles the browser storage operation.
    * @returns Operation result.
-   */ public async list(): Promise<readonly BrowserStoredDocument[]> {
+   */ public async list(): Promise<readonly BrowserDocumentSummary[]> {
     const db = await this.open();
     try {
       return await new Promise(
@@ -45,13 +50,13 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
          * @param reject - Input value.
          * @returns Operation result.
          */ (resolve, reject) => {
-          const transaction = db.transaction(DOCUMENTS, "readonly");
-          const request = transaction.objectStore(DOCUMENTS).getAll();
+          const transaction = db.transaction(METADATA, "readonly");
+          const request = transaction.objectStore(METADATA).getAll();
           request.onsuccess =
             /**
              * Handles the browser storage operation.
              * @returns Operation result.
-             */ () => resolve(request.result as BrowserStoredDocument[]);
+             */ () => resolve(request.result as BrowserDocumentSummary[]);
           request.onerror =
             /**
              * Handles the browser storage operation.
@@ -142,9 +147,9 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
           resolve,
           reject,
         ) => {
-          const transaction = db.transaction(DOCUMENTS, "readwrite");
+          const transaction = db.transaction([DOCUMENTS, METADATA], "readwrite");
           const store = transaction.objectStore(DOCUMENTS);
-          const target = store.get(record.id);
+          const target = transaction.objectStore(METADATA).get(record.id);
           target.onsuccess =
             /** Confirms that the selected conflict still owns its title. @returns Nothing. */ () => {
               const existing = target.result as BrowserStoredDocument | undefined;
@@ -154,7 +159,11 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
                 return;
               }
               store.put(record);
-              if (previousId !== record.id) store.delete(previousId);
+              transaction.objectStore(METADATA).put(summary(record));
+              if (previousId !== record.id) {
+                store.delete(previousId);
+                transaction.objectStore(METADATA).delete(previousId);
+              }
             };
           target.onerror = /** Reports target lookup failure. @returns Nothing. */ () =>
             reject(target.error);
@@ -192,9 +201,9 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
          * @param reject - Input value.
          * @returns Operation result.
          */ (resolve, reject) => {
-          const transaction = db.transaction(DOCUMENTS, "readwrite");
+          const transaction = db.transaction([DOCUMENTS, METADATA], "readwrite");
           const store = transaction.objectStore(DOCUMENTS);
-          const byTitle = store.index("title").get(record.title);
+          const byTitle = transaction.objectStore(METADATA).index("title").get(record.title);
           byTitle.onsuccess =
             /**
              * Handles the browser storage operation.
@@ -212,7 +221,7 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
                 return;
               }
               if (operation === "rename" && previousTitle !== undefined) {
-                const existing = store.get(record.id);
+                const existing = transaction.objectStore(METADATA).get(record.id);
                 existing.onsuccess =
                   /**
                    * Handles the browser storage operation.
@@ -222,9 +231,15 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
                     if (old === undefined || old.title !== previousTitle) {
                       transaction.abort();
                       reject(new Error("The document name changed in another tab."));
-                    } else store.put(record);
+                    } else {
+                      store.put(record);
+                      transaction.objectStore(METADATA).put(summary(record));
+                    }
                   };
-              } else store.put(record);
+              } else {
+                store.put(record);
+                transaction.objectStore(METADATA).put(summary(record));
+              }
             };
           byTitle.onerror =
             /**
@@ -264,7 +279,7 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
        * @param reject - Input value.
        * @returns Operation result.
        */ (resolve, reject) => {
-        const request = this.factory.open(this.name, 2);
+        const request = this.factory.open(this.name, 3);
         request.onupgradeneeded =
           /**
            * Handles the browser storage operation.
@@ -272,8 +287,9 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
            */ () => {
             const database = request.result;
             if (!database.objectStoreNames.contains(DOCUMENTS)) {
-              const store = database.createObjectStore(DOCUMENTS, { keyPath: "id" });
-              store.createIndex("title", "title", { unique: true });
+              database.createObjectStore(DOCUMENTS, { keyPath: "id" });
+              const metadata = database.createObjectStore(METADATA, { keyPath: "id" });
+              metadata.createIndex("title", "title", { unique: true });
             }
           };
         request.onsuccess =
@@ -295,7 +311,7 @@ export class IndexedDbDocumentStore implements BrowserDocumentStore {
 /** Allocates the first unused browser title by appending a one-based parenthesized index. @param baseTitle - Requested display name. @param documents - Existing browser records. @returns Unique normalized title. */
 export function getUniqueDocumentTitle(
   baseTitle: string,
-  documents: readonly BrowserStoredDocument[],
+  documents: readonly BrowserDocumentSummary[],
 ): string {
   const normalized = baseTitle.trim();
   if (normalized.length === 0) throw new Error("Document name is required.");
@@ -312,4 +328,9 @@ export function getUniqueDocumentTitle(
   let index = indexed === null ? 1 : Number(indexed[2]) + 1;
   while (occupied.has(`${root} (${index})`)) index += 1;
   return `${root} (${index})`;
+}
+
+/** Copies only fields needed for listings and title checks. @param record - Full body. @returns Metadata. */
+function summary(record: BrowserStoredDocument): BrowserDocumentSummary {
+  return { id: record.id, title: record.title, version: record.version };
 }

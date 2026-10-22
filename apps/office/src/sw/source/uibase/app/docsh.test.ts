@@ -250,6 +250,11 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
   it("rejects stale ODT imports after another document replaces the graph", /** Checks rejects stale ODT imports after another document replaces the graph. @returns Test callback result. */ async () => {
     let resolveImport!: (value: ReturnType<typeof createOdtFilterDocument>) => void;
     const filter: OdtFilterService = {
+      ExportXml:
+        /** Returns a deterministic browser XML result for shell lifecycle tests.  @returns Operation result. */ async () => ({
+          format: "xml",
+          files: {},
+        }),
       Cancel: vi.fn(),
       Close: vi.fn(),
       Export: /** Runs the test callback. @returns Test callback result. */ async () =>
@@ -292,6 +297,11 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
   it("restores dirty history and accepts both default and explicit ODT open media", /** Checks restores dirty history and accepts both default and explicit ODT open media. @returns Test callback result. */ async () => {
     const initial = createDocument({ id: "doc", suiteId: "writer", title: "Draft" });
     const filter: OdtFilterService = {
+      ExportXml:
+        /** Returns a deterministic browser XML result for shell lifecycle tests.  @returns Operation result. */ async () => ({
+          format: "xml",
+          files: {},
+        }),
       Cancel: vi.fn(),
       Close: vi.fn(),
       Export: /** Runs the test callback. @returns Test callback result. */ async () =>

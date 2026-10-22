@@ -1,6 +1,7 @@
 /** @fileoverview Calc browser-byte composition for native XML import/export wrapper responsibilities over shared ZIP/manifest services. */
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { packXmlPackage } from "../../../../package/source/zippackage/xml-package";
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import {
   createManifestXml,
@@ -20,10 +21,29 @@ export class ScXMLImportWrapper {
   /** Binds the actual document. @param document - Target/source. @returns Wrapper. */
   constructor(private readonly document: ScDocument) {}
   /** Imports a plain modern ODS package directly into a fresh actual document. @param bytes - Package. @param options - Controls. @returns Completion. */
-  async Import(bytes: Uint8Array, options: OdsImportOptions = {}): Promise<void> {
+  async Import(bytes: Uint8Array | XmlPackage, options: OdsImportOptions = {}): Promise<void> {
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const zip =
-      options.zipLimits === undefined ? new ZipFile(bytes) : new ZipFile(bytes, options.zipLimits);
+      bytes instanceof Uint8Array
+        ? options.zipLimits === undefined
+          ? new ZipFile(bytes)
+          : new ZipFile(bytes, options.zipLimits)
+        : {
+            getEntryNames:
+              /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
+                Object.keys(bytes.files),
+            getEntryMethod:
+              /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
+                0,
+            readTextEntry:
+              /** Reads or measures an unpacked Calc XML stream. @param name - name. @returns Operation result. */ async (
+                name: string,
+              ) => {
+                const value = bytes.files[name];
+                if (typeof value !== "string") throw new Error(`Missing ODS XML stream: ${name}`);
+                return value;
+              },
+          };
     if (zip.getEntryNames()[0] !== "mimetype" || zip.getEntryMethod("mimetype") !== 0)
       throw new Error("ODS requires first uncompressed mimetype entry");
     const mimetype = await zip.readTextEntry("mimetype");
@@ -36,13 +56,26 @@ export class ScXMLImportWrapper {
       importer.importStyles(await zip.readTextEntry("styles.xml"));
     importer.importContent(content);
   }
-  /** Writes supported content through shared native manifest properties and ZIP records. @param options - Controls. @returns ODS bytes. */
+  /** Writes an external ODS package. @param options - Controls. @returns Package bytes. */
   Export(options: ScXMLExportOptions = {}): Uint8Array {
+    const bytes = packXmlPackage(this.ExportXml(options).files);
+    if (bytes.length > (options.maxOutputBytes ?? 64 * 1024 * 1024))
+      throw new Error("ODS export size limit exceeded");
+    return bytes;
+  }
+
+  /** Writes supported content through shared native manifest properties and ZIP records. @param options - Controls. @returns ODS bytes. */
+  ExportXml(options: ScXMLExportOptions = {}): XmlPackage {
     if (options.isCancelled?.()) throw new Error("ODS operation was cancelled");
     const content = new ScXMLExport(this.document, options).exportContent(),
-      zip = new ZipOutputStream(),
-      encoder = new TextEncoder();
-    zip.putNextEntry("mimetype", encoder.encode(ODS_MIMETYPE));
+      files: Record<string, string> = {},
+      zip = {
+        /** Retains one unpacked stream. @param name - Path. @param value - Text. @returns Nothing. */
+        putNextEntry(name: string, value: string) {
+          files[name] = value;
+        },
+      };
+    zip.putNextEntry("mimetype", ODS_MIMETYPE);
     const manifest = [
       [
         ["FullPath", "/"],
@@ -64,17 +97,23 @@ export class ScXMLImportWrapper {
           ]) => createManifestProperty(name as string, value as string),
         ),
     );
-    zip.putNextEntry("META-INF/manifest.xml", encoder.encode(createManifestXml(manifest)));
-    zip.putNextEntry("content.xml", encoder.encode(content));
-    const bytes = zip.finish();
-    if (bytes.length > (options.maxOutputBytes ?? 64 * 1024 * 1024))
+    zip.putNextEntry("META-INF/manifest.xml", createManifestXml(manifest));
+    zip.putNextEntry("content.xml", content);
+    const size = Object.values(files).reduce(
+      /** Reads or measures an unpacked Calc XML stream. @param sum - sum. @param value - value. @returns Operation result. */ (
+        sum,
+        value,
+      ) => sum + new TextEncoder().encode(value).length,
+      0,
+    );
+    if (size > (options.maxOutputBytes ?? 64 * 1024 * 1024))
       throw new Error("ODS export size limit exceeded");
-    return bytes;
+    return { format: "xml", files };
   }
 }
 /** Browser package-to-native-document binding. @param bytes - ODS. @param options - Controls. @returns Actual document. */
 export async function readOdsDocument(
-  bytes: Uint8Array,
+  bytes: Uint8Array | XmlPackage,
   options: OdsImportOptions = {},
 ): Promise<ScDocument> {
   const doc = new ScDocument();
@@ -87,4 +126,9 @@ export function writeOdsDocument(
   options: ScXMLExportOptions = {},
 ): Uint8Array {
   return new ScXMLImportWrapper(document).Export(options);
+}
+
+/** Writes primary browser XML. @param document - Model. @param options - Controls. @returns XML streams. */
+export function writeOdsXml(document: ScDocument, options: ScXMLExportOptions = {}): XmlPackage {
+  return new ScXMLImportWrapper(document).ExportXml(options);
 }

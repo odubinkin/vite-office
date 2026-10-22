@@ -73,7 +73,7 @@ function hierarchy(paths: readonly string[]): {
 }
 /** Applies actual PropertyValue entries in original order and computes normal non-recovery package metadata. @param archive - Real readonly ZIP. @param manifest - Native parsed property sequences. @param mimetype - Optional decoded native mimetype stream. @returns Represented metadata. */
 export function applyPlainManifestMetadata(
-  archive: ZipFile,
+  archive: Pick<ZipFile, "getEntryNames">,
   manifest: readonly (readonly PropertyValue[])[],
   mimetype?: string,
 ): PlainPackageMetadata {
@@ -146,7 +146,7 @@ export function applyPlainManifestMetadata(
 }
 /** Shared plain reader composition;all applications consume the same actual importer and package metadata responsibilities. @param archive - Real ZIP. @param xml - Decoded manifest stream. @param mimetype - Optional native mimetype stream. @returns Represented package properties. */
 export function readPlainPackageManifest(
-  archive: ZipFile,
+  archive: Pick<ZipFile, "getEntryNames">,
   xml: string,
   mimetype?: string,
 ): PlainPackageMetadata {

@@ -1,0 +1,87 @@
+{
+  "large_ods_user_fixture": {
+    "source": "user ODS 5000",
+    "importing": {
+      "maxGap": 52.10000014305115,
+      "ticks": 699
+    },
+    "saving": {
+      "maxGap": 42.200000047683716,
+      "ticks": 99
+    },
+    "reopening": {
+      "maxGap": 39.30000019073486,
+      "ticks": 120
+    },
+    "exporting": {
+      "maxGap": 29.799999952316284,
+      "ticks": 127
+    },
+    "errors": []
+  },
+  "portable_5000_by_9": {
+    "source": "generated 5000 x 9",
+    "importing": {
+      "maxGap": 29.800000190734863,
+      "ticks": 285
+    },
+    "saving": {
+      "maxGap": 40.19999980926514,
+      "ticks": 96
+    },
+    "reopening": {
+      "maxGap": 25.899999856948853,
+      "ticks": 187
+    },
+    "exporting": {
+      "maxGap": 26.40000009536743,
+      "ticks": 121
+    },
+    "errors": []
+  },
+  "unpacked_content_xml_bytes": 4104300,
+  "regressions": {
+    "filter_shell_storage_autosave": {
+      "files": 71,
+      "tests": 427,
+      "result": "pass"
+    },
+    "browser_workflow_components": {
+      "files": 6,
+      "tests": 30,
+      "result": "pass",
+      "note": "Includes overlapping worker/storage checks."
+    },
+    "final_worker_boundaries": {
+      "files": 4,
+      "tests": 18,
+      "result": "pass",
+      "note": "Recheck after worker cleanup/type layering changes."
+    },
+    "calc_worker_cancellation": {
+      "files": 1,
+      "tests": 2,
+      "result": "pass"
+    },
+    "existing_browser_scenarios": {
+      "tests": 10,
+      "result": "pass"
+    },
+    "new_browser_responsiveness": {
+      "inputs": 2,
+      "result": "pass",
+      "max_gap_limit_ms": 200
+    }
+  },
+  "static_checks": {
+    "typecheck": "pass",
+    "build": "pass",
+    "changed_file_eslint": "pass",
+    "changed_file_prettier": "pass",
+    "module_boundaries": "pass",
+    "jsdoc": "pass",
+    "file_size": "pass",
+    "agentplane_doctor": "pass",
+    "policy_routing": "pass"
+  }
+}

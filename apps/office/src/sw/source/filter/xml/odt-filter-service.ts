@@ -3,12 +3,13 @@
  * remote execution adapters while retaining package/xmloff/sw ownership inside the filter.
  */
 
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import { SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
-import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
+import { writeOdtDocument, writeOdtXml, type OdtExportProgressStage } from "./wrtxml";
 
 /** Progress stages qualified by import/export direction. */
 export type OdtFilterProgressStage =
@@ -46,6 +47,7 @@ export interface OdtFilterOperationOptions {
   readonly zipLimits?: ZipFileLimits;
   /** Output device retained when constructing an imported graph on this side of the Worker boundary. */
   readonly defaultFontDevice?: DefaultFontDevice;
+  readonly isCurrent?: () => boolean;
 }
 
 /** Canonical document boundary accepted by inline and remote filter adapters. */
@@ -80,9 +82,10 @@ export interface OdtFilterService {
   Close(): void;
   /** Exports one Writer graph. @param input - Canonical graph without lifecycle state. @param options - Cancellation/progress controls. @returns Complete STORE-only ODT bytes. */
   Export(input: OdtFilterDocument, options?: OdtFilterOperationOptions): Promise<Uint8Array>;
+  ExportXml(input: OdtFilterDocument, options?: OdtFilterOperationOptions): Promise<XmlPackage>;
   /** Imports one ODT into a Writer graph. @param bytes - Complete package bytes. @param metadata - Fallback filter metadata. @param options - Cancellation/progress/resource controls. @returns Candidate graph for shell adoption. */
   Import(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: Readonly<{ title: string; locale?: string }>,
     options?: OdtFilterOperationOptions,
   ): Promise<OdtFilterDocument>;
@@ -142,9 +145,30 @@ export class InlineOdtFilterService implements OdtFilterService {
     }
   }
 
+  /** Exports browser XML without constructing a ZIP. @param input - Model. @param options - Controls. @returns XML streams. */
+  public async ExportXml(
+    input: OdtFilterDocument,
+    options: OdtFilterOperationOptions = {},
+  ): Promise<XmlPackage> {
+    this.Begin(options.signal);
+    try {
+      return writeOdtXml(
+        input.document,
+        { title: input.title },
+        {
+          isCancelled:
+            /** Observes cancellation before another Writer XML export stage.  @returns Operation result. */ () =>
+              this.IsCancelled(options.signal),
+        },
+      );
+    } catch (error) {
+      throw normalizeOdtFilterError(error);
+    }
+  }
+
   /** Imports through the existing package/XML filter. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate graph. */
   public async Import(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: Readonly<{ title: string; locale?: string }>,
     options: OdtFilterOperationOptions = {},
   ): Promise<OdtFilterDocument> {

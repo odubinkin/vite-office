@@ -165,7 +165,9 @@ cross a version-one Dedicated Worker protocol using transferable `ArrayBuffer`
 payloads. `odt-transfer.ts` owns the Worker-only graph envelope around
 `WriterDocumentRecord` from `sw/browser/filter/xml/writer-document-codec.ts`.
 This structured-clone codec is not used by IndexedDB persistence: the browser
-stores complete ODT bytes and does not read old JSON snapshot records.
+stores unpacked XML strings and binary resources. Earlier ZIP and JSON records
+are not read or migrated. Dedicated Workers perform the XML filtering; graph
+capture and adoption yield in bounded main-thread work slices.
 The shared
 decoder reconstructs text through the document-bound content-operations manager.
 Neither boundary is treated as the live Writer model, and retired storage or

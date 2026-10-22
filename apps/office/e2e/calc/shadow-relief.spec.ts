@@ -8,7 +8,10 @@ const nativeExports = [
   { module: "src/xmloff/source/core/xmluconv.ts", names: ["SvXMLUnitConverter"] },
   { module: "src/udkapi/com/sun/star/uno/TypeClass.ts", names: ["TypeClass"] },
   { module: "src/sc/browser/workflows/calc-ods-io.ts", names: ["createCalcDocumentStore"] },
-  { module: "src/sc/source/filter/xml/xmlwrap.ts", names: ["readOdsDocument", "writeOdsDocument"] },
+  {
+    module: "src/sc/source/filter/xml/xmlwrap.ts",
+    names: ["readOdsDocument", "writeOdsDocument", "writeOdsXml"],
+  },
   { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
   { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
   { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
@@ -93,7 +96,7 @@ for (const width of [1280, 390]) {
               if (!record) return -1;
               const stored = await store.load(record.id);
               if (!stored) return -1;
-              const doc = await n.readOdsDocument(stored.bytes);
+              const doc = await n.readOdsDocument(stored.content);
               try {
                 return (
                   doc.GetPattern(new n.ScAddress())?.GetItem(108) as InstanceType<
@@ -252,7 +255,7 @@ test("paints native relief over shadow on colored background with independent li
           id: "shadow-paint",
           title: "Shadow paint",
           version: 1,
-          bytes: n.writeOdsDocument(doc),
+          content: n.writeOdsXml(doc),
         });
       } finally {
         doc.DisposeAttributes();

@@ -220,8 +220,18 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   it("prefills an indexed name and keeps both documents after an import collision", /** Checks the save-new collision choice. @returns Completion. */ async () => {
     const documentShell = shell();
     const store = new IndexedDbWriterOdtStore("dialog-import-copy", new IDBFactory());
-    await store.save({ bytes: new Uint8Array([1]), id: "plan", title: "Plan", version: 1 });
-    await store.save({ bytes: new Uint8Array([2]), id: "plan-1", title: "Plan (1)", version: 1 });
+    await store.save({
+      content: { format: "xml", files: {} },
+      id: "plan",
+      title: "Plan",
+      version: 1,
+    });
+    await store.save({
+      content: { format: "xml", files: {} },
+      id: "plan-1",
+      title: "Plan (1)",
+      version: 1,
+    });
     const close = vi.fn();
     render(
       <WriterFileDialog
@@ -268,7 +278,12 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
   it("overwrites the colliding browser identity only after explicit confirmation", /** Checks the replace-existing collision choice. @returns Completion. */ async () => {
     const documentShell = shell();
     const store = new IndexedDbWriterOdtStore("dialog-import-overwrite", new IDBFactory());
-    await store.save({ bytes: new Uint8Array([1]), id: "plan", title: "Plan", version: 1 });
+    await store.save({
+      content: { format: "xml", files: {} },
+      id: "plan",
+      title: "Plan",
+      version: 1,
+    });
     const close = vi.fn();
     render(
       <WriterFileDialog
@@ -342,7 +357,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     const documentShell = shell();
     const store = {
       list: /** Runs the focused test callback. @returns Operation result. */ async () => [
-        { bytes: new Uint8Array([1]), id: "old", title: "Old", version: 1 },
+        { content: { format: "xml", files: {} }, id: "old", title: "Old", version: 1 },
       ],
     } as unknown as WriterOdtStore;
     const close = vi.fn();

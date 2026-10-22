@@ -210,3 +210,37 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     });
   });
 });
+
+it("writes and reopens raw browser XML in the worker", /** Checks raw browser XML through the actual Writer worker runtime.  @returns Operation result. */ async () => {
+  const source = createWriterDocument();
+  new SwWrtShell(new SwDocShell(source, metadata())).Insert("Raw XML body");
+  const scope = new CapturingScope();
+  new OdtWorkerRuntime(scope).HandleMessage(
+    request({
+      operation: "export-xml",
+      document: createOdtWorkerDocument(createOdtFilterDocument(source, "XML title")),
+    }),
+  );
+  const exported = await terminal(scope);
+  expect(exported.type).toBe("result");
+  const data = (
+    exported.payload as {
+      data: import("../../../../svl/source/misc/storage").XmlPackage;
+    }
+  ).data;
+  expect(data.format).toBe("xml");
+  expect(data.files["content.xml"]).toContain("Raw<text:s/>XML<text:s/>body");
+  const opened = new CapturingScope();
+  new OdtWorkerRuntime(opened).HandleMessage(
+    request({ operation: "import", bytes: data, metadata: { title: "fallback" } }),
+  );
+  const result = await terminal(opened);
+  expect(result.type).toBe("result");
+  const doc = restoreOdtWorkerDocument(
+    (result.payload as { document: OdtWorkerDocument }).document,
+  );
+  expect(doc.title).toBe("XML title");
+  expect(doc.document.paragraphs[0]?.GetText()).toBe("Raw XML body");
+  doc.document.Dispose();
+  source.Dispose();
+});

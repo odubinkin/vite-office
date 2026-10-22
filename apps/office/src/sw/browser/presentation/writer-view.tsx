@@ -1,4 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import type { BrowserDocumentSummary } from "../../../framework/browser/storage/document-store";
 import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { SwFormatVertOrient } from "../../inc/fmtornt";
 import { importBoxProperties } from "../../source/filter/xml/xmlimpit";
@@ -59,12 +60,11 @@ import { SwTabCols } from "../../source/core/bastyp/tabcol";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
-import type { BrowserWriterDocument } from "../storage/writer-odt-store";
 import { getUniqueWriterTitle, overwriteBrowserWriterDocument } from "../workflows/writer-odt-io";
 
 /** Manual title edit paused on an occupied browser title. */
 interface WriterRenameCollision {
-  readonly conflicting: BrowserWriterDocument;
+  readonly conflicting: BrowserDocumentSummary;
 }
 
 /** Properties selecting a persistent Writer view for projection. */

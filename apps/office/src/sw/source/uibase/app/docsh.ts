@@ -2,7 +2,7 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
-
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxRequest } from "../../../../sfx2/source/control/request";
@@ -255,7 +255,7 @@ export class SwDocShell extends SfxObjectShell {
 
   /** Loads an ODT candidate before atomically replacing the active graph. @param bytes - Complete ODT bytes. @param metadata - Fallback lifecycle metadata. @param medium - Open medium. @param options - Filter controls. @returns Loaded model. */
   public async Open(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: SfxObjectShellState,
     medium?: SfxMediumInput,
     options?: OdtFilterOperationOptions,
@@ -309,7 +309,7 @@ export class SwDocShell extends SfxObjectShell {
 
   /** Alias for the atomic ODT open boundary. @param bytes - Complete ODT bytes. @param metadata - Fallback metadata. @param medium - Optional open medium. @returns Loaded model. */
   public Load(
-    bytes: Uint8Array,
+    bytes: Uint8Array | XmlPackage,
     metadata: SfxObjectShellState,
     medium?: SfxMediumInput,
   ): Promise<SwDoc> {
@@ -327,7 +327,26 @@ export class SwDocShell extends SfxObjectShell {
     title = this.GetTitle(),
   ): Promise<Uint8Array> {
     this.EnsureOpen();
-    return this.odtFilter.Export(createOdtFilterDocument(this.document, title), options);
+    const generation = this.GetContentGeneration(),
+      document = this.document;
+    return this.odtFilter.Export(createOdtFilterDocument(this.document, title), {
+      ...options,
+      isCurrent:
+        /** Rejects graph capture after the live document generation changes.  @returns Operation result. */ () =>
+          generation === this.GetContentGeneration() && document === this.document,
+    });
+  }
+
+  /** Serializes browser XML without ZIP headers or checksums. @param title - Saved title. @returns XML streams. */
+  public SerializeXml(title = this.GetTitle()): Promise<XmlPackage> {
+    this.EnsureOpen();
+    const generation = this.GetContentGeneration(),
+      document = this.document;
+    return this.odtFilter.ExportXml(createOdtFilterDocument(this.document, title), {
+      isCurrent:
+        /** Rejects graph capture after the live document generation changes.  @returns Operation result. */ () =>
+          generation === this.GetContentGeneration() && document === this.document,
+    });
   }
 
   /** Saves to the current confirmed writable primary medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */

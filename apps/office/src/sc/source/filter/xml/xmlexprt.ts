@@ -36,6 +36,7 @@ export interface ScXMLExportOptions {
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();
   private readonly styles = new Map<string, string>();
+  private readonly patternNames = new Map<ScPatternAttr, string>();
   private readonly columnStyles = new Map<number, string>();
   private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
@@ -45,14 +46,18 @@ export class ScXMLExport {
   ) {}
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
+    const cached = this.patternNames.get(pattern);
+    if (cached !== undefined) return cached;
     const ids = cellTextWhichIds;
     if (
       !ids.some(
         /** Tests genuine direct item state. @param which - Identity. @returns Set. */ (which) =>
           pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET,
       )
-    )
+    ) {
+      this.patternNames.set(pattern, "");
       return "";
+    }
     const text = exportCellTextProperties(pattern, this.fontPool),
       cell = exportCellProperties(pattern),
       paragraph = exportCellParagraphProperties(pattern),
@@ -62,6 +67,7 @@ export class ScXMLExport {
       name = `ce${this.styles.size + 1}`;
       this.styles.set(key, name);
     }
+    this.patternNames.set(pattern, name);
     return name;
   }
   /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
@@ -78,6 +84,7 @@ export class ScXMLExport {
       );
     }
     this.styles.clear();
+    this.patternNames.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
     let body = "";
@@ -183,10 +190,24 @@ export class ScXMLExport {
             column++;
             cell = iterator.GetNext(col, row);
           } else {
-            const stop = Math.min(
-              column < allocated ? column + 1 : endColumn + 1,
+            const limit = Math.min(
+              endColumn + 1,
               cell && row[0] === currentRow ? col[0] : endColumn + 1,
             );
+            let stop = column + 1;
+            while (stop < limit) {
+              if (stop >= allocated) {
+                if (style !== this.styleName(defaultPattern)) break;
+                stop = limit;
+                break;
+              }
+              if (
+                style !==
+                this.styleName(table.GetColumnData(stop).GetPattern(currentRow) as ScPatternAttr)
+              )
+                break;
+              stop++;
+            }
             const count = stop - column;
             body += `<table:table-cell${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
             column = stop;

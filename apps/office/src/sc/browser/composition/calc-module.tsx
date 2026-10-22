@@ -1,4 +1,7 @@
 /** @fileoverview Lazy production Calc module with one document/controller/frame ownership chain per mounted workspace. */
+import { ScDocShell } from "../../source/ui/docshell/docsh";
+import { ScDocument } from "../../inc/document";
+import { OdsWorkerClient } from "../filter/xml/ods-worker-client";
 /* eslint-disable react-refresh/only-export-components -- The private workspace host belongs to the exported lazy module factory. */
 import generated from "../../uiconfig/scalc/calc-ui.generated.json" with { type: "json" };
 import { normalizeCommandShortcut } from "../../../framework/browser/accelerators/keymapping";
@@ -20,7 +23,11 @@ export function createCalcSession(
     ? undefined
     : createCalcDocumentStore(),
 ) {
-  const controller = new CalcViewController(),
+  const controller = new CalcViewController(
+      globalThis.Worker === undefined
+        ? new ScDocShell()
+        : new ScDocShell(new ScDocument(), new OdsWorkerClient()),
+    ),
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),
     fileWorkflows = new CalcFileWorkflows(controller, store, autosave),
