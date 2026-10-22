@@ -4,7 +4,7 @@ title: "Connect native Writer strikethrough formatting through UI and ODT"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-22T21:46:18.830Z"
+  updated_by: "CODER"
+  note: "Native strikeout UI/core/ODT complete for consumed profile. Current81 files4728 cases and supplemental5 files61 cases pass;7 Chromium scenarios1280/390 pass.26-owner exact unchanged-span audit S3110 B2524 F677 L2806 all100 with zero missing; raw profiles retained, no thresholds lowered or full-suite claim. Types/lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff pass. Source2217028cd752; residual services and WRITER052 documented; keep goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T21:46:33.575Z"
+  updated_by: "EVALUATOR"
+  note: "Consumed native Writer strikeout slice meets approved UI/core/ODT and history contract at2217028cd752; deterministic gates and scoped evidence pass; finish task and keep goal active."
+  evaluated_sha: "2217028cd752a4d53aee1e9e995852df558120ce"
+  blueprint_digest: "0aa2d815149f529a79db2767c33285573cf596820f5162bf4a2cbb9ae0004b49"
+  evidence_refs:
+    - ".agentplane/tasks/202610222030-N700C9/README.md"
+    - ".agentplane/tasks/202610222030-N700C9/quality/20261022-214633575-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610222030-N700C9/quality/20261022-214633575-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610222030-N700C9/quality/20261022-214633575-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610222030-N700C9/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-strikeout/incremental-coverage-audit.json"
+    - "output/playwright/writer-strikeout/final-delta-coverage.log"
+    - "output/playwright/writer-strikeout/final-extra-coverage.log"
+    - "output/playwright/writer-strikeout/browser-final.log"
+    - "output/playwright/writer-strikeout/closure-gates.json"
+    - "output/playwright/writer-strikeout/final-first-gates.json"
+    - "output/playwright/writer-strikeout/final-other-gates.json"
+  findings:
+    - "Original numeric enum and explicit NONE survive pool/style/hints, partial and zero selections, source state/toggle, actual original cursor owners and undo/redo. Mounted sidebar/body/numbering and Chromium1280/390 ODT download/reopen provide real consumer evidence."
+    - "Current4728 related and61 supplemental tests pass;26 executable owner source identities verified with strict S3110/B2524/F677/L2806 all100 via exact unchanged-span carry only. Raw scoped100 failures are preserved and distinguished from fresh whole-module coverage. No lowered thresholds, skipped required checks or full-suite claim."
+    - "29 implementation/resource paths meet approved24+5 tolerance;7 tests fit8. Writer branch unchanged, local approved sources only; no network, merges, save/open/recovery change or semantic status promotion. WRITER052 retains source asymmetry with qualified evidence."
 commit: null
 comments:
   -
@@ -35,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native Writer crossed-out attribute, source command state, sidebar and ODT flow in writer using local pinned sources and related checks."
+  -
+    type: "verify"
+    at: "2026-10-22T21:46:18.830Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native strikeout UI/core/ODT complete for consumed profile. Current81 files4728 cases and supplemental5 files61 cases pass;7 Chromium scenarios1280/390 pass.26-owner exact unchanged-span audit S3110 B2524 F677 L2806 all100 with zero missing; raw profiles retained, no thresholds lowered or full-suite claim. Types/lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff pass. Source2217028cd752; residual services and WRITER052 documented; keep goal active."
 doc_version: 3
-doc_updated_at: "2026-10-22T21:45:50.174Z"
+doc_updated_at: "2026-10-22T21:46:18.892Z"
 doc_updated_by: "CODER"
 description: "Complete the current character-formatting slice with original crossed-out items, source toggle/state contracts, sidebar/menu placement, browser projection and native XML property mappings; preserve full enum values in history and persistence."
 sections:
@@ -47,7 +77,41 @@ sections:
   Scope: "Only writer checkout/branch. Character WhichId/ranges/pool snapshots and item deltas, native shell command state/execute and existing Sfx toggle boundary, generated native menu/toolbar resources, Character sidebar and browser text/numbering projection where consumed, ODF text-property handler/mapping/import/export and persistence codec if needed. Related tests and browser ODT flows; conservative records for every changed native/browser owner, source-shaped extraction if an existing owner approaches1000 lines. Expected up to24 implementation/resource paths plus their registry records and up to8 test paths. No locale/search expansion, table structural operations, network, branches/merges or save/open/recovery policy changes."
   Plan: "Register original RES_CHRATR_CROSSEDOUT and NONE default with existing shared SvxCrossedOutItem; preserve actual enum across node/style/hint inheritance, item snapshots, direct-format history and cursor pending attributes. Follow source Sfx enum-bool toggle including mixed state and typed execution rather than a parallel boolean core. Bind original Strikeout command, menu/toolbar resources and sidebar order. Carry full native value into browser rendering and ODF chained style/type/width/text handlers in source order, preserving explicit off and inherited styles. Verify selected/caret/table text, mixed enum values, edit/history/model replacement, persistence and ODT, native handler permutations, and desktop/mobile UI. Record unsupported native layout/service coverage honestly without status promotion; continue active goal after closure."
   Verify Steps: "Read pinned init.cxx/hintids, SfxBindings Execute_Impl, SwBaseShell ExecTextCtrl/GetTextCtrlState, native command declarations and sidebar placements, and native XML crossed-out handlers/property map. Targeted tests must cover default and complete enum storage, clone/restore, inherited and direct NONE, native mixed/typed/toggle state, pending insertion and selection/table history, preservation of adjacent formatting, actual ODT style/span roundtrip including property-order cases. Browser1280/390 must prove actual native command placements, checked/mixed state, rendering, undo/redo and downloaded ODT reopen. Run related character/item/hints/history/view/XML/resource tests and strict changed-responsibility coverage; typecheck, scoped lint/format, build/static, resources/boundaries/docs/file-size/source-tree/provenance/invariants/parity, doctor/routing, diff/status. No full suite: fourth task after ACR55N under the ten-task cadence."
-  Verification: "PASS:81 related files/4728 cases and five supplemental files/61 cases; current native UI/core/ODT and history validated. Seven current Chromium scenarios1280/390 pass (previous15 broader browser scenarios pass).26 executable-owner deterministic exact-span audit is S3110/B2524/F677/L2806,100% with zero missing; raw scoped profiles retain unchanged100 thresholds and are explicitly partial. Typecheck, scoped lint/format, build/static, resources, dependencies/docs/size/tree/provenance, invariants/parity, doctor/routing/diff pass. Detailed exact commands, raw failures/resolutions, source identities and residual native-service limits are in Findings and output/playwright/writer-strikeout. No full suite, network or merge; fourth task after checkpoint. Goal remains active."
+  Verification: |-
+    PASS:81 related files/4728 cases and five supplemental files/61 cases; current native UI/core/ODT and history validated. Seven current Chromium scenarios1280/390 pass (previous15 broader browser scenarios pass).26 executable-owner deterministic exact-span audit is S3110/B2524/F677/L2806,100% with zero missing; raw scoped profiles retain unchanged100 thresholds and are explicitly partial. Typecheck, scoped lint/format, build/static, resources, dependencies/docs/size/tree/provenance, invariants/parity, doctor/routing/diff pass. Detailed exact commands, raw failures/resolutions, source identities and residual native-service limits are in Findings and output/playwright/writer-strikeout. No full suite, network or merge; fourth task after checkpoint. Goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-22T21:46:18.830Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native strikeout UI/core/ODT complete for consumed profile. Current81 files4728 cases and supplemental5 files61 cases pass;7 Chromium scenarios1280/390 pass.26-owner exact unchanged-span audit S3110 B2524 F677 L2806 all100 with zero missing; raw profiles retained, no thresholds lowered or full-suite claim. Types/lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff pass. Source2217028cd752; residual services and WRITER052 documented; keep goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T21:45:50.174Z, excerpt_hash=sha256:182fb2fd81a71b17a8c8a888d6bd2cb33f0e6422291435fdf143e9f8db99460e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610222030-N700C9/blueprint/resolved-snapshot.json
+    - old_digest: 0aa2d815149f529a79db2767c33285573cf596820f5162bf4a2cbb9ae0004b49
+    - current_digest: 0aa2d815149f529a79db2767c33285573cf596820f5162bf4a2cbb9ae0004b49
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222030-N700C9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610222030-N700C9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commits; preserve completed row/column/sidebar work and task traceability. No reset, merge or external changes."
   Findings: |-
     Previous goal turn was progress: TV1H69 source d3539d3199ec, closure66b172a2c83c, verified final45 tests/16 browser and exact-span coverage audit; clean writer. Current audit found shared crossed-out item and native XML handlers already exist but Writer lacks WhichId/default, state/UI and I/O wiring. Native enum exposes bool only for command toggling; preserve the full numeric enum in model/history/filter. Broad user mutation/continuation approval remains in force. Old stop requests are revoked by latest user instruction; keep goal active. Source reads are local pinned LibreOffice9bc445578031fecf56086729d8e4940c77e14d65.
@@ -96,6 +160,39 @@ Read pinned init.cxx/hintids, SfxBindings Execute_Impl, SwBaseShell ExecTextCtrl
 ## Verification
 
 PASS:81 related files/4728 cases and five supplemental files/61 cases; current native UI/core/ODT and history validated. Seven current Chromium scenarios1280/390 pass (previous15 broader browser scenarios pass).26 executable-owner deterministic exact-span audit is S3110/B2524/F677/L2806,100% with zero missing; raw scoped profiles retain unchanged100 thresholds and are explicitly partial. Typecheck, scoped lint/format, build/static, resources, dependencies/docs/size/tree/provenance, invariants/parity, doctor/routing/diff pass. Detailed exact commands, raw failures/resolutions, source identities and residual native-service limits are in Findings and output/playwright/writer-strikeout. No full suite, network or merge; fourth task after checkpoint. Goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-22T21:46:18.830Z — VERIFY — ok
+
+By: CODER
+
+Note: Native strikeout UI/core/ODT complete for consumed profile. Current81 files4728 cases and supplemental5 files61 cases pass;7 Chromium scenarios1280/390 pass.26-owner exact unchanged-span audit S3110 B2524 F677 L2806 all100 with zero missing; raw profiles retained, no thresholds lowered or full-suite claim. Types/lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff pass. Source2217028cd752; residual services and WRITER052 documented; keep goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T21:45:50.174Z, excerpt_hash=sha256:182fb2fd81a71b17a8c8a888d6bd2cb33f0e6422291435fdf143e9f8db99460e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610222030-N700C9/blueprint/resolved-snapshot.json
+- old_digest: 0aa2d815149f529a79db2767c33285573cf596820f5162bf4a2cbb9ae0004b49
+- current_digest: 0aa2d815149f529a79db2767c33285573cf596820f5162bf4a2cbb9ae0004b49
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222030-N700C9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610222030-N700C9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
