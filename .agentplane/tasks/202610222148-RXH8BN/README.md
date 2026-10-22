@@ -4,7 +4,7 @@ title: "Connect native Writer superscript and subscript through UI and ODT"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-22T22:18:20.989Z"
+  updated_by: "CODER"
+  note: "Native super/sub UI/core/ODT slice passes4836 related plus79 final focused cases,77 boundary tests and11 Chromium scenarios.24 executable-owner exact unchanged-span audit S2393 B1907 F462 L2203 all100 with zero missing, raw partial profiles retained. All local gates pass, sourceb00edb419944. Complete raw browser storage and native stricter UNO admission distinguished; native-service/transient-binding residuals and WRITER053 documented. Fifth task after full checkpoint; goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T22:19:05.148Z"
+  updated_by: "EVALUATOR"
+  note: "Native Writer super/sub consumed slice meets approved current UI/core/ODT scope atb00edb419944; scoped evidence and local gates pass. Finish task while keeping broad goal active."
+  evaluated_sha: "b00edb41994410ddb3d1d465c603cbcb764ca885"
+  blueprint_digest: "05320459a8fc0b219ec28da139d12604ba667f67417f567ffdc355ab44299e02"
+  evidence_refs:
+    - ".agentplane/tasks/202610222148-RXH8BN/README.md"
+    - ".agentplane/tasks/202610222148-RXH8BN/quality/20261022-221905148-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610222148-RXH8BN/quality/20261022-221905148-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610222148-RXH8BN/quality/20261022-221905148-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610222148-RXH8BN/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-escapement/incremental-coverage-audit.json"
+    - "output/playwright/writer-escapement/current-coverage.log"
+    - "output/playwright/writer-escapement/delta-coverage.log"
+    - "output/playwright/writer-escapement/boundary-current.log"
+    - "output/playwright/writer-escapement/browser-final.log"
+    - "output/playwright/writer-escapement/final-gates.json"
+  findings:
+    - "Complete signed16 offset/unsigned8 height and original0/100 default persist through native owners and browser transfer. Source sign toggle, explicit Bool requests, INVALID-as-false slot state, inherited off, same-sign mixed heights and history are covered without a parallel boolean core."
+    - "Actual mounted sidebar/body/numbering and11 current Chromium scenarios prove auto/manual proportional font and baseline placement, cell typing/history and downloaded ODT/reopen at1280/390. Original XML token/narrowing/percent contracts and independent item PutValue restrictions remain intact; WRITER053 qualifies source anomaly evidence."
+    - "Current91 related files4836 tests,6 final files79 tests and12 boundary files77 tests pass.24 executable-owner exact unchanged-span audit is S2393/B1907/F462/L2203 all100; current source hashes match. Raw partial profiles and100 thresholds retained; no new or changed counter inherits historical hits or full-suite coverage claim."
+    - "Exact scalar header edge rejects executable/service imports instead of admitting a library cycle. Mechanical checker and XML character splits preserve old responsibilities; moved canonical symbol/evidence ownership is explicit.32 implementation/resource/tooling paths and8 tests match plan, all declared gates pass, no classifications/defaults/native-service statuses promoted. Writer checkout only; no network/merges or deliberate I/O policy changes."
 commit: null
 comments:
   -
@@ -35,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native superscript/subscript item, source command and sidebar placement, complete value codec and ODT text-position with related checks in writer."
+  -
+    type: "verify"
+    at: "2026-10-22T22:18:20.989Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native super/sub UI/core/ODT slice passes4836 related plus79 final focused cases,77 boundary tests and11 Chromium scenarios.24 executable-owner exact unchanged-span audit S2393 B1907 F462 L2203 all100 with zero missing, raw partial profiles retained. All local gates pass, sourceb00edb419944. Complete raw browser storage and native stricter UNO admission distinguished; native-service/transient-binding residuals and WRITER053 documented. Fifth task after full checkpoint; goal active."
 doc_version: 3
-doc_updated_at: "2026-10-22T22:17:02.136Z"
+doc_updated_at: "2026-10-22T22:18:21.175Z"
 doc_updated_by: "CODER"
 description: "Complete original escapement commands, complete offset/height storage, source sidebar controls, original horizontal baseline arithmetic and style:text-position import/export over existing Writer native owners."
 sections:
@@ -47,7 +77,41 @@ sections:
   Scope: "Only writer checkout and writer branch. Native Which6/default and complete escaped offset/proportional-height values, native command IDs and txtattr state/execute, existing UI resource generator and sidebar/icon controls, browser projection/metrics and original horizontal CalcEsc arithmetic, complete browser item codec, actual ODF merged text-position handlers and Writer filter integration. Up to32 implementation/resource paths plus paired canonical records/generated views and up to8 related test paths. Local pinned sources only; no locale, table structural, native memory, network, branch/merge or deliberate I/O/recovery policy changes."
   Plan: "Reuse actual SvxEscapementItem signed16 offset and unsigned8 height; register original default0/100 and complete snapshot restoration. Implement source txtattr superscript/subscript explicit bool and sign toggle/state through actual SwBaseShell/SwEditShell item boundaries, retaining distinct mixed/full-value behavior. Add original sidebar pair and source menu/toolbar placements. Project full native values to actual body/cell/numbering text with original horizontal baseline formulas supplied by genuine browser font metrics; preserve browser geometry ownership. Port original merged XMLEscapementPropHdl/Height handlers and wire actual named/direct ODT properties. Add related command/history/inheritance/codec/device/XML/browser tests, strict changed-responsibility coverage and declared local gates, conservative canonical records and suspected-source issues. Finish task while keeping goal active."
   Verify Steps: "Read pinned hintids/init, txtattr execute and state, command SDI/sidebar, SwSubFont CalcEsc and proportional font path, escphdl and text-position property map. Tests cover default0/100, full signed16/unsigned8 value/copy/codec/history/inherited explicit off, source sign/state and explicit bool commands including mixed heights, ordinary/cell/empty/caret edits and unrelated formatting, native auto/manual horizontal offsets, malformed/one-token/two-token/extra-token SAX and merged property export, actual ODT named/direct roundtrip. Chromium1280/390 must prove source controls, exclusive state, body/cell baseline/scale, history, download and reopen. Run related item/hint/command/history/projection/codec/XML tests, strict changed-responsibility coverage, typecheck/scoped lint/format/build/static/resources/boundaries/docs/size/tree/provenance/invariants/parity/doctor/routing/diff/status. No full suite: fifth task after ACR55N."
-  Verification: "PASS for consumed native superscript/subscript UI/core/ODT slice:91 related files4836 cases, final6 files79 cases,12 tooling files77 cases,11 real Chromium scenarios1280/390, and all declared local gates.24 executable-owner deterministic exact unchanged-span audit S2393 B1907 F462 L2203 is100 with zero missing; raw partial profiles/100 thresholds retained and distinguished from fresh whole-module coverage. Complete signed16/unsigned8 browser transfer and native stricter UNO/ODT admission remain separate. Detailed commands, source identities, failures/resolutions and unrepresented native services are recorded in Findings and output/playwright/writer-escapement. No full suite or network/branch/merge; fifth task after ACR55N. Goal stays active."
+  Verification: |-
+    PASS for consumed native superscript/subscript UI/core/ODT slice:91 related files4836 cases, final6 files79 cases,12 tooling files77 cases,11 real Chromium scenarios1280/390, and all declared local gates.24 executable-owner deterministic exact unchanged-span audit S2393 B1907 F462 L2203 is100 with zero missing; raw partial profiles/100 thresholds retained and distinguished from fresh whole-module coverage. Complete signed16/unsigned8 browser transfer and native stricter UNO/ODT admission remain separate. Detailed commands, source identities, failures/resolutions and unrepresented native services are recorded in Findings and output/playwright/writer-escapement. No full suite or network/branch/merge; fifth task after ACR55N. Goal stays active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-22T22:18:20.989Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native super/sub UI/core/ODT slice passes4836 related plus79 final focused cases,77 boundary tests and11 Chromium scenarios.24 executable-owner exact unchanged-span audit S2393 B1907 F462 L2203 all100 with zero missing, raw partial profiles retained. All local gates pass, sourceb00edb419944. Complete raw browser storage and native stricter UNO admission distinguished; native-service/transient-binding residuals and WRITER053 documented. Fifth task after full checkpoint; goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T22:17:02.136Z, excerpt_hash=sha256:943037d67aae64670b7b8ca5dc8157a2180ae248588ad5792fc4c73d2eebe4cb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610222148-RXH8BN/blueprint/resolved-snapshot.json
+    - old_digest: 05320459a8fc0b219ec28da139d12604ba667f67417f567ffdc355ab44299e02
+    - current_digest: 05320459a8fc0b219ec28da139d12604ba667f67417f567ffdc355ab44299e02
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222148-RXH8BN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610222148-RXH8BN
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task source commits only, preserving N700C9 and previous UI/table work and task traceability; no reset/merge/external actions."
   Findings: |-
     Previous goal turn is progress: N700C9 closed cde84746197a, source2217028cd752, current4728 related and61 supplemental cases plus7 Chromium scenarios and strict exact-span audit100. Writer working tree clean. Preflight direct/writer confirmed. Broad user mutation/continuation approval persists; stop requests revoked. Existing actual shared escapement item is available but Writer Which/commands/UI/filter links are absent. Local pinned source commit9bc445578031fecf56086729d8e4940c77e14d65. Keep semantic/provenance states conservative; no network or C++memory port.
@@ -91,6 +155,39 @@ Read pinned hintids/init, txtattr execute and state, command SDI/sidebar, SwSubF
 ## Verification
 
 PASS for consumed native superscript/subscript UI/core/ODT slice:91 related files4836 cases, final6 files79 cases,12 tooling files77 cases,11 real Chromium scenarios1280/390, and all declared local gates.24 executable-owner deterministic exact unchanged-span audit S2393 B1907 F462 L2203 is100 with zero missing; raw partial profiles/100 thresholds retained and distinguished from fresh whole-module coverage. Complete signed16/unsigned8 browser transfer and native stricter UNO/ODT admission remain separate. Detailed commands, source identities, failures/resolutions and unrepresented native services are recorded in Findings and output/playwright/writer-escapement. No full suite or network/branch/merge; fifth task after ACR55N. Goal stays active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-22T22:18:20.989Z — VERIFY — ok
+
+By: CODER
+
+Note: Native super/sub UI/core/ODT slice passes4836 related plus79 final focused cases,77 boundary tests and11 Chromium scenarios.24 executable-owner exact unchanged-span audit S2393 B1907 F462 L2203 all100 with zero missing, raw partial profiles retained. All local gates pass, sourceb00edb419944. Complete raw browser storage and native stricter UNO admission distinguished; native-service/transient-binding residuals and WRITER053 documented. Fifth task after full checkpoint; goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T22:17:02.136Z, excerpt_hash=sha256:943037d67aae64670b7b8ca5dc8157a2180ae248588ad5792fc4c73d2eebe4cb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610222148-RXH8BN/blueprint/resolved-snapshot.json
+- old_digest: 05320459a8fc0b219ec28da139d12604ba667f67417f567ffdc355ab44299e02
+- current_digest: 05320459a8fc0b219ec28da139d12604ba667f67417f567ffdc355ab44299e02
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222148-RXH8BN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610222148-RXH8BN
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
