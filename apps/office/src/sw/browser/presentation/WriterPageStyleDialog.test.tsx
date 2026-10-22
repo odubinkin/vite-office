@@ -4,11 +4,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  createDefaultWriterPageDescriptor,
-  WRITER_PAPER_SIZES,
-} from "../../source/core/layout/pagedesc";
-import { swapOrientation, WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 
@@ -51,31 +48,45 @@ describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @retur
   it("keeps selected paper dimensions consistent with landscape orientation", /** Checks keeps selected paper dimensions consistent with landscape orientation. @returns Test callback result. */ () => {
     const onSubmit = vi.fn();
     const initialValue = createDefaultWriterPageDescriptor("en-US").GetValue();
-    expect(swapOrientation(initialValue, false)).toBe(initialValue);
     render(
       <WriterPageStyleDialog initialValue={initialValue} onCancel={vi.fn()} onSubmit={onSubmit} />,
     );
     fireEvent.click(screen.getByLabelText("Landscape"));
-    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "A4" } });
+    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "4" } });
     fireEvent.click(screen.getByText("OK"));
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         landscape: true,
-        height: WRITER_PAPER_SIZES.A4.width,
-        width: WRITER_PAPER_SIZES.A4.height,
+        height: 11906,
+        width: 16838,
       }),
     );
     fireEvent.click(screen.getByLabelText("Landscape"));
     fireEvent.click(screen.getByLabelText("Portrait"));
-    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "Letter" } });
+    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "8" } });
     fireEvent.click(screen.getByText("OK"));
     expect(onSubmit).toHaveBeenLastCalledWith(
       expect.objectContaining({
         landscape: false,
-        height: WRITER_PAPER_SIZES.Letter.height,
-        width: WRITER_PAPER_SIZES.Letter.width,
+        height: 15840,
+        width: 12240,
       }),
     );
+  });
+
+  it("accepts native original items when Reset and a same-known-paper manual edit only change the preview", /** Exercises the real UI acceptance boundary rather than submitting its preview draft. @returns Nothing. */ () => {
+    const initialValue = { ...createDefaultWriterPageDescriptor("en-GB").GetValue(), width: 11905 };
+    const onSubmit = vi.fn();
+    render(
+      <WriterPageStyleDialog initialValue={initialValue} onCancel={vi.fn()} onSubmit={onSubmit} />,
+    );
+    expect(screen.getByLabelText("Paper format")).toHaveValue("4");
+    fireEvent.click(screen.getByText("OK"));
+    expect(onSubmit).toHaveBeenLastCalledWith(initialValue);
+    fireEvent.change(screen.getByLabelText("Width (cm)"), { target: { value: "20.99" } });
+    expect(screen.getByLabelText("Paper format")).toHaveValue("4");
+    fireEvent.click(screen.getByText("OK"));
+    expect(onSubmit).toHaveBeenLastCalledWith(initialValue);
   });
 
   it("reports a non-Error callback failure without dismissing the dialog", /** Checks reports a non-Error callback failure without dismissing the dialog. @returns Test callback result. */ () => {

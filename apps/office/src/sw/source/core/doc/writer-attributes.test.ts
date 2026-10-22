@@ -713,10 +713,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const writer = createWriterDocument();
     const standard = writer.GetPageDesc();
     const first = writer.MakePageDesc("First Page", standard);
-    writer.ChgPageDesc(
-      { ...first.GetValue(), leftMargin: 720, paperFormat: "custom" },
-      first.GetName(),
-    );
+    writer.ChgPageDesc({ ...first.GetValue(), leftMargin: 720 }, first.GetName());
     first.SetFollow(standard);
     standard.SetFollow(first);
     writer.GetDocumentSettingManager().set("TAB_COMPAT", false);

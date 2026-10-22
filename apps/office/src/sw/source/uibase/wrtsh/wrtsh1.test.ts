@@ -156,7 +156,6 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const nextPage = {
       ...initialPage,
       leftMargin: initialPage.leftMargin + 120,
-      paperFormat: "custom" as const,
     };
     expect(shell.SetPageDescriptor(initialPage)).toBe(false);
     expect(shell.SetPageDescriptor(initialPage, "Missing page style")).toBe(false);

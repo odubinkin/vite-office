@@ -104,7 +104,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
     const fresh = shell.InitNew(createDocument({ id: "new", suiteId: "writer", title: "New" }));
     expect(fresh.GetLocale()).toBe("ja-JP");
     expect(fresh.GetDefaultFontDevice()).toBe(device);
-    expect(fresh.GetPageDesc().GetValue().paperFormat).toBe("A4");
+    expect(fresh.GetPageDesc().GetValue()).toMatchObject({ width: 11906, height: 16838 });
     expect(
       (
         fresh.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
@@ -132,7 +132,9 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
       );
       const fresh = shell.InitNew(createDocument({ id: "new", suiteId: "writer", title: "New" }));
       expect(fresh.GetLocale()).toBe(locale);
-      expect(fresh.GetPageDesc().GetValue().paperFormat).toBe(paper);
+      expect(fresh.GetPageDesc().GetValue()).toMatchObject(
+        paper === "Letter" ? { width: 12240, height: 15840 } : { width: 11906, height: 16838 },
+      );
       expect(
         (fresh.GetAttrPool().GetUserOrPoolDefaultItem(fontWhich) as SvxFontItem).GetFamilyName(),
       ).toBe("Device family");

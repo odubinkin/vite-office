@@ -1,5 +1,4 @@
 /** @fileoverview Renders the bounded browser Page tab from LibreOffice's PageFormatPage. */
-/* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
@@ -9,10 +8,11 @@ import { useMemo, useState } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import {
   validateWriterPageDescriptor,
-  WRITER_PAPER_SIZES,
   type WriterPageDescriptorValue,
-  type WriterPaperFormat,
 } from "../../source/core/layout/pagedesc";
+import { Paper } from "../../../i18nutil/inc/paper";
+import { SvxPageDescPage } from "../../../cui/source/tabpages/page";
+import { getPageFormatDefaultLimits } from "../../../cui/browser/dialog/page-format-defaults";
 
 /** Inputs and completion callbacks for the bounded Writer Page tab. */
 export interface WriterPageStyleDialogProps {
@@ -30,7 +30,26 @@ export function WriterPageStyleDialog({
   onSubmit,
 }: WriterPageStyleDialogProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const [draft, setDraft] = useState(initialValue);
+  const [page] = useState(
+    /** Creates the original page-geometry and list owners for this request. @returns Page tab. */ () =>
+      new SvxPageDescPage(
+        initialValue,
+        getPageFormatDefaultLimits(),
+        /** Resolves original resource context and label through the actual platform localization port. @param context - Source context. @param text - Source label. @returns Translated label or source fallback. */ (
+          context,
+          text,
+        ) => localization.GetText(`${context}.${text}`, text),
+      ),
+  );
+  const [draft, setDraft] = useState(page.GetGeometry());
+  const [paper, setPaper] = useState(page.GetPaperSizeBox().get_active_id());
+  const ranges = page.GetFieldRanges();
+  /** Publishes original geometry and selection after one source event. @returns Nothing. */
+  function sync(): void {
+    setDraft(page.GetGeometry());
+    setPaper(page.GetPaperSizeBox().get_active_id());
+    setError(undefined);
+  }
   const [error, setError] = useState<string>();
   const previewScale = 150 / Math.max(draft.width, draft.height);
   const preview = useMemo(
@@ -41,10 +60,14 @@ export function WriterPageStyleDialog({
     [draft.height, draft.width, previewScale],
   );
 
-  /** Updates one metric field and marks the paper size custom. @param key - Page field. @param twips - Accepted physical length. @returns Nothing. */
-  function updateLength(key: keyof WriterPageDescriptorValue, twips: number): void {
-    setDraft({ ...draft, [key]: twips, paperFormat: "custom" });
-    setError(undefined);
+  /** Delegates a physical axis or margin edit to its original source handler. @param key - Page field. @param twips - Accepted physical length. @returns Nothing. */
+  function updateLength(
+    key: "width" | "height" | "leftMargin" | "rightMargin" | "topMargin" | "bottomMargin",
+    twips: number,
+  ): void {
+    if (key === "width" || key === "height") page.PaperSizeModify_Impl(key, twips);
+    else page.SetMargin(key, twips);
+    sync();
   }
 
   return (
@@ -64,7 +87,9 @@ export function WriterPageStyleDialog({
           ) => {
             event.preventDefault();
             try {
-              onSubmit(validateWriterPageDescriptor(draft));
+              onSubmit(
+                validateWriterPageDescriptor({ ...initialValue, ...page.GetAcceptedGeometry() }),
+              );
             } catch (caught) {
               setError(caught instanceof Error ? caught.message : "Invalid page geometry.");
             }
@@ -92,31 +117,31 @@ export function WriterPageStyleDialog({
                       /** Applies one paper-format selection. @param event - Select change. @returns Nothing. */ (
                         event,
                       ) => {
-                        const format = event.target.value as WriterPaperFormat;
-                        const size = format === "custom" ? undefined : WRITER_PAPER_SIZES[format];
-                        setDraft(
-                          size === undefined
-                            ? { ...draft, paperFormat: format }
-                            : {
-                                ...draft,
-                                height: draft.landscape ? size.width : size.height,
-                                paperFormat: format,
-                                width: draft.landscape ? size.height : size.width,
-                              },
-                        );
-                        setError(undefined);
+                        page.PaperSizeSelect_Impl(Number(event.target.value) as Paper);
+                        sync();
                       }
                     }
-                    value={draft.paperFormat}
+                    value={paper}
                   >
-                    <option value="A4">A4</option>
-                    <option value="Letter">Letter</option>
-                    <option value="custom">Custom</option>
+                    {page
+                      .GetPaperSizeBox()
+                      .GetEntries()
+                      .map(
+                        /** Retains the actual source list order and IDs. @param entry - Native paper row. @returns Platform option. */ (
+                          entry,
+                        ) => (
+                          <option key={entry.paper} value={entry.paper}>
+                            {entry.label}
+                          </option>
+                        ),
+                      )}
                   </select>
                 </label>
                 <MetricField
                   unit={unit}
                   label="Width"
+                  minimum={ranges.width.minimum}
+                  maximum={ranges.width.maximum}
                   value={draft.width}
                   onChange={
                     /** Updates custom width. @param value - Physical twips. @returns Nothing. */ (
@@ -127,6 +152,8 @@ export function WriterPageStyleDialog({
                 <MetricField
                   unit={unit}
                   label="Height"
+                  minimum={ranges.height.minimum}
+                  maximum={ranges.height.maximum}
                   value={draft.height}
                   onChange={
                     /** Updates custom height. @param value - Physical twips. @returns Nothing. */ (
@@ -139,8 +166,10 @@ export function WriterPageStyleDialog({
                     checked={!draft.landscape}
                     name="orientation"
                     onChange={
-                      /** Selects portrait orientation. @returns Nothing. */ () =>
-                        setDraft(swapOrientation(draft, false))
+                      /** Selects portrait orientation. @returns Nothing. */ () => {
+                        page.SwapOrientation_Impl(false);
+                        sync();
+                      }
                     }
                     type="radio"
                   />
@@ -151,8 +180,10 @@ export function WriterPageStyleDialog({
                     checked={draft.landscape}
                     name="orientation"
                     onChange={
-                      /** Selects landscape orientation. @returns Nothing. */ () =>
-                        setDraft(swapOrientation(draft, true))
+                      /** Selects landscape orientation. @returns Nothing. */ () => {
+                        page.SwapOrientation_Impl(true);
+                        sync();
+                      }
                     }
                     type="radio"
                   />
@@ -164,6 +195,8 @@ export function WriterPageStyleDialog({
                 <MetricField
                   unit={unit}
                   label="Left"
+                  minimum={ranges.leftMargin.minimum}
+                  maximum={ranges.leftMargin.maximum}
                   value={draft.leftMargin}
                   onChange={
                     /** Updates the left margin. @param value - Physical twips. @returns Nothing. */ (
@@ -174,6 +207,8 @@ export function WriterPageStyleDialog({
                 <MetricField
                   unit={unit}
                   label="Right"
+                  minimum={ranges.rightMargin.minimum}
+                  maximum={ranges.rightMargin.maximum}
                   value={draft.rightMargin}
                   onChange={
                     /** Updates the right margin. @param value - Physical twips. @returns Nothing. */ (
@@ -184,6 +219,8 @@ export function WriterPageStyleDialog({
                 <MetricField
                   unit={unit}
                   label="Top"
+                  minimum={ranges.topMargin.minimum}
+                  maximum={ranges.topMargin.maximum}
                   value={draft.topMargin}
                   onChange={
                     /** Updates the top margin. @param value - Physical twips. @returns Nothing. */ (
@@ -194,6 +231,8 @@ export function WriterPageStyleDialog({
                 <MetricField
                   unit={unit}
                   label="Bottom"
+                  minimum={ranges.bottomMargin.minimum}
+                  maximum={ranges.bottomMargin.maximum}
                   value={draft.bottomMargin}
                   onChange={
                     /** Updates the bottom margin. @param value - Physical twips. @returns Nothing. */ (
@@ -250,11 +289,15 @@ function MetricField({
   onChange,
   value,
   unit,
+  minimum,
+  maximum,
 }: Readonly<{
   label: string;
   onChange: (twips: number) => void;
   value: number;
   unit: FieldUnit;
+  minimum: number;
+  maximum: number;
 }>): React.JSX.Element {
   return (
     <label className="grid gap-1 text-sm font-semibold text-slate-700">
@@ -263,18 +306,11 @@ function MetricField({
         aria-label={`${label} (${unit === FieldUnit.INCH ? "in" : unit === FieldUnit.CM ? "cm" : FieldUnit[unit].toLowerCase()})`}
         unit={unit}
         value={value}
+        minimum={minimum}
+        maximum={maximum}
         onValueChange={onChange}
         className="min-w-0 rounded-md border border-slate-300 px-2 py-1.5 font-normal"
       />
     </label>
   );
-}
-
-/** Swaps physical dimensions when the requested orientation changes. @param value - Current page value. @param landscape - Requested orientation. @returns Oriented page value. */
-export function swapOrientation(
-  value: WriterPageDescriptorValue,
-  landscape: boolean,
-): WriterPageDescriptorValue {
-  if (value.landscape === landscape) return value;
-  return { ...value, height: value.width, landscape, width: value.height };
 }

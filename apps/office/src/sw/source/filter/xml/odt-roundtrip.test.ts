@@ -112,7 +112,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       landscape: true,
       leftMargin: 720,
       name: "Standard" as const,
-      paperFormat: "custom" as const,
+
       rightMargin: 840,
       topMargin: 960,
       width: 16_000,
@@ -133,10 +133,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const writer = createWriterDocument();
     const standard = writer.GetPageDesc();
     const first = writer.MakePageDesc("First Page", standard);
-    writer.ChgPageDesc(
-      { ...first.GetValue(), topMargin: 720, paperFormat: "custom" },
-      first.GetName(),
-    );
+    writer.ChgPageDesc({ ...first.GetValue(), topMargin: 720 }, first.GetName());
     first.SetFollow(standard);
     standard.SetFollow(first);
     const bytes = writeTargetOdt(writer);
@@ -159,14 +156,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ...initial,
       height: 12_240,
       landscape: true,
-      paperFormat: "Letter",
+
       width: 15_840,
     });
     const imported = await readOdtDocument(writeTargetOdt(writer), metadata());
     expect(imported.document.GetPageDesc().GetValue()).toMatchObject({
       height: 12_240,
       landscape: true,
-      paperFormat: "Letter",
+
       width: 15_840,
     });
   });

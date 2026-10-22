@@ -5,6 +5,16 @@ import path from "node:path";
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Original page.cxx uses o3tl unit conversion and the Paper enum from paperinf/papersizelistbox headers.
+  [
+    "cui/source/tabpages/page.ts",
+    new Set(["i18nutil/inc/paper.ts", "o3tl/inc/unit_conversion.ts"]),
+  ],
+  // Original page.hrc and papersizelistbox.hxx use i18nutil/paper.hxx identities.
+  ["svx/source/dialog/page.ts", new Set(["i18nutil/inc/paper.ts"])],
+  ["svx/source/dialog/papersizelistbox.ts", new Set(["i18nutil/inc/paper.ts"])],
+  // Existing explicit document host-locale preparation supplies original paper/measurement queries, not a native LanguageTag substitute.
+  ["sw/source/core/layout/pagedesc.ts", new Set(["i18nlangtag/source/isolang/insys.locale.ts"])],
   // The persistent browser binding owns only actual VCL numeric state and source aliases.
   [
     "svtools/browser/control/metric-spin-binding.ts",

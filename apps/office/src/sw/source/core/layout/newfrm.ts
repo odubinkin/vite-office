@@ -1,7 +1,6 @@
 /** @fileoverview Creates Writer page frames from measured text-frame lines. */
 
 import type { WriterPageDescriptorValue } from "./pagedesc";
-import { WRITER_PAPER_SIZES } from "./pagedesc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   resolveSwListTextLeftMargin,
@@ -68,14 +67,9 @@ export function projectSwTextPrintBounds(
   const left =
     (resolveSwListTextLeftMargin(paragraph) ?? paragraph.GetParagraphTextLeftMargin()) +
     resolveSwListFirstLineIndent(paragraph);
-  const physicalWidth =
-    page.paperFormat === "A4" &&
-    page.width === (page.landscape ? WRITER_PAPER_SIZES.A4.height : WRITER_PAPER_SIZES.A4.width)
-      ? Math.floor(((page.landscape ? 297 : 210) * 1440) / 25.4)
-      : page.width;
   return {
     left,
-    right: physicalWidth - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin(),
+    right: page.width - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin(),
   };
 }
 
@@ -501,7 +495,6 @@ function pageDescriptorEqual(
   if (left === right) return true;
   return (
     left.name === right.name &&
-    left.paperFormat === right.paperFormat &&
     left.width === right.width &&
     left.height === right.height &&
     left.landscape === right.landscape &&

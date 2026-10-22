@@ -3,13 +3,13 @@ import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "./kernel-fixture";
 const nativeExports = [
   { module: "src/i18nutil/inc/paper.ts", names: ["Paper", "PaperInfo", "NUM_PAPER_ENTRIES"] },
-  { module: "src/sw/source/core/layout/pagedesc.ts", names: ["WRITER_PAPER_SIZES"] },
+  { module: "src/editeng/inc/paperinf.ts", names: ["SvxPaperInfo"] },
   { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
   { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
 ] as const;
 /** Actual exported native owners in both realms. */
 type Runtime = typeof import("../../src/i18nutil/inc/paper") &
-  typeof import("../../src/sw/source/core/layout/pagedesc") &
+  typeof import("../../src/editeng/inc/paperinf") &
   typeof import("../../src/udkapi/com/sun/star/lang/Locale") &
   typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
 test("retains native paper matching and shared Writer geometry in Chromium and a DOM-free Worker", /** Executes actual source classes without a replacement model. @param fixtures - Browser page. @returns Completion. */ async ({
@@ -35,7 +35,16 @@ test("retains native paper matching and shared Writer geometry in Chromium and a
             rotated: [rotated.getPaper(), rotated.getWidth(), rotated.getHeight()],
             letter: [letter.getPaper(), letter.getWidth(), letter.getHeight()],
             alias: n.PaperInfo.fromPSName(new TextEncoder().encode("nOtE")),
-            writer: n.WRITER_PAPER_SIZES,
+            writer: {
+              A4: {
+                width: n.SvxPaperInfo.GetPaperSize(n.Paper.PAPER_A4).Width(),
+                height: n.SvxPaperInfo.GetPaperSize(n.Paper.PAPER_A4).Height(),
+              },
+              Letter: {
+                width: n.SvxPaperInfo.GetPaperSize(n.Paper.PAPER_LETTER).Width(),
+                height: n.SvxPaperInfo.GetPaperSize(n.Paper.PAPER_LETTER).Height(),
+              },
+            },
           };
         } finally {
           locale.dispose();
