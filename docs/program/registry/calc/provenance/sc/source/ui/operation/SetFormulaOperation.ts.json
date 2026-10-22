@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/operation/SetFormulaOperation.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/operation/SetFormulaOperation.cxx",
+    "localSymbols": [
+      "SetFormulaOperation"
+    ],
+    "upstreamSymbols": [
+      "SetFormulaOperation::runImplementation"
+    ],
+    "preservedResponsibilities": [
+      "Original formula adoption,interactive manual-calc result,enabled recording and consumed height/query ordering. Painting,spills,API input notification and alternate views remain unported;the default-only recording profile does not fabricate a document undo-enable service.",
+      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated default profile is represented;the task remains in progress and broader parity is unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/operation/SetFormulaOperation.ts",
+          "marker": "SetFormulaOperation"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/operation/SetFormulaOperation.cxx",
+          "marker": "SetFormulaOperation::runImplementation"
+        }
+      ]
+    }
+  }
+}

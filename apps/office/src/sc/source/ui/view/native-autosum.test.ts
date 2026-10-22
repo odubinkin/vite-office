@@ -1,0 +1,333 @@
+/** @fileoverview Independent source-bound AutoSum reference/directional vectors over actual Calc tokens,columns and views. */
+import { assert, expect, it } from "vitest";
+import { ScDocument } from "../../../inc/document";
+import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
+import { ScRangeList } from "../../../inc/rangelst";
+import { ScDirection } from "../../../inc/global";
+import { ScCompiler } from "../../../inc/compiler";
+import { ScViewData } from "../inc/viewdata";
+import { ScTabViewShell } from "../inc/tabvwsh";
+import { ScFormulaCell } from "../../../inc/formulacell";
+import { HasAttrFlags } from "../../../inc/global";
+import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import { ScCondFormatItem } from "../../../inc/attrib";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { ScRotateValueItem } from "../../../inc/attrib";
+import type { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
+import {
+  ATTR_STACKED,
+  ATTR_LINEBREAK,
+  ATTR_HOR_JUSTIFY,
+  ATTR_ROTATE_VALUE,
+} from "../../../inc/scitems";
+import { ScDocShell } from "../docshell/docsh";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { OpCode } from "../../../../formula/inc/opcode";
+import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+/** Uses actual default shell/view owners. @returns Live owners. */
+function setup(): {
+  doc: ScDocument;
+  view: ScViewData;
+  functions: ScTabViewShell;
+  shell: ScDocShell;
+} {
+  const shell = new ScDocShell(),
+    doc = shell.GetDocument(),
+    functions = new ScTabViewShell(shell),
+    view = functions.GetViewData();
+  return { doc, view, functions, shell };
+}
+/** Compiles actual tokens with the document's real convention. @param doc - Document. @param position - Formula position. @param source - Formula text. @returns Token array. */
+function compile(doc: ScDocument, position: ScAddress, source: string) {
+  const compiler = new ScCompiler(doc, position, doc.GetGrammar()),
+    array = compiler.CompileString(unicode(source));
+  compiler.CompileTokenArray();
+  return array;
+}
+/** Reads original ordered output coordinates. @param ranges - Native list. @returns Independent coordinate observations. */
+function coordinates(ranges: ScRangeList) {
+  return Array.from(
+    ranges,
+    /** Copies original coordinates. @param r - Range. @returns Coordinates. */ (r) => r.GetVars(),
+  );
+}
+
+it("preserves original directional outer-function reference extension and early output boundaries", /** Real scalar/double RPN tokens participate in every source direction. @returns Nothing. */ () => {
+  const { doc } = setup(),
+    pos = new ScAddress(3, 3, 0);
+  for (const [source, direction, expected] of [
+    ["=SUM(D5)", ScDirection.DIR_BOTTOM, 4],
+    ["=SUM(D5:D8)", ScDirection.DIR_BOTTOM, 7],
+    ["=SUM(E4)", ScDirection.DIR_RIGHT, 4],
+    ["=SUM(E4:H4)", ScDirection.DIR_RIGHT, 7],
+    ["=SUM(D3)", ScDirection.DIR_TOP, 2],
+    ["=SUM(D1:D3)", ScDirection.DIR_TOP, 0],
+    ["=SUM(C4)", ScDirection.DIR_LEFT, 2],
+    ["=SUM(A4:C4)", ScDirection.DIR_LEFT, 0],
+  ] as const) {
+    const output: [number] = [99];
+    expect(compile(doc, pos, source).GetAdjacentExtendOfOuterFuncRefs(output, pos, direction)).toBe(
+      true,
+    );
+    expect(output[0]).toBe(expected);
+  }
+  const array = compile(doc, pos, "=SUM(1)"),
+    output: [number] = [99];
+  for (const [position, direction] of [
+    [new ScAddress(0, MAXROW, 0), ScDirection.DIR_BOTTOM],
+    [new ScAddress(MAXCOL, 0, 0), ScDirection.DIR_RIGHT],
+    [new ScAddress(), ScDirection.DIR_TOP],
+    [new ScAddress(), ScDirection.DIR_LEFT],
+  ] as const) {
+    expect(array.GetAdjacentExtendOfOuterFuncRefs(output, position, direction)).toBe(false);
+    expect(output[0]).toBe(99);
+  }
+  expect(array.GetAdjacentExtendOfOuterFuncRefs(output, pos, 99 as ScDirection)).toBe(false);
+  expect(output[0]).toBe(99);
+  for (const source of ["=1", "=SUM()", "=SUM(D2)", "=SUM(D1:D2)", "=SUM(2;3)"]) {
+    expect(
+      compile(doc, pos, source).GetAdjacentExtendOfOuterFuncRefs(output, pos, ScDirection.DIR_TOP),
+    ).toBe(false);
+    expect(output[0]).toBe(3);
+  }
+  doc.Dispose();
+});
+
+it("retains upstream axis-only adjacency instead of inventing same-column or same-row guards", /** Literal witnesses show the original method ignores the other reference axis. @returns Nothing. */ () => {
+  const { doc } = setup(),
+    position = new ScAddress(0, 3, 0),
+    output: [number] = [99];
+  expect(
+    compile(doc, position, "=SUM(B1:B3)").GetAdjacentExtendOfOuterFuncRefs(
+      output,
+      position,
+      ScDirection.DIR_TOP,
+    ),
+  ).toBe(true);
+  expect(output[0]).toBe(0);
+  doc.Dispose();
+});
+
+it("prefers adjacent vertical data before horizontal data and serializes actual relative range tokens", /** Expected references are independent source-priority vectors. @returns Nothing. */ () => {
+  const { doc, view, functions } = setup();
+  doc.SetValue(new ScAddress(1, 0, 0), 2);
+  doc.SetValue(new ScAddress(1, 1, 0), 3);
+  doc.SetValue(new ScAddress(0, 2, 0), 9);
+  view.SetCurX(1);
+  view.SetCurY(2);
+  const ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([[1, 0, 0, 1, 1, 0]]);
+  const source = functions.GetAutoSumFormula(ranges, false, new ScAddress(1, 2, 0), OpCode.ocSum);
+  expect(text(source)).toBe("=SUM(B1:B2)");
+  source.dispose();
+  doc.SetGrammar(FormulaGrammar.Grammar.GRAM_ODFF);
+  const odff = functions.GetAutoSumFormula(ranges, false, new ScAddress(1, 2, 0), OpCode.ocAverage);
+  expect(text(odff)).toBe("=AVERAGE([.B1:.B2])");
+  odff.dispose();
+  doc.Dispose();
+});
+
+it("preserves native twenty-cell seek cutoff and the left fallback after an empty top search", /** Both cutoff endpoints use actual sparse column storage. @returns Nothing. */ () => {
+  const { doc, view, functions } = setup();
+  doc.SetValue(new ScAddress(0, 0, 0), 2);
+  view.SetCurY(20);
+  let ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([[0, 0, 0, 0, 19, 0]]);
+  view.SetCurY(21);
+  ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(false);
+  expect(ranges.empty()).toBe(true);
+  doc.SetValue(new ScAddress(0, 21, 0), 7);
+  view.SetCurX(2);
+  ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([[0, 21, 0, 1, 21, 0]]);
+  doc.Dispose();
+});
+
+it("builds original sum-of-sums ranges while excluding intervening raw data", /** Existing aggregate references determine the native preceding extent. @returns Nothing. */ () => {
+  const { doc, view, functions } = setup();
+  doc.SetValue(new ScAddress(0, 0, 0), 2);
+  doc.SetFormula(new ScAddress(0, 1, 0), unicode("=SUM(A1:A1)"), doc.GetGrammar());
+  doc.SetValue(new ScAddress(0, 2, 0), 3);
+  doc.SetFormula(new ScAddress(0, 3, 0), unicode("=SUM(A3:A3)"), doc.GetGrammar());
+  view.SetCurY(4);
+  const ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([
+    [0, 3, 0, 0, 3, 0],
+    [0, 1, 0, 0, 1, 0],
+  ]);
+  const result = functions.GetAutoSumFormula(ranges, false, new ScAddress(0, 4, 0), OpCode.ocSum);
+  expect(text(result)).toBe("=SUM(A4:A4;A2:A2)");
+  result.dispose();
+  doc.Dispose();
+});
+
+it("retains source treatment of unrecognized adjacent outer functions and initialized block emptiness", /** SUMSQ is numeric but absent from the original AutoSum classification switch. @returns Nothing. */ () => {
+  const { doc, view, functions } = setup();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetFormula(new ScAddress(0, 1, 0), unicode("=SUMSQ(A1:A1)"), doc.GetGrammar());
+  view.SetCurY(2);
+  const ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([[0, 0, 0, 0, 1, 0]]);
+  expect(doc.IsBlockEmpty(0, 0, 0, 0, 99)).toBe(false);
+  expect(doc.IsBlockEmpty(-1, 0, 0, 0, 0)).toBe(false);
+  expect(doc.IsBlockEmpty(0, 0, MAXCOL + 1, 0, 0)).toBe(false);
+  expect(doc.IsBlockEmpty(4, 0, 5, 2, 0)).toBe(true);
+  expect(doc.IsBlockEmpty(0, 0, 0, 0, 0)).toBe(false);
+  const empty = functions.GetAutoSumFormula(
+    new ScRangeList(),
+    false,
+    new ScAddress(),
+    OpCode.ocSum,
+  );
+  expect(text(empty)).toBe("=SUM()");
+  empty.dispose();
+  expect(
+    /** Keeps unavailable filtered execution explicit. @returns Formula. */ () =>
+      functions.GetAutoSumFormula(
+        new ScRangeList(new ScRange()),
+        true,
+        new ScAddress(),
+        OpCode.ocSum,
+      ),
+  ).toThrow(/SUBTOTAL/);
+  assert(doc.GetGrammar() === FormulaGrammar.Grammar.GRAM_NATIVE);
+  doc.Dispose();
+});
+
+it("inserts genuine selected-column sums through original formula operations and per-cell undo", /** Selection,formula ownership and history remain in the real kernel. @returns Nothing. */ () => {
+  const { doc, view, functions, shell } = setup(),
+    range = new ScRange(0, 0, 0, 1, 1, 0);
+  doc.SetValue(new ScAddress(0, 0, 0), 1);
+  doc.SetValue(new ScAddress(0, 1, 0), 3);
+  doc.SetValue(new ScAddress(1, 0, 0), 2);
+  doc.SetValue(new ScAddress(1, 1, 0), 4);
+  view.GetMarkData().SetMarkArea(range);
+  const finder: [boolean] = [true],
+    subtotal: [boolean] = [true],
+    source = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(source.isEmpty()).toBe(true);
+  source.dispose();
+  expect(finder[0]).toBe(false);
+  expect(subtotal[0]).toBe(false);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(6);
+  expect([view.GetCurX(), view.GetCurY()]).toEqual([1, 2]);
+  expect(view.GetMarkData().GetMarkArea().GetVars()).toEqual([0, 0, 0, 1, 2, 0]);
+  expect(shell.GetUndoManager().GetUndoActionCount()).toBe(2);
+  shell.Undo();
+  expect(doc.GetFormulaCell(new ScAddress(1, 2, 0))).toBeNull();
+  shell.Undo();
+  expect(doc.GetFormulaCell(new ScAddress(0, 2, 0))).toBeNull();
+  shell.Redo();
+  shell.Redo();
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(6);
+  shell.Close();
+});
+
+it("keeps native row totals,unselected drafts and blank-data fallbacks separate", /** Real marks and source output flags determine whether input begins or data is inserted. @returns Nothing. */ () => {
+  const { doc, view, functions, shell } = setup(),
+    range = new ScRange(0, 0, 0, 2, 1, 0);
+  doc.SetValue(new ScAddress(0, 0, 0), 1);
+  doc.SetValue(new ScAddress(1, 0, 0), 2);
+  doc.SetValue(new ScAddress(0, 1, 0), 3);
+  doc.SetValue(new ScAddress(1, 1, 0), 4);
+  expect(functions.AutoSum(range, false, true, false, OpCode.ocSum)).toBe(true);
+  expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(3);
+  expect(doc.GetValue(new ScAddress(2, 1, 0))).toBe(7);
+  view.GetMarkData().ResetMark();
+  view.SetCurX(3);
+  view.SetCurY(1);
+  const finder: [boolean] = [false],
+    subtotal: [boolean] = [false],
+    source = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(text(source)).toBe("=SUM(C2:C2)");
+  expect(finder[0]).toBe(true);
+  source.dispose();
+  expect(functions.AutoSum(new ScRange(9, 9, 0, 10, 10, 0), false, true, false, OpCode.ocSum)).toBe(
+    false,
+  );
+  view.GetMarkData().SetMarkArea(new ScRange(9, 9, 0, 10, 10, 0));
+  view.SetCurX(9);
+  view.SetCurY(9);
+  const empty = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(empty.isEmpty()).toBe(true);
+  empty.dispose();
+  shell.Close();
+});
+
+it("retains interactive manual-calculation results and actual source filtered-row detection", /** API calls and UI calls use the same prepared native formula owner. @returns Nothing. */ () => {
+  const { doc, functions, shell } = setup(),
+    position = new ScAddress(0, 0, 0);
+  doc.SetAutoCalc(false);
+  const cell = new ScFormulaCell(doc, position, unicode("=2+3"), doc.GetGrammar());
+  expect(shell.GetDocFunc().SetFormulaCell(position, cell, true)).toBe(true);
+  expect(doc.GetFormulaCell(position)).toBe(cell);
+  expect(doc.GetValue(position)).toBe(5);
+  expect(cell.GetDirty()).toBe(true);
+  const apiPosition = new ScAddress(1, 0, 0),
+    apiCell = new ScFormulaCell(doc, apiPosition, unicode("=4+3"), doc.GetGrammar());
+  shell.GetDocFunc().SetFormulaCell(apiPosition, apiCell, false);
+  expect(apiCell.GetDirty()).toBe(true);
+  const ranges = new ScRangeList(new ScRange(0, 0, 0, 1, 3, 0));
+  expect(functions.UseSubTotal(ranges)).toBe(false);
+  doc.SetRowFiltered(2, 2, 0, true);
+  expect(functions.UseSubTotal(ranges)).toBe(true);
+  shell.Close();
+});
+
+it("queries original NeedHeight attributes through actual sparse patterns and default-column tails", /** All five source attribute branches use real registered item classes. @returns Nothing. */ () => {
+  const { doc, shell } = setup();
+  expect(doc.HasAttrib(new ScRange(0, 0, 0, 5, 1, 0), HasAttrFlags.NeedHeight)).toBe(false);
+  for (const which of [ATTR_STACKED, ATTR_LINEBREAK, ATTR_HOR_JUSTIFY, 154, ATTR_ROTATE_VALUE]) {
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    if (which === 154) pattern.GetItemSet().Put(new ScCondFormatItem(1));
+    else {
+      const item = doc.GetPool().GetPoolDefaultItem(which).Clone();
+      assert(item);
+      if (which === ATTR_STACKED || which === ATTR_LINEBREAK) (item as SfxBoolItem).SetValue(true);
+      else if (which === ATTR_HOR_JUSTIFY)
+        (item as SvxHorJustifyItem).SetValue(SvxCellHorJustify.Block);
+      else (item as ScRotateValueItem).SetValue(4500);
+      pattern.GetItemSet().Put(item);
+    }
+    doc.ApplyPatternAreaTab(0, 2, 0, 3, 0, pattern);
+    expect(doc.HasAttrib(new ScRange(0, 2, 0, 0, 3, 0), HasAttrFlags.NeedHeight)).toBe(true);
+    if (which === ATTR_LINEBREAK) {
+      const height = (
+          doc.FetchTable(0) as NonNullable<ReturnType<ScDocument["FetchTable"]>>
+        ).GetRowHeight(2),
+        position = new ScAddress(0, 2, 0);
+      shell
+        .GetDocFunc()
+        .SetFormulaCell(
+          position,
+          new ScFormulaCell(doc, position, unicode("=1"), doc.GetGrammar()),
+          true,
+        );
+      expect(doc.GetValue(position)).toBe(1);
+      expect(
+        (doc.FetchTable(0) as NonNullable<ReturnType<ScDocument["FetchTable"]>>).GetRowHeight(2),
+      ).toBe(height);
+    }
+    const cleared = new CellAttributeHolder(new ScPatternAttr(doc.getCellAttributeHelper()));
+    try {
+      doc.SetPattern(0, 2, 0, cleared);
+      doc.SetPattern(0, 3, 0, cleared);
+    } finally {
+      cleared.Dispose();
+    }
+    expect(doc.HasAttrib(new ScRange(0, 2, 0, 0, 3, 0), HasAttrFlags.NeedHeight)).toBe(false);
+  }
+  expect(
+    /** Leaves other native masks explicit. @returns Query. */ () =>
+      doc.HasAttrib(new ScRange(), HasAttrFlags.Protected),
+  ).toThrow(/NeedHeight/);
+  shell.Close();
+});

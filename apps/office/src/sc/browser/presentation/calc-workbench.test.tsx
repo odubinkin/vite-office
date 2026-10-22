@@ -48,7 +48,7 @@ it("mounts the lazy production factory and edits actual scalar/formula cells thr
   expect(line).toHaveValue("=A1*3");
   fireEvent.click(screen.getByRole("button", { name: "Formula" }));
   expect(line).toHaveFocus();
-  expect(line).toHaveValue("=");
+  expect(line).toHaveValue("=A1*3");
   fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
   fireEvent.doubleClick(screen.getByRole("gridcell", { name: "A1" }));
   fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell A1" }), {
@@ -171,5 +171,38 @@ it("dispatches source SDI named arguments and defers input until InputLineEnter 
   expect(c.shell.GetDocument().GetValue(new ScAddress())).toBe(2);
   dispatcher.Execute(".uno:Redo");
   expect(c.shell.GetDocument().GetValue(new ScAddress())).toBe(3);
+  session.Close();
+});
+
+it("uses native Sum reference selection,accept/cancel and live formula history in the mounted input line", /** The actual formula button inserts source-derived ranges and selects only its arguments. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller;
+  c.EnterString("4");
+  c.Navigate(0, 1);
+  c.EnterString("6");
+  c.Navigate(0, 1);
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  const line = screen.getByRole("textbox", { name: "Input line" }) as HTMLInputElement;
+  expect(line).toHaveValue("=SUM(A1:A2)");
+  expect(line).toHaveFocus();
+  expect([line.selectionStart, line.selectionEnd]).toEqual([5, 10]);
+  fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  cleanup();
   session.Close();
 });

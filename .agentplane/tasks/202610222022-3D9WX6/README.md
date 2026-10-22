@@ -4,7 +4,7 @@ title: "Connect native AutoSum and formula-bar input actions"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved native AutoSum and formula-bar input block in the current calc checkout."
 doc_version: 3
-doc_updated_at: "2026-10-22T20:23:13.842Z"
+doc_updated_at: "2026-10-22T21:07:16.601Z"
 doc_updated_by: "CODER"
 description: "Block74 after73: implement original ordinary AutoSum classification/search/range construction and selected-block insertion through native token/view/input owners. Enable real Sum and correct StartFormula/SetFuncString source text selection in the shared-style Calc formula bar. Preserve native detection priorities,20-cell seek bound,sum-of-sums,empty-selection behavior,history and ODS persistence. No browser evaluator or ad-hoc range inference. Existing unported filtered/subtotal/group/3D services stay explicit and do not receive fabricated state. Scope up to80 source/test/registry/probe paths in Calc and any genuinely shared consumed owners. Require complete Calc raw100 and changed shared raw100,related tests,actual UI/browser/Worker checks and static/build/source/registry gates. Full all-app checkpoint80."
 sections:
@@ -45,9 +45,27 @@ sections:
   Scope: "Block74:ordinary native AutoSum token classification,20-cell directional seek,sum-of-sums,range construction,selected-block insertion,StartFormula/SetFuncString and browser focus/caret routing. Up to80 source/test/registry/probe paths;no branch/worktree changes,external writes or network. Native unported filtered/subtotal/group/3D services stay explicit;do not fabricate service state."
   Plan: "Read complete original consumed token/view/input methods;port real range inference and formula construction first,then native default block insertion/history and input selection,then expose Sum/Formula actions in existing shared-style presenters. Verify source boundary/priority vectors,actual document/history/ODS,mounted caret/focus behavior,Calc and changed shared raw100 and static/build/browser/registry gates. Full all-app checkpoint remains80."
   Verify Steps: "Native vectors must cover directional priority,20-cell seek cutoff,adjacent outer-function references,sum-of-sums,empty/text/error cells,selected single/multi blocks and sheet/coordinate boundaries. Actual UI Sum and Formula actions must preserve source draft/selection/focus,commit/cancel,live recalculation,Undo/Redo and ODS save/reopen. Run complete Calc raw100 S/B/F/L with unchanged thresholds,changed shared owner raw100 and related consumers,actual browser/Worker,production build and all type/lint/format/boundary/JSDoc/size/source/provenance/registry/resource/static/routing/doctor gates. No full all-app run before80."
-  Verification: "Pending implementation and acceptance checks."
+  Verification: "In progress;not verified.655 Calc scenarios/185files passed in a diagnostic,but raw coverage remains below the unchanged100 gate. Current19 focused native/UI scenarios,type/lint pass;actual Chromium Sum yields10 for4and6. Source-pinned progress evidence is under evidence/progress. Native clipboard/grouped-copy prerequisites and complete final acceptance remain required before closure."
   Rollback Plan: "Revert task-owned implementation commits only,preserving integrated user changes and completed prior work."
-  Findings: "Block73 provides real range compilation/area recalculation. Current Sum button is disabled and Formula action inserts a bare equals without native content-dependent text selection. Native source includes selected-block and sum-of-sums semantics which must be preserved rather than replaced with a contiguous-column heuristic."
+  Findings: |-
+    Block74 remains DOING and unverified. Native ordinary AutoSum inference,20-position seek,sum-of-sums,relative range construction,nonempty selected-block totals and StartFormula text selection are implemented. Actual view/token/column/history owners are used;there is no browser evaluator or cell-copy substitute. Native SetFormulaOperation is connected for generated block formulas in the current normal enabled-recording profile. Browser availability rejects filtered SUBTOTAL and empty-marked clipboard-fill contexts while their native services are unavailable.
+
+    Command:npm run test:coverage:calc -- --maxWorkers=1 --coverage.reportsDirectory=../../output/playwright/task74-calc-in-progress-coverage --reporter=default --reporter=json --outputFile.json=../../output/playwright/task74-calc-in-progress-results.json.
+    Result:655 scenarios/185files pass;coverage gate fails as expected for incomplete acceptance work.
+    Evidence:99.47 statements,99.13 branches,99.95 functions,99.56 lines. This diagnostic precedes source-only removal of unused initializers and strengthened pattern-reset assertions;it is not presented as final-head coverage. No thresholds/exclusions/skips changed.
+    Scope:complete Calc-only diagnostic;final raw100 is still required.
+
+    Command:npx vitest run --config vitest.calc.config.ts src/sc/source/ui/view/native-autosum.test.ts src/sc/browser/presentation/calc-workbench.test.tsx src/sc/browser/controller/calc-input-modification.test.ts.
+    Result:current19 scenarios pass after real-owner setup and pattern-reset corrections.
+    Evidence:actual native column/row totals,manual-calculation formula adoption,NeedHeight flags,directional/outer-reference vectors and mounted Sum/Formula selection/history. Tests use the ScTabViewShell-owned view rather than passing an incorrect second constructor argument. Whole-pattern reset uses native CellAttributeHolder/SetPattern instead of a no-op empty delta;each NeedHeight case is independently checked after clearing.
+    Scope:current changed native/UI feature mechanisms. Typecheck,scoped lint,JSDoc,size,provenance and registry checks pass;production build/final browser/Worker/ODS/evidence/quality closure remain pending.
+
+    Command:playwright-cli -s=calc71 actual input4,6,Sum,Accept;viewport screenshot inspection.
+    Result:pass.
+    Evidence:the actual browser proposes=SUM(A1:A2),then shows10 inA3. Shared Writer control styling is retained. Raw snapshots and screenshot are in task evidence/progress.
+    Scope:reviewable current ordinary AutoSum UI,not full AutoSum/clipboard parity.
+
+    Native dependency discovery:empty marked blocks route through EnterAutoSum -> EnterBlock -> PasteFromClip,not repeated EnterData calls. This requires real clipboard document/pool lifetime,relative-reference copying,shared formula groups,listening and native paste undo. Implementing a flat per-cell fill would change upstream architecture and contracts. These services remain explicit boundaries rather than fake implementations. Complete those kernel prerequisites before claiming block74 done;retain the original scope and full raw100 verification contract. CALC253 documents retained axis-only outer-reference adjacency.
 id_source: "generated"
 ---
 ## Summary
@@ -68,7 +86,7 @@ Native vectors must cover directional priority,20-cell seek cutoff,adjacent oute
 
 ## Verification
 
-Pending implementation and acceptance checks.
+In progress;not verified.655 Calc scenarios/185files passed in a diagnostic,but raw coverage remains below the unchanged100 gate. Current19 focused native/UI scenarios,type/lint pass;actual Chromium Sum yields10 for4and6. Source-pinned progress evidence is under evidence/progress. Native clipboard/grouped-copy prerequisites and complete final acceptance remain required before closure.
 
 ## Rollback Plan
 
@@ -76,4 +94,21 @@ Revert task-owned implementation commits only,preserving integrated user changes
 
 ## Findings
 
-Block73 provides real range compilation/area recalculation. Current Sum button is disabled and Formula action inserts a bare equals without native content-dependent text selection. Native source includes selected-block and sum-of-sums semantics which must be preserved rather than replaced with a contiguous-column heuristic.
+Block74 remains DOING and unverified. Native ordinary AutoSum inference,20-position seek,sum-of-sums,relative range construction,nonempty selected-block totals and StartFormula text selection are implemented. Actual view/token/column/history owners are used;there is no browser evaluator or cell-copy substitute. Native SetFormulaOperation is connected for generated block formulas in the current normal enabled-recording profile. Browser availability rejects filtered SUBTOTAL and empty-marked clipboard-fill contexts while their native services are unavailable.
+
+Command:npm run test:coverage:calc -- --maxWorkers=1 --coverage.reportsDirectory=../../output/playwright/task74-calc-in-progress-coverage --reporter=default --reporter=json --outputFile.json=../../output/playwright/task74-calc-in-progress-results.json.
+Result:655 scenarios/185files pass;coverage gate fails as expected for incomplete acceptance work.
+Evidence:99.47 statements,99.13 branches,99.95 functions,99.56 lines. This diagnostic precedes source-only removal of unused initializers and strengthened pattern-reset assertions;it is not presented as final-head coverage. No thresholds/exclusions/skips changed.
+Scope:complete Calc-only diagnostic;final raw100 is still required.
+
+Command:npx vitest run --config vitest.calc.config.ts src/sc/source/ui/view/native-autosum.test.ts src/sc/browser/presentation/calc-workbench.test.tsx src/sc/browser/controller/calc-input-modification.test.ts.
+Result:current19 scenarios pass after real-owner setup and pattern-reset corrections.
+Evidence:actual native column/row totals,manual-calculation formula adoption,NeedHeight flags,directional/outer-reference vectors and mounted Sum/Formula selection/history. Tests use the ScTabViewShell-owned view rather than passing an incorrect second constructor argument. Whole-pattern reset uses native CellAttributeHolder/SetPattern instead of a no-op empty delta;each NeedHeight case is independently checked after clearing.
+Scope:current changed native/UI feature mechanisms. Typecheck,scoped lint,JSDoc,size,provenance and registry checks pass;production build/final browser/Worker/ODS/evidence/quality closure remain pending.
+
+Command:playwright-cli -s=calc71 actual input4,6,Sum,Accept;viewport screenshot inspection.
+Result:pass.
+Evidence:the actual browser proposes=SUM(A1:A2),then shows10 inA3. Shared Writer control styling is retained. Raw snapshots and screenshot are in task evidence/progress.
+Scope:reviewable current ordinary AutoSum UI,not full AutoSum/clipboard parity.
+
+Native dependency discovery:empty marked blocks route through EnterAutoSum -> EnterBlock -> PasteFromClip,not repeated EnterData calls. This requires real clipboard document/pool lifetime,relative-reference copying,shared formula groups,listening and native paste undo. Implementing a flat per-cell fill would change upstream architecture and contracts. These services remain explicit boundaries rather than fake implementations. Complete those kernel prerequisites before claiming block74 done;retain the original scope and full raw100 verification contract. CALC253 documents retained axis-only outer-reference adjacency.

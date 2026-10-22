@@ -1,4 +1,8 @@
 /** @fileoverview Consumed ScTabViewShell actual view ownership and default frame line from tabvwsh3.cxx/tabvwsh4.cxx/tabvwsh8.cxx/tabvwshf.cxx;native window/UNO services remain unported. */
+import { DoAutoSum, UseSubTotal } from "./tabvwshc";
+import type { ScRangeList } from "../../../inc/rangelst";
+import type { OpCode } from "../../../../formula/inc/opcode";
+import type { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import type { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -9,6 +13,14 @@ import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/it
 import { COL_BLACK } from "../../../../tools/inc/color";
 /** Native view-shell state persists across commands and is replaced with its actual document view. */
 export class ScTabViewShell extends ScViewFunc {
+  /** Original filtered-data command query for the represented document profile. @param ranges - Source ranges. @returns Subtotal requested. */
+  UseSubTotal(ranges: ScRangeList): boolean {
+    return UseSubTotal(this, ranges);
+  }
+  /** Original AutoSum command orchestration. @param rangeFinder - Native output. @param subtotal - Native output. @param code - Aggregate. @returns Owned input-line formula. */
+  DoAutoSum(rangeFinder: [boolean], subtotal: [boolean], code: OpCode): OUString {
+    return DoAutoSum(this, rangeFinder, subtotal, code);
+  }
   /** Consumed original tabvwsh3 FID_TOGGLEHEADERS request case;RepeatResize is projected by the browser owner. @param request - Native request. @returns Nothing. */
   ToggleHeaders(request: SfxRequest): void {
     const data = this.GetViewData(),

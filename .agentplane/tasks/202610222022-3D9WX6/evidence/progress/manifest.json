@@ -1,0 +1,248 @@
+{
+  "task": "202610222022-3D9WX6",
+  "final": false,
+  "verification": "pending",
+  "archiveSha256": "e4b1ba3e71b2d8b5909f8844ab18723501bb3edf862fcc902b1c7aa275f424f2",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+      "sha256": "a92647df68bcf800f6595019c7293f11e036426dc1266df7da637741f09fd5e5"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "635fb4cc3bcb951e6fbbe9c51e242430c87bbc71bcb26b5dddace9ffe9df7a3d"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+      "sha256": "2ff09311fd15d51fdea214926739d2ea93a72252acb3748415e616664f33a159"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "e4d1dbe5b4dbc6d1be32c9148a1905e6355ada351da91294f1ae31a8683d33eb"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "57738fe45768b027d7e1849bf980cb47a3b325377b1de56da3f349963defd99b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "0d29a262d729898313993214a667096537dd5ec6bb23c7d692ad4499b572e5ee"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "22e4b44344d35b0dec11a2330db5f2ba0d646f24af6c77e1cd058f7a794b8a51"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "be4cc3f126327e315948293f65540a3fa910d95a647c18578f13882a3af596fe"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "d591bf908ad5180a4e65233ecca3e8485759d2748946ea40f8cf71da06030b15"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "3cba1752ccaa11942b9144dbaecfdd98d0eb90f01cb3f8390b40193ab40055df"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "61428c400b429ce92fcc55d922ece10dfc16683798c6509e0d4af5d7a5f74824"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+      "sha256": "95f91dc7a613de7dcda97d2cc38b35df872c7da6b59de5608d5c55168300316f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+      "sha256": "8d5dea8afed745e3278e37f2d7816c7a12229287290105f9222f78d569aac8ee"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "59ac5457ef6182fd970cdd7acfe21adcc98e2eabc68dc1ec3a8051de0d4f8fba"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+      "sha256": "b06edd73d8b833c999627a263caa1ce4e6b922c844dde38c77b9b4d9519c621f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "sha256": "48a24c40f446c1e5970197763a40b1048b06314675e9d61fb5a421c1c835fcb1"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "636aab8ba38e763bf29d37a03fc2f1fa6b584c518874b0258776c1d925b30d97"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "ddc7399389a54d7df9edaec354271482fd6d9349afd2ce222309a9be54b22a25"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "81ddf5bfae9fc50b395d134c9929104da7c541af1a5921e03b6615091186279c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "8fe0ae8236033af615511d98fc38383ca592af1a2b291325b1d40245f5cc579f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+      "sha256": "5c348b97abdef54ecfc29fa107bda1d0aea29241650fd1057c1c8a0c837a848e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+      "sha256": "1ff72db8988cf85af19b8ef7c0a27c6794ba968c7cc130ee86ef05d769277d99"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "sha256": "1c88b208de16d552c1c9e050c14d43c573bcc489ef6f468f8b3492808461d46f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+      "sha256": "a44e65a2281a13aa6722323d16b4ed8a6b798e80fd6c3c7e490f878051851390"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "e0ce4c567d612bf76963de56f4a9be49559447a59ef910de782519e65f52f6d5"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "sha256": "d689809eacbea92a85ed42aa204eb317e46ade4e362a63bfc5127b38712fd20a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/token.ts.json",
+      "sha256": "68431c7eaba3de7aac20959ab391580db8855a9c72370af152ea43f786a7e4fa"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/docshell/docfunc.ts.json",
+      "sha256": "d5545ba9c59e151dcde544b679d9b0f04171ba6b6a7b3b0a203a58f7638c6144"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/operation/Operation.ts.json",
+      "sha256": "c66abf97895e5dc9ec96b693627eb8c8616c7e1b27b17fac1b769b999dd887b6"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "1b01c3841f578a6d5fbc8d1ba8b161cc0773d51ba85737f43341630fcb71a693"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabvwsh4.ts.json",
+      "sha256": "52dcbfbe7b0911f0ea0b055384bc6c547737a649389dc33b0b5e46f03190e3f1"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewfun2.ts.json",
+      "sha256": "be5f4c361a483cac35140836706ecb7eb57058b5be60eb45466393c3e4e32e9e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewfunc.ts.json",
+      "sha256": "7bba5382088239230d6315c4482c8f5713c7596c3ad235a2775aa28531d9402d"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "f75ec5d483a4f2baf7a3cef5a1df7a92396096589fae0087756510eeb45636c6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "5ffbd3bd3ff21ddbc839237d1833a5a64bf3f214d83099f658450a4a5096b200"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+      "sha256": "08ebe564f81c827d90f8bcf9944445cc53ad26320fe630a11226f8216bc35bb3"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+      "sha256": "c38f538d72e21842ea7450fb16ff2f237874d44db5a511941a56d93be19ec133"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "sha256": "8710c376fb50d71832e75479abd96ec86a0104cc1b7b70052972b6ae449d86ba"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+      "sha256": "db48456eeb1a568289c3a2dbc50172fc06118ceb77d8973211747a4033168c26"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "ccd89772e46d0ff04adf3d9e360ea76b0e7d56dde946ae94c0bf5f73586c2794"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "sha256": "399c10bc6d471841ad2d0243e67c5ddd10456a7a5859b229b500c0fed1717960"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/token.ts.json",
+      "sha256": "e698a6d82026e84aee0ae744ee9e2a5370d81855720a3588b81b0adf68e3f9a4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/docshell/docfunc.ts.json",
+      "sha256": "85159e4264ae117be54777aa9a29ebe5ac27b57b121e58e214730949bf534e31"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/operation/Operation.ts.json",
+      "sha256": "dea29bfa910b5f6a3d3bd30550e052de410376fec1a25caf2a24262d1c740bda"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "a04a2963c63b254ea6d640dd215d1b7cecf306d28532cc5455cb622755e24886"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabvwsh4.ts.json",
+      "sha256": "fb06f66e41d88fc07688967ebb7b553b9abf905dec38d5844717f0ac77756d15"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewfun2.ts.json",
+      "sha256": "d68a7937c303e388beadc6134fe5c3a973a0e0cf6fc3716214b012c3c4bb7766"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewfunc.ts.json",
+      "sha256": "7bb18fcc327e0be9ce0911d491c826b9d6e2d3bb8336c261ea90590792a5bb0b"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/SetFormulaOperation.ts",
+      "sha256": "6f87ee6af314c0ce21383df45abab23788293d2cf93916201a907912fa95e736"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+      "sha256": "30756294a3c23545ec02f3d63fd717a34deff0084dd4aa6320e99b1123155eb2"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwshc.ts",
+      "sha256": "f02ad8c42e482f5e0b42a104cf2756d6e25495a844c7617c558fe1d9f3639698"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/operation/SetFormulaOperation.ts.json",
+      "sha256": "4952996b1cb726a061469e6fcd672775a560ed92ef53f2baa166bff521d78c3c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabvwshc.ts.json",
+      "sha256": "31343e1edd7287c10bfcff05f09e87a728bf751604b599d7d1caf8cc023ad9ed"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/operation/SetFormulaOperation.ts.json",
+      "sha256": "4d3087e7742155cddd145d07da4a4536c8590208694403f56216ec5fa3aea433"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabvwshc.ts.json",
+      "sha256": "c0bfcdf36076c30817f9a1c961ed52419e78d98da61637dced54f13d32e26f9d"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task74-calc-in-progress.log",
+    "output/playwright/task74-calc-in-progress-results.json",
+    "output/playwright/task74-calc-in-progress-coverage/coverage-final.json",
+    "output/playwright/task74-calc-in-progress-coverage/coverage-summary.json",
+    "output/playwright/task74-coverage-misses.txt",
+    "output/playwright/task74-autosum-ui-current-tests.log",
+    "output/playwright/task74-types-height-vectors.log",
+    "output/playwright/task74-lint-current.log",
+    "output/playwright/task74-lint-height-vectors.log",
+    "output/playwright/task74-docs-current.log",
+    "output/playwright/task74-size-current.log",
+    "output/playwright/task74-provenance-current.log",
+    "output/playwright/task74-registry-current.log",
+    "output/playwright/task74-browser-sum-draft.txt",
+    "output/playwright/task74-browser-sum-result.txt",
+    "output/playwright/task74-browser-sum-result.png"
+  ],
+  "progress": "655 Calc scenarios passed in a full diagnostic;coverage99.47/99.13/99.95/99.56 failed the unchanged final100 gate. This diagnostic predates source-only unused-initializer cleanup and strengthened pattern reset assertions. Current19 focused scenarios/type/lint pass. Actual browser Sum yields10 for4and6. No final-head raw100,full AutoSum/clipboard parity,production build or quality closure is claimed.",
+  "remaining": "Native clipboard document/grouped formula copying and paste undo prerequisites;empty-marked AutoSum route;all final boundary tests,raw100 and complete browser/Worker/ODS/gates acceptance."
+}

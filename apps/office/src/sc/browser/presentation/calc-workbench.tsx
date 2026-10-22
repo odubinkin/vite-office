@@ -89,6 +89,7 @@ export function CalcWorkbench({
           error instanceof Error ? error.message : String(error),
         ),
   });
+  const [inputSelection, setInputSelection] = useState<readonly [number, number]>();
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
@@ -126,6 +127,18 @@ export function CalcWorkbench({
       if (restore) grid().focus();
     },
     [modal],
+  );
+  useLayoutEffect(
+    /** Applies original input-window text selection only after controlled text has rendered. @returns Nothing. */ () => {
+      if (inputSelection) {
+        const input = (root.current as HTMLElement).querySelector(
+          '[aria-label="Input line"]',
+        ) as HTMLInputElement;
+        input.focus();
+        input.setSelectionRange(inputSelection[0], inputSelection[1]);
+      }
+    },
+    [inputSelection],
   );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
@@ -297,11 +310,13 @@ export function CalcWorkbench({
       focusGrid();
     }
     if (action === "accept" && controller.Commit()) focusGrid();
+    if (action === "sum") {
+      const selection = controller.AutoSum();
+      if (selection) setInputSelection(selection);
+      else focusGrid();
+    }
     if (action === "equals") {
-      controller.StartInput(ScInputMode.SC_INPUT_TOP, "=");
-      (
-        (root.current as HTMLElement).querySelector('[aria-label="Input line"]') as HTMLInputElement
-      ).focus();
+      setInputSelection(controller.StartFormula());
     }
   }
   return (
@@ -396,7 +411,9 @@ export function CalcWorkbench({
           editing={controller.mode !== ScInputMode.SC_INPUT_NONE}
           enabledActions={
             new Set<CalcInputAction>(
-              controller.mode === ScInputMode.SC_INPUT_NONE ? ["equals"] : ["cancel", "accept"],
+              controller.mode === ScInputMode.SC_INPUT_NONE
+                ? [...(controller.CanAutoSum() ? ["sum" as const] : []), "equals"]
+                : ["cancel", "accept"],
             )
           }
           onAddressChange={

@@ -3604,3 +3604,21 @@ Mutable local double references use Float64Array backing so JavaScript packed
 number-array canonicalization does not erase the only encoded NoValue payload
 before the native rescan can recognize it. This storage adaptation preserves
 native scalar bits; it does not resolve the upstream mixed-payload ambiguity.
+
+
+## CALC-253: AutoSum adjacency checks only the scan axis
+
+Pinned source: `sc/source/core/tool/token.cxx`,
+`ScTokenArray::GetAdjacentExtendOfOuterFuncRefs`.
+
+The four directional branches compare only the referenced row or column with
+its neighboring scan coordinate. They do not require the other coordinate or
+sheet to match the formula position. For example, a formula at A4 containing
+`SUM(B1:B3)` reports a top-adjacent reference with extent row0,despite referring
+to column B. The AutoSum classification in `sc/source/ui/view/viewfun2.cxx`
+consumes this outcome when deciding whether to sum existing aggregates.
+
+This is a source-derived suspicion rather than a certified whole-application
+failure. Preserve the original axis-only checks;adding a same-column/same-row
+filter would change the upstream contract. The actual-token witness is in
+`sc/source/ui/view/native-autosum.test.ts`.

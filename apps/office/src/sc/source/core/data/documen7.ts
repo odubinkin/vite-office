@@ -1,5 +1,8 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import { HasAttrFlags } from "../../../inc/global";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -188,4 +191,61 @@ export function SetAllFormulasDirty(this: ScDocument, context: SetFormulaDirtyCo
   } finally {
     this.SetAutoCalc(old);
   }
+}
+
+/** Original documen7 single-cell hint dispatch,defined on the same actual document. @param this - Actual document. @param hint - Source hint. @returns Whether delivered. */
+export function BroadcastHintInternal(this: ScDocument, hint: ScHint): boolean {
+  let delivered = false,
+    last: SvtBroadcaster<SfxHint> | null = null;
+  for (let row = 0; row < hint.GetRowCount(); row++) {
+    const address = new ScAddress(hint.GetStartAddress());
+    address.SetRow(address.Row() + row);
+    const broadcaster = this.GetBroadcaster(address);
+    if (broadcaster && broadcaster !== last) {
+      broadcaster.Broadcast(hint);
+      delivered = true;
+      last = broadcaster;
+    }
+  }
+  return delivered;
+}
+
+/** Original document.cxx connected-area delegation on the same actual owner. @param this - Document. @param tab - Sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param includeOld - Retain input. @param onlyDown - Restrict extension. @returns Nothing. */
+export function GetDataArea(
+  this: ScDocument,
+  tab: number,
+  firstCol: [number],
+  firstRow: [number],
+  lastCol: [number],
+  lastRow: [number],
+  includeOld: boolean,
+  onlyDown: boolean,
+): void {
+  this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+}
+
+/** Original document.cxx address-only cached script query. @param this - Actual document. @param position - Cell. @returns Stored flags. */
+export function GetScriptType(this: ScDocument, position: ScAddress): SvtScriptType {
+  return (
+    this.FetchTable(position.Tab())?.GetScriptType(position.Col(), position.Row()) ??
+    SvtScriptType.NONE
+  );
+}
+/** Original document.cxx sheet traversal for the consumed native NeedHeight query. @param this - Document. @param range - Area. @param mask - Native query. @returns Found. */
+export function HasAttrib(this: ScDocument, range: ScRange, mask: HasAttrFlags): boolean {
+  for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab() && tab < this.GetTableCount(); tab++) {
+    const table = this.FetchTable(tab);
+    if (
+      table &&
+      table.HasAttrib(
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+        mask,
+      )
+    )
+      return true;
+  }
+  return false;
 }

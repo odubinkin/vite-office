@@ -14,8 +14,11 @@ import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_BORDER } from "../../../inc/scitems";
 import { ScIndentItem } from "../../../inc/attrib";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
-import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
-import { SC_INDENT_STEP } from "../../../inc/global";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { ScCondFormatItem, ScRotateValueItem } from "../../../inc/attrib";
+import { ATTR_LINEBREAK, ATTR_CONDITIONAL, ATTR_ROTATE_VALUE } from "../../../inc/scitems";
+import { SvxCellHorJustify, SvxCellOrientation } from "../../../../editeng/inc/svxenum";
+import { SC_INDENT_STEP, HasAttrFlags } from "../../../inc/global";
 import { ATTR_INDENT, ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
 import { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
@@ -115,6 +118,39 @@ class ScAttrEntry extends CellAttributeHolder {
 }
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
+  /** Original NeedHeight branch of HasAttrib_Impl over genuine pattern values;other masks remain explicitly unported. @param pattern - Actual pattern. @returns Height-sensitive attribute found. */
+  private HasAttrib_Impl(pattern: ScPatternAttr): boolean {
+    if (pattern.GetCellOrientation() !== SvxCellOrientation.Standard) return true;
+    if ((pattern.GetItem(ATTR_LINEBREAK) as SfxBoolItem).GetValue()) return true;
+    if (
+      (pattern.GetItem(ATTR_HOR_JUSTIFY) as SvxHorJustifyItem).GetValue() ===
+      SvxCellHorJustify.Block
+    )
+      return true;
+    if (!(pattern.GetItem(ATTR_CONDITIONAL) as ScCondFormatItem).GetCondFormatData().empty())
+      return true;
+    return (pattern.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem).GetValue() !== 0;
+  }
+  /** Original range search and early found termination for the consumed NeedHeight mask. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
+  HasAttrib(first: number, last: number, mask: HasAttrFlags): boolean {
+    if (mask !== HasAttrFlags.NeedHeight)
+      throw new Error("Only NeedHeight attribute queries are implemented");
+    if (this.mvData.length === 0)
+      return this.HasAttrib_Impl(
+        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
+      );
+    const start: [number] = [0],
+      end: [number] = [0];
+    this.Search(first, start);
+    if (first !== last) this.Search(last, end);
+    else end[0] = start[0];
+    let found = false;
+    for (let i = start[0]; i <= end[0] && !found; i++)
+      found = this.HasAttrib_Impl(
+        (this.mvData[i] as ScAttrEntry).getScPatternAttr() as ScPatternAttr,
+      );
+    return found;
+  }
   private readonly mvData: ScAttrEntry[] = [];
   /** Original Concat joins canonical neighboring runs after an in-place pattern change. @param position - Changed entry index. @returns Whether joined. */
   private Concat(position: number): boolean {
@@ -321,7 +357,7 @@ export class ScAttrArray {
         outer,
         inner,
         flags,
-        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
         left,
         right,
         true,
@@ -532,7 +568,7 @@ export class ScAttrArray {
   private SetDefaultIfNotInit(): void {
     if (this.mvData.length) return;
     const entry = new ScAttrEntry(
-      this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+      this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
     );
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
@@ -596,7 +632,7 @@ export class ScAttrArray {
   DeleteHardAttr(first: number, last: number): void {
     this.SetDefaultIfNotInit();
     const defaults = new CellAttributeHolder(
-        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+        this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
       ),
       index: [number] = [0];
     try {

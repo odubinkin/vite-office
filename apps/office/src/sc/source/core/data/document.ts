@@ -50,14 +50,15 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../inc/global";
+import type { HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { uppercase } from "../../../../unotools/inc/charclass";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-
 /** Native dependency recalculation modes from document.hxx. */
 export enum HardRecalcState {
   OFF,
@@ -67,6 +68,29 @@ export enum HardRecalcState {
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   static readonly HardRecalcState = HardRecalcState;
+  private eGrammar: Grammar = FormulaGrammar.Grammar.GRAM_NATIVE;
+  /** Original current formula convention,initialized GRAM_NATIVE. @returns Grammar. */
+  GetGrammar(): Grammar {
+    return this.eGrammar;
+  }
+  /** Original documen3 assignment. @param grammar - Convention. @returns Nothing. */
+  SetGrammar(grammar: Grammar): void {
+    this.eGrammar = grammar;
+  }
+  /** Original document block emptiness forwards to the actual sheet;missing sheets retain false. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param tab - Sheet. @returns Empty block. */
+  IsBlockEmpty(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    tab: number,
+  ): boolean {
+    return this.FetchTable(tab)?.IsBlockEmpty(firstCol, firstRow, lastCol, lastRow) ?? false;
+  }
+  /** Original range overload delegates to actual sheet attribute owners. @param range - Area. @param mask - Native query. @returns Found. */
+  HasAttrib(range: ScRange, mask: HasAttrFlags): boolean {
+    return documen7.HasAttrib.call(this, range, mask);
+  }
   private readonly pViewOptions = new ScViewOptions();
   /** Original documen3 borrowed view options. @returns Actual document-owned options. */
   GetViewOptions(): ScViewOptions {
@@ -76,17 +100,9 @@ export class ScDocument {
   SetViewOptions(options: ScViewOptions): void {
     this.pViewOptions.copy_assign(options);
   }
-  /** Original document.cxx connected-area delegation;missing sheets leave references untouched. @param tab - Sheet. @param firstCol - Start column. @param firstRow - Start row. @param lastCol - End column. @param lastRow - End row. @param includeOld - Retain input. @param onlyDown - Only final row. @returns Nothing. */
-  GetDataArea(
-    tab: number,
-    firstCol: [number],
-    firstRow: [number],
-    lastCol: [number],
-    lastRow: [number],
-    includeOld: boolean,
-    onlyDown: boolean,
-  ): void {
-    this.FetchTable(tab)?.GetDataArea(firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+  /** Original connected-area delegation,with its parameter tuple retained from the out-of-class definition. @param args - Original sheet,coordinate references and extension controls. @returns Nothing. */
+  GetDataArea(...args: Parameters<typeof documen7.GetDataArea>): void {
+    return documen7.GetDataArea.apply(this, args);
   }
   private pScriptTypeData: ScScriptTypeData | undefined;
   /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
@@ -106,10 +122,7 @@ export class ScDocument {
   }
   /** Original address-only const getter reads cached metadata without evaluating or updating it. @param position - Actual coordinate. @returns Stored flags or NONE. */
   GetScriptType(position: ScAddress): SvtScriptType {
-    return (
-      this.FetchTable(position.Tab())?.GetScriptType(position.Col(), position.Row()) ??
-      SvtScriptType.NONE
-    );
+    return documen7.GetScriptType.call(this, position);
   }
   /** Original address setter delegates through the actual sheet/column metadata owners. @param position - Actual coordinate. @param type - Native flags. @returns Nothing. */
   SetScriptType(position: ScAddress, type: SvtScriptType): void {
@@ -751,21 +764,9 @@ export class ScDocument {
   EndListeningArea(range: ScRange, group: boolean, listener: SvtListener<SfxHint>): void {
     return documen7.EndListeningArea.call(this, range, group, listener);
   }
-  /** Dispatches native hints through existing single-cell broadcasters. Area subscribers remain unsupported. @param hint - Hint. @returns Whether delivered. */
+  /** Dispatches native hints through existing single-cell broadcasters. Area subscribers are dispatched by Broadcast. @param hint - Hint. @returns Whether delivered. */
   BroadcastHintInternal(hint: ScHint): boolean {
-    let delivered = false,
-      last: SvtBroadcaster<SfxHint> | null = null;
-    for (let row = 0; row < hint.GetRowCount(); row++) {
-      const address = new ScAddress(hint.GetStartAddress());
-      address.SetRow(address.Row() + row);
-      const broadcaster = this.GetBroadcaster(address);
-      if (broadcaster && broadcaster !== last) {
-        broadcaster.Broadcast(hint);
-        delivered = true;
-        last = broadcaster;
-      }
-    }
-    return delivered;
+    return documen7.BroadcastHintInternal.call(this, hint);
   }
   /** Broadcasts a normal single-cell change and tracks its dependent formulas. @param hint - Hint. @returns Nothing. */
   Broadcast(hint: ScHint): void {

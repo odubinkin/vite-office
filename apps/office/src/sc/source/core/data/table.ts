@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { HasAttrFlags } from "../../../inc/global";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScLineFlags } from "../../../inc/attarray";
@@ -321,6 +322,28 @@ export class ScTable {
     for (let col = first; col <= last; col++)
       result = Math.max(result, (this.aCol[col] as ScColumn).GetLastDataPos(row));
     return result;
+  }
+  /** Original table2 attribute query scans allocated columns then the real default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param mask - Native mask. @returns Found. */
+  HasAttrib(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    mask: HasAttrFlags,
+  ): boolean {
+    for (let col = firstCol; col <= lastCol && col < this.aCol.length; col++)
+      if ((this.aCol[col] as ScColumn).HasAttrib(firstRow, lastRow, mask)) return true;
+    if (lastCol >= this.aCol.length) return this.aDefaultColData.HasAttrib(firstRow, lastRow, mask);
+    return false;
+  }
+  /** Original table2 typed-cell block emptiness for the consumed scalar stores;notes and sparklines are unrepresented families. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Empty block. */
+  IsBlockEmpty(firstCol: number, firstRow: number, lastCol: number, lastRow: number): boolean {
+    if (!this.rDocument.ValidCol(firstCol) || !this.rDocument.ValidCol(lastCol)) return false;
+    lastCol = this.ClampToAllocatedColumns(lastCol);
+    let empty = true;
+    for (let col = firstCol; col <= lastCol && empty; col++)
+      empty = (this.aCol[col] as ScColumn).IsEmptyData(firstRow, lastRow);
+    return empty;
   }
   /** Finds native first occupied coordinates using actual column stores. @param col - Column output. @param row - Row output. @returns Nothing. */
   GetFirstDataPos(col: [number], row: [number]): void {

@@ -1,4 +1,5 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import { HasAttrFlags } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
 import { celltextattr_block, element_type_celltextattr } from "../../../inc/mtvelements";
@@ -98,6 +99,10 @@ export class ScColumnData {
   }
   protected nCol = 0;
   protected nTab = 0;
+  /** Original column attribute query delegates to its actual row runs. @param first - First row. @param last - Last row. @param mask - Native mask. @returns Found. */
+  HasAttrib(first: number, last: number, mask: HasAttrFlags): boolean {
+    return this.pAttrArray.HasAttrib(first, last, mask);
+  }
   protected pAttrArray: ScAttrArray;
   /** Creates an uninitialized-position attribute owner. @param rDocument - Document. @returns Owner. */
   constructor(protected readonly rDocument: ScDocument) {

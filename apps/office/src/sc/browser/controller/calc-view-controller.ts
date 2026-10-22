@@ -28,11 +28,14 @@ import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import type { ScCellValue } from "../../inc/cellvalue";
-import { ScInputMode } from "../../inc/global";
+import { OpCode } from "../../../formula/inc/opcode";
+import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScInputMode, CellType } from "../../inc/global";
 import { ScInputHandler } from "../../source/ui/inc/inputhdl";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScTabView } from "../../source/ui/inc/tabview";
 import { ScViewData } from "../../source/ui/inc/viewdata";
+import { ScRangeList } from "../../inc/rangelst";
 import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
 import { ScUndoSetCell } from "../../source/ui/inc/undocell";
 import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
@@ -548,6 +551,81 @@ export class CalcViewController {
     );
     this.Changed();
     return changed;
+  }
+  /** Browser availability boundary for native services already implemented in this kernel. Clipboard block-fill and SUBTOTAL remain unavailable;no replacement calculation is offered. @returns The represented native action can execute. */
+  CanAutoSum(): boolean {
+    const marks = this.viewData.GetMarkData(),
+      ranges = new ScRangeList(),
+      doc = this.shell.GetDocument();
+    if (marks.IsMarked() || marks.IsMultiMarked()) {
+      marks.FillRangeListWithMarks(ranges, false);
+      for (const range of ranges)
+        if (
+          doc.IsBlockEmpty(
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+            range.aStart.Tab(),
+          )
+        )
+          return false;
+    } else this.viewShell.GetAutoSumArea(ranges);
+    return !this.viewShell.UseSubTotal(ranges);
+  }
+  /** Runs original AutoSum and SetFuncString caret selection through real view/input owners. @returns Native selection when an input-line draft was created. */
+  AutoSum(): readonly [number, number] | undefined {
+    try {
+      const rangeFinder: [boolean] = [false],
+        subtotal: [boolean] = [false],
+        formula = this.viewShell.DoAutoSum(rangeFinder, subtotal, OpCode.ocSum);
+      try {
+        if (formula.isEmpty()) {
+          this.addressText = this.Address();
+          this.Changed();
+          return undefined;
+        }
+        const value = text(formula),
+          length = value.length,
+          open = value.indexOf("(");
+        this.StartInput(ScInputMode.SC_INPUT_TOP, value);
+        if (rangeFinder[0] && open !== -1 && length > open)
+          return [open + (subtotal[0] ? 3 : 1), length - 1];
+        return [length - 1, length - 1];
+      } finally {
+        formula.dispose();
+      }
+    } catch (error) {
+      this.error = error instanceof Error ? error.message : String(error);
+      this.Changed();
+      return undefined;
+    }
+  }
+  /** Browser projection of original ScInputWindow::StartFormula over actual cell/input owners. @returns Native UTF16 selection endpoints after entering TOP mode. */
+  StartFormula(): readonly [number, number] {
+    let value = this.Input(),
+      start = 1,
+      end = 1;
+    const length = value.length;
+    switch (this.shell.GetDocument().GetCellType(this.Position())) {
+      case CellType.CELLTYPE_VALUE:
+        end = length + 1;
+        value = "=" + value;
+        break;
+      case CellType.CELLTYPE_STRING:
+      case CellType.CELLTYPE_EDIT:
+        start = 0;
+        end = length;
+        break;
+      case CellType.CELLTYPE_FORMULA:
+        end = length;
+        break;
+      default:
+        value = "=";
+        break;
+    }
+    this.StartInput(ScInputMode.SC_INPUT_TOP, value);
+    return [start, end];
   }
   /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
   StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {

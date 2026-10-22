@@ -1,6 +1,8 @@
 /** @fileoverview Original Calc empty, hybrid, matrix result and reference tokens over genuine shared token, string and matrix owners; references use JS GC. */
 import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
 import { OpCode } from "../../../../formula/inc/opcode";
+import { ScDirection } from "../../../inc/global";
+import type { ScAddress } from "../../../inc/address";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScSingleRefData } from "../../../inc/refdata";
 import { ScSingleRefToken, ScDoubleRefToken } from "./token.references";
@@ -428,6 +430,121 @@ export class ScTokenArray extends FormulaTokenArray {
       }
     }
     return p;
+  }
+  /** Original adjacent outer-function parameter inspection over genuine RPN references;axis adjacency intentionally ignores the other axis and sheet as upstream. @param extend - Native output extent,untouched on an early boundary. @param position - Formula position. @param direction - Original scan direction. @returns Adjacent reference found. */
+  GetAdjacentExtendOfOuterFuncRefs(
+    extend: [number],
+    position: ScAddress,
+    direction: ScDirection,
+  ): boolean {
+    let col = 0,
+      row = 0;
+    switch (direction) {
+      case ScDirection.DIR_BOTTOM:
+        if (position.Row() >= this.mxSheetLimits.mnMaxRow) return false;
+        extend[0] = position.Row();
+        row = extend[0] + 1;
+        break;
+      case ScDirection.DIR_RIGHT:
+        if (position.Col() >= this.mxSheetLimits.mnMaxCol) return false;
+        extend[0] = position.Col();
+        col = extend[0] + 1;
+        break;
+      case ScDirection.DIR_TOP:
+        if (position.Row() <= 0) return false;
+        extend[0] = position.Row();
+        row = extend[0] - 1;
+        break;
+      case ScDirection.DIR_LEFT:
+        if (position.Col() <= 0) return false;
+        extend[0] = position.Col();
+        col = extend[0] - 1;
+        break;
+      default:
+        return false;
+    }
+    if (this.pRPN && this.nRPN) {
+      const outer = this.pRPN[this.nRPN - 1] as FormulaToken;
+      if (outer.GetType() === StackVar.svByte) {
+        const count = (outer as FormulaByteToken).GetByte();
+        if (count && this.nRPN > count) {
+          let found = false;
+          for (let index = this.nRPN - count - 1; index < this.nRPN - 1; index++) {
+            const token = this.pRPN[index] as FormulaToken;
+            switch (token.GetType()) {
+              case StackVar.svSingleRef: {
+                const absolute = (token as ScSingleRefToken)
+                  .GetSingleRef()
+                  .toAbs(this.mxSheetLimits, position);
+                switch (direction) {
+                  case ScDirection.DIR_BOTTOM:
+                    if (absolute.Row() === row && absolute.Row() > extend[0]) {
+                      extend[0] = absolute.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_RIGHT:
+                    if (absolute.Col() === col && absolute.Col() > extend[0]) {
+                      extend[0] = absolute.Col();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_TOP:
+                    if (absolute.Row() === row && absolute.Row() < extend[0]) {
+                      extend[0] = absolute.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_LEFT:
+                    if (absolute.Col() === col && absolute.Col() < extend[0]) {
+                      extend[0] = absolute.Col();
+                      found = true;
+                    }
+                    break;
+                }
+                break;
+              }
+              case StackVar.svDoubleRef: {
+                const absolute = (token as ScDoubleRefToken)
+                  .GetDoubleRef()
+                  .toAbs(this.mxSheetLimits, position);
+                switch (direction) {
+                  case ScDirection.DIR_BOTTOM:
+                    if (absolute.aStart.Row() === row && absolute.aEnd.Row() > extend[0]) {
+                      extend[0] = absolute.aEnd.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_RIGHT:
+                    if (absolute.aStart.Col() === col && absolute.aEnd.Col() > extend[0]) {
+                      extend[0] = absolute.aEnd.Col();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_TOP:
+                    if (absolute.aEnd.Row() === row && absolute.aStart.Row() < extend[0]) {
+                      extend[0] = absolute.aStart.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_LEFT:
+                    if (absolute.aEnd.Col() === col && absolute.aStart.Col() < extend[0]) {
+                      extend[0] = absolute.aStart.Col();
+                      found = true;
+                    }
+                    break;
+                }
+                break;
+              }
+              default:
+                break;
+            }
+          }
+          return found;
+        }
+      }
+    }
+    return false;
   }
   /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
   AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
