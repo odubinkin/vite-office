@@ -4,7 +4,7 @@ title: "Connect formula ranges to native area recalculation and aggregate execut
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -19,16 +19,21 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-22T20:20:24.441Z"
+  updated_by: "CODER"
+  note: "642 Calc and64 related scenarios pass;142 Calc and2 changed shared owners raw100 S/B/F/L;2 Chromium/Worker cases,4097 native rows/138 original objects,15 gates,production build and actual UI history/ODS reopen pass. Immutable source-pinned audit passes."
   attempts: 0
-commit: null
+commit:
+  hash: "6135d82cdadf7a04fbbc2a3c922899b341337194"
+  message: "🧩 98YRBY calc: execute native range formulas and area recalculation"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: pin the verified range implementation and immutable evidence for evaluation."
 events:
   -
     type: "status"
@@ -37,8 +42,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-22T20:20:24.441Z"
+    author: "CODER"
+    state: "ok"
+    note: "642 Calc and64 related scenarios pass;142 Calc and2 changed shared owners raw100 S/B/F/L;2 Chromium/Worker cases,4097 native rows/138 original objects,15 gates,production build and actual UI history/ODS reopen pass. Immutable source-pinned audit passes."
+  -
+    type: "status"
+    at: "2026-10-22T20:20:25.050Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: pin the verified range implementation and immutable evidence for evaluation."
 doc_version: 3
-doc_updated_at: "2026-10-22T20:20:04.489Z"
+doc_updated_at: "2026-10-22T20:20:25.050Z"
 doc_updated_by: "CODER"
 description: "Block73 dependent on72: implement native local-A1/ODFF double-reference compilation/output,real area dependency notifications through ScBroadcastArea/Slot/SlotMachine and ScDocument lifetime,then aggregate range traversal through actual RangeColumnSpanSet/NumericCellAccumulator and native array summation. Do not flatten ranges into individual cell listeners or use a browser evaluator. Verify liveSUMrange edits,errors,history,large sparse ranges and ODS/browser reopen. Preserve source slot distribution,bulk/deferred erasure and default non-grouped semantics;unported advanced modes stay explicit. Scope up to80source/test/registry/probe paths. Calc and changed shared100;full checkpoint80."
 sections:
@@ -66,6 +84,39 @@ sections:
     Result:pass.
     Evidence:actual mounted formula SUM(A1:A3)+AVERAGE(A1:A3)+SUMSQ(A1:A3)+PRODUCT(A1:A3) gives91,source edit gives220,Undo91,Redo220;fresh stored ODS reopen retains220 and original formula source. Screenshots inspected. Immutable archive audit verifies85source hashes,all positive raw coverage counters,complete test/e2e/gate results,original numeric streams and browser snapshots. git diff --check passes;branch remains calc.
     Scope:approved block73 only. Full all-application checkpoint next80;goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-22T20:20:24.441Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 642 Calc and64 related scenarios pass;142 Calc and2 changed shared owners raw100 S/B/F/L;2 Chromium/Worker cases,4097 native rows/138 original objects,15 gates,production build and actual UI history/ODS reopen pass. Immutable source-pinned audit passes.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T20:20:04.489Z, excerpt_hash=sha256:24560f86393b4293965ced8aa6d5ba1addc6c9fc2681e0cad21f94b4ddfd3cb6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610221740-98YRBY/blueprint/resolved-snapshot.json
+    - old_digest: 3df2c4aeaec7c24a9c1dcdaa37d7b3f1fc933ed904972f5836f815566d5481bc
+    - current_digest: 3df2c4aeaec7c24a9c1dcdaa37d7b3f1fc933ed904972f5836f815566d5481bc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221740-98YRBY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610221740-98YRBY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task-owned implementation commits only;preserve integrated user changes."
   Findings: |-
     Block73 implements native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,ordinary scalar intersection,and default SUM/SUMSQ/PRODUCT/AVERAGE ranges. Actual ScBroadcastArea/Slot/SlotMachine own logarithmic geometry,shared reciprocal listeners,bulk/deferred erasure,reference updates and document destruction. Native column actions,ScValueIterator,ParseBlock and original portable array summation consume real typed stores. Range subscriptions are not expanded into individual-cell registrations. The independent5000-row import/autosave case remains in Calc;the human's actual5000-row filename is still unknown.
@@ -129,6 +180,39 @@ Command:playwright-cli -s=calc71 input/edit/Undo/Redo/Meta+s/reload/open; node .
 Result:pass.
 Evidence:actual mounted formula SUM(A1:A3)+AVERAGE(A1:A3)+SUMSQ(A1:A3)+PRODUCT(A1:A3) gives91,source edit gives220,Undo91,Redo220;fresh stored ODS reopen retains220 and original formula source. Screenshots inspected. Immutable archive audit verifies85source hashes,all positive raw coverage counters,complete test/e2e/gate results,original numeric streams and browser snapshots. git diff --check passes;branch remains calc.
 Scope:approved block73 only. Full all-application checkpoint next80;goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-22T20:20:24.441Z — VERIFY — ok
+
+By: CODER
+
+Note: 642 Calc and64 related scenarios pass;142 Calc and2 changed shared owners raw100 S/B/F/L;2 Chromium/Worker cases,4097 native rows/138 original objects,15 gates,production build and actual UI history/ODS reopen pass. Immutable source-pinned audit passes.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T20:20:04.489Z, excerpt_hash=sha256:24560f86393b4293965ced8aa6d5ba1addc6c9fc2681e0cad21f94b4ddfd3cb6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610221740-98YRBY/blueprint/resolved-snapshot.json
+- old_digest: 3df2c4aeaec7c24a9c1dcdaa37d7b3f1fc933ed904972f5836f815566d5481bc
+- current_digest: 3df2c4aeaec7c24a9c1dcdaa37d7b3f1fc933ed904972f5836f815566d5481bc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221740-98YRBY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610221740-98YRBY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
