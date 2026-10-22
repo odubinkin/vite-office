@@ -1,10 +1,11 @@
 ---
 id: "202610221744-ACR55N"
 title: "Connect native Writer table sidebar metrics and alignment"
-status: "DOING"
+result_summary: "verified-202610221744-ACR55N"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-22T18:33:44.988Z"
+  updated_at: "2026-10-22T18:35:28.775Z"
   updated_by: "CODER"
-  note: "Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification."
+  note: "verified-202610221744-ACR55N"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Actual UInt32 row/column and UInt16 alignment plus signed spacing items reach native table/history owners; source constructor admission and native asymmetric width behavior are preserved and tested. Ordinary ODT output is inspected from Chromium downloads."
     - "Full application18259 cases pass; all four aggregate metrics100 for934 owners use matching-source merges and two independently complete current-owner replacements. Two stale browser expectations were repaired without weakening geometry assertions; eight affected cases and final desktop/mobile table cases pass."
-commit: null
+commit:
+  hash: "f0b30bfb14caeb55db12b97e407110c357475f46"
+  message: "🧩 ACR55N task: record complete verification and quality"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native table sidebar block and final verification checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610221744-ACR55N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification."
+  -
+    type: "verify"
+    at: "2026-10-22T18:35:28.775Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610221744-ACR55N"
+  -
+    type: "status"
+    at: "2026-10-22T18:35:28.934Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610221744-ACR55N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-22T18:33:45.065Z"
+doc_updated_at: "2026-10-22T18:35:28.934Z"
 doc_updated_by: "CODER"
 description: "Implement approved Table sidebar row height, current column width, alignment and lateral spacing through native typed slots and table owners; verify Undo/Redo and ODT consistency, then full suites and coverage and stop goal."
 sections:
@@ -119,6 +138,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-22T18:35:28.775Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610221744-ACR55N
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:33:45.065Z, excerpt_hash=sha256:b6f329276364ceee15fd07e50730943869f5fee5dab712a47a518aa90b887e19
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221744-ACR55N/blueprint/resolved-snapshot.json
+    - old_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+    - current_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221744-ACR55N
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610221744-ACR55N --result verified-202610221744-ACR55N --commit f0b30bfb14caeb55db12b97e407110c357475f46
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commits, preserving unrelated user changes; no branch integration."
   Findings: |-
@@ -139,6 +188,10 @@ sections:
     - Observation: Final source audit corrected SwTableFUNC construction-time format admission and added an actual cursor-entry regression. WRITER048 and WRITER049 document preserved native alignment-width/type and single-column coordinate asymmetries.
       Impact: Consumed horizontal flat table behavior is verified; full RTL/vertical/complex-table layout and remaining native Table toolbar groups remain unported or unverified, with no parity promotion.
       Resolution: Retain conservative runtime/provenance statuses, original save/open/recovery deviations, complete actual typed-slot/history/ODT wiring and current-source coverage evidence. Close only this task, then pause the overall goal as the user requested.
+extensions:
+  implementation_commit:
+    hash: "c9f836644a65154461bef163d75c217ca7cd7c4d"
+    message: "🧩 ACR55N feat: connect native table sidebar metrics and alignment"
 id_source: "generated"
 ---
 ## Summary
@@ -204,6 +257,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-22T18:35:28.775Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610221744-ACR55N
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:33:45.065Z, excerpt_hash=sha256:b6f329276364ceee15fd07e50730943869f5fee5dab712a47a518aa90b887e19
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221744-ACR55N/blueprint/resolved-snapshot.json
+- old_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+- current_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221744-ACR55N
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610221744-ACR55N --result verified-202610221744-ACR55N --commit f0b30bfb14caeb55db12b97e407110c357475f46
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
