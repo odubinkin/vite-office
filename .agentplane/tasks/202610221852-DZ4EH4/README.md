@@ -1,10 +1,11 @@
 ---
 id: "202610221852-DZ4EH4"
 title: "Connect Writer table cell alignment and row flow commands to native UI"
-status: "DOING"
+result_summary: "verified-202610221852-DZ4EH4"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-22T19:18:51.486Z"
+  updated_at: "2026-10-22T19:19:43.698Z"
   updated_by: "CODER"
-  note: "Native table flow slots and source UI verified:1452 related tests,156 changed mounted tests,35 final owner/UI tests,67 affected browser scenarios plus final2 docking/ODT scenarios pass. Exact-source incremental coverage100 across7 owners; all required scoped/static checks pass. Evidence output/playwright/writer-table-flow. Implementation bdc5ffd0f986; no full-suite rerun by approved cadence."
+  note: "verified-202610221852-DZ4EH4"
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "Alignment mixed selection remains all-false; headline execution ignores Boolean payload and preserves selected top-prefix admission; RowSplit consumes its native Boolean slot item with common/mixed toggle and table split gate; minimal height applies the complete native default frame-size item."
     - "Restored visible TableDialog caused legitimate selector ambiguity;44 existing test files now scope the unchanged command to their original sidebar. No product labels or native placements were changed to accommodate tests."
     - "Coverage audit reuses prior counts only for exact unchanged source spans after SHA256 verification. New/changed counters require fresh hits; all819 statements,627 branch arms,193 functions and742 lines pass."
-commit: null
+commit:
+  hash: "0cee0d3e60b9028f66a2014f45f7db6022987461"
+  message: "🧩 DZ4EH4 quality: record native table flow verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue approved Writer consistency work by wiring existing native table cell and row-flow owners into actual source UI commands; no planned goal stop."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610221852-DZ4EH4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native table flow slots and source UI verified:1452 related tests,156 changed mounted tests,35 final owner/UI tests,67 affected browser scenarios plus final2 docking/ODT scenarios pass. Exact-source incremental coverage100 across7 owners; all required scoped/static checks pass. Evidence output/playwright/writer-table-flow. Implementation bdc5ffd0f986; no full-suite rerun by approved cadence."
+  -
+    type: "verify"
+    at: "2026-10-22T19:19:43.698Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610221852-DZ4EH4"
+  -
+    type: "status"
+    at: "2026-10-22T19:19:43.837Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610221852-DZ4EH4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-22T19:18:51.563Z"
+doc_updated_at: "2026-10-22T19:19:43.837Z"
 doc_updated_by: "CODER"
 description: "Continue the approved Writer consistency goal: connect existing cell vertical alignment, row split, repeated heading rows and automatic row height owners through native command state, actual upstream menu/toolbar/sidebar placements, Undo/Redo and ODT. No planned goal stop."
 sections:
@@ -109,6 +128,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-22T19:19:43.698Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610221852-DZ4EH4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T19:18:51.563Z, excerpt_hash=sha256:42878fa05bcdd64f8bf099e2df41e0bf45a9e88d95e3dbf6929b8a3167476c29
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221852-DZ4EH4/blueprint/resolved-snapshot.json
+    - old_digest: 7254c6390b8056b99ed8fb8d65fba7906b3c622cd48ba09a07a8a9672a91502e
+    - current_digest: 7254c6390b8056b99ed8fb8d65fba7906b3c622cd48ba09a07a8a9672a91502e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221852-DZ4EH4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610221852-DZ4EH4 --result verified-202610221852-DZ4EH4 --commit 0cee0d3e60b9028f66a2014f45f7db6022987461
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commits while retaining user work and preceding ACR55N functionality. No integration or branch operations."
   Findings: |-
@@ -129,6 +178,10 @@ sections:
     - Observation: Final source configuration review found WriterWindowState.xcu tableobjectbar DockingArea=1; offapi ui/DockingArea.idl defines that as bottom above the status bar.
       Impact: The initial browser composition below the formatting toolbar did not preserve the native default docking location.
       Resolution: Move the contextual table toolbar below the canvas/sidebar and immediately above the status bar; add mounted sibling-order and real browser bounding-box assertions. Re-run affected UI, coverage and desktop/mobile flows.
+extensions:
+  implementation_commit:
+    hash: "bdc5ffd0f98662754cf92e4e0b87169e89cc3b6d"
+    message: "🧩 DZ4EH4 feat: connect native table flow slots and contextual controls"
 id_source: "generated"
 ---
 ## Summary
@@ -182,6 +235,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-22T19:19:43.698Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610221852-DZ4EH4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T19:18:51.563Z, excerpt_hash=sha256:42878fa05bcdd64f8bf099e2df41e0bf45a9e88d95e3dbf6929b8a3167476c29
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221852-DZ4EH4/blueprint/resolved-snapshot.json
+- old_digest: 7254c6390b8056b99ed8fb8d65fba7906b3c622cd48ba09a07a8a9672a91502e
+- current_digest: 7254c6390b8056b99ed8fb8d65fba7906b3c622cd48ba09a07a8a9672a91502e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221852-DZ4EH4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610221852-DZ4EH4 --result verified-202610221852-DZ4EH4 --commit 0cee0d3e60b9028f66a2014f45f7db6022987461
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
