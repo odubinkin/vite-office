@@ -1,10 +1,10 @@
 ---
 id: "202610222107-NCTYV6"
 title: "Implement native formula copying and shared-group lifetime"
-status: "TODO"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -25,11 +25,21 @@ verification:
   note: null
   attempts: 0
 commit: null
-comments: []
-events: []
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement native formula copy and shared-group prerequisites while preserving the committed74 UI checkpoint and its final verification requirements."
+events:
+  -
+    type: "status"
+    at: "2026-10-22T21:10:36.982Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement native formula copy and shared-group prerequisites while preserving the committed74 UI checkpoint and its final verification requirements."
 doc_version: 3
-doc_updated_at: "2026-10-22T21:08:49.762Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-22T21:10:36.982Z"
+doc_updated_by: "CODER"
 description: "Block75 kernel prerequisite for completing74 without flat clipboard-fill substitutes. Implement original ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,default document/clipboard/undo mode identity and shared formula group creation,splitting,ownership and listening over actual columns and native area broadcasters. Support the existing numeric/string/error/local-reference and aggregate slice;keep external/named/3D/matrix/device/OpenCL services explicit. Preserve source flags,logical sharing,member/code ownership and default behavior;JS GC replaces physical allocation only. No browser evaluator,formula-source reparse substitute,per-cell flattening of native groups or reduced-original probe facade. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,independent source vectors and genuine original native observations where feasible,browser/Worker and all static/build/source gates. Full all-app checkpoint80."
 sections:
   Summary: "Port native formula copy/clone and shared-group ownership/listening needed by internal clipboard fill and full range recalculation."
