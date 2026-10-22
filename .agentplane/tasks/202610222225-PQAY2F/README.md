@@ -1,10 +1,11 @@
 ---
 id: "202610222225-PQAY2F"
 title: "Canonicalize Writer paper formats and page geometry UI"
-status: "DOING"
+result_summary: "Canonical native paper formats and page geometry across Writer UI, history and ODT"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Current CUI source Reset/manual/select/orientation/ranges/1mm/larger-margin behavior and one-shot FillItemSet admission are independently tested. Preview is not incorrectly committed; changed margins preserve original uint16 narrowing. WRITER054/055/056 qualify suspected anomalies without native bug/parity claims."
     - "Current44 related files494 cases, final6 files133 cases,21 boundary cases and9 Chromium scenarios pass. Actual desktop/mobile menus, metric controls, preview, history, downloaded ODT/reopen, units and DOM-free Worker are covered.10 executable owners match current SHA and exact unchanged-span audit S891/B729/F184/L814 all100; raw partial coverage threshold failures remain explicit."
     - "12 app owners plus one tooling owner,16 test paths and canonical paired records are within plan; all declared local gates pass. Narrow native field/unit/host preparation edges retain neighboring negative checks. No classification/status/default promotion, fake config/printer service, network, merge or deliberate I/O policy change."
-commit: null
+commit:
+  hash: "f791f50bb11aeae024238ac7391ca13c1b040817"
+  message: "🧩 PQAY2F feat: canonicalize native paper formats and page geometry"
 comments:
   -
     author: "CODER"
     body: "Start: canonicalize original physical paper bridge, source catalog/page handlers and Writer page geometry, UI, history and ODT in writer using approved local sources and related checks."
+  -
+    author: "CODER"
+    body: "Verified: original paper catalogs and physical geometry now connect source handlers to Writer UI/history/ODT;494 related,133 focused,21 boundary and9 browser cases pass with strict10-owner coverage100 and all local gates. No full native printer/configuration claim. Goal remains active."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native paper/page slice at f791f50bb11a: current44 related files494 tests, final6 files133 tests,21 boundary tests and9 Chromium scenarios pass; exact unchanged-span10-owner audit S891/B729/F184/L814 all100 with raw partial threshold failures retained; all declared local gates pass. Full suite sixth-task cadence unchanged; native full-page/printer/config services unverified. Goal remains active."
+  -
+    type: "status"
+    at: "2026-10-22T23:20:13.925Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original paper catalogs and physical geometry now connect source handlers to Writer UI/history/ODT;494 related,133 focused,21 boundary and9 browser cases pass with strict10-owner coverage100 and all local gates. No full native printer/configuration claim. Goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-22T23:19:40.621Z"
+doc_updated_at: "2026-10-22T23:20:13.926Z"
 doc_updated_by: "CODER"
 description: "Connect original PaperInfo and SvxPaperInfo size/fitting contracts to native standard paper catalog, page dialog geometry and locale defaults; remove synthetic paper-format storage and A4 width workaround while retaining history and ODT physical values."
 sections:
