@@ -367,9 +367,9 @@ export class SwTextShell extends SwBaseShell {
     return this.target.ApplyAction(
       action,
       false,
-      /** Runs initial attribute reset without history cursor restoration. @param context - Original shell context. @returns Nothing. */
-      (context) => {
-        for (const child of actions) child.ApplyExact(context);
+      /** Runs initial attribute reset without history cursor restoration. @returns Nothing. */
+      () => {
+        for (const child of actions) child.ApplyExact();
       },
     );
   }

@@ -4,14 +4,18 @@ import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../tx
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwDoc } from "../doc/doc";
-import { SwHistory } from "./rolbck";
+import { SwRegHistory, SwHistory } from "./rolbck";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { getTextFormatCollNodes } from "../doc/docfmt";
 import { SwpHints } from "../txtnode/ndhints";
 import { clipHintOutsideRange } from "../txtnode/ndhints-range";
 import { AssertTextNodeRange } from "../txtnode/ndtxt-hints";
-import { resetFullParagraphAutoFormat, resetParagraphTextAttributes } from "../txtnode/txtedt";
+import {
+  ResetTextNodeHintItems,
+  resetFullParagraphAutoFormat,
+  resetParagraphTextAttributes,
+} from "../txtnode/txtedt";
 import {
   CopyTextFragment,
   CopyUndoFragment,
@@ -105,8 +109,10 @@ export class SwUndoAttr extends SwUndo {
   private readonly afterFragment: SwTextFragment;
   private readonly beforeFragment: SwTextFragment;
   private readonly changedWhich = new Set<number>();
+  private readonly directItems: SfxItemSet | undefined;
+  private directHistory: SwHistory | undefined;
 
-  /** Creates a direct-format action. @param paragraph - Target node. @param start - Formatted range start. @param beforeFragment - Original native fragment. @param afterFragment - Resulting native fragment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  /** Creates a direct-format action. @param paragraph - Target node. @param start - Formatted range start. @param beforeFragment - Original native fragment. @param afterFragment - Resulting native fragment. @param before - Cursor before formatting. @param after - Cursor after formatting. @param directItems - Full-node character set when the native paragraph branch applies. @returns Nothing. */
   public constructor(
     paragraph: SwTextNode,
     private readonly start: number,
@@ -114,14 +120,24 @@ export class SwUndoAttr extends SwUndo {
     afterFragment: SwTextFragment,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+    directItems?: SfxItemSet,
   ) {
     super("Character Formatting", before, after);
+    this.directItems = directItems?.Clone();
     this.m_rDoc = paragraph.GetDoc();
     this.m_nNode = paragraph.GetIndex();
     this.beforeFragment = CopyUndoFragment(beforeFragment);
-    this.afterFragment = CopyUndoFragment(afterFragment);
+    this.afterFragment =
+      directItems === undefined
+        ? CopyUndoFragment(afterFragment)
+        : {
+            text: beforeFragment.text,
+            hints:
+              ResetTextNodeHintItems(paragraph, beforeFragment.hints, directItems) ??
+              beforeFragment.hints.clone(),
+          };
     const families = new Set(
-      [...beforeFragment.hints.entries(), ...afterFragment.hints.entries()].map(
+      [...this.beforeFragment.hints.entries(), ...this.afterFragment.hints.entries()].map(
         /** Reads native ranged item identity. @param hint - Original snapshot attribute. @returns WhichId. */
         (hint) => hint.Which(),
       ),
@@ -129,14 +145,14 @@ export class SwUndoAttr extends SwUndo {
     for (const which of families) {
       const original = new SwpHints(
           paragraph.GetDoc().GetAttrPool(),
-          beforeFragment.hints.entries().filter(
+          this.beforeFragment.hints.entries().filter(
             /** Selects one original item family. @param hint - Snapshot attribute. @returns Whether selected. */
             (hint) => hint.Which() === which,
           ),
         ),
         replacement = new SwpHints(
           paragraph.GetDoc().GetAttrPool(),
-          afterFragment.hints.entries().filter(
+          this.afterFragment.hints.entries().filter(
             /** Selects one replacement family. @param hint - Snapshot attribute. @returns Whether selected. */
             (hint) => hint.Which() === which,
           ),
@@ -145,9 +161,10 @@ export class SwUndoAttr extends SwUndo {
     }
   }
 
-  /** Performs the initial family-only mutation without restoring a history cursor; full native ResetAttrs history remains unverified. @param context - Original shell-owned history context. @returns Nothing. */
-  public ApplyExact(context: SwUndoRedoContext): void {
-    this.ApplyAttributes(context, this.afterFragment);
+  /** Performs the initial family-only mutation without restoring a history cursor; full native ResetAttrs history remains unverified. @returns Nothing. */
+  public ApplyExact(): void {
+    if (this.directItems === undefined) this.ApplyAttributes(this.m_rDoc, this.afterFragment);
+    this.ApplyDirectItems(this.m_rDoc);
   }
 
   /** Reports changed range hints only. @returns Approximate payload units. */
@@ -157,32 +174,51 @@ export class SwUndoAttr extends SwUndo {
 
   /** Restores changed attributes without replacing text or splitting unrelated original owners. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    this.ApplyAttributes(context, this.beforeFragment);
+    if (this.directHistory !== undefined) {
+      this.directHistory.TmpRollback(context.GetDoc(), 0);
+      this.directHistory.SetTmpEnd(this.directHistory.Count());
+    }
+    this.ApplyAttributes(context.GetDoc(), this.beforeFragment);
   }
 
   /** Reapplies changed attributes while preserving native text and unrelated hint identities. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    this.ApplyAttributes(context, this.afterFragment);
+    if (this.directItems === undefined) this.ApplyAttributes(context.GetDoc(), this.afterFragment);
+    this.ApplyDirectItems(context.GetDoc());
   }
 
-  /** Applies the represented ranged item-family delta; complete native SwHistory/InsertItemSet remains unverified. @param context - Current graph. @param fragment - Attribute snapshot. @returns Nothing. */
-  private ApplyAttributes(context: SwUndoRedoContext, fragment: SwTextFragment): void {
-    const node = GetUndoTextNode(
-        context.GetDoc(),
-        this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
-      ),
+  /** Applies full-node character values through original attribute setters and registered old/reset history. @param document - Original document. @returns Nothing. */
+  private ApplyDirectItems(document: SwDoc): void {
+    if (this.directItems === undefined) return;
+    const node = GetUndoTextNode(document, this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode);
+    this.directHistory = new SwHistory();
+    const recorder = new SwRegHistory(node, node, this.directHistory);
+    try {
+      resetParagraphTextAttributes(node, false, this.directItems);
+      node.SetAttr(this.directItems);
+    } finally {
+      recorder.Dispose();
+    }
+  }
+
+  /** Applies the represented ranged item-family delta; complete native SwHistory/InsertItemSet remains unverified. @param document - Current graph. @param fragment - Attribute snapshot. @returns Nothing. */
+  private ApplyAttributes(document: SwDoc, fragment: SwTextFragment): void {
+    const node = GetUndoTextNode(document, this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode),
       end = this.start + GetUndoFragmentLength(fragment);
     AssertTextNodeRange(node, this.start, end);
+    if (this.changedWhich.size === 0) return;
     const hints = node.GetOrCreateSwpHints();
     for (const hint of hints.entries()) {
       if (
         !this.changedWhich.has(hint.Which()) ||
-        hint.GetEnd() <= this.start ||
-        hint.GetStart() >= end
+        (end === this.start
+          ? hint.GetStart() !== this.start || hint.GetEnd() !== end
+          : hint.GetEnd() <= this.start || hint.GetStart() >= end)
       )
         continue;
       hints.DeleteAtPos(hints.entries().indexOf(hint));
-      for (const retained of clipHintOutsideRange(hint, this.start, end)) hints.Insert(retained);
+      if (end !== this.start)
+        for (const retained of clipHintOutsideRange(hint, this.start, end)) hints.Insert(retained);
     }
     for (const hint of fragment.hints.entries()) {
       if (!this.changedWhich.has(hint.Which())) continue;
@@ -192,9 +228,7 @@ export class SwUndoAttr extends SwUndo {
       hints.Insert(replacement);
     }
     hints.MergePortions(node);
-    context
-      .GetDoc()
-      .NotifyModelChange({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
+    document.NotifyModelChange({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
   }
 }
 

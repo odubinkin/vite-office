@@ -78,7 +78,7 @@ import {
   CreateTextNodeFontSizeFragment,
   CreateTextNodeColorFragment,
 } from "./ndtxt-hints";
-import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
+import * as thints from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -187,17 +187,17 @@ export class SwTextNode extends SwContentNode {
     end: number,
     mode = SetAttrMode.DEFAULT,
   ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
-    return InsertTextNodeItem(this, attr, start, end, mode);
+    return thints.InsertTextNodeItem(this, attr, start, end, mode);
   }
 
   /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
   public ClearSwpHintsArr(deleteFields: boolean): void {
-    ClearTextNodeHints(this, deleteFields);
+    thints.ClearTextNodeHints(this, deleteFields);
   }
 
   /** Converts direct character items into native ranged automatic styles before joining. @param node - Surviving paragraph. @returns Nothing. */
   public FormatToTextAttr(node: SwTextNode): void {
-    FormatTextNodeToTextAttr(this, node);
+    thints.FormatTextNodeToTextAttr(this, node);
     if (node.GetOrCreateSwpHints().CanBeDeleted()) node.pSwpHints = undefined;
   }
 
@@ -812,6 +812,10 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
+  /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @returns Whether any state was collected. */
+  public GetParaAttr(set: SfxItemSet, start: number, end: number, onlyText = false): boolean {
+    return thints.GetTextNodeParaAttr(this, set, start, end, onlyText);
+  }
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
   public GetCharacterItemsAt(offset: number): SfxItemSet {
     return GetTextNodeCharacterItems(this, offset);

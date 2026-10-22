@@ -15,14 +15,8 @@ export function StrikeoutText({
   const element = useRef<HTMLSpanElement>(null);
   useLayoutEffect(
     /** Measures genuine browser font/fragment metrics; releases font and resize subscriptions. @returns Cleanup or nothing for an unpainted enum. */ () => {
-      const target = element.current;
-      if (
-        target === null ||
-        value === S.STRIKEOUT_NONE ||
-        value === S.STRIKEOUT_DONTKNOW ||
-        value < 0
-      )
-        return;
+      const target = element.current as HTMLSpanElement;
+      if (value === S.STRIKEOUT_NONE || value === S.STRIKEOUT_DONTKNOW || value < 0) return;
       const paint =
         /** Repaints native horizontal strikeout against actual font metrics. @returns Nothing. */ () => {
           const style = getComputedStyle(target);

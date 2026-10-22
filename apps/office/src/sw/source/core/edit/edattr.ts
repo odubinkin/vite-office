@@ -1,8 +1,6 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
 import { SwEditShell as SwNumberingEditShell } from "./ednumber";
-import { SwAttrIter } from "../text/itratr";
-import { getWriterSelectedTextRanges } from "../crsr/pam";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SwDoc } from "../doc/doc";
@@ -173,45 +171,48 @@ export abstract class SwEditShell extends SwNumberingEditShell {
   public abstract SetPendingCharacterItems(items: SfxItemSet): void;
   /** Publishes a native selection/typing state change. @returns Nothing. */
   public abstract NotifySelectionChanged(): void;
-  /** Collects represented character item state into the original caller-owned set. @param state - Requested native character ranges. @returns Whether lookup remained within source limits. */
+  /** Collects represented native character state from the current original cursor. @param state - Caller-owned requested set. @returns Whether source lookup limits admit it. */
   public GetCurAttr(state: SfxItemSet): boolean {
-    const cursors = [...this.GetCursor().GetRingContainer()];
-    if (
-      cursors.length > 10000 ||
-      cursors.some(
-        /** Preserves native node-span lookup limit. @param cursor - Original cursor. @returns Whether too large. */
-        (cursor) => cursor.End().GetNodeIndex() - cursor.Start().GetNodeIndex() >= 10000,
-      )
-    ) {
+    return this.GetPaMAttr(this.GetCursor(), state);
+  }
+  /** Preserves source ring/node traversal, initial versus merged sets and10000 lookup limits for represented text nodes. Original character-style-at-label and merged/graphic/OLE branches remain unrepresented. @param cursor - Original ring head. @param state - Caller-owned character set. @returns Whether source limits admit lookup. */
+  public GetPaMAttr(cursor: SwPaM, state: SfxItemSet): boolean {
+    if ([...this.GetCursor().GetRingContainer()].length > 10000) {
       state.ClearItem();
       return false;
     }
-    for (const [first, last] of state.GetRanges())
-      for (let which = first; which <= last; which++) this.GetCurrentCharacterItem(state, which);
-    return true;
-  }
-  /** Aggregates one complete item from represented original text portions. @param state - Destination. @param which - Character identity. @returns Nothing. */
-  private GetCurrentCharacterItem(state: SfxItemSet, which: number): void {
-    const ranges = getWriterSelectedTextRanges(this.GetCursor());
-    if (ranges === undefined) {
-      state.Put(this.GetPendingCharacterItems().Get(which));
-      return;
-    }
-    for (const range of ranges) {
-      const iterator = new SwAttrIter(range.node);
-      for (let offset = range.start; offset < range.end;) {
-        iterator.Seek(offset);
-        const item = iterator.GetAttrHandler().ReadItem(which);
-        const previous = state.GetItemIfSet(which, false);
-        if (previous !== undefined && !previous.equals(item)) {
-          state.InvalidateItem(which);
-          return;
+    const local = new SfxItemSet(state.GetPool(), state.GetRanges());
+    let target = state;
+    for (const current of cursor.GetRingContainer()) {
+      if (current.IsInFrontOfLabel()) continue;
+      const start = current.Start(),
+        end = current.End();
+      if (end.GetNodeIndex() - start.GetNodeIndex() >= 10000) {
+        state.ClearItem();
+        return false;
+      }
+      for (let index = start.GetNodeIndex(); index <= end.GetNodeIndex(); index++) {
+        const node = this.GetDoc().GetNodes().at(index);
+        if (node instanceof SwTextNode) {
+          node.GetParaAttr(
+            target,
+            index === start.GetNodeIndex() ? start.GetContentIndex() : 0,
+            index === end.GetNodeIndex() ? end.GetContentIndex() : node.Len(),
+          );
+          if (target !== state) state.MergeValues(local);
+          if (local.Count()) local.ClearItem();
         }
-        state.Put(item);
-        offset = Math.min(range.end, iterator.GetNextAttr());
+        target = local;
       }
     }
-    if (state.GetItemState(which, false) !== SfxItemState.SET) state.InvalidateItem(which);
-    return;
+    // The browser's existing caret typing-owner replaces the native typing-attribute overlay.
+    if (
+      cursor === this.GetCursor() &&
+      !cursor.IsMultiSelection() &&
+      (!cursor.HasMark() || cursor.Start().compare(cursor.End()) === 0) &&
+      !cursor.IsInFrontOfLabel()
+    )
+      state.PutSet(this.GetPendingCharacterItems());
+    return true;
   }
 }

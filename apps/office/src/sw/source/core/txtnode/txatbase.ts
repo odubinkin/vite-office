@@ -482,6 +482,10 @@ export function projectWriterCharacterAttributes(
   const highlight =
     items.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, true);
+  const strikeout = get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem;
+  const authoredStrikeout =
+    items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
@@ -490,8 +494,8 @@ export function projectWriterCharacterAttributes(
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
-    ...((get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetBoolValue()
-      ? { strikeout: (get(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetStrikeout() }
+    ...(authoredStrikeout !== undefined || strikeout.GetBoolValue()
+      ? { strikeout: strikeout.GetStrikeout() }
       : {}),
   };
 }

@@ -39,6 +39,71 @@ async function open(page: Page) {
   return first;
 }
 for (const width of [1280, 390]) {
+  test(`Empty selected cells retain native strikethrough for typing and ODT width=${width}`, /** Checks empty-node ownership through actual browser commands and ODT. @param fixtures - Fixtures. @param fixtures.page - Browser. @param info - Artifacts. @returns Completion. */ async ({
+    page,
+  }, info) => {
+    await page.setViewportSize({ width, height: 900 });
+    const doc = new SwDoc(),
+      table = doc.nodes.MakeTableNode("Empty strikeout");
+    table.AddColumnWidth(3000);
+    table.AddColumnWidth(3000);
+    doc.nodes.AppendTableRow(table, 2);
+    const buffer = Buffer.from(writeOdtDocument(doc, { title: "Empty native strikeout" }));
+    doc.Dispose();
+    await page.goto("/writer");
+    await page.getByRole("button", { name: "Open", exact: true }).click();
+    await page.getByRole("tab", { name: "On computer" }).click();
+    await page.getByLabel("Browse").setInputFiles({
+      buffer,
+      mimeType: "application/vnd.oasis.opendocument.text",
+      name: "empty-strikeout.odt",
+    });
+    const first = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true });
+    await first.click();
+    await page
+      .getByRole("toolbar", { name: "Writer table toolbar" })
+      .getByRole("button", { name: "Select Table", exact: true })
+      .click();
+    const command = page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("group", { name: "Font Effects" })
+      .getByRole("button", { name: "Strikethrough", exact: true });
+    await expect(command).toHaveAttribute("aria-pressed", "false");
+    await command.click();
+    await expect(command).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Undo", exact: true }).click();
+    await expect(command).toHaveAttribute("aria-pressed", "false");
+    await page.getByRole("button", { name: "Redo", exact: true }).click();
+    await expect(command).toHaveAttribute("aria-pressed", "true");
+    await first.click();
+    await page.keyboard.type("A");
+    await expect(first).toHaveText("A");
+    await expect(first.locator('[data-native-strikeout="1"]')).toHaveCSS(
+      "background-image",
+      /data:image\/png/,
+    );
+    const pending = page.waitForEvent("download");
+    await page.getByRole("menuitem", { name: "File", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
+    await page.getByRole("button", { name: "Download ODT", exact: true }).click();
+    const artifact = info.outputPath("empty-strikeout.odt");
+    await (await pending).saveAs(artifact);
+    const restored = await readOdtDocument(new Uint8Array(await readFile(artifact)), {
+      title: "Empty native strikeout",
+    });
+    try {
+      const boxes = restored.document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes();
+      expect(
+        boxes?.map(
+          /** Reads complete actual native paragraph items. @param box - Original cell. @returns Enum. */ (
+            box,
+          ) => (box.GetParagraphs()[0]?.GetAttr(WHICH) as SvxCrossedOutItem).GetStrikeout(),
+        ),
+      ).toEqual([S.STRIKEOUT_SINGLE, S.STRIKEOUT_SINGLE]);
+    } finally {
+      restored.document.Dispose();
+    }
+  });
   test(`Native strikethrough command, history, paint and ODT width=${width}`, /** Verifies original enum data and browser interactions without private app ports. @param fixtures - Fixtures. @param fixtures.page - Browser. @param info - Artifact locations. @returns Completion. */ async ({
     page,
   }, info) => {

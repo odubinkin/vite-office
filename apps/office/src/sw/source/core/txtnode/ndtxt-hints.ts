@@ -172,18 +172,7 @@ export function GetTextNodeCharacterItems(node: SwTextNode, offset: number): Sfx
   if (!Number.isInteger(offset) || offset < 0 || offset > node.Len())
     throw new Error("Writer character-format caret is outside the text node.");
   const items = new NativeItemSet(node.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
-  const inheritance: SfxItemSet[] = [];
-  for (
-    let source: SfxItemSet | undefined = node.GetSwAttrSet();
-    source;
-    source = source.GetParent()
-  )
-    inheritance.unshift(source);
-  for (const source of inheritance) items.PutSet(source);
-  if (node.Len() === 0) return items;
-  const characterOffset = offset === 0 ? 0 : offset - 1;
-  const hint = node.GetTextAttrAt(characterOffset, RES_TXTATR_AUTOFMT);
-  if (hint?.format instanceof SwFormatAutoFormat) items.PutSet(hint.format.GetStyleHandle());
+  node.GetParaAttr(items, offset, offset);
   return items;
 }
 

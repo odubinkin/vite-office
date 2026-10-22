@@ -49,7 +49,8 @@
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside RES_TXTATR_AUTOFMT, SwTextAttr, SwTextAttr::SwTextAttr, SwTextAttr::~SwTextAttr and the bounded RES_TXTATR_AUTOFMT, WriterCharacterAttributes, SwFormatAutoFormat contract remain intentionally omitted.",
-      "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending."
+      "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending.",
+      "TaskN700C9 follow-up preserves authored numeric NONE over inherited DOUBLE at the existing character-value projection boundary and complete native enum values. Mounted WriterWorkbench verifies source Font Effects order, body/numbering paint, command and undo/redo. Writer pool retains its registered-default bridge; complete generic user-default item-info routing remains unverified. No classification, semantic state or broad native parity promotion."
     ],
     "preservedResponsibilities": [
       "Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.",
