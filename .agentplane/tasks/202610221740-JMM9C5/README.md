@@ -4,7 +4,7 @@ title: "Compile and evaluate native aggregate functions through Calc formula inp
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,16 +18,21 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-22T18:47:10.733Z"
+  updated_by: "CODER"
+  note: "617 Calc cases and46 related cases pass;136Calc and2shared owners raw100 coverage;2browser/Worker cases,2050native rows/138objects and15gates pass;immutable evidence audit verifies actual UI save/reopen."
   attempts: 0
-commit: null
+commit:
+  hash: "54c876ac7cdd227be02f8b0ab631aa36f29aa3a8"
+  message: "🧩 JMM9C5 calc: compile native aggregate formulas with compensated evaluation"
 comments:
   -
     author: "CODER"
     body: "Start: implement native aggregate function argument compilation and compensated scalar/reference execution with source-backed probes and live Calc UI tests."
+  -
+    author: "CODER"
+    body: "Start: pin the verified aggregate implementation and immutable evidence before the evaluator closure gate."
 events:
   -
     type: "status"
@@ -36,8 +41,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native aggregate function argument compilation and compensated scalar/reference execution with source-backed probes and live Calc UI tests."
+  -
+    type: "verify"
+    at: "2026-10-22T18:47:10.733Z"
+    author: "CODER"
+    state: "ok"
+    note: "617 Calc cases and46 related cases pass;136Calc and2shared owners raw100 coverage;2browser/Worker cases,2050native rows/138objects and15gates pass;immutable evidence audit verifies actual UI save/reopen."
+  -
+    type: "status"
+    at: "2026-10-22T18:47:11.004Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: pin the verified aggregate implementation and immutable evidence before the evaluator closure gate."
 doc_version: 3
-doc_updated_at: "2026-10-22T18:46:43.114Z"
+doc_updated_at: "2026-10-22T18:47:11.004Z"
 doc_updated_by: "CODER"
 description: "Block72: implement shared native variable-argument Factor grammar,consumedSUM/SUMSQ/PRODUCT/AVERAGE symbols,argument scanning and native compensated aggregation for numeric and single-reference operands,with live recalculation,errors,history and ODS/browser integration. Port actual KahanSum methods with original normal/ASan native evidence. Range operands require native area broadcast ownership and are the next dependent block,not flattened to cell lists or browser computations. Scope up to80intentional implementation/test/registry/probe paths including existing invalid-input fixtures that currently use SUM(A1). Require unchanged Calc100 and changed shared owners100;no full all-app before80."
 sections:
@@ -50,6 +68,39 @@ sections:
     Result: pass. Calc617tests/183files/136owners;related46tests/12files/2sharedowners. Raw positive counters and summary S/B/F/L are100% in both profiles. Calc S11289/B7026/F2074/L10140;shared S183/B127/F19/L165. No pending/failed scenarios. Two Chromium/Worker specs pass with no skip/retry/flaky result. All15gates pass: types,targeted intentional-source lint,format,dependencies,JSDoc,size,tree,provenance,registry,Calcresources,Writerresources,production/static,native,routing,doctor.
     Evidence: evidence/audit.mjs,acceptance.json,raw-results.json.gz. Re-running the audit checks source hashes,archived results,all raw positive counters,2050matching native normal/ASan observation rows and138verified original objects. Native full-source profile is portable non-SSE2;source input pins remain9bc445578031fecf56086729d8e4940c77e14d65. Cases0/1 preserve the cancellation consequence recorded as CALC-249.
     Scope: actual shared Factor variable-argument grammar,Calc scanning/RPN/string output,native scalar/single-reference SUM/SUMSQ/PRODUCT/AVERAGE,Kahan operations and numeric cell predicate. Real UI input/Undo/Redo/live edits,Cmd+S and primary ODS save/reload/open retain the same formula source and22result. Native range-area ownership and range aggregation remain dependent73. Full all-app checkpoint remains80.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-22T18:47:10.733Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 617 Calc cases and46 related cases pass;136Calc and2shared owners raw100 coverage;2browser/Worker cases,2050native rows/138objects and15gates pass;immutable evidence audit verifies actual UI save/reopen.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:46:43.114Z, excerpt_hash=sha256:9b5a121a3a32e1d32bdb27bb3317bad6b70347c0ffcb701d8267630a9cc389ca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610221740-JMM9C5/blueprint/resolved-snapshot.json
+    - old_digest: 49d5bc10e5071c2af136667a237ee26e83c2f31e82c7981efc9d8d0576f626e5
+    - current_digest: 49d5bc10e5071c2af136667a237ee26e83c2f31e82c7981efc9d8d0576f626e5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221740-JMM9C5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610221740-JMM9C5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commits;preserve user integration and other work."
   Findings: |-
     Block72 completes the approved scalar/single-reference aggregate slice and preserves full goal scope through dependent202610221740-98YRBY for ranges. English/ODFF source serialization and native argument byte255 bounds are represented. Existing invalid-input scenarios now use UNPORTED(A1) while retaining their failure/history assertions. Other functions,range/named/external/matrix operands,locale string-to-number conversion and nondefault subtotal/number-format services remain unavailable.
@@ -80,6 +131,39 @@ Command: Calc Vitest config with Istanbul coverage; shared formula tests plus ag
 Result: pass. Calc617tests/183files/136owners;related46tests/12files/2sharedowners. Raw positive counters and summary S/B/F/L are100% in both profiles. Calc S11289/B7026/F2074/L10140;shared S183/B127/F19/L165. No pending/failed scenarios. Two Chromium/Worker specs pass with no skip/retry/flaky result. All15gates pass: types,targeted intentional-source lint,format,dependencies,JSDoc,size,tree,provenance,registry,Calcresources,Writerresources,production/static,native,routing,doctor.
 Evidence: evidence/audit.mjs,acceptance.json,raw-results.json.gz. Re-running the audit checks source hashes,archived results,all raw positive counters,2050matching native normal/ASan observation rows and138verified original objects. Native full-source profile is portable non-SSE2;source input pins remain9bc445578031fecf56086729d8e4940c77e14d65. Cases0/1 preserve the cancellation consequence recorded as CALC-249.
 Scope: actual shared Factor variable-argument grammar,Calc scanning/RPN/string output,native scalar/single-reference SUM/SUMSQ/PRODUCT/AVERAGE,Kahan operations and numeric cell predicate. Real UI input/Undo/Redo/live edits,Cmd+S and primary ODS save/reload/open retain the same formula source and22result. Native range-area ownership and range aggregation remain dependent73. Full all-app checkpoint remains80.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-22T18:47:10.733Z — VERIFY — ok
+
+By: CODER
+
+Note: 617 Calc cases and46 related cases pass;136Calc and2shared owners raw100 coverage;2browser/Worker cases,2050native rows/138objects and15gates pass;immutable evidence audit verifies actual UI save/reopen.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:46:43.114Z, excerpt_hash=sha256:9b5a121a3a32e1d32bdb27bb3317bad6b70347c0ffcb701d8267630a9cc389ca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610221740-JMM9C5/blueprint/resolved-snapshot.json
+- old_digest: 49d5bc10e5071c2af136667a237ee26e83c2f31e82c7981efc9d8d0576f626e5
+- current_digest: 49d5bc10e5071c2af136667a237ee26e83c2f31e82c7981efc9d8d0576f626e5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221740-JMM9C5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610221740-JMM9C5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
