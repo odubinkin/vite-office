@@ -1,0 +1,73 @@
+{
+  "task": "202610221715-X5TEM5",
+  "archiveSha256": "b54bdb36f8a92848405985c2f249ce05e9fcebf60f7677778545279e2800cb39",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "71d9e2b42d571426927d2f84d6656b379d1191f984603b423c36152696d75efc"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-sparse-export.test.ts",
+      "sha256": "0ae88f4eedecdf71e28c470901df62b6424aa26f482ce2b56e12b442d6b2cb2f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-large-ods.test.ts",
+      "sha256": "fdc0e59ccda9c96ae8b0a51e3abf319d9ad006c82c8af75c56ec8afc11fb497c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.ts.json",
+      "sha256": "b9f291e6339cdcc3b23ca74d619c55186d476d38dcc652d474e88a0bc6618727"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.ts.json",
+      "sha256": "84bc292af7669dfb7ee973faaaa6d065a19c51fff1ae2595ec97ebadce658b5a"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+      "sha256": "97ff694a5bb9ea572facedf505ffc0c72196ca4ca0735341211057ddba71f69d"
+    },
+    {
+      "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+      "sha256": "e85412e8ee12a8f6bb76bc3aa1cb26bb2f84836e754632bb848fa3430410722a"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task71-before.log",
+    "output/playwright/task71-after.log",
+    "output/playwright/task71-sparse-repro.ts",
+    "output/playwright/task71-original-xmlexprt.txt",
+    "output/playwright/task71-large-source.xml",
+    "output/playwright/task71-large-output.ods",
+    "output/playwright/task71-independent-5000.ods",
+    "output/playwright/task71-input-package.ts",
+    "output/playwright/task71-xml-results.json",
+    "output/playwright/task71-xml-coverage/coverage-final.json",
+    "output/playwright/task71-xml-coverage/coverage-summary.json",
+    "output/playwright/task71-calc-results.json",
+    "output/playwright/task71-calc-coverage/coverage-final.json",
+    "output/playwright/task71-calc-coverage/coverage-summary.json",
+    "output/playwright/task71-gate-exits.json",
+    "output/playwright/task71-browser-imported.txt",
+    "output/playwright/task71-browser-stored-list.txt",
+    "output/playwright/task71-browser-reopened-last.txt",
+    "output/playwright/task71-browser-reopened-last.png",
+    "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+    "vendor/libreoffice-reference/sc/source/filter/xml/XMLStylesExportHelper.cxx",
+    "output/playwright/task71-gate-types.log",
+    "output/playwright/task71-gate-lint.log",
+    "output/playwright/task71-gate-format.log",
+    "output/playwright/task71-gate-dependencies.log",
+    "output/playwright/task71-gate-jsdoc.log",
+    "output/playwright/task71-gate-size.log",
+    "output/playwright/task71-gate-tree.log",
+    "output/playwright/task71-gate-provenance.log",
+    "output/playwright/task71-gate-registry.log",
+    "output/playwright/task71-gate-calc-resources.log",
+    "output/playwright/task71-gate-writer-resources.log",
+    "output/playwright/task71-gate-static.log",
+    "output/playwright/task71-gate-routing.log",
+    "output/playwright/task71-gate-doctor.log"
+  ],
+  "finding": "Independent5000row1024column input reproduces the identical default export-size error before the patch. Same source input exports1475262bytes after native equal-style grouping. All10000nonempty values plus geometry survive real import/autosave/reopen. Original human5000row filename remains unspecified;no claim that its other unsupported ODF features have been checked.",
+  "nativeComparison": "Source-inspected ScXMLExport::WriteRowContent equal-style empty-range merging and native attribute row-boundary reuse. Full native validations,default style index owners,objects and rich/number format services remain outside this scalar export slice."
+}
