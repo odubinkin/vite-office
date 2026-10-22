@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610221852-DZ4EH4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-22T19:18:52.342Z",
+  "verdict": "pass",
+  "summary": "Native cell/row-flow commands are connected through existing Sfx and document owners; source toolbar order and bottom docking are preserved and scoped regressions pass.",
+  "evaluated_sha": "bdc5ffd0f98662754cf92e4e0b87169e89cc3b6d",
+  "blueprint_digest": "7254c6390b8056b99ed8fb8d65fba7906b3c622cd48ba09a07a8a9672a91502e",
+  "findings": [
+    "Alignment mixed selection remains all-false; headline execution ignores Boolean payload and preserves selected top-prefix admission; RowSplit consumes its native Boolean slot item with common/mixed toggle and table split gate; minimal height applies the complete native default frame-size item.",
+    "Restored visible TableDialog caused legitimate selector ambiguity;44 existing test files now scope the unchanged command to their original sidebar. No product labels or native placements were changed to accommodate tests.",
+    "Coverage audit reuses prior counts only for exact unchanged source spans after SHA256 verification. New/changed counters require fresh hits; all819 statements,627 branch arms,193 functions and742 lines pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610221852-DZ4EH4/README.md",
+    "output/playwright/writer-table-flow/incremental-coverage-audit.json",
+    "output/playwright/writer-table-flow/related-coverage-fixed.log",
+    "output/playwright/writer-table-flow/changed-tests-final.log",
+    "output/playwright/writer-table-flow/browser-final.log",
+    "output/playwright/writer-table-flow/browser-docking-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Heading row lookup remains bounded to represented horizontal table frame graphs; full content layout, nested/RTL/vertical and protected/deleted-table shell parity remain unverified. Metadata does not promote parity status."
+  ]
+}
