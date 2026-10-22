@@ -1,10 +1,11 @@
 ---
 id: "202610221740-JMM9C5"
 title: "Compile and evaluate native aggregate functions through Calc formula input"
-status: "DOING"
+result_summary: "Compile native aggregate formulas with compensated scalar and single-reference execution,live recalculation,history and ODS persistence"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: pin the verified aggregate implementation and immutable evidence before the evaluator closure gate."
+  -
+    author: "CODER"
+    body: "Verified: native aggregate input and scalar/reference evaluation pass617Calc and46related scenarios at100percent coverage,with original native and real browser persistence evidence."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: pin the verified aggregate implementation and immutable evidence before the evaluator closure gate."
+  -
+    type: "status"
+    at: "2026-10-22T18:48:01.793Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native aggregate input and scalar/reference evaluation pass617Calc and46related scenarios at100percent coverage,with original native and real browser persistence evidence."
 doc_version: 3
-doc_updated_at: "2026-10-22T18:47:11.004Z"
+doc_updated_at: "2026-10-22T18:48:01.794Z"
 doc_updated_by: "CODER"
 description: "Block72: implement shared native variable-argument Factor grammar,consumedSUM/SUMSQ/PRODUCT/AVERAGE symbols,argument scanning and native compensated aggregation for numeric and single-reference operands,with live recalculation,errors,history and ODS/browser integration. Port actual KahanSum methods with original normal/ASan native evidence. Range operands require native area broadcast ownership and are the next dependent block,not flattened to cell lists or browser computations. Scope up to80intentional implementation/test/registry/probe paths including existing invalid-input fixtures that currently use SUM(A1). Require unchanged Calc100 and changed shared owners100;no full all-app before80."
 sections:
