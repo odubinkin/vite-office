@@ -103,6 +103,7 @@ const specs: readonly CommandSpec[] = [
   { browserControlLabel: "Paragraph style", commandUrl: ".uno:StyleApply", semantics: "radio" },
   { commandUrl: ".uno:TableDialog", showsDialog: true },
   { commandUrl: ".uno:SetRowHeight", showsDialog: true },
+  { commandUrl: ".uno:SetColumnWidth", showsDialog: true },
   { commandUrl: ".uno:CellVertTop", semantics: "check" },
   { commandUrl: ".uno:CellVertCenter", semantics: "check" },
   { commandUrl: ".uno:CellVertBottom", semantics: "check" },
@@ -177,6 +178,7 @@ const commandAliases = {
   tableRightSpace: ".uno:TableRightSpace",
 
   setRowHeight: ".uno:SetRowHeight",
+  setColumnWidth: ".uno:SetColumnWidth",
   cellVertTop: ".uno:CellVertTop",
   cellVertCenter: ".uno:CellVertCenter",
   cellVertBottom: ".uno:CellVertBottom",
@@ -259,6 +261,7 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:TableRightSpace": "CAP-0137",
 
   ".uno:SetRowHeight": "CAP-0137",
+  ".uno:SetColumnWidth": "CAP-0137",
   ".uno:CellVertTop": "CAP-0137",
   ".uno:CellVertCenter": "CAP-0137",
   ".uno:CellVertBottom": "CAP-0137",

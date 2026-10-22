@@ -111,3 +111,19 @@ it("captures format admission at construction rather than retargeting when a tab
   after.InitTabCols();
   expect(after.GetColCount()).toBe(1);
 });
+
+it("limits native visible widths by only the adjacent columns, including hidden and single intervals", /** Checks literal first/middle/last neighbor capacity without replacing source arithmetic. @returns Nothing. */ () => {
+  const f = fixture();
+  expect(
+    [0, 1, 2].map(
+      /** Reads actual native maximum widths. @param column - Visible column. @returns Twips. */ (
+        column,
+      ) => f.manager.GetMaxColWidth(column),
+    ),
+  ).toEqual([2977, 5954, 4977]);
+  const hidden = fixture([1100, 3100], [true, false]);
+  expect([hidden.manager.GetMaxColWidth(0), hidden.manager.GetMaxColWidth(1)]).toEqual([
+    5977, 5977,
+  ]);
+  expect(fixture([]).manager.GetMaxColWidth(0)).toBe(6100);
+});

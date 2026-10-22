@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/ui/table/colwd.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/ui/table/colwd.cxx",
+    "localSymbols": [
+      "SwTableWidthDlg"
+    ],
+    "upstreamSymbols": [
+      "SwTableWidthDlg"
+    ],
+    "preservedResponsibilities": [
+      "Task AAX9TR ports native visible-column selector initialization, single-column minimum lock, adjacent-neighbor maximums, draft reset on numeric column change, Apply-time manager reinitialization and native uint16 ingress. Original shell, separator and document history owners remain authoritative. Native weld services, web-document preferences, nested/vertical/RTL layout and full dialog parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full native widget, Help service, web profile, nested/vertical/RTL and unrepresented table model obligations remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/ui/table/colwd.ts",
+          "marker": "SwTableWidthDlg"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/ui/table/colwd.cxx",
+          "marker": "SwTableWidthDlg"
+        }
+      ]
+    }
+  }
+}

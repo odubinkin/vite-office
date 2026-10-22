@@ -60,6 +60,7 @@
     "tableLeftSpace": ".uno:TableLeftSpace",
     "tableRightSpace": ".uno:TableRightSpace",
     "setRowHeight": ".uno:SetRowHeight",
+    "setColumnWidth": ".uno:SetColumnWidth",
     "cellVertTop": ".uno:CellVertTop",
     "cellVertCenter": ".uno:CellVertCenter",
     "cellVertBottom": ".uno:CellVertBottom",
@@ -1103,6 +1104,21 @@
       "shortcuts": [],
       "slotId": 20507
     },
+    ".uno:SetColumnWidth": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Column Width",
+      "label": "Column Width",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20508
+    },
     ".uno:CellVertTop": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1693,6 +1709,14 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SetRowHeight",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SetColumnWidth",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -4700,14 +4724,6 @@
       "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetColumnWidth",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -6924,14 +6940,6 @@
       "classification": "X",
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetColumnWidth",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -7728,7 +7736,9 @@
             "id": ".uno:TableAutoFitMenu",
             "items": [
               { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SetColumnWidth", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Size"
@@ -7813,7 +7823,9 @@
         "id": ".uno:TableAutoFitMenu",
         "items": [
           { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SetColumnWidth", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "Size"
@@ -10122,12 +10134,6 @@
         "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:SetColumnWidth"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
       },
       {
@@ -11725,12 +11731,6 @@
         "context": [".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DistributeRows"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableAutoFitMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SetColumnWidth"
       },
       {
         "classification": "X",

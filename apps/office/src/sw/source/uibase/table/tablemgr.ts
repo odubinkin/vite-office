@@ -49,6 +49,18 @@ export class SwTableFUNC {
       : this.columns.GetLeft();
     return right - left;
   }
+  /** Adds only the native adjacent-column borrowing capacity, retaining MINLAY in each neighbor. @param number - Visible column. @returns Maximum native width in twips. */
+  public GetMaxColWidth(number: number): number {
+    if (this.GetColCount() === 0) return this.GetColWidth(number);
+    let maximum: number;
+    if (number === 0) maximum = this.GetColWidth(1) - 23;
+    else {
+      maximum = this.GetColWidth(number - 1);
+      if (number === this.GetColCount()) maximum -= 23;
+      else maximum += this.GetColWidth(number + 1) - 46;
+    }
+    return maximum + this.GetColWidth(number);
+  }
   /** Moves original separators with native neighbor borrowing and signed int differences. @param number - Visible column. @param width - New width in twips. @returns Whether accepted by document geometry. */
   public SetColWidth(number: number, width: number): boolean {
     let currentOnly = false;

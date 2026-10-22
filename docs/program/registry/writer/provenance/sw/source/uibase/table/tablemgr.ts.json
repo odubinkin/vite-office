@@ -17,7 +17,8 @@
       "SwTableFUNC::SetColWidth"
     ],
     "preservedResponsibilities": [
-      "Consumed source column count, hidden separator mapping, current-column lookup, width intervals, signed int differences, neighbor borrowing and document-owned separator/history application."
+      "Consumed source column count, hidden separator mapping, current-column lookup, width intervals, signed int differences, neighbor borrowing and document-owned separator/history application.",
+      "Task AAX9TR adds literal GetMaxColWidth borrowing from immediate visible neighbors, preserving MINLAY per neighbor and the native single-column GetRight convention. Full manager/layout parity remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete table manager, dialogs, charts, vertical and RTL frame geometry and full native action scheduling remain unverified."

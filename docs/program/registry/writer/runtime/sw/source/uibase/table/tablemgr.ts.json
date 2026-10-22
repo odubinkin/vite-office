@@ -20,7 +20,7 @@
         "vendor/libreoffice-reference/sw/source/uibase/table/tablemgr.cxx#SwTableFUNC::SetColWidth",
         "apps/office/src/sw/source/uibase/shells/native-table-sidebar-slots.test.ts"
       ],
-      "justification": "Consumed native column manager over actual shell geometry and document history; no complete table manager parity claim.",
+      "justification": "Consumed native column manager over actual shell geometry and document history; no complete table manager parity claim. Task AAX9TR adds literal GetMaxColWidth borrowing from immediate visible neighbors, preserving MINLAY per neighbor and the native single-column GetRight convention. Full manager/layout parity remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "SwTableFUNC"
