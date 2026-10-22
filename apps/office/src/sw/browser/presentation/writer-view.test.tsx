@@ -1,10 +1,7 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
-import { tabStops } from "../../../../test/tab-item-fixtures";
-import { createTabs } from "../../../../test/tab-item-fixtures";
+import { tabStops, createTabs } from "../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
-
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
-
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
@@ -91,6 +88,11 @@ function openParagraphDialog(): void {
   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
 }
 
+/** Reads the original sidebar command surface independently of the contextual toolbar. @returns Scoped queries. */
+function tableSidebar() {
+  return within(screen.getByRole("complementary", { name: "Writer properties sidebar" }));
+}
+
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
   it("uses icons for the standard toolbar and keeps Save and Paragraph off their upstream-hidden positions", /** Checks upstream visible command placement. @returns Nothing. */ () => {
     const session = createWriterDocumentSession();
@@ -153,7 +155,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
         name: "Insert",
       }),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(tableSidebar().getByRole("button", { name: "Table Properties" }));
     const replacement = createWriterDocument();
     act(
       /** Switches documents while the table dialog is open. @returns Nothing. */ () =>
@@ -202,7 +204,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
     expect(screen.getByRole("table", { name: "Table1" })).toBeInTheDocument();
     selectMountedTableRow("Table1", 2);
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(tableSidebar().getByRole("button", { name: "Table Properties" }));
     dialog = screen.getByRole("dialog", { name: "Table Properties" });
     fireEvent.click(within(dialog).getByRole("tab", { name: "Columns" }));
     fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Column 1 width (cm)" }), {

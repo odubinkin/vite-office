@@ -1,7 +1,7 @@
 /** @fileoverview Applies represented table dialog attributes through native ItemSetToTableParam ownership from tabsh.cxx. */
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
-import { createWriterInterface } from "../../../sdi/swriter";
+import { createWriterInterface, getWriterSlotId } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
@@ -9,6 +9,7 @@ import { SwFormatHoriOrient } from "../../../inc/fmtornt";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { RES_LR_SPACE, RES_FRM_SIZE, RES_HORI_ORIENT } from "../../../inc/hintids";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwTableRep } from "../table/swtablerep";
@@ -335,6 +336,87 @@ export class SwTableShell {
     this.commandShell = createSfxShell(
       this,
       createWriterInterface([
+        ...(
+          [
+            [WRITER_COMMAND_IDS.cellVertTop, VertOrientation.NONE],
+            [WRITER_COMMAND_IDS.cellVertCenter, VertOrientation.CENTER],
+            [WRITER_COMMAND_IDS.cellVertBottom, VertOrientation.BOTTOM],
+          ] as const
+        ).map(
+          /** Binds native Boolean alignment states, including all-false mixed selection. @param entry - Slot and orientation. @returns Handler. */
+          ([id, alignment]) => ({
+            id,
+            capabilityId: "CAP-0137" as const,
+            /** Applies the source-owned cell attribute. @returns Whether changed. */
+            execute: () => this.wrtShell.SetBoxAlign(alignment),
+            /** Tests the original table context. @returns Whether available. */
+            isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
+            /** Reads the original common alignment. @returns Whether selected. */
+            isChecked: () => this.wrtShell.GetBoxAlign() === alignment,
+          }),
+        ),
+        {
+          id: WRITER_COMMAND_IDS.setMinimalRowHeight,
+          capabilityId: "CAP-0137",
+          /** Applies the complete native default frame-size item. @returns Whether changed. */
+          execute: () => this.wrtShell.SetRowHeight(new SwFormatFrameSize()),
+          /** Mixed row heights remain enabled, as in native GetState. @returns Whether available. */
+          isEnabled: () =>
+            this.wrtShell.IsCursorInTable() !== undefined &&
+            this.wrtShell.GetRowHeight()?.GetHeightSizeType() !== SwFrameSize.Variable,
+        },
+        {
+          id: WRITER_COMMAND_IDS.headingRowsRepeat,
+          capabilityId: "CAP-0137",
+          /** Native execution toggles the count, ignoring Boolean arguments. @returns Whether changed. */
+          execute: () =>
+            this.wrtShell.SetRowsToRepeat(
+              this.wrtShell.GetRowsToRepeat() !== 0 ? 0 : this.wrtShell.GetRowSelectionFromTop(),
+            ),
+          /** Admits an existing headline or a selected top-row prefix. @returns Whether available. */
+          isEnabled: () =>
+            this.wrtShell.IsCursorInTable() !== undefined &&
+            (this.wrtShell.GetRowsToRepeat() !== 0 || this.wrtShell.GetRowSelectionFromTop() !== 0),
+          /** Reads the native headline count. @returns Whether checked. */
+          isChecked: () => this.wrtShell.GetRowsToRepeat() !== 0,
+        },
+        {
+          id: WRITER_COMMAND_IDS.rowSplit,
+          capabilityId: "CAP-0137",
+          /** Consumes the native explicit Boolean item or toggles common state; mixed becomes true. @param _context - Owning shell. @param items - Request items. @returns Whether changed. */
+          execute: (_context: unknown, items: readonly SfxPoolItem[]) => {
+            const explicit = items.find(
+              /** Locates the native slot item. @param item - Original item. @returns Whether matching. */
+              (item) =>
+                item.Which() === getWriterSlotId(WRITER_COMMAND_IDS.rowSplit) &&
+                item instanceof SfxBoolItem,
+            );
+            const current = this.wrtShell.GetRowSplit();
+            return this.wrtShell.SetRowSplit(
+              new SwFormatRowSplit(
+                explicit instanceof SfxBoolItem
+                  ? explicit.GetValue()
+                  : current === undefined || !current.GetValue(),
+              ),
+            );
+          },
+          /** Table-level splitting gates the row command. @returns Whether available. */
+          isEnabled: () => {
+            const split = this.wrtShell
+              .IsCursorInTable()
+              ?.GetTable()
+              .GetFrameFormat()
+              .GetAttrSet()
+              .Get(RES_LAYOUT_SPLIT);
+            return split instanceof SfxBoolItem && split.GetValue();
+          },
+          /** Preserves the actual row attribute item identity. @returns Common item. */
+          getStateValue: () => this.wrtShell.GetRowSplit(),
+          /** Publishes mixed selected rows. @returns Whether invalidated. */
+          isMixed: () => this.wrtShell.GetRowSplit() === undefined,
+          /** Publishes the common Boolean state. @returns Whether checked. */
+          isChecked: () => this.wrtShell.GetRowSplit()?.GetValue() ?? false,
+        },
         ...[
           WRITER_COMMAND_IDS.tableRowHeight,
           WRITER_COMMAND_IDS.tableColumnWidth,

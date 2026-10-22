@@ -28,7 +28,10 @@ for (const width of [1280, 390])
         name: "focus.odt",
       });
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       const group = page.getByRole("group", { name: "User-defined borders" });
       await group.click({ position: { x: 70, y: 60 } });
@@ -89,7 +92,10 @@ for (const width of [1280, 390])
         .locator("[data-writer-table-box]");
       await expect(cells).toHaveCount(4);
       await selectBrowserTableRow(page, "NativeBrowser", 2);
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await expect(page.getByRole("checkbox", { name: "Synchronize" })).not.toBeChecked();
       await page
@@ -107,7 +113,10 @@ for (const width of [1280, 390])
       );
       await page.getByRole("button", { name: "Cancel", exact: true }).click();
       await expect(cells.nth(2)).toHaveCSS("padding-top", "6.66667px");
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await page
         .getByRole("button", { name: "Outer Border and All Inner Lines", exact: true })

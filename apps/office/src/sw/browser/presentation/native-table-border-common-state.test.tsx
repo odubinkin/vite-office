@@ -1,6 +1,6 @@
 /** @fileoverview Checks native table-property input through the mounted workbench and owned dialog drafts. */
 import { Color } from "../../../tools/inc/color";
-import { cleanup, fireEvent, render, screen, act } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, act, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
@@ -62,7 +62,12 @@ function fixture() {
 }
 /** Opens actual properties and its native Borders page. @returns Nothing. */
 function openBorders(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
 }
 for (const selected of [false, true])

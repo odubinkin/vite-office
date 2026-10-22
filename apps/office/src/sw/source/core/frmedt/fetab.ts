@@ -1,18 +1,48 @@
 /** @fileoverview Owns represented native SwFEShell table attributes, selection and history from fetab.cxx. */
 import { SwEditShell } from "../edit/edtab";
 import { SwTable, type SwTableBox, type SwTableFormat } from "../table/swtable";
-import { SwTableBoxStartNode } from "../docnode/node";
+import { SwTableNode, SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoAttrTable } from "../undo/untbl";
 import type { SwUndoCursorState } from "../undo/undobj";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
-import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
+import {
+  SwTabFrame,
+  type SwRowFrame,
+  type SwCellFrame,
+  type SwTableMouseCell,
+  type SwTableMouseRect,
+} from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import type { SwPosition } from "../crsr/pam";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+
+/** Resolves the original row-frame line identity for the represented horizontal table graph. @param position - Original native endpoint. @returns Native uint16 row or USHRT_MAX when no cell frame is represented. */
+function lcl_GetRowNumber(position: SwPosition): number {
+  const section = position.GetNode().StartOfSectionNode();
+  if (!(section instanceof SwTableBoxStartNode)) return 65535;
+  // SwTableBoxStartNode construction requires its original SwTableNode parent.
+  const parent = section.StartOfSectionNode() as SwTableNode;
+  const table = parent.GetTable(),
+    frame = new SwTabFrame(table);
+  try {
+    for (let row = frame.Lower(); row !== undefined; row = row.GetNext()) {
+      const line = row as SwRowFrame;
+      for (let lower = line.Lower(); lower !== undefined; lower = lower.GetNext()) {
+        if ((lower as SwCellFrame).GetTabBox().GetStartNode() !== section) continue;
+        const index = table.GetTabLines().indexOf(line.GetTabLine());
+        return index & 0xffff;
+      }
+    }
+    return 65535;
+  } finally {
+    frame.DestroyImpl();
+  }
+}
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -396,6 +426,22 @@ export abstract class SwFEShell extends SwEditShell {
           this.CaptureCursorState(),
         ),
     );
+  }
+
+  /** Reads the original current table headline count. @returns Native count or zero outside tables. */
+  public GetRowsToRepeat(): number {
+    return this.IsCursorInTable()?.GetTable().GetRowsToRepeat() ?? 0;
+  }
+
+  /** Preserves native top-row endpoint admission without expanding ordinary marks into row selections. @returns Selected top-row prefix count or zero. */
+  public GetRowSelectionFromTop(): number {
+    const cursor = this.getShellCursor(),
+      point = lcl_GetRowNumber(cursor.GetPoint());
+    if (!this.IsTableMode()) return point === 0 ? 1 : 0;
+    const mark = lcl_GetRowNumber(cursor.GetMark());
+    return (point === 0 && mark !== 65535) || (mark === 0 && point !== 65535)
+      ? (Math.max(point, mark) + 1) & 0xffff
+      : 0;
   }
 
   /** Invokes the native count-only headline document operation on the actual current table. @param requested - Authored uint16 count. @returns Whether changed. */

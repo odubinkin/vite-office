@@ -103,6 +103,12 @@ const specs: readonly CommandSpec[] = [
   { browserControlLabel: "Paragraph style", commandUrl: ".uno:StyleApply", semantics: "radio" },
   { commandUrl: ".uno:TableDialog", showsDialog: true },
   { commandUrl: ".uno:SetRowHeight", showsDialog: true },
+  { commandUrl: ".uno:CellVertTop", semantics: "check" },
+  { commandUrl: ".uno:CellVertCenter", semantics: "check" },
+  { commandUrl: ".uno:CellVertBottom", semantics: "check" },
+  { commandUrl: ".uno:HeadingRowsRepeat", semantics: "check" },
+  { commandUrl: ".uno:RowSplit", semantics: "check" },
+  { commandUrl: ".uno:SetMinimalRowHeight" },
   { commandUrl: ".uno:Underline", semantics: "check" },
   { commandUrl: ".uno:UnderlineSingle", semantics: "check" },
   { commandUrl: ".uno:Undo" },
@@ -171,6 +177,13 @@ const commandAliases = {
   tableRightSpace: ".uno:TableRightSpace",
 
   setRowHeight: ".uno:SetRowHeight",
+  cellVertTop: ".uno:CellVertTop",
+  cellVertCenter: ".uno:CellVertCenter",
+  cellVertBottom: ".uno:CellVertBottom",
+  headingRowsRepeat: ".uno:HeadingRowsRepeat",
+  rowSplit: ".uno:RowSplit",
+  setMinimalRowHeight: ".uno:SetMinimalRowHeight",
+
   toggleHorizontalRuler: ".uno:Ruler",
   toggleVerticalRuler: ".uno:VRuler",
   toggleSidebar: ".uno:Sidebar",
@@ -246,6 +259,13 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:TableRightSpace": "CAP-0137",
 
   ".uno:SetRowHeight": "CAP-0137",
+  ".uno:CellVertTop": "CAP-0137",
+  ".uno:CellVertCenter": "CAP-0137",
+  ".uno:CellVertBottom": "CAP-0137",
+  ".uno:HeadingRowsRepeat": "CAP-0137",
+  ".uno:RowSplit": "CAP-0137",
+  ".uno:SetMinimalRowHeight": "CAP-0137",
+
   ".uno:Undo": "CAP-0102",
   ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":
     "CAP-0112",
@@ -321,6 +341,7 @@ const resourcePaths = [
   "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
   "sw/uiconfig/swriter/popupmenu/text.xml",
   "sw/uiconfig/swriter/popupmenu/table.xml",
+  "sw/uiconfig/swriter/toolbar/tableobjectbar.xml",
 ] as const;
 
 const sdiPaths = ["sw/sdi/swriter.sdi", "sfx2/sdi/sfx.sdi", "svx/sdi/svx.sdi"] as const;
@@ -453,6 +474,7 @@ const surfaces = {
   popupTable: resourceGraphs[resourcePaths[5]]?.nodes ?? [],
   standardbar: resourceGraphs[resourcePaths[1]]?.nodes ?? [],
   textobjectbar: resourceGraphs[resourcePaths[2]]?.nodes ?? [],
+  tableobjectbar: resourceGraphs[resourcePaths[6]]?.nodes ?? [],
 };
 const visibleCommandUrls = [
   ...new Set(
@@ -525,6 +547,7 @@ const runtimeResourcePaths = [
   "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts",
   "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
   "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/tableobjectbar.ts",
   "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
 ] as const;
 for (const [index, text] of (

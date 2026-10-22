@@ -101,7 +101,12 @@ it("caret alone sets table properties context without painting a selected row", 
     },
   );
   expect(painted("First")).toHaveLength(0);
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   expect(
     within(screen.getByRole("dialog", { name: "Table Properties" })).getByLabelText(
       "Table width (cm)",
@@ -116,7 +121,12 @@ it("caret alone sets table properties context without painting a selected row", 
       f.edit.SetSelection({ point: { nodeIndex: second.GetIndex(), contentIndex: 0 } });
     },
   );
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   expect(
     within(screen.getByRole("dialog", { name: "Table Properties" })).getByLabelText(
       "Table width (cm)",

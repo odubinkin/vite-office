@@ -3,7 +3,7 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { Color } from "../../../tools/inc/color";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
-import { cleanup, render, screen, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen, fireEvent, within } from "@testing-library/react";
 import { WriterBorderPage } from "./WriterBorderPage";
 import { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import { SvxBoxItem, SvxBoxInfoItem } from "../../../editeng/source/items/frmitems";
@@ -283,7 +283,12 @@ it("actual selected native border page applies inner/outer/padding items to orig
     shell.FocusNode(first);
     render(<WriterWorkbench isActive view={session.view} />);
     selectMountedTableRow("NativePage", 2);
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Table Properties" },
+      ),
+    );
     fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
     fireEvent.click(screen.getByRole("button", { name: "Outer Border and All Inner Lines" }));
     fireEvent.change(screen.getByRole("combobox", { name: "Border thickness" }), {

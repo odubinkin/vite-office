@@ -1,7 +1,7 @@
 /** @fileoverview Verifies existing table border models through native items, mounted UI, history and ODT. */
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { WriterBorderPage } from "./WriterBorderPage";
@@ -47,7 +47,12 @@ function fixture(model: "collapsing" | "separating" | undefined) {
 }
 /** Opens native table border controls. @returns Native checkbox device. */
 function open() {
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
   return screen.getByRole("checkbox", { name: "Merge adjacent line styles" });
 }

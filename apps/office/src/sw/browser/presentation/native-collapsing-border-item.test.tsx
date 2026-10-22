@@ -1,6 +1,6 @@
 /** @fileoverview Verifies actual mounted table paint, dialog and shell read the original native collapsing-border item. */
 import { Color } from "../../../tools/inc/color";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -152,7 +152,12 @@ it.each([false, true])(
       expect(
         (TableParamToItemSet(shell).Get(RES_COLLAPSING_BORDERS) as SfxBoolItem).GetValue(),
       ).toBe(true);
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
       expect(screen.getByRole("checkbox", { name: "Merge adjacent line styles" })).toHaveProperty(
         "checked",

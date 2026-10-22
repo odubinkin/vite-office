@@ -1,5 +1,5 @@
 /** @fileoverview Verifies mounted original horizontal orientation, native dialog history and inherited native ODT export. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -70,7 +70,11 @@ it.each([false, true])(
         const element = screen.getByRole("table", { name: "NativeHoriUI" });
         expect(element).toHaveStyle({ width: "200px", marginRight: "0px" });
         expect(Number.parseFloat(element.style.marginLeft)).toBeGreaterThan(0);
-        fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+        fireEvent.click(
+          within(
+            screen.getByRole("complementary", { name: "Writer properties sidebar" }),
+          ).getByRole("button", { name: "Table Properties" }),
+        );
         expect(screen.getByRole("radio", { name: "Right" })).toBeChecked();
         fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
         const reopen = await readOdtDocument(writeOdtDocument(doc, { title: "NativeHoriUI" }), {
@@ -82,7 +86,12 @@ it.each([false, true])(
       } finally {
         projection.mockRestore();
       }
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("radio", { name: "Center" }));
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       expect([

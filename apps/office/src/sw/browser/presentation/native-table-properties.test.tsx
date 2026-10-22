@@ -1,7 +1,7 @@
 /** @fileoverview Verifies the actual React workbench delegates accepted table properties to native owners and history. */
 import { nativeBoxFormat, tableBoxFormatForTest } from "../../../test/table-box-test-helpers";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
-import { render, cleanup, screen, fireEvent, act } from "@testing-library/react";
+import { render, cleanup, screen, fireEvent, act, within } from "@testing-library/react";
 import { afterEach, it, expect, vi } from "vitest";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
@@ -48,7 +48,12 @@ it("accepts native properties as one history action and retains real selected ce
   const f = fixture(),
     setter = vi.spyOn(f.shell, "SetTableAttr");
   selectMountedTableRow("Grid", 1);
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "8" },
   });
@@ -111,7 +116,12 @@ it("cancels property drafts without native mutation or history", /** Checks canc
   const f = fixture(),
     setter = vi.spyOn(f.shell, "SetTableAttr");
   selectMountedTableRow("Grid", 1);
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "8" },
   });

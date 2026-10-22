@@ -39,7 +39,11 @@ test("Writer row selection paints core boxes and typing after caret kill preserv
   await expect(second).toContainText("X");
   await expect(body).toHaveText("Body");
   await body.click();
-  await expect(page.getByRole("button", { name: "Table Properties", exact: true })).toHaveCount(0);
+  await expect(
+    page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true }),
+  ).toHaveCount(0);
 });
 test("Writer native keyboard box selection and caret properties context agree", /** Checks actual table selection behavior. @param root0 - Current owner. @param root0.page - Browser owner. @returns Operation result. */ async ({
   page,
@@ -58,7 +62,10 @@ test("Writer native keyboard box selection and caret properties context agree", 
   await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
   await second.click();
   await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(0);
-  await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+  await page
+    .getByRole("complementary", { name: "Writer properties sidebar" })
+    .getByRole("button", { name: "Table Properties", exact: true })
+    .click();
   await expect(
     page
       .getByRole("dialog", { name: "Table Properties" })

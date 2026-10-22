@@ -9,6 +9,7 @@ import { SwInsertTableFlags } from "../../inc/itabenum";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
+import { WriterTableObjectBar } from "./WriterTableObjectBar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
 import { WriterDialogPresenter } from "./WriterDialogPresenter";
@@ -472,6 +473,14 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
+        tableToolbar={
+          currentTable === undefined ? undefined : (
+            <WriterTableObjectBar
+              commandSource={commandSource}
+              resolveArguments={resolveCommandArguments}
+            />
+          )
+        }
         formattingToolbar={
           <WriterFormattingToolbar
             isInputEnabled={isInputEnabled}

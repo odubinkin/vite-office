@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import {
   Ellipsis,
+  Minimize2,
   ArrowUpToLine,
   ArrowDownToLine,
   ArrowLeftToLine,
@@ -206,6 +207,14 @@ export function TableEditPanel(
               </label>
             ),
           )}
+        </div>
+        <div role="group" aria-label="Row sizing" className="flex gap-0.5">
+          <CommandButton
+            {...props}
+            commandId=".uno:SetMinimalRowHeight"
+            icon={Minimize2}
+            className="grid size-5 shrink-0 place-items-center rounded text-slate-700 hover:bg-indigo-50 disabled:opacity-50 [&_svg]:size-4"
+          />
         </div>
         <label className="grid gap-1 text-xs">
           Alignment:

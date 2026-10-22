@@ -1,5 +1,5 @@
 /** @fileoverview Verifies mounted combined native table attributes, reset, original history and real ODT transport. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
@@ -66,7 +66,12 @@ it.each([false, true])(
         width = format.GetFrameSize().Clone();
       doc.GetUndoManager().Clear();
       render(<WriterWorkbench isActive view={session.view} />);
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       changeControls();
       fireEvent.click(screen.getByRole("button", { name: "Reset" }));
       expect(screen.getByRole("checkbox", { name: merge })).not.toBeChecked();
@@ -84,7 +89,12 @@ it.each([false, true])(
       expect(format.GetULSpace()).toEqual(before);
       const attrs = vi.spyOn(shell, "SetTableAttr"),
         scalar = vi.spyOn(table, "SetFormat");
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       changeControls();
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       expect(attrs).toHaveBeenCalledTimes(1);

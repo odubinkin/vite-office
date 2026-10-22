@@ -27,7 +27,10 @@ for (const viewport of [1280, 390])
     await expect(original).toHaveCount(1);
     await expect(original).toContainText("Cell");
     await original.getByRole("textbox").click();
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     const name = page.getByRole("textbox", { name: "Name", exact: true });
     await expect(name).toHaveValue("Original");
     await name.fill("Bad Name");
@@ -45,7 +48,10 @@ for (const viewport of [1280, 390])
     await name.fill("Draft");
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(original).toHaveCount(1);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await name.fill("Accepted");
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("button", { name: "OK", exact: true }).click();
@@ -57,11 +63,17 @@ for (const viewport of [1280, 390])
       await page.getByRole("button", { name: "Redo", exact: true }).click();
       await expect(accepted).toContainText("Cell");
     }
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await name.fill("");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await expect(page.getByRole("table", { name: "Table1", exact: true })).toContainText("Cell");
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await name.fill("Occupied");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     const unique = page.getByRole("table", { name: "Table2", exact: true });

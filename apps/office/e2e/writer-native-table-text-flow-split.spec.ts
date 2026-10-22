@@ -63,7 +63,10 @@ for (const width of [1280, 390])
     await expect(frames).toHaveCount(2);
     await editor.click();
     /** Opens the actual native properties page. @returns Completion. */ async function properties() {
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
     }
     await properties();

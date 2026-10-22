@@ -43,7 +43,10 @@ for (const viewport of [1280, 390]) {
     await open(page);
     /** Opens the native headline page. @returns Completion. */
     async function properties() {
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
     }
     const repeat = page.getByRole("checkbox", { name: "Repeat header", exact: true }),

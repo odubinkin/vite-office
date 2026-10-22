@@ -60,6 +60,12 @@
     "tableLeftSpace": ".uno:TableLeftSpace",
     "tableRightSpace": ".uno:TableRightSpace",
     "setRowHeight": ".uno:SetRowHeight",
+    "cellVertTop": ".uno:CellVertTop",
+    "cellVertCenter": ".uno:CellVertCenter",
+    "cellVertBottom": ".uno:CellVertBottom",
+    "headingRowsRepeat": ".uno:HeadingRowsRepeat",
+    "rowSplit": ".uno:RowSplit",
+    "setMinimalRowHeight": ".uno:SetMinimalRowHeight",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
@@ -533,7 +539,10 @@
       "controlLabel": "Select Cell",
       "label": "Select Cell",
       "iconName": "lc_entirecell.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -546,7 +555,10 @@
       "controlLabel": "Select Row",
       "label": "Select Row",
       "iconName": "lc_entirerow.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -559,7 +571,10 @@
       "controlLabel": "Select Column",
       "label": "Select Column",
       "iconName": "lc_entirecolumn.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -572,7 +587,10 @@
       "controlLabel": "Select Table",
       "label": "Select Table",
       "iconName": "lc_selecttable.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -609,7 +627,8 @@
       "iconName": "lc_insertrowsbefore.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -625,7 +644,8 @@
       "iconName": "lc_insertrowsafter.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -641,7 +661,8 @@
       "iconName": "lc_insertcolumnsbefore.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -657,7 +678,8 @@
       "iconName": "lc_insertcolumnsafter.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -1058,7 +1080,8 @@
       "iconName": "lc_tabledialog.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ],
       "semantics": "action",
       "showsDialog": true,
@@ -1079,6 +1102,97 @@
       "showsDialog": true,
       "shortcuts": [],
       "slotId": 20507
+    },
+    ".uno:CellVertTop": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Top",
+      "label": "Top",
+      "placements": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11075
+    },
+    ".uno:CellVertCenter": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Center",
+      "label": "Center",
+      "placements": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11074
+    },
+    ".uno:CellVertBottom": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Bottom",
+      "label": "Bottom",
+      "placements": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11073
+    },
+    ".uno:HeadingRowsRepeat": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Header Rows Repeat Across Pages",
+      "label": "Header Rows Repeat Across Pages",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20520
+    },
+    ".uno:RowSplit": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Row to Break Across Pages",
+      "label": "Row to Break Across Pages",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21753
+    },
+    ".uno:SetMinimalRowHeight": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Minimal Row Height",
+      "label": "Minimal Row Height",
+      "iconName": "lc_setminimalrowheight.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11186
     },
     ".uno:Underline": {
       "browserOwned": false,
@@ -1318,22 +1432,34 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:EntireCell",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:EntireRow",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:EntireColumn",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SelectTable",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -1348,7 +1474,8 @@
       "commandUrl": ".uno:InsertRowsBefore",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ]
     },
     {
@@ -1356,7 +1483,8 @@
       "commandUrl": ".uno:InsertRowsAfter",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ]
     },
     {
@@ -1364,7 +1492,8 @@
       "commandUrl": ".uno:InsertColumnsBefore",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ]
     },
     {
@@ -1372,7 +1501,8 @@
       "commandUrl": ".uno:InsertColumnsAfter",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ]
     },
     {
@@ -1556,12 +1686,61 @@
       "commandUrl": ".uno:TableDialog",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/table.xml"
+        "sw/uiconfig/swriter/popupmenu/table.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
       ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SetRowHeight",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:CellVertTop",
+      "sources": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:CellVertCenter",
+      "sources": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:CellVertBottom",
+      "sources": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:HeadingRowsRepeat",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:RowSplit",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SetMinimalRowHeight",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -4505,14 +4684,6 @@
       "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetMinimalRowHeight",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetOptimalRowHeight",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -4626,22 +4797,6 @@
       "context": [".uno:TableMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:TableNumberRecognition",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:HeadingRowsRepeat",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:RowSplit",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6025,30 +6180,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:CellVertTop",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:CellVertCenter",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:CellVertBottom",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetOutline",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -6777,14 +6908,6 @@
       "classification": "X",
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetMinimalRowHeight",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetOptimalRowHeight",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -6826,22 +6949,6 @@
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:DistributeColumns",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:StyleMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:HeadingRowsRepeat",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:StyleMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:RowSplit",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -6914,14 +7021,6 @@
       "context": [".uno:StyleMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:AutoFormat",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:StyleMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -7276,6 +7375,198 @@
       "sourceUrl": ".uno:InsertCaptionDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteRows",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteColumns",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:MergeCells",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SplitCell",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SplitTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OptimizeTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:TableCellBackgroundColor",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AutoFormat",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetBorderStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:LineStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:FrameLineColor",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberFormatStandard",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberFormatCurrency",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberFormatPercent",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberFormatDecimal",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberFormatDate",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:TableNumberFormatDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertCaptionDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:TableSort",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Protect",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:UnsetCellsReadOnly",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AutoSum",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertFormula",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/toolbar/tableobjectbar.xml"
     }
   ],
   "locale": "en-US",
@@ -7435,10 +7726,16 @@
           },
           {
             "id": ".uno:TableAutoFitMenu",
-            "items": [{ "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true }],
+            "items": [
+              { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true }
+            ],
             "kind": "menu",
             "label": "Size"
           },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:HeadingRowsRepeat", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:RowSplit", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
         ],
@@ -7514,9 +7811,21 @@
       },
       {
         "id": ".uno:TableAutoFitMenu",
-        "items": [{ "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true }],
+        "items": [
+          { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true }
+        ],
         "kind": "menu",
         "label": "Size"
+      },
+      {
+        "id": ".uno:StyleMenu",
+        "items": [
+          { "commandUrl": ".uno:HeadingRowsRepeat", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:RowSplit", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Style"
       },
       { "kind": "separator" },
       {
@@ -7584,6 +7893,10 @@
       { "commandUrl": ".uno:EndPara", "kind": "command", "visible": true },
       { "commandUrl": ".uno:JustifyPara", "kind": "command", "visible": true },
       { "kind": "separator" },
+      { "commandUrl": ".uno:CellVertTop", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:CellVertCenter", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:CellVertBottom", "kind": "command", "visible": false },
+      { "kind": "separator" },
       { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": true },
       { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -7594,6 +7907,23 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false },
       { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": false }
+    ],
+    "tableobjectbar": [
+      { "commandUrl": ".uno:InsertRowsBefore", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:EntireRow", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:EntireColumn", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:SelectTable", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CellVertTop", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CellVertCenter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CellVertBottom", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
     ]
   },
   "unsupported": {
@@ -9780,12 +10110,6 @@
         "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:SetMinimalRowHeight"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetOptimalRowHeight"
       },
       {
@@ -9871,18 +10195,6 @@
         "context": [".uno:TableMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:TableNumberRecognition"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:HeadingRowsRepeat"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:RowSplit"
       },
       {
         "classification": "X",
@@ -10874,24 +11186,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:CellVertTop"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:CellVertCenter"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:CellVertBottom"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetOutline"
       },
       { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Spacing" },
@@ -11424,12 +11718,6 @@
         "classification": "X",
         "context": [".uno:TableAutoFitMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:SetMinimalRowHeight"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableAutoFitMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetOptimalRowHeight"
       },
       {
@@ -11461,18 +11749,6 @@
         "context": [".uno:TableAutoFitMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:DistributeColumns"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:StyleMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:HeadingRowsRepeat"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:StyleMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:RowSplit"
       },
       {
         "classification": "X",
@@ -11528,7 +11804,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:AutoFormat"
       },
-      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:StyleMenu" },
       {
         "classification": "X",
         "context": [],
@@ -11792,6 +12067,142 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertCaptionDialog"
+      }
+    ],
+    "sw/uiconfig/swriter/toolbar/tableobjectbar.xml": [
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteRows"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteColumns"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MergeCells"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SplitCell"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SplitTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OptimizeTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableCellBackgroundColor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoFormat"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetBorderStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LineStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FrameLineColor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberFormatStandard"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberFormatCurrency"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberFormatPercent"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberFormatDecimal"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberFormatDate"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableNumberFormatDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertCaptionDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableSort"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Protect" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnsetCellsReadOnly"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:AutoSum" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFormula"
       }
     ]
   }

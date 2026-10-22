@@ -57,7 +57,10 @@ for (const width of [1280, 390])
         exact: true,
       });
       await centered.click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
       await expect(page.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue(
         "2",
@@ -68,7 +71,10 @@ for (const width of [1280, 390])
       const fixed = rendered.locator("[data-writer-fixed-row-content]").nth(1);
       await expect(fixed).toHaveCSS("justify-content", "safe flex-end");
       await selectBrowserTableRow(page, "NativeAlign", 2);
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
       await expect(page.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue(
         "0",
@@ -147,7 +153,10 @@ test("native primitive cell orientation remains numeric across the browser open 
   for (const [index, align] of ["top", "middle", "bottom"].entries())
     await expect(cells.nth(index)).toHaveCSS("vertical-align", align);
   await page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true }).click();
-  await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+  await page
+    .getByRole("complementary", { name: "Writer properties sidebar" })
+    .getByRole("button", { name: "Table Properties", exact: true })
+    .click();
   await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
   await expect(page.getByRole("combobox", { name: "Cell vertical alignment" })).toHaveValue("2");
   await page.getByRole("button", { name: "Cancel", exact: true }).click();

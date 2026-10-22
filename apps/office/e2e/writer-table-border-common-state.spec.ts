@@ -49,7 +49,10 @@ for (const width of [1280, 390])
         .locator("[data-writer-table-box]");
       await expect(cells).toHaveCount(4);
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
         "aria-valuenow",
@@ -73,7 +76,10 @@ for (const width of [1280, 390])
       await page.getByRole("button", { name: "Cancel", exact: true }).click();
       await expect(cells.nth(0)).toHaveCSS("padding-top", "6.66667px");
       await selectBrowserTableRow(page, "CommonBrowser", 2);
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await expect(page.getByRole("spinbutton", { name: "Top padding (cm)" })).toHaveAttribute(
         "aria-valuenow",
