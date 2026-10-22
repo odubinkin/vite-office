@@ -1,10 +1,10 @@
 ---
 id: "202610221740-98YRBY"
 title: "Connect formula ranges to native area recalculation and aggregate execution"
-status: "TODO"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on:
@@ -25,11 +25,21 @@ verification:
   note: null
   attempts: 0
 commit: null
-comments: []
-events: []
+comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
+events:
+  -
+    type: "status"
+    at: "2026-10-22T18:48:38.038Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-22T17:41:24.582Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-22T18:48:38.038Z"
+doc_updated_by: "CODER"
 description: "Block73 dependent on72: implement native local-A1/ODFF double-reference compilation/output,real area dependency notifications through ScBroadcastArea/Slot/SlotMachine and ScDocument lifetime,then aggregate range traversal through actual RangeColumnSpanSet/NumericCellAccumulator and native array summation. Do not flatten ranges into individual cell listeners or use a browser evaluator. Verify liveSUMrange edits,errors,history,large sparse ranges and ODS/browser reopen. Preserve source slot distribution,bulk/deferred erasure and default non-grouped semantics;unported advanced modes stay explicit. Scope up to80source/test/registry/probe paths. Calc and changed shared100;full checkpoint80."
 sections:
   Summary: "Connect real range operands to native dependency notifications and aggregate range computation."
