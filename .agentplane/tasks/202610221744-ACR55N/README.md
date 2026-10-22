@@ -4,7 +4,7 @@ title: "Connect native Writer table sidebar metrics and alignment"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-22T18:33:44.988Z"
+  updated_by: "CODER"
+  note: "Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T18:33:45.877Z"
+  updated_by: "EVALUATOR"
+  note: "Approved table sidebar scope is implemented and verified at c9f836644a65154461bef163d75c217ca7cd7c4d, with honest cumulative full-suite and current-source coverage closure."
+  evaluated_sha: "c9f836644a65154461bef163d75c217ca7cd7c4d"
+  blueprint_digest: "b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585"
+  evidence_refs:
+    - ".agentplane/tasks/202610221744-ACR55N/README.md"
+    - ".agentplane/tasks/202610221744-ACR55N/quality/20261022-183345877-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610221744-ACR55N/quality/20261022-183345877-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610221744-ACR55N/quality/20261022-183345877-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610221744-ACR55N/blueprint/resolved-snapshot.json"
+    - "output/playwright/table-sidebar-coverage-audit.json"
+    - "output/playwright/table-sidebar-full-coverage.log"
+    - "output/playwright/table-sidebar-e2e-final.log"
+    - "output/playwright/table-sidebar-e2e-visual-final.log"
+  findings:
+    - "Actual UInt32 row/column and UInt16 alignment plus signed spacing items reach native table/history owners; source constructor admission and native asymmetric width behavior are preserved and tested. Ordinary ODT output is inspected from Chromium downloads."
+    - "Full application18259 cases pass; all four aggregate metrics100 for934 owners use matching-source merges and two independently complete current-owner replacements. Two stale browser expectations were repaired without weakening geometry assertions; eight affected cases and final desktop/mobile table cases pass."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native table sidebar block and final verification checkpoint."
+  -
+    type: "verify"
+    at: "2026-10-22T18:33:44.988Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification."
 doc_version: 3
-doc_updated_at: "2026-10-22T18:31:25.025Z"
+doc_updated_at: "2026-10-22T18:33:45.065Z"
 doc_updated_by: "CODER"
 description: "Implement approved Table sidebar row height, current column width, alignment and lateral spacing through native typed slots and table owners; verify Undo/Redo and ODT consistency, then full suites and coverage and stop goal."
 sections:
@@ -61,6 +87,39 @@ sections:
     Commands: build, typecheck, lint with final changed-owner checks, tracked-source Prettier audit plus failed/current-file repairs, Writer/Calc resource freshness, module boundaries, docs, file size, source tree, source provenance, inventory invariants, static build smoke, ap doctor and policy routing. Result: pass. Initial root-glob formatter scans were canceled; eligible tracked/untracked source audit checked2939 files, and all failed/subsequently changed source files passed final formatting checks. No policy/config/threshold weakening.
 
     Evidence directory: output/playwright/table-sidebar-*.log and named coverage/browser evidence directories. All implementation edits are in vite-office-writer on writer; no network, branch switching, merges or publication.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-22T18:33:44.988Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:31:25.025Z, excerpt_hash=sha256:b6f329276364ceee15fd07e50730943869f5fee5dab712a47a518aa90b887e19
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221744-ACR55N/blueprint/resolved-snapshot.json
+    - old_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+    - current_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610221744-ACR55N
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610221744-ACR55N
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commits, preserving unrelated user changes; no branch integration."
   Findings: |-
     User explicitly approved proposed Table block and mutations. Latest stop instruction retained: after this task run complete verification, fix tests and coverage, close task and stop goal.
@@ -115,6 +174,39 @@ Command: npm run test:inventory:coverage; npm run test:tooling. Result:124 cases
 Commands: build, typecheck, lint with final changed-owner checks, tracked-source Prettier audit plus failed/current-file repairs, Writer/Calc resource freshness, module boundaries, docs, file size, source tree, source provenance, inventory invariants, static build smoke, ap doctor and policy routing. Result: pass. Initial root-glob formatter scans were canceled; eligible tracked/untracked source audit checked2939 files, and all failed/subsequently changed source files passed final formatting checks. No policy/config/threshold weakening.
 
 Evidence directory: output/playwright/table-sidebar-*.log and named coverage/browser evidence directories. All implementation edits are in vite-office-writer on writer; no network, branch switching, merges or publication.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-22T18:33:44.988Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: implementation c9f836644a65154461bef163d75c217ca7cd7c4d; full18259 cases/1173 files passed, targeted current-source boundary and browser repairs passed, audited934-owner Istanbul100 across all four metrics, inventory124/tooling94 and static/source gates passed. Initial full coverage and browser nonzero outcomes and exact repairs are retained in Verification.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-22T18:31:25.025Z, excerpt_hash=sha256:b6f329276364ceee15fd07e50730943869f5fee5dab712a47a518aa90b887e19
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610221744-ACR55N/blueprint/resolved-snapshot.json
+- old_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+- current_digest: b303f10193dc19f88308f670f4f316b2f20f3e07268c7702844eef4635ef9585
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610221744-ACR55N
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610221744-ACR55N
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
