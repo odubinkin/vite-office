@@ -1,4 +1,8 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
+import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
@@ -60,6 +64,14 @@ export function createWriterTextCommandRegistry(
           return paragraphChanged || lineNumbersChanged;
         },
       );
+  }
+  /** Reads original complete strikeout item state through the native UI/core boundary. @returns Independent item set. */
+  function strikeoutState(): SfxItemSet {
+    const state = new SfxItemSet(target.GetActiveParagraph().GetDoc().GetAttrPool(), [
+      [RES_CHRATR_CROSSEDOUT, RES_CHRATR_CROSSEDOUT],
+    ]);
+    target.GetTextCtrlState(state);
+    return state;
   }
   return createWriterInterface([
     {
@@ -127,6 +139,41 @@ export function createWriterTextCommandRegistry(
       id: WRITER_COMMAND_IDS.redo,
       /** Reads Redo availability. @returns Whether Redo is enabled. */
       isEnabled: (): boolean => target.CanRedo(),
+    },
+    {
+      id: WRITER_COMMAND_IDS.strikeout,
+      capabilityId: "CAP-0109",
+      /** Uses the original enum-bool toggle preparation and complete typed request. @param context - Native shell. @param args - Request items. @returns Whether selected text changed. */
+      execute: (context, args) => {
+        const supplied = args.find(
+          /** Resolves the original character item. @param item - Request item. @returns Match. */
+          (item) => item.Which() === RES_CHRATR_CROSSEDOUT,
+        );
+        const item =
+          supplied ??
+          createAttributeToggleItem(
+            strikeoutState(),
+            RES_CHRATR_CROSSEDOUT,
+            SvxCrossedOutItem.CreateDefault,
+          );
+        if (!(item instanceof SvxCrossedOutItem)) return false;
+        const items = new SfxItemSet(strikeoutState().GetPool(), [
+          [RES_CHRATR_CROSSEDOUT, RES_CHRATR_CROSSEDOUT],
+        ]);
+        items.Put(item);
+        return context.ExecTextCtrl(items);
+      },
+      /** Publishes the original complete enum item. @returns Independent item or mixed state. */
+      getStateValue: () => strikeoutState().GetItemIfSet(RES_CHRATR_CROSSEDOUT, false),
+      /** Reads the native bool interface without collapsing mixed enums. @returns Checked state. */
+      isChecked: () =>
+        (
+          strikeoutState().GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) as
+            SvxCrossedOutItem | undefined
+        )?.GetBoolValue() ?? false,
+      /** Reports exact enum disagreement. @returns Whether mixed. */
+      isMixed: () =>
+        strikeoutState().GetItemState(RES_CHRATR_CROSSEDOUT, false) === SfxItemState.INVALID,
     },
     characterCommand(WRITER_COMMAND_IDS.bold, "bold"),
     characterCommand(WRITER_COMMAND_IDS.italic, "italic"),

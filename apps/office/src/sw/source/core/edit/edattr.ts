@@ -1,5 +1,8 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
+import { SwEditShell as SwNumberingEditShell } from "./ednumber";
+import { SwAttrIter } from "../text/itratr";
+import { getWriterSelectedTextRanges } from "../crsr/pam";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SwDoc } from "../doc/doc";
@@ -160,4 +163,55 @@ function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
   if (first === undefined) {
     if (second !== undefined && !defaults.equals(second)) target.InvalidateItem(RES_TXTATR_INETFMT);
   } else if (!first.equals(second ?? defaults)) target.InvalidateItem(RES_TXTATR_INETFMT);
+}
+
+/** Consumed character-only GetCurAttr path. Native paragraph/merged/redline queries remain in their existing or unported owners. */
+export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Reads original caret typing items. @returns Current native items. */
+  public abstract GetPendingCharacterItems(): SfxItemSet;
+  /** Assigns native typing items. @param items - Independent set. @returns Nothing. */
+  public abstract SetPendingCharacterItems(items: SfxItemSet): void;
+  /** Publishes a native selection/typing state change. @returns Nothing. */
+  public abstract NotifySelectionChanged(): void;
+  /** Collects represented character item state into the original caller-owned set. @param state - Requested native character ranges. @returns Whether lookup remained within source limits. */
+  public GetCurAttr(state: SfxItemSet): boolean {
+    const cursors = [...this.GetCursor().GetRingContainer()];
+    if (
+      cursors.length > 10000 ||
+      cursors.some(
+        /** Preserves native node-span lookup limit. @param cursor - Original cursor. @returns Whether too large. */
+        (cursor) => cursor.End().GetNodeIndex() - cursor.Start().GetNodeIndex() >= 10000,
+      )
+    ) {
+      state.ClearItem();
+      return false;
+    }
+    for (const [first, last] of state.GetRanges())
+      for (let which = first; which <= last; which++) this.GetCurrentCharacterItem(state, which);
+    return true;
+  }
+  /** Aggregates one complete item from represented original text portions. @param state - Destination. @param which - Character identity. @returns Nothing. */
+  private GetCurrentCharacterItem(state: SfxItemSet, which: number): void {
+    const ranges = getWriterSelectedTextRanges(this.GetCursor());
+    if (ranges === undefined) {
+      state.Put(this.GetPendingCharacterItems().Get(which));
+      return;
+    }
+    for (const range of ranges) {
+      const iterator = new SwAttrIter(range.node);
+      for (let offset = range.start; offset < range.end;) {
+        iterator.Seek(offset);
+        const item = iterator.GetAttrHandler().ReadItem(which);
+        const previous = state.GetItemIfSet(which, false);
+        if (previous !== undefined && !previous.equals(item)) {
+          state.InvalidateItem(which);
+          return;
+        }
+        state.Put(item);
+        offset = Math.min(range.end, iterator.GetNextAttr());
+      }
+    }
+    if (state.GetItemState(which, false) !== SfxItemState.SET) state.InvalidateItem(which);
+    return;
+  }
 }

@@ -1,6 +1,6 @@
 /** @fileoverview Consumed Character panel font/effects/color controls from sidebartextpanel.ui over actual Sfx bindings. */
 import { useRef } from "react";
-import { Bold, Italic, Underline } from "lucide-react";
+import { Bold, Italic, Underline, Strikethrough } from "lucide-react";
 import { SidebarPanel } from "../../../../sfx2/browser/presentation/SidebarPanel";
 import { CommandSelectControl } from "../../../../framework/browser/presentation/CommandSelectControl";
 import { CommandButton } from "../../../../framework/browser/presentation/CommandToolbar";
@@ -71,6 +71,7 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
             [".uno:Bold", Bold],
             [".uno:Italic", Italic],
             [".uno:Underline", Underline],
+            [".uno:Strikeout", Strikethrough],
           ].map(
             /** Projects source effect toolbar order. @param entry - Slot and icon. @returns Actual command button. */ ([
               commandId,

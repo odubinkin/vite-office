@@ -1,5 +1,5 @@
 /** @fileoverview Resolves represented NewNumberPortion font values from original paragraph and numbering owners. */
-import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import { FontStrikeout, FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   FontLineStyle,
   SvxFontItem,
@@ -8,6 +8,8 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import type { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
@@ -29,6 +31,7 @@ export interface SwNumberPortionFont {
   readonly weight: FontWeight;
   readonly posture: FontItalic;
   readonly underline: FontLineStyle;
+  readonly strikeout?: FontStrikeout;
   readonly color: string;
 }
 
@@ -64,6 +67,9 @@ export function resolveSwNumberPortionFont(
     underline: reset
       ? FontLineStyle.LINESTYLE_NONE
       : (node.GetAttr(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetLineStyle(),
+    ...((node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetBoolValue()
+      ? { strikeout: (node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetStrikeout() }
+      : {}),
     color: (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue(),
   });
 }

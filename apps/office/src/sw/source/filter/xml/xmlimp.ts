@@ -1,4 +1,7 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { ConvertFontSlant, ConvertFontWeight } from "../../../../vcl/inc/unohelp";
@@ -808,6 +811,8 @@ function putCharacterProperties(
   put: (item: SfxPoolItem) => unknown,
   inherited: (which: number) => SfxPoolItem,
 ): void {
+  if (properties.strikeout !== undefined)
+    put(new SvxCrossedOutItem(properties.strikeout as FontStrikeout, RES_CHRATR_CROSSEDOUT));
   if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
   for (const [suffix, which] of [
     ["", RES_CHRATR_FONT],

@@ -33,6 +33,8 @@ export interface OdfCharacterProperties {
   readonly fontSizeTwipsAsian?: number;
   readonly fontSizeTwipsComplex?: number;
   /** Native UNO CharUnderline and its independent color properties. */
+  /** Native UNO CharStrikeout, merged from the four original ODF properties. */
+  readonly strikeout?: number;
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;

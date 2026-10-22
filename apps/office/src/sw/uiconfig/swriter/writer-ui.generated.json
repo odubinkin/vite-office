@@ -73,6 +73,7 @@
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "toggleStatusBar": ".uno:StatusBarVisible",
+    "strikeout": ".uno:Strikeout",
     "underline": ".uno:Underline",
     "underlineSingle": ".uno:UnderlineSingle",
     "undo": ".uno:Undo",
@@ -141,6 +142,7 @@
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:Strikeout" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:UnderlineSingle" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:TableDialog" },
@@ -1244,6 +1246,22 @@
       "shortcuts": [],
       "slotId": 20583
     },
+    ".uno:Strikeout": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Strikethrough",
+      "label": "Strikethrough",
+      "iconName": "lc_strikeout.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10013
+    },
     ".uno:Underline": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1818,6 +1836,14 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:Strikeout",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ]
     },
     {
@@ -3487,14 +3513,6 @@
       "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:UnderlineDouble",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Strikeout",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6142,14 +6160,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Strikeout",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:Overline",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -7676,7 +7686,8 @@
             "items": [
               { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
               { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:UnderlineSingle", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:UnderlineSingle", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Text"
@@ -7918,6 +7929,7 @@
       { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
       { "commandUrl": ".uno:CharBackColor", "kind": "command", "visible": true },
@@ -9191,12 +9203,6 @@
         "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:UnderlineDouble"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Strikeout"
       },
       {
         "classification": "X",
@@ -11131,12 +11137,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:UnderlineDouble"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Strikeout"
       },
       {
         "classification": "X",

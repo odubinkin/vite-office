@@ -1,6 +1,9 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
@@ -258,6 +261,11 @@ export class SwAttrPool extends SfxItemPool {
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );
+    this.RegisterDefaultItem(
+      new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT),
+      /** Restores the complete native strikeout enum. @param value - Stored enum. @returns Item. */
+      (value) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
+    );
     this.RegisterDefaultItem(
       new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */

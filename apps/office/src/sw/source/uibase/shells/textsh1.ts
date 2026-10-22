@@ -1,4 +1,5 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { SwBaseShell } from "./basesh";
 import {
   createCharacterFormatItems,
   createFontHeightItems,
@@ -103,6 +104,8 @@ export interface SwTextShellTarget extends Pick<
       GetUndoActionCount(): number;
     }>;
   }>;
+  readonly GetCurAttr: (state: SfxItemSet) => boolean;
+  readonly SetAttrSet: (items: SfxItemSet) => boolean;
   readonly GetPendingCharacterItems: () => SfxItemSet;
   readonly IsMoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
   readonly MoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
@@ -137,7 +140,7 @@ export interface WriterParagraphFormatValue {
   readonly countLineNumbers: boolean;
 }
 /** Dedicated text context shell owning its execute/state registration. */
-export class SwTextShell {
+export class SwTextShell extends SwBaseShell {
   /** Applies only the requested native pending item delta. @param items - Complete changed values. @returns Nothing. */
   private ApplyPendingCharacterItems(items: readonly SfxPoolItem[]): void {
     const pending = this.target.GetPendingCharacterItems().Clone();
@@ -146,10 +149,8 @@ export class SwTextShell {
   }
   private readonly shell: SfxShell;
   /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
-  public constructor(
-    private readonly target: SwTextShellTarget,
-    dialogs: WriterDialogController,
-  ) {
+  public constructor(target: SwTextShellTarget, dialogs: WriterDialogController) {
+    super(target);
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
     this.shell.GetInterface().RegisterPopupMenu("text");
   }

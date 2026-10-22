@@ -1,4 +1,10 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import {
+  XMLCrossedOutStylePropHdl,
+  XMLCrossedOutTypePropHdl,
+  XMLCrossedOutWidthPropHdl,
+  XMLCrossedOutTextPropHdl,
+} from "../style/cdouthdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { cppu_detail_getUnoType_FontSlant as slantType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FastAttributeList } from "../core/xmlimp";
@@ -40,6 +46,21 @@ const lineProperties = [
   [T.STYLE_TEXT_UNDERLINE_TYPE, "style:text-underline-type", new XMLUnderlineTypePropHdl()],
   [T.STYLE_TEXT_UNDERLINE_WIDTH, "style:text-underline-width", new XMLUnderlineWidthPropHdl()],
 ] as const;
+/** Original chained CharStrikeout style/type/width/text associations. */
+const strikeoutProperties = [
+  [
+    T.STYLE_TEXT_LINE_THROUGH_STYLE,
+    "style:text-line-through-style",
+    new XMLCrossedOutStylePropHdl(),
+  ],
+  [T.STYLE_TEXT_LINE_THROUGH_TYPE, "style:text-line-through-type", new XMLCrossedOutTypePropHdl()],
+  [
+    T.STYLE_TEXT_LINE_THROUGH_WIDTH,
+    "style:text-line-through-width",
+    new XMLCrossedOutWidthPropHdl(),
+  ],
+  [T.STYLE_TEXT_LINE_THROUGH_TEXT, "style:text-line-through-text", new XMLCrossedOutTextPropHdl()],
+] as const;
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -49,6 +70,10 @@ export const textCharacterPropertyTokens = [
   ...lineProperties.map(
     /** Selects a native property token. @param entry - Mapping. @returns Token. */ ([token]) =>
       token,
+  ),
+  ...strikeoutProperties.map(
+    /** Reads the original decoration token. @param entry - Mapping. @returns Token. */
+    ([token]) => token,
   ),
   T.STYLE_TEXT_UNDERLINE_COLOR,
 ];
@@ -63,6 +88,11 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
       if (scalar === undefined) continue;
       value.insert([scalar], type);
       if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
+    }
+    if (properties.strikeout !== undefined) {
+      value.insert([properties.strikeout], "sal_Int16");
+      for (const [, name, handler] of strikeoutProperties)
+        if (handler.exportXML(output, value, converter)) result += ` ${name}="${output[0]}"`;
     }
     if (properties.underlineStyle !== undefined) {
       value.insert([properties.underlineStyle], "sal_Int16");
@@ -93,7 +123,8 @@ export function importTextCharacterProperties(
 ): Partial<OdfCharacterProperties> {
   const result: Record<string, number | boolean> = {},
     value = new Any(),
-    line = new Any();
+    line = new Any(),
+    crossedOut = new Any();
   try {
     for (const [token, text] of attributes) {
       const script = scriptProperties.find(
@@ -109,6 +140,15 @@ export function importTextCharacterProperties(
           result[key] = scalar[0];
         }
         continue;
+      }
+      const strikeout = strikeoutProperties.find(
+        /** Resolves one chained strikeout property. @param entry - Mapping. @returns Match. */
+        ([item]) => item === token,
+      );
+      if (strikeout !== undefined && strikeout[2].importXML(text, crossedOut, converter)) {
+        const scalar: [number] = [0];
+        crossedOut.extract(scalar, "sal_Int16");
+        result.strikeout = scalar[0];
       }
       const underline = lineProperties.find(
         /** Finds a line property. @param entry - Mapping. @returns Token equality. */ ([item]) =>
@@ -135,5 +175,6 @@ export function importTextCharacterProperties(
   } finally {
     value.dispose();
     line.dispose();
+    crossedOut.dispose();
   }
 }

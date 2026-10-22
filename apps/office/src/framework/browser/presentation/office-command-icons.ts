@@ -1,5 +1,6 @@
 /** @fileoverview Shared Writer/Calc Lucide icon vocabulary keyed by original UNO command identities. */
 import {
+  Strikethrough,
   ClipboardPaste,
   Copy,
   FilePlus,
@@ -68,6 +69,7 @@ import {
 import type { CommandIcon } from "./CommandToolbar";
 /** Common source command icons;module-specific resource order and live state remain outside this browser vocabulary. */
 export const officeCommandIcons: ReadonlyMap<string, CommandIcon> = new Map<string, CommandIcon>([
+  [".uno:Strikeout", Strikethrough],
   [".uno:AddDirect", FilePlus],
   [".uno:Open", FolderOpen],
   [".uno:OpenFromCalc", FolderOpen],
