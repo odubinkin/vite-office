@@ -4,7 +4,7 @@ title: "Preserve native sparse ODS export runs for large table browser saving"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,23 @@ verification:
   updated_by: "CODER"
   note: "610Calc/135owners100;56related cases/exporter100;14gates0;original5000-row default-limit reproduction and bounded output;all10000scalars/styles/geometry plus actual browser storage/reopen pass;portable raw audit passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-22T17:30:37.247Z"
+  updated_by: "EVALUATOR"
+  note: "Native empty-style span grouping repairs independently reproduced large ODS persistence failure under unchanged limits."
+  evaluated_sha: "db96ec6cc422e210cd831493fc6604a2e3d04bea"
+  blueprint_digest: "c0aa5d012582bd281f62d7878c930277b0d539e498ca7a93ad10329be2e172fc"
+  evidence_refs:
+    - ".agentplane/tasks/202610221715-X5TEM5/README.md"
+    - ".agentplane/tasks/202610221715-X5TEM5/quality/20261022-173037247-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610221715-X5TEM5/quality/20261022-173037247-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610221715-X5TEM5/quality/20261022-173037247-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610221715-X5TEM5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610221715-X5TEM5/evidence/acceptance.json"
+    - ".agentplane/tasks/202610221715-X5TEM5/evidence/audit.mjs"
+  findings:
+    - "Before/after evidence uses identical independently authored5000-row1024-column input. Original exporter fails default-size guard;new output1475262bytes preserves all10000scalars and geometry through real primary storage and fresh-session reopen. Horizontal style groups are invalidated at actual attribute row ends and split by real cell content;style-boundary and exporter-reuse regressions pass.610Calc/135owners and56related cases/changed exporter have raw100coverage;14gates and real Chromium persistence/reload checks pass."
 commit:
   hash: "db96ec6cc422e210cd831493fc6604a2e3d04bea"
   message: "🧩 X5TEM5 task: preserve native repeated empty-cell runs in large ODS saves"
