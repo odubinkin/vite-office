@@ -110,6 +110,8 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:HeadingRowsRepeat", semantics: "check" },
   { commandUrl: ".uno:RowSplit", semantics: "check" },
   { commandUrl: ".uno:SetMinimalRowHeight" },
+  { commandUrl: ".uno:SetOptimalRowHeight" },
+  { commandUrl: ".uno:DistributeRows" },
   { commandUrl: ".uno:Underline", semantics: "check" },
   { commandUrl: ".uno:UnderlineSingle", semantics: "check" },
   { commandUrl: ".uno:Undo" },
@@ -185,6 +187,8 @@ const commandAliases = {
   headingRowsRepeat: ".uno:HeadingRowsRepeat",
   rowSplit: ".uno:RowSplit",
   setMinimalRowHeight: ".uno:SetMinimalRowHeight",
+  setOptimalRowHeight: ".uno:SetOptimalRowHeight",
+  distributeRows: ".uno:DistributeRows",
 
   toggleHorizontalRuler: ".uno:Ruler",
   toggleVerticalRuler: ".uno:VRuler",
@@ -268,6 +272,8 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:HeadingRowsRepeat": "CAP-0137",
   ".uno:RowSplit": "CAP-0137",
   ".uno:SetMinimalRowHeight": "CAP-0137",
+  ".uno:SetOptimalRowHeight": "CAP-0137",
+  ".uno:DistributeRows": "CAP-0137",
 
   ".uno:Undo": "CAP-0102",
   ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":

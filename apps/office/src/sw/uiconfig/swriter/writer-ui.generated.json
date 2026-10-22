@@ -67,6 +67,8 @@
     "headingRowsRepeat": ".uno:HeadingRowsRepeat",
     "rowSplit": ".uno:RowSplit",
     "setMinimalRowHeight": ".uno:SetMinimalRowHeight",
+    "setOptimalRowHeight": ".uno:SetOptimalRowHeight",
+    "distributeRows": ".uno:DistributeRows",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
@@ -1210,6 +1212,38 @@
       "shortcuts": [],
       "slotId": 11186
     },
+    ".uno:SetOptimalRowHeight": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Optimal Row Height",
+      "label": "Optimal Row Height",
+      "iconName": "lc_setoptimalrowheight.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20528
+    },
+    ".uno:DistributeRows": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Distribute Rows Evenly",
+      "label": "Distribute Rows Evenly",
+      "iconName": "lc_distributerows.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20583
+    },
     ".uno:Underline": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1765,6 +1799,22 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SetMinimalRowHeight",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SetOptimalRowHeight",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:DistributeRows",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -4708,22 +4758,6 @@
       "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetOptimalRowHeight",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DistributeRows",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -6924,22 +6958,6 @@
       "classification": "X",
       "context": [".uno:TableAutoFitMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:SetOptimalRowHeight",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableAutoFitMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:DistributeRows",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableAutoFitMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:SetMinimalColumnWidth",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
@@ -7737,6 +7755,8 @@
             "items": [
               { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
               { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SetOptimalRowHeight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DistributeRows", "kind": "command", "visible": true },
               { "kind": "separator" },
               { "commandUrl": ".uno:SetColumnWidth", "kind": "command", "visible": true }
             ],
@@ -7824,6 +7844,8 @@
         "items": [
           { "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true },
           { "commandUrl": ".uno:SetMinimalRowHeight", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SetOptimalRowHeight", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DistributeRows", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:SetColumnWidth", "kind": "command", "visible": true }
         ],
@@ -10122,18 +10144,6 @@
         "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:SetOptimalRowHeight"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DistributeRows"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:SetMinimalColumnWidth"
       },
       {
@@ -11719,18 +11729,6 @@
         "context": [],
         "entryKind": "menu",
         "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableAutoFitMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SetOptimalRowHeight"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableAutoFitMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DistributeRows"
       },
       {
         "classification": "X",

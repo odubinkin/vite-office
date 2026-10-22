@@ -1,4 +1,6 @@
 /** @fileoverview Owns represented native row attributes and history from original selected lines in ndtbl1.cxx. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+import { SwFrame } from "../layout/wsfrm";
 import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
 import type { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwDoc } from "../doc/doc";
@@ -7,7 +9,7 @@ import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
 import { SwUndoAttrTable } from "../undo/untbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwTextNode } from "../txtnode/ndtxt";
-import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import {
@@ -426,6 +428,37 @@ export function SetSwRowHeight(
   cursorState?: SwUndoCursorState,
 ): boolean {
   return SetRowAttr(doc, cursor, size, cursorState);
+}
+
+/** Balances actual native row-frame heights without consulting browser command payloads. @param doc - Original document. @param cursor - Native point/table cursor. @param testOnly - Read-only multiple-row admission. @param optimize - Use source average rather than maximum. @param cursorState - Original shell history state. @returns Whether multiple source rows are admitted. */
+export function BalanceSwRowHeight(
+  doc: SwDoc,
+  cursor: SwCursor,
+  testOnly: boolean,
+  optimize: boolean,
+  cursorState?: SwUndoCursorState,
+): boolean {
+  const node = cursor.GetPoint().GetNode();
+  if (node.GetNodes() !== doc.nodes) return false;
+  const rows = CollectSwRowSplitLines(cursor);
+  if (rows.length <= 1) return false;
+  if (testOnly) return true;
+  let height = 0,
+    total = 0;
+  for (const row of rows) {
+    if (optimize) height = 0;
+    for (const frame of new SwIterator(SwClient, row.GetFrameFormat()))
+      if (frame instanceof SwFrame) height = Math.max(height, frame.getFrameArea().Height());
+    total = (total + height) | 0;
+  }
+  // Native sal_Int32 total is promoted to 64-bit size_t by division by vector::size().
+  if (optimize) height = Number(BigInt.asUintN(64, BigInt(total)) / BigInt(rows.length));
+  return SetRowAttr(
+    doc,
+    cursor,
+    new SwFormatFrameSize(SwFrameSize.Minimum, 0, height),
+    cursorState,
+  );
 }
 
 /** Records original row attributes through one document transaction, including same-value requests. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param value - Represented row item. @param cursorState - Optional shell history attributes. @returns Whether admitted. */

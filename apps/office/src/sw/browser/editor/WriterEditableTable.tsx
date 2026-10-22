@@ -1,4 +1,5 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
+import { SwFrameSize } from "../../inc/fmtfsize";
 import { SwXMLTableLines } from "../../source/filter/xml/xmltble";
 
 import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientation";
@@ -38,6 +39,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
   repeatedHeaderRows = 0,
+  measureNaturalRows = false,
   retainElement,
   paragraphs,
   activeParagraphId,
@@ -51,6 +53,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   firstRow?: number;
   lastRow?: number;
   repeatedHeaderRows?: number;
+  /** Device measurement consumes natural content before authored row-size constraints. */
+  measureNaturalRows?: boolean;
   retainElement?: (element: HTMLTableElement | null) => void;
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   activeParagraphId?: string;
@@ -133,6 +137,8 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                   rowFrame = rowFrame.GetNext() as SwRowFrame | undefined;
                 if (rowFrame === undefined) return null;
                 const nativeRow = rowFrame;
+                const rowSize = nativeRow.GetFormat().GetFrameSize();
+                const fixed = !measureNaturalRows && nativeRow.HasFixSize();
                 const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
                 let nativeCell = nativeRow.Lower();
                 return (
@@ -150,7 +156,12 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                     data-writer-table-row={rowIndex}
                     data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
                     key={rowIndex}
-                    style={{ height: nativeRow.Format(0) / 15 }}
+                    style={{
+                      height:
+                        measureNaturalRows || rowSize.GetHeightSizeType() === SwFrameSize.Variable
+                          ? undefined
+                          : rowSize.GetHeight() / 15,
+                    }}
                   >
                     {row.GetTabBoxes().map(
                       /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
@@ -161,23 +172,23 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                         nativeCell = frame.GetNext();
                         const cellFormat = frame.GetFormat(),
                           boxItem = cellFormat.GetBox(),
-                          boxStyle = browserCellBoxStyle(boxItem, nativeRow.HasFixSize());
+                          boxStyle = browserCellBoxStyle(boxItem, fixed);
                         if (collapsing) {
                           boxStyle.borderTop = browserBorderLine(
                             resolved.get(`true:${rowIndex}:${cellIndex}`),
-                            nativeRow.HasFixSize(),
+                            fixed,
                           );
                           boxStyle.borderBottom = browserBorderLine(
                             resolved.get(`true:${rowIndex + 1}:${cellIndex}`),
-                            nativeRow.HasFixSize(),
+                            fixed,
                           );
                           boxStyle.borderLeft = browserBorderLine(
                             resolved.get(`false:${cellIndex}:${rowIndex}`),
-                            nativeRow.HasFixSize(),
+                            fixed,
                           );
                           boxStyle.borderRight = browserBorderLine(
                             resolved.get(`false:${cellIndex + 1}:${rowIndex}`),
-                            nativeRow.HasFixSize(),
+                            fixed,
                           );
                         }
                         const content = cell.GetParagraphs().map(
@@ -236,9 +247,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                             colSpan={grid.GetColumnSpan(cell)}
                             key={cellIndex}
                             style={{
-                              ...(nativeRow.HasFixSize()
-                                ? { border: "none", padding: 0 }
-                                : boxStyle),
+                              ...(fixed ? { border: "none", padding: 0 } : boxStyle),
                               outline: [0, 1, 2, 3].every(
                                 /** Keeps borderless table guides outside native column geometry. @param edge - Native side. @returns Whether unpainted. */
                                 (edge) => boxItem.GetLine(edge)?.isEmpty() ?? true,
@@ -256,7 +265,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                     : "top",
                             }}
                           >
-                            {nativeRow.HasFixSize() ? (
+                            {fixed ? (
                               <div
                                 data-writer-fixed-row-content="true"
                                 style={{
@@ -264,7 +273,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
                                   top: 0,
                                   left: 0,
                                   right: 0,
-                                  height: row.GetFrameSize().GetHeight() / 15,
+                                  height: rowSize.GetHeight() / 15,
                                   boxSizing: "border-box",
                                   overflow: "hidden",
                                   display: "flex",

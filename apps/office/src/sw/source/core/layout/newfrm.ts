@@ -214,11 +214,13 @@ export class SwRootFrame extends SwLayoutFrame {
     this.cursorFrames.clear();
     for (const frame of this.snapshot?.tableFrames ?? []) SwFrame.DestroyFrame(frame);
     this.snapshot = undefined;
+    this.deviceInputs = undefined;
     this.lastInputs = [];
     this.lastDocument = undefined;
     this.dirty = true;
     super.DestroyImpl();
   }
+  private deviceInputs: Parameters<SwRootFrame["Format"]> | undefined;
   private dirty = true;
   private dirtyFrom = 0;
   private lastDocument: SwDoc | undefined;
@@ -267,6 +269,14 @@ export class SwRootFrame extends SwLayoutFrame {
     this.dirtyFrom = Math.min(this.dirtyFrom, affected < 0 ? paragraphs.length : affected);
   }
 
+  /** Completes the represented root layout at a native shell action boundary using the existing device inputs. @returns Nothing. */
+  public Calc(): void {
+    if (this.deviceInputs !== undefined && this.lastDocument === this.getDocument()) {
+      this.Invalidate();
+      this.Format(...this.deviceInputs);
+    }
+  }
+
   /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @param measurementRevision - Browser device revision. @param tableMeasurements - Browser table-row geometry. @returns Immutable current layout. */
   public Format(
     measurements: readonly SwTextFrameMeasurement[],
@@ -278,6 +288,14 @@ export class SwRootFrame extends SwLayoutFrame {
   ): SwRootFrameSnapshot {
     const document = this.getDocument();
     this.BindRootFormat(document);
+    this.deviceInputs = [
+      measurements,
+      descriptor,
+      settings,
+      lineInfo,
+      measurementRevision,
+      tableMeasurements,
+    ];
     for (const [node, measured] of this.cursorFrames)
       if (node.GetDoc() !== document) {
         for (const frame of measured.frames) SwFrame.DestroyFrame(frame);

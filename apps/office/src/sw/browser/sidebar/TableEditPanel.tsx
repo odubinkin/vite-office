@@ -3,6 +3,8 @@ import { useRef } from "react";
 import {
   Ellipsis,
   Minimize2,
+  Rows2,
+  Equal,
   ArrowUpToLine,
   ArrowDownToLine,
   ArrowLeftToLine,
@@ -209,12 +211,24 @@ export function TableEditPanel(
           )}
         </div>
         <div role="group" aria-label="Row sizing" className="flex gap-0.5">
-          <CommandButton
-            {...props}
-            commandId=".uno:SetMinimalRowHeight"
-            icon={Minimize2}
-            className="grid size-5 shrink-0 place-items-center rounded text-slate-700 hover:bg-indigo-50 disabled:opacity-50 [&_svg]:size-4"
-          />
+          {(
+            [
+              [".uno:SetMinimalRowHeight", Minimize2],
+              [".uno:SetOptimalRowHeight", Rows2],
+              [".uno:DistributeRows", Equal],
+            ] as const
+          ).map(
+            /** Retains the original three row-sizing controls and shared native binding. @param entry - Slot and icon. @returns Control. */
+            ([commandId, icon]) => (
+              <CommandButton
+                {...props}
+                key={commandId}
+                commandId={commandId}
+                icon={icon}
+                className="grid size-5 shrink-0 place-items-center rounded text-slate-700 hover:bg-indigo-50 disabled:opacity-50 [&_svg]:size-4"
+              />
+            ),
+          )}
         </div>
         <label className="grid gap-1 text-xs">
           Alignment:

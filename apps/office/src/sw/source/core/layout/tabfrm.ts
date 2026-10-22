@@ -1,4 +1,5 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
+import { SwFrameAreaDefinition } from "../inc/frame";
 import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
@@ -129,10 +130,28 @@ export class SwRowFrame extends SwLayoutFrame {
   /** Resolves represented native row height from the complete item and device content extent. @param contentHeight - Measured content height in twips. @returns Authored fixed height, minimum floor or natural content height. */
   public Format(contentHeight: number): number {
     const size = this.GetFormat().GetFrameSize();
-    if (size.GetHeightSizeType() === SwFrameSize.Fixed) return size.GetHeight();
-    return size.GetHeightSizeType() === SwFrameSize.Minimum
-      ? Math.max(size.GetHeight(), contentHeight)
-      : contentHeight;
+    const height =
+      size.GetHeightSizeType() === SwFrameSize.Fixed
+        ? size.GetHeight()
+        : size.GetHeightSizeType() === SwFrameSize.Minimum
+          ? Math.max(size.GetHeight(), contentHeight)
+          : contentHeight;
+    const area = new SwFrameAreaDefinition.FrameAreaWriteAccess(this.areaDefinition);
+    try {
+      area.Height(height);
+    } finally {
+      area.Dispose();
+    }
+    const print = new SwFrameAreaDefinition.FramePrintAreaWriteAccess(this.areaDefinition);
+    try {
+      print.Left(0);
+      print.Top(0);
+      print.Width(this.getFrameArea().Width());
+      print.Height(height);
+    } finally {
+      print.Dispose();
+    }
+    return height;
   }
 }
 

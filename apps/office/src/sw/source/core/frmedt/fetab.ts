@@ -458,8 +458,33 @@ export abstract class SwFEShell extends SwEditShell {
   /** Applies a complete native size to current or selected rows. @param size - Native frame-size item. @returns Whether admitted. */
   public SetRowHeight(size: SwFormatFrameSize): boolean {
     return this.RunNotificationTransaction(
-      /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
-      () => this.GetDoc().SetRowHeight(this.getShellCursor(), size, this.CaptureCursorState()),
+      /** Forwards native selection and completes the source row-height action before another command reads geometry. @returns Whether admitted. */
+      () => {
+        const result = this.GetDoc().SetRowHeight(
+          this.getShellCursor(),
+          size,
+          this.CaptureCursorState(),
+        );
+        this.GetLayout().Calc();
+        return result;
+      },
+    );
+  }
+
+  /** Completes each mutating native balancing action before a later optimal-height pass reads frames. @param testOnly - Read-only state query. @param optimize - Source average mode. @returns Whether native multiple-row admission succeeded. */
+  public BalanceRowHeight(testOnly: boolean, optimize = false): boolean {
+    if (testOnly) return this.GetDoc().BalanceRowHeight(this.getShellCursor(), true, optimize);
+    return this.RunNotificationTransaction(
+      /** Applies original row formats and completes the current root's native layout. @returns Whether admitted. */ () => {
+        const result = this.GetDoc().BalanceRowHeight(
+          this.getShellCursor(),
+          false,
+          optimize,
+          this.CaptureCursorState(),
+        );
+        this.GetLayout().Calc();
+        return result;
+      },
     );
   }
 

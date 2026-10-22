@@ -355,6 +355,24 @@ export class SwTableShell {
             isChecked: () => this.wrtShell.GetBoxAlign() === alignment,
           }),
         ),
+        ...[WRITER_COMMAND_IDS.setOptimalRowHeight, WRITER_COMMAND_IDS.distributeRows].map(
+          /** Binds native test-only state and literal one/two-pass execution. @param id - Original row-sizing slot. @returns Handler. */
+          (id) => ({
+            id,
+            capabilityId: "CAP-0137" as const,
+            /** Completes each shell action before the next pass reads original frame areas. @returns Whether admitted. */
+            execute: () => {
+              if (id === WRITER_COMMAND_IDS.setOptimalRowHeight) {
+                this.wrtShell.BalanceRowHeight(false, true);
+                return this.wrtShell.BalanceRowHeight(false, false);
+              }
+              return this.wrtShell.BalanceRowHeight(true) && this.wrtShell.BalanceRowHeight(false);
+            },
+            /** Queries source multiple-row admission without recalculating or mutating frames. @returns Whether available. */
+            isEnabled: () =>
+              this.wrtShell.IsCursorInTable() !== undefined && this.wrtShell.BalanceRowHeight(true),
+          }),
+        ),
         {
           id: WRITER_COMMAND_IDS.setMinimalRowHeight,
           capabilityId: "CAP-0137",
