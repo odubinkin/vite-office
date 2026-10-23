@@ -1,10 +1,11 @@
 ---
 id: "202610231745-0YVMQG"
 title: "Route Writer ODT import through upstream text APIs"
-status: "DOING"
+result_summary: "route ODT text, styles, numbering and cell content through upstream Writer APIs; remove SwXMLParagraphTarget and verify the current core slice with 478 focused tests"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610231745-0YVMQG/verification-evidence.json"
   findings:
     - "Verified source hashes match the implementation. Native API integration checks exercise body and cell insertion, paragraph controls, typed properties, styles, numbering and bookmarks. Automatic character styles retain document-pooled handles and distinct paragraph/span ownership. Native table structure remains specialized. Literal numbering/geometry/continuation expectations remain, while obsolete opaque-name/collision/soft-break assumptions follow pinned source. Dependency guards explicitly distinguish the model API from UI and retain reverse-edge protection. Registry parity statuses are preserved."
-commit: null
+commit:
+  hash: "2bbc8c2dab5c7014f1e8e0c438ad2310cbfdf902"
+  message: "🧩 0YVMQG writer: route ODT import through upstream Writer APIs"
 comments:
   -
     author: "CODER"
     body: "Start: migrate ordinary ODT content and style import to pinned common Writer APIs, preserving native table responsibilities and targeted regression coverage."
+  -
+    author: "CODER"
+    body: "Verified: ODT text, paragraph properties, styles, numbering, bookmarks and table-cell text now use shared XMLTextImportHelper and actual Writer APIs; specialized native table structure remains in SwXMLTableImport. 478 focused tests and all declared static/source/registry checks pass. Quality review passed for implementation 2bbc8c2dab5c."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "478 distinct focused tests passed: Writer ODT 341, API/core 65, shared xmloff 19, font 4, boundary 49; final automatic-style/API rerun 29 passed. Typecheck, scoped ESLint/Prettier, dependency/JSDoc/size/source-tree/provenance and Writer/shared registry checks passed. Exact commands, argv and source hashes: .agentplane/tasks/202610231745-0YVMQG/verification-evidence.json. No full suites, DOCX, network or sibling changes."
+  -
+    type: "status"
+    at: "2026-10-23T18:57:51.580Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ODT text, paragraph properties, styles, numbering, bookmarks and table-cell text now use shared XMLTextImportHelper and actual Writer APIs; specialized native table structure remains in SwXMLTableImport. 478 focused tests and all declared static/source/registry checks pass. Quality review passed for implementation 2bbc8c2dab5c."
 doc_version: 3
-doc_updated_at: "2026-10-23T18:55:53.144Z"
+doc_updated_at: "2026-10-23T18:57:51.581Z"
 doc_updated_by: "CODER"
 description: "Replace SwXMLParagraphTarget and direct ordinary ODT text/style/property mutations with pinned upstream XMLTextImportHelper and common Writer API. Preserve native specialized SwXMLTableImport/core responsibilities and all currently represented ODT features. Work only in vite-office; no DOCX or Calc implementation; targeted module tests only."
 sections:
@@ -187,6 +200,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit and task-specific registry/documentation changes. Preserve the preceding common Writer API port and all unrelated tasks."
   Findings: "Pinned-source migration removes SwXMLParagraphTarget and both obsolete Writer-only property/style sinks. Ordinary text, paragraph terminators, styles, properties, list services, bookmarks and cell text now use actual Writer API owners. Native table structure and endDocAdjustNodes remain specialized core operations. Source-based regression corrections: automatic rule names are opaque; common and automatic list namespaces are separate; named rules export in styles.xml; soft-page-break XML is ignored by native XMLParaContext; list indentation is derived from native items rather than the legacy projection flag. No network, sibling-repository edits, DOCX work or full test suites. Full engine/UNO service coverage and unsupported current-core features remain outside scope. Prior registry statuses and registered I/O deviations are preserved."
+extensions:
+  implementation_commit:
+    hash: "2bbc8c2dab5c7014f1e8e0c438ad2310cbfdf902"
+    message: "🧩 0YVMQG writer: route ODT import through upstream Writer APIs"
 id_source: "generated"
 ---
 ## Summary
