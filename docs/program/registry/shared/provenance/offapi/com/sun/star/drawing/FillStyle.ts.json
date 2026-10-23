@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts",
+    "localSymbols": [
+      "FillStyle"
+    ],
+    "upstreamPath": "offapi/com/sun/star/drawing/FillStyle.idl",
+    "upstreamSymbols": [
+      "FillStyle"
+    ],
+    "preservedResponsibilities": [
+      "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete native SetupEntry,style pool lookup and renderer/backend parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts",
+          "marker": "FillStyle"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/drawing/FillStyle.idl",
+          "marker": "FillStyle"
+        }
+      ]
+    }
+  }
+}

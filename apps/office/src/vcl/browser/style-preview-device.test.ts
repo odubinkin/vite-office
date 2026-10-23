@@ -5,6 +5,7 @@ import { Font } from "../source/font/font";
 import { Point, Rectangle } from "../../tools/inc/gen";
 import { FontItalic, FontWeight, TextAlign } from "../../tools/inc/fontenum";
 import { SvtScriptType } from "../../svl/inc/languageoptions";
+import { Color, COL_WHITE } from "../../tools/inc/color";
 import {
   calcStylePreviewBounds,
   drawStylePreviewEntry,
@@ -37,15 +38,72 @@ function fixture() {
       /** Supplies explicit host metrics. @returns Fixture metrics. */ () => metrics,
     ),
     fillText: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    fillRect: vi.fn(),
+    strokeRect: vi.fn(),
+    strokeStyle: "",
   };
   const ui = font("ui-serif, serif"),
     device = new BrowserStylePreviewDevice(
       context as unknown as CanvasRenderingContext2D,
       ui,
       "#123456",
+      { background: COL_WHITE, fillColor: COL_WHITE, lineColor: undefined },
     );
   return { context, metrics, ui, device };
 }
+it("keeps text, fill and explicit host background/outline state separate", /** Observes actual adapter operations over native values without assuming raster equivalence. @returns Nothing. */ () => {
+  const f = fixture(),
+    background = new Color(0x123456),
+    fill = new Color(0x456789),
+    outline = new Color(0xabcdef);
+  const device = new BrowserStylePreviewDevice(
+    f.context as unknown as CanvasRenderingContext2D,
+    f.ui,
+    "#202020",
+    { background, fillColor: fill, lineColor: outline },
+  );
+  background.SetRed(0);
+  fill.SetRed(0);
+  outline.SetRed(0);
+  expect(device.GetBackgroundColor().toUInt32()).toBe(0x123456);
+  device.DrawRect(new Rectangle(2, 3, 8, 9));
+  expect(f.context.fillRect).toHaveBeenCalledWith(2, 3, 7, 7);
+  expect(f.context.strokeRect).toHaveBeenCalledWith(2, 3, 6, 6);
+  expect(f.context.strokeStyle).toBe("#abcdef");
+  device.SetTextColor(new Color(0x987654));
+  expect(f.context.fillStyle).toBe("#987654");
+  const next = new Color(0x010203);
+  device.SetFillColor(next);
+  next.SetBlue(9);
+  device.DrawRect(new Rectangle(0, 0, 4, 4));
+  expect(f.context.fillStyle).toBe("#010203");
+  expect(f.context.save).toHaveBeenCalledTimes(2);
+  expect(f.context.restore).toHaveBeenCalledTimes(2);
+});
+it("normalizes reversed row edges and skips source-empty rectangles before host calls", /** Preserves native DrawRect geometry instead of treating negative inclusive widths as Canvas extents. @returns Nothing. */ () => {
+  const f = fixture();
+  f.device.DrawRect(new Rectangle());
+  expect(f.context.save).not.toHaveBeenCalled();
+  f.device.DrawRect(new Rectangle(8, 9, 2, 3));
+  expect(f.context.fillRect).toHaveBeenCalledWith(2, 3, 7, 7);
+});
+it("omits disabled outlines and restores the host state after failed rectangle paint", /** Actual host errors are propagated after paint-state restoration. @returns Nothing. */ () => {
+  const f = fixture();
+  f.device.DrawRect(new Rectangle(0, 0, 1, 1));
+  expect(f.context.strokeRect).not.toHaveBeenCalled();
+  f.context.fillRect.mockImplementationOnce(
+    /** Simulates an actual host paint failure. @returns Never. */ () => {
+      throw new Error("paint failed");
+    },
+  );
+  expect(
+    /** Invokes real adapter failure path. @returns Nothing. */ () =>
+      f.device.DrawRect(new Rectangle(0, 0, 1, 1)),
+  ).toThrow("paint failed");
+  expect(f.context.restore).toHaveBeenCalledTimes(2);
+});
 it.each([
   [FontWeight.WEIGHT_THIN, 100],
   [FontWeight.WEIGHT_ULTRALIGHT, 200],

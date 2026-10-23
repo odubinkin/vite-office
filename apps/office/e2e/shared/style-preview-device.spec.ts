@@ -17,6 +17,7 @@ type SourceExports = typeof import("../../src/sw/browser/composition/writer-modu
   typeof import("../../src/tools/inc/gen") &
   typeof import("../../src/tools/inc/mapunit") &
   typeof import("../../src/tools/inc/fontenum") &
+  typeof import("../../src/tools/inc/color") &
   typeof import("../../src/editeng/inc/editids") &
   typeof import("../../src/o3tl/inc/unit_conversion");
 test("actual Canvas style paint from real Writer preview items", /** Measures and paints actual style fonts on a production page using separately bundled repository exports. @param fixtures - Chromium page. @param testInfo - Local witness artifacts. @returns Completion. */ async ({
@@ -70,6 +71,7 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
     { module: "src/tools/inc/gen.ts", names: ["Rectangle", "Size"] },
     { module: "src/tools/inc/mapunit.ts", names: ["MapUnit"] },
     { module: "src/tools/inc/fontenum.ts", names: ["FontWeight"] },
+    { module: "src/tools/inc/color.ts", names: ["COL_WHITE"] },
     {
       module: "src/editeng/inc/editids.ts",
       names: [
@@ -103,7 +105,11 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
       ui.SetFamilyName("system-ui");
       ui.SetFontHeight(14);
       ui.SetWeight(api.FontWeight.WEIGHT_NORMAL);
-      const device = new api.BrowserStylePreviewDevice(context, ui, "#202020");
+      const device = new api.BrowserStylePreviewDevice(context, ui, "#202020", {
+        background: api.COL_WHITE,
+        fillColor: api.COL_WHITE,
+        lineColor: undefined,
+      });
       const observations = [];
       try {
         for (const [index, id] of ["heading-1", "heading-4"].entries()) {

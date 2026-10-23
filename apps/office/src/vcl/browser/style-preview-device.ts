@@ -3,6 +3,15 @@ import { Font, type ConstFont } from "../source/font/font";
 import { Rectangle, type ReadonlyPoint } from "../../tools/inc/gen";
 import { FontItalic, FontWeight, TextAlign } from "../../tools/inc/fontenum";
 import { quoteFontFamily } from "./font-preview-device";
+import { Color } from "../../tools/inc/color";
+import { browserColor } from "./color";
+
+/** Actual host paint state; undefined line color explicitly disables the native rectangle outline. */
+export interface BrowserStylePreviewPaintState {
+  readonly background: Readonly<Color>;
+  readonly fillColor: Readonly<Color>;
+  readonly lineColor: Readonly<Color> | undefined;
+}
 
 /** Original CSS weight projection from SVGAttributeWriter::SetFontAttr; SEMILIGHT and unknown values use400. @param weight - Actual stored weight. @returns CSS weight. */
 function cssWeight(weight: FontWeight): number {
@@ -32,18 +41,58 @@ function cssWeight(weight: FontWeight): number {
 export class BrowserStylePreviewDevice {
   private font: Font;
   private readonly uiFamily: string;
-  /** Binds real Canvas and an actual UI font whose family is the computed CSS family list. @param context - Actual Canvas context. @param uiFont - Actual UI family and stored pixel font values. @param color - Actual UI text color. @returns Device. */
+  private readonly background: Readonly<Color>;
+  private fillColor: Readonly<Color>;
+  private readonly lineColor: Readonly<Color> | undefined;
+  /** Binds real Canvas and an actual UI font whose family is the computed CSS family list. @param context - Actual Canvas context. @param uiFont - Actual UI family and stored pixel font values. @param color - Actual UI text color. @param paint - Explicit host background, fill and outline state. @returns Device. */
   constructor(
     private readonly context: CanvasRenderingContext2D,
     uiFont: ConstFont,
     color: string,
+    paint: BrowserStylePreviewPaintState,
   ) {
     this.font = new Font(uiFont);
     this.uiFamily = uiFont.GetFamilyName();
+    this.background = Object.freeze(new Color(paint.background));
+    this.fillColor = Object.freeze(new Color(paint.fillColor));
+    this.lineColor =
+      paint.lineColor === undefined ? undefined : Object.freeze(new Color(paint.lineColor));
     context.textBaseline = "alphabetic";
     context.textAlign = "left";
     context.fillStyle = color;
     this.SetFont(uiFont);
+  }
+  /** Original SetTextColor value is projected without discarding alpha. @param color - Actual native color. @returns Nothing. */
+  public SetTextColor(color: Readonly<Color>): void {
+    this.context.fillStyle = browserColor(color);
+  }
+  /** Independent native rectangle fill state does not change text color. @param color - Actual fill value. @returns Nothing. */
+  public SetFillColor(color: Readonly<Color>): void {
+    this.fillColor = Object.freeze(new Color(color));
+  }
+  /** Consumed GetBackground().GetColor() result is the explicit host background. @returns Background value. */
+  public GetBackgroundColor(): Readonly<Color> {
+    return this.background;
+  }
+  /** Normalizes nonempty source rectangles like OutputDevice::DrawRect. Fill spans inclusive extents; the outline excludes the final edge as CairoCommon::drawRect does. Browser rasterization is not native pixel parity. @param rectangle - Actual source row. @returns Nothing. */
+  public DrawRect(rectangle: Rectangle): void {
+    if (rectangle.IsEmpty()) return;
+    const left = Math.min(rectangle.Left(), rectangle.Right()),
+      top = Math.min(rectangle.Top(), rectangle.Bottom()),
+      width = Math.abs(rectangle.Right() - rectangle.Left()) + 1,
+      height = Math.abs(rectangle.Bottom() - rectangle.Top()) + 1;
+    this.context.save();
+    try {
+      this.context.fillStyle = browserColor(this.fillColor);
+      this.context.fillRect(left, top, width, height);
+      if (this.lineColor !== undefined) {
+        this.context.strokeStyle = browserColor(this.lineColor);
+        this.context.lineWidth = 1;
+        this.context.strokeRect(left, top, width - 1, height - 1);
+      }
+    } finally {
+      this.context.restore();
+    }
   }
   /** Returns actual copied device font state. @returns Current font. */
   public GetFont(): Font {
