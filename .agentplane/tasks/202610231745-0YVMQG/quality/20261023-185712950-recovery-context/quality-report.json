@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610231745-0YVMQG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-23T18:57:12.950Z",
+  "verdict": "pass",
+  "summary": "Commit 2bbc8c2dab5c replaces the bespoke ODT paragraph target with shared text import and actual Writer APIs within the represented core slice; all declared targeted checks passed.",
+  "evaluated_sha": "2bbc8c2dab5c7014f1e8e0c438ad2310cbfdf902",
+  "blueprint_digest": "c5ad82e66be839fa855b2bee10cd19500f8597257782bb672739e21f9fd66b91",
+  "findings": [
+    "Verified source hashes match the implementation. Native API integration checks exercise body and cell insertion, paragraph controls, typed properties, styles, numbering and bookmarks. Automatic character styles retain document-pooled handles and distinct paragraph/span ownership. Native table structure remains specialized. Literal numbering/geometry/continuation expectations remain, while obsolete opaque-name/collision/soft-break assumptions follow pinned source. Dependency guards explicitly distinguish the model API from UI and retain reverse-edge protection. Registry parity statuses are preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610231745-0YVMQG/README.md",
+    ".agentplane/tasks/202610231745-0YVMQG/verification-evidence.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Only the represented Writer ODT/core slice is covered. Full UNO service metadata/listeners, unrepresented automatic paragraph/ruby families, expanded bookmarks and wider engine/layout behavior remain outside scope. Full suites were intentionally omitted at user request."
+  ]
+}

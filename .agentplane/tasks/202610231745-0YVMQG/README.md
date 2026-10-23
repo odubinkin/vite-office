@@ -4,7 +4,7 @@ title: "Route Writer ODT import through upstream text APIs"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,22 @@ verification:
   updated_by: "CODER"
   note: "478 distinct focused tests passed: Writer ODT 341, API/core 65, shared xmloff 19, font 4, boundary 49; final automatic-style/API rerun 29 passed. Typecheck, scoped ESLint/Prettier, dependency/JSDoc/size/source-tree/provenance and Writer/shared registry checks passed. Exact commands, argv and source hashes: .agentplane/tasks/202610231745-0YVMQG/verification-evidence.json. No full suites, DOCX, network or sibling changes."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-23T18:57:12.950Z"
+  updated_by: "EVALUATOR"
+  note: "Commit 2bbc8c2dab5c replaces the bespoke ODT paragraph target with shared text import and actual Writer APIs within the represented core slice; all declared targeted checks passed."
+  evaluated_sha: "2bbc8c2dab5c7014f1e8e0c438ad2310cbfdf902"
+  blueprint_digest: "c5ad82e66be839fa855b2bee10cd19500f8597257782bb672739e21f9fd66b91"
+  evidence_refs:
+    - ".agentplane/tasks/202610231745-0YVMQG/README.md"
+    - ".agentplane/tasks/202610231745-0YVMQG/quality/20261023-185712950-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610231745-0YVMQG/quality/20261023-185712950-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610231745-0YVMQG/quality/20261023-185712950-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610231745-0YVMQG/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610231745-0YVMQG/verification-evidence.json"
+  findings:
+    - "Verified source hashes match the implementation. Native API integration checks exercise body and cell insertion, paragraph controls, typed properties, styles, numbering and bookmarks. Automatic character styles retain document-pooled handles and distinct paragraph/span ownership. Native table structure remains specialized. Literal numbering/geometry/continuation expectations remain, while obsolete opaque-name/collision/soft-break assumptions follow pinned source. Dependency guards explicitly distinguish the model API from UI and retain reverse-edge protection. Registry parity statuses are preserved."
 commit: null
 comments:
   -
