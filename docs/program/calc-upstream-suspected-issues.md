@@ -3781,3 +3781,21 @@ Evidence: the pinned methods and
 [clipboard-block.test.ts](../../apps/office/src/sc/source/core/data/clipboard-block.test.ts)
 (`retains signed SCROW-max sentinel and its original filtered-row count accumulation`).
 Decision: preserve the original accumulator and output instead of clamping them.
+
+## CALC-262: empty selected Undo initialization retains one null sheet slot
+
+Status: surprising diagnostic fallback; not a confirmed defect in a defined UI call.
+
+Pinned `sc/source/core/data/markdata.cxx`, `ScMarkData::GetLastSelected`,
+lines 194–200, reports a diagnostic and returns 0 when no sheet is selected.
+Pinned `sc/source/core/data/document.cxx`, `ScDocument::InitUndoSelected`,
+lines 2076–2105, loops inclusively through that result and appends a null slot
+for every unselected sheet. Thus an empty selection leaves the Undo document
+with a table-vector size of 1 and `FetchTable(0) == nullptr`.
+
+Evidence: the pinned methods and
+[clipboard-undo-init.test.ts](../../apps/office/src/sc/source/core/data/clipboard-undo-init.test.ts)
+(`replaces previous Undo content with exactly selected sparse sheets and independent option defaults`).
+Whether ordinary upstream UI callers can supply an empty selection has not
+been established. Decision: preserve the slot and original diagnostic fallback,
+without replacing the result with an empty vector.

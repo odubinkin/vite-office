@@ -36,8 +36,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         const n = (globalThis as unknown as { CalcClipboardFixture: Fixture }).CalcClipboardFixture,
           doc = new n.ScDocument(),
           clip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP),
+          undo = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_UNDO),
           grammar = n.FormulaGrammar.Grammar.GRAM_NATIVE;
         for (let tab = 0; tab < 3; ++tab) doc.InsertTab(tab, n.unicode(`Sheet${tab}`));
+        undo.InitUndo(doc, 0, 0);
+        const undoTable = undo.FetchTable(0);
+        if (!undoTable) throw Error("Missing actual Undo table");
+        const originalUndoWidth = undoTable.GetColWidth(0);
+        undoTable.SetColWidth(0, originalUndoWidth + 100);
+        const undoGeometryDisabled = undoTable.GetColWidth(0) === originalUndoWidth,
+          undoShared = undo.GetPool() === doc.GetPool();
         clip.ResetClip(doc, 2);
         clip.SetClipArea(new n.ScRange(0, 0, 2, 0, 1, 2));
         clip.SetValue(new n.ScAddress(0, 0, 2), 13);
@@ -55,7 +63,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         doc.GetValue(new n.ScAddress(5, 0, 0));
         const context = new n.CopyFromClipContext(
             doc,
-            null,
+            undo,
             clip,
             n.InsertDeleteFlags.CONTENTS,
             false,
@@ -91,8 +99,9 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         string.dispose();
         context.Dispose();
         clip.Dispose();
+        undo.Dispose();
         doc.Dispose();
-        return { value, changed, formula, sparse };
+        return { value, changed, formula, sparse, undoGeometryDisabled, undoShared };
       }
       const script = Array.from(document.scripts).find(
         /** Locates the actual kernel compiler output. @param item - Script. @returns Match. */ (
@@ -130,6 +139,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       }
     },
   );
-  const expected = { value: 21, changed: 34, formula: "=D6+1", sparse: true };
+  const expected = {
+    value: 21,
+    changed: 34,
+    formula: "=D6+1",
+    sparse: true,
+    undoGeometryDisabled: true,
+    undoShared: true,
+  };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

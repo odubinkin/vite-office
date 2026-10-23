@@ -121,7 +121,7 @@ it("recompiles the actual referenced cell and preserves the first on-move undo f
   const doc = new ScDocument(),
     undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
   doc.InsertTab(0, unicode("Data"));
-  undo.InsertTab(0, unicode("Data"));
+  undo.InitUndo(doc, 0, 0);
   const position = new ScAddress(1, 1, 0),
     cell = new ScFormulaCell(doc, position, unicode("=A2+1"), grammar);
   doc.SetFormulaCell(position, cell);
@@ -308,7 +308,7 @@ it("retains unchanged positions,explicit undo coordinates and disabled automatic
   const doc = new ScDocument(),
     undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
   doc.InsertTab(0, unicode("Data"));
-  undo.InsertTab(0, unicode("Data"));
+  undo.InitUndo(doc, 0, 0);
   const cell = new ScFormulaCell(doc, new ScAddress(1, 1, 0), unicode("=A2"), grammar),
     context = new RefUpdateContext(doc);
   context.meMode = UpdateRefMode.URM_COPY;

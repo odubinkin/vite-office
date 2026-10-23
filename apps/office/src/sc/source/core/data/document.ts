@@ -79,6 +79,18 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original contiguous Undo initialization. @param args - Native source,sheets and allocation defaults. @returns Nothing. */
+  InitUndo(...args: Parameters<typeof documen7.InitUndo>): void {
+    documen7.InitUndo.apply(this, args);
+  }
+  /** Original sparse selected-sheet Undo initialization. @param args - Native source,marks and allocation defaults. @returns Nothing. */
+  InitUndoSelected(...args: Parameters<typeof documen7.InitUndoSelected>): void {
+    documen7.InitUndoSelected.apply(this, args);
+  }
+  /** Original incremental Undo sheet allocation. @param args - Native sheet range and allocation defaults. @returns Nothing. */
+  AddUndoTab(...args: Parameters<typeof documen7.AddUndoTab>): void {
+    documen7.AddUndoTab.apply(this, args);
+  }
   /** Original general block paste into actual selected sheets. @param args - Native context,bounds,marks and displacement. @returns Nothing. */
   CopyBlockFromClip(...args: Parameters<typeof documen7.CopyBlockFromClip>): void {
     documen7.CopyBlockFromClip.apply(this, args);
@@ -182,22 +194,9 @@ export class ScDocument {
     parameter.maRanges.push_back(range);
     parameter.mbCutMode = cut;
   }
-  /** Reads native inclusive clipboard dimensions as coordinate differences. @param cols - Column difference output. @param rows - Row difference output. @param includeFiltered - Include filtered rows. @returns Nothing. */
-  GetClipArea(cols: [number], rows: [number], includeFiltered: boolean): void {
-    if (!this.IsClipboard()) return;
-    const ranges = this.GetClipParam().maRanges;
-    if (ranges.empty()) return;
-    const whole = ranges.Combine();
-    cols[0] = whole.aEnd.Col() - whole.aStart.Col();
-    if (includeFiltered) rows[0] = whole.aEnd.Row() - whole.aStart.Row();
-    else {
-      let tab = 0;
-      while (tab < this.GetTableCount() && !this.FetchTable(tab)) ++tab;
-      rows[0] = Math.max(
-        0,
-        this.CountNonFilteredRows(whole.aStart.Row(), whole.aEnd.Row(), tab) - 1,
-      );
-    }
+  /** Original clipboard dimensions on this actual document. @param args - Dimension outputs and filtered mode. @returns Nothing. */
+  GetClipArea(...args: Parameters<typeof documen7.GetClipArea>): void {
+    documen7.GetClipArea.apply(this, args);
   }
   private mpClipParam: ScClipParam | undefined;
   /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */

@@ -12,7 +12,8 @@ import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn, ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
-import type { ScTable } from "../../../inc/table";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { ScTable } from "../../../inc/table";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -737,4 +738,71 @@ export function CopyNonFilteredFromClip(
   }
   sourceRow[0] = row;
   return filtered;
+}
+
+/** Original clipboard dimensions,partitioned unchanged onto the same document. @param this - Actual document. @param cols - Width difference. @param rows - Height difference. @param includeFiltered - Filtered mode. @returns Nothing. */
+export function GetClipArea(
+  this: ScDocument,
+  cols: [number],
+  rows: [number],
+  includeFiltered: boolean,
+): void {
+  if (!this.IsClipboard()) return;
+  const ranges = this.GetClipParam().maRanges;
+  if (ranges.empty()) return;
+  const whole = ranges.Combine();
+  cols[0] = whole.aEnd.Col() - whole.aStart.Col();
+  if (includeFiltered) rows[0] = whole.aEnd.Row() - whole.aStart.Row();
+  else {
+    let tab = 0;
+    while (tab < this.GetTableCount() && !this.FetchTable(tab)) ++tab;
+    rows[0] = Math.max(0, this.CountNonFilteredRows(whole.aStart.Row(), whole.aEnd.Row(), tab) - 1);
+  }
+}
+/** Original native contiguous Undo initialization;source shell-medium URL propagation remains unrepresented. @param this - Undo document. @param source - Source owner. @param first - First sheet. @param last - Last sheet. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function InitUndo(
+  this: ScDocument,
+  source: ScDocument,
+  first: number,
+  last: number,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  this.Clear();
+  this.SharePooledResources(source);
+  const tabs = this["maTabs"];
+  while (tabs.length <= last) tabs.push(null);
+  for (let tab = first; tab <= last; ++tab)
+    tabs[tab] = new ScTable(this, tab, new OUString(), colInfo, rowInfo);
+}
+/** Original selected-sheet Undo initialization retains intervening null slots and clears previous payload owners. @param this - Undo document. @param source - Source owner. @param marks - Source-selected sheets. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function InitUndoSelected(
+  this: ScDocument,
+  source: ScDocument,
+  marks: ScMarkData,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  this.Clear();
+  this.SharePooledResources(source);
+  for (let tab = 0; tab <= marks.GetLastSelected(); ++tab)
+    this["maTabs"].push(
+      marks.GetTableSelect(tab) ? new ScTable(this, tab, new OUString(), colInfo, rowInfo) : null,
+    );
+}
+/** Original incremental Undo allocation leaves existing tables and their geometry owners intact. @param this - Undo document. @param first - First sheet. @param last - Last sheet. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function AddUndoTab(
+  this: ScDocument,
+  first: number,
+  last: number,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  const tabs = this["maTabs"];
+  while (tabs.length <= last) tabs.push(null);
+  for (let tab = first; tab <= last; ++tab)
+    if (!tabs[tab]) tabs[tab] = new ScTable(this, tab, new OUString(), colInfo, rowInfo);
 }
