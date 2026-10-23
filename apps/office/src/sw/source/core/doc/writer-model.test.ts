@@ -716,7 +716,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
       DocumentContentOperationsManager,
     );
     expect(writer.GetDocumentListsManager()).toBeDefined();
-    expect(writer.GetDocumentStylePoolManager()).toBeDefined();
+    expect(writer.getIDocumentStylePoolAccess()).toBeDefined();
     const settings = writer.GetDocumentSettingManager();
     expect(settings.get("HTML_MODE")).toBe(false);
     expect(settings.get("TAB_COMPAT")).toBe(true);

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/source/control/ctrlbox.fontname.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svtools/source/control/ctrlbox.fontname.ts#drawFontNamePreview",
+        "apps/office/src/svtools/source/control/ctrlbox.fontname.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT in-progress font/style dropdown pipeline: original FontNameBox item sizing, five-pixel fit loop, own-name eligibility, exact script/minimal/symbol sample order, right-aligned sample truncation and scoped paint state are represented. Browser Canvas consumes acquired face metadata and real TextMetrics; no glyph support is inferred from CSS fallback. Writer paragraph FillPreview flattens real root/parent/child item sets and temporarily resolves unused pool styles before deleting new collections in reverse creation order; no persistent style store, model revision, modified or history mutation is introduced. The old unused GetDocumentStylePoolManager accessor is canonicalized to native getIDocumentStylePoolAccess. WRITER072 documents the preserved minimal-sample overwrite. Browser font-source acquisition, real popup/style rendering and Writer/Calc acceptance remain unfinished. Focused deterministic device tests are not installed-font or Chromium-raster evidence; no broad parity/default status is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "drawFontNamePreview",
+        "getFontNamePreviewSize"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svtools/source/control/ctrlbox.cxx",
+      "upstreamSymbols": [
+        "DrawPreview",
+        "shrinkFontToFit",
+        "calcCustomItemSize"
+      ]
+    }
+  }
+}

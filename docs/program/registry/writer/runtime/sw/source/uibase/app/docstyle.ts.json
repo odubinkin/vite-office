@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/uibase/app/docstyle.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/uibase/app/docstyle.ts#getParagraphStyleItemSetForPreview",
+        "apps/office/src/sw/source/uibase/app/docstyle-preview.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT in-progress font/style dropdown pipeline: original FontNameBox item sizing, five-pixel fit loop, own-name eligibility, exact script/minimal/symbol sample order, right-aligned sample truncation and scoped paint state are represented. Browser Canvas consumes acquired face metadata and real TextMetrics; no glyph support is inferred from CSS fallback. Writer paragraph FillPreview flattens real root/parent/child item sets and temporarily resolves unused pool styles before deleting new collections in reverse creation order; no persistent style store, model revision, modified or history mutation is introduced. The old unused GetDocumentStylePoolManager accessor is canonicalized to native getIDocumentStylePoolAccess. WRITER072 documents the preserved minimal-sample overwrite. Browser font-source acquisition, real popup/style rendering and Writer/Calc acceptance remain unfinished. Focused deterministic device tests are not installed-font or Chromium-raster evidence; no broad parity/default status is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getParagraphStyleItemSetForPreview",
+        "flattenSwFormatForPreview"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/uibase/app/docstyle.cxx",
+      "upstreamSymbols": [
+        "SwDocStyleSheet::GetItemSetForPreview",
+        "lcl_SwFormatToFlatItemSet",
+        "lcl_DeleteInfoStyles"
+      ]
+    }
+  }
+}

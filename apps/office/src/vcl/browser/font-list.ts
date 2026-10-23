@@ -1,5 +1,6 @@
 /** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
-import { text } from "../../i18nlangtag/source/isolang/isolang.tables";
+import { lower, text } from "../../i18nlangtag/source/isolang/isolang.tables";
+import { decodeBrowserFontFamily } from "./font-family";
 import { Font } from "../source/font/font";
 import { GetEnglishSearchFontName } from "../../unotools/source/misc/fontdefs";
 import { RTL_TEXTENCODING_SYMBOL } from "../../sal/inc/rtl/textenc";
@@ -80,6 +81,13 @@ export class FontList {
   /** Queries Local Font Access and falls back offline. @param window_ - Browser boundary. @returns Populated list. */
   public static async FromBrowser(window_: Window = window): Promise<FontList> {
     const query = (window_ as Window & { queryLocalFonts?: LocalFontQuery }).queryLocalFonts;
+    const registered: string[] = [];
+    window_.document?.fonts?.forEach(
+      /** Includes actual bundled and document FontFaces even when system enumeration is unavailable. @param face - Registered browser face. @returns Nothing. */
+      (face) => {
+        if (face.status !== "error") registered.push(decodeBrowserFontFamily(face.family));
+      },
+    );
     let local: readonly LocalFontData[] = [];
     if (query !== undefined)
       try {
@@ -87,23 +95,28 @@ export class FontList {
       } catch {
         local = [];
       }
-    const names = [
-      ...new Set([
-        ...FALLBACK_FONT_FAMILIES,
-        ...local
-          .map(
-            /** Projects a family. @param font - Local font. @returns Family. */ (font) =>
-              font.family,
-          )
-          .filter(
-            /** Removes blank families. @param family - Candidate. @returns Whether non-empty. */ Boolean,
-          ),
-      ]),
-    ].sort(
-      /** Sorts family names. @param left - First. @param right - Second. @returns Ordering. */ (
-        left,
-        right,
-      ) => left.localeCompare(right, undefined, { sensitivity: "base" }),
+    const available = [
+      ...registered,
+      ...local
+        .map(
+          /** Projects a family. @param font - Local font. @returns Family. */ (font) =>
+            font.family,
+        )
+        .filter(
+          /** Removes blank families. @param family - Candidate. @returns Whether non-empty. */ Boolean,
+        ),
+    ];
+    // Native FontList groups physical names using ASCII-only case folding. Preserve
+    // the first actual registered spelling instead of inventing installed fallback faces.
+    const families = new Map<string, string>();
+    for (const name of available.length === 0 ? FALLBACK_FONT_FAMILIES : available) {
+      if (!name) continue;
+      const key = lower(name);
+      if (!families.has(key)) families.set(key, name);
+    }
+    const names = [...families.keys()].sort().map(
+      /** Uses native UTF16 ordering of the ASCII-folded keys, retaining actual family spelling. @param key - Existing family key. @returns Registered name. */
+      (key) => families.get(key) as string,
     );
     return new FontList(names);
   }

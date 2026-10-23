@@ -413,8 +413,8 @@ export class SwDoc {
   public NotifyModelChange(hint: SwAtomicModelHint): void {
     this.stateManager.NotifyModelChange(hint);
   }
-  /** Returns style-pool ownership. @returns Style manager. */
-  public GetDocumentStylePoolManager(): DocumentStylePoolManager {
+  /** Returns the actual style-pool owner through Writer's native access boundary. @returns Style manager. */
+  public getIDocumentStylePoolAccess(): DocumentStylePoolManager {
     return this.stylePoolManager;
   }
   /** Appends one original range undo before applying typed paragraph attributes. @param range - Native selected range. @param right - Increase direction. @param modulus - Native snapping policy. @param state - Optional browser shell cursor adjunct. @returns Nothing. */

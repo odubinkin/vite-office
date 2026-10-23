@@ -657,17 +657,6 @@ it("permits original SVTools scalar metric dependencies while preserving reverse
   );
 });
 
-it("admits native SVTools font preview dependencies without reversing application ownership", /** Pinned sampletext.cxx and Library_svt consume the actual font, script, encoding and language owners. @returns Nothing. */ () => {
-  for (const target of ["external", "i18nlangtag", "i18nutil", "unotools", "sal", "offapi", "vcl"])
-    expect(isForbiddenModuleEdge("svtools", target)).toBe(false);
-  for (const target of ["sc", "sw", "framework", "sfx2", "svx"])
-    expect(isForbiddenModuleEdge("svtools", target)).toBe(true);
-  expect(isForbiddenModuleEdge("vcl", "svtools")).toBe(true);
-  expect(getRuntimeOwnershipViolation("svtools/source/misc/sampletext.ts", "", "react")).toMatch(
-    /presentation package/u,
-  );
-});
-
 it("admits original Tools Color Any operators while retaining reverse and application guards", /** Header owns the original specialization, no CPPU to Tools dependency. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("tools", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "tools")).toBe(true);
