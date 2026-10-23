@@ -2,6 +2,7 @@
 import { ScViewOptions } from "../../../inc/viewopti";
 import * as documen2 from "./documen2";
 import * as documen7 from "./documen7";
+import * as document10 from "./document10";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
@@ -22,7 +23,6 @@ import type { ScMarkData } from "../../../inc/markdata";
 import { ScClipParam } from "../../../inc/clipparam";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
-import type { ScColumnData } from "../../../inc/column";
 import { ScDocumentPool } from "./docpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
@@ -67,6 +67,40 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private pDelayedFormulaGrouping: ScRange | null = null;
+  /** Original delay owner presence. @returns Delayed. */
+  IsDelayedFormulaGrouping(): boolean {
+    return this.pDelayedFormulaGrouping !== null;
+  }
+  /** Original document10 regroup overloads. @param args - Range or sheet/column. @returns Nothing. */
+  RegroupFormulaCells(...args: Parameters<typeof document10.RegroupFormulaCells>): void {
+    document10.RegroupFormulaCells.apply(this, args);
+  }
+  /** Original deferred grouping toggle. @param delay - Flag. @returns Nothing. */
+  DelayFormulaGrouping(delay: boolean): void {
+    document10.DelayFormulaGrouping.call(this, delay);
+  }
+  /** Original delayed cell registration requires an active delay owner. @param cell - Actual cell. @returns Nothing. */
+  AddDelayedFormulaGroupingCell(cell: ScFormulaCell): void {
+    document10.AddDelayedFormulaGroupingCell.call(this, cell);
+  }
+  private bDetectiveDirty = false;
+  /** Original native detective-listening change flag. @returns Dirty. */
+  IsDetectiveDirty(): boolean {
+    return this.bDetectiveDirty;
+  }
+  /** Original flag assignment. @param dirty - Dirty flag. @returns Nothing. */
+  SetDetectiveDirty(dirty: boolean): void {
+    this.bDetectiveDirty = dirty;
+  }
+  /** Original actual column cursor initialization. @param args - Native cursor,sheet,column arguments. @returns Initialized. */
+  InitColumnBlockPosition(...args: Parameters<typeof documen7.InitColumnBlockPosition>): boolean {
+    return documen7.InitColumnBlockPosition.apply(this, args);
+  }
+  /** Original deferred broadcaster deletion. @param args - Native cursor,position,length arguments. @returns Nothing. */
+  DeleteBroadcasters(...args: Parameters<typeof documen7.DeleteBroadcasters>): void {
+    documen7.DeleteBroadcasters.apply(this, args);
+  }
   static readonly HardRecalcState = HardRecalcState;
   private mpClipParam: ScClipParam | undefined;
   /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */
@@ -555,128 +589,8 @@ export class ScDocument {
     return changed;
   }
   /** Copies consumed ATTRIB and optional source STRING undo payload through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
-  CopyToDocument(
-    range: ScRange,
-    flags: InsertDeleteFlags,
-    marked: boolean,
-    destination: ScDocument,
-    marks?: ScMarkData,
-  ): void {
-    if (flags === InsertDeleteFlags.NONE) {
-      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-        if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
-        const source = this.FetchTable(tab),
-          target = destination.FetchTable(tab);
-        if (source && target)
-          source.CopyToTable(
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-            target,
-          );
-      }
-      return;
-    }
-    if (
-      (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
-      flags &
-        ~(
-          InsertDeleteFlags.ATTRIB |
-          InsertDeleteFlags.STRING |
-          InsertDeleteFlags.EDITATTR |
-          InsertDeleteFlags.NOCAPTIONS
-        )
-    )
-      throw new Error("Only attribute document copying is implemented");
-    if (marked) {
-      if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
-      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-        if (!marks.GetTableSelect(tab)) continue;
-        for (const part of marks.GetMarkedRangesForTab(tab)) {
-          const firstCol = Math.max(part.aStart.Col(), range.aStart.Col()),
-            firstRow = Math.max(part.aStart.Row(), range.aStart.Row()),
-            lastCol = Math.min(part.aEnd.Col(), range.aEnd.Col()),
-            lastRow = Math.min(part.aEnd.Row(), range.aEnd.Row());
-          if (firstCol > lastCol || firstRow > lastRow) continue;
-          this.CopyToDocument(
-            new ScRange(firstCol, firstRow, tab, lastCol, lastRow, tab),
-            flags,
-            false,
-            destination,
-            marks,
-          );
-        }
-      }
-      return;
-    }
-    const start = range.aStart,
-      end = range.aEnd;
-    for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
-      if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
-      const source = this.FetchTable(tab),
-        target = destination.FetchTable(tab);
-      if (!source || !target) continue;
-      const last =
-        end.Col() === this.MaxCol()
-          ? Math.max(
-              start.Col(),
-              source.GetAllocatedColumnsCount(),
-              target.GetAllocatedColumnsCount(),
-            ) - 1
-          : end.Col();
-      for (let col = start.Col(); col <= last; col++) {
-        this.CopyColumnAttributes(
-          source.GetColumnData(col),
-          target.CreateColumnIfNotExists(col),
-          start.Row(),
-          end.Row(),
-          destination,
-        );
-        if (flags & InsertDeleteFlags.STRING && col < source.GetAllocatedColumnsCount())
-          source
-            .CreateColumnIfNotExists(col)
-            .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
-      }
-      if (end.Col() === this.MaxCol()) {
-        // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
-        target.CreateColumnIfNotExists(last);
-        this.CopyColumnAttributes(
-          source.GetDefaultColumnData(),
-          target.GetDefaultColumnData(),
-          start.Row(),
-          end.Row(),
-          destination,
-        );
-      }
-    }
-  }
-  /** Copies real pattern runs across actual helper/pool ownership. @param source - Source attributes. @param target - Target attributes. @param start - First row. @param end - Last row. @param destination - Target document. @returns Nothing. */
-  private CopyColumnAttributes(
-    source: ScColumnData,
-    target: ScColumnData,
-    start: number,
-    end: number,
-    destination: ScDocument,
-  ): void {
-    const first: [number] = [0],
-      last: [number] = [0];
-    for (let row = start; row <= end;) {
-      const old = source.GetPatternRange(first, last, row) as ScPatternAttr;
-      const next = new ScPatternAttr(
-        destination.getCellAttributeHelper(),
-        old.GetItemSet(),
-        old.GetStyleName() ?? undefined,
-      );
-      const holder = new CellAttributeHolder(next, true);
-      try {
-        const stop = Math.min(end, last[0]);
-        target.SetPatternArea(row, stop, holder);
-        row = stop + 1;
-      } finally {
-        holder.Dispose();
-      }
-    }
+  CopyToDocument(...args: Parameters<typeof documen7.CopyToDocument>): void {
+    documen7.CopyToDocument.apply(this, args);
   }
   /** Releases actual attribute registrations at document closure. @returns Nothing. */
   DisposeAttributes(): void {
@@ -717,12 +631,12 @@ export class ScDocument {
     return this.FetchTable(position.Tab())?.GetBroadcaster(position.Col(), position.Row()) ?? null;
   }
   /** Registers the original native listener at a cell. @param position - Cell. @param listener - Listener. @returns Nothing. */
-  StartListeningCell(position: ScAddress, listener: SvtListener<SfxHint>): void {
-    this.FetchTable(position.Tab())?.StartListening(position, listener);
+  StartListeningCell(...args: Parameters<typeof documen7.StartListeningCell>): void {
+    documen7.StartListeningCell.apply(this, args);
   }
   /** Ends an original reciprocal registration. @param position - Cell. @param listener - Listener. @returns Nothing. */
-  EndListeningCell(position: ScAddress, listener: SvtListener<SfxHint>): void {
-    this.FetchTable(position.Tab())?.EndListening(position, listener);
+  EndListeningCell(...args: Parameters<typeof documen7.EndListeningCell>): void {
+    documen7.EndListeningCell.apply(this, args);
   }
   /** Borrows the actual native area machine;null after observable destruction. @returns Machine. */
   GetBASM(): ScBroadcastAreaSlotMachine | null {
@@ -827,9 +741,10 @@ export class ScDocument {
   }
   /** Transfers a compiled formula into the canonical sheet/column store. Position/document matching is the caller precondition. @param position - Target. @param cell - Matching native owner. @returns Adopted cell or null for an absent sheet. */
   SetFormulaCell(position: ScAddress, cell: ScFormulaCell): ScFormulaCell | null {
-    return (
-      this.FetchTable(position.Tab())?.SetFormulaCell(position.Col(), position.Row(), cell) ?? null
-    );
+    const table = this.FetchTable(position.Tab());
+    if (table) return table.SetFormulaCell(position.Col(), position.Row(), cell);
+    cell.Dispose();
+    return null;
   }
   /** Borrows the actual formula cell, or native null. @param position - Cell. @returns Formula cell or null. */
   GetFormulaCell(position: ScAddress): ScFormulaCell | null {

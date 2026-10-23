@@ -1,5 +1,5 @@
 /** @fileoverview Original RowSpan and ColRowSpan value constructors from columnspanset.cxx. */
-import { ScRange, ValidTab } from "../../../inc/address";
+import { ScAddress, ScRange, ValidTab } from "../../../inc/address";
 import type { SCROW, SCCOLROW } from "../../../inc/types";
 import { flat_segment_tree } from "../../../../external/mdds/include/mdds/flat_segment_tree";
 import type { const_iterator } from "../../../../external/mdds/include/mdds/flat_segment_tree_itr";
@@ -34,6 +34,13 @@ export interface ColumnAction {
   startColumn(column: import("../../../inc/column").ScColumn): void;
   /** Executes the original inclusive row span. @param first - First row. @param last - Last row. @param value - Native span flag. @returns Nothing. */
   execute(first: number, last: number, value: boolean): void;
+}
+/** Consumed native ColumnSpanSet::Action coordinate/span contract. */
+export interface SpanAction {
+  /** Starts an actual allocated column. @param tab - Sheet. @param col - Column. @returns Nothing. */
+  startColumn(tab: number, col: number): void;
+  /** Processes native inclusive span as position and length. @param position - Top position. @param length - Row count. @param value - Span flag. @returns Nothing. */
+  execute(position: ScAddress, length: number, value: boolean): void;
 }
 /** Original optional per-column segmented owner and insertion hint. */
 class ColumnType {
@@ -109,6 +116,31 @@ export class ColumnSpanSet {
         for (iterator.increment(); !iterator.equals(end); iterator.increment()) {
           const last = iterator.value().first - 1;
           action.execute(first, last, value);
+          first = last + 1;
+          value = iterator.value().second;
+        }
+      }
+    }
+  }
+  /** Original coordinate action traversal emits both flag values in native table/column/leaf order. @param doc - Actual document. @param action - Original action. @returns Nothing. */
+  executeAction(doc: ScDocument, action: SpanAction): void {
+    for (let tab = 0; tab < this.maTables.length; tab++) {
+      const columns = this.maTables[tab] as (ColumnType | undefined)[];
+      if (!columns.length) continue;
+      const table = doc.FetchTable(tab);
+      if (!table) continue;
+      for (let col = 0; col < columns.length; col++) {
+        const owner = columns[col];
+        if (!owner) continue;
+        if (col >= table.GetAllocatedColumnsCount()) break;
+        action.startColumn(tab, col);
+        const iterator = owner.maSpans.begin(),
+          end = owner.maSpans.end();
+        let first = iterator.value().first,
+          value = iterator.value().second;
+        for (iterator.increment(); !iterator.equals(end); iterator.increment()) {
+          const last = iterator.value().first - 1;
+          action.execute(new ScAddress(col, first, tab), last - first + 1, value);
           first = last + 1;
           value = iterator.value().second;
         }

@@ -10,7 +10,10 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
     { module: "src/sc/inc/formulacell.ts", names: ["ScFormulaCell", "ScFormulaCellGroup"] },
-    { module: "src/sc/inc/compiler.ts", names: ["ScCompiler"] },
+    {
+      module: "src/sc/inc/listenercontext.ts",
+      names: ["StartListeningContext", "EndListeningContext"],
+    },
     { module: "src/formula/inc/grammar.ts", names: ["FormulaGrammar"] },
     { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode", "text"] },
   ]);
@@ -23,7 +26,7 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
             CalcGroupFixture: typeof import("../../src/sc/inc/document") &
               typeof import("../../src/sc/inc/address") &
               typeof import("../../src/sc/inc/formulacell") &
-              typeof import("../../src/sc/inc/compiler") &
+              typeof import("../../src/sc/inc/listenercontext") &
               typeof import("../../src/formula/inc/grammar") &
               typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
           }
@@ -32,28 +35,31 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
           g = n.FormulaGrammar.Grammar.GRAM_NATIVE;
         doc.InsertTab(0, n.unicode("Data"));
         for (let row = 0; row < 5; row++) doc.SetValue(new n.ScAddress(0, row, 0), row + 1);
-        const position = new n.ScAddress(1, 0, 0),
-          compiler = new n.ScCompiler(doc, position, g),
-          code = compiler.CompileString(n.unicode("=SUM(A1:A3)")),
-          group = new n.ScFormulaCellGroup(),
-          cells: InstanceType<typeof n.ScFormulaCell>[] = [];
-        compiler.CompileTokenArray();
-        group.setCode(code);
-        group.mnLength = 3;
-        for (let row = 0; row < 3; row++) {
-          const cell = new n.ScFormulaCell(doc, new n.ScAddress(1, row, 0), group, g);
-          if (!row) group.mpTopCell = cell;
-          doc.SetFormulaCell(cell.aPos, cell);
-          cells.push(cell);
+        const position = new n.ScAddress(1, 0, 0);
+        doc.SetFormula(position, n.unicode("=SUM(A1:A3)"), g);
+        const first = doc.GetFormulaCell(position);
+        if (!first) throw Error("Missing first actual formula");
+        for (let row = 1; row < 3; row++) {
+          const address = new n.ScAddress(1, row, 0);
+          doc.SetFormulaCell(address, first.Clone(address));
         }
+        const cells = [0, 1, 2].map(
+          /** Borrows inserted formula owners. @param row - Row. @returns Actual cell. */ (row) => {
+            const cell = doc.GetFormulaCell(new n.ScAddress(1, row, 0));
+            if (!cell) throw Error("Missing inserted formula");
+            return cell;
+          },
+        );
+        const group = first.GetCellGroup(),
+          column = doc.FetchTable(0)?.FetchColumn(1);
+        if (!group || !column) throw Error("Missing automatically joined group");
         for (const cell of cells) cell.EndListeningTo(doc);
-        const column = doc.FetchTable(0)?.FetchColumn(1),
-          range = new n.ScRange(0, 0, 0, 0, 2, 0);
-        if (!column) throw Error("Missing actual formula column");
-        const pointer = column.GetFormulaCellBlockAddress(0, [0]);
-        if (!pointer) throw Error("Missing actual formula block");
-        const listener = group.getAreaListener(pointer, range, false, false);
-        doc.StartListeningArea(listener.getListeningRange(), true, listener);
+        column.StartListeningFormulaCells(
+          new n.StartListeningContext(doc),
+          new n.EndListeningContext(doc),
+          0,
+          2,
+        );
         const initial = cells.map(
           /** Reads the actual formula result. @param cell - Actual cell. @returns Value. */ (
             cell,
@@ -82,19 +88,17 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
             ) => cell.GetCode() === group.mpCode,
           ),
           hashPresent = group.mpCode !== null && group.mpCode.GetHash() !== 0n;
-        group.endAllGroupListening(doc);
-        last.SetCellGroup(null);
-        group.mnLength = 2;
-        last.StartListeningTo(doc);
-        const shorter = group.getAreaListener(pointer, range, false, false);
-        doc.StartListeningArea(shorter.getListeningRange(), true, shorter);
+        doc.SetFormula(last.aPos, n.unicode("=SUM(A3:A5)+0"), g);
+        const replacement = doc.GetFormulaCell(last.aPos);
+        if (!replacement) throw Error("Missing actual replacement formula");
+        cells[2] = replacement;
         doc.SetValue(new n.ScAddress(0, 3, 0), 40);
         const shortened = cells.map(
             /** Reads the actual formula result. @param cell - Actual cell. @returns Value. */ (
               cell,
             ) => cell.GetValue(),
           ),
-          independentLast = last.GetCode() !== group.mpCode;
+          independentLast = replacement.GetCode() !== group.mpCode && group.mnLength === 2;
         doc.Dispose();
         return { initial, changed, detached, sharedCode, hashPresent, shortened, independentLast };
       }

@@ -21,8 +21,12 @@ it("adopts actual compiled formula owners and disposes deleted-sheet subscriptio
   expect(doc.SetFormulaCell(pos, copy)).toBe(copy);
   expect(doc.GetFormulaCell(pos)).toBe(copy);
   for (const invalid of [new ScAddress(-1, 0, 0), new ScAddress(0, -1, 0), new ScAddress(0, 0, 99)])
-    expect(doc.SetFormulaCell(invalid, copy)).toBeNull();
-  expect(doc.FetchTable(0)?.CreateColumnIfNotExists(0).SetFormulaCell(-1, copy)).toBeNull();
+    expect(doc.SetFormulaCell(invalid, copy.Clone(pos))).toBeNull();
+  const rejectedByColumn = copy.Clone(pos);
+  expect(
+    doc.FetchTable(0)?.CreateColumnIfNotExists(0).SetFormulaCell(-1, rejectedByColumn),
+  ).toBeNull();
+  rejectedByColumn.Dispose();
   doc.SetValue(new ScAddress(0, 0, 1), 10);
   doc.SetFormula(new ScAddress(1, 0, 1), unicode("=A1*2"), grammar);
   const removed = doc.GetFormulaCell(new ScAddress(1, 0, 1));

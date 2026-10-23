@@ -29,3 +29,25 @@ export function ParseBlock(
   }
   return iterator;
 }
+/** Original mutable ProcessBlock specialization with actual mutable store cursors. @param position - Mutable hint. @param store - Actual store. @param action - Block functor. @param start - First row. @param end - Last row. @returns Final mutable cursor. */
+export function ProcessBlock(
+  position: ReturnType<CellStoreType["begin"]>,
+  store: CellStoreType,
+  action: BlockFunction,
+  start: number,
+  end: number,
+): ReturnType<CellStoreType["begin"]> {
+  const found = store.position(position, start),
+    iterator = found.first;
+  let offset = found.second,
+    current = start;
+  for (; !iterator.equals(store.end()) && current <= end; iterator.increment(), offset = 0) {
+    let size = iterator.get().size - offset;
+    const last = current + size - 1 > end;
+    if (last) size = end - current + 1;
+    action.call(iterator.get(), offset, size);
+    if (last) break;
+    current += size;
+  }
+  return iterator;
+}

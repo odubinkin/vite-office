@@ -16,6 +16,32 @@ import {
 } from "../../../inc/mtvelements";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScFormulaCell } from "../../../inc/formulacell";
+import { ColumnBlockPosition } from "../../../inc/mtvelements";
+import type { ScDocument } from "../../../inc/document";
+/** Original per-document cached column cursor ownership;workers use independent instances rather than a physical mutex facade. */
+export class ColumnBlockPositionSet {
+  private readonly maTables = new Map<number, Map<number, ColumnBlockPosition>>();
+  /** Borrows the actual document. @param mrDoc - Document. @returns Cache. */
+  constructor(private readonly mrDoc: ScDocument) {}
+  /** Original insertion precedes InitColumnBlockPosition;failed initialization remains cached as upstream. Native allocator insertion failures are outside managed allocation. @param tab - Sheet. @param col - Column. @returns Cached cursor or null on initial failed initialization. */
+  getBlockPosition(tab: number, col: number): ColumnBlockPosition | null {
+    let columns = this.maTables.get(tab);
+    if (!columns) {
+      columns = new Map();
+      this.maTables.set(tab, columns);
+    }
+    const existing = columns.get(col);
+    if (existing) return existing;
+    const position = new ColumnBlockPosition();
+    columns.set(col, position);
+    if (!this.mrDoc.InitColumnBlockPosition(position, tab, col)) return null;
+    return position;
+  }
+  /** Original cache clear releases cursor values. @returns Nothing. */
+  clear(): void {
+    this.maTables.clear();
+  }
+}
 /** Native per-column block count events. */
 export class CellStoreEvent {
   /** Binds an optional actual column owner. @param mpCol - Column. @returns Handler. */

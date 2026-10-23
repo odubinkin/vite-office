@@ -33,7 +33,10 @@
       "TaskSRFT0T implements original ScViewOptions19boolean fields/defaults/copy and genuine document/view value boundaries;object modes,color,drawing-grid aggregate,configuration/window services and full equality remain explicitly unported. Native View Headers26242 and Show Formulas26250 accept slot bools or invert;headers initially change only the view,formula copies the entire represented view options into the document. Grid25018 ignores arguments,creates selected tab-data slots,changes only current-sheet bShowGrid and marks the document modified without adding history or committing input. Genuine shared Writer View menus/Sfx bindings render native checked states;header offsets and scroll geometry disappear,implicit grid lines hide while real cell frames remain,formula output reads source before cached errors. Shared quote-key canonicalization consumes original QUOTELEFT accelerator. Browser redraw/invalidation projects native paint/resize callbacks;no fake window/modificator/configuration service or alternate model. Native view-settings XML persistence and complete parity remain unported;Writer IO/no-recovery deviations remain.",
       "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
       "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete.",
-      "Block75 work in progress implements same-pool relocated ScFormulaCell Clone through deep token ownership without reparsing source text;cached result and dirty state survive until actual insertion starts listeners. ScTokenArray CloneValue,IsInvariant,AdjustReferenceOnCopy and local AdjustAbsoluteRefs consume actual code/RPN and retained table-area identities. The TokenPointers adaptation is bounded to deep-owned arrays or callers that discard shared RPN as required by source;it does not simulate global physical smart-pointer refcounts or certify externally retained flat-copy graphs. ScClipParam owns actual independent range lists,source IDs,compressed dimensions and filtered transpose;document lazy parameters and CountNonFilteredRows use real segmented filter storage. These pure parameter prerequisites do not implement clipboard document reset/pooling/paste. Selection-pattern merging moved to an out-of-class definition on the same document instance to retain the file-size boundary. Mode identity,shared formula groups,column splitting/group listening,paste fill/undo and final raw100/browser/Worker/build acceptance remain pending;no broad behavior,contract or default parity is certified."
+      "Block75 work in progress implements same-pool relocated ScFormulaCell Clone through deep token ownership without reparsing source text;cached result and dirty state survive until actual insertion starts listeners. ScTokenArray CloneValue,IsInvariant,AdjustReferenceOnCopy and local AdjustAbsoluteRefs consume actual code/RPN and retained table-area identities. The TokenPointers adaptation is bounded to deep-owned arrays or callers that discard shared RPN as required by source;it does not simulate global physical smart-pointer refcounts or certify externally retained flat-copy graphs. ScClipParam owns actual independent range lists,source IDs,compressed dimensions and filtered transpose;document lazy parameters and CountNonFilteredRows use real segmented filter storage. These pure parameter prerequisites do not implement clipboard document reset/pooling/paste. Selection-pattern merging moved to an out-of-class definition on the same document instance to retain the file-size boundary. Mode identity,shared formula groups,column splitting/group listening,paste fill/undo and final raw100/browser/Worker/build acceptance remain pending;no broad behavior,contract or default parity is certified.",
+      "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
+      "Block75 adoption routing now retains original ConvertToGroupListening0,SingleCellListening1,NoListening2. Column SetFormulaCell defaults to SingleCellListening;table SetFormulaCell explicitly selects ConvertToGroupListening. Source affected-span bounds and context traversal preserve one actual area owner when extending existing groups. NoListening marks surviving groups through original SetNeedsListeningGroup on actual blocks. Rejected table/document adoptions semantically Dispose the actual formula as native deletion does;GC retains physical lifetime only. The group-area fixture assembles predeclared groups through the native column SingleCellListening boundary before subscribing the whole group,without an import-mode facade. Mode identity,group compileCode,history and final raw100 remain pending.",
+      "Latest source-bound ownership tests reject fresh detached formula owners at invalid adoption coordinates rather than repeatedly passing a pointer already owned by a live column. Native ScDocFunc/SetFormulaOperation/ScUndoSetCell history acceptance now exercises group split,rejoin,redo and real dependency updates without a copied document model. Final task75 acceptance remains pending."
     ],
     "omittedResponsibilities": [
       "References, functions, localized formatter/string formulas, dependency/listener services, ODS/UI, complete constructor/service APIs and broad parity remain unsupported."
@@ -79,6 +82,22 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipparam.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+          "marker": "SharedFormulaUtil"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+          "marker": "ConvertToGroupListening"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+          "marker": "rejectedByColumn"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/undo/undocell.test.ts",
+          "marker": "splits and rejoins actual formula groups"
         }
       ],
       "upstream": [
@@ -121,6 +140,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::GetClipParam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::DelayFormulaGrouping"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "ScDocument::SetFormulaCell"
         }
       ]
     }

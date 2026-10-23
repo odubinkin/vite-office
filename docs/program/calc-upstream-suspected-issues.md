@@ -3679,3 +3679,22 @@ or reachable whole-application failure has been established. Retain the
 distinct source removal points. JavaScript GC replaces physical deletion;
 do not manufacture native dangling-memory behavior or silently add the missing
 group-map removal to the direct-deletion path.
+
+## CALC-257: failed column cursor initialization remains cached
+
+Reference: `sc/source/core/data/mtvelements.cxx`,
+`ColumnBlockPositionSet::getBlockPosition`, pinned LibreOffice source
+`9bc445578031fecf56086729d8e4940c77e14d65`.
+
+The first lookup inserts a `ColumnBlockPosition` before calling
+`InitColumnBlockPosition`. If initialization fails, the method returns null
+without erasing the inserted entry. A second lookup for the same sheet and
+column returns that retained entry directly, without another initialization.
+Thus a missing-sheet lookup can return null first and an uninitialized cursor
+on repetition.
+
+This is a conditional caller-contract suspicion; no whole-application native
+failure is established. Preserve insertion, lookup and failure ordering.
+The source-bound context test observes the cached owner through public lookup
+without consuming its uninitialized iterators. Managed allocation does not
+simulate native allocator failure or physical mutex behavior.

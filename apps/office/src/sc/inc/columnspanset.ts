@@ -5,4 +5,5 @@ export {
   RangeColumnSpanSet,
   ColumnSpanSet,
   type ColumnAction,
+  type SpanAction,
 } from "../source/core/data/columnspanset";

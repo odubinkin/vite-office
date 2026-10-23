@@ -1,12 +1,22 @@
-/** @fileoverview Scalar/local-reference formula cells with native single-cell subscriptions and logical tracking. Groups, iterative cycles and localized formatting remain unsupported. */
+/** @fileoverview Scalar/local-reference formula cells with native shared-code ownership, reference subscriptions and logical tracking. Iterative cycles and localized formatting remain unsupported. */
 import {
   SvtListener,
   type SvtDyingHint,
   type SvtQueryBase,
 } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
-import { ScSingleRefToken, ScDoubleRefToken } from "../../../inc/token";
-import { StackVar } from "../../../../formula/inc/token";
+import { ScSingleRefToken, ScDoubleRefToken, ScTableRefToken } from "../../../inc/token";
+import {
+  StackVar,
+  FormulaDoubleToken,
+  FormulaStringToken,
+  FormulaIndexToken,
+  FormulaByteToken,
+  FormulaExternalToken,
+  FormulaErrorToken,
+  type FormulaToken,
+} from "../../../../formula/inc/token";
+import { approxEqual } from "../../../../sal/inc/rtl/math";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { Grammar } from "../../../../formula/inc/grammar";
@@ -15,7 +25,8 @@ import { ScCompiler } from "../../../inc/compiler";
 import { ScInterpreter } from "../inc/interpre";
 import { ScFormulaResult, type FormulaResultNumber } from "../../../inc/formularesult";
 import { ScTokenArray } from "../../../inc/tokenarray";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, BCA_LISTEN_ALWAYS } from "../../../inc/address";
+import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScDocument } from "../../../inc/document";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -25,8 +36,18 @@ import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
 
+/** Original ScFormulaCell::CompareState discriminator. */
+export enum CompareState {
+  NotEqual,
+  EqualInvariant,
+  EqualRelativeRef,
+}
+
 /** Formula content is stored as actual code/RPN tokens with the existing result owner. */
 export class ScFormulaCell extends SvtListener<SfxHint> {
+  static readonly NotEqual = CompareState.NotEqual;
+  static readonly EqualInvariant = CompareState.EqualInvariant;
+  static readonly EqualRelativeRef = CompareState.EqualRelativeRef;
   private mxGroup: ScFormulaCellGroup | null = null;
   private pPrevious: ScFormulaCell | null = null;
   private pNext: ScFormulaCell | null = null;
@@ -38,6 +59,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private readonly rDocument: ScDocument;
   private readonly eTempGrammar: Grammar;
   private bDirty = true;
+  private bNeedListening = false;
   private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
   readonly aPos: ScAddress;
   /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
@@ -209,6 +231,141 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SyncSharedCode(): void {
     if (this.mxGroup) this.pCode = this.mxGroup.mpCode as ScTokenArray;
   }
+  /** Original grouping comparison checks RPN first and lexical references/names second. All currently represented cell constructors are nonmatrix,so the native matrix-cell mode rejection is outside this constructor profile;matrix/external RPN token rejection is retained. @param other - Actual neighboring cell. @returns Native comparison classification. */
+  CompareByTokenArray(other: ScFormulaCell): CompareState {
+    if (this.GetHash() !== other.GetHash()) return CompareState.NotEqual;
+    if (!this.pCode.IsShareable() || !other.pCode.IsShareable()) return CompareState.NotEqual;
+    let left = this.pCode.GetCode(),
+      right = other.pCode.GetCode(),
+      length = this.pCode.GetCodeLen(),
+      otherLength = other.pCode.GetCodeLen();
+    if (!left || !right) return CompareState.NotEqual;
+    if (length !== otherLength) return CompareState.NotEqual;
+    if (this.pCode.GetCodeError() !== other.pCode.GetCodeError()) return CompareState.NotEqual;
+    let invariant = true;
+    for (let index = 0; index < length; index++) {
+      const a = left[index] as FormulaToken,
+        b = right[index] as FormulaToken;
+      if (
+        a.GetType() !== b.GetType() ||
+        a.GetOpCode() !== b.GetOpCode() ||
+        a.GetParamCount() !== b.GetParamCount()
+      )
+        return CompareState.NotEqual;
+      switch (a.GetType()) {
+        case StackVar.svMatrix:
+        case StackVar.svExternalSingleRef:
+        case StackVar.svExternalDoubleRef:
+          return CompareState.NotEqual;
+        case StackVar.svSingleRef: {
+          const reference = (a as ScSingleRefToken).GetSingleRef();
+          if (!reference.equals((b as ScSingleRefToken).GetSingleRef()))
+            return CompareState.NotEqual;
+          if (reference.IsRowRel()) invariant = false;
+          break;
+        }
+        case StackVar.svDoubleRef: {
+          const first = (a as ScDoubleRefToken).GetSingleRef(),
+            second = (a as ScDoubleRefToken).GetSingleRef2();
+          if (!first.equals((b as ScDoubleRefToken).GetSingleRef())) return CompareState.NotEqual;
+          if (!second.equals((b as ScDoubleRefToken).GetSingleRef2())) return CompareState.NotEqual;
+          if (first.IsRowRel()) invariant = false;
+          if (second.IsRowRel()) invariant = false;
+          break;
+        }
+        case StackVar.svDouble:
+          if (
+            !approxEqual(
+              (a as FormulaDoubleToken).GetDouble(),
+              (b as FormulaDoubleToken).GetDouble(),
+            )
+          )
+            return CompareState.NotEqual;
+          break;
+        case StackVar.svString:
+          if (!(a as FormulaStringToken).GetString().equals((b as FormulaStringToken).GetString()))
+            return CompareState.NotEqual;
+          break;
+        case StackVar.svIndex:
+          if (a.GetOpCode() === OpCode.ocName || a.GetOpCode() === OpCode.ocDBArea) {
+            const first = a as FormulaIndexToken,
+              second = b as FormulaIndexToken;
+            if (first.GetIndex() !== second.GetIndex() || first.GetSheet() !== second.GetSheet())
+              return CompareState.NotEqual;
+          } else if ((a as ScTableRefToken).GetIndex() !== (b as ScTableRefToken).GetIndex())
+            return CompareState.NotEqual;
+          break;
+        case StackVar.svByte:
+          if ((a as FormulaByteToken).GetByte() !== (b as FormulaByteToken).GetByte())
+            return CompareState.NotEqual;
+          break;
+        case StackVar.svExternal:
+          if (
+            !(a as FormulaExternalToken)
+              .GetExternal()
+              .equals((b as FormulaExternalToken).GetExternal())
+          )
+            return CompareState.NotEqual;
+          if ((a as FormulaExternalToken).GetByte() !== (b as FormulaExternalToken).GetByte())
+            return CompareState.NotEqual;
+          break;
+        case StackVar.svError:
+          if ((a as FormulaErrorToken).GetError() !== (b as FormulaErrorToken).GetError())
+            return CompareState.NotEqual;
+          break;
+        default:
+          break;
+      }
+    }
+    left = this.pCode.GetArray();
+    right = other.pCode.GetArray();
+    length = this.pCode.GetLen();
+    otherLength = other.pCode.GetLen();
+    if (!left || !right) return CompareState.NotEqual;
+    if (length !== otherLength) return CompareState.NotEqual;
+    for (let index = 0; index < length; index++) {
+      const a = left[index] as FormulaToken,
+        b = right[index] as FormulaToken;
+      if (
+        a.GetType() !== b.GetType() ||
+        a.GetOpCode() !== b.GetOpCode() ||
+        a.GetParamCount() !== b.GetParamCount()
+      )
+        return CompareState.NotEqual;
+      switch (a.GetType()) {
+        case StackVar.svSingleRef: {
+          const reference = (a as ScSingleRefToken).GetSingleRef();
+          if (!reference.equals((b as ScSingleRefToken).GetSingleRef()))
+            return CompareState.NotEqual;
+          if (reference.IsRowRel()) invariant = false;
+          break;
+        }
+        case StackVar.svDoubleRef: {
+          const first = (a as ScDoubleRefToken).GetSingleRef(),
+            second = (a as ScDoubleRefToken).GetSingleRef2();
+          if (!first.equals((b as ScDoubleRefToken).GetSingleRef())) return CompareState.NotEqual;
+          if (!second.equals((b as ScDoubleRefToken).GetSingleRef2())) return CompareState.NotEqual;
+          if (first.IsRowRel()) invariant = false;
+          if (second.IsRowRel()) invariant = false;
+          break;
+        }
+        case StackVar.svIndex:
+          if (a.GetOpCode() === OpCode.ocTableRef) {
+            if ((a as ScTableRefToken).GetIndex() !== (b as ScTableRefToken).GetIndex())
+              return CompareState.NotEqual;
+          } else {
+            const first = a as FormulaIndexToken,
+              second = b as FormulaIndexToken;
+            if (first.GetIndex() !== second.GetIndex() || first.GetSheet() !== second.GetSheet())
+              return CompareState.NotEqual;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    return invariant ? CompareState.EqualInvariant : CompareState.EqualRelativeRef;
+  }
   /** Reports lazy calculation state. @returns Dirty. */
   GetDirty(): boolean {
     return this.bDirty;
@@ -260,27 +417,69 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       ? this.aResult.GetString()
       : SharedString.getEmptyString();
   }
-  /** Binds actual single/double-reference RPN listeners. Other reference families are not represented. @param doc - Document. @returns Nothing. */
-  StartListeningTo(doc: ScDocument): void {
+  /** Original deferred-listening flag. @returns Pending. */
+  NeedsListening(): boolean {
+    return this.bNeedListening;
+  }
+  /** Original deferred-listening flag setter. @param needed - Pending flag. @returns Nothing. */
+  SetNeedsListening(needed: boolean): void {
+    this.bNeedListening = needed;
+  }
+  /** Original ordinary/context subscriptions for the current normal-document local-reference profile. @param target - Actual document or shared cursor context. @returns Nothing. */
+  StartListeningTo(target: ScDocument | StartListeningContext): void {
+    const context = target instanceof StartListeningContext ? target : null;
+    const doc = context ? context.getDoc() : (target as ScDocument);
     this.mxGroup?.endAllGroupListening(doc);
+    doc.SetDetectiveDirty(true);
+    if (this.pCode.IsRecalcModeAlways()) {
+      doc.StartListeningArea(BCA_LISTEN_ALWAYS(), false, this);
+      this.SetNeedsListening(false);
+      return;
+    }
     for (const token of this.pCode.RPNTokens())
       if (token.GetType() === StackVar.svSingleRef) {
         const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
-        if (address.IsValid()) doc.StartListeningCell(address, this);
+        if (address.IsValid()) {
+          if (context) doc.StartListeningCell(context, address, this);
+          else doc.StartListeningCell(address, this);
+        }
       } else if (token.GetType() === StackVar.svDoubleRef) {
-        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(this.rDocument, this.aPos);
+        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(doc, this.aPos);
         if (range.IsValid()) doc.StartListeningArea(range, false, this);
       }
+    this.SetNeedsListening(false);
   }
-  /** Ends the actual source subscriptions and allows empty broadcaster cleanup. @param doc - Document. @returns Nothing. */
-  EndListeningTo(doc: ScDocument): void {
+  /** Original ordinary/context removal uses previous code and position where supplied. Context purging remains an explicit caller operation. @param target - Actual document or end context. @param oldCode - Ordinary overload's optional previous code. @param oldPosition - Position corresponding to previous code. @returns Nothing. */
+  EndListeningTo(
+    target: ScDocument | EndListeningContext,
+    oldCode: ScTokenArray | null = null,
+    oldPosition: ScAddress = this.aPos,
+  ): void {
+    const context = target instanceof EndListeningContext ? target : null;
+    const doc = context ? context.getDoc() : (target as ScDocument);
     this.mxGroup?.endAllGroupListening(doc);
-    for (const token of this.pCode.RPNTokens())
+    if (!this.HasBroadcaster()) return;
+    doc.SetDetectiveDirty(true);
+    const code = context ? (context.getOldCode() ?? this.pCode) : (oldCode ?? this.pCode);
+    const position = context
+      ? context.getOldPosition(this.aPos)
+      : oldCode
+        ? oldPosition
+        : this.aPos;
+    // The document overload checks current code, whereas the context overload checks old code.
+    if ((context ? code : this.pCode).IsRecalcModeAlways()) {
+      doc.EndListeningArea(BCA_LISTEN_ALWAYS(), false, this);
+      return;
+    }
+    for (const token of code.RPNTokens())
       if (token.GetType() === StackVar.svSingleRef) {
-        const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, this.aPos);
-        if (address.IsValid()) doc.EndListeningCell(address, this);
+        const address = (token as ScSingleRefToken).GetSingleRef().toAbs(this.rDocument, position);
+        if (address.IsValid()) {
+          if (context) doc.EndListeningCell(context, address, this);
+          else doc.EndListeningCell(address, this);
+        }
       } else if (token.GetType() === StackVar.svDoubleRef) {
-        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(this.rDocument, this.aPos);
+        const range = (token as ScDoubleRefToken).GetDoubleRef().toAbs(doc, position);
         if (range.IsValid()) doc.EndListeningArea(range, false, this);
       }
   }

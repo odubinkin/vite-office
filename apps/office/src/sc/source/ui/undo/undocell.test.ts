@@ -73,3 +73,39 @@ it("transfers prepared formulas into the document without cloning or disposing t
   expect(doc.GetValue(b)).toBe(12);
   shell.Close();
 });
+it("splits and rejoins actual formula groups through recorded native formula adoption undo and redo", /** History owns independent native cell values while original document storage owns live group code and subscriptions. @returns Nothing. */ () => {
+  const shell = new ScDocShell(),
+    doc = shell.GetDocument(),
+    grammar = doc.GetGrammar();
+  for (let row = 0; row < 5; row++) doc.SetValue(new ScAddress(0, row, 0), row + 1);
+  for (let row = 0; row < 3; row++) {
+    const position = new ScAddress(1, row, 0);
+    doc.SetFormulaCell(
+      position,
+      new ScFormulaCell(doc, position, unicode(`=SUM(A${row + 1}:A${row + 3})`), grammar),
+    );
+  }
+  const position = new ScAddress(1, 1, 0),
+    first = new ScAddress(1, 0, 0),
+    last = new ScAddress(1, 2, 0);
+  expect(doc.GetFormulaCell(first)?.GetSharedLength()).toBe(3);
+  expect(
+    shell
+      .GetDocFunc()
+      .SetFormulaCell(position, new ScFormulaCell(doc, position, unicode("=99"), grammar), true),
+  ).toBe(true);
+  expect(doc.GetFormulaCell(first)?.IsShared()).toBe(false);
+  expect(doc.GetFormulaCell(last)?.IsShared()).toBe(false);
+  shell.Undo();
+  expect(doc.GetFormulaCell(first)?.GetSharedLength()).toBe(3);
+  doc.SetValue(new ScAddress(0, 2, 0), 30);
+  expect([doc.GetValue(first), doc.GetValue(position), doc.GetValue(last)]).toEqual([33, 36, 39]);
+  shell.Redo();
+  expect(doc.GetValue(position)).toBe(99);
+  doc.SetValue(new ScAddress(0, 1, 0), 20);
+  expect([doc.GetValue(first), doc.GetValue(position), doc.GetValue(last)]).toEqual([51, 99, 39]);
+  shell.Undo();
+  expect(doc.GetFormulaCell(first)?.GetSharedLength()).toBe(3);
+  expect([doc.GetValue(first), doc.GetValue(position), doc.GetValue(last)]).toEqual([51, 54, 39]);
+  shell.Close();
+});

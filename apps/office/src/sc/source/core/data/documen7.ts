@@ -1,11 +1,12 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import type { ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
-import { ScPatternAttr } from "../../../inc/patattr";
+import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ScTable } from "../../../inc/table";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { HasAttrFlags } from "../../../inc/global";
+import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -14,6 +15,47 @@ import { SfxHintId, type SfxHint } from "../../../../svl/inc/hint";
 import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS } from "../../../inc/address";
 import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
+import type { ColumnBlockPosition } from "../../../inc/mtvelements";
+import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+
+/** Original document.cxx initialized-column cursor forwarding. @param this - Actual document. @param position - Actual cursor. @param tab - Sheet. @param col - Column. @returns Initialized. */
+export function InitColumnBlockPosition(
+  this: ScDocument,
+  position: ColumnBlockPosition,
+  tab: number,
+  col: number,
+): boolean {
+  return this.FetchTable(tab)?.InitColumnBlockPosition(position, col) ?? false;
+}
+/** Original document.cxx broadcaster purge forwarding. @param this - Actual document. @param position - Initialized cursor. @param top - First cell. @param length - Count. @returns Nothing. */
+export function DeleteBroadcasters(
+  this: ScDocument,
+  position: ColumnBlockPosition,
+  top: ScAddress,
+  length: number,
+): void {
+  const table = this.FetchTable(top.Tab());
+  if (!table || length <= 0) return;
+  table.DeleteBroadcasters(position, top.Col(), top.Row(), top.Row() + length - 1);
+}
+/** Original ordinary/context start forwarding. @param this - Actual document. @param args - Native overload arguments. @returns Nothing. */
+export function StartListeningCell(
+  this: ScDocument,
+  ...args:
+    [ScAddress, SvtListener<SfxHint>] | [StartListeningContext, ScAddress, SvtListener<SfxHint>]
+): void {
+  if (args.length === 2) this.FetchTable(args[0].Tab())?.StartListening(...args);
+  else this.FetchTable(args[1].Tab())?.StartListening(...args);
+}
+/** Original ordinary/context end forwarding. @param this - Actual document. @param args - Native overload arguments. @returns Nothing. */
+export function EndListeningCell(
+  this: ScDocument,
+  ...args:
+    [ScAddress, SvtListener<SfxHint>] | [EndListeningContext, ScAddress, SvtListener<SfxHint>]
+): void {
+  if (args.length === 2) this.FetchTable(args[0].Tab())?.EndListening(...args);
+  else this.FetchTable(args[1].Tab())?.EndListening(...args);
+}
 
 /** Clips actual source sheet endpoints symmetrically for area start/end listening. @param range - Source range. @param limited - Output range. @param entirelyOut - Output out-of-bounds flag. @param this - Actual document instance. @returns Whether clipping is needed. */
 export function LimitRangeToAvailableSheets(
@@ -289,5 +331,131 @@ export function CreateSelectionPattern(
     return new ScPatternAttr(this.getCellAttributeHelper());
   } finally {
     state.Dispose();
+  }
+}
+
+/** Original document.cxx consumed document copy definition on the same instance. @param this - Actual document. @param range - Copied area. @param flags - Native flags. @param marked - Restrict to marks. @param destination - Actual receiving document. @param marks - Optional real mark data. @returns Nothing. */
+export function CopyToDocument(
+  this: ScDocument,
+  range: ScRange,
+  flags: InsertDeleteFlags,
+  marked: boolean,
+  destination: ScDocument,
+  marks?: ScMarkData,
+): void {
+  if (flags === InsertDeleteFlags.NONE) {
+    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
+      if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+      const source = this.FetchTable(tab),
+        target = destination.FetchTable(tab);
+      if (source && target)
+        source.CopyToTable(
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+          target,
+        );
+    }
+    return;
+  }
+  if (
+    (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
+    flags &
+      ~(
+        InsertDeleteFlags.ATTRIB |
+        InsertDeleteFlags.STRING |
+        InsertDeleteFlags.EDITATTR |
+        InsertDeleteFlags.NOCAPTIONS
+      )
+  )
+    throw new Error("Only attribute document copying is implemented");
+  if (marked) {
+    if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
+    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
+      if (!marks.GetTableSelect(tab)) continue;
+      for (const part of marks.GetMarkedRangesForTab(tab)) {
+        const firstCol = Math.max(part.aStart.Col(), range.aStart.Col()),
+          firstRow = Math.max(part.aStart.Row(), range.aStart.Row()),
+          lastCol = Math.min(part.aEnd.Col(), range.aEnd.Col()),
+          lastRow = Math.min(part.aEnd.Row(), range.aEnd.Row());
+        if (firstCol > lastCol || firstRow > lastRow) continue;
+        this.CopyToDocument(
+          new ScRange(firstCol, firstRow, tab, lastCol, lastRow, tab),
+          flags,
+          false,
+          destination,
+          marks,
+        );
+      }
+    }
+    return;
+  }
+  const start = range.aStart,
+    end = range.aEnd;
+  for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
+    if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+    const source = this.FetchTable(tab),
+      target = destination.FetchTable(tab);
+    if (!source || !target) continue;
+    const last =
+      end.Col() === this.MaxCol()
+        ? Math.max(
+            start.Col(),
+            source.GetAllocatedColumnsCount(),
+            target.GetAllocatedColumnsCount(),
+          ) - 1
+        : end.Col();
+    for (let col = start.Col(); col <= last; col++) {
+      copyColumnAttributes(
+        source.GetColumnData(col),
+        target.CreateColumnIfNotExists(col),
+        start.Row(),
+        end.Row(),
+        destination,
+      );
+      if (flags & InsertDeleteFlags.STRING && col < source.GetAllocatedColumnsCount())
+        source
+          .CreateColumnIfNotExists(col)
+          .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
+    }
+    if (end.Col() === this.MaxCol()) {
+      // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
+      target.CreateColumnIfNotExists(last);
+      copyColumnAttributes(
+        source.GetDefaultColumnData(),
+        target.GetDefaultColumnData(),
+        start.Row(),
+        end.Row(),
+        destination,
+      );
+    }
+  }
+}
+/** Copies real pattern runs across actual helper/pool ownership. @param source - Source attributes. @param target - Target attributes. @param start - First row. @param end - Last row. @param destination - Target document. @returns Nothing. */
+function copyColumnAttributes(
+  source: ScColumnData,
+  target: ScColumnData,
+  start: number,
+  end: number,
+  destination: ScDocument,
+): void {
+  const first: [number] = [0],
+    last: [number] = [0];
+  for (let row = start; row <= end;) {
+    const old = source.GetPatternRange(first, last, row) as ScPatternAttr;
+    const next = new ScPatternAttr(
+      destination.getCellAttributeHelper(),
+      old.GetItemSet(),
+      old.GetStyleName() ?? undefined,
+    );
+    const holder = new CellAttributeHolder(next, true);
+    try {
+      const stop = Math.min(end, last[0]);
+      target.SetPatternArea(row, stop, holder);
+      row = stop + 1;
+    } finally {
+      holder.Dispose();
+    }
   }
 }

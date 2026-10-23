@@ -8,6 +8,7 @@ export {
   CellStoreEvent,
   cell_store_event_value_ops,
   toRefCell,
+  ColumnBlockPositionSet,
 } from "../source/core/data/mtvelements";
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SharedString } from "../../svl/inc/sharedstring";
@@ -243,4 +244,10 @@ export type BroadcasterStoreType = InstanceType<typeof BroadcasterStoreType>;
 export interface ColumnBlockConstPosition {
   miCellPos?: ReturnType<CellStoreType["cbegin"]>;
   miCellTextAttrPos?: ReturnType<CellTextAttrStoreType["cbegin"]>;
+}
+/** Original mutable block-position value;iterator members are uninitialized until InitBlockPosition,without dummy owners. Notes/sparklines remain unrepresented. */
+export class ColumnBlockPosition {
+  declare miCellPos?: ReturnType<CellStoreType["begin"]>;
+  declare miCellTextAttrPos?: ReturnType<CellTextAttrStoreType["begin"]>;
+  declare miBroadcasterPos?: ReturnType<BroadcasterStoreType["begin"]>;
 }

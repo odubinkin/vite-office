@@ -49,7 +49,10 @@ function fixture(startFixed = false, endFixed = false, wide = false, length = 4)
     const position = new ScAddress(1, 10 + offset, 0),
       cell = new ScFormulaCell(doc, position, group, doc.GetGrammar());
     if (!offset) group.mpTopCell = cell;
-    doc.SetFormulaCell(position, cell);
+    doc
+      .FetchTable(position.Tab())
+      ?.CreateColumnIfNotExists(position.Col())
+      .SetFormulaCell(position.Row(), cell);
     cells.push(cell);
   }
   // Native individual listening and native group listening are distinct admission paths.
@@ -397,16 +400,18 @@ it("resynchronizes a separately owned cold listener after genuine group shorteni
   cold.Dispose();
   doc.Dispose();
 });
-it("retains source top/length repair for a separately owned cold listener after group ownership joins", /** Production join orchestration remains pending;the source listener's repair operates on actual valid group/cell identities. @returns Nothing. */ () => {
+it("retains source top/length repair for a separately owned cold listener after group ownership joins", /** Production insertion joins the real group;the separately owned listener repairs its original top/length. @returns Nothing. */ () => {
   const { doc, cells, group, range } = fixture(),
     cold = new FormulaGroupAreaListener(range, doc, new ScAddress(1, 10, 0), 4, false, false),
     top = new ScFormulaCell(doc, new ScAddress(1, 9, 0), unicode("=SUM(A2:A4)"), doc.GetGrammar());
   doc.SetFormulaCell(top.aPos, top);
   top.EndListeningTo(doc);
   group.endAllGroupListening(doc);
-  const joined = top.CreateCellGroup(5, false);
+  const joined = top.GetCellGroup();
   assert(joined);
-  for (const cell of cells) cell.SetCellGroup(joined);
+  expect(joined).toBe(group);
+  expect(joined.mnLength).toBe(5);
+  for (const cell of cells) expect(cell.GetCellGroup()).toBe(joined);
   expect(selected(cold, 3)).toEqual([9, 10]);
   expect(cold.getTopCell()).toBe(top);
   expect(cold.getListeningRange()).toEqual(new ScRange(0, 2, 0, 0, 8, 0));
@@ -414,7 +419,7 @@ it("retains source top/length repair for a separately owned cold listener after 
   doc.Dispose();
 });
 
-it("serializes actual shared code at every member position and reopens formulas with live dependencies", /** ODS preserves formula content;automatic in-memory regrouping after import remains separate column acceptance. @returns Completion. */ async () => {
+it("serializes actual shared code at every member position and reopens formulas with live dependencies", /** ODS preserves formula content and ordinary column insertion rebuilds actual shared groups. @returns Completion. */ async () => {
   const { doc, group, cells, listener } = fixture();
   doc.StartListeningArea(listener.getListeningRange(), true, listener);
   doc.SetValue(new ScAddress(0, 3, 0), 40);
@@ -432,6 +437,8 @@ it("serializes actual shared code at every member position and reopens formulas 
     const position = new ScAddress(1, row, 0),
       cell = reopened.GetFormulaCell(position);
     assert(cell);
+    expect(cell.GetSharedTopRow()).toBe(10);
+    expect(cell.GetSharedLength()).toBe(4);
     formulas.push(text(cell.GetFormula(reopened.GetGrammar())));
     values.push(reopened.GetValue(position));
   }
