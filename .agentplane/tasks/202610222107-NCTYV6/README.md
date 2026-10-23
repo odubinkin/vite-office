@@ -1,10 +1,11 @@
 ---
 id: "202610222107-NCTYV6"
 title: "Implement native formula copying and shared-group lifetime"
-status: "DOING"
+result_summary: "verified-202610222107-NCTYV6"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 48
+revision: 50
 origin:
   system: "manual"
 depends_on:
@@ -20,7 +21,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-23T07:41:00.700Z"
+  updated_at: "2026-10-23T07:41:25.748Z"
   updated_by: "CODER"
   note: "verified-202610222107-NCTYV6"
   attempts: 0
@@ -46,7 +47,9 @@ quality_review:
     - "Reviewed final production diff and accepted-profile source proof. Native group/code/top/span error contracts remain; genuine public-boundary and lifetime cases replace no owner with a simulated backend. Scalar-only private compiler specialization is bounded by the actual parser admission and audited native classifications; the essential pending-token identity guard remains. No broader native matrix/function parity is claimed."
     - "Validated all 17 committed source/record hashes and 404 acceptance source/test hashes, readable immutable raw archive, 796 passing scenarios with no pending/failing cases, and raw totals 14335/14335 statements, 8768/8768 branches, 2439/2439 functions and 12838/12838 lines. Six real Chromium/Worker scenarios pass. Required build/static/type/lint/format/source/provenance/registry/resource/routing gates are recorded as passing."
     - "The earlier 18359-case full checkpoint and its repaired browser failures are preserved, with 799 unchanged non-Calc instrumented owner hashes. Fresh final Calc coverage is separately recorded; evidence does not claim a second full all-app execution. Scope185/200 remains approved. No required gap remains within75; recommend finish and immediate goal pause before76."
-commit: null
+commit:
+  hash: "9976039d069a0c5158fc76bc09381f5343417edb"
+  message: "🧩 NCTYV6 task: record final verification and quality review"
 comments:
   -
     author: "CODER"
@@ -69,6 +72,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue approved native document-mode and pool-ownership scope with the human-approved cumulative limit of 200 paths; close task 75 after verification and then pause the goal."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610222107-NCTYV6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -143,8 +149,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610222107-NCTYV6"
+  -
+    type: "verify"
+    at: "2026-10-23T07:41:25.748Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610222107-NCTYV6"
+  -
+    type: "status"
+    at: "2026-10-23T07:41:25.949Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610222107-NCTYV6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-23T07:41:00.760Z"
+doc_updated_at: "2026-10-23T07:41:25.952Z"
 doc_updated_by: "CODER"
 description: "Block75 kernel prerequisite for completing74 without flat clipboard-fill substitutes. Implement original ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,default document/clipboard/undo mode identity and shared formula group creation,splitting,ownership and listening over actual columns and native area broadcasters. Support the existing numeric/string/error/local-reference and aggregate slice;keep external/named/3D/matrix/device/OpenCL services explicit. Preserve source flags,logical sharing,member/code ownership and default behavior;JS GC replaces physical allocation only. No browser evaluator,formula-source reparse substitute,per-cell flattening of native groups or reduced-original probe facade. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,independent source vectors and genuine original native observations where feasible,browser/Worker and all static/build/source gates. Full all-app checkpoint80."
 sections:
@@ -283,6 +302,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-23T07:41:25.748Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610222107-NCTYV6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T07:41:00.760Z, excerpt_hash=sha256:c7ca8d4131e54f40f7d69e64aee12944ac986f4e524fd3ef14d9bad75006e340
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222107-NCTYV6/blueprint/resolved-snapshot.json
+    - old_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+    - current_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222107-NCTYV6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610222107-NCTYV6 --result verified-202610222107-NCTYV6 --commit 9976039d069a0c5158fc76bc09381f5343417edb
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task-owned commits only,preserving the current74 UI checkpoint and integrated user changes."
   Findings: |-
@@ -373,6 +422,10 @@ sections:
     Approved scope200;used184source/test/registry paths plus1audit probe,total185. Current changes remain calc checkout/branch. No network,external write,merge or branch switch occurred. Original mode/default/pool/copy/group/listening contracts for the approved numeric/string/error/local-reference/aggregate slice are verified. Broader native parity remains unclaimed;matrix evaluation,full native styles/formatter,external/named/3D/device/OpenCL services and clipboard reset/resource sharing/paste remain out of75. Tasks74/76 and the large5000-row ODS export/autosave-limit issue are not closed or claimed fixed.
 
     Required next sequence:commit exact verified source/evidence,record EVALUATOR review against that implementation commit,record successful verification/finish via route oracle,then pause the user goal before starting any new task. No required implementation or test gap remains within75scope.
+extensions:
+  implementation_commit:
+    hash: "d3810ffa8dee10ab643a28b592a7600ef752d5db"
+    message: "🧩 NCTYV6 calc: verify formula lifetime and complete coverage"
 id_source: "generated"
 ---
 ## Summary
@@ -515,6 +568,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610222107-NCTYV6 --result verified-202610222107-NCTYV6 --commit d3810ffa8dee10ab643a28b592a7600ef752d5db
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-23T07:41:25.748Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610222107-NCTYV6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T07:41:00.760Z, excerpt_hash=sha256:c7ca8d4131e54f40f7d69e64aee12944ac986f4e524fd3ef14d9bad75006e340
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222107-NCTYV6/blueprint/resolved-snapshot.json
+- old_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+- current_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222107-NCTYV6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610222107-NCTYV6 --result verified-202610222107-NCTYV6 --commit 9976039d069a0c5158fc76bc09381f5343417edb
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
