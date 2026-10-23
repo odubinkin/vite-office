@@ -1,10 +1,11 @@
 ---
 id: "202610230856-RMZXBZ"
 title: "Integrate Writer and Calc branches and synchronize all checkouts"
-status: "DOING"
+result_summary: "verified-202610230856-RMZXBZ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,7 +23,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-23T11:44:22.840Z"
+  updated_at: "2026-10-23T11:44:33.869Z"
   updated_by: "CODER"
   note: "verified-202610230856-RMZXBZ"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - ".agentplane/tmp/RMZXBZ-e2e-rerun.log"
   findings:
     - "Two merge conflicts resolved preserving both intended behaviors; XML persistence fixtures and seven missing module registrations repaired; boundary tests close every uncovered production branch."
-commit: null
+commit:
+  hash: "6175d5b61d447a484d94f925bc6e138b26d2d56e"
+  message: "📝 RMZXBZ task: record complete integration verification"
 comments:
   -
     author: "CODER"
     body: "Start: Integrate and verify the user-approved Writer and Calc branches, then synchronize the three checkouts and remote branches."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610230856-RMZXBZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -70,8 +76,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610230856-RMZXBZ"
+  -
+    type: "verify"
+    at: "2026-10-23T11:44:33.869Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610230856-RMZXBZ"
+  -
+    type: "status"
+    at: "2026-10-23T11:44:33.995Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610230856-RMZXBZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-23T11:44:22.894Z"
+doc_updated_at: "2026-10-23T11:44:33.996Z"
 doc_updated_by: "CODER"
 description: "Push current Writer and Calc work, merge both into main, resolve conflicts, run full verification and repair regressions, publish main and merge it back into both development branches. User explicitly authorized all three repositories and network pushes."
 sections:
@@ -146,9 +165,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-23T11:44:33.869Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610230856-RMZXBZ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T11:44:22.894Z, excerpt_hash=sha256:2f8832a58a4d637a01ce57596f0f8fea9d8fd7fffa7d62da4c320d17db009c6a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610230856-RMZXBZ/blueprint/resolved-snapshot.json
+    - old_digest: 56796b1c78c6317e2e6e51f43bc1d8845cc096af3cfb1aca2bc6ef27f8a0ef0c
+    - current_digest: 56796b1c78c6317e2e6e51f43bc1d8845cc096af3cfb1aca2bc6ef27f8a0ef0c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610230856-RMZXBZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610230856-RMZXBZ --result verified-202610230856-RMZXBZ --commit 84a93a0a118f74491a4cc3a95028c3fe53304e33
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve original commits in Git history. If integration fails, repair before publication; use a reviewed revert if a published merge must be reversed. Never reset user work or force push."
   Findings: "Preserved both development histories. Resolved two Calc merge conflicts by retaining label-based paper selection, native style ranges and main pattern-name caching. Added style-edit/export reuse coverage and browser XML/Worker cancellation, timeout, transfer, failure, malformed-stream, embedded-resource and stale-generation tests. Registered seven existing I/O modules with matching honest browser/local provenance records. SSH pushes were unavailable; authorized HTTPS publication succeeded. Unified Istanbul run hit ENOSPC; removed its generated temporary data and completed all tests in 16 bounded shards, merging identical-source counters before strict final gating. A temporary shard-helper restart diagnostic did not invalidate retained successful shards; final structured results contain exactly shards1..16, all successful with coverage present. No production code changed after the complete application run, only regression tests and metadata. All final gates pass; remaining operations are publication and branch synchronization."
+extensions:
+  implementation_commit:
+    hash: "fe17a75c20f4551da160c29592489fe7f102eee2"
+    message: "🧪 RMZXBZ code: close browser XML and worker boundary coverage"
 id_source: "generated"
 ---
 ## Summary
@@ -227,6 +280,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610230856-RMZXBZ --result verified-202610230856-RMZXBZ --commit 6175d5b61d447a484d94f925bc6e138b26d2d56e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-23T11:44:33.869Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610230856-RMZXBZ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T11:44:22.894Z, excerpt_hash=sha256:2f8832a58a4d637a01ce57596f0f8fea9d8fd7fffa7d62da4c320d17db009c6a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610230856-RMZXBZ/blueprint/resolved-snapshot.json
+- old_digest: 56796b1c78c6317e2e6e51f43bc1d8845cc096af3cfb1aca2bc6ef27f8a0ef0c
+- current_digest: 56796b1c78c6317e2e6e51f43bc1d8845cc096af3cfb1aca2bc6ef27f8a0ef0c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610230856-RMZXBZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610230856-RMZXBZ --result verified-202610230856-RMZXBZ --commit 84a93a0a118f74491a4cc3a95028c3fe53304e33
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
