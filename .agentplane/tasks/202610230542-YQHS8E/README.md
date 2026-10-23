@@ -1,10 +1,11 @@
 ---
 id: "202610230542-YQHS8E"
 title: "Run full Writer checkpoint, repair regressions and stop the goal"
-status: "DOING"
+result_summary: "Completed full Writer checkpoint with native print-bound and reset-merging repairs, source-bound 100% coverage and verified UI regression scenarios"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -53,11 +54,16 @@ quality_review:
     - "Complete application run1208files18640cases honestly records2failures and99.99coverage. Both assertions repaired: actual IndexedDB list completion replaces a one-second DOM deadline; native reset merges adjacent equal styles. Fresh repair87cases and native-reset75cases pass. No failed case or stale/incomplete attempt is presented as a passing full command."
     - "Verified1155current source identities. Whole current coverage uses only exact unchanged full-run identities plus fresh same-source repair counters; old changed txtedt.ts map is discarded entirely and independently replaced with S40/B35/F5/L31 all100. Original Istanbul provider enforces unchanged global100thresholds: S61415/B38307/F11451/L55869, zero skipped counters. Conventional reports match audited committed sources."
     - "Final inventory124cases100%, tooling140cases, full Chromium488with explicit initial port/oracle repairs, final affected7current-build style/font/history cases, split19viewcases, all static/canonical/type/doc/size/format/lint checks pass. Final tracked tree is clean at reviewed source commit. Existing doctor managed-shim warning is pre-existing and outside product scope;0errors."
-commit: null
+commit:
+  hash: "6c9534ef96f11b8cec14d9c7ad4844193d4eff9f"
+  message: "🐛 YQHS8E writer: restore native reset merging and inclusive print bounds"
 comments:
   -
     author: "CODER"
     body: "Start: execute the human-requested tenth-task full application/inventory/tooling/Chromium checkpoint, repair necessary Writer/shared regressions with unchanged native contracts and coverage thresholds, close verified work and pause the goal."
+  -
+    author: "CODER"
+    body: "Verified: completed the18640-case application checkpoint, repaired native inclusive print bounds and selective-reset merging, fixed stale and asynchronous test oracles, added meaningful native history/page cases and obtained source-bound strict100% current coverage. Inventory124,tooling140,full browser488and final affected7cases verified; all final static/canonical gates pass and EVALUATOR review accepts6c9534ef96f11b8cec14d9c7ad4844193d4eff9f. Close this final checkpoint task; pause the broad goal as explicitly requested, with no subsequent task."
 events:
   -
     type: "status"
@@ -72,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete18640-case app checkpoint plus repaired current-source cases, source-bound strict100% aggregate S61415/B38307/F11451/L55869, inventory124cases100%, tooling140cases, full Chromium488and final affected7cases, all final static/canonical gates pass. Original incomplete/failing attempts retained explicitly; no thresholds lowered or changed-source old coverage retained."
+  -
+    type: "status"
+    at: "2026-10-23T07:16:04.079Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: completed the18640-case application checkpoint, repaired native inclusive print bounds and selective-reset merging, fixed stale and asynchronous test oracles, added meaningful native history/page cases and obtained source-bound strict100% current coverage. Inventory124,tooling140,full browser488and final affected7cases verified; all final static/canonical gates pass and EVALUATOR review accepts6c9534ef96f11b8cec14d9c7ad4844193d4eff9f. Close this final checkpoint task; pause the broad goal as explicitly requested, with no subsequent task."
 doc_version: 3
-doc_updated_at: "2026-10-23T07:13:01.844Z"
+doc_updated_at: "2026-10-23T07:16:04.081Z"
 doc_updated_by: "CODER"
 description: "Tenth task after ACR55N: run full application coverage, inventory coverage, tooling and Chromium suites plus static/canonical gates; repair current Writer/shared integration regressions and add or correct meaningful scenarios with preserved native contracts and explicit synthetic-only annotations where authorized. Close the verified task and pause the goal as the human requested; no new feature work, network, merge, worktree or mutations outside writer checkout."
 sections:
