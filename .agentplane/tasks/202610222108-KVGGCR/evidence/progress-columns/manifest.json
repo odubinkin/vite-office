@@ -1,0 +1,174 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "in_progress_not_accepted",
+  "scopePaths": 39,
+  "approvedScopeBudget": 110,
+  "checks": {
+    "focusedTests": "71/71 across7 physical files pass,including13 new native boundary/resource/context/column scenarios",
+    "types_lint_format_docs_size_boundaries_provenance_registry_build_static_routing_doctor": "pass",
+    "coverage": "Not claimed for this checkpoint;previous800-scenario diagnostic and failed raw100 gate preserved separately in progress-resources",
+    "finalTask76": "pending document paste/history/EnterBlock and final acceptance"
+  },
+  "archiveSha256": "ac7b2c99043b566feea11f66a581280fe330a012e835e33647490a54e03b4868",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "817ef145e0e9eba8c3d384b61e92215fb79a447c38cafc45c1ed04fd7f0b2b27"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "357a6a93d55039af6f16d2beca7b1fc8111c99d1676e65e32d01ef97ad6257b3"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column4.ts",
+      "sha256": "015eee41e66b6740f801aa99bf9ae0771bd91ee8e933b5e9022c46c8bb95b8f4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen2.ts",
+      "sha256": "d8584f4e83b62b239913ab3af2da1145b1ee0c96c322f5a18af59fb0cd05e5d6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "0b0845ef8da54c3e8f37402d6affb7834eaf077481f642f99f673e3b07ed2ee9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "c77fe157061df0371c2934d76f482afaa1c873a5f04a949966a228c474adae2e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "bb4db449cfcdfd25171c5799a8dd95b7f4108c4b55a88622c1799f41ede1a59f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/poolhelp.ts",
+      "sha256": "0824edf07b26407fa6fce717cc3efaac042f119b3bca8137d8f48e8e9af056f2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "9c33133dd4fae4e23d3a760931edd30ab415f49a8faa14f1da7b4bb5ef6eed82"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+      "sha256": "22964f45f6daf888fb0ae6f3d1035fb6bd4243f1575a6b1e692574b6463ee50b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "sha256": "04f38f3ed19d1c9080c4025019834e3c94ba1e45781220794a4aad4fa76bba42"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column4.ts.json",
+      "sha256": "8de827e532c8bfd067efa4c0463875546e99b69a54bb259cfeabbe278800bbff"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen2.ts.json",
+      "sha256": "1661746388933183dbc30ecd2b14b0ae31f1e64c827ab85d9aa6da326b80a244"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+      "sha256": "83ca340f852e9b49e492dd3092719a9dbdef1e88a8470fc0c78b988329b9a110"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "8c076620b79c71025a55b0b0f80f2109e47350c93c27c8b2c599fdc75be095b0"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document10.ts.json",
+      "sha256": "a97acea3cab9ef4f6112ab36de4316b85e1af11ae04cbc93241bbbb94e2dc91c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/poolhelp.ts.json",
+      "sha256": "4c28f4b46832cdb92d34d406ec794290290b397ab00ca5c9440421d888d4b9d2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "sha256": "d2a9dd38ab1c06324cc9e6f3efa5f177dc1c9d3ff1ec0effb750bc7286a1445a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+      "sha256": "23eaa77848d533cd751743378094477c7d57dbf39155e060f921e35f48389b21"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "sha256": "32a199bb7ca51c004c619d596ff87b2c74651ca2b83f79c3c526ccddc65b05c6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column4.ts.json",
+      "sha256": "34e7c4ce4ae2b8332469c286022a8e30bca957107f53938c324cbb5179599190"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen2.ts.json",
+      "sha256": "5042fc5e3dddbc6e89d7f2a636a54bf43e3a087351b2c27456aaf0f44abb81d4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+      "sha256": "ac1e79ba8e131e5dd8ebe3aa916cc8b5be37ad0f770361032e1c0cf05f342735"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "0fff985a7c064bfcd8d3ebe7d26e9919d1ee68de50ea8f5442b514ed005676fe"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document10.ts.json",
+      "sha256": "31405e781a16face0cc45629e95d9d9b813fd76371bfe54132cf53741fd92b75"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/poolhelp.ts.json",
+      "sha256": "3283a1a4a49be2e9ca063ce5af25353889659383b695ed64b874fdcbba07a1d2"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "sha256": "1006cf9a7a0be869d8d44d6a0be59e63c567d46568d2b2356f54a1809b938d51"
+    },
+    {
+      "path": "apps/office/src/sc/inc/clipcontext.ts",
+      "sha256": "5384d047f1ecc7b5c09e0a04e2ddf8813a3883074a279e238017331bc97df6b9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-context.test.ts",
+      "sha256": "3382c1c25883cdd5a338da693ba8728054f9a8960d8bc7fbd74a2e36591b2d3d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts",
+      "sha256": "01d434add79504dd524712554dce92dee64c74bc7d6be20e61fc4361dfaaf0c2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+      "sha256": "c80d0ca19f9184271c1522af3b5d91d47226b44f1fe3c63fdc76e5efc6e942e0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipcontext.ts",
+      "sha256": "2d440cbc83018ab7987a677c5835371c1b48e937fc527ab8e96e40b392495bcd"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen9.ts",
+      "sha256": "55730a9db83eb8d2674cb82cd11afe2a13ba89204791a9dd3e8049c08fb827bb"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/clipcontext.ts.json",
+      "sha256": "13727dd1d7be6cd9c575720744eea43b38464a57f0c92eb734758d94071eb9c6"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/clipcontext.ts.json",
+      "sha256": "0194f0c6e22765e429e375107e4ec896b398fb325c22d62f8bf6689729a8dbb0"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen9.ts.json",
+      "sha256": "79c565d8d14be2a9a3c6eb982947a87594b43c8e056a459d5085c5e6f429cbd8"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/clipcontext.ts.json",
+      "sha256": "bb287a183dc4d4adec1efaa2521fdc835ec5a2df7ff523753d9ee6db34d6d7f7"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/clipcontext.ts.json",
+      "sha256": "b51ab5ee2bce7a884f872759928c33c8b5292ad239970982a8f135dc14226704"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen9.ts.json",
+      "sha256": "704028939e343c3ce413d6953911ccad6656b355cc6f31f3dc0a60f1a7a866d1"
+    }
+  ],
+  "nativeBaseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeEvidence": "Original-source inspection and genuine current managed owner tests;no complete native Calc class execution or full parity claimed. Original sources preserved in archive for independent review.",
+  "stopRule": "Human resumed after merging;goal stays active. No new full all-app checkpoint in this progress slice."
+}

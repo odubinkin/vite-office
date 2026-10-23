@@ -1,0 +1,75 @@
+{
+  "task": "202610222108-KVGGCR",
+  "status": "in_progress_not_accepted",
+  "checks": {
+    "tests": "800/800 pass across206 physical files",
+    "coverage": "gate failed:14590/14594S,8812/8818B,2508/2510F,13061/13064L",
+    "types": "pass",
+    "docs_size_lint_provenance_registry": "diagnostic failures retained;repairs follow"
+  },
+  "archiveSha256": "08be53ebe37fe12628a875c9b05da38be2e4d3e979a5d92f6e7f98eed47206ed",
+  "sourceBaseCommit": "52640f3dc575094d04f6a8c35325fc6aa880c8bc",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/inc/clipcontext.ts",
+      "sha256": "5384d047f1ecc7b5c09e0a04e2ddf8813a3883074a279e238017331bc97df6b9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-context.test.ts",
+      "sha256": "91c379484fd1cd4deff245628b51ffe6319d3cfc4e299f52fc6d0c917b9eee50"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts",
+      "sha256": "0bfe2d41315c0a78dde561d3c555a60ba35f142900c1be7f7bff2822fbb1f37c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+      "sha256": "1e031378097953dab4fee60e6ab34c149acc54dd19e9257b8ee417da722af46a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipcontext.ts",
+      "sha256": "54ba1baaeef8019c8285e53fd4a93b1f3ae1362335297fd3c9879273300d6e81"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen9.ts",
+      "sha256": "55730a9db83eb8d2674cb82cd11afe2a13ba89204791a9dd3e8049c08fb827bb"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "08e0162ba323b399afea2646314ecaaa50f2b71b4a4d3a877dc5caf248ee6446"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "357a6a93d55039af6f16d2beca7b1fc8111c99d1676e65e32d01ef97ad6257b3"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column4.ts",
+      "sha256": "ccc3ae614ebaf31ac02297247d4757e9f48c8bac401ca84162288ca19517f07a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen2.ts",
+      "sha256": "d8584f4e83b62b239913ab3af2da1145b1ee0c96c322f5a18af59fb0cd05e5d6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "f8a3113755c4354e5a7594fd44ebf3c0a3064607abb9b4a985ed723e143370f5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "e842ab0ff00fe155a8b41528c6a2a7da21295dd9b9c627965a0669399ed78659"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "bb4db449cfcdfd25171c5799a8dd95b7f4108c4b55a88622c1799f41ede1a59f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/poolhelp.ts",
+      "sha256": "0824edf07b26407fa6fce717cc3efaac042f119b3bca8137d8f48e8e9af056f2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "b51a38baad703704cb53511c17e2f0672aa494fb2799c96293c71f1108dbd171"
+    }
+  ],
+  "scope": "Native clipboard resource/reset/context and column replication progress only;document paste,undo and UI remain pending."
+}
