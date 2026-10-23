@@ -4,11 +4,13 @@ import type { SwPaM } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
-import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
+import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { getTextFormatCollNodes, setTextFormatCollAtNode } from "../doc/docfmt";
 import { createParagraphStyleResetSet } from "../doc/DocumentContentOperationsManager";
 import { SwUndoFormatColl } from "../undo/unfmco";
+import { RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwNumRuleItem } from "../para/paratr";
 import { SwUndoResetAttr } from "../undo/unattr";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 
@@ -66,4 +68,78 @@ export function createTextFormatCollAction(
       reset.ApplyExact();
     },
   };
+}
+
+/** Copies only point-node direct attributes, excluding break/page and automatic numbering as native FillByEx. @param document - Original graph. @param range - Actual shell cursor. @param collection - Destination style. @returns Nothing. */
+export function fillParagraphStyleByExample(
+  document: SwDoc,
+  range: SwPaM,
+  collection: SwTextFormatColl,
+): void {
+  const node = range.GetPoint().GetNode() as SwTextNode;
+  const direct = node.GetpSwAttrSet();
+  if (direct === undefined) return;
+  const set = direct.Clone();
+  const hasSpecial =
+    direct.GetItemIfSet(RES_BREAK, false) !== undefined ||
+    direct.GetItemIfSet(RES_PAGEDESC, false) !== undefined;
+  set.ClearItem(RES_BREAK);
+  set.ClearItem(RES_PAGEDESC);
+  const rule = direct.GetItemIfSet(RES_PARATR_NUMRULE, false) as SwNumRuleItem | undefined;
+  const autoRule =
+    rule !== undefined && document.FindNumRulePtr(rule.GetValue())?.IsAutoRule() === true;
+  if (autoRule) set.ClearItem(RES_PARATR_NUMRULE);
+  if ((hasSpecial || autoRule) && set.Count() === 0) return;
+  document.ChgFormat(collection, set);
+}
+
+/** Consumed edit-shell ports for original collection application; the shell retains cursor and history ownership. */
+interface TextFormatCollShell {
+  GetDoc(): SwDoc;
+  GetCursor(): SwPaM;
+  CaptureCursorState(): SwUndoCursorState;
+  ApplyAction(
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge: boolean,
+    execute: () => void,
+  ): boolean;
+}
+/** Applies source-ordered collection/reset operations over the actual cursor ring with one native undo group. @param target - Original shell. @param collection - Owned paragraph format. @param resetAllCharAttrs - Initial selective reset eligibility. @returns Whether applied. */
+export function setTextFormatCollAtShell(
+  target: TextFormatCollShell,
+  collection: SwTextFormatColl,
+  resetAllCharAttrs: boolean,
+): boolean {
+  const document = target.GetDoc(),
+    cursor = target.GetCursor(),
+    ranges = [...cursor.GetRingContainer()];
+  if (ranges.length > 1) {
+    const group = new SfxListUndoAction<SwUndoRedoContext>("Paragraph Style");
+    return target.ApplyAction(
+      group,
+      false,
+      /** Captures each original ring range after the preceding range mutation. @returns Nothing. */
+      () => {
+        for (const range of ranges) {
+          const operation = createTextFormatCollAction(
+            document,
+            range,
+            collection,
+            target.CaptureCursorState(),
+            resetAllCharAttrs,
+          );
+          group.AddAction(operation.action);
+          operation.execute();
+        }
+      },
+    );
+  }
+  const operation = createTextFormatCollAction(
+    document,
+    cursor,
+    collection,
+    target.CaptureCursorState(),
+    resetAllCharAttrs,
+  );
+  return target.ApplyAction(operation.action, false, operation.execute);
 }

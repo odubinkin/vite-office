@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/browser/presentation/NewStyleDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sfx2/browser/presentation/NewStyleDialog.tsx#NewStyleDialog",
+        "vendor/libreoffice-reference/sfx2/source/dialog/newstyle.cxx#SfxNewStyleDlg"
+      ],
+      "justification": "Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NewStyleDialog"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

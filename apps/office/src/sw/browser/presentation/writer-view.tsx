@@ -555,6 +555,7 @@ export function WriterWorkbench({
             }
             commandSource={commandSource}
             paragraphStyleOptions={snapshot.paragraphStyleOptions}
+            paragraphStyleNames={snapshot.paragraphStyleNames}
             resolveArguments={resolveCommandArguments}
           />
         }
@@ -588,6 +589,7 @@ export function WriterWorkbench({
               isTable={currentTable !== undefined}
               unit={snapshot.metricUnit}
               paragraphStyleOptions={snapshot.paragraphStyleOptions}
+              paragraphStyleNames={snapshot.paragraphStyleNames}
               embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
                 /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
                 (font) => font.familyName,

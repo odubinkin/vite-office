@@ -13,6 +13,7 @@ import { SfxUnoAnyItem } from "../view/frame";
 /** One slot invocation with item arguments, completion state, and an optional return item. */
 export class SfxRequest {
   private done = false;
+  private ignored = false;
   private arguments_: readonly SfxPoolItem[];
   private modifier = 0;
   private returnValue: SfxPoolItem | undefined;
@@ -71,6 +72,11 @@ export class SfxRequest {
   public SetReturnValue(value: SfxPoolItem): void {
     this.returnValue = value.Clone() as SfxPoolItem;
   }
+  /** Returns original execution flags for an asynchronous request copy. @returns Native call mode. */
+  public GetCallMode(): SfxCallMode {
+    return this.callMode;
+  }
+
   /** Original API call-mode bit query,independent of arguments. @returns Whether called by API. */
   public IsAPI(): boolean {
     return Boolean(this.callMode & SfxCallMode.API);
@@ -79,6 +85,15 @@ export class SfxRequest {
   public Done(release = false): void {
     this.done = true;
     if (release) this.arguments_ = [];
+  }
+
+  /** Original Ignore suppresses recording/completion for requests continued through an asynchronous copy. @returns Nothing. */
+  public Ignore(): void {
+    this.ignored = true;
+  }
+  /** Reports whether the original request was ignored. @returns Ignore flag. */
+  public IsIgnored(): boolean {
+    return this.ignored;
   }
 
   /** Reports whether execution completed. @returns Completion state. */

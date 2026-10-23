@@ -1,6 +1,6 @@
 /** @fileoverview Composes the consumed native Writer Style,Character and Paragraph Properties panels over the active frame. */
 import { TableEditPanel } from "../sidebar/TableEditPanel";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Paintbrush, RefreshCw, FilePlus } from "lucide-react";
 import { StylesPropertyPanel } from "../../../svx/browser/sidebar/styles/StylesPropertyPanel";
 import { TextPropertyPanel } from "../../../svx/browser/sidebar/text/TextPropertyPanel";
 import { ParaPropertyPanel } from "../../../svx/browser/sidebar/paragraph/ParaPropertyPanel";
@@ -66,6 +66,7 @@ export function WriterParagraphProperties(
 export function WriterPropertiesPanel(
   props: WriterParagraphPropertiesProps &
     Readonly<{
+      paragraphStyleNames?: readonly string[];
       paragraphStyleOptions: readonly WriterParagraphStyleOption[];
       isTable: boolean;
       embeddedFontFamilies: readonly string[];
@@ -86,6 +87,37 @@ export function WriterPropertiesPanel(
     <>
       <StylesPropertyPanel
         title={localization.GetText("writer.properties.style", "Style")}
+        inSidebar
+        tools={
+          <>
+            {[
+              [WRITER_COMMAND_IDS.formatPaintbrush, Paintbrush],
+              [WRITER_COMMAND_IDS.styleUpdateByExample, RefreshCw],
+              [WRITER_COMMAND_IDS.styleNewByExample, FilePlus],
+            ].map(
+              /** Retains original sidebarstylespanel command order and actual availability. @param entry - Native command and icon. @returns Bound control. */
+              ([commandId, icon]) => (
+                <CommandButton
+                  {...props}
+                  key={commandId as string}
+                  commandId={commandId as string}
+                  icon={icon as typeof Paintbrush}
+                  getCommandResource={resource}
+                />
+              ),
+            )}
+          </>
+        }
+        acceptName={
+          /** Selects existing styles against the full pool; new names use the source command. @param name - Exact raw accepted name. @returns Nothing. */
+          (name) => {
+            const exists = props.paragraphStyleNames?.includes(name) === true;
+            props.commandSource.Execute(
+              exists ? WRITER_COMMAND_IDS.styleApply : WRITER_COMMAND_IDS.styleNewByExample,
+              exists ? { Template: name, Family: 2 } : { Param: name, Family: 2 },
+            );
+          }
+        }
         label={resource(WRITER_COMMAND_IDS.styleApply).controlLabel}
         options={props.paragraphStyleOptions}
         value={String(style.selectedValue ?? "")}

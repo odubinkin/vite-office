@@ -93,7 +93,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).queryByRole(
         "button",
-        { name: /Paragraph/ },
+        { name: "Paragraph…" },
       ),
     ).toBeNull();
     rendered.unmount();

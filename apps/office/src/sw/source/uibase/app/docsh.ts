@@ -9,7 +9,13 @@ import type { SfxRequest } from "../../../../sfx2/source/control/request";
 import { KEY_MOD1 } from "../../../../vcl/keycodes";
 import type { SwView } from "../uiview/view";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
-import { createWriterDocStyleInterface, execStyleSheet, findParagraphStyle } from "./docst";
+import {
+  createWriterDocStyleInterface,
+  execStyleSheet,
+  findParagraphStyle,
+  updateStyle,
+  makeByExample,
+} from "./docst";
 import {
   acquireSfxMedium,
   type SfxMedium,
@@ -88,7 +94,7 @@ export class SwDocShell extends SfxObjectShell {
   }
 
   /** Executes the bounded native style-sheet request. @param request - Caller-owned request. @returns Applied family. */
-  public ExecStyleSheet(request: SfxRequest): number | undefined {
+  public ExecStyleSheet(request: SfxRequest): number | undefined | Promise<void> {
     return execStyleSheet(this, request);
   }
 
@@ -101,6 +107,15 @@ export class SwDocShell extends SfxObjectShell {
     if (style === undefined) return 0;
     shell.SetParagraphStyle(style, (modifier & KEY_MOD1) !== 0);
     return family;
+  }
+
+  /** Updates the current paragraph style using native FillByEx and grouped reapplication. @param name - Exact style name. @param family - Native family. @returns Nothing. */
+  public UpdateStyle(name: string, family: number): void {
+    updateStyle(this, name, family);
+  }
+  /** Creates a paragraph style by example using the native default mask and separate history owners. @param name - Exact style name. @param family - Native family. @returns Nothing. */
+  public MakeByExample(name: string, family: number): void {
+    makeByExample(this, name, family);
   }
 
   /** Returns the session output device used when constructing document defaults. @returns Device or undefined. */

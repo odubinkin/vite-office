@@ -69,6 +69,12 @@ export interface WriterParagraphDialogResult {
 
 /** Every Writer child-window request supported by the presenter. */
 export type WriterDialogRequest =
+  | Readonly<{
+      kind: "new-style";
+      commandUrl: string;
+      names: readonly string[];
+      reservedNames: readonly string[];
+    }>
   | WriterHyperlinkDialogRequest
   | WriterBookmarkDialogRequest
   | WriterBreakDialogRequest
@@ -76,6 +82,7 @@ export type WriterDialogRequest =
   | WriterParagraphDialogRequest;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
+  | Readonly<{ name: string }>
   | WriterHyperlinkDialogResult
   | WriterBookmarkDialogResult
   | WriterBreakDialogResult
@@ -90,6 +97,23 @@ export class WriterDialogController {
 
   public readonly GetSnapshot = this.controller.GetSnapshot;
   public readonly Subscribe = this.controller.Subscribe;
+
+  /** Opens native New Style from Selection with user-defined names. @param commandUrl - Original slot. @param names - Existing user styles. @param reservedNames - Existing builtin names. @returns Raw accepted name or cancellation. */
+  public async RequestNewStyleDialog(
+    commandUrl: string,
+    names: readonly string[],
+    reservedNames: readonly string[],
+  ): Promise<Readonly<{ name: string }> | undefined> {
+    const completion = await this.controller.Request({
+      kind: "new-style",
+      commandUrl,
+      names,
+      reservedNames,
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as Readonly<{ name: string }>)
+      : undefined;
+  }
 
   /** Requests the hyperlink child window and returns its accepted value or cancellation. @param commandUrl - Originating command. @param initialHyperlink - Shell-owned edit state. @returns Accepted fields or undefined. */
   public async RequestHyperlinkDialog(

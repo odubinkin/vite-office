@@ -48,6 +48,7 @@ function attach(document = new SwDoc(), argumentsValue?: unknown) {
         unit={FieldUnit.CM}
         commandSource={source}
         paragraphStyleOptions={projection.paragraphStyleOptions}
+        paragraphStyleNames={projection.paragraphStyleNames}
         resolveArguments={
           /** Supplies the requested presentation-owned arguments. @returns Arguments. */ () =>
             argumentsValue
@@ -88,7 +89,7 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
           /** Finds the device-backed font selector. @param select - Candidate selector. @returns Whether it lists the font. */ (
             select,
           ) =>
-            [...(select as HTMLSelectElement).options].some(
+            [...((select as HTMLSelectElement).options ?? [])].some(
               /** Matches the requested font. @param option - Native option. @returns Match. */ (
                 option,
               ) => option.value === "Liberation Serif",
@@ -181,38 +182,41 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     render(<owner.Toolbar />);
     const select = screen.getByRole("combobox", { name: "Paragraph style" });
     expect(select.querySelectorAll("optgroup")).toHaveLength(0);
-    fireEvent.change(select, { target: { value: "custom-id" } });
+    fireEvent.change(select, { target: { value: "Owned: & <字>" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(execute).toHaveBeenLastCalledWith(".uno:StyleApply", {
       Style: "Owned: & <字>",
       FamilyName: "ParagraphStyles",
     });
-    expect(select).toHaveValue("custom-id");
+    expect(select).toHaveValue("Owned: & <字>");
     expect(required(document.paragraphs[0]).GetTextFormatColl().GetName()).toBe("Owned: & <字>");
     const history = document.GetUndoManager().GetUndoActionCount();
-    fireEvent.change(select, { target: { value: "custom-id" } });
+    fireEvent.change(select, { target: { value: "Owned: & <字>" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(document.GetUndoManager().GetUndoActionCount()).toBe(history + 1);
     act(
       /** Undoes the repeated request and then the applied style. @returns Nothing. */ () => {
         owner.source.Execute(WRITER_COMMAND_IDS.undo);
-        expect(select).toHaveValue("custom-id");
+        expect(select).toHaveValue("Owned: & <字>");
         owner.source.Execute(WRITER_COMMAND_IDS.undo);
       },
     );
-    expect(select).toHaveValue("default");
+    expect(select).toHaveValue("Default Paragraph Style");
     act(
       /** Redoes the applied style. @returns Nothing. */ () => {
         owner.source.Execute(WRITER_COMMAND_IDS.redo);
       },
     );
-    expect(select).toHaveValue("custom-id");
+    expect(select).toHaveValue("Owned: & <字>");
     expect(untouched.GetParagraphStyle()).toBe("default");
     act(
       /** Renames the actual active owner. @returns Nothing. */ () => {
         required(document.FindTextFormatColl("custom-id")).SetFormatName("Renamed: & 字", true);
       },
     );
-    expect(select).toHaveValue("custom-id");
-    expect(screen.getByRole("option", { name: "Renamed: & 字" })).toHaveValue("custom-id");
+    expect(select).toHaveValue("Renamed: & 字");
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Renamed: & 字" })).toBeVisible();
     const second = new SwDoc();
     second.MakeTextFormatColl("New document style", undefined, "second");
     act(
@@ -223,9 +227,11 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
         });
       },
     );
-    expect(select).toHaveValue("default");
+    expect(select).toHaveValue("Default Paragraph Style");
     expect(screen.queryByRole("option", { name: "Renamed: & 字" })).toBeNull();
-    expect(screen.getByRole("option", { name: "New document style" })).toHaveValue("second");
+    if (screen.queryByRole("option", { name: "New document style" }) === null)
+      fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "New document style" })).toBeVisible();
     act(/** Removes active command shells. @returns Nothing. */ () => owner.frame.CloseView());
     expect(select).toBeDisabled();
     expect(select).toHaveValue("");
@@ -246,8 +252,10 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       </BrowserLocalizationProvider>,
     );
     const select = screen.getByRole("combobox", { name: "Paragraph style" });
-    expect(screen.getByRole("option", { name: "Заголовок 1" })).toHaveValue("heading-1");
-    fireEvent.change(select, { target: { value: "heading-1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Заголовок 1" })).toBeVisible();
+    fireEvent.change(select, { target: { value: "Заголовок 1" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(required(owner.document.paragraphs[0]).GetParagraphStyle()).toBe("heading-1");
     act(
       /** Renames a builtin and registers a live custom style. @returns Nothing. */ () => {
@@ -256,10 +264,13 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       },
     );
     expect(screen.queryByRole("option", { name: "Заголовок 1" })).toBeNull();
-    expect(screen.getByRole("option", { name: "Owned heading" })).toHaveValue("heading-1");
-    expect(screen.getByRole("option", { name: "Unused:新" })).toHaveValue("new");
-    fireEvent.change(select, { target: { value: "new" } });
-    fireEvent.change(select, { target: { value: "heading-1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Owned heading" })).toBeVisible();
+    expect(screen.getByRole("option", { name: "Unused:新" })).toBeVisible();
+    fireEvent.change(select, { target: { value: "Unused:新" } });
+    fireEvent.keyDown(select, { key: "Enter" });
+    fireEvent.change(select, { target: { value: "Owned heading" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(required(owner.document.paragraphs[0]).GetTextFormatColl().GetName()).toBe(
       "Owned heading",
     );

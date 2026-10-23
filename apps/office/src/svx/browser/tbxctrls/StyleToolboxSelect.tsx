@@ -1,8 +1,9 @@
-/** @fileoverview Adapts native SvxStyleBox acceptance, travel and focus release to a browser style selector. */
-import { useState } from "react";
+/** @fileoverview Editable SvxStyleBox acceptance, tentative travel and saved-value focus restoration from pinned tbcontrl.cxx. */
+import { useId, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import type { StyleToolboxEntry } from "./style-toolbox-control";
 
-/** Family-independent browser style-box ports; the frame retains dispatch and model ownership. */
+/** Original frame-owned style pool lookup and dispatch ports. */
 export interface StyleToolboxSelectProps {
   readonly options: readonly StyleToolboxEntry[];
   readonly value: string;
@@ -10,63 +11,80 @@ export interface StyleToolboxSelectProps {
   readonly label: string;
   readonly getLabel: (style: StyleToolboxEntry) => string;
   readonly applyStyle: (style: StyleToolboxEntry) => void;
+  readonly acceptName: (name: string) => void;
   readonly focusDocument?: () => void;
+  readonly inSidebar?: boolean;
 }
 
-/** Renders tentative native keyboard travel and explicit acceptance without presentation-owned model writes. @param props - Current bindings and frame ports. @returns Style selector. */
-export function StyleToolboxSelect({
-  options,
-  value,
-  enabled,
-  label,
-  getLabel,
-  applyStyle,
-  focusDocument,
-}: StyleToolboxSelectProps): React.JSX.Element {
+/** Renders a family-neutral editable combo; input and travel do not dispatch until explicit acceptance. @param props - Actual pool and command bindings. @returns Style box. */
+export function StyleToolboxSelect(props: StyleToolboxSelectProps): React.JSX.Element {
+  const { options, value, enabled, label, getLabel, applyStyle, focusDocument } = props;
+  const listId = useId(),
+    input = useRef<HTMLInputElement>(null);
   const [draft, setDraft] =
-    useState<
-      Readonly<{ options: readonly StyleToolboxEntry[]; boundValue: string; value: string }>
-    >();
-  const selected = draft?.options === options && draft.boundValue === value ? draft.value : value;
-
-  /** Resolves the selected entry before native focus-before-dispatch acceptance. @param id - Rendered identity. @param releaseFocus - Whether normal focus navigation is suppressed. @returns Nothing. */
-  function accept(id: string, releaseFocus: boolean): void {
-    const style = options.find(
-      /** Resolves an actual rendered entry. @param entry - Candidate. @returns Match. */ (entry) =>
-        entry.id === id,
+    useState<Readonly<{ bound: string; text: string; options: readonly StyleToolboxEntry[] }>>();
+  const [open, setOpen] = useState(false);
+  const current = options.find(
+    /** Resolves current model identity. @param entry - Pool projection. @returns Match. */
+    (entry) => entry.id === value,
+  );
+  const saved = current === undefined ? "" : getLabel(current);
+  const selected = draft?.bound === saved && draft.options === options ? draft.text : saved;
+  /** Releases focus before dispatch, preserving the exact raw typed name. @param text - Accepted entry text. @param release - Whether Tab suppresses explicit document focus. @returns Nothing. */
+  function accept(text: string, release: boolean): void {
+    if (!enabled) return;
+    const entry = options.find(
+      /** Translates localized list labels to actual names. @param style - Actual entry. @returns Match. */
+      (style) => getLabel(style) === text,
     );
-    if (!enabled || style === undefined) return;
     setDraft(undefined);
-    if (releaseFocus) focusDocument?.();
-    applyStyle(style);
+    setOpen(false);
+    if (release) focusDocument?.();
+    if (entry !== undefined) applyStyle(entry);
+    else props.acceptName(text);
   }
-
   return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
+    <span
+      className="relative inline-flex min-w-0 max-w-full"
+      onBlur={
+        /** Restores the saved value when the entire combo loses focus. @param event - Actual focus transfer. @returns Nothing. */
+        (event) => {
+          if (event.currentTarget.contains(event.relatedTarget)) return;
+          setDraft(undefined);
+          setOpen(false);
+        }
+      }
+    >
+      <input
+        ref={input}
+        role="combobox"
         aria-label={label}
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-autocomplete="list"
         disabled={!enabled}
-        className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
         value={selected}
-        onBlur={
-          /** Restores the saved binding value after unaccepted travel. @returns Nothing. */ () =>
-            setDraft(undefined)
+        className="h-8 w-44 min-w-0 rounded-l-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
+        onFocus={
+          /** Native focus selects the entire entry. @param event - Entry focus. @returns Nothing. */
+          (event) => event.currentTarget.select()
         }
         onChange={
-          /** Accepts a direct native list pick. @param event - Select change. @returns Nothing. */ (
-            event,
-          ) => accept(event.target.value, true)
+          /** Typing retains a tentative draft only. @param event - Entry change. @returns Nothing. */
+          (event) => setDraft({ options, bound: saved, text: event.target.value })
         }
         onKeyDown={
-          /** Routes native acceptance/cancellation and closed-widget travel. @param event - Browser key. @returns Nothing. */ (
-            event,
-          ) => {
+          /** Routes original Enter, Tab, Escape and nondispatching travel. @param event - Actual key. @returns Nothing. */
+          (event) => {
             if (!enabled) return;
             if (event.key === "Escape") {
-              event.preventDefault();
               setDraft(undefined);
-              focusDocument?.();
+              setOpen(false);
+              if (!props.inSidebar) {
+                event.preventDefault();
+                event.stopPropagation();
+                focusDocument?.();
+              }
               return;
             }
             if (event.key === "Tab") {
@@ -80,9 +98,8 @@ export function StyleToolboxSelect({
               return;
             }
             const index = options.findIndex(
-              /** Finds current travel position. @param entry - Candidate. @returns Match. */ (
-                entry,
-              ) => entry.id === selected,
+              /** Finds tentative travel row. @param entry - Candidate row. @returns Match. */
+              (entry) => getLabel(entry) === selected,
             );
             let next: number;
             switch (event.key) {
@@ -102,20 +119,66 @@ export function StyleToolboxSelect({
                 return;
             }
             event.preventDefault();
-            const style = options[next];
-            if (style !== undefined) setDraft({ options, boundValue: value, value: style.id });
+            const entry = options[next];
+            if (entry !== undefined) setDraft({ options, bound: saved, text: getLabel(entry) });
+          }
+        }
+      />
+      <button
+        type="button"
+        tabIndex={-1}
+        disabled={!enabled}
+        aria-label={`Show ${label}`}
+        aria-expanded={open}
+        aria-controls={listId}
+        data-office-combobox-toggle="true"
+        className="grid w-5 shrink-0 place-items-center rounded-r-md border border-l-0 border-slate-300 bg-white"
+        onMouseDown={
+          /** Retains entry focus before popup pick. @param event - Pointer. @returns Nothing. */
+          (event) => event.preventDefault()
+        }
+        onClick={
+          /** Opens the original full list. @returns Nothing. */
+          () => {
+            input.current?.focus();
+            setOpen(!open);
           }
         }
       >
-        {selected === "" && <option value="" />}
-        {options.map(
-          /** Renders one native flat entry. @param style - Entry. @returns Option. */ (style) => (
-            <option key={style.id} value={style.id}>
-              {getLabel(style)}
-            </option>
-          ),
-        )}
-      </select>
-    </label>
+        <ChevronDown aria-hidden size={12} />
+      </button>
+      {open && (
+        <div
+          id={listId}
+          role="listbox"
+          aria-label={label}
+          className="absolute top-full left-0 z-50 max-h-60 min-w-full overflow-y-auto border border-slate-300 bg-white py-1 shadow-md"
+        >
+          {options.map(
+            /** Direct list picks accept once; travel remains tentative. @param entry - Original row. @returns Option. */
+            (entry) => (
+              <button
+                type="button"
+                role="option"
+                key={entry.id}
+                tabIndex={-1}
+                aria-selected={getLabel(entry) === selected}
+                className="block w-full px-2 py-1 text-left text-sm hover:bg-slate-100"
+                onMouseDown={
+                  /** Retains focus until explicit release. @param event - Pointer. @returns Nothing. */
+                  (event) => event.preventDefault()
+                }
+                onClick={
+                  /** Accepts the direct native row. @returns Nothing. */
+                  () => accept(getLabel(entry), true)
+                }
+              >
+                {getLabel(entry)}
+              </button>
+            ),
+          )}
+        </div>
+      )}
+    </span>
   );
 }

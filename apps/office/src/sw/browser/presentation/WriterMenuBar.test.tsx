@@ -347,8 +347,14 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
           "Paragraph style",
         ),
         {
-          target: { value: "heading-1" },
+          target: { value: "Heading 1" },
         },
+      );
+      fireEvent.keyDown(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Paragraph style",
+        ),
+        { key: "Enter" },
       );
       fireEvent.click(
         within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
@@ -536,8 +542,14 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         "Paragraph style",
       ),
       {
-        target: { value: "heading-1" },
+        target: { value: "Heading 1" },
       },
+    );
+    fireEvent.keyDown(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+        "Paragraph style",
+      ),
+      { key: "Enter" },
     );
     fireEvent.click(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(

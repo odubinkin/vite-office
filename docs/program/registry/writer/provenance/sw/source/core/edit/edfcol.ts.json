@@ -110,7 +110,8 @@
     "upstreamPath": "sw/source/core/edit/edfcol.cxx",
     "upstreamSymbols": [
       "SwEditShell::SetTextFormatColl"
-    ]
+    ],
+    "rationale": " TaskDVQ9ES extends the consumed paragraph style path with editable raw-name acceptance, full pool-name lookup beyond displayed rows, actual document-shell UpdateStyle/MakeByExample, point-node FillByEx filtering, first selected text collection lookup, native grouped update and separate attribute/create/apply histories, Sfx ignored asynchronous naming and existing collection deletion/follow correction. Source quirks WRITER067/068 are preserved. Named-style references are XML-escaped during paragraph/list body export. The Style panel retains native command order; FormatPaintbrush and standalone Writer ResetAttributes remain disabled because their original execute paths are not implemented. This corrects the initial task assumption that ResetAttributes was already registered; the private style-application reset is a distinct owner. Wider style families/masks/hidden default table, complete style-box popup/completion/preview/clear/more/platform services and complete UI/core parity remain unverified. Existing save/open/autosave/no-recovery deviations and classification/default statuses are unchanged."
   },
   "legacyOrder": 183
 }

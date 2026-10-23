@@ -4,6 +4,7 @@ import { SwEditShell as SwNumberingEditShell } from "./ednumber";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SwDoc } from "../doc/doc";
+import type { SwTextFormatColl } from "../doc/fmtcol";
 import { getMoveLeftMarginDistance } from "../doc/docfmt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
@@ -168,6 +169,23 @@ function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
 
 /** Consumed character-only GetCurAttr path. Native paragraph/merged/redline queries remain in their existing or unported owners. */
 export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Returns the first selected text collection in native ring/node order. @returns Borrowed collection or no result at the lookup limit. */
+  public GetCurTextFormatColl(): SwTextFormatColl | undefined {
+    return this.GetPaMTextFormatColl(this.GetCursor());
+  }
+  /** Implements original first-text lookup with the pre-inspection ten-thousand limit. @param cursor - Original ring head. @returns Borrowed collection. */
+  public GetPaMTextFormatColl(cursor: SwPaM): SwTextFormatColl | undefined {
+    let lookedUp = 0;
+    for (const range of cursor.GetRingContainer()) {
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = this.GetDoc().GetNodes().at(index);
+        if (++lookedUp >= 10000) return undefined;
+        if (node instanceof SwTextNode) return node.GetTextFormatColl();
+      }
+    }
+    return undefined;
+  }
+
   /** Original character contribution traversal without changing current cursor ownership. @param which - Character Which. @returns Borrowed source items and independent ranges. */
   public GetItemWithPaM(which: number): SwItemWithPaM[] {
     return getSwItemWithPaM(this.GetDoc(), this.GetCursor(), which);

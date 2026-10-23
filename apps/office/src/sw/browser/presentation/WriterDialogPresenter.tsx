@@ -1,4 +1,7 @@
 /** @fileoverview Presents actual shell-owned Writer dialog requests without adding another dialog model or controller. */
+import { WriterDialogHeader } from "./WriterDialogHeader";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { NewStyleDialog } from "../../../sfx2/browser/presentation/NewStyleDialog";
 import type {
   WriterDialogController,
   WriterDialogSnapshot,
@@ -19,8 +22,44 @@ export function WriterDialogPresenter({
   request: WriterDialogSnapshot;
   unit: FieldUnit;
 }>): React.JSX.Element {
+  const localization = useBrowserLocalization();
   return (
     <>
+      {request?.request.kind !== "new-style" ? null : (
+        <NewStyleDialog
+          getText={
+            /** Keeps framework localization outside the Sfx presentation module. @param key - Source string identity. @param fallback - Native English string. @returns Localized text. */
+            (key, fallback) => localization.GetText(key, fallback)
+          }
+          header={
+            <WriterDialogHeader
+              title={localization.GetText("sfx.new-style.title", "New Style from Selection")}
+              onClose={
+                /** Cancels the actual request from shared dialog chrome. @returns Nothing. */
+                () => {
+                  controller.Cancel(request.id);
+                }
+              }
+            />
+          }
+          key={request.id}
+          names={request.request.names}
+          reservedNames={request.request.reservedNames}
+          onCancel={
+            /** Cancels the original asynchronous document request. @returns Nothing. */
+            () => {
+              controller.Cancel(request.id);
+            }
+          }
+          onSubmit={
+            /** Completes with native GetName output. @param name - Accepted display name. @returns Nothing. */
+            (name) => {
+              controller.Complete(request.id, { name });
+            }
+          }
+        />
+      )}
+
       {request?.request.kind !== "hyperlink" ? null : (
         <WriterHyperlinkDialog
           {...(request.request.initialHyperlink === undefined

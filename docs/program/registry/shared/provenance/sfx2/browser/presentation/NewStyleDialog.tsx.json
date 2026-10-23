@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/browser/presentation/NewStyleDialog.tsx",
+          "marker": "NewStyleDialog"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/dialog/newstyle.cxx",
+          "marker": "SfxNewStyleDlg"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sfx2/browser/presentation/NewStyleDialog.tsx",
+    "rationale": "TaskDVQ9ES ports the consumed paragraph by-example naming/creation history boundary. Native exact raw-name validation, leading-space GetName order and separate create/apply history are preserved. Browser lifetime is native JS. Full native style families, hidden default/style-table parity, pool group masks, recording and widget services remain unverified. No application-wide parity promotion or saving/opening/recovery policy change.",
+    "status": "local-only",
+    "upstreamPath": "sfx2/source/dialog/newstyle.cxx",
+    "upstreamSymbols": [
+      "SfxNewStyleDlg"
+    ],
+    "responsibilities": [
+      "Native new-style list, protected builtin names, overwrite confirmation and GetName order through injected presentation chrome/localization."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React form replaces weld widgets; actual Writer document shell retains the native asynchronous request and style ownership."
+    }
+  },
+  "legacyOrder": 321
+}

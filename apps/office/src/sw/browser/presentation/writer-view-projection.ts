@@ -181,6 +181,7 @@ export interface WriterPresentationProjection {
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
   readonly textNodes: readonly WriterParagraphProjection[];
+  readonly paragraphStyleNames: readonly string[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly pageDescriptor: WriterPageDescriptorValue;
   readonly pageDescriptors: readonly Readonly<{
@@ -463,6 +464,19 @@ export class WriterViewProjection {
       paragraphs: Object.freeze(paragraphs),
       textNodes: Object.freeze(textNodes),
       paragraphStyleOptions: createParagraphStyleOptions(document),
+      paragraphStyleNames: [
+        ...document.GetTextFormatColls().map(
+          /** Retains names of all actual pool owners, even outside visible rows. @param style - Owned style. @returns Name. */
+          (style) => style.GetName(),
+        ),
+        ...WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.filter(
+          /** Includes available unmaterialized builtins without replacing renamed owners. @param style - Native metadata. @returns Available. */
+          (style) => document.FindTextFormatColl(style.id) === undefined,
+        ).map(
+          /** Retains unused factory names; the default collection is already owned. @param style - Native metadata. @returns Name. */
+          (style) => style.name,
+        ),
+      ],
       pageDescriptor: document.GetPageDesc().GetValue(),
       pageDescriptors: Object.freeze(
         Array.from(

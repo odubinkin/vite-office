@@ -103,7 +103,7 @@ describe("Writer explicit style modifier commands", /** Groups real UI/ODT behav
         ).toMatchObject({ status: "executed", value: 2 });
       },
     );
-    expect(select).toHaveValue("BrowserCtrl");
+    expect(select).toHaveValue("Browser Ctrl target");
     expect(paragraph.querySelector("strong")).toBeNull();
     expect(paragraph.querySelector("a")).toHaveAttribute(
       "href",
@@ -131,12 +131,12 @@ describe("Writer explicit style modifier commands", /** Groups real UI/ODT behav
     initial.document.Dispose();
     for (let cycle = 0; cycle < 3; cycle++) {
       fireEvent.keyDown(editor, { key: "z", ctrlKey: true });
-      expect(select).toHaveValue("default");
+      expect(select).toHaveValue("Default Paragraph Style");
       expect(required(node.GetpSwpHints()).equals(original)).toBe(true);
       expect(paragraph.querySelector("strong")).not.toBeNull();
       expect(paragraph.querySelector("a")).not.toBeNull();
       fireEvent.keyDown(editor, { key: "z", ctrlKey: true, shiftKey: true });
-      expect(select).toHaveValue("BrowserCtrl");
+      expect(select).toHaveValue("Browser Ctrl target");
       expect(paragraph.querySelector("strong")).toBeNull();
       expect(paragraph.querySelector("a")).toBeNull();
       expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(8);
@@ -170,15 +170,16 @@ describe("Writer explicit style modifier commands", /** Groups real UI/ODT behav
     const { doc, node, editor, paragraph, select } = mount();
     const before = required(node.GetpSwpHints()).clone();
     select.focus();
-    fireEvent.change(select, { target: { value: "BrowserCtrl" } });
-    expect(select).toHaveValue("BrowserCtrl");
+    fireEvent.change(select, { target: { value: "Browser Ctrl target" } });
+    fireEvent.keyDown(select, { key: "Enter" });
+    expect(select).toHaveValue("Browser Ctrl target");
     expect(editor.contains(document.activeElement)).toBe(true);
     expect(required(node.GetpSwpHints()).equals(before)).toBe(true);
     expect(paragraph.querySelector("strong")).not.toBeNull();
     expect(paragraph.querySelector("a")).not.toBeNull();
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
     fireEvent.keyDown(editor, { key: "z", ctrlKey: true });
-    expect(select).toHaveValue("default");
+    expect(select).toHaveValue("Default Paragraph Style");
     expect(required(node.GetpSwpHints()).equals(before)).toBe(true);
   });
 });

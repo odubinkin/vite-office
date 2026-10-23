@@ -55,6 +55,9 @@
     "saveOdt": ".uno:SaveAs",
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
+    "styleNewByExample": ".uno:StyleNewByExample",
+    "styleUpdateByExample": ".uno:StyleUpdateByExample",
+    "formatPaintbrush": ".uno:FormatPaintbrush",
     "tableDialog": ".uno:TableDialog",
     "tableRowHeight": ".uno:TableRowHeight",
     "tableColumnWidth": ".uno:TableColumWidth",
@@ -1113,6 +1116,71 @@
       "shortcuts": [],
       "slotId": 5552
     },
+    ".uno:ResetAttributes": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "controlLabel": "Clear",
+      "label": "Clear",
+      "iconName": "lc_resetattributes.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+M", "Meta+M"],
+      "slotId": 20469
+    },
+    ".uno:StyleNewByExample": {
+      "browserOwned": false,
+      "argumentSchema": ["Param:SfxStringItem", "Family:SfxUInt16Item"],
+      "controlLabel": "New Style from Selection",
+      "label": "New Style from Selection",
+      "iconName": "lc_stylenewbyexample.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Shift+F11"],
+      "slotId": 5555
+    },
+    ".uno:StyleUpdateByExample": {
+      "browserOwned": false,
+      "argumentSchema": ["Param:SfxStringItem", "Family:SfxUInt16Item"],
+      "controlLabel": "Update",
+      "label": "Update",
+      "iconName": "lc_styleupdatebyexample.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+F11", "Meta+Shift+F11"],
+      "slotId": 5556
+    },
+    ".uno:FormatPaintbrush": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "controlLabel": "Clone Formatting",
+      "label": "Clone Formatting",
+      "iconName": "lc_formatpaintbrush.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 5715
+    },
     ".uno:TableDialog": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -1832,6 +1900,43 @@
       "commandUrl": ".uno:StyleApply",
       "sources": [
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ResetAttributes",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:StyleNewByExample",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:StyleUpdateByExample",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:FormatPaintbrush",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml",
         "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
@@ -3860,22 +3965,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FormatPaintbrush",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResetAttributes",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:FormatMenu", ".uno:SpotlightMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:HighlightCharDF",
@@ -4759,22 +4848,6 @@
       "context": [".uno:FormatStylesMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:EditStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatStylesMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:StyleUpdateByExample",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatStylesMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:StyleNewByExample",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5942,22 +6015,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:FormatPaintbrush",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResetAttributes",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:SearchDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -6182,22 +6239,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:StyleUpdateByExample",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:StyleNewByExample",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:EditStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -6231,14 +6272,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:OutlineFont",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResetAttributes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
     },
@@ -6543,22 +6576,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:AuthoritiesEntryDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FormatPaintbrush",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResetAttributes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     },
@@ -7095,22 +7112,6 @@
       "context": [".uno:StyleMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:AutoFormat",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:FormatPaintbrush",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ResetAttributes",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     },
@@ -7746,6 +7747,9 @@
             "label": "Spacing"
           },
           { "kind": "separator" },
+          { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
+          { "kind": "separator" },
           { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
           {
             "id": ".uno:FormatBulletsMenu",
@@ -7773,7 +7777,10 @@
         "items": [
           { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
           { "kind": "separator" },
-          { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:StyleUpdateByExample", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:StyleNewByExample", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "Styles"
@@ -7852,6 +7859,8 @@
       { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
       { "kind": "separator" },
+      { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
@@ -7917,6 +7926,8 @@
         "label": "Style"
       },
       { "kind": "separator" },
+      { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       {
         "id": ".uno:ParagraphMenu",
         "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
@@ -7953,6 +7964,9 @@
       { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
       { "kind": "separator" },
+      { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": false },
+      { "kind": "separator" },
       { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -7965,6 +7979,8 @@
     ],
     "textobjectbar": [
       { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:StyleUpdateByExample", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:StyleNewByExample", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
       { "kind": "separator" },
@@ -7979,6 +7995,8 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
       { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
       { "commandUrl": ".uno:CharBackColor", "kind": "command", "visible": true },
@@ -9435,18 +9453,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FormatPaintbrush"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResetAttributes"
-      },
-      {
-        "classification": "X",
         "context": [".uno:FormatMenu", ".uno:SpotlightMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:HighlightCharDF"
@@ -10110,18 +10116,6 @@
         "context": [".uno:FormatStylesMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:EditStyle"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatStylesMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:StyleUpdateByExample"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatStylesMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:StyleNewByExample"
       },
       {
         "classification": "X",
@@ -10969,18 +10963,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:FormatPaintbrush"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResetAttributes"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:SearchDialog"
       },
       {
@@ -11141,18 +11123,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:StyleUpdateByExample"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:StyleNewByExample"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:EditStyle"
       },
       {
@@ -11178,12 +11148,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:OutlineFont"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResetAttributes"
       },
       {
         "classification": "X",
@@ -11401,18 +11365,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:AuthoritiesEntryDialog"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FormatPaintbrush"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResetAttributes"
       },
       {
         "classification": "X",
@@ -11812,18 +11764,6 @@
         "context": [".uno:StyleMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:AutoFormat"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FormatPaintbrush"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ResetAttributes"
       },
       {
         "classification": "X",

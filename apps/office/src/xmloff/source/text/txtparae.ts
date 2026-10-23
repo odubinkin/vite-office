@@ -386,7 +386,7 @@ function exportParagraphBody(
           : ""
       : "";
     const item = includeStartValue && !info.IsNumbered() ? "list-header" : "list-item";
-    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:${item}${startValue}>`;
+    body += `<text:list text:style-name="${escapeXml(styleName)}"${identityAttributes}><text:${item}${startValue}>`;
     openItems.push(item);
     openRules.push(paragraphList.rule.name);
   }
@@ -523,8 +523,8 @@ function exportParagraphElement(
     markerIndex += 1;
   }
   return paragraph.style === "heading-1"
-    ? `<text:h text:outline-level="1" text:style-name="${styleName}">${content}</text:h>`
-    : `<text:p text:style-name="${styleName}">${content}</text:p>`;
+    ? `<text:h text:outline-level="1" text:style-name="${escapeXml(styleName)}">${content}</text:h>`
+    : `<text:p text:style-name="${escapeXml(styleName)}">${content}</text:p>`;
 }
 
 /** Emits one zero-width Writer marker. @param marker - Canonical position. @returns ODF element. */

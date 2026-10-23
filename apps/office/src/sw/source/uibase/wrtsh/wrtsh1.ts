@@ -20,7 +20,7 @@ import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
-import { createTextFormatCollAction } from "../../core/edit/edfcol";
+import { setTextFormatCollAtShell, fillParagraphStyleByExample } from "../../core/edit/edfcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type {
   SwTextFragment,
@@ -756,19 +756,17 @@ export class SwWrtShell extends SwFEShell {
     return this.textShell.SetParagraphAlignment(alignment);
   }
 
+  /** Original edit-shell FillByEx uses the current point, independent of selection travel. @param collection - Actual destination owner. @returns Nothing. */
+  public FillByEx(collection: import("../../core/doc/fmtcol").SwTextFormatColl): void {
+    fillParagraphStyleByExample(this.GetDoc(), this.GetCursor(), collection);
+  }
+
   /** Applies a paragraph style through one native range history transition, including repeated requests. @param style - Next style. @param resetAllCharAttrs - Initial native full-character reset. @returns Whether the valid request was applied. */
   public SetParagraphStyle(style: WriterParagraphStyle, resetAllCharAttrs = false): boolean {
     const document = this.GetDoc();
     if (!isWriterParagraphStyle(style) && document.FindTextFormatColl(style) === undefined)
       throw new Error(`Unsupported Writer paragraph style: ${style}`);
-    const operation = createTextFormatCollAction(
-      document,
-      this.getShellCursor(),
-      document.GetTextFormatColl(style),
-      this.CaptureCursorState(),
-      resetAllCharAttrs,
-    );
-    return this.ApplyAction(operation.action, false, operation.execute);
+    return setTextFormatCollAtShell(this, document.GetTextFormatColl(style), resetAllCharAttrs);
   }
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */

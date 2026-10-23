@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import { WriterTransferError } from "../../source/uibase/dochdl/swdtflvr";
+import { createWriterDocumentSession } from "../composition/writer-module";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 
 describe("browser Writer edit window links", /** Groups browser Writer edit window links. @returns Test callback result. */ () => {
@@ -256,4 +257,68 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
       ["text/plain", payload.plainText],
     ]);
   });
+});
+
+it("preserves the native point during projection-driven paragraph focus and restores ordinary focus admission afterward", /** Uses an actual edit shell and native DOM focus instead of mocking its model operation. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession(),
+    shell = session.view.GetWrtShell();
+  shell.Insert("Retained caret");
+  const node = shell.GetActiveParagraph(),
+    root = document.createElement("div"),
+    paragraph = document.createElement("p"),
+    input = document.createElement("input");
+  root.dataset.writerEditingHost = "true";
+  root.contentEditable = "true";
+  paragraph.dataset.writerParagraphId = "retained";
+  paragraph.dataset.writerNodeIndex = String(node.GetIndex());
+  paragraph.tabIndex = -1;
+  paragraph.textContent = node.GetText();
+  root.append(paragraph);
+  document.body.append(root, input);
+  const adapter = new BrowserWriterEditWindow(
+    session.view.GetEditWin(),
+    {
+      document,
+      getSelection:
+        /** Reads the actual DOM selection. @returns Native selection. */
+        () => window.getSelection(),
+    },
+    /** Resolves the mounted native node projection. @returns Original paragraph. */
+    () => paragraph,
+  );
+  paragraph.addEventListener(
+    "focus",
+    /** Delivers synchronous DOM focus reentrancy exactly as the mounted React host does. @param event - Native focus. @returns Nothing. */
+    (event) => adapter.HandleFocus(event as unknown as React.FocusEvent<HTMLElement>),
+  );
+  const unsubscribe = adapter.Subscribe(root);
+  try {
+    input.focus();
+    const stale = document.createRange();
+    stale.setStart(paragraph.firstChild as Node, 0);
+    stale.collapse(true);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(stale);
+    document.dispatchEvent(new Event("selectionchange"));
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(node.Len());
+    window.getSelection()?.removeAllRanges();
+    expect(
+      adapter.RestoreSelection({
+        point: { paragraphId: "retained", nodeIndex: node.GetIndex(), offset: node.Len() },
+      }),
+    ).toBe(true);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(node.Len());
+    input.focus();
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(stale);
+    paragraph.focus();
+    document.dispatchEvent(new Event("selectionchange"));
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
+  } finally {
+    unsubscribe();
+    window.getSelection()?.removeAllRanges();
+    root.remove();
+    input.remove();
+    session.Close();
+  }
 });
