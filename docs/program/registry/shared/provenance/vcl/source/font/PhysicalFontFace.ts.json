@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/vcl/source/font/PhysicalFontFace.ts",
+    "localSymbols": [
+      "readOs2FontCapabilities"
+    ],
+    "upstreamPath": "vcl/source/font/PhysicalFontFace.cxx",
+    "upstreamSymbols": [
+      "PhysicalFontFace::GetFontCapabilities",
+      "appendBitset"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT reads actual SFNT/TTC table containers at the browser byte boundary and preserves the defined PhysicalFontFace OS/2 coverage algorithm: original offsets42/78,word-to-bit ordering,optional codepage set and last-successful-word reuse after short reads. WRITER074 records version-zero/partial-read behavior and the uninitialized-first-word boundary, where the browser exposes unknown data rather than emulating C++ uninitialized memory. The core file contains only the extracted capability algorithm; no fake PhysicalFontFace class or service is introduced. Native physical-face ownership,HarfBuzz cmap/collection face selection and dropdown rendering remain unfinished. Collection capability reads require an explicit resolved face index. Actual repository fonts and synthetic binary-boundary cases are checked; advertised coverage is not glyph support."
+    ],
+    "omittedResponsibilities": [
+      "PhysicalFontFace inheritance,actual face ownership/native font acquisition,raw table backend,cmap and native renderer are unported;no facade class is fabricated."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/font/PhysicalFontFace.ts",
+          "marker": "readOs2FontCapabilities"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/os2-font-capabilities.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/font/PhysicalFontFace.cxx",
+          "marker": "PhysicalFontFace::GetFontCapabilities"
+        },
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "SvStream::ReadNumber"
+        }
+      ]
+    }
+  }
+}

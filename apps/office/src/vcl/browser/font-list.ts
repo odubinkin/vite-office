@@ -1,6 +1,9 @@
 /** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
 import { lower, text } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { decodeBrowserFontFamily } from "./font-family";
+import { readSfntFontTable } from "./sfnt-font-table";
+import { readOs2FontCapabilities } from "../source/font/PhysicalFontFace";
+import type { FontCapabilities } from "../inc/fontcapabilities";
 import { getCssFontFaceSources } from "./css-font-source";
 import { readBrowserFontFaceSource } from "./font-face-source";
 import { Font } from "../source/font/font";
@@ -83,6 +86,20 @@ export async function readBrowserPhysicalFont(
   const blob = await font.data.blob?.();
   return blob?.arrayBuffer();
 }
+/** Reads actual advertised capabilities using the source PhysicalFontFace OS/2 algorithm. A collection requires an explicitly resolved face index; family names never select its first face implicitly. @param font - Real physical source. @param faceIndex - Actual resolved collection index, optional for standalone fonts. @returns Source capability bitsets or unknown. */
+export async function readBrowserFontCapabilities(
+  font: BrowserPhysicalFont,
+  faceIndex?: number,
+): Promise<FontCapabilities | undefined> {
+  const source = await readBrowserPhysicalFont(font);
+  if (source === undefined) return undefined;
+  const bytes = new Uint8Array(source);
+  if (faceIndex === undefined && String.fromCharCode(...bytes.subarray(0, 4)) === "ttcf")
+    return undefined;
+  const table = readSfntFontTable(bytes, "OS/2", faceIndex ?? 0);
+  return table === undefined ? undefined : readOs2FontCapabilities(table);
+}
+
 /** Local Font Access API signature kept optional for unsupported browsers. */
 type LocalFontQuery = () => Promise<readonly BrowserLocalFontData[]>;
 

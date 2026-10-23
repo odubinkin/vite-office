@@ -10,7 +10,10 @@ for (const app of ["writer", "calc"]) {
   }, testInfo) => {
     await page.goto(`/${app}`);
     await installKernelFixture(page, "BrowserFontSources", [
-      { module: "src/vcl/browser/font-list.ts", names: ["FontList", "readBrowserPhysicalFont"] },
+      {
+        module: "src/vcl/browser/font-list.ts",
+        names: ["FontList", "readBrowserPhysicalFont", "readBrowserFontCapabilities"],
+      },
     ]);
     const result = await page.evaluate(
       /** Runs the actual bundled repository adapter against real browser FontFaces and CSSOM. @returns Bounded source observations. */ async () => {
@@ -49,7 +52,10 @@ for (const app of ["writer", "calc"]) {
           if (record === undefined) throw new Error(`Missing actual face: ${family}`);
           const bytes = await api.readBrowserPhysicalFont(record);
           if (bytes === undefined) throw new Error(`Missing physical source: ${family}`);
+          const capabilities = await api.readBrowserFontCapabilities(record);
           samples.push({
+            unicodeCoverage: capabilities?.oUnicodeRange?.size,
+            codePageCoverage: capabilities?.oCodePageRange?.size,
             family,
             bytes: bytes.byteLength,
             signature: [...new Uint8Array(bytes, 0, 4)],
@@ -86,6 +92,8 @@ for (const app of ["writer", "calc"]) {
     for (const sample of result.samples) {
       expect(sample.bytes).toBeGreaterThan(1000);
       expect(sample.loaded).toBe(true);
+      expect(sample.unicodeCoverage).toBeGreaterThan(0);
+      expect(sample.codePageCoverage).toBeGreaterThanOrEqual(0);
       expect([
         [0, 1, 0, 0],
         [79, 84, 84, 79],
