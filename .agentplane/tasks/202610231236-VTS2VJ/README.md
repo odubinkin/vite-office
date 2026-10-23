@@ -1,10 +1,11 @@
 ---
 id: "202610231236-VTS2VJ"
 title: "Implement native formula reference pointing and mouse selection"
-status: "DOING"
+result_summary: "verified-202610231236-VTS2VJ"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-23T16:59:50.878Z"
+  updated_at: "2026-10-23T17:00:19.095Z"
   updated_by: "CODER"
   note: "verified-202610231236-VTS2VJ"
   attempts: 0
@@ -45,11 +46,16 @@ quality_review:
     - "Original input/reference/view/mark contracts are represented without alternate cell models or fake native services;real active view/document identity rejects unsupported cross-document contexts."
     - "Click/drag/full-axis/modifier/negative selection,capture/scroll/hidden geometry,UTF16 equals protection,caret/focus/IME/paste/manual-word semantics,history and ODS recalculation have actual-owner evidence;5Chromium/Worker and33related Writer/VCL scenarios pass."
     - "All authored Calc lint/format and required build/type/static/source/registry gates pass. Broad npm lint diagnostic retains unchanged Writer/ignored-probe baseline errors;the report does not certify that broad command."
-commit: null
+commit:
+  hash: "ce222357a35ed6b4c342e648f3de5aabd71d3bcc"
+  message: "🧩 VTS2VJ task: persist verified quality and gate evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the human-prioritized native mouse reference entry and selection block in calc before continuing76."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610231236-VTS2VJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -82,8 +88,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610231236-VTS2VJ"
+  -
+    type: "verify"
+    at: "2026-10-23T17:00:19.095Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610231236-VTS2VJ"
+  -
+    type: "status"
+    at: "2026-10-23T17:00:19.231Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610231236-VTS2VJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-23T16:59:50.935Z"
+doc_updated_at: "2026-10-23T17:00:19.231Z"
 doc_updated_by: "CODER"
 description: "Block77 is the human-requested next priority ahead of pending76: implement upstream ScInputHandler reference entry and ScTabView reference mode over real draft/caret/view/mark owners,then browser mouse cells/ranges/row/column/full-sheet and modifier selection. Preserve edit origin,UTF16 replacement selection,formula equals protection,reference continuation,drag lifetime,focus,commit/cancel,visual reference and ordinary selection distinctions. Support maximum source-backed pointing and selection scenarios within the current local-reference core;do not simulate clipboard fill/move,matrix,merged or external-reference services. Up to110 source/test/registry/evidence-probe paths,only vite-office-calc branch calc. Keep Writer shared controls/styles. Require real controller/mounted/Chromium/Worker scenarios,Calc and changed shared raw100,related consumers,build and all static/source/registry checks. No full all-app replay before the established checkpoint80."
 sections:
@@ -215,6 +234,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-23T17:00:19.095Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610231236-VTS2VJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:59:50.935Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+    - old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit ce222357a35ed6b4c342e648f3de5aabd71d3bcc
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task77 implementation commits while preserving75,76 checkpoint and integrated user changes."
   Findings: |-
@@ -235,6 +284,10 @@ sections:
     Command: npm run lint;Result:fail;Evidence:output/playwright/task77-lint3.log;Scope:the broad diagnostic includes unchanged Writer ODT-boundary fixture lint and ignored historical output probes. Writer source remains identical to HEAD;all authored Calc source/E2E lint passes. This is a recorded baseline outside77,not a green broad lint claim or a policy/threshold weakening.
 
     Skipped:full all-application test replay before80. Reason:the human explicitly requested related/application checks between the established ten-task checkpoints. Risk:unrelated application regressions are not re-certified by this Calc block. Approval:standing human cadence. Complete Calc,actual Chromium/Worker and related Writer/VCL consumers were executed. Tasks76/74 remain unfinished under their own acceptance;the overall goal is neither complete nor paused.
+extensions:
+  implementation_commit:
+    hash: "f111d0b9c08f48c5d84a277ed5728900fa47ff9b"
+    message: "🧩 VTS2VJ feat: add native formula pointing and mouse selection"
 id_source: "generated"
 ---
 ## Summary
@@ -371,6 +424,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit f111d0b9c08f48c5d84a277ed5728900fa47ff9b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-23T17:00:19.095Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610231236-VTS2VJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:59:50.935Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+- old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit ce222357a35ed6b4c342e648f3de5aabd71d3bcc
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
