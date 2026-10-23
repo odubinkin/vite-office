@@ -12,7 +12,7 @@
       ]
     },
     "localPath": "apps/office/src/vcl/browser/embedded-font-loader.ts",
-    "rationale": "Adapts Writer package font resources to the browser FontFace API with document-scoped revocation and a visible fallback status.",
+    "rationale": "Adapts Writer package font resources to the browser FontFace API with document-scoped revocation and a visible fallback status. Task6764KT preserves actual browser physical-face records and available source bytes. FontList groups real registered FontFaces and approved Local Font Access records without discarding actual descriptors, PostScript identity or lazy blob access. Embedded-font installation records the exact constructor bytes by actual FontFace identity in a JS WeakMap and returns independent byte copies. CSS FontFace bytes remain absent because the public FontFace API does not expose its source; CSS URL acquisition,cmap parsing,native face selection and visual preview integration remain unfinished. No glyph support or native font metrics are inferred from names, and no native lifetime machinery is implemented.",
     "responsibilities": [
       "Loads only validated viewable font bytes into the browser and removes the faces when the document closes."
     ],

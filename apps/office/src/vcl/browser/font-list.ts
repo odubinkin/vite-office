@@ -1,6 +1,7 @@
 /** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
 import { lower, text } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { decodeBrowserFontFamily } from "./font-family";
+import { readBrowserFontFaceSource } from "./font-face-source";
 import { Font } from "../source/font/font";
 import { GetEnglishSearchFontName } from "../../unotools/source/misc/fontdefs";
 import { RTL_TEXTENCODING_SYMBOL } from "../../sal/inc/rtl/textenc";
@@ -54,16 +55,36 @@ export const FALLBACK_FONT_FAMILIES = [
 ] as const;
 
 /** Browser local-font query result used by FontList. */
-interface LocalFontData {
+export interface BrowserLocalFontData {
   readonly family: string;
+  readonly fullName?: string;
+  readonly postscriptName?: string;
+  readonly style?: string;
+  readonly blob?: () => Promise<Blob>;
+}
+/** Actual registered face or approved local-font record; browser metadata is retained without inventing native physical metrics. */
+export type BrowserPhysicalFont =
+  | Readonly<{ kind: "registered"; family: string; face: FontFace }>
+  | Readonly<{ kind: "local"; family: string; data: BrowserLocalFontData }>;
+
+/** Reads bytes only from an actual source: an owned FontFace constructor buffer or approved Local Font Access blob. @param font - Real physical record. @returns Source bytes or undefined when the platform exposes names only. */
+export async function readBrowserPhysicalFont(
+  font: BrowserPhysicalFont,
+): Promise<ArrayBuffer | undefined> {
+  if (font.kind === "registered") return readBrowserFontFaceSource(font.face);
+  const blob = await font.data.blob?.();
+  return blob?.arrayBuffer();
 }
 /** Local Font Access API signature kept optional for unsupported browsers. */
-type LocalFontQuery = () => Promise<readonly LocalFontData[]>;
+type LocalFontQuery = () => Promise<readonly BrowserLocalFontData[]>;
 
 /** Ordered, deduplicated font-family list populated from the active output device. */
 export class FontList {
-  /** Creates a font list from normalized names. @param names - Ordered unique families. @returns Nothing. */
-  public constructor(private readonly names: readonly string[]) {}
+  /** Creates a font list from normalized names. @param names - Ordered unique families. @param faces - Actual registered or approved local records. @returns Nothing. */
+  public constructor(
+    private readonly names: readonly string[],
+    private readonly faces: readonly BrowserPhysicalFont[] = [],
+  ) {}
   /** Returns the number of family names. @returns Font count. */
   public GetFontNameCount(): number {
     return this.names.length;
@@ -78,23 +99,38 @@ export class FontList {
   public GetFontNames(): readonly string[] {
     return this.names;
   }
+  /** Browser-only physical inventory; native face selection remains the caller's responsibility. Missing fallback names do not acquire fictitious physical records. @param family - Actual family name. @returns Registered/local faces in their original enumeration order. */
+  public GetBrowserFaces(family: string): readonly BrowserPhysicalFont[] {
+    const key = lower(family);
+    return this.faces.filter(
+      /** Groups actual records by native ASCII-only folded family identity. @param face - Actual face. @returns Match. */
+      (face) => lower(face.family) === key,
+    );
+  }
   /** Queries Local Font Access and falls back offline. @param window_ - Browser boundary. @returns Populated list. */
   public static async FromBrowser(window_: Window = window): Promise<FontList> {
     const query = (window_ as Window & { queryLocalFonts?: LocalFontQuery }).queryLocalFonts;
     const registered: string[] = [];
+    const faces: BrowserPhysicalFont[] = [];
     window_.document?.fonts?.forEach(
       /** Includes actual bundled and document FontFaces even when system enumeration is unavailable. @param face - Registered browser face. @returns Nothing. */
       (face) => {
-        if (face.status !== "error") registered.push(decodeBrowserFontFamily(face.family));
+        const family = decodeBrowserFontFamily(face.family);
+        if (face.status !== "error" && family !== "") {
+          registered.push(family);
+          faces.push({ kind: "registered", family, face });
+        }
       },
     );
-    let local: readonly LocalFontData[] = [];
+    let local: readonly BrowserLocalFontData[] = [];
     if (query !== undefined)
       try {
         local = await query.call(window_);
       } catch {
         local = [];
       }
+    for (const data of local)
+      if (data.family !== "") faces.push({ kind: "local", family: data.family, data });
     const available = [
       ...registered,
       ...local
@@ -110,7 +146,6 @@ export class FontList {
     // the first actual registered spelling instead of inventing installed fallback faces.
     const families = new Map<string, string>();
     for (const name of available.length === 0 ? FALLBACK_FONT_FAMILIES : available) {
-      if (!name) continue;
       const key = lower(name);
       if (!families.has(key)) families.set(key, name);
     }
@@ -118,6 +153,6 @@ export class FontList {
       /** Uses native UTF16 ordering of the ASCII-folded keys, retaining actual family spelling. @param key - Existing family key. @returns Registered name. */
       (key) => families.get(key) as string,
     );
-    return new FontList(names);
+    return new FontList(names, faces);
   }
 }

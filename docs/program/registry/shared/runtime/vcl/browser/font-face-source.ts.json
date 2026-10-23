@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/font-face-source.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "font-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/font-face-source.ts#rememberBrowserFontFaceSource",
+        "apps/office/src/vcl/browser/font-face-source.test.ts#@fileoverview",
+        "apps/office/src/vcl/browser/embedded-font-loader.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT preserves actual browser physical-face records and available source bytes. FontList groups real registered FontFaces and approved Local Font Access records without discarding actual descriptors, PostScript identity or lazy blob access. Embedded-font installation records the exact constructor bytes by actual FontFace identity in a JS WeakMap and returns independent byte copies. CSS FontFace bytes remain absent because the public FontFace API does not expose its source; CSS URL acquisition,cmap parsing,native face selection and visual preview integration remain unfinished. No glyph support or native font metrics are inferred from names, and no native lifetime machinery is implemented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rememberBrowserFontFaceSource",
+        "readBrowserFontFaceSource"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
