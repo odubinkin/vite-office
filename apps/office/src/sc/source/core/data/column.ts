@@ -171,6 +171,14 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original column4 single-cell row repetition. @param args - Context,row bounds and source offset. @returns Nothing. */
+  CopyOneCellFromClip(...args: Parameters<typeof column4.CopyOneCellFromClip>): void {
+    column4.CopyOneCellFromClip.apply(this, args);
+  }
+  /** Original span-clone routing inserts native code/group owners into typed storage. @param args - Source,metadata,spans and optional cursor. @returns Nothing. */
+  CloneFormulaCell(...args: Parameters<typeof column4.CloneFormulaCell>): void {
+    column4.CloneFormulaCell.apply(this, args);
+  }
   /** Original formula-block count query from column4.cxx. @returns Formulas present. */
   HasFormulaCell(): boolean {
     return this.mnBlkCountFormula > 0;
@@ -233,6 +241,14 @@ export class ScColumn extends ScColumnData {
     column3.RegroupFormulaCells.call(this, positions);
   }
 
+  /** Original const metadata lookup borrows a real store element or returns null for an empty block. @param row - Valid row. @returns Metadata or null. */
+  GetCellTextAttr(row: number): CellTextAttr | null {
+    const position = this.maCellTextAttrs.cposition(row),
+      block = position.first.get();
+    return block.type === element_type_celltextattr
+      ? celltextattr_block.at(block.data as base_element_block, position.second)
+      : null;
+  }
   /** Original cached script getter;UNKNOWN is retained until a real classifier writes metadata. @param row - Row. @returns Cached flags or NONE for absent metadata. */
   GetScriptType(row: number): SvtScriptType {
     if (
@@ -509,6 +525,7 @@ export class ScColumn extends ScColumnData {
     this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
     this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
     this.JoinNewFormulaCell(this.maCells.position(row), cell);
+    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc()) return cell;
     if (listening === ConvertToGroupListening) {
       const positions = new ColumnBlockPositionSet(this.rDocument),
         start = new StartListeningContext(this.rDocument, positions),
@@ -659,6 +676,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Broadcasts the represented normal-document source write. Import/clipboard modes remain unsupported. @param row - Valid row. @returns Nothing. */
   private BroadcastNewCell(row: number): void {
+    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc()) return;
     this.Broadcast(row);
   }
   /** Dispatches actual native cell-change hints. @param row - Valid row. @returns Nothing. */

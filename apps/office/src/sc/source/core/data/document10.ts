@@ -25,3 +25,11 @@ export function AddDelayedFormulaGroupingCell(this: ScDocument, cell: ScFormulaC
   const range = this["pDelayedFormulaGrouping"] as ScRange;
   if (!range.Contains(cell.aPos)) range.ExtendTo(new ScRange(cell.aPos));
 }
+
+/** Original document10 pooled-resource sharing uses genuine owners and initializes the source helper first. @param this - Destination document. @param source - Source document. @returns Nothing. */
+export function SharePooledResources(this: ScDocument, source: ScDocument): void {
+  this["mxPoolHelper"] = source["mxPoolHelper"];
+  this["mpCellStringPool"] = source["mpCellStringPool"];
+  source.getCellAttributeHelper();
+  this["mpCellAttributeHelper"] = source["mpCellAttributeHelper"];
+}

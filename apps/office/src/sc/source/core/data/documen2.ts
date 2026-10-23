@@ -1,5 +1,8 @@
 /** @fileoverview Consumed native ScDocument observable destructor from documen2.cxx,running on its original instance before GC reclaims physical stores. */
 import type { ScDocument } from "./document";
+import { ScTable } from "../../../inc/table";
+import type { ScMarkData } from "../../../inc/markdata";
+import { OUString, OUStringLiteral } from "../../../../sal/inc/rtl/ustring";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 
 /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @param this - Actual document instance. @returns Nothing. */
@@ -9,6 +12,7 @@ export function Dispose(this: ScDocument): void {
   machine?.Dispose();
   this.DisposeAttributes();
   for (let tab = 0; tab < this.GetTableCount(); tab++) {
+    if (!this.FetchTable(tab)) continue;
     const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow()),
       col: [number] = [0],
       row: [number] = [0];
@@ -23,5 +27,43 @@ export function Dispose(this: ScDocument): void {
 export function DisposeAttributes(this: ScDocument): void {
   this["pSelectionAttr"]?.Dispose();
   this["pSelectionAttr"] = undefined;
-  for (const table of this["maTabs"]) table.DisposeAttributes();
+  for (const table of this["maTabs"]) table?.DisposeAttributes();
+}
+
+/** Original clipboard initialization for represented scalar documents;options are actual value copies. @param this - Clipboard. @param source - Source owner. @returns Nothing. */
+export function InitClipPtrs(this: ScDocument, source: ScDocument): void {
+  this.Clear();
+  this.SharePooledResources(source);
+  this.SetDocOptions(source.GetDocOptions());
+  this.SetViewOptions(source.GetViewOptions());
+}
+/** Original ResetClip overloads retain null slots and actual sheet indexes. @param this - Clipboard. @param source - Source document. @param selection - Marks,all-source null,or explicit sheet. @returns Nothing. */
+export function ResetClip(
+  this: ScDocument,
+  source: ScDocument,
+  selection: ScMarkData | number | null,
+): void {
+  if (!this.IsClipboard()) return;
+  this.InitClipPtrs(source);
+  const tabs = this["maTabs"];
+  if (typeof selection === "number") {
+    while (tabs.length <= selection) tabs.push(null);
+    const table = new ScTable(
+      this,
+      selection,
+      new OUString(new OUStringLiteral(new Uint16Array([98, 97, 101, 104, 0]))),
+    );
+    tabs[selection] = table;
+    const original = source.FetchTable(selection);
+    if (original) table.SetLayoutRTL(original.IsLayoutRTL());
+    return;
+  }
+  for (let index = 0; index < source.GetTableCount(); ++index) {
+    const original = source.FetchTable(index);
+    if (!original || (selection && !selection.GetTableSelect(index))) continue;
+    while (tabs.length <= index) tabs.push(null);
+    const table = new ScTable(this, index, original.GetName());
+    tabs[index] = table;
+    table.SetLayoutRTL(original.IsLayoutRTL());
+  }
 }

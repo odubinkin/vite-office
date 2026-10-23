@@ -2,7 +2,22 @@
 import { ProcessBlock, type BlockFunction, type CellStoreNode } from "../../../inc/mtvfunctions";
 import { formula_block, element_type_formula } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
-import type { ScFormulaCell } from "../../../inc/formulacell";
+import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
+import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import { CellType } from "../../../inc/global";
+import { RowSpan } from "../../../inc/columnspanset";
+import { string_element_callbacks } from "../../../inc/mtvelements";
+import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
+import { ScAddress } from "../../../inc/address";
+import { CellTextAttr } from "../../../inc/celltextattr";
+import {
+  type CellStoreType,
+  type CellTextAttrStoreType,
+  ColumnBlockPosition,
+  formula_element_callbacks,
+  celltextattr_element_callbacks,
+} from "../../../inc/mtvelements";
+import { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
 import type { ScColumn } from "../../../inc/column";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
@@ -75,5 +90,146 @@ export function StartListeningFormulaCells(
     new StartListeningFormulaCellsHandler(start, end),
     first,
     last,
+  );
+}
+
+/** Original CloneFormulaCell span insertion creates one real shared code owner per shareable span,then joins its boundaries. @param this - Destination column. @param args - Original block/source/metadata/spans or source/metadata/spans overload. @returns Nothing. */
+export function CloneFormulaCell(
+  this: ScColumn,
+  ...args:
+    | [ScFormulaCell, CellTextAttr, readonly RowSpan[]]
+    | [ColumnBlockPosition, ScFormulaCell, CellTextAttr, readonly RowSpan[]]
+): void {
+  const hinted = args[0] instanceof ColumnBlockPosition,
+    block = hinted ? (args[0] as ColumnBlockPosition) : undefined,
+    source = args[hinted ? 1 : 0] as ScFormulaCell,
+    attr = args[hinted ? 2 : 1] as CellTextAttr,
+    spans = args[hinted ? 3 : 2] as readonly RowSpan[];
+  if (source.GetMatrixFlag() !== ScMatrixMode.NONE)
+    throw new Error("Matrix clipboard cloning is not implemented");
+  const position = block ?? new ColumnBlockPosition();
+  if (!block) this.InitBlockPosition(position);
+  const doc = this.GetDoc();
+  for (const span of spans) {
+    const length = span.mnRow2 - span.mnRow1 + 1;
+    if (length <= 0) throw new Error("Formula clone span must be nonempty");
+    const formulas: ScFormulaCell[] = [],
+      first = new ScAddress(this.GetCol(), span.mnRow1, this.GetTab());
+    if (length === 1 || !source.GetCode().IsShareable()) {
+      for (let index = 0; index < length; ++index) {
+        formulas.push(new ScFormulaCell(source, doc, first));
+        first.IncRow();
+      }
+    } else {
+      const group = new ScFormulaCellGroup();
+      group.setCode(source.GetCode());
+      group.compileCode(doc, first, doc.GetGrammar());
+      for (let index = 0; index < length; ++index) {
+        const cell = new ScFormulaCell(doc, first, group, doc.GetGrammar());
+        if (index === 0) {
+          group.mpTopCell = cell;
+          group.mnLength = length;
+        }
+        formulas.push(cell);
+        first.IncRow();
+      }
+    }
+    const storage = { values: formulas, size: length };
+    position.miCellPos = this["maCells"].set(
+      position.miCellPos as ReturnType<CellStoreType["begin"]>,
+      span.mnRow1,
+      new delayed_delete_vector_iterator(storage, 0),
+      new delayed_delete_vector_iterator(storage, length),
+      formula_element_callbacks,
+    );
+    let cellPosition = this["maCells"].position(position.miCellPos, span.mnRow1);
+    this.JoinNewFormulaCell(cellPosition, this.GetFormulaCell(span.mnRow1) as ScFormulaCell);
+    cellPosition = this["maCells"].position(cellPosition.first, span.mnRow2);
+    this.JoinNewFormulaCell(cellPosition, this.GetFormulaCell(span.mnRow2) as ScFormulaCell);
+    const attrs = {
+      values: Array.from(
+        { length },
+        /** Copies native text metadata by value. @returns Metadata. */ () =>
+          new CellTextAttr(attr),
+      ),
+      size: length,
+    };
+    position.miCellTextAttrPos = this["maCellTextAttrs"].set(
+      position.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+      span.mnRow1,
+      new delayed_delete_vector_iterator(attrs, 0),
+      new delayed_delete_vector_iterator(attrs, length),
+      celltextattr_element_callbacks,
+    );
+  }
+}
+
+/** Original single-row repetition into cleared typed stores;default CONTENTS preserves destination patterns. @param this - Destination column. @param context - Actual paste context. @param row1 - First row. @param row2 - Last row. @param offset - Source column offset. @returns Nothing. */
+export function CopyOneCellFromClip(
+  this: ScColumn,
+  context: CopyFromClipContext,
+  row1: number,
+  row2: number,
+  offset: number,
+): void {
+  if (row1 > row2) throw new Error("Clipboard row span is reversed");
+  const block = context.getBlockPosition(this.GetTab(), this.GetCol());
+  if (!block) return;
+  const source = context.getSingleCell(offset),
+    attr = context.getSingleCellAttr(offset),
+    length = row2 - row1 + 1;
+  if (source.getType() === CellType.CELLTYPE_FORMULA) {
+    this.CloneFormulaCell(block, source.getFormula(), attr, [new RowSpan(row1, row2)]);
+    return;
+  }
+  if (source.getType() === CellType.CELLTYPE_NONE) return;
+  if (source.getType() === CellType.CELLTYPE_VALUE) {
+    const storage = { values: Array<number>(length).fill(source.getDouble()), size: length };
+    block.miCellPos = this["maCells"].set(
+      block.miCellPos as ReturnType<CellStoreType["begin"]>,
+      row1,
+      new delayed_delete_vector_iterator(storage, 0),
+      new delayed_delete_vector_iterator(storage, length),
+      double_element_callbacks,
+    );
+  } else {
+    const samePool = context.getClipDoc().GetPool() === this.GetDoc().GetPool(),
+      interned = samePool
+        ? null
+        : this.GetDoc().GetSharedStringPool().intern(source.getSharedString().getString()),
+      str = interned ?? source.getSharedString();
+    const storage = {
+      values: Array.from(
+        { length },
+        /** Borrows the source vector element until storage copies it. @returns Shared string. */ () =>
+          str,
+      ),
+      size: length,
+    };
+    try {
+      block.miCellPos = this["maCells"].set(
+        block.miCellPos as ReturnType<CellStoreType["begin"]>,
+        row1,
+        new delayed_delete_vector_iterator(storage, 0),
+        new delayed_delete_vector_iterator(storage, length),
+        string_element_callbacks,
+      );
+    } finally {
+      interned?.dispose();
+    }
+  }
+  const attrs = {
+    values: Array.from(
+      { length },
+      /** Copies native text metadata by value. @returns Metadata. */ () => new CellTextAttr(attr),
+    ),
+    size: length,
+  };
+  block.miCellTextAttrPos = this["maCellTextAttrs"].set(
+    block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+    row1,
+    new delayed_delete_vector_iterator(attrs, 0),
+    new delayed_delete_vector_iterator(attrs, length),
+    celltextattr_element_callbacks,
   );
 }

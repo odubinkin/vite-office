@@ -43,6 +43,21 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table2 clipboard listening clamps to actual allocated columns and native bounds. @param start - Start context. @param end - End context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
+  StartListeningFormulaCells(
+    start: StartListeningContext,
+    end: EndListeningContext,
+    col1: number,
+    row1: number,
+    col2: number,
+    row2: number,
+  ): void {
+    col2 = Math.min(col2, this.aCol.length - 1, this.rDocument.MaxCol());
+    row2 = Math.min(row2, this.rDocument.MaxRow());
+    if (this.rDocument.ValidColRow(col1, row1) && this.rDocument.ValidColRow(col2, row2))
+      for (let col = col1; col <= col2; ++col)
+        (this.aCol[col] as ScColumn).StartListeningFormulaCells(start, end, row1, row2);
+  }
   /** Original table7 allocated-column regroup routing. @param col - Column. @returns Nothing. */
   RegroupFormulaCells(col: number): void {
     if (this.rDocument.ValidCol(col) && col < this.aCol.length)

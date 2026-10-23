@@ -1,9 +1,17 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import { ScRangeList } from "../../../inc/rangelst";
+import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemLine as InnerEdge,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
 import type { ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import type { ScMarkData } from "../../../inc/markdata";
-import type { ScTable } from "../../../inc/table";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
@@ -233,7 +241,7 @@ export function SetAllFormulasDirty(this: ScDocument, context: SetFormulaDirtyCo
   const old = this["bAutoCalc"];
   this["bAutoCalc"] = false;
   try {
-    for (const table of this["maTabs"]) table.SetAllFormulasDirty(context);
+    for (const table of this["maTabs"]) table?.SetAllFormulasDirty(context);
   } finally {
     this.SetAutoCalc(old);
   }
@@ -307,13 +315,13 @@ export function CreateSelectionPattern(
     if (marks.IsMultiMarked())
       for (const tab of marks.GetSelectedTabs()) {
         if (tab >= this.GetTableCount()) break;
-        (this["maTabs"][tab] as ScTable).MergeSelectionPattern(state, marks, deep);
+        this["maTabs"][tab]?.MergeSelectionPattern(state, marks, deep);
       }
     if (marks.IsMarked()) {
       const range = marks.GetMarkArea();
       for (const tab of marks.GetSelectedTabs()) {
         if (tab >= this.GetTableCount()) break;
-        (this["maTabs"][tab] as ScTable).MergePatternArea(
+        this["maTabs"][tab]?.MergePatternArea(
           state,
           range.aStart.Col(),
           range.aStart.Row(),
@@ -458,4 +466,67 @@ function copyColumnAttributes(
       holder.Dispose();
     }
   }
+}
+
+/** Original document.cxx selection-frame query on the same document instance;definition partitioned to preserve the file-size boundary. @param this - Actual document. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
+export function GetSelectionFrame(
+  this: ScDocument,
+  marks: ScMarkData,
+  outer: SvxBoxItem,
+  inner: SvxBoxInfoItem,
+): void {
+  for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT]) outer.SetLine(undefined, edge);
+  outer.SetAllDistances(0);
+  inner.SetLine(undefined, InnerEdge.HORI);
+  inner.SetLine(undefined, InnerEdge.VERT);
+  inner.SetTable(true);
+  inner.SetDist(true);
+  inner.SetMinDist(false);
+  const flags = new ScLineFlags();
+  if (marks.IsMultiMarked()) {
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    let rows = false,
+      cols = false;
+    for (const range of ranges) {
+      rows = rows || range.aStart.Row() !== range.aEnd.Row();
+      cols = cols || range.aStart.Col() !== range.aEnd.Col();
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        this.FetchTable(tab)?.MergeBlockFrame(
+          outer,
+          inner,
+          flags,
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+        );
+      }
+    }
+    inner.EnableHor(rows);
+    inner.EnableVer(cols);
+  } else if (marks.IsMarked()) {
+    const range = marks.GetMarkArea();
+    inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
+    inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.MergeBlockFrame(
+        outer,
+        inner,
+        flags,
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+      );
+    }
+  }
+  inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
 }

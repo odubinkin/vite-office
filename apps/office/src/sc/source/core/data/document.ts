@@ -1,7 +1,10 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import { ScViewOptions } from "../../../inc/viewopti";
 import * as documen2 from "./documen2";
 import * as documen7 from "./documen7";
+import * as documen9 from "./documen9";
 import * as document10 from "./document10";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { ScItemPoolCache } from "../../../inc/poolcach";
@@ -10,7 +13,6 @@ import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreak
 import { GetStringScriptType as classifyString } from "./documen6";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -111,6 +113,59 @@ export class ScDocument {
     documen7.DeleteBroadcasters.apply(this, args);
   }
   static readonly HardRecalcState = HardRecalcState;
+  /** Original clipboard listening delegates through actual selected sheets and columns. @param start - Listening start context. @param end - End context. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
+  StartListeningFromClip(
+    start: StartListeningContext,
+    end: EndListeningContext,
+    tab: number,
+    col1: number,
+    row1: number,
+    col2: number,
+    row2: number,
+  ): void {
+    this.FetchTable(tab)?.StartListeningFormulaCells(start, end, col1, row1, col2, row2);
+  }
+  /** Shares the actual source pool helper,string pool and canonical attribute helper. @param source - Resource owner. @returns Nothing. */
+  SharePooledResources(source: ScDocument): void {
+    document10.SharePooledResources.call(this, source);
+  }
+  /** Clears native sheet owners while retaining document resources and clipboard parameters. @returns Nothing. */
+  Clear(): void {
+    documen9.Clear.call(this);
+  }
+  /** Resets a clipboard to source-selected sheet indexes or one explicit sheet. @param source - Source document. @param selection - Source marks,null for all,or explicit sheet. @returns Nothing. */
+  ResetClip(source: ScDocument, selection: ScMarkData | number | null): void {
+    documen2.ResetClip.call(this, source, selection);
+  }
+  /** Native clipboard initialization clears old content before borrowing source resources. @param source - Source document. @returns Nothing. */
+  InitClipPtrs(source: ScDocument): void {
+    documen2.InitClipPtrs.call(this, source);
+  }
+  /** Stores a clipboard's one owned range and cut flag. @param range - Source area. @param cut - Cut mode. @returns Nothing. */
+  SetClipArea(range: ScRange, cut = false): void {
+    if (!this.IsClipboard()) return;
+    const parameter = this.GetClipParam();
+    parameter.maRanges.RemoveAll();
+    parameter.maRanges.push_back(range);
+    parameter.mbCutMode = cut;
+  }
+  /** Reads native inclusive clipboard dimensions as coordinate differences. @param cols - Column difference output. @param rows - Row difference output. @param includeFiltered - Include filtered rows. @returns Nothing. */
+  GetClipArea(cols: [number], rows: [number], includeFiltered: boolean): void {
+    if (!this.IsClipboard()) return;
+    const ranges = this.GetClipParam().maRanges;
+    if (ranges.empty()) return;
+    const whole = ranges.Combine();
+    cols[0] = whole.aEnd.Col() - whole.aStart.Col();
+    if (includeFiltered) rows[0] = whole.aEnd.Row() - whole.aStart.Row();
+    else {
+      let tab = 0;
+      while (tab < this.GetTableCount() && !this.FetchTable(tab)) ++tab;
+      rows[0] = Math.max(
+        0,
+        this.CountNonFilteredRows(whole.aStart.Row(), whole.aEnd.Row(), tab) - 1,
+      );
+    }
+  }
   private mpClipParam: ScClipParam | undefined;
   /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */
   GetClipParam(): ScClipParam {
@@ -146,6 +201,16 @@ export class ScDocument {
   /** Original range overload delegates to actual sheet attribute owners. @param range - Area. @param mask - Native query. @returns Found. */
   HasAttrib(range: ScRange, mask: HasAttrFlags): boolean {
     return documen7.HasAttrib.call(this, range, mask);
+  }
+  private readonly pDocOptions = new ScDocOptions();
+  /** Original borrowed document options,including lazy search classification. @returns Actual options. */
+  GetDocOptions(): ScDocOptionsConstReference {
+    return this.pDocOptions;
+  }
+  /** Assigns original options by value;the unported lazy formatter is never allocated in this profile. @param options - Source options. @returns Nothing. */
+  SetDocOptions(options: ScDocOptionsConstReference): void {
+    this.pDocOptions.assign(options);
+    this.mxPoolHelper?.SetFormTableOpt(options);
   }
   private readonly pViewOptions = new ScViewOptions();
   /** Original documen3 borrowed view options. @returns Actual document-owned options. */
@@ -206,61 +271,7 @@ export class ScDocument {
   }
   /** Original selection-frame query preserves traversal order and six independent mixed states. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
   GetSelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
-    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
-      outer.SetLine(undefined, edge);
-    outer.SetAllDistances(0);
-    inner.SetLine(undefined, InnerEdge.HORI);
-    inner.SetLine(undefined, InnerEdge.VERT);
-    inner.SetTable(true);
-    inner.SetDist(true);
-    inner.SetMinDist(false);
-    const flags = new ScLineFlags();
-    if (marks.IsMultiMarked()) {
-      const ranges = new ScRangeList();
-      marks.FillRangeListWithMarks(ranges, false);
-      let rows = false,
-        cols = false;
-      for (const range of ranges) {
-        rows = rows || range.aStart.Row() !== range.aEnd.Row();
-        cols = cols || range.aStart.Col() !== range.aEnd.Col();
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          this.FetchTable(tab)?.MergeBlockFrame(
-            outer,
-            inner,
-            flags,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-        }
-      }
-      inner.EnableHor(rows);
-      inner.EnableVer(cols);
-    } else if (marks.IsMarked()) {
-      const range = marks.GetMarkArea();
-      inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
-      inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        this.FetchTable(tab)?.MergeBlockFrame(
-          outer,
-          inner,
-          flags,
-          range.aStart.Col(),
-          range.aStart.Row(),
-          range.aEnd.Col(),
-          range.aEnd.Row(),
-        );
-      }
-    }
-    inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+    documen7.GetSelectionFrame.call(this, marks, outer, inner);
   }
   /** Original marked selection frames and adjacent-envelope border removal. @param marks - Actual native marks. @param outer - Requested outer lines. @param inner - Requested inner lines and validity. @returns Nothing. */
   ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
@@ -505,6 +516,15 @@ export class ScDocument {
   private readonly bIsUndo: boolean;
   private readonly bIsFunctionAccess: boolean;
   private bNoListening = false;
+  private bInsertingFromOtherDoc = false;
+  /** Original deferred insertion state. @returns Insertion flag. */
+  IsInsertingFromOtherDoc(): boolean {
+    return this.bInsertingFromOtherDoc;
+  }
+  /** Original flag suppresses premature column listening and broadcasts during clipboard transfer. @param inserting - Insertion flag. @returns Nothing. */
+  SetInsertingFromOtherDoc(inserting: boolean): void {
+    this.bInsertingFromOtherDoc = inserting;
+  }
   private pFormulaTree: ScFormulaCell | null = null;
   private pEOFormulaTree: ScFormulaCell | null = null;
   private pFormulaTrack: ScFormulaCell | null = null;
@@ -516,14 +536,14 @@ export class ScDocument {
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
   private bAutoCalc: boolean;
-  private readonly maTabs: ScTable[] = [];
+  private readonly maTabs: (ScTable | null)[] = [];
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
-  private readonly mpCellStringPool: SharedStringPool;
+  private mpCellStringPool: SharedStringPool;
   /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
   constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
     this.bIsClip = mode === ScDocumentMode.SCDOCMODE_CLIP;
@@ -854,7 +874,7 @@ export class ScDocument {
   }
   /** Borrows a real existing sheet or native null result. @param tab - Sheet. @returns Owner or null. */
   FetchTable(tab: number): ScTable | null {
-    return ValidTab(tab) && tab < this.maTabs.length ? (this.maTabs[tab] as ScTable) : null;
+    return ValidTab(tab) ? (this.maTabs[tab] ?? null) : null;
   }
   /** Copies the sheet name or clears the output for a missing sheet. @param tab - Sheet. @param output - Unicode target. @returns Found. */
   GetName(tab: number, output: OUString): boolean {
@@ -876,7 +896,7 @@ export class ScDocument {
     if (!ScDocument.ValidTabName(name)) return false;
     const candidate = uppercase(name, this.locale);
     for (const table of this.maTabs)
-      if (uppercase(table.GetName(), this.locale).equals(candidate)) return false;
+      if (table && uppercase(table.GetName(), this.locale).equals(candidate)) return false;
     return true;
   }
   /** Inserts a normal scalar sheet and updates shifted sheet/column positions. External-document/undo-delete modes remain unsupported APIs. @param position - Position or native append sentinel. @param name - Native sheet name. @returns Inserted. */
@@ -885,7 +905,7 @@ export class ScDocument {
     if (position === SC_TAB_APPEND || position >= this.maTabs.length) position = this.maTabs.length;
     if (!ValidTab(position)) return false;
     this.maTabs.splice(position, 0, new ScTable(this, position, name));
-    for (let i = position + 1; i < this.maTabs.length; i++) (this.maTabs[i] as ScTable).SetTabNo(i);
+    for (let i = position + 1; i < this.maTabs.length; i++) this.maTabs[i]?.SetTabNo(i);
     const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
     if (position < this.maTabs.length - 1)
       this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
@@ -904,8 +924,7 @@ export class ScDocument {
     while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
     (this.maTabs[tab] as ScTable).DisposeAttributes();
     this.maTabs.splice(tab, 1);
-    for (let index = tab; index < this.maTabs.length; index++)
-      (this.maTabs[index] as ScTable).SetTabNo(index);
+    for (let index = tab; index < this.maTabs.length; index++) this.maTabs[index]?.SetTabNo(index);
     this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, -1);
     this.SetAllFormulasDirty(new SetFormulaDirtyContext());
     return true;

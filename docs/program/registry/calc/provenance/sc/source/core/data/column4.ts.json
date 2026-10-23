@@ -15,10 +15,10 @@
       "ScColumn::StartListeningFormulaCells"
     ],
     "preservedResponsibilities": [
-      "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified."
+      "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity."
     ],
     "omittedResponsibilities": [
-      "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
+      "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
     ],
     "evidence": {
       "local": [
@@ -29,6 +29,18 @@
         {
           "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
           "marker": "StartListeningFormulaCells"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+          "marker": "clipboard"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-context.test.ts",
+          "marker": "clipboard"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts",
+          "marker": "span"
         }
       ],
       "upstream": [
