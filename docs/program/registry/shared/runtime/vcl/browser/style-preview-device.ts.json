@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/style-preview-device.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/style-preview-device.ts#BrowserStylePreviewDevice",
+        "apps/office/src/vcl/browser/style-preview-device.test.ts#@fileoverview",
+        "apps/office/e2e/shared/style-preview-device.spec.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT adds a real Canvas text device consumed structurally by native style CalcBoundRect/UserDrawEntry,without a VCL-to-SVX import. Actual Font values select CSS family,weight and posture;weight/posture projection follows native SVGAttributeWriter,including SEMILIGHT400 and unknown400. Canvas text is laid out from exact UTF16 substrings at the host boundary. Real fontBoundingBoxAscent/Descent supply original TOP/BASELINE/BOTTOM offsets;unsupported metrics are not replaced with fabricated baselines. Actual advance widths are rounded to integer and ink is enclosed in native closed-edge Rectangle values. Browser floor/ceil and Canvas shaping/metrics are host-owned,not native approxValue or raster parity. The consumed style-font path requires positive height and zero stored average width;arbitrary native horizontal font matching is explicitly unsupported. Device fixtures prove protocol behavior;Chromium witness separately consumes actual Writer preview items and bundled fonts with explicit supplied Latin ScriptInfo. EditEngine CheckScript,full SetupEntry decoration/color,physical cmap/face selection and live dropdown integration remain unfinished. No broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BrowserStylePreviewDevice"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
