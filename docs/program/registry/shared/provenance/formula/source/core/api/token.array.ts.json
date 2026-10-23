@@ -74,13 +74,16 @@
       "IsRecalcModeForced",
       "IsRecalcModeOnRefMove",
       "IsRecalcModeMustAfterImport",
-      "ClearRecalcModeMustAfterImport"
+      "ClearRecalcModeMustAfterImport",
+      "AddBad"
     ],
     "upstreamSymbols": [
-      "FormulaTokenArray"
+      "FormulaTokenArray",
+      "FormulaTokenArray::AddBad"
     ],
     "preservedResponsibilities": [
-      "Original shared initialized code/RPN token identity, copies/moves/defaults/edit/query/finalization/limits and recalc state, with actual live ranges."
+      "Original shared initialized code/RPN token identity, copies/moves/defaults/edit/query/finalization/limits and recalc state, with actual live ranges.",
+      "Task76 adds original FormulaTokenArray::AddBad with a non-interned SharedString and FormulaStringOpToken(ocBad), consumed by the actual ScFormulaCell hybrid recompilation guard. Finalized append rejection and genuine string ownership are tested in the existing shared tokenarray suite. No whole-module parity promotion."
     ],
     "omittedResponsibilities": [
       "Task90 implements the actual shared FormulaTokenArray initialized code/RPN storage operation family and original FormulaTokenArrayStandardRange live bounded iterable plus ScRecalcMode UInt8 constants/priority/masks. Default/shallowcopy/logicalmove/assignment/clear/finalize/DelRPN, XML placeholders, initialized compiler RPN data, append/cloned token/numeric/string/error wrappers,8192bound/ocStop, replacements/removal and token/opcode/reference/name/index queries reuse genuine FormulaToken owners. Copy finalizes nonempty code; move transfers arrays/lengths while retaining source flags; finalized rejects appends. Ordinary JS refs omit physical capacity32/unique_ptr/refcount/allocator/pool/finalizer; logical nullable buffer presence/active lengths and original alias traversal retained. Replace/remove native GetRef gates specialize to actual RPN identity matches; refcount1 break implies no remaining match, but original forward-index duplicate-adjacency skip remains CALC-079. StandardRange borrows live buffer with fixed end, preserving later replacement, JS iteration adapts pointer range. o3tl typed_flags7f complement makes combined mask60, implemented with native bitops, no flags library. Native selected complete source/header scopes over genuine token dependencies use only declaration scaffold for supported array methods/static compiler function, no fake instantiated peer/full native layout claim. Full normal array/recalc streams include every256mode input; no count/address/tail/undefined-state/sanitizer certification. Full UNO/opcode jump builders/rewrites/reference-range/ScTokenArray/ScFormulaCell/document/UI/ODS remain pending; actual Calc prerequisite focus/full91 retained."

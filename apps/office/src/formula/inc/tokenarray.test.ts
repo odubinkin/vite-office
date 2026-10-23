@@ -1,4 +1,5 @@
 /** @fileoverview Whole original initialized code/RPN/recalc streams; protected operations are exposed by a legal caller subclass, not a missing Calc peer substitute. */
+import { unicode, text as toText } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { gunzipSync } from "node:zlib";
 import { createHash } from "node:crypto";
 import { expect, it } from "vitest";
@@ -252,4 +253,22 @@ it("matches complete original initialized code and RPN ownership edit stream", /
   placeholder.dispose();
   shared.dispose();
   text.dispose();
+});
+
+it("appends the original non-interned bad-source token through the shared array owner", /** Native AddBad retains its actual opcode and string payload after input release. @returns Nothing. */ () => {
+  const array = new FormulaTokenArray(),
+    input = unicode("bad😀"),
+    added = array.AddBad(input);
+  input.dispose();
+  expect(added?.GetOpCode()).toBe(OpCode.ocBad);
+  expect(added?.GetType()).toBe(StackVar.svString);
+  if (!(added instanceof FormulaStringOpToken))
+    throw new Error("AddBad must return its original string-op token");
+  expect(toText(added.GetString().getString())).toBe("bad😀");
+  expect(array.GetLen()).toBe(1);
+  array.Finalize();
+  const another = unicode("later");
+  expect(array.AddBad(another)).toBeNull();
+  another.dispose();
+  array.Clear();
 });

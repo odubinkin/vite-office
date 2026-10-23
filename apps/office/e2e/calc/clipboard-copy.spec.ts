@@ -6,6 +6,7 @@ type Fixture = typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
   typeof import("../../src/sc/inc/clipcontext") &
+  typeof import("../../src/sc/inc/refupdatecontext") &
   typeof import("../../src/sc/inc/columnspanset") &
   typeof import("../../src/sc/inc/global") &
   typeof import("../../src/sc/inc/formulacell") &
@@ -22,7 +23,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sc/inc/markdata.ts", names: ["ScMarkData"] },
     { module: "src/sc/inc/clipcontext.ts", names: ["CopyFromClipContext"] },
     { module: "src/sc/inc/columnspanset.ts", names: ["ColumnSpanSet"] },
-    { module: "src/sc/inc/global.ts", names: ["InsertDeleteFlags"] },
+    { module: "src/sc/inc/global.ts", names: ["InsertDeleteFlags", "UpdateRefMode"] },
+    { module: "src/sc/inc/refupdatecontext.ts", names: ["RefUpdateContext"] },
     { module: "src/sc/inc/formulacell.ts", names: ["ScFormulaCell"] },
     { module: "src/sc/source/core/data/documen7.ts", names: ["BroadcastAction"] },
     { module: "src/formula/inc/grammar.ts", names: ["FormulaGrammar"] },
@@ -72,6 +74,14 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         doc.SetInsertingFromOtherDoc(true);
         doc.DeleteBeforeCopyFromClip(context, marks, spans);
         target.CopyFromClip(context, 2, 4, 2, 5, 2, 4, clipTable);
+        const references = new n.RefUpdateContext(doc, clip);
+        references.meMode = n.UpdateRefMode.URM_COPY;
+        references.maRange.assign(new n.ScRange(2, 4, 0, 2, 5, 0));
+        references.mnColDelta = 2;
+        references.mnRowDelta = 4;
+        references.mnTabDelta = -2;
+        references.setBlockPositionReference(context.getBlockPositionSet());
+        doc.UpdateReference(references, null, false);
         doc.SetInsertingFromOtherDoc(false);
         context.setListeningFormulaSpans(0, 2, 4, 2, 5);
         context.startListeningFormulas();

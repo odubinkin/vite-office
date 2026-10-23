@@ -2,6 +2,7 @@
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import { ScViewOptions } from "../../../inc/viewopti";
+import * as documen3 from "./documen3";
 import * as documen2 from "./documen2";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
@@ -78,6 +79,10 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original documen3 reference update on this actual document. @param args - Native context and defaults. @returns Nothing. */
+  UpdateReference(...args: Parameters<typeof documen3.UpdateReference>): void {
+    documen3.UpdateReference.apply(this, args);
+  }
   private pDelayedFormulaGrouping: ScRange | null = null;
   /** Original selected-sheet clipboard dirty forwarding. @param args - Native bounds,marks,flags and deferred spans. @returns Nothing. */
   SetDirtyFromClip(...args: Parameters<typeof documen7.SetDirtyFromClip>): void {

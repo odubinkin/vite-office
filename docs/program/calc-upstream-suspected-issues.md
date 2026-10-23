@@ -3740,3 +3740,23 @@ Evidence: the pinned source and the actual owner vector in
 inclusion`). Full historical issue context and the upstream selection engine's
 other modes have not been audited. Decision: preserve this branch and its
 original defaults without replacing it with a browser-only selection rule.
+
+## CALC-260: updated global names normalize the sheet only on insertion
+
+Status: surprising contract asymmetry; not a confirmed upstream defect.
+
+Pinned `sc/source/core/data/refupdatecontext.cxx`, lines 18–65,
+`UpdatedRangeNames::setUpdatedName`, maps every sheet index below -1 to -1.
+The three readers `isNameUpdated`, `getUpdatedNames` and `isEmpty` perform
+literal key lookups without applying that normalization.
+
+After `setUpdatedName(-8, 4)`, querying sheet -1 reports the updated name,
+whereas querying sheet -8 reports absence. Callers must use the canonical
+global-name index when reading. The local owner preserves the asymmetry;
+it does not normalize every public method for convenience.
+
+Evidence: the pinned methods and the actual value-owner scenario in
+[clipboard-reference.test.ts](../../apps/office/src/sc/source/core/data/clipboard-reference.test.ts)
+(`retains original sparse column output and insertion-only global-name normalization`).
+No claim is made that a defined upstream caller passes a noncanonical index
+to the readers. Decision: retain the original insertion and lookup behavior.

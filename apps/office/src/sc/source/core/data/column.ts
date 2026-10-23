@@ -1,5 +1,5 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
-import { ParseBlock } from "../../../inc/mtvfunctions";
+import { ParseBlock, ProcessBlock, type CellStoreNode } from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
 import * as column3 from "./column3";
 import * as column4 from "./column4";
@@ -29,7 +29,7 @@ import {
 } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import type { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -55,7 +55,7 @@ import { ScAddress } from "../../../inc/address";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import {
   element_type_numeric,
   element_type_string,
@@ -173,6 +173,33 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original reference-update dispatch skips empty and clipboard/undo columns. @param context - Native operation. @param undo - Optional native undo document. @returns Updated flag. */
+  UpdateReference(context: RefUpdateContext, undo: ScDocument | null = null): boolean {
+    if (this.IsEmptyData() || this.GetDoc().IsClipOrUndo()) return false;
+    if (context.meMode !== UpdateRefMode.URM_COPY)
+      throw new Error("Non-copy column reference updates are not implemented");
+    return this.UpdateReferenceOnCopy(context, undo);
+  }
+  /** Original copy traversal updates real formulas then rejoins both previously split boundaries. @param context - Native copy operation. @param undo - Undo owner. @returns Native accumulated update flag. */
+  private UpdateReferenceOnCopy(context: RefUpdateContext, undo: ScDocument | null): boolean {
+    const handler = new UpdateRefOnCopy(context, undo),
+      block = context.getBlockPosition(this.nTab, this.nCol),
+      first = context.maRange.aStart.Row(),
+      last = context.maRange.aEnd.Row();
+    let position = block
+      ? this.maCells.position(
+          block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
+          first,
+        )
+      : this.maCells.position(first);
+    ProcessBlock(position.first, this.maCells, handler, first, last);
+    SharedFormulaUtil.joinFormulaCellAbove(position);
+    if (last < this.GetDoc().MaxRow()) {
+      position = this.maCells.position(position.first, last + 1);
+      SharedFormulaUtil.joinFormulaCellAbove(position);
+    }
+    return handler.isUpdated();
+  }
   /** Original deferred clipboard dirty phase separates formula dirtiness from scalar broadcast spans. @param first - First row. @param last - Last row. @param spans - Deferred changed spans. @returns Nothing. */
   SetDirtyFromClip(first: number, last: number, spans: ColumnSpanSet): void {
     const old = this.rDocument.GetAutoCalc();
@@ -908,5 +935,27 @@ class SetDirtyOnRangeHandler {
       this.maValueRanges,
       true,
     );
+  }
+}
+
+/** Original UpdateRefOnCopy functor visits every borrowed formula,including shared members. */
+class UpdateRefOnCopy {
+  private mbUpdated = false;
+  /** Borrows actual operation and undo owner. @param context - Context. @param undo - Undo document. @returns Handler. */
+  constructor(
+    private readonly context: RefUpdateContext,
+    private readonly undo: ScDocument | null,
+  ) {}
+  /** Original result query. @returns Accumulated native flag. */
+  isUpdated(): boolean {
+    return this.mbUpdated;
+  }
+  /** Original non-short-circuit traversal consumes only formula blocks. @param node - Borrowed store block. @param offset - First element. @param size - Count. @returns Nothing. */
+  call(node: CellStoreNode, offset: number, size: number): void {
+    if (node.type !== element_type_formula) return;
+    for (let index = offset; index < offset + size; ++index) {
+      const cell = formula_block.at(node.data as base_element_block, index) as ScFormulaCell;
+      this.mbUpdated = cell.UpdateReference(this.context, this.undo) || this.mbUpdated;
+    }
   }
 }

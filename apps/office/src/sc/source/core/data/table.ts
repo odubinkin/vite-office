@@ -40,11 +40,15 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { FilterData } from "../../../inc/FilterData";
-import { SetOptimalHeightsToRows } from "./table1";
+import { UpdateReference, SetOptimalHeightsToRows } from "./table1";
 /** Original ColumnDataApply callable contract. */
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table1 reference operation on this actual sheet. @param args - Native context and defaults. @returns Nothing. */
+  UpdateReference(...args: Parameters<typeof UpdateReference>): void {
+    UpdateReference.apply(this, args);
+  }
   /** Original table2 clipboard dirty forwarding. @param args - Native bounds and changed spans. @returns Nothing. */
   SetDirtyFromClip(...args: Parameters<typeof table2.SetDirtyFromClip>): void {
     table2.SetDirtyFromClip.apply(this, args);
