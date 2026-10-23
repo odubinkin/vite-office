@@ -12,16 +12,19 @@ import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn, ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import type { ScTable } from "../../../inc/table";
+import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
+import { HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { SfxHintId, type SfxHint } from "../../../../svl/inc/hint";
-import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS } from "../../../inc/address";
+import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS, MAXTAB } from "../../../inc/address";
 import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
@@ -604,4 +607,134 @@ export class BroadcastAction implements ColumnAction {
     range.aEnd.SetRow(last);
     this.mrDoc.BroadcastCells(range, SfxHintId.ScDataChanged);
   }
+}
+
+/** Original selected-sheet deletion,partitioned unchanged onto this same document instance. @param this - Actual document. @param flags - Deletion flags. @param marks - Actual selection. @returns Nothing. */
+export function DeleteSelection(
+  this: ScDocument,
+  flags: InsertDeleteFlags,
+  marks: ScMarkData,
+): void {
+  const oldAutoCalc = this.GetAutoCalc();
+  this.SetAutoCalc(false);
+  try {
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
+    }
+  } finally {
+    this.SetAutoCalc(oldAutoCalc);
+  }
+}
+/** Original block copying and consecutive-sheet reference phase for the admitted CONTENTS context;source clipboard must contain an actual sheet. Same-pool cut/move services remain unported. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected sheets. @param dx - Column displacement. @param dy - Row displacement. @returns Nothing. */
+export function CopyBlockFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  dx: number,
+  dy: number,
+): void {
+  const clip = context.getClipDoc(),
+    count = clip.GetTableCount(),
+    cut = clip.GetClipParam().mbCutMode;
+  if (cut && clip.GetPool() === this.GetPool())
+    throw new Error("Same-document cut reference updates are not implemented");
+  let clipTab = 0;
+  for (
+    let tab = context.getTabStart();
+    tab <= context.getTabEnd() && tab < this.GetTableCount();
+    ++tab
+  ) {
+    const table = this.FetchTable(tab);
+    if (!table || !marks.GetTableSelect(tab)) continue;
+    while (!clip.FetchTable(clipTab)) clipTab = (clipTab + 1) % count;
+    table.CopyFromClip(
+      context,
+      col1,
+      row1,
+      col2,
+      row2,
+      dx,
+      dy,
+      clip.FetchTable(clipTab) as ScTable,
+    );
+    clipTab = (clipTab + 1) % count;
+  }
+  clipTab = 0;
+  for (
+    let tab = context.getTabStart();
+    tab <= context.getTabEnd() && tab < this.GetTableCount();
+    ++tab
+  ) {
+    if (!this.FetchTable(tab) || !marks.GetTableSelect(tab)) continue;
+    while (!clip.FetchTable(clipTab)) clipTab = (clipTab + 1) % count;
+    let follow = 0;
+    while (
+      tab + follow < context.getTabEnd() &&
+      marks.GetTableSelect(tab + follow + 1) &&
+      clipTab + follow < MAXTAB &&
+      clip.FetchTable((clipTab + follow + 1) % count)
+    )
+      ++follow;
+    const references = new RefUpdateContext(this, clip);
+    references.maRange.assign(new ScRange(col1, row1, tab, col2, row2, tab + follow));
+    references.mnColDelta = dx;
+    references.mnRowDelta = dy;
+    references.mnTabDelta = tab - clipTab;
+    references.setBlockPositionReference(context.getBlockPositionSet());
+    if (!cut) {
+      references.meMode = UpdateRefMode.URM_COPY;
+      this.UpdateReference(references, context.getUndoDoc(), false);
+    }
+    clipTab = (clipTab + follow + 1) % count;
+    tab += follow;
+  }
+}
+/** Original filtered-row runs use the first populated source sheet's filter flags and publish the native source cursor,including its SCROW-max sentinel. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Destination sheets. @param dx - Column displacement. @param sourceRow - Source cursor output. @param sourceEnd - Last source row. @returns Skipped source-row count. */
+export function CopyNonFilteredFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  dx: number,
+  sourceRow: [number],
+  sourceEnd: number,
+): number {
+  const clip = context.getClipDoc();
+  let flagTab = 0;
+  while (flagTab < clip.GetTableCount() && !clip.FetchTable(flagTab)) ++flagTab;
+  let row = sourceRow[0],
+    destination = row1,
+    filtered = 0;
+  while (row <= sourceEnd && destination <= row2) {
+    const old = row;
+    row = clip.FirstNonFilteredRow(row, sourceEnd, flagTab);
+    filtered += row - old;
+    if (row <= sourceEnd) {
+      const last: [number] = [row];
+      clip.RowFiltered(row, flagTab, undefined, last);
+      const follow = Math.min(last[0] - row, sourceEnd - row, row2 - destination);
+      this.CopyBlockFromClip(
+        context,
+        col1,
+        destination,
+        col2,
+        destination + follow,
+        marks,
+        dx,
+        destination - row,
+      );
+      row += follow + 1;
+      destination += follow + 1;
+    }
+  }
+  sourceRow[0] = row;
+  return filtered;
 }

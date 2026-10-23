@@ -73,15 +73,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         doc.SetAutoCalc(false);
         doc.SetInsertingFromOtherDoc(true);
         doc.DeleteBeforeCopyFromClip(context, marks, spans);
-        target.CopyFromClip(context, 2, 4, 2, 5, 2, 4, clipTable);
-        const references = new n.RefUpdateContext(doc, clip);
-        references.meMode = n.UpdateRefMode.URM_COPY;
-        references.maRange.assign(new n.ScRange(2, 4, 0, 2, 5, 0));
-        references.mnColDelta = 2;
-        references.mnRowDelta = 4;
-        references.mnTabDelta = -2;
-        references.setBlockPositionReference(context.getBlockPositionSet());
-        doc.UpdateReference(references, null, false);
+        doc.CopyBlockFromClip(context, 2, 4, 2, 5, marks, 2, 4);
         doc.SetInsertingFromOtherDoc(false);
         context.setListeningFormulaSpans(0, 2, 4, 2, 5);
         context.startListeningFormulas();

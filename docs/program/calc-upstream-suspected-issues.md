@@ -3760,3 +3760,24 @@ Evidence: the pinned methods and the actual value-owner scenario in
 (`retains original sparse column output and insertion-only global-name normalization`).
 No claim is made that a defined upstream caller passes a noncanonical index
 to the readers. Decision: retain the original insertion and lookup behavior.
+
+## CALC-261: filtered block copying adds the no-row sentinel to its count
+
+Status: surprising helper contract; not a confirmed defect in a defined UI call.
+
+Pinned `sc/source/core/data/FilterData.cxx`, `firstNonFilteredRow`, returns
+`std::numeric_limits<SCROW>::max()` when no eligible row is found. Pinned
+`sc/source/core/data/document.cxx`, `CopyNonFilteredFromClip`, lines 2893–2920,
+adds the difference between that result and the old source row to its
+filtered-row count before checking whether the result exceeds the source end.
+It also publishes that sentinel through the source-row output.
+
+For a source cursor of 1 and an entirely filtered range ending at row 5,
+the helper returns 2147483646 and advances the cursor to 2147483647. It does
+not return the five filtered rows in the requested interval. The enclosing
+paste orchestration may prevent such calls; that reachability is not certified.
+
+Evidence: the pinned methods and
+[clipboard-block.test.ts](../../apps/office/src/sc/source/core/data/clipboard-block.test.ts)
+(`retains signed SCROW-max sentinel and its original filtered-row count accumulation`).
+Decision: preserve the original accumulator and output instead of clamping them.

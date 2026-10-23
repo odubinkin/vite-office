@@ -64,6 +64,17 @@ export class FilterData {
     if (last) last[0] = data.mnRow2;
     return data.mbValue;
   }
+  /** Original first unfiltered row or signed SCROW maximum;initialized segments cover every valid row. @param first - First row. @param last - Last row. @returns Row or 2147483647. */
+  firstNonFilteredRow(first: number, last: number): number {
+    const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };
+    for (let row = first; row <= last;) {
+      if (!this.mrTable.GetDoc().ValidRow(row)) break;
+      this.mpFilteredRows.getRangeData(row, data);
+      if (!data.mbValue) return row;
+      row = data.mnRow2 + 1;
+    }
+    return 2147483647;
+  }
   /** Original segmented nonfiltered count includes hidden rows and stops at the represented domain boundary. @param first - First row. @param last - Last row. @returns Nonfiltered row count. */
   countNonFilteredRows(first: number, last: number): number {
     let count = 0,

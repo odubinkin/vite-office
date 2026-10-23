@@ -79,6 +79,18 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  /** Original general block paste into actual selected sheets. @param args - Native context,bounds,marks and displacement. @returns Nothing. */
+  CopyBlockFromClip(...args: Parameters<typeof documen7.CopyBlockFromClip>): void {
+    documen7.CopyBlockFromClip.apply(this, args);
+  }
+  /** Original filtered-source block dispatch. @param args - Native context,bounds,marks and source row output. @returns Filtered count. */
+  CopyNonFilteredFromClip(...args: Parameters<typeof documen7.CopyNonFilteredFromClip>): number {
+    return documen7.CopyNonFilteredFromClip.apply(this, args);
+  }
+  /** Original source-row query and missing-table sentinel. @param first - First row. @param last - Last row. @param tab - Sheet. @returns Row or signed SCROW maximum. */
+  FirstNonFilteredRow(first: number, last: number, tab: number): number {
+    return this.FetchTable(tab)?.getFilterData().firstNonFilteredRow(first, last) ?? 2147483647;
+  }
   /** Original documen3 reference update on this actual document. @param args - Native context and defaults. @returns Nothing. */
   UpdateReference(...args: Parameters<typeof documen3.UpdateReference>): void {
     documen3.UpdateReference.apply(this, args);
@@ -481,18 +493,9 @@ export class ScDocument {
       this.SetAutoCalc(oldAutoCalc);
     }
   }
-  /** Original selected-sheet DeleteSelection traversal for the represented hard/edit-attribute flags;cell payload/listener owners are untouched. @param flags - Attribute-only deletion flags. @param marks - Actual multi marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
-    const oldAutoCalc = this.GetAutoCalc();
-    this.SetAutoCalc(false);
-    try {
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
-      }
-    } finally {
-      this.SetAutoCalc(oldAutoCalc);
-    }
+  /** Original selected-sheet deletion on this document. @param args - Native flags and marks. @returns Nothing. */
+  DeleteSelection(...args: Parameters<typeof documen7.DeleteSelection>): void {
+    documen7.DeleteSelection.apply(this, args);
   }
 
   /** Clips only to real cell data, preserving source output mutations on failure. @param tab - Sheet. @param firstCol - Start-column output. @param firstRow - Start-row output. @param lastCol - End-column output. @param lastRow - End-row output. @returns Whether the clipped area is valid. */
