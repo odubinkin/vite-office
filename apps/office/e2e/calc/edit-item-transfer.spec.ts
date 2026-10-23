@@ -38,7 +38,9 @@ test("transfers genuine Calc EditEngine formatting with original units in the DO
           d = new n.ScDocument(),
           pattern = new n.ScPatternAttr(d.getCellAttributeHelper()),
           reverse = new n.ScPatternAttr(d.getCellAttributeHelper()),
-          edit = new n.SfxItemSet(d.GetPool(), [[n.EE_ITEMS_START, n.EE_ITEMS_END]]);
+          edit = new n.SfxItemSet(d.GetPool() as NonNullable<ReturnType<typeof d.GetPool>>, [
+            [n.EE_ITEMS_START, n.EE_ITEMS_END],
+          ]);
         try {
           pattern.GetItemSetWritable().Put(new n.SvxFontHeightItem(201, 100, 101));
           pattern.GetItemSetWritable().Put(new n.SvxFontHeightItem(301, 100, 112));

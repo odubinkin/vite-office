@@ -1,4 +1,4 @@
-/** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+/** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { ScViewOptions } from "../../../inc/viewopti";
 import * as documen2 from "./documen2";
 import * as documen7 from "./documen7";
@@ -23,7 +23,9 @@ import type { ScMarkData } from "../../../inc/markdata";
 import { ScClipParam } from "../../../inc/clipparam";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
-import { ScDocumentPool } from "./docpool";
+import type { ScDocumentPool } from "./docpool";
+import { ScPoolHelper } from "../inc/poolhelp";
+import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -59,6 +61,13 @@ import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { uppercase } from "../../../../unotools/inc/charclass";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+/** Native document construction modes from document.hxx. */
+export enum ScDocumentMode {
+  SCDOCMODE_DOCUMENT = 0,
+  SCDOCMODE_CLIP = 1,
+  SCDOCMODE_UNDO = 2,
+  SCDOCMODE_FUNCTIONACCESS = 3,
+}
 /** Native dependency recalculation modes from document.hxx. */
 export enum HardRecalcState {
   OFF,
@@ -490,8 +499,12 @@ export class ScDocument {
     this.pSelectionAttr = next;
     return this.pSelectionAttr;
   }
-  private readonly xPool = new ScDocumentPool();
-  private readonly maCellAttributeHelper = new CellAttributeHelper(this.xPool);
+  private mxPoolHelper: ScPoolHelper | null = null;
+  private mpCellAttributeHelper: CellAttributeHelper | null = null;
+  private readonly bIsClip: boolean;
+  private readonly bIsUndo: boolean;
+  private readonly bIsFunctionAccess: boolean;
+  private bNoListening = false;
   private pFormulaTree: ScFormulaCell | null = null;
   private pEOFormulaTree: ScFormulaCell | null = null;
   private pFormulaTrack: ScFormulaCell | null = null;
@@ -502,17 +515,25 @@ export class ScDocument {
   private bCalculatingFormulaTree = false;
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
-  private bAutoCalc = true;
+  private bAutoCalc: boolean;
   private readonly maTabs: ScTable[] = [];
-  private pBASM: ScBroadcastAreaSlotMachine | null = new ScBroadcastAreaSlotMachine(this);
+  private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   private readonly mpCellStringPool: SharedStringPool;
-  /** Creates the scalar document's shared pool using the existing prepared-locale uppercase operation. @returns Document. */
-  constructor() {
+  /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
+  constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
+    this.bIsClip = mode === ScDocumentMode.SCDOCMODE_CLIP;
+    this.bIsUndo = mode === ScDocumentMode.SCDOCMODE_UNDO;
+    this.bIsFunctionAccess = mode === ScDocumentMode.SCDOCMODE_FUNCTIONACCESS;
+    this.bAutoCalc = mode === ScDocumentMode.SCDOCMODE_DOCUMENT || this.bIsFunctionAccess;
+    if (this.bAutoCalc) {
+      this.mxPoolHelper = new ScPoolHelper(this);
+      this.pBASM = new ScBroadcastAreaSlotMachine(this);
+    }
     const locale = this.locale;
     this.mpCellStringPool = new SharedStringPool({
       /** Applies the existing real whole-string classifier field binding. @param value - Unicode source. @returns Uppercase value. */
@@ -521,13 +542,50 @@ export class ScDocument {
       },
     });
   }
-  /** Borrows the real consumed character-item pool. @returns Pool. */
-  GetPool(): ScDocumentPool {
-    return this.xPool;
+  /** Borrows the native document pool, absent before temporary-document resource sharing. @returns Pool or null. */
+  GetPool(): ScDocumentPool | null {
+    return this.mxPoolHelper ? this.mxPoolHelper.GetDocPool() : null;
+  }
+  /** Borrows the actual native style pool when this document owns pooled resources. @returns Pool or null. */
+  GetStyleSheetPool(): ScStyleSheetPool | null {
+    return this.mxPoolHelper ? this.mxPoolHelper.GetStylePool() : null;
+  }
+  /** Native clipboard mode query. @returns Mode flag. */
+  IsClipboard(): boolean {
+    return this.bIsClip;
+  }
+  /** Native undo mode query. @returns Mode flag. */
+  IsUndo(): boolean {
+    return this.bIsUndo;
+  }
+  /** Native combined temporary-document query. @returns Mode flag. */
+  IsClipOrUndo(): boolean {
+    return this.bIsClip || this.bIsUndo;
+  }
+  /** Native function-access mode query. @returns Mode flag. */
+  IsFunctionAccess(): boolean {
+    return this.bIsFunctionAccess;
+  }
+  /** Sets the actual subscription suppression flag. @param value - Suppress new listening. @returns Nothing. */
+  SetNoListening(value: boolean): void {
+    this.bNoListening = value;
+  }
+  /** Reads the native subscription suppression flag. @returns Flag. */
+  GetNoListening(): boolean {
+    return this.bNoListening;
   }
   /** Borrows actual document pattern canonicalization. @returns Helper. */
   getCellAttributeHelper(): CellAttributeHelper {
-    return this.maCellAttributeHelper;
+    if (!this.mpCellAttributeHelper) {
+      if (this.IsClipOrUndo())
+        throw new Error(
+          "CellAttributeHelper needs to be shared using SharePooledResources, not created",
+        );
+      const pool = this.GetPool();
+      if (!pool) throw new Error("No SfxItemPool for this ScDocument");
+      this.mpCellAttributeHelper = new CellAttributeHelper(pool);
+    }
+    return this.mpCellAttributeHelper;
   }
   /** Borrows effective cell attributes through the sheet/column/default chain. @param position - Cell. @returns Pattern or null. */
   GetPattern(position: ScAddress): ScPatternAttr | null {

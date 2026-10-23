@@ -1,9 +1,10 @@
 /** @fileoverview Independent source-bound AutoSum reference/directional vectors over actual Calc tokens,columns and views. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress, ScRange, MAXCOL, MAXROW } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
-import { ScDirection } from "../../../inc/global";
+import { ScDirection, CellType } from "../../../inc/global";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScViewData } from "../inc/viewdata";
 import { ScTabViewShell } from "../inc/tabvwsh";
@@ -317,7 +318,7 @@ it("queries original NeedHeight attributes through actual sparse patterns and de
     const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
     if (which === 154) pattern.GetItemSet().Put(new ScCondFormatItem(1));
     else {
-      const item = doc.GetPool().GetPoolDefaultItem(which).Clone();
+      const item = (doc.GetPool() as ScDocumentPool).GetPoolDefaultItem(which).Clone();
       assert(item);
       if (which === ATTR_STACKED || which === ATTR_LINEBREAK) (item as SfxBoolItem).SetValue(true);
       else if (which === ATTR_HOR_JUSTIFY)
@@ -453,5 +454,145 @@ it("retains directional unknown-function classification and marked text fallback
       functions.DoAutoSum(finder, subtotal, OpCode.ocSum),
   ).toThrow("Native EnterBlock/PasteFromClip block fill is not implemented");
   expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
+  shell.Close();
+});
+
+it("infers original ordered horizontal aggregate chains at the cursor", /** The native horizontal search mirrors its independently tested vertical ordering. @returns Nothing. */ () => {
+  const { doc, view, functions, shell } = setup();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetFormula(new ScAddress(1, 0, 0), unicode("=SUM(A1:A1)"), doc.GetGrammar());
+  doc.SetValue(new ScAddress(2, 0, 0), 3);
+  doc.SetFormula(new ScAddress(3, 0, 0), unicode("=SUM(C1:C1)"), doc.GetGrammar());
+  view.SetCurX(4);
+  const ranges = new ScRangeList();
+  expect(functions.GetAutoSumArea(ranges)).toBe(true);
+  expect(coordinates(ranges)).toEqual([
+    [3, 0, 0, 3, 0, 0],
+    [1, 0, 0, 1, 0, 0],
+  ]);
+  const formula = functions.GetAutoSumFormula(ranges, false, new ScAddress(4, 0, 0), OpCode.ocSum);
+  expect(text(formula)).toBe("=SUM(D1:D1;B1:B1)");
+  formula.dispose();
+  shell.Close();
+});
+it("stops original selected raw-data totals after a preceding aggregate in each axis", /** Actual aggregate references define the source scan break;selected earlier data is not reparsed or flattened. @returns Nothing. */ () => {
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    doc.SetValue(new ScAddress(), 1);
+    const aggregate = horizontal ? new ScAddress(1, 0, 0) : new ScAddress(0, 1, 0),
+      next = horizontal ? new ScAddress(2, 0, 0) : new ScAddress(0, 2, 0),
+      end = horizontal ? new ScAddress(3, 0, 0) : new ScAddress(0, 3, 0),
+      output = horizontal ? new ScAddress(4, 0, 0) : new ScAddress(0, 4, 0);
+    doc.SetFormula(aggregate, unicode("=SUM(A1:A1)"), doc.GetGrammar());
+    doc.SetValue(next, 2);
+    doc.SetValue(end, 3);
+    expect(
+      functions.AutoSum(new ScRange(new ScAddress(), end), false, true, false, OpCode.ocSum),
+    ).toBe(true);
+    const cell = doc.GetFormulaCell(output);
+    assert(cell);
+    expect(text(cell.GetFormula(doc.GetGrammar()))).toBe(
+      horizontal ? "=SUM(C1:D1)" : "=SUM(A3:A4)",
+    );
+    expect(doc.GetValue(output)).toBe(5);
+    shell.Close();
+  }
+});
+it("retains native leading empty references and an already selected empty output row or column", /** Transposed literal witnesses exercise the original None-to-Data fallback and inclusive source endpoints. @returns Nothing. */ () => {
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    for (const [col, row, value] of [
+      [1, 0, 1],
+      [0, 1, 2],
+      [1, 1, 3],
+      [1, 2, 4],
+    ] as const)
+      doc.SetValue(horizontal ? new ScAddress(row, col, 0) : new ScAddress(col, row, 0), value);
+    const range = horizontal ? new ScRange(0, 0, 0, 3, 1, 0) : new ScRange(0, 0, 0, 1, 3, 0),
+      first = horizontal ? new ScAddress(3, 0, 0) : new ScAddress(0, 3, 0),
+      second = horizontal ? new ScAddress(3, 1, 0) : new ScAddress(1, 3, 0);
+    expect(functions.AutoSum(range, false, true, false, OpCode.ocSum)).toBe(true);
+    const formula = doc.GetFormulaCell(first);
+    assert(formula);
+    expect(text(formula.GetFormula(doc.GetGrammar()))).toBe(
+      horizontal ? "=SUM(A1:C1)" : "=SUM(A1:A3)",
+    );
+    expect(doc.GetValue(first)).toBe(2);
+    expect(doc.GetValue(second)).toBe(8);
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(2);
+    shell.Close();
+  }
+});
+it("skips actual empty internal columns or rows while retaining both surrounding totals", /** Sparse real storage distinguishes an empty span from a zero-valued formula result. @returns Nothing. */ () => {
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    for (const [col, row, value] of [
+      [0, 0, 2],
+      [0, 1, 3],
+      [2, 0, 4],
+      [2, 1, 5],
+    ] as const)
+      doc.SetValue(horizontal ? new ScAddress(row, col, 0) : new ScAddress(col, row, 0), value);
+    expect(functions.AutoSum(new ScRange(0, 0, 0, 2, 2, 0), false, true, false, OpCode.ocSum)).toBe(
+      true,
+    );
+    expect(doc.GetValue(horizontal ? new ScAddress(2, 0, 0) : new ScAddress(0, 2, 0))).toBe(5);
+    expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(9);
+    expect(
+      doc.GetFormulaCell(horizontal ? new ScAddress(2, 1, 0) : new ScAddress(1, 2, 0)),
+    ).toBeNull();
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(2);
+    shell.Close();
+  }
+});
+
+it("retains native multi-range totals,cursor placement and grouped marks across actual view commands", /** Public native selection operations preserve both separated blocks while AutoSum iterates its owned range list. @returns Nothing. */ () => {
+  const { doc, view, functions, shell } = setup();
+  functions.SetCursor(1, 0);
+  functions.SetCursor(1, 1);
+  functions.SetCursor(1, 1);
+  functions.SetCursor(1, 1, true);
+  expect([view.GetCurX(), view.GetCurY()]).toEqual([1, 1]);
+  for (const [col, row, value] of [
+    [0, 0, 2],
+    [0, 1, 3],
+    [2, 0, 4],
+    [2, 1, 5],
+  ] as const)
+    doc.SetValue(new ScAddress(col, row, 0), value);
+  functions.MarkRange(new ScRange(0, 0, 0, 0, 1, 0), false);
+  functions.MarkRange(new ScRange(2, 0, 0, 2, 1, 0), false, true);
+  expect(view.GetMarkData().IsMultiMarked()).toBe(true);
+  expect([view.GetCurX(), view.GetCurY()]).toEqual([1, 1]);
+  const finder: [boolean] = [true],
+    subtotal: [boolean] = [true],
+    formula = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(formula.isEmpty()).toBe(true);
+  formula.dispose();
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
+  expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(9);
+  expect([view.GetCurX(), view.GetCurY()]).toEqual([2, 2]);
+  const ranges = new ScRangeList();
+  view.GetMarkData().FillRangeListWithMarks(ranges, false);
+  expect(coordinates(ranges)).toEqual([
+    [0, 0, 0, 0, 2, 0],
+    [2, 0, 0, 2, 2, 0],
+  ]);
+  expect(shell.GetUndoManager().GetUndoActionCount()).toBe(2);
+  shell.Close();
+});
+it("keeps absent-sheet row sizing and unavailable nonformula view input nonmutating", /** Native FetchTable failure and an explicit unported entry boundary operate on real public owners. @returns Nothing. */ () => {
+  const { doc, functions, shell } = setup(),
+    count = doc.GetTableCount();
+  expect(shell.GetDocFunc().AdjustRowHeight(new ScRange(0, 0, 99, 0, 1, 99), true, true)).toBe(
+    false,
+  );
+  expect(doc.GetTableCount()).toBe(count);
+  expect(
+    /** Requests the actual unported nonformula branch without changing document state. @returns Nothing or explicit unsupported error. */ () =>
+      functions.EnterData(0, 0, 0, unicode("text")),
+  ).toThrow("Nonformula EnterData processing is not implemented");
+  expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
+  expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   shell.Close();
 });

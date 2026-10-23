@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -269,8 +270,8 @@ export class ScViewFunc extends ScTabView {
         ) => state !== SfxItemState.INVALID,
       )
     ) {
-      const oldSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
-        newSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+      const oldSet = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
+        newSet = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
         updated = new SvxBorderLine();
       try {
         const border = selected.Get(150) as SvxBoxItem,

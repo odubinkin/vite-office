@@ -243,3 +243,28 @@ it("keeps grid focus after selected AutoSum and presents an unavailable block-fi
   cleanup();
   session.Close();
 });
+
+it("starts an empty native Sum argument draft and cancels without a document edit or history", /** A fresh worksheet has no inferred range;native input selection stays inside the actual empty parentheses. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller;
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  const line = screen.getByRole("textbox", { name: "Input line" }) as HTMLInputElement;
+  expect(line).toHaveValue("=SUM()");
+  expect(line).toHaveFocus();
+  expect([line.selectionStart, line.selectionEnd]).toEqual([5, 5]);
+  expect(c.shell.GetDocument().GetFormulaCell(new ScAddress())).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  expect(c.shell.GetDocument().GetFormulaCell(new ScAddress())).toBeNull();
+  expect(screen.getByRole("grid")).toHaveFocus();
+  cleanup();
+  session.Close();
+});

@@ -6,7 +6,8 @@ import { ScCompiler } from "../../../inc/compiler";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScSingleRefData } from "../../../inc/refdata";
-import { ScSingleRefToken } from "../../../inc/token";
+import { ScSingleRefToken, ScMatrixToken } from "../../../inc/token";
+import { ScMatrix } from "../../../inc/scmatrix";
 import { FormulaByteToken, FormulaDoubleToken, StackVar } from "../../../../formula/inc/token";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -255,5 +256,58 @@ it("resolves real matrix reference origins and retains native orphan source form
       follower.GetValue(),
   ).toThrow("Matrix formula evaluation is not implemented");
   follower.Dispose();
+  doc.Dispose();
+});
+
+it("binds explicit scanning-constructor II switches to the original working token owner", /** Native scanning and existing-array overloads carry distinct argument positions for the same flag. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const position = new ScAddress(1, 1, 0);
+  for (const enabled of [false, true]) {
+    const compiler = new ScCompiler(
+        doc,
+        position,
+        FormulaGrammar.Grammar.GRAM_UNSPECIFIED,
+        enabled,
+      ),
+      code = compiler.CompileString(unicode("=A1:A3+1")),
+      lexical = Array.from(code.Tokens());
+    compiler.CompileTokenArray();
+    expect(code.GetCodeError()).toBe(FormulaError.NONE);
+    expect(Array.from(code.RPNTokens())[0]?.GetType()).toBe(
+      enabled ? StackVar.svSingleRef : StackVar.svDoubleRef,
+    );
+    expect(Array.from(code.Tokens())).toEqual(lexical);
+  }
+  doc.Dispose();
+});
+it("rejects actual matrix operands at the explicit unported compilation boundary without changing source owners", /** Real matrix tokens carry native ForceArrayReturn;the current scalar compiler rejects this context instead of claiming native matrix compilation. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const position = new ScAddress(1, 1, 0),
+    range = new ScCompiler(doc, position).CompileString(unicode("=A1:A3"));
+  const reference = Array.from(range.Tokens()).find(
+    /** Selects the actual scanner-owned range. @param token - Source token. @returns Whether it is a range. */ (
+      token,
+    ) => token.GetType() === StackVar.svDoubleRef,
+  );
+  assert(reference);
+  for (const matrixFirst of [false, true]) {
+    const matrix = new ScMatrix(1, 1, 2.5),
+      matrixToken = new ScMatrixToken(matrix),
+      code = new ScTokenArray(doc);
+    code.AddToken(matrixFirst ? matrixToken : reference);
+    code.AddToken(new FormulaByteToken(OpCode.ocAdd));
+    code.AddToken(matrixFirst ? reference : matrixToken);
+    const lexical = Array.from(code.Tokens());
+    expect(
+      /** Requests the genuine currently unported array compilation context. @returns Subtotal flag or explicit unsupported error. */ () =>
+        new ScCompiler(doc, position, code, doc.GetGrammar(), true).CompileTokenArray(),
+    ).toThrow("Formula opcode or array context is not implemented by scalar compilation");
+    expect(code.GetCodeLen()).toBe(0);
+    for (let index = 0; index < lexical.length; index++)
+      expect(code.TokenAt(index)).toBe(lexical[index]);
+    expect((lexical[matrixFirst ? 0 : 2] as ScMatrixToken).GetMatrix()).toBe(matrix);
+  }
   doc.Dispose();
 });

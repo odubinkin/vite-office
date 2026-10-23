@@ -68,6 +68,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private cMatrixFlag: ScMatrixMode = ScMatrixMode.NONE;
   private bDirty = true;
   private bNeedListening = false;
+  private bInChangeTrack = false;
   private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
   readonly aPos: ScAddress;
   /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
@@ -100,7 +101,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       const source = documentOrCell,
         doc = positionOrDocument as ScDocument,
         pos = formulaOrPosition as ScAddress;
-      if (doc.GetPool() !== source.rDocument.GetPool())
+      if ((!doc.IsClipOrUndo() || doc.IsUndo()) && doc.GetPool() !== source.rDocument.GetPool())
         throw new Error("Formula foreign-document pool conversion is not implemented");
       this.rDocument = doc;
       this.cMatrixFlag = source.cMatrixFlag;
@@ -110,17 +111,29 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.pCode = source.pCode.Clone();
       this.aResult = new ScFormulaResult(source.aResult);
       this.bDirty = source.bDirty;
-      const compile = this.pCode.GetCodeError() !== FormulaError.NONE && this.pCode.GetLen() !== 0;
+      const compile =
+        this.pCode.GetCodeError() !== FormulaError.NONE &&
+        !doc.IsClipboard() &&
+        this.pCode.GetLen() !== 0;
       if (compile) this.pCode.SetCodeError(FormulaError.NONE);
-      this.pCode.AdjustAbsoluteRefs(source.rDocument, source.aPos, this.aPos, false);
-      // Same-pool copies do not enter foreign-pool/external/name conversion.
-      // Source clipboard/undo and clone-flag branches are added with their actual mode owners separately.
-      this.pCode.AdjustReferenceOnCopy(this.aPos);
-      if (compile) {
-        const compiler = new ScCompiler(doc, this.aPos, this.pCode, this.eTempGrammar);
+      if (!doc.IsClipOrUndo() || doc.IsUndo())
+        this.pCode.AdjustAbsoluteRefs(source.rDocument, source.aPos, this.aPos, false);
+      // Clipboard and undo copies retain reference flags until the native insertion/update phase.
+      if (!doc.IsClipOrUndo()) this.pCode.AdjustReferenceOnCopy(this.aPos);
+      if (compile && !doc.IsClipOrUndo()) {
+        const compiler = new ScCompiler(
+          doc,
+          this.aPos,
+          this.pCode,
+          this.eTempGrammar,
+          true,
+          this.cMatrixFlag !== ScMatrixMode.NONE,
+        );
         compiler.CompileTokenArray();
-        if (this.pCode.GetCodeError() === FormulaError.NONE)
+        if (this.pCode.GetCodeError() === FormulaError.NONE) {
           this.nFormatType = compiler.GetNumFormatType();
+          this.aResult.SetToken(null);
+        }
       }
     } else {
       this.rDocument = documentOrCell;
@@ -481,11 +494,20 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SetNeedsListening(needed: boolean): void {
     this.bNeedListening = needed;
   }
+  /** Native change-track membership query. @returns Membership. */
+  IsInChangeTrack(): boolean {
+    return this.bInChangeTrack;
+  }
+  /** Sets actual native change-track membership without managing an unported change tracker. @param value - Membership. @returns Nothing. */
+  SetInChangeTrack(value: boolean): void {
+    this.bInChangeTrack = value;
+  }
   /** Original ordinary/context subscriptions for the current normal-document local-reference profile. @param target - Actual document or shared cursor context. @returns Nothing. */
   StartListeningTo(target: ScDocument | StartListeningContext): void {
     const context = target instanceof StartListeningContext ? target : null;
     const doc = context ? context.getDoc() : (target as ScDocument);
     this.mxGroup?.endAllGroupListening(doc);
+    if (doc.IsClipOrUndo() || doc.GetNoListening() || this.IsInChangeTrack()) return;
     doc.SetDetectiveDirty(true);
     if (this.pCode.IsRecalcModeAlways()) {
       doc.StartListeningArea(BCA_LISTEN_ALWAYS(), false, this);
@@ -514,6 +536,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     const context = target instanceof EndListeningContext ? target : null;
     const doc = context ? context.getDoc() : (target as ScDocument);
     this.mxGroup?.endAllGroupListening(doc);
+    if (doc.IsClipOrUndo() || this.IsInChangeTrack()) return;
     if (!this.HasBroadcaster()) return;
     doc.SetDetectiveDirty(true);
     const code = context ? (context.getOldCode() ?? this.pCode) : (oldCode ?? this.pCode);

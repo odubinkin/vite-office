@@ -1,4 +1,5 @@
 /** @fileoverview ScUndoSelectionAttr consumed single/multi-mark pattern path over a real attribute-only undo document;rich text,merge and VCL painting remain unported. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { SfxPoolItemHolder } from "../../../../svl/source/items/itemset";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import { AdjustBlockHeight } from "../view/viewfun2";
@@ -34,7 +35,7 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
     this.aRange = new ScRange(range);
     this.aApplyPattern = new CellAttributeHolder(apply);
     this.aRangeCover = new ScRange(cover);
-    const pool = shell.GetDocument().GetPool();
+    const pool = shell.GetDocument().GetPool() as ScDocumentPool;
     this.maLineOuter = new SfxPoolItemHolder(pool, outer ?? null);
     this.maLineInner = new SfxPoolItemHolder(pool, inner ?? null);
   }

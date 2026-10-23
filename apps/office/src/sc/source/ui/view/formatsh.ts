@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScFormatShell font/color/alignment operations through native script sets,merged selection patterns and attribute history;rich-edit,dialog and device layout services remain unported. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../../editeng/source/items/textitem";
 
 import {
@@ -230,8 +231,8 @@ export class ScFormatShell {
       return true;
     }
     if (slot === 10188 || slot === 10024) {
-      const oldSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
-        next = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+      const oldSet = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
+        next = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
         current = view.GetDefaultFrameLine();
       try {
         const outer = args.find(
@@ -326,7 +327,9 @@ export class ScFormatShell {
   SetColor(kind: CalcColorKind, color?: SvxColorItem): boolean {
     const which = kind === "font" ? 109 : 148,
       doc = this.shell.GetDocument(),
-      old = this.SelectionItem(which) ?? doc.GetPool().GetUserOrPoolDefaultItem(which),
+      old =
+        this.SelectionItem(which) ??
+        (doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(which),
       item = (old as SvxColorItem | SvxBrushItem).Clone();
     if (color === undefined) {
       const recent = this.shell.GetRecentColor(calcColorSlots[kind]);
@@ -360,7 +363,7 @@ export class ScFormatShell {
   }
   /** Copies the complete toolbox item through the original shared script-set owner. @param font - Source item. @param script - Selection flags. @returns Changed. */
   SetFontFamily(font: SvxFontItem, script: SvtScriptType): boolean {
-    const set = new SvxScriptSetItem(10007, this.shell.GetDocument().GetPool());
+    const set = new SvxScriptSetItem(10007, this.shell.GetDocument().GetPool() as ScDocumentPool);
     set.PutItemForScriptType(script, font);
     const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
     delta.GetItemSetWritable().PutSet(set.GetItemSet(), false);
@@ -409,7 +412,7 @@ export class ScFormatShell {
   }
   /** Native SID_GROW_FONT_SIZE/SID_SHRINK_FONT_SIZE body retains unsigned growth and signed shrink conversion before source limits. @param grow - Original grow slot selection. @param script - Actual selection-script mask. @returns Whether document changed. */
   ChangeFontSize(grow: boolean, script: SvtScriptType): boolean {
-    const set = new SvxScriptSetItem(10015, this.shell.GetDocument().GetPool());
+    const set = new SvxScriptSetItem(10015, this.shell.GetDocument().GetPool() as ScDocumentPool);
     set.GetItemSet().PutSet(this.SelectionPattern().GetItemSet(), false);
     const current = set.GetItemOfScript(script) as SvxFontHeightItem | undefined;
     if (current === undefined) return false;
@@ -431,7 +434,7 @@ export class ScFormatShell {
   }
   /** Native explicit FontHeight applies all three scripts and preserves the complete height/property/unit payload. @param height - Complete source item. @returns Changed. */
   SetFontHeight(height: SvxFontHeightItem): boolean {
-    const set = new SvxScriptSetItem(10015, this.shell.GetDocument().GetPool());
+    const set = new SvxScriptSetItem(10015, this.shell.GetDocument().GetPool() as ScDocumentPool);
     set.PutItemForScriptType(
       SvtScriptType.LATIN | SvtScriptType.ASIAN | SvtScriptType.COMPLEX,
       height,
@@ -529,7 +532,9 @@ export class ScFormatShell {
       new SvxUnderlineItem(
         (this.GetUnderlineStyle() ??
           (
-            this.shell.GetDocument().GetPool().GetUserOrPoolDefaultItem(104) as SvxUnderlineItem
+            (this.shell.GetDocument().GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(
+              104,
+            ) as SvxUnderlineItem
           ).GetLineStyle()) === style
           ? FontLineStyle.LINESTYLE_NONE
           : style,
@@ -546,7 +551,7 @@ export class ScFormatShell {
       const slot = format === "bold" ? 10009 : 10008,
         scripts = SvtScriptType.LATIN | SvtScriptType.ASIAN | SvtScriptType.COMPLEX,
         old = SvxScriptSetItem.GetItemOfScript(slot, this.SelectionPattern().GetItemSet(), scripts),
-        set = new SvxScriptSetItem(slot, doc.GetPool());
+        set = new SvxScriptSetItem(slot, doc.GetPool() as ScDocumentPool);
       if (format === "bold") {
         const value =
           enabled ?? !(old && (old as SvxWeightItem).GetWeight() === FontWeight.WEIGHT_BOLD);
@@ -566,7 +571,7 @@ export class ScFormatShell {
     } else {
       const item = new SvxUnderlineItem(
         (this.SelectionItem(104) ??
-          doc.GetPool().GetUserOrPoolDefaultItem(104)) as SvxUnderlineItem,
+          (doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(104)) as SvxUnderlineItem,
       );
       const value = enabled ?? item.GetLineStyle() === FontLineStyle.LINESTYLE_NONE;
       item.SetLineStyle(value ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);

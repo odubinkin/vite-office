@@ -15,6 +15,8 @@ export function Dispose(this: ScDocument): void {
     let cell;
     while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
   }
+  if (this["mxPoolHelper"] && !this.IsClipOrUndo()) this["mxPoolHelper"].SourceDocumentGone();
+  this["mxPoolHelper"] = null;
 }
 
 /** Releases actual attribute registrations at document closure. @param this - Actual document instance. @returns Nothing. */

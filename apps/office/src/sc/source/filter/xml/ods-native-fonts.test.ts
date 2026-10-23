@@ -1,4 +1,5 @@
 /** @fileoverview Native five-field three-script cell fonts survive the actual shared font pool and ODS package path. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
@@ -105,7 +106,9 @@ it("retains missing-face defaults and diagnoses unported resources and invalid s
     '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><office:automatic-styles><style:style style:name="ce" style:family="table-cell"><style:text-properties style:font-name="Absent"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row><table:table-cell table:style-name="ce"/></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>',
   );
   expect(diagnostics).toContain("missing font declaration");
-  expect(font(doc, 100).equals(doc.GetPool().GetUserOrPoolDefaultItem(100))).toBe(true);
+  expect(
+    font(doc, 100).equals((doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(100)),
+  ).toBe(true);
   doc.DisposeAttributes();
 });
 it("resolves an independently authored styles-stream declaration referenced by content", /** Exercises the actual package wrapper and common XMLFontStylesContext. @returns Completion. */ async () => {

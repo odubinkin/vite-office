@@ -1,4 +1,5 @@
 /** @fileoverview Source DeleteHardAttr run mutation,style/merge preservation and original allocated-column deletion witnesses. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress, ScRange } from "../../../inc/address";
@@ -12,7 +13,7 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 /** Constructs a real source pattern with optional preserved style name and merge flags. @param doc - Actual document. @param named - Whether named. @returns Holder. */
 function pattern(doc: ScDocument, named = false): CellAttributeHolder {
-  const set = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+  const set = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
     name = unicode("Named"),
     p = new ScPatternAttr(doc.getCellAttributeHelper(), set, named ? name : undefined);
   set.ClearItem();
@@ -131,7 +132,7 @@ it("preserves original allocated-column clamp and leaves default-column tails un
 
 it("reveals actual inherited item values while retaining original parent identity and style name", /** Uses a genuine SfxItemSet parent rather than a browser style projection. @returns Nothing. */ () => {
   const doc = new ScDocument(),
-    parent = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+    parent = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
     name = unicode("Named"),
     source = new ScPatternAttr(doc.getCellAttributeHelper(), undefined, name),
     a = new ScAttrArray(0, 0, doc);

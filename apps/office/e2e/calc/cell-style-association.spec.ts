@@ -37,7 +37,7 @@ test("retains native pattern style inheritance and registered rename/delete in t
             }
           ).CalcStyleAssociationFixture,
           d = new n.ScDocument(),
-          pool = new n.SfxStyleSheetPool(d.GetPool()),
+          pool = new n.SfxStyleSheetPool(required(d.GetPool())),
           helper = d.getCellAttributeHelper(),
           name = n.unicode("Native style"),
           renamed = n.unicode("Renamed style"),

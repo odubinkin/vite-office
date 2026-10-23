@@ -1,4 +1,5 @@
 /** @fileoverview Original native box defaults,canonical cache,selection-frame validity/envelopes and existing-line transformations over real documents. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress, ScRange } from "../../../inc/address";
@@ -68,7 +69,7 @@ function widths(item: SvxBoxItem): (number | undefined)[] {
 it("registers exact native protection/outer/inner defaults and slots with real table/distance flags", /** Actual pool metadata. @returns Nothing. */ () => {
   const doc = document();
   try {
-    const pool = doc.GetPool(),
+    const pool = doc.GetPool() as ScDocumentPool,
       inner = pool.GetUserOrPoolDefaultItem(151) as SvxBoxInfoItem;
     expect(pool.GetWhichIDFromSlotID(10024)).toBe(150);
     expect(pool.GetWhichIDFromSlotID(10023)).toBe(151);
@@ -90,7 +91,7 @@ it("uses real canonical cached transformations and source set-merge border prese
   pattern.ItemSetPut(old);
   const holder = new CellAttributeHolder(pattern, true),
     empty = new CellAttributeHolder(),
-    set = new SfxItemSet(doc.GetPool(), [[100, 151]]),
+    set = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 151]]),
     next = new SvxBoxItem(150);
   next.SetLine(new SvxBorderLine(null, 40), Edge.LEFT);
   set.Put(next);

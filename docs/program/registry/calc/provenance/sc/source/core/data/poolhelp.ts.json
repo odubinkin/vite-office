@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/poolhelp.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/poolhelp.cxx",
+    "localSymbols": [
+      "ScPoolHelper"
+    ],
+    "upstreamSymbols": [
+      "ScPoolHelper::ScPoolHelper",
+      "ScPoolHelper::SourceDocumentGone"
+    ],
+    "preservedResponsibilities": [
+      "Block75 document-mode work in progress now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,source auto-calc defaults,independent string pools,normal/function-access-only ScPoolHelper and broadcast-area allocation,and nullable GetPool/GetStyleSheetPool contracts. Actual helper owns ScDocumentPool and ScStyleSheetPool on the existing shared style base. SourceDocumentGone clears the actual style-pool source pointer;managed references retain physical identity without a global reference-count simulator. CellAttributeHelper is allocated lazily and rejects unshared clipboard/undo access as native assertions require. Real document NoListening and formula change-track membership flags preserve native start/end subscription asymmetry after group teardown. Tests use genuine documents,resources and listeners. Existing normal-document shell/export/test consumers explicitly borrow the known owned pool at original dereference boundaries;nullable document API remains honest. Calc style creation/copy factories explicitly reject unsupported ScStyleSheet construction rather than creating the wrong shared style type. Standard-style population,formatter/edit-engine services,clipboard resource sharing/reset/paste belong outside this consumed allocation/lifetime slice. Full closure/raw100 and broad native parity remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Calc style factories and standard styles,number formatter,EditEngine pool,clipboard sharing/reset/paste and complete document services remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/poolhelp.ts",
+          "marker": "ScPoolHelper"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+          "marker": "constructs native mode"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/poolhelp.cxx",
+          "marker": "ScPoolHelper::ScPoolHelper"
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -99,7 +100,9 @@ export class ScXMLExport {
   exportContent(): string {
     this.fontPool = new XMLFontAutoStylePool();
     for (const which of [100, 111, 116]) {
-      const font = this.document.GetPool().GetUserOrPoolDefaultItem(which) as SvxFontItem;
+      const font = (this.document.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(
+        which,
+      ) as SvxFontItem;
       this.fontPool.Add(
         font.GetFamilyName(),
         font.GetStyleName(),

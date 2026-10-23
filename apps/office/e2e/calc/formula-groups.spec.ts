@@ -7,7 +7,7 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcGroupFixture", [
-    { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
+    { module: "src/sc/inc/document.ts", names: ["ScDocument", "ScDocumentMode"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
     { module: "src/sc/inc/formulacell.ts", names: ["ScFormulaCell", "ScFormulaCellGroup"] },
     {
@@ -100,7 +100,50 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
           ),
           independentLast = replacement.GetCode() !== group.mpCode && group.mnLength === 2;
         doc.Dispose();
-        return { initial, changed, detached, sharedCode, hashPresent, shortened, independentLast };
+        const modes = [
+          n.ScDocumentMode.SCDOCMODE_DOCUMENT,
+          n.ScDocumentMode.SCDOCMODE_CLIP,
+          n.ScDocumentMode.SCDOCMODE_UNDO,
+          n.ScDocumentMode.SCDOCMODE_FUNCTIONACCESS,
+        ].map(
+          /** Reads genuine native resource allocation and lifetime in this realm. @param mode - Construction mode. @returns Consumed mode observations. */ (
+            mode,
+          ) => {
+            const document = new n.ScDocument(mode),
+              stylePool = document.GetStyleSheetPool(),
+              pool = document.GetPool(),
+              auto = document.GetAutoCalc();
+            const flags = [document.IsClipboard(), document.IsUndo(), document.IsFunctionAccess()];
+            let value: number | null = null;
+            if (auto) {
+              document.InsertTab(0, n.unicode("Functions"));
+              document.SetValue(new n.ScAddress(), 4);
+              document.SetFormula(new n.ScAddress(1, 0, 0), n.unicode("=A1*2"), g);
+              value = document.GetValue(new n.ScAddress(1, 0, 0));
+            }
+            const owned =
+              pool !== null && stylePool?.GetDocument() === document && document.GetBASM() !== null;
+            document.Dispose();
+            return {
+              mode,
+              flags,
+              auto,
+              owned,
+              value,
+              detached: (stylePool?.GetDocument() ?? null) === null,
+            };
+          },
+        );
+        return {
+          initial,
+          changed,
+          detached,
+          sharedCode,
+          hashPresent,
+          shortened,
+          independentLast,
+          modes,
+        };
       }
       const script = Array.from(document.scripts).find(
         /** Locates the actual source bundle. @param script - DOM script. @returns Match. */ (
@@ -146,6 +189,26 @@ test("shares actual formula code and delivers grouped changes in browser and Wor
     hashPresent: true,
     shortened: [24, 63, 48],
     independentLast: true,
+    modes: [
+      { mode: 0, flags: [false, false, false], auto: true, owned: true, value: 8, detached: true },
+      {
+        mode: 1,
+        flags: [true, false, false],
+        auto: false,
+        owned: false,
+        value: null,
+        detached: true,
+      },
+      {
+        mode: 2,
+        flags: [false, true, false],
+        auto: false,
+        owned: false,
+        value: null,
+        detached: true,
+      },
+      { mode: 3, flags: [false, false, true], auto: true, owned: true, value: 8, detached: true },
+    ],
   };
   expect(result.main).toEqual(expected);
   expect(result.other).toEqual({ value: expected, dom: "undefined" });
