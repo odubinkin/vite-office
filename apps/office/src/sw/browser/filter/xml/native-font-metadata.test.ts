@@ -9,7 +9,11 @@ import {
   TextAlign,
   FontWeight,
   FontItalic,
+  FontLineStyle,
+  FontStrikeout,
+  FontEmphasisMark,
 } from "../../../../tools/inc/fontenum";
+import { FontRelief } from "../../../../vcl/inc/fntstyle";
 import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
 import { SwNumFormat, SwNumRule } from "../../../source/core/doc/number";
 import { createWriterDocument } from "../../../source/core/doc/doc";
@@ -48,6 +52,13 @@ it("preserves all represented metadata through numbering copies and Worker recor
     transparent: true,
     alignment: 0,
     fontSize: [0, 0],
+    outline: false,
+    shadow: false,
+    underline: 0,
+    overline: 0,
+    strikeout: 0,
+    relief: 0,
+    emphasisMark: 0,
   });
   const restored = decodeWriterDocument(record).GetNumRuleTable()[0] as SwNumRule;
   expect(
@@ -101,6 +112,13 @@ it("preserves every represented Font value through real numbering and structured
   font.SetFontSize(new Size(-12, 1234));
   font.SetWeight(FontWeight.WEIGHT_SEMIBOLD);
   font.SetItalic(FontItalic.ITALIC_NORMAL);
+  font.SetOutline(true);
+  font.SetShadow(true);
+  font.SetUnderline(FontLineStyle.LINESTYLE_DOUBLEWAVE);
+  font.SetOverline(FontLineStyle.LINESTYLE_BOLD);
+  font.SetStrikeout(FontStrikeout.STRIKEOUT_X);
+  font.SetRelief(FontRelief.Engraved);
+  font.SetEmphasisMark(FontEmphasisMark.Disc | FontEmphasisMark.PosBelow);
   const format = new SwNumFormat();
   format.SetBulletFont(font);
   const doc = createWriterDocument(),
@@ -121,6 +139,13 @@ it("preserves every represented Font value through real numbering and structured
     restored?.GetFontHeight(),
     restored?.GetWeight(),
     restored?.GetItalic(),
+    restored?.IsOutline(),
+    restored?.IsShadow(),
+    restored?.GetUnderline(),
+    restored?.GetOverline(),
+    restored?.GetStrikeout(),
+    restored?.GetRelief(),
+    restored?.GetEmphasisMark(),
   ]).toEqual([
     0x80123456,
     0xabcdef,
@@ -130,5 +155,12 @@ it("preserves every represented Font value through real numbering and structured
     1234,
     FontWeight.WEIGHT_SEMIBOLD,
     FontItalic.ITALIC_NORMAL,
+    true,
+    true,
+    11,
+    12,
+    6,
+    2,
+    8195,
   ]);
 });

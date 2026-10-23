@@ -27,6 +27,13 @@ test("preserves shared Font values in Chromium and a DOM-free Worker document ro
       font.SetTransparent(false);
       font.SetAlignment(2);
       font.SetFontSize(new n.Size(-12, 1234));
+      font.SetOutline(true);
+      font.SetShadow(true);
+      font.SetUnderline(11);
+      font.SetOverline(12);
+      font.SetStrikeout(6);
+      font.SetRelief(2);
+      font.SetEmphasisMark(8195);
       const format = new n.SwNumFormat();
       format.SetBulletFont(font);
       const doc = n.createWriterDocument(),
@@ -55,6 +62,13 @@ test("preserves shared Font values in Chromium and a DOM-free Worker document ro
             font.GetAlignment(),
             font.GetAverageFontWidth(),
             font.GetFontHeight(),
+            font.IsOutline(),
+            font.IsShadow(),
+            font.GetUnderline(),
+            font.GetOverline(),
+            font.GetStrikeout(),
+            font.GetRelief(),
+            font.GetEmphasisMark(),
           ];
         };
       const url = URL.createObjectURL(
@@ -91,6 +105,22 @@ test("preserves shared Font values in Chromium and a DOM-free Worker document ro
       }
     },
   );
-  const expected = ["Transport", "Native", 0x80123456, 0xabcdef, false, 2, -12, 1234];
+  const expected = [
+    "Transport",
+    "Native",
+    0x80123456,
+    0xabcdef,
+    false,
+    2,
+    -12,
+    1234,
+    true,
+    true,
+    11,
+    12,
+    6,
+    2,
+    8195,
+  ];
   expect(result).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

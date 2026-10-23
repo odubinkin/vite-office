@@ -11,8 +11,44 @@ import {
   SvxUnderlineItem,
 } from "../../../../editeng/source/items/textitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
-import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import {
+  FontItalic,
+  FontWeight,
+  FontLineStyle,
+  FontStrikeout,
+} from "../../../../tools/inc/fontenum";
 import { getParagraphStyleItemSetForPreview } from "../../uibase/app/docstyle";
+import { Font } from "../../../../vcl/source/font/font";
+import { setStylePreviewFontDecorations } from "../../../../svx/source/tbxctrls/tbcontrl.stylepreview";
+
+it("prepares inherited Writer underline and strikeout in all three preview font values", /** Uses the real current Writer style/item pool; unimplemented Writer decoration slots are not fabricated. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    const parent = doc.MakeTextFormatColl(
+      "Decorated parent",
+      doc.GetDfltTextFormatColl(),
+      "decoration-parent",
+    );
+    parent.SetFormatAttr(
+      new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, H.RES_CHRATR_UNDERLINE),
+    );
+    parent.SetFormatAttr(
+      new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_BOLD, H.RES_CHRATR_CROSSEDOUT),
+    );
+    const child = doc.MakeTextFormatColl("Decorated child", parent, "decoration-child");
+    child.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_WAVE, H.RES_CHRATR_UNDERLINE));
+    const preview = getParagraphStyleItemSetForPreview(doc, child.id);
+    expect(preview).toBeDefined();
+    const latin = new Font(),
+      asian = new Font(),
+      complex = new Font();
+    setStylePreviewFontDecorations(preview as NonNullable<typeof preview>, latin, asian, complex);
+    for (const font of [latin, asian, complex])
+      expect([font.GetUnderline(), font.GetStrikeout()]).toEqual([10, 4]);
+  } finally {
+    doc.Dispose();
+  }
+});
 
 it("resolves every represented character preview slot in both directions with its actual native item", /** Pins init.cxx numeric identities independently of shared declarations. @returns Nothing. */ () => {
   const doc = new SwDoc();

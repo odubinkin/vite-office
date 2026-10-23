@@ -20,7 +20,116 @@ import {
   setStylePreviewFontName,
   setStylePreviewFontSize,
   setStylePreviewFontStyle,
+  setStylePreviewFontDecorations,
 } from "./tbcontrl.stylepreview";
+import * as slots from "../../../editeng/inc/editids";
+import { SvxContourItem } from "../../../editeng/inc/contouritem";
+import { SvxShadowedItem } from "../../../editeng/inc/shdditem";
+import { SvxCharReliefItem } from "../../../editeng/inc/charreliefitem";
+import { SvxUnderlineItem, SvxOverlineItem } from "../../../editeng/inc/udlnitem";
+import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
+import { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import { FontLineStyle, FontStrikeout, FontEmphasisMark } from "../../../tools/inc/fontenum";
+import { FontRelief } from "../../../vcl/inc/fntstyle";
+
+it("copies inherited, local and default decoration items into all actual script fonts", /** Uses real item pools and native slot identities, without a parallel style store. @returns Nothing. */ () => {
+  const pool = new SfxItemPool();
+  const defaults = [
+    new SvxContourItem(false, 1),
+    new SvxShadowedItem(false, 2),
+    new SvxCharReliefItem(FontRelief.NONE, 3),
+    new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, 4),
+    new SvxOverlineItem(FontLineStyle.LINESTYLE_NONE, 5),
+    new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, 6),
+    new SvxEmphasisMarkItem(FontEmphasisMark.NONE, 7),
+  ];
+  const declared = [
+    slots.SID_ATTR_CHAR_CONTOUR,
+    slots.SID_ATTR_CHAR_SHADOWED,
+    slots.SID_ATTR_CHAR_RELIEF,
+    slots.SID_ATTR_CHAR_UNDERLINE,
+    slots.SID_ATTR_CHAR_OVERLINE,
+    slots.SID_ATTR_CHAR_STRIKEOUT,
+    slots.SID_ATTR_CHAR_EMPHASISMARK,
+  ];
+  expect(declared).toEqual([10012, 10010, 10920, 10014, 11568, 10013, 10899]);
+  for (const [index, item] of defaults.entries())
+    pool.RegisterDefaultItem(item, undefined, declared[index]);
+  const parent = new SfxItemSet(pool, [[1, 7]]),
+    child = new SfxItemSet(pool, [[1, 7]], parent);
+  parent.Put(new SvxContourItem(true, 1));
+  parent.Put(new SvxShadowedItem(true, 2));
+  parent.Put(new SvxCharReliefItem(FontRelief.Embossed, 3));
+  parent.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, 4));
+  parent.Put(new SvxOverlineItem(FontLineStyle.LINESTYLE_BOLD, 5));
+  parent.Put(new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_SLASH, 6));
+  parent.Put(new SvxEmphasisMarkItem(FontEmphasisMark.Accent | FontEmphasisMark.PosAbove, 7));
+  child.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_WAVE, 4));
+  const latin = new Font(),
+    asian = new Font(),
+    complex = new Font();
+  latin.SetFamilyName("Latin");
+  asian.SetFamilyName("Asian");
+  complex.SetFamilyName("Complex");
+  setStylePreviewFontDecorations(child, latin, asian, complex);
+  for (const font of [latin, asian, complex])
+    expect([
+      font.IsOutline(),
+      font.IsShadow(),
+      font.GetRelief(),
+      font.GetUnderline(),
+      font.GetOverline(),
+      font.GetStrikeout(),
+      font.GetEmphasisMark(),
+    ]).toEqual([true, true, 1, 10, 12, 5, 4100]);
+  expect([latin.GetFamilyName(), asian.GetFamilyName(), complex.GetFamilyName()]).toEqual([
+    "Latin",
+    "Asian",
+    "Complex",
+  ]);
+  const empty = new SfxItemSet(pool, [[1, 7]]);
+  setStylePreviewFontDecorations(empty, latin, asian, complex);
+  for (const font of [latin, asian, complex])
+    expect([
+      font.IsOutline(),
+      font.IsShadow(),
+      font.GetRelief(),
+      font.GetUnderline(),
+      font.GetOverline(),
+      font.GetStrikeout(),
+      font.GetEmphasisMark(),
+    ]).toEqual([false, false, 0, 0, 0, 0, 0]);
+  for (const id of [1, 3, 5, 7]) child.InvalidateItem(id);
+  for (const id of [2, 4, 6]) child.DisableItem(id);
+  for (const font of [latin, asian, complex]) {
+    font.SetOutline(true);
+    font.SetShadow(true);
+    font.SetRelief(FontRelief.Engraved);
+    font.SetUnderline(FontLineStyle.LINESTYLE_DOUBLE);
+    font.SetOverline(FontLineStyle.LINESTYLE_DOUBLE);
+    font.SetStrikeout(FontStrikeout.STRIKEOUT_DOUBLE);
+    font.SetEmphasisMark(FontEmphasisMark.Circle);
+  }
+  const before = [new Font(latin), new Font(asian), new Font(complex)];
+  setStylePreviewFontDecorations(child, latin, asian, complex);
+  for (const [index, font] of [latin, asian, complex].entries())
+    expect(font.Equals(before[index] as Font)).toBe(true);
+});
+
+it("retains existing script decoration values when the pool does not know the slots", /** Missing optional items must not reset a previously prepared font. @returns Nothing. */ () => {
+  const set = new SfxItemSet(new SfxItemPool(), [[1, 7]]),
+    font = new Font();
+  font.SetOutline(true);
+  font.SetShadow(true);
+  font.SetUnderline(FontLineStyle.LINESTYLE_BOLD);
+  const before = new Font(font);
+  const asian = new Font(font),
+    complex = new Font(font);
+  setStylePreviewFontDecorations(set, font, asian, complex);
+  expect(font.Equals(before)).toBe(true);
+  expect(asian.Equals(before)).toBe(true);
+  expect(complex.Equals(before)).toBe(true);
+});
 
 /** Creates a real pool with four native typed slot defaults and parent/child sets. @returns Actual value owners. */
 function fixture() {

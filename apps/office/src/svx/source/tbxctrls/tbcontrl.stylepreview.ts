@@ -7,6 +7,21 @@ import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import type { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import type { SvxPostureItem } from "../../../editeng/inc/postitem";
 import type { SvxWeightItem } from "../../../editeng/inc/wghtitem";
+import type { SvxContourItem } from "../../../editeng/inc/contouritem";
+import type { SvxShadowedItem } from "../../../editeng/inc/shdditem";
+import type { SvxCharReliefItem } from "../../../editeng/inc/charreliefitem";
+import type { SvxUnderlineItem, SvxOverlineItem } from "../../../editeng/inc/udlnitem";
+import type { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
+import type { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import {
+  SID_ATTR_CHAR_CONTOUR,
+  SID_ATTR_CHAR_SHADOWED,
+  SID_ATTR_CHAR_RELIEF,
+  SID_ATTR_CHAR_UNDERLINE,
+  SID_ATTR_CHAR_OVERLINE,
+  SID_ATTR_CHAR_STRIKEOUT,
+  SID_ATTR_CHAR_EMPHASISMARK,
+} from "../../../editeng/inc/editids";
 
 /** Original GetWhich admits inherited/default states, but excludes unknown, disabled and invalid. @param set - Actual preview set. @param slot - Original slot identity. @returns Admitted Which or no identity. */
 function getWhich(set: SfxItemSet, slot: number): number | undefined {
@@ -56,4 +71,49 @@ export function setStylePreviewFontStyle(
   const weightWhich = getWhich(set, weight);
   if (weightWhich !== undefined)
     font.SetWeight((set.Get(weightWhich) as SvxWeightItem).GetWeight());
+}
+
+/** Original SetupEntry base-Font decoration assignments to all three script fonts. Derived SvxFont case mapping remains a separate owner and is not emulated here. @param set - Actual preview item set. @param latin - Actual Latin font. @param asian - Actual CJK font. @param complex - Actual CTL font. @returns Nothing. */
+export function setStylePreviewFontDecorations(
+  set: SfxItemSet,
+  latin: Font,
+  asian: Font,
+  complex: Font,
+): void {
+  const fonts = [latin, asian, complex];
+  const contour = set.GetItem(SID_ATTR_CHAR_CONTOUR) as SvxContourItem | undefined;
+  if (contour !== undefined) {
+    const value = contour.GetValue();
+    for (const font of fonts) font.SetOutline(value);
+  }
+  const shadow = set.GetItem(SID_ATTR_CHAR_SHADOWED) as SvxShadowedItem | undefined;
+  if (shadow !== undefined) {
+    const value = shadow.GetValue();
+    for (const font of fonts) font.SetShadow(value);
+  }
+  const relief = set.GetItem(SID_ATTR_CHAR_RELIEF) as SvxCharReliefItem | undefined;
+  if (relief !== undefined) {
+    const value = relief.GetValue();
+    for (const font of fonts) font.SetRelief(value);
+  }
+  const underline = set.GetItem(SID_ATTR_CHAR_UNDERLINE) as SvxUnderlineItem | undefined;
+  if (underline !== undefined) {
+    const value = underline.GetLineStyle();
+    for (const font of fonts) font.SetUnderline(value);
+  }
+  const overline = set.GetItem(SID_ATTR_CHAR_OVERLINE) as SvxOverlineItem | undefined;
+  if (overline !== undefined) {
+    const value = overline.GetValue();
+    for (const font of fonts) font.SetOverline(value);
+  }
+  const strikeout = set.GetItem(SID_ATTR_CHAR_STRIKEOUT) as SvxCrossedOutItem | undefined;
+  if (strikeout !== undefined) {
+    const value = strikeout.GetStrikeout();
+    for (const font of fonts) font.SetStrikeout(value);
+  }
+  const emphasis = set.GetItem(SID_ATTR_CHAR_EMPHASISMARK) as SvxEmphasisMarkItem | undefined;
+  if (emphasis !== undefined) {
+    const value = emphasis.GetEmphasisMark();
+    for (const font of fonts) font.SetEmphasisMark(value);
+  }
 }

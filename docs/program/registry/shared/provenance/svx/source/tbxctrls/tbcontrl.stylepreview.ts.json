@@ -9,20 +9,23 @@
       "setStylePreviewFontName",
       "setStylePreviewFontSize",
       "setStylePreviewFontStyle",
-      "StylePreviewLogicToPixel"
+      "StylePreviewLogicToPixel",
+      "setStylePreviewFontDecorations"
     ],
     "upstreamPath": "svx/source/tbxctrls/tbcontrl.cxx",
     "upstreamSymbols": [
       "GetWhich",
       "SetFont",
       "SetFontSize",
-      "SetFontStyle"
+      "SetFontStyle",
+      "SetupEntry"
     ],
     "preservedResponsibilities": [
-      "Task6764KT extracts the actual SvxStyleBox SetFont/SetFontSize/SetFontStyle operations. Real SfxItemSet slot mapping and inherited/default state determine admission;unknown,disabled and invalid states preserve the recipient. Font name assignment deliberately copies only family/style names,not the other FontItem metadata. Posture precedes weight and each slot is independent. Size uses the absolute item height through an actual caller-owned device conversion and current shell map unit;absence of a shell returns false and no CSS DPI is guessed. These are extracted value operations over the shared Font base,not a partial SvxFont or SvxStyleBox class. Full SetupEntry decorations/colors,EditEngine CheckScript,physical face selection,Canvas row integration and native widget services remain unfinished. No whole-module parity promotion."
+      "Task6764KT extracts the actual SvxStyleBox SetFont/SetFontSize/SetFontStyle operations. Real SfxItemSet slot mapping and inherited/default state determine admission;unknown,disabled and invalid states preserve the recipient. Font name assignment deliberately copies only family/style names,not the other FontItem metadata. Posture precedes weight and each slot is independent. Size uses the absolute item height through an actual caller-owned device conversion and current shell map unit;absence of a shell returns false and no CSS DPI is guessed. These are extracted value operations over the shared Font base,not a partial SvxFont or SvxStyleBox class. Full SetupEntry decorations/colors,EditEngine CheckScript,physical face selection,Canvas row integration and native widget services remain unfinished. No whole-module parity promotion.",
+      "Task6764KT additionally extracts the original SetupEntry base-Font decoration block. Real slot-aware SfxItemSet.GetItem resolves contour,shadow,relief,underline,overline,strikeout and emphasis;each actual item value is read once and assigned to Latin,CJK and CTL font values in source order. Unknown,invalid and disabled items preserve existing prepared values. Source default/local/inherited values and all seven operations are covered through actual pools;real Writer paragraph style tests cover its currently represented underline/strikeout slots. Derived SvxFont case mapping remains separate and is not replaced with text transformation. Full shell/pool/menu SetupEntry,concrete ICU analysis,remaining Writer decoration item mappings/filters and actual WYSIWYG popup paint remain incomplete."
     ],
     "omittedResponsibilities": [
-      "Full style font/decorations/color/script analysis and actual device/widget integration are unported;source helper tests do not prove browser raster parity."
+      "Full SetupEntry shell/pool/menu ownership,derived SvxFont case mapping,concrete ICU initialization and full device/widget paint remain incomplete;source tests are not a browser raster-parity certificate."
     ],
     "evidence": {
       "local": [
