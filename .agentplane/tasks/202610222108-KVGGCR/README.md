@@ -1,10 +1,10 @@
 ---
 id: "202610222108-KVGGCR"
 title: "Implement native internal clipboard fill and paste undo"
-status: "TODO"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -25,11 +25,21 @@ verification:
   note: null
   attempts: 0
 commit: null
-comments: []
-events: []
+comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
+events:
+  -
+    type: "status"
+    at: "2026-10-23T12:07:27.066Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-22T21:10:10.308Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-10-23T12:07:27.066Z"
+doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
   Summary: "Implement the original internal clipboard/PasteFromClip path required by empty-marked AutoSum instead of a repeated-cell shortcut."
