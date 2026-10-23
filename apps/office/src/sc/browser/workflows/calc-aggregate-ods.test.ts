@@ -5,7 +5,6 @@ import { IndexedDbDocumentStore } from "../../../framework/browser/storage/docum
 import { createCalcSession } from "../composition/calc-module";
 import { ScAddress } from "../../inc/address";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 it("retains native aggregate source and live dependency results across undo,redo,primary save and fresh ODS reopen", /** Uses actual controller,shell,filter,store and document graph. @returns Completion. */ async () => {
   const db = new IndexedDbDocumentStore(crypto.randomUUID(), new IDBFactory()),
@@ -31,7 +30,7 @@ it("retains native aggregate source and live dependency results across undo,redo
   assert(records[0]);
   const record = await db.load(records[0].id);
   assert(record);
-  expect(await new ZipFile(record.bytes).readTextEntry("content.xml")).toContain(
+  expect(record.content.files["content.xml"]).toContain(
     'table:formula="of:=SUM([.A1];[.B1];PRODUCT(2;3))"',
   );
   s.Close();

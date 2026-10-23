@@ -3,7 +3,6 @@ import { assert, expect, it } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
 import { createCalcSession } from "../composition/calc-module";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
 import { ScAddress } from "../../inc/address";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -38,8 +37,11 @@ it("automatically stores an imported5000-row sparse table and opens every scalar
   expect(session.controller.shell.IsModified()).toBe(false);
   const record = await db.load("large");
   assert(record);
-  expect(record.bytes.length).toBeLessThan(3 * 1024 * 1024);
-  const xml = await new ZipFile(record.bytes).readTextEntry("content.xml");
+  expect(new TextEncoder().encode(JSON.stringify(record.content)).length).toBeLessThan(
+    3 * 1024 * 1024,
+  );
+  const xml = record.content.files["content.xml"];
+  assert(typeof xml === "string");
   expect(xml.match(/table:number-columns-repeated="1022"/g)).toHaveLength(5000);
   expect(xml.match(/<table:table-cell\b/g)).toHaveLength(15000);
   session.Close();
