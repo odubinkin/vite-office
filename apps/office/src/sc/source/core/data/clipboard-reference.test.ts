@@ -19,6 +19,14 @@ import {
 } from "../../../inc/token";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { LANGUAGE_SYSTEM, LANGUAGE_ENGLISH_US } from "../../../../i18nlangtag/inc/lang";
+import { ScGlobal } from "../../../inc/global";
+import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
+import { ColumnBlockPosition } from "../../../inc/mtvelements";
+import { NoListening } from "../../../inc/types";
 import { UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -379,5 +387,120 @@ it("defers genuine range-operator,column-name and table-reference lexical code",
     copied.Dispose();
   }
   clip.Dispose();
+  doc.Dispose();
+});
+
+it("retains native format cache values across copy and invalidates original item mutation paths", /** Real item owners provide cached numeric keys and independent language fields. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    pattern = new ScPatternAttr(doc.getCellAttributeHelper()),
+    context = doc.GetNonThreadedContext();
+  expect(pattern.HasValidNumberFormat()).toBe(true);
+  expect(pattern.GetNumberFormat(context)).toBe(0);
+  expect(pattern.GetNumberFormatKey()).toBe(0);
+  expect(pattern.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+  pattern.ItemSetPut(new SfxUInt32Item(146, 7));
+  expect(pattern.GetNumberFormat(context)).toBe(7);
+  const copy = new ScPatternAttr(pattern);
+  expect(copy.GetNumberFormatKey()).toBe(7);
+  expect(copy.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+  pattern.ItemSetPut(new SvxLanguageItem(LANGUAGE_ENGLISH_US, 147));
+  expect(pattern.GetLanguageType()).toBe(LANGUAGE_ENGLISH_US);
+  expect(pattern.GetNumberFormat(null)).toBe(7);
+  expect(
+    /** Missing native formatter conversion is an explicit service boundary. @returns Format key. */ () =>
+      pattern.GetNumberFormat(context),
+  ).toThrow("language conversion");
+  pattern.ItemSetClearItem(147);
+  expect(pattern.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+  pattern.ItemSetPut(new SfxUInt32Item(146, SV_COUNTRY_LANGUAGE_OFFSET));
+  expect(pattern.GetNumberFormat(null)).toBe(SV_COUNTRY_LANGUAGE_OFFSET);
+  expect(
+    /** Missing native formatter conversion is an explicit service boundary. @returns Format key. */ () =>
+      pattern.GetNumberFormat(context),
+  ).toThrow("language conversion");
+  pattern.ClearItems([146, 0]);
+  expect(pattern.GetNumberFormatKey()).toBe(0);
+  pattern.GetItemSetWritable().InvalidateItem(146);
+  expect(pattern.HasValidNumberFormat()).toBe(false);
+  pattern.ItemSetClearItem(146);
+  pattern.GetItemSetWritable().InvalidateItem(147);
+  expect(pattern.HasValidNumberFormat()).toBe(false);
+  pattern.ItemSetClearItem(147);
+  expect(pattern.HasValidNumberFormat()).toBe(true);
+  copy.Dispose();
+  pattern.Dispose();
+  doc.Dispose();
+});
+it("bypasses uncached format fields during native threaded calculation and retains warmed caches", /** Only original ScGlobal state is changed and restored;no alternate pattern model is used. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    pattern = new ScPatternAttr(doc.getCellAttributeHelper()),
+    items = pattern.GetItemSetWritable(),
+    old = ScGlobal.bThreadedGroupCalcInProgress;
+  try {
+    ScGlobal.bThreadedGroupCalcInProgress = true;
+    items.Put(new SfxUInt32Item(146, 3));
+    items.Put(new SvxLanguageItem(LANGUAGE_ENGLISH_US, 147));
+    expect(pattern.GetNumberFormatKey()).toBe(3);
+    expect(pattern.GetLanguageType()).toBe(LANGUAGE_ENGLISH_US);
+    items.Put(new SfxUInt32Item(146, 4));
+    items.Put(new SvxLanguageItem(LANGUAGE_SYSTEM, 147));
+    expect(pattern.GetNumberFormatKey()).toBe(4);
+    expect(pattern.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+    ScGlobal.bThreadedGroupCalcInProgress = false;
+    expect(pattern.GetNumberFormatKey()).toBe(4);
+    expect(pattern.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+    ScGlobal.bThreadedGroupCalcInProgress = true;
+    items.Put(new SfxUInt32Item(146, 5));
+    items.Put(new SvxLanguageItem(LANGUAGE_ENGLISH_US, 147));
+    const copy = new ScPatternAttr(pattern);
+    expect(copy.GetNumberFormatKey()).toBe(4);
+    expect(copy.GetLanguageType()).toBe(LANGUAGE_SYSTEM);
+    pattern.InvalidateCaches();
+    expect(pattern.GetNumberFormatKey()).toBe(5);
+    expect(pattern.GetLanguageType()).toBe(LANGUAGE_ENGLISH_US);
+    copy.Dispose();
+  } finally {
+    ScGlobal.bThreadedGroupCalcInProgress = old;
+    pattern.Dispose();
+    doc.Dispose();
+  }
+});
+it("preserves native formula format requests through clone and both hinted adoption overloads", /** The real default/general and explicitly formatted patterns control inheritance independently of source requests. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const table = doc.FetchTable(0) as ScTable,
+    col = table.CreateColumnIfNotExists(0),
+    at =
+      /** Uses the actual destination column and sheet. @param row - Destination row. @returns Address. */ (
+        row: number,
+      ) => new ScAddress(0, row, 0);
+  const cell = new ScFormulaCell(doc, at(0), unicode("=1+2"), grammar);
+  expect(cell.NeedsNumberFormat()).toBe(false);
+  expect(col.SetFormulaCell(0, cell)).toBe(cell);
+  expect(cell.NeedsNumberFormat()).toBe(true);
+  const clone = new ScFormulaCell(cell, doc, at(1));
+  expect(clone.NeedsNumberFormat()).toBe(true);
+  clone.SetNeedNumberFormat(false);
+  expect(col.SetFormulaCell(1, clone, NoListening, false)).toBe(clone);
+  expect(clone.NeedsNumberFormat()).toBe(false);
+  const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+  pattern.ItemSetPut(new SfxUInt32Item(146, 7));
+  col.ApplyPattern(2, pattern);
+  const formatted = new ScFormulaCell(doc, at(2), unicode("=4"), grammar),
+    position = new ColumnBlockPosition();
+  col.InitBlockPosition(position);
+  expect(col.SetFormulaCell(position, 2, formatted, NoListening)).toBeUndefined();
+  expect(formatted.NeedsNumberFormat()).toBe(false);
+  const hinted = new ScFormulaCell(doc, at(3), unicode("=5"), grammar);
+  col.SetFormulaCell(position, 3, hinted, NoListening, false);
+  expect(hinted.NeedsNumberFormat()).toBe(false);
+  const hintedDefault = new ScFormulaCell(doc, at(4), unicode("=6"), grammar);
+  col.SetFormulaCell(position, 4, hintedDefault);
+  expect(hintedDefault.NeedsNumberFormat()).toBe(true);
+  formatted.SetNeedNumberFormat(true);
+  const requestedCopy = new ScFormulaCell(formatted, doc, at(5));
+  expect(requestedCopy.NeedsNumberFormat()).toBe(true);
+  col.SetFormulaCell(5, requestedCopy, NoListening, false);
+  pattern.Dispose();
   doc.Dispose();
 });

@@ -66,6 +66,8 @@ import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScItemPoolCache } from "../../../inc/poolcach";
+import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
+import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 
 import { ScAttrArray } from "./attarray";
@@ -146,6 +148,10 @@ export class ScColumnData {
   /** Borrows a canonical pattern. @param row - Row. @returns Pattern or null. */
   GetPattern(row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPattern(row);
+  }
+  /** Original column.hxx number-format forwarding uses this column's actual canonical pattern. @param context - Actual interpreter context. @param row - Valid row. @returns Effective native format key. */
+  GetNumberFormat(context: ScInterpreterContext, row: number): number {
+    return (this.pAttrArray.GetPattern(row) as ScPatternAttr).GetNumberFormat(context);
   }
   /** Borrows a complete attribute run. @param start - First output. @param end - Last output. @param row - Query row. @returns Pattern or null. */
   GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
@@ -677,32 +683,40 @@ export class ScColumn extends ScColumnData {
     );
     this.SetFormulaCell(row, cell);
   }
-  /** Adopts an already compiled native formula owner without reparsing its input text. The cell position/document must match this column and row. @param row - Target row. @param cell - Compiled owner. @param listening - Original column listening mode. @returns Adopted cell or null for invalid row. */
+  /** Adopts an already compiled native formula owner without reparsing its input text. The cell position/document must match this column and row. @param row - Target row. @param cell - Compiled owner. @param listening - Original column listening mode. @param inheritNumFormatIfNeeded - Native default true. @returns Adopted cell or null for invalid row. */
   SetFormulaCell(
     row: number,
     cell: ScFormulaCell,
     listening?: StartListeningType,
+    inheritNumFormatIfNeeded?: boolean,
   ): ScFormulaCell | null;
-  /** Original hinted formula adoption returns void;number-format inheritance remains outside the existing local default-format profile. @param block - Cached cursors. @param row - Row. @param cell - Owned formula. @param listening - Native listening default. @returns Nothing. */
+  /** Original hinted formula adoption returns void and inherits a requested general format. @param block - Cached cursors. @param row - Row. @param cell - Owned formula. @param listening - Native listening default. @param inheritNumFormatIfNeeded - Native default true. @returns Nothing. */
   SetFormulaCell(
     block: ColumnBlockPosition,
     row: number,
     cell: ScFormulaCell,
     listening?: StartListeningType,
+    inheritNumFormatIfNeeded?: boolean,
   ): void;
-  /** Binds both source formula adoption overloads to actual cell/group owners. @param first - Row or cursors. @param second - Formula or row. @param third - Listening mode or formula. @param fourth - Hinted listening mode. @returns Original nonhinted owner or void for the hinted overload. */
+  /** Binds both source formula adoption overloads to actual cell/group owners. @param first - Row or cursors. @param second - Formula or row. @param third - Listening mode or formula. @param fourth - Hinted listening mode or ordinary inheritance flag. @param fifth - Hinted inheritance flag. @returns Original nonhinted owner or void for the hinted overload. */
   SetFormulaCell(
     first: number | ColumnBlockPosition,
     second: ScFormulaCell | number,
     third?: StartListeningType | ScFormulaCell,
-    fourth: StartListeningType = SingleCellListening,
+    fourth: StartListeningType | boolean = SingleCellListening,
+    fifth = true,
   ): ScFormulaCell | null | void {
     const block = first instanceof ColumnBlockPosition ? first : null,
       row = block ? (second as number) : (first as number),
       cell = block ? (third as ScFormulaCell) : (second as ScFormulaCell),
-      listening = block ? fourth : ((third as StartListeningType) ?? SingleCellListening);
+      listening = block
+        ? (fourth as StartListeningType)
+        : ((third as StartListeningType) ?? SingleCellListening),
+      inherit = block ? fifth : typeof fourth === "boolean" ? fourth : true;
     if (!this.rDocument.ValidRow(row)) return block ? undefined : null;
     const rows = this.DetachFormulaCell(row);
+    const format = this.GetNumberFormat(this.rDocument.GetNonThreadedContext(), row);
+    if (format % SV_COUNTRY_LANGUAGE_OFFSET === 0 && inherit) cell.SetNeedNumberFormat(true);
     if (block) {
       block.miCellPos = this.maCells.set<ScFormulaCell | null>(
         block.miCellPos as ReturnType<CellStoreType["begin"]>,

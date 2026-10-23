@@ -57,6 +57,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         );
         source.GetValue();
         clip.SetFormulaCell(new n.ScAddress(0, 1, 2), source);
+        source.SetNeedNumberFormat(false);
         doc.SetValue(new n.ScAddress(2, 4, 0), 1);
         doc.SetValue(new n.ScAddress(3, 5, 0), 7);
         doc.SetFormula(new n.ScAddress(5, 0, 0), n.unicode("=SUM(C5:C6)"), grammar);
@@ -95,7 +96,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         if (!formulaCell) throw Error("Missing actual copied formula");
         const string = formulaCell.GetFormula(grammar),
           formula = n.text(string),
-          sparse = clip.FetchTable(0) === null;
+          sparse = clip.FetchTable(0) === null,
+          formatRequests = [source.NeedsNumberFormat(), formulaCell.NeedsNumberFormat()];
         string.dispose();
         const rowClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
         rowClip.ResetClip(doc, 0);
@@ -138,7 +140,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         clip.Dispose();
         undo.Dispose();
         doc.Dispose();
-        return { value, changed, formula, sparse, undoGeometryDisabled, undoShared, singleRow };
+        return {
+          value,
+          changed,
+          formula,
+          sparse,
+          undoGeometryDisabled,
+          undoShared,
+          singleRow,
+          formatRequests,
+        };
       }
       const script = Array.from(document.scripts).find(
         /** Locates the actual kernel compiler output. @param item - Script. @returns Match. */ (
@@ -184,6 +195,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoGeometryDisabled: true,
     undoShared: true,
     singleRow: [3, 7, 3, 3, 7, 3],
+    formatRequests: [false, false],
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

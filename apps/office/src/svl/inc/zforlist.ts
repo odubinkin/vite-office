@@ -18,3 +18,6 @@ export const SvNumFormatType = {
 } as const;
 /** Native typed flags can combine the declared format categories. */
 export type SvNumFormatType = number;
+
+/** Original number-format key block size per country/language. */
+export const SV_COUNTRY_LANGUAGE_OFFSET = 10000;

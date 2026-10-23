@@ -73,8 +73,19 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private bChanged = false;
   private bNeedListening = false;
   private bInChangeTrack = false;
+  private mbNeedsNumberFormat = false;
+  private mbAllowNumberFormatChange = false;
   private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
   readonly aPos: ScAddress;
+  /** Original explicit format request also enables later result-format changes. @param value - Requested state. @returns Nothing. */
+  SetNeedNumberFormat(value: boolean): void {
+    this.mbAllowNumberFormatChange = value;
+    this.mbNeedsNumberFormat = this.mbAllowNumberFormatChange;
+  }
+  /** Original copy/adoption metadata query. @returns Pending format request. */
+  NeedsNumberFormat(): boolean {
+    return this.mbNeedsNumberFormat;
+  }
   /** Original explicit recompilation flag setter. @param value - Compile state. @returns Nothing. */
   SetCompile(value: boolean): void {
     this.bCompile = value;
@@ -262,6 +273,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
       this.nFormatType = source.nFormatType;
+      this.mbNeedsNumberFormat = source.mbNeedsNumberFormat;
       this.pCode = source.pCode.Clone();
       this.aResult = new ScFormulaResult(source.aResult);
       this.bDirty = source.bDirty;

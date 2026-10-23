@@ -24,6 +24,7 @@ import {
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, RowSpan } from "../../../inc/columnspanset";
+import { SingleCellListening } from "../../../inc/types";
 import { InsertDeleteFlags } from "../../../inc/global";
 import type { ScDocument } from "../../../inc/document";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
@@ -317,6 +318,8 @@ export class CopyCellsFromClipHandler implements BlockFunction {
               this.destination.GetDoc(),
               new ScAddress(this.mnCol, row, this.mnTab),
             ),
+            SingleCellListening,
+            source.NeedsNumberFormat(),
           );
         }
         break;

@@ -7,7 +7,9 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/formulacell.cxx",
     "localSymbols": [
-      "ScFormulaCell"
+      "ScFormulaCell",
+      "SetNeedNumberFormat",
+      "NeedsNumberFormat"
     ],
     "upstreamSymbols": [
       "ScFormulaCell::ScFormulaCell",
@@ -30,7 +32,8 @@
       "Native copy construction now retains clipboard code errors and skips ordinary reference invalidation in CLIP/UNDO modes;clipboard destinations skip normal pool conversion and absolute adjustment,while undo retains the original absolute-adjustment branch. Foreign normal/undo pool conversion remains explicitly unported. Function-access documents execute actual scalar formulas and dependency updates. Relocated mixed valid/invalid local references exercise ordinary and context listener teardown without fabricated private graphs.",
       "Native copy retry now follows the additional CompileTokenArray !IsClipOrUndo guard:UNDO copies clear original nonempty code errors but defer recompilation;normal retry enables compute-II with the actual matrix flag and clears the cached result on successful compilation. Genuine malformed-formula undo-copy vectors verify this distinction without a fake document or private state injection.",
       "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
-      "Task76 also routes the ordinary source-string constructor through original Compile(formula,true,grammar), preserving changed/compile state and the native clipboard/undo early return with an empty token-array fallback. Undo-copy error tests use actual precompiled arrays rather than relying on the previous nonnative undo source-string compilation. Shared compiler subtotal/named/bad-opcode admission remains explicit;absent registration services are not simulated."
+      "Task76 also routes the ordinary source-string constructor through original Compile(formula,true,grammar), preserving changed/compile state and the native clipboard/undo early return with an empty token-array fallback. Undo-copy error tests use actual precompiled arrays rather than relying on the previous nonnative undo source-string compilation. Shared compiler subtotal/named/bad-opcode admission remains explicit;absent registration services are not simulated.",
+      "Task76: Original mbNeedsNumberFormat and mbAllowNumberFormatChange defaults,SetNeedNumberFormat,NeedsNumberFormat and copy-constructor request/reset behavior are represented. Full native result-format interpretation/compatibility and hard-format mutation remain unported;these metadata changes do not claim completion of those formatter services."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
