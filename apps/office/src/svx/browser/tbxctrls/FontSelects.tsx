@@ -1,9 +1,15 @@
 /** @fileoverview Actual Writer font-family/point-size widgets shared with Calc;the frame supplies selected value,availability and acceptance ports. */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { ComboBox } from "../../../vcl/browser/ComboBox";
 import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
 import { createBrowserFontItem } from "./font-item";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
+import {
+  getComboBoxMruEntries,
+  restoreComboBoxMru,
+  updateComboBoxMru,
+} from "../../../vcl/browser/combobox-mru";
+import { readFontMruEntries, saveFontMruEntries } from "../../../svtools/browser/font-mru-store";
 const noEmbeddedFontFamilies: readonly string[] = [];
 
 /** Device-backed font selector. @param props - Command surface properties. @returns Selector. */
@@ -29,6 +35,9 @@ export function FontNameSelect({
   readonly inSidebar?: boolean;
 }): React.JSX.Element {
   const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
+  const [recent, setRecent] = useState<readonly string[]>([]);
+  const recentRows = useRef<readonly string[]>([]),
+    hasFontList = useRef(false);
   const selected = String(value ?? "");
   useEffect(
     /** Loads device fonts after mount. @returns Cleanup. */ () => {
@@ -38,7 +47,17 @@ export function FontNameSelect({
         /** Publishes the font list. @param fontList - Loaded fonts. @returns Nothing. */ (
           fontList,
         ) => {
-          if (active) setFonts(fontList.GetFontNames());
+          if (active) {
+            const current = getComboBoxMruEntries(recentRows.current);
+            const restored = restoreComboBoxMru(
+              current.length === 0 ? readFontMruEntries() : current,
+              fontList.GetFontNames(),
+            );
+            recentRows.current = restored;
+            setRecent(restored);
+            hasFontList.current = true;
+            setFonts(fontList.GetFontNames());
+          }
         },
       );
       return /** Prevents stale publication. @returns Nothing. */ () => {
@@ -46,6 +65,20 @@ export function FontNameSelect({
       };
     },
     [enabled],
+  );
+  useEffect(
+    /** Saves this actual populated widget on React teardown or native browser page teardown. @returns Listener removal and actual unmount save. */ () => {
+      const save =
+        /** Reads current widget rows,not an earlier render snapshot. @returns Nothing. */ () => {
+          if (hasFontList.current) saveFontMruEntries(getComboBoxMruEntries(recentRows.current));
+        };
+      window.addEventListener("pagehide", save);
+      return /** Removes the host listener and persists the actual widget state. @returns Nothing. */ () => {
+        window.removeEventListener("pagehide", save);
+        save();
+      };
+    },
+    [],
   );
   const options = useMemo(
     /** Lists available names without fabricating an installed face for the current typed value. @returns Actual family rows. */
@@ -59,6 +92,7 @@ export function FontNameSelect({
       <ComboBox
         resetKey={selected}
         options={options}
+        mruOptions={recent}
         value={selected}
         enabled={enabled}
         label={label}
@@ -75,6 +109,12 @@ export function FontNameSelect({
           (name, release) => {
             if (release) focusDocument?.();
             onSelect(createBrowserFontItem(name));
+            // Native GTK updates history after entry activation/direct pick,not Tab or travel.
+            if (release) {
+              const next = updateComboBoxMru(recentRows.current, name, 5);
+              recentRows.current = next;
+              setRecent(next);
+            }
           }
         }
         onCancel={

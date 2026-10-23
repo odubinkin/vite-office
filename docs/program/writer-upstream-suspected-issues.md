@@ -1014,3 +1014,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::GetItemScriptType`.
 - Observation: a cached script span contributes flags only if it contains the selection start or selection end under the two original endpoint tests. A span entirely between those endpoints contributes nothing. For initialized Latin `[0,1)`, Asian `[1,2)` and Complex `[2,3)` spans, selection `[0,3)` therefore returns Latin|Complex, omitting Asian. This is a source-level finding over the original range algorithm, not native GUI confirmation.
 - Preservation: retain the endpoint tests rather than replacing them with a generic interval-overlap test. The extracted single-paragraph operation pins flags5 for this case, and copied reversed selections produce the same result without mutating the input. Actual paragraph storage,selection resolution and ICU analysis remain their owners' responsibilities.
+
+### WRITER078 — GTK font-history restoration reverses saved order and does not apply the maximum
+
+- Source: pinned `vcl/unx/gtk3/gtkinst.cxx`, `GtkInstanceComboBox::set_mru_entries`, `get_mru_entries`; `svtools/source/control/ctrlbox.cxx`, `FontNameBox::Fill`, `LoadMRUEntries`, `SaveMRUEntries`.
+- Observation: saving enumerates current recent rows in order, but restoring inserts every accepted name at index zero. Saved `[A,B]` therefore restores as `[B,A]`. The restore loop also does not trim to `m_nMaxMRUCount`; only a later `update_mru` trims the list. Existing nonempty widget history passes through this same restoration on refill. This is source-derived behavior, not native GUI confirmation.
+- Preservation: retain prepend order, exact main-list membership filtering and absence of restore-time truncation. Focused tests cover reversal and restoring more than five entries; production Writer and Calc tests cover restored order, including actual Calc page teardown and reload.
+
+### WRITER079 — GTK history duplicate removal excludes the old last row
+
+- Source: pinned `vcl/unx/gtk3/gtkinst.cxx`, `GtkInstanceComboBox::update_mru`.
+- Observation: after prepending the accepted text, duplicate search uses `i < m_nMRUCount - 1`. The previous last row is excluded. Accepting `A` with history `[B,A]` and maximum five therefore leaves `[A,B,A]`. Tail trimming may hide this at capacity, but does not remove the duplicate below capacity. This is source-derived behavior, not native GUI confirmation.
+- Preservation: retain the loop boundary and subsequent tail trimming. Deterministic value and actual populated widget tests pin the duplicate below capacity instead of replacing this with general deduplication.

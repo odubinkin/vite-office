@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   useLayoutEffect,
+  Fragment,
   type ReactNode,
   type RefObject,
   type HTMLAttributes,
@@ -14,6 +15,7 @@ import { ChevronDown } from "lucide-react";
 /** Browser widget ports; document commands and focus ownership belong to the calling controller. */
 export interface ComboBoxProps<T> {
   readonly options: readonly T[];
+  readonly mruOptions?: readonly T[];
   readonly value: string;
   /** Actual parent assignment identity; asynchronous list refreshes need not discard an unchanged editable assignment. */
   readonly resetKey: unknown;
@@ -31,15 +33,37 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
   const { options, value: saved, enabled, label, getText: getLabel } = props;
   const listId = useId(),
     input = useRef<HTMLInputElement>(null);
-  const [draft, setDraft] = useState<Readonly<{ bound: string; text: string; owner: unknown }>>();
+  const [draft, setDraft] =
+    useState<Readonly<{ bound: string; text: string; owner: unknown; rowKey?: string }>>();
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLSpanElement>(null),
     popup = useRef<HTMLDivElement>(null);
-  const selected = draft?.bound === saved && draft.owner === props.resetKey ? draft.text : saved;
-  const activeIndex = options.findIndex(
+  const recent = props.mruOptions ?? [];
+  const rows = [...recent, ...options];
+  /** Native MRU copies may repeat the same model identity;browser row identity remains distinct from command identity. @param entry - Actual entry. @param index - Visible row index excluding separator. @returns Stable row key. */
+  function rowKey(entry: T, index: number): string {
+    return index < recent.length
+      ? `mru:${index}:${props.getId(entry)}`
+      : `main:${props.getId(entry)}`;
+  }
+  const currentDraft = draft?.bound === saved && draft.owner === props.resetKey ? draft : undefined;
+  const selected = currentDraft?.text ?? saved;
+  const travelIndex =
+    currentDraft?.rowKey === undefined
+      ? -1
+      : rows.findIndex(
+          /** Keeps explicit travel on its actual repeated row. @param entry - Actual row. @param index - Visible position. @returns Match. */ (
+            entry,
+            index,
+          ) => rowKey(entry, index) === currentDraft.rowKey && getLabel(entry) === selected,
+        );
+  const mainIndex = options.findIndex(
     /** Resolves the current row for accessible keyboard travel. @param entry - Row. @returns Whether selected. */
     (entry) => getLabel(entry) === selected,
   );
+  // Native find_text/set_active assignments search the main list,not recent copies.
+  const activeIndex =
+    travelIndex >= 0 ? travelIndex : mainIndex < 0 ? -1 : recent.length + mainIndex;
   const activeId = activeIndex < 0 ? undefined : `${listId}-${activeIndex}`;
   useLayoutEffect(
     /** Keeps actual popup travel visible without moving input focus. @returns Nothing. */
@@ -115,14 +139,11 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
               accept(selected, true);
               return;
             }
-            const index = options.findIndex(
-              /** Finds tentative travel row. @param entry - Candidate row. @returns Match. */
-              (entry) => getLabel(entry) === selected,
-            );
+            const index = activeIndex;
             let next: number;
             switch (event.key) {
               case "ArrowDown":
-                next = Math.min(options.length - 1, index + 1);
+                next = Math.min(rows.length - 1, index + 1);
                 break;
               case "ArrowUp":
                 next = Math.max(0, index - 1);
@@ -131,15 +152,20 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
                 next = 0;
                 break;
               case "PageDown":
-                next = options.length - 1;
+                next = rows.length - 1;
                 break;
               default:
                 return;
             }
             event.preventDefault();
-            const entry = options[next];
+            const entry = rows[next];
             if (entry !== undefined)
-              setDraft({ owner: props.resetKey, bound: saved, text: getLabel(entry) });
+              setDraft({
+                owner: props.resetKey,
+                bound: saved,
+                text: getLabel(entry),
+                rowKey: rowKey(entry, next),
+              });
           }
         }
       />
@@ -183,36 +209,46 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
             role="listbox"
             aria-label={label}
           >
-            {options.map(
+            {rows.map(
               /** Direct list picks accept once; travel remains tentative. @param entry - Original row. @param index - Stable row position for the accessible descendant. @returns Option. */
               (entry, index) => (
-                <button
-                  type="button"
-                  id={`${listId}-${index}`}
-                  aria-label={getLabel(entry)}
-                  role="option"
-                  key={props.getId(entry)}
-                  tabIndex={-1}
-                  aria-selected={getLabel(entry) === selected}
-                  className="block w-full px-2 py-1 text-left text-sm hover:bg-[Highlight] hover:text-[HighlightText]"
-                  style={
-                    getLabel(entry) === selected
-                      ? { backgroundColor: "Highlight", color: "HighlightText" }
-                      : undefined
-                  }
-                  onMouseDown={
-                    /** Retains focus until explicit release. @param event - Pointer. @returns Nothing. */
-                    (event) => event.preventDefault()
-                  }
-                  onClick={
-                    /** Accepts the direct native row. @returns Nothing. */
-                    () => accept(getLabel(entry), true)
-                  }
-                >
-                  {props.renderItem === undefined
-                    ? getLabel(entry)
-                    : props.renderItem(entry, getLabel(entry) === selected)}
-                </button>
+                <Fragment key={rowKey(entry, index)}>
+                  <button
+                    type="button"
+                    id={`${listId}-${index}`}
+                    aria-label={getLabel(entry)}
+                    role="option"
+                    tabIndex={-1}
+                    aria-selected={index === activeIndex}
+                    data-office-combobox-recent-option={index < recent.length || undefined}
+                    data-office-combobox-main-option={index >= recent.length || undefined}
+                    className="block w-full px-2 py-1 text-left text-sm hover:bg-[Highlight] hover:text-[HighlightText]"
+                    style={
+                      index === activeIndex
+                        ? { backgroundColor: "Highlight", color: "HighlightText" }
+                        : undefined
+                    }
+                    onMouseDown={
+                      /** Retains focus until explicit release. @param event - Pointer. @returns Nothing. */
+                      (event) => event.preventDefault()
+                    }
+                    onClick={
+                      /** Accepts the direct native row. @returns Nothing. */
+                      () => accept(getLabel(entry), true)
+                    }
+                  >
+                    {props.renderItem === undefined
+                      ? getLabel(entry)
+                      : props.renderItem(entry, index === activeIndex)}
+                  </button>
+                  {index === recent.length - 1 ? (
+                    <div
+                      role="separator"
+                      aria-hidden="true"
+                      className="my-1 border-t border-slate-300"
+                    />
+                  ) : null}
+                </Fragment>
               ),
             )}
           </ComboBoxPopup>,

@@ -4,5 +4,10 @@ import type { Locator } from "@playwright/test";
 export async function pickComboBoxEntry(input: Locator, name: string): Promise<void> {
   await input.locator("..").locator("[data-office-combobox-toggle]").click();
   const popupId = await input.getAttribute("aria-controls");
-  await input.page().locator(`id=${popupId}`).getByRole("option", { name, exact: true }).click();
+  await input
+    .page()
+    .locator(`id=${popupId}`)
+    .getByRole("option", { name, exact: true })
+    .first()
+    .click();
 }

@@ -3,11 +3,69 @@ import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, expect, it, vi } from "vitest";
 import { FontNameSelect } from "./FontSelects";
 import { FontList } from "../../../vcl/browser/font-list";
+import { FONT_MRU_STORAGE_KEY } from "../../../svtools/browser/font-mru-store";
 const names = ["Alpha", "Beta"];
+it("loads source MRU order,updates it after direct picks and saves on actual unmount", /** Recent rows remain separate from the actual main font inventory. @returns Completion. */ async () => {
+  window.localStorage.setItem(FONT_MRU_STORAGE_KEY, "Alpha;Beta\n\n");
+  const f = await fixture();
+  fireEvent.click(screen.getByRole("button", { name: "Show Family" }));
+  expect(
+    screen
+      .getAllByRole("option")
+      .map(
+        /** Reads real popup names. @param option - Actual row. @returns Text. */ (option) =>
+          option.textContent,
+      ),
+  ).toEqual(["Beta", "Alpha", "Alpha", "Beta"]);
+  fireEvent.click(screen.getAllByRole("option", { name: "Alpha" })[1] as HTMLElement);
+  expect(f.trace).toEqual(["focus", "Alpha"]);
+  expect(window.localStorage.getItem(FONT_MRU_STORAGE_KEY)).toBe("Alpha;Beta\n\n");
+  fireEvent(window, new Event("pagehide"));
+  expect(window.localStorage.getItem(FONT_MRU_STORAGE_KEY)).toBe("Alpha;Beta;Alpha\n\n");
+  cleanup();
+  expect(window.localStorage.getItem(FONT_MRU_STORAGE_KEY)).toBe("Alpha;Beta;Alpha\n\n");
+});
+it("keeps Tab acceptance out of MRU and preserves current history across refills", /** Native entry activation/direct picks update history;Tab and travel do not. @returns Completion. */ async () => {
+  vi.spyOn(FontList, "FromBrowser").mockResolvedValue(new FontList(names));
+  const select = vi.fn(),
+    props = { value: "Alpha", enabled: true, label: "History", onSelect: select };
+  const tree = render(<FontNameSelect {...props} />);
+  await act(
+    /** Settles native font inventory publication. @returns Completion. */ async () => {
+      await Promise.resolve();
+    },
+  );
+  const box = screen.getByRole("combobox", { name: "History" });
+  fireEvent.change(box, { target: { value: "Beta" } });
+  fireEvent.keyDown(box, { key: "Tab" });
+  fireEvent.click(screen.getByRole("button", { name: "Show History" }));
+  expect(screen.getAllByRole("option")).toHaveLength(2);
+  fireEvent.click(screen.getByRole("option", { name: "Beta" }));
+  window.localStorage.setItem(FONT_MRU_STORAGE_KEY, "Alpha\n\n");
+  tree.rerender(<FontNameSelect {...props} enabled={false} />);
+  tree.rerender(<FontNameSelect {...props} />);
+  await act(
+    /** Settles the new real inventory. @returns Completion. */ async () => {
+      await Promise.resolve();
+    },
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Show History" }));
+  expect(
+    screen
+      .getAllByRole("option")
+      .map(
+        /** Reads actual ordered text. @param option - Row. @returns Text. */ (option) =>
+          option.textContent,
+      ),
+  ).toEqual(["Beta", "Alpha", "Beta"]);
+  tree.unmount();
+  expect(window.localStorage.getItem(FONT_MRU_STORAGE_KEY)).toBe("Beta\n\n");
+});
 afterEach(
   /** Releases actual widget fixtures and font enumeration instrumentation. @returns Nothing. */ () => {
     cleanup();
     vi.restoreAllMocks();
+    window.localStorage.removeItem(FONT_MRU_STORAGE_KEY);
   },
 );
 

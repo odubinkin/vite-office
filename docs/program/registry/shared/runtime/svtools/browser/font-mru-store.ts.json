@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/browser/font-mru-store.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svtools/browser/font-mru-store.ts#readFontMruEntries",
+        "apps/office/src/svtools/browser/font-mru-store.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-mru.spec.ts#@fileoverview"
+      ],
+      "justification": "Common browser profile storage replaces the native user/config/fontnameboxmruentries file. Actual localStorage denial follows the failed-file-open no-op boundary; unexpected errors remain visible. Real widget unmount and browser pagehide save actual current rows. Per-widget histories remain independent; no reactive global merge or C++ lifetime emulation is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "readFontMruEntries",
+        "saveFontMruEntries"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

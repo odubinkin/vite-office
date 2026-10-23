@@ -39,7 +39,12 @@ for (const width of [1280, 390]) {
     await font.locator("..").locator("[data-office-combobox-toggle]").click();
     const popupId = await font.getAttribute("aria-controls");
     const popup = page.locator(`id=${popupId}`);
-    await expect(popup.getByRole("option", { name: "Missing: & 字", exact: true })).toHaveCount(0);
+    await expect(
+      popup.locator("[data-office-combobox-main-option]").filter({ hasText: "Missing: & 字" }),
+    ).toHaveCount(0);
+    await expect(
+      popup.locator("[data-office-combobox-recent-option]").filter({ hasText: "Missing: & 字" }),
+    ).toHaveCount(1);
     await expect(popup.getByRole("option", { name: "OpenSymbol", exact: true })).toHaveCount(1);
     const rect = await popup.boundingBox();
     expect(rect?.x).toBeGreaterThanOrEqual(0);

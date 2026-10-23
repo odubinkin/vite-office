@@ -6,6 +6,51 @@ const rows = [
   { id: "a", name: "Alpha" },
   { id: "b", name: "Beta" },
 ];
+it("travels through repeated recent/main rows by row identity and skips their separator", /** Native programmatic assignments target the main list while keyboard travel preserves the actual selected copy. @returns Nothing. */ () => {
+  const accept = vi.fn();
+  render(
+    <ComboBox
+      resetKey={rows}
+      options={rows}
+      mruOptions={[rows[1] as (typeof rows)[number], rows[0] as (typeof rows)[number]]}
+      value="Alpha"
+      enabled
+      label="Recent"
+      getId={/** Native identity. @param row - Actual entry. @returns Identity. */ (row) => row.id}
+      getText={
+        /** Native display text. @param row - Actual entry. @returns Text. */ (row) => row.name
+      }
+      onAccept={accept}
+      onCancel={/** Consumes Escape. @returns True. */ () => true}
+    />,
+  );
+  const box = screen.getByRole("combobox", { name: "Recent" });
+  fireEvent.click(screen.getByRole("button", { name: "Show Recent" }));
+  const options = screen.getAllByRole("option");
+  expect(options).toHaveLength(4);
+  expect(box).toHaveAttribute("aria-activedescendant", options[2]?.id);
+  fireEvent.keyDown(box, { key: "PageUp" });
+  expect(box).toHaveValue("Beta");
+  expect(box).toHaveAttribute("aria-activedescendant", options[0]?.id);
+  fireEvent.keyDown(box, { key: "ArrowDown" });
+  expect(box).toHaveValue("Alpha");
+  expect(box).toHaveAttribute("aria-activedescendant", options[1]?.id);
+  fireEvent.keyDown(box, { key: "ArrowDown" });
+  expect(box).toHaveValue("Alpha");
+  expect(box).toHaveAttribute("aria-activedescendant", options[2]?.id);
+  fireEvent.keyDown(box, { key: "ArrowDown" });
+  expect(box).toHaveValue("Beta");
+  expect(box).toHaveAttribute("aria-activedescendant", options[3]?.id);
+  expect(
+    options.filter(
+      /** Exactly one native row is active. @param option - Actual option. @returns Whether selected. */ (
+        option,
+      ) => option.getAttribute("aria-selected") === "true",
+    ),
+  ).toHaveLength(1);
+  fireEvent.keyDown(box, { key: "Enter" });
+  expect(accept).toHaveBeenCalledWith("Beta", true);
+});
 afterEach(
   /** Releases real DOM fixtures and geometry instrumentation. @returns Nothing. */ () => {
     cleanup();

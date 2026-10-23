@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/combobox-mru.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/combobox-mru.ts#getComboBoxMruEntries",
+        "apps/office/src/vcl/browser/combobox-mru.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-mru.spec.ts#@fileoverview"
+      ],
+      "justification": "Extracted consumed GTK weld text-only MRU transitions: existing main-list restoration prepends each accepted name without maximum trimming; activation prepends raw text, searches duplicates excluding the old tail and trims to the configured maximum. Empty rows are omitted only from persistence output. Browser row identity, controller acceptance and host storage remain separate. No Gtk object, ID or rendering parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getComboBoxMruEntries",
+        "restoreComboBoxMru",
+        "updateComboBoxMru"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/vcl/browser/combobox-mru.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/combobox-mru.ts",
+          "marker": "getComboBoxMruEntries"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/combobox-mru.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "rationale": "Extracted consumed GTK weld text-only MRU transitions: existing main-list restoration prepends each accepted name without maximum trimming; activation prepends raw text, searches duplicates excluding the old tail and trims to the configured maximum. Empty rows are omitted only from persistence output. Browser row identity, controller acceptance and host storage remain separate. No Gtk object, ID or rendering parity is claimed.",
+    "responsibilities": [
+      "Extracted consumed GTK weld text-only MRU transitions: existing main-list restoration prepends each accepted name without maximum trimming; activation prepends raw text, searches duplicates excluding the old tail and trims to the configured maximum. Empty rows are omitted only from persistence output. Browser row identity, controller acceptance and host storage remain separate. No Gtk object, ID or rendering parity is claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Extracted consumed GTK weld text-only MRU transitions: existing main-list restoration prepends each accepted name without maximum trimming; activation prepends raw text, searches duplicates excluding the old tail and trims to the configured maximum. Empty rows are omitted only from persistence output. Browser row identity, controller acceptance and host storage remain separate. No Gtk object, ID or rendering parity is claimed."
+    }
+  }
+}

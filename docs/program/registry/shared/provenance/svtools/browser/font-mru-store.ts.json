@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svtools/browser/font-mru-store.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/browser/font-mru-store.ts",
+          "marker": "readFontMruEntries"
+        },
+        {
+          "path": "apps/office/src/svtools/browser/font-mru-store.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "rationale": "Common browser profile storage replaces the native user/config/fontnameboxmruentries file. Actual localStorage denial follows the failed-file-open no-op boundary; unexpected errors remain visible. Real widget unmount and browser pagehide save actual current rows. Per-widget histories remain independent; no reactive global merge or C++ lifetime emulation is introduced.",
+    "responsibilities": [
+      "Common browser profile storage replaces the native user/config/fontnameboxmruentries file. Actual localStorage denial follows the failed-file-open no-op boundary; unexpected errors remain visible. Real widget unmount and browser pagehide save actual current rows. Per-widget histories remain independent; no reactive global merge or C++ lifetime emulation is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Common browser profile storage replaces the native user/config/fontnameboxmruentries file. Actual localStorage denial follows the failed-file-open no-op boundary; unexpected errors remain visible. Real widget unmount and browser pagehide save actual current rows. Per-widget histories remain independent; no reactive global merge or C++ lifetime emulation is introduced."
+    }
+  }
+}
