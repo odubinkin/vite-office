@@ -49,6 +49,10 @@ export class MetricSpinButton {
     this.maximum = this.ConvertValue(maximum, unit, this.unit);
     this.set_value(this.value, FieldUnit.NONE);
   }
+  /** Original set_min reads the opposite bound in the requested unit and delegates the full range conversion. @param minimum - Normalized new minimum. @param unit - Source unit. @returns Nothing. */
+  set_min(minimum: bigint, unit: FieldUnit): void {
+    this.set_range(minimum, this.get_range(unit)[1], unit);
+  }
   /** Original converted range getter;the tuple adapts native output references. @param unit - Output unit. @returns Minimum and maximum normalized values. */
   get_range(unit: FieldUnit): readonly [bigint, bigint] {
     return [

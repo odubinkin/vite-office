@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/sidebar/paragraph/ParaLineSpacingControl.ts",
+    "localSymbols": [
+      "ParaLineSpacingControl",
+      "LINE_SPACING_MODES"
+    ],
+    "upstreamPath": "svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+    "upstreamSymbols": [
+      "ParaLineSpacingControl::Initialize",
+      "ParaLineSpacingControl::UpdateMetricFields",
+      "ParaLineSpacingControl::SetLineSpace",
+      "ParaLineSpacingControl::ExecuteLineSpace",
+      "ParaLineSpacingControl::ExecuteLineSpacing"
+    ],
+    "preservedResponsibilities": [
+      "TaskFNBXHP ports consumed original ParaLineSpacingControl eight-mode item initialization, native numeric resource defaults, field/minimum transitions, immediate mode/value dispatch and predefined-button closure. Writer state now carries complete uniform SvxLineSpacingItem values instead of number/custom projection; typed original slot10033 remaps to Writer Which through actual pool metadata and original per-paragraph history. Source static map conversion keeps72PPI pixels, signed half-away rounding and release BigInt out-of-range result without device/cache/allocation emulation; original SetMetricValue/GetCoreValue preserve hundredth-mm normalization and large-value denormalization order. Real module units and host decimal fields feed browser presentation. Portable evidence:49 current related cases,18 additional paragraph/layout cases,16 exact-boundary cases and7 current-build Chromium cases including CM/INCH module preference, native spin arrows, mixed/table/history and physical ODT reopen. Exact14 executable owner audit S1216/B899/F342/L1123 all100 uses current producer/source identities and only unchanged-span historical carry; raw partial focused coverage remains separately disclosed. Original preset icons are copied byte-for-byte from pinned colibre_svg resources. Canonical gates and residual native service boundaries are recorded in taskFNBXHP; native binary/full-service parity remains unverified. No native binary/full device/widget/configuration/service parity promotion; previous classifications/statuses/history and deliberate browser I/O/recovery defaults retained."
+    ],
+    "omittedResponsibilities": [
+      "Full native device/popup/configuration/service graph and native binary compilation remain unverified; represented source static/numeric/item branches only."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/sidebar/paragraph/ParaLineSpacingControl.ts",
+          "marker": "ParaLineSpacingControl"
+        },
+        {
+          "path": "apps/office/src/svx/source/sidebar/paragraph/ParaLineSpacingControl.ts",
+          "marker": "LINE_SPACING_MODES"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+          "marker": "ParaLineSpacingControl::Initialize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+          "marker": "ParaLineSpacingControl::UpdateMetricFields"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+          "marker": "ParaLineSpacingControl::SetLineSpace"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+          "marker": "ParaLineSpacingControl::ExecuteLineSpace"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx",
+          "marker": "ParaLineSpacingControl::ExecuteLineSpacing"
+        }
+      ]
+    }
+  }
+}

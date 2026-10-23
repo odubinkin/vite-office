@@ -1,4 +1,5 @@
 /** @fileoverview Shared Writer font controls over real Writer Sfx owners and platform font-list lifetime. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import {
@@ -216,6 +217,7 @@ it("uses real font size toolbar binding when the host has no document focus port
   try {
     render(
       <WriterFormattingToolbar
+        unit={FieldUnit.CM}
         commandSource={source}
         paragraphStyleOptions={[]}
         resolveArguments={

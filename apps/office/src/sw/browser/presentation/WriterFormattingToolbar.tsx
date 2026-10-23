@@ -18,6 +18,7 @@ import type { WriterParagraphStyleOption } from "./writer-view-projection";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
+import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterLineSpacingControl } from "./WriterLineSpacingControl";
 import { selectWriterCommandResource } from "./writer-command-presentation";
 import type { WriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
@@ -25,6 +26,7 @@ import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resou
 
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
+  readonly unit: FieldUnit;
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly focusDocument?: () => void;
   readonly isInputEnabled?: boolean;
@@ -36,6 +38,7 @@ export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps
 /** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
 export function WriterFormattingToolbar({
   commandSource,
+  unit,
   paragraphStyleOptions,
   focusDocument,
   isInputEnabled = true,
@@ -95,6 +98,7 @@ export function WriterFormattingToolbar({
     <>
       {items(beforeLineSpacing)}
       <WriterLineSpacingControl
+        unit={unit}
         commandSource={commandSource}
         getCommandResource={getCommandResource}
       />

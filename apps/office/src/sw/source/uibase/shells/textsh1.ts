@@ -12,6 +12,7 @@ import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { SID_ATTR_PARA_LINESPACE } from "../../../../editeng/inc/editids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
@@ -651,6 +652,26 @@ export class SwTextShell extends SwBaseShell {
             ]),
         new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
       ],
+    );
+  }
+
+  /** Original line-spacing item request retains all active and inactive fields while mapping slot to Writer Which. @param item - Actual request item. @returns Whether selected paragraphs changed. */
+  public ApplyLineSpacing(item: SvxLineSpacingItem): boolean {
+    const copy = item.Clone();
+    copy.SetWhich(RES_PARATR_LINESPACING);
+    return this.SetParagraphItem(copy);
+  }
+
+  /** Reads original uniform line-spacing item state over the selected paragraphs. @returns Slot item or undefined for mixed selection. */
+  public GetLineSpacing(): SvxLineSpacingItem | undefined {
+    return this.GetUniformParagraphItem(
+      /** Copies actual pooled state for frame bindings. @param paragraph - Selected text node. @returns Slot item. */ (
+        paragraph,
+      ) => {
+        const item = (paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).Clone();
+        item.SetWhich(SID_ATTR_PARA_LINESPACE);
+        return item;
+      },
     );
   }
 

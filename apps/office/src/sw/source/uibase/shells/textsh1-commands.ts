@@ -5,7 +5,6 @@ import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { createAttributeToggleItem } from "../../../../sfx2/source/control/bindings";
-import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import {
@@ -23,9 +22,9 @@ import type {
 import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { RES_PARATR_LINESPACING } from "../../../inc/hintids";
+
 import { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
-import { SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
+import { SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LRSPACE } from "../../../../editeng/inc/editids";
 
 /** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
@@ -325,19 +324,23 @@ export function createWriterTextCommandRegistry(
     ),
     {
       capabilityId: "CAP-0125",
-      /** Applies a proportional line-spacing choice. @param _context - Bound shell. @param arguments_ - Percent argument. @returns Whether changed. */
-      execute: (_context, arguments_: unknown): boolean => {
+      /** Original typed line-spacing request copies the complete native item. Legacy percent requests retain their existing adapter. @param _context - Bound shell. @param arguments_ - Actual request items. @returns Whether changed. */
+      execute: (_context, arguments_): boolean => {
+        const item = arguments_.find(
+          /** Finds the native line-spacing slot. @param candidate - Request item. @returns Whether mapped. */
+          (candidate) =>
+            active().GetDoc().GetAttrPool().GetWhichIDFromSlotID(candidate.Which()) ===
+            active().GetDoc().GetAttrPool().GetWhichIDFromSlotID(SID_ATTR_PARA_LINESPACE),
+        );
+        if (item instanceof SvxLineSpacingItem) return target.ApplyLineSpacing(item);
         const percent =
           getWriterCommandArguments<Readonly<{ percent?: number }>>(arguments_)?.percent;
         return percent === undefined ? false : target.SetLineSpacingPercent(percent);
       },
-      /** Reads the active proportional spacing, or the custom sentinel. @returns Slot value. */
-      getStateValue: (): number | "custom" => {
-        const spacing = active().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
-        return projectWriterLineSpacing(spacing).mode === "proportional"
-          ? projectWriterLineSpacing(spacing).value
-          : "custom";
-      },
+      /** Reads native item state without discarding nonproportional modes. @returns Complete item or mixed. */
+      getStateValue: () => target.GetLineSpacing(),
+      /** Original invalid aggregate has no uniform item. @returns Whether mixed. */
+      isMixed: () => target.GetLineSpacing() === undefined,
       id: WRITER_COMMAND_IDS.lineSpacing,
     },
     {

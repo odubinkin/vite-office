@@ -514,6 +514,7 @@ export function WriterWorkbench({
         }
         formattingToolbar={
           <WriterFormattingToolbar
+            unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
             focusDocument={
               /** Releases accepted style-box focus to this mounted Writer frame. @returns Nothing. */ () =>

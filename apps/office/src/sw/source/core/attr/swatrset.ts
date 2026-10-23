@@ -475,6 +475,7 @@ export class SwAttrPool extends SfxItemPool {
         }
         return item;
       },
+      10033,
     );
     for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
       this.RegisterDefaultItem(

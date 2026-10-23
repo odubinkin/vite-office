@@ -48,7 +48,15 @@ const originalCharacterValueImports = new Map([
   // React presentation reads the shared system-locale fields;numeric ownership stays in the binding.
   ["svtools/browser/control/MetricSpinButton.tsx", new Set(["unotools/source/misc/syslocale.ts"])],
   // Original svtools SetFieldUnit borrows the actual VCL metric widget numeric contract.
-  ["svtools/source/misc/unitconv.ts", new Set(["vcl/source/weld/MetricSpinButton.ts"])],
+  [
+    "svtools/source/misc/unitconv.ts",
+    new Set(["vcl/source/weld/MetricSpinButton.ts", "vcl/source/outdev/map.ts"]),
+  ],
+  // Actual native popup numeric presentation borrows existing host decimal fields.
+  [
+    "svx/browser/sidebar/paragraph/ParaLineSpacingControl.tsx",
+    new Set(["unotools/source/misc/syslocale.ts", "i18nutil/source/utility/unicode.percent.ts"]),
+  ],
   // Generated MultipleCharsOutputException type initialization uses the original UNO TypeClass value.
   [
     "offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",

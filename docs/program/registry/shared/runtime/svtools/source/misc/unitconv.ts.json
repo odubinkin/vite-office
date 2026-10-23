@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svtools/source/misc/native-unitconv.test.ts",
-        "docs/program/calc-core.md#Original shared metric units for font-height attributes (task125)"
+        "docs/program/calc-core.md#Original shared metric units for font-height attributes (task125)",
+        "apps/office/src/sw/source/uibase/shells/native-line-spacing.test.ts#@fileoverview"
       ],
-      "justification": "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause. TaskDS8CKD connects current Writer metric dialogs through original SetFieldUnit:coarse M/KM and FOOT/MILE mapping,POINT precision narrowing,unit-specific normalized increments and denormalized twip range/value preservation. Native numeric getters/increment storage extend actual MetricSpinButton;browser owns temporary text and controls.No global preference/locale service or full widget-parity claim.",
+      "justification": "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause. TaskDS8CKD connects current Writer metric dialogs through original SetFieldUnit:coarse M/KM and FOOT/MILE mapping,POINT precision narrowing,unit-specific normalized increments and denormalized twip range/value preservation. Native numeric getters/increment storage extend actual MetricSpinButton;browser owns temporary text and controls.No global preference/locale service or full widget-parity claim. TaskFNBXHP ports consumed original ParaLineSpacingControl eight-mode item initialization, native numeric resource defaults, field/minimum transitions, immediate mode/value dispatch and predefined-button closure. Writer state now carries complete uniform SvxLineSpacingItem values instead of number/custom projection; typed original slot10033 remaps to Writer Which through actual pool metadata and original per-paragraph history. Source static map conversion keeps72PPI pixels, signed half-away rounding and release BigInt out-of-range result without device/cache/allocation emulation; original SetMetricValue/GetCoreValue preserve hundredth-mm normalization and large-value denormalization order. Real module units and host decimal fields feed browser presentation. Portable evidence:49 current related cases,18 additional paragraph/layout cases,16 exact-boundary cases and7 current-build Chromium cases including CM/INCH module preference, native spin arrows, mixed/table/history and physical ODT reopen. Exact14 executable owner audit S1216/B899/F342/L1123 all100 uses current producer/source identities and only unchanged-span historical carry; raw partial focused coverage remains separately disclosed. Original preset icons are copied byte-for-byte from pinned colibre_svg resources. Canonical gates and residual native service boundaries are recorded in taskFNBXHP; native binary/full-service parity remains unverified. No native binary/full device/widget/configuration/service parity promotion; previous classifications/statuses/history and deliberate browser I/O/recovery defaults retained.",
       "knownViolations": [],
       "localSymbols": [
         "CalcToUnit",
@@ -27,7 +28,9 @@
         "ItemToControl",
         "ControlToItem",
         "MapToFieldUnit",
-        "SetFieldUnit"
+        "SetFieldUnit",
+        "SetMetricValue",
+        "GetCoreValue"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svtools/source/misc/unitconv.cxx",
@@ -37,7 +40,9 @@
         "ItemToControl",
         "ControlToItem",
         "MapToFieldUnit",
-        "SetFieldUnit"
+        "SetFieldUnit",
+        "SetMetricValue",
+        "GetCoreValue"
       ]
     }
   }
