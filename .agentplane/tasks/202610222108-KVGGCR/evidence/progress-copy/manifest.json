@@ -1,0 +1,161 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;general copy/completion foundation verified;final task acceptance pending",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 851,
+  "calcFiles": 215,
+  "coverage": {
+    "lines": {
+      "total": 13896,
+      "covered": 13896,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15519,
+      "covered": 15519,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2675,
+      "covered": 2675,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9418,
+      "covered": 9418,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "chromiumWorkerScenarios": 6,
+  "capturedSourceTestConfigHashes": 475,
+  "sourceHashesStable": true,
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed in this block",
+  "changedPaths": [
+    ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-copy/raw.json.gz",
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/inc/mtvcellfunc.ts",
+    "apps/office/src/sc/inc/mtvfunctions.ts",
+    "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/column3.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table2.ts",
+    "docs/program/registry/calc/provenance/sc/inc/mtvcellfunc.ts.json",
+    "docs/program/registry/calc/provenance/sc/inc/mtvfunctions.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/mtvcellfunc.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/mtvfunctions.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json"
+  ],
+  "rawSha256": "b686a82da67518e1873641162135e1bb0d4f1f8bb47bc86d227062c2e4079d64",
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage:calc -- --coverage.reportOnFailure=true",
+      "result": "pass",
+      "sha256": "29e955eeb5e6bc87fd25ed317829b97648f27edd0c3106c2b8067f7b78e72fbd"
+    },
+    "app-types": {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "pass",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    "tools-types": {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "pass",
+      "sha256": "c153a755ca9250544394e1a1a6f17c47a1b149f387edd381b829fd177022df35"
+    },
+    "calc-lint": {
+      "command": "npx eslint apps/office/src/sc apps/office/e2e/calc --max-warnings 0",
+      "result": "pass",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "calc-format": {
+      "command": "npx prettier --check apps/office/src/sc apps/office/e2e/calc",
+      "result": "pass",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "sha256": "38d6ccc4aeb88a9908cf339c842fc78f24df0b5194830846ea9029cdbed20907"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "sha256": "d8c16fdfca13ff7f9aa104d721545162cf69ad582c9471b5f317e36cf36facd5"
+    },
+    "boundaries": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "sha256": "c31ca0e27b54ba0dfafa8614ff2ca756c0963916be327e512301202c0c6e51a0"
+    },
+    "source-tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "sha256": "8bf18f82a9e342a918f5f3736abbafcb1427e86cf1810c48da6f533db06845d1"
+    },
+    "registry": {
+      "command": "npm run inventory:parity:calc",
+      "result": "pass",
+      "sha256": "31b41adab585958f1c90650f24311969c09606dd2570b4fb20b97c6b3b57773b"
+    },
+    "chromium-worker": {
+      "command": "npx playwright test e2e/calc/clipboard-copy.spec.ts e2e/calc/formula-pointing.spec.ts e2e/calc/cell-selection.spec.ts --config playwright.config.ts --project=calc",
+      "result": "pass",
+      "sha256": "98e33fe84b9b0d240840d94050b3533ff0a3bce1776664b61fefccc97a4288a0"
+    },
+    "static": {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "sha256": "95de0aa1160544d2a6ee72d637012246dad0fe21897a7f558d5b85d4eb0118df"
+    }
+  }
+}
