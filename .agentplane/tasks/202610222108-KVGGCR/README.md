@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T19:13:25.937Z"
+doc_updated_at: "2026-10-23T19:28:33.716Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -175,6 +175,22 @@ sections:
     Scope:full source-comparison gates. Human intentionally removed ignored research references to reclaim disk. Ordinary Calc tests/build/browser work without them. CLI inspection confirms no upstream-absent switch for these two checks. Direct canonical provenance validation of only changed table.ts/table7.ts passes against the retained pinned LO source;this does not substitute full gates. No sources were downloaded,checks weakened,or final acceptance/approved skip claimed. Final source/registry verification remains pending.
 
     Remaining:document CopyFromClip orchestration,optimized single-row entry with genuine formatting/script services,native paste history and EnterBlock/AutoSum,then final76 and74 acceptance. Task76 remains DOING/verification pending;74 depends on76. Full all-app checkpoint80 and human stop instruction remain unchanged. Goal remains active.
+
+    Task76 formula-format metadata checkpoint:original ScFormulaCell needs/allow-format flags retain false constructor defaults,copy-constructor needs-state and reset allow-state,and SetNeedNumberFormat/NeedsNumberFormat contracts. Both ScColumn.SetFormulaCell overloads retain inheritNumFormatIfNeeded default true and actual canonical-pattern General-format handling. CopyCellsFromClipHandler forwards the source request exactly. Native ScPatternAttr number-format key/language caches,copy values,threaded uncached reads,HasValidNumberFormat and writable/item/style/edit/delta invalidation now use actual SfxItemSet/SfxUInt32Item/SvxLanguageItem owners. SV_COUNTRY_LANGUAGE_OFFSET is shared from the original svl header owner. The context fast branch supports system-language built-in keys;native null formatter returns the raw key. Missing context language conversion is explicit,without a fake formatter or display approximation.
+
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-format-calc-coverage.
+    Result:pass,884/884 scenarios across219 physical files;raw100 S15871/B9673/F2733/L14206.
+    Command:npx vitest run --config vitest.calc.config.ts src/sc/source/core/tool/compiler-format-type.test.ts --coverage --coverage.include=src/svl/inc/zforlist.ts --coverage.reportsDirectory=../../output/playwright/task76-format-shared-coverage.
+    Result:pass,5/5 scenarios;changed shared owner raw100 S2/B0/F0/L2.
+    Scope:complete Calc profile and only the changed shared zforlist header owner. Thresholds,exclusions and persistent coverage config unchanged. Three new actual-owner cases verify cache/default/invalid-item behavior,threaded uncached and warmed/copy behavior,and ordinary/hinted formula adoption with independent source request and destination format. Final focused19/19,type/lint/format/JSDoc pass after test-only documentation repair and adopting the already-asserted detached copy for proper document cleanup. Production and config hashes remain identical throughout Calc coverage and final checks;immutable evidence stores before/after test hashes explicitly.
+
+    Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+    Result:pass,1/1 actual Chromium/DOM-free Worker scenario. Source false format request remains false after native general block copy;actual dependency values21/34,=D6+1,sparse sheet and repeated-row values remain unchanged.
+    Scope:real core copy phases,not full browser PasteFromClip/history acceptance.
+
+    Production build/app types,tools types,scoped lint/format,JSDoc,size,boundaries,source-tree,resources,static,routing and doctor pass. Canonical provenance validation of five changed source modules passes against retained LO source. Full npm run check:source-provenance still fails ENOENT vendor/icu-reference/source/common/ucase.h;full npm run inventory:parity:calc still fails ENOENT vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl. Their acceptance criteria were not changed,no approved skip is claimed,and deleted references were not restored/downloaded. Evidence/progress-format-metadata preserves current raw Istanbul,logs,commands and hashes. Human .DS_Store files stay outside commits.
+
+    Remaining:context/result-format services and script update owners,document CopyFromClip orchestration,native paste history,EnterBlock/AutoSum,final76 acceptance and then74. In particular,the new formula request metadata does not claim completion of native InterpretTail format compatibility,request clearing or hard-format mutation. Cumulative footprint now110/110,including prior removed probe images. Further new owner/test/registry paths need material-scope re-approval under dod.core. No extra paths have been edited. Task76 remains DOING/verification pending;74 depends on76;full all-app checkpoint80 and human stop rule remain unchanged. Goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -329,3 +345,19 @@ Result:fail,ENOENT vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl.
 Scope:full source-comparison gates. Human intentionally removed ignored research references to reclaim disk. Ordinary Calc tests/build/browser work without them. CLI inspection confirms no upstream-absent switch for these two checks. Direct canonical provenance validation of only changed table.ts/table7.ts passes against the retained pinned LO source;this does not substitute full gates. No sources were downloaded,checks weakened,or final acceptance/approved skip claimed. Final source/registry verification remains pending.
 
 Remaining:document CopyFromClip orchestration,optimized single-row entry with genuine formatting/script services,native paste history and EnterBlock/AutoSum,then final76 and74 acceptance. Task76 remains DOING/verification pending;74 depends on76. Full all-app checkpoint80 and human stop instruction remain unchanged. Goal remains active.
+
+Task76 formula-format metadata checkpoint:original ScFormulaCell needs/allow-format flags retain false constructor defaults,copy-constructor needs-state and reset allow-state,and SetNeedNumberFormat/NeedsNumberFormat contracts. Both ScColumn.SetFormulaCell overloads retain inheritNumFormatIfNeeded default true and actual canonical-pattern General-format handling. CopyCellsFromClipHandler forwards the source request exactly. Native ScPatternAttr number-format key/language caches,copy values,threaded uncached reads,HasValidNumberFormat and writable/item/style/edit/delta invalidation now use actual SfxItemSet/SfxUInt32Item/SvxLanguageItem owners. SV_COUNTRY_LANGUAGE_OFFSET is shared from the original svl header owner. The context fast branch supports system-language built-in keys;native null formatter returns the raw key. Missing context language conversion is explicit,without a fake formatter or display approximation.
+
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-format-calc-coverage.
+Result:pass,884/884 scenarios across219 physical files;raw100 S15871/B9673/F2733/L14206.
+Command:npx vitest run --config vitest.calc.config.ts src/sc/source/core/tool/compiler-format-type.test.ts --coverage --coverage.include=src/svl/inc/zforlist.ts --coverage.reportsDirectory=../../output/playwright/task76-format-shared-coverage.
+Result:pass,5/5 scenarios;changed shared owner raw100 S2/B0/F0/L2.
+Scope:complete Calc profile and only the changed shared zforlist header owner. Thresholds,exclusions and persistent coverage config unchanged. Three new actual-owner cases verify cache/default/invalid-item behavior,threaded uncached and warmed/copy behavior,and ordinary/hinted formula adoption with independent source request and destination format. Final focused19/19,type/lint/format/JSDoc pass after test-only documentation repair and adopting the already-asserted detached copy for proper document cleanup. Production and config hashes remain identical throughout Calc coverage and final checks;immutable evidence stores before/after test hashes explicitly.
+
+Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+Result:pass,1/1 actual Chromium/DOM-free Worker scenario. Source false format request remains false after native general block copy;actual dependency values21/34,=D6+1,sparse sheet and repeated-row values remain unchanged.
+Scope:real core copy phases,not full browser PasteFromClip/history acceptance.
+
+Production build/app types,tools types,scoped lint/format,JSDoc,size,boundaries,source-tree,resources,static,routing and doctor pass. Canonical provenance validation of five changed source modules passes against retained LO source. Full npm run check:source-provenance still fails ENOENT vendor/icu-reference/source/common/ucase.h;full npm run inventory:parity:calc still fails ENOENT vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl. Their acceptance criteria were not changed,no approved skip is claimed,and deleted references were not restored/downloaded. Evidence/progress-format-metadata preserves current raw Istanbul,logs,commands and hashes. Human .DS_Store files stay outside commits.
+
+Remaining:context/result-format services and script update owners,document CopyFromClip orchestration,native paste history,EnterBlock/AutoSum,final76 acceptance and then74. In particular,the new formula request metadata does not claim completion of native InterpretTail format compatibility,request clearing or hard-format mutation. Cumulative footprint now110/110,including prior removed probe images. Further new owner/test/registry paths need material-scope re-approval under dod.core. No extra paths have been edited. Task76 remains DOING/verification pending;74 depends on76;full all-app checkpoint80 and human stop rule remain unchanged. Goal remains active.
