@@ -45,6 +45,16 @@ import { UpdateReference, SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original single-source-row repetition on this actual sheet. @param args - Native context,bounds and source geometry. @returns Nothing. */
+  CopyOneCellFromClip(...args: Parameters<typeof table7.CopyOneCellFromClip>): void {
+    table7.CopyOneCellFromClip.apply(this, args);
+  }
+  /** Original raw height query ignores hidden state and retains the absent/invalid fallback. @param row - Source row. @returns Twips. */
+  GetOriginalHeight(row: number): number {
+    return this.rDocument.ValidRow(row) && this.mpRowHeights
+      ? this.mpRowHeights.getValue(row)
+      : this.GetOptimalMinRowHeight();
+  }
   /** Original table1 reference operation on this actual sheet. @param args - Native context and defaults. @returns Nothing. */
   UpdateReference(...args: Parameters<typeof UpdateReference>): void {
     UpdateReference.apply(this, args);

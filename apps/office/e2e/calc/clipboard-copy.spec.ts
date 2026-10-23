@@ -97,11 +97,48 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           formula = n.text(string),
           sparse = clip.FetchTable(0) === null;
         string.dispose();
+        const rowClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
+        rowClip.ResetClip(doc, 0);
+        rowClip.SetClipArea(new n.ScRange(0, 0, 0, 1, 0, 0));
+        rowClip.SetValue(new n.ScAddress(), 3);
+        rowClip.SetValue(new n.ScAddress(1, 0, 0), 7);
+        const rowSource = rowClip.FetchTable(0),
+          rowContext = new n.CopyFromClipContext(
+            doc,
+            null,
+            rowClip,
+            n.InsertDeleteFlags.CONTENTS,
+            false,
+            false,
+          ),
+          rowSpans = new n.ColumnSpanSet();
+        if (!rowSource) throw Error("Missing actual single-row source");
+        rowContext.setSingleCellColumnSize(2);
+        for (let col = 0; col < 2; ++col)
+          rowContext.setSingleCell(
+            new n.ScAddress(col, 0, 0),
+            rowSource.CreateColumnIfNotExists(col),
+          );
+        doc.SetAutoCalc(false);
+        doc.SetInsertingFromOtherDoc(true);
+        target.CopyOneCellFromClip(rowContext, 6, 8, 8, 9, 0, rowSource);
+        doc.SetInsertingFromOtherDoc(false);
+        rowContext.setListeningFormulaSpans(0, 6, 8, 8, 9);
+        rowContext.startListeningFormulas();
+        doc.SetDirtyFromClip(6, 8, 8, 9, marks, n.InsertDeleteFlags.CONTENTS, rowSpans);
+        rowSpans.executeColumnAction(doc, new n.BroadcastAction(doc));
+        doc.SetAutoCalc(true);
+        const singleRow: number[] = [];
+        for (let row = 8; row < 10; ++row)
+          for (let col = 6; col < 9; ++col)
+            singleRow.push(doc.GetValue(new n.ScAddress(col, row, 0)));
+        rowContext.Dispose();
+        rowClip.Dispose();
         context.Dispose();
         clip.Dispose();
         undo.Dispose();
         doc.Dispose();
-        return { value, changed, formula, sparse, undoGeometryDisabled, undoShared };
+        return { value, changed, formula, sparse, undoGeometryDisabled, undoShared, singleRow };
       }
       const script = Array.from(document.scripts).find(
         /** Locates the actual kernel compiler output. @param item - Script. @returns Match. */ (
@@ -146,6 +183,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     sparse: true,
     undoGeometryDisabled: true,
     undoShared: true,
+    singleRow: [3, 7, 3, 3, 7, 3],
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

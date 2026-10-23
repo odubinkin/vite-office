@@ -3799,3 +3799,24 @@ Evidence: the pinned methods and
 Whether ordinary upstream UI callers can supply an empty selection has not
 been established. Decision: preserve the slot and original diagnostic fallback,
 without replacing the result with an empty vector.
+
+## CALC-263: single-row paste changes the manual-size bit only on its first destination row
+
+Status: surprising propagation asymmetry; not a confirmed upstream defect.
+
+Pinned `sc/source/core/data/table7.cxx`, `ScTable::CopyOneCellFromClip`,
+lines 149–160, copies the source height to the entire destination row range
+when the destination spans all columns. Its following manual-size flag update
+uses the single-row overload `OrValue(nRow1, ...)` or `AndValue(nRow1, ...)`.
+The other destination rows retain their previous manual-size flags.
+
+For destination rows 2–4 with initially automatic flags, copying a manually
+sized source row sets all three heights but leaves manual flags true,false,false.
+Copying an automatic source onto initially manual destination rows leaves
+false,true,true. Hidden source rows still supply their original nonzero height.
+
+Evidence: the pinned method and
+[clipboard-single-row.test.ts](../../apps/office/src/sc/source/core/data/clipboard-single-row.test.ts)
+(`copies whole-row heights but updates only the first destination row's manual-size flag`).
+Decision: preserve both the full-range height update and the first-row-only
+flag update without extending that flag mutation for consistency.

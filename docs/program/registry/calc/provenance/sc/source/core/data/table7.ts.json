@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/table7.cxx",
     "localSymbols": [
-      "DeleteBeforeCopyFromClip"
+      "DeleteBeforeCopyFromClip",
+      "CopyOneCellFromClip"
     ],
     "upstreamSymbols": [
-      "ScTable::DeleteBeforeCopyFromClip"
+      "ScTable::DeleteBeforeCopyFromClip",
+      "ScTable::CopyOneCellFromClip"
     ],
     "preservedResponsibilities": [
-      "Task76 pre-paste deletion progress ports SingleColumnSpanSet set/getSpans/swap/empty and the ColumnSpanSet single-column overload;native DeleteCells captures actual formula group extents before shared-context teardown and explicit broadcaster purge,then splits top/bottom boundaries and empties real typed stores in reverse span order. Original document10/table7/column4 pre-deletion cycles sparse source tabs and columns,visits allocated destinations only,and defers broadcasts/listener restoration to CopyFromClipContext. Default CONTENTS preserves destination patterns. Native toSpanArray is reused. Selective date/number deletion requires the unported formatter;skip-empty,nondefault flags and absent rich-edit/note/sparkline stores remain explicit. CellStorageModified formula-group compute cache and stream-valid notifications are unrepresented rather than simulated. Full document copy/paste/reference completion,paste Undo/Redo,EnterBlock and browser acceptance remain pending;this is not task76 completion or full parity. These additions supersede only earlier omissions of these specific pre-deletion/span/listener methods;unconsumed overloads and broader parity remain unverified."
+      "Task76 pre-paste deletion progress ports SingleColumnSpanSet set/getSpans/swap/empty and the ColumnSpanSet single-column overload;native DeleteCells captures actual formula group extents before shared-context teardown and explicit broadcaster purge,then splits top/bottom boundaries and empties real typed stores in reverse span order. Original document10/table7/column4 pre-deletion cycles sparse source tabs and columns,visits allocated destinations only,and defers broadcasts/listener restoration to CopyFromClipContext. Default CONTENTS preserves destination patterns. Native toSpanArray is reused. Selective date/number deletion requires the unported formatter;skip-empty,nondefault flags and absent rich-edit/note/sparkline stores remain explicit. CellStorageModified formula-group compute cache and stream-valid notifications are unrepresented rather than simulated. Full document copy/paste/reference completion,paste Undo/Redo,EnterBlock and browser acceptance remain pending;this is not task76 completion or full parity. These additions supersede only earlier omissions of these specific pre-deletion/span/listener methods;unconsumed overloads and broader parity remain unverified.",
+      "Task76 adds original table7 CopyOneCellFromClip over prepared actual single-row context values,with native modulo column repetition and existing native column bulk formula-group cloning. Whole-row paste copies original nonhidden source height across the destination range but changes the ManualSize bit only at its first row (CALC-263). GetOriginalHeight preserves native invalid/absent-height fallback. Optional actual row/flag owners are respected. Context admission remains default CONTENTS;conditional formats/drawings and document-level single-row script/format preparation remain unrepresented. Native document CopyFromClip,paste history and EnterBlock/AutoSum are still pending;no whole-module parity promotion."
     ],
     "omittedResponsibilities": [
       "Complete CopyFromClip,CopyOneCellFromClip,stream-valid shell notifications,protected/conditional attribute mutation and nondefault paste services remain outside this pre-deletion foundation."
@@ -23,12 +26,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
           "marker": "pre-paste"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
           "marker": "ScTable::DeleteBeforeCopyFromClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
+          "marker": "ScTable::CopyOneCellFromClip"
         }
       ]
     }
