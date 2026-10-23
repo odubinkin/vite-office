@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T18:37:06.868Z"
+doc_updated_at: "2026-10-23T18:51:57.975Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -142,6 +142,20 @@ sections:
     All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Evidence/progress-blocks preserves raw Istanbul,logs and446 stable source/test/config hashes. Conservative cumulative task footprint102/110,including four prior generated images that were removed from Git;no generated screenshots are included in this checkpoint.
 
     Remaining unchanged:complete document CopyFromClip orchestration and original single-source-row optimization with its actual script/format services;native Undo initialization and paste history;EnterBlock/AutoSum and final76 acceptance,then74. Number-format inheritance/service boundaries remain under review. Task76 stays DOING/verification pending;task74 depends on76. Full all-app checkpoint80 remains the requested stop checkpoint after repairs,coverage and current-task closure. Goal remains active.
+
+    Task76 Undo-initialization checkpoint:ported original InitUndo,InitUndoSelected and AddUndoTab using actual shared source pools,empty native table names,sparse native sheet vectors and original false/false geometry defaults. ScTable constructor now preserves independent colInfo/rowInfo allocation,with native true/true constructor defaults. Absent owners are actually null;no simulated geometry buffers or replacement workbook are introduced. Native width/height setters,getters and CopyToTable guards consume these actual nullable owners. Column width/flag and row height/flag pairs are allocated together,so paired-pointer casts rely on constructor ownership invariants. Browser range borrowers,CopyRowHeight and optimal-height calculation retain their existing allocated-geometry caller preconditions;no absent range is fabricated. GetClipArea body is partitioned unchanged onto the same document instance to keep document.ts below1000lines. Source shell-medium URL propagation remains unrepresented. CALC-262 preserves empty selected initialization's one-null-slot result through original GetLastSelected fallback0.
+
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-undo-calc-coverage.
+    Result:877/877 scenarios across218 physical files pass;raw100 S15808/B9630/F2721/L14149. Seven new native resource/geometry/sparse-tab vectors and existing reference-copy vectors now use actual InitUndo. Tests retain existing tables during AddUndoTab,exercise all geometry allocation combinations,normal-document no-ops,hidden-without-geometry getter defaults,source closure with pooled text/compiled formulas,selected initialization and optional geometry-copy guards. No thresholds,exclusions or coverage ignores changed.
+    Scope:complete Calc only;not an all-application checkpoint. Earlier fixture failures used nonexistent SetRawString and were corrected to the real SetTextCell API;diagnostic logs are retained. Shared implementation is unchanged from the prior changed-owner raw100 checkpoint.
+
+    Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+    Result:1/1 actual Chromium/DOM-free Worker scenario passes. The copied-owner graph now constructs a genuine Undo document with InitUndo,observes shared pool identity and disabled default width storage,and passes that actual Undo document through CopyFromClipContext. Actual copy dependency values21/34 and=D6+1 remain unchanged.
+    Scope:native Undo initialization and block-copy graph,not complete user-facing paste Undo/Redo.
+
+    All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-undo-init stores raw Istanbul,logs and447 stable source/test/config hashes. Conservative cumulative footprint103/110 includes the previously removed generated images;no generated screenshots are committed in this block.
+
+    Remaining:full document CopyFromClip orchestration,original one-source-row optimization and its real ScCellFormat/number-formatter/script services,native paste history and EnterBlock/AutoSum integration. Those formatting owners remain unported;do not substitute ad-hoc display formatting or skip the source optimization to enable UI. Number-format inheritance remains under review. Then perform final76 acceptance and74 acceptance. Task76 stays DOING/verification pending;74 waits on76. Full all-application checkpoint80 remains the requested stop point after fixes,coverage and current-task closure. Goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -263,3 +277,17 @@ Scope:actual core block-copy graph;full browser PasteFromClip/history acceptance
 All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Evidence/progress-blocks preserves raw Istanbul,logs and446 stable source/test/config hashes. Conservative cumulative task footprint102/110,including four prior generated images that were removed from Git;no generated screenshots are included in this checkpoint.
 
 Remaining unchanged:complete document CopyFromClip orchestration and original single-source-row optimization with its actual script/format services;native Undo initialization and paste history;EnterBlock/AutoSum and final76 acceptance,then74. Number-format inheritance/service boundaries remain under review. Task76 stays DOING/verification pending;task74 depends on76. Full all-app checkpoint80 remains the requested stop checkpoint after repairs,coverage and current-task closure. Goal remains active.
+
+Task76 Undo-initialization checkpoint:ported original InitUndo,InitUndoSelected and AddUndoTab using actual shared source pools,empty native table names,sparse native sheet vectors and original false/false geometry defaults. ScTable constructor now preserves independent colInfo/rowInfo allocation,with native true/true constructor defaults. Absent owners are actually null;no simulated geometry buffers or replacement workbook are introduced. Native width/height setters,getters and CopyToTable guards consume these actual nullable owners. Column width/flag and row height/flag pairs are allocated together,so paired-pointer casts rely on constructor ownership invariants. Browser range borrowers,CopyRowHeight and optimal-height calculation retain their existing allocated-geometry caller preconditions;no absent range is fabricated. GetClipArea body is partitioned unchanged onto the same document instance to keep document.ts below1000lines. Source shell-medium URL propagation remains unrepresented. CALC-262 preserves empty selected initialization's one-null-slot result through original GetLastSelected fallback0.
+
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-undo-calc-coverage.
+Result:877/877 scenarios across218 physical files pass;raw100 S15808/B9630/F2721/L14149. Seven new native resource/geometry/sparse-tab vectors and existing reference-copy vectors now use actual InitUndo. Tests retain existing tables during AddUndoTab,exercise all geometry allocation combinations,normal-document no-ops,hidden-without-geometry getter defaults,source closure with pooled text/compiled formulas,selected initialization and optional geometry-copy guards. No thresholds,exclusions or coverage ignores changed.
+Scope:complete Calc only;not an all-application checkpoint. Earlier fixture failures used nonexistent SetRawString and were corrected to the real SetTextCell API;diagnostic logs are retained. Shared implementation is unchanged from the prior changed-owner raw100 checkpoint.
+
+Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+Result:1/1 actual Chromium/DOM-free Worker scenario passes. The copied-owner graph now constructs a genuine Undo document with InitUndo,observes shared pool identity and disabled default width storage,and passes that actual Undo document through CopyFromClipContext. Actual copy dependency values21/34 and=D6+1 remain unchanged.
+Scope:native Undo initialization and block-copy graph,not complete user-facing paste Undo/Redo.
+
+All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-undo-init stores raw Istanbul,logs and447 stable source/test/config hashes. Conservative cumulative footprint103/110 includes the previously removed generated images;no generated screenshots are committed in this block.
+
+Remaining:full document CopyFromClip orchestration,original one-source-row optimization and its real ScCellFormat/number-formatter/script services,native paste history and EnterBlock/AutoSum integration. Those formatting owners remain unported;do not substitute ad-hoc display formatting or skip the source optimization to enable UI. Number-format inheritance remains under review. Then perform final76 acceptance and74 acceptance. Task76 stays DOING/verification pending;74 waits on76. Full all-application checkpoint80 remains the requested stop point after fixes,coverage and current-task closure. Goal remains active.

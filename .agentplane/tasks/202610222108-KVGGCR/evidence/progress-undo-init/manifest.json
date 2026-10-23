@@ -1,0 +1,164 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native Undo initialization and optional geometry verified;paste history/EnterBlock pending",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 877,
+  "calcFiles": 218,
+  "coverage": {
+    "lines": {
+      "total": 14149,
+      "covered": 14149,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15808,
+      "covered": 15808,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2721,
+      "covered": 2721,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9630,
+      "covered": 9630,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "sourceHashesStable": true,
+  "capturedSourceTestConfigHashes": 447,
+  "taskFootprint": "103/110 cumulative paths,including prior removed probe images",
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed here",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+    "apps/office/src/sc/source/core/data/clipboard-undo-init.test.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json"
+  ],
+  "rawSha256": "f194d775a8ab0a6befb176457e242b28cf94d040680962000d91c8a9a22c70ad",
+  "checks": {
+    "calc-coverage": {
+      "command": "npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-undo-calc-coverage",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-calc.log",
+      "sha256": "93443f23ebed607207caccde1f40d99ad32987f26044e4de56b52fc9e6fa5fc4"
+    },
+    "app-types": {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-types3.log",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-build.log",
+      "sha256": "c0415d25fae4052f2d212f554359867a7205ef4607a910206663dbc5fc60cf62"
+    },
+    "tools-types": {
+      "command": "npx tsc --noEmit -p tsconfig.tools.json",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-tools-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lint": {
+      "command": "npx eslint <changed source/test/E2E paths>",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check <changed source/test/E2E/docs paths>",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-docs.log",
+      "sha256": "bf69f87cff076c0509d7d7596ae07bb7a782d17d2c590eb229194c38a2fcccb7"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-provenance.log",
+      "sha256": "f026a859bdffa47c08315148a88284f49d920818c337ca240e91b403b436b606"
+    },
+    "registry": {
+      "command": "npm run inventory:parity:calc",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-registry.log",
+      "sha256": "760efcf39c6f7c8e72795d2197315072d8647678ff726704a5e76c17b2beff62"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-size.log",
+      "sha256": "944340b99b93b950d9a07b9d8ca4e097d57b72b6faa1d0f2ce0013b2bcae9969"
+    },
+    "boundaries": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-boundaries.log",
+      "sha256": "9457651409b1a599ed917d6a771dcee633a5bd6cf631f003238edb854e03095c"
+    },
+    "source-tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "chromium-worker": {
+      "command": "npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-browser.log",
+      "sha256": "3a38ec1138d59954aefd92db90bb244fd96518bc219ef9a27a36e4422c0d46e5"
+    },
+    "static": {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "output/playwright/task76-undo-doctor.log",
+      "sha256": "86ffcf57ee38012c0fb3268a17b806b1bc3e5bc10824876b8bf732cde7bb08dd"
+    }
+  }
+}
