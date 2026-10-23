@@ -1,20 +1,27 @@
 /** @fileoverview Consumed original ParseBlock template over real Calc multi_type_vector const cursors. */
+import type {
+  multi_type_vector,
+  ContainerEvent,
+} from "../../external/mdds/include/mdds/multi_type_vector/soa/main";
 import type { CellStoreType } from "./mtvelements";
 /** Native callback argument is an actual borrowed store node,not a copied cell list. */
-export type CellStoreNode = ReturnType<ReturnType<CellStoreType["cbegin"]>["get"]>;
+export type CellStoreNode = Pick<
+  ReturnType<ReturnType<CellStoreType["cbegin"]>["get"]>,
+  "type" | "position" | "size" | "data"
+>;
 /** Original block callback signature. */
 export interface BlockFunction {
   /** Consumes original node and native partial-block bounds. @param node - Borrowed node. @param offset - Native offset. @param size - Native count. @returns Nothing. */
   call(node: CellStoreNode, offset: number, size: number): void;
 }
 /** Native ParseBlock specialization,retaining the final block cursor and exact truncation behavior. @param position - Const position hint. @param store - Actual cell store. @param action - Native block functor. @param start - First row. @param end - Last row. @returns Final const cursor. */
-export function ParseBlock(
-  position: ReturnType<CellStoreType["cbegin"]>,
-  store: CellStoreType,
+export function ParseBlock<E extends ContainerEvent>(
+  position: ReturnType<multi_type_vector<E>["cbegin"]>,
+  store: multi_type_vector<E>,
   action: BlockFunction,
   start: number,
   end: number,
-): ReturnType<CellStoreType["cbegin"]> {
+): ReturnType<multi_type_vector<E>["cbegin"]> {
   const found = store.cposition(position, start),
     iterator = found.first;
   let offset = found.second,

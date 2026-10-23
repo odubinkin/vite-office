@@ -79,6 +79,14 @@ export enum HardRecalcState {
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   private pDelayedFormulaGrouping: ScRange | null = null;
+  /** Original selected-sheet clipboard dirty forwarding. @param args - Native bounds,marks,flags and deferred spans. @returns Nothing. */
+  SetDirtyFromClip(...args: Parameters<typeof documen7.SetDirtyFromClip>): void {
+    documen7.SetDirtyFromClip.apply(this, args);
+  }
+  /** Original rectangular broadcast with its native individual-broadcaster default. @param range - Changed area. @param id - Hint ID. @param singles - Individual delivery. @returns Nothing. */
+  BroadcastCells(range: ScRange, id: SfxHintId, singles = true): void {
+    documen7.BroadcastCells.call(this, range, id, singles);
+  }
   /** Original clipboard pre-deletion forwarding on this actual document. @param args - Native arguments. @returns Nothing. */
   DeleteBeforeCopyFromClip(...args: Parameters<typeof document10.DeleteBeforeCopyFromClip>): void {
     document10.DeleteBeforeCopyFromClip.apply(this, args);

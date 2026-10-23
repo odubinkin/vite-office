@@ -1,4 +1,6 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import { ParseBlock } from "../../../inc/mtvfunctions";
+import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
 import * as column3 from "./column3";
 import * as column4 from "./column4";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
@@ -171,6 +173,71 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original deferred clipboard dirty phase separates formula dirtiness from scalar broadcast spans. @param first - First row. @param last - Last row. @param spans - Deferred changed spans. @returns Nothing. */
+  SetDirtyFromClip(first: number, last: number, spans: ColumnSpanSet): void {
+    const old = this.rDocument.GetAutoCalc();
+    this.rDocument.SetAutoCalc(false);
+    try {
+      const action = new SetDirtyOnRangeHandler(this);
+      ProcessFormula(
+        this.maCells.begin(),
+        this.maCells,
+        first,
+        last,
+        /** Original formula operator. @param row - Native row. @param cell - Formula. @returns Nothing. */ (
+          row,
+          cell,
+        ) => {
+          void row;
+          cell.SetDirty();
+        },
+        /** Original non-formula operator. @param type - Store kind. @param row - First row. @param length - Count. @returns Nothing. */ (
+          type,
+          row,
+          length,
+        ) => action.other(type, row, length),
+      );
+      action.fillBroadcastSpans(spans);
+    } finally {
+      this.rDocument.SetAutoCalc(old);
+    }
+  }
+  /** Original sparse broadcaster walk reuses one mutable native hint across the actual nonempty broadcaster blocks. @param first - First row. @param last - Last row. @param id - Hint ID. @returns Whether delivered. */
+  BroadcastBroadcasters(first: number, last: number, id: SfxHintId): boolean {
+    const hint = new ScHint(id, new ScAddress(this.nCol, 0, this.nTab));
+    let delivered = false;
+    ParseBlock(
+      this.maBroadcasters.cbegin(),
+      this.maBroadcasters,
+      {
+        /** Original broadcaster template only visits actual stored listeners. @param node - Actual block. @param offset - First element. @param length - Count. @returns Nothing. */
+        call(node, offset, length) {
+          if (node.type !== element_type_broadcaster) return;
+          for (let index = 0; index < length; ++index) {
+            hint.SetAddressRow(node.position + offset + index);
+            (
+              broadcaster_block.at(
+                node.data as base_element_block,
+                offset + index,
+              ) as SvtBroadcaster<SfxHint>
+            ).Broadcast(hint);
+            delivered = true;
+          }
+        },
+      },
+      first,
+      last,
+    );
+    return delivered;
+  }
+  /** Original mutable metadata-store borrow. @returns Actual native store. */
+  GetCellAttrStore(): CellTextAttrStoreType {
+    return this.maCellTextAttrs;
+  }
+  /** Original default-content general clipboard copy on this actual column. @param args - Native arguments. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof column3.CopyFromClip>): void {
+    column3.CopyFromClip.apply(this, args);
+  }
   /** Original pre-paste deletion forwards actual context/source/deferred spans. @param args - Native arguments. @returns Nothing. */
   DeleteBeforeCopyFromClip(...args: Parameters<typeof column4.DeleteBeforeCopyFromClip>): void {
     column4.DeleteBeforeCopyFromClip.apply(this, args);
@@ -485,31 +552,92 @@ export class ScColumn extends ScColumnData {
   GetDoc(): ScDocument {
     return this.rDocument;
   }
-  /** Writes numeric cell content and invalidates its text measurement metadata. @param row - Row. @param value - Number. @returns Nothing. */
-  SetValue(row: number, value: number): void {
+  /** Original numeric insertion without a position hint. @param row - Row. @param value - Number. @returns Nothing. */
+  SetValue(row: number, value: number): void;
+  /** Original cached numeric insertion with the native broadcast default. @param block - Actual cursors. @param row - Row. @param value - Number. @param broadcast - Broadcast flag. @returns Nothing. */
+  SetValue(block: ColumnBlockPosition, row: number, value: number, broadcast?: boolean): void;
+  /** Binds original scalar/hinted overloads to the same actual stores. @param first - Row or cursors. @param second - Value or row. @param third - Hinted value. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetValue(
+    first: number | ColumnBlockPosition,
+    second: number,
+    third?: number,
+    broadcast = true,
+  ): void {
+    const block = first instanceof ColumnBlockPosition ? first : null,
+      row = block ? second : (first as number),
+      value = block ? (third as number) : second;
     if (!this.rDocument.ValidRow(row)) return;
     const rows = this.DetachFormulaCell(row);
-    this.maCells.set(row, value, double_element_callbacks);
-    this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    if (block) {
+      block.miCellPos = this.maCells.set(
+        block.miCellPos as ReturnType<CellStoreType["begin"]>,
+        row,
+        value,
+        double_element_callbacks,
+      );
+      block.miCellTextAttrPos = this.maCellTextAttrs.set(
+        block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+        row,
+        new CellTextAttr(),
+        celltextattr_element_callbacks,
+      );
+    } else {
+      this.maCells.set(row, value, double_element_callbacks);
+      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    }
     this.StartListeningUnshared(rows);
-    this.BroadcastNewCell(row);
+    if (broadcast) this.BroadcastNewCell(row);
   }
-  /** Stores literal text using the document's shared pool,without number or formula recognition. @param row - Row. @param value - Unicode text or already interned string. @returns Nothing. */
-  SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void {
+  /** Original literal Unicode/shared-string insertion. @param row - Row. @param value - Literal text. @returns Nothing. */
+  SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void;
+  /** Original cached shared-string insertion. @param block - Actual cursors. @param row - Row. @param value - Shared text. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetRawString(
+    block: ColumnBlockPosition,
+    row: number,
+    value: SharedStringConstReference,
+    broadcast?: boolean,
+  ): void;
+  /** Binds original string overloads to actual shared storage and deferred listeners. @param first - Row or cursors. @param second - Text or row. @param third - Hinted text. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetRawString(
+    first: number | ColumnBlockPosition,
+    second: number | OUStringConstReference | SharedStringConstReference,
+    third?: SharedStringConstReference,
+    broadcast = true,
+  ): void {
+    const block = first instanceof ColumnBlockPosition ? first : null,
+      row = block ? (second as number) : (first as number),
+      value = block
+        ? (third as SharedStringConstReference)
+        : (second as OUStringConstReference | SharedStringConstReference);
     if (!this.rDocument.ValidRow(row)) return;
     const shared =
-      "getData" in value
-        ? new SharedString(value)
-        : this.rDocument.GetSharedStringPool().intern(value);
-    const rows = this.DetachFormulaCell(row);
+        "getData" in value
+          ? new SharedString(value)
+          : this.rDocument.GetSharedStringPool().intern(value),
+      rows = this.DetachFormulaCell(row);
     try {
-      this.maCells.set(row, shared, string_element_callbacks);
-      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+      if (block) {
+        block.miCellPos = this.maCells.set(
+          block.miCellPos as ReturnType<CellStoreType["begin"]>,
+          row,
+          shared,
+          string_element_callbacks,
+        );
+        block.miCellTextAttrPos = this.maCellTextAttrs.set(
+          block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+          row,
+          new CellTextAttr(),
+          celltextattr_element_callbacks,
+        );
+      } else {
+        this.maCells.set(row, shared, string_element_callbacks);
+        this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+      }
     } finally {
       shared.dispose();
     }
     this.StartListeningUnshared(rows);
-    this.BroadcastNewCell(row);
+    if (broadcast) this.BroadcastNewCell(row);
   }
   /** Compiles and stores a supported formula in the actual typed block store. @param row - Row. @param formula - Source. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(row: number, formula: OUStringConstReference, grammar: Grammar): void {
@@ -526,14 +654,48 @@ export class ScColumn extends ScColumnData {
   SetFormulaCell(
     row: number,
     cell: ScFormulaCell,
-    listening: StartListeningType = SingleCellListening,
-  ): ScFormulaCell | null {
-    if (!this.rDocument.ValidRow(row)) return null;
+    listening?: StartListeningType,
+  ): ScFormulaCell | null;
+  /** Original hinted formula adoption returns void;number-format inheritance remains outside the existing local default-format profile. @param block - Cached cursors. @param row - Row. @param cell - Owned formula. @param listening - Native listening default. @returns Nothing. */
+  SetFormulaCell(
+    block: ColumnBlockPosition,
+    row: number,
+    cell: ScFormulaCell,
+    listening?: StartListeningType,
+  ): void;
+  /** Binds both source formula adoption overloads to actual cell/group owners. @param first - Row or cursors. @param second - Formula or row. @param third - Listening mode or formula. @param fourth - Hinted listening mode. @returns Original nonhinted owner or void for the hinted overload. */
+  SetFormulaCell(
+    first: number | ColumnBlockPosition,
+    second: ScFormulaCell | number,
+    third?: StartListeningType | ScFormulaCell,
+    fourth: StartListeningType = SingleCellListening,
+  ): ScFormulaCell | null | void {
+    const block = first instanceof ColumnBlockPosition ? first : null,
+      row = block ? (second as number) : (first as number),
+      cell = block ? (third as ScFormulaCell) : (second as ScFormulaCell),
+      listening = block ? fourth : ((third as StartListeningType) ?? SingleCellListening);
+    if (!this.rDocument.ValidRow(row)) return block ? undefined : null;
     const rows = this.DetachFormulaCell(row);
-    this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
-    this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    if (block) {
+      block.miCellPos = this.maCells.set<ScFormulaCell | null>(
+        block.miCellPos as ReturnType<CellStoreType["begin"]>,
+        row,
+        cell,
+        formula_element_callbacks,
+      );
+      block.miCellTextAttrPos = this.maCellTextAttrs.set(
+        block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+        row,
+        new CellTextAttr(),
+        celltextattr_element_callbacks,
+      );
+    } else {
+      this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
+      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    }
     this.JoinNewFormulaCell(this.maCells.position(row), cell);
-    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc()) return cell;
+    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc())
+      return block ? undefined : cell;
     if (listening === ConvertToGroupListening) {
       const positions = new ColumnBlockPositionSet(this.rDocument),
         start = new StartListeningContext(this.rDocument, positions),
@@ -555,7 +717,7 @@ export class ScColumn extends ScColumnData {
         if (!top.NeedsListening()) this.SetNeedsListeningGroup(rows[index] as number);
       }
     cell.SetDirty();
-    return cell;
+    return block ? undefined : cell;
   }
   /** Borrows an actual formula-cell identity. @param row - Valid row. @returns Formula cell or null. */
   GetFormulaCell(row: number): ScFormulaCell | null {
@@ -723,5 +885,28 @@ export class ScColumn extends ScColumnData {
     this.maCellTextAttrs.set_empty(row, row);
     this.StartListeningUnshared(rows);
     this.Broadcast(row);
+  }
+}
+
+/** Original SetDirtyOnRangeHandler owns compact non-formula changed spans. */
+class SetDirtyOnRangeHandler {
+  private readonly maValueRanges: SingleColumnSpanSet;
+  /** Borrows the actual column and limits. @param column - Native owner. @returns Handler. */
+  constructor(private readonly column: ScColumn) {
+    this.maValueRanges = new SingleColumnSpanSet(column.GetDoc().GetSheetLimits());
+  }
+  /** Native non-formula dispatch excludes empty blocks. @param type - Store type. @param first - First row. @param length - Count. @returns Nothing. */
+  other(type: number, first: number, length: number): void {
+    if (type !== element_type_empty) this.maValueRanges.set(first, first + length - 1, true);
+  }
+  /** Transfers compact native true spans for the original post-insert broadcast. @param spans - Document operation owner. @returns Nothing. */
+  fillBroadcastSpans(spans: ColumnSpanSet): void {
+    spans.set(
+      this.column.GetDoc(),
+      this.column.GetTab(),
+      this.column.GetCol(),
+      this.maValueRanges,
+      true,
+    );
   }
 }

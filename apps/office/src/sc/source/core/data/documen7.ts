@@ -8,7 +8,8 @@ import {
   SvxBoxInfoItemLine as InnerEdge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
-import type { ScColumnData } from "../../../inc/column";
+import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
+import type { ScColumn, ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -537,4 +538,70 @@ export function EndListeningFormulaCells(this: ScDocument, cells: readonly ScFor
   const context = new EndListeningContext(this);
   for (const cell of cells) cell.EndListeningTo(context);
   context.purgeEmptyBroadcasters();
+}
+
+/** Original document selected-sheet deferred clipboard dirty phase. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected tabs. @param flags - Native insert flags. @param spans - Deferred broadcasts. @returns Nothing. */
+export function SetDirtyFromClip(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  flags: InsertDeleteFlags,
+  spans: ColumnSpanSet,
+): void {
+  if (!(flags & InsertDeleteFlags.CONTENTS)) return;
+  for (const tab of marks.GetSelectedTabs()) {
+    if (tab >= this.GetTableCount()) break;
+    this.FetchTable(tab)?.SetDirtyFromClip(col1, row1, col2, row2, spans);
+  }
+}
+/** Original document7 rectangular broadcast coordinates actual individual and area subscriptions under one native bulk scope. Unrepresented group-compute cache,stream-valid and UNO shell notification owners are not synthesized. @param this - Actual document. @param range - Changed rectangle. @param id - Hint ID. @param singles - Native individual-broadcaster default. @returns Nothing. */
+export function BroadcastCells(
+  this: ScDocument,
+  range: ScRange,
+  id: SfxHintId,
+  singles: boolean,
+): void {
+  if (!this["pBASM"] || this["eHardRecalcState"] !== HardRecalcState.OFF) return;
+  const bulk = new ScBulkBroadcast(this["pBASM"], id);
+  try {
+    let delivered = false;
+    if (singles)
+      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); ++tab) {
+        const table = this.FetchTable(tab);
+        if (table)
+          delivered =
+            table.BroadcastBroadcasters(
+              range.aStart.Col(),
+              range.aStart.Row(),
+              range.aEnd.Col(),
+              range.aEnd.Row(),
+              id,
+            ) || delivered;
+      }
+    if (this["pBASM"].AreaBroadcast(range, id) || delivered) this.TrackFormulas(id);
+  } finally {
+    bulk.Dispose();
+  }
+}
+
+/** Original document.cxx deferred scalar/deletion broadcast action. */
+export class BroadcastAction implements ColumnAction {
+  private mpCol: ScColumn | null = null;
+  /** Borrows the real destination document. @param mrDoc - Actual document. @returns Action. */
+  constructor(private readonly mrDoc: ScDocument) {}
+  /** Original callback borrows the actual allocated column. @param column - Native column. @returns Nothing. */
+  startColumn(column: ScColumn): void {
+    this.mpCol = column;
+  }
+  /** Original false-span early return and inclusive changed-row notification. @param first - First row. @param last - Last row. @param value - Changed flag. @returns Nothing. */
+  execute(first: number, last: number, value: boolean): void {
+    if (!value) return;
+    if (!this.mpCol) throw new Error("BroadcastAction requires an initialized column");
+    const range = new ScRange(this.mpCol.GetCol(), first, this.mpCol.GetTab());
+    range.aEnd.SetRow(last);
+    this.mrDoc.BroadcastCells(range, SfxHintId.ScDataChanged);
+  }
 }

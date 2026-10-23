@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import * as table2 from "./table2";
 import * as table7 from "./table7";
 import { ConvertToGroupListening } from "../../../inc/types";
 import { HasAttrFlags } from "../../../inc/global";
@@ -44,6 +45,18 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table2 clipboard dirty forwarding. @param args - Native bounds and changed spans. @returns Nothing. */
+  SetDirtyFromClip(...args: Parameters<typeof table2.SetDirtyFromClip>): void {
+    table2.SetDirtyFromClip.apply(this, args);
+  }
+  /** Original table2 broadcaster forwarding. @param args - Native bounds and hint. @returns Whether delivered. */
+  BroadcastBroadcasters(...args: Parameters<typeof table2.BroadcastBroadcasters>): boolean {
+    return table2.BroadcastBroadcasters.apply(this, args);
+  }
+  /** Original table2 general clipboard-copy forwarding on this actual table. @param args - Native rectangle/displacement/source arguments. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof table2.CopyFromClip>): void {
+    table2.CopyFromClip.apply(this, args);
+  }
   /** Original table7 pre-paste forwarding on this actual table instance. @param args - Native context/source/broadcast arguments. @returns Nothing. */
   DeleteBeforeCopyFromClip(...args: Parameters<typeof table7.DeleteBeforeCopyFromClip>): void {
     table7.DeleteBeforeCopyFromClip.apply(this, args);
