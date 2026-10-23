@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610230856-RMZXBZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-23T11:44:12.263Z",
+  "verdict": "pass",
+  "summary": "Both development histories integrated, regressions repaired and full verification completed; all three branches published and clean.",
+  "evaluated_sha": "fe17a75c20f4551da160c29592489fe7f102eee2",
+  "blueprint_digest": "56796b1c78c6317e2e6e51f43bc1d8845cc096af3cfb1aca2bc6ef27f8a0ef0c",
+  "findings": [
+    "Two merge conflicts resolved preserving both intended behaviors; XML persistence fixtures and seven missing module registrations repaired; boundary tests close every uncovered production branch."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610230856-RMZXBZ/README.md",
+    ".agentplane/tmp/RMZXBZ-coverage-final-summary.json",
+    ".agentplane/tmp/RMZXBZ-coverage-results.json",
+    ".agentplane/tmp/RMZXBZ-targeted-final.log",
+    ".agentplane/tmp/RMZXBZ-e2e-rerun.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
