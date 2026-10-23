@@ -972,7 +972,7 @@ it("admits only pinned character-handler value imports without widening module o
       "cppu/inc/typelib/typedescription.ts",
     ),
   ).toBe(false);
-  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("xmloff", "vcl")).toBe(true);
   expect(isForbiddenModuleEdge("sax", "o3tl")).toBe(true);
   expect(

@@ -264,7 +264,7 @@ export class XMLTableContext extends SvXMLImportContext {
   public constructor(
     private readonly target: XMLTableImportTarget,
     attributes: FastAttributeList,
-    private readonly helper = new XMLTextImportHelper(target),
+    private readonly helper = target.GetTextImport(),
   ) {
     super();
     attributes.assertOnly([XMLToken.TABLE_NAME, XMLToken.TABLE_STYLE_NAME], "table");

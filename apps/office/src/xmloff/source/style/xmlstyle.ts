@@ -118,7 +118,7 @@ export class XMLStylesContext extends SvXMLImportContext {
       return context;
     }
     if (element === XMLToken.TEXT_LIST_STYLE)
-      return new SvxXMLListStyleContext(this.target, attributes);
+      return new SvxXMLListStyleContext(this.target, attributes, this.automatic);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)
       return new XMLPageLayoutContext(this.target, attributes);
     if (element === XMLToken.TEXT_LINENUMBERING_CONFIGURATION)

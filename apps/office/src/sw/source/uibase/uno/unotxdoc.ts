@@ -1,9 +1,11 @@
 /** @fileoverview Consumed SwXTextDocument text/style/service suppliers from pinned sw/source/uibase/uno/unotxdoc.cxx. No browser/shell lifecycle state enters SwDoc. */
+import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
+
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwXText } from "../../core/unocore/unotext";
 import { SwXStyleFamilies, SwXStyle } from "../../core/unocore/unostyle";
-import { SwXNumberingRules } from "../../core/unocore/unosett";
+import { SwXNumberingRules, SwXLineNumberingProperties } from "../../core/unocore/unosett";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
 import { invalid } from "../../core/unocore/unocrsrhelper";
@@ -25,7 +27,15 @@ export class SwXTextDocument {
     this.GetDoc();
     return this.body;
   }
+  /** Supplies the document-owned line numbering property interface. @returns Actual native property owner. */
+  getLineNumberingProperties(): SwXLineNumberingProperties {
+    return new SwXLineNumberingProperties(this.GetDoc());
+  }
   /** Implements the represented native getStyleFamilies operation. @returns The represented native operation result. */
+  getAutoStyles(): SwXAutoStyles {
+    return new SwXAutoStyles(this.GetDoc());
+  }
+  /** Supplies the named style families. @returns Native family supplier. */
   getStyleFamilies(): SwXStyleFamilies {
     return new SwXStyleFamilies(this.GetDoc());
   }

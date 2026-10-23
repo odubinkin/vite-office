@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/inc/txtimp.ts",
+    "status": "mapped",
+    "upstreamPath": "include/xmloff/txtimp.hxx",
+    "localSymbols": [
+      "XMLTextModel",
+      "XMLTextCursor"
+    ],
+    "upstreamSymbols": [
+      "XMLTextImportHelper"
+    ],
+    "preservedResponsibilities": [
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Only the represented Writer ODT core slice is ported. Wider native service, unsupported families and engine contracts remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/inc/txtimp.ts",
+          "marker": "XMLTextModel"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/xmloff/txtimp.hxx",
+          "marker": "XMLTextImportHelper"
+        }
+      ]
+    }
+  }
+}

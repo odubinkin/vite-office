@@ -54,7 +54,7 @@
           "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/xmloff/source/style/prstylei.ts",
           "marker": "applyNamedParagraphStyles"
         },
         {
@@ -436,6 +436,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+          "marker": "SwXText"
         }
       ],
       "upstream": [
@@ -807,7 +811,8 @@
       "Task202610101723-QH6XM1 replaces the scalar per-node margin action/group with document-owned native range history: full first/left items, independent list-indent flags, native borrowed old/new attr-set deltas and scoped SwRegHistory direct/reset entries. Undo temporarily restores original directness and full values at current slots; redo uses current tab defaults without adding another undo. Final related and browser evidence executes only the portable implementation with both references absent. Full C++ independent base topology, general native node/style/client lifetime, rich numbering first-line units, formula external-name conversion, edit-shell admission guard, selection rings, frame/vertical/redline/merged-layout and global Repeat dispatch remain unverified. No historical status/default/classification or registered save/open/recovery promotion. SwDoc.MoveLeftMargin appends one range action before initial mutation and directly calls the native operation, recording through its original history.",
       "Task135: Embedded resource identity permits multiple declaration-local font-face aliases for identical package data; conflicting family/style/weight/format still rejects. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
       "Task TV1H69 exposes native BalanceRowHeight through the existing ndtbl1 owner and original cursor/history state, with no browser height payload or parallel geometry model. Full document parity remains unverified.",
-      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",

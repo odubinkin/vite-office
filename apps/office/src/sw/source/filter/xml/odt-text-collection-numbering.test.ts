@@ -194,7 +194,7 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
     expect(paragraph.GetListLabel()).toBe("•");
     const bytes = writeOdtDocument(current, { title: metadata.title });
     const xml = await new ZipFile(bytes).readTextEntry("content.xml");
-    expect(xml).toContain('text:style-name="L1"');
+    expect(xml).toContain('text:style-name="Bullets"');
     expect(xml).not.toContain('text:start-value="7"');
     const reopened = (await readOdtDocument(bytes, metadata)).document;
     expect(reopened.GetTextFormatColl("text-body").GetNumRule().GetValue()).toBe("Counters");

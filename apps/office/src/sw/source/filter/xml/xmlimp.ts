@@ -1,25 +1,19 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
-import { putCharacterProperties } from "./xmlimp-character";
-import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { getCharacterProperties } from "./xmlexp";
-import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
-import {
-  SvxIndentValue,
-  SvxFirstLineIndentItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/inc/lrspitem";
-import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
-import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
-import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
-import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { applyNamedParagraphStyles } from "./xmlimp-named-styles";
-import { SwNumRuleItem } from "../../core/para/paratr";
-import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
+import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+import { text } from "../../core/unocore/unocrsrhelper";
+import type { SwXStyle } from "../../core/unocore/unostyle";
+import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
+import { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
+import { xmlTextString } from "../../../../xmloff/source/text/txtprmap";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+
+import { SwXNumberingRules } from "../../core/unocore/unosett";
+
+import { applyNamedParagraphStyles } from "../../../../xmloff/source/style/prstylei";
+
 import {
   FastAttributeList,
   parseOdfXmlStream,
@@ -38,43 +32,23 @@ import {
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwXMLTableImport } from "./xmltbli";
-import type {
-  OdfCharacterProperties,
-  OdfHyperlink,
-  OdfParagraphAlignment,
-  XMLParagraphStyle,
-} from "../../../../xmloff/source/text/txtparae";
+
 import {
   XMLTextBodyContext,
   type OdfStyleDefinition,
-  type XMLParagraphImportTarget,
-  type XMLParagraphListState,
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
-import { LineNumberPosition, SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
-import { SwPosition } from "../../core/crsr/pam";
+
 import { SwDoc, type WriterEmbeddedFont } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
-import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
+
+import { SwTextNode } from "../../core/txtnode/ndtxt";
+
 import {
-  WRITER_CHARACTER_WHICH_RANGES,
-  RES_BREAK,
-  RES_PARATR_SPLIT,
-  RES_PARATR_ORPHANS,
-  RES_PARATR_WIDOWS,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_TEXTLEFT,
-  RES_MARGIN_RIGHT,
-  RES_UL_SPACE,
-  RES_KEEP,
-  RES_LINENUMBER,
-} from "../../../inc/hintids";
-import { getWriterStyleIdFromOdfName } from "../../../inc/poolfmt";
+  getWriterStyleIdFromOdfName,
+  getWriterMaterializedParagraphStyleDefinition,
+} from "../../../inc/poolfmt";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
 
@@ -136,7 +110,7 @@ export function importWriterXml(
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
-      createInitialTextNode: contentXml === undefined,
+      createInitialTextNode: true,
       locale,
       ...(options.defaultFontDevice === undefined
         ? {}
@@ -159,6 +133,7 @@ export function importWriterXml(
       title: xmlImport.title ?? metadata.title,
     };
   } finally {
+    xmlImport.dispose();
     xmlImport.document.SetInReading(false);
   }
 }
@@ -171,11 +146,11 @@ class SwXMLImport
   private lineNumberingSeen = false;
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
-  private paragraphCount = 0;
   private titleSeen = false;
   private styles: XMLStylesContext | undefined;
   private autoStyles: XMLStylesContext | undefined;
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
+  private readonly automaticListRules = new Map<string, XMLTextListRule>();
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
   private readonly fontFaceGenerics = new Map<string, string>();
@@ -191,6 +166,22 @@ class SwXMLImport
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
   public constructor(document: SwDoc) {
     super(document);
+    this.model = new SwXTextDocument(document);
+    this.textImport = new XMLTextImportHelper(this, this.model);
+  }
+  private readonly model: SwXTextDocument;
+  /** Supplies the shared text import owner used by every paragraph and table cell. @returns Active native helper. */
+  public GetTextImport(): XMLTextImportHelper {
+    return this.textImport as XMLTextImportHelper;
+  }
+  /** Supplies the original model/style/service API. @returns Writer model. */
+  public GetModel(): SwXTextDocument {
+    return this.model;
+  }
+  /** Releases import API cursors and model wrappers without destroying the imported SwDoc. @returns Nothing. */
+  public dispose(): void {
+    this.textImport?.ResetCursor();
+    this.model.dispose();
   }
 
   /** Parses one expected package stream. @param xml - XML text. @param expectedRoot - Required root token. @param options - Parser controls. @returns Nothing. */
@@ -249,8 +240,10 @@ class SwXMLImport
   /** Creates and retains one native style-container context. @param automatic - Whether to replace the automatic context. @returns New owning context. */
   public CreateStylesContext(automatic: boolean): XMLStylesContext {
     const context = new XMLStylesContext(this, automatic);
-    if (automatic) this.autoStyles = context;
-    else this.styles = context;
+    if (automatic) {
+      this.autoStyles = context;
+      this.automaticListRules.clear();
+    } else this.styles = context;
     return context;
   }
 
@@ -305,33 +298,67 @@ class SwXMLImport
 
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
   public getListRule(styleName: string): XMLTextListRule | undefined {
-    return this.listRules.get(styleName);
+    return this.automaticListRules.get(styleName) ?? this.listRules.get(styleName);
   }
 
   /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
   public registerLineNumbering(value: OdfLineNumberingConfiguration): void {
     if (this.lineNumberingSeen) throw new Error("Duplicate ODF line numbering configuration.");
     this.lineNumberingSeen = true;
-    this.document.SetLineNumberInfo(
-      new SwLineNumberInfo({
-        countBlankLines: value.countBlankLines,
-        countBy: value.countBy,
-        countInFlys: value.countInFlys,
-        divider: value.divider,
-        dividerCountBy: value.dividerCountBy,
-        paintLineNumbers: value.paintLineNumbers,
-        posFromLeft: value.posFromLeft,
-        position:
-          value.position === "right"
-            ? LineNumberPosition.Right
-            : value.position === "inside"
-              ? LineNumberPosition.Inside
-              : value.position === "outside"
-                ? LineNumberPosition.Outside
-                : LineNumberPosition.Left,
-        restartEachPage: value.restartEachPage,
-      }),
-    );
+    const properties = this.model.getLineNumberingProperties();
+    for (const [name, field] of [
+      ["CountEmptyLines", "countBlankLines"],
+      ["CountLinesInFrames", "countInFlys"],
+      ["IsOn", "paintLineNumbers"],
+      ["RestartAtEachPage", "restartEachPage"],
+    ] as const) {
+      const key = xmlTextString(name),
+        any = new Any([value[field]], "bool");
+      try {
+        properties.setPropertyValue(key, any);
+      } finally {
+        key.dispose();
+        any.dispose();
+      }
+    }
+    for (const [name, number] of [
+      ["Interval", value.countBy],
+      ["SeparatorInterval", value.dividerCountBy],
+      [
+        "NumberPosition",
+        value.position === "right"
+          ? 1
+          : value.position === "inside"
+            ? 2
+            : value.position === "outside"
+              ? 3
+              : 0,
+      ],
+    ] as const) {
+      const key = xmlTextString(name),
+        any = new Any([(number << 16) >> 16], "sal_Int16");
+      try {
+        properties.setPropertyValue(key, any);
+      } finally {
+        key.dispose();
+        any.dispose();
+      }
+    }
+    const distanceKey = xmlTextString("Distance"),
+      distance = new Any([Number(convertTwipToMm100(BigInt(value.posFromLeft)))], "sal_Int32"),
+      separatorKey = xmlTextString("SeparatorText"),
+      separator = xmlTextString(value.divider),
+      any = new Any(separator.getDataAddress(), "OUString");
+    try {
+      properties.setPropertyValue(distanceKey, distance);
+      properties.setPropertyValue(separatorKey, any);
+    } finally {
+      distanceKey.dispose();
+      distance.dispose();
+      separatorKey.dispose();
+      separator.dispose();
+      any.dispose();
+    }
   }
 
   /** Registers the paragraph-family default shared by all named paragraph styles. @param definition - Parsed default. @returns Nothing. */
@@ -356,48 +383,70 @@ class SwXMLImport
     });
   }
 
-  /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
-  public registerListStyle(styleName: string, rule: XMLTextListRule): void {
-    if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
-    const imported = createWriterNumRule(
-      rule.name,
-      undefined,
-      rule.name,
-      this.expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT,
-    );
-    const numberingRules = new SwXNumberingRules(imported);
+  /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing.  @param automatic - Native operation input. */
+  public registerListStyle(styleName: string, rule: XMLTextListRule, automatic = false): void {
+    const declarations = automatic ? this.automaticListRules : this.listRules;
+    if (declarations.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
+    let rules: SwXNumberingRules, style: SwXStyle | undefined;
+    if (automatic)
+      rules = this.model.createInstance(
+        xmlTextString("com.sun.star.text.NumberingRules"),
+      ) as SwXNumberingRules;
+    else {
+      const family = this.model.getStyleFamilies().getByName(xmlTextString("NumberingStyles")),
+        key = xmlTextString(rule.name);
+      try {
+        if (!family.hasByName(key)) {
+          const descriptor = this.model.createInstance(
+            xmlTextString("com.sun.star.style.NumberingStyle"),
+          ) as SwXStyle;
+          family.insertByName(key, descriptor);
+        }
+        style = family.getByName(key);
+        const value = style.getPropertyValue(xmlTextString("NumberingRules")),
+          reference = new Reference(value, UNO_QUERY, indexReplaceType);
+        try {
+          rules = reference.get() as SwXNumberingRules;
+          rules.acquire();
+        } finally {
+          reference.dispose();
+          value.dispose();
+        }
+      } finally {
+        key.dispose();
+      }
+    }
     try {
-      for (const declaration of rule.levels) {
-        const { level, position, ...properties } = declaration;
-        numberingRules.replaceByIndex(level, { ...position.values, ...properties });
+      FillUnoNumRule(rules, rule);
+      if (style) {
+        const value = new Any([rules], ["Reference", indexReplaceType]);
+        try {
+          style.setPropertyValue(xmlTextString("NumberingRules"), value);
+        } finally {
+          value.dispose();
+        }
       }
-    } catch (error) {
-      // FillUnoNumRule catches the UNO failure outside the loop, retaining prior replacements.
-      if (!(error instanceof NumberingRulePropertyError)) throw error;
-    }
-    const existing = this.document.FindNumRulePtr(rule.name);
-    if (existing !== undefined) {
-      for (let level = 0; level < rule.levelCount; level += 1) {
-        const previous = existing.Get(level),
-          applied = imported.Get(level);
-        if (
-          previous.GetNumberingType() !== applied.GetNumberingType() ||
-          JSON.stringify(previous.GetMarkerProperties()) !==
-            JSON.stringify(applied.GetMarkerProperties()) ||
-          (previous.GetBulletFont()?.GetFamilyName() ?? "") !==
-            (applied.GetBulletFont()?.GetFamilyName() ?? "") ||
-          (getWriterNumFormatKind(applied) === "bullet" &&
-            getWriterNumFormatBullet(previous) !== getWriterNumFormatBullet(applied)) ||
-          JSON.stringify(previous.GetPositionProperties()) !==
-            JSON.stringify(applied.GetPositionProperties())
-        )
-          throw new Error(`Conflicting ODF list rule: ${rule.name}`);
+      const name = rules.getName(),
+        key = xmlTextString("DefaultListId"),
+        value = rules.getPropertyValue(key),
+        identity = xmlTextString("");
+      try {
+        value.extract(identity, "OUString");
+        declarations.set(styleName, {
+          ...rule,
+          rules,
+          name: text(name),
+          defaultListId: text(identity),
+        });
+      } finally {
+        name.dispose();
+        key.dispose();
+        value.dispose();
+        identity.dispose();
       }
-      this.listRules.set(styleName, { ...rule, defaultListId: existing.GetDefaultListId() });
-      return;
+    } finally {
+      if (style) rules.release();
     }
-    this.document.AddNumRule(imported);
-    this.listRules.set(styleName, { ...rule, defaultListId: imported.GetDefaultListId() });
   }
 
   /** Opens the sole office:text context. @returns Text body context. */
@@ -405,6 +454,7 @@ class SwXMLImport
     this.officeTextCount += 1;
     if (this.officeTextCount > 1)
       throw new Error("ODF content must contain exactly one office:text.");
+    this.GetTextImport().SetCursor(this.model.getText().createTextCursor());
     return new XMLTextBodyContext(this);
   }
 
@@ -414,194 +464,100 @@ class SwXMLImport
     this.titleSeen = true;
   }
 
-  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @param listGeometryWins - Whether list geometry overrides inherited paragraph indentation. @param forceListRule - Automatic list declaration requires a direct rule. @returns Paragraph target. */
-  public createParagraph(
-    style: XMLParagraphStyle,
-    alignment: OdfParagraphAlignment | undefined,
-    leftMargin: number | undefined,
-    paragraphProperties: XMLParagraphImportProperties | undefined,
-    properties: Partial<OdfCharacterProperties> | undefined,
-    list: XMLParagraphListState | undefined,
-    listGeometryWins: boolean,
-    forceListRule = false,
-  ): XMLParagraphImportTarget {
-    const cell = this.activeCell;
-    if (cell === undefined) this.paragraphCount += 1;
-    const node =
-      cell === undefined
-        ? this.document.nodes.MakeTextNode()
-        : this.cellParagraphCount++ === 0
-          ? (cell.GetParagraphs()[0] as SwTextNode)
-          : this.document.nodes.AppendTableCellParagraph(cell);
-    node.ChgFormatColl(this.document.GetTextFormatColl(style));
-    node.SetListGeometryWins(listGeometryWins);
-    if (alignment !== undefined) node.SetParagraphAlignment(alignment);
-    if (leftMargin !== undefined)
-      node.SetAttr(
-        new SvxTextLeftMarginItem(SvxIndentValue.twips(leftMargin), RES_MARGIN_TEXTLEFT),
-      );
-    if (paragraphProperties !== undefined)
-      putParagraphProperties(
-        paragraphProperties,
-        /** Applies one direct paragraph item. @param item - Imported item. @returns Set result. */ (
-          item,
-        ) => node.SetAttr(item),
-        /** Reads native composite fields before applying a delta. @param which - Item identity. @returns Effective item. */
-        (which) => node.GetAttr(which),
-      );
-    if (list !== undefined) {
-      /* istanbul ignore next -- list contexts only expose rules registered in this same temporary document. */
-      if (this.document.FindNumRulePtr(list.ruleName) === undefined)
-        throw new Error(`Unsupported ODF list rule: ${list.ruleName}`);
-      if (forceListRule || node.GetNumRuleName() !== list.ruleName) node.SetNumRule(list.ruleName);
-      node.SetListId(list.listId);
-      node.SetAttrListLevel(list.level);
-      node.SetListRestart(list.restart === true);
-      node.SetAttrListRestartValue(list.startValue ?? 65_535);
-      if (list.counted === false) node.SetCountedInList(false);
-      node.AddToList();
-    } else if (node.GetNumRuleName() !== "" && node.GetNumRuleName() !== "Outline") {
-      node.SetAttr(new SwNumRuleItem(""));
-    }
-    if (properties !== undefined)
-      putCharacterProperties(
-        properties,
-        /** Applies a direct paragraph item. @param item - Pooled item. @returns Set result. */
-        (item) => node.SetAttr(item),
-        /** Preserves unmentioned native composite fields. @param which - Identity. @returns Effective item. */ (
-          which,
-        ) => node.GetAttr(which),
-      );
-    return new SwXMLParagraphTarget(node);
-  }
-
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
     applyNamedParagraphStyles(
-      this.document,
+      this.model,
       paragraphs,
       this.defaultParagraphStyle,
-      putParagraphProperties,
-      putCharacterProperties,
       /** Resolves the declared ODF numbering name to its native display name. @param name - ODF identity. @returns Registered rule name. */
       (name) => this.listRules.get(name)?.name,
+      /** Executes this bounded native operation. @param name - Native operation input. @returns Native operation result. */ (
+        name,
+      ) => {
+        const id = getWriterStyleIdFromOdfName(name);
+        return id && getWriterMaterializedParagraphStyleDefinition(id) ? id : undefined;
+      },
     );
-    const createValue =
-      /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
+    const pages = this.model.getStyleFamilies().getByName(xmlTextString("PageStyles"));
+    /** Applies original page geometry through PageStyles property owners. @param name - Master page name. @param layout - Imported physical geometry. @returns Nothing. */
+    const applyPage =
+      /** Executes this bounded native operation. @param name - Native operation input. @param layout - Native operation input. @returns Native operation result. */ (
         name: string,
         layout: OdfPageLayout,
-      ): WriterPageDescriptorValue => {
-        return { ...layout, name };
+      ): void => {
+        const key = xmlTextString(name);
+        if (!pages.hasByName(key)) {
+          const descriptor = this.model.createInstance(
+            xmlTextString("com.sun.star.style.PageStyle"),
+          );
+          pages.insertByName(key, descriptor as import("../../core/unocore/unostyle").SwXStyle);
+        }
+        const style = pages.getByName(key);
+        for (const [field, property] of [
+          ["width", "Width"],
+          ["height", "Height"],
+          ["leftMargin", "LeftMargin"],
+          ["rightMargin", "RightMargin"],
+          ["topMargin", "TopMargin"],
+          ["bottomMargin", "BottomMargin"],
+        ] as const) {
+          const value = new Any([Number(convertTwipToMm100(BigInt(layout[field])))], "sal_Int32");
+          try {
+            style.setPropertyValue(xmlTextString(property), value);
+          } finally {
+            value.dispose();
+          }
+        }
+        const landscape = new Any([layout.landscape], "bool");
+        try {
+          style.setPropertyValue(xmlTextString("IsLandscape"), landscape);
+        } finally {
+          landscape.dispose();
+          key.dispose();
+        }
       };
     if (this.masterPages.size === 0) {
       const layout = this.pageLayouts.values().next().value;
-      if (layout !== undefined) this.document.ChgPageDesc(createValue("Standard", layout));
+      if (layout) applyPage("Standard", layout);
       return;
     }
     for (const [name, master] of this.masterPages) {
       const layout = this.pageLayouts.get(master.pageLayoutName);
-      if (layout === undefined)
-        throw new Error(`Missing ODF page layout: ${master.pageLayoutName}`);
-      if (name === "Standard") this.document.ChgPageDesc(createValue(name, layout));
-      else {
-        this.document.MakePageDesc(name);
-        this.document.ChgPageDesc(createValue(name, layout), name);
-      }
+      if (!layout) throw new Error(`Missing ODF page layout: ${master.pageLayoutName}`);
+      applyPage(name, layout);
     }
     for (const [name, master] of this.masterPages) {
-      const descriptor = this.document.FindPageDesc(name);
-      const follow =
-        master.followName === undefined
-          ? descriptor
-          : this.document.FindPageDesc(master.followName);
-      if (descriptor === undefined || follow === undefined)
-        throw new Error(`Missing ODF follow master page: ${master.followName ?? name}`);
-      descriptor.SetFollow(follow);
+      const follow = master.followName ?? name;
+      if (!pages.hasByName(xmlTextString(follow)))
+        throw new Error(`Missing ODF follow master page: ${follow}`);
+      const value = xmlTextString(follow),
+        any = new Any(value.getDataAddress(), "OUString");
+      try {
+        pages.getByName(xmlTextString(name)).setPropertyValue(xmlTextString("FollowStyle"), any);
+      } finally {
+        any.dispose();
+        value.dispose();
+      }
     }
   }
 
-  /** Validates body cardinality and supplies Writer's empty paragraph. @returns Nothing. */
+  /** Native endDocAdjustNodes removes only the final empty paragraph preceded by ordinary content. @returns Nothing. */
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
-    if (this.paragraphCount === 0)
-      this.createParagraph("default", undefined, undefined, undefined, undefined, undefined, false);
-  }
-}
-
-/** Applies SAX character callbacks directly to one canonical text node. */
-class SwXMLParagraphTarget implements XMLParagraphImportTarget {
-  private readonly openBookmarks = new Map<string, number>();
-  /** Wraps one live text node. @param node - Canonical node. @returns Paragraph target. */
-  public constructor(private readonly node: SwTextNode) {}
-
-  /** Reads actual inherited character state after style and automatic items have been applied. @returns Effective supported properties. */
-  public getInheritedProperties(): OdfCharacterProperties {
-    const items = this.node.GetSwAttrSet();
-    return getCharacterProperties(items, true) as OdfCharacterProperties;
-  }
-
-  /** Registers one collapsed bookmark at the current paragraph offset. @param name - ODF name. @returns Nothing. */
-  public addBookmark(name: string): void {
-    this.node.GetDoc().GetIDocumentMarkAccess().MakeMark(this.node, this.node.Len(), name);
-  }
-
-  /** Begins a range bookmark; the bounded slice preserves collapsed ranges. @param name - ODF name. @returns Nothing. */
-  public addBookmarkStart(name: string): void {
-    if (this.openBookmarks.has(name)) throw new Error(`ODF bookmark start is duplicated: ${name}`);
-    this.openBookmarks.set(name, this.node.Len());
-  }
-
-  /** Completes a collapsed range bookmark. @param name - ODF name. @returns Nothing. */
-  public addBookmarkEnd(name: string): void {
-    const start = this.openBookmarks.get(name);
-    if (start === undefined) throw new Error(`ODF bookmark end has no start: ${name}`);
-    if (start !== this.node.Len()) throw new Error("ODF ranged bookmarks are unsupported.");
-    this.openBookmarks.delete(name);
-    this.addBookmark(name);
-  }
-
-  /** Registers an imported soft page hint at the current offset. @returns Nothing. */
-  public addSoftPageBreak(): void {
-    this.node.GetDoc().GetIDocumentMarkAccess().AddSoftPageBreak(this.node, this.node.Len());
-  }
-
-  /** Rejects a range with no closing marker. @returns Nothing. */
-  public finishParagraph(): void {
-    if (this.openBookmarks.size > 0) throw new Error("ODF bookmark start has no end.");
-  }
-
-  /** Appends SAX text with effective attributes. @param text - Character data. @param properties - Effective formatting. @param hyperlink - Optional enclosing hyperlink. @returns Nothing. */
-  public appendText(
-    text: string,
-    properties: OdfCharacterProperties,
-    hyperlink?: OdfHyperlink,
-  ): void {
-    const nativeItems = new SfxItemSet(
-      this.node.GetDoc().GetAttrPool(),
-      WRITER_CHARACTER_WHICH_RANGES,
-    );
-    putCharacterProperties(
-      properties,
-      /** Stores actual converted source items. @param item - Item. @returns Set result. */ (
-        item,
-      ) => nativeItems.Put(item),
-      /** Resolves inherited composite fields. @param which - Identity. @returns Effective item. */ (
-        which,
-      ) => this.node.GetAttr(which),
-    );
-    const position = new SwPosition(this.node, this.node.Len(), "redline");
-    try {
-      this.node
-        .GetDoc()
-        .GetDocumentContentOperationsManager()
-        .InsertTextFragment(
-          position,
-          this.node.CreateTextFragmentFromText(text, nativeItems, hyperlink),
-        );
-    } finally {
-      position.Dispose();
+    const cursor =
+        this.GetTextImport().GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor,
+      node = cursor.GetPaM().GetPoint().GetNode() as SwTextNode,
+      previous = this.document.GetNodes().entries()[node.GetIndex() - 1];
+    if (
+      node.Len() === 0 &&
+      previous instanceof SwTextNode &&
+      previous.StartOfSectionNode() === node.StartOfSectionNode()
+    ) {
+      this.GetTextImport().ResetCursor();
+      this.document.GetNodes().removeTextNode(node);
     }
   }
 }
@@ -757,110 +713,4 @@ class XMLTitleContext extends SvXMLImportContext {
     const title = this.value.trim();
     if (title.length > 0) this.commit(title);
   }
-}
-
-/** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @param inherited - Effective items for untouched composite fields. @returns Nothing. */
-function putParagraphProperties(
-  properties: XMLParagraphImportProperties,
-  put: (item: SfxPoolItem) => unknown,
-  inherited: (which: number) => SfxPoolItem,
-): void {
-  if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined) {
-    const first = (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
-    if (properties.firstLineIndent !== undefined)
-      first.SetTextFirstLineOffset(SvxIndentValue.twips(properties.firstLineIndent));
-    if (properties.autoTextIndent !== undefined) first.SetAutoFirst(properties.autoTextIndent);
-    put(first);
-  }
-  if (properties.rightMargin !== undefined)
-    put(new SvxRightMarginItem(SvxIndentValue.twips(properties.rightMargin), RES_MARGIN_RIGHT));
-  if (
-    properties.upperSpacing !== undefined ||
-    properties.lowerSpacing !== undefined ||
-    properties.contextualSpacing !== undefined
-  )
-    put(
-      new SvxULSpaceItem(
-        properties.upperSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetUpper(),
-        properties.lowerSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetLower(),
-        RES_UL_SPACE,
-        properties.contextualSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetContext(),
-      ),
-    );
-  const lineMode =
-    properties.lineHeightTwips !== undefined
-      ? "fixed"
-      : properties.lineHeightAtLeastTwips !== undefined
-        ? "minimum"
-        : properties.lineSpacingTwips !== undefined
-          ? "leading"
-          : "proportional";
-  const lineValue =
-    properties.lineHeightTwips ??
-    properties.lineHeightAtLeastTwips ??
-    properties.lineSpacingTwips ??
-    properties.lineHeightPercent;
-  if (lineValue !== undefined) {
-    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
-    if (lineMode === "proportional") item.SetPropLineSpace(lineValue);
-    else if (lineMode === "leading") item.SetInterLineSpace(lineValue);
-    else {
-      item.SetLineHeight(lineValue);
-      if (lineMode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
-    }
-    put(item);
-  }
-  if (properties.tabStopDetails !== undefined) {
-    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
-    for (const stop of properties.tabStopDetails)
-      item.Insert(
-        new SvxTabStop(
-          // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
-          Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
-          stop.alignment === "right"
-            ? SvxTabAdjust.Right
-            : stop.alignment === "center"
-              ? SvxTabAdjust.Center
-              : stop.alignment === "char"
-                ? SvxTabAdjust.Decimal
-                : stop.alignment === "default"
-                  ? SvxTabAdjust.Default
-                  : SvxTabAdjust.Left,
-          stop.decimal,
-          stop.fill,
-        ),
-      );
-    put(item);
-  }
-  if (properties.keepWithNext !== undefined)
-    put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
-  if (properties.keepTogether !== undefined)
-    put(new SfxBoolItem(RES_PARATR_SPLIT, !properties.keepTogether));
-  if (properties.orphans !== undefined)
-    put(new SfxInt16Item(RES_PARATR_ORPHANS, properties.orphans));
-  if (properties.widows !== undefined) put(new SfxInt16Item(RES_PARATR_WIDOWS, properties.widows));
-  if (properties.pageStyleName !== undefined || properties.pageNumber !== undefined)
-    put(
-      new SwFormatPageDesc(
-        properties.pageStyleName ?? "",
-        properties.pageNumber === undefined || properties.pageNumber === "auto"
-          ? undefined
-          : properties.pageNumber,
-      ),
-    );
-  if (properties.breakBefore !== undefined || properties.breakAfter !== undefined)
-    put(
-      new SfxInt16Item(
-        RES_BREAK,
-        properties.breakBefore === "page" && properties.breakAfter === "page"
-          ? 6
-          : properties.breakBefore === "page"
-            ? 4
-            : properties.breakAfter === "page"
-              ? 5
-              : 0,
-      ),
-    );
-  if (properties.countLineNumbers !== undefined)
-    put(new SfxBoolItem(RES_LINENUMBER, properties.countLineNumbers));
 }

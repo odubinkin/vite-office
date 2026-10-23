@@ -1,4 +1,6 @@
 /** @fileoverview SwXText import append/insert/paragraph boundaries from pinned unotext.cxx, using the existing document content-operation owner. */
+import { SetAttrMode } from "../../../inc/swtypes";
+import * as ControlCharacter from "../../../../offapi/com/sun/star/text/ControlCharacter";
 import { convertToTable, setCellProperty, type SwXTextTable } from "./unotbl";
 import type { SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
@@ -11,7 +13,13 @@ import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeE
 import type { SwXBookmark } from "./unobkm";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
 import { SwXTextCursor } from "./unoobj";
-import { DocInsertStringSplitCR, SetPropertyValues, invalid } from "./unocrsrhelper";
+import {
+  DocInsertStringSplitCR,
+  SetPropertyValues,
+  invalid,
+  illegal,
+  unicode,
+} from "./unocrsrhelper";
 import { text } from "./unocrsrhelper";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
@@ -147,6 +155,33 @@ export class SwXText implements SwXTextOwner {
       first.Dispose();
     }
   }
+  /** Inserts the represented original control character and updates the caller cursor through canonical index correction. @param range - Native destination. @param control - ControlCharacter value. @param absorb - Replace the selected range. @returns Nothing. */
+  insertControlCharacter(range: SwXTextRange, control: number, absorb: boolean): void {
+    this.check(range);
+    const value =
+      control === ControlCharacter.PARAGRAPH_BREAK
+        ? "\r"
+        : control === ControlCharacter.LINE_BREAK
+          ? "\n"
+          : control === ControlCharacter.HARD_HYPHEN
+            ? "\u2011"
+            : control === ControlCharacter.SOFT_HYPHEN
+              ? "\u00ad"
+              : control === ControlCharacter.HARD_SPACE
+                ? "\u00a0"
+                : undefined;
+    if (value !== undefined) {
+      const string = unicode(value);
+      try {
+        this.insertString(range, string, absorb);
+      } finally {
+        string.dispose();
+      }
+    } else if (control === ControlCharacter.APPEND_PARAGRAPH) {
+      const paragraph = this.finishParagraphInsert([], range);
+      paragraph.dispose();
+    } else illegal("Unsupported control character");
+  }
   /** Import portions use NOHINTEXPAND so omitted properties cannot inherit the preceding run's direct formatting. @param value - Declared native value. @param properties - Ordered native property values. @returns The represented native operation result. */
   appendTextPortion(
     value: OUStringConstReference,
@@ -179,7 +214,7 @@ export class SwXText implements SwXTextOwner {
       DocInsertStringSplitCR(p, value, SwInsertFlags.NOHINTEXPAND);
       const result = new SwPaM(start, p.GetPoint());
       try {
-        SetPropertyValues(result, properties);
+        SetPropertyValues(result, properties, SetAttrMode.NOFORMATATTR);
         return new SwXTextRange(result, this);
       } finally {
         result.Dispose();

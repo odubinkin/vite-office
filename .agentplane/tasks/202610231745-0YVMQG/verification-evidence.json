@@ -1,0 +1,468 @@
+{
+  "taskId": "202610231745-0YVMQG",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "command": "npm run test:writer -- src/sw/source/filter/xml",
+      "result": "pass",
+      "evidence": "54 files; 341 tests passed"
+    },
+    {
+      "command": "npm run test:writer -- native-text-import-api.test.ts unostyle-auto.test.ts automatic-style-handles.test.ts txtedt-stylepool.test.ts native-escapement.test.ts",
+      "result": "pass",
+      "evidence": "5 files; 65 tests passed"
+    },
+    {
+      "command": "npm run test:writer -- unostyle-auto.test.ts native-text-import-api.test.ts",
+      "result": "pass",
+      "evidence": "2 files; 29 tests passed after automatic-style getter completion"
+    },
+    {
+      "command": "npm run test:shared -- text/txtimp.test.ts txtparai.test.ts XMLTextListBlockContext.test.ts style/xmlnumi.test.ts",
+      "result": "pass",
+      "evidence": "4 files; 19 tests passed"
+    },
+    {
+      "command": "npm run test:shared -- native-font-family.test.ts",
+      "result": "pass",
+      "evidence": "1 file; 4 tests passed"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/writer-model-api-boundaries.test.ts",
+      "result": "pass",
+      "evidence": "2 files; 49 tests passed"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "pass",
+      "evidence": "pass"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "evidence": "1199 runtime sources; 6030 relative imports; 170 module edges passed"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "evidence": "2953 authored files passed"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "2957 authored files scanned; no file at or above 1000 lines"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "115 required paths and 32 retired roots passed"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "1200 runtime modules; 1024 mapped; 153 browser adaptations; 23 local infrastructure passed"
+    },
+    {
+      "command": "npm run inventory:parity:writer",
+      "result": "pass",
+      "evidence": "pass; zero semantic violations"
+    },
+    {
+      "command": "npm run inventory:parity:shared",
+      "result": "pass",
+      "evidence": "pass; zero semantic violations"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "pass"
+    }
+  ],
+  "scopedTools": [
+    {
+      "executable": "node_modules/.bin/eslint",
+      "arguments": [
+        "--max-warnings",
+        "0",
+        "apps/office/src/editeng/source/items/native-font-family.test.ts",
+        "apps/office/src/editeng/source/items/textitem.font.ts",
+        "apps/office/src/svl/source/items/stylepool.ts",
+        "apps/office/src/sw/inc/istyleaccess.ts",
+        "apps/office/src/sw/source/core/doc/doc.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+        "apps/office/src/sw/source/core/unocore/unocrsrhelper.ts",
+        "apps/office/src/sw/source/core/unocore/unomap.ts",
+        "apps/office/src/sw/source/core/unocore/unoobj.ts",
+        "apps/office/src/sw/source/core/unocore/unosett.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle.ts",
+        "apps/office/src/sw/source/core/unocore/unotext.ts",
+        "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-markers.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+        "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+        "apps/office/src/sw/source/uibase/shells/native-escapement.test.ts",
+        "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+        "apps/office/src/xmloff/source/style/xmlnumi.ts",
+        "apps/office/src/xmloff/source/style/xmlstyle.ts",
+        "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+        "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+        "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+        "apps/office/src/xmloff/source/text/txtimp.test.ts",
+        "apps/office/src/xmloff/source/text/txtimp.ts",
+        "apps/office/src/xmloff/source/text/txtparae.ts",
+        "apps/office/src/xmloff/source/text/txtparai.test.ts",
+        "apps/office/src/xmloff/source/text/txtparai.ts",
+        "apps/office/src/xmloff/source/text/txtprmap.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/check-module-boundaries.test.ts",
+        "apps/office/src/offapi/com/sun/star/style/BreakType.ts",
+        "apps/office/src/offapi/com/sun/star/text/ControlCharacter.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle-auto.test.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle-auto.ts",
+        "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+        "apps/office/src/xmloff/inc/txtimp.ts",
+        "apps/office/src/xmloff/source/style/prstylei.ts",
+        "scripts/writer-model-api-boundaries.test.ts"
+      ],
+      "result": "pass"
+    },
+    {
+      "executable": "node_modules/.bin/prettier",
+      "arguments": [
+        "--check",
+        "apps/office/src/editeng/source/items/native-font-family.test.ts",
+        "apps/office/src/editeng/source/items/textitem.font.ts",
+        "apps/office/src/svl/source/items/stylepool.ts",
+        "apps/office/src/sw/inc/istyleaccess.ts",
+        "apps/office/src/sw/source/core/doc/doc.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+        "apps/office/src/sw/source/core/unocore/unocrsrhelper.ts",
+        "apps/office/src/sw/source/core/unocore/unomap.ts",
+        "apps/office/src/sw/source/core/unocore/unoobj.ts",
+        "apps/office/src/sw/source/core/unocore/unosett.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle.ts",
+        "apps/office/src/sw/source/core/unocore/unotext.ts",
+        "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-markers.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+        "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+        "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+        "apps/office/src/sw/source/uibase/shells/native-escapement.test.ts",
+        "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+        "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+        "apps/office/src/xmloff/source/style/xmlnumi.ts",
+        "apps/office/src/xmloff/source/style/xmlstyle.ts",
+        "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+        "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+        "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+        "apps/office/src/xmloff/source/text/txtimp.test.ts",
+        "apps/office/src/xmloff/source/text/txtimp.ts",
+        "apps/office/src/xmloff/source/text/txtparae.ts",
+        "apps/office/src/xmloff/source/text/txtparai.test.ts",
+        "apps/office/src/xmloff/source/text/txtparai.ts",
+        "apps/office/src/xmloff/source/text/txtprmap.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/check-module-boundaries.test.ts",
+        "apps/office/src/offapi/com/sun/star/style/BreakType.ts",
+        "apps/office/src/offapi/com/sun/star/text/ControlCharacter.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle-auto.test.ts",
+        "apps/office/src/sw/source/core/unocore/unostyle-auto.ts",
+        "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+        "apps/office/src/xmloff/inc/txtimp.ts",
+        "apps/office/src/xmloff/source/style/prstylei.ts",
+        "scripts/writer-model-api-boundaries.test.ts"
+      ],
+      "result": "pass"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "apps/office/src/editeng/source/items/native-font-family.test.ts",
+      "sha256": "bda68de0977a39558a4ccfa5811aeb4adbda72aa672efeb6d61b73025157c926"
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/textitem.font.ts",
+      "sha256": "c795131172f3746741b380251018ca8c2950d6230ea22df3da0d3d710120bb9c"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/stylepool.ts",
+      "sha256": "ce77cbd68b846ced34a132a008c313c1eb8a1aabfd4d795a5f17759236a4ef9b"
+    },
+    {
+      "path": "apps/office/src/sw/inc/istyleaccess.ts",
+      "sha256": "bb8611e5e630eefbb466fe2a25350341d503d72fc87fa2ef8c82e9ded174d6df"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "66eeb8c915f3605204f8c050d0039352b44ad7723231b447e72cd58055a77b0a"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "sha256": "494eb0f52a0701a14004d302a857627eab9013d135aa366f96be93f31d05c746"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+      "sha256": "1079f12b90df9e33056650347223e3f7b415367c5525100e3202904a1da53ef7"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unocrsrhelper.ts",
+      "sha256": "db428d464dac372f91141adb35ff0c0f9c26ec97cbae446e2edaf49d5d53ab3a"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
+      "sha256": "7c91636274a29ec773a2582a32e60b024f1d5f38e7afe4752e4a2a17e44ca633"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unoobj.ts",
+      "sha256": "da6ce5ad733305b0ca2c8a9c2f8cad5a869ba345f40a13b84495fea4face8d6d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+      "sha256": "e52e78ced8cd27d71ff059e5e75983f4b7570c1db712519601e0bb709cc26dfb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+      "sha256": "482747a6cb3cb7639bf6f9f1c96f45c77e2d71cd3c74a53f79b2e8193535a115"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unotext.ts",
+      "sha256": "a4875ea700c60c0bcafa08ef89df8ac2e20dba73b58f52b1fb2ff8ea4832c75f"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+      "sha256": "fcb6a80ada8094f9f360972dc5456f7c0bb331e809bf3680baf53adbe9c47fab"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+      "sha256": "e071e4ffdb0696dc4910b5a7efdb323bcfdd43e0e71fa09d182040959734192a"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+      "sha256": "da41aec1d69f113a024ff9907f4a490969f138b5dc240459ab165028a6292eeb"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts",
+      "sha256": "503f7260a838d1c96c2b1e413551512f610e8970038944c6694f56f8294091bb"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+      "sha256": "893a7f92d01a0de61173b48bb32804ab90a1d04171119fd87781b42e2d792550"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts",
+      "sha256": "c9acc876f6718988e223e992cf4fad7803e7a6c59997de7678148377c2a92b5c"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts",
+      "sha256": "484f5a00a6fd0aa6e30a5715b86f83f568f714fad4005fe445de34ed869ca476"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+      "sha256": "ce6bc3b19b139eafd2d0f6d179af4255417d4ae1f06c54b1701a3e8b7e9c8559"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+      "sha256": "b969c5f318c0b4400a0e4b994144c0d293751f9bf3774cfe5cdbf0ce2d9a16bd"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts",
+      "sha256": "01ab1d5aadbf45a1a296c500002e5813dab50279556b667d2c5a23099dd63c39"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+      "sha256": "8693d596af5cc48ac047d1514ab21c1c42e9db9d7b22ce6981a5457e8d68bcdc"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts",
+      "sha256": "54d176fdea2d6dc50267078f80d7791245a7df6ea93142b7302341b18c14aa08"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+      "sha256": "e110406bffc7a6947921fa871096e05ad6e4c7b16ffeec1f726c860f2e0ccb5d"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-markers.test.ts",
+      "sha256": "6b1631266f924dc556f42424c52cfa7e099125b5225552e5d3482e62aa339038"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+      "sha256": "d41f6030d60b6e073f2f74494848c9689bc77f544f538acaec326b0ea0bff30a"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+      "sha256": "853600f231d86f37062d76e25e781ea3f1d9966fa3419092e3358a1a581a4d28"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+      "sha256": "6441790d8d67431f81d099d1a138d7e807605bbdee40a180028175e2d07018f8"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+      "sha256": "20342197f12742dd70a79c117a9c452f960418a6c589a849256677076ebeb822"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+      "sha256": "9f4821159d511d77d5344c549c1c5f374a32663e24e01f405b996fdcded84bb4"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "a39b6fe9eba5baa7dc69fecc025cb6dd93084ad827a34f637c76f2a4fbb4d1b1"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "c09d8b52aefe7401c0523142fa6d20cc38400b74fdd2e5fda189761a40a6666e"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "a5d103ff3652bcdce3adf3aacd0270b31e0ee0e7e35bad765f8d43eaa6af18a5"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/native-escapement.test.ts",
+      "sha256": "63caef53556861407b3d6dd06d6682a78b0a60ac33d4553fd99bd99cb0500f0f"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+      "sha256": "1367be01f2c2ed395fb579e4181626e490a8715e28fdd7909bccccb15958e98f"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.test.ts",
+      "sha256": "0ecb74d465a730baf2f6d01f37e420b500700cdd21ab8a09bddf4d7b1af626ea"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.ts",
+      "sha256": "a80bfb4a050b99ce3a8c8efec6f5d921501f8a4032e9c744aff711ea8358f007"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
+      "sha256": "5891bdc760f38259c4418fef2cc3c3f293bd3311cc54a0b4a14932199718ceef"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "sha256": "553c0ee37eeecefd4a9626cb39ee99dd9e1aeca9e80a9742cab453f00e43e6d3"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts",
+      "sha256": "8a4e41c9216d41c74565c16a7dc69f7ea75af7e55f51da709fa8ed0a32ad8a48"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+      "sha256": "7e4e2a8d784b2d4fa21b842ddd82f77401ebabbe9f764657011494b71154f005"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtimp.test.ts",
+      "sha256": "715ecb6c72854100bf147660ab92576034bf4f4e09152a695986ef150cfa9926"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtimp.ts",
+      "sha256": "5f515263e033b2da655c7e562d0eb8a6b512116abfeac3e281c1b6ca89a8189c"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+      "sha256": "48e97cdada30a50ee18cc1a094e73fd05ec0ed127710e206c2e4d59f3c4ccfcc"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparai.test.ts",
+      "sha256": "a00d3fd6488c15a6a6f1ceacb1231e1124f21752be0f376afdcdf02417f8e36b"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+      "sha256": "0ce5892cfb43d93f2bf99a740a95284139dbd20f32ff680769ea76f3b7277ee2"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+      "sha256": "7dda81500a4e31fd2608827f3fc9e4466b08c1647fc96bcf094ccc4d8ff828c0"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "4c526193da842933d34754218b627c1932eb63872534ea5777ae0e9e22fc1800"
+    },
+    {
+      "path": "scripts/check-module-boundaries.test.ts",
+      "sha256": "f0bf69c08e348d56e4ac2342bc705c8fbc59a0e496bc7fde850cb539bbc6a169"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/style/BreakType.ts",
+      "sha256": "f0a6cb2e48c4b91157135b2c6f77fe3c745a523436d1c9b58dbac0fa6a50a013"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/text/ControlCharacter.ts",
+      "sha256": "49af7f27290f243e89150137eb7d03eff0e12a13970647ce63d4d49ed9b4b67e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle-auto.test.ts",
+      "sha256": "16192e71a65267201f6925b49ff1d952dd58b5bf8e2d856946d669be298306e5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle-auto.ts",
+      "sha256": "8a28a0ab61d5e7f4ff5ade1afef2e1ecc98f3ff927c02c65f4b4a21603db6cf5"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
+      "sha256": "49e29fb91e5bc59b44282080834a54889dd2f7644b1871ecd397cee2d0784f36"
+    },
+    {
+      "path": "apps/office/src/xmloff/inc/txtimp.ts",
+      "sha256": "3ada547427b066dd8a213214b87405004608893d45664e99852b1bef84fa4723"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/prstylei.ts",
+      "sha256": "3625d7924f6922edf696d98db37bd0c1221177a3f4c203096157561f72bb0cda"
+    },
+    {
+      "path": "scripts/writer-model-api-boundaries.test.ts",
+      "sha256": "48711877e4aab6f9446dcbe702bda4580164b5a29b4381ff37e10d22cb3234e8"
+    }
+  ],
+  "scope": "Only touched Writer ODT/API/core, shared xmloff/font and boundary tooling modules; 478 distinct focused tests. No full suite, browser suite, DOCX, Calc, network or sibling repository work.",
+  "limits": [
+    "Full engine and UNO service metadata/listener/lifecycle parity remains outside the current core slice.",
+    "Automatic paragraph/ruby families and unsupported format features are not advertised.",
+    "Soft-page-break XML is ignored as pinned native XMLParaContext does; existing Worker soft marker state still transfers.",
+    "Native pointer style names are represented by opaque host-handle identity; names do not become canonical document content."
+  ],
+  "review": [
+    "No SwXMLParagraphTarget or XMLParagraphImportTarget implementation remains.",
+    "Shared xmloff imports only format-neutral API contracts; it never imports Writer core or UI.",
+    "SwXMLTableImport retains native structural ownership; one shared helper switches actual text cursors across body/cells.",
+    "Independent tests retain literal expected labels, units, format values, list continuation and native object ownership; only opaque identities and former non-native collision/soft-break assumptions were corrected.",
+    "Per-module registry parity statuses and registered deviations remain unchanged."
+  ]
+}

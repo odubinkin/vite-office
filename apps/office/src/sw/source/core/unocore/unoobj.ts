@@ -7,6 +7,7 @@ import {
 } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { WrappedTargetException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetException";
 import { unicode } from "./unocrsrhelper";
+import type { SwXText } from "./unotext";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
 import { SwPaM } from "../crsr/pam";
 import { ResetPoolItem } from "../doc/docfmt";
@@ -44,6 +45,10 @@ export class SwXTextCursor extends SwXTextRange {
         error.dispose();
       }
     }
+  }
+  /** Borrows the actual XText owner of this cursor. @returns Parent text. */
+  override getText(): SwXText {
+    return super.getText() as SwXText;
   }
   /** Implements the represented native GetCursor operation. @returns The represented native operation result. */
   GetCursor(): SwPaM {

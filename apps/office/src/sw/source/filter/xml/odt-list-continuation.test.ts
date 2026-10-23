@@ -99,13 +99,20 @@ async function input(
   }
   return output.finish();
 }
+/** Normalizes opaque native automatic names while preserving identity and continuation equivalence. @param value - Native identity. @param doc - Document defining its rule owners. @returns Fixture declaration identity. */
+function identity(value: string | undefined, doc: SwDoc): string | undefined {
+  for (const [index, rule] of doc.GetNumRuleTable().entries())
+    if ((rule.IsAutoRule() && value === rule.GetName()) || value === rule.GetDefaultListId())
+      return ["Counters", "Other"][index];
+  return value;
+}
 /** Reads public model state independently of XML stream shape. @param doc - Model. @returns States. */
 function state(doc: SwDoc) {
   return doc.paragraphs.map(
     /** Captures one canonical paragraph. @param node - Node. @returns State. */ (node) => ({
       text: node.GetText(),
-      id: node.GetListId(),
-      rule: node.GetNumRule()?.GetName(),
+      id: identity(node.GetListId(), doc),
+      rule: identity(node.GetNumRule()?.GetName(), doc),
       level: node.GetAttrListLevel(),
       counted: node.IsCountedInList(),
       restart: node.IsListRestart(),
@@ -444,12 +451,12 @@ it("imports native root continuation and default IDs through common and automati
           }
           expect(state(doc), `${test.name}/${common}/${bullet}`).toEqual(expected(test.before));
           const copied = createWriterDocument();
-          for (const name of ["Counters", "Other"]) {
-            const rule = doc.FindNumRulePtr(name);
+          for (const [index, name] of ["Counters", "Other"].entries()) {
+            const rule = doc.GetNumRuleTable()[index];
             if (rule === undefined) throw new Error("Missing declared rule");
-            expect(rule.GetDefaultListId()).toBe(name);
+            expect(identity(rule.GetDefaultListId(), doc)).toBe(name);
             copied.GetDocumentListsManager().AddNumRule(rule.clone());
-            expect(copied.FindNumRulePtr(name)).not.toBe(rule);
+            expect(copied.FindNumRulePtr(rule.GetName())).not.toBe(rule);
           }
           doc.paragraphs.forEach(
             /** Copies owned paragraph items and text. @param node - Source. @param index - Position. @returns Nothing. */ (
@@ -477,10 +484,20 @@ it("imports native root continuation and default IDs through common and automati
           const record = encodeWriterDocument(doc);
           expect(record.swModelVersion).toBe(16);
           const worker = decodeWriterDocument(record);
-          expect(worker.FindNumRulePtr("Counters")).not.toBe(doc.FindNumRulePtr("Counters"));
+          expect(worker.GetNumRuleTable()[0]).not.toBe(doc.GetNumRuleTable()[0]);
           expect(state(worker)).toEqual(expected(test.before));
           const bytes = writeOdtDocument(doc, { title: "Continuation" });
-          const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+          let xml = await new ZipFile(bytes).readTextEntry("content.xml");
+          for (const rule of doc.GetNumRuleTable())
+            xml = xml
+              .replaceAll(
+                `"${rule.GetDefaultListId()}-`,
+                `"${identity(rule.GetDefaultListId(), doc)}-`,
+              )
+              .replaceAll(
+                `"${rule.GetDefaultListId()}"`,
+                `"${identity(rule.GetDefaultListId(), doc)}"`,
+              );
           expect(xml).toContain('office:version="1.3"');
           const body = xml.match(/<office:text>([\s\S]*)<\/office:text>/u)?.[1];
           if (body === undefined) throw new Error("Missing exported body");

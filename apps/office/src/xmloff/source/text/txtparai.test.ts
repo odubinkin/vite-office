@@ -1,5 +1,5 @@
 /** @fileoverview Verifies source-derived ODF paragraph and inline import contracts at the model-facing context boundary. */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { parseOdfXmlStream, type SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import type {
@@ -7,11 +7,14 @@ import type {
   OdfParagraphProperties,
   XMLTextParagraphSource,
 } from "./txtparae";
+import { XMLTextImportHelper } from "./txtimp";
+import { createWriterDocument } from "../../../sw/source/core/doc/doc";
+import { SwXTextDocument } from "../../../sw/source/uibase/uno/unotxdoc";
+import type { OdfHyperlink } from "./txtparae";
 import {
   XMLTextBodyContext,
   resolveParagraphStyle,
   type OdfStyleDefinition,
-  type XMLParagraphImportTarget,
   type XMLParagraphListState,
   type XMLTextImportTarget,
   type XMLTextListRule,
@@ -56,6 +59,15 @@ it("resolves list indentation precedence on a built-in paragraph style", /** Cov
   }
 });
 
+/** Parser-only recorder for source declaration tests; production owns no paragraph target. */
+interface RecordedParagraph {
+  appendText(text: string, properties: OdfCharacterProperties, hyperlink?: OdfHyperlink): void;
+  addBookmark(name: string): void;
+  addBookmarkStart(name: string): void;
+  addBookmarkEnd(name?: string): void;
+  addSoftPageBreak(): void;
+  finishParagraph(): void;
+}
 /** Canonical paragraph operations captured by the fake Writer target. */
 interface ImportedParagraph {
   alignment?: XMLTextParagraphSource["alignment"];
@@ -82,80 +94,85 @@ function importBody(
   const paragraphs: ImportedParagraph[] = [];
   const definitions = Array.from(styles);
   const automaticDefinitions = Array.from(automaticStyles);
+  const recordParagraph: (
+    ...args: Parameters<XMLTextImportHelper["BeginParagraph"]>
+  ) => RecordedParagraph = /** Executes this bounded native operation. @param style - Native operation input. @param alignment - Native operation input. @param leftMargin - Native operation input. @param paragraphProperties - Native operation input. @param properties - Native operation input. @param list - Native operation input. @returns Native operation result. */ (
+    style,
+    alignment,
+    leftMargin,
+    paragraphProperties,
+    properties,
+    list,
+  ) => {
+    const paragraph: ImportedParagraph = {
+      ...(alignment === undefined ? {} : { alignment }),
+      ...(leftMargin === undefined ? {} : { leftMargin }),
+      ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
+      ...(list === undefined ? {} : { list }),
+      ...(properties === undefined ? {} : { properties }),
+      runs: [],
+      style,
+    };
+    paragraphs.push(paragraph);
+    /** Returns the current UTF-16 paragraph length. @returns Text length. */
+    function currentOffset(): number {
+      return paragraph.runs.reduce(
+        /** Adds one run's UTF-16 length. @param sum - Previous length. @param run - Text run. @returns New length. */
+        (sum, run) => sum + run.text.length,
+        0,
+      );
+    }
+    return {
+      /** Records a collapsed bookmark at the current text length. @param name - Bookmark name. @returns Nothing. */
+      addBookmark(name): void {
+        (paragraph.markers ??= []).push({
+          kind: "bookmark",
+          name,
+          offset: currentOffset(),
+        });
+      },
+      /** Records a pending range start. @param name - Name. @returns Nothing. */
+      addBookmarkStart(name): void {
+        (paragraph.markers ??= []).push({
+          kind: "bookmark",
+          name,
+          offset: currentOffset(),
+        });
+      },
+      /** Completes the test target's collapsed range. @returns Nothing. */
+      addBookmarkEnd(): void {},
+      /** Records a soft pagination hint at the current text length. @returns Nothing. */
+      addSoftPageBreak(): void {
+        (paragraph.markers ??= []).push({
+          kind: "soft-page-break",
+          offset: currentOffset(),
+        });
+      },
+      /** Completes one test paragraph. @returns Nothing. */
+      finishParagraph(): void {},
+      /** Appends text, merging adjacent equal runs like SwTextNode. @param text - Text. @param runProperties - Effective properties. @param hyperlink - Optional hyperlink metadata. @returns Nothing. */
+      appendText(text, runProperties, hyperlink): void {
+        runProperties = { ...properties, ...runProperties };
+        const previous = paragraph.runs.at(-1);
+        if (
+          previous !== undefined &&
+          JSON.stringify(previous.properties) === JSON.stringify(runProperties) &&
+          JSON.stringify(previous.hyperlink) === JSON.stringify(hyperlink)
+        )
+          previous.text += text;
+        else
+          paragraph.runs.push({
+            ...(hyperlink === undefined ? {} : { hyperlink }),
+            properties: runProperties,
+            text,
+          });
+      },
+    };
+  };
+
   const target: XMLTextImportTarget = {
     /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - List state. @returns Text sink. */
-    createParagraph(
-      style,
-      alignment,
-      leftMargin,
-      paragraphProperties,
-      properties,
-      list,
-    ): XMLParagraphImportTarget {
-      const paragraph: ImportedParagraph = {
-        ...(alignment === undefined ? {} : { alignment }),
-        ...(leftMargin === undefined ? {} : { leftMargin }),
-        ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
-        ...(list === undefined ? {} : { list }),
-        ...(properties === undefined ? {} : { properties }),
-        runs: [],
-        style,
-      };
-      paragraphs.push(paragraph);
-      /** Returns the current UTF-16 paragraph length. @returns Text length. */
-      function currentOffset(): number {
-        return paragraph.runs.reduce(
-          /** Adds one run's UTF-16 length. @param sum - Previous length. @param run - Text run. @returns New length. */
-          (sum, run) => sum + run.text.length,
-          0,
-        );
-      }
-      return {
-        /** Records a collapsed bookmark at the current text length. @param name - Bookmark name. @returns Nothing. */
-        addBookmark(name): void {
-          (paragraph.markers ??= []).push({
-            kind: "bookmark",
-            name,
-            offset: currentOffset(),
-          });
-        },
-        /** Records a pending range start. @param name - Name. @returns Nothing. */
-        addBookmarkStart(name): void {
-          (paragraph.markers ??= []).push({
-            kind: "bookmark",
-            name,
-            offset: currentOffset(),
-          });
-        },
-        /** Completes the test target's collapsed range. @returns Nothing. */
-        addBookmarkEnd(): void {},
-        /** Records a soft pagination hint at the current text length. @returns Nothing. */
-        addSoftPageBreak(): void {
-          (paragraph.markers ??= []).push({
-            kind: "soft-page-break",
-            offset: currentOffset(),
-          });
-        },
-        /** Completes one test paragraph. @returns Nothing. */
-        finishParagraph(): void {},
-        /** Appends text, merging adjacent equal runs like SwTextNode. @param text - Text. @param runProperties - Effective properties. @param hyperlink - Optional hyperlink metadata. @returns Nothing. */
-        appendText(text, runProperties, hyperlink): void {
-          const previous = paragraph.runs.at(-1);
-          if (
-            previous !== undefined &&
-            JSON.stringify(previous.properties) === JSON.stringify(runProperties) &&
-            JSON.stringify(previous.hyperlink) === JSON.stringify(hyperlink)
-          )
-            previous.text += text;
-          else
-            paragraph.runs.push({
-              ...(hyperlink === undefined ? {} : { hyperlink }),
-              properties: runProperties,
-              text,
-            });
-        },
-      };
-    },
+    GetTextImport: () => helper,
     /** Resolves a list rule. @param name - Style name. @returns Rule. */
     getListRule: (name) => rules.get(name),
     /** Resolves a style only in the active automatic container. @param family - Style family. @param name - Style name. @returns Automatic definition. */
@@ -171,6 +188,19 @@ function importBody(
         ([candidate, definition]) => candidate === name && definition.family === family,
       )?.[1],
   };
+  const helper = new XMLTextImportHelper(target, new SwXTextDocument(createWriterDocument()));
+  vi.spyOn(helper, "BeginParagraph").mockImplementation(
+    /** Executes this bounded native operation. @param args - Native operation input. @returns Native operation result. */ (
+      ...args
+    ) => {
+      const sink = recordParagraph(...args);
+      helper.InsertString = sink.appendText.bind(sink);
+      helper.InsertBookmark = sink.addBookmark.bind(sink);
+      helper.StartBookmark = sink.addBookmarkStart.bind(sink);
+      helper.EndBookmark = sink.addBookmarkEnd.bind(sink);
+      helper.EndParagraph = sink.finishParagraph.bind(sink);
+    },
+  );
   parseOdfXmlStream(
     `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:xlink="${ODF_NAMESPACES.xlink}">${body}</office:text>`,
     {
@@ -498,17 +528,17 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       [
         '<text:p text:style-name="Child">A<text:span text:style-name="Child">B</text:span>C</text:p>',
         [
-          ["A", true, false, false],
+          ["A", false, false, false],
           ["B", false, false, true],
-          ["C", true, false, false],
+          ["C", false, false, false],
         ],
       ],
       [
         '<text:p text:style-name="Child">A<text:span text:style-name="Shared">B</text:span>C</text:p>',
         [
-          ["A", true, false, false],
-          ["B", true, true, true],
-          ["C", true, false, false],
+          ["A", false, false, false],
+          ["B", false, true, true],
+          ["C", false, false, false],
         ],
       ],
       [
@@ -522,9 +552,9 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       [
         '<text:h text:style-name="Heading_20_1">A<text:span text:style-name="Heading_20_1">B</text:span>C</text:h>',
         [
-          ["A", true, false, false],
-          ["B", true, false, true],
-          ["C", true, false, false],
+          ["A", false, false, false],
+          ["B", false, false, true],
+          ["C", false, false, false],
         ],
       ],
       [

@@ -14,7 +14,7 @@ import type { SwTextFormatColl } from "../doc/fmtcol";
 import type { SwPageDesc } from "../layout/pagedesc";
 import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Any as UnoAny } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "./unocrsrhelper";
 import { SwUnoPropertyMap, createPropertySetInfo } from "./unomap";
 import {
@@ -124,8 +124,16 @@ export class SwXStyle {
       (this.owner as SwTextFormatColl).ResetFormatAttr(entry.which);
   }
   /** Implements the represented native getName operation. @returns The represented native operation result. */
-  getName(): OUStringConstReference {
+  getName(): OUString {
     return unicode(this.owner?.GetName() ?? "");
+  }
+  /** Renames the actual attached style while retaining its canonical identity. @param name - Native display name. @returns Nothing. */
+  setName(name: OUStringConstReference): void {
+    if (!this.owner) invalid("Style descriptor is detached");
+    if (this.owner instanceof SwNumRule) illegal("Numbering style rename is unrepresented");
+    if (this.family === "ParagraphStyles")
+      (this.owner as SwTextFormatColl).SetFormatName(text(name));
+    else illegal("Page style rename is unrepresented");
   }
   /** Implements the represented native isUserDefined operation. @returns The represented native operation result. */
   isUserDefined(): boolean {
@@ -159,7 +167,13 @@ export class SwXStyle {
       ? this.doc.FindTextFormatCollByName(value)
       : this.doc.GetDfltTextFormatColl();
     if (!parent) illegal("Unknown parent style");
-    (this.owner as SwTextFormatColl).SetDerivedFrom(parent);
+    for (
+      let ancestor: import("../attr/format").SwFormat | undefined = parent;
+      ancestor;
+      ancestor = ancestor.DerivedFrom()
+    )
+      if (ancestor === this.owner && parent !== this.owner) illegal("Cyclic parent style");
+    (this.owner as SwTextFormatColl).SetDerivedFrom(parent === this.owner ? undefined : parent);
   }
   /** Attaches the descriptor once; its pending state is then released. @param name - Native property or element name. @returns The represented native operation result. */
   Attach(name: string): void {
@@ -332,7 +346,11 @@ export class SwXStyleFamily {
       : this.family === "ParagraphStyles"
         ? [
             ...new Set([
-              ...WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+              ...WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.filter(
+                /** Executes this bounded native operation. @param style - Native operation input. @returns Native operation result. */ (
+                  style,
+                ) => getWriterMaterializedParagraphStyleDefinition(style.id) !== undefined,
+              ).map(
                 /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
                 (s) => s.name,
               ),
@@ -361,13 +379,16 @@ export class SwXStyleFamily {
           ? this.doc.FindNumRulePtr(n)
           : this.family === "ParagraphStyles"
             ? (this.doc.FindTextFormatCollByName(n) ??
+              this.doc.FindTextFormatColl(n) ??
               (
                 /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
                 () => {
-                  const d = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-                    /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
-                    (s) => s.name === n,
-                  );
+                  const d =
+                    getWriterMaterializedParagraphStyleDefinition(n) ??
+                    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
+                      /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
+                      (s) => s.name === n || s.id === n,
+                    );
                   return d && getWriterMaterializedParagraphStyleDefinition(d.id)
                     ? this.doc.GetTextFormatColl(d.id)
                     : undefined;

@@ -58,7 +58,7 @@
           "marker": "preserves native scalar state on the actual Worker document owner with strict legacy domains"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/xmloff/source/style/prstylei.ts",
           "marker": "applyNamedParagraphStyles"
         },
         {

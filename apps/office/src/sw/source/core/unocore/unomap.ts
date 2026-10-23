@@ -1,5 +1,6 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { Property } from "../../../../udkapi/com/sun/star/beans/Property";
 import { SfxItemPropertySetInfo } from "../../../../svl/source/items/itemprop";
 import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
@@ -14,10 +15,22 @@ export interface SwUnoPropertyEntry {
   readonly which: number;
   readonly member: number;
   readonly kind:
-    "any" | "long" | "short" | "byte" | "bool" | "string" | "font" | "color" | "hyperlink";
+    | "any"
+    | "long"
+    | "short"
+    | "byte"
+    | "bool"
+    | "string"
+    | "font"
+    | "color"
+    | "autostyle"
+    | "hyperlink"
+    | "pagedesc"
+    | "break";
 }
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
+  ["CharAutoStyleName", { which: H.RES_TXTATR_AUTOFMT, member: 0, kind: "autostyle" }],
   ...["", "Asian", "Complex"].flatMap(
     /** Processes one ordered native value at this boundary. @param suffix - Original suffix input. @param index - Native zero-based index. @returns The represented native operation result. */
     (suffix, index) =>
@@ -67,6 +80,48 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["HyperLinkURL", { which: H.RES_TXTATR_INETFMT, member: 4, kind: "hyperlink" }],
   ["HyperLinkTarget", { which: H.RES_TXTATR_INETFMT, member: 5, kind: "hyperlink" }],
   ["HyperLinkName", { which: H.RES_TXTATR_INETFMT, member: 1, kind: "hyperlink" }],
+  ...["", "Asian", "Complex"].flatMap(
+    /** Executes this bounded native operation. @param suffix - Native operation input. @param index - Native operation input. @returns Native operation result. */ (
+      suffix,
+      index,
+    ) => [
+      ...[
+        ["CharFontStyleName", 2],
+        ["CharFontFamily", 3],
+        ["CharFontCharSet", 4],
+        ["CharFontPitch", 5],
+      ].map(
+        /** Executes this bounded native operation. @param namemember - Native operation input. @returns Native operation result. */ ([
+          name,
+          member,
+        ]) =>
+          [
+            `${name}${suffix}`,
+            {
+              which: [H.RES_CHRATR_FONT, H.RES_CHRATR_CJK_FONT, H.RES_CHRATR_CTL_FONT][
+                index
+              ] as number,
+              member: member as number,
+              kind: "font",
+            },
+          ] as [string, SwUnoPropertyEntry],
+      ),
+    ],
+  ),
+  ["CharUnderlineColor", { which: H.RES_CHRATR_UNDERLINE, member: M.MID_TL_COLOR, kind: "any" }],
+  [
+    "CharUnderlineHasColor",
+    { which: H.RES_CHRATR_UNDERLINE, member: M.MID_TL_HASCOLOR, kind: "any" },
+  ],
+  [
+    "ParaIsAutoFirstLineIndent",
+    { which: H.RES_MARGIN_FIRSTLINE, member: M.MID_FIRST_AUTO, kind: "bool" },
+  ],
+  ["ParaLineNumberCount", { which: H.RES_LINENUMBER, member: 0, kind: "bool" }],
+  ["BreakType", { which: H.RES_BREAK, member: 0, kind: "break" }],
+  ["PageDescName", { which: H.RES_PAGEDESC, member: 1, kind: "pagedesc" }],
+  ["PageNumberOffset", { which: H.RES_PAGEDESC, member: 0, kind: "pagedesc" }],
+  ["NumberingStyleName", { which: H.RES_PARATR_NUMRULE, member: 0, kind: "string" }],
   ["VisitedCharStyleName", { which: H.RES_TXTATR_INETFMT, member: 6, kind: "hyperlink" }],
   ["UnvisitedCharStyleName", { which: H.RES_TXTATR_INETFMT, member: 7, kind: "hyperlink" }],
   ["CharUnderline", { which: H.RES_CHRATR_UNDERLINE, member: M.MID_TL_STYLE, kind: "short" }],
@@ -82,7 +137,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     "ParaLeftMargin",
     { which: H.RES_MARGIN_TEXTLEFT, member: M.MID_TXT_LMARGIN | 0x80, kind: "long" },
   ],
-  ["ParaRightMargin", { which: H.RES_MARGIN_RIGHT, member: 7 | 0x80, kind: "long" }],
+  ["ParaRightMargin", { which: H.RES_MARGIN_RIGHT, member: 5 | 0x80, kind: "long" }],
   [
     "ParaFirstLineIndent",
     { which: H.RES_MARGIN_FIRSTLINE, member: M.MID_FIRST_LINE_INDENT | 0x80, kind: "long" },
@@ -107,32 +162,48 @@ export function createPropertySetInfo(
   const properties: Property[] = [];
   for (const [name, entry] of includeItems ? SwUnoPropertyMap : []) {
     const argument: UnoTypeArgument =
-      entry.kind === "bool"
-        ? "bool"
-        : entry.kind === "byte"
-          ? "sal_Int8"
-          : entry.kind === "short"
-            ? "sal_Int16"
-            : entry.kind === "font" || entry.kind === "hyperlink"
-              ? "OUString"
-              : entry.kind === "color" || entry.kind === "long"
-                ? "sal_Int32"
-                : name.includes("Posture")
-                  ? fontSlantType
-                  : name === "ParaLineSpacing"
-                    ? lineSpacingType
-                    : name === "ParaTabStops"
-                      ? ["Sequence", tabStopType]
-                      : name === "CharStrikeout" ||
-                          name === "CharEscapement" ||
-                          name === "ParaAdjust" ||
-                          name === "ParaLastLineAdjust"
-                        ? "sal_Int16"
-                        : name === "CharEscapementHeight"
-                          ? "sal_Int8"
-                          : name === "ParaExpandSingleWord"
-                            ? "bool"
-                            : "float";
+      entry.kind === "break"
+        ? breakType
+        : entry.kind === "pagedesc"
+          ? entry.member === 1
+            ? "OUString"
+            : "sal_Int16"
+          : entry.kind === "string"
+            ? "OUString"
+            : entry.kind === "font"
+              ? entry.member < 3
+                ? "OUString"
+                : "sal_Int16"
+              : entry.kind === "bool"
+                ? "bool"
+                : entry.kind === "byte"
+                  ? "sal_Int8"
+                  : entry.kind === "short"
+                    ? "sal_Int16"
+                    : entry.kind === "hyperlink" || entry.kind === "autostyle"
+                      ? "OUString"
+                      : entry.kind === "color" || entry.kind === "long"
+                        ? "sal_Int32"
+                        : name.includes("Posture")
+                          ? fontSlantType
+                          : name === "ParaLineSpacing"
+                            ? lineSpacingType
+                            : name === "ParaTabStops"
+                              ? ["Sequence", tabStopType]
+                              : name === "CharUnderlineColor"
+                                ? "sal_Int32"
+                                : name === "CharUnderlineHasColor"
+                                  ? "bool"
+                                  : name === "CharStrikeout" ||
+                                      name === "CharEscapement" ||
+                                      name === "ParaAdjust" ||
+                                      name === "ParaLastLineAdjust"
+                                    ? "sal_Int16"
+                                    : name === "CharEscapementHeight"
+                                      ? "sal_Int8"
+                                      : name === "ParaExpandSingleWord"
+                                        ? "bool"
+                                        : "float";
     const key = unicode(name);
     properties.push(new Property(key, entry.which, UnoType.get(argument), 1));
     key.dispose();

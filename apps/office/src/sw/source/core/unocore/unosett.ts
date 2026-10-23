@@ -1,5 +1,5 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
-import { illegal } from "./unocrsrhelper";
+import { illegal, stringAny, stringValue, scalar, text, unicode, unknown } from "./unocrsrhelper";
 import { queryInterface } from "../../../../cppuhelper/inc/queryinterface";
 import { UnoType } from "../../../../cppu/inc/unotype";
 import { Type } from "../../../../cppu/inc/com/sun/star/uno/Type";
@@ -146,6 +146,17 @@ export class SwXNumberingRules {
     return this.GetNumberingRuleByIndex(this.rule, level);
   }
 
+  /** Original XNamed numbering-rule identity. @returns Owned native name. */
+  public getName(): import("../../../../sal/inc/rtl/ustring").OUString {
+    return unicode(this.rule.GetName());
+  }
+  /** Queries the source DefaultListId used by XMLTextListsHelper. @param name - Native property name. @returns Owned Any. */
+  public getPropertyValue(
+    name: import("../../../../sal/inc/rtl/ustring").OUStringConstReference,
+  ): Any {
+    if (text(name) !== "DefaultListId") unknown(text(name));
+    return stringAny(this.rule.GetDefaultListId());
+  }
   /** Native ten-level index container. @returns Level count. */
   public getCount(): number {
     return 10;
@@ -269,5 +280,74 @@ export class SwXNumberingRules {
       applied.SetIncludeUpperLevels(properties.parentNumbering);
     if (properties.listFormat !== undefined) applied.SetListFormat(properties.listFormat);
     rule.Set(level, applied);
+  }
+}
+
+import type { SwDoc } from "../doc/doc";
+import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+/** Original represented SwXLineNumberingProperties property owner over SwDoc's copied SwLineNumberInfo. */
+export class SwXLineNumberingProperties {
+  /** Borrows the canonical document. @param doc - Writer owner. @returns Service. */
+  constructor(private readonly doc: SwDoc) {}
+  /** Applies the original supported line-numbering properties to a copied value before committing it. @param property - Native property name. @param value - Typed Any. @returns Nothing. */
+  setPropertyValue(
+    property: import("../../../../sal/inc/rtl/ustring").OUStringConstReference,
+    value: Any,
+  ): void {
+    const name = text(property),
+      info = this.doc.GetLineNumberInfo();
+    if (name === "SeparatorText") info.SetDivider(stringValue(value));
+    else if (name === "Distance")
+      info.SetPosFromLeft(
+        Math.min(
+          65535,
+          Number(toTwips(BigInt(scalar(value, "sal_Int32") as number), Length.mm100)),
+        ) & 0xffff,
+      );
+    else if (name === "Interval") {
+      const count = scalar(value, "sal_Int16") as number;
+      if (count > 0) info.SetCountBy(count);
+    } else if (name === "SeparatorInterval") {
+      const count = scalar(value, "sal_Int16") as number;
+      if (count >= 0) info.SetDividerCountBy(count);
+    } else if (name === "NumberPosition") {
+      const position = scalar(value, "sal_Int16") as number;
+      if (position >= 0 && position <= 3) info.SetPos(position);
+    } else if (name === "IsOn") info.SetPaintLineNumbers(scalar(value, "bool") as boolean);
+    else if (name === "CountEmptyLines") info.SetCountBlankLines(scalar(value, "bool") as boolean);
+    else if (name === "CountLinesInFrames") info.SetCountInFlys(scalar(value, "bool") as boolean);
+    else if (name === "RestartAtEachPage")
+      info.SetRestartEachPage(scalar(value, "bool") as boolean);
+    else unknown(name);
+    this.doc.SetLineNumberInfo(info);
+  }
+  /** Queries a supported original line-numbering property. @param property - Native name. @returns Owned Any. */
+  getPropertyValue(
+    property: import("../../../../sal/inc/rtl/ustring").OUStringConstReference,
+  ): Any {
+    const name = text(property),
+      info = this.doc.GetLineNumberInfo();
+    if (name === "SeparatorText") return stringAny(info.GetDivider());
+    if (name === "Distance")
+      return new Any([Number(convertTwipToMm100(BigInt(info.GetPosFromLeft())))], "sal_Int32");
+    if (name === "Interval" || name === "SeparatorInterval" || name === "NumberPosition")
+      return new Any(
+        [
+          ((name === "Interval"
+            ? info.GetCountBy()
+            : name === "SeparatorInterval"
+              ? info.GetDividerCountBy()
+              : info.GetPos()) <<
+            16) >>
+            16,
+        ],
+        "sal_Int16",
+      );
+    if (name === "IsOn") return new Any([info.IsPaintLineNumbers()], "bool");
+    if (name === "CountEmptyLines") return new Any([info.IsCountBlankLines()], "bool");
+    if (name === "CountLinesInFrames") return new Any([info.IsCountInFlys()], "bool");
+    if (name === "RestartAtEachPage") return new Any([info.IsRestartEachPage()], "bool");
+    return unknown(name);
   }
 }

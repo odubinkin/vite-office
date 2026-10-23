@@ -1,4 +1,9 @@
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
+import { StylePool } from "../../../../svl/source/items/stylepool";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+
+import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
+import { SetAttrMode } from "../../../inc/swtypes";
 import { SwXNumberingRules } from "./unosett";
 import { SwNumRule } from "../doc/number";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -86,6 +91,16 @@ export function stringAny(value: string): Any {
 }
 /** Reads supported item member values through original item QueryValue owners. @param item - Original item input. @param entry - Original entry input. @returns The represented native operation result. */
 export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
+  if (entry.kind === "autostyle")
+    return stringAny(StylePool.nameOf((item as SwFormatAutoFormat).GetStyleHandle()));
+  if (entry.kind === "pagedesc") {
+    const page = item as SwFormatPageDesc;
+    return entry.member === 1
+      ? stringAny(page.GetPageDescName())
+      : new Any([((page.GetNumOffset() ?? 0) << 16) >> 16], "sal_Int16");
+  }
+  if (entry.kind === "break") return new Any([(item as SfxInt16Item).GetValue()], breakType);
+  if (entry.kind === "string") return stringAny((item as SfxStringItem).GetValue());
   if (entry.kind === "hyperlink") {
     const fields: Record<number, keyof import("../txtnode/fmtatr2").WriterHyperlink> = {
       1: "name",
@@ -113,11 +128,16 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     return out;
   }
   let value: unknown;
-  if (entry.kind === "font") return stringAny((item as SvxFontItem).GetFamilyName());
+  if (entry.kind === "font") {
+    (item as SvxFontItem).QueryValue(out, entry.member);
+    return out;
+  }
   if (entry.kind === "color") {
     const color = (item as SfxStringItem).GetValue();
     value =
-      color === "automatic" || color === "transparent" ? -1 : parseInt(color.replace("#", ""), 16);
+      color === "auto" || color === "automatic" || color === "transparent"
+        ? -1
+        : parseInt(color.replace("#", ""), 16);
   } else if (
     item instanceof SfxBoolItem ||
     item instanceof SfxInt16Item ||
@@ -140,6 +160,21 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
 }
 /** Clones before applying a property; failed PutValue cannot mutate a pooled item. @param item - Original item input. @param entry - Original entry input. @param value - Declared native value. @returns The represented native operation result. */
 export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any): SfxPoolItem {
+  if (entry.kind === "pagedesc") {
+    const page = item as SwFormatPageDesc,
+      offset =
+        entry.member === 0 ? (scalar(value, "sal_Int16") as number) & 0xffff : page.GetNumOffset();
+    return new SwFormatPageDesc(
+      entry.member === 1 ? stringValue(value) : page.GetPageDescName(),
+      offset === 0 ? undefined : offset,
+    );
+  }
+  if (entry.kind === "break") {
+    const result: [number] = [0];
+    if (!value.extract(result, breakType)) illegal("Expected BreakType");
+    return new SfxInt16Item(item.Which(), result[0]);
+  }
+  if (entry.kind === "string") return new SwNumRuleItem(stringValue(value));
   if (entry.kind === "hyperlink") {
     const fields: Record<number, keyof import("../txtnode/fmtatr2").WriterHyperlink> = {
       1: "name",
@@ -162,12 +197,12 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
       n === -1
         ? item.Which() === H.RES_CHRATR_HIGHLIGHT
           ? "transparent"
-          : "automatic"
+          : "auto"
         : `#${(n & 0xffffff).toString(16).padStart(6, "0")}`,
     );
   }
   if (entry.kind === "font") {
-    (copy as SvxFontItem).SetFamilyName(stringValue(value));
+    if (!(copy as SvxFontItem).PutValue(value, entry.member)) illegal("Invalid font member");
     return copy;
   }
   if (copy instanceof SvxUnderlineItem) {
@@ -183,7 +218,12 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   if (copy instanceof SfxUInt16Item)
     return new SfxUInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   const input =
-    entry.kind === "any" ? value : scalar(value, entry.kind === "long" ? "sal_Int32" : "sal_Int16");
+    entry.kind === "any"
+      ? value
+      : scalar(
+          value,
+          entry.kind === "long" ? "sal_Int32" : entry.kind === "bool" ? "bool" : "sal_Int16",
+        );
   if (!copy.PutValue(input, entry.member)) illegal("Property value rejected by native item");
   return copy;
 }
@@ -209,10 +249,22 @@ export function spans(pam: SwPaM): { node: SwTextNode; start: number; end: numbe
       }),
     );
 }
-/** Applies a native property to selected paragraphs or ranged character items. @param pam - Original pam input. @param name - Native property or element name. @param value - Declared native value. @returns The represented native operation result. */
-export function SetPropertyValue(pam: SwPaM, name: string, value: Any): void {
+/** Applies a native property to selected paragraphs or ranged character items. @param pam - Original pam input. @param name - Native property or element name. @param value - Declared native value. @returns The represented native operation result.  @param mode - Native operation input. */
+export function SetPropertyValue(
+  pam: SwPaM,
+  name: string,
+  value: Any,
+  mode = SetAttrMode.DEFAULT,
+): void {
   const ranges = spans(pam),
     doc = pam.GetPoint().GetNode().GetDoc();
+  if (name === "CharAutoStyleName") {
+    const handle = doc
+      .GetIStyleAccess()
+      .getByName(stringValue(value), SwAutoStyleFamily.AUTO_STYLE_CHAR);
+    if (handle) doc.InsertPoolItem(pam, new SwFormatAutoFormat(handle), mode);
+    return;
+  }
   if (name === "NumberingRules") {
     const reference = new Reference(value, UNO_QUERY, indexReplaceType);
     try {
@@ -227,10 +279,11 @@ export function SetPropertyValue(pam: SwPaM, name: string, value: Any): void {
     const n = stringValue(value),
       definition = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
         /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
-        (s) => s.name === n,
+        (s) => s.name === n || s.id === n,
       ),
       style =
         doc.FindTextFormatCollByName(n) ??
+        doc.FindTextFormatColl(n) ??
         (definition ? doc.GetTextFormatColl(definition.id) : undefined);
     if (!style) illegal("Unknown paragraph style");
     for (const r of ranges) setTextFormatCollAtNode(r.node, style, false);
@@ -245,7 +298,13 @@ export function SetPropertyValue(pam: SwPaM, name: string, value: Any): void {
   if (name === "PageDescName") {
     const s = stringValue(value);
     if (s && !doc.FindPageDesc(s)) illegal("Unknown page style");
-    for (const r of ranges) r.node.SetAttr(new SwFormatPageDesc(s));
+    for (const r of ranges)
+      r.node.SetAttr(
+        new SwFormatPageDesc(
+          s,
+          (r.node.GetAttr(H.RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
+        ),
+      );
     return;
   }
   if (
@@ -281,7 +340,7 @@ export function SetPropertyValue(pam: SwPaM, name: string, value: Any): void {
   if (!first) invalid("No text range");
   const current = effectiveItem(first.node, first.start, entry.which),
     item = putItem(current, entry, value);
-  doc.InsertPoolItem(pam, item);
+  doc.InsertPoolItem(pam, item, mode);
 }
 /** Queries the item effective at a text offset, including character hints. @param node - Canonical text node. @param offset - Original offset input. @param which - Original which input. @returns The represented native operation result. */
 export function effectiveItem(node: SwTextNode, offset: number, which: number): SfxPoolItem {
@@ -301,6 +360,35 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
   const r = spans(pam)[0];
   if (!r) invalid("No text range");
   const node = r.node;
+  if (name === "CharAutoStyleName") {
+    let nameValue: string | undefined;
+    for (const span of spans(pam)) {
+      const hints = span.node.GetpSwpHints()?.entries() ?? [],
+        boundaries = new Set([span.start]);
+      for (const hint of hints) {
+        if (!(hint.GetAttr() instanceof SwFormatAutoFormat)) continue;
+        if (hint.GetStart() > span.start && hint.GetStart() < span.end)
+          boundaries.add(hint.GetStart());
+        const end = hint.GetEnd();
+        if (end !== undefined && end > span.start && end < span.end) boundaries.add(end);
+      }
+      for (const offset of boundaries) {
+        let current = "";
+        for (const hint of hints) {
+          const format = hint.GetAttr();
+          if (
+            format instanceof SwFormatAutoFormat &&
+            hint.GetStart() <= offset &&
+            offset < (hint.GetEnd() ?? hint.GetStart())
+          )
+            current = StylePool.nameOf(format.GetStyleHandle());
+        }
+        if (nameValue !== undefined && nameValue !== current) return new Any();
+        nameValue = current;
+      }
+    }
+    return stringAny(nameValue ?? "");
+  }
   if (name === "NumberingRules") {
     const rule = node.GetNumRule();
     return rule
@@ -353,9 +441,18 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
   }
   return result ?? new Any();
 }
-/** Ordered native multi-property setter. Callers own undo grouping and rollback. @param pam - Original pam input. @param properties - Ordered native property values. @returns The represented native operation result. */
-export function SetPropertyValues(pam: SwPaM, properties: readonly PropertyValue[]): void {
-  const sideEffects = new Set(["ParaStyleName", "NumberingStartValue", "NumberingRules"]),
+/** Ordered native multi-property setter. Callers own undo grouping and rollback. @param pam - Original pam input. @param properties - Ordered native property values. @returns The represented native operation result.  @param mode - Native operation input. */
+export function SetPropertyValues(
+  pam: SwPaM,
+  properties: readonly PropertyValue[],
+  mode = SetAttrMode.DEFAULT,
+): void {
+  const sideEffects = new Set([
+      "ParaStyleName",
+      "NumberingStartValue",
+      "NumberingRules",
+      "CharAutoStyleName",
+    ]),
     items = new Map<number, SfxPoolItem>(),
     special: PropertyValue[] = [],
     regular: PropertyValue[] = [];
@@ -365,7 +462,7 @@ export function SetPropertyValues(pam: SwPaM, properties: readonly PropertyValue
     if (sideEffects.has(name)) special.push(property);
     else regular.push(property);
   }
-  for (const property of special) SetPropertyValue(pam, text(property.Name), property.Value);
+  for (const property of special) SetPropertyValue(pam, text(property.Name), property.Value, mode);
   const first = spans(pam)[0];
   if (!first) invalid("No text range");
   for (const property of regular) {
@@ -377,7 +474,7 @@ export function SetPropertyValues(pam: SwPaM, properties: readonly PropertyValue
       items.set(entry.which, putItem(previous, entry, property.Value));
     } else {
       try {
-        SetPropertyValue(pam, name, property.Value);
+        SetPropertyValue(pam, name, property.Value, mode);
       } catch (error) {
         if (error instanceof UnknownPropertyException) {
           missing += `Unknown property: '${name}' `;
@@ -386,7 +483,8 @@ export function SetPropertyValues(pam: SwPaM, properties: readonly PropertyValue
       }
     }
   }
-  for (const item of items.values()) pam.GetPoint().GetNode().GetDoc().InsertPoolItem(pam, item);
+  for (const item of items.values())
+    pam.GetPoint().GetNode().GetDoc().InsertPoolItem(pam, item, mode);
   if (missing) unknown(missing);
 }
 /** CR separates paragraphs; LF is a line break, not another paragraph. Control characters reject the whole insertion before mutation. @param pam - Original pam input. @param input - Original input input. @param mode - Original mode input. @returns The represented native operation result. */

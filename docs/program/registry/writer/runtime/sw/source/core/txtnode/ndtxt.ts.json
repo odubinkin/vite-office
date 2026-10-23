@@ -112,7 +112,7 @@
         "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#selectsIndependentMask",
         "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#tracksLiveMaskHistory",
         "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx#selectsStyleHierarchy",
-        "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts#applyNamedParagraphStyles",
+        "apps/office/src/xmloff/source/style/prstylei.ts#applyNamedParagraphStyles",
         "apps/office/src/sw/source/core/doc/doc.ts#CopyTextColl",
         "apps/office/src/sw/source/core/doc/doc.ts#FindTextFormatCollByName",
         "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#retainsNamedOwnership",

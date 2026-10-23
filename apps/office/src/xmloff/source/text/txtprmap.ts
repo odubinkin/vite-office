@@ -1,4 +1,7 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
+
 import { XMLEscapementPropHdl, XMLEscapementHeightPropHdl } from "../style/escphdl";
 
 import {
@@ -7,6 +10,9 @@ import {
   XMLCrossedOutWidthPropHdl,
   XMLCrossedOutTextPropHdl,
 } from "../style/cdouthdl";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
+import { UnknownPropertyException } from "../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { cppu_detail_getUnoType_FontSlant as slantType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FastAttributeList } from "../core/xmlimp";
@@ -205,5 +211,242 @@ export function importTextCharacterProperties(
     value.dispose();
     line.dispose();
     crossedOut.dispose();
+  }
+}
+
+/** Original import property map output targets the shared XPropertySet contract. */
+import type { XMLAutoStyleFamily, XMLPropertySet } from "../../inc/txtimp";
+import type { XMLParagraphImportProperties } from "./txtparai";
+import type { OdfParagraphAlignment } from "./txtparae";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { convertTwipToMm100 } from "../../../tools/inc/UnitConversion";
+import { getFontFamilyFromGeneric } from "../style/fonthdl";
+import {
+  LineSpacing,
+  cppu_detail_getUnoType_LineSpacing as lineType,
+} from "../../../offapi/com/sun/star/style/LineSpacing";
+import { cppu_detail_getUnoType_BreakType as breakType } from "../../../offapi/com/sun/star/style/BreakType";
+import { cppu_detail_getUnoType_TabStop as stopType } from "../../../offapi/com/sun/star/style/TabStop";
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { UnoTypeArgument } from "../../../cppu/inc/unotype";
+/** Native UTF16 string construction at the parser/API boundary. @param value - Parsed XML text. @returns Owned string. */
+export function xmlTextString(value: string): OUString {
+  const units = new Uint16Array(value.length);
+  for (let i = 0; i < value.length; i++) units[i] = value.charCodeAt(i);
+  return new OUString(units, units.length);
+}
+/** Projects native member offsets used by Sequence<TabStop>. */
+interface TabStopAddress {
+  get(offset: number): [number];
+}
+/** Original generated compound stride, consumed through the existing CPPU sequence owner. */
+const ImportTabStops = Sequence.specialize<TabStopAddress>(stopType, 12);
+/** Applies parsed XML properties as native API values, leaving canonical item construction to Writer. @param target - Actual property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional paragraph alignment. @param leftMargin - Optional text-left margin in twips. @returns Nothing.  @param autoFamily - Native operation input. */
+export function applyTextImportProperties(
+  target: XMLPropertySet,
+  character: Partial<OdfCharacterProperties> = {},
+  paragraph: XMLParagraphImportProperties = {},
+  alignment?: OdfParagraphAlignment,
+  leftMargin?: number,
+  autoFamily?: XMLAutoStyleFamily,
+): void {
+  const names: OUString[] = [],
+    values: Any[] = [];
+  /** Appends one original typed property value. @param name - Native name. @param value - Parsed scalar. @param type - Native declared type. @returns Nothing. */
+  function add(name: string, value: unknown, type: UnoTypeArgument): void {
+    names.push(xmlTextString(name));
+    if (type === "OUString") {
+      const string = xmlTextString(value as string);
+      try {
+        values.push(new Any(string.getDataAddress(), type));
+      } finally {
+        string.dispose();
+      }
+    } else values.push(new Any([value], type));
+  }
+  /** Converts parsed twips to original API MM100 with integer native rounding. @param value - Twips. @returns MM100. */
+  function mm(value: number): number {
+    return Number(convertTwipToMm100(BigInt(value)));
+  }
+  try {
+    for (const suffix of ["", "Asian", "Complex"] as const) {
+      const family = character[`fontFamily${suffix}`];
+      if (family !== undefined) {
+        add(`CharFontName${suffix}`, family, "OUString");
+        add(
+          `CharFontFamily${suffix}`,
+          getFontFamilyFromGeneric(character[`fontFamilyGeneric${suffix}`]),
+          "sal_Int16",
+        );
+        add(`CharFontStyleName${suffix}`, character[`fontStyleName${suffix}`] ?? "", "OUString");
+        add(`CharFontPitch${suffix}`, character[`fontPitch${suffix}`] ?? 0, "sal_Int16");
+        add(`CharFontCharSet${suffix}`, character[`fontCharSet${suffix}`] ?? 0, "sal_Int16");
+      }
+      const height = character[`fontSizeTwips${suffix}`];
+      if (height !== undefined) add(`CharHeight${suffix}`, height / 20, "float");
+      const weight = character[`fontWeight${suffix}`],
+        posture = character[`fontPosture${suffix}`];
+      if (weight !== undefined) add(`CharWeight${suffix}`, weight, "float");
+      if (posture !== undefined) add(`CharPosture${suffix}`, posture, slantType);
+    }
+    for (const [key, name] of [
+      ["color", "CharColor"],
+      ["highlight", "CharHighlight"],
+    ] as const) {
+      const value = character[key];
+      if (value !== undefined)
+        add(
+          name,
+          value === "auto" || value === "automatic" || value === "transparent"
+            ? -1
+            : parseInt(value.replace("#", ""), 16),
+          "sal_Int32",
+        );
+    }
+    for (const [key, name, type] of [
+      ["strikeout", "CharStrikeout", "sal_Int16"],
+      ["escapement", "CharEscapement", "sal_Int16"],
+      ["escapementHeight", "CharEscapementHeight", "sal_Int8"],
+      ["underlineStyle", "CharUnderline", "sal_Int16"],
+      ["underlineColor", "CharUnderlineColor", "sal_Int32"],
+      ["underlineHasColor", "CharUnderlineHasColor", "bool"],
+    ] as const)
+      if (character[key] !== undefined) add(name, character[key], type);
+    if (alignment !== undefined)
+      add(
+        "ParaAdjust",
+        alignment === "center" ? 3 : alignment === "right" ? 6 : alignment === "justify" ? 2 : 5,
+        "sal_Int16",
+      );
+    if (leftMargin !== undefined) add("ParaLeftMargin", mm(leftMargin), "sal_Int32");
+    for (const [key, name] of [
+      ["firstLineIndent", "ParaFirstLineIndent"],
+      ["rightMargin", "ParaRightMargin"],
+      ["upperSpacing", "ParaTopMargin"],
+      ["lowerSpacing", "ParaBottomMargin"],
+    ] as const)
+      if (paragraph[key] !== undefined) add(name, mm(paragraph[key]), "sal_Int32");
+    for (const [key, name] of [
+      ["autoTextIndent", "ParaIsAutoFirstLineIndent"],
+      ["contextualSpacing", "ParaContextMargin"],
+      ["countLineNumbers", "ParaLineNumberCount"],
+      ["keepWithNext", "ParaKeepTogether"],
+    ] as const)
+      if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
+    if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
+    for (const [key, name] of [
+      ["orphans", "ParaOrphans"],
+      ["widows", "ParaWidows"],
+    ] as const)
+      if (paragraph[key] !== undefined) add(name, (paragraph[key] << 24) >> 24, "sal_Int8");
+    if (paragraph.pageStyleName !== undefined)
+      add("PageDescName", paragraph.pageStyleName, "OUString");
+    if (paragraph.pageNumber !== undefined)
+      add(
+        "PageNumberOffset",
+        paragraph.pageNumber === "auto" ? 0 : (paragraph.pageNumber << 16) >> 16,
+        "sal_Int16",
+      );
+    if (paragraph.breakBefore !== undefined || paragraph.breakAfter !== undefined)
+      add(
+        "BreakType",
+        paragraph.breakBefore === "page" && paragraph.breakAfter === "page"
+          ? 6
+          : paragraph.breakBefore === "page"
+            ? 4
+            : paragraph.breakAfter === "page"
+              ? 5
+              : 0,
+        breakType,
+      );
+    const line =
+      paragraph.lineHeightTwips ??
+      paragraph.lineHeightAtLeastTwips ??
+      paragraph.lineSpacingTwips ??
+      paragraph.lineHeightPercent;
+    if (line !== undefined) {
+      const mode =
+        paragraph.lineHeightTwips !== undefined
+          ? 3
+          : paragraph.lineHeightAtLeastTwips !== undefined
+            ? 1
+            : paragraph.lineSpacingTwips !== undefined
+              ? 2
+              : 0;
+      names.push(xmlTextString("ParaLineSpacing"));
+      values.push(new Any(new LineSpacing(mode, mode === 0 ? line : mm(line)), lineType));
+    }
+    if (paragraph.tabStopDetails !== undefined) {
+      const sequence = new ImportTabStops(paragraph.tabStopDetails.length);
+      try {
+        for (const [index, stop] of paragraph.tabStopDetails.entries()) {
+          const value = sequence.operatorIndex(index);
+          value.get(0)[0] = stop.position;
+          value.get(4)[0] =
+            stop.alignment === "right"
+              ? 2
+              : stop.alignment === "center"
+                ? 1
+                : stop.alignment === "char"
+                  ? 3
+                  : stop.alignment === "default"
+                    ? 4
+                    : 0;
+          value.get(8)[0] = stop.decimal.charCodeAt(0);
+          value.get(10)[0] = stop.fill.charCodeAt(0);
+        }
+        names.push(xmlTextString("ParaTabStops"));
+        values.push(new Any(sequence.getAddress(), ["Sequence", stopType]));
+      } finally {
+        sequence.dispose();
+      }
+    }
+    if (names.length && autoFamily) {
+      const properties = names.map(
+        /** Applies this source-owned operation. @param name - Native input. @param index - Native input. @returns Native result. */ (
+          name,
+          index,
+        ) => new PropertyValue(name, -1, values[index] as Any, PropertyState.DIRECT_VALUE),
+      );
+      const key = xmlTextString("CharAutoStyleName");
+      try {
+        const style = autoFamily.insertStyle(properties),
+          value = style.getPropertyValue(key);
+        try {
+          target.setPropertyValue(key, value);
+        } finally {
+          value.dispose();
+        }
+      } finally {
+        key.dispose();
+        for (const property of properties) {
+          property.Name.dispose();
+          property.Value.dispose();
+        }
+      }
+    } else if (names.length) {
+      try {
+        target.setPropertyValues(names, values);
+      } catch (error) {
+        if (!(error instanceof Exception)) throw error;
+        error.dispose();
+        // Native FillPropertySet retries individual properties after the multi-set fails.
+        for (let i = 0; i < names.length; i++) {
+          try {
+            target.setPropertyValue(names[i] as OUString, values[i] as Any);
+          } catch (failure) {
+            if (
+              !(failure instanceof IllegalArgumentException) &&
+              !(failure instanceof UnknownPropertyException)
+            )
+              throw failure;
+            failure.dispose();
+          }
+        }
+      }
+    }
+  } finally {
+    for (const name of names) name.dispose();
+    for (const value of values) value.dispose();
   }
 }

@@ -88,6 +88,7 @@ export interface SwDocOptions {
   readonly defaultFontDevice?: DefaultFontDevice;
   readonly locale?: string;
 }
+import { SetAttrMode } from "../../../inc/swtypes";
 
 /** Native SetNumRule operation flags from doc.hxx. */
 export enum SetNumRuleMode {
@@ -112,12 +113,13 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
-  /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing. */
+  /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing.  @param mode - Native operation input. */
   public InsertPoolItem(
     range: SwPaM,
     item: import("../../../../svl/source/items/poolitem").SfxPoolItem,
+    mode = SetAttrMode.DEFAULT,
   ): void {
-    InsertPoolItem(this, range, item);
+    InsertPoolItem(this, range, item, mode);
   }
 
   /** Renames a table through its native frame owner. @param format - Table frame. @param name - Requested name. @returns Nothing. */
@@ -526,7 +528,10 @@ export class SwDoc {
 
   /** Stores an independent native numbering rule. @param rule - Source rule. @returns Document-owned rule. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
-    return this.listsManager.AddNumRule(rule);
+    const stored = this.listsManager.AddNumRule(rule);
+    const list = this.listsManager.GetListForListStyle(stored.GetName());
+    if (!stored.GetDefaultListId()) stored.SetDefaultListId(list.GetListId());
+    return stored;
   }
   /** Finds a numbering rule. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {

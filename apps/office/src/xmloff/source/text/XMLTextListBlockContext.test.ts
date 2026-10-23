@@ -10,10 +10,9 @@ import { XMLTextListItemContext } from "./XMLTextListItemContext";
 it("retains native block references and returns pending restart from empty sublists", /** Verifies ownership independent of paragraph counter materialization. @returns Nothing. */ () => {
   const rule = { name: "L", levelCount: 10, levels: [] };
   const target: XMLTextImportTarget = {
-    createParagraph:
-      /** Rejects accidental paragraph construction in this ownership test. @returns Never. */ () => {
-        throw new Error("No paragraph expected");
-      },
+    GetTextImport: /** No paragraph is created by this list-owner test. @returns Never. */ () => {
+      throw new Error("No paragraph expected");
+    },
     getListRule: /** Returns the existing rule reference. @returns Rule. */ () => rule,
     getStyle: /** Has no common style. @returns Nothing. */ () => undefined,
     getAutoStyle: /** Has no automatic style. @returns Nothing. */ () => undefined,
@@ -73,7 +72,7 @@ it("retains native block references and returns pending restart from empty subli
 
 it("narrows repeated-sublist count to the native signed16 field", /** Verifies primary factory boundary states independently of the restart flag returned by empty lists. @returns Nothing. */ () => {
   const target: XMLTextImportTarget = {
-    createParagraph: /** Has no paragraph in this counter test. @returns Never. */ () => {
+    GetTextImport: /** No paragraph is created by this list counter test. @returns Never. */ () => {
       throw new Error("No paragraph expected");
     },
     getListRule: /** Returns an existing rule. @returns Rule. */ () => ({

@@ -144,7 +144,20 @@ export function exportStylesXml(document: SwDoc): string {
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
   ).namedStyles;
-  const namedRules = new Map<string, SwNumRule>();
+  const namedRules = new Map(
+    document
+      .GetNumRuleTable()
+      .filter(
+        /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+          rule,
+        ) => !rule.IsAutoRule(),
+      )
+      .map(
+        /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+          rule,
+        ) => [rule.GetName(), rule],
+      ),
+  );
   const styles = document.GetTextFormatColls().map(
     /** Emits one named Writer paragraph style. @param collection - Style collection. @returns Style XML. */
     (collection) => {
@@ -556,6 +569,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
       (_unused, index) => properties.GetPropertiesByIndex(index),
     ),
     name: rule.GetName(),
+    isAutomatic: rule.IsAutoRule(),
   };
 }
 

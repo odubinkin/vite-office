@@ -93,7 +93,9 @@ function state(doc: SwDoc) {
       text: node.GetText(),
       kind: node.GetListKind(),
       id: node.GetListId(),
-      rule: node.GetNumRuleName(),
+      rule: node.GetNumRule()?.IsAutoRule()
+        ? `automatic-${doc.GetNumRuleTable().indexOf(required(node.GetNumRule()))}`
+        : node.GetNumRuleName(),
       level: node.GetAttrListLevel(),
       counted: node.IsCountedInList(),
       restart: node.IsListRestart(),

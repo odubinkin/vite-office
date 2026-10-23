@@ -1,4 +1,6 @@
 /** @fileoverview Native fontitem.hxx/textitem.cxx value construction, defaults, mutations, equality, hashing and full browser state; no replacement font or descriptor provider. */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import { expect, it } from "vitest";
 import { SvxFontItem } from "../../inc/fontitem";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
@@ -134,4 +136,49 @@ it("retains original numeric declarations and the exact shared ODF font-family e
   expect(getFontPitchFromGeneric("fixed")).toBe(FontPitch.PITCH_FIXED);
   expect(getFontPitchFromGeneric("variable")).toBe(FontPitch.PITCH_VARIABLE);
   expect(getFontPitchFromGeneric("invalid")).toBe(FontPitch.PITCH_DONTKNOW);
+});
+
+it("transports independent native font members through typed Any without mutating on failed extraction", /** Covers exact fontitem scalar members consumed by Writer property maps. @returns Nothing. */ () => {
+  const item = new SvxFontItem(77),
+    input = new Any(),
+    output = new Any(),
+    name = new OUString(new Uint16Array([0x41, 0, 0x42]), 3),
+    extracted = new OUString();
+  try {
+    input.insert(name.getDataAddress(), "OUString");
+    for (const member of [1, 2]) {
+      expect(item.PutValue(input, member | 0x80)).toBe(true);
+      expect(item.QueryValue(output, member)).toBe(true);
+      expect(output.extract(extracted, "OUString")).toBe(true);
+      expect(extracted.equals(name)).toBe(true);
+    }
+    for (const [member, expected] of [
+      [3, 3],
+      [4, 76],
+      [5, 1],
+    ] as const) {
+      input.insert([expected], "sal_Int16");
+      expect(item.PutValue(input, member)).toBe(true);
+      expect(item.QueryValue(output, member | 0x80)).toBe(true);
+      const actual: [number] = [0];
+      expect(output.extract(actual, "sal_Int16")).toBe(true);
+      expect(actual[0]).toBe(expected);
+    }
+    const before = item.QueryValue();
+    input.insert([true], "bool");
+    expect(item.PutValue(input, 1)).toBe(false);
+    expect(item.QueryValue()).toEqual(before);
+    const retained = new Any(output);
+    try {
+      expect(item.QueryValue(output, 127)).toBe(true);
+      expect(output.operatorEquals(retained)).toBe(true);
+    } finally {
+      retained.dispose();
+    }
+  } finally {
+    input.dispose();
+    output.dispose();
+    name.dispose();
+    extracted.dispose();
+  }
 });

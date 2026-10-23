@@ -200,56 +200,60 @@ it("owns source-created leaf references and reads them only at list publication"
   first?.endFastElement(XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER);
   expect(consumer.registerListStyle).not.toHaveBeenCalled();
   list.endFastElement();
-  expect(consumer.registerListStyle).toHaveBeenCalledWith("Owned", {
-    name: "Display",
-    levelCount: 10,
-    levels: [
-      {
-        level: 0,
-        kind: "numbered",
-        numberingType: 4,
-        prefix: "",
-        suffix: "",
-        startWith: 1,
-        parentNumbering: 1,
-        listFormat: "%1%",
-        position: {
-          measureUnit: "mm100",
-          values: {
-            positionAndSpaceMode: "label-width-and-position",
-            firstLineIndent: 0,
-            indentAt: 0,
-            labelFollowedBy: "listtab",
-            listTabPosition: 0,
-            absLSpace: 100,
-            firstLineOffset: 0,
-            charTextDistance: 0,
+  expect(consumer.registerListStyle).toHaveBeenCalledWith(
+    "Owned",
+    {
+      name: "Display",
+      levelCount: 10,
+      levels: [
+        {
+          level: 0,
+          kind: "numbered",
+          numberingType: 4,
+          prefix: "",
+          suffix: "",
+          startWith: 1,
+          parentNumbering: 1,
+          listFormat: "%1%",
+          position: {
+            measureUnit: "mm100",
+            values: {
+              positionAndSpaceMode: "label-width-and-position",
+              firstLineIndent: 0,
+              indentAt: 0,
+              labelFollowedBy: "listtab",
+              listTabPosition: 0,
+              absLSpace: 100,
+              firstLineOffset: 0,
+              charTextDistance: 0,
+            },
           },
         },
-      },
-      {
-        level: 0,
-        kind: "bullet",
-        numberingType: 6,
-        bulletChar: "\0",
-        bulletFont: { name: "" },
-        prefix: "",
-        suffix: "",
-        listFormat: "%1%",
-        position: {
-          measureUnit: "mm100",
-          values: {
-            positionAndSpaceMode: "label-width-and-position",
-            firstLineIndent: 0,
-            indentAt: 0,
-            labelFollowedBy: "listtab",
-            listTabPosition: 0,
-            absLSpace: 0,
-            firstLineOffset: 0,
-            charTextDistance: 0,
+        {
+          level: 0,
+          kind: "bullet",
+          numberingType: 6,
+          bulletChar: "\0",
+          bulletFont: { name: "" },
+          prefix: "",
+          suffix: "",
+          listFormat: "%1%",
+          position: {
+            measureUnit: "mm100",
+            values: {
+              positionAndSpaceMode: "label-width-and-position",
+              firstLineIndent: 0,
+              indentAt: 0,
+              labelFollowedBy: "listtab",
+              listTabPosition: 0,
+              absLSpace: 0,
+              firstLineOffset: 0,
+              charTextDistance: 0,
+            },
           },
         },
-      },
-    ],
-  });
+      ],
+    },
+    false,
+  );
 });

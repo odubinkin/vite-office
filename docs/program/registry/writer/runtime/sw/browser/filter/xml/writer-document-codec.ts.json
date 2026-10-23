@@ -54,7 +54,7 @@
         "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#bool SwNumRule::operator==(",
         "vendor/libreoffice-reference/sw/inc/numrule.hxx#SetPoolHelpId(",
         "vendor/libreoffice-reference/sw/inc/poolfmt.hxx#UNKNOWN = USHRT_MAX",
-        "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts#applyNamedParagraphStyles",
+        "apps/office/src/xmloff/source/style/prstylei.ts#applyNamedParagraphStyles",
         "apps/office/src/sw/source/core/doc/doc.ts#CopyTextColl",
         "apps/office/src/sw/source/core/doc/doc.ts#FindTextFormatCollByName",
         "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#retainsNamedOwnership",

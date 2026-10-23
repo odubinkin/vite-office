@@ -88,6 +88,7 @@ export interface XMLTextListRuleSource {
   readonly levels: readonly XMLListLevelExport[];
   /** Canonical SwNumRule name. */
   readonly name: string;
+  readonly isAutomatic?: boolean;
 }
 
 /** Neutral list attributes applied to one paragraph. */
@@ -214,7 +215,11 @@ export class XMLTextParagraphExport {
         /** Names one automatic list style. @param ruleName - Canonical rule name. @param index - Rule order. @returns Name pair. */ (
           ruleName,
           index,
-        ) => [ruleName, `L${index + 1}`] as const,
+        ) =>
+          [
+            ruleName,
+            listRules.get(ruleName)?.isAutomatic === false ? escapeXml(ruleName) : `L${index + 1}`,
+          ] as const,
       ),
     );
     const namedStyles: string[] = [];
@@ -272,19 +277,25 @@ export class XMLTextParagraphExport {
         return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
       },
     );
-    const listStyles = [...listRules.values()].map(
-      /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
-      (rule) => {
-        const name = listStyleNames.get(rule.name) as string;
-        const levels = rule.levels
-          .map(
-            /** Delegates each native property record to numbering export ownership. @param properties - Level properties. @param level - Zero-based level. @returns Level XML. */
-            (properties, level) => numRuleExport.exportLevelStyle(level, properties),
-          )
-          .join("");
-        return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
-      },
-    );
+    const listStyles = [...listRules.values()]
+      .filter(
+        /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+          rule,
+        ) => rule.isAutomatic !== false,
+      )
+      .map(
+        /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
+        (rule) => {
+          const name = listStyleNames.get(rule.name) as string;
+          const levels = rule.levels
+            .map(
+              /** Delegates each native property record to numbering export ownership. @param properties - Level properties. @param level - Zero-based level. @returns Level XML. */
+              (properties, level) => numRuleExport.exportLevelStyle(level, properties),
+            )
+            .join("");
+          return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
+        },
+      );
     const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
     const usedXmlIds = new Set<string>();
     const renderParagraphs =

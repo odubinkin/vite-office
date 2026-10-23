@@ -1,4 +1,5 @@
 /** @fileoverview Validates ODT master-page graph errors at Writer import. */
+import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/container/NoSuchElementException";
 
 import { describe, expect, it, vi } from "vitest";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
@@ -55,7 +56,7 @@ describe("ODT master-page validation", /** Registers malformed style fixtures. @
       expect(
         /** Runs the focused test callback. @returns Operation result. */ () =>
           importStyles(styles),
-      ).toThrow("Missing ODF follow master page: Standard");
+      ).toThrow(NoSuchElementException);
     } finally {
       lookup.mockRestore();
     }

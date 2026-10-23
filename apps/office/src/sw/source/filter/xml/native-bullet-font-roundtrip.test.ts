@@ -82,7 +82,7 @@ it("retains custom bullet families through common and automatic ODT rules, body/
       zip = new ZipFile(bytes);
     const content = await zip.readTextEntry("content.xml"),
       styles = await zip.readTextEntry("styles.xml");
-    expect(content).toContain(
+    expect(styles + content).toContain(
       'fo:font-family="&apos;Native Marker&apos;, &apos;Comma, Face&apos;"',
     );
     expect(styles).toContain('<style:text-properties style:font-name="Liberation Serif"/>');
@@ -118,7 +118,7 @@ it("retains custom bullet families through common and automatic ODT rules, body/
   }
 });
 
-it("includes the native represented font family when checking duplicate common and automatic rule definitions", /** Checks same-family retention and different-family collision through the real XML import boundary. @returns Nothing. */ () => {
+it("keeps common and automatic font rules in independent native owners", /** Checks same-family retention and different-family collision through the real XML import boundary. @returns Nothing. */ () => {
   const doc = new SwDoc();
   const declaration =
     /** Emits otherwise identical definitions with distinct XML aliases for one native rule name. @param family - Font family. @param alias - XML style identity. @returns Definition XML. */ (
@@ -142,17 +142,27 @@ it("includes the native represented font family when checking duplicate common a
     ).document;
     expect(same.FindNumRulePtr("Shared")?.Get(0).GetBulletFont()?.GetFamilyName()).toBe("NativeA");
     same.Dispose();
+    const different = importWriterXml(
+      styles,
+      content.replace(
+        "</office:automatic-styles>",
+        declaration("NativeB", "AutomaticAlias") + "</office:automatic-styles>",
+      ),
+      { title: "Different" },
+    ).document;
     expect(
-      /** Rejects only the changed family in an otherwise identical rule. @returns Candidate document. */ () =>
-        importWriterXml(
-          styles,
-          content.replace(
-            "</office:automatic-styles>",
-            declaration("NativeB", "AutomaticAlias") + "</office:automatic-styles>",
-          ),
-          { title: "Different" },
+      different
+        .GetNumRuleTable()
+        .map(
+          /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+            rule,
+          ) => [rule.IsAutoRule(), rule.Get(0).GetBulletFont()?.GetFamilyName()],
         ),
-    ).toThrow("Conflicting ODF list rule: Shared");
+    ).toEqual([
+      [false, "NativeA"],
+      [true, "NativeB"],
+    ]);
+    different.Dispose();
   } finally {
     doc.Dispose();
   }

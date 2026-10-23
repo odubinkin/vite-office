@@ -36,8 +36,8 @@
           "marker": "SvxFontHeightItem"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
-          "marker": "SvxFontHeightItem"
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "CharHeight"
         }
       ],
       "tests": [

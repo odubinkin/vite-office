@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/unocore/unostyle-auto.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "writer-core",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/unocore/unostyle-auto.ts",
+        "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts#SwXText"
+      ],
+      "justification": "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwXAutoStyles",
+        "SwXAutoStyleFamily",
+        "SwXAutoStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/unocore/unostyle.cxx",
+      "upstreamSymbols": [
+        "SwXAutoStyleFamily::insertStyle",
+        "SwXAutoStyle::getPropertyValue"
+      ]
+    }
+  }
+}

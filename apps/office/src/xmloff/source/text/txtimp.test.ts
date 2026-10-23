@@ -1,9 +1,11 @@
 /** @fileoverview Verifies the shared native text dispatcher retains actual list context ownership across text locations. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { FastAttributeList, SvXMLIgnoreContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
 import { XMLParaContext, type XMLParagraphListState, type XMLTextImportTarget } from "./txtparai";
+import { createWriterDocument } from "../../../sw/source/core/doc/doc";
+import { SwXTextDocument } from "../../../sw/source/uibase/uno/unotxdoc";
 import { XMLTextImportHelper } from "./txtimp";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 import { XMLTextListItemContext } from "./XMLTextListItemContext";
@@ -36,26 +38,9 @@ function attrs(values: Record<string, string> = {}): FastAttributeList {
 }
 /** Creates a paragraph-only target which records the exact shared native list projection. @param records - Actual paragraph list arguments. @returns Target. */
 function target(records: (XMLParagraphListState | undefined)[]): XMLTextImportTarget {
-  return {
-    createParagraph:
-      /** Records native paragraph construction. @param style - Style. @param alignment - Alignment. @param left - Margin. @param paragraph - Paragraph properties. @param properties - Character properties. @param list - Exact native state. @returns Text sink. */ (
-        _style,
-        _alignment,
-        _left,
-        _paragraph,
-        _properties,
-        list,
-      ) => {
-        records.push(list);
-        return {
-          appendText: /** Has no text in this context ownership test. @returns Nothing. */ () => {},
-          addBookmark: /** Has no bookmark. @returns Nothing. */ () => {},
-          addBookmarkStart: /** Has no bookmark start. @returns Nothing. */ () => {},
-          addBookmarkEnd: /** Has no bookmark end. @returns Nothing. */ () => {},
-          addSoftPageBreak: /** Has no page break. @returns Nothing. */ () => {},
-          finishParagraph: /** Completes an empty actual paragraph. @returns Nothing. */ () => {},
-        };
-      },
+  const target: XMLTextImportTarget = {
+    GetTextImport:
+      /** Executes this bounded native operation. @returns Native operation result. */ () => helper,
     getListRule: /** Returns the one existing rule. @returns Rule. */ () => ({
       name: "S",
       levelCount: 10,
@@ -65,11 +50,25 @@ function target(records: (XMLParagraphListState | undefined)[]): XMLTextImportTa
     getStyle: /** Has no named style definitions. @returns Nothing. */ () => undefined,
     getAutoStyle: /** Has no automatic style definitions. @returns Nothing. */ () => undefined,
   };
+  const helper = new XMLTextImportHelper(target, new SwXTextDocument(createWriterDocument()));
+  vi.spyOn(helper, "BeginParagraph").mockImplementation(
+    /** Executes this bounded native operation. @param _style - Native operation input. @param _alignment - Native operation input. @param _left - Native operation input. @param _paragraph - Native operation input. @param _properties - Native operation input. @param list - Native operation input. @returns Native operation result. */ (
+      _style,
+      _alignment,
+      _left,
+      _paragraph,
+      _properties,
+      list,
+    ) => {
+      records.push(list);
+    },
+  );
+  return target;
 }
 
 it("shares native list roots across body cells and later body contexts", /** Checks the common owner rather than independently copying per-cell state. @returns Nothing. */ () => {
   const records: (XMLParagraphListState | undefined)[] = [],
-    helper = new XMLTextImportHelper(target(records));
+    helper = target(records).GetTextImport();
   for (const [id, previous, type] of [
     ["Before", "", "Body"],
     ["Cell", "Before", "Cell"],
@@ -106,7 +105,7 @@ it("shares native list roots across body cells and later body contexts", /** Che
         list?.level,
     ),
   ).toEqual([0, 0, 0]);
-  const independent = new XMLTextImportHelper(target(records));
+  const independent = target(records).GetTextImport();
   const root = independent.CreateTextChildContext(
     XMLToken.TEXT_LIST,
     attrs({ "text:style-name": "S", "xml:id": "Fresh", "text:continue-list": "After" }),
@@ -119,7 +118,7 @@ it("shares native list roots across body cells and later body contexts", /** Che
 it("keeps native body cell dispatch and explicit unimplemented structural boundaries", /** Verifies body/cell location, inert children and retained public standalone table entry. @returns Nothing. */ () => {
   const records: (XMLParagraphListState | undefined)[] = [],
     base = target(records),
-    helper = new XMLTextImportHelper(base);
+    helper = base.GetTextImport();
   for (const type of ["Body", "Cell"] as const)
     for (const token of [XMLToken.TEXT_P, XMLToken.TEXT_H])
       expect(helper.CreateTextChildContext(token, attrs(), type)).toBeInstanceOf(XMLParaContext);
@@ -157,10 +156,9 @@ it("keeps native body cell dispatch and explicit unimplemented structural bounda
     XMLTableContext,
   );
   expect(
-    new XMLTextImportHelper(sink).CreateTextChildContext(
-      XMLToken.TABLE_TABLE,
-      attrs({ "table:name": "Shared" }),
-      "Body",
-    ),
+    new XMLTextImportHelper(
+      sink,
+      new SwXTextDocument(createWriterDocument()),
+    ).CreateTextChildContext(XMLToken.TABLE_TABLE, attrs({ "table:name": "Shared" }), "Body"),
   ).toBeInstanceOf(XMLTableContext);
 });

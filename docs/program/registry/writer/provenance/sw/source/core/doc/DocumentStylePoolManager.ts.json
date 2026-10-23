@@ -10,7 +10,7 @@
           "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/xmloff/source/style/prstylei.ts",
           "marker": "applyNamedParagraphStyles"
         },
         {

@@ -187,7 +187,9 @@ it("selects native mode independently of child geometry through common and autom
           (testCase.alignment ? listTabPosition : absLSpace + charTextDistance) / 20,
       });
       const exported = writeOdtDocument(document, metadata);
-      const xml = await new ZipFile(exported).readTextEntry("content.xml");
+      const xml =
+        (await new ZipFile(exported).readTextEntry("styles.xml")) +
+        (await new ZipFile(exported).readTextEntry("content.xml"));
       const actual = xml.match(
         /<text:list-level-style-number text:level="1"[^>]*>([\s\S]*?)<\/text:list-level-style-number>/u,
       )?.[1];
@@ -267,7 +269,9 @@ it("retains source-owned fields across repeated position properties and failed m
       listTabPosition: 1296,
     });
     const exported = writeOdtDocument(document, metadata);
-    const xml = await new ZipFile(exported).readTextEntry("content.xml");
+    const xml =
+      (await new ZipFile(exported).readTextEntry("styles.xml")) +
+      (await new ZipFile(exported).readTextEntry("content.xml"));
     expect(xml).toContain(
       '<style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.286cm" fo:text-indent="-0.635cm" fo:margin-left="0.002cm"/></style:list-level-properties>',
     );

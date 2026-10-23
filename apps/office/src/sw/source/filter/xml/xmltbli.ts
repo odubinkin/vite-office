@@ -1,4 +1,8 @@
 /** @fileoverview Adapts xmloff table SAX callbacks to canonical Writer SwTable sections, following pinned xmltbli.cxx. */
+import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
+import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp";
+import { SwXCell } from "../../core/unocore/unotbl";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
@@ -22,7 +26,8 @@ export class SwXMLTableImport extends SvXMLImport {
   private activeTable: SwTable | undefined;
   private activeRow: SwTableLine | undefined;
   protected activeCell: SwTableBox | undefined;
-  protected cellParagraphCount = 0;
+  protected textImport: XMLTextImportHelper | undefined;
+  private oldCursor: XMLTextCursor | undefined;
   private rowCellIndex = 0;
   private readonly columnWidths: number[] = [];
   private pendingCovered = 0;
@@ -54,7 +59,15 @@ export class SwXMLTableImport extends SvXMLImport {
       OdfTableStyle,
       { family: "table" }
     >;
-    this.activeTable = this.document.nodes.MakeTableNode(name);
+    const cursor = this.textImport?.GetCursor() as
+      import("../../core/unocore/unoobj").SwXTextCursor | undefined;
+    this.activeTable = cursor
+      ? this.document.nodes.InsertTable(
+          cursor.GetPaM().GetPoint().GetNode() as SwTextNode,
+          name,
+          {},
+        )
+      : this.document.nodes.MakeTableNode(name);
     const frameFormat = this.activeTable.GetFrameFormat();
     const hasMargins = style.marginLeft !== undefined || style.marginRight !== undefined;
     if (hasMargins) {
@@ -222,7 +235,10 @@ export class SwXMLTableImport extends SvXMLImport {
         ),
       );
     this.activeCell = cell;
-    this.cellParagraphCount = 0;
+    if (this.textImport) {
+      this.oldCursor = this.textImport.GetCursor();
+      this.textImport.SetCursor(new SwXCell(cell).createTextCursor());
+    }
     this.rowCellIndex += columnSpan;
     this.pendingCovered = columnSpan - 1;
   }
@@ -235,6 +251,13 @@ export class SwXMLTableImport extends SvXMLImport {
 
   /** Closes a cell after its paragraph contexts. */
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableCell(): void {
+    if (this.textImport && this.oldCursor) {
+      const cursor = this.textImport.GetCursor();
+      if ((this.activeCell?.GetParagraphs().length ?? 0) > 1) this.textImport.DeleteParagraph();
+      this.textImport.SetCursor(this.oldCursor);
+      cursor.dispose();
+      this.oldCursor = undefined;
+    }
     this.activeCell = undefined;
   }
 

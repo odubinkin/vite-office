@@ -28,7 +28,7 @@
           "marker": "FontWeight"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "FontWeight"
         },
         {

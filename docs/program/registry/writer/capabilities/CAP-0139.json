@@ -40,8 +40,8 @@
     "local": {
       "implementation": [
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
-          "marker": "RES_CHRATR_WEIGHT"
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "CharWeight"
         }
       ],
       "tests": [
@@ -89,8 +89,8 @@
     "closure": {
       "contract": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
-          "marker": "RES_CHRATR_WEIGHT"
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "CharWeight"
         },
         "method": "api-invariant",
         "rationale": "The bounded CAP-0139 contract resolves to the mapped local and pinned upstream symbols.",
@@ -102,8 +102,8 @@
       },
       "ownership": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-character.ts",
-          "marker": "RES_CHRATR_WEIGHT"
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "CharWeight"
         },
         "method": "api-invariant",
         "rationale": "The bounded CAP-0139 owner is checked at the mapped filter implementation boundary.",

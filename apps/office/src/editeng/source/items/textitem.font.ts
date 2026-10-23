@@ -1,4 +1,6 @@
 /** @fileoverview Original SvxFontItem value fields, construction, mutation, comparison and hashing from fontitem.hxx/textitem.cxx. Existing browser immutable JS strings adapt Unicode value ownership; native Any FontDescriptor and presentation remain unported. */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
@@ -136,21 +138,83 @@ export class SvxFontItem extends SfxPoolItem {
       hash_combine(seed, value);
     return seed[0];
   }
-  /** Complete browser persistence projection of actual state; native Any descriptor transport is separately pending. @returns Every native font value field. */
+  /** Original browser projection retained for persisted native item state. @returns Complete font fields. */
   override QueryValue(): {
     familyName: string;
     styleName: string;
     family: FontFamily;
     pitch: FontPitch;
     charSet: rtl_TextEncoding;
-  } {
-    return {
-      familyName: this.aFamilyName,
-      styleName: this.aStyleName,
-      family: this.eFamily,
-      pitch: this.ePitch,
-      charSet: this.eTextEncoding,
-    };
+  };
+  /** Original scalar member Any query. @param output - Destination Any. @param member - Native member selector. @returns Success. */
+  override QueryValue(output: Any, member?: number): boolean;
+  /** Queries the original member while preserving unmentioned output. @param output - Optional native output. @param member - Native selector. @returns Scalar transport result or persistence projection. */
+  override QueryValue(
+    output?: Any,
+    member = 0,
+  ):
+    | boolean
+    | {
+        familyName: string;
+        styleName: string;
+        family: FontFamily;
+        pitch: FontPitch;
+        charSet: rtl_TextEncoding;
+      } {
+    if (!output)
+      return {
+        familyName: this.aFamilyName,
+        styleName: this.aStyleName,
+        family: this.eFamily,
+        pitch: this.ePitch,
+        charSet: this.eTextEncoding,
+      };
+    member &= ~0x80;
+    if (member === 1 || member === 2) {
+      const value = member === 1 ? this.aFamilyName : this.aStyleName,
+        units = new Uint16Array(value.length);
+      for (let i = 0; i < value.length; i++) units[i] = value.charCodeAt(i);
+      const string = new OUString(units, units.length);
+      try {
+        output.insert(string.getDataAddress(), "OUString");
+      } finally {
+        string.dispose();
+      }
+    } else if (member >= 3 && member <= 5)
+      output.insert(
+        [
+          ((member === 3 ? this.eFamily : member === 4 ? this.eTextEncoding : this.ePitch) << 16) >>
+            16,
+        ],
+        "sal_Int16",
+      );
+    else if (member === 0) return false;
+    return true;
+  }
+  /** Original five scalar member PutValue paths, extracting before mutation. @param value - Native Any. @param member - Native selector. @returns Whether accepted. */
+  override PutValue(value: unknown, member: number): boolean {
+    if (!(value instanceof Any)) return false;
+    member &= ~0x80;
+    if (member === 1 || member === 2) {
+      const string = new OUString();
+      try {
+        if (!value.extract(string, "OUString")) return false;
+        let text = "";
+        for (let i = 0; i < string.getLength(); i++)
+          text += String.fromCharCode(string.getStr()[i] as number);
+        if (member === 1) this.aFamilyName = text;
+        else this.aStyleName = text;
+      } finally {
+        string.dispose();
+      }
+    } else if (member >= 3 && member <= 5) {
+      const result: [number] = [0];
+      if (!value.extract(result, "sal_Int16")) return false;
+      if (member === 3) this.eFamily = result[0];
+      else if (member === 4) this.eTextEncoding = result[0];
+      else this.ePitch = result[0];
+    } else if (member === 0) return false;
+    return true;
   }
 }
 

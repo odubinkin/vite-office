@@ -121,7 +121,9 @@ it("round-trips native MM100 defaults, parsing bounds and conditional list attri
       });
       expect(geometry(imported.document), testCase.attributes).toEqual(testCase.expected);
       const exported = writeOdtDocument(imported.document, { title: "Alignment" });
-      const xml = await new ZipFile(exported).readTextEntry("content.xml");
+      const xml =
+        (await new ZipFile(exported).readTextEntry("styles.xml")) +
+        (await new ZipFile(exported).readTextEntry("content.xml"));
       const level = xml.match(
         /<text:list-level-style-number text:level="1"[^>]*>([\s\S]*?)<\/text:list-level-style-number>/u,
       )?.[1];
@@ -144,7 +146,9 @@ it("exports the default Writer list geometry at every supported level", /** Ensu
     if (paragraph === undefined) throw new Error("Default list paragraph missing");
     paragraph.SetNumRule("Default");
     const exported = writeOdtDocument(document, { title: "Default list" });
-    const xml = await new ZipFile(exported).readTextEntry("content.xml");
+    const xml =
+      (await new ZipFile(exported).readTextEntry("styles.xml")) +
+      (await new ZipFile(exported).readTextEntry("content.xml"));
     expect(xml.match(/text:list-level-position-and-space-mode="label-alignment"/gu)).toHaveLength(
       10,
     );

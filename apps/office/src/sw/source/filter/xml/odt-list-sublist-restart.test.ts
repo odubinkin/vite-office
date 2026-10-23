@@ -220,7 +220,7 @@ it("imports native repeated-sublist restart and pending return through real pack
           })
         ).document;
         expect(state(imported)).toEqual(expected);
-        const rule = imported.FindNumRulePtr("Sublist") as SwNumRule;
+        const rule = imported.GetNumRuleTable()[0] as SwNumRule;
         const copied = createWriterDocument();
         copied.GetDocumentListsManager().AddNumRule(rule.clone());
         imported.paragraphs.forEach(
@@ -234,13 +234,15 @@ it("imports native repeated-sublist restart and pending return through real pack
             target.SetListItems(node.CaptureListItems());
           },
         );
-        expect(copied.FindNumRulePtr("Sublist")).not.toBe(rule);
+        expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected);
         const record = encodeWriterDocument(imported);
         expect(record.swModelVersion).toBe(16);
         expect(state(decodeWriterDocument(record))).toEqual(expected);
         const exported = writeOdtDocument(imported, { title: "Sublist" });
-        const xml = await new ZipFile(exported).readTextEntry("content.xml");
+        const xml =
+          (await new ZipFile(exported).readTextEntry("styles.xml")) +
+          (await new ZipFile(exported).readTextEntry("content.xml"));
         expect(xml).toContain('office:version="1.3"');
         const starts = [...xml.matchAll(/<text:list-item[^>]*text:start-value="([^"]*)"/gu)].map(
           /** Reads actual item attributes rather than style starts. @param match - Item. @returns Start. */

@@ -54,6 +54,7 @@ export class XMLTextListItemContext extends SvXMLImportContext {
         ...(restart ? { restart: true } : {}),
         ...(startValue === undefined ? {} : { startValue }),
         ruleName: this.active.rule.name,
+        ...(this.active.rule.rules ? { rules: this.active.rule.rules } : {}),
       });
     }
     if (element === XMLToken.TEXT_LIST) {

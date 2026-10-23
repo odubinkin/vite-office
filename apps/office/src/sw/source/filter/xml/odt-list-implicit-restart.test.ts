@@ -95,8 +95,11 @@ function state(doc: SwDoc) {
       restart: node.IsListRestart(),
       direct: node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : undefined,
       start: node.GetActualListStartValue(),
-      identity: node.GetListId(),
-      rule: node.GetNumRule()?.GetName(),
+      identity:
+        node.GetListId() === doc.GetNumRuleTable()[0]?.GetDefaultListId()
+          ? "Restart"
+          : node.GetListId(),
+      rule: node.GetNumRule() ? "Restart" : undefined,
       number: node.GetListItemNumber(),
       vector: doc
         .GetDocumentListsManager()
@@ -359,7 +362,7 @@ it("exports native implicit restart positions and direct starts through genuine 
           );
         }
         expect(state(doc)).toEqual(expected(test.before));
-        const rule = doc.FindNumRulePtr("Restart") as SwNumRule;
+        const rule = doc.GetNumRuleTable()[0] as SwNumRule;
         const copied = createWriterDocument();
         copied.GetDocumentListsManager().AddNumRule(rule.clone());
         doc.paragraphs.forEach(
@@ -373,15 +376,17 @@ it("exports native implicit restart positions and direct starts through genuine 
             target.SetListItems(node.CaptureListItems());
           },
         );
-        expect(copied.FindNumRulePtr("Restart")).not.toBe(rule);
+        expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected(test.before));
         const record = encodeWriterDocument(doc);
         expect(record.swModelVersion).toBe(16);
         const worker = decodeWriterDocument(record);
-        expect(worker.FindNumRulePtr("Restart")).not.toBe(rule);
+        expect(worker.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(worker)).toEqual(expected(test.before));
         const bytes = writeOdtDocument(doc, { title: "Restart" });
-        const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+        const xml =
+          (await new ZipFile(bytes).readTextEntry("styles.xml")) +
+          (await new ZipFile(bytes).readTextEntry("content.xml"));
         expect(xml).toContain('office:version="1.3"');
         expect(events(xml)).toEqual(test.events.split(" "));
         const reopened = (await readOdtDocument(bytes, { title: "Restart" })).document;

@@ -208,7 +208,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
         ) => node.GetText(),
       ),
     ).toEqual(["before", "after"]);
-    expect(reopened.document.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(1);
+    expect(reopened.document.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(0);
     expect(
       reopened.document.GetIDocumentMarkAccess().FindMark("CellBookmark")?.GetMarkPos().GetNode(),
     ).toBe(

@@ -251,7 +251,7 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
 
 /** Model-facing numbering publication port used by the source-owned list context. */
 export interface XMLListStyleImportTarget {
-  registerListStyle(styleName: string, rule: XMLTextListRule): void;
+  registerListStyle(styleName: string, rule: XMLTextListRule, automatic?: boolean): void;
   /** Resolves an existing declaration; missing faces retain the level's prior font. */
   getFontFace?(name: string): string | undefined;
 }
@@ -261,10 +261,11 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
   private readonly levelStyles: SvxXMLListLevelStyleContext_Impl[] = [];
   private readonly name: string;
   private readonly ruleName: string;
-  /** Reads identity while retaining declarations in their own contexts. @param target - Writer numbering consumer. @param attributes - List identity attributes. @returns Context. */
+  /** Reads identity while retaining declarations in their own contexts. @param target - Writer numbering consumer. @param attributes - List identity attributes. @returns Context.  @param automatic - Native operation input. */
   public constructor(
     private readonly target: XMLListStyleImportTarget,
     attributes: FastAttributeList,
+    private readonly automatic = false,
   ) {
     super();
     attributes.assertOnly([XMLToken.STYLE_NAME, XMLToken.STYLE_DISPLAY_NAME], "style property");
@@ -304,6 +305,104 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
       const level = context.GetLevel();
       if (level >= 0 && level < 10) levels.push(context.GetProperties());
     }
-    this.target.registerListStyle(this.name, { name: this.ruleName, levelCount: 10, levels });
+    this.target.registerListStyle(
+      this.name,
+      { name: this.ruleName, levelCount: 10, levels },
+      this.automatic,
+    );
+  }
+}
+
+import type { XMLNumberingRules } from "../../inc/txtimp";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  PropertyValue,
+  cppu_detail_getUnoType_PropertyValue as propertyType,
+} from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import { xmlTextString } from "../text/txtprmap";
+/** Original generated PropertyValue compound sequence; layout belongs to shared CPPU. */
+const ListPropertySequence = Sequence.specialize<PropertyValue>(propertyType, 48);
+/** Fills the native rule service with typed level property sequences, retaining earlier replacements after UNO failure. @param rules - Actual XIndexReplace service. @param declaration - Parsed list declaration. @returns Nothing. */
+export function FillUnoNumRule(rules: XMLNumberingRules, declaration: XMLTextListRule): void {
+  try {
+    for (const level of declaration.levels) {
+      if (level.level < 0 || level.level >= rules.getCount()) continue;
+      const properties: PropertyValue[] = [];
+      /** Copies one native Any property into the generated sequence values. @param name - API name. @param value - Owned temporary value. @returns Nothing. */
+      function add(name: string, value: Any): void {
+        const key = xmlTextString(name);
+        try {
+          properties.push(new PropertyValue(key, -1, value, 0));
+        } finally {
+          key.dispose();
+          value.dispose();
+        }
+      }
+      /** Creates a native string property. @param name - API name. @param text - Parsed text. @returns Nothing. */
+      function addString(name: string, text: string): void {
+        const value = xmlTextString(text);
+        try {
+          add(name, new Any(value.getDataAddress(), "OUString"));
+        } finally {
+          value.dispose();
+        }
+      }
+      add(
+        "NumberingType",
+        new Any([level.numberingType ?? (level.kind === "bullet" ? 6 : 4)], "sal_Int16"),
+      );
+      addString("Prefix", level.prefix);
+      addString("Suffix", level.suffix);
+      addString("ListFormat", level.listFormat);
+      if (level.startWith !== undefined)
+        add("StartWith", new Any([(level.startWith << 16) >> 16], "sal_Int16"));
+      if (level.parentNumbering !== undefined)
+        add("ParentNumbering", new Any([level.parentNumbering], "sal_Int16"));
+      if (level.bulletChar !== undefined) addString("BulletChar", level.bulletChar);
+      if (level.bulletFont !== undefined) addString("BulletFontName", level.bulletFont.name);
+      const position = level.position.values;
+      add(
+        "PositionAndSpaceMode",
+        new Any([position.positionAndSpaceMode === "label-alignment" ? 1 : 0], "sal_Int16"),
+      );
+      for (const [field, name] of [
+        ["absLSpace", "LeftMargin"],
+        ["firstLineOffset", "FirstLineOffset"],
+        ["charTextDistance", "SymbolTextDistance"],
+        ["firstLineIndent", "FirstLineIndent"],
+        ["indentAt", "IndentAt"],
+        ["listTabPosition", "ListtabStopPosition"],
+      ] as const)
+        if (position[field] !== undefined) add(name, new Any([position[field]], "sal_Int32"));
+      if (position.labelFollowedBy !== undefined)
+        add(
+          "LabelFollowedBy",
+          new Any([["listtab", "space", "nothing"].indexOf(position.labelFollowedBy)], "sal_Int16"),
+        );
+      const sequence = new ListPropertySequence(
+        {
+          get: /** Executes this bounded native operation. @param offset - Native operation input. @returns Native operation result. */ (
+            offset: number,
+          ) => properties[offset / 48],
+        },
+        properties.length,
+      );
+      const value = new Any(sequence.getAddress(), ["Sequence", propertyType]);
+      try {
+        rules.replaceByIndex(level.level, value);
+      } finally {
+        value.dispose();
+        sequence.dispose();
+        for (const property of properties) {
+          property.Name.dispose();
+          property.Value.dispose();
+        }
+      }
+    }
+  } catch (error) {
+    if (!(error instanceof Exception)) throw error;
+    error.dispose();
   }
 }

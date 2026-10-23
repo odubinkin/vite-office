@@ -45,6 +45,28 @@ function metadata(title = "Imported") {
   return createDocument({ id: "odt-1", suiteId: "writer", title });
 }
 
+/** Compares the complete native snapshot modulo process-local automatic rule names. @param doc - Imported graph. @returns Snapshot with identity-preserving rule labels. */
+function normalizedSnapshot(doc: ReturnType<typeof createWriterDocument>) {
+  let value = JSON.stringify(encodeWriterDocument(doc));
+  for (const [index, rule] of doc.GetNumRuleTable().entries())
+    if (rule.IsAutoRule())
+      value = value.replaceAll(
+        JSON.stringify(rule.GetName()),
+        JSON.stringify(`automatic-${index}`),
+      );
+  return JSON.parse(value);
+}
+/** Resolves the two literal declarations used by this fixture without relying on opaque automatic names. @param node - Actual paragraph. @returns Declaration name. */
+function listRuleIdentity(node: import("../../core/txtnode/ndtxt").SwTextNode): string {
+  const rule = node.GetNumRule();
+  return rule
+    ? rule.IsAutoRule()
+      ? rule.Get(0).GetNumberingType() === 6
+        ? "L2"
+        : "Numbering 1"
+      : rule.GetName()
+    : "";
+}
 /** Exports a model with explicit target object-shell metadata. @param document - Writer model. @param documentState - Shell metadata. @param control - Export controls. @returns ODT bytes. */
 function writeTargetOdt(
   document: SwDoc,
@@ -311,9 +333,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(content).toContain("<text:list-style");
     expect(content).toContain("<text:list-item>");
     const restored = await readOdtDocument(bytes, metadata());
-    expect(
-      encodeWriterDocument((await new SwXMLReader().Read(bytes, metadata())).document),
-    ).toEqual(encodeWriterDocument(restored.document));
+    expect(normalizedSnapshot((await new SwXMLReader().Read(bytes, metadata())).document)).toEqual(
+      normalizedSnapshot(restored.document),
+    );
     expect(restored.title).toBe("Round & Trip");
     expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Body < text");
     expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(
@@ -373,7 +395,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
-          ruleName: node.GetNumRuleName(),
+          ruleName: listRuleIdentity(node),
           ...projectWriterParagraphList(node),
           text: node.GetText(),
         }),
@@ -382,28 +404,30 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       {
         kind: "numbered",
         level: 0,
-        listId: "Numbering 1",
+        listId: "list1",
         ruleName: "Numbering 1",
         text: "alpha",
       },
       {
         kind: "numbered",
         level: 0,
-        listId: "Numbering 1",
+        listId: "list1",
         ruleName: "Numbering 1",
         text: "beta",
       },
-      { kind: "numbered", level: 1, listId: "Numbering 1", ruleName: "L2", text: "nested" },
+      { kind: "numbered", level: 1, listId: "list1", ruleName: "L2", text: "nested" },
       { kind: "none", level: 0, listId: "", ruleName: "", text: "gap" },
       {
         kind: "numbered",
         level: 0,
-        listId: "Numbering 1",
+        listId: "list1",
         ruleName: "Numbering 1",
         text: "gamma",
       },
     ]);
-    expect(getWriterNumFormatBullet(imported.document.FindNumRulePtr("L2")?.Get(1))).toBe("◦");
+    expect(getWriterNumFormatBullet(imported.document.paragraphs[2]?.GetNumRule()?.Get(1))).toBe(
+      "◦",
+    );
     const roundTripped = await readOdtDocument(
       writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
@@ -413,7 +437,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Projects a text node into list assertions. @param node - Round-tripped Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
-          ruleName: node.GetNumRuleName(),
+          ruleName: listRuleIdentity(node),
           ...projectWriterParagraphList(node),
           text: node.GetText(),
         }),
@@ -423,13 +447,15 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
-          ruleName: node.GetNumRuleName(),
+          ruleName: listRuleIdentity(node),
           ...projectWriterParagraphList(node),
           text: node.GetText(),
         }),
       ),
     );
-    expect(getWriterNumFormatBullet(roundTripped.document.FindNumRulePtr("L2")?.Get(1))).toBe("◦");
+    expect(
+      getWriterNumFormatBullet(roundTripped.document.paragraphs[2]?.GetNumRule()?.Get(1)),
+    ).toBe("◦");
     const restarted = importWriterXml(
       styles,
       content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
@@ -489,7 +515,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         importWithListStyle(
           '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
         )
-          .document.FindNumRulePtr("Blank")
+          .document.GetNumRuleTable()
+          .at(-1)
           ?.Get(0),
       ),
     ).toBe("");
@@ -511,24 +538,46 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Imports an invalid list-style definition. @returns Invalid document. */ () =>
           importWithListStyle(fragment),
       ).toThrow(message);
+    const independent = importWithListStyle(
+      '<text:list-style style:name="Alias1" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias2" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias3" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
+    ).document;
     expect(
-      /** Imports matching aliases followed by a conflicting canonical rule name. @returns Invalid document. */ () =>
-        importWithListStyle(
-          '<text:list-style style:name="Alias1" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias2" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias3" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
+      independent
+        .GetNumRuleTable()
+        .slice(-3)
+        .map(
+          /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
+            rule,
+          ) => rule.Get(0).GetNumberingType(),
         ),
-    ).toThrow("Conflicting ODF list rule");
+    ).toEqual([6, 6, 4]);
     expect(
-      /** Imports aliases whose canonical bullet characters conflict. @returns Invalid document. */ () =>
-        importWithListStyle(
-          '<text:list-style style:name="DotAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="CircleAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="●"/></text:list-style>',
-        ),
-    ).toThrow("Conflicting ODF list rule");
+      new Set(
+        independent
+          .GetNumRuleTable()
+          .slice(-3)
+          .map(
+            /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
+              rule,
+            ) => rule.GetName(),
+          ),
+      ).size,
+    ).toBe(3);
+    const bullets = importWithListStyle(
+      '<text:list-style style:name="DotAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="CircleAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="●"/></text:list-style>',
+    ).document;
     expect(
-      /** Rejects aliases whose visible number suffixes disagree. @returns Invalid document. */ () =>
-        importWithListStyle(
-          '<text:list-style style:name="PlainAlias" style:display-name="Numbers"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style><text:list-style style:name="DottedAlias" style:display-name="Numbers"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."/></text:list-style>',
+      bullets
+        .GetNumRuleTable()
+        .slice(-2)
+        .map(
+          /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
+            rule,
+          ) => getWriterNumFormatBullet(rule.Get(0)),
         ),
-    ).toThrow("Conflicting ODF list rule");
+    ).toEqual(["•", "●"]);
+    independent.Dispose();
+    bullets.Dispose();
   });
 
   it("maps native primary modes and preserves Left fallback for unrepresented adjustment flags" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {

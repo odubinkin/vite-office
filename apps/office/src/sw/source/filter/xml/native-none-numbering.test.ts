@@ -230,19 +230,19 @@ it("retains NONE list ownership through fresh ODT export import and Worker graph
   shell.Close();
 });
 
-it("distinguishes NONE from Arabic when validating canonical rule aliases", /** Preserves the existing duplicate-rule policy while comparing native type. @returns Completion. */ async () => {
+it("applies the last common alias to the shared named numbering style", /** Preserves the existing duplicate-rule policy while comparing native type. @returns Completion. */ async () => {
   const bytes = writeOdtDocument(new SwDoc(), { title: "Alias" }),
     zip = new ZipFile(bytes),
     styles = await zip.readTextEntry("styles.xml"),
     content = await zip.readTextEntry("content.xml");
   const declarations =
     '<text:list-style style:name="One" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format=""/></text:list-style><text:list-style style:name="Two" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>';
-  expect(
-    /** Imports conflicting represented numeric types. @returns Imported model. */ () =>
-      importWriterXml(
-        styles.replace("</office:styles>", declarations + "</office:styles>"),
-        content,
-        createDocument({ id: "aliases", suiteId: "writer", title: "Aliases" }),
-      ),
-  ).toThrow("Conflicting ODF list rule");
+  const doc = importWriterXml(
+    styles.replace("</office:styles>", declarations + "</office:styles>"),
+    content,
+    createDocument({ id: "aliases", suiteId: "writer", title: "Aliases" }),
+  ).document;
+  expect(doc.GetNumRuleTable()).toHaveLength(1);
+  expect(doc.FindNumRulePtr("Shared")?.Get(0).GetNumberingType()).toBe(4);
+  doc.Dispose();
 });

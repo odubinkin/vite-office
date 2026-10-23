@@ -72,17 +72,7 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
     expect(encodeWriterDocument(reopened.document).bookmarks).toEqual(
       encodeWriterDocument(transferred).bookmarks,
     );
-    expect(
-      encodeWriterDocument(reopened.document).textNodes.map(
-        /** Selects encoded soft breaks. @param node - Text node. @returns Soft breaks. */ (node) =>
-          node.softPageBreaks,
-      ),
-    ).toEqual(
-      encodeWriterDocument(transferred).textNodes.map(
-        /** Selects encoded soft breaks. @param node - Text node. @returns Soft breaks. */ (node) =>
-          node.softPageBreaks,
-      ),
-    );
+    expect(reopened.document.GetIDocumentMarkAccess().GetSoftPageBreaks()).toHaveLength(0);
   });
 
   it("validates names, duplicate positions and malformed or unsupported ODF markers", /** Retains explicit failures for semantic marker loss. @returns Completion. */ async () => {

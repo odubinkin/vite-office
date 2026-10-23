@@ -261,7 +261,7 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
         }),
       );
       expect(state(imported.document)).toEqual(expected);
-      const rule = imported.document.FindNumRulePtr("Headers") as SwNumRule;
+      const rule = imported.document.GetNumRuleTable()[0] as SwNumRule;
       const copied = createWriterDocument();
       copied.GetDocumentListsManager().AddNumRule(rule.clone());
       imported.document.paragraphs.forEach(
@@ -274,13 +274,15 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
         },
       );
       expect(state(copied)).toEqual(expected);
-      expect(copied.FindNumRulePtr("Headers")).not.toBe(rule);
+      expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
       const record = encodeWriterDocument(imported.document);
       expect(record.swModelVersion).toBe(16);
       const transferred = decodeWriterDocument(record);
       expect(state(transferred)).toEqual(expected);
       const exported = writeOdtDocument(imported.document, { title: "Headers" });
-      const xml = await new ZipFile(exported).readTextEntry("content.xml");
+      const xml =
+        (await new ZipFile(exported).readTextEntry("styles.xml")) +
+        (await new ZipFile(exported).readTextEntry("content.xml"));
       expect(xml).toContain('office:version="1.3"');
       expect(events(xml)).toEqual(test.events);
       expect(xml).not.toContain("list-header text:start-value=");
@@ -313,7 +315,9 @@ it("omits restart metadata on uncounted paragraphs as native NumberingIsNumber p
   const worker = decodeWriterDocument(encodeWriterDocument(document));
   expect(worker.paragraphs[1]?.IsListRestart()).toBe(true);
   const exported = writeOdtDocument(document, { title: "Headers" });
-  const xml = await new ZipFile(exported).readTextEntry("content.xml");
+  const xml =
+    (await new ZipFile(exported).readTextEntry("styles.xml")) +
+    (await new ZipFile(exported).readTextEntry("content.xml"));
   expect(xml).not.toContain('text:list-item text:start-value="0"');
   expect(xml).not.toContain("text:list-header");
   const reopened = await readOdtDocument(exported, { title: "Headers" });

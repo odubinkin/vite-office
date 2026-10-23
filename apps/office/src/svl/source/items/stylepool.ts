@@ -39,6 +39,24 @@ class Node {
 
 /** Document-owned pool for concrete-item automatic character styles; paragraph/usage/name iteration is not implemented. */
 export class StylePool {
+  private static readonly names = new WeakMap<SfxItemSet, string>();
+  private static nextName = 0;
+
+  /** Represents native pointer identity with an opaque host handle name. @param set - Retained native handle. @returns Identity, stable for the lifetime of this handle. */
+  public static nameOf(set: SfxItemSet): string {
+    let name = this.names.get(set);
+    if (name === undefined) {
+      name = (++this.nextName).toString(16);
+      this.names.set(set, name);
+    }
+    return name;
+  }
+
+  private readonly handles = new Set<SfxItemSet>();
+  /** Iterates retained native handles for uncached-name lookup. @returns Pool handles. */
+  public getAllStyles(): readonly SfxItemSet[] {
+    return [...this.handles];
+  }
   private readonly roots = new Map<SfxItemSet | undefined, Node>();
 
   /** Interns a concrete SET-only item path under its parent identity. @param set - Character style input, without state sentinels. @returns Shared leaf handle, fresh for non-shareable items. */
@@ -62,6 +80,8 @@ export class StylePool {
       nonShareable = false;
     }
     if (nonShareable) node.setItemSet(set);
-    return node.getItemSet();
+    const handle = node.getItemSet();
+    this.handles.add(handle);
+    return handle;
   }
 }

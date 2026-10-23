@@ -3,7 +3,8 @@ import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
-import { putCharacterProperties } from "../../filter/xml/xmlimp-character";
+import { applyTextImportProperties } from "../../../../xmloff/source/text/txtprmap";
+import { SwXTextDocument } from "../uno/unotxdoc";
 
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
@@ -220,21 +221,23 @@ it.each([
     pair,
     authored,
   ) => {
-    const f = fixture(),
-      items = new SfxItemSet(f.doc.GetAttrPool(), [[WHICH, WHICH]]);
+    const f = fixture();
     f.node.SetAttr(new Item(14000, 58, WHICH));
-    putCharacterProperties(
-      properties,
-      /** Stores actual accepted native item. @param item - Original imported field. @returns Put result. */ (
-        item,
-      ) => items.Put(item),
-      /** Reads actual inherited native owner. @param which - Requested family. @returns Original item. */ (
-        which,
-      ) => f.node.GetAttr(which),
-    );
-    expect(items.GetItemIfSet(WHICH, false) !== undefined).toBe(authored);
-    const item = (items.GetItemIfSet(WHICH, false) ?? f.node.GetAttr(WHICH)) as Item;
-    expect([item.GetEsc(), item.GetProportionalHeight()]).toEqual(pair);
+    const before = f.node.GetAttr(WHICH);
+    const model = new SwXTextDocument(f.doc),
+      cursor = model.getText().createTextCursor();
+    try {
+      cursor.gotoEnd(true);
+      applyTextImportProperties(cursor, properties);
+      expect(value(f.node, 0)).toEqual(pair);
+      expect(
+        f.node.GetAttr(WHICH) !== before ||
+          f.node.CaptureTextFragment(0, f.node.Len()).hints.Count() > 0,
+      ).toBe(authored);
+    } finally {
+      cursor.dispose();
+      model.dispose();
+    }
   },
 );
 

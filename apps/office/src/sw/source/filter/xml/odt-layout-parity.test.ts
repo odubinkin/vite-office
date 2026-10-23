@@ -81,13 +81,13 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       assertGeometry(imported.document);
       const sixteenth = imported.document.paragraphs[15];
       if (sixteenth === undefined) throw new Error("tdf114287 fixture has no sixteenth paragraph");
-      const view = new WriterViewProjection().Project(
+      new WriterViewProjection().Project(
         imported.document,
         sixteenth,
         new SwPaM(new SwPosition(sixteenth, 0)),
         metadata,
       );
-      expect(view.paragraphs[15]?.listGeometryWins).toBe(true);
+      expect(imported.document.paragraphs[15]?.AreListLevelIndentsApplicable()).toBe(3);
       assertGeometry(decodeWriterDocument(encodeWriterDocument(imported.document)));
       const reopened = await readOdtDocument(
         writeOdtDocument(imported.document, { title: imported.title }),
@@ -201,7 +201,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = source.FindNumRulePtr("L1")?.Get(0);
+    const format = source.GetNumRuleTable()[0]?.Get(0);
     expect(format?.GetFirstLineIndent()).toBe(-360);
     expect(format?.GetIndentAt()).toBe(1152);
     expect(format?.GetListtabPos()).toBe(1152);
@@ -209,7 +209,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     const exported = exportContentXml(source);
     expect(exported).toContain("style:list-level-label-alignment");
     const roundTripped = importWriterXml(styles(""), exported, metadata).document;
-    expect(roundTripped.FindNumRulePtr("L1")?.Get(0).GetIndentAt()).toBe(1152);
+    expect(roundTripped.GetNumRuleTable()[0]?.Get(0).GetIndentAt()).toBe(1152);
   });
 
   it("retains legacy list spacing independently from modern alignment", /** Verifies bounded legacy positioning import. @returns Nothing. */ () => {
@@ -223,7 +223,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = document.FindNumRulePtr("Legacy")?.Get(0);
+    const format = document.GetNumRuleTable()[0]?.Get(0);
     expect(format?.GetPositionAndSpaceMode()).toBe("label-width-and-position");
     expect(format?.GetAbsLSpace()).toBe(720);
     expect(format?.GetFirstLineOffset()).toBe(-288);
@@ -250,7 +250,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const rule = source.FindNumRulePtr("Partial")!;
+    const rule = source.GetNumRuleTable()[0]!;
     expect(rule.Get(0).GetLabelFollowedBy()).toBe("space");
     expect(rule.Get(1).GetLabelFollowedBy()).toBe("nothing");
     expect(rule.Get(2).GetListtabPos()).toBe(1296);
@@ -268,7 +268,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       content(invalidList, "<text:p>Item</text:p>"),
       metadata,
     )
-      .document.FindNumRulePtr("Invalid")
+      .document.GetNumRuleTable()[0]
       ?.Get(0);
     expect(unknownFollow?.GetLabelFollowedBy()).toBe("listtab");
     expect(unknownFollow?.GetFirstLineIndent()).toBe(0);
@@ -328,7 +328,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect(document.GetPageDesc().GetValue().width).toBe(12240);
   });
 
-  it("rejects duplicate list definitions across ODF style streams", /** Checks rejects duplicate list definitions across ODF style streams. @returns Test callback result. */ () => {
+  it("keeps common and automatic list definitions in separate native owners", /** Checks rejects duplicate list definitions across ODF style streams. @returns Test callback result. */ () => {
     const attributes = [
       'fo:text-indent="-0.25in"',
       'fo:margin-left="0.5in"',
@@ -348,18 +348,28 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     ].entries()) {
       const changed = [...attributes];
       changed[index] = replacement;
+      const doc = importWriterXml(
+        styles(listStyle(attributes)),
+        content(listStyle(changed), "<text:p>Body</text:p>"),
+        metadata,
+      ).document;
       expect(
-        /** Runs the test callback. @returns Test callback result. */ () =>
-          importWriterXml(
-            styles(listStyle(attributes)),
-            content(listStyle(changed), "<text:p>Body</text:p>"),
-            metadata,
+        doc
+          .GetNumRuleTable()
+          .map(
+            /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+              rule,
+            ) => rule.IsAutoRule(),
           ),
-      ).toThrow(/Duplicate ODF list style/);
+      ).toEqual([false, true]);
+      expect(doc.GetNumRuleTable()[0]?.Get(0).GetPositionProperties()).not.toEqual(
+        doc.GetNumRuleTable()[1]?.Get(0).GetPositionProperties(),
+      );
+      doc.Dispose();
     }
   });
 
-  it("rejects canonical list aliases with conflicting positioning fields", /** Checks rejects canonical list aliases with conflicting positioning fields. @returns Test callback result. */ () => {
+  it("keeps automatic aliases as independent native rules", /** Checks rejects canonical list aliases with conflicting positioning fields. @returns Test callback result. */ () => {
     const attributes = [
       'fo:text-indent="-0.25in"',
       'fo:margin-left="0.5in"',
@@ -380,17 +390,28 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     ].entries()) {
       const changed = [...attributes];
       changed[index] = replacement;
+      const doc = importWriterXml(
+        styles(""),
+        content(
+          listStyle("AliasBase", attributes) + listStyle("AliasChanged", changed),
+          "<text:p>Body</text:p>",
+        ),
+        metadata,
+      ).document;
+      expect(doc.GetNumRuleTable()).toHaveLength(2);
       expect(
-        /** Runs the test callback. @returns Test callback result. */ () =>
-          importWriterXml(
-            styles(""),
-            content(
-              listStyle("AliasBase", attributes) + listStyle("AliasChanged", changed),
-              "<text:p>Body</text:p>",
-            ),
-            metadata,
+        doc
+          .GetNumRuleTable()
+          .every(
+            /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
+              rule,
+            ) => rule.IsAutoRule(),
           ),
-      ).toThrow(/Conflicting ODF list rule/);
+      ).toBe(true);
+      expect(doc.GetNumRuleTable()[0]?.Get(0).GetPositionProperties()).not.toEqual(
+        doc.GetNumRuleTable()[1]?.Get(0).GetPositionProperties(),
+      );
+      doc.Dispose();
     }
   });
 });

@@ -208,7 +208,8 @@ const allowedEdges = new Map([
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   ["tools", new Set(["o3tl", "cppu"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
-  ["xmloff", new Set(["o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
+  // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
+  ["xmloff", new Set(["udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);
@@ -244,6 +245,7 @@ const protectedWriterTransferSymbols = new Set([
   "WriterClipboardPasteParagraph",
 ]);
 const upstreamMechanismLayers = new Set([
+  "writer-model-api",
   "sfx",
   "upstream-mechanism",
   "writer-core",
@@ -257,6 +259,8 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (/(?:^|\/)browser\//u.test(portablePath)) return "browser";
   if (portablePath.startsWith("sw/source/core/")) return "writer-core";
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
+  // Native SwXTextDocument is implemented in uibase/uno but supplies the format-neutral model, not UI state.
+  if (portablePath.startsWith("sw/source/uibase/uno/")) return "writer-model-api";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
@@ -313,9 +317,16 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
     return `${sourceLayer} must receive browser adapters through an injected contract`;
   if (
     sourceLayer === "writer-core" &&
-    (targetLayer === "writer-filter" || targetLayer === "writer-uibase")
+    (targetLayer === "writer-filter" ||
+      targetLayer === "writer-uibase" ||
+      targetLayer === "writer-model-api")
   )
     return `Writer core must not depend on ${targetLayer.replace("writer-", "")}`;
+  if (
+    sourceLayer === "writer-model-api" &&
+    (targetLayer === "writer-filter" || targetLayer === "writer-uibase")
+  )
+    return "Writer model API must not depend on UI or format filters";
   if (sourceLayer === "writer-filter" && targetLayer === "writer-uibase")
     return "Writer filter must not depend on uibase";
   return undefined;

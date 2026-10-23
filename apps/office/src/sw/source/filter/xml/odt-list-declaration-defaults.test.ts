@@ -128,10 +128,10 @@ it("retains native declaration defaults and skips invalid indices before reading
           },
         )
       ).document;
-      const rule = document.FindNumRulePtr("Defaults");
+      const rule = document.GetNumRuleTable()[0];
       if (rule === undefined) throw new Error("Fixture lost its rule");
       const copied = rule.clone(),
-        restored = decodeWriterDocument(encodeWriterDocument(document)).FindNumRulePtr("Defaults");
+        restored = decodeWriterDocument(encodeWriterDocument(document)).GetNumRuleTable()[0];
       if (restored === undefined) throw new Error("Fixture snapshot lost its rule");
       for (let level = 0; level < 10; level += 1) {
         const applied = level === testCase.applied,
@@ -172,11 +172,13 @@ it("retains native declaration defaults and skips invalid indices before reading
         ),
       );
       const exported = writeOdtDocument(document, { title: "Defaults" });
-      const xml = await new ZipFile(exported).readTextEntry("content.xml");
+      const xml =
+        (await new ZipFile(exported).readTextEntry("styles.xml")) +
+        (await new ZipFile(exported).readTextEntry("content.xml"));
       if (testCase.bullet === "") expect(xml).toContain('text:bullet-char=""');
       const reopened = (
         await readOdtDocument(exported, { title: "Defaults" })
-      ).document.FindNumRulePtr("Defaults");
+      ).document.GetNumRuleTable()[0];
       if (reopened === undefined) throw new Error("Reopen lost its rule");
       for (let level = 0; level < 10; level += 1) {
         expect(getWriterNumFormatKind(reopened.Get(level))).toBe(

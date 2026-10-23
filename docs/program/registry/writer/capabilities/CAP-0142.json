@@ -40,7 +40,7 @@
     "local": {
       "implementation": [
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
           "marker": "RES_PARATR_ADJUST"
         }
       ],
@@ -89,7 +89,7 @@
     "closure": {
       "contract": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
           "marker": "RES_PARATR_ADJUST"
         },
         "method": "api-invariant",
@@ -102,7 +102,7 @@
       },
       "ownership": {
         "local": {
-          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
           "marker": "RES_PARATR_ADJUST"
         },
         "method": "api-invariant",

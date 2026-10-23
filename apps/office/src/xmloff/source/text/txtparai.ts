@@ -1,8 +1,9 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
+import type { XMLNumberingRules } from "../../inc/txtimp";
 import { XMLTextImportHelper } from "./txtimp";
 
-import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
+import { FastAttributeList, SvXMLImportContext, SvXMLIgnoreContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type {
   OdfCharacterProperties,
@@ -75,6 +76,7 @@ export interface XMLListLevelImport {
 export interface XMLTextListRule {
   readonly levels: readonly XMLListLevelImport[];
   readonly levelCount: number;
+  readonly rules?: XMLNumberingRules;
   /** Native resolved numbering rule property;absent in property-less adapters. */
   readonly defaultListId?: string;
   readonly name: string;
@@ -87,32 +89,13 @@ export interface XMLParagraphListState {
   readonly counted?: boolean;
   readonly restart?: boolean;
   readonly ruleName: string;
+  readonly rules?: XMLNumberingRules;
   readonly startValue?: number;
 }
 
-/** Canonical paragraph operation surface used by SAX callbacks. */
-export interface XMLParagraphImportTarget {
-  getInheritedProperties?(): OdfCharacterProperties;
-  appendText(text: string, properties: OdfCharacterProperties, hyperlink?: OdfHyperlink): void;
-  addBookmark(name: string): void;
-  addBookmarkStart(name: string): void;
-  addBookmarkEnd(name: string): void;
-  addSoftPageBreak(): void;
-  finishParagraph(): void;
-}
-
-/** Model-facing import surface implemented by Writer's SwXMLImport. */
+/** Model-facing import supplier and source declaration lookup. */
 export interface XMLTextImportTarget {
-  createParagraph(
-    style: XMLParagraphStyle,
-    alignment: OdfParagraphAlignment | undefined,
-    leftMargin: number | undefined,
-    paragraphProperties: XMLParagraphImportProperties | undefined,
-    properties: Partial<OdfCharacterProperties> | undefined,
-    list: XMLParagraphListState | undefined,
-    listGeometryWins: boolean,
-    forceListRule?: boolean,
-  ): XMLParagraphImportTarget;
+  GetTextImport(): XMLTextImportHelper;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   getAutoStyle(
@@ -137,7 +120,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
   /** Creates a body context. @param target - Writer import target. @returns Context. */
   public constructor(target: XMLTextImportTarget) {
     super();
-    this.helper = new XMLTextImportHelper(target);
+    this.helper = target.GetTextImport();
   }
 
   /** Creates one paragraph, list, or ignored declarations context. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -152,7 +135,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
 /** Imports one text:p or text:h directly into a canonical Writer paragraph. */
 export class XMLParaContext extends SvXMLImportContext {
   private readonly inherited: OdfCharacterProperties;
-  private readonly paragraph: XMLParagraphImportTarget;
+  private readonly paragraph: XMLTextImportHelper;
 
   /** Creates and configures one paragraph context. @param target - Writer target. @param element - Paragraph token. @param attributes - Attributes. @param list - Optional list state. @returns Context. */
   public constructor(
@@ -173,7 +156,8 @@ export class XMLParaContext extends SvXMLImportContext {
       element === XMLToken.TEXT_H,
       target,
     );
-    this.paragraph = target.createParagraph(
+    this.paragraph = target.GetTextImport();
+    this.paragraph.BeginParagraph(
       resolved.style,
       resolved.alignment,
       resolved.leftMargin,
@@ -183,16 +167,12 @@ export class XMLParaContext extends SvXMLImportContext {
       resolved.listGeometryWins === true,
       resolved.forceListRule,
     );
-    this.inherited = {
-      ...DEFAULT_PROPERTIES,
-      ...resolved.effectiveProperties,
-      ...this.paragraph.getInheritedProperties?.(),
-    };
+    this.inherited = DEFAULT_PROPERTIES;
   }
 
   /** Appends paragraph characters. @param characters - Decoded text. @returns Nothing. */
   public override characters(characters: string): void {
-    this.paragraph.appendText(characters, this.inherited);
+    this.paragraph.InsertString(characters, this.inherited);
   }
 
   /** Creates one supported inline context. @param element - Inline token. @param attributes - Attributes. @returns Child context or null. */
@@ -205,7 +185,7 @@ export class XMLParaContext extends SvXMLImportContext {
 
   /** Verifies that every range marker was closed. @returns Nothing. */
   public override endFastElement(): void {
-    this.paragraph.finishParagraph();
+    this.paragraph.EndParagraph();
   }
 }
 
@@ -214,7 +194,7 @@ class XMLSpanContext extends SvXMLImportContext {
   /** Creates a nested span context. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective properties. @returns Context. */
   public constructor(
     private readonly target: XMLTextImportTarget,
-    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly paragraph: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
   ) {
     super();
@@ -222,7 +202,7 @@ class XMLSpanContext extends SvXMLImportContext {
 
   /** Appends span characters. @param characters - Decoded text. @returns Nothing. */
   public override characters(characters: string): void {
-    this.paragraph.appendText(characters, this.properties);
+    this.paragraph.InsertString(characters, this.properties);
   }
 
   /** Creates one nested inline context. @param element - Inline token. @param attributes - Attributes. @returns Child context or null. */
@@ -239,7 +219,7 @@ class XMLHyperlinkContext extends SvXMLImportContext {
   /** Creates a hyperlink context. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param attributes - Link attributes. @returns Context. */
   public constructor(
     private readonly target: XMLTextImportTarget,
-    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly paragraph: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
     attributes: FastAttributeList,
   ) {
@@ -289,7 +269,7 @@ class XMLHyperlinkContext extends SvXMLImportContext {
 
   /** Appends linked or plain characters. @param characters - Decoded text. @returns Nothing. */
   public override characters(characters: string): void {
-    this.paragraph.appendText(characters, this.properties, this.hyperlink);
+    this.paragraph.InsertString(characters, this.properties, this.hyperlink);
   }
 
   /** Creates supported hyperlink children except nested links. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -312,7 +292,7 @@ class XMLHyperlinkContext extends SvXMLImportContext {
 /** Creates one supported inline import context. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param element - Child token. @param attributes - Attributes. @param hyperlink - Optional active hyperlink. @param allowHyperlink - Whether text:a may start here. @returns Child context or null. */
 function createInlineContext(
   target: XMLTextImportTarget,
-  paragraph: XMLParagraphImportTarget,
+  paragraph: XMLTextImportHelper,
   properties: OdfCharacterProperties,
   element: XMLToken,
   attributes: FastAttributeList,
@@ -351,17 +331,16 @@ function createInlineContext(
     if (name === null) throw new Error("ODF bookmark requires text:name.");
     return new XMLMarkerContext(
       /** Inserts the named bookmark marker. @returns Nothing. */ () => {
-        if (element === XMLToken.TEXT_BOOKMARK_START) paragraph.addBookmarkStart(name);
-        else if (element === XMLToken.TEXT_BOOKMARK_END) paragraph.addBookmarkEnd(name);
-        else paragraph.addBookmark(name);
+        if (element === XMLToken.TEXT_BOOKMARK_START) paragraph.StartBookmark(name);
+        else if (element === XMLToken.TEXT_BOOKMARK_END) paragraph.EndBookmark(name);
+        else paragraph.InsertBookmark(name);
       },
     );
   }
   if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
     attributes.assertOnly([], "soft page break");
-    return new XMLMarkerContext(
-      /** Inserts a soft page break marker. @returns Nothing. */ () => paragraph.addSoftPageBreak(),
-    );
+    // Native text import ignores pagination hints; these are produced by layout on export.
+    return new SvXMLIgnoreContext();
   }
   return null;
 }
@@ -384,7 +363,7 @@ class XMLLinkedSpanContext extends SvXMLImportContext {
   /** Creates a linked span. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param hyperlink - Active hyperlink. @returns Context. */
   public constructor(
     private readonly target: XMLTextImportTarget,
-    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly paragraph: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
     private readonly hyperlink: OdfHyperlink,
   ) {
@@ -393,7 +372,7 @@ class XMLLinkedSpanContext extends SvXMLImportContext {
 
   /** Appends linked span text. @param characters - Decoded text. @returns Nothing. */
   public override characters(characters: string): void {
-    this.paragraph.appendText(characters, this.properties, this.hyperlink);
+    this.paragraph.InsertString(characters, this.properties, this.hyperlink);
   }
 
   /** Creates nested supported inline content without nested links. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -417,7 +396,7 @@ class XMLLinkedSpanContext extends SvXMLImportContext {
 class XMLCharacterContext extends SvXMLImportContext {
   /** Creates one inline character context. @param paragraph - Active paragraph. @param properties - Effective properties. @param value - Inserted text. @param hyperlink - Optional enclosing hyperlink. @returns Context. */
   public constructor(
-    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly paragraph: XMLTextImportHelper,
     private readonly properties: OdfCharacterProperties,
     private readonly value: string,
     private readonly hyperlink?: OdfHyperlink,
@@ -427,7 +406,7 @@ class XMLCharacterContext extends SvXMLImportContext {
 
   /** Inserts the represented character data. @returns Nothing. */
   public override startFastElement(): void {
-    this.paragraph.appendText(this.value, this.properties, this.hyperlink);
+    this.paragraph.InsertString(this.value, this.properties, this.hyperlink);
   }
 }
 

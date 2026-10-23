@@ -147,7 +147,7 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       expect(result.document.GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
       for (const node of result.document.paragraphs)
         if (!node.HasAttrListRestartValue()) expect(node.GetAttr(86).QueryValue()).toBe(1);
-      const rule = result.document.FindNumRulePtr("Counters") as SwNumRule;
+      const rule = result.document.GetNumRuleTable()[0] as SwNumRule;
       const copied = createWriterDocument();
       copied.GetDocumentListsManager().AddNumRule(rule.clone());
       result.document.paragraphs.forEach(
@@ -159,14 +159,16 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
           ).SetListItems(node.CaptureListItems()),
       );
       expect(state(copied)).toEqual(expected);
-      expect(copied.FindNumRulePtr("Counters")).not.toBe(rule);
+      expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
       const transferred = decodeWriterDocument(encodeWriterDocument(result.document));
       expect(state(transferred)).toEqual(expected);
       expect(transferred.GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
       for (const node of transferred.paragraphs)
         if (!node.HasAttrListRestartValue()) expect(node.GetAttr(86).QueryValue()).toBe(1);
       const exported = writeOdtDocument(result.document, { title: "Counters" });
-      const xml = await new ZipFile(exported).readTextEntry("content.xml");
+      const xml =
+        (await new ZipFile(exported).readTextEntry("styles.xml")) +
+        (await new ZipFile(exported).readTextEntry("content.xml"));
       expect(xml).toContain('office:version="1.3"');
       const rootDeclaration = xml.match(
         /<text:list-level-style-(?:number|bullet) text:level="1"[^>]*>/u,
