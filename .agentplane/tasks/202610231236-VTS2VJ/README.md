@@ -4,7 +4,7 @@ title: "Implement native formula reference pointing and mouse selection"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-23T16:55:27.923Z"
+  updated_at: "2026-10-23T16:59:50.878Z"
   updated_by: "CODER"
   note: "verified-202610231236-VTS2VJ"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-23T16:59:36.289Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation f111d0b9c08f satisfies the approved local-reference/native mouse selection profile with real owners and stable edit lifetime;837Calc cases and raw100 are tied to473committed source/test/config hashes."
+  evaluated_sha: "f111d0b9c08f48c5d84a277ed5728900fa47ff9b"
+  blueprint_digest: "df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19"
+  evidence_refs:
+    - ".agentplane/tasks/202610231236-VTS2VJ/README.md"
+    - ".agentplane/tasks/202610231236-VTS2VJ/quality/20261023-165936289-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610231236-VTS2VJ/quality/20261023-165936289-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610231236-VTS2VJ/quality/20261023-165936289-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/checks.json"
+    - ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/source-hashes.json"
+    - ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/calc-coverage.log"
+    - ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/chromium-worker.log"
+    - ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-gates"
+  findings:
+    - "Original input/reference/view/mark contracts are represented without alternate cell models or fake native services;real active view/document identity rejects unsupported cross-document contexts."
+    - "Click/drag/full-axis/modifier/negative selection,capture/scroll/hidden geometry,UTF16 equals protection,caret/focus/IME/paste/manual-word semantics,history and ODS recalculation have actual-owner evidence;5Chromium/Worker and33related Writer/VCL scenarios pass."
+    - "All authored Calc lint/format and required build/type/static/source/registry gates pass. Broad npm lint diagnostic retains unchanged Writer/ignored-probe baseline errors;the report does not certify that broad command."
 commit: null
 comments:
   -
@@ -48,8 +70,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610231236-VTS2VJ"
+  -
+    type: "verify"
+    at: "2026-10-23T16:59:30.281Z"
+    author: "CODER"
+    state: "ok"
+    note: "Reviewed implementation f111d0b9c08f: same473source/test/config hashes as complete837scenario Calc raw100 run,5Chromium/Worker and33Writer/VCL checks. Scoped authored/static/source/registry gates pass;broader lint baseline outside77 recorded. Durable evidence/pointing-final and pointing-gates."
+  -
+    type: "verify"
+    at: "2026-10-23T16:59:50.878Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610231236-VTS2VJ"
 doc_version: 3
-doc_updated_at: "2026-10-23T16:55:27.975Z"
+doc_updated_at: "2026-10-23T16:59:50.935Z"
 doc_updated_by: "CODER"
 description: "Block77 is the human-requested next priority ahead of pending76: implement upstream ScInputHandler reference entry and ScTabView reference mode over real draft/caret/view/mark owners,then browser mouse cells/ranges/row/column/full-sheet and modifier selection. Preserve edit origin,UTF16 replacement selection,formula equals protection,reference continuation,drag lifetime,focus,commit/cancel,visual reference and ordinary selection distinctions. Support maximum source-backed pointing and selection scenarios within the current local-reference core;do not simulate clipboard fill/move,matrix,merged or external-reference services. Up to110 source/test/registry/evidence-probe paths,only vite-office-calc branch calc. Keep Writer shared controls/styles. Require real controller/mounted/Chromium/Worker scenarios,Calc and changed shared raw100,related consumers,build and all static/source/registry checks. No full all-app replay before the established checkpoint80."
 sections:
@@ -114,6 +148,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit 9049f92885be2f14820063724e009fd7d09ba562
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-23T16:59:30.281Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Reviewed implementation f111d0b9c08f: same473source/test/config hashes as complete837scenario Calc raw100 run,5Chromium/Worker and33Writer/VCL checks. Scoped authored/static/source/registry gates pass;broader lint baseline outside77 recorded. Durable evidence/pointing-final and pointing-gates.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:55:27.975Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+    - old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit f111d0b9c08f48c5d84a277ed5728900fa47ff9b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-23T16:59:50.878Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610231236-VTS2VJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:59:30.337Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+    - old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit f111d0b9c08f48c5d84a277ed5728900fa47ff9b
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -217,6 +311,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit 9049f92885be2f14820063724e009fd7d09ba562
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-23T16:59:30.281Z — VERIFY — ok
+
+By: CODER
+
+Note: Reviewed implementation f111d0b9c08f: same473source/test/config hashes as complete837scenario Calc raw100 run,5Chromium/Worker and33Writer/VCL checks. Scoped authored/static/source/registry gates pass;broader lint baseline outside77 recorded. Durable evidence/pointing-final and pointing-gates.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:55:27.975Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+- old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit f111d0b9c08f48c5d84a277ed5728900fa47ff9b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-23T16:59:50.878Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610231236-VTS2VJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T16:59:30.337Z, excerpt_hash=sha256:0577bf1c157b7d229284a2fb8cfbe37ec067bdbee1167dba2ee9553d007156a2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610231236-VTS2VJ/blueprint/resolved-snapshot.json
+- old_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- current_digest: df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231236-VTS2VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231236-VTS2VJ --result verified-202610231236-VTS2VJ --commit f111d0b9c08f48c5d84a277ed5728900fa47ff9b
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
