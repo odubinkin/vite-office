@@ -23,7 +23,8 @@ for (const width of [1280, 390]) {
     await b1.click();
     await input.fill("Tall");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
-    await page.getByRole("combobox", { name: "Font Size", exact: true }).selectOption("36");
+    await page.getByRole("combobox", { name: "Font Size", exact: true }).fill("36");
+    await page.getByRole("combobox", { name: "Font Size", exact: true }).press("Tab");
     await a1.click();
     await expect(a1).toHaveCSS("text-align", "right");
     const left = page.getByRole("button", { name: "Align Left", exact: true });

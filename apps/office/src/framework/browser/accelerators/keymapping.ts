@@ -27,6 +27,12 @@ const modifierAliases = new Map<string, string>([
   ["shift", "Shift"],
 ]);
 const modifierOrder = ["Ctrl", "Alt", "Meta", "Shift"] as const;
+// Original VCL keycode names correspond to these actual browser logical keys.
+const keyAliases = new Map([
+  ["`", "QUOTELEFT"],
+  ["[", "BRACKETLEFT"],
+  ["]", "BRACKETRIGHT"],
+]);
 
 /** Normalizes accelerator text at the framework accelerator boundary. @param shortcut - Raw shortcut. @returns Canonical shortcut. */
 export function normalizeCommandShortcut(shortcut: string): string {
@@ -47,7 +53,7 @@ export function normalizeCommandShortcut(shortcut: string): string {
   const keys: string[] = [];
   for (const part of parts) {
     const modifier = modifierAliases.get(part.toLowerCase());
-    if (modifier === undefined) keys.push(part === "`" ? "QUOTELEFT" : part.toUpperCase());
+    if (modifier === undefined) keys.push(keyAliases.get(part) ?? part.toUpperCase());
     else if (modifiers.has(modifier))
       throw new Error(`Command shortcut repeats modifier: ${modifier}`);
     else modifiers.add(modifier);

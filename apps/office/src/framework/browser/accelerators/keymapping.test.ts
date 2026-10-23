@@ -40,3 +40,24 @@ describe("browser shortcuts" /** Groups browser keyboard shortcut adaptation cas
     ).toThrow("exactly one");
   });
 });
+
+it.each([
+  ["[", "BRACKETLEFT"],
+  ["]", "BRACKETRIGHT"],
+])(
+  "keeps browser %s aligned with original VCL %s",
+  /** Original source key names and real browser characters must resolve the same native font-size slot. @param key - DOM logical key. @param native - Source keycode name. @returns Nothing. */ (
+    key,
+    native,
+  ) => {
+    expect(getBrowserShortcut(createEvent({ key: key as string, ctrlKey: true }))).toBe(
+      `Ctrl+${native}`,
+    );
+    expect(getBrowserShortcut(createEvent({ key: key as string, metaKey: true }))).toBe(
+      `Meta+${native}`,
+    );
+    expect(normalizeCommandShortcut(`Ctrl+${key}`)).toBe(
+      normalizeCommandShortcut(`Ctrl+${native}`),
+    );
+  },
+);

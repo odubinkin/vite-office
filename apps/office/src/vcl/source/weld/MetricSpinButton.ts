@@ -49,6 +49,10 @@ export class MetricSpinButton {
     this.maximum = this.ConvertValue(maximum, unit, this.unit);
     this.set_value(this.value, FieldUnit.NONE);
   }
+  /** Original set_min reads the opposite bound in the requested unit and delegates the full range conversion. @param minimum - Normalized new minimum. @param unit - Source unit. @returns Nothing. */
+  set_min(minimum: bigint, unit: FieldUnit): void {
+    this.set_range(minimum, this.get_range(unit)[1], unit);
+  }
   /** Original converted range getter;the tuple adapts native output references. @param unit - Output unit. @returns Minimum and maximum normalized values. */
   get_range(unit: FieldUnit): readonly [bigint, bigint] {
     return [
@@ -82,4 +86,24 @@ export class MetricSpinButton {
     this.set_value(BigInt(bounded < 0 ? -Math.round(-bounded) : Math.round(bounded)), this.unit);
     return true;
   }
+}
+
+/** Original non-percent format_number unit-text suffix step, separated from the native locale numeric string. @param numberText - Already formatted native numeric text. @param unit - Original source unit. @param unitText - Actual MetricToString result. @returns Original combined metric text. */
+export function formatMetricUnit(numberText: string, unit: FieldUnit, unitText: string): string {
+  let suffix = unitText;
+  let space =
+    unit !== FieldUnit.NONE &&
+    unit !== FieldUnit.DEGREE &&
+    unit !== FieldUnit.INCH &&
+    unit !== FieldUnit.FOOT
+      ? " "
+      : "";
+  if (unit === FieldUnit.INCH) {
+    if (suffix !== '"' && suffix !== "″") space = " ";
+    else suffix = "″";
+  } else if (unit === FieldUnit.FOOT) {
+    if (suffix !== "'" && suffix !== "′") space = " ";
+    else suffix = "′";
+  }
+  return numberText + space + suffix;
 }

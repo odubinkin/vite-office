@@ -1,5 +1,5 @@
 /** @fileoverview Verifies native headline commands publish mounted page changes and original scalar history through real table properties. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -52,7 +52,12 @@ it("actual Table Properties changes physical repeated headers and ODT while pres
       />,
     );
     expect(screen.getAllByRole("textbox", { name: "Row 1 column 1 paragraph 1" })).toHaveLength(3);
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Table Properties" },
+      ),
+    );
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     fireEvent.click(screen.getByRole("checkbox", { name: "Repeat header" }));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));

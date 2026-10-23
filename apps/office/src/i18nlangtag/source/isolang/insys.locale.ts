@@ -4,6 +4,11 @@ import { OUString } from "../../../sal/inc/rtl/ustring";
 /** Browser host-locale query replaces only the native system-locale configuration source. Raw browser language is retained even when Intl lacks that locale; Intl supplies the host default in non-DOM environments. @returns Actual prepared Locale value. */
 export function getPlatformLocale(): Locale {
   const input = globalThis.navigator?.language || new Intl.NumberFormat().resolvedOptions().locale;
+  return preparePlatformLocale(input);
+}
+
+/** Prepares explicit browser/document host language fields through the same existing adapter. This is not native LanguageTag validation. @param input - Original host tag. @returns Actual Locale fields. */
+export function preparePlatformLocale(input: string): Locale {
   const units = input.split("-");
   units[0] = (units[0] as string).toLowerCase();
   let index = 1;

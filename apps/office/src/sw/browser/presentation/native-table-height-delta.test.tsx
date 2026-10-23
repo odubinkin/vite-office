@@ -1,5 +1,5 @@
 /** @fileoverview Checks properties height draft admission over mounted original native owners. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -72,7 +72,12 @@ it.each([false, true])(
     if (selected) shell.SelTable();
     try {
       render(<WriterWorkbench isActive view={session.view} />);
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
       fireEvent.click(screen.getByRole("checkbox", { name: "Merge adjacent line styles" }));
       fireEvent.click(screen.getByRole("button", { name: "OK" }));

@@ -1,4 +1,4 @@
-/** @fileoverview Ports MakeTextAttr construction for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
+/** @fileoverview Ports MakeTextAttr construction and represented GetParaAttr character queries for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints } from "./ndhints";
@@ -169,4 +169,68 @@ export function FormatTextNodeToTextAttr(node: SwTextNode, target: SwTextNode): 
   node.ResetAttr(clear);
   ConvertTextNodeItemsToHints(node, convert);
   ConvertTextNodeItemsToHints(target, main);
+}
+
+/** Consumes GetParaAttr's native automatic-character branch, including original partial-hint accumulation and collapsed DontExpand boundaries. Character styles, merged/redline and non-character requests remain outside this represented branch. @param node - Original text owner. @param result - Empty caller-owned character set. @param start - Inclusive content position. @param end - Exclusive content position. @param onlyText - Ignore inherited node/style values. @returns Whether any native state was collected. */
+export function GetTextNodeParaAttr(
+  node: SwTextNode,
+  result: SfxItemSet,
+  start: number,
+  end: number,
+  onlyText: boolean,
+): boolean {
+  assertTextRange(node.Len(), start, end);
+  const format = new SfxItemSet(result.GetPool(), result.GetRanges());
+  if (!onlyText) format.Set(node.GetSwAttrSet());
+  const previous = new Map<number, { item: SfxPoolItem; end: number } | null>();
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    const first = hint.GetStart(),
+      last = hint.GetAnyEnd();
+    if (first > end) break;
+    if (!(hint.format instanceof SwFormatAutoFormat)) continue;
+    const items = hint.format.GetStyleHandle();
+    if (start === end) {
+      if (
+        (first < start && (hint.DontExpand() ? start < last : start <= last)) ||
+        (start === first && (first === last || start === 0))
+      )
+        result.PutSet(items);
+      continue;
+    }
+    let partial = false;
+    if (first <= start) {
+      if (last <= start) continue;
+      if (end <= last) format.PutSet(items);
+      else partial = true;
+    } else if (first < end) partial = true;
+    if (!partial) continue;
+    for (const item of items.entries()) {
+      const which = item.Which(),
+        old = previous.get(which);
+      if (which < RES_CHRATR_BEGIN || which >= RES_CHRATR_END) continue;
+      if (old === undefined) {
+        if (onlyText || !item.equals(format.Get(which))) {
+          if (first > start) {
+            result.InvalidateItem(which);
+            previous.set(which, null);
+          } else previous.set(which, { item, end: last });
+        }
+      } else if (old !== null) {
+        if (old.end === first && old.item.equals(item)) previous.set(which, { item, end: last });
+        else {
+          result.InvalidateItem(which);
+          previous.set(which, null);
+        }
+      }
+    }
+  }
+  for (const [which, value] of previous) {
+    if (value === null) continue;
+    if (end <= value.end) {
+      if (!value.item.equals(format.Get(which))) result.Put(value.item);
+    } else result.InvalidateItem(which);
+  }
+  format.Differentiate(result);
+  result.PutSet(format);
+  return result.Count() !== 0;
 }

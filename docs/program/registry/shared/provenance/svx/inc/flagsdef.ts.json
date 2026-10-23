@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/flagsdef.ts",
+    "localSymbols": [
+      "TabulatorDisableFlags"
+    ],
+    "upstreamPath": "include/svx/flagsdef.hxx",
+    "upstreamSymbols": [
+      "TabulatorDisableFlags"
+    ],
+    "preservedResponsibilities": [
+      "TaskRH91WB ports the consumed original tabulator Reset/FillItemSet, type/fill/UTF16/default/offset/null-tab handlers and typed complete Writer input/output through one native paragraph history action, with actual selected-cell/mixed state, module units, ruler and physical ODT transport. Original GetTabDist, pool slot metadata and VCL metric suffix responsibility stay in source owners; React/DOM supply actual text/focus/lazy exchange and deferred post-commit selection. WRITER061-066 preserve qualified suspected source issues. Portable evidence:42 current producer cases, related item/metric/paragraph/ruler/filter batches and5 current-build Chromium cases at1280/390CM and1280INCH. Exact18 executable-owner audit S1138/B790/F333/L1044 all100 uses current producer/source identities plus historical hits only for unchanged spans at verified095449e7c319 baseline positions. Two explicitly named synthetic-only tests requested by the user execute normally unreachable deletion/focus bodies; they do not establish native UI reachability or alter production logic. Raw partial focused coverage is separately disclosed with unchanged thresholds. No compiled native/full service, widget, locale catalog, frame/configuration or general SfxTabPage/SfxTabDialog parity promotion; classifications/statuses and deliberate browser document I/O/recovery/autosave defaults remain."
+    ],
+    "omittedResponsibilities": [
+      "General native page/dialog/window/configuration/locale service graph, native binary execution and unconsumed flags/styles remain unrepresented or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/flagsdef.ts",
+          "marker": "TabulatorDisableFlags"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/flagsdef.hxx",
+          "marker": "TabulatorDisableFlags"
+        }
+      ]
+    }
+  }
+}

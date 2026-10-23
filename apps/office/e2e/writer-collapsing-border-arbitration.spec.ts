@@ -71,7 +71,10 @@ for (const width of [1280, 390])
       }
       await collapsed();
       await page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }).click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await page
         .getByRole("checkbox", { name: "Merge adjacent line styles", exact: true })

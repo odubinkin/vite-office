@@ -1,4 +1,8 @@
 /** @fileoverview Checks the Writer formatting palettes and paragraph dialog. */
+import { SwDoc } from "../../source/core/doc/doc";
+import { SfxItemSet } from "../../../svl/inc/itemset";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
+import { RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useMemo, useRef, useState } from "react";
@@ -95,6 +99,16 @@ function WriterAdvancedFormattingControls({
             request: {
               commandUrl,
               kind: "paragraph",
+              tabContext: (
+                /** Creates actual tab values over the Writer pool. @returns Native set. */ () => {
+                  const set = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+                  const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
+                  for (const pt of style.tabStopsPt ?? [])
+                    tabs.Insert(new SvxTabStop(Math.round(pt * 20), SvxTabAdjust.Left));
+                  set.Put(tabs);
+                  return set;
+                }
+              )(),
               paintLineNumbers: showLineNumbers,
               initialValue: {
                 upperPt: style.upperSpacingPt,
@@ -249,7 +263,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.change(screen.getByLabelText("First line indent (pt)"), { target: { value: "12" } });
     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
-    fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "72" } });
+    fireEvent.change(screen.getByLabelText("Position"), { target: { value: "72" } });
     fireEvent.click(screen.getByText("New"));
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     fireEvent.change(screen.getByLabelText("Page style"), { target: { value: "Standard" } });
@@ -276,7 +290,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
         upperPt: 6,
         firstLineIndentPt: 12,
         autoTextIndent: true,
-        tabStopsPt: [36, 72],
+        tabStopsPt: [36],
         keepWithNext: true,
         keepTogether: true,
         orphans: 3,
@@ -337,13 +351,12 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
     fireEvent.click(screen.getByText("New"));
-    fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "2000" } });
+    fireEvent.change(screen.getByLabelText("Position"), { target: { value: "2000" } });
     fireEvent.click(screen.getByText("New"));
     expect(screen.queryByRole("option", { name: "2000 pt" })).toBeNull();
-    fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "24" } });
+    fireEvent.change(screen.getByLabelText("Position"), { target: { value: "24" } });
     fireEvent.click(screen.getByText("New"));
     expect(screen.getByRole("option", { name: "24.0 pt" })).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Tab stops"), { target: { value: "24" } });
     fireEvent.click(screen.getByText("Delete"));
     expect(screen.queryByRole("option", { name: "24.0 pt" })).toBeNull();
     fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);

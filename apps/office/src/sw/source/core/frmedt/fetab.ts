@@ -1,18 +1,48 @@
 /** @fileoverview Owns represented native SwFEShell table attributes, selection and history from fetab.cxx. */
 import { SwEditShell } from "../edit/edtab";
 import { SwTable, type SwTableBox, type SwTableFormat } from "../table/swtable";
-import { SwTableBoxStartNode } from "../docnode/node";
+import { SwTableNode, SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoAttrTable } from "../undo/untbl";
 import type { SwUndoCursorState } from "../undo/undobj";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
-import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
+import {
+  SwTabFrame,
+  type SwRowFrame,
+  type SwCellFrame,
+  type SwTableMouseCell,
+  type SwTableMouseRect,
+} from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwDoc } from "../doc/doc";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import type { SwPosition } from "../crsr/pam";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+
+/** Resolves the original row-frame line identity for the represented horizontal table graph. @param position - Original native endpoint. @returns Native uint16 row or USHRT_MAX when no cell frame is represented. */
+function lcl_GetRowNumber(position: SwPosition): number {
+  const section = position.GetNode().StartOfSectionNode();
+  if (!(section instanceof SwTableBoxStartNode)) return 65535;
+  // SwTableBoxStartNode construction requires its original SwTableNode parent.
+  const parent = section.StartOfSectionNode() as SwTableNode;
+  const table = parent.GetTable(),
+    frame = new SwTabFrame(table);
+  try {
+    for (let row = frame.Lower(); row !== undefined; row = row.GetNext()) {
+      const line = row as SwRowFrame;
+      for (let lower = line.Lower(); lower !== undefined; lower = lower.GetNext()) {
+        if ((lower as SwCellFrame).GetTabBox().GetStartNode() !== section) continue;
+        const index = table.GetTabLines().indexOf(line.GetTabLine());
+        return index & 0xffff;
+      }
+    }
+    return 65535;
+  } finally {
+    frame.DestroyImpl();
+  }
+}
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -291,6 +321,32 @@ export abstract class SwFEShell extends SwEditShell {
     return this.GetTabCols_(result, table, start);
   }
 
+  /** Matches the current represented horizontal cell-frame edge against native separators, using fetab.cxx's layout-only COLFUZZY tolerance. @returns Raw separator column number. */
+  public GetCurTabColNum(): number {
+    const table = this.IsCursorInTable()?.GetTable();
+    if (table === undefined) return 0;
+    const node = this.GetCursor().GetPoint().GetNode();
+    const page = this.GetDoc().GetPageDesc().GetValue();
+    const upperWidth = page.width - page.leftMargin - page.rightMargin;
+    const frame = new SwTabFrame(table);
+    try {
+      for (const line of table.GetTabLines())
+        for (const box of line.GetTabBoxes()) {
+          if (!box.GetParagraphs().includes(node as SwTextNode)) continue;
+          const offset = frame.GetBoxPrintOffset(box, upperWidth);
+          if (offset === undefined || Math.abs(offset) <= 20) return 0;
+          const columns = new SwTabCols();
+          this.GetTabCols(columns);
+          const left = columns.GetLeft() + offset;
+          for (let i = 0; i < columns.Count(); i++)
+            if (Math.abs(left - columns.GetEntry(i).nPos) <= 20) return i + 1;
+        }
+      return 0;
+    } finally {
+      frame.DestroyImpl();
+    }
+  }
+
   /** Reads print geometry over the actual native cell-frame owner. @param result - Output geometry. @param table - Connected table. @param start - Actual cell. @returns Whether admitted. */
   private GetTabCols_(result: SwTabCols, table: SwTable, start: SwTableBox): boolean {
     const page = this.GetDoc().GetPageDesc().GetValue();
@@ -372,6 +428,22 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
+  /** Reads the original current table headline count. @returns Native count or zero outside tables. */
+  public GetRowsToRepeat(): number {
+    return this.IsCursorInTable()?.GetTable().GetRowsToRepeat() ?? 0;
+  }
+
+  /** Preserves native top-row endpoint admission without expanding ordinary marks into row selections. @returns Selected top-row prefix count or zero. */
+  public GetRowSelectionFromTop(): number {
+    const cursor = this.getShellCursor(),
+      point = lcl_GetRowNumber(cursor.GetPoint());
+    if (!this.IsTableMode()) return point === 0 ? 1 : 0;
+    const mark = lcl_GetRowNumber(cursor.GetMark());
+    return (point === 0 && mark !== 65535) || (mark === 0 && point !== 65535)
+      ? (Math.max(point, mark) + 1) & 0xffff
+      : 0;
+  }
+
   /** Invokes the native count-only headline document operation on the actual current table. @param requested - Authored uint16 count. @returns Whether changed. */
   public SetRowsToRepeat(requested: number): boolean {
     const table = this.IsCursorInTable()?.GetTable(),
@@ -386,8 +458,33 @@ export abstract class SwFEShell extends SwEditShell {
   /** Applies a complete native size to current or selected rows. @param size - Native frame-size item. @returns Whether admitted. */
   public SetRowHeight(size: SwFormatFrameSize): boolean {
     return this.RunNotificationTransaction(
-      /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
-      () => this.GetDoc().SetRowHeight(this.getShellCursor(), size, this.CaptureCursorState()),
+      /** Forwards native selection and completes the source row-height action before another command reads geometry. @returns Whether admitted. */
+      () => {
+        const result = this.GetDoc().SetRowHeight(
+          this.getShellCursor(),
+          size,
+          this.CaptureCursorState(),
+        );
+        this.GetLayout().Calc();
+        return result;
+      },
+    );
+  }
+
+  /** Completes each mutating native balancing action before a later optimal-height pass reads frames. @param testOnly - Read-only state query. @param optimize - Source average mode. @returns Whether native multiple-row admission succeeded. */
+  public BalanceRowHeight(testOnly: boolean, optimize = false): boolean {
+    if (testOnly) return this.GetDoc().BalanceRowHeight(this.getShellCursor(), true, optimize);
+    return this.RunNotificationTransaction(
+      /** Applies original row formats and completes the current root's native layout. @returns Whether admitted. */ () => {
+        const result = this.GetDoc().BalanceRowHeight(
+          this.getShellCursor(),
+          false,
+          optimize,
+          this.CaptureCursorState(),
+        );
+        this.GetLayout().Calc();
+        return result;
+      },
     );
   }
 

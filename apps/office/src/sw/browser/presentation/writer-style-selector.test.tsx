@@ -1,4 +1,5 @@
 /** @fileoverview Checks live document-owned style population, dispatch and history through actual Sfx bindings. */
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { useSyncExternalStore } from "react";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
@@ -44,6 +45,7 @@ function attach(document = new SwDoc(), argumentsValue?: unknown) {
     const projection = useSyncExternalStore(store.Subscribe, store.GetSnapshot);
     return (
       <WriterFormattingToolbar
+        unit={FieldUnit.CM}
         commandSource={source}
         paragraphStyleOptions={projection.paragraphStyleOptions}
         resolveArguments={
@@ -92,19 +94,11 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
               ) => option.value === "Liberation Serif",
             ),
         );
-        const size = selects.find(
-          /** Finds the point-size selector. @param select - Candidate selector. @returns Whether it lists the size. */ (
-            select,
-          ) =>
-            [...(select as HTMLSelectElement).options].some(
-              /** Matches a standard size option. @param option - Native option. @returns Match. */ (
-                option,
-              ) => option.textContent === "14 pt",
-            ),
-        );
-        if (font === undefined || size === undefined) throw new Error("Missing font selectors");
+        const size = screen.getByRole("combobox", { name: "Font size" });
+        if (font === undefined) throw new Error("Missing font selector");
         fireEvent.change(font, { target: { value: "Liberation Serif" } });
         fireEvent.change(size, { target: { value: "14" } });
+        fireEvent.keyDown(size, { key: "Enter" });
         expect(execute).toHaveBeenCalledWith(".uno:CharFontName", {
           ...(value ?? {}),
           fontFamily: new SvxFontItem(0, "Liberation Serif", "", 0, 0, 10007),

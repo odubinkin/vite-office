@@ -1,6 +1,6 @@
 /** @fileoverview Verifies native resolved border paint over original mounted cell owners and history. */
 import { Color } from "../../../tools/inc/color";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
 import { SvxBorderLine } from "../../../editeng/source/items/borderline";
@@ -86,7 +86,12 @@ it.each([false, true])(
           expect(box.GetBox().QueryValue()).toEqual(original[i]);
       }
       collapsed();
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
       fireEvent.click(screen.getByRole("checkbox", { name: "Merge adjacent line styles" }));
       fireEvent.click(screen.getByRole("button", { name: "OK" }));

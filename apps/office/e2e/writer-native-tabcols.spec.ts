@@ -32,7 +32,10 @@ for (const viewport of [1280, 390])
     const rendered = page.getByRole("table", { name: "Relative" });
     await expect(rendered).toHaveCount(1);
     await selectBrowserTableRow(page, "Relative", 2);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     let dialog = page.getByRole("dialog", { name: "Table Properties" });
     await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
     await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
@@ -44,7 +47,10 @@ for (const viewport of [1280, 390])
     await expect(dialog).toHaveCount(0);
     for (let cycle = 0; cycle < 3; cycle++) {
       await page.getByRole("button", { name: "Undo", exact: true }).click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       dialog = page.getByRole("dialog", { name: "Table Properties" });
       await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
       await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(
@@ -53,7 +59,10 @@ for (const viewport of [1280, 390])
       );
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       await page.getByRole("button", { name: "Redo", exact: true }).click();
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       dialog = page.getByRole("dialog", { name: "Table Properties" });
       await dialog.getByRole("tab", { name: "Columns", exact: true }).click();
       await expect(dialog.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveAttribute(

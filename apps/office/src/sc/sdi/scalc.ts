@@ -25,6 +25,9 @@ import { SvxOverlineItem } from "../../editeng/source/items/textitem";
 import { FontLineStyle } from "../../tools/inc/fontenum";
 import { SvxFontItem } from "../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../editeng/inc/fhgtitem";
+import { MID_FONTHEIGHT } from "../../editeng/inc/memberids";
+import { CONVERT_TWIPS } from "../../svl/inc/poolitem";
+import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { SvxColorItem } from "../../editeng/inc/colritem";
 import { type CalcColorKind, calcColorSlots } from "../source/ui/view/formatsh";
 import type { CalcCharacterFormat } from "../source/ui/view/formatsh";
@@ -735,7 +738,18 @@ export function createCalcInterface(
             typeof args.fontSizePt !== "number"
           )
             throw new TypeError("FontHeight requires numeric fontSizePt");
-          return target.SetFontSize(args.fontSizePt);
+          const requested = new Any([args.fontSizePt], "double");
+          const converted = new SvxFontHeightItem(240, 100, 10015);
+          try {
+            if (
+              !Number.isFinite(args.fontSizePt) ||
+              !converted.PutValue(requested, MID_FONTHEIGHT | CONVERT_TWIPS)
+            )
+              return false;
+            return target.SetFontHeight(converted);
+          } finally {
+            requested.dispose();
+          }
         },
     },
     {

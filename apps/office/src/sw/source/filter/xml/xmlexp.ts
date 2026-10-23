@@ -1,6 +1,11 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import {
   SvxFontItem,
   SvxFontHeightItem,
@@ -567,6 +572,8 @@ function assertSupportedItems(
     RES_CHRATR_FONT,
     RES_CHRATR_FONTSIZE,
     RES_CHRATR_UNDERLINE,
+    RES_CHRATR_ESCAPEMENT,
+    RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_WEIGHT,
     RES_CHRATR_CJK_POSTURE,
     RES_CHRATR_CJK_FONT,
@@ -811,6 +818,8 @@ export function getCharacterProperties(
     /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
+  const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
+  const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
@@ -828,6 +837,8 @@ export function getCharacterProperties(
     !directWeight &&
     !directPosture &&
     !directUnderline &&
+    crossedOut === undefined &&
+    escapement === undefined &&
     !directFontSize &&
     color === undefined &&
     highlight === undefined &&
@@ -926,6 +937,10 @@ export function getCharacterProperties(
     ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false) !== undefined
       ? { fontPostureComplex: ConvertFontSlant(complexPosture.GetValue(), "FontItalic") }
       : {}),
+    ...(escapement instanceof SvxEscapementItem
+      ? { escapement: escapement.GetEsc(), escapementHeight: escapement.GetProportionalHeight() }
+      : {}),
+    ...(crossedOut instanceof SvxCrossedOutItem ? { strikeout: crossedOut.GetStrikeout() } : {}),
     ...(inherited || directUnderline
       ? {
           underlineStyle: underline.GetLineStyle(),

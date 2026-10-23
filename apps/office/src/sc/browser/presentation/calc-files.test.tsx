@@ -43,7 +43,9 @@ async function first(db: IndexedDbDocumentStore) {
 }
 
 /** Observes a genuine file operation while preserving its original Promise and failures. @param operation - Real bound file operation. @returns Completion and the call-through observer. */
-function observeOperation<Result>(operation: (value: string) => Promise<Result>) {
+function observeOperation<Args extends unknown[], Result>(
+  operation: (...args: Args) => Promise<Result>,
+) {
   let resolveResult: (value: Result) => void;
   let rejectResult: (error: unknown) => void;
   const completion = new Promise<Result>(
@@ -57,11 +59,11 @@ function observeOperation<Result>(operation: (value: string) => Promise<Result>)
   );
   return {
     completion,
-    call: /** Forwards the original operation without changing its scheduling or result. @param value - Actual file argument. @returns Original Promise. */ (
-      value: string,
+    call: /** Forwards the original operation without changing its scheduling or result. @param args - Actual file arguments. @returns Original Promise. */ (
+      ...args: Args
     ): Promise<Result> => {
       try {
-        const pending = operation(value);
+        const pending = operation(...args);
         void pending.then(resolveResult, rejectResult);
         return pending;
       } catch (error) {
@@ -103,8 +105,15 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   expect(c.shell.GetTitle()).toBe("Named copy");
   expect(await db.list()).toHaveLength(2);
+  const listed = observeOperation(db.list.bind(db));
+  vi.spyOn(db, "list").mockImplementation(listed.call);
   fireEvent.keyDown(screen.getByRole("grid"), { key: "o", ctrlKey: true });
-  await screen.findByRole("button", { name: "Working document" });
+  await act(
+    /** Waits for the real IndexedDB list instead of a default one-second query deadline. @returns Completion. */ async () => {
+      await listed.completion;
+    },
+  );
+  expect(screen.getByRole("button", { name: "Working document" })).toBeVisible();
   const opened = observeOperation(session.fileWorkflows.OpenStored.bind(session.fileWorkflows));
   vi.spyOn(session.fileWorkflows, "OpenStored").mockImplementation(opened.call);
   await act(

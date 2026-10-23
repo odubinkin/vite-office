@@ -1,7 +1,6 @@
 /** @fileoverview Creates Writer page frames from measured text-frame lines. */
 
 import type { WriterPageDescriptorValue } from "./pagedesc";
-import { WRITER_PAPER_SIZES } from "./pagedesc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   resolveSwListTextLeftMargin,
@@ -68,15 +67,10 @@ export function projectSwTextPrintBounds(
   const left =
     (resolveSwListTextLeftMargin(paragraph) ?? paragraph.GetParagraphTextLeftMargin()) +
     resolveSwListFirstLineIndent(paragraph);
-  const physicalWidth =
-    page.paperFormat === "A4" &&
-    page.width === (page.landscape ? WRITER_PAPER_SIZES.A4.height : WRITER_PAPER_SIZES.A4.width)
-      ? Math.floor(((page.landscape ? 297 : 210) * 1440) / 25.4)
-      : page.width;
-  return {
-    left,
-    right: physicalWidth - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin(),
-  };
+  const width =
+    page.width - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin() - left;
+  // SwRect::dumpAsXmlAttributes uses inclusive Right(), including its zero-width case.
+  return { left, right: width ? left + width - 1 : left };
 }
 
 /** Immutable descriptor graph supplied to DOM-neutral page-frame creation. */
@@ -214,11 +208,13 @@ export class SwRootFrame extends SwLayoutFrame {
     this.cursorFrames.clear();
     for (const frame of this.snapshot?.tableFrames ?? []) SwFrame.DestroyFrame(frame);
     this.snapshot = undefined;
+    this.deviceInputs = undefined;
     this.lastInputs = [];
     this.lastDocument = undefined;
     this.dirty = true;
     super.DestroyImpl();
   }
+  private deviceInputs: Parameters<SwRootFrame["Format"]> | undefined;
   private dirty = true;
   private dirtyFrom = 0;
   private lastDocument: SwDoc | undefined;
@@ -267,6 +263,14 @@ export class SwRootFrame extends SwLayoutFrame {
     this.dirtyFrom = Math.min(this.dirtyFrom, affected < 0 ? paragraphs.length : affected);
   }
 
+  /** Completes the represented root layout at a native shell action boundary using the existing device inputs. @returns Nothing. */
+  public Calc(): void {
+    if (this.deviceInputs !== undefined && this.lastDocument === this.getDocument()) {
+      this.Invalidate();
+      this.Format(...this.deviceInputs);
+    }
+  }
+
   /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @param measurementRevision - Browser device revision. @param tableMeasurements - Browser table-row geometry. @returns Immutable current layout. */
   public Format(
     measurements: readonly SwTextFrameMeasurement[],
@@ -278,6 +282,14 @@ export class SwRootFrame extends SwLayoutFrame {
   ): SwRootFrameSnapshot {
     const document = this.getDocument();
     this.BindRootFormat(document);
+    this.deviceInputs = [
+      measurements,
+      descriptor,
+      settings,
+      lineInfo,
+      measurementRevision,
+      tableMeasurements,
+    ];
     for (const [node, measured] of this.cursorFrames)
       if (node.GetDoc() !== document) {
         for (const frame of measured.frames) SwFrame.DestroyFrame(frame);
@@ -483,7 +495,6 @@ function pageDescriptorEqual(
   if (left === right) return true;
   return (
     left.name === right.name &&
-    left.paperFormat === right.paperFormat &&
     left.width === right.width &&
     left.height === right.height &&
     left.landscape === right.landscape &&

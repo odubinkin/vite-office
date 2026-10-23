@@ -1,5 +1,6 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
+import { SwEditShell as SwNumberingEditShell } from "./ednumber";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SwDoc } from "../doc/doc";
@@ -9,6 +10,9 @@ import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { RES_TXTATR_INETFMT, RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwPaM } from "../crsr/pam";
 import type { SwUndoCursorState } from "../undo/undobj";
+import { getSwItemWithPaM, type SwItemWithPaM } from "./edattr-items";
+import { getSwSelectionScriptType } from "./edattr-script";
+import type { SvtScriptType } from "../../../../svl/inc/languageoptions";
 
 /** Reads native edit-shell admission across the actual cursor ring; current page-body frame geometry remains a browser layout accommodation. @param document - Original document. @param cursor - Native cursor ring. @param right - Increase direction. @param modulus - Native snapping policy. @returns Original represented admission. */
 export function isMoveLeftMargin(
@@ -160,4 +164,66 @@ function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
   if (first === undefined) {
     if (second !== undefined && !defaults.equals(second)) target.InvalidateItem(RES_TXTATR_INETFMT);
   } else if (!first.equals(second ?? defaults)) target.InvalidateItem(RES_TXTATR_INETFMT);
+}
+
+/** Consumed character-only GetCurAttr path. Native paragraph/merged/redline queries remain in their existing or unported owners. */
+export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Original character contribution traversal without changing current cursor ownership. @param which - Character Which. @returns Borrowed source items and independent ranges. */
+  public GetItemWithPaM(which: number): SwItemWithPaM[] {
+    return getSwItemWithPaM(this.GetDoc(), this.GetCursor(), which);
+  }
+  /** Original represented layout-absent selection script query. @returns Native script flags. */
+  public GetScriptType(): SvtScriptType {
+    return getSwSelectionScriptType(this.GetDoc(), this.GetCursor());
+  }
+  /** Reads original caret typing items. @returns Current native items. */
+  public abstract GetPendingCharacterItems(): SfxItemSet;
+  /** Assigns native typing items. @param items - Independent set. @returns Nothing. */
+  public abstract SetPendingCharacterItems(items: SfxItemSet): void;
+  /** Publishes a native selection/typing state change. @returns Nothing. */
+  public abstract NotifySelectionChanged(): void;
+  /** Collects represented native character state from the current original cursor. @param state - Caller-owned requested set. @returns Whether source lookup limits admit it. */
+  public GetCurAttr(state: SfxItemSet): boolean {
+    return this.GetPaMAttr(this.GetCursor(), state);
+  }
+  /** Preserves source ring/node traversal, initial versus merged sets and10000 lookup limits for represented text nodes. Original character-style-at-label and merged/graphic/OLE branches remain unrepresented. @param cursor - Original ring head. @param state - Caller-owned character set. @returns Whether source limits admit lookup. */
+  public GetPaMAttr(cursor: SwPaM, state: SfxItemSet): boolean {
+    if ([...this.GetCursor().GetRingContainer()].length > 10000) {
+      state.ClearItem();
+      return false;
+    }
+    const local = new SfxItemSet(state.GetPool(), state.GetRanges());
+    let target = state;
+    for (const current of cursor.GetRingContainer()) {
+      if (current.IsInFrontOfLabel()) continue;
+      const start = current.Start(),
+        end = current.End();
+      if (end.GetNodeIndex() - start.GetNodeIndex() >= 10000) {
+        state.ClearItem();
+        return false;
+      }
+      for (let index = start.GetNodeIndex(); index <= end.GetNodeIndex(); index++) {
+        const node = this.GetDoc().GetNodes().at(index);
+        if (node instanceof SwTextNode) {
+          node.GetParaAttr(
+            target,
+            index === start.GetNodeIndex() ? start.GetContentIndex() : 0,
+            index === end.GetNodeIndex() ? end.GetContentIndex() : node.Len(),
+          );
+          if (target !== state) state.MergeValues(local);
+          if (local.Count()) local.ClearItem();
+        }
+        target = local;
+      }
+    }
+    // The browser's existing caret typing-owner replaces the native typing-attribute overlay.
+    if (
+      cursor === this.GetCursor() &&
+      !cursor.IsMultiSelection() &&
+      (!cursor.HasMark() || cursor.Start().compare(cursor.End()) === 0) &&
+      !cursor.IsInFrontOfLabel()
+    )
+      state.PutSet(this.GetPendingCharacterItems());
+    return true;
+  }
 }

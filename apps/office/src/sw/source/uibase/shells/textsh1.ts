@@ -1,11 +1,18 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { SwBaseShell } from "./basesh";
+import { canChangeWriterFontSize, changeWriterFontSize } from "./txtattr-fontsize";
 import {
   createCharacterFormatItems,
   createFontHeightItems,
   createCharacterColorItems,
 } from "../../core/txtnode/ndhints-font";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { SID_ATTR_PARA_LINESPACE } from "../../../../editeng/inc/editids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
@@ -103,6 +110,17 @@ export interface SwTextShellTarget extends Pick<
       GetUndoActionCount(): number;
     }>;
   }>;
+  readonly GetCurAttr: (state: SfxItemSet) => boolean;
+  readonly SetAttrSet: (
+    items: SfxItemSet,
+    mode?: import("../../../inc/swtypes").SetAttrMode,
+    pam?: SwPaM,
+  ) => boolean;
+  readonly GetPaMAttr: (pam: SwPaM, items: SfxItemSet) => boolean;
+  readonly GetScriptType: () => import("../../../../svl/inc/languageoptions").SvtScriptType;
+  readonly GetItemWithPaM: (
+    which: number,
+  ) => import("../../core/edit/edattr-items").SwItemWithPaM[];
   readonly GetPendingCharacterItems: () => SfxItemSet;
   readonly IsMoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
   readonly MoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
@@ -137,7 +155,7 @@ export interface WriterParagraphFormatValue {
   readonly countLineNumbers: boolean;
 }
 /** Dedicated text context shell owning its execute/state registration. */
-export class SwTextShell {
+export class SwTextShell extends SwBaseShell {
   /** Applies only the requested native pending item delta. @param items - Complete changed values. @returns Nothing. */
   private ApplyPendingCharacterItems(items: readonly SfxPoolItem[]): void {
     const pending = this.target.GetPendingCharacterItems().Clone();
@@ -146,10 +164,8 @@ export class SwTextShell {
   }
   private readonly shell: SfxShell;
   /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
-  public constructor(
-    private readonly target: SwTextShellTarget,
-    dialogs: WriterDialogController,
-  ) {
+  public constructor(target: SwTextShellTarget, dialogs: WriterDialogController) {
+    super(target);
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
     this.shell.GetInterface().RegisterPopupMenu("text");
   }
@@ -366,9 +382,9 @@ export class SwTextShell {
     return this.target.ApplyAction(
       action,
       false,
-      /** Runs initial attribute reset without history cursor restoration. @param context - Original shell context. @returns Nothing. */
-      (context) => {
-        for (const child of actions) child.ApplyExact(context);
+      /** Runs initial attribute reset without history cursor restoration. @returns Nothing. */
+      () => {
+        for (const child of actions) child.ApplyExact();
       },
     );
   }
@@ -415,9 +431,18 @@ export class SwTextShell {
 
   /** Applies a font height through one text-shell history action. @param fontSizePt - Requested height in points. @returns Whether changed. */
   public SetFontSize(fontSizePt: number): boolean {
-    const fontSizeTwips = fontSizePt * 20;
-    if (!Number.isFinite(fontSizePt) || fontSizePt <= 0 || !Number.isInteger(fontSizeTwips))
-      throw new Error("Writer font size must be a positive value representable in twips.");
+    const height = SvxFontHeightItem.CreateDefault();
+    const requested = new Any([fontSizePt], "double");
+    try {
+      if (
+        !Number.isFinite(fontSizePt) ||
+        !height.PutValue(requested, MID_FONTHEIGHT | CONVERT_TWIPS)
+      )
+        throw new Error("Writer font size is outside the native font-height range.");
+    } finally {
+      requested.dispose();
+    }
+    const fontSizeTwips = height.GetHeight();
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.ApplyPendingCharacterItems(createFontHeightItems(fontSizeTwips));
@@ -440,6 +465,15 @@ export class SwTextShell {
           this.target.CaptureCursorState(),
         ),
     );
+  }
+
+  /** Original font-step enabled state. @param grow - Original grow slot. @returns Enabled. */
+  public CanChangeFontSize(grow: boolean): boolean {
+    return canChangeWriterFontSize(this.target, grow);
+  }
+  /** Original font-step execution. @param grow - Original grow slot. @returns Whether selected ranges changed. */
+  public ChangeFontSize(grow: boolean): boolean {
+    return changeWriterFontSize(this.target, grow);
   }
 
   /** Applies foreground or highlight color at the caret or over selected text. @param property - Color attribute. @param value - Hex color or automatic marker. @returns Whether selected text changed. */
@@ -521,8 +555,11 @@ export class SwTextShell {
       : undefined;
   }
 
-  /** Applies the supported paragraph dialog through pooled items and one undo entry. @param value - Accepted primitive draft. @returns Whether formatting changed. */
-  public ApplyParagraphFormat(value: WriterParagraphFormatValue): boolean {
+  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param tabStopItems - Optional original tab-page output set, empty when unchanged. @returns Whether formatting changed. */
+  public ApplyParagraphFormat(
+    value: WriterParagraphFormatValue,
+    tabStopItems?: SfxItemSet,
+  ): boolean {
     if (
       !Number.isFinite(value.upperPt) ||
       value.upperPt < 0 ||
@@ -558,6 +595,7 @@ export class SwTextShell {
       ) => Math.round(position * 20),
     );
     if (
+      tabStopItems === undefined &&
       positions.some(
         /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
           position,
@@ -588,7 +626,7 @@ export class SwTextShell {
           value.contextual,
         ),
         lineSpacing,
-        this.CreateTabStops(positions, paragraph),
+        ...(tabStopItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
         new SfxInt16Item(RES_PARATR_ORPHANS, value.orphans ?? 2),
@@ -618,6 +656,26 @@ export class SwTextShell {
             ]),
         new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
       ],
+    );
+  }
+
+  /** Original line-spacing item request retains all active and inactive fields while mapping slot to Writer Which. @param item - Actual request item. @returns Whether selected paragraphs changed. */
+  public ApplyLineSpacing(item: SvxLineSpacingItem): boolean {
+    const copy = item.Clone();
+    copy.SetWhich(RES_PARATR_LINESPACING);
+    return this.SetParagraphItem(copy);
+  }
+
+  /** Reads original uniform line-spacing item state over the selected paragraphs. @returns Slot item or undefined for mixed selection. */
+  public GetLineSpacing(): SvxLineSpacingItem | undefined {
+    return this.GetUniformParagraphItem(
+      /** Copies actual pooled state for frame bindings. @param paragraph - Selected text node. @returns Slot item. */ (
+        paragraph,
+      ) => {
+        const item = (paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).Clone();
+        item.SetWhich(SID_ATTR_PARA_LINESPACE);
+        return item;
+      },
     );
   }
 

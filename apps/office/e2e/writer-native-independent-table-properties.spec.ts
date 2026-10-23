@@ -78,7 +78,10 @@ for (const viewport of [1280, 390]) {
         [960, 480],
       ];
     await geometry(page, original);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     for (const [i, value] of ["1.76", "1.76", "7.06"].entries())
       await expect(
@@ -91,11 +94,17 @@ for (const viewport of [1280, 390]) {
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await geometry(page, original);
     await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeDisabled();
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await geometry(page, original);
     await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeDisabled();
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }).fill("2.54");
     await page.getByRole("button", { name: "OK", exact: true }).click();
@@ -107,7 +116,10 @@ for (const viewport of [1280, 390]) {
       await geometry(page, changed);
     }
     await page.getByRole("button", { name: "Undo", exact: true }).click();
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("2.54");
     await page.getByRole("button", { name: "OK", exact: true }).click();
     await geometry(page, scaled);

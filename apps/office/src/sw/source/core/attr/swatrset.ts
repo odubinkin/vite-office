@@ -1,6 +1,12 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SID_ATTR_TABSTOP, SID_ATTR_LRSPACE } from "../../../../editeng/inc/editids";
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
@@ -95,6 +101,22 @@ export class SwAttrPool extends SfxItemPool {
   public constructor(private readonly document: SwDoc) {
     super();
     this.RegisterDefaultItem(
+      new SvxEscapementItem(RES_CHRATR_ESCAPEMENT),
+      /** Restores every stored native offset and height at the browser boundary. @param value - Complete persisted pair. @returns Actual item. */
+      (value) => {
+        if (
+          typeof value !== "object" ||
+          Array.isArray(value) ||
+          !("offset" in value) ||
+          !("height" in value) ||
+          typeof value.offset !== "number" ||
+          typeof value.height !== "number"
+        )
+          throw new Error("Invalid escapement item state.");
+        return new SvxEscapementItem(value.offset, value.height, RES_CHRATR_ESCAPEMENT);
+      },
+    );
+    this.RegisterDefaultItem(
       new SvxProtectItem(127),
       /** Restores the existing browser protection snapshot. @param value - Stored flags. @returns Native item. */
       (value) => {
@@ -121,7 +143,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores the represented double. @param value - Stored scalar. @returns Native item. */
       (value) => new SwTableBoxValue(Number(value)),
     );
-    this.RegisterDefaultItem(new SvxLRSpaceItem(RES_LR_SPACE));
+    this.RegisterDefaultItem(new SvxLRSpaceItem(RES_LR_SPACE), undefined, SID_ATTR_LRSPACE);
     this.RegisterDefaultItem(new SwFormatFrameSize());
     this.RegisterDefaultItem(new SwFormatVertOrient());
     this.RegisterDefaultItem(new SwFormatHoriOrient());
@@ -245,6 +267,7 @@ export class SwAttrPool extends SfxItemPool {
           item.SetProp(value.prop, value.propUnit);
           return item;
         },
+        which === RES_CHRATR_FONTSIZE ? 10015 : which === RES_CHRATR_CJK_FONTSIZE ? 10888 : 10893,
       );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(
@@ -258,6 +281,11 @@ export class SwAttrPool extends SfxItemPool {
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );
+    this.RegisterDefaultItem(
+      new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT),
+      /** Restores the complete native strikeout enum. @param value - Stored enum. @returns Item. */
+      (value) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
+    );
     this.RegisterDefaultItem(
       new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
@@ -344,6 +372,7 @@ export class SwAttrPool extends SfxItemPool {
         }
         return item;
       },
+      SID_ATTR_TABSTOP,
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),
@@ -448,6 +477,7 @@ export class SwAttrPool extends SfxItemPool {
         }
         return item;
       },
+      10033,
     );
     for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
       this.RegisterDefaultItem(

@@ -8,11 +8,23 @@ export const RES_CHRATR_BEGIN = 1 as const;
 /** Automatic or explicit character color, `RES_CHRATR_BEGIN + 2`. */
 export const RES_CHRATR_COLOR = 3 as const;
 
+/** Native crossed-out decoration, RES_CHRATR_BEGIN +4. */
+export const RES_CHRATR_CROSSEDOUT = 5 as const;
+
+/** Original text escapement, RES_CHRATR_BEGIN +5. */
+export const RES_CHRATR_ESCAPEMENT = 6 as const;
+
 /** Western font family, `RES_CHRATR_BEGIN + 6`. */
 export const RES_CHRATR_FONT = 7 as const;
 
 /** Western font height in twips, `RES_CHRATR_BEGIN + 7`. */
 export const RES_CHRATR_FONTSIZE = 8 as const;
+/** Original western language identity, RES_CHRATR_BEGIN +9. */
+export const RES_CHRATR_LANGUAGE = 10 as const;
+/** Original Asian language identity, RES_CHRATR_BEGIN +23. */
+export const RES_CHRATR_CJK_LANGUAGE = 24 as const;
+/** Original complex language identity, RES_CHRATR_BEGIN +28. */
+export const RES_CHRATR_CTL_LANGUAGE = 29 as const;
 
 /** Western font posture, `RES_CHRATR_BEGIN + 10`. */
 export const RES_CHRATR_POSTURE = 11 as const;
@@ -153,6 +165,7 @@ export const RES_BOXATR_VALUE = 159 as const;
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_COLOR, RES_CHRATR_COLOR],
+  [RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT],
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
@@ -181,6 +194,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
 /** WhichIds supported by the current Writer paragraph-style attribute set. */
 export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_CHRATR_COLOR, RES_CHRATR_COLOR],
+  [RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT],
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
@@ -209,6 +223,7 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
 /** WhichIds stored inside the bounded SwFormatAutoFormat item set. */
 export const WRITER_CHARACTER_WHICH_RANGES = [
   [RES_CHRATR_COLOR, RES_CHRATR_COLOR],
+  [RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT],
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],

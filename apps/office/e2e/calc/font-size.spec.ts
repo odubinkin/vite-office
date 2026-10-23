@@ -20,15 +20,17 @@ for (const width of [1280, 390]) {
       a1 = grid.getByRole("gridcell", { name: "A1", exact: true }),
       b2 = grid.getByRole("gridcell", { name: "B2", exact: true });
     await expect(size).toBeEnabled();
-    await expect(size).toHaveValue("10");
+    await expect(size).toHaveValue("10 pt");
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("Font sample");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
-    await size.selectOption("18");
+    await size.fill("18");
+    await size.press("Tab");
     await expect(a1).toHaveCSS("font-size", "24px");
     await expect(a1).toHaveText("Font sample");
     await b2.click({ modifiers: ["Shift"] });
     await expect(size).toHaveValue("");
-    await size.selectOption("24");
+    await size.fill("24");
+    await size.press("Tab");
     await expect(a1).toHaveCSS("font-size", "32px");
     await expect(b2).toHaveCSS("font-size", "32px");
     await expect(a1).toHaveCSS("height", "38px");
@@ -38,7 +40,7 @@ for (const width of [1280, 390]) {
     await expect(a1).toHaveCSS("height", "29px");
     await expect(size).toHaveValue("");
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(size).toHaveValue("24");
+    await expect(size).toHaveValue("24 pt");
     await expect(b2).toHaveCSS("font-size", "32px");
     const name = page.getByRole("textbox", { name: "Name Box", exact: true });
     await name.fill("A1048576");
@@ -47,7 +49,8 @@ for (const width of [1280, 390]) {
     await expect(last).toBeInViewport({ ratio: 1 });
     await last.click();
     await expect(grid).toHaveAttribute("aria-activedescendant", /-0-0-1048575$/);
-    await size.selectOption("72");
+    await size.fill("72");
+    await size.press("Tab");
     await expect(last).toHaveCSS("height", "114px");
     await expect(last).toBeInViewport({ ratio: 1 });
     await page.getByRole("button", { name: "Undo", exact: true }).click();

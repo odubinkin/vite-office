@@ -156,7 +156,6 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const nextPage = {
       ...initialPage,
       leftMargin: initialPage.leftMargin + 120,
-      paperFormat: "custom" as const,
     };
     expect(shell.SetPageDescriptor(initialPage)).toBe(false);
     expect(shell.SetPageDescriptor(initialPage, "Missing page style")).toBe(false);
@@ -933,11 +932,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).fontSizeTwips).toBe(
       270,
     );
-    for (const invalid of [Number.NaN, 0, 13.03])
+    for (const invalid of [Number.NaN, -1, Number.POSITIVE_INFINITY, 10001])
       expect(
         /** Rejects one invalid point height. @returns Invalid mutation. */ () =>
           shell.SetFontSize(invalid),
-      ).toThrow("positive value representable in twips");
+      ).toThrow("native font-height range");
     setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 3, paragraphId: "p-1" },

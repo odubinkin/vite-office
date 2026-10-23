@@ -38,6 +38,7 @@ export function WriterParagraphProperties(
       getCommandResource={resource}
       lineSpacing={
         <WriterLineSpacingControl
+          unit={props.unit}
           commandSource={props.commandSource}
           getCommandResource={resource}
         />

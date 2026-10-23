@@ -1,4 +1,5 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
+import { SwFrameAreaDefinition } from "../inc/frame";
 import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
@@ -129,10 +130,28 @@ export class SwRowFrame extends SwLayoutFrame {
   /** Resolves represented native row height from the complete item and device content extent. @param contentHeight - Measured content height in twips. @returns Authored fixed height, minimum floor or natural content height. */
   public Format(contentHeight: number): number {
     const size = this.GetFormat().GetFrameSize();
-    if (size.GetHeightSizeType() === SwFrameSize.Fixed) return size.GetHeight();
-    return size.GetHeightSizeType() === SwFrameSize.Minimum
-      ? Math.max(size.GetHeight(), contentHeight)
-      : contentHeight;
+    const height =
+      size.GetHeightSizeType() === SwFrameSize.Fixed
+        ? size.GetHeight()
+        : size.GetHeightSizeType() === SwFrameSize.Minimum
+          ? Math.max(size.GetHeight(), contentHeight)
+          : contentHeight;
+    const area = new SwFrameAreaDefinition.FrameAreaWriteAccess(this.areaDefinition);
+    try {
+      area.Height(height);
+    } finally {
+      area.Dispose();
+    }
+    const print = new SwFrameAreaDefinition.FramePrintAreaWriteAccess(this.areaDefinition);
+    try {
+      print.Left(0);
+      print.Top(0);
+      print.Width(this.getFrameArea().Width());
+      print.Height(height);
+    } finally {
+      print.Dispose();
+    }
+    return height;
   }
 }
 
@@ -450,6 +469,19 @@ export class SwTabFrame extends SwLayoutFrame {
             : (cell.GetFormat().GetFrameSize().GetWidth() * this.Format(upperWidth).width) / wished;
       }
     return 0;
+  }
+
+  /** Resolves the represented horizontal cell-frame position from original row lowers and print widths. @param box - Original current box. @param upperWidth - Upper print width in twips. @returns Cell left relative to table print area, or absent for a foreign box. */
+  public GetBoxPrintOffset(box: SwTableBox, upperWidth: number): number | undefined {
+    for (let row = this.Lower(); row !== undefined; row = row.GetNext()) {
+      let offset = 0;
+      for (let lower = (row as SwRowFrame).Lower(); lower !== undefined; lower = lower.GetNext()) {
+        const cell = lower as SwCellFrame;
+        if (cell.GetTabBox() === box) return Math.trunc(offset);
+        offset += this.GetBoxPrintWidth(cell.GetTabBox(), upperWidth);
+      }
+    }
+    return undefined;
   }
 
   /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */

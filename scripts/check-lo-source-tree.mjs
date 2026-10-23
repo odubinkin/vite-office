@@ -11,6 +11,8 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Files that prove every currently instantiated LibreOffice-derived source area remains present. */
 const requiredFiles = [
+  // RXH8BN restores the original native ExecCharAttr/GetAttrState owner; the retired browser wrapper ban is superseded only for this source path.
+  "apps/office/src/sw/source/uibase/shells/txtattr.ts",
   "apps/office/src/o3tl/inc/sorted_vector.ts",
   "apps/office/src/editeng/inc/svxenum.ts",
   "apps/office/src/vcl/source/font/font.ts",
@@ -148,7 +150,6 @@ const forbiddenPaths = [
   "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx",
   "apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx",
   "apps/office/src/sw/source/uibase/utlui/use-writer-browser-commands.ts",
-  "apps/office/src/sw/source/uibase/shells/txtattr.ts",
   "apps/office/src/sw/source/uibase/shells/txtnum.ts",
   "apps/office/src/sw/uiconfig/swriter/menubar.ts",
   "apps/office/src/sw/source/uibase/app/mainwn.tsx",

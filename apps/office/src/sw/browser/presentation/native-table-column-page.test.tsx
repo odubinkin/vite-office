@@ -1,6 +1,6 @@
 /** @fileoverview Verifies declarative browser column controls over shared native page state and shell selection ingress. */
 import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
 import { SwPosition } from "../../source/core/crsr/pam";
@@ -168,14 +168,24 @@ it("mounted workbench passes actual row versus whole-table selection to native c
   expect(selectMountedTableRow("Selected", 1)).toBe(true);
   expect(session.view.GetWrtShell().IsTableMode()).toBe(true);
   expect(session.view.GetWrtShell().HasWholeTabSelection()).toBe(false);
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select Table" }));
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeEnabled();
 });

@@ -1,4 +1,5 @@
 /** @fileoverview Original five scalar metric helpers over common Tools/o3tl owners; native tools::Long uses bigint. */
+import { LogicToLogic } from "../../../vcl/source/outdev/map";
 import type { MetricSpinButton } from "../../../vcl/source/weld/MetricSpinButton";
 import { convert, Length } from "../../../o3tl/inc/unit_conversion";
 import { MapUnit, MapToO3tlLength } from "../../../tools/inc/mapunit";
@@ -89,4 +90,20 @@ export function SetFieldUnit(field: MetricSpinButton, unit: FieldUnit, all = fal
   }
   if (!all) field.set_range(field.normalize(minimum), field.normalize(maximum), FieldUnit.TWIP);
   field.set_value(field.normalize(value), FieldUnit.TWIP);
+}
+
+/** Original map-unit assignment normalizes after conversion through hundredths of a millimetre. @param field - Actual numeric owner. @param value - Native core value. @param unit - Core map unit. @returns Nothing. */
+export function SetMetricValue(field: MetricSpinButton, value: bigint, unit: MapUnit): void {
+  field.set_value(
+    field.normalize(LogicToLogic(value, unit, MapUnit.Map100thMM)),
+    FieldUnit.MM_100TH,
+  );
+}
+/** Original map-unit read changes denormalization order for large normalized values to avoid rounding/overflow. @param field - Actual numeric owner. @param unit - Core map unit. @returns Core value. */
+export function GetCoreValue(field: MetricSpinButton, unit: MapUnit): bigint {
+  let value = field.get_value(FieldUnit.MM_100TH);
+  const roundBefore = ((value < 0n ? -value : value) & 0xffffffffff000000n) !== 0n;
+  if (roundBefore) value = field.denormalize(value);
+  const converted = LogicToLogic(value, MapUnit.Map100thMM, unit);
+  return roundBefore ? converted : field.denormalize(converted);
 }

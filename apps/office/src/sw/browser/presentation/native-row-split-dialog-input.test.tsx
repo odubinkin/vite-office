@@ -1,5 +1,5 @@
 /** @fileoverview Verifies authoritative native row-split input and actual shell selection through mounted Text Flow. */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../source/core/doc/doc";
 import { SwFormatRowSplit } from "../../inc/fmtrowsplt";
@@ -129,7 +129,12 @@ it.each([false, true])(
         boxes = [...shell.GetTableSel()];
       doc.GetUndoManager().Clear();
       render(<WriterWorkbench isActive view={session.view} />);
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
       expect(screen.getByRole("checkbox", { name: rowLabel })).toHaveAttribute(
         "aria-checked",

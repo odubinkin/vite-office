@@ -9,7 +9,11 @@ import { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
-import { resetParagraphTextAttributes } from "./txtedt";
+import { resetParagraphTextAttributes, ResetTextNodeHintItems } from "./txtedt";
+import { SwUndoAttr } from "../undo/unattr";
+import { SwDocShell } from "../../uibase/app/docsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 
 afterEach(
   /** Restores observed real owner methods. @returns Nothing. */ () => vi.restoreAllMocks(),
@@ -140,4 +144,68 @@ describe("pooled selective automatic hint reconstruction", /** Groups actual res
       }
     },
   );
+});
+
+it("merges selectively reset adjacent styles on initial formatting and redo while undo restores both handles", /** Runs the actual direct-item action through the native editing-shell history. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = required(doc.paragraphs[0]);
+  node.SetText("abcdefgh");
+  node.SetTextHints(
+    new SwpHints(doc.GetAttrPool(), [
+      MakeTextAttr(doc, input(doc, 8), 0, 4),
+      MakeTextAttr(doc, input(doc, 5), 4, 8),
+    ]),
+  );
+  const docShell = new SwDocShell(
+      doc,
+      createDocument({ id: "merge-history", suiteId: "writer", title: "Merge history" }),
+    ),
+    shell = new SwWrtShell(docShell);
+  try {
+    const before = node.CaptureTextFragment(0, 8),
+      cursor = shell.CaptureCursorState(),
+      reset = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
+    reset.Put(new SvxWeightItem(0, 15));
+    shell.ApplyAction(new SwUndoAttr(node, 0, before, before, cursor, cursor, reset));
+    expect(required(node.GetpSwpHints()).Count()).toBe(1);
+    expect(required(node.GetpSwpHints()).Get(0)).toMatchObject({ start: 0, end: 8 });
+    expect(shell.Undo()).toBe(true);
+    const restored = required(node.GetpSwpHints());
+    expect(restored.Count()).toBe(2);
+    expect([
+      handle(restored.Get(0)).Get(15).QueryValue(),
+      handle(restored.Get(1)).Get(15).QueryValue(),
+    ]).toEqual([8, 5]);
+    expect(shell.Redo()).toBe(true);
+    expect(required(node.GetpSwpHints()).Count()).toBe(1);
+    expect(handle(required(node.GetpSwpHints()).Get(0)).Get(11).QueryValue()).toBe(2);
+  } finally {
+    docShell.Close();
+  }
+});
+
+it("keeps absent hints and distinguishes unchanged versus removed independent reset snapshots", /** Exercises native no-hint reset and real history-value decisions without changing original ownership. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = required(doc.paragraphs[0]);
+  try {
+    const reset = new SfxItemSet(doc.GetAttrPool(), [[1, 54]]);
+    reset.Put(new SvxWeightItem(0, 15));
+    resetParagraphTextAttributes(node, false, reset);
+    expect(node.GetpSwpHints()).toBeUndefined();
+    node.SetText("abcd");
+    node.SetTextHints(new SwpHints(doc.GetAttrPool(), [MakeTextAttr(doc, input(doc), 1, 3)]));
+    const original = required(node.GetpSwpHints()),
+      originalHandle = handle(original.Get(0));
+    const unrelated = new SfxItemSet(doc.GetAttrPool(), [[1, 54]]);
+    unrelated.Put(new SfxInt16Item(3, 1));
+    expect(ResetTextNodeHintItems(node, original, unrelated)).toBeUndefined();
+    const all = new SfxItemSet(doc.GetAttrPool(), [[1, 54]]);
+    all.Put(new SwFormatAutoFormat(input(doc)));
+    expect(required(ResetTextNodeHintItems(node, original, all)).Count()).toBe(0);
+    expect(node.GetpSwpHints()).toBe(original);
+    expect(original.Count()).toBe(1);
+    expect(handle(original.Get(0))).toBe(originalHandle);
+  } finally {
+    doc.Dispose();
+  }
 });

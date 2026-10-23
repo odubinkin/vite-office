@@ -211,16 +211,17 @@ for (const width of [1280, 390])
     await expect(a1.getByText("ش", { exact: true })).toHaveCSS("font-size", "32px");
     await page.screenshot({ path: test.info().outputPath(`font-script-mixed-${width}.png`) });
     await page.getByRole("gridcell", { name: "B1", exact: true }).click();
-    await expect(size).toHaveValue("12");
+    await expect(size).toHaveValue("12 pt");
     await a1.click();
     await expect(size).toHaveValue("");
-    await size.selectOption("18");
+    await size.fill("18");
+    await size.press("Tab");
     await expect(a1.getByText("A", { exact: true })).toHaveCSS("font-size", "24px");
     await page.getByRole("button", { name: "Undo", exact: true }).click();
     await expect(size).toHaveValue("");
     await expect(a1.getByText("ش", { exact: true })).toHaveCSS("font-size", "32px");
     await page.getByRole("button", { name: "Redo", exact: true }).click();
-    await expect(size).toHaveValue("18");
+    await expect(size).toHaveValue("18 pt");
     await expect
       .poll(
         /** Reads the primary stored ODS after the shared autosave cadence. @returns Native saved heights. */ () =>
@@ -253,7 +254,7 @@ for (const width of [1280, 390])
     await page.reload();
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("button", { name: "Script sizes", exact: true }).click();
-    await expect(size).toHaveValue("18");
+    await expect(size).toHaveValue("18 pt");
     for (const text of ["A", "漢", "ش"])
       await expect(a1.getByText(text, { exact: true })).toHaveCSS("font-size", "24px");
     await page.screenshot({ path: test.info().outputPath(`font-script-reopened-${width}.png`) });

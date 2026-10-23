@@ -1,6 +1,6 @@
 /** @fileoverview Verifies native concrete Text Flow items on the mounted UI-to-shell path with original owners and Undo/Redo. */
 import { nativeRowFormatForTest } from "../../../test/table-row-test-helpers";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -57,7 +57,12 @@ function fixture(selected = false) {
     ),
     acceptance = vi.spyOn(tableShell, "ItemSetToTableParam");
   render(<WriterWorkbench isActive view={session.view} />);
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   return { doc, shell, table, rows, boxes, node, cursor, format, rowFormats, acceptance };
 }

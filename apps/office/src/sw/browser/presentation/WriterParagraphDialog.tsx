@@ -1,10 +1,7 @@
 /** @fileoverview Browser paragraph dialog driven by one Writer controller request. */
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
-import { MetricSpinBinding } from "../../../svtools/browser/control/metric-spin-binding";
-import {
-  getSystemDecimalSeparator,
-  getSystemDecimalSeparatorAlternate,
-} from "../../../unotools/source/misc/syslocale";
+import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-session";
+import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useState } from "react";
@@ -36,26 +33,10 @@ export function WriterParagraphDialog({
     /** Handles Writer formatting state.  @returns Callback result. */ () =>
       dialogRequest.request.initialValue,
   );
-  const [tabPosition, setTabPosition] = useState<number | undefined>();
-  const [tabReset, setTabReset] = useState(0);
-  const unitLabel =
-    unit === FieldUnit.INCH
-      ? "in"
-      : unit === FieldUnit.POINT
-        ? "pt"
-        : FieldUnit[unit].toLowerCase();
-  /** Formats the actual native tab list entry using its metric owner. @param points - Physical position. @returns Formatted position. */
-  function formatTab(points: number): string {
-    return new MetricSpinBinding({
-      value: Math.round(points * 20),
-      unit,
-      minimum: 0,
-      maximum: 32767,
-      decimal: getSystemDecimalSeparator(),
-      alternate: getSystemDecimalSeparatorAlternate(),
-    }).GetSnapshot().text;
-  }
-  const [selectedTab, setSelectedTab] = useState<number | undefined>();
+  const [tabs] = useState(
+    /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
+    () => new TabulatorDialogSession(dialogRequest.request.tabContext, unit),
+  );
   return (
     <div
       data-writer-modal="true"
@@ -72,7 +53,7 @@ export function WriterParagraphDialog({
         aria-label="Paragraph"
         aria-modal="true"
         data-writer-modal-panel="true"
-        className="w-full max-w-2xl bg-white"
+        className="w-full max-w-3xl bg-white"
         role="dialog"
       >
         <WriterDialogHeader
@@ -105,8 +86,10 @@ export function WriterParagraphDialog({
                     className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
                     key={id}
                     onClick={
-                      /** Handles Writer formatting state.  @returns Callback result. */ () =>
-                        setActiveTab(id)
+                      /** Handles Writer formatting state.  @returns Callback result. */ () => {
+                        if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+                        setActiveTab(id);
+                      }
                     }
                     role="tab"
                     type="button"
@@ -242,114 +225,7 @@ export function WriterParagraphDialog({
                   )}
                 </>
               ) : null}
-              {activeTab === "tabs" ? (
-                <>
-                  <label className="flex flex-col gap-1">
-                    {`Position (${unitLabel})`}
-                    <MetricSpinButton
-                      aria-label={`Position (${unitLabel})`}
-                      className="min-w-0 rounded border px-2 py-1"
-                      unit={unit}
-                      minimum={0}
-                      maximum={32767}
-                      value={tabPosition === undefined ? undefined : Math.round(tabPosition * 20)}
-                      resetKey={tabReset}
-                      onValueChange={
-                        /** Retains the controller's point contract. @param twips - Physical tab position. @returns Nothing. */
-                        (twips) => setTabPosition(twips / 20)
-                      }
-                    />
-                  </label>
-                  <select
-                    aria-label="Tab stops"
-                    className="sm:row-span-2 min-h-24 rounded border px-2"
-                    size={5}
-                    value={selectedTab ?? ""}
-                    onChange={
-                      /** Selects one tab marker for editing. @param event - Selection event. @returns Nothing. */ (
-                        event,
-                      ) => {
-                        const value = Number(event.target.value);
-                        setSelectedTab(value);
-                        setTabPosition(value);
-                        setTabReset(
-                          /** Applies a native tab-list selection assignment. @param version - Previous assignment. @returns New identity. */
-                          (version) => version + 1,
-                        );
-                      }
-                    }
-                  >
-                    {draft.tabStopsPt.map(
-                      /** Renders one tab position. @param position - Position in points. @returns Option. */ (
-                        position,
-                      ) => (
-                        <option key={position} value={position}>
-                          {formatTab(position)}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                  <div className="flex flex-wrap gap-2 sm:col-span-2">
-                    <button
-                      className="rounded border px-2 py-1"
-                      onClick={
-                        /** Adds a position to the current tab-stop list. @returns Nothing. */ () => {
-                          const position = tabPosition ?? 0;
-                          if (!Number.isFinite(position) || position <= 0 || position * 20 > 32767)
-                            return;
-                          setDraft({
-                            ...draft,
-                            tabStopsPt: [...new Set([...draft.tabStopsPt, position])].sort(
-                              /** Sorts tab positions. @param left - First position. @param right - Second position. @returns Ascending order. */
-                              (left, right) => left - right,
-                            ),
-                          });
-                          setSelectedTab(position);
-                        }
-                      }
-                      type="button"
-                    >
-                      New
-                    </button>
-                    <button
-                      className="rounded border px-2 py-1"
-                      onClick={
-                        /** Deletes the selected tab stop. @returns Nothing. */ () => {
-                          setDraft({
-                            ...draft,
-                            tabStopsPt: draft.tabStopsPt.filter(
-                              /** Excludes the selected tab. @param position - Candidate position. @returns Whether retained. */
-                              (position) => position !== selectedTab,
-                            ),
-                          });
-                          setSelectedTab(undefined);
-                          setTabPosition(undefined);
-                        }
-                      }
-                      type="button"
-                    >
-                      Delete
-                    </button>
-                    <button
-                      className="rounded border px-2 py-1"
-                      onClick={
-                        /** Deletes all tab stops. @returns Nothing. */ () => {
-                          setDraft({ ...draft, tabStopsPt: [] });
-                          setSelectedTab(undefined);
-                          setTabPosition(undefined);
-                        }
-                      }
-                      type="button"
-                    >
-                      Delete All
-                    </button>
-                  </div>
-                  <p className="sm:col-span-2 text-xs text-slate-600">
-                    Positions are measured from the left text margin. Drag markers on the ruler to
-                    adjust them.
-                  </p>
-                </>
-              ) : null}
+              {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               {activeTab === "flow" ? (
                 <>
                   <label className="flex flex-col gap-1">
@@ -534,7 +410,9 @@ export function WriterParagraphDialog({
             className="writer-dialog-primary"
             onClick={
               /** Handles Writer formatting state.  @returns Callback result. */ () => {
+                if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
                 onDialogSubmit(dialogRequest.id, {
+                  tabStopItems: tabs.output,
                   paragraphFormat: draft,
                   paintLineNumbers: showLineNumbersDraft,
                 });

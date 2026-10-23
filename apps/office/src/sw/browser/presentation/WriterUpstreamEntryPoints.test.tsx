@@ -82,10 +82,12 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
         { name: "Line Spacing" },
       ),
     );
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "Line spacing mode" }), {
+      target: { value: "4" },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Line spacing value" }), {
       target: { value: "175" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
     expect(
       (
         session.view
@@ -94,18 +96,19 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
           .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
       ).GetPropLineSpace(),
     ).toBe(175);
-    fireEvent.click(
-      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
-        "button",
-        { name: "Line Spacing" },
-      ),
-    );
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Line spacing value" }), {
       target: { value: "0" },
     });
-    expect(screen.getByRole("button", { name: "Apply" })).toBeDisabled();
+    expect(
+      (
+        session.view
+          .GetWrtShell()
+          .GetActiveParagraph()
+          .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
+      ).GetPropLineSpace(),
+    ).toBe(6);
     fireEvent.keyDown(document, { key: "Escape" });
-    expect(screen.queryByRole("button", { name: "Apply" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "Line Spacing" })).toBeNull();
     fireEvent.click(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
         "button",
@@ -113,7 +116,7 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
       ),
     );
     fireEvent.pointerDown(document.body);
-    expect(screen.queryByRole("button", { name: "Apply" })).toBeNull();
+    expect(screen.queryByRole("dialog", { name: "Line Spacing" })).toBeNull();
     rendered.unmount();
     session.Close();
   });

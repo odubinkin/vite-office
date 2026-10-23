@@ -24,7 +24,10 @@ for (const viewport of [1280, 390])
       name: "restore.odt",
     });
     await selectBrowserTableRow(page, "Restore", 1);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     const width = page.getByRole("spinbutton", { name: "Table width (cm)" });
     await width.fill("4");
     await page.getByRole("radio", { name: "Automatic", exact: true }).check();
@@ -80,7 +83,10 @@ for (const viewport of [1280, 390])
       const rendered = page.getByRole("table", { name: "Geometry" });
       await expect(rendered).toHaveCount(1);
       await selectBrowserTableRow(page, "Geometry", 1);
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await expect(page.getByRole("radio")).toHaveCount(6);
       await page.getByRole("radio", { name: label, exact: true }).check();
       const metric = page.getByRole("spinbutton", { name: "Table width (cm)" });

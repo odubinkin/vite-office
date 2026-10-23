@@ -40,7 +40,10 @@ for (const viewport of [1280, 390]) {
   }) => {
     await page.setViewportSize({ width: viewport, height: 900 });
     const rendered = await open(page);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Top padding (cm)", exact: true }).fill("1");
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
@@ -113,7 +116,10 @@ for (const viewport of [1280, 390]) {
         )
         .toBeCloseTo(2835 / 15, 0);
     }
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("8");
     await page.getByRole("button", { name: "Reset", exact: true }).click();
     await page.getByRole("button", { name: "Cancel", exact: true }).click();

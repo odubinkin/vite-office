@@ -1,13 +1,22 @@
 /** @fileoverview Verifies paragraph dimensional fields retain physical values across display units. */
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
+import { SwDoc } from "../../source/core/doc/doc";
+import { SfxItemSet } from "../../../svl/inc/itemset";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
+import { RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { WriterParagraphDialog } from "./WriterParagraphDialog";
 import { FieldUnit as F } from "../../../tools/inc/fldunit";
 import type { WriterParagraphDialogRequest } from "../../source/uibase/dialog/writer-dialog-controller";
 
+const tabContext = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 12000]]);
+const nativeTabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Left, RES_PARATR_TABSTOP);
+nativeTabs.Insert(new SvxTabStop(720, SvxTabAdjust.Left));
+tabContext.Put(nativeTabs);
 const request: WriterParagraphDialogRequest = {
   commandUrl: ".uno:ParagraphDialog",
   kind: "paragraph",
+  tabContext,
   paintLineNumbers: false,
   initialValue: {
     upperPt: 72,
@@ -43,24 +52,35 @@ it("edits inch,explicit suffix,and tab values through the unchanged physical par
   });
   fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
   expect(screen.getByRole("option", { name: "0.50″" })).toBeInTheDocument();
-  fireEvent.change(screen.getByRole("spinbutton", { name: "Position (in)" }), {
+  fireEvent.change(screen.getByRole("combobox", { name: "Position" }), {
     target: { value: "1 in" },
   });
   fireEvent.click(screen.getByRole("button", { name: "New" }));
   fireEvent.change(screen.getByRole("listbox", { name: "Tab stops" }), {
-    target: { value: "36" },
+    target: { value: "0" },
   });
-  expect(screen.getByRole("spinbutton", { name: "Position (in)" })).toHaveValue("0.50″");
+  expect(screen.getByRole("combobox", { name: "Position" })).toHaveValue("0.50″");
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(submit).toHaveBeenCalledWith(1, {
+    tabStopItems: expect.any(SfxItemSet),
     paintLineNumbers: false,
     paragraphFormat: {
       ...request.initialValue,
       upperPt: 12.25,
       lineValue: 360,
-      tabStopsPt: [36, 72],
+      tabStopsPt: [36],
     },
   });
+  const accepted = submit.mock.calls[0]?.[1].tabStopItems.Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+  expect(
+    Array.from(
+      { length: accepted.Count() },
+      /** Reads native tab position. @param _ - Unused slot. @param index - Native row. @returns Twips. */ (
+        _,
+        index,
+      ) => accepted.At(index).GetTabPos(),
+    ),
+  ).toEqual([0, 720, 1440]);
 });
 
 it("keeps proportional spacing as a percent when module units change", /** Checks numeric and dimensional boundaries separately. @returns Nothing. */ () => {
@@ -123,4 +143,24 @@ it("uses native default metric labels and routes character-unit vertical fields 
     expect(submit).not.toHaveBeenCalled();
     cleanup();
   }
+});
+
+it("exchanges the native tab page with the documented absent first-line scalar default", /** Optional legacy paragraph fields retain zero as their original fallback while tab data stays native. @returns Nothing. */ () => {
+  const submit = vi.fn();
+  const { firstLineIndentPt, ...initialValue } = request.initialValue;
+  void firstLineIndentPt;
+  render(
+    <WriterParagraphDialog
+      dialogRequest={{ id: 31, request: { ...request, initialValue } }}
+      fontSizePt={12}
+      unit={F.CM}
+      onDialogCancel={vi.fn()}
+      onDialogSubmit={submit}
+    />,
+  );
+  fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+  fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+  fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+  fireEvent.click(screen.getByRole("button", { name: "OK" }));
+  expect(submit.mock.calls[0]?.[1].tabStopItems).toBeInstanceOf(SfxItemSet);
 });

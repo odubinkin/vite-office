@@ -220,6 +220,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-root-owned-table.test.tsx",
           "marker": "actual visible and shadow Writer table paint borrow one root-owned hierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-text-print-bounds.test.ts",
+          "marker": "projects inclusive native print bounds with paragraph margins and first-line indentation"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-text-print-bounds.test.ts",
+          "marker": "retains native empty and negative rectangle-width scalar semantics"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+          "marker": "preserves tdf114287 exact print bounds across ODT export"
         }
       ],
       "upstream": [
@@ -374,6 +386,22 @@
         {
           "path": "sw/source/core/layout/paintfrm.cxx",
           "marker": ": mrTabFrame( rTabFrame )"
+        },
+        {
+          "path": "sw/inc/swrect.hxx",
+          "marker": "tools::Long Right() const"
+        },
+        {
+          "path": "sw/source/core/bastyp/swrect.cxx",
+          "marker": "void SwRect::dumpAsXmlAttributes"
+        },
+        {
+          "path": "sw/source/core/text/xmldump.cxx",
+          "marker": "getFramePrintArea().dumpAsXmlAttributes(writer)"
+        },
+        {
+          "path": "sw/qa/extras/odfexport/odfexport4.cxx",
+          "marker": "testTdf114287"
         }
       ]
     },
@@ -387,7 +415,8 @@
       "linkTextFrameFollows",
       "BindRootFormat",
       "SetCursorTextFrames",
-      "IsCursorTextGeometryCurrent"
+      "IsCursorTextGeometryCurrent",
+      "projectSwTextPrintBounds"
     ],
     "omittedResponsibilities": [
       "Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."
@@ -418,7 +447,10 @@
       "Task202610111845-4QRYA0 switches SwCursor LeftRightMargin/IsAtLeftRightMargin frame selection to original SwContentNode.getLayoutFrame(layout,point), preserving native root/client order and original follow position/affinity. Actual already formatted native clients admit movement without UI cursor publication; a different measured-registry client no longer selects the movement frame. Native IsAt compares original MapModelToViewPos values for its temporary PaM and current point. Existing source freshness at the browser-device root remains explicitly temporary admission only, rejecting a stale existing lease or a foreign document without selecting any frame and without requiring publication. Full native view-position Calc/formatter invalidation, bidi/save-state/selection-overlap/nontext/merged/general UI behavior remain unported or unverified; this bounded original-client integration does not certify them. Fresh actual native and mounted React query/edit/history cases plus relevant Chromium paths supply evidence. All old acceptance bytes, canonical history/status/default/classification/responsibility prefixes and registered recovery/open/save/settings deviations retained; no whole-module or goal parity promotion.",
       "Without a cursor publication, an existing formatted snapshot must also retain its actual document-model revision; a literal red regression proved stale original paragraph caches otherwise admit margin movement before device reformatting. The temporary admission reads the existing snapshot/revision, introduces no duplicated text state and is superseded by the current formatted snapshot or fresh measured lease. Native Calc remains unported, so this rejection is a declared browser-device safeguard rather than source-native formatter certification.",
       "Task202610140430-6KP5DV restores represented native sibling constructor contracts. SwTabFrame(table,sibling), SwRowFrame(line,sibling) and SwCellFrame(box,sibling) forward actual native root through SwLayoutFrame; table supplies itself to rows and row to cells. Browser device mouseGeometry is an explicit field assignment outside construction; no union/third argument/factory/adapter/state manager. Existing pagination borrows its original sibling and actual mouse allocation borrows the current Writer shell layout. Native linked owners/lifetimes/format notifications remain. Protected IO/recovery/Space and historical fields/classifications/defaults/statuses remain. Temporary render/pagination frames and full persistent page/master/follow/paint/hit graph remain unverified and unresolved.",
-      "Task202610140458-3F7TV1 makes the original SwRootFrame snapshot own one represented native master per model table. Existing actual lower hierarchy is reused across reflow and original model attribute changes, replaced on structural/document change, and released by root lifetime; new frame cleanup is guarded on formatting failure. Actual row measurement, pagination and both visible/shadow browser paint borrow that same original master. Detached standalone rendering/pagination retain their own bounded fallback lifetimes. Existing mouse freshness scan is shared once as explicit temporary browser-device model admission, not an upstream operation or extra registry/manager/map. No new runtime module/controller. Physical page/body/follow/paint/hit graph and independent mouse frame ownership remain unresolved; no whole parity/status/default/classification promotion, protected IO/recovery/Space unchanged."
+      "Task202610140458-3F7TV1 makes the original SwRootFrame snapshot own one represented native master per model table. Existing actual lower hierarchy is reused across reflow and original model attribute changes, replaced on structural/document change, and released by root lifetime; new frame cleanup is guarded on formatting failure. Actual row measurement, pagination and both visible/shadow browser paint borrow that same original master. Detached standalone rendering/pagination retain their own bounded fallback lifetimes. Existing mouse freshness scan is shared once as explicit temporary browser-device model admission, not an upstream operation or extra registry/manager/map. No new runtime module/controller. Physical page/body/follow/paint/hit graph and independent mouse frame ownership remain unresolved; no whole parity/status/default/classification promotion, protected IO/recovery/Space unchanged.",
+      "Task TV1H69 completes represented root layout at Calc from its existing device input tuple, invalidating the root to honor direct native format changes without model revision. Original frame identity, document ownership and destruction remain authoritative. This adapts native action completion to the existing portable formatter; complete PrepareMake/layout action scheduling remains unverified.",
+      "TaskPQAY2F replaces the synthetic two-name Writer paper field/table with native physical dimensions and independent orientation. Actual PaperInfo and new SvxPaperInfo supply source integer physical conversion, nonrotating first-match sloppy fit and original dimension snapping. Source Std37/Draw35 paper IDs/order/labels and native USER fallback drive the original list owner. The consumed borderless CUI Page handlers retain automatic versus manual landscape recognition, original1mm body/larger-side margin arithmetic and configured physical bounds, plus one-shot FillItemSet acceptance checks independently from preview and original changed-margin uint16 narrowing; browser static default limits read the actual Common.xcs resource, not a fabricated Components/printer service. Page defaults independently query original country paper and locale measurement fields through existing host preparation. ODT/graph retain physical values without an extra paper identity, and body print width uses the stored integer width, removing the A4-only floor. Current44 related files/494 cases and final6 files/133 cases pass;9 Chromium scenarios include actual UI/history/ODT and DOM-free Worker geometry. The10 executable-owner exact unchanged-span audit is S891/B729/F184/L814 all100 with zero missing; raw partial profiles retain their unchanged100 thresholds. Final local gates are recorded in task evidence; no full-module/native-service certification. Full header/footer/border/printer/config overrides/LanguageTag/page-layout services and extreme invalid native control states remain unverified. No existing classification/status/default or deliberate I/O/recovery policy is promoted.",
+      "Checkpoint YQHS8E corrects the existing first-line print-bounds diagnostic projection to native SwRect::Right inclusive arithmetic: nonzero width returns Left+Width-1, zero width returns Left. Real paragraph items and tdf114287 ODT import/export/browser-codec round trips cover represented coordinates; scalar inverted-width tests do not claim ordinary UI layout reachability. This is bounded diagnostic projection evidence, not a complete native SwRect or text-frame formatter implementation. Existing semantic states, defaults, classifications and browser IO deviations are unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/layout/newfrm.cxx",

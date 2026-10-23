@@ -1,6 +1,6 @@
 /** @fileoverview Verifies mounted original direct/inherited LR margins, native dialog history and real signed ODT cycles. */
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -74,7 +74,11 @@ it.each([false, true])(
           marginLeft: "-8px",
           marginRight: "16px",
         });
-        fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+        fireEvent.click(
+          within(
+            screen.getByRole("complementary", { name: "Writer properties sidebar" }),
+          ).getByRole("button", { name: "Table Properties" }),
+        );
         expect(screen.getByRole("spinbutton", { name: "Left (cm)" })).toHaveAttribute(
           "aria-valuenow",
           "-0.21",
@@ -84,7 +88,12 @@ it.each([false, true])(
         spy.mockRestore();
       }
       const saved = source.GetLRSpace().Clone();
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.change(screen.getByRole("spinbutton", { name: "Left (cm)" }), {
         target: { value: "0.35" },
       });

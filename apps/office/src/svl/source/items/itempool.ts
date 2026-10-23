@@ -183,6 +183,12 @@ export class SfxItemPool {
   /** Original chain-aware Which-to-slot conversion and identity fallback. @param which - Native identity. @returns Registered nonzero slot or unchanged identity. */
   public GetSlotId(which: number): number {
     if (!SfxItemPool.IsWhich(which)) return which;
+    if (this.maItemInfos.length === 0 && this.defaults.has(which)) {
+      for (const [slot, mapped] of this.mpSlotIDToWhichIDMap ?? [])
+        if (mapped === which) return slot;
+      return which;
+    }
+    if (this.maItemInfos.length === 0 && this.mpSecondary) return this.mpSecondary.GetSlotId(which);
     const target = this.getTargetPool(which);
     const info = target?.maItemInfos[which - target.mnStart];
     if (info === undefined) throw new Error("Unknown WhichId for slot lookup.");
@@ -190,11 +196,18 @@ export class SfxItemPool {
     return slot !== 0 ? slot : which;
   }
 
-  /** Registers a pool default independently of optional browser snapshot restoration. @param item - Default item. @param factory - Optional concrete restore function. @returns Nothing. */
-  public RegisterDefaultItem(item: SfxPoolItem, factory?: SfxPoolItemFactory): void {
+  /** Registers a consumed native default and its original ItemInfo slot field independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Default item. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @returns Nothing. */
+  public RegisterDefaultItem(item: SfxPoolItem, factory?: SfxPoolItemFactory, slot = 0): void {
     if (this.defaults.has(item.Which())) throw new Error(`Duplicate pool default: ${item.Which()}`);
+    if (slot !== 0 && this.mpSlotIDToWhichIDMap?.has(slot))
+      throw new Error(`Duplicate pool slot: ${slot}`);
     this.defaults.set(item.Which(), item.Clone() as SfxPoolItem);
     if (factory !== undefined) this.factories.set(item.Which(), factory);
+    if (slot !== 0) {
+      const mapping = new Map(this.mpSlotIDToWhichIDMap);
+      mapping.set(slot, item.Which());
+      this.mpSlotIDToWhichIDMap = mapping;
+    }
   }
 
   /** Original pool default ignores any current user override and returns the saved static/dynamic metadata value. @param which - Known identity. @returns Original pool item. */
@@ -240,6 +253,10 @@ export class SfxItemPool {
   }
   /** Original optional current override lookup, independent of the saved original pool item. @param which - Known native identity. @returns Override or null. */
   public GetUserDefaultItem(which: number): SfxPoolItem | null {
+    // The bounded standalone registration owns a known original default, with no native user override installed.
+    if (this.maItemInfos.length === 0 && this.defaults.has(which)) return null;
+    if (this.maItemInfos.length === 0 && this.mpSecondary)
+      return this.mpSecondary.GetUserDefaultItem(which);
     const target = this.getTargetPool(which);
     if (target === null) throw new Error("Unknown WhichId for user default");
     if (!target.maUserItemInfos.has(which)) return null;

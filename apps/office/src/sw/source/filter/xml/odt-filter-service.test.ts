@@ -139,7 +139,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
     expect(
       restoreOdtWriterTransfer(createOdtWriterTransfer(restored), device).GetDefaultFontDevice(),
     ).toBe(device);
-    expect(restored.GetPageDesc().GetValue().paperFormat).toBe("A4");
+    expect(restored.GetPageDesc().GetValue()).toMatchObject({ width: 11906, height: 16838 });
     service.Close();
   });
 

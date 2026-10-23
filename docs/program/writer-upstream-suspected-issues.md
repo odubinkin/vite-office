@@ -839,3 +839,118 @@ implementation change.
 - Source: pinned `sw/source/uibase/shells/textsh1.cxx`, `SwTextShell::Execute`, `SID_ATTR_PARA_LRSPACE` direct-item branch; `sw/source/uibase/shells/txtattr.cxx`, `SwTextShell::GetAttrState`, combined indent state; `editeng/source/items/frmitems.cxx`, `SetTextLeft`, `SetRight`, `SetTextFirstLineOffset` for combined and split items.
 - Observation: Execute copies each already-scaled measure from the combined item into a split Writer attribute using the original percentage again. GetAttrState copies the split measure back into a combined item with that percentage yet again. For a combined item initialized from1200 twips at75 percent, the item contains900;Execute stores675 in the text-left attribute;state reconstruction stores506.25,which resolves to506 twips. Corresponding900-at125 right spacing goes1125 →1406.25 →1757.8125,while-400-at50 first-line offset goes-200 →-100 →-50. The automatic-first flag is copied independently.
 - Preservation: retain the literal source setter/getter sequence and percentages,without inverse scaling or replacement setters. Independent frame/slot tests assert the literal attribute and state values,including Undo/Redo and independent returned items. Normal sidebar edits create fresh items with100-percent defaults,as in ModifyIndentHdl_Impl. This finding is based on source inspection and the portable implementation;native application reproduction and intent remain unverified.
+
+### WRITER048 — table sidebar From left resets the frame width
+
+- Source: pinned `sw/source/uibase/shells/tabsh.cxx`, `SwTableShell::Execute`, `SID_ATTR_TABLE_ALIGNMENT`; `sw/sdi/swriter.sdi`, `TableAlignment`; `sw/source/uibase/sidebar/TableEditPanel.cxx`, `AlignmentModify`.
+- Observation: the LEFT_AND_WIDTH branch says “width doesn't change” but retains `nWidth = nSpace` initialized before the switch and publishes that width. The old frame width is never read. The SDI declares SfxUInt32Item for this slot, while Execute and the sidebar explicitly exchange SfxUInt16Item. These may be intentional internal conventions; native UI reproduction and intent remain unverified.
+- Preservation: retain the full available width in LEFT_AND_WIDTH and the actual UInt16 handler/sidebar transport. Do not infer the existing frame width or change the typed request to UInt32. Portable slot/history/ODT regressions assert the literal behavior.
+
+### WRITER049 — single-column width uses the right coordinate
+
+- Source: pinned `sw/source/uibase/table/tablemgr.cxx`, `SwTableFUNC::GetColWidth`, zero-separator branch.
+- Observation: multi-column widths subtract the left edge, while the single-column case returns `m_aCols.GetRight()` directly. A table with left=100 and right=6100 therefore reports6100 rather than6000. Native callers or geometry conventions may constrain this asymmetry; native UI reproduction and intent remain unverified.
+- Preservation: retain GetRight without subtracting GetLeft. The consumed native manager regression uses nonzero-left geometry and checks the literal6100 result, plus the native SetColWidth right-maximum cap.
+
+### WRITER050 — row-height average accumulates into a signed 32-bit total
+
+- Source: pinned `sw/source/core/docnode/ndtbl1.cxx`, `SwDoc::BalanceRowHeight`; `include/tools/long.hxx`.
+- Observation: each frame height uses `tools::Long`, but `nTotalHeight` is `sal_Int32`. In optimize mode the total is divided by `aRowArr.size()`. On the 64-bit reference profile a wrapped negative total is promoted to unsigned `size_t` for that division, producing a very large positive minimum height. Two literal heights of1073741824 yield a total of-2147483648 and an unsigned quotient of9223372035781033984. Physical layout limits may keep ordinary documents away from this boundary; native UI reproduction and intent remain unverified.
+- Preservation: retain signed32 accumulation and unsigned64 division in the portable core. Independent actual-frame/document tests check the boundary before applying the original row-size item. Do not silently widen the accumulator or replace the source average with a safer arithmetic mean.
+
+### WRITER051 — optimal row height appends history in both passes
+
+- Source: pinned `sw/source/uibase/shells/tabsh.cxx`, `FN_TABLE_OPTIMAL_HEIGHT`; `sw/source/core/frmedt/fetab.cxx`, `SwFEShell::BalanceRowHeight`; `sw/source/core/docnode/ndtbl1.cxx`, `SwDoc::BalanceRowHeight`.
+- Observation: the slot invokes optimize mode and then normal mode. Each document invocation appends `SwUndoAttrTable`, including an unchanged second-pass item, and the inspected slot/shell path contains no enclosing undo group. This can leave a first Undo with no visible height change when both passes choose the same item. Additional native dispatch context could affect the user-facing history; native application reproduction remains unverified.
+- Preservation: keep both source document actions and the intervening layout completion. Tests assert their actual item states and original cursor/row owners across both Undo and Redo steps; do not merge or suppress the second action merely because its numeric height is unchanged.
+
+
+### WRITER052 — only-text attribute queries distinguish a full default hint from adjacent default hints
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `sw/source/core/txtnode/thints.cxx`, `SwTextNode::GetParaAttr`, `bOnlyTextAttr` partial-hint accumulation and final `aFormatSet.Get(nWh)` comparison.
+- Observation: a single full-cover explicit `STRIKEOUT_NONE` hint is merged into the format set and returned as SET. With two contiguous equal NONE hints covering the same query, `bOnlyTextAttr=true` records the partial candidates, but the final candidate equals the empty format set's pool default and is suppressed; the result remains DEFAULT. Therefore equivalent effective values can expose different explicitness depending on stored hint boundaries. Whether a native producer retains this exact adjacent-hint shape, and whether this difference is intended by callers, remain unverified.
+- Preservation: keep both the `bOnlyTextAttr` admission and final default comparison. Actual native-owner portable tests assert both outcomes without normalizing the hint maps or changing the query algorithm. This is source/portable state evidence, not compiled native application reproduction or a confirmed product defect.
+
+### WRITER053 — text-position empty tokens are converted rather than rejected
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `xmloff/source/core/xmluconv.cxx`, `SvXMLTokenEnumerator::getNextToken`; `sax/source/tools/converter.cxx`, `lcl_parseMeasure`, `lcl_convertMeasure`, `Converter::convertPercent`; `xmloff/source/style/escphdl.cxx`, both escapement handlers.
+- Observation: original ASCII-space token enumeration preserves empty tokens, and percent parsing permits an empty numeric part. Consequently an empty position becomes signed16 zero, while `super ` or `super  75%` gives signed8 height zero instead of the one-token default58; later tokens are ignored. The later native `SvxEscapementItem::PutValue(MID_ESC_HEIGHT)` rejects zero, so the XML handler result and the accepted item state are distinct. This is surprising lexical behavior, not a confirmed native application defect; native file-producer reachability and caller intent remain unverified.
+- Preservation: retain exact empty tokens, decimal rounding, signed narrowing and independent original item validation. Portable tests use the actual shared Any, converter, handlers, SAX attributes and Writer items; no whitespace normalization or stricter XML grammar is substituted.
+
+### WRITER054 — manual page-size recognition does not normalize landscape dimensions
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `cui/source/tabpages/page.cxx`, `SvxPageDescPage::Reset` and `PaperSizeModify_Impl`; `editeng/source/items/paperinf.cxx`, `SvxPaperInfo::GetSvxPaper`; `svx/source/dialog/papersizelistbox.cxx`, `set_active_id`.
+- Observation: Reset swaps an oriented page size back before matching its paper identity. The manual-size handler instead derives the landscape radio state from width greater than height and sends the unswapped physical size to the nonrotating `GetSvxPaper`. An unchanged landscape A4 size can therefore select USER after a manual metric event while Reset recognizes A4. If a rotated size matches another original paper, that identity is used before list fallback (for example Tabloid versus Ledger). Native producer/widget event reachability and whether this is intentional remain unverified; this is source and portable-owner evidence, not a native application reproduction.
+- Preservation: keep orientation-sensitive matching and the actual list USER fallback. Tests distinguish Reset, manual modification, explicit known-paper selection and USER-preserving orientation changes; no automatic portrait normalization is inserted in the manual branch.
+
+### WRITER055 — manual dimensions can be ignored when the known paper identity stays unchanged
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `cui/source/tabpages/page.cxx`, `PaperSizeModify_Impl` and the known-paper branch of `FillItemSet`.
+- Observation: manual dimensions are recognized through sloppy fitting. If the resulting known paper ID and orientation equal their saved values, the known-paper export branch does not inspect changed width/height controls. A near-A4 manual width can remain visible in the preview while no page-size item is emitted. Reset also snaps known sizes in the controls without necessarily writing them back on an unchanged acceptance. Native widget precision/event reachability and intended editing semantics remain unverified; portable integer-twip tests are not a compiled native reproduction.
+- Preservation: distinguish preview geometry from accepted item values. USER checks paper, both dimensions and orientation; known formats check paper/orientation and emit the canonical paper size. Keep the original physical item when no eligible change exists.
+
+### WRITER056 — changed page margins narrow to uint16 despite large configured paper limits
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `cui/source/tabpages/page.cxx`, `FillItemSet` left/right/top/bottom assignments; `officecfg/registry/schema/org/openoffice/Office/Common.xcs`, Drawinglayer maximum-paper defaults.
+- Observation: the page dialog supports large physical dimensions, but changed margin values pass through `static_cast<sal_uInt16>(GetCoreValue(...))` before entering LR/UL items. In Writer's twip profile, an accepted changed margin100000 becomes34464. Unchanged old items bypass this cast and retain their previous value. Whether this narrowing is intentional and whether a particular native metric-widget/configuration combination reaches it remain unverified; no compiled native UI defect is claimed.
+- Preservation: apply the source uint16 narrowing only to margins changed from the saved control values, retain untouched original fields, and test both paths with actual original geometry and source handler owners.
+
+### WRITER057 — activating an empty font-size entry can dispatch zero despite the regular 2pt minimum
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `svtools/source/control/ctrlbox.cxx`, `FontSizeBox::get_value`; `svx/source/tbxctrls/tbunocontroller.cxx`, `SvxFontSizeBox_Base::Select` and `ActivateHdl`; `editeng/source/items/textitem.cxx`, `SvxFontHeightItem::PutValue`, `MID_FONTHEIGHT`.
+- Observation: the absolute font-size getter initializes its result to zero and clamps to20..9999 tenths of a point only for nonempty entry text. Entry activation dispatches the result divided by10 as a float. An empty entry therefore dispatches0pt, which the font-height item accepts because its lower-bound check rejects negative values rather than zero. Invalid nonempty text instead becomes the regular2pt minimum. Native combo event order and application-level reachability remain unverified; source, portable owner and React event evidence do not constitute a compiled native UI reproduction.
+- Preservation: retain the empty/nonempty distinction, original float dispatch and independent native item admission. Test actual numeric/controller owners, editable browser activation and native Writer all-script item state without substituting a preset or introducing a positive-only kernel guard.
+
+### WRITER058 — Writer font shrinking can wrap below the regular minimum
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `sw/source/uibase/shells/txtattr.cxx`, Grow/Shrink branches of `ExecCharAttr` and `GetAttrState`.
+- Observation: the enabled state disables Shrink only at exactly40twips. Execution subtracts40 from an unsigned32 height before comparing the result with40. A height below40 therefore wraps; zero becomes4294967256. Grow likewise performs unsigned addition before its upper-limit comparison. Native dialog/event/item producer reachability and intended behavior remain unverified; this is initialized source arithmetic and portable original-owner evidence rather than a compiled native application defect.
+- Preservation: retain original unsigned32 arithmetic and equality-based disabled states. Do not replace subtraction with pre-clamping or saturating arithmetic. Tests distinguish regular limits, zero-height admission and the wrapped native item result.
+
+### WRITER059 — mixed font contributions do not automatically include uncovered defaults
+
+- Source: pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, `sw/source/core/edit/edattr.cxx`, `SwEditShell::GetItemWithPaM`; `sw/source/uibase/shells/txtattr.cxx`, mixed/table Grow/Shrink branch.
+- Observation: the traversal emits a whole-node contribution only when the node has a direct attribute set, followed by matching automatic/style-hint contributions. Its default branch tests the last visited item pointer: a nonempty set without the requested Which leaves that pointer non-null and emits no default. An empty set can instead emit a null user-default contribution. Thus uncovered inherited/default text is not unconditionally represented, and contributions can overlap rather than form a disjoint partition. Native producer allocation/style/layout conditions and intended editing semantics remain unverified; this is source and initialized portable-state evidence, not a compiled native UI defect.
+- Preservation: keep source contribution order, overlap, clipping, null admission and nonmatching-item suppression. Do not fill missing runs, synthesize pool defaults or normalize the contribution vector into effective font runs. Tests inspect actual original item/range owners and grouped edits.
+
+### WRITER060 — line-spacing popup dimensional values narrow before item assignment
+
+- Source: pinned `svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx`, `ExecuteLineSpace` and `SetLineSpace`; `paralinespacingcontrol.ui` metric range; `include/editeng/lspcitem.hxx` signed additive spacing.
+- Observation: the popup reads dimensional values in the module core unit and casts them to `sal_uInt16` before assigning minimum, fixed or leading spacing. The leading item then stores signed16. In Writer's twip profile, an admitted100cm becomes56693twips, which leading stores as-8843. Larger minimum/fixed values also wrap modulo65536. The resource's large upper bound does not itself constrain the dimensional value to the item domain. Native platform-widget reachability and the intended application behavior remain unverified; this is source/portable evidence, not a compiled native application defect claim.
+- Preservation: keep the original uint16 narrowing and signed leading setter, together with source numeric ranges and unit conversion. Do not silently cap physical values or widen the item. Portable popup/item tests assert the exact behavior.
+
+### WRITER061 — a partial tab-page disable mask disables its entire group
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `SvxTabulatorTabPage::DisableControls`; `include/svx/flagsdef.hxx` masks.
+- Observation: after disabling individual controls, the page disables the entire Type or Fill frame whenever any bit of the corresponding mask is present. A TypeLeft flag therefore also disables interaction with the other type radios through their parent frame. Whether this is the intended caller convention is unverified; no compiled GUI defect is claimed.
+- Preservation: retain any-bit mask tests and both individual and parent sensitivity. Do not replace them with an all-bits equality check.
+
+### WRITER062 — Delete All can retain hidden current-tab fields after resetting radios
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `DelAllHdl_Impl`, empty `InitTabPos_Impl` branch, `NewHdl_Impl`; `include/vcl/weld/Toggleable.hxx` notification suppression.
+- Observation: Delete All constructs default stops and strips them from the list. The empty path sets Left/No Fill radios but retains `aCurrentTab`, decimal/fill text and entry sensitivity. Programmatic radio assignments suppress user handlers. A later new Left tab can retain the prior custom filler despite No Fill being selected. Native GUI event reachability and intended behavior remain unverified.
+- Preservation: keep the source current-tab retention, radio assignment and handler ordering; portable controller tests assert the literal result.
+
+### WRITER063 — matching a displayed tab position can store its offset as a real position
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `InitTabPos_Impl`, `ModifyHdl_Impl`, `NewHdl_Impl` and type/fill replacement handlers.
+- Observation: list rows include the input left-border offset. New subtracts that offset, but Modify assigns the displayed `GetCurrentValue()` directly to `aCurrentTab.GetTabPos()`. A subsequent type/fill replacement can therefore store the offset-inclusive value. A720twip tab with360twip offset displays1.91cm after field rounding and this handler sequence stores1083twips. Exact native platform signal routing remains unverified; this is source/portable handler evidence.
+- Preservation: retain the distinct New and Modify assignments and original field rounding; do not apply an inferred inverse offset in Modify.
+
+- Additional portable consequence: with original Writer1440twip indent offset and explicit tabs1440/2880twips, selecting the first displayed5.08cm value through Modify and changing its type moves it to the second tab's internal position. `SvxTabStopItem::Insert` replaces that equal position, so two visible rows can correspond to one actual item. Deleting the first row then leaves one visible row and no actual tab. This initialized source sequence is tested without mutating a widget/provider facade; native GUI reachability remains unverified.
+
+### WRITER064 — non-mm100 tab-page Reset does not copy independent default-distance metadata
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, constructor, `Reset` and `FillItemSet`; `editeng/source/items/paraitem.cxx`, `SvxTabStopItem` constructors/equality.
+- Observation: the non-mm100 Reset branch clones input only into a temporary, clears the page-owned item and copies individual converted stops. Its independent default-distance field remains the page constructor's zero. An input item with a nonzero default-distance field can consequently compare different on acceptance even when visible positions stay unchanged. Native caller intent and GUI impact are unverified.
+- Preservation: keep metadata zero in this branch and the original full-item comparison. Do not copy the field merely to make unchanged acceptance appear cleaner.
+
+### WRITER065 — Tab-page exchange inserts an internal default zero without rebuilding visible row indices
+
+Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at zero into `aNewTabs` for a negative first-line indent in a non-mm100 pool. The displayed list is not rebuilt. A later `SelectHdl_Impl` still indexes `aNewTabs` using the displayed row index. With a single Decimal stop, exchange followed by activation of its still-visible row loads the internal Default-zero stop; `SetFillAndTabType_Impl` leaves the previous type radio but disables the decimal field. The portable source test reproduces this actual item/lifecycle sequence. Preserve it; this is a suspected contract issue, not a compiled native GUI confirmation.
+
+### WRITER066 — tab deletion retains a trailing empty-list branch dominated by an earlier return
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `SvxTabulatorTabPage::DelHdl_Impl`.
+- Observation: a missing row returns immediately; a list of exactly one row delegates to Delete All and returns. The remaining branch therefore begins with at least two rows. It removes one displayed row; subsequent native item removal and current-row assignment do not remove another displayed row. Consequently its trailing `get_count() == 0` block cannot execute under the original non-reentrant page handler contract. The browser's focus-without-select projection is only called by that block. This is a source control-flow proof; compiled/native reentrancy or corrupt-widget behavior is not claimed.
+- Preservation: retain the original empty-list block, flags and focus operation. Do not delete it or infer normal UI reachability from coverage. Explicitly named synthetic-only tests, requested by the user, deliberately violate the displayed-list removal invariant and separately invoke the actual browser callback with false to pin the preserved branch bodies. These executions cover the isolated contracts and do not invalidate the source control-flow proof. The actual offset-collision state from WRITER063 is separately tested and still leaves a displayed row after deletion.

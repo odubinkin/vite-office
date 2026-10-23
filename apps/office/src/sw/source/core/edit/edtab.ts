@@ -1,5 +1,5 @@
 /** @fileoverview Owns represented body table insertion from native edtab.cxx. */
-import { SwEditShell as SwNumberingEditShell } from "./ednumber";
+import { SwEditShell as SwNumberingEditShell } from "./edatmisc";
 import { SwUndoInsTable } from "../undo/untbl";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable, SwTableBoxFormat } from "../table/swtable";

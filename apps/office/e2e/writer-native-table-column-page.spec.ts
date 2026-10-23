@@ -36,7 +36,10 @@ async function open(page: Page, count = 3) {
 }
 /** Opens the actual source-owned Columns page. @param page - Actual browser. @returns Completion. */
 async function columns(page: Page) {
-  await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+  await page
+    .getByRole("complementary", { name: "Writer properties sidebar" })
+    .getByRole("button", { name: "Table Properties", exact: true })
+    .click();
   await page.getByRole("tab", { name: "Columns", exact: true }).click();
 }
 for (const viewport of [1280, 390]) {

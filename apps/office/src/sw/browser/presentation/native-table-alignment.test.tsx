@@ -1,7 +1,7 @@
 /** @fileoverview Mounted native alignment, geometry and history acceptance without upstream invocation. */
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
 import { it, expect, afterEach } from "vitest";
-import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, act, within } from "@testing-library/react";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
 import { SwTabFrame } from "../../source/core/layout/tabfrm";
@@ -40,7 +40,12 @@ for (const [label, orient, width, left, right] of [
     const original = table.GetFormat();
     render(<WriterWorkbench isActive view={session.view} />);
     selectMountedTableRow("Geometry", 1);
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Table Properties" },
+      ),
+    );
     fireEvent.click(screen.getByRole("radio", { name: new RegExp(`^${label}$`) }));
     if (label === "From left" || label === "Manual")
       fireEvent.change(screen.getByRole("spinbutton", { name: "Left (cm)" }), {

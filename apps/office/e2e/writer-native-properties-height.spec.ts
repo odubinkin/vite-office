@@ -40,7 +40,10 @@ for (const width of [1280, 390])
         original = "Original native paragraph. ".repeat(12).trim();
       await expect(editor).toHaveText(original);
       await editor.click({ position: { x: 8, y: 8 } });
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await page
         .getByRole("checkbox", { name: "Merge adjacent line styles", exact: true })

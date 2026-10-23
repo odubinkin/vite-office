@@ -10,12 +10,15 @@ import { SwInsertTableFlags } from "../../inc/itabenum";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
+import { WriterTableObjectBar } from "./WriterTableObjectBar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
 import { WriterDialogPresenter } from "./WriterDialogPresenter";
 import { WriterOptionsDialog } from "./WriterOptionsDialog";
 import { ApplyWriterMetricItemSet } from "../../source/uibase/app/appopt";
 import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
+import { WriterColumnWidthDialog } from "./WriterColumnWidthDialog";
+import { SwTableWidthDlg } from "../../source/ui/table/colwd";
 import { WriterRowHeightDialog } from "./WriterRowHeightDialog";
 import { SwTableHeightDlg } from "../../source/ui/table/rowht";
 import { WriterLineNumberingDialog } from "./WriterLineNumberingDialog";
@@ -134,7 +137,14 @@ export function WriterWorkbench({
     useState<ReturnType<typeof TableParamToItemSet>>();
   const [tableColumns, setTableColumns] = useState<SwTabCols>();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
-  const [rowHeightDialog, setRowHeightDialog] = useState<SwTableHeightDlg>();
+  const [tableSizeRequest, setTableSizeRequest] = useState<
+    Readonly<{
+      document: SwDoc;
+      draft: SwTableHeightDlg | SwTableWidthDlg;
+    }>
+  >();
+  const tableSizeDialog =
+    tableSizeRequest?.document === activeDocument ? tableSizeRequest.draft : undefined;
   const [renameCollision, setRenameCollision] = useState<WriterRenameCollision>();
   const [renameTitle, setRenameTitle] = useState("");
   const [renameBusy, setRenameBusy] = useState(false);
@@ -177,15 +187,26 @@ export function WriterWorkbench({
             isEnabled: /** Checks table selection. @returns Availability. */ () =>
               currentTable !== undefined,
           },
-          {
-            id: WRITER_COMMAND_IDS.setRowHeight,
-            capabilityId: "CAP-0137",
-            execute: /** Captures the native row-height draft. @returns Nothing. */ () =>
-              setRowHeightDialog(new SwTableHeightDlg(view.GetWrtShell())),
-            isEnabled:
-              /** Restricts height editing to native table context. @returns Availability. */ () =>
-                currentTable !== undefined,
-          },
+          ...(
+            [
+              [WRITER_COMMAND_IDS.setRowHeight, SwTableHeightDlg],
+              [WRITER_COMMAND_IDS.setColumnWidth, SwTableWidthDlg],
+            ] as const
+          ).map(
+            /** Binds source sizing dialogs to the actual document owner. @param entry - Slot and native draft type. @returns Handler. */
+            ([id, Draft]) => ({
+              id,
+              capabilityId: "CAP-0137" as const,
+              /** Captures native draft and document identity without model mutation. @returns Nothing. */
+              execute: () =>
+                setTableSizeRequest({
+                  document: view.GetDocShell().GetDoc(),
+                  draft: new Draft(view.GetWrtShell()),
+                }),
+              /** Admits sizing only in the current table. @returns Whether available. */
+              isEnabled: () => currentTable !== undefined,
+            }),
+          ),
           {
             id: WRITER_COMMAND_IDS.lineNumberingDialog,
             capabilityId: "CAP-0125",
@@ -422,7 +443,7 @@ export function WriterWorkbench({
     dialogRequest === undefined &&
     fileDialogKind === undefined &&
     tableDialog === undefined &&
-    rowHeightDialog === undefined &&
+    tableSizeDialog === undefined &&
     !lineNumberingDialog;
   const [onContextPopup, contextMenu] = useWriterContextMenu(
     isInputEnabled,
@@ -468,12 +489,32 @@ export function WriterWorkbench({
       },
   });
 
+  const sizingDialogProps = {
+    unit: snapshot.metricUnit,
+    /** Discards either unaccepted native size draft. @returns Nothing. */
+    onCancel: () => setTableSizeRequest(undefined),
+    /** Applies only to the document that owns the captured draft. @returns Nothing. */
+    onSubmit: () => {
+      if (tableSizeRequest?.document === view.GetDocShell().GetDoc())
+        tableSizeRequest.draft.Apply();
+      setTableSizeRequest(undefined);
+    },
+  };
   return (
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
+        tableToolbar={
+          currentTable === undefined ? undefined : (
+            <WriterTableObjectBar
+              commandSource={commandSource}
+              resolveArguments={resolveCommandArguments}
+            />
+          )
+        }
         formattingToolbar={
           <WriterFormattingToolbar
+            unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
             focusDocument={
               /** Releases accepted style-box focus to this mounted Writer frame. @returns Nothing. */ () =>
@@ -728,22 +769,11 @@ export function WriterWorkbench({
           onSubmit={submitTable}
         />
       )}
-      {rowHeightDialog === undefined ? null : (
-        <WriterRowHeightDialog
-          unit={snapshot.metricUnit}
-          draft={rowHeightDialog}
-          onCancel={
-            /** Discards the row-height draft. @returns Nothing. */ () =>
-              setRowHeightDialog(undefined)
-          }
-          onSubmit={
-            /** Applies accepted size to the native selected rows. @returns Nothing. */ () => {
-              rowHeightDialog.Apply();
-              setRowHeightDialog(undefined);
-            }
-          }
-        />
-      )}
+      {tableSizeDialog instanceof SwTableHeightDlg ? (
+        <WriterRowHeightDialog draft={tableSizeDialog} {...sizingDialogProps} />
+      ) : tableSizeDialog instanceof SwTableWidthDlg ? (
+        <WriterColumnWidthDialog draft={tableSizeDialog} {...sizingDialogProps} />
+      ) : null}
       {lineNumberingDialog ? (
         <WriterLineNumberingDialog
           unit={snapshot.metricUnit}

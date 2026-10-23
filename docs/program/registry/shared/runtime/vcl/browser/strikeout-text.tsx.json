@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/strikeout-text.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-text-line",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/strikeout-text.tsx#StrikeoutText",
+        "apps/office/src/vcl/browser/strikeout-text.test.tsx#@fileoverview"
+      ],
+      "justification": "TaskN700C9 connects original Writer crossed-out Which5/NONE default and complete SvxCrossedOutItem values through native attribute sets, hint inheritance and snapshot transport, represented SwBaseShell/SwEditShell state and item editing, original Sfx enum-bool toggle, source sidebar/menu placements, immutable body/cell/numbering paint and four chained ODF strikeout properties. Native values remain numeric; explicit NONE and mixed SINGLE/DOUBLE states are distinct. Current character-only core profile uses existing fragment history and pending items; full generic GetPaMAttr/GetParaAttr, auto-update, readonly/merged/redline behavior and native history scheduling remain unverified. Browser96dpi canvas font metrics feed original fallback line/repeated-glyph arithmetic; native HarfBuzz/printer/vertical shaping is not claimed. No previous classification/status/default or intentional storage/recovery exception is promoted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StrikeoutText"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

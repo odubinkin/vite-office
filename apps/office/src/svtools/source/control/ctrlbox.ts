@@ -1,4 +1,7 @@
 /** @fileoverview Implements native BorderWidthImpl component arithmetic from ctrlbox.cxx. */
+/** Original absolute font-size numerical owner from the same source file. */
+export { FontSizeBox } from "./ctrlbox.fontsize";
+/** Original fixed versus variable border-width component flags. */
 export enum BorderWidthImplFlags {
   FIXED = 0,
   CHANGE_LINE1 = 1,

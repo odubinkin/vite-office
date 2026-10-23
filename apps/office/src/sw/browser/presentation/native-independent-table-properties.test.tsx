@@ -1,5 +1,5 @@
 /** @fileoverview Mounted table properties use current-row native geometry and preserve hidden constraints. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "./writer-view";
@@ -82,7 +82,12 @@ function fixture(row = 1) {
 }
 /** Opens the existing properties and Columns page. @returns Nothing. */
 function openColumns(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
 }
 it.each([
@@ -221,7 +226,12 @@ it("mounted native width-only acceptance scales every independent row through fr
   const f = fixture(),
     acceptance = vi.spyOn(tableShell, "ItemSetToTableParam"),
     setter = vi.spyOn(f.shell, "SetTabCols");
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
     target: { value: "2.54" },
   });

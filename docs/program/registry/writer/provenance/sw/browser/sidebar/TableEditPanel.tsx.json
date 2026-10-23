@@ -13,9 +13,12 @@
         }
       ]
     },
-    "rationale": "React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported.",
+    "rationale": "React TableEditPanel binds consumed native insertion/selection and metric/alignment controls to actual Sfx typed slots and module units. Remaining toolbar groups are unported.",
     "responsibilities": [
-      "TaskAHJ2M9: React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported."
+      "TaskAHJ2M9: React TableEditPanel exposes existing insertion and selection toolbar slots in source order300 only for actual table context,with real TableDialog properties command. Native row/column size fields and other toolbar groups remain unported.",
+      "Task ACR55N: row height, current column width, native alignment order and left/right spacing sensitivity, integer redistribution and typed request items; actual history and ODT regressions.",
+      "Task DZ4EH4 connects the consumed Minimal Row Height control at the native row-sizing position. Optimal/distributed sizing and remaining groups remain unported.",
+      "Task TV1H69 completes the consumed native row-sizing group in original Minimal/Optimal/Distribute order with actual Sfx state. Other unported table toolbar groups and complete widget parity remain unverified."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

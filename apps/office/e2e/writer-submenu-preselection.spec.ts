@@ -28,7 +28,8 @@ test("pointer submenu owns focus without a selected Writer command", /** Checks 
   await hoverEntry(page, trigger);
   const popup = page.getByRole("menu", { name: "Text menu" });
   const first = page.getByRole("menuitemcheckbox", { name: "Bold", exact: true });
-  const last = page.getByRole("menuitemcheckbox", { name: "Single Underline", exact: true });
+  // Font-size stepping is now implemented, so the native Text menu ends with Shrink.
+  const last = popup.getByRole("menuitem", { name: "Decrease", exact: true });
   await expect(popup).toBeFocused();
   await expect(first).not.toBeFocused();
   await expect(first).toHaveAttribute("aria-checked", "false");

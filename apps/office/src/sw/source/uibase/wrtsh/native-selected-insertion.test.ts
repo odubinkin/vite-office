@@ -175,8 +175,12 @@ describe("native same-node selected insertion", /** Registers independent shell 
                     (start === 2 && end === 6 && !reverse))
                 ) {
                   expect(owner.attr.m_pHints).toBeUndefined();
-                  const map = required(owner.node.GetpSwpHints());
-                  for (const hint of map.entries()) expect(hint.m_pHints).toBe(map);
+                  const map = owner.node.GetpSwpHints();
+                  // Replacing the entire autoformat range with unformatted pending text
+                  // removes its last represented hint; other cases retain a real hint map.
+                  if (start === 2 && end === 6 && !reverse && mask & 1) expect(map).toBeUndefined();
+                  else expect(map).toBeDefined();
+                  for (const hint of map?.entries() ?? []) expect(hint.m_pHints).toBe(map);
                   const bold = projectWriterTextRuns(owner.node).flatMap(
                     /** Expands effective item portions into literal character states. @param run - Real projected portion. @returns Per-character bold flags. */ (
                       run,
@@ -187,7 +191,10 @@ describe("native same-node selected insertion", /** Registers independent shell 
                           run.attributes.bold,
                       ),
                   );
-                  const pendingBold = start === 6 ? reverse : true;
+                  // Native GetParaAttr excludes the end boundary when DontExpand is set
+                  // (thints.cxx), independently of the later FORCEHINTEXPAND insertion mode.
+                  const point = reverse ? start : end;
+                  const pendingBold = point > 2 && (point < 6 || (point === 6 && !(mask & 1)));
                   const expected = [false, false, true, true, true, true, false, false];
                   expected.splice(start, end - start, pendingBold, pendingBold);
                   expect(bold).toEqual(expected);

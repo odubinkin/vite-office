@@ -21,6 +21,8 @@ export interface WriterWorkspaceChromeProps {
   readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
   readonly formattingToolbar: ReactNode;
+  /** Native contextual table toolbar, present only in table context. */
+  readonly tableToolbar?: ReactNode;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
   /** Upstream-shaped horizontal and vertical ruler projections. */
@@ -46,6 +48,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.onDocumentTitleChange - Applies a committed document title.
+ * @param props.tableToolbar - Contextual table controls.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.isVerticalRulerVisible - Whether the fixed left ruler lane is shown.
@@ -62,6 +65,7 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
+  tableToolbar,
   isPropertiesSidebarVisible,
   isVerticalRulerVisible = false,
   isStatusBarVisible,
@@ -145,6 +149,16 @@ export function WriterWorkspaceChrome({
           </SidebarDeck>
         ) : null}
       </div>
+
+      {tableToolbar !== undefined && (
+        <div
+          role="toolbar"
+          aria-label="Writer table toolbar"
+          className="flex shrink-0 items-center gap-1 overflow-x-auto border-t border-slate-300 bg-white px-3 py-1"
+        >
+          {tableToolbar}
+        </div>
+      )}
 
       {isStatusBarVisible ? (
         <div

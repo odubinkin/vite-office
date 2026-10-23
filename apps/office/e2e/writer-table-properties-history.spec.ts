@@ -67,7 +67,10 @@ for (const viewport of [1280, 390])
         ) => table.getBoundingClientRect().width,
       );
     await selectBrowserTableRow(page, "Properties", 1);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("spinbutton", { name: "Table width (cm)" }).fill("8");
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     expect(
@@ -77,7 +80,10 @@ for (const viewport of [1280, 390])
         ) => table.getBoundingClientRect().width,
       ),
     ).toBeCloseTo(width, 2);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("spinbutton", { name: "Table width (cm)" }).fill("8");
     await page.getByRole("tab", { name: "Borders", exact: true }).click();
     await page.getByRole("spinbutton", { name: "Top padding (cm)" }).fill("0.2");

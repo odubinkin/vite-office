@@ -923,7 +923,10 @@ function equalAttributes(
     left.fontSizeTwips === right.fontSizeTwips &&
     left.highlight === right.highlight &&
     left.italic === right.italic &&
-    left.underline === right.underline
+    left.underline === right.underline &&
+    (left.strikeout ?? 0) === (right.strikeout ?? 0) &&
+    (left.escapement?.offset ?? 0) === (right.escapement?.offset ?? 0) &&
+    (left.escapement?.height ?? 100) === (right.escapement?.height ?? 100)
   );
 }
 

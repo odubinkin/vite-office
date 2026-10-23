@@ -251,8 +251,15 @@ describe("App" /**
     const fontSizeSelect = within(
       screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
     ).getByLabelText("Font size");
-    expect(within(fontSizeSelect).getByRole("option", { name: "14 pt" })).toBeInTheDocument();
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Show Font size" },
+      ),
+    );
+    expect(screen.getByRole("option", { name: "14 pt" })).toBeInTheDocument();
     fireEvent.change(fontSizeSelect, { target: { value: "14" } });
+    fireEvent.keyDown(fontSizeSelect, { key: "Tab" });
     expect(editor.querySelector('[style*="font-size"]')).toHaveStyle({ fontSize: "14pt" });
 
     const styleSelect = within(

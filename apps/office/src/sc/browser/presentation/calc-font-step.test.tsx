@@ -70,7 +70,7 @@ it("paints and queries the actual selected script heights while preserving nativ
         c.EnterString("漢");
       },
     );
-    expect(screen.getByRole("combobox", { name: "Font Size" })).toHaveValue("15");
+    expect(screen.getByRole("combobox", { name: "Font Size" })).toHaveValue("15 pt");
     act(
       /** Runs the actual command within React notification batching. @returns Nothing. */ () => {
         expect(d.Execute(".uno:Grow")).toMatchObject({ status: "executed", value: true });
@@ -79,7 +79,7 @@ it("paints and queries the actual selected script heights while preserving nativ
     expect(height(session, 112).GetHeight()).toBe(340);
     expect(height(session, 101).GetHeight()).toBe(200);
     expect(height(session, 117).GetHeight()).toBe(400);
-    expect(screen.getByRole("combobox", { name: "Font Size" })).toHaveValue("17");
+    expect(screen.getByRole("combobox", { name: "Font Size" })).toHaveValue("17 pt");
     expect(within(cell).getByText("漢")).toHaveStyle({ fontSize: "17pt" });
     act(
       /** Runs the actual command within React notification batching. @returns Nothing. */ () => {

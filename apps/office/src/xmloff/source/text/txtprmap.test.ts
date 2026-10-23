@@ -1,7 +1,7 @@
 /** @fileoverview Native scalar property-map transport preserves independent scripts and source merge/failure behavior. */
 import { expect, it } from "vitest";
 import { FastAttributeList } from "../core/xmlimp";
-import { ODF_NAMESPACES } from "../core/xmltoken";
+import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import {
   exportTextCharacterProperties,
   importTextCharacterProperties,
@@ -102,5 +102,58 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(10);
+  expect(textCharacterPropertyTokens).toHaveLength(15);
+  expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
+    XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_WIDTH,
+    XMLToken.STYLE_TEXT_LINE_THROUGH_TEXT,
+  ]);
+});
+
+it("merges native crossed-out type and width in actual SAX order without affecting underline", /** Preserves native DOUBLE precedence and text replacement. @returns Nothing. */ () => {
+  const entries = [
+    ["style:text-line-through-style", "solid"],
+    ["style:text-line-through-type", "double"],
+    ["style:text-line-through-width", "bold"],
+  ] as const;
+  for (const order of [
+    [0, 1, 2],
+    [0, 2, 1],
+    [1, 0, 2],
+    [1, 2, 0],
+    [2, 0, 1],
+    [2, 1, 0],
+  ]) {
+    const properties = order.map(
+      /** Orders actual SAX inputs. @param index - Source mapping. @returns Property. */ (index) =>
+        entries[index] as readonly [string, string],
+    );
+    expect(importTextCharacterProperties(attributes(properties))).toEqual({ strikeout: 2 });
+    expect(
+      importTextCharacterProperties(
+        attributes([...properties, ["style:text-line-through-text", "/"]]),
+      ),
+    ).toEqual({ strikeout: 5 });
+    expect(
+      importTextCharacterProperties(
+        attributes([["style:text-line-through-text", "other"], ...properties]),
+      ),
+    ).toEqual({ strikeout: 6 });
+  }
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-line-through-style", "invalid"],
+        ["style:text-line-through-text", ""],
+      ]),
+    ),
+  ).toEqual({});
+  expect(exportTextCharacterProperties({ strikeout: 3 })).toBe("");
+  expect(exportTextCharacterProperties({ strikeout: 2, underlineStyle: 1 })).toContain(
+    'style:text-line-through-type="double"',
+  );
+  expect(exportTextCharacterProperties({ strikeout: 2, underlineStyle: 1 })).toContain(
+    'style:text-underline-style="solid"',
+  );
 });

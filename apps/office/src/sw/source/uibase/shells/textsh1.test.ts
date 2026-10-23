@@ -7,6 +7,8 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createRequestArguments, SfxRequest } from "../../../../sfx2/source/control/request";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { RES_BREAK } from "../../../inc/hintids";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
@@ -233,7 +235,9 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     expect(state(WRITER_COMMAND_IDS.charBackColor).value).toBe("#00ff00");
     expect(runValue(WRITER_COMMAND_IDS.color)).toBe(false);
     expect(runValue(WRITER_COMMAND_IDS.lineSpacing, { percent: 150 })).toBe(true);
-    expect(state(WRITER_COMMAND_IDS.lineSpacing).value).toBe(150);
+    expect(
+      (state(WRITER_COMMAND_IDS.lineSpacing).value as SvxLineSpacingItem).GetPropLineSpace(),
+    ).toBe(150);
     expect(runValue(WRITER_COMMAND_IDS.lineSpacing)).toBe(false);
     expect(runValue(WRITER_COMMAND_IDS.lineSpacing, { percent: -1 })).toBe(false);
 
@@ -283,7 +287,9 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
         lineValue: 240,
       }),
     ).toBe(true);
-    expect(state(WRITER_COMMAND_IDS.lineSpacing).value).toBe("custom");
+    expect(
+      (state(WRITER_COMMAND_IDS.lineSpacing).value as SvxLineSpacingItem).GetLineSpaceRule(),
+    ).toBe(SvxLineSpaceRule.Fix);
     shell.GetDocShell().Close();
   });
 });

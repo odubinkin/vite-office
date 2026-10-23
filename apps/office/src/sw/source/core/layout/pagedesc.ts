@@ -1,10 +1,12 @@
 /** @fileoverview Implements the supported SwPageDesc contract from pinned Writer pagedesc/docdesc. */
 
-import { Paper, PaperInfo } from "../../../../i18nutil/inc/paper";
-import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
-
-/** Supported physical paper identities exposed by the bounded Page tab. */
-export type WriterPaperFormat = "A4" | "Letter" | "custom";
+import { PaperInfo } from "../../../../i18nutil/inc/paper";
+import { SvxPaperInfo } from "../../../../editeng/inc/paperinf";
+import { preparePlatformLocale } from "../../../../i18nlangtag/source/isolang/insys.locale";
+import {
+  MeasurementSystem,
+  getMeasurementSystemEnum,
+} from "../../../../unotools/source/i18n/localedatawrapper";
 
 /** Immutable physical page geometry. All distances use Writer twips. */
 export interface WriterPageDescriptorValue {
@@ -13,29 +15,10 @@ export interface WriterPageDescriptorValue {
   readonly landscape: boolean;
   readonly leftMargin: number;
   readonly name: string;
-  readonly paperFormat: WriterPaperFormat;
   readonly rightMargin: number;
   readonly topMargin: number;
   readonly width: number;
 }
-
-/** Common paper sizes used by LibreOffice's SvxPaperInfo boundary, in twips. */
-export const WRITER_PAPER_SIZES = Object.freeze({
-  A4: physicalPaper(Paper.PAPER_A4),
-  Letter: physicalPaper(Paper.PAPER_LETTER),
-});
-
-/** Borrows actual shared native geometry and converts integer distances with original o3tl rounding. @param paper - Native paper identity. @returns Immutable twip dimensions. */
-function physicalPaper(paper: Paper): Readonly<{ height: number; width: number }> {
-  const info = new PaperInfo(paper);
-  return Object.freeze({
-    height: Number(convert(BigInt(info.getHeight()), Length.mm100, Length.twip)),
-    width: Number(convert(BigInt(info.getWidth()), Length.mm100, Length.twip)),
-  });
-}
-
-const MIN_PAGE_CONTENT_TWIPS = 567;
-const MAX_PAGE_TWIPS = 90_720;
 
 /** Upstream-shaped standard page descriptor with value-copy semantics. */
 export class SwPageDesc {
@@ -82,19 +65,19 @@ export class SwPageDesc {
 
 /** Creates Writer's locale-derived standard page, mirroring docdesc.cxx metric/imperial defaults. @param locale - Writer document locale. @returns Standard page descriptor. */
 export function createDefaultWriterPageDescriptor(locale: string): SwPageDesc {
-  const imperial = usesImperialPageDefaults(locale);
-  const paperFormat: Exclude<WriterPaperFormat, "custom"> = imperial ? "Letter" : "A4";
-  const size = WRITER_PAPER_SIZES[paperFormat];
+  const fields = preparePlatformLocale(locale.replaceAll("_", "-")),
+    imperial = getMeasurementSystemEnum(fields) !== MeasurementSystem.Metric;
+  const paper = PaperInfo.getDefaultPaperForLocale(fields),
+    size = SvxPaperInfo.GetPaperSize(paper.getPaper());
   return new SwPageDesc({
     bottomMargin: imperial ? 1_440 : 1_134,
-    height: size.height,
+    height: size.Height(),
     landscape: false,
     leftMargin: imperial ? 1_800 : 1_134,
     name: "Standard",
-    paperFormat,
     rightMargin: imperial ? 1_800 : 1_134,
     topMargin: imperial ? 1_440 : 1_134,
-    width: size.width,
+    width: size.Width(),
   });
 }
 
@@ -108,22 +91,6 @@ export function equalWriterPageDescriptors(
       left[key as keyof WriterPageDescriptorValue] ===
       right[key as keyof WriterPageDescriptorValue],
   );
-}
-
-/** Applies a known paper format while retaining margins and requested orientation. @param current - Current page value. @param paperFormat - Known paper identity. @param landscape - Requested orientation. @returns Validated replacement value. */
-export function applyWriterPaperFormat(
-  current: WriterPageDescriptorValue,
-  paperFormat: Exclude<WriterPaperFormat, "custom">,
-  landscape: boolean,
-): WriterPageDescriptorValue {
-  const size = WRITER_PAPER_SIZES[paperFormat];
-  return validateWriterPageDescriptor({
-    ...current,
-    height: landscape ? size.width : size.height,
-    landscape,
-    paperFormat,
-    width: landscape ? size.height : size.width,
-  });
 }
 
 /** Validates the supported Writer page geometry and returns a frozen copy. @param value - Candidate geometry. @returns Validated immutable copy. */
@@ -148,26 +115,15 @@ export function validateWriterPageDescriptor(
     )
   )
     throw new Error("Writer page margins must be non-negative integer twips.");
-  if (
-    dimensions.some(
-      /** Checks the supported maximum page dimension. @param candidate - Twip length. @returns Whether excessive. */ (
-        candidate,
-      ) => candidate > MAX_PAGE_TWIPS,
-    )
-  )
-    throw new Error("Writer page dimensions exceed the supported range.");
-  if (value.leftMargin + value.rightMargin + MIN_PAGE_CONTENT_TWIPS > value.width)
-    throw new Error("Writer horizontal page margins leave no text area.");
-  if (value.topMargin + value.bottomMargin + MIN_PAGE_CONTENT_TWIPS > value.height)
-    throw new Error("Writer vertical page margins leave no text area.");
   if (value.name.trim().length === 0) throw new Error("Writer page style name must not be empty.");
-  if (!(["A4", "Letter", "custom"] as const).includes(value.paperFormat))
-    throw new Error("Writer paper format is unsupported.");
-  return Object.freeze({ ...value });
-}
-
-/** Matches LibreOffice's non-metric page-default branch for the supported browser locales. @param locale - Document locale. @returns Whether imperial defaults apply. */
-function usesImperialPageDefaults(locale: string): boolean {
-  const region = locale.replace("_", "-").split("-")[1]?.toUpperCase();
-  return region === "US" || region === "CA" || region === "PH";
+  return Object.freeze({
+    bottomMargin: value.bottomMargin,
+    height: value.height,
+    landscape: value.landscape,
+    leftMargin: value.leftMargin,
+    name: value.name,
+    rightMargin: value.rightMargin,
+    topMargin: value.topMargin,
+    width: value.width,
+  });
 }

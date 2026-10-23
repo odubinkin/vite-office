@@ -201,7 +201,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             table.GetName(),
             [...element.rows].map(
               /** map handles this value. @param row - Input 1. @returns The result. */ (row) =>
-                row.getBoundingClientRect().height * 15,
+                Math.round(row.getBoundingClientRect().height * 15),
             ),
           );
       }
@@ -407,6 +407,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     return (
                       <WriterEditableTable
                         key={`measure-${tableName}`}
+                        measureNaturalRows
                         table={table}
                         nativeFrame={layout.tableFrames.find(
                           /** Borrows the same original root-owned master for device measurement. @param frame - Original layout object. @returns Whether it owns this table. */

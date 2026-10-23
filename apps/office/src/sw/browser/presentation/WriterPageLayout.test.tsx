@@ -444,22 +444,23 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     const onSubmit = vi.fn();
     render(<WriterPageStyleDialog initialValue={page} onCancel={onCancel} onSubmit={onSubmit} />);
 
-    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "custom" } });
+    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "11" } });
     fireEvent.change(screen.getByLabelText("Height (cm)"), { target: { value: "31" } });
     fireEvent.change(screen.getByLabelText("Left (cm)"), { target: { value: "20" } });
     fireEvent.change(screen.getByLabelText("Top (cm)"), { target: { value: "1.5" } });
     fireEvent.change(screen.getByLabelText("Bottom (cm)"), { target: { value: "1.5" } });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
-    expect(screen.getByText("Writer horizontal page margins leave no text area.")).toBeVisible();
+    expect(onSubmit).toHaveBeenCalledOnce();
+    expect(onSubmit.mock.calls[0]?.[0].leftMargin).toBeLessThan(page.width - page.rightMargin);
 
     fireEvent.change(screen.getByLabelText("Width (cm)"), { target: { value: "30" } });
     fireEvent.change(screen.getByLabelText("Right (cm)"), { target: { value: "1" } });
     fireEvent.click(screen.getByLabelText("Landscape"));
     fireEvent.click(screen.getByLabelText("Portrait"));
     fireEvent.change(screen.getByLabelText("Left (cm)"), { target: { value: "2" } });
-    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "Letter" } });
+    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "8" } });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
-    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ paperFormat: "Letter" }));
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ width: 12240, height: 15840 }));
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(onCancel).toHaveBeenCalledOnce();
   });

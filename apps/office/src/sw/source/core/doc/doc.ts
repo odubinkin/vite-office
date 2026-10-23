@@ -30,6 +30,7 @@ import {
   SetSwRowSplit,
   GetSwRowHeight,
   SetSwRowHeight,
+  BalanceSwRowHeight,
   GetSwBoxAttr,
   GetSwBoxAlign,
   SetSwBoxAttr,
@@ -165,6 +166,15 @@ export class SwDoc {
     cursorState?: SwUndoCursorState,
   ): boolean {
     return SetSwRowHeight(this, cursor, size, cursorState);
+  }
+  /** Balances registered source row-frame areas through native row attribute/history ownership. @param cursor - Original cursor. @param testOnly - Read-only admission. @param optimize - Average rather than maximum. @param cursorState - Original shell state. @returns Whether multiple rows are admitted. */
+  public BalanceRowHeight(
+    cursor: SwCursor,
+    testOnly: boolean,
+    optimize = false,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    return BalanceSwRowHeight(this, cursor, testOnly, optimize, cursorState);
   }
   /** Applies native row-height deltas through the source ndtbl owner split. @param next - Requested rows. @param currentColumnOnly - Original hit cell only. @param frame - Physical frame. @param start - Actual cell. @param cursorState - Retained native cursor. @returns Whether changed. */
   public SetTabRows(

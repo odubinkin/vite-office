@@ -36,9 +36,10 @@ it("binds the real shared font widget,mixed state,paint and native repeated-oper
   );
   const select = screen.getByRole("combobox", { name: "Font Size" });
   expect(select).toBeEnabled();
-  expect(select).toHaveValue("10");
+  expect(select).toHaveValue("10 pt");
   expect(d.QueryDispatch(".uno:FontHeight")?.slot.slotId).toBe(10015);
   fireEvent.change(select, { target: { value: "18" } });
+  fireEvent.keyDown(select, { key: "Tab" });
   expect(height(doc, 0, 0)).toBe(360);
   expect(screen.getByRole("gridcell", { name: "A1" })).toHaveStyle({ fontSize: "18pt" });
   for (const which of [101, 112, 117]) expect(height(doc, 0, 0, 0, which)).toBe(360);
@@ -59,6 +60,7 @@ it("binds the real shared font widget,mixed state,paint and native repeated-oper
   expect(select).toHaveValue("");
   expect(d.QueryState(".uno:FontHeight").mixed).toBe(true);
   fireEvent.change(select, { target: { value: "24" } });
+  fireEvent.keyDown(select, { key: "Tab" });
   expect(height(doc, 0, 0)).toBe(480);
   expect(height(doc, 1, 0)).toBe(480);
   expect(select).toHaveValue("24");
@@ -77,7 +79,7 @@ it("binds the real shared font widget,mixed state,paint and native repeated-oper
     },
   );
   expect(height(doc, 1, 0)).toBe(480);
-  expect(select).toHaveValue("24");
+  expect(select).toHaveValue("24 pt");
   expect(c.shell.GetUndoManager().GetUndoAction()?.GetComment()).toBe("Attributes");
   expect(doc.GetPool()).toBe(doc.getCellAttributeHelper().GetPool());
   s.Close();
@@ -199,4 +201,23 @@ it("restores exactly the selected sheet when other sheets are outside the font o
   c.Undo();
   expect(height(doc, 0, 0, 1)).toBe(200);
   s.Close();
+});
+
+it("rejects out-of-range shared numeric requests before native pattern mutation", /** The actual font-height item owns scalar admission independently from the positive-only direct controller API. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    dispatcher = session.frame.GetDispatcher(),
+    doc = session.controller.shell.GetDocument();
+  try {
+    const count = session.controller.shell.GetUndoManager().GetUndoActionCount();
+    expect(dispatcher.Execute(".uno:FontHeight", { fontSizePt: 10001 })).toMatchObject({
+      value: false,
+    });
+    expect(dispatcher.Execute(".uno:FontHeight", { fontSizePt: Number.NaN })).toMatchObject({
+      value: false,
+    });
+    expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(count);
+    expect(height(doc, 0, 0)).toBe(200);
+  } finally {
+    session.Close();
+  }
 });

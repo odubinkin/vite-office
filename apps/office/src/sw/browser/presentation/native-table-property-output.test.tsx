@@ -102,7 +102,12 @@ it.each(["Table", "Text Flow"])(
     page,
   ) => {
     const f = fixture();
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Table Properties" },
+      ),
+    );
     fireEvent.click(screen.getByRole("tab", { name: page }));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(accepted(f).Count()).toBe(0);
@@ -123,7 +128,12 @@ it.each(["Table", "Text Flow"])(
 );
 it("mounted name-only publication advertises one native name item and retains frame defaults", /** Checks original owner rename through grouped history. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
     target: { value: "Renamed" },
   });
@@ -155,7 +165,12 @@ it("mounted name-only publication advertises one native name item and retains fr
 });
 it("mounted upper spacing emits only native upper-lower items and one frame action", /** Checks isolated spacing without headline or geometry defaults. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("spinbutton", { name: "Above (cm)" }), {
     target: { value: "2.54" },
   });
@@ -177,7 +192,12 @@ it("mounted upper spacing emits only native upper-lower items and one frame acti
 });
 it("mounted Text Flow publishes changed headline and split without a table representation", /** Checks actual saved widget flags and original geometry. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   fireEvent.click(screen.getByRole("checkbox", { name: "Repeat header" }));
   fireEvent.click(
@@ -200,7 +220,12 @@ it("mounted Text Flow publishes changed headline and split without a table repre
 
 it("mounted visited Borders publishes native inner-border metadata and one source history group", /** Checks the created native border page output. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   const input = accepted(f);
@@ -243,7 +268,12 @@ it("mounted visited Borders publishes native inner-border metadata and one sourc
 
 it("mounted visited Columns advertises the borrowed native representation even without edits", /** Checks native unconditional deactivation output and original widths. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   fireEvent.click(screen.getByRole("tab", { name: "Table" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
@@ -281,7 +311,12 @@ it("mounted visited Columns advertises the borrowed native representation even w
 
 it("native publication rejects a spaced name before both page exchange and OK", /** Checks no accepted native payload during failed page admission. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
     target: { value: "Invalid name" },
   });
@@ -318,7 +353,12 @@ it("native publication refuses an empty table graph without accepting changed na
 
 it("native vertical-only UI output advertises the literal alignment item and restores original cell formats", /** Checks represented cell attributes through native changed items. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
     target: { value: "3" },
@@ -349,7 +389,12 @@ it("native vertical-only UI output advertises the literal alignment item and res
 
 it("native active Columns acceptance applies its representation without separator writes", /** Checks native exchange output on final active page. @returns Nothing. */ () => {
   const f = fixture();
-  fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+  fireEvent.click(
+    within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+      "button",
+      { name: "Table Properties" },
+    ),
+  );
   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   const input = accepted(f);
@@ -366,7 +411,12 @@ it.each(["Table", "Columns", "Text Flow", "Borders"])(
     page,
   ) => {
     const f = fixture();
-    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    fireEvent.click(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "button",
+        { name: "Table Properties" },
+      ),
+    );
     fireEvent.change(screen.getByRole("spinbutton", { name: "Above (cm)" }), {
       target: { value: "2.54" },
     });

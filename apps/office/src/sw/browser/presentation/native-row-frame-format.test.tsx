@@ -1,5 +1,5 @@
 /** @fileoverview Verifies mounted native UI edits shared document row formats directly. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -46,7 +46,12 @@ it.each([false, true])(
         ),
         frame = new SwRowFrame(first);
       render(<WriterWorkbench isActive view={session.view} />);
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
       fireEvent.click(
         screen.getByRole("checkbox", { name: "Allow row to break across pages and columns" }),

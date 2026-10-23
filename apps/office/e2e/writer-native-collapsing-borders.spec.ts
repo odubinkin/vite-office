@@ -45,7 +45,10 @@ for (const width of [1280, 390])
       const original = await cells.allTextContents();
       await expect(view).toHaveCSS("border-collapse", "separate");
       await selectBrowserTableRow(page, "CoupledBrowser", 2);
-      await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+      await page
+        .getByRole("complementary", { name: "Writer properties sidebar" })
+        .getByRole("button", { name: "Table Properties", exact: true })
+        .click();
       await page.getByRole("tab", { name: "Borders", exact: true }).click();
       await page.getByRole("checkbox", { name: "Merge adjacent line styles", exact: true }).check();
       await page
@@ -116,7 +119,10 @@ for (const width of [1280, 390])
         await selectBrowserTableRow(page, "MergeBrowser", 2);
         /** Opens the actual source-owned table page. @returns Native checkbox locator. */
         async function open() {
-          await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+          await page
+            .getByRole("complementary", { name: "Writer properties sidebar" })
+            .getByRole("button", { name: "Table Properties", exact: true })
+            .click();
           await page.getByRole("tab", { name: "Borders", exact: true }).click();
           return page.getByRole("checkbox", { name: "Merge adjacent line styles", exact: true });
         }

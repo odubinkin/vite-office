@@ -1,5 +1,5 @@
 /** @fileoverview Verifies mounted Writer consumes original native table spacing, native property history and ODT. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -68,7 +68,11 @@ it.each([false, true])(
           marginTop: "10px",
           marginBottom: "20px",
         });
-        fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+        fireEvent.click(
+          within(
+            screen.getByRole("complementary", { name: "Writer properties sidebar" }),
+          ).getByRole("button", { name: "Table Properties" }),
+        );
         expect(screen.getByRole("spinbutton", { name: "Above (cm)" })).toHaveAttribute(
           "aria-valuenow",
           "0.26",
@@ -81,7 +85,12 @@ it.each([false, true])(
       } finally {
         stale.mockRestore();
       }
-      fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+      fireEvent.click(
+        within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+          "button",
+          { name: "Table Properties" },
+        ),
+      );
       fireEvent.change(screen.getByRole("spinbutton", { name: "Above (cm)" }), {
         target: { value: "1" },
       });

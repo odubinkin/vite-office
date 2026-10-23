@@ -38,7 +38,10 @@ for (const viewport of [1280, 390]) {
   }) => {
     await page.setViewportSize({ width: viewport, height: 900 });
     const rendered = await open(page);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("5");
     await page.getByRole("radio", { name: "Automatic", exact: true }).check();
     await expect(
@@ -64,7 +67,10 @@ for (const viewport of [1280, 390]) {
       .toBeCloseTo(6000 / 15, 0);
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
     await expect(page.getByRole("button", { name: "Undo", exact: true })).toBeDisabled();
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await expect(page.getByRole("radio", { name: "Left", exact: true })).toBeChecked();
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("5");
     await page.getByRole("radio", { name: "Center", exact: true }).check();
@@ -100,7 +106,10 @@ for (const viewport of [1280, 390]) {
   }) => {
     await page.setViewportSize({ width: viewport, height: 900 });
     const rendered = await open(page);
-    await page.getByRole("button", { name: "Table Properties", exact: true }).click();
+    await page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("button", { name: "Table Properties", exact: true })
+      .click();
     await page.getByRole("tab", { name: "Columns", exact: true }).click();
     await page.getByRole("checkbox", { name: "Adapt table width", exact: true }).check();
     await page.getByRole("spinbutton", { name: "Column 1 width (cm)", exact: true }).fill("5");

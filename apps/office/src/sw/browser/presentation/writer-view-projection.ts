@@ -1,4 +1,9 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
+import { RES_CHRATR_ESCAPEMENT } from "../../inc/hintids";
+
+import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_CROSSEDOUT } from "../../inc/hintids";
 import type { RulerUnitData } from "../../../svtools/source/control/ruler";
 import type { FieldUnit } from "../../../tools/inc/fldunit";
 import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
@@ -125,6 +130,8 @@ export interface WriterTextPortion {
     bold: boolean;
     italic: boolean;
     underline: boolean;
+    escapement?: Readonly<{ offset: number; height: number }>;
+    strikeout?: import("../../../tools/inc/fontenum").FontStrikeout;
     color?: string;
     highlight?: string;
     fontFamily?: string;
@@ -649,6 +656,23 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
           underline: (handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
+          ...(authored(RES_CHRATR_ESCAPEMENT)
+            ? {
+                escapement: Object.freeze({
+                  offset: (handler.ReadItem(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc(),
+                  height: (
+                    handler.ReadItem(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem
+                  ).GetProportionalHeight(),
+                }),
+              }
+            : {}),
+          ...(authored(RES_CHRATR_CROSSEDOUT)
+            ? {
+                strikeout: (
+                  handler.ReadItem(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem
+                ).GetStrikeout(),
+              }
+            : {}),
           ...(authored(RES_CHRATR_COLOR)
             ? { color: (handler.ReadItem(RES_CHRATR_COLOR) as SfxStringItem).GetValue() }
             : {}),

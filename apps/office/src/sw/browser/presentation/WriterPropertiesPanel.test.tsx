@@ -133,7 +133,8 @@ it("shares actual style,font,size,effect and color state with the formatting too
   fireEvent.change(sidebar.getByRole("combobox", { name: "Font size" }), {
     target: { value: "14" },
   });
-  expect(toolbar.getByRole("combobox", { name: "Font size" })).toHaveValue("14");
+  fireEvent.keyDown(sidebar.getByRole("combobox", { name: "Font size" }), { key: "Tab" });
+  expect(toolbar.getByRole("combobox", { name: "Font size" })).toHaveValue("14 pt");
   for (const name of ["Bold", "Italic", "Underline"]) {
     const button = sidebar.getByRole("button", { name }),
       checked = button.getAttribute("aria-pressed") === "true";

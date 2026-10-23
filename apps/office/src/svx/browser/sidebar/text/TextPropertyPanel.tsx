@@ -1,6 +1,15 @@
 /** @fileoverview Consumed Character panel font/effects/color controls from sidebartextpanel.ui over actual Sfx bindings. */
 import { useRef } from "react";
-import { Bold, Italic, Underline } from "lucide-react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Superscript,
+  Subscript,
+  AArrowUp,
+  AArrowDown,
+} from "lucide-react";
 import { SidebarPanel } from "../../../../sfx2/browser/presentation/SidebarPanel";
 import { CommandSelectControl } from "../../../../framework/browser/presentation/CommandSelectControl";
 import { CommandButton } from "../../../../framework/browser/presentation/CommandToolbar";
@@ -59,6 +68,10 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 binding,
               ) => (
                 <FontSizeSelect
+                  inSidebar
+                  {...(props.focusDocument === undefined
+                    ? {}
+                    : { focusDocument: props.focusDocument })}
                   {...binding}
                   label={getCommandResource(".uno:FontHeight").controlLabel as string}
                 />
@@ -66,11 +79,16 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
             }
           </CommandSelectControl>
         </div>
+        <div className="flex justify-end gap-1" role="group" aria-label="Font Size Adjustment">
+          <CommandButton {...props} commandId=".uno:Grow" icon={AArrowUp} />
+          <CommandButton {...props} commandId=".uno:Shrink" icon={AArrowDown} />
+        </div>
         <div className="flex flex-wrap gap-1" role="group" aria-label="Font Effects">
           {[
             [".uno:Bold", Bold],
             [".uno:Italic", Italic],
             [".uno:Underline", Underline],
+            [".uno:Strikeout", Strikethrough],
           ].map(
             /** Projects source effect toolbar order. @param entry - Slot and icon. @returns Actual command button. */ ([
               commandId,
@@ -80,6 +98,26 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 key={commandId as string}
                 commandId={commandId as string}
                 icon={icon as typeof Bold}
+                commandSource={commandSource}
+                resolveArguments={resolveArguments}
+                getCommandResource={getCommandResource}
+              />
+            ),
+          )}
+        </div>
+        <div className="flex gap-1" role="group" aria-label="Character Position">
+          {(
+            [
+              [".uno:SuperScript", Superscript],
+              [".uno:SubScript", Subscript],
+            ] as const
+          ).map(
+            /** Binds the original separate position toolbar in source order. @param entry - Native slot and icon. @returns Command. */
+            ([commandId, icon]) => (
+              <CommandButton
+                key={commandId}
+                commandId={commandId}
+                icon={icon}
                 commandSource={commandSource}
                 resolveArguments={resolveArguments}
                 getCommandResource={getCommandResource}
