@@ -1,10 +1,11 @@
 ---
 id: "202610222322-014VCW"
 title: "Canonicalize Writer font size controls and grow shrink commands"
-status: "DOING"
+result_summary: "Original32 font sizes, absolute numeric acceptance and Writer40twip Grow Shrink now operate through actual script items, source contribution ranges, grouped history, UI and ODT. Related checks and current browser cases pass; native service omissions remain explicit. Goal continues; full suite due at task10."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Original32 sizes, absolute empty/invalid/unit/rounding contracts and toolbox acceptance retained; Grow Shrink40twip/19998/uint32/exact-disabled semantics documented and tested. Original contribution traversal remains source ordered; real PaM ownership and script metadata are used without simulated native providers."
     - "Failed old UI expectations, missing canonical operation/divergence records and type-induced stale bundle validation were repaired; current18-scenario browser run is tied to successful build hashes. Raw partial coverage failure is disclosed separately from exact source-bound incremental audit."
-commit: null
+commit:
+  hash: "d05c726543c342fdccc1ad66cd2bb1aff6780738"
+  message: "🚧 014VCW task: implement native Writer font sizing and Grow Shrink"
 comments:
   -
     author: "CODER"
     body: "Start: implement original font size numeric controls and Grow/Shrink traversal, slots and UI over actual Writer owners, with related tests and strict source-bound coverage in writer."
+  -
+    author: "CODER"
+    body: "Verified: native editable font sizes and Grow Shrink connected through Writer items, ranges, grouped history, sidebar, hotkeys and ODT;109 focused and18 current-build Chromium cases, source-bound24-owner100 audit and all local gates pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original font-size controls and Grow/Shrink wired through actual Writer items/ranges/history and shared Calc scalar boundary;109 current focused cases, related43-file passes plus repaired UI file,31 boundary cases,18 current-build Chromium scenarios and strict24-owner S1665/B1245/F396/L1485 all100 source audit; all declared local gates pass. Full suite follows one-in-ten cadence; task7. Native service gaps remain documented."
+  -
+    type: "status"
+    at: "2026-10-23T00:34:29.899Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native editable font sizes and Grow Shrink connected through Writer items, ranges, grouped history, sidebar, hotkeys and ODT;109 focused and18 current-build Chromium cases, source-bound24-owner100 audit and all local gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-23T00:33:23.361Z"
+doc_updated_at: "2026-10-23T00:34:29.900Z"
 doc_updated_by: "CODER"
 description: "Replace the restricted font-size select with original absolute FontSizeBox numeric behavior and standard sizes, and connect native Writer Grow/Shrink traversal and slots to sidebar/menu/core/history/ODT."
 sections:
