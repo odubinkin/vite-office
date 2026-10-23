@@ -1,10 +1,11 @@
 ---
 id: "202610230035-FNBXHP"
 title: "Canonicalize Writer line spacing popup and native item dispatch"
-status: "DOING"
+result_summary: "Original line-spacing popup modes and full item request/state now operate through actual Writer selected paragraphs, table ranges, grouped history, module units and ODT. Native icons and numeric/percent contracts are retained; source suspicion WRITER060 preserved. Current related checks and exact source-bound audit pass. Goal continues; full suite due task10(current8)."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Original mode/item fields, uint16/signed leading behavior, metric minimum/default transitions, complete pooled state, mixed/table history, original icons, required module units and explicit percent overrides are represented through actual source owners and frame dispatch. Deliberate browser I/O deviations remain intact."
     - "Current12-file49-case profile and7 current-build Chromium cases plus18 layout/paragraph and16 boundary cases pass. Exact14-owner source-bound audit S1216/B899/F342/L1123 all100 is separate from disclosed partial focused raw thresholds. Repaired legacy selector and unit expectations retain assertions rather than weakening source behavior."
-commit: null
+commit:
+  hash: "a6d345f4fc63ff593ff9684758acb4cbc44caca7"
+  message: "🚧 FNBXHP task: connect native Writer line spacing popup and item dispatch"
 comments:
   -
     author: "CODER"
     body: "Start: implement original eight-mode line spacing popup and full native item dispatch on writer under existing user continuation approval; related tests only on task8."
+  -
+    author: "CODER"
+    body: "Verified: original eight-mode popup, native item transport, module units, spin controls and source icons connect actual Writer mixed/table/history/ODT;49 related,18 paragraph/layout,16 boundary and7 current-build Chromium cases pass with strict14-owner source audit and all local gates."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native eight-mode popup and complete item state/request now connect real Writer selection/table/history/ODT and module units;49 current related,18 paragraph/layout,16 exact boundary and7 current-build Chromium cases pass.14-owner exact-source audit S1216/B899/F342/L1123 all100; all local gates pass. Raw partial focused thresholds and native-service/CLDR limits remain explicit. Task8; goal continues."
+  -
+    type: "status"
+    at: "2026-10-23T01:23:00.251Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original eight-mode popup, native item transport, module units, spin controls and source icons connect actual Writer mixed/table/history/ODT;49 related,18 paragraph/layout,16 boundary and7 current-build Chromium cases pass with strict14-owner source audit and all local gates."
 doc_version: 3
-doc_updated_at: "2026-10-23T01:20:51.211Z"
+doc_updated_at: "2026-10-23T01:23:00.252Z"
 doc_updated_by: "CODER"
 description: "Replace the percentage-only browser popup with original ParaLineSpacingControl initialization, eight modes, metric and percent fields and predefined acceptance, carrying actual SvxLineSpacingItem state and execution through Writer history and ODT."
 sections:
