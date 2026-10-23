@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/source/utility/scriptchangescanner.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-script-analysis",
+    "capabilityIds": [
+      "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/i18nutil/source/utility/scriptchangescanner.ts#MakeScriptChangeScanner",
+        "apps/office/src/i18nutil/source/utility/scriptchangescanner.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT implements the original ScriptHintProvider and full GreedyScriptChangeScanner body over existing actual SAL UTF16 iteration,pinned GetScriptClass,Unicode categories and ICU script properties. Retains insertion-order/forward-only hints,first-strong prescan/application fallback,Ignore/weak-only hints,RTL/embedded CTL rules with Asian exception,zero-length transition skipping and dotted-circle/mark/NNBSP-Mongolian reassociation. Peek returns copied structs. Native direction/script abstract contracts are represented without a fake ICU provider;MakeDirectionChangeScanner and IcuDirectionChangeScanner remain unported. Explicit direction levels/runs in tests are protocol fixtures,not ICU bidi-analysis evidence. Header retains the native ScriptHintType enum and reexports actual runtime owners;the implementation compares the exact canonical IDL aliases with a type-only header dependency to avoid an ESM declaration cycle. No native ownership/cache/lifetime emulation. Actual EditEngine GetItemScriptType/CheckScript,ICU bidi construction and live dropdown wiring remain unfinished;no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScriptHintProvider",
+        "ScriptChangeScanner",
+        "DirectionChangeScanner",
+        "MakeScriptChangeScanner",
+        "ScriptChange",
+        "DirectionChange"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18nutil/source/utility/scriptchangescanner.cxx",
+      "upstreamSymbols": [
+        "ScriptHintProvider",
+        "GreedyScriptChangeScanner",
+        "DirectionChangeScanner",
+        "ScriptChangeScanner",
+        "MakeScriptChangeScanner"
+      ]
+    }
+  }
+}
