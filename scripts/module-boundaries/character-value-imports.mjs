@@ -5,6 +5,11 @@ import path from "node:path";
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Native TabWin_Impl paints Ruler::DrawTab through the svtools owner.
+  [
+    "cui/browser/tabpages/TabulatorTabPage.tsx",
+    new Set(["svtools/browser/control/RulerTabSymbol.tsx", "svtools/inc/ruler.ts"]),
+  ],
   // Original absolute FontSizeBox uses vcl::TextToValue/ConvertValue, not an alternate numeric parser.
   ["svtools/source/control/ctrlbox.fontsize.ts", new Set(["vcl/source/control/field.ts"])],
   // Browser toolbox binding borrows actual system decimal fields like original SvtSysLocale; no locale provider is supplied.
@@ -56,6 +61,25 @@ const originalCharacterValueImports = new Map([
   [
     "svx/browser/sidebar/paragraph/ParaLineSpacingControl.tsx",
     new Set(["unotools/source/misc/syslocale.ts", "i18nutil/source/utility/unicode.percent.ts"]),
+  ],
+  // Original tabstpge.cxx uses the native numeric widget, map conversion, unit helper and SfxTabPage item queries.
+  [
+    "cui/source/tabpages/tabstpge.ts",
+    new Set([
+      "vcl/source/weld/MetricSpinButton.ts",
+      "vcl/source/outdev/map.ts",
+      "svtools/source/misc/unitconv.ts",
+      "sfx2/source/dialog/SfxTabPage.ts",
+    ]),
+  ],
+  // Browser field formatting borrows real VCL unit aliases and actual host locale fields only.
+  [
+    "cui/browser/tabpages/tabstpge-binding.ts",
+    new Set([
+      "vcl/source/weld/MetricSpinButton.ts",
+      "vcl/inc/units.ts",
+      "unotools/source/misc/syslocale.ts",
+    ]),
   ],
   // Generated MultipleCharsOutputException type initialization uses the original UNO TypeClass value.
   [
@@ -291,6 +315,8 @@ const originalCharacterValueImports = new Map([
 /** Matches only source-backed value-owner imports,leaving general module/browser/cycle guards unchanged. @param relativeSource - Importing source path. @param relativeTarget - Imported source path. @returns Whether this exact edge is original. */
 export function isOriginalCharacterValueImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
-    target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") + ".ts";
-  return originalCharacterValueImports.get(source)?.has(target) ?? false;
+    normalized = relativeTarget.split(path.sep).join("/"),
+    allowed = originalCharacterValueImports.get(source);
+  if (/\.tsx?$/u.test(normalized)) return allowed?.has(normalized) ?? false;
+  return (allowed?.has(normalized + ".ts") || allowed?.has(normalized + ".tsx")) ?? false;
 }

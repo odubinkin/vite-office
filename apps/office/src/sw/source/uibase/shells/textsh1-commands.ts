@@ -1,4 +1,5 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
+import { createWriterTabulatorInput } from "./textsh1-tabs";
 import { createWriterEscapementCommands } from "./txtattr";
 
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -55,12 +56,16 @@ export function createWriterTextCommandRegistry(
         target.GetParagraphFormat(),
         target.IsPaintLineNumbers(),
         target.GetPageStyleNames(),
+        createWriterTabulatorInput(target),
       )
       .then(
         /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
         (result) => {
           if (result === undefined) return false;
-          const paragraphChanged = target.ApplyParagraphFormat(result.paragraphFormat);
+          const paragraphChanged = target.ApplyParagraphFormat(
+            result.paragraphFormat,
+            result.tabStopItems,
+          );
           const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
           return paragraphChanged || lineNumbersChanged;
         },

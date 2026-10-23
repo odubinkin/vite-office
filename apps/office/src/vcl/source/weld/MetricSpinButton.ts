@@ -87,3 +87,23 @@ export class MetricSpinButton {
     return true;
   }
 }
+
+/** Original non-percent format_number unit-text suffix step, separated from the native locale numeric string. @param numberText - Already formatted native numeric text. @param unit - Original source unit. @param unitText - Actual MetricToString result. @returns Original combined metric text. */
+export function formatMetricUnit(numberText: string, unit: FieldUnit, unitText: string): string {
+  let suffix = unitText;
+  let space =
+    unit !== FieldUnit.NONE &&
+    unit !== FieldUnit.DEGREE &&
+    unit !== FieldUnit.INCH &&
+    unit !== FieldUnit.FOOT
+      ? " "
+      : "";
+  if (unit === FieldUnit.INCH) {
+    if (suffix !== '"' && suffix !== "″") space = " ";
+    else suffix = "″";
+  } else if (unit === FieldUnit.FOOT) {
+    if (suffix !== "'" && suffix !== "′") space = " ";
+    else suffix = "′";
+  }
+  return numberText + space + suffix;
+}

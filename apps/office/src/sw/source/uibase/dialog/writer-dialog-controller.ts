@@ -1,6 +1,7 @@
 /** @fileoverview Typed Writer dialog requests completed by an external presentation adapter. */
 
 import { SfxDialogController } from "../../../../sfx2/source/dialog/basedlgs";
+import type { SfxItemSet } from "../../../../svl/inc/itemset";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import type { WriterParagraphFormatValue } from "../shells/textsh1";
@@ -56,10 +57,12 @@ export interface WriterParagraphDialogRequest {
   readonly initialValue: WriterParagraphFormatValue;
   readonly paintLineNumbers: boolean;
   readonly kind: "paragraph";
+  readonly tabContext: SfxItemSet;
   readonly pageStyleNames?: readonly string[];
 }
 /** Accepted paragraph dialog values. */
 export interface WriterParagraphDialogResult {
+  readonly tabStopItems?: SfxItemSet;
   readonly paragraphFormat: WriterParagraphFormatValue;
   readonly paintLineNumbers: boolean;
 }
@@ -145,12 +148,13 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @returns Accepted values or undefined. */
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @param tabContext - Actual native page input. @returns Accepted values or undefined. */
   public async RequestParagraphDialog(
     commandUrl: string,
     initialValue: WriterParagraphFormatValue,
     paintLineNumbers: boolean,
     pageStyleNames: readonly string[],
+    tabContext: SfxItemSet,
   ): Promise<WriterParagraphDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
@@ -158,6 +162,7 @@ export class WriterDialogController {
       kind: "paragraph",
       paintLineNumbers,
       pageStyleNames,
+      tabContext,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterParagraphDialogResult)

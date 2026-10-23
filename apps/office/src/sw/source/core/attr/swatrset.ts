@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SID_ATTR_TABSTOP, SID_ATTR_LRSPACE } from "../../../../editeng/inc/editids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -142,7 +143,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores the represented double. @param value - Stored scalar. @returns Native item. */
       (value) => new SwTableBoxValue(Number(value)),
     );
-    this.RegisterDefaultItem(new SvxLRSpaceItem(RES_LR_SPACE));
+    this.RegisterDefaultItem(new SvxLRSpaceItem(RES_LR_SPACE), undefined, SID_ATTR_LRSPACE);
     this.RegisterDefaultItem(new SwFormatFrameSize());
     this.RegisterDefaultItem(new SwFormatVertOrient());
     this.RegisterDefaultItem(new SwFormatHoriOrient());
@@ -371,6 +372,7 @@ export class SwAttrPool extends SfxItemPool {
         }
         return item;
       },
+      SID_ATTR_TABSTOP,
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),

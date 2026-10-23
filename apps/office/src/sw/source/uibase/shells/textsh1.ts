@@ -555,8 +555,11 @@ export class SwTextShell extends SwBaseShell {
       : undefined;
   }
 
-  /** Applies the supported paragraph dialog through pooled items and one undo entry. @param value - Accepted primitive draft. @returns Whether formatting changed. */
-  public ApplyParagraphFormat(value: WriterParagraphFormatValue): boolean {
+  /** Applies paragraph-dialog items through one history entry. @param value - Accepted formatting fields. @param tabStopItems - Optional original tab-page output set, empty when unchanged. @returns Whether formatting changed. */
+  public ApplyParagraphFormat(
+    value: WriterParagraphFormatValue,
+    tabStopItems?: SfxItemSet,
+  ): boolean {
     if (
       !Number.isFinite(value.upperPt) ||
       value.upperPt < 0 ||
@@ -592,6 +595,7 @@ export class SwTextShell extends SwBaseShell {
       ) => Math.round(position * 20),
     );
     if (
+      tabStopItems === undefined &&
       positions.some(
         /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
           position,
@@ -622,7 +626,7 @@ export class SwTextShell extends SwBaseShell {
           value.contextual,
         ),
         lineSpacing,
-        this.CreateTabStops(positions, paragraph),
+        ...(tabStopItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
         new SfxInt16Item(RES_PARATR_ORPHANS, value.orphans ?? 2),

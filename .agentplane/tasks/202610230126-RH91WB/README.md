@@ -4,7 +4,7 @@ title: "Canonicalize Writer tab-stop dialog and complete native item acceptance"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-23T05:38:14.312Z"
+  updated_by: "CODER"
+  note: "Native tab page and complete Writer UI/core/history/ODT acceptance verified. Current42cases and related item/ruler/metric/filter batches plus5 Chromium cases pass. Exact18-owner source-bound audit S1138/B790/F333/L1044 all100 with current identities and unchanged-span carry only. User-requested synthetic-only tests pin normally unreachable source/browser bodies; normal-flow proof and WRITER066 retained, thresholds unchanged. All declared scoped/static/canonical/doctor/routing gates pass; no full suite for task9."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port original tab-stop dialog page and complete native item request/result through actual Writer history and ODT under existing user continuation approval; task9 related checks only."
+  -
+    type: "verify"
+    at: "2026-10-23T05:38:14.312Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native tab page and complete Writer UI/core/history/ODT acceptance verified. Current42cases and related item/ruler/metric/filter batches plus5 Chromium cases pass. Exact18-owner source-bound audit S1138/B790/F333/L1044 all100 with current identities and unchanged-span carry only. User-requested synthetic-only tests pin normally unreachable source/browser bodies; normal-flow proof and WRITER066 retained, thresholds unchanged. All declared scoped/static/canonical/doctor/routing gates pass; no full suite for task9."
 doc_version: 3
-doc_updated_at: "2026-10-23T03:44:13.574Z"
+doc_updated_at: "2026-10-23T05:38:14.364Z"
 doc_updated_by: "CODER"
 description: "Replace position-only paragraph Tabs editing with original SvxTabulatorTabPage controls and Reset/FillItemSet contracts; carry complete native tab-stop items through the Writer dialog, history, ruler/layout and ODT."
 sections:
@@ -44,7 +50,41 @@ sections:
   Scope: "Only vite-office-writer checkout and writer branch. Up to28 implementation/resource/tooling paths and16 test paths plus paired canonical records/generated views. Original CUI tabstpge source/header and browser page; actual Writer dialog request/acceptance and native pool/slot/default/offset fields; existing metric, tab item, ruler/layout and ODT consumers only where integration evidence requires. Preserve intentional browser I/O/recovery/autosave deviations. No native allocation/lifetime engine, fake SfxTabPage/frame/provider/config services, locale-data expansion, network, merges or unrelated generic service graphs."
   Plan: "Read original tabstpge.cxx/.hxx and paratabspage.ui together with Writer textsh1 paragraph-dialog construction/acceptance and existing complete tab item/I/O/layout. Port original Reset/FillItemSet, automatic pending New acceptance, default/offset conversion, implicit/default stop stripping/reinsertion, null tab for negative first-line indent and type/fill/character/new/delete handlers. Build a source-backed browser TabulatorTabPage preserving original controls, units, sensitivity, focus and UTF16 first-character contracts. Carry complete actual tab-stop items through paragraph dialog request/result into one native paragraph history action, retaining existing position-only public caller compatibility without making UI lose metadata. Verify all types/fills, custom decimal, mixed/table selection, offset/default/null/rounding behavior, untouched entries, undo/redo/ruler/layout and physical ODT; document suspected source anomalies without correcting them. Current-source strict changed-responsibility coverage and all declared local gates, source/quality/close; continue active goal."
   Verify Steps: "Pinned local source review: cui/source/tabpages/tabstpge.cxx, cui/source/inc/tabstpge.hxx, cui/uiconfig/ui/paratabspage.ui, sw/source/uibase/shells/textsh1.cxx paragraph-dialog tab defaults/position/offset and acceptance, editeng tab item owners and actual ODT/ruler/layout. Test original Reset map-unit conversions/default stripping/selected-index fallback, pending New on OK except zero, explicit New zero, source insertion/replacement/order and FindCurrentTab formatted identity, delete/last/delete-all, disabled type/fill controls, four alignments, five fill choices, custom decimal/fill first UTF16-unit handling, empty/control-character rules. Preserve original FillItemSet default insertion, hanging-indent null tab, old-item comparison and native field/default-distance behavior; no invented normalization. Actual pooled complete request/result plus selected paragraph/table history and import/export retain metadata, and legacy callers remain consistent. Chromium1280/390 original Tabs controls, CM/INCH units, edit/accept/cancel, undo/redo, ruler and real ODT download/reopen, no runtime errors/root overflow. Strict exact-source changed-responsibility100 coverage with untouched thresholds; related portable/tooling/browser tests and type/scoped lint/format/build/static/docs/dependencies/resources/provenance/tree/invariants/parity/file-size/doctor/routing/diff and clean final state. Task9 since ACR55N: related tests only, next full suite at task10."
-  Verification: "Implementation and all non-coverage gates complete; final verification pending explicit user decision about proven native unreachable counters. Native tabulator controls/input/output/history/ODT, module units, mixed/table selection and post-DOM focus are connected. Current related batches: shared5files31cases, Writer8files62cases, ruler/acceptance5files34cases, metrics2files7cases, paraitem1file5cases, tooling3files18cases (batches overlap); current-built Chromium5cases pass at1280/390CM and1280INCH, including real export/reopen and history. Typecheck/scoped format+lint/build/static/docs/dependencies/resources/provenance/source-tree/generated canonical views/invariants/parity/file-size/doctor/routing/diff all pass. Fresh18-owner exact-source audit1135/1138statements788/790branches333/333functions1041/1044lines; only preserved native unreachable3statements+2linked branches remain. Read-only source dominance/cardinality proof and raw counters are retained in output/playwright/writer-tabs/native-unreachable-branch-proof.json; no instrumentation/counter/threshold/native behavior was distorted. User approval to accept that proof instead of dynamic execution is pending, per AGENTS.md verification-change gate; current strict criterion remains unchanged. No verify--ok/source/quality/finish yet. Task9 after ACR55N; then full checkpoint task10/fixes/current-task closure and user-requested goal pause. Goal remains active."
+  Verification: |-
+    PASS for approved implementation and verification scope, pending final commit/quality/closure bookkeeping. Original native Tabs Reset/FillItemSet, controls/type/fill/UTF16/unit/default/offset/null and complete pooled request/result are connected to Writer selected paragraphs/table cells, one history action, ruler and physical ODT. Current6producer files42cases pass; related shared5files31cases, Writer8files62cases, ruler/acceptance5files34cases, metrics2files7cases, paraitem1file5cases and tooling3files18cases pass (overlap disclosed). Current-build Chromium5cases pass at1280/390CM and1280INCH with real download/parse/reopen, history/cancel/exchange/ruler, no runtime errors/root overflow; inspected screenshots. Fresh18-owner exact-source S1138/B790/F333/L1044 all100, zero skipped/missing; source/report identities verified, unchanged-span historical carry only. Two user-requested synthetic-only tests genuinely cover normally unreachable native deletion and browser false-focus bodies; source/WRITER066 annotations and normal-flow proof remain, with no production normalization/threshold waiver/counter fabrication. Raw partial focused coverage is separately disclosed. Typecheck/scoped format+lint/build/static/docs/dependencies/resources/provenance/tree/generated4views/invariants/parity/file-size/doctor/routing/diff pass. Intentional browser save/open/recovery/autosave deviations and conservative native parity statuses preserved. Logs/producers/audit/proof/screenshots:output/playwright/writer-tabs. Ninth task after ACR55N; next task is full test checkpoint, necessary repairs/current-task closure and user-requested goal pause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-23T05:38:14.312Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native tab page and complete Writer UI/core/history/ODT acceptance verified. Current42cases and related item/ruler/metric/filter batches plus5 Chromium cases pass. Exact18-owner source-bound audit S1138/B790/F333/L1044 all100 with current identities and unchanged-span carry only. User-requested synthetic-only tests pin normally unreachable source/browser bodies; normal-flow proof and WRITER066 retained, thresholds unchanged. All declared scoped/static/canonical/doctor/routing gates pass; no full suite for task9.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T05:37:31.011Z, excerpt_hash=sha256:d4d481f3f7c80bbb1bf23389bb340bdc2982817a358f031265243755bb86111d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610230126-RH91WB/blueprint/resolved-snapshot.json
+    - old_digest: 5db8dd2755c5124c66544a7e5672a0755f166fed55550669dd1f2478543ecc77
+    - current_digest: 5db8dd2755c5124c66544a7e5672a0755f166fed55550669dd1f2478543ecc77
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610230126-RH91WB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610230126-RH91WB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source commits; retain previous Writer work and task evidence. No reset, merge, worktree or external write."
   Findings: |-
     Baseline095449e7c319 clean after FNBXHP. Approved RH91WB artifacts persisted774f453b2925; only writer checkout/branch under existing broad mutation/continuation and pinned local LibreOffice9bc445578031fecf56086729d8e4940c77e14d65 read approval. No network/outside mutation/merge/other worktree/subagent. Goal remains active; earlier stop instructions revoked.
@@ -86,6 +126,10 @@ sections:
     Fresh18-owner audit uses current coverage producer/report/source hashes and previous hits only on exact unchanged source spans at matching git-diff positions with verified baseline hashes095449e7c319. Current audit:1135/1138statements,788/790branches,333/333functions,1041/1044lines. Exactly five missing counters remain:3 statements in original tabstpge.ts212..214, its empty-list true branch211, and the linked browser focus-without-select branch. All other counters are covered; the raw focused report remains partial and its100 thresholds are unchanged, not misreported as a complete run. Read-only proof script output/playwright/writer-tabs/prove-native-deletion-branch.mjs validates actual local/pinned guards, row removal cardinality, unique false-focus source and the exact missing-counter set; native-unreachable-branch-proof.json preserves source identities and raw summary. No ignore pragma, fabricated hit, private state corruption or native algorithm deletion was used.
 
     Acceptance is pending: asked the human through request_user_input_async whether the declared strict dynamic100 criterion may accept this exact reachability proof for those5counters. AGENTS.md requires re-approval of a material verification criterion change. Other verification is complete; do not record verify--ok, promote a100 claim, finishRH91WB, change the approved criterion or start full checkpoint task10 until this required answer is received. Current task remains DOING and the goal active, not paused. Source implementation and canonical records remain uncommitted pending final acceptance/quality, under the approved28implementation16test path budgets. The latest stop instruction remains: after task10's next full run, necessary fixes and closure of the then-current task, pause the goal without starting further work.
+
+    FINAL ACCEPTANCE RESOLUTION: the human explicitly requested adding tests for the otherwise unreachable code, with a real-world reachability annotation, instead of accepting a coverage exception. Added two user-authorized, explicitly named synthetic-only tests. The source test builds the genuine offset-collision page state and intercepts only that isolated test's actual displayed-array splice to remove all rows; it verifies the retained native empty-list flags and focus(false) body. The browser contract test observes the real mounted SetFocus callback and passes false explicitly, verifying focus with a collapsed selection. These tests genuinely execute the production branch bodies, do not alter counters or thresholds, do not change production algorithms and do not claim real native UI reachability. Original control-flow proof and WRITER066 remain; source handler JSDoc points to the qualification. The prior coverage-exception request is resolved by this human-directed testing approach; no verification criterion waiver or pending human input remains.
+
+    Final42case current coverage producer passes6files. Fresh18-owner exact-source audit is now S1138/1138 B790/790 F333/333 L1044/1044,100all with no skipped counters. Source/report producer hashes are checked; historical hits are restricted to exact unchanged source spans at verified baseline095449e7c319 positions, with no changed responsibility inheriting a historical hit. The broader raw partial profile is still separately reported and its global100 thresholds are untouched. Synthetic-only evidence is explicitly separated from ordinary UI/core/table/ODT/browser integration and does not imply native binary/widget-service parity. Source-only reachability proof now records zero uncovered counters and preserves the normal-flow qualification. Latest scoped lint/format, type/docs and canonical invariant/provenance checks pass. Implementation source commit, formal verify record, EVALUATOR report and clean closure are the remaining lifecycle steps. This remains task9; proceed to the explicitly requested task10 full test checkpoint, required fixes/current-task closure and goal pause afterward.
 id_source: "generated"
 ---
 ## Summary
@@ -106,7 +150,40 @@ Pinned local source review: cui/source/tabpages/tabstpge.cxx, cui/source/inc/tab
 
 ## Verification
 
-Implementation and all non-coverage gates complete; final verification pending explicit user decision about proven native unreachable counters. Native tabulator controls/input/output/history/ODT, module units, mixed/table selection and post-DOM focus are connected. Current related batches: shared5files31cases, Writer8files62cases, ruler/acceptance5files34cases, metrics2files7cases, paraitem1file5cases, tooling3files18cases (batches overlap); current-built Chromium5cases pass at1280/390CM and1280INCH, including real export/reopen and history. Typecheck/scoped format+lint/build/static/docs/dependencies/resources/provenance/source-tree/generated canonical views/invariants/parity/file-size/doctor/routing/diff all pass. Fresh18-owner exact-source audit1135/1138statements788/790branches333/333functions1041/1044lines; only preserved native unreachable3statements+2linked branches remain. Read-only source dominance/cardinality proof and raw counters are retained in output/playwright/writer-tabs/native-unreachable-branch-proof.json; no instrumentation/counter/threshold/native behavior was distorted. User approval to accept that proof instead of dynamic execution is pending, per AGENTS.md verification-change gate; current strict criterion remains unchanged. No verify--ok/source/quality/finish yet. Task9 after ACR55N; then full checkpoint task10/fixes/current-task closure and user-requested goal pause. Goal remains active.
+PASS for approved implementation and verification scope, pending final commit/quality/closure bookkeeping. Original native Tabs Reset/FillItemSet, controls/type/fill/UTF16/unit/default/offset/null and complete pooled request/result are connected to Writer selected paragraphs/table cells, one history action, ruler and physical ODT. Current6producer files42cases pass; related shared5files31cases, Writer8files62cases, ruler/acceptance5files34cases, metrics2files7cases, paraitem1file5cases and tooling3files18cases pass (overlap disclosed). Current-build Chromium5cases pass at1280/390CM and1280INCH with real download/parse/reopen, history/cancel/exchange/ruler, no runtime errors/root overflow; inspected screenshots. Fresh18-owner exact-source S1138/B790/F333/L1044 all100, zero skipped/missing; source/report identities verified, unchanged-span historical carry only. Two user-requested synthetic-only tests genuinely cover normally unreachable native deletion and browser false-focus bodies; source/WRITER066 annotations and normal-flow proof remain, with no production normalization/threshold waiver/counter fabrication. Raw partial focused coverage is separately disclosed. Typecheck/scoped format+lint/build/static/docs/dependencies/resources/provenance/tree/generated4views/invariants/parity/file-size/doctor/routing/diff pass. Intentional browser save/open/recovery/autosave deviations and conservative native parity statuses preserved. Logs/producers/audit/proof/screenshots:output/playwright/writer-tabs. Ninth task after ACR55N; next task is full test checkpoint, necessary repairs/current-task closure and user-requested goal pause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-23T05:38:14.312Z — VERIFY — ok
+
+By: CODER
+
+Note: Native tab page and complete Writer UI/core/history/ODT acceptance verified. Current42cases and related item/ruler/metric/filter batches plus5 Chromium cases pass. Exact18-owner source-bound audit S1138/B790/F333/L1044 all100 with current identities and unchanged-span carry only. User-requested synthetic-only tests pin normally unreachable source/browser bodies; normal-flow proof and WRITER066 retained, thresholds unchanged. All declared scoped/static/canonical/doctor/routing gates pass; no full suite for task9.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T05:37:31.011Z, excerpt_hash=sha256:d4d481f3f7c80bbb1bf23389bb340bdc2982817a358f031265243755bb86111d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610230126-RH91WB/blueprint/resolved-snapshot.json
+- old_digest: 5db8dd2755c5124c66544a7e5672a0755f166fed55550669dd1f2478543ecc77
+- current_digest: 5db8dd2755c5124c66544a7e5672a0755f166fed55550669dd1f2478543ecc77
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610230126-RH91WB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610230126-RH91WB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -153,3 +230,7 @@ Current evidence: shared-related5files31cases, Writer-related8files62cases, addi
 Fresh18-owner audit uses current coverage producer/report/source hashes and previous hits only on exact unchanged source spans at matching git-diff positions with verified baseline hashes095449e7c319. Current audit:1135/1138statements,788/790branches,333/333functions,1041/1044lines. Exactly five missing counters remain:3 statements in original tabstpge.ts212..214, its empty-list true branch211, and the linked browser focus-without-select branch. All other counters are covered; the raw focused report remains partial and its100 thresholds are unchanged, not misreported as a complete run. Read-only proof script output/playwright/writer-tabs/prove-native-deletion-branch.mjs validates actual local/pinned guards, row removal cardinality, unique false-focus source and the exact missing-counter set; native-unreachable-branch-proof.json preserves source identities and raw summary. No ignore pragma, fabricated hit, private state corruption or native algorithm deletion was used.
 
 Acceptance is pending: asked the human through request_user_input_async whether the declared strict dynamic100 criterion may accept this exact reachability proof for those5counters. AGENTS.md requires re-approval of a material verification criterion change. Other verification is complete; do not record verify--ok, promote a100 claim, finishRH91WB, change the approved criterion or start full checkpoint task10 until this required answer is received. Current task remains DOING and the goal active, not paused. Source implementation and canonical records remain uncommitted pending final acceptance/quality, under the approved28implementation16test path budgets. The latest stop instruction remains: after task10's next full run, necessary fixes and closure of the then-current task, pause the goal without starting further work.
+
+FINAL ACCEPTANCE RESOLUTION: the human explicitly requested adding tests for the otherwise unreachable code, with a real-world reachability annotation, instead of accepting a coverage exception. Added two user-authorized, explicitly named synthetic-only tests. The source test builds the genuine offset-collision page state and intercepts only that isolated test's actual displayed-array splice to remove all rows; it verifies the retained native empty-list flags and focus(false) body. The browser contract test observes the real mounted SetFocus callback and passes false explicitly, verifying focus with a collapsed selection. These tests genuinely execute the production branch bodies, do not alter counters or thresholds, do not change production algorithms and do not claim real native UI reachability. Original control-flow proof and WRITER066 remain; source handler JSDoc points to the qualification. The prior coverage-exception request is resolved by this human-directed testing approach; no verification criterion waiver or pending human input remains.
+
+Final42case current coverage producer passes6files. Fresh18-owner exact-source audit is now S1138/1138 B790/790 F333/333 L1044/1044,100all with no skipped counters. Source/report producer hashes are checked; historical hits are restricted to exact unchanged source spans at verified baseline095449e7c319 positions, with no changed responsibility inheriting a historical hit. The broader raw partial profile is still separately reported and its global100 thresholds are untouched. Synthetic-only evidence is explicitly separated from ordinary UI/core/table/ODT/browser integration and does not imply native binary/widget-service parity. Source-only reachability proof now records zero uncovered counters and preserves the normal-flow qualification. Latest scoped lint/format, type/docs and canonical invariant/provenance checks pass. Implementation source commit, formal verify record, EVALUATOR report and clean closure are the remaining lifecycle steps. This remains task9; proceed to the explicitly requested task10 full test checkpoint, required fixes/current-task closure and goal pause afterward.

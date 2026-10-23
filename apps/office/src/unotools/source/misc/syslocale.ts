@@ -5,6 +5,7 @@ import { getPlatformLocale } from "../../../i18nlangtag/source/isolang/insys.loc
 import {
   getLocaleDecimalSeparator,
   getLocaleDecimalSeparatorAlternate,
+  getLocaleThousandSeparator,
 } from "../../../i18npool/source/localedata/localedata";
 /** Existing locale field query uses actual configured state,otherwise delegates the unchanged live host preparation. @returns Actual Locale value. */
 export function getSystemLocale(): Locale {
@@ -18,4 +19,9 @@ export function getSystemDecimalSeparator(): string {
 /** Original alternate decimal field through the actual shared system Locale binding. @returns Source alternate separator,possibly empty. */
 export function getSystemDecimalSeparatorAlternate(): string {
   return getLocaleDecimalSeparatorAlternate(getSystemLocale());
+}
+
+/** Actual shared system-locale thousand separator field, without a LocaleDataWrapper service. @returns Original grouping separator. */
+export function getSystemThousandSeparator(): string {
+  return getLocaleThousandSeparator(getSystemLocale());
 }

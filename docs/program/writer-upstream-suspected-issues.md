@@ -918,3 +918,39 @@ implementation change.
 - Source: pinned `svx/source/sidebar/paragraph/ParaLineSpacingControl.cxx`, `ExecuteLineSpace` and `SetLineSpace`; `paralinespacingcontrol.ui` metric range; `include/editeng/lspcitem.hxx` signed additive spacing.
 - Observation: the popup reads dimensional values in the module core unit and casts them to `sal_uInt16` before assigning minimum, fixed or leading spacing. The leading item then stores signed16. In Writer's twip profile, an admitted100cm becomes56693twips, which leading stores as-8843. Larger minimum/fixed values also wrap modulo65536. The resource's large upper bound does not itself constrain the dimensional value to the item domain. Native platform-widget reachability and the intended application behavior remain unverified; this is source/portable evidence, not a compiled native application defect claim.
 - Preservation: keep the original uint16 narrowing and signed leading setter, together with source numeric ranges and unit conversion. Do not silently cap physical values or widen the item. Portable popup/item tests assert the exact behavior.
+
+### WRITER061 — a partial tab-page disable mask disables its entire group
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `SvxTabulatorTabPage::DisableControls`; `include/svx/flagsdef.hxx` masks.
+- Observation: after disabling individual controls, the page disables the entire Type or Fill frame whenever any bit of the corresponding mask is present. A TypeLeft flag therefore also disables interaction with the other type radios through their parent frame. Whether this is the intended caller convention is unverified; no compiled GUI defect is claimed.
+- Preservation: retain any-bit mask tests and both individual and parent sensitivity. Do not replace them with an all-bits equality check.
+
+### WRITER062 — Delete All can retain hidden current-tab fields after resetting radios
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `DelAllHdl_Impl`, empty `InitTabPos_Impl` branch, `NewHdl_Impl`; `include/vcl/weld/Toggleable.hxx` notification suppression.
+- Observation: Delete All constructs default stops and strips them from the list. The empty path sets Left/No Fill radios but retains `aCurrentTab`, decimal/fill text and entry sensitivity. Programmatic radio assignments suppress user handlers. A later new Left tab can retain the prior custom filler despite No Fill being selected. Native GUI event reachability and intended behavior remain unverified.
+- Preservation: keep the source current-tab retention, radio assignment and handler ordering; portable controller tests assert the literal result.
+
+### WRITER063 — matching a displayed tab position can store its offset as a real position
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `InitTabPos_Impl`, `ModifyHdl_Impl`, `NewHdl_Impl` and type/fill replacement handlers.
+- Observation: list rows include the input left-border offset. New subtracts that offset, but Modify assigns the displayed `GetCurrentValue()` directly to `aCurrentTab.GetTabPos()`. A subsequent type/fill replacement can therefore store the offset-inclusive value. A720twip tab with360twip offset displays1.91cm after field rounding and this handler sequence stores1083twips. Exact native platform signal routing remains unverified; this is source/portable handler evidence.
+- Preservation: retain the distinct New and Modify assignments and original field rounding; do not apply an inferred inverse offset in Modify.
+
+- Additional portable consequence: with original Writer1440twip indent offset and explicit tabs1440/2880twips, selecting the first displayed5.08cm value through Modify and changing its type moves it to the second tab's internal position. `SvxTabStopItem::Insert` replaces that equal position, so two visible rows can correspond to one actual item. Deleting the first row then leaves one visible row and no actual tab. This initialized source sequence is tested without mutating a widget/provider facade; native GUI reachability remains unverified.
+
+### WRITER064 — non-mm100 tab-page Reset does not copy independent default-distance metadata
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, constructor, `Reset` and `FillItemSet`; `editeng/source/items/paraitem.cxx`, `SvxTabStopItem` constructors/equality.
+- Observation: the non-mm100 Reset branch clones input only into a temporary, clears the page-owned item and copies individual converted stops. Its independent default-distance field remains the page constructor's zero. An input item with a nonzero default-distance field can consequently compare different on acceptance even when visible positions stay unchanged. Native caller intent and GUI impact are unverified.
+- Preservation: keep metadata zero in this branch and the original full-item comparison. Do not copy the field merely to make unchanged acceptance appear cleaner.
+
+### WRITER065 — Tab-page exchange inserts an internal default zero without rebuilding visible row indices
+
+Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at zero into `aNewTabs` for a negative first-line indent in a non-mm100 pool. The displayed list is not rebuilt. A later `SelectHdl_Impl` still indexes `aNewTabs` using the displayed row index. With a single Decimal stop, exchange followed by activation of its still-visible row loads the internal Default-zero stop; `SetFillAndTabType_Impl` leaves the previous type radio but disables the decimal field. The portable source test reproduces this actual item/lifecycle sequence. Preserve it; this is a suspected contract issue, not a compiled native GUI confirmation.
+
+### WRITER066 — tab deletion retains a trailing empty-list branch dominated by an earlier return
+
+- Source: pinned `cui/source/tabpages/tabstpge.cxx`, `SvxTabulatorTabPage::DelHdl_Impl`.
+- Observation: a missing row returns immediately; a list of exactly one row delegates to Delete All and returns. The remaining branch therefore begins with at least two rows. It removes one displayed row; subsequent native item removal and current-row assignment do not remove another displayed row. Consequently its trailing `get_count() == 0` block cannot execute under the original non-reentrant page handler contract. The browser's focus-without-select projection is only called by that block. This is a source control-flow proof; compiled/native reentrancy or corrupt-widget behavior is not claimed.
+- Preservation: retain the original empty-list block, flags and focus operation. Do not delete it or infer normal UI reachability from coverage. Explicitly named synthetic-only tests, requested by the user, deliberately violate the displayed-list removal invariant and separately invoke the actual browser callback with false to pin the preserved branch bodies. These executions cover the isolated contracts and do not invalidate the source control-flow proof. The actual offset-collision state from WRITER063 is separately tested and still leaves a displayed row after deletion.
