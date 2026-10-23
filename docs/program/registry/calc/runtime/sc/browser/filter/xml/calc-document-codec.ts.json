@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-f15476e9-2d48-48f8-9cc5-6c90aa523b01"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#encodeCalcDocument",
+        "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#decodeCalcDocument",
+        "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#encodeCalcDocumentAsync",
+        "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts#decodeCalcDocumentAsync"
+      ],
+      "justification": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeCalcDocument",
+        "decodeCalcDocument",
+        "encodeCalcDocumentAsync",
+        "decodeCalcDocumentAsync"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

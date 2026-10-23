@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "marker": "scope",
+          "path": "apps/office/src/sc/browser/filter/xml/ods-worker.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
+    "rationale": "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+    "responsibilities": [
+      "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser scheduling, worker transport and unpacked XML persistence adapt platform boundaries."
+    },
+    "status": "local-only"
+  }
+}

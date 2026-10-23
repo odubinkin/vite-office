@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "encodeCalcDocument",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts"
+        },
+        {
+          "marker": "decodeCalcDocument",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts"
+        },
+        {
+          "marker": "encodeCalcDocumentAsync",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts"
+        },
+        {
+          "marker": "decodeCalcDocumentAsync",
+          "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+    "rationale": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+    "responsibilities": [
+      "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser scheduling, worker transport and unpacked XML persistence adapt platform boundaries."
+    },
+    "status": "local-only"
+  }
+}

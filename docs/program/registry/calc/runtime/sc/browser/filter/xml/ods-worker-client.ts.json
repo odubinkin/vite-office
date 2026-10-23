@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/filter/xml/ods-worker-client.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-52899cc6-d061-4979-a569-681a6b9e15e0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/filter/xml/ods-worker-client.ts#OdsWorkerClient"
+      ],
+      "justification": "Coordinates a reusable Calc Dedicated Worker with bounded graph transfer, stale-result rejection, cancellation and explicit teardown. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OdsWorkerClient"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

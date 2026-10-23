@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "marker": "createInlineOdsFilterService",
+          "path": "apps/office/src/sc/source/filter/xml/ods-filter-service.ts"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sc/source/filter/xml/ods-filter-service.ts",
+    "rationale": "Defines asynchronous Calc document filtering and a deterministic inline adapter for native callers and tests; browser worker transport remains separately owned. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+    "responsibilities": [
+      "Defines asynchronous Calc document filtering and a deterministic inline adapter for native callers and tests; browser worker transport remains separately owned."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser scheduling, worker transport and unpacked XML persistence adapt platform boundaries."
+    },
+    "status": "local-only"
+  }
+}
