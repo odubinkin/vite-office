@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T17:49:01.701Z"
+doc_updated_at: "2026-10-23T18:24:01.911Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -110,6 +110,24 @@ sections:
     Diagnostics repaired within scope:fixtures now use the genuine precompiled matrix metadata constructor and the public TEMPORARY enum;broadcast control checks inspect the actual dirty flag without invoking unavailable locale string-to-number conversion. Handler fallback tests use fresh real contexts,retaining CALC-257 failed-initialization caching and avoiding consumption of undefined native cursor values. coverage1 was diagnostic (one missing absent-sheet branch);the final raw100 run covers it. No production policy or check was weakened.
 
     Remaining unchanged acceptance:original general document CopyFromClip/CopyBlockFromClip and reference-update orchestration;real undo-document initialization and paste Undo/Redo;EnterBlock/empty-marked AutoSum and final74 UI acceptance. Number-format inheritance,full formatter/note/edit/drawing services,group-compute cache invalidation and stream-valid/UNO shell notifications remain explicit unrepresented services rather than fake owners. Final default-profile behavior and original contract gaps still need review before finishing76. Task74 depends on76;77 is already done. Goal remains active;the stop rule after the next full all-app checkpoint remains in force.
+
+    Task76 reference-copy checkpoint: preserved native RefUpdateContext/RefErrorContext/UpdatedRangeNames and sparse ColumnSet ownership/defaults,actual document/table/column COPY traversal and both shared-formula boundary joins. Added native ScFormulaCell Compile/CompileTokenArray,copy-update metadata,on-reference-move dirty handling and oldest undo-formula retention. The ordinary source-string constructor now calls the actual Compile path;clipboard/undo source-string construction retains the original empty-array early return. Existing undo-error vectors now provide actual precompiled arrays. Shared FormulaTokenArray::AddBad owns a non-interned native shared string. CALC-260 documents insertion-only global-name normalization. Non-copy engines and unavailable names/printing/drawing/validation/embedded/UNO/formatter services remain unported;no alternate workbook or relocation by formula-source reparsing was introduced. Native bad/name/subtotal opcodes retain the actual shared compiler admission boundary;no fake subtotal registration owner.
+
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-reference-final-coverage.
+    Result:863/863 scenarios across216 files pass;current raw100 S15708/B9558/F2707/L14063. Twelve new reference/compile/undo/context scenarios plus corrected existing undo-source construction. No thresholds,exclusions or coverage ignores changed.
+    Scope:complete Calc only;not the all-application checkpoint. Earlier failed diagnostic reports and the prior863/raw100 report before the final constructor correction are retained as historical evidence,not current-source acceptance.
+
+    Command:npx vitest run --config vitest.shared.config.ts src/formula/inc/tokenarray.test.ts --coverage --coverage.include=src/formula/source/core/api/token.array.ts --coverage.reportsDirectory=../../output/playwright/task76-reference-shared-final-coverage.
+    Result:3/3 shared native-array scenarios pass;changed shared owner raw100 S234/B84/F69/L201.
+    Scope:the actual changed shared token-array owner and existing consumers,not a complete shared-suite replay.
+
+    Command:npx playwright test e2e/calc/clipboard-copy.spec.ts e2e/calc/formula-pointing.spec.ts e2e/calc/cell-selection.spec.ts --config playwright.config.ts --project=calc.
+    Result:6/6 actual Chromium/DOM-free Worker and1280/390px UI selection/pointing scenarios pass. The clipboard probe now executes document.UpdateReference with real shared block-position caching before listener restart and deferred notifications;expected21/34 dependency values and=D6+1 remain unchanged.
+    Scope:actual copied-owner graph,not completed document PasteFromClip/Undo UI behavior.
+
+    All current app/tools types,production build,scoped Calc/changed-shared/E2E lint,changed-file format,JSDoc,size,boundary,source-tree,provenance,Calc/shared registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-reference contains the logs,raw Istanbul reports and448 stable source/test/config hashes. Current task source/test/registry/probe footprint98/110. Repository-wide lint is not recertified;its previous unrelated Writer/probe failures remain outside this checkpoint.
+
+    Remaining:general document CopyFromClip/CopyBlockFromClip and optimized document/table single-cell dispatch;actual Undo document initialization,source paste history and EnterBlock/AutoSum integration;final76 acceptance then74 acceptance. Existing number-format inheritance/formatter service boundaries still require review before76 closure. Task76 remains DOING/verification pending;task74 waits on76. Full all-application checkpoint stays80,then repairs,coverage,current-task closure and the human-requested stop. Goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -199,3 +217,21 @@ Result:pass;Calc registry0semantic violations. Immutable exact commands and comp
 Diagnostics repaired within scope:fixtures now use the genuine precompiled matrix metadata constructor and the public TEMPORARY enum;broadcast control checks inspect the actual dirty flag without invoking unavailable locale string-to-number conversion. Handler fallback tests use fresh real contexts,retaining CALC-257 failed-initialization caching and avoiding consumption of undefined native cursor values. coverage1 was diagnostic (one missing absent-sheet branch);the final raw100 run covers it. No production policy or check was weakened.
 
 Remaining unchanged acceptance:original general document CopyFromClip/CopyBlockFromClip and reference-update orchestration;real undo-document initialization and paste Undo/Redo;EnterBlock/empty-marked AutoSum and final74 UI acceptance. Number-format inheritance,full formatter/note/edit/drawing services,group-compute cache invalidation and stream-valid/UNO shell notifications remain explicit unrepresented services rather than fake owners. Final default-profile behavior and original contract gaps still need review before finishing76. Task74 depends on76;77 is already done. Goal remains active;the stop rule after the next full all-app checkpoint remains in force.
+
+Task76 reference-copy checkpoint: preserved native RefUpdateContext/RefErrorContext/UpdatedRangeNames and sparse ColumnSet ownership/defaults,actual document/table/column COPY traversal and both shared-formula boundary joins. Added native ScFormulaCell Compile/CompileTokenArray,copy-update metadata,on-reference-move dirty handling and oldest undo-formula retention. The ordinary source-string constructor now calls the actual Compile path;clipboard/undo source-string construction retains the original empty-array early return. Existing undo-error vectors now provide actual precompiled arrays. Shared FormulaTokenArray::AddBad owns a non-interned native shared string. CALC-260 documents insertion-only global-name normalization. Non-copy engines and unavailable names/printing/drawing/validation/embedded/UNO/formatter services remain unported;no alternate workbook or relocation by formula-source reparsing was introduced. Native bad/name/subtotal opcodes retain the actual shared compiler admission boundary;no fake subtotal registration owner.
+
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-reference-final-coverage.
+Result:863/863 scenarios across216 files pass;current raw100 S15708/B9558/F2707/L14063. Twelve new reference/compile/undo/context scenarios plus corrected existing undo-source construction. No thresholds,exclusions or coverage ignores changed.
+Scope:complete Calc only;not the all-application checkpoint. Earlier failed diagnostic reports and the prior863/raw100 report before the final constructor correction are retained as historical evidence,not current-source acceptance.
+
+Command:npx vitest run --config vitest.shared.config.ts src/formula/inc/tokenarray.test.ts --coverage --coverage.include=src/formula/source/core/api/token.array.ts --coverage.reportsDirectory=../../output/playwright/task76-reference-shared-final-coverage.
+Result:3/3 shared native-array scenarios pass;changed shared owner raw100 S234/B84/F69/L201.
+Scope:the actual changed shared token-array owner and existing consumers,not a complete shared-suite replay.
+
+Command:npx playwright test e2e/calc/clipboard-copy.spec.ts e2e/calc/formula-pointing.spec.ts e2e/calc/cell-selection.spec.ts --config playwright.config.ts --project=calc.
+Result:6/6 actual Chromium/DOM-free Worker and1280/390px UI selection/pointing scenarios pass. The clipboard probe now executes document.UpdateReference with real shared block-position caching before listener restart and deferred notifications;expected21/34 dependency values and=D6+1 remain unchanged.
+Scope:actual copied-owner graph,not completed document PasteFromClip/Undo UI behavior.
+
+All current app/tools types,production build,scoped Calc/changed-shared/E2E lint,changed-file format,JSDoc,size,boundary,source-tree,provenance,Calc/shared registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-reference contains the logs,raw Istanbul reports and448 stable source/test/config hashes. Current task source/test/registry/probe footprint98/110. Repository-wide lint is not recertified;its previous unrelated Writer/probe failures remain outside this checkpoint.
+
+Remaining:general document CopyFromClip/CopyBlockFromClip and optimized document/table single-cell dispatch;actual Undo document initialization,source paste history and EnterBlock/AutoSum integration;final76 acceptance then74 acceptance. Existing number-format inheritance/formatter service boundaries still require review before76 closure. Task76 remains DOING/verification pending;task74 waits on76. Full all-application checkpoint stays80,then repairs,coverage,current-task closure and the human-requested stop. Goal remains active.
