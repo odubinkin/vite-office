@@ -1,0 +1,163 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native block and filtered-run copy verified;full paste/Undo/EnterBlock pending",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 870,
+  "calcFiles": 217,
+  "coverage": {
+    "lines": {
+      "total": 14125,
+      "covered": 14125,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15778,
+      "covered": 15778,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2714,
+      "covered": 2714,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9592,
+      "covered": 9592,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "sourceHashesStable": true,
+  "capturedSourceTestConfigHashes": 446,
+  "taskFootprint": "102/110 cumulative paths,including prior removed probe images",
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed here",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/FilterData.ts",
+    "apps/office/src/sc/source/core/data/clipboard-block.test.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/source/core/data/FilterData.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/FilterData.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json"
+  ],
+  "rawSha256": "b3f8418125ba41b539f55db234bd605d42ca2d101bf743c5d0877f8ebbc4c942",
+  "checks": {
+    "calc-coverage": {
+      "command": "npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-block-calc-coverage",
+      "result": "pass",
+      "log": "output/playwright/task76-block-calc.log",
+      "sha256": "87814cec83fca41ce2a548605f827ed4aa6d6c7f28e0fc4568ce9a4e1b458fd8"
+    },
+    "app-types": {
+      "command": "npx tsc --noEmit -p apps/office/tsconfig.json",
+      "result": "pass",
+      "log": "output/playwright/task76-block-app-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "pass",
+      "log": "output/playwright/task76-block-build.log",
+      "sha256": "f62a142455bdc9e729c0801eea70b543369af8121ac4ecc289ed4e2763c74c1e"
+    },
+    "tools-types": {
+      "command": "npx tsc --noEmit -p tsconfig.tools.json",
+      "result": "pass",
+      "log": "output/playwright/task76-block-tools-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lint": {
+      "command": "npx eslint <changed source/test/E2E paths>",
+      "result": "pass",
+      "log": "output/playwright/task76-block-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check <changed source/test/E2E/docs paths>",
+      "result": "pass",
+      "log": "output/playwright/task76-block-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "output/playwright/task76-paste-docs.log",
+      "sha256": "8faeaa49de019ad06469653030b94054fe46ad15310604add7dbb260916c19df"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "output/playwright/task76-paste-provenance.log",
+      "sha256": "f026a859bdffa47c08315148a88284f49d920818c337ca240e91b403b436b606"
+    },
+    "registry": {
+      "command": "npm run inventory:parity:calc",
+      "result": "pass",
+      "log": "output/playwright/task76-paste-registry.log",
+      "sha256": "7dd57acd7759e7ff3776e8edf7990a88cac1fd658b2dfec59d26bc0508b6db22"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "output/playwright/task76-block-size.log",
+      "sha256": "6d742c2da22a30dbb2b0cb63d4b6f50fb744e0a51a7122440cf25e4f7292ab60"
+    },
+    "boundaries": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "output/playwright/task76-block-boundaries.log",
+      "sha256": "012477911f68ef4d8393e730fd9b27dbf2c4d2056d7d1ba51ec15541bccaa904"
+    },
+    "source-tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "output/playwright/task76-block-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "output/playwright/task76-block-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "chromium-worker": {
+      "command": "npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc",
+      "result": "pass",
+      "log": "output/playwright/task76-block-browser.log",
+      "sha256": "723efef1d2679de687a5898424a882e4f95e375edfe05b4b859b25fa712e50df"
+    },
+    "static": {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-block-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-block-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "output/playwright/task76-block-doctor.log",
+      "sha256": "059e936de1de468944da5237435484e2e4335c3cc9f60c76dd8f10a230d5a8c6"
+    }
+  }
+}

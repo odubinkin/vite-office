@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T18:24:01.911Z"
+doc_updated_at: "2026-10-23T18:37:06.868Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -128,6 +128,20 @@ sections:
     All current app/tools types,production build,scoped Calc/changed-shared/E2E lint,changed-file format,JSDoc,size,boundary,source-tree,provenance,Calc/shared registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-reference contains the logs,raw Istanbul reports and448 stable source/test/config hashes. Current task source/test/registry/probe footprint98/110. Repository-wide lint is not recertified;its previous unrelated Writer/probe failures remain outside this checkpoint.
 
     Remaining:general document CopyFromClip/CopyBlockFromClip and optimized document/table single-cell dispatch;actual Undo document initialization,source paste history and EnterBlock/AutoSum integration;final76 acceptance then74 acceptance. Existing number-format inheritance/formatter service boundaries still require review before76 closure. Task76 remains DOING/verification pending;task74 waits on76. Full all-application checkpoint stays80,then repairs,coverage,current-task closure and the human-requested stop. Goal remains active.
+
+    Task76 block-copy checkpoint:original CopyBlockFromClip now cycles genuine sparse source-sheet vectors only for selected existing destinations,then processes consecutive selected sheets through actual RefUpdateContext and the shared mdds cursor cache. Default CONTENTS is the admitted context;unrepresented drawing/non-content owners are not simulated. Same-pool cut/move has an explicit pre-mutation admission failure;foreign-pool cut preserves the source skipped-reference phase. Native CopyNonFilteredFromClip uses the first populated source sheet's real FilterData segments,retains hidden rows,advances the real source cursor and preserves the signed SCROW-max count/output behavior documented in CALC-261. FirstNonFilteredRow keeps native missing-sheet/invalid/no-match sentinels;initialized segment partitions guarantee valid-row lookup,without simulating allocator/corrupt-store failures. Existing DeleteSelection body is partitioned unchanged onto the same ScDocument instance through documen7 to keep document.ts at999lines.
+
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-block-calc-coverage.
+    Result:870/870 scenarios across217 physical files pass;raw100 S15778/B9592/F2714/L14125. Seven new genuine owner vectors cover sparse source cycling,selected/consecutive/missing destination sheets,foreign/same-pool cut boundary,filtered/hidden rows,source/destination run limits,SCROW-max outputs,maximum source tab9999 and fresh ODS reopen with live copied relative/absolute formulas. Original ResetClip explicitly permits a missing source sheet and creates the actual sparse clipboard slot;no intervening worksheets or fake tables are allocated in the boundary vector. No thresholds,exclusions or ignores changed.
+    Scope:complete Calc only,not an all-application checkpoint. Shared source is unchanged since the prior changed-owner raw100 evidence.
+
+    Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+    Result:1/1 actual Chromium/DOM-free Worker scenario passes. The probe now calls native document.CopyBlockFromClip,which includes the real reference-update phase,instead of manually composing table copy and document reference calls. Actual expected dependency results21/34 and=D6+1 remain unchanged.
+    Scope:actual core block-copy graph;full browser PasteFromClip/history acceptance is not claimed.
+
+    All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Evidence/progress-blocks preserves raw Istanbul,logs and446 stable source/test/config hashes. Conservative cumulative task footprint102/110,including four prior generated images that were removed from Git;no generated screenshots are included in this checkpoint.
+
+    Remaining unchanged:complete document CopyFromClip orchestration and original single-source-row optimization with its actual script/format services;native Undo initialization and paste history;EnterBlock/AutoSum and final76 acceptance,then74. Number-format inheritance/service boundaries remain under review. Task76 stays DOING/verification pending;task74 depends on76. Full all-app checkpoint80 remains the requested stop checkpoint after repairs,coverage and current-task closure. Goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -235,3 +249,17 @@ Scope:actual copied-owner graph,not completed document PasteFromClip/Undo UI beh
 All current app/tools types,production build,scoped Calc/changed-shared/E2E lint,changed-file format,JSDoc,size,boundary,source-tree,provenance,Calc/shared registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-reference contains the logs,raw Istanbul reports and448 stable source/test/config hashes. Current task source/test/registry/probe footprint98/110. Repository-wide lint is not recertified;its previous unrelated Writer/probe failures remain outside this checkpoint.
 
 Remaining:general document CopyFromClip/CopyBlockFromClip and optimized document/table single-cell dispatch;actual Undo document initialization,source paste history and EnterBlock/AutoSum integration;final76 acceptance then74 acceptance. Existing number-format inheritance/formatter service boundaries still require review before76 closure. Task76 remains DOING/verification pending;task74 waits on76. Full all-application checkpoint stays80,then repairs,coverage,current-task closure and the human-requested stop. Goal remains active.
+
+Task76 block-copy checkpoint:original CopyBlockFromClip now cycles genuine sparse source-sheet vectors only for selected existing destinations,then processes consecutive selected sheets through actual RefUpdateContext and the shared mdds cursor cache. Default CONTENTS is the admitted context;unrepresented drawing/non-content owners are not simulated. Same-pool cut/move has an explicit pre-mutation admission failure;foreign-pool cut preserves the source skipped-reference phase. Native CopyNonFilteredFromClip uses the first populated source sheet's real FilterData segments,retains hidden rows,advances the real source cursor and preserves the signed SCROW-max count/output behavior documented in CALC-261. FirstNonFilteredRow keeps native missing-sheet/invalid/no-match sentinels;initialized segment partitions guarantee valid-row lookup,without simulating allocator/corrupt-store failures. Existing DeleteSelection body is partitioned unchanged onto the same ScDocument instance through documen7 to keep document.ts at999lines.
+
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-block-calc-coverage.
+Result:870/870 scenarios across217 physical files pass;raw100 S15778/B9592/F2714/L14125. Seven new genuine owner vectors cover sparse source cycling,selected/consecutive/missing destination sheets,foreign/same-pool cut boundary,filtered/hidden rows,source/destination run limits,SCROW-max outputs,maximum source tab9999 and fresh ODS reopen with live copied relative/absolute formulas. Original ResetClip explicitly permits a missing source sheet and creates the actual sparse clipboard slot;no intervening worksheets or fake tables are allocated in the boundary vector. No thresholds,exclusions or ignores changed.
+Scope:complete Calc only,not an all-application checkpoint. Shared source is unchanged since the prior changed-owner raw100 evidence.
+
+Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+Result:1/1 actual Chromium/DOM-free Worker scenario passes. The probe now calls native document.CopyBlockFromClip,which includes the real reference-update phase,instead of manually composing table copy and document reference calls. Actual expected dependency results21/34 and=D6+1 remain unchanged.
+Scope:actual core block-copy graph;full browser PasteFromClip/history acceptance is not claimed.
+
+All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Evidence/progress-blocks preserves raw Istanbul,logs and446 stable source/test/config hashes. Conservative cumulative task footprint102/110,including four prior generated images that were removed from Git;no generated screenshots are included in this checkpoint.
+
+Remaining unchanged:complete document CopyFromClip orchestration and original single-source-row optimization with its actual script/format services;native Undo initialization and paste history;EnterBlock/AutoSum and final76 acceptance,then74. Number-format inheritance/service boundaries remain under review. Task76 stays DOING/verification pending;task74 depends on76. Full all-app checkpoint80 remains the requested stop checkpoint after repairs,coverage and current-task closure. Goal remains active.
