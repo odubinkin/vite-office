@@ -1,10 +1,11 @@
 ---
 id: "202610231627-0F8SYR"
 title: "Port Writer API attachment points consumed by DomainMapper"
-status: "DOING"
+result_summary: "Port Writer text, range, style, numbering and table import APIs with targeted verification"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-23T17:32:02.208Z"
+  updated_at: "2026-10-23T17:33:16.469Z"
   updated_by: "CODER"
-  note: "Verified affected modules: 211 Writer tests in 15 files, 2 shared contract tests, 48 boundary tooling tests. Application typecheck, changed-file ESLint/Prettier, source-tree/provenance, docs, size, dependency and Writer/shared registry checks pass. Full suites omitted per user request; exact commands and limits recorded in Findings."
+  note: "verified-202610231627-0F8SYR"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,19 @@ quality_review:
   findings:
     - "Canonical SwDoc/nodes/items remain authoritative; live range marks, property staging/types/errors, paragraph rollback, styles, numbering Any sequences and table conversion are exercised by 211 affected Writer tests and 2 shared tests. Boundary configuration adds only the native sw -> cppuhelper edge, with 48 tooling tests and source dependency evidence."
     - "Application typecheck, changed-file lint/formatting, dependency graph, docs/size, source-tree/provenance and Writer/shared registry checks pass. Exact commands and results are recorded in task Findings. Full suites were excluded by the user."
-commit: null
+commit:
+  hash: "98a2b67e2d4dc7988f815a0e3aed36890025da7b"
+  message: "🧩 0F8SYR writer: port upstream import API attachment points"
 comments:
   -
     author: "CODER"
     body: "Start: implement user-approved pinned Writer API attachment points for DomainMapper within the existing canonical model; targeted tests only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610231627-0F8SYR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Writer import API attachment points use canonical owners and pass affected-module checks."
 events:
   -
     type: "status"
@@ -62,8 +71,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified affected modules: 211 Writer tests in 15 files, 2 shared contract tests, 48 boundary tooling tests. Application typecheck, changed-file ESLint/Prettier, source-tree/provenance, docs, size, dependency and Writer/shared registry checks pass. Full suites omitted per user request; exact commands and limits recorded in Findings."
+  -
+    type: "verify"
+    at: "2026-10-23T17:33:16.469Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610231627-0F8SYR"
+  -
+    type: "status"
+    at: "2026-10-23T17:33:16.591Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610231627-0F8SYR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-10-23T17:34:20.035Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Writer import API attachment points use canonical owners and pass affected-module checks."
 doc_version: 3
-doc_updated_at: "2026-10-23T17:32:02.261Z"
+doc_updated_at: "2026-10-23T17:34:34.516Z"
 doc_updated_by: "CODER"
 description: "User-approved port of Writer text/document/range/cursor/property/style/numbering/table API attachment points required by upstream DomainMapper within the current canonical Writer core. Preserve pinned upstream ownership, contracts, behavior and error handling. Do not implement DOCX parsing/export or expand unsupported model features. Run only affected module tests and targeted checks."
 sections:
@@ -104,6 +133,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-23T17:33:16.469Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610231627-0F8SYR
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T17:32:02.261Z, excerpt_hash=sha256:379ea1bf2470e1913e9fd644a4369736f82a4e89d51d9daa03be09f013653cc7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610231627-0F8SYR/blueprint/resolved-snapshot.json
+    - old_digest: ba4690f395b76ada0f5a455f9efb8540a477507034cb6ba66a035148358b4f52
+    - current_digest: ba4690f395b76ada0f5a455f9efb8540a477507034cb6ba66a035148358b4f52
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231627-0F8SYR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231627-0F8SYR --result verified-202610231627-0F8SYR --commit 2f418a860e02d0dde72dfc02a014cacb1fb9b399
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -154,6 +213,12 @@ sections:
     Approval: User request in this conversation.
 
     Development checks caught and corrected primitive item QueryValue signature differences, native exception Any address transport, batch exception wrapping, and paragraph-style rollback. A temporary inspection-only TypeScript checker process exhausted its default heap; the prescribed application TypeScript CLI completed successfully. No source guard was disabled, no native-source runtime dependency was added and no baseline parity flags were promoted.
+
+    Closeout recovery: the route-generated result verified-<task-id> produced a deterministic close subject rejected as too generic. After confirming DONE state and the unchanged implementation SHA, the documented finish --force --no-close-commit path replaced only the result summary with the concrete API outcome. No implementation, verification criterion or quality gate changed. The task artifacts are then closed with the canonical deterministic commit command.
+extensions:
+  implementation_commit:
+    hash: "98a2b67e2d4dc7988f815a0e3aed36890025da7b"
+    message: "🧩 0F8SYR writer: port upstream import API attachment points"
 id_source: "generated"
 ---
 ## Summary
@@ -205,6 +270,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-23T17:33:16.469Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610231627-0F8SYR
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T17:32:02.261Z, excerpt_hash=sha256:379ea1bf2470e1913e9fd644a4369736f82a4e89d51d9daa03be09f013653cc7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610231627-0F8SYR/blueprint/resolved-snapshot.json
+- old_digest: ba4690f395b76ada0f5a455f9efb8540a477507034cb6ba66a035148358b4f52
+- current_digest: ba4690f395b76ada0f5a455f9efb8540a477507034cb6ba66a035148358b4f52
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231627-0F8SYR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231627-0F8SYR --result verified-202610231627-0F8SYR --commit 2f418a860e02d0dde72dfc02a014cacb1fb9b399
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -260,3 +355,5 @@ Risk: Broader application and interactive/browser regressions are not establishe
 Approval: User request in this conversation.
 
 Development checks caught and corrected primitive item QueryValue signature differences, native exception Any address transport, batch exception wrapping, and paragraph-style rollback. A temporary inspection-only TypeScript checker process exhausted its default heap; the prescribed application TypeScript CLI completed successfully. No source guard was disabled, no native-source runtime dependency was added and no baseline parity flags were promoted.
+
+Closeout recovery: the route-generated result verified-<task-id> produced a deterministic close subject rejected as too generic. After confirming DONE state and the unchanged implementation SHA, the documented finish --force --no-close-commit path replaced only the result summary with the concrete API outcome. No implementation, verification criterion or quality gate changed. The task artifacts are then closed with the canonical deterministic commit command.
