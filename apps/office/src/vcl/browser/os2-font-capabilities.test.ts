@@ -4,7 +4,10 @@ import { resolve } from "node:path";
 import { readFileSync, readdirSync } from "node:fs";
 import { readOs2FontCapabilities } from "../source/font/PhysicalFontFace";
 import { Blob as NodeBlob } from "node:buffer";
-import { readBrowserFontCapabilities, type BrowserPhysicalFont } from "./font-list";
+import {
+  readBrowserFontCapabilities,
+  type BrowserPhysicalFont,
+} from "../../svtools/browser/font-list";
 import { readSfntFontTable } from "./sfnt-font-table";
 
 /** Encodes actual big-endian coverage fields in a controlled OS/2 byte table. @param length - Actual available bytes. @param words - Unicode/codepage values. @returns Encoded table. */

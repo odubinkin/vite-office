@@ -2,7 +2,7 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { FontNameSelect } from "./FontSelects";
-import { FontList } from "../../../vcl/browser/font-list";
+import { FontList } from "../../../svtools/browser/font-list";
 import { FONT_MRU_STORAGE_KEY } from "../../../svtools/browser/font-mru-store";
 const names = ["Alpha", "Beta"];
 it("loads source MRU order,updates it after direct picks and saves on actual unmount", /** Recent rows remain separate from the actual main font inventory. @returns Completion. */ async () => {

@@ -3,7 +3,7 @@ import { writeFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "./kernel-fixture";
 /** Actual repository exports used by the isolated browser witness. */
-type SourceExports = typeof import("../../src/vcl/browser/font-list");
+type SourceExports = typeof import("../../src/svtools/browser/font-list");
 for (const app of ["writer", "calc"]) {
   test(`${app} actual registered CSS font sources`, /** Checks actual registered face identity, CSS serialization and byte reads without app test globals. @param fixtures - Actual Chromium page. @param testInfo - Source evidence output. @returns Completion. */ async ({
     page,
@@ -11,7 +11,7 @@ for (const app of ["writer", "calc"]) {
     await page.goto(`/${app}`);
     await installKernelFixture(page, "BrowserFontSources", [
       {
-        module: "src/vcl/browser/font-list.ts",
+        module: "src/svtools/browser/font-list.ts",
         names: ["FontList", "readBrowserPhysicalFont", "readBrowserFontCapabilities"],
       },
     ]);
@@ -20,6 +20,29 @@ for (const app of ["writer", "calc"]) {
         const api = (globalThis as unknown as { BrowserFontSources: SourceExports })
           .BrowserFontSources;
         const list = await api.FontList.FromBrowser();
+        const base = list.GetBrowserFaces("Liberation Serif");
+        const feature = list.GetBrowserFaces("LIBERATION SERIF:liga=0;Missing");
+        const alternate = list.GetBrowserFaces("Liberation Serif;Missing:liga=0");
+        const nativeLookup = {
+          count: base.length,
+          featureSame:
+            feature.length === base.length &&
+            feature.every(
+              /** Checks the actual retained physical identity,not only name equality. @param face - Actual record. @param index - Position. @returns Identity match. */ (
+                face,
+                index,
+              ) => face === base[index],
+            ),
+          alternateSame:
+            alternate.length === base.length &&
+            alternate.every(
+              /** Checks source first-family resolution against the actual original records. @param face - Actual record. @param index - Position. @returns Identity match. */ (
+                face,
+                index,
+              ) => face === base[index],
+            ),
+          missing: list.GetBrowserFaces("Missing;Liberation Serif").length,
+        };
         const registered = list
           .GetFontNames()
           .flatMap(
@@ -63,6 +86,7 @@ for (const app of ["writer", "calc"]) {
           });
         }
         return {
+          nativeLookup,
           registered: registered.length,
           known: sources.length,
           unresolved: registered
@@ -87,6 +111,10 @@ for (const app of ["writer", "calc"]) {
       contentType: "application/json",
     });
     expect(result.registered).toBeGreaterThan(100);
+    expect(result.nativeLookup.count).toBeGreaterThan(0);
+    expect(result.nativeLookup.featureSame).toBe(true);
+    expect(result.nativeLookup.alternateSame).toBe(true);
+    expect(result.nativeLookup.missing).toBe(0);
     expect(result.known).toBe(result.registered);
     expect(result.unresolved).toEqual([]);
     for (const sample of result.samples) {

@@ -1,8 +1,46 @@
 /** @fileoverview Actual browser physical-record identity and source-byte ownership, without pretending fixture bytes are installed fonts. */
 import { Blob as NodeBlob } from "node:buffer";
 import { expect, it, vi } from "vitest";
-import { FontList, readBrowserPhysicalFont } from "./font-list";
+import { FontList, readBrowserPhysicalFont } from "../../svtools/browser/font-list";
 import { rememberBrowserFontFaceSource, readBrowserFontFaceSource } from "./font-face-source";
+it("resolves source family expressions and explicit device aliases without changing physical identity or choosing a fallback", /** The supplied aliases are device input fixtures,not invented browser aliases. @returns Nothing. */ () => {
+  const regular = {
+    kind: "registered",
+    family: "Actual Family",
+    face: { style: "normal", weight: "400" } as FontFace,
+  } as const;
+  const bold = {
+    kind: "registered",
+    family: "ACTUAL FAMILY",
+    face: { style: "normal", weight: "700" } as FontFace,
+  } as const;
+  const other = { kind: "local", family: "Other", data: { family: "Other" } } as const;
+  const aliases: [string, string][] = [
+    ["Alias", "Actual Family"],
+    ["Other", "Actual Family"],
+    ["chain", "Alias"],
+    ["dangling", "Missing"],
+  ];
+  const list = new FontList(["Actual Family", "Other", "Missing"], [regular, bold, other], aliases);
+  for (const name of [
+    "actual FAMILY",
+    "Actual Family:liga=0",
+    "Actual Family;Other:tag",
+    "Actual Family:tag;Other",
+    "ALIAS:tag;Other",
+  ]) {
+    const faces = list.GetBrowserFaces(name);
+    expect(faces).toEqual([regular, bold]);
+    expect(faces[0]).toBe(regular);
+    expect(faces[1]).toBe(bold);
+  }
+  expect(list.GetBrowserFaces("Other")).toEqual([other]);
+  for (const name of ["Missing", "Missing;Actual Family", " Actual Family ", "chain", "dangling"])
+    expect(list.GetBrowserFaces(name)).toEqual([]);
+  aliases.push(["Late", "Actual Family"]);
+  expect(list.GetBrowserFaces("Late")).toEqual([]);
+  expect(list.GetFontNames()).toEqual(["Actual Family", "Other", "Missing"]);
+});
 
 it("retains distinct registered faces and approved local data without flattening physical records to family names", /** Checks actual record identity, CSS descriptors and lazy Local Font Access reads. @returns Completion. */ async () => {
   const regular = {

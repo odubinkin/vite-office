@@ -1,7 +1,7 @@
 /** @fileoverview Actual Writer font-family/point-size widgets shared with Calc;the frame supplies selected value,availability and acceptance ports. */
 import { useEffect, useMemo, useState, useRef } from "react";
 import { ComboBox } from "../../../vcl/browser/ComboBox";
-import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
+import { FontList, FALLBACK_FONT_FAMILIES } from "../../../svtools/browser/font-list";
 import { createBrowserFontItem } from "./font-item";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import {

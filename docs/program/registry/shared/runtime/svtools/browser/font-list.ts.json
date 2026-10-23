@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/browser/font-list.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svtools/browser/font-list.ts#export class FontList",
+        "apps/office/src/vcl/browser/font-list.test.ts#@fileoverview",
+        "apps/office/src/vcl/browser/font-face-source.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-css-source.spec.ts#@fileoverview",
+        "apps/office/src/vcl/browser/os2-font-capabilities.test.ts#@fileoverview"
+      ],
+      "justification": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable. Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. Task6764KT in-progress actual font inventory: FontList now enumerates real registered document/bundled FontFaces alongside approved Local Font Access results, excludes error/empty faces, preserves the first actual spelling under native ASCII-only case folding and UTF16 key ordering, and uses legacy fallback names only when no actual face records are available. CSS font-family decoding is shared with the existing default-font device without changing CSS escape semantics. Actual127 runtime TTF/OTF assets and their existing CSS declarations remain the data source; no physical glyph coverage or font-file source is invented. Physical metadata acquisition/cmap and visual popup integration remain pending; no native font/UI parity or semantic/default status is promoted. Task6764KT preserves actual browser physical-face records and available source bytes. FontList groups real registered FontFaces and approved Local Font Access records without discarding actual descriptors, PostScript identity or lazy blob access. Embedded-font installation records the exact constructor bytes by actual FontFace identity in a JS WeakMap and returns independent byte copies. CSS FontFace bytes remain absent because the public FontFace API does not expose its source; CSS URL acquisition,cmap parsing,native face selection and visual preview integration remain unfinished. No glyph support or native font metrics are inferred from names, and no native lifetime machinery is implemented. Task6764KT connects actual registered CSS FontFaces to unique active same-origin CSSOM declarations, preserving ambiguity as unknown rather than selecting guessed glyph data. Source URLs use actual stylesheet bases and CSS string decoding; disabled/opaque/inactive sheets,duplicate descriptors,local/fallback/unsupported format/technology sources are not guessed. FontList retains source URLs, reads only on demand, waits for actual face.load and propagates HTTP/load failures. Chromium witnesses run actual repository exports over production Writer/Calc pages; unit CSSOM descriptor ports explicitly compensate for jsdom dropping font-face-only descriptors and are not native browser evidence. Actual font cmap/capability readers,native regular-face choice and visual font/style dropdown integration remain unfinished; no full parity/default promotion. Task6764KT reads actual SFNT/TTC table containers at the browser byte boundary and preserves the defined PhysicalFontFace OS/2 coverage algorithm: original offsets42/78,word-to-bit ordering,optional codepage set and last-successful-word reuse after short reads. WRITER074 records version-zero/partial-read behavior and the uninitialized-first-word boundary, where the browser exposes unknown data rather than emulating C++ uninitialized memory. The core file contains only the extracted capability algorithm; no fake PhysicalFontFace class or service is introduced. Native physical-face ownership,HarfBuzz cmap/collection face selection and dropdown rendering remain unfinished. Collection capability reads require an explicit resolved face index. Actual repository fonts and synthetic binary-boundary cases are checked; advertised coverage is not glyph support. Task6764KT moves actual browser FontList ownership from VCL to svtools,matching native ctrltool ownership and avoiding a vcl-to-svtools cycle. VCL retains actual physical records,source bytes,capabilities and unknown-metadata construction. The browser inventory groups real faces by ASCII-only family keys in original face order;native read-only family lookup strips a colon only before a semicolon,does not trim or try later alternatives,and tries one explicit device-alias hop only after a direct family miss. Actual supplied aliases use native last-writer ASCII normalization;no aliases are invented for browsers without a device alias API. Feature-bearing requests resolve to the original real physical records. This is not physical weight/style/cmap/collection face selection or WYSIWYG paint parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "readBrowserPhysicalFont",
+        "readBrowserFontCapabilities"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

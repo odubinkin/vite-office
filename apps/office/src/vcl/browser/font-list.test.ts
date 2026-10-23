@@ -1,6 +1,6 @@
 /** @fileoverview Verifies browser FontList enumeration and fallback semantics. */
 import { describe, expect, it } from "vitest";
-import { FALLBACK_FONT_FAMILIES, FontList, getBrowserFont } from "./font-list";
+import { FALLBACK_FONT_FAMILIES, FontList, getBrowserFont } from "../../svtools/browser/font-list";
 import { RTL_TEXTENCODING_SYMBOL, RTL_TEXTENCODING_DONTKNOW } from "../../sal/inc/rtl/textenc";
 
 it("retains native missing-metric values and original symbol-recode availability", /** Known uninstalled symbol names use SYMBOL while regular missing metrics stay unknown. @returns Nothing. */ () => {

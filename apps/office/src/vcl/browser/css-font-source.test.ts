@@ -1,7 +1,7 @@
 /** @fileoverview CSSOM source resolution and physical-byte reads, with conservative ambiguity and conditional-state contracts. */
 import { afterEach, expect, it, vi } from "vitest";
 import { getSingleCssFontUrl, getCssFontFaceSources } from "./css-font-source";
-import { FontList, readBrowserPhysicalFont } from "./font-list";
+import { FontList, readBrowserPhysicalFont } from "../../svtools/browser/font-list";
 const styles: HTMLStyleElement[] = [];
 afterEach(
   /** Removes actual connected CSSOM fixtures and platform instrumentation. @returns Nothing. */ () => {
