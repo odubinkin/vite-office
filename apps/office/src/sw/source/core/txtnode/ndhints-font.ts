@@ -95,7 +95,7 @@ export function createCharacterColorItems(
   return [new SfxStringItem(property === "color" ? RES_CHRATR_COLOR : RES_CHRATR_HIGHLIGHT, value)];
 }
 
-/** Applies actual item-set deltas at native hint boundaries without projecting unrelated values. @param hints - Original ranges. @param pool - Document pool. @param textLength - Complete logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param delta - Native item changes. @param inherited - Node defaults. @returns Independent native snapshot. */
+/** Applies actual item-set deltas at native hint boundaries without projecting unrelated values. @param hints - Original ranges. @param pool - Document pool. @param textLength - Complete logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param delta - Native item changes. @param inherited - Node defaults. @param keepDirect - Preserve explicit equal-to-inherited items for native API import. @returns Independent native snapshot. */
 export function setCharacterItems(
   hints: SwpHints,
   pool: SwAttrPool,
@@ -104,6 +104,7 @@ export function setCharacterItems(
   end: number,
   delta: readonly SfxPoolItem[],
   inherited: SfxItemSet,
+  keepDirect = false,
 ): SwpHints {
   assertTextRange(textLength, start, end);
   if (start === end) return hints.clone();
@@ -137,7 +138,7 @@ export function setCharacterItems(
         items.PutSet(hint.format.GetStyleHandle());
     for (const item of delta) {
       const which = item.Which();
-      if (item.equals(inherited.Get(which))) items.ClearItem(which);
+      if (!keepDirect && item.equals(inherited.Get(which))) items.ClearItem(which);
       else items.Put(item);
     }
     if (items.Count() > 0) retained.push(MakeTextAttr(pool.GetDoc(), items, first, last));

@@ -69,8 +69,8 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
-import { OutlineUpDown as moveOutlineLevels } from "./docnum";
-import { moveLeftMargin } from "./docfmt";
+import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
+import { moveLeftMargin, InsertPoolItem } from "./docfmt";
 import { SwUndoMoveLeftMargin } from "../undo/unattr";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
@@ -112,6 +112,14 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing. */
+  public InsertPoolItem(
+    range: SwPaM,
+    item: import("../../../../svl/source/items/poolitem").SfxPoolItem,
+  ): void {
+    InsertPoolItem(this, range, item);
+  }
+
   /** Renames a table through its native frame owner. @param format - Table frame. @param name - Requested name. @returns Nothing. */
   public SetTableName(format: SwFrameFormat, name: string): void {
     SetTableName(this, format, name);
@@ -512,6 +520,11 @@ export class SwDoc {
     return copied;
   }
   /** Adds a numbering rule. @param rule - Source rule. @returns Stored rule. */
+  public GetUniqueNumRuleName(): string {
+    return GetUniqueNumRuleName(this);
+  }
+
+  /** Stores an independent native numbering rule. @param rule - Source rule. @returns Document-owned rule. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
     return this.listsManager.AddNumRule(rule);
   }
@@ -953,6 +966,7 @@ export class SwDoc {
   public Dispose(): void {
     this.mbDtor = true;
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
+    this.markAccess.Dispose();
     this.undoManager.Dispose();
     this.stateManager.Dispose();
   }

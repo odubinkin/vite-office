@@ -432,6 +432,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
+          "marker": "describe("
         }
       ],
       "upstream": [
@@ -749,7 +753,9 @@
     "localSymbols": [
       "SwDoc",
       "createWriterDocument",
-      "SetNumRuleMode"
+      "SetNumRuleMode",
+      "SwDocOptions",
+      "WriterEmbeddedFont"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
@@ -800,7 +806,8 @@
       "Correction T8EQAC2/10 after full SZKQTN and KVM0ER: native count-only shell/doc command delegates to source-owned ndtbl SetSwRowsToRepeat; exact capped getter no-op, uint16 new value and DoesUndo gate. Dedicated SwUndoTableHeadline retains only native table-node index and capped old/authored new counts, resolves original table for Undo/Redo and stores no graph/format/cursor snapshot. Original frame format publishes concrete no-payload TableHeadingChange after storage; same typed hint also advances the represented browser document revision publication boundary, an explicit browser architecture boundary rather than full native document-state/layout parity. Original master SwTabFrame ignores heading hints as upstream master handler returns before follow-row rebuilding. Original table/row/box/frame/node/cursor/ring identities and unrelated later geometry/row-height/numbering state survive actual command and three undo/redo cycles. Mounted Table Properties changes physical repeated occurrences and real ODT headerless reopening. 2950 distinct accepted related cases,10 fresh native/history/mounted cases; all entire six changed production files actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative and complete-map/current-source-hash identity. Five exact old insert/native normalized-geometry/headline snapshot/payload expectations migrate with every other old assertion retained; native SetTabCols normalizes actual frame print width before attribute history, so dedicated headline undo cannot restore unrelated pre-normalization geometry. Tests/build/statics physically upstream-absent with finally restoration; restored metadata audits. Twelve canonical classification/status/default/history prefixes retained. Native Repeat context/framework and complete original master/follow-row reconstruction remain unrepresented/unverified; capped table-copy/node-copy and full layout/root/page/section/content/HTML/VCL families remain separate, no whole-module or broad-goal parity promotion. Registered recovery/open/save/settings deviations unchanged. Raw source snapshots/helpers/logs/maps only ignored cache; bounded English task evidence. Task202610091853-T8EQAC; goal ACTIVE/incomplete; correction2/10.",
       "Task202610101723-QH6XM1 replaces the scalar per-node margin action/group with document-owned native range history: full first/left items, independent list-indent flags, native borrowed old/new attr-set deltas and scoped SwRegHistory direct/reset entries. Undo temporarily restores original directness and full values at current slots; redo uses current tab defaults without adding another undo. Final related and browser evidence executes only the portable implementation with both references absent. Full C++ independent base topology, general native node/style/client lifetime, rich numbering first-line units, formula external-name conversion, edit-shell admission guard, selection rings, frame/vertical/redline/merged-layout and global Repeat dispatch remain unverified. No historical status/default/classification or registered save/open/recovery promotion. SwDoc.MoveLeftMargin appends one range action before initial mutation and directly calls the native operation, recording through its original history.",
       "Task135: Embedded resource identity permits multiple declaration-local font-face aliases for identical package data; conflicting family/style/weight/format still rejects. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
-      "Task TV1H69 exposes native BalanceRowHeight through the existing ndtbl1 owner and original cursor/history state, with no browser height payload or parallel geometry model. Full document parity remains unverified."
+      "Task TV1H69 exposes native BalanceRowHeight through the existing ndtbl1 owner and original cursor/history state, with no browser height payload or parallel geometry model. Full document parity remains unverified.",
+      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",

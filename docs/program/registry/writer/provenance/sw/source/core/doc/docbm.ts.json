@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-bookmark-replace-history.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
+          "marker": "describe("
         }
       ],
       "upstream": [
@@ -36,7 +40,8 @@
     ],
     "preservedResponsibilities": [
       "Owns named collapsed Writer marks and registered zero-width positions through document edits.",
-      "LeafV6W22V aligns the represented collapsed bookmark position query to native GetMarkPos, replacing the old GetPosition adapter spelling and migrating actual shell/export/browser consumers. It remains the existing collapsed ordinary bookmark manager profile; no fabricated expanded mark or DDE/UNO class hierarchy, metadata state or storage format change is introduced."
+      "LeafV6W22V aligns the represented collapsed bookmark position query to native GetMarkPos, replacing the old GetPosition adapter spelling and migrating actual shell/export/browser consumers. It remains the existing collapsed ordinary bookmark manager profile; no fabricated expanded mark or DDE/UNO class hierarchy, metadata state or storage format change is introduced.",
+      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/docbm.cxx",

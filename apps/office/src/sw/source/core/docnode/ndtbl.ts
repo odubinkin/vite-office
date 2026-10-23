@@ -1,7 +1,10 @@
 /** @fileoverview Owns native Writer row-boundary collection and row-height deltas from ndtbl.cxx. */
+import type { SwNodes } from "./nodes";
+import { SwTableBoxStartNode, SwEndNode } from "./node";
+import { SwTableLine, SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { TableHeadingChange } from "../../../inc/hints";
-import { SwTable, type SwTableBox, type SwTableLine } from "../table/swtable";
+import { SwTable } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -348,6 +351,60 @@ export function InsertSwTableRows(
         manager.AddUndoAction(action);
       }
       return true;
+    },
+  );
+}
+
+/** Native whole-paragraph TextToTable wraps original nodes in canonical table and cell sections. @param this - Owning node array. @param rows - Inclusive cell node ranges. @param name - Unique table name. @returns Connected table. */
+export function TextToTableNodes(
+  this: SwNodes,
+  rows: readonly (readonly (readonly SwTextNode[])[])[],
+  name: string,
+): SwTable {
+  const all = rows.flat(2);
+  if (
+    !all.length ||
+    rows.some(
+      /** Processes one ordered native value at this boundary. @param row - Original row input. @returns The represented native operation result. */
+      (row) =>
+        !row.length ||
+        row.some(
+          /** Processes one ordered native value at this boundary. @param cell - Original cell input. @returns The represented native operation result. */
+          (cell) => !cell.length,
+        ),
+    )
+  )
+    throw new Error("Empty table range.");
+  const first = all[0] as SwTextNode,
+    body = this["endOfContent"].StartOfSectionNode();
+  for (let index = 0; index < all.length; index++)
+    if (
+      (all[index] as SwTextNode).GetNodes() !== this ||
+      (all[index] as SwTextNode).StartOfSectionNode() !== body ||
+      (all[index] as SwTextNode).GetIndex() !== first.GetIndex() + index
+    )
+      throw new Error("Table ranges must be contiguous body text.");
+  return this.GetDoc().RunModelTransaction(
+    /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
+    () => {
+      const table = this["MakeTableNodeAt"](first.GetIndex(), name, {}),
+        tableNode = table.GetTableNode();
+      for (const row of rows) {
+        const line = new SwTableLine(this.GetDoc().MakeTableLineFormat());
+        for (const cell of row) {
+          const start = new SwTableBoxStartNode(this, tableNode),
+            end = new SwEndNode(this, start);
+          start.setEndOfSection(end);
+          for (const node of cell) this["nodeArray"].splice(node.GetIndex(), 1);
+          this["nodeArray"].splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, ...cell, end);
+          for (const node of cell) node.SetStartOfSection(start);
+          line.AddBox(new SwTableBox(this.GetDoc().MakeTableBoxFormat(), start));
+        }
+        table.AddLine(line);
+      }
+      if (this.getTextNodes().length === 0) this.MakeTextNode();
+      this.GetDoc().NotifyModelChange({ kind: "node-inserted", index: tableNode.GetIndex() });
+      return table;
     },
   );
 }

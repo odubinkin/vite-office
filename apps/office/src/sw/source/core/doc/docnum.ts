@@ -91,3 +91,17 @@ export function OutlineUpDown(document: SwDoc, range: SwPaM, offset: number): bo
     },
   );
 }
+
+/** Native default automatic-name branch, using browser RNG in place of the platform RNG and the same smallest-unused positive suffix. Mail merge and environment-selected stable export remain outside this caller. @param document - Canonical rule table owner. @returns Unique automatic name. */
+export function GetUniqueNumRuleName(document: SwDoc): string {
+  const base = String(crypto.getRandomValues(new Uint32Array(1))[0]);
+  const used = new Set<number>();
+  for (const rule of document.GetNumRuleTable()) {
+    const name = rule.GetName();
+    if (name.startsWith(base) && /^\d+$/u.test(name.slice(base.length)))
+      used.add(Number(name.slice(base.length)) & 0xffff);
+  }
+  let suffix = 1;
+  while (used.has(suffix)) suffix++;
+  return base + suffix;
+}

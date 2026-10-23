@@ -1,5 +1,9 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { RES_CHRATR_END } from "../../../inc/hintids";
+import { setCharacterItems } from "../txtnode/ndhints-font";
+import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import {
   SvxTextLeftMarginItem,
   SvxFirstLineIndentItem,
@@ -175,5 +179,52 @@ export function moveLeftMargin(
     } finally {
       registration.Dispose();
     }
+  }
+}
+
+/** Applies a native item through paragraph or automatic-character format owners. @param document - Actual document. @param range - Registered selection. @param item - Concrete item delta. @returns Nothing. */
+export function InsertPoolItem(document: SwDoc, range: SwPaM, item: SfxPoolItem): void {
+  for (const node of getTextFormatCollNodes(document, range)) {
+    const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0;
+    const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
+    if (item instanceof SwFormatINetFormat)
+      node.SetHyperlink(start, end, item.GetValue() ? item.GetHyperlink() : undefined);
+    else if (item.Which() < RES_CHRATR_END && start !== end)
+      node.SetTextHints(
+        setCharacterItems(
+          node.GetOrCreateSwpHints(),
+          document.GetAttrPool(),
+          node.Len(),
+          start,
+          end,
+          [item],
+          node.GetSwAttrSet(),
+          true,
+        ),
+      );
+    else node.SetAttr(item);
+  }
+}
+
+/** Resets represented direct attributes through original node and automatic-style owners. @param document - Canonical document. @param range - Registered selection. @param which - Selected item identity. @returns Nothing. */
+export function ResetPoolItem(document: SwDoc, range: SwPaM, which: number): void {
+  for (const node of getTextFormatCollNodes(document, range)) {
+    const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0,
+      end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
+    if (which < RES_CHRATR_END && start !== end) {
+      node.FormatToTextAttr(node);
+      const inherited = node.GetSwAttrSet();
+      node.SetTextHints(
+        setCharacterItems(
+          node.GetOrCreateSwpHints(),
+          document.GetAttrPool(),
+          node.Len(),
+          start,
+          end,
+          [inherited.Get(which)],
+          inherited,
+        ),
+      );
+    } else node.ResetAttr(which);
   }
 }

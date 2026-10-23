@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { TextToTableNodes } from "./ndtbl";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
@@ -218,6 +219,11 @@ export class SwNodes {
     tableNode.GetTable().Dispose();
     this.nodeArray.splice(index, end - index + 1);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
+  }
+
+  /** Wraps imported text using the native ndtbl owner. @param rows - Validated cell nodes. @param name - Table identity. @returns Canonical table. */
+  public TextToTable(rows: readonly (readonly (readonly SwTextNode[])[])[], name: string): SwTable {
+    return TextToTableNodes.call(this, rows, name);
   }
 
   /** Appends one row and its cell sections to a table. @param table - Owning table. @param columnCount - Number of cells. @param lineFormat - Row geometry. @param boxFormats - Cell geometry by column. @returns New row. */

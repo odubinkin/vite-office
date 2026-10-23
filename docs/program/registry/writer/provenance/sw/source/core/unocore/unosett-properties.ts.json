@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/unosett-properties.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unosett.cxx",
+    "localSymbols": [
+      "NumberingPropertySequence",
+      "numberingSequenceType",
+      "numberingToSequence",
+      "numberingFromAny",
+      "readNumberingProperty"
+    ],
+    "upstreamSymbols": [
+      "SwXNumberingRules"
+    ],
+    "preservedResponsibilities": [
+      "Actual typed Sequence<PropertyValue> transport and consumed property extraction through generated compound addresses."
+    ],
+    "omittedResponsibilities": [
+      "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unosett-properties.ts",
+          "marker": "NumberingPropertySequence"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
+          "marker": "describe("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/unocore/unosett.cxx",
+          "marker": "SwXNumberingRules"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/unocore/unosett-properties.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The existing format application kernel remains in unosett.ts; typed PropertyValue transport is separated into this module."
+    }
+  }
+}

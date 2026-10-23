@@ -1,4 +1,5 @@
 /** @fileoverview Checks native source-owned numbering publication and actual XML/Worker consumers. */
+import { IndexOutOfBoundsException } from "../../../../cppu/inc/com/sun/star/lang/IndexOutOfBoundsException";
 import { expect, it } from "vitest";
 import { SwXNumberingRules } from "./unosett";
 import { createWriterNumRule } from "../doc/DocumentListsManager";
@@ -48,8 +49,8 @@ it("publishes only the active native MM100 geometry group with signed start and 
         ? { absLSpace: 127, firstLineOffset: -127, charTextDistance: 254 }
         : { firstLineIndent: -127, indentAt: 254, labelFollowedBy: "space", listTabPosition: 381 }),
     };
-    expect(service.getByIndex(9)).toEqual(expected);
-    expect(service.getRuleByIndex(9)).toEqual(expected);
+    expect(service.GetPropertiesByIndex(9)).toEqual(expected);
+    expect(service.GetPropertiesByIndex(9)).toEqual(expected);
     expect(rule.Get(9)).toBe(owner);
     expect(owner.GetPositionProperties()).toEqual({
       positionAndSpaceMode: mode,
@@ -64,8 +65,8 @@ it("publishes only the active native MM100 geometry group with signed start and 
     for (const index of [-1, 10, 1.5, NaN, Infinity])
       expect(
         /** Reads outside the represented native salInt32/MAXLEVEL contract. @returns Nothing. */ () =>
-          service.getByIndex(index),
-      ).toThrow(RangeError);
+          service.GetPropertiesByIndex(index),
+      ).toThrow(IndexOutOfBoundsException);
   }
 });
 
@@ -82,22 +83,22 @@ it("retains native absent present-empty and named Font ownership while returning
     format.SetListFormat("[%1%/%3%]");
     rule.Set(0, format);
     const owner = rule.Get(0),
-      properties = service.getByIndex(0);
+      properties = service.GetPropertiesByIndex(0);
     expect(properties.bulletChar).toBe("🔹");
     expect(properties.listFormat).toBe("[%1%/%3%]");
     expect(properties.bulletFont).toEqual(family === undefined ? undefined : { name: family });
     const mutable = properties as { bulletFont?: { name: string }; absLSpace?: number };
     mutable.absLSpace = 999999;
     if (mutable.bulletFont) mutable.bulletFont.name = "Mutated detached descriptor";
-    expect(service.getByIndex(0).absLSpace).toBe(0);
-    expect(service.getByIndex(0).bulletFont).toEqual(
+    expect(service.GetPropertiesByIndex(0).absLSpace).toBe(0);
+    expect(service.GetPropertiesByIndex(0).bulletFont).toEqual(
       family === undefined ? undefined : { name: family },
     );
     expect(rule.Get(0)).toBe(owner);
     format.SetNumberingType(SvxNumType.SVX_NUM_NUMBER_NONE);
     format.SetSuffix("]");
     rule.Set(0, format);
-    const numeric = service.getByIndex(0);
+    const numeric = service.GetPropertiesByIndex(0);
     expect(numeric.kind).toBe("numbered");
     expect(numeric.numberingType).toBe(5);
     expect(numeric).not.toHaveProperty("bulletChar");
@@ -166,7 +167,7 @@ it("preserves source-owned active properties through common automatic body cell 
       for (const name of ["BodyNative", "CellNative", "CommonNative"]) {
         const rule = doc.FindNumRulePtr(name);
         if (rule === undefined) throw Error("Missing imported rule");
-        const p = new SwXNumberingRules(rule).getByIndex(0);
+        const p = new SwXNumberingRules(rule).GetPropertiesByIndex(0);
         expect(p.startWith).toBe(name === "BodyNative" ? 1 : 7);
         expect(p.prefix).toBe("[");
         expect(p.suffix).toBe("]");

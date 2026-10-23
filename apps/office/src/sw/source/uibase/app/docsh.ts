@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
+import { SwXTextDocument } from "../uno/unotxdoc";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
@@ -39,6 +40,7 @@ export class SwDocShell extends SfxObjectShell {
   public static readonly ODT_MEDIA_TYPE = ODT_MIMETYPE;
 
   private odtRequestGeneration = 0;
+  private importModel: SwXTextDocument | undefined;
   private readonly modelClient: SwClient;
   private readonly notifications = new SwModify();
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
@@ -65,6 +67,12 @@ export class SwDocShell extends SfxObjectShell {
       ) => this.ReceiveModelHint(hint),
     );
     this.modelClient.RegisterToModify(document.GetDocumentStateManager());
+  }
+
+  /** Borrows the stable Writer API model used by import filters; model replacement invalidates its ranges. @returns Import-facing model. */
+  public GetModel(): SwXTextDocument {
+    this.EnsureOpen();
+    return (this.importModel ??= new SwXTextDocument(this.document));
   }
 
   /** Returns the shell-owned Writer model. @returns Active model. */
@@ -226,6 +234,8 @@ export class SwDocShell extends SfxObjectShell {
     this.odtFilter.Cancel();
     const previous = this.document;
     this.modelClient.Dispose();
+    this.importModel?.dispose();
+    this.importModel = undefined;
     previous.Dispose();
     this.document = document;
     this.CommitObjectStateReplacement(replacementState);
@@ -410,6 +420,8 @@ export class SwDocShell extends SfxObjectShell {
       },
     );
     this.modelClient.Dispose();
+    this.importModel?.dispose();
+    this.importModel = undefined;
     this.document.Dispose();
     this.notifications.DisposeModify();
     this.Dispose();

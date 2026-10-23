@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/unocore/unostyle.ts",
+        "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts"
+      ],
+      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Paragraph/page/numbering style families, descriptors, canonical owner attachment, inheritance and typed properties. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwStyleFamily",
+        "SwXStyle",
+        "SwXStyleFamily",
+        "SwXStyleFamilies"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/unocore/unostyle.cxx",
+      "upstreamSymbols": [
+        "SwXStyle"
+      ]
+    }
+  }
+}

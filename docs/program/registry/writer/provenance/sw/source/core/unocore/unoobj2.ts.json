@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/unoobj2.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unoobj2.cxx",
+    "localSymbols": [
+      "SwXTextOwner",
+      "SwXTextRange"
+    ],
+    "upstreamSymbols": [
+      "SwXTextRange"
+    ],
+    "preservedResponsibilities": [
+      "Internal document UNO mark ownership, canonical text ranges, properties and disposal checks."
+    ],
+    "omittedResponsibilities": [
+      "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unoobj2.ts",
+          "marker": "SwXTextOwner"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
+          "marker": "describe("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/unocore/unoobj2.cxx",
+          "marker": "SwXTextRange"
+        }
+      ]
+    }
+  }
+}

@@ -154,6 +154,8 @@ const allowedEdges = new Map([
       "udkapi",
       // Original Library_sw links cppu; native property transport uses real Any values.
       "cppu",
+      // Original sw/Library_sw.mk links cppuhelper; unosett.hxx uses cppuhelper/implbase.hxx.
+      "cppuhelper",
       "cui",
       "editeng",
       "framework",

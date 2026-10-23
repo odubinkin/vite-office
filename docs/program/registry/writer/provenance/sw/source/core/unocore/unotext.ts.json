@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/unotext.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/unotext.cxx",
+    "localSymbols": [
+      "SwXText",
+      "SwXCell"
+    ],
+    "upstreamSymbols": [
+      "SwXText"
+    ],
+    "preservedResponsibilities": [
+      "Body/cell text, live cursor/range factories, insert/append portions, paragraph finishing, content attachment and TextToTable delegation.",
+      "SwXCell is defined after SwXText and reexported from unotbl.ts so ES module evaluation preserves the original base class before subclass initialization. Table conversion follows original table/cell property denylists and per-property UNO exception isolation; row properties apply only to existing rows."
+    ],
+    "omittedResponsibilities": [
+      "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unotext.ts",
+          "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
+          "marker": "describe("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/unocore/unotext.cxx",
+          "marker": "SwXText"
+        },
+        {
+          "path": "sw/source/core/unocore/unotbl.cxx",
+          "marker": "SwXCell"
+        }
+      ]
+    }
+  }
+}

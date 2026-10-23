@@ -35,7 +35,7 @@ export abstract class SwNode extends SwContentIndexRegistry {
   protected constructor(
     private readonly nodes: SwNodes,
     private readonly nodeType: SwNodeType,
-    private readonly startOfSection?: SwStartNode,
+    private startOfSection?: SwStartNode,
   ) {
     super();
   }
@@ -75,6 +75,12 @@ export abstract class SwNode extends SwContentIndexRegistry {
     if (this instanceof SwStartNode && this.startOfSection === undefined) return this;
     if (this.startOfSection === undefined) throw new Error("SwNode has no section owner.");
     return this.startOfSection;
+  }
+
+  /** Reassigns the canonical section during native TextToTable, retaining node and registered index identity. @param start - Connected new section. @returns Nothing. */
+  public SetStartOfSection(start: SwStartNode): void {
+    if (start.GetNodes() !== this.nodes) throw new Error("Section belongs to another document.");
+    this.startOfSection = start;
   }
 
   /** Reports whether this is a section start sentinel. @returns True for SwStartNode. */

@@ -553,7 +553,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
     levels: Array.from(
       { length: WRITER_MAX_LIST_LEVEL + 1 },
       /** Reads the represented native numbering properties from their actual service owner. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
-      (_unused, index) => properties.getByIndex(index),
+      (_unused, index) => properties.GetPropertiesByIndex(index),
     ),
     name: rule.GetName(),
   };

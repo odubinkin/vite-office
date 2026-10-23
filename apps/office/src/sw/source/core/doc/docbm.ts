@@ -1,5 +1,7 @@
 /** @fileoverview Owns collapsed Writer bookmarks and imported soft-page positions at the pinned `sw/source/core/doc/docbm.cxx` boundary. */
 
+import { UnoMark } from "../crsr/bookmark";
+import type { SwPaM } from "../crsr/pam";
 import { SwPosition } from "../crsr/pam";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -35,6 +37,28 @@ export class SwBookmark {
 
 /** Document-owned subset of LibreOffice's MarkManager plus retained soft pagination hints. */
 export class DocumentMarkAccess {
+  private readonly unoMarks = new Set<UnoMark>();
+  /** Creates a native internal UNO_BOOKMARK, outside user-visible bookmark enumeration. @param range - Original registered range. @returns Document-owned mark. */
+  public MakeUnoMark(range: SwPaM): UnoMark {
+    this.assertNode(range.Start().GetNode() as SwTextNode);
+    this.assertNode(range.End().GetNode() as SwTextNode);
+    const mark = new UnoMark(range);
+    this.unoMarks.add(mark);
+    return mark;
+  }
+  /** Deletes one internal range mark without recording a document edit. @param mark - Owned mark. @returns Nothing. */
+  public DeleteUnoMark(mark: UnoMark): void {
+    if (this.unoMarks.delete(mark)) mark.Dispose();
+  }
+  /** Invalidates API/user mark positions when their canonical document is destroyed. @returns Nothing. */
+  public Dispose(): void {
+    for (const mark of this.unoMarks) mark.Dispose();
+    this.unoMarks.clear();
+    for (const mark of this.bookmarks.values()) mark.Dispose();
+    this.bookmarks.clear();
+    for (const position of this.softPageBreaks) position.Dispose();
+    this.softPageBreaks.length = 0;
+  }
   private readonly bookmarks = new Map<string, SwBookmark>();
   private readonly softPageBreaks: SwPosition[] = [];
 

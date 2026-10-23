@@ -1,5 +1,17 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
-import { SwNumFormat, SvxNumType, type SwNumRule, type ConstSwNumFormat } from "../doc/number";
+import { illegal } from "./unocrsrhelper";
+import { queryInterface } from "../../../../cppuhelper/inc/queryinterface";
+import { UnoType } from "../../../../cppu/inc/unotype";
+import { Type } from "../../../../cppu/inc/com/sun/star/uno/Type";
+import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+import { cppu_detail_getUnoType as indexAccessType } from "../../../../cppu/inc/com/sun/star/container/XIndexAccess";
+import { cppu_detail_getUnoType as elementAccessType } from "../../../../cppu/inc/com/sun/star/container/XElementAccess";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { IndexOutOfBoundsException } from "../../../../cppu/inc/com/sun/star/lang/IndexOutOfBoundsException";
+import { numberingToSequence, numberingFromAny, numberingSequenceType } from "./unosett-properties";
+import type { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { SwNumFormat, SvxNumType, SwNumRule, type ConstSwNumFormat } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import { fontFromUnoDescriptorName } from "../../../../editeng/source/uno/unofdesc";
 
@@ -76,18 +88,75 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
 /** Writer-owned copy, validation and commit boundary corresponding to SwXNumberingRules. */
 export class SwXNumberingRules {
   /** Binds the native numbering-rule service to its Writer rule. @param rule - Document-owned rule. @returns Service. */
-  public constructor(private readonly rule: SwNumRule) {}
-
-  /** Reads the represented native property record through the rule service. @param level - Zero-based level. @returns Independent supported properties in MM100. */
-  public getByIndex(level: number): WriterNumberingRuleProperties {
-    return this.getRuleByIndex(level);
+  private references = 1;
+  /** Erased owning service reference retains logical lifetime while browser GC owns allocation. @returns Nothing. */
+  public acquire(): void {
+    this.references++;
+  }
+  /** Releases an acquired service reference. @returns Nothing. */
+  public release(): void {
+    this.references--;
+  }
+  /** Native index-container interface query uses existing CPPU type and acquired Any owners. @param type - Requested interface. @returns Owned result. */
+  public queryInterface(type: Type): Any {
+    return queryInterface(type, [
+      [indexReplaceType, this],
+      [indexAccessType, this],
+      [elementAccessType, this],
+      [
+        /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
+        () => UnoType.get(["Reference", "XInterface"]),
+        this,
+      ],
+    ]);
+  }
+  /** Native element type is Sequence<PropertyValue>. @returns Owned Type. */
+  public getElementType(): Type {
+    return new Type(UnoType.get(numberingSequenceType));
   }
 
-  /** Validates native MAXLEVEL bounds before reading the borrowed rule. @param level - Zero-based level. @returns Independent represented properties. */
-  public getRuleByIndex(level: number): WriterNumberingRuleProperties {
+  private readonly rule: SwNumRule;
+  /** Native rule-copy and document-created-rule constructor paths share one real rule owner. @param source - Rule or document. @returns Service. */
+  public constructor(source: SwNumRule | import("../doc/doc").SwDoc) {
+    this.rule =
+      source instanceof SwNumRule
+        ? source
+        : source.AddNumRule(new SwNumRule(source.GetUniqueNumRuleName(), "label-alignment"));
+  }
+
+  /** Reads the represented native property record through the rule service. @param level - Zero-based level. @returns Independent supported properties in MM100. */
+  public getByIndex(level: number): Any {
+    const sequence = this.getRuleByIndex(level);
+    try {
+      return new Any(sequence.getAddress(), numberingSequenceType);
+    } finally {
+      sequence.dispose();
+    }
+  }
+
+  /** Publishes the original typed property sequence for this level. @param level - Native index. @returns Owned sequence. */
+  public getRuleByIndex(level: number): Sequence<PropertyValue> {
+    return numberingToSequence(this.GetPropertiesByIndex(level));
+  }
+
+  /** Existing ODF transport projection of the same rule; this does not own numbering state. @param level - Native index. @returns Independent represented values. */
+  public GetPropertiesByIndex(level: number): WriterNumberingRuleProperties {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
-      throw new RangeError("Numbering rule index is out of range.");
+      throw new IndexOutOfBoundsException();
     return this.GetNumberingRuleByIndex(this.rule, level);
+  }
+
+  /** Native ten-level index container. @returns Level count. */
+  public getCount(): number {
+    return 10;
+  }
+  /** Native nonempty container. @returns True. */
+  public hasElements(): boolean {
+    return true;
+  }
+  /** Borrows the actual core rule for application by Writer's property owner. @returns Core owner. */
+  public GetNumRule(): SwNumRule {
+    return this.rule;
   }
 
   /** Resolves the original document-owned level without cloning its format. @param rule - Borrowed native rule. @param level - Validated level. @returns Supported property record. */
@@ -134,8 +203,19 @@ export class SwXNumberingRules {
   }
 
   /** Replaces one level through the native UNO application boundary. @param level - Zero-based level. @param properties - Supported property sequence. @returns Nothing. */
-  public replaceByIndex(level: number, properties: WriterNumberingRuleProperties): void {
-    this.SetNumberingRuleByIndex(this.rule, properties, level);
+  public replaceByIndex(level: number, properties: WriterNumberingRuleProperties | Any): void {
+    const previous = this.GetPropertiesByIndex(level);
+    try {
+      this.SetNumberingRuleByIndex(
+        this.rule,
+        properties instanceof Any ? numberingFromAny(properties, previous) : properties,
+        level,
+      );
+    } catch (error) {
+      if (properties instanceof Any && error instanceof NumberingRulePropertyError)
+        illegal(error.message);
+      throw error;
+    }
   }
 
   /** Applies supported UNO properties to one independent format, then commits the complete level. @param rule - Writer rule. @param properties - MM100 properties and marker attributes. @param level - Zero-based level. @returns Nothing. */
