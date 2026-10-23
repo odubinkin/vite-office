@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/ComboBox.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/ComboBox.tsx#ComboBox",
+        "apps/office/src/vcl/browser/ComboBox.test.tsx#@fileoverview",
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx#native style-box acceptance"
+      ],
+      "justification": "Task6764KT in-progress browser weld ComboBox presentation for font/style controllers, currently connected to the style controller. The widget owns editable draft, nondispatching keyboard travel, explicit acceptance, accessible custom rows, actual DOM overlay geometry and composite focus. Native style-name lookup, document focus release and dispatch remain in SvxStyleBox controller. Overlay measures actual DOM geometry and avoids toolbar overflow clipping. Native platform/full popup parity and production font/style drawing remain unverified; no behavioral/default parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ComboBox"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

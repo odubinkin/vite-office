@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/ComboBox.tsx",
+          "marker": "ComboBox"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/ComboBox.test.tsx",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/ComboBox.tsx",
+    "rationale": "Task6764KT in-progress browser weld ComboBox presentation for font/style controllers, currently connected to the style controller. The widget owns editable draft, nondispatching keyboard travel, explicit acceptance, accessible custom rows, actual DOM overlay geometry and composite focus. Native style-name lookup, document focus release and dispatch remain in SvxStyleBox controller. Overlay measures actual DOM geometry and avoids toolbar overflow clipping. Native platform/full popup parity and production font/style drawing remain unverified; no behavioral/default parity promotion.",
+    "responsibilities": [
+      "Editable widget drafts, nondispatching keyboard travel and explicit controller acceptance.",
+      "Accessible custom rows, actual DOM popup measurement, overlay placement and composite focus boundaries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React DOM input and a document portal implement the browser presentation of a welded editable combo. Native font/style lookup, focus release and command dispatch remain in the caller controller."
+    },
+    "status": "local-only"
+  }
+}

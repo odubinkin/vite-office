@@ -152,4 +152,53 @@ for (const width of [1280, 390]) {
       fullPage: true,
     });
   });
+  test(`Writer style popup overlay width=${width}`, /** Checks real DOM overlay, viewport bounds and accessible travel before any document edit. @param fixtures - Browser page. @param testInfo - Screenshot output. @returns Completion. */ async ({
+    page,
+  }, testInfo) => {
+    const errors: string[] = [];
+    page.on(
+      "pageerror",
+      /** Records actual browser failures. @param error - Unhandled error. @returns Nothing. */ (
+        error,
+      ) => {
+        errors.push(error.message);
+      },
+    );
+    const fixture = await openOwnedStyleDocument(page, width);
+    await fixture.select
+      .locator("..")
+      .getByRole("button", { name: "Show Paragraph style", exact: true })
+      .click();
+    const list = page.getByRole("listbox", { name: "Paragraph style", exact: true });
+    await expect(list).toBeVisible();
+    const rect = await list.boundingBox();
+    expect(rect).not.toBeNull();
+    expect(rect?.x).toBeGreaterThanOrEqual(0);
+    expect((rect?.x ?? 0) + (rect?.width ?? 0)).toBeLessThanOrEqual(width);
+    expect(
+      await list.evaluate(
+        /** Checks that toolbar clipping cannot affect the popup. @param element - Actual list. @returns Whether in the document overlay layer. */ (
+          element,
+        ) => element.parentElement === document.body,
+      ),
+    ).toBe(true);
+    await fixture.select.press("PageDown");
+    const active = await fixture.select.getAttribute("aria-activedescendant");
+    expect(active).not.toBeNull();
+    await expect(list.getByRole("option", { selected: true })).toHaveAttribute(
+      "id",
+      active as string,
+    );
+    await expect(list.getByRole("option", { selected: true })).toBeInViewport();
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedA");
+    await page.screenshot({
+      path: testInfo.outputPath("style-popup-overlay.png"),
+      scale: "css",
+      fullPage: true,
+    });
+    await fixture.select.press("Escape");
+    await expect(list).toHaveCount(0);
+    await expectClientFocus(fixture.editor);
+    expect(errors).toEqual([]);
+  });
 }

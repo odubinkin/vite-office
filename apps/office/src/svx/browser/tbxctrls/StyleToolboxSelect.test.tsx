@@ -259,3 +259,45 @@ it("keeps popup-internal focus, ignores disabled picks and leaves sidebar Escape
   press(box, "Enter");
   expect(trace).toEqual(["Raw name "]);
 });
+
+it("passes custom style rows through the common widget while resolving actual style identity on pick", /** Checks separation of accessible name, row drawing and native apply owner. @returns Nothing. */ () => {
+  const applied: StyleToolboxEntry[] = [];
+  render(
+    <StyleToolboxSelect
+      options={options}
+      value="b"
+      enabled
+      label="Preview"
+      getLabel={
+        /** Uses actual visible names. @param entry - Pool row. @returns Name. */ (entry) =>
+          entry.name
+      }
+      renderItem={
+        /** Supplies independent custom row content without changing its native identity. @param entry - Pool row. @param selected - Current row state. @returns Row. */ (
+          entry,
+          selected,
+        ) => (
+          <span aria-hidden data-active={selected}>
+            {entry.id} preview
+          </span>
+        )
+      }
+      applyStyle={
+        /** Observes the actual native row rather than rendered text. @param entry - Accepted row. @returns Nothing. */ (
+          entry,
+        ) => {
+          applied.push(entry);
+        }
+      }
+      acceptName={
+        /** Rejects unexpected raw-name acceptance. @returns Nothing. */ () => {
+          throw new Error("Known row must resolve through the pool.");
+        }
+      }
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Show Preview" }));
+  expect(screen.getByText("b preview")).toHaveAttribute("data-active", "true");
+  fireEvent.click(screen.getByRole("option", { name: "Owned: & 字" }));
+  expect(applied).toEqual([options[1]]);
+});
