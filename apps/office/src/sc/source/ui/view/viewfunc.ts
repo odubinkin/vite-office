@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import type { ScModule } from "../../../inc/scmod";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
@@ -90,12 +91,13 @@ export function GetSelectionPattern(view: ScViewData): ScPatternAttr {
 
 /** Native view-function layer owns the cursor-versus-mark deletion decision. */
 export class ScViewFunc extends ScTabView {
-  /** Borrows actual source view/document owners. @param data - View. @param shell - Document shell. @returns View functions. */
+  /** Borrows actual source view/document owners. @param data - View. @param shell - Document shell. @param module - Actual active input reference receiver. @returns View functions. */
   constructor(
     private readonly data: ScViewData,
     private readonly shell: ScDocShell,
+    module: ScModule | null = null,
   ) {
-    super(data);
+    super(data, true, module);
   }
   /** Original range inference delegates to the native viewfun2 implementation. @param ranges - Ordered output ranges. @returns Found data. */
   GetAutoSumArea(ranges: ScRangeList): boolean {

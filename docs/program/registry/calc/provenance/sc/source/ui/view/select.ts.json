@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/select.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/select.cxx",
+    "localSymbols": [
+      "ScViewFunctionSet",
+      "ScHeaderFunctionSet"
+    ],
+    "upstreamSymbols": [
+      "ScViewFunctionSet",
+      "ScHeaderFunctionSet"
+    ],
+    "preservedResponsibilities": [
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "ScViewFunctionSet.SetCursorAtCell retains the original boolean admission result and third device-scroll argument. The admitted normal browser path supplies false because real DOM/native geometry reveals the endpoint separately;requests for the unported VCL device branch reject explicitly. Mouse Shift is read from the native caller modifier lifetime rather than substituting a different meaning for that argument."
+    ],
+    "omittedResponsibilities": [
+      "Complete owner implementations and the unsupported services listed in the bounded foundation note remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/select.ts",
+          "marker": "ScViewFunctionSet"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/select.cxx",
+          "marker": "ScViewFunctionSet"
+        }
+      ]
+    }
+  }
+}

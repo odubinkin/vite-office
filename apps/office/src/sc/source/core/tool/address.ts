@@ -1,4 +1,5 @@
 /** @fileoverview Numerical ScAddress/ScRange owners from pinned sc/inc/address.hxx and sc/source/core/tool/address.cxx. No browser or Writer state enters these owners. */
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -41,6 +42,43 @@ export class ScAddress {
   static readonly detailsOOOa1: Readonly<ScAddressDetails> = new ScAddressDetails(
     FormulaGrammar.AddressConvention.CONV_OOO,
   );
+  /** Original local OOO A1 Format,including absolute flags and partial-valid axes. Sheet-qualified and alternate output conventions remain unported. @param flags - Native reference flags. @param doc - Optional document bounds. @param details - Output convention. @returns Owned UTF16 reference. */
+  Format(
+    flags: ScRefFlags,
+    doc: ScAddressDocument | null = null,
+    details: Readonly<ScAddressDetails> = ScAddress.detailsOOOa1,
+  ): OUString {
+    if (
+      details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO ||
+      flags & (ScRefFlags.TAB_3D | ScRefFlags.FORCE_DOC)
+    )
+      throw new Error("Nonlocal address formatting is not implemented");
+    if (flags & ScRefFlags.VALID)
+      flags |= ScRefFlags.ROW_VALID | ScRefFlags.COL_VALID | ScRefFlags.TAB_VALID;
+    let output = "";
+    if (
+      doc &&
+      flags & ScRefFlags.TAB_VALID &&
+      (this.Tab() < 0 || this.Tab() >= doc.GetTableCount())
+    )
+      output = "#REF!";
+    else {
+      if (flags & ScRefFlags.COL_VALID) {
+        let letters = "",
+          col = this.Col();
+        do {
+          letters = String.fromCharCode(65 + (col % 26)) + letters;
+          col = Math.floor(col / 26) - 1;
+        } while (col >= 0);
+        output += (flags & ScRefFlags.COL_ABS ? "$" : "") + letters;
+      }
+      if (flags & ScRefFlags.ROW_VALID)
+        output += (flags & ScRefFlags.ROW_ABS ? "$" : "") + (this.Row() + 1);
+    }
+    const units = new Uint16Array(output.length);
+    for (let index = 0; index < output.length; ++index) units[index] = output.charCodeAt(index);
+    return new OUString(units, units.length);
+  }
   /** Implements the valid local A1 subset of native Parse; other conventions, sheet/external/name/error fallbacks are explicit missing APIs. @param value - Unwrapped local A1 address. @param doc - Limits owner. @param details - Convention/base. @returns Native valid/absolute flags. */
   Parse(
     value: OUStringConstReference,
@@ -280,6 +318,34 @@ export class ScRange {
   public readonly aStart: ScAddress;
   public readonly aEnd: ScAddress;
 
+  /** Original OOO range Format uses endpoint flags and retains full-axis endpoint notation. @param doc - Document. @param flags - Native flags. @param details - Convention. @returns Owned UTF16 reference. */
+  Format(
+    doc: ScAddressDocument,
+    flags: ScRefFlags,
+    details: Readonly<ScAddressDetails> = ScAddress.detailsOOOa1,
+  ): OUString {
+    if (!(flags & ScRefFlags.VALID)) return new OUString(new Uint16Array([35, 82, 69, 70, 33]), 5);
+    if (this.aStart.Tab() !== this.aEnd.Tab()) flags |= ScRefFlags.TAB_3D;
+    const first = this.aStart.Format(flags, doc, details);
+    if (
+      this.aStart.equals(this.aEnd) &&
+      Boolean(flags & ScRefFlags.COL_ABS) === Boolean(flags & ScRefFlags.COL2_ABS) &&
+      Boolean(flags & ScRefFlags.ROW_ABS) === Boolean(flags & ScRefFlags.ROW2_ABS)
+    )
+      return first;
+    const second = this.aEnd.Format(
+        (ScRefFlags.VALID | ((flags >> 4) & ScRefFlags.BITS)) as ScRefFlags,
+        null,
+        details,
+      ),
+      units = new Uint16Array(first.getLength() + 1 + second.getLength());
+    units.set(first.getStr().subarray(0, first.getLength()));
+    units[first.getLength()] = 58;
+    units.set(second.getStr().subarray(0, second.getLength()), first.getLength() + 1);
+    first.dispose();
+    second.dispose();
+    return new OUString(units, units.length);
+  }
   /** Preserves the native overloads and constructor-specific ordering. @param args - Zero, invalid, copy, address pair, numeric singleton or numeric endpoints. @returns New range. */
   public constructor(
     ...args:

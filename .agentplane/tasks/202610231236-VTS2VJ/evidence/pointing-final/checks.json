@@ -1,0 +1,98 @@
+{
+  "build": {
+    "result": "pass",
+    "log": "output/playwright/task77-build12.log",
+    "sha256": "947b5f4ee9fbcdc849096ab9aaf22af22335c34e9c8997b4d139b64bfd5d3ecc"
+  },
+  "tools-types": {
+    "result": "pass",
+    "log": "output/playwright/task77-tools10.log",
+    "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+  },
+  "docs": {
+    "result": "pass",
+    "log": "output/playwright/task77-docs10.log",
+    "sha256": "93ad7add78d96a885be891721ddc734ec9fb3513835ed538d5491cd14dc42f5e"
+  },
+  "size": {
+    "result": "pass",
+    "log": "output/playwright/task77-size10.log",
+    "sha256": "a75f01252c33eede6ac844eb32f926093c1bff14c9e92d1a14765903d8630240"
+  },
+  "resources": {
+    "result": "pass",
+    "log": "output/playwright/task77-resources10.log",
+    "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+  },
+  "static": {
+    "result": "pass",
+    "log": "output/playwright/task77-static-final.log",
+    "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+  },
+  "boundaries": {
+    "result": "pass",
+    "log": "output/playwright/task77-boundaries-final.log",
+    "sha256": "de3c79f1f541f46007cee363eb7db96d711f1a77a13feb656f77583b77e41fab"
+  },
+  "source-tree": {
+    "result": "pass",
+    "log": "output/playwright/task77-tree-final.log",
+    "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+  },
+  "provenance": {
+    "result": "pass",
+    "log": "output/playwright/task77-provenance-final.log",
+    "sha256": "f1e4a23b0472dd2b71b89ff78c5155e7e63d23e2e183be52811e9bf1b18600e9"
+  },
+  "registry": {
+    "result": "pass",
+    "log": "output/playwright/task77-registry-final.log",
+    "sha256": "6cc1be66f73d05266575c97f06971b4b89bbe500b5bc8666d4ca372d83a4b647"
+  },
+  "routing": {
+    "result": "pass",
+    "log": "output/playwright/task77-routing-final.log",
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  },
+  "doctor": {
+    "result": "pass",
+    "log": "output/playwright/task77-doctor-final.log",
+    "sha256": "f796b7b1df3893a23da8b24d1ac46c5453d93cd8e2ff80efe9fe245848bdc80d"
+  },
+  "calc": {
+    "result": "pass",
+    "scenarios": 837,
+    "files": 213,
+    "log": ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/calc-coverage.log"
+  },
+  "chromium_worker": {
+    "result": "pass",
+    "scenarios": 5,
+    "log": ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/chromium-worker.log"
+  },
+  "related_writer_vcl": {
+    "result": "pass",
+    "scenarios": 33,
+    "files": 3
+  },
+  "source_snapshot": {
+    "result": "pass",
+    "files": 473,
+    "unchanged_during_final_verification": true
+  },
+  "scope": {
+    "result": "pass",
+    "changed_paths_at_capture": 85,
+    "approved_limit": 110,
+    "branch": "calc"
+  },
+  "global_lint": {
+    "result": "fail",
+    "log": "output/playwright/task77-lint3.log",
+    "reason": "Unchanged Writer ODT-boundary fixture lint and ignored historical output probes;all authored Calc source/E2E lint passes. No broad lint success is claimed."
+  },
+  "all_application_replay": {
+    "result": "deferred",
+    "reason": "Human-requested all-application cadence80;complete Calc and related consumers ran."
+  }
+}

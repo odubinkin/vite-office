@@ -14,6 +14,14 @@ export const ScSplitPos = {
 } as const;
 /** Native pane value domain; the maximum enumerator aliases bottom-right. */
 export type ScSplitPos = (typeof ScSplitPos)[keyof typeof ScSplitPos];
+/** Original viewdata.hxx reference mode identities. */
+export enum ScRefType {
+  SC_REFTYPE_NONE = 0,
+  SC_REFTYPE_REF = 1,
+  SC_REFTYPE_FILL = 2,
+  SC_REFTYPE_EMBED_LT = 3,
+  SC_REFTYPE_EMBED_RB = 4,
+}
 /** Represented native per-sheet cursor fields. Physical ownership is managed by JS; no split/geometry services are claimed. */
 class ScViewDataTable {
   bShowGrid = true;
@@ -26,6 +34,73 @@ class ScViewDataTable {
 }
 /** Native document-bound cursor/selection ownership, shared by browser view consumers. Only the declared cursor operations are ported. */
 export class ScViewData {
+  private bSelCtrlMouseClick = false;
+  /** Original selection-engine Ctrl-click state. @returns Modifier state. */ IsSelCtrlMouseClick(): boolean {
+    return this.bSelCtrlMouseClick;
+  }
+  /** Original actual mouse modifier assignment. @param value - Modifier state. @returns Nothing. */ SetSelCtrlMouseClick(
+    value: boolean,
+  ): void {
+    this.bSelCtrlMouseClick = value;
+  }
+  private bIsRefMode = false;
+  private eRefType = ScRefType.SC_REFTYPE_NONE;
+  private nRefStartX = 0;
+  private nRefStartY = 0;
+  private nRefStartZ = 0;
+  private nRefEndX = 0;
+  private nRefEndY = 0;
+  private nRefEndZ = 0;
+  /** Original reference selection lifetime. @returns Active reference mode. */ IsRefMode(): boolean {
+    return this.bIsRefMode;
+  }
+  /** Original reference kind. @returns Kind. */ GetRefType(): ScRefType {
+    return this.eRefType;
+  }
+  /** Original reference lifetime and kind assignment. @param active - Reference mode. @param type - Reference kind. @returns Nothing. */ SetRefMode(
+    active: boolean,
+    type: ScRefType,
+  ): void {
+    this.bIsRefMode = active;
+    this.eRefType = type;
+  }
+  /** Original reference anchor column. @returns Column. */ GetRefStartX(): number {
+    return this.nRefStartX;
+  }
+  /** Original reference anchor row. @returns Row. */ GetRefStartY(): number {
+    return this.nRefStartY;
+  }
+  /** Original reference anchor sheet. @returns Sheet. */ GetRefStartZ(): number {
+    return this.nRefStartZ;
+  }
+  /** Original reference endpoint column. @returns Column. */ GetRefEndX(): number {
+    return this.nRefEndX;
+  }
+  /** Original reference endpoint row. @returns Row. */ GetRefEndY(): number {
+    return this.nRefEndY;
+  }
+  /** Original reference endpoint sheet. @returns Sheet. */ GetRefEndZ(): number {
+    return this.nRefEndZ;
+  }
+  /** Original reference anchor assignment keeps the editing cursor separate. @param col - Column. @param row - Row. @param tab - Sheet. @returns Nothing. */ SetRefStart(
+    col: number,
+    row: number,
+    tab: number,
+  ): void {
+    this.nRefStartX = col;
+    this.nRefStartY = row;
+    this.nRefStartZ = tab;
+  }
+  /** Original reference endpoint assignment. @param col - Column. @param row - Row. @param tab - Sheet. @returns Nothing. */ SetRefEnd(
+    col: number,
+    row: number,
+    tab: number,
+  ): void {
+    this.nRefEndX = col;
+    this.nRefEndY = row;
+    this.nRefEndZ = tab;
+  }
+
   /** Original viewdata.hxx pixel conversion, preserving a nonzero twip extent. @param twips - Native extent. @param factor - Pixels per twip. @returns Pixels. */
   static ToPixel(twips: number, factor: number): number {
     const result = Math.trunc(twips * factor);

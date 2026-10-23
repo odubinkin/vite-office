@@ -41,7 +41,7 @@ it("opens the native dialog through the shared menu,filters case-sensitively,and
   const mask = screen.getByRole("textbox", { name: "Type a Sheet Name" });
   expect(mask).toHaveFocus();
   expect(screen.getByRole("option", { name: "Sheet1" })).toHaveAttribute("aria-selected", "true");
-  expect(screen.getByRole("grid").parentElement).toHaveAttribute("inert");
+  expect(screen.getByRole("grid").closest("[inert]")).toHaveAttribute("inert");
   expect(within(screen.getByRole("dialog")).getByRole("button", { name: "Help" })).toBeDisabled();
   fireEvent.keyDown(mask, { key: "PageDown", ctrlKey: true });
   expect(c.viewData.GetTabNumber()).toBe(0);

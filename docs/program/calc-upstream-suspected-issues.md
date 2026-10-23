@@ -3718,3 +3718,25 @@ formula regression: ABS itself does not accept eight arguments. Preserve the
 runtime lookup, including UInt16 narrowing and the distinct return sentinel.
 Independent source vectors cover the boundary;no whole-native class execution
 or user-visible LibreOffice failure is claimed.
+
+## CALC-259: the first Ctrl-click includes the old active cell
+
+Status: surprising behavior; explicitly described as an intentional upstream
+workaround, not a confirmed defect.
+
+Pinned `sc/source/ui/view/select.cxx`, `ScViewFunctionSet::SetCursorAtCell`,
+lines 793–811, handles a Ctrl-click with no previous marks by initializing a
+block at the old cursor before initializing the clicked cell. The source
+comment labels this `#i3875# *Hack*` and explicitly requires both old and new
+cells to be highlighted. Its same-cell case retains one marked cell.
+
+Example: with A1 active and no marked range, Ctrl-click D4 selects A1 and D4;
+it does not select D4 alone. The normal subsequent Ctrl-click branch can
+subtract already marked cells through native negative block conversion.
+
+Evidence: the pinned source and the actual owner vector in
+[mouse-block.test.ts](../../apps/office/src/sc/source/ui/view/mouse-block.test.ts)
+(`keeps original function-set anchors and the first-Ctrl-click old cursor
+inclusion`). Full historical issue context and the upstream selection engine's
+other modes have not been audited. Decision: preserve this branch and its
+original defaults without replacing it with a browser-only selection rule.

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/controller/calc-reference-input.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "mouse-reference-selection",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/controller/calc-reference-input.ts",
+        "apps/office/src/sc/source/ui/view/reference-input.test.ts",
+        "apps/office/src/sc/browser/controller/formula-pointing.test.ts",
+        "apps/office/src/sc/browser/controller/pointer-selection.test.ts",
+        "apps/office/src/sc/browser/presentation/calc-formula-pointing.test.tsx"
+      ],
+      "justification": "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. React binds the sole controller draft and DOM caret,uses shared Writer/VCL pointer capture and styling,and paints reference rectangles separately from ordinary native marks. Browser viewport/physical scroll mapping and repeat capture are platform adaptations;desktop scroll acceleration and complete range-finder parsing remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BindReferenceInput",
+        "PointReference",
+        "DragReference",
+        "ReferenceRange",
+        "NavigateReference"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

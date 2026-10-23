@@ -67,7 +67,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   expect(grid).toHaveAttribute("aria-colcount", String(MAXCOL + 2));
   expect(cell).toHaveTextContent("42");
   expect(cell).toHaveAttribute("aria-colindex", "28");
-  expect(cell).toHaveAttribute("aria-selected", "true");
+  expect(cell).toHaveAttribute("aria-selected", "false");
   expect(cell.parentElement).toHaveAttribute("aria-rowindex", "6");
   expect(screen.getByRole("gridcell", { name: "AB5" })).toHaveAttribute("aria-selected", "true");
   expect(screen.getByRole("gridcell", { name: "AA6" })).toHaveAttribute("aria-selected", "false");
@@ -76,6 +76,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   expect(selected?.[0].Col()).toBe(26);
   expect(selected?.[0].Row()).toBe(4);
   expect(selected?.[0].Tab()).toBe(0);
+  fireEvent.pointerUp(cell);
   fireEvent.doubleClick(cell);
   expect(props.onEdit).toHaveBeenCalledOnce();
   fireEvent.keyDown(grid, { key: "ArrowDown", shiftKey: true });
@@ -95,6 +96,8 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
     ["column", 26],
     ["row", 4],
   ]);
+  fireEvent.keyDown(screen.getByRole("button", { name: "Column AA" }), { key: "ArrowLeft" });
+  expect(props.onKeyDown).toHaveBeenCalledOnce();
   rerender(<ScGridWindow {...props} inputMode={ScInputMode.SC_INPUT_TABLE} />);
   const input = screen.getByRole("textbox", { name: "Edit cell AA5" });
   expect(input).toHaveFocus();
@@ -105,7 +108,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   expect(props.onEdit).toHaveBeenCalledOnce();
   expect(input).toHaveValue("=A1+1");
   fireEvent.change(input, { target: { value: "=B2" } });
-  expect(props.onInput).toHaveBeenCalledWith("=B2");
+  expect(props.onInput).toHaveBeenCalledWith("=B2", [3, 3]);
   fireEvent.keyDown(input, { key: "Enter", isComposing: true });
   expect(props.onInputKeyDown).toHaveBeenCalledOnce();
   expect(props.onKeyDown).toHaveBeenCalledOnce();
@@ -160,7 +163,7 @@ it("keeps formula-line state controlled and preserves source action modes", /** 
   fireEvent.focus(line);
   expect(props.onInputFocus).toHaveBeenCalledOnce();
   fireEvent.change(line, { target: { value: "=2" } });
-  expect(props.onInput).toHaveBeenCalledWith("=2");
+  expect(props.onInput).toHaveBeenCalledWith("=2", [2, 2]);
   fireEvent.keyDown(line, { key: "Escape" });
   expect(props.onInputKeyDown).toHaveBeenCalledOnce();
   for (const label of ["Named ranges", "Function Wizard", "Sum", "Formula", "Expand formula bar"])

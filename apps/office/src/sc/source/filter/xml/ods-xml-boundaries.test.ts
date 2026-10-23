@@ -79,7 +79,7 @@ it("rejects incompatible, duplicate-sheet and missing-style transfer data and di
       decodeCalcDocument({ ...record, sheets: [...record.sheets, ...record.sheets] }),
   ).toThrow("sheet is invalid");
   const missing = structuredClone(record);
-  missing.sheets[0]!.patterns[0] = [-1, 0, 0, "missing"];
+  (missing.sheets[0] as CalcDocumentRecord["sheets"][number]).patterns[0] = [-1, 0, 0, "missing"];
   expect(
     /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
       decodeCalcDocument(missing),
