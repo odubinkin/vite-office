@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T19:28:33.716Z"
+doc_updated_at: "2026-10-23T19:28:50.611Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -181,7 +181,7 @@ sections:
     Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-format-calc-coverage.
     Result:pass,884/884 scenarios across219 physical files;raw100 S15871/B9673/F2733/L14206.
     Command:npx vitest run --config vitest.calc.config.ts src/sc/source/core/tool/compiler-format-type.test.ts --coverage --coverage.include=src/svl/inc/zforlist.ts --coverage.reportsDirectory=../../output/playwright/task76-format-shared-coverage.
-    Result:pass,5/5 scenarios;changed shared owner raw100 S2/B0/F0/L2.
+    Result:pass,2/2 scenarios;changed shared owner raw100 S2/B0/F0/L2.
     Scope:complete Calc profile and only the changed shared zforlist header owner. Thresholds,exclusions and persistent coverage config unchanged. Three new actual-owner cases verify cache/default/invalid-item behavior,threaded uncached and warmed/copy behavior,and ordinary/hinted formula adoption with independent source request and destination format. Final focused19/19,type/lint/format/JSDoc pass after test-only documentation repair and adopting the already-asserted detached copy for proper document cleanup. Production and config hashes remain identical throughout Calc coverage and final checks;immutable evidence stores before/after test hashes explicitly.
 
     Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
@@ -351,7 +351,7 @@ Task76 formula-format metadata checkpoint:original ScFormulaCell needs/allow-for
 Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-format-calc-coverage.
 Result:pass,884/884 scenarios across219 physical files;raw100 S15871/B9673/F2733/L14206.
 Command:npx vitest run --config vitest.calc.config.ts src/sc/source/core/tool/compiler-format-type.test.ts --coverage --coverage.include=src/svl/inc/zforlist.ts --coverage.reportsDirectory=../../output/playwright/task76-format-shared-coverage.
-Result:pass,5/5 scenarios;changed shared owner raw100 S2/B0/F0/L2.
+Result:pass,2/2 scenarios;changed shared owner raw100 S2/B0/F0/L2.
 Scope:complete Calc profile and only the changed shared zforlist header owner. Thresholds,exclusions and persistent coverage config unchanged. Three new actual-owner cases verify cache/default/invalid-item behavior,threaded uncached and warmed/copy behavior,and ordinary/hinted formula adoption with independent source request and destination format. Final focused19/19,type/lint/format/JSDoc pass after test-only documentation repair and adopting the already-asserted detached copy for proper document cleanup. Production and config hashes remain identical throughout Calc coverage and final checks;immutable evidence stores before/after test hashes explicitly.
 
 Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
