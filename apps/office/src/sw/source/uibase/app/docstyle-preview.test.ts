@@ -9,6 +9,12 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { FontWeight } from "../../../../tools/inc/fontenum";
+import { Font } from "../../../../vcl/source/font/font";
+import {
+  setStylePreviewFontName,
+  setStylePreviewFontStyle,
+} from "../../../../svx/source/tbxctrls/tbcontrl.stylepreview";
+import * as slot from "../../../../editeng/inc/editids";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases actual frame/document ownership. @returns Nothing. */ () => {
@@ -22,6 +28,27 @@ function fixture() {
   sessions.push(session);
   return { ...session, document: session.docShell.GetDoc() };
 }
+
+it("supplies actual flattened Writer items to each native style preview font group", /** Crosses the actual document pool, temporary builtin resolution and SVX slot consumers. @returns Nothing. */ () => {
+  const f = fixture(),
+    doc = f.document;
+  const before = [...doc.GetTextFormatColls()];
+  const set = getParagraphStyleItemSetForPreview(doc, "heading-1");
+  if (set === undefined) throw new Error("Expected the actual builtin preview item set.");
+  for (const [fontSlot, postureSlot, weightSlot] of [
+    [slot.SID_ATTR_CHAR_FONT, slot.SID_ATTR_CHAR_POSTURE, slot.SID_ATTR_CHAR_WEIGHT],
+    [slot.SID_ATTR_CHAR_CJK_FONT, slot.SID_ATTR_CHAR_CJK_POSTURE, slot.SID_ATTR_CHAR_CJK_WEIGHT],
+    [slot.SID_ATTR_CHAR_CTL_FONT, slot.SID_ATTR_CHAR_CTL_POSTURE, slot.SID_ATTR_CHAR_CTL_WEIGHT],
+  ] as const) {
+    const font = new Font();
+    setStylePreviewFontStyle(set, postureSlot, weightSlot, font);
+    expect(setStylePreviewFontName(set, fontSlot, font)).toBe(true);
+    expect(font.GetFamilyName()).not.toBe("");
+    expect(font.GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+  }
+  expect(doc.GetTextFormatColls()).toEqual(before);
+  expect(doc.FindTextFormatColl("heading-1")).toBeUndefined();
+});
 
 it("copies existing parent sets root-first and keeps child overrides independent", /** Verifies real SwFormat inheritance and actual pooled item copies. @returns Nothing. */ () => {
   const f = fixture(),

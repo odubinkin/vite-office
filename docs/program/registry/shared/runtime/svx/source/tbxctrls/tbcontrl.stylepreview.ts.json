@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.ts#setStylePreviewFontName",
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT extracts the actual SvxStyleBox SetFont/SetFontSize/SetFontStyle operations. Real SfxItemSet slot mapping and inherited/default state determine admission;unknown,disabled and invalid states preserve the recipient. Font name assignment deliberately copies only family/style names,not the other FontItem metadata. Posture precedes weight and each slot is independent. Size uses the absolute item height through an actual caller-owned device conversion and current shell map unit;absence of a shell returns false and no CSS DPI is guessed. These are extracted value operations over the shared Font base,not a partial SvxFont or SvxStyleBox class. Full SetupEntry decorations/colors,EditEngine CheckScript,physical face selection,Canvas row integration and native widget services remain unfinished. No whole-module parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "setStylePreviewFontName",
+        "setStylePreviewFontSize",
+        "setStylePreviewFontStyle",
+        "StylePreviewLogicToPixel"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/tbxctrls/tbcontrl.cxx",
+      "upstreamSymbols": [
+        "GetWhich",
+        "SetFont",
+        "SetFontSize",
+        "SetFontStyle"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.ts",
+    "localSymbols": [
+      "setStylePreviewFontName",
+      "setStylePreviewFontSize",
+      "setStylePreviewFontStyle",
+      "StylePreviewLogicToPixel"
+    ],
+    "upstreamPath": "svx/source/tbxctrls/tbcontrl.cxx",
+    "upstreamSymbols": [
+      "GetWhich",
+      "SetFont",
+      "SetFontSize",
+      "SetFontStyle"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT extracts the actual SvxStyleBox SetFont/SetFontSize/SetFontStyle operations. Real SfxItemSet slot mapping and inherited/default state determine admission;unknown,disabled and invalid states preserve the recipient. Font name assignment deliberately copies only family/style names,not the other FontItem metadata. Posture precedes weight and each slot is independent. Size uses the absolute item height through an actual caller-owned device conversion and current shell map unit;absence of a shell returns false and no CSS DPI is guessed. These are extracted value operations over the shared Font base,not a partial SvxFont or SvxStyleBox class. Full SetupEntry decorations/colors,EditEngine CheckScript,physical face selection,Canvas row integration and native widget services remain unfinished. No whole-module parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full style font/decorations/color/script analysis and actual device/widget integration are unported;source helper tests do not prove browser raster parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.ts",
+          "marker": "setStylePreviewFontName"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "static bool SetFont("
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "static void SetFontStyle("
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylepreview.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps original style preview font-value helpers in the native svx/source/tbxctrls owner, split from existing border toolbox responsibilities in tbcontrl.ts. Shell and device adapters remain caller-owned."
+    }
+  }
+}
