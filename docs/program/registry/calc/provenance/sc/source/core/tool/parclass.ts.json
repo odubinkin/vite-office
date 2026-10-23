@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/parclass.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/parclass.cxx",
+    "localSymbols": [
+      "ScParameterClassification"
+    ],
+    "upstreamSymbols": [
+      "ScParameterClassification::Init",
+      "ScParameterClassification::GetParameterType"
+    ],
+    "preservedResponsibilities": [
+      "Block75 compute-II work in progress ports the original238-row classification table,seven-slot RunData initialization,repeat indexing,Unknown fallback,macro/return/signed-opcode behavior and explicit Init/Exit cache lifetime. Static data audit matches every original row;this is not native class execution. External AddIn argument collections remain explicitly unported,with the original Unknown return-type result retained. The existing per-realm compiler symbol bootstrap invokes actual classification Init after symbols,corresponding to that portion of native ScGlobal::Init without a replacement global service. Original shared compiler compute-II flag,empty virtual hooks,borrowed actual RPN buffer/offset locations,eight-argument cap and PostProcessCode timing are represented. Calc schedules and applies local scalar arithmetic II replacements only after final context,while preserving lexical ranges,relative flags and source exclusions for fully absolute rows,trivial or ambiguous ranges. Existing unsupported opcode/array/matrix admission remains explicit. ScFormulaCell owns actual native cMatrixFlag/GetMatrixFlag,explicit precompiled-token mode construction and copied mode state. Original matrix-reference formula output resolves its actual local RPN reference through the document and falls back to real source tokens when the origin is absent;non-normal output retains native braces. Matrix compilation and evaluation remain explicit unsupported services rather than scalar substitutes. The owned-array constructor creates a compiler only when RPN is missing,as in source. The classification constant-table diagnostic branch is specialized only for the proved invariant that all238 actual upstream repeated rows supply at least their repeat count of leading parameters;the source-data audit asserts that invariant. Twelve actual libc++64 double-hash bit patterns now match normal and ASan/UBSan,including a finite value whose native folded token hash is one. This is a primitive observation,not a full native Calc differential. Actual group compileCode enables II for missing RPN and retains precompiled,error and subtotal-detection branches. Source default column/table group listeners and earlier copy/ownership work remain unchanged. CALC258 preserves the source fallback-comment discrepancy. This does not complete document modes/pool identity,full native differential or final raw100/quality acceptance."
+    ],
+    "omittedResponsibilities": [
+      "External AddIn argument services and DEBUG_SC_PARCLASSDOC documentation generation remain unported;no full native differential or final raw100 acceptance is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/parclass.ts",
+          "marker": "ScParameterClassification"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/parameter-classification.test.ts",
+          "marker": "GetParameterType"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/parclass.cxx",
+          "marker": "ScParameterClassification::Init"
+        }
+      ]
+    }
+  }
+}

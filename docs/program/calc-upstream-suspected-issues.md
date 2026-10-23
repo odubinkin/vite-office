@@ -3698,3 +3698,23 @@ failure is established. Preserve insertion, lookup and failure ordering.
 The source-bound context test observes the cached owner through public lookup
 without consuming its uninitialized iterators. Managed allocation does not
 simulate native allocator failure or physical mutex behavior.
+
+## CALC-258: unspecified parameter classifications stop returning Value after slot six
+
+Reference: `sc/source/core/tool/parclass.cxx`, the assumptions above `pRawData`
+and `ScParameterClassification::GetParameterType`, pinned LibreOffice source
+`9bc445578031fecf56086729d8e4940c77e14d65`.
+
+The introductory comment says unspecified opcodes accept only Value parameters,
+without a parameter-count check or Bounds result. The executable lookup instead
+returns Value for the seven zero-initialized parameter slots, but Bounds for
+indices seven and above when the opcode has no repeated-parameter definition.
+For example, `ocAbs` is absent from the static table; its parameter six resolves
+to Value and parameter seven resolves to Bounds. The return-type sentinel still
+resolves to Value.
+
+This is a source-comment/lookup-contract discrepancy, not an established valid
+formula regression: ABS itself does not accept eight arguments. Preserve the
+runtime lookup, including UInt16 narrowing and the distinct return sentinel.
+Independent source vectors cover the boundary;no whole-native class execution
+or user-visible LibreOffice failure is claimed.

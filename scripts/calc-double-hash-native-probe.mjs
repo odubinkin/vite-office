@@ -21,7 +21,7 @@ int main() {
  static_assert(sizeof(std::size_t)==8);
  static_assert(sizeof(double)==8);
  std::cout << "libcxx64 " << _LIBCPP_VERSION << "\\n";
- for(std::uint64_t bits : {0ULL,0x8000000000000000ULL,0x3ff0000000000000ULL,0xbff0000000000000ULL,0x400c000000000000ULL,0x7ff0000000000000ULL,0xfff0000000000000ULL,0x7ff8000000000001ULL,0xfff8000000000002ULL,1ULL,0x8000000000000001ULL})
+ for(std::uint64_t bits : {0ULL,0x8000000000000000ULL,0x3ff0000000000000ULL,0xbff0000000000000ULL,0x400c000000000000ULL,0x7ff0000000000000ULL,0xfff0000000000000ULL,0x7ff8000000000001ULL,0xfff8000000000002ULL,1ULL,0x8000000000000001ULL,0xeeeeeeeeeeeeeeeeULL})
   std::cout<<bits<<" "<<std::hash<double>{}(std::bit_cast<double>(bits))<<"\\n";
 }
 `;

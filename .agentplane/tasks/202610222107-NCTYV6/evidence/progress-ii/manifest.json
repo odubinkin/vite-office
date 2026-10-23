@@ -1,0 +1,404 @@
+{
+  "task": "202610222107-NCTYV6",
+  "final": false,
+  "verification": "pending",
+  "parentSourceCommit": "688a4ea70a22",
+  "archiveSha256": "76d303734a1d99394646f96fd9642d4fd89f3665746ce875c94a10fb5d59b39f",
+  "sources": [
+    {
+      "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+      "sha256": "7e5eb31b5008458f3876696726d3ff954cb968de7887aea6950c799cfed69797"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts",
+      "sha256": "19ef93c8552a45cd9ff64638119f6a77d09fd5c221b8b8c778ec3e2ca1225b06"
+    },
+    {
+      "path": "apps/office/src/sc/inc/formulacell.ts",
+      "sha256": "14683272b59153f0305a092a14b0260d2b9c83917c8cbd92c4d14ea3def81989"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-compare.test.ts",
+      "sha256": "fddb01bcec5bcf56e21de5ea85cefb3fa1471c971ecf5ce47959ccae8d9e9f0c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "sha256": "c3d961c4ba72b150f19e0f24d0d5a4e40cc926011f6db9c45a6776a5882b32f1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacellgroup.ts",
+      "sha256": "6f67417abcc130e5eb48b9dbd9b0b0929f422cbc7800196e40e11c990dc3ad6f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/parclass.ts",
+      "sha256": "9d24d32ffac49e18f69120c2963227a5d1cc74baf2cbbc45ab5e2b34b7f61b27"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "eb5661bc5acc80b7bc47e9b7a77854188c96ac61fb51a1b469774ce57d59701b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/implicit-intersection.test.ts",
+      "sha256": "54af148696fc7e6dcf5b8f4dda03d5a0d4061243f82bf1ebf83e7426f4d915a5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "sha256": "0bb69f202d05f8f98e74108a9d180549a47ad76ed6e397da0bb4b46b3b9fa910"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-double-hash-cases.json",
+      "sha256": "7bf42c7391332f0c38c6e288572dde30832dc3b8de6b33aefc06eaaa63ef4d47"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/parameter-classification.test.ts",
+      "sha256": "260bb17143039f93ca863ce6f134f85ceadff60972050be995945de9c2520de0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/parclass.ts",
+      "sha256": "ab722572c321cfda45525340fb6f65f4e1da9f2fd196ee5e8bf4082c582a3c69"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "0d8cf661492fd1b94226a9d0fd404b5151dd8e352674afb8cb3c99718c514d06"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/formulacell.ts.json",
+      "sha256": "ca519af0f37d36184ad5c110a2ac82b0c31a1d0f8e5180ba820afabba54f0a0a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "sha256": "2c337d1dfd36ed630934e8545b60ce92738ba53f98c8fbb742531da430dfca94"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacellgroup.ts.json",
+      "sha256": "9409659ef15f610fc0772d7db7b18611ea280da973531036978186a79fa0d92b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/inc/parclass.ts.json",
+      "sha256": "8303a71e1508297df78680f39495ac3447488164f944a558629b8024e729278c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/compiler.ts.json",
+      "sha256": "e3fee17f1f3132c02117bb17c3d8545779ff8e7704741c722a61401ab3e72aba"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/parclass.ts.json",
+      "sha256": "0949ebe46fcfb007e1e2df76c9b5353ce42f795862417c112c63771cc0795d4d"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/formulacell.ts.json",
+      "sha256": "aa20842423b91b0cb707b03c1eeecea2123ddee8033383590a32fb96c21100b3"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "sha256": "e0e689d3957a44cea55c66a75e736bdb812c3971d0012fd793e401be282b3756"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacellgroup.ts.json",
+      "sha256": "1e9f4850b458f9fed1b41899051652a713b21870ae7e60fffae0b79967072df6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/inc/parclass.ts.json",
+      "sha256": "edd7fc8e7600e1d422db55b981032f103f59a92b5caf775c93b3dfcbfbedc5af"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/compiler.ts.json",
+      "sha256": "b984a2e1a9af319268aa52748eed707cb4337534cfb9e2b19f2fb99760651897"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/parclass.ts.json",
+      "sha256": "0849453a73d8128114659aecc3c1a28a9a592fdc68a6e5950aaa95bebcc2affe"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "101c2f781d97c4a974866e34a548cdc97de8317cbb12f3ed6809eadd89016fb5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "dfadbab63d0d1454d239842ca29b3e26c322a60311659f9d00ab831bcfc954c4"
+    },
+    {
+      "path": "scripts/calc-double-hash-native-probe.mjs",
+      "sha256": "41b3eab36774e80c27bace416d83c79be347767ba33cd98a91591dddfc92b664"
+    }
+  ],
+  "cumulativeScopePaths": 132,
+  "approvedScopeBudget": 135,
+  "rawPaths": [
+    "output/playwright/task75-matrix-results.json",
+    "output/playwright/task75-matrix-coverage/coverage-summary.json",
+    "output/playwright/task75-matrix-coverage/coverage-final.json",
+    "output/playwright/task75-matrix-result-audit.json",
+    "output/playwright/task75-matrix-complete.log",
+    "output/playwright/task75-matrix-types.log",
+    "output/playwright/task75-matrix-lint.log",
+    "output/playwright/task75-matrix-format.log",
+    "output/playwright/task75-matrix-docs.log",
+    "output/playwright/task75-matrix-size.log",
+    "output/playwright/task75-matrix-boundaries.log",
+    "output/playwright/task75-matrix-tree.log",
+    "output/playwright/task75-matrix-provenance.log",
+    "output/playwright/task75-matrix-registry.log",
+    "output/playwright/task75-matrix-build.log",
+    "output/playwright/task75-matrix-browser.log",
+    "output/playwright/task75-matrix-static.log",
+    "output/playwright/task75-matrix-resources.log",
+    "output/playwright/task75-matrix-routing.log",
+    "output/playwright/task75-matrix-doctor.log",
+    "output/playwright/task75-matrix-native-hash.log",
+    "output/playwright/task75-matrix-table-audit.log",
+    "output/playwright/task75-matrix-focused.log",
+    "output/playwright/task75-parclass-table-audit.py",
+    "output/playwright/task75-save-ii-progress.mjs",
+    "output/playwright/task75-ii-findings.txt",
+    "output/playwright/task75-ii-verification.txt",
+    "output/playwright/task75-nullable-contract-planning.json",
+    "output/playwright/task75-nullable-contract-planning.log",
+    "output/playwright/calc-double-hash-native/driver.cpp",
+    "output/playwright/calc-double-hash-native/normal.txt",
+    "output/playwright/calc-double-hash-native/asan.txt"
+  ],
+  "calcScope": {
+    "calcFiles": [
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-alignment.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-boundary-controls.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-cell-style-inheritance.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-color.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-deselect-bindings.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-deselect.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-header-sizing.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-modal-focus.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-optional-icons.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-primary-save.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-sheet-popup.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-visible-selection.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/column-geometry.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/workflows/calc-aggregate-ods.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/workflows/calc-large-ods.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/address.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/fstalgorithm.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/kahan.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-append.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-callback.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-matrix.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-range.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-set.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements-store.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/mtvelements.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/ref-address.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/inc/sheetlimits.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/alignmentattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/asianattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attarray.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/attrib.values.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/background-brush.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/bigrange.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/border-boundaries.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/border-frame.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cell-style-association.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/celltextattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/cellvalue.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/clipparam.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/color-defaults.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/compressedarray.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/connected-area.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/diagonalattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/dociter.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool-style-defaults.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/docpool.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.references.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.scalar.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/edit-item-transfer.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/font-family-defaults.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/fonteffectsattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/formula-block-address.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/formula-compare.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/formula-copy.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/heightattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/indentattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/language-item.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/listener-context.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/marginattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markarr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markdata.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/markmulti.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/mergeattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/mergeflag.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/namespace-map.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-column-width.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-document-pool-complete.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/native-page-hf.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/pageattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/patattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/postureattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/protectionattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/refcellvalue.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/rotateattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/script-type.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/segmenttree.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/selection-pattern.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/shadowattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/strikeout-emphasisattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/text-line-items.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/text-size-context.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/weightattr.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/data/xml-attributes.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/address.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/aggregate-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/compiler-format-type.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/docoptio.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/external-token.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formula-output.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/formularesult.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/group-area-listener.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/implicit-intersection.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/native-address.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/parameter-classification.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/range-extension.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/range-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/range-matrix.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangelst.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/rangepair.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refdata.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/reference-token.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refupdat.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refupdate.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/refwrap.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/scmatrix.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/stringutil.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/stylehelper.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token-clone.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token-copy.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token-hash.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/token.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/core/tool/viewopti.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/format-export-failures.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/native-alignment-handlers.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-borders.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-columns.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-native-fonts.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-sparse-export.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-style-routing.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/wrap-text.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/app/inputhdl.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/undo/undocell.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/border-history.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/colrowba.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/column-width.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/deselect.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/format-boundaries.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/tabview3.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/view-options.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/viewdata.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/svl/source/items/native-target-which.test.ts"
+    ],
+    "calcScenarios": 724,
+    "sharedFiles": 4,
+    "sharedScenarios": 23,
+    "testsPass": true,
+    "totalFiles": 202
+  },
+  "coverage": {
+    "lines": {
+      "total": 12820,
+      "covered": 12765,
+      "skipped": 0,
+      "pct": 99.57
+    },
+    "statements": {
+      "total": 14324,
+      "covered": 14236,
+      "skipped": 0,
+      "pct": 99.38
+    },
+    "functions": {
+      "total": 2423,
+      "covered": 2423,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8777,
+      "covered": 8681,
+      "skipped": 0,
+      "pct": 98.9
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "progress": "Original238-row parameter classification and repeat/default/return contracts,real borrowed RPN compute-II scheduling and final replacement over existing arithmetic/local-reference slice,native cell/group missing-RPN compilation flags and precompiled matrix-mode metadata/copy/formatting. Matrix compilation/evaluation and external AddIn parameter services stay explicit unsupported. CALC258 preserves source fallback comment discrepancy. Full production profile passes747 scenarios/202files;unchanged raw100 gate fails99.38S/98.90B/100F/99.57L. Both changed shared owners and classifier/group owners are raw100. Source/type/scoped lint/format/JSDoc/size/boundary/tree/provenance/registry/static/resources/routing/doctor/build and3 Chromium/DOM-free Worker cases pass. Only required test-callback JSDoc was added after full test execution.",
+  "nativeObservations": "Twelve actual libc++64 double-hash bit patterns match normal and ASan/UBSan. Classification table audit is static source-data comparison only. No whole-native Calc/compiler differential claim.",
+  "planning": "Optional initial JS compiler-program analysis exhausted heap without changing source. Bounded native type-only nullable GetPool planning probe reports15 callers and restores exact original document source in finally. This is not implementation/runtime evidence.",
+  "remaining": "Native document-mode defaults and actual pool-helper identity,remaining source/native observations,final all-Calc/changed-shared raw100 and quality acceptance. Clipboard resource sharing/reset/fill/paste Undo remain76;full UI/AutoSum acceptance remains74;all-app checkpoint80."
+}

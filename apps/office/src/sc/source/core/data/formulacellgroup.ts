@@ -1,4 +1,10 @@
-/** @fileoverview Original ScFormulaCellGroup code,scalar metadata and cached area-listener ownership split from formulacell.cxx;compileCode and column grouping remain separate consumers. */
+/** @fileoverview Original ScFormulaCellGroup code,scalar metadata and cached area-listener ownership split from formulacell.cxx;column grouping remains a separate consumer. */
+import { ScCompiler } from "../../../inc/compiler";
+import { ScMatrixMode } from "../../../inc/formulacell";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { OpCode } from "../../../../formula/inc/opcode";
+import type { Grammar } from "../../../../formula/inc/grammar";
+import type { ScAddress } from "../../../inc/address";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
@@ -49,6 +55,28 @@ export class ScFormulaCellGroup {
     this.mpCode = code.CloneValue();
     this.mbInvariant = this.mpCode.IsInvariant();
     this.mpCode.GenHash();
+  }
+  /** Original group compilation enables II only when source code lacks RPN;otherwise it preserves existing code and detects subtotal/aggregate opcodes. @param doc - Actual document. @param position - Formula origin. @param grammar - Native grammar. @returns Nothing. */
+  compileCode(doc: ScDocument, position: ScAddress, grammar: Grammar): void {
+    if (!this.mpCode) return;
+    if (
+      this.mpCode.GetLen() &&
+      this.mpCode.GetCodeError() === FormulaError.NONE &&
+      !this.mpCode.GetCodeLen()
+    ) {
+      const compiler = new ScCompiler(
+        doc,
+        position,
+        this.mpCode,
+        grammar,
+        true,
+        (this.mpTopCell as ScFormulaCell).GetMatrixFlag() !== ScMatrixMode.NONE,
+      );
+      this.mbSubTotal = compiler.CompileTokenArray();
+      this.mnFormatType = compiler.GetNumFormatType();
+    } else
+      this.mbSubTotal =
+        this.mpCode.HasOpCodeRPN(OpCode.ocSubTotal) || this.mpCode.HasOpCodeRPN(OpCode.ocAggregate);
   }
   /** Original range/policy cache constructs one actual listener using the borrowed real top-cell block pointer. @param top - Actual formula block pointer. @param range - Source reference range. @param startFixed - Start row policy. @param endFixed - End row policy. @returns Cached owned listener. */
   getAreaListener(

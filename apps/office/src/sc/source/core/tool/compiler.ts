@@ -1,9 +1,12 @@
 /** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet references,other functions and localized input formatting remain unsupported. */
+import { ParamClass } from "../../../../formula/inc/paramclass";
+import { ScParameterClassification } from "../inc/parclass";
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
 import {
   FormulaByteToken,
   FormulaSpaceToken,
   FormulaMissingToken,
+  StackVar,
 } from "../../../../formula/inc/token";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -37,6 +40,9 @@ const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
       ]) => [symbol, op],
     ),
 );
+// Existing per-realm compiler symbol bootstrap binds the classification part of
+// native ScGlobal::Init after symbols,without a replacement global service.
+ScParameterClassification.Init();
 /** Actual shared grammar with the Calc first-error hook and bounded numeric scanner. */
 export class ScCompiler extends FormulaCompiler {
   /** Original scalar implicit-intersection branch for the consumed local-sheet reference convention. 3D cases remain unported. @param range - Non-singleton native range. @param address - Selected address output. @param position - Formula position. @returns Unique source position. */
@@ -61,16 +67,202 @@ export class ScCompiler extends FormulaCompiler {
     return false;
   }
   readonly aPos: ScAddress;
-  /** Native document/position/array-or-grammar constructor subset. @param rDoc - Document. @param position - Formula position. @param arrayOrGrammar - Existing array or scanning grammar. @param grammar - Existing-array grammar. @returns Compiler. */
+  /** Original document/source-scanning constructor family. @param doc - Actual document. @param position - Formula origin. @param grammar - Native grammar or unspecified. @param computeII - Original implicit-intersection switch. @param matrixFlag - Original matrix context. @returns Compiler. */
+  constructor(
+    doc: ScDocument,
+    position: ScAddress,
+    grammar?: Grammar,
+    computeII?: boolean,
+    matrixFlag?: boolean,
+  );
+  /** Original existing-token-array constructor family. @param doc - Actual document. @param position - Origin. @param array - Actual code owner. @param grammar - Native grammar or unspecified. @param computeII - II switch. @param matrixFlag - Matrix context. @returns Compiler. */
+  constructor(
+    doc: ScDocument,
+    position: ScAddress,
+    array: ScTokenArray,
+    grammar?: Grammar,
+    computeII?: boolean,
+    matrixFlag?: boolean,
+  );
+  /** Binds the original overload values and unspecified-grammar resolution before SetGrammar. @param rDoc - Actual document. @param position - Origin. @param arrayOrGrammar - Existing array or grammar. @param grammarOrCompute - Array grammar or scanning II flag. @param computeOrMatrix - Array II flag or scanning matrix flag. @param matrixFlag - Array matrix context. @returns Compiler. */
   constructor(
     private readonly rDoc: ScDocument,
     position: ScAddress,
-    arrayOrGrammar: ScTokenArray | Grammar,
-    grammar?: Grammar,
+    arrayOrGrammar: ScTokenArray | Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED,
+    grammarOrCompute: Grammar | boolean = FormulaGrammar.Grammar.GRAM_UNSPECIFIED,
+    computeOrMatrix = false,
+    matrixFlag = false,
   ) {
-    super(arrayOrGrammar instanceof ScTokenArray ? arrayOrGrammar : new ScTokenArray(rDoc));
+    const existing = arrayOrGrammar instanceof ScTokenArray;
+    super(
+      existing ? arrayOrGrammar : new ScTokenArray(rDoc),
+      existing ? computeOrMatrix : typeof grammarOrCompute === "boolean" ? grammarOrCompute : false,
+      existing ? matrixFlag : computeOrMatrix,
+    );
     this.aPos = new ScAddress(position);
-    this.SetGrammar(arrayOrGrammar instanceof ScTokenArray ? (grammar as Grammar) : arrayOrGrammar);
+    const grammar = existing ? (grammarOrCompute as Grammar) : arrayOrGrammar;
+    this.SetGrammar(
+      grammar === FormulaGrammar.Grammar.GRAM_UNSPECIFIED ? rDoc.GetGrammar() : grammar,
+    );
+  }
+  private readonly mPendingImplicitIntersectionOptimizations: {
+    parameterLocation: readonly [FormulaToken[], number];
+    parameter: FormulaToken;
+    operation: FormulaToken;
+  }[] = [];
+  private readonly mUnhandledPossibleImplicitIntersections = new Set<FormulaToken>();
+  /** Original classification predicate. @param token - Actual operation. @param parameter - Native argument offset. @returns Candidate scalar/array argument. */
+  private static ParameterMayBeImplicitIntersection(
+    token: FormulaToken,
+    parameter: number,
+  ): boolean {
+    const classification = ScParameterClassification.GetParameterType(token, parameter);
+    return classification === ParamClass.Value || classification === ParamClass.Array;
+  }
+  /** Original matrix/forced-array/reference-return optimization exclusion. @param token - Operation. @returns Skip optimization. */
+  private SkipImplicitIntersectionOptimization(token: FormulaToken): boolean {
+    if (this.mbMatrixFlag) return true;
+    const parameter = token.GetInForceArray();
+    if (
+      parameter === ParamClass.ForceArray ||
+      parameter === ParamClass.ReferenceOrForceArray ||
+      parameter === ParamClass.SuppressedReferenceOrForceArray ||
+      parameter === ParamClass.ReferenceOrRefArray
+    )
+      return true;
+    return ScParameterClassification.GetParameterType(token, 65535) === ParamClass.Reference;
+  }
+  /** Original enabled II hook for current scalar/local-reference/aggregate opcodes;unconsumed function families are rejected by the shared compiler admission guard. @param token - Operation. @param parameters - Borrowed actual RPN slot locations. @param count - Argument count. @returns Nothing. */
+  protected override HandleIIOpCode(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): void {
+    if (!this.mbComputeII) return;
+    this.HandleIIOpCodeInternal(token, parameters, count);
+  }
+  /** Original pointer validation,candidate scheduling and aggregate reference bookkeeping for the accepted opcode slice. @param token - Operation. @param parameters - Actual RPN locations. @param count - Native count. @returns Handled. */
+  private HandleIIOpCodeInternal(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): boolean {
+    for (let index = 0; index < count; index++) {
+      const location = parameters?.[index];
+      if (!location || !location[0][location[1]]) return false;
+    }
+    const opcode = token.GetOpCode();
+    if (opcode === OpCode.ocPush) {
+      if (token.GetType() === StackVar.svDoubleRef)
+        this.mUnhandledPossibleImplicitIntersections.add(token);
+      return true;
+    }
+    if (
+      opcode >= OpCode.ocStartBinaryOperators &&
+      opcode < OpCode.ocStopBinaryOperators &&
+      opcode !== OpCode.ocAnd &&
+      opcode !== OpCode.ocOr
+    ) {
+      if (count !== 2) return false;
+      if (
+        !ScCompiler.ParameterMayBeImplicitIntersection(token, 0) ||
+        !ScCompiler.ParameterMayBeImplicitIntersection(token, 1)
+      )
+        return false;
+      if (this.SkipImplicitIntersectionOptimization(token)) return false;
+      const locations = parameters as readonly (readonly [FormulaToken[], number])[],
+        first = locations[0] as readonly [FormulaToken[], number],
+        second = locations[1] as readonly [FormulaToken[], number];
+      if (
+        (first[0][first[1]] as FormulaToken).GetType() === StackVar.svDoubleRef &&
+        (second[0][second[1]] as FormulaToken).GetType() !== StackVar.svMatrix
+      )
+        this.addPendingIntersection(first, token);
+      if (
+        (second[0][second[1]] as FormulaToken).GetType() === StackVar.svDoubleRef &&
+        (first[0][first[1]] as FormulaToken).GetType() !== StackVar.svMatrix
+      )
+        this.addPendingIntersection(second, token);
+      return true;
+    }
+    if (
+      (opcode >= OpCode.ocStartUnaryOperators && opcode < OpCode.ocStopUnaryOperators) ||
+      opcode === OpCode.ocPercentSign
+    ) {
+      if (count !== 1) return false;
+      if (!ScCompiler.ParameterMayBeImplicitIntersection(token, 0)) return false;
+      if (this.SkipImplicitIntersectionOptimization(token)) return false;
+      const location = (
+        parameters as readonly (readonly [FormulaToken[], number])[]
+      )[0] as readonly [FormulaToken[], number];
+      if ((location[0][location[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
+        this.addPendingIntersection(location, token);
+      return true;
+    }
+    let possible = false;
+    for (let index = 0; index < count; index++) {
+      const location = (parameters as readonly (readonly [FormulaToken[], number])[])[
+        index
+      ] as readonly [FormulaToken[], number];
+      if (
+        ScCompiler.ParameterMayBeImplicitIntersection(token, index) &&
+        (location[0][location[1]] as FormulaToken).GetType() === StackVar.svDoubleRef
+      ) {
+        possible = true;
+        break;
+      }
+    }
+    if (!possible) {
+      for (let index = 0; index < count; index++) {
+        const location = (parameters as readonly (readonly [FormulaToken[], number])[])[
+          index
+        ] as readonly [FormulaToken[], number];
+        this.mUnhandledPossibleImplicitIntersections.delete(
+          location[0][location[1]] as FormulaToken,
+        );
+      }
+      return true;
+    }
+    return false;
+  }
+  /** Original PendingImplicitIntersectionOptimization member capture;the location borrows the real code buffer. @param location - Actual slot. @param operation - Operation. @returns Nothing. */
+  private addPendingIntersection(
+    location: readonly [FormulaToken[], number],
+    operation: FormulaToken,
+  ): void {
+    this.mPendingImplicitIntersectionOptimizations.push({
+      parameterLocation: location,
+      parameter: location[0][location[1]] as FormulaToken,
+      operation,
+    });
+  }
+  /** Original delayed optimization waits for the final operation's array context and current slot identity. @returns Nothing. */
+  protected override PostProcessCode(): void {
+    for (const item of this.mPendingImplicitIntersectionOptimizations) {
+      const [buffer, offset] = item.parameterLocation;
+      if (buffer[offset] !== item.parameter) continue;
+      if (offset >= this.mpCode.length) continue;
+      if (item.operation.IsInForceArray()) continue;
+      this.ReplaceDoubleRefII(item.parameterLocation);
+    }
+    this.mPendingImplicitIntersectionOptimizations.length = 0;
+  }
+  /** Original local-sheet double-to-single optimization preserves lexical tokens and skips fully absolute rows,trivial ranges and ambiguous intersections. @param location - Actual RPN slot. @returns Nothing. */
+  private ReplaceDoubleRefII(location: readonly [FormulaToken[], number]): void {
+    const token = location[0][location[1]] as ScDoubleRefToken,
+      range = token.GetDoubleRef();
+    if (!range.Ref1.IsRowRel() && !range.Ref2.IsRowRel()) return;
+    const absolute = range.toAbs(this.rDoc, this.aPos);
+    if (absolute.aStart.equals(absolute.aEnd)) return;
+    const address = new ScAddress();
+    if (!ScCompiler.DoubleRefToPosSingleRefScalarCase(absolute, address, this.aPos)) return;
+    const reference = new ScSingleRefData();
+    reference.InitFlags();
+    reference.SetColRel(range.Ref1.IsColRel());
+    reference.SetRowRel(true);
+    reference.SetTabRel(range.Ref1.IsTabRel());
+    reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
+    location[0][location[1]] = new ScSingleRefToken(this.rDoc.GetSheetLimits(), reference);
   }
   /** Selects the implemented native Calc grammar and reference convention. @param grammar - Grammar. @returns Nothing. */
   SetGrammar(grammar: Grammar): void {

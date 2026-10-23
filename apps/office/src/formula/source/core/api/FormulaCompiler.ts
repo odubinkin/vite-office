@@ -1,4 +1,4 @@
-/** @fileoverview Shared FormulaCompiler arithmetic/aggregate argument RPN and ODFF output subsets. Reference operators,other functions and implicit intersection remain unsupported. */
+/** @fileoverview Shared FormulaCompiler arithmetic/aggregate argument RPN and ODFF output subsets. Other functions,array/matrix compilation and unconsumed reference operators remain unsupported. */
 import { OpCode } from "../../../inc/opcode";
 import {
   FormulaToken,
@@ -86,7 +86,7 @@ export class FormulaCompiler {
         op === OpCode.ocSpaces ? " " : String.fromCharCode((token as FormulaSpaceToken).GetChar())
       ).repeat(byte);
     }
-    if (op === OpCode.ocPush) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
       if (token.GetType() === StackVar.svDouble)
         return doubleToString((token as FormulaDoubleToken).GetDouble());
       if (token.GetType() === StackVar.svString)
@@ -131,11 +131,27 @@ export class FormulaCompiler {
   private meLastOp: OpCode = OpCode.ocPush;
   private mnRecursion = 0;
   private index = 0;
-  private mpCode: FormulaToken[] = [];
-  /** Binds the actual array for default scalar compilation; other modes require their missing real services. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
+  protected mpCode: FormulaToken[] = [];
+  protected readonly mbComputeII: boolean;
+  protected readonly mbMatrixFlag: boolean;
+  /** Original virtual II hook. A native FormulaToken** borrows one actual code buffer plus its offset;no copied operand vector or pointer manager is introduced. @param token - Operation. @param parameters - Borrowed slot locations or null. @param count - Native argument count. @returns Nothing. */
+  protected HandleIIOpCode(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): void {
+    void token;
+    void parameters;
+    void count;
+  }
+  /** Original empty final-code virtual hook. @returns Nothing. */
+  protected PostProcessCode(): void {}
+
+  /** Binds the original code owner and II flag;matrix compilation requires its unported real services. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
   constructor(array: FormulaTokenArray, computeII = false, matrixFlag = false) {
-    if (computeII || matrixFlag)
-      throw new Error("Implicit-intersection and matrix compilation are not implemented");
+    if (matrixFlag) throw new Error("Formula matrix compilation is not implemented");
+    this.mbComputeII = computeII;
+    this.mbMatrixFlag = matrixFlag;
     this.mpArr = array;
   }
   /** Preserves the original empty virtual base operation; Calc records the first error in its override. @param error - Compiler error. @returns Nothing. */
@@ -159,6 +175,7 @@ export class FormulaCompiler {
     this.meLastOp = OpCode.ocOpen;
     this.NextToken();
     if (this.Expression() !== OpCode.ocStop) this.SetError(FormulaError.OperatorExpected);
+    this.PostProcessCode();
     if (this.mpCode.length) this.mpArr.CreateNewRPNArrayFromData(this.mpCode, this.mpCode.length);
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       this.mpArr.DelRPN();
@@ -186,6 +203,8 @@ export class FormulaCompiler {
           token = this.mpArr.TokenAt(this.index++);
         if (token) {
           this.mpToken = token;
+          if (token.GetOpCode() === OpCode.ocPush && this.mbComputeII)
+            this.HandleIIOpCode(token, null, 0);
           return true;
         }
       }
@@ -252,14 +271,20 @@ export class FormulaCompiler {
         else terminal = this.Expression();
       } else this.SetError(FormulaError.PairExpected);
       let parameterCount = 0;
+      const locations: (readonly [FormulaToken[], number])[] = [];
       if (!noParameters) {
         parameterCount++;
+        if (this.mbComputeII) locations.push([this.mpCode, this.mpCode.length - 1]);
         while (terminal === OpCode.ocSep && this.mpArr.GetCodeError() === FormulaError.NONE) {
           this.NextToken();
           parameterCount++;
           if (parameterCount > 255) this.SetError(FormulaError.CodeOverflow);
           terminal = this.Expression();
+          if (this.mbComputeII && parameterCount <= 8)
+            locations.push([this.mpCode, this.mpCode.length - 1]);
         }
+        if (this.mbComputeII)
+          this.HandleIIOpCode(functionToken, locations, Math.min(parameterCount, 8));
       }
       if (terminal !== OpCode.ocClose) this.SetError(FormulaError.PairExpected);
       else this.NextToken();
@@ -280,6 +305,7 @@ export class FormulaCompiler {
       const token = this.mpToken;
       this.NextToken();
       this.UnaryLine();
+      if (this.mbComputeII) this.HandleIIOpCode(token, [[this.mpCode, this.mpCode.length - 1]], 1);
       this.PutCode(token);
     } else this.RangeLine();
   }
@@ -311,6 +337,8 @@ export class FormulaCompiler {
   private PostOpLine(): void {
     this.UnaryLine();
     while (this.mpToken.GetOpCode() === OpCode.ocPercentSign) {
+      if (this.mbComputeII)
+        this.HandleIIOpCode(this.mpToken, [[this.mpCode, this.mpCode.length - 1]], 1);
       this.PutCode(this.mpToken);
       this.NextToken();
     }
@@ -319,9 +347,12 @@ export class FormulaCompiler {
   private PowLine(): void {
     this.PostOpLine();
     while (this.mpToken.GetOpCode() === OpCode.ocPow) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.PostOpLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }
@@ -329,9 +360,12 @@ export class FormulaCompiler {
   private MulDivLine(): void {
     this.PowLine();
     while (this.mpToken.GetOpCode() === OpCode.ocMul || this.mpToken.GetOpCode() === OpCode.ocDiv) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.PowLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }
@@ -339,9 +373,12 @@ export class FormulaCompiler {
   private AddSubLine(): void {
     this.MulDivLine();
     while (this.mpToken.GetOpCode() === OpCode.ocAdd || this.mpToken.GetOpCode() === OpCode.ocSub) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.MulDivLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }

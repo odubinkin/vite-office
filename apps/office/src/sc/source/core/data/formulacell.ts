@@ -36,6 +36,13 @@ import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
 
+/** Original formula-cell matrix discriminator;precompiled metadata is represented while matrix computation remains unported. */
+export enum ScMatrixMode {
+  NONE = 0,
+  Formula = 1,
+  Reference = 2,
+}
+
 /** Original ScFormulaCell::CompareState discriminator. */
 export enum CompareState {
   NotEqual,
@@ -58,6 +65,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private readonly aResult: ScFormulaResult;
   private readonly rDocument: ScDocument;
   private readonly eTempGrammar: Grammar;
+  private cMatrixFlag: ScMatrixMode = ScMatrixMode.NONE;
   private bDirty = true;
   private bNeedListening = false;
   private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
@@ -69,14 +77,23 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     formula: OUStringConstReference | ScTokenArray | ScFormulaCellGroup,
     grammar: Grammar,
   );
+  /** Original explicit matrix-mode value for source/precompiled token constructors;matrix evaluation/compilation services remain unported. @param rDocument - Document. @param position - Position. @param formula - Source or owned code. @param grammar - Source grammar. @param matrixMode - Native mode. @returns Cell. */
+  constructor(
+    rDocument: ScDocument,
+    position: ScAddress,
+    formula: OUStringConstReference | ScTokenArray,
+    grammar: Grammar,
+    matrixMode: ScMatrixMode,
+  );
   /** Original copy-constructor local-reference slice used by Clone;foreign pools,named/external/3D services remain unsupported. @param source - Copied cell. @param rDocument - Original document. @param position - Original position. @returns Cell. */
   constructor(source: ScFormulaCell, rDocument: ScDocument, position: ScAddress);
-  /** Binds native ordinary/copy constructor families for the current local-reference slice. @param documentOrCell - Document or source cell. @param positionOrDocument - Position or original document. @param formulaOrPosition - Formula or copied position. @param grammar - Ordinary input grammar. @returns Cell. */
+  /** Binds native ordinary/copy constructor families for the current local-reference slice. @param documentOrCell - Document or source cell. @param positionOrDocument - Position or original document. @param formulaOrPosition - Formula or copied position. @param grammar - Ordinary input grammar. @param matrixMode - Original mode for non-group constructors. @returns Cell. */
   constructor(
     documentOrCell: ScDocument | ScFormulaCell,
     positionOrDocument: ScAddress | ScDocument,
     formulaOrPosition: OUStringConstReference | ScTokenArray | ScFormulaCellGroup | ScAddress,
     grammar?: Grammar,
+    matrixMode: ScMatrixMode = ScMatrixMode.NONE,
   ) {
     super();
     if (documentOrCell instanceof ScFormulaCell) {
@@ -86,6 +103,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       if (doc.GetPool() !== source.rDocument.GetPool())
         throw new Error("Formula foreign-document pool conversion is not implemented");
       this.rDocument = doc;
+      this.cMatrixFlag = source.cMatrixFlag;
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
       this.nFormatType = source.nFormatType;
@@ -117,21 +135,24 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         this.pCode = formulaOrPosition.mpCode ?? new ScTokenArray(this.rDocument);
         return;
       }
+      this.cMatrixFlag = matrixMode;
       const formula = formulaOrPosition as OUStringConstReference | ScTokenArray;
-      const compiler = new ScCompiler(
-        this.rDocument,
-        this.aPos,
-        formula instanceof ScTokenArray ? formula : this.eTempGrammar,
-        this.eTempGrammar,
-      );
-      this.pCode = formula instanceof ScTokenArray ? formula : compiler.CompileString(formula);
       if (formula instanceof ScTokenArray) {
+        this.pCode = formula;
         this.pCode.Finalize();
         if (
           this.pCode.GetLen() &&
           this.pCode.GetCodeError() === FormulaError.NONE &&
           !this.pCode.GetCodeLen()
         ) {
+          const compiler = new ScCompiler(
+            this.rDocument,
+            this.aPos,
+            this.pCode,
+            this.eTempGrammar,
+            true,
+            this.cMatrixFlag !== ScMatrixMode.NONE,
+          );
           compiler.CompileTokenArray();
           this.nFormatType = compiler.GetNumFormatType();
         } else if (
@@ -141,6 +162,16 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
           throw new Error("Subtotal-cell document registration is not implemented");
         this.pCode.GenHash();
       } else {
+        const scanner = new ScCompiler(this.rDocument, this.aPos, this.eTempGrammar);
+        this.pCode = scanner.CompileString(formula);
+        const compiler = new ScCompiler(
+          this.rDocument,
+          this.aPos,
+          this.pCode,
+          this.eTempGrammar,
+          true,
+          this.cMatrixFlag !== ScMatrixMode.NONE,
+        );
         compiler.CompileTokenArray();
         if (this.pCode.GetCodeError() === FormulaError.NONE)
           this.nFormatType = compiler.GetNumFormatType();
@@ -157,10 +188,27 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       throw new Error("Localized empty-code error strings are not implemented");
     const output = new OUString();
     try {
-      new ScCompiler(this.rDocument, this.aPos, this.pCode, grammar).CreateStringFromTokenArray(
-        output,
-      );
-      return unicode("=" + text(output));
+      let emit = true;
+      if (this.cMatrixFlag === ScMatrixMode.Reference) {
+        const reference = Array.from(this.pCode.RPNTokens()).find(
+          /** The represented matrix-reference code uses its real local single reference. @param token - RPN token. @returns Reference. */ (
+            token,
+          ) => token.GetType() === StackVar.svSingleRef,
+        );
+        if (reference) {
+          const position = (reference as ScSingleRefToken)
+            .GetSingleRef()
+            .toAbs(this.rDocument, this.aPos);
+          const origin = position.IsValid() ? this.rDocument.GetFormulaCell(position) : null;
+          if (origin) return origin.GetFormula(grammar);
+        } else emit = false;
+      }
+      if (emit)
+        new ScCompiler(this.rDocument, this.aPos, this.pCode, grammar).CreateStringFromTokenArray(
+          output,
+        );
+      const formula = "=" + text(output);
+      return unicode(this.cMatrixFlag === ScMatrixMode.NONE ? formula : "{" + formula + "}");
     } finally {
       output.dispose();
     }
@@ -176,6 +224,10 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Original native format metadata is separate from displayed cell formatting. @returns Format flags. */
   GetFormatType(): SvNumFormatType {
     return this.nFormatType;
+  }
+  /** Original matrix-mode query reads the actual cell member. @returns Mode. */
+  GetMatrixFlag(): ScMatrixMode {
+    return this.cMatrixFlag;
   }
   /** Original borrowed owning document. @returns Actual document. */
   GetDocument(): ScDocument {
@@ -231,8 +283,9 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SyncSharedCode(): void {
     if (this.mxGroup) this.pCode = this.mxGroup.mpCode as ScTokenArray;
   }
-  /** Original grouping comparison checks RPN first and lexical references/names second. All currently represented cell constructors are nonmatrix,so the native matrix-cell mode rejection is outside this constructor profile;matrix/external RPN token rejection is retained. @param other - Actual neighboring cell. @returns Native comparison classification. */
+  /** Original grouping comparison checks RPN first and lexical references/names second. The original matrix-mode and matrix/external RPN rejections are retained. @param other - Actual neighboring cell. @returns Native comparison classification. */
   CompareByTokenArray(other: ScFormulaCell): CompareState {
+    if (this.GetMatrixFlag() !== ScMatrixMode.NONE) return CompareState.NotEqual;
     if (this.GetHash() !== other.GetHash()) return CompareState.NotEqual;
     if (!this.pCode.IsShareable() || !other.pCode.IsShareable()) return CompareState.NotEqual;
     let left = this.pCode.GetCode(),
@@ -372,10 +425,13 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   }
   /** Evaluates supported scalar formulas on demand with normal noniterative cycle detection. @returns Nothing. */
   private MaybeInterpret(): void {
-    if (this.bDirty && this.rDocument.GetAutoCalc()) this.Interpret();
+    if (this.bDirty && (this.rDocument.GetAutoCalc() || this.cMatrixFlag !== ScMatrixMode.NONE))
+      this.Interpret();
   }
   /** Runs the actual interpreter and stores its genuine result token; no display-side evaluation occurs. @returns Whether interpretation ran. */
   Interpret(): boolean {
+    if (this.cMatrixFlag !== ScMatrixMode.NONE)
+      throw new Error("Matrix formula evaluation is not implemented");
     if (this.bRunning) {
       this.aResult.SetResultError(FormulaError.CircularReference);
       return false;

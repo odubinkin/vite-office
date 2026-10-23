@@ -139,9 +139,7 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
     /** Rejects inherited array context until its actual propagation is implemented. @returns Subtotal flag. */ () =>
       new FormulaCompiler(flagged).CompileTokenArray(),
   ).toThrow(/array context/);
-  expect(
-    /** Rejects missing II services. @returns Compiler. */ () => new FormulaCompiler(array, true),
-  ).toThrow(/Implicit/);
+  expect(new FormulaCompiler(array, true)).toBeInstanceOf(FormulaCompiler);
   expect(
     /** Rejects missing matrix services. @returns Compiler. */ () =>
       new FormulaCompiler(array, false, true),
@@ -204,4 +202,9 @@ it("retains native range precedence and base nonmerging RPN contracts", /** The 
   const malformed = tokens(["ocRange", 1]);
   new RecordingCompiler(malformed).CompileTokenArray();
   expect(malformed.GetCodeError()).toBe(FormulaError.VariableExpected);
+});
+it("retains the original empty base II hooks when compute mode is enabled", /** Shared compilation accepts the original flag while Calc owns reference optimization. @returns Nothing. */ () => {
+  const array = tokens([1, "ocAdd", 2]);
+  expect(new FormulaCompiler(array, true).CompileTokenArray()).toBe(false);
+  expect(rpn(array)).toEqual([1, 2, "ocAdd"]);
 });

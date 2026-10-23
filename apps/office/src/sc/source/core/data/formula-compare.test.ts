@@ -264,3 +264,32 @@ it("retains missing compiled/lexical buffers and lexical structural guards", /**
   rpnOnly.Dispose();
   doc.Dispose();
 });
+it("rejects missing source/RPN buffers even for a native finite-value hash collision", /** Real scalar code owners have equal interpreted values and cached hashes;no private hash or owner state is fabricated. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const bytes = new DataView(new ArrayBuffer(8));
+  bytes.setBigUint64(0, BigInt("0xeeeeeeeeeeeeeeee"), true);
+  const value = bytes.getFloat64(0, true),
+    position = new ScAddress(2, 3, 0),
+    source = new ScTokenArray(doc),
+    sourceToken = source.AddDouble(value);
+  if (!sourceToken) throw new Error("Missing actual source token");
+  source.CreateNewRPNArrayFromData([sourceToken], 1);
+  const lexical = new ScFormulaCell(doc, position, source, doc.GetGrammar()),
+    compiledOnly = new ScTokenArray(doc);
+  compiledOnly.CreateNewRPNArrayFromData([new FormulaDoubleToken(value)], 1);
+  const rpnOnly = new ScFormulaCell(doc, position, compiledOnly, doc.GetGrammar()),
+    empty = new ScFormulaCell(doc, position, new ScTokenArray(doc), doc.GetGrammar());
+  expect(Number.isFinite(value)).toBe(true);
+  expect(lexical.GetHash()).toBe(1n);
+  expect(rpnOnly.GetHash()).toBe(1n);
+  expect(empty.GetHash()).toBe(1n);
+  expect(lexical.GetValue()).toBe(value);
+  expect(rpnOnly.GetValue()).toBe(value);
+  expect(lexical.CompareByTokenArray(rpnOnly)).toBe(CompareState.NotEqual);
+  expect(rpnOnly.CompareByTokenArray(empty)).toBe(CompareState.NotEqual);
+  lexical.Dispose();
+  rpnOnly.Dispose();
+  empty.Dispose();
+  doc.Dispose();
+});

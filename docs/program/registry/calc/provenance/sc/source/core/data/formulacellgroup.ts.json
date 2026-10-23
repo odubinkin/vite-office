@@ -13,7 +13,8 @@
       "ScFormulaCellGroup"
     ],
     "preservedResponsibilities": [
-      "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified."
+      "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified.",
+      "Block75 compute-II work in progress ports the original238-row classification table,seven-slot RunData initialization,repeat indexing,Unknown fallback,macro/return/signed-opcode behavior and explicit Init/Exit cache lifetime. Static data audit matches every original row;this is not native class execution. External AddIn argument collections remain explicitly unported,with the original Unknown return-type result retained. The existing per-realm compiler symbol bootstrap invokes actual classification Init after symbols,corresponding to that portion of native ScGlobal::Init without a replacement global service. Original shared compiler compute-II flag,empty virtual hooks,borrowed actual RPN buffer/offset locations,eight-argument cap and PostProcessCode timing are represented. Calc schedules and applies local scalar arithmetic II replacements only after final context,while preserving lexical ranges,relative flags and source exclusions for fully absolute rows,trivial or ambiguous ranges. Existing unsupported opcode/array/matrix admission remains explicit. ScFormulaCell owns actual native cMatrixFlag/GetMatrixFlag,explicit precompiled-token mode construction and copied mode state. Original matrix-reference formula output resolves its actual local RPN reference through the document and falls back to real source tokens when the origin is absent;non-normal output retains native braces. Matrix compilation and evaluation remain explicit unsupported services rather than scalar substitutes. The owned-array constructor creates a compiler only when RPN is missing,as in source. The classification constant-table diagnostic branch is specialized only for the proved invariant that all238 actual upstream repeated rows supply at least their repeat count of leading parameters;the source-data audit asserts that invariant. Twelve actual libc++64 double-hash bit patterns now match normal and ASan/UBSan,including a finite value whose native folded token hash is one. This is a primitive observation,not a full native Calc differential. Actual group compileCode enables II for missing RPN and retains precompiled,error and subtotal-detection branches. Source default column/table group listeners and earlier copy/ownership work remain unchanged. CALC258 preserves the source fallback-comment discrepancy. This does not complete document modes/pool identity,full native differential or final raw100/quality acceptance."
     ],
     "omittedResponsibilities": [
       "Only represented value/notification responsibilities are implemented;remaining task75/native services and final acceptance are pending."
@@ -27,12 +28,28 @@
         {
           "path": "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
           "marker": "CreateCellGroup"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/implicit-intersection.test.ts",
+          "marker": "compute-II"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/parameter-classification.test.ts",
+          "marker": "GetParameterType"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx",
           "marker": "ScFormulaCellGroup"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/formulacell.hxx",
+          "marker": "ScMatrixMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx",
+          "marker": "ScFormulaCellGroup::compileCode"
         }
       ]
     },
