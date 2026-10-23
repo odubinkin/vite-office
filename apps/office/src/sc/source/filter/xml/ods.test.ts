@@ -1,4 +1,5 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScTable } from "../../../inc/table";
 import { assert, expect, it, vi } from "vitest";
@@ -524,8 +525,12 @@ it("retains source item defaults and diagnostics when character conversions fail
   ).toHaveLength(2);
   expect(names).toContain("invalid cell underline property");
   const pattern = doc.GetPattern(new ScAddress()) as ScPatternAttr;
-  expect(pattern.GetItem(102).equals(doc.GetPool().GetUserOrPoolDefaultItem(102))).toBe(true);
-  expect(pattern.GetItem(103).equals(doc.GetPool().GetUserOrPoolDefaultItem(103))).toBe(true);
+  expect(
+    pattern.GetItem(102).equals((doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(102)),
+  ).toBe(true);
+  expect(
+    pattern.GetItem(103).equals((doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(103)),
+  ).toBe(true);
   doc.DisposeAttributes();
 });
 

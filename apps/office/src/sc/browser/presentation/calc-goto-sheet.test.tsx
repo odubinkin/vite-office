@@ -126,7 +126,7 @@ it("retains one-based Nr requests,typed UInt16 items,invalid-argument errors and
   expect(d.GetLastCommandError()?.error).toContain("unsigned16 Nr");
   await completed(d.ExecuteRequest(new SfxRequest(26042, [new SfxUInt16Item(26041, 2)])));
   expect(d.GetLastCommandError()?.error).toContain("unsigned16 Nr");
-  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
   await completed(d.Execute(".uno:JumpToTable"));
   expect(s.sheetWorkflows.dialogs.GetSnapshot()).toBeUndefined();
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);

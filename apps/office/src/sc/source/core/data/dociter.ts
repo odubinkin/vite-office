@@ -1,4 +1,19 @@
 /** @fileoverview Native ScHorizontalCellIterator over actual column block cursors; no second cell model is retained. */
+import { ScAddress, type ScRange, ValidTab } from "../../../inc/address";
+import type { ScColumn } from "../../../inc/column";
+import type { ScTable } from "../../../inc/table";
+import type { ScFormulaCell } from "../../../inc/formulacell";
+import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import type { FormulaResultNumber } from "../../../inc/formularesult";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { SubtotalFlags } from "../../../inc/global";
+import {
+  numeric_block,
+  formula_block,
+  element_type_numeric,
+  element_type_formula,
+} from "../../../inc/mtvelements";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import type { CellStoreType } from "../../../inc/mtvelements";
 import { element_type_empty, toRefCell } from "../../../inc/mtvelements";
 import { ScRefCellValue } from "../../../inc/cellvalue";
@@ -147,5 +162,120 @@ export class ScHorizontalCellIterator {
       this.SkipInvalidInRow();
     }
     if (this.mnRow > this.nEndRow) this.mbMore = false;
+  }
+}
+
+/** Original column-major numeric iterator,consuming only ordinary NONE/false default options. Format,CalcAsShown and subtotal services remain unported. */
+export class ScValueIterator {
+  private readonly mrDoc: ScDocument;
+  private readonly maStartPos: ScAddress;
+  private readonly maEndPos: ScAddress;
+  private mnCol = 0;
+  private mnTab = 0;
+  private mpCells: CellStoreType | null = null;
+  private maCurPos: ReturnType<CellStoreType["cposition"]> | null = null;
+  /** Binds the genuine context/range with native out-of-domain coordinate clamping. @param context - Context. @param range - Source range. @param flags - Native subtotal flags. @param textAsZero - Native text mode. @returns Iterator. */
+  constructor(
+    context: ScInterpreterContext,
+    range: ScRange,
+    flags = SubtotalFlags.NONE,
+    textAsZero = false,
+  ) {
+    if (flags !== SubtotalFlags.NONE || textAsZero)
+      throw new Error("Subtotal/text-as-zero iteration services are not implemented");
+    this.mrDoc = context.mpDoc;
+    this.maStartPos = new ScAddress(range.aStart);
+    this.maEndPos = new ScAddress(range.aEnd);
+    const lastTab = this.mrDoc.GetTableCount() - 1;
+    for (const point of [this.maStartPos, this.maEndPos]) {
+      if (!this.mrDoc.ValidCol(point.Col())) point.SetCol(this.mrDoc.MaxCol());
+      if (!this.mrDoc.ValidRow(point.Row())) point.SetRow(this.mrDoc.MaxRow());
+      if (!ValidTab(point.Tab()) || point.Tab() > lastTab) point.SetTab(lastTab);
+    }
+  }
+  /** Reads the actual cursor's row. @returns Row. */
+  private GetRow(): number {
+    const position = this.maCurPos as ReturnType<CellStoreType["cposition"]>;
+    return position.first.get().position + position.second;
+  }
+  /** Advances the original block cursor and resets its offset. @returns Nothing. */
+  private IncBlock(): void {
+    const position = this.maCurPos as ReturnType<CellStoreType["cposition"]>;
+    position.first.increment();
+    position.second = 0;
+  }
+  /** Advances within the native typed block or onto the next block. @returns Nothing. */
+  private IncPos(): void {
+    const position = this.maCurPos as ReturnType<CellStoreType["cposition"]>;
+    if (position.second + 1 < position.first.get().size) position.second++;
+    else this.IncBlock();
+  }
+  /** Original GetThis scans native allocated columns and typed blocks without expanding empty rows. @param output - Native error/value references. @returns Found numeric/error cell. */
+  private GetThis(output: FormulaResultNumber): boolean {
+    while (true) {
+      let nextColumn =
+        !this.mpCells ||
+        (this.maCurPos as ReturnType<CellStoreType["cposition"]>).first.equals(this.mpCells.cend());
+      if (!nextColumn && this.GetRow() > this.maEndPos.Row()) nextColumn = true;
+      if (nextColumn) {
+        let column: ScColumn;
+        do {
+          this.mnCol++;
+          while (
+            this.mnCol > this.maEndPos.Col() ||
+            this.mnCol >= (this.mrDoc.FetchTable(this.mnTab) as ScTable).GetAllocatedColumnsCount()
+          ) {
+            this.mnCol = this.maStartPos.Col();
+            this.mnTab++;
+            if (this.mnTab > this.maEndPos.Tab()) {
+              output.error = FormulaError.NONE;
+              return false;
+            }
+          }
+          column = (this.mrDoc.FetchTable(this.mnTab) as ScTable).CreateColumnIfNotExists(
+            this.mnCol,
+          );
+        } while (column.IsEmptyData());
+        this.mpCells = column.GetCellStore();
+        this.maCurPos = this.mpCells.cposition(this.maStartPos.Row());
+      }
+      const position = this.maCurPos as ReturnType<CellStoreType["cposition"]>,
+        node = position.first.get();
+      switch (node.type) {
+        case element_type_numeric:
+          output.value = numeric_block.at(node.data as base_element_block, position.second);
+          output.error = FormulaError.NONE;
+          return true;
+        case element_type_formula: {
+          const cell = formula_block.at(
+            node.data as base_element_block,
+            position.second,
+          ) as ScFormulaCell;
+          if (cell.GetErrorOrValue(output)) return true;
+          this.IncPos();
+          break;
+        }
+        default:
+          this.IncBlock();
+          break;
+      }
+    }
+  }
+  /** Original first-value search;an absent sheet leaves both outputs untouched. @param output - Error/value references. @returns Found value. */
+  GetFirst(output: FormulaResultNumber): boolean {
+    this.mnCol = this.maStartPos.Col();
+    this.mnTab = this.maStartPos.Tab();
+    const table = this.mrDoc.FetchTable(this.mnTab);
+    if (!table) return false;
+    if (this.mnCol < table.GetAllocatedColumnsCount()) {
+      this.mpCells = table.CreateColumnIfNotExists(this.mnCol).GetCellStore();
+      this.maCurPos = this.mpCells.cposition(this.maStartPos.Row());
+    } else this.mpCells = null;
+    return this.GetThis(output);
+  }
+  /** Original next-value search;terminal search preserves the previous value. @param output - Error/value references. @returns Found value. */
+  GetNext(output: FormulaResultNumber): boolean {
+    this.IncPos();
+    return this.GetThis(output);
   }
 }

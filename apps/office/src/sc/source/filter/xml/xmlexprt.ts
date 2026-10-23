@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -70,11 +71,44 @@ export class ScXMLExport {
     this.patternNames.set(pattern, name);
     return name;
   }
+  /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
+  private collectColumnStyles(
+    table: ScTable,
+    row: number,
+  ): {
+    endRow: number;
+    ranges: { first: number; last: number; style: string }[];
+  } {
+    const first: [number] = [0],
+      last: [number] = [0];
+    const defaultPattern = table
+      .GetDefaultColumnData()
+      .GetPatternRange(first, last, row) as ScPatternAttr;
+    let endRow = last[0];
+    const allocated = table.GetAllocatedColumnsCount();
+    const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
+    const ranges: { first: number; last: number; style: string }[] = [];
+    for (let column = 0; column <= endColumn;) {
+      const pattern = table
+        .GetColumnData(column)
+        .GetPatternRange(first, last, row) as ScPatternAttr;
+      endRow = Math.min(endRow, last[0]);
+      const style = this.styleName(pattern),
+        end = column < allocated ? column : endColumn;
+      const previous = ranges.at(-1);
+      if (previous !== undefined && previous.style === style) previous.last = end;
+      else ranges.push({ first: column, last: end, style });
+      column = end + 1;
+    }
+    return { endRow, ranges };
+  }
   /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
   exportContent(): string {
     this.fontPool = new XMLFontAutoStylePool();
     for (const which of [100, 111, 116]) {
-      const font = this.document.GetPool().GetUserOrPoolDefaultItem(which) as SvxFontItem;
+      const font = (this.document.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(
+        which,
+      ) as SvxFontItem;
       this.fontPool.Add(
         font.GetFamilyName(),
         font.GetStyleName(),
@@ -149,6 +183,7 @@ export class ScXMLExport {
         col: [number] = [0],
         row: [number] = [0];
       let cell = iterator.GetNext(col, row);
+      let columnStyles: ReturnType<ScXMLExport["collectColumnStyles"]> | undefined;
       for (let currentRow = 0; currentRow <= maxRow;) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
         const heightRun = table.GetRowHeightRange(currentRow),
@@ -171,46 +206,28 @@ export class ScXMLExport {
           rowStyle = "ro" + (this.rowStyles.size + 1);
           this.rowStyles.set(key, rowStyle);
         }
-        for (let column = 0; column <= allocated; column++) {
-          table.GetColumnData(column).GetPatternRange(first, last, currentRow);
-          endRow = Math.min(endRow, last[0]);
-        }
+        if (columnStyles === undefined || currentRow > columnStyles.endRow)
+          columnStyles = this.collectColumnStyles(table, currentRow);
+        endRow = Math.min(endRow, columnStyles.endRow);
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
         const repeat = endRow - currentRow + 1;
         body += `<table:table-row table:style-name="${rowStyle}"${hidden ? ` table:visibility="${filtered ? "filter" : "collapse"}"` : ""}${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
-        const defaultPattern = table.GetDefaultColumnData().GetPattern(currentRow) as ScPatternAttr;
-        const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
-        for (let column = 0; column <= endColumn;) {
-          const style = this.styleName(
-            table.GetColumnData(column).GetPattern(currentRow) as ScPatternAttr,
-          );
-          const attribute = style ? ` table:style-name="${style}"` : "";
-          if (cell && row[0] === currentRow && col[0] === column) {
-            body += this.exportCell(cell, attribute);
-            column++;
-            cell = iterator.GetNext(col, row);
-          } else {
-            const limit = Math.min(
-              endColumn + 1,
-              cell && row[0] === currentRow ? col[0] : endColumn + 1,
-            );
-            let stop = column + 1;
-            while (stop < limit) {
-              if (stop >= allocated) {
-                if (style !== this.styleName(defaultPattern)) break;
-                stop = limit;
-                break;
-              }
-              if (
-                style !==
-                this.styleName(table.GetColumnData(stop).GetPattern(currentRow) as ScPatternAttr)
-              )
-                break;
-              stop++;
+        for (const range of columnStyles.ranges) {
+          const attribute = range.style ? ` table:style-name="${range.style}"` : "";
+          for (let column = range.first; column <= range.last;) {
+            if (cell && row[0] === currentRow && col[0] === column) {
+              body += this.exportCell(cell, attribute);
+              column++;
+              cell = iterator.GetNext(col, row);
+            } else {
+              const stop = Math.min(
+                range.last + 1,
+                cell && row[0] === currentRow ? col[0] : range.last + 1,
+              );
+              const count = stop - column;
+              body += `<table:table-cell${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
+              column = stop;
             }
-            const count = stop - column;
-            body += `<table:table-cell${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
-            column = stop;
           }
         }
         body += "</table:table-row>";

@@ -1,12 +1,12 @@
 /** @fileoverview Public local-reference/parser/tracking protocols over real Calc and shared observer owners. */
 import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
-import { ScAddress, ScRefFlags, MAXROW, MAXCOL } from "../../../inc/address";
+import { ScAddress, ScRefFlags, ScRange, MAXROW, MAXCOL } from "../../../inc/address";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScSingleRefData } from "../../../inc/refdata";
-import { ScSingleRefToken } from "../../../inc/token";
+import { ScSingleRefToken, ScDoubleRefToken } from "../../../inc/token";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScHint } from "../../../inc/brdcst";
@@ -64,7 +64,7 @@ it("preserves local A1 details, absolute flags, bounds and unsupported parser fa
       a.Parse(unicode("A1"), doc, new ScAddress.Details(conv.CONV_XL_A1)),
   ).toThrow(/implemented/);
   const compiler = new ScCompiler(doc, a, grammar);
-  for (const source of ["=[.A1", "=[Sheet.A1]", "=[.]", "=[.A1:.A2]"])
+  for (const source of ["=[.A1", "=[Sheet.A1]", "=[.]", "=[Sheet.A1:.A2]"])
     expect(
       /** Refuses an unavailable scanner/reference family. @returns Code. */ () =>
         compiler.CompileString(unicode(source)),
@@ -300,4 +300,37 @@ it("uses actual reference tokens for deletion, error precedence and direct text 
   expect(bad.GetError()).toBe(FormulaError.NoRef);
   doc.SetFormula(a, unicode("=1+"), grammar);
   expect(formula(doc, a).GetString().isEmpty()).toBe(true);
+});
+
+it("keeps deleted range tokens unsubscribed and preserves empty aggregate and nonunique intersection results", /** Uses real compiled references and native deleted-axis flags. @returns Nothing. */ () => {
+  const doc = document(),
+    pos = new ScAddress(3, 3, 0);
+  const cell = new ScFormulaCell(doc, pos, unicode("=SUM([.A1:.A2])"), grammar);
+  const token = Array.from(cell.GetCode().RPNTokens()).find(
+    /** Selects the actual native double reference. @param t - Token. @returns Membership. */ (t) =>
+      t instanceof ScDoubleRefToken,
+  );
+  assert(token instanceof ScDoubleRefToken);
+  token.GetDoubleRef().Ref1.SetColDeleted(true);
+  token.GetDoubleRef().Ref1.SetAbsCol(-1);
+  cell.StartListeningTo(doc);
+  expect(cell.HasBroadcaster()).toBe(false);
+  cell.Dispose();
+  expect(
+    ScCompiler.DoubleRefToPosSingleRefScalarCase(
+      new ScRange(0, 0, 0, 1, 1, 0),
+      new ScAddress(),
+      new ScAddress(3, 1, 0),
+    ),
+  ).toBe(false);
+  for (const [source, value, error] of [
+    ["=SUMSQ([.A1:.A2])", 0, FormulaError.NONE],
+    ["=PRODUCT([.A1:.A2])", 0, FormulaError.NONE],
+    ["=AVERAGE([.A1:.A2])", 0, FormulaError.DivisionByZero],
+  ] as const) {
+    doc.SetFormula(pos, unicode(source), grammar);
+    expect(doc.GetErrCode(pos)).toBe(error);
+    expect(doc.GetValue(pos)).toBe(value);
+  }
+  doc.Dispose();
 });

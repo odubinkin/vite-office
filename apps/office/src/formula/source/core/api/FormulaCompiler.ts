@@ -1,4 +1,4 @@
-/** @fileoverview Shared FormulaCompiler scalar arithmetic RPN and ODFF source-token output subsets. Text scanning, functions, reference operators and implicit intersection remain unsupported. */
+/** @fileoverview Shared FormulaCompiler arithmetic/aggregate argument RPN and ODFF output subsets. Other functions,array/matrix compilation and unconsumed reference operators remain unsupported. */
 import { OpCode } from "../../../inc/opcode";
 import {
   FormulaToken,
@@ -11,6 +11,7 @@ import {
 import { FormulaTokenArray } from "../../../inc/tokenarray";
 import { ParamClass } from "../../../inc/paramclass";
 import { FormulaError } from "../../../inc/errorcodes";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 
 import { FormulaGrammar, type Grammar } from "../../../inc/grammar";
 import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../inc/core_resource";
@@ -31,10 +32,22 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocPercentSign,
   OpCode.ocSpaces,
   OpCode.ocWhitespace,
+  OpCode.ocSep,
+  OpCode.ocMissing,
+  OpCode.ocRange,
+  OpCode.ocSum,
+  OpCode.ocSumSQ,
+  OpCode.ocProduct,
+  OpCode.ocAverage,
 ]);
 
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
 export class FormulaCompiler {
+  private mnNumFmt: SvNumFormatType = SvNumFormatType.UNDEFINED;
+  /** Original current return-format type,initialized UNDEFINED before compilation. @returns Native format flags. */
+  GetNumFormatType(): SvNumFormatType {
+    return this.mnNumFmt;
+  }
   protected meGrammar: Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED;
   /** Serializes source-order tokens rather than RPN, preserving the native forced-recalc prefix and output replacement. @param output - Actual mutable Unicode output owner. @returns Nothing. */
   CreateStringFromTokenArray(output: OUString): void {
@@ -73,14 +86,16 @@ export class FormulaCompiler {
         op === OpCode.ocSpaces ? " " : String.fromCharCode((token as FormulaSpaceToken).GetChar())
       ).repeat(byte);
     }
-    if (op === OpCode.ocPush) {
+    if (op === OpCode.ocPush || op === OpCode.ocMatRef) {
       if (token.GetType() === StackVar.svDouble)
         return doubleToString((token as FormulaDoubleToken).GetDouble());
       if (token.GetType() === StackVar.svString)
         return this.AppendString((token as FormulaStringToken).GetString().getString());
       if (token.GetType() === StackVar.svSingleRef) return this.CreateStringFromSingleRef(token);
+      if (token.GetType() === StackVar.svDoubleRef) return this.CreateStringFromDoubleRef(token);
       throw new Error("Formula output token family is not implemented");
     }
+    if (op === OpCode.ocMissing) return "";
     const symbol = RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF.get(op);
     if (symbol === undefined) throw new Error("Formula output opcode is not implemented");
     return symbol;
@@ -100,16 +115,43 @@ export class FormulaCompiler {
     void token;
     return "";
   }
+  /** Original empty base double-reference output hook. @param token - Reference token. @returns Empty base fragment. */
+  protected CreateStringFromDoubleRef(token: FormulaToken): string {
+    void token;
+    return "";
+  }
+  /** Original empty base range-extension hook. @param left - Left operand. @param right - Right operand. @returns No base extension. */
+  protected ExtendRangeReference(left: FormulaToken, right: FormulaToken): FormulaToken | null {
+    void left;
+    void right;
+    return null;
+  }
   protected mpArr: FormulaTokenArray;
   private mpToken: FormulaToken = new FormulaByteToken(OpCode.ocStop);
   private meLastOp: OpCode = OpCode.ocPush;
   private mnRecursion = 0;
   private index = 0;
-  private mpCode: FormulaToken[] = [];
-  /** Binds the actual array for default scalar compilation; other modes require their missing real services. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
+  protected mpCode: FormulaToken[] = [];
+  protected readonly mbComputeII: boolean;
+  protected readonly mbMatrixFlag: boolean;
+  /** Original virtual II hook. A native FormulaToken** borrows one actual code buffer plus its offset;no copied operand vector or pointer manager is introduced. @param token - Operation. @param parameters - Borrowed slot locations or null. @param count - Native argument count. @returns Nothing. */
+  protected HandleIIOpCode(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): void {
+    void token;
+    void parameters;
+    void count;
+  }
+  /** Original empty final-code virtual hook. @returns Nothing. */
+  protected PostProcessCode(): void {}
+
+  /** Binds the original code owner and II flag;matrix compilation requires its unported real services. @param array - Token owner. @param computeII - Implicit intersection mode. @param matrixFlag - Matrix mode. @returns Compiler. */
   constructor(array: FormulaTokenArray, computeII = false, matrixFlag = false) {
-    if (computeII || matrixFlag)
-      throw new Error("Implicit-intersection and matrix compilation are not implemented");
+    if (matrixFlag) throw new Error("Formula matrix compilation is not implemented");
+    this.mbComputeII = computeII;
+    this.mbMatrixFlag = matrixFlag;
     this.mpArr = array;
   }
   /** Preserves the original empty virtual base operation; Calc records the first error in its override. @param error - Compiler error. @returns Nothing. */
@@ -121,7 +163,10 @@ export class FormulaCompiler {
     for (const token of this.mpArr.Tokens())
       if (!arithmetic.has(token.GetOpCode()) || token.GetInForceArray() !== ParamClass.Unknown)
         throw new Error("Formula opcode or array context is not implemented by scalar compilation");
-    if (this.mpArr.GetCodeError() !== FormulaError.NONE) return false;
+    if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
+      if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
+      return false;
+    }
     this.mpArr.DelRPN();
     const forced = this.mpArr.IsRecalcModeForced();
     this.mpArr.ClearRecalcMode();
@@ -130,12 +175,14 @@ export class FormulaCompiler {
     this.meLastOp = OpCode.ocOpen;
     this.NextToken();
     if (this.Expression() !== OpCode.ocStop) this.SetError(FormulaError.OperatorExpected);
+    this.PostProcessCode();
     if (this.mpCode.length) this.mpArr.CreateNewRPNArrayFromData(this.mpCode, this.mpCode.length);
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       this.mpArr.DelRPN();
       this.mpArr.SetHyperLink(false);
     }
     if (forced) this.mpArr.SetRecalcModeForced();
+    if (this.mnNumFmt === SvNumFormatType.UNDEFINED) this.mnNumFmt = SvNumFormatType.NUMBER;
     return false;
   }
   /** Reads the next active token, skipping insignificant whitespace for this scalar subset. @returns Whether a token exists. */
@@ -156,6 +203,8 @@ export class FormulaCompiler {
           token = this.mpArr.TokenAt(this.index++);
         if (token) {
           this.mpToken = token;
+          if (token.GetOpCode() === OpCode.ocPush && this.mbComputeII)
+            this.HandleIIOpCode(token, null, 0);
           return true;
         }
       }
@@ -171,6 +220,7 @@ export class FormulaCompiler {
     let op = this.mpToken.GetOpCode();
     const needsOperand =
       this.meLastOp === OpCode.ocOpen ||
+      this.meLastOp === OpCode.ocSep ||
       (this.meLastOp >= OpCode.ocStartBinaryOperators &&
         this.meLastOp < OpCode.ocStopUnaryOperators);
     if (op === OpCode.ocPush && !needsOperand) this.SetError(FormulaError.OperatorExpected);
@@ -192,13 +242,54 @@ export class FormulaCompiler {
   private PutCode(token: FormulaToken): void {
     if (this.mpArr.GetCodeError() === FormulaError.NONE) this.mpCode.push(token);
   }
-  /** Emits scalar operands or nested expressions; function and reference-operator grammar is outside the supported token set. @returns Nothing. */
+  /** Emits scalar operands,missing arguments,nested expressions and the consumed native variable-argument function branch. Reference operators remain unsupported. @returns Nothing. */
   private Factor(): void {
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) return;
     const op = this.mpToken.GetOpCode();
+    // Native lcl_GetRetFormat:all other accepted scalar/aggregate factor opcodes return NUMBER.
+    if (op !== OpCode.ocOpen && this.mnNumFmt === SvNumFormatType.UNDEFINED)
+      this.mnNumFmt =
+        op === OpCode.ocPercentSign ? SvNumFormatType.PERCENT : SvNumFormatType.NUMBER;
     if (op === OpCode.ocPush) {
       this.PutCode(this.mpToken);
       if (this.NextToken() === OpCode.ocOpen) this.SetError(FormulaError.OperatorExpected);
+    } else if (op === OpCode.ocMissing) {
+      this.PutCode(this.mpToken);
+      this.NextToken();
+    } else if (
+      op === OpCode.ocSum ||
+      op === OpCode.ocSumSQ ||
+      op === OpCode.ocProduct ||
+      op === OpCode.ocAverage
+    ) {
+      const functionToken = this.mpToken as FormulaByteToken;
+      let terminal = this.NextToken(),
+        noParameters = false;
+      if (terminal === OpCode.ocOpen) {
+        terminal = this.NextToken();
+        if (terminal === OpCode.ocClose) noParameters = true;
+        else terminal = this.Expression();
+      } else this.SetError(FormulaError.PairExpected);
+      let parameterCount = 0;
+      const locations: (readonly [FormulaToken[], number])[] = [];
+      if (!noParameters) {
+        parameterCount++;
+        if (this.mbComputeII) locations.push([this.mpCode, this.mpCode.length - 1]);
+        while (terminal === OpCode.ocSep && this.mpArr.GetCodeError() === FormulaError.NONE) {
+          this.NextToken();
+          parameterCount++;
+          if (parameterCount > 255) this.SetError(FormulaError.CodeOverflow);
+          terminal = this.Expression();
+          if (this.mbComputeII && parameterCount <= 8)
+            locations.push([this.mpCode, this.mpCode.length - 1]);
+        }
+        if (this.mbComputeII)
+          this.HandleIIOpCode(functionToken, locations, Math.min(parameterCount, 8));
+      }
+      if (terminal !== OpCode.ocClose) this.SetError(FormulaError.PairExpected);
+      else this.NextToken();
+      functionToken.SetByte(parameterCount);
+      this.PutCode(functionToken);
     } else if (op === OpCode.ocOpen) {
       this.NextToken();
       if (this.Expression() !== OpCode.ocClose) this.SetError(FormulaError.PairExpected);
@@ -214,13 +305,40 @@ export class FormulaCompiler {
       const token = this.mpToken;
       this.NextToken();
       this.UnaryLine();
+      if (this.mbComputeII) this.HandleIIOpCode(token, [[this.mpCode, this.mpCode.length - 1]], 1);
       this.PutCode(token);
-    } else this.Factor();
+    } else this.RangeLine();
+  }
+  /** Original range precedence and adjacent-RPN merge over actual token identities. @returns Nothing. */
+  private RangeLine(): void {
+    this.Factor();
+    while (this.mpToken.GetOpCode() === OpCode.ocRange) {
+      const left = this.mpCode.length - 1,
+        operator = this.mpToken;
+      this.NextToken();
+      this.Factor();
+      const right = this.mpCode.length - 1;
+      let merged = false;
+      if (this.mpCode.length >= 2 && right - left === 1) {
+        const token = this.ExtendRangeReference(
+          this.mpCode[left] as FormulaToken,
+          this.mpCode[right] as FormulaToken,
+        );
+        if (token) {
+          this.mpCode[left] = token;
+          this.mpCode.pop();
+          merged = true;
+        }
+      }
+      if (!merged) this.PutCode(operator);
+    }
   }
   /** Emits repeated postfix percent operators. @returns Nothing. */
   private PostOpLine(): void {
     this.UnaryLine();
     while (this.mpToken.GetOpCode() === OpCode.ocPercentSign) {
+      if (this.mbComputeII)
+        this.HandleIIOpCode(this.mpToken, [[this.mpCode, this.mpCode.length - 1]], 1);
       this.PutCode(this.mpToken);
       this.NextToken();
     }
@@ -229,9 +347,12 @@ export class FormulaCompiler {
   private PowLine(): void {
     this.PostOpLine();
     while (this.mpToken.GetOpCode() === OpCode.ocPow) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.PostOpLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }
@@ -239,9 +360,12 @@ export class FormulaCompiler {
   private MulDivLine(): void {
     this.PowLine();
     while (this.mpToken.GetOpCode() === OpCode.ocMul || this.mpToken.GetOpCode() === OpCode.ocDiv) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.PowLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }
@@ -249,9 +373,12 @@ export class FormulaCompiler {
   private AddSubLine(): void {
     this.MulDivLine();
     while (this.mpToken.GetOpCode() === OpCode.ocAdd || this.mpToken.GetOpCode() === OpCode.ocSub) {
-      const token = this.mpToken;
+      const token = this.mpToken,
+        first: readonly [FormulaToken[], number] = [this.mpCode, this.mpCode.length - 1];
       this.NextToken();
       this.MulDivLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(token, [first, [this.mpCode, this.mpCode.length - 1]], 2);
       this.PutCode(token);
     }
   }

@@ -1,0 +1,170 @@
+{
+  "scope": "Static admission/call-shape and real pure classification audit,not complete native Calc execution. Existing238-row source-data audit supplies the pinned native table correspondence.",
+  "admitted": [
+    "ocPush",
+    "ocStop",
+    "ocOpen",
+    "ocClose",
+    "ocAdd",
+    "ocSub",
+    "ocMul",
+    "ocDiv",
+    "ocPow",
+    "ocNegSub",
+    "ocPercentSign",
+    "ocSpaces",
+    "ocWhitespace",
+    "ocSep",
+    "ocMissing",
+    "ocRange",
+    "ocSum",
+    "ocSumSQ",
+    "ocProduct",
+    "ocAverage"
+  ],
+  "rows": [
+    {
+      "name": "ocAdd",
+      "arity": 2,
+      "params": [
+        5,
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocSub",
+      "arity": 2,
+      "params": [
+        5,
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocMul",
+      "arity": 2,
+      "params": [
+        5,
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocDiv",
+      "arity": 2,
+      "params": [
+        5,
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocPow",
+      "arity": 2,
+      "params": [
+        5,
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocNegSub",
+      "arity": 1,
+      "params": [
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocPercentSign",
+      "arity": 1,
+      "params": [
+        5
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocSum",
+      "arity": 1,
+      "params": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocSumSQ",
+      "arity": 1,
+      "params": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocProduct",
+      "arity": 1,
+      "params": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "returns": 2
+    },
+    {
+      "name": "ocAverage",
+      "arity": 1,
+      "params": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "returns": 2
+    }
+  ],
+  "sources": [
+    {
+      "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+      "sha256": "7e5eb31b5008458f3876696726d3ff954cb968de7887aea6950c799cfed69797"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "8d49780e5575278fa6e9c298599637779c499284e6fb8791af70a66c7b104633"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/parclass.ts",
+      "sha256": "ab722572c321cfda45525340fb6f65f4e1da9f2fd196ee5e8bf4082c582a3c69"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/tool/parclass.cxx",
+      "sha256": "2c5aa14fd10c3f1063ab24c739bc957bad2964bd5580f2baa2c1bee385f7259d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+      "sha256": "84dfe1e52b8b632d8fd9d687d64857c779283bb3de660063664b916c7d458e83"
+    }
+  ]
+}

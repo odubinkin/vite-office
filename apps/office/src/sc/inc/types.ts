@@ -9,6 +9,23 @@ export type SCTAB = number;
 /** Native signed 32-bit coordinate capable of holding either rows or columns. */
 export type SCCOLROW = number;
 
+/** Original group-listening conversion mode from types.hxx. */
+export const ConvertToGroupListening = 0;
+/** Original column insertion default retains individual subscriptions. */
+export const SingleCellListening = 1;
+/** Original deferred-listening mode. */
+export const NoListening = 2;
+/** Original unscoped start-listening discriminator. */
+export type StartListeningType =
+  typeof ConvertToGroupListening | typeof SingleCellListening | typeof NoListening;
+
+/** Native formula-group calculation state values from types.hxx. */
+export const GroupCalcDisabled = 0;
+/** Native enabled state is the shared-group constructor default. */
+export const GroupCalcEnabled = 1;
+/** Native currently evaluating state. */
+export const GroupCalcRunning = 2;
+
 /** Original fixed UInt8 matrix value discriminator and non-value bit mask. */
 export const ScMatValType = {
   Value: 0x00,

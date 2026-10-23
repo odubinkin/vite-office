@@ -1,22 +1,127 @@
 /** @fileoverview Original Calc empty, hybrid, matrix result and reference tokens over genuine shared token, string and matrix owners; references use JS GC. */
 import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
 import { OpCode } from "../../../../formula/inc/opcode";
+import { ScDirection } from "../../../inc/global";
+import { ScRange, type ScAddress } from "../../../inc/address";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScSingleRefData } from "../../../inc/refdata";
-import { ScSingleRefToken } from "./token.references";
+import {
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScExternalSingleRefToken,
+  ScExternalDoubleRefToken,
+  ScTableRefToken,
+} from "./token.references";
 import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { RangeMatrix } from "../../../inc/types";
 import {
   FormulaToken,
   FormulaDoubleToken,
+  FormulaStringToken,
   FormulaByteToken,
   StackVar,
 } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import {
+  OUString,
+  OUStringHash,
+  type OUStringConstReference,
+} from "../../../../sal/inc/rtl/ustring";
 
+/** Binds std::hash<double> to the observed libc++64 size_t profile,matching the existing OUStringHash64 target. Both signed zeros hash to zero;all other doubles retain their actual IEEE bits. This is a platform binding,not a claim about other standard libraries or32-bit ABIs. @param value - Native double value. @returns Unsigned64 hash. */
+function hashDouble64(value: number): bigint {
+  if (value === 0) return 0n;
+  const storage = new DataView(new ArrayBuffer(8));
+  storage.setFloat64(0, value, true);
+  return storage.getBigUint64(0, true);
+}
+/** Original HashSingleRef deliberately hashes flags rather than coordinates so relocated group members can match. @param reference - Actual reference. @returns Original flag sum. */
+function hashSingleRef(reference: ScSingleRefData): bigint {
+  return BigInt(
+    Number(reference.IsColRel()) +
+      (Number(reference.IsRowRel()) << 1) +
+      (Number(reference.IsTabRel()) << 2),
+  );
+}
+
+/** Native active pointer range over the actual code/RPN buffer;inactive tails remain outside the logical range. */
+interface TokenPointerRange {
+  readonly tokens: readonly FormulaToken[];
+  readonly length: number;
+}
+/** Original AdjustSingleRefData changes only absolute coordinates by the copy-position delta. @param reference - Actual mutable reference. @param oldPosition - Source position. @param newPosition - Destination position. @returns Nothing. */
+function adjustSingleRefData(
+  reference: ScSingleRefData,
+  oldPosition: ScAddress,
+  newPosition: ScAddress,
+): void {
+  if (!reference.IsColRel()) reference.IncCol(newPosition.Col() - oldPosition.Col());
+  if (!reference.IsRowRel()) reference.IncRow(newPosition.Row() - oldPosition.Row());
+  if (!reference.IsTabRel()) reference.IncTab(newPosition.Tab() - oldPosition.Tab());
+}
+/** Native TokenPointers traversal for deep owned token arrays (or discarded shared RPN). Actual active buffer entries and structured-reference fields determine membership;JS GC owns physical lifetime,no reference-count facade is introduced. External retained smart-pointer counts and invalid flat-copy callers are outside this consumed ownership contract. */
+class TokenPointers {
+  readonly maPointerRange: readonly [TokenPointerRange, TokenPointerRange];
+  private readonly memberships = new Map<FormulaToken, number>();
+  /** Borrows original buffers and counts their actual active owning entries plus table-area fields. @param code - Code buffer. @param length - Active code length. @param rpn - RPN buffer. @param rpnLength - Active RPN length. @param mbSkipRelName - Original relative-name skip policy. @returns Borrowed traversal. */
+  constructor(
+    code: readonly FormulaToken[] | null,
+    length: number,
+    rpn: readonly FormulaToken[] | null,
+    rpnLength: number,
+    private readonly mbSkipRelName: boolean,
+  ) {
+    this.maPointerRange = [
+      { tokens: code ?? [], length },
+      { tokens: rpn ?? [], length: rpnLength },
+    ];
+    const tableOwners = new Set<ScTableRefToken>();
+    for (const range of this.maPointerRange)
+      for (let index = 0; index < range.length; index++) {
+        const token = range.tokens[index] as FormulaToken;
+        this.memberships.set(token, (this.memberships.get(token) ?? 0) + 1);
+        if (token instanceof ScTableRefToken) tableOwners.add(token);
+      }
+    for (const table of tableOwners) {
+      const area = table.GetAreaRefRPN();
+      if (area) this.memberships.set(area, (this.memberships.get(area) ?? 0) + 1);
+    }
+  }
+  /** Original RPN-only/ref-sharing and relative-name decisions under the consumed actual ownership graph. @param range - Code0 or RPN1. @param index - Active position. @returns Skip this entry. */
+  private skipToken(range: number, index: number): boolean {
+    if (range === 1) {
+      const token = this.maPointerRange[range].tokens[index] as FormulaToken;
+      if ((this.memberships.get(token) as number) > 1) return true;
+      if (this.mbSkipRelName) {
+        switch (token.GetType()) {
+          case StackVar.svSingleRef:
+            return (token as ScSingleRefToken).GetSingleRef().IsRelName();
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            return reference.Ref1.IsRelName() || reference.Ref2.IsRelName();
+          }
+          default:
+            break;
+        }
+      }
+    }
+    return false;
+  }
+  /** Original structured-reference projection returns its inner area only when it is not handled in RPN. @param range - Code0 or RPN1. @param index - Active position. @returns Actual handled token or null. */
+  getHandledToken(range: 0 | 1, index: number): FormulaToken | null {
+    if (this.skipToken(range, index)) return null;
+    const token = this.maPointerRange[range].tokens[index] as FormulaToken;
+    if (token.GetOpCode() === OpCode.ocTableRef) {
+      if (!(token instanceof ScTableRefToken)) return token;
+      const area = token.GetAreaRefRPN();
+      if (!area || (this.memberships.get(area) as number) > 1) return token;
+      return area;
+    }
+    return token;
+  }
+}
 /** Original empty-cell token retaining inherited and display-as-string flags. */
 export class ScEmptyCellToken extends FormulaToken {
   private readonly bInherited: boolean;
@@ -377,10 +482,16 @@ const operators = new Set<OpCode>([
   OpCode.ocNegSub,
   OpCode.ocPercentSign,
   OpCode.ocStop,
+  OpCode.ocSum,
+  OpCode.ocSumSQ,
+  OpCode.ocProduct,
+  OpCode.ocAverage,
+  OpCode.ocRange,
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
 export class ScTokenArray extends FormulaTokenArray {
-  readonly mxSheetLimits: ScSheetLimits;
+  mxSheetLimits: ScSheetLimits;
+  private mnHashValue = 0n;
   /** Constructs the represented numeric state or a native shallow token copy. @param source - Document, limits or copied array. @returns Owner. */
   constructor(source: ScDocument | ScSheetLimits | ScTokenArray) {
     super(source instanceof ScTokenArray ? source : undefined);
@@ -390,6 +501,83 @@ export class ScTokenArray extends FormulaTokenArray {
         : source instanceof ScSheetLimits
           ? source
           : source.GetSheetLimits();
+    if (source instanceof ScTokenArray) this.mnHashValue = source.mnHashValue;
+  }
+  /** Original move construction transfers the real buffers and preserves scalar hash state in the moved-from owner. @param source - Moved token array. @returns New token-array owner. */
+  static override move(source: ScTokenArray): ScTokenArray {
+    const result = new ScTokenArray(source.mxSheetLimits);
+    result.mnHashValue = source.mnHashValue;
+    result.Move(source);
+    return result;
+  }
+  /** Original copy assignment clears before Assign,including source self-assignment,and preserves the receiving limits owner. @param source - Copied array. @returns Recipient. */
+  override copy_assign(source: ScTokenArray): this {
+    this.Clear();
+    this.Assign(source);
+    this.mnHashValue = source.mnHashValue;
+    return this;
+  }
+  /** Original move assignment transfers represented limits,hash and buffers without clearing the copied scalar hash on self-move. Physical shared_ptr moved-from lifetime is erased under GC. @param source - Moved array. @returns Recipient. */
+  override move_assign(source: ScTokenArray): this {
+    this.mxSheetLimits = source.mxSheetLimits;
+    this.mnHashValue = source.mnHashValue;
+    this.Move(source);
+    return this;
+  }
+  /** Original source-order token equality ignores RPN and accepts identical pointers before comparing values. @param other - Actual array. @returns Equal code tokens. */
+  EqualTokens(other: ScTokenArray): boolean {
+    if (other.nLen !== this.nLen) return false;
+    for (let index = 0; index < this.nLen; index++) {
+      const left = (this.pCode as FormulaToken[])[index] as FormulaToken,
+        right = (other.pCode as FormulaToken[])[index] as FormulaToken;
+      if (left !== right && !left.equals(right)) return false;
+    }
+    return true;
+  }
+  /** Original Clear resets the hash before clearing the actual token arrays. Vector scheduling flags remain outside this consumed slice. @returns Nothing. */
+  override Clear(): void {
+    this.mnHashValue = 0n;
+    super.Clear();
+  }
+  /** Original borrowed size_t hash value on the represented64-bit target. @returns Unsigned64 hash. */
+  GetHash(): bigint {
+    return this.mnHashValue;
+  }
+  /** Original first20-source-token rolling hash with the existing native string hash and observed libc++64 double binding. RPN and reference coordinates do not participate. @returns Nothing. */
+  GenHash(): void {
+    const hasher = new OUStringHash();
+    let hash = 1n;
+    const count = Math.min(this.nLen, 20);
+    for (let index = 0; index < count; index++) {
+      const token = (this.pCode as FormulaToken[])[index] as FormulaToken,
+        opcode = token.GetOpCode();
+      if (opcode === OpCode.ocPush)
+        switch (token.GetType()) {
+          case StackVar.svByte:
+            hash += BigInt((token as FormulaByteToken).GetByte());
+            break;
+          case StackVar.svDouble:
+            hash += hashDouble64((token as FormulaDoubleToken).GetDouble());
+            break;
+          case StackVar.svString:
+            hash += hasher.call((token as FormulaStringToken).GetString().getString());
+            break;
+          case StackVar.svSingleRef:
+            hash += hashSingleRef((token as ScSingleRefToken).GetSingleRef());
+            break;
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            hash += hashSingleRef(reference.Ref1);
+            hash += hashSingleRef(reference.Ref2);
+            break;
+          }
+          default:
+            hash += BigInt(opcode);
+        }
+      else hash += BigInt(opcode);
+      hash = BigInt.asUintN(64, (hash << 4n) - hash);
+    }
+    this.mnHashValue = hash;
   }
   /** Original deep Clone:independent code tokens;RPN entries reuse the first matching cloned code entry or receive their own clone. Native refcounts are represented by actual JS identity. @returns Deep token-array owner. */
   Clone(): ScTokenArray {
@@ -399,6 +587,7 @@ export class ScTokenArray extends FormulaTokenArray {
     p.nMode = this.nMode;
     p.nError = this.nError;
     p.bHyperLink = this.bHyperLink;
+    p.mnHashValue = this.mnHashValue;
     p.mbFromRangeName = this.mbFromRangeName;
     p.mbShareable = this.mbShareable;
     p.mbDynamicArrayFunction = this.mbDynamicArrayFunction;
@@ -424,13 +613,223 @@ export class ScTokenArray extends FormulaTokenArray {
     }
     return p;
   }
+  /** Original by-value true copy;the C++ unique_ptr/by-value allocation-category distinction is erased under JS GC,while the same deep code/RPN identity algorithm is retained. @returns Independent token array. */
+  CloneValue(): ScTokenArray {
+    return this.Clone();
+  }
+  /** Original vertical-group invariance scans source-order references,including actual external reference values and index tokens. @returns No relative row dependency. */
+  IsInvariant(): boolean {
+    for (let index = 0; index < this.nLen; index++) {
+      const token = (this.pCode as FormulaToken[])[index] as FormulaToken;
+      switch (token.GetType()) {
+        case StackVar.svSingleRef:
+          if ((token as ScSingleRefToken).GetSingleRef().IsRowRel()) return false;
+          break;
+        case StackVar.svExternalSingleRef:
+          if ((token as ScExternalSingleRefToken).GetSingleRef().IsRowRel()) return false;
+          break;
+        case StackVar.svDoubleRef: {
+          const reference = (token as ScDoubleRefToken).GetDoubleRef();
+          if (reference.Ref1.IsRowRel() || reference.Ref2.IsRowRel()) return false;
+          break;
+        }
+        case StackVar.svExternalDoubleRef: {
+          const reference = (token as ScExternalDoubleRefToken).GetDoubleRef();
+          if (reference.Ref1.IsRowRel() || reference.Ref2.IsRowRel()) return false;
+          break;
+        }
+        case StackVar.svIndex:
+          return false;
+        default:
+          break;
+      }
+    }
+    return true;
+  }
+  /** Original copy-position ordering visits actual code and RPN-only double references through TokenPointers. No formula text is parsed and no cell model is copied. @param position - New formula position. @returns Nothing. */
+  AdjustReferenceOnCopy(position: ScAddress): void {
+    const pointers = new TokenPointers(this.pCode, this.nLen, this.pRPN, this.nRPN, false);
+    for (const range of [0, 1] as const)
+      for (let index = 0; index < pointers.maPointerRange[range].length; index++) {
+        const token = pointers.getHandledToken(range, index);
+        if (!token) continue;
+        switch (token.GetType()) {
+          case StackVar.svDoubleRef:
+            (token as ScDoubleRefToken).GetDoubleRef().PutInOrder(position);
+            break;
+          default:
+            break;
+        }
+      }
+  }
+  /** Original absolute-reference copy adjustment over actual token ownership. In this loop SkipReference's bRangeName is false and its token kinds are already local references,so its extraction always succeeds;the remaining decision is actual clipboard-range containment. @param oldDocument - Original document owning copy ranges. @param oldPosition - Original formula position. @param newPosition - New formula position. @param checkCopyRange - Original copied-area policy. @returns Nothing. */
+  AdjustAbsoluteRefs(
+    oldDocument: ScDocument,
+    oldPosition: ScAddress,
+    newPosition: ScAddress,
+    checkCopyRange: boolean,
+  ): void {
+    const pointers = new TokenPointers(this.pCode, this.nLen, this.pRPN, this.nRPN, true);
+    for (const range of [0, 1] as const)
+      for (let index = 0; index < pointers.maPointerRange[range].length; index++) {
+        const token = pointers.getHandledToken(range, index);
+        if (!token) continue;
+        switch (token.GetType()) {
+          case StackVar.svSingleRef: {
+            const reference = (token as ScSingleRefToken).GetSingleRef(),
+              address = reference.toAbs(oldDocument, oldPosition);
+            if (
+              !checkCopyRange ||
+              !oldDocument.GetClipParam().maRanges.Contains(new ScRange(address))
+            )
+              continue;
+            adjustSingleRefData(reference, oldPosition, newPosition);
+            break;
+          }
+          case StackVar.svDoubleRef: {
+            const reference = (token as ScDoubleRefToken).GetDoubleRef();
+            if (
+              !checkCopyRange ||
+              !oldDocument
+                .GetClipParam()
+                .maRanges.Contains(reference.toAbs(oldDocument, oldPosition))
+            )
+              continue;
+            adjustSingleRefData(reference.Ref1, oldPosition, newPosition);
+            adjustSingleRefData(reference.Ref2, oldPosition, newPosition);
+            break;
+          }
+          default:
+            break;
+        }
+      }
+  }
+  /** Original adjacent outer-function parameter inspection over genuine RPN references;axis adjacency intentionally ignores the other axis and sheet as upstream. @param extend - Native output extent,untouched on an early boundary. @param position - Formula position. @param direction - Original scan direction. @returns Adjacent reference found. */
+  GetAdjacentExtendOfOuterFuncRefs(
+    extend: [number],
+    position: ScAddress,
+    direction: ScDirection,
+  ): boolean {
+    let col = 0,
+      row = 0;
+    switch (direction) {
+      case ScDirection.DIR_BOTTOM:
+        if (position.Row() >= this.mxSheetLimits.mnMaxRow) return false;
+        extend[0] = position.Row();
+        row = extend[0] + 1;
+        break;
+      case ScDirection.DIR_RIGHT:
+        if (position.Col() >= this.mxSheetLimits.mnMaxCol) return false;
+        extend[0] = position.Col();
+        col = extend[0] + 1;
+        break;
+      case ScDirection.DIR_TOP:
+        if (position.Row() <= 0) return false;
+        extend[0] = position.Row();
+        row = extend[0] - 1;
+        break;
+      case ScDirection.DIR_LEFT:
+        if (position.Col() <= 0) return false;
+        extend[0] = position.Col();
+        col = extend[0] - 1;
+        break;
+      default:
+        return false;
+    }
+    if (this.pRPN && this.nRPN) {
+      const outer = this.pRPN[this.nRPN - 1] as FormulaToken;
+      if (outer.GetType() === StackVar.svByte) {
+        const count = (outer as FormulaByteToken).GetByte();
+        if (count && this.nRPN > count) {
+          let found = false;
+          for (let index = this.nRPN - count - 1; index < this.nRPN - 1; index++) {
+            const token = this.pRPN[index] as FormulaToken;
+            switch (token.GetType()) {
+              case StackVar.svSingleRef: {
+                const absolute = (token as ScSingleRefToken)
+                  .GetSingleRef()
+                  .toAbs(this.mxSheetLimits, position);
+                switch (direction) {
+                  case ScDirection.DIR_BOTTOM:
+                    if (absolute.Row() === row && absolute.Row() > extend[0]) {
+                      extend[0] = absolute.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_RIGHT:
+                    if (absolute.Col() === col && absolute.Col() > extend[0]) {
+                      extend[0] = absolute.Col();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_TOP:
+                    if (absolute.Row() === row && absolute.Row() < extend[0]) {
+                      extend[0] = absolute.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_LEFT:
+                    if (absolute.Col() === col && absolute.Col() < extend[0]) {
+                      extend[0] = absolute.Col();
+                      found = true;
+                    }
+                    break;
+                }
+                break;
+              }
+              case StackVar.svDoubleRef: {
+                const absolute = (token as ScDoubleRefToken)
+                  .GetDoubleRef()
+                  .toAbs(this.mxSheetLimits, position);
+                switch (direction) {
+                  case ScDirection.DIR_BOTTOM:
+                    if (absolute.aStart.Row() === row && absolute.aEnd.Row() > extend[0]) {
+                      extend[0] = absolute.aEnd.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_RIGHT:
+                    if (absolute.aStart.Col() === col && absolute.aEnd.Col() > extend[0]) {
+                      extend[0] = absolute.aEnd.Col();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_TOP:
+                    if (absolute.aEnd.Row() === row && absolute.aStart.Row() < extend[0]) {
+                      extend[0] = absolute.aStart.Row();
+                      found = true;
+                    }
+                    break;
+                  case ScDirection.DIR_LEFT:
+                    if (absolute.aEnd.Col() === col && absolute.aStart.Col() < extend[0]) {
+                      extend[0] = absolute.aStart.Col();
+                      found = true;
+                    }
+                    break;
+                }
+                break;
+              }
+              default:
+                break;
+            }
+          }
+          return found;
+        }
+      }
+    }
+    return false;
+  }
   /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
   AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
     return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));
   }
+  /** Original double-reference token append with retained sheet limits. @param reference - Actual complex reference. @returns Token or null. */
+  AddDoubleReference(reference: ScComplexRefData): FormulaToken | null {
+    return this.Add(new ScDoubleRefToken(this.mxSheetLimits, reference));
+  }
   /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
   AddOpCode(code: OpCode): FormulaToken | null {
-    if (code === OpCode.ocOpen || code === OpCode.ocClose)
+    if (code === OpCode.ocOpen || code === OpCode.ocClose || code === OpCode.ocSep)
       return this.Add(new FormulaToken(StackVar.svSep, code));
     if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
     return this.Add(new FormulaByteToken(code));

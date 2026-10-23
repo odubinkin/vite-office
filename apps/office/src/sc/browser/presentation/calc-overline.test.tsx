@@ -108,7 +108,7 @@ it("uses the native mixed-state factory and marked attribute history without cha
       /** Rejects incomplete request arguments. @returns Dispatch result. */ () =>
         d.Execute(".uno:Overline", { enabled: true }),
     ).toThrow("complete SvxOverlineItem");
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(c.SetOverline()).toBe(false);
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);

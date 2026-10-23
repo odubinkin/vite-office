@@ -1,4 +1,5 @@
 /** @fileoverview Native formatting boundary admission, complete item requests, fallback view and headless history behavior. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { expect, it, vi } from "vitest";
 import { createCalcSession } from "../../../browser/composition/calc-module";
 import { GetSelectionPattern } from "./viewfunc";
@@ -203,7 +204,7 @@ it("separates attribute-only, frame-only and selective-validity apply paths incl
     c = s.controller,
     view = required(c.viewData.GetViewShell()),
     doc = c.shell.GetDocument(),
-    pool = doc.GetPool(),
+    pool = doc.GetPool() as ScDocumentPool,
     old = new SfxItemSet(pool, [[100, 151]]),
     next = new SfxItemSet(pool, [[100, 151]]);
   try {

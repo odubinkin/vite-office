@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/clipparam.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/clipparam.cxx",
+    "localSymbols": [
+      "ScClipParam"
+    ],
+    "upstreamSymbols": [
+      "ScClipParam"
+    ],
+    "preservedResponsibilities": [
+      "Block75 work in progress implements same-pool relocated ScFormulaCell Clone through deep token ownership without reparsing source text;cached result and dirty state survive until actual insertion starts listeners. ScTokenArray CloneValue,IsInvariant,AdjustReferenceOnCopy and local AdjustAbsoluteRefs consume actual code/RPN and retained table-area identities. The TokenPointers adaptation is bounded to deep-owned arrays or callers that discard shared RPN as required by source;it does not simulate global physical smart-pointer refcounts or certify externally retained flat-copy graphs. ScClipParam owns actual independent range lists,source IDs,compressed dimensions and filtered transpose;document lazy parameters and CountNonFilteredRows use real segmented filter storage. These pure parameter prerequisites do not implement clipboard document reset/pooling/paste. Selection-pattern merging moved to an out-of-class definition on the same document instance to retain the file-size boundary. Mode identity,shared formula groups,column splitting/group listening,paste fill/undo and final raw100/browser/Worker/build acceptance remain pending;no broad behavior,contract or default parity is certified."
+    ],
+    "omittedResponsibilities": [
+      "Task75 remains in progress;actual clipboard document pooling,reset,paste and history are not implemented by these parameter values."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/clipparam.ts",
+          "marker": "ScClipParam"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipparam.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/clipparam.cxx",
+          "marker": "ScClipParam"
+        }
+      ]
+    }
+  }
+}

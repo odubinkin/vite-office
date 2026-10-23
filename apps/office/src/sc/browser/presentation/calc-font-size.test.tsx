@@ -138,7 +138,7 @@ it("validates command arguments,commits drafts before attributes and rejects inv
   c.StartInput(ScInputMode.SC_INPUT_TABLE, "hello");
   expect(c.SetFontSize(12)).toBe(true);
   expect(c.Input()).toBe("hello");
-  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
   const count = c.shell.GetUndoManager().GetUndoActionCount();
   expect(c.SetFontSize(18)).toBe(false);
   expect(height(doc, 0, 0)).toBe(240);

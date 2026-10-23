@@ -1,4 +1,5 @@
 /** @fileoverview Native document/table/column attribute selection merges,real defaults and compressed-run semantics. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
@@ -134,7 +135,7 @@ it("retains upstream multi-selection omission of unallocated default-column attr
 it("retains native deep inherited versus shallow direct merge semantics", /** A real parent set participates only in the deep selection mode. @returns Nothing. */ () => {
   const doc = document(),
     array = new ScAttrArray(0, 0, doc),
-    parent = new SfxItemSet(doc.GetPool()),
+    parent = new SfxItemSet(doc.GetPool() as ScDocumentPool),
     pattern = new ScPatternAttr(doc.getCellAttributeHelper());
   parent.Put(new Height(340, 100, 101));
   pattern.GetItemSetWritable().SetParent(parent);

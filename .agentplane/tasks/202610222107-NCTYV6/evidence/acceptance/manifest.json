@@ -1,0 +1,1793 @@
+{
+  "task": "202610222107-NCTYV6",
+  "acceptanceChecks": "pass;task closure and evaluator review follow this evidence snapshot",
+  "sourceBaseCommit": "0ca47f8b765a3129d265ccdf22db6129d85bed23",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "sha256": "bfbff8e5848c09ebbdbe0d97d523e3ab4beafacd7b29064e54a8286e9c08f4a7"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "481e8948c7ea06e04449f077af5256798656f9814ffe604715ef296856666a76"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column3.ts",
+      "sha256": "ee04f7934c5c5ae58a843f64c33fe156453fc99505535c56faa7e56d263d8b41"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+      "sha256": "d6184df682359d8b033078e5f5d0494826cb53c63e4eeb5657f8ba739f023381"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "8d49780e5575278fa6e9c298599637779c499284e6fb8791af70a66c7b104633"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/group-area-listener.test.ts",
+      "sha256": "b18e5f647c7cf7931ec92dcd5c04c443baaaafb24f5120218a9e78ef0f3f6de7"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/implicit-intersection.test.ts",
+      "sha256": "ecc0054a45f81918d9a22c956afe9ac126f7c31e8f4c2f43893b50419f7f78cd"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+      "sha256": "4fcd1041371ea694d58de6cef6e4eafe5edb5dba95e45a0d9f8035af544dd851"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "sha256": "0cc29642848a49c17a43c1a72638d6ab4526d015a78d6e7b863cc4b25dda5b23"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "ab0a1d195e43d98c2b8b705698257e10bf75e5d7f25de12a3ca82cfc3d2fec25"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+      "sha256": "97e23d7fbeef1e09a19689aa422d3e180b1ec79494c7d0fe99e8cedeb6c439f9"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/compiler.ts.json",
+      "sha256": "9d6e0221c31a7a72ffd10167db44c6f6a14a76eb381b7a7e702df61d92bed2b6"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewfun2.ts.json",
+      "sha256": "2275946a626c569c6f793af55840215c2eb0266740e1183eb1c7302701c02c35"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "b5a2397af4b797a922796f2dc9bf98f96afd52912bc8a46a1387ce8c56279949"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+      "sha256": "2d7dc45d51faf4c9f5c37cad6029cb7ef2e160edf4447bbbe63b2582d92105b7"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/compiler.ts.json",
+      "sha256": "f1d6dd2cbb33c7b6270118f9e0ade113b55587862da2e9c9be8e74f616f57c8d"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewfun2.ts.json",
+      "sha256": "d9c23ae7578adb96d27e9d4a0898ffc0e80b1b066cf0ce56df35c8c8cd537848"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+      "sha256": "7e5eb31b5008458f3876696726d3ff954cb968de7887aea6950c799cfed69797"
+    },
+    {
+      "path": "apps/office/src/sc/browser/composition/calc-module.tsx",
+      "sha256": "cd00570b51d56ac655dc7244db13021e296dd35cd49aa5969c148145c03fb6f1"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+      "sha256": "a92647df68bcf800f6595019c7293f11e036426dc1266df7da637741f09fd5e5"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-selection-script.ts",
+      "sha256": "08145885bf3208c26830c9b36283bd5d4ae25a6d06d7010a2c4020f9c29bb704"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "sha256": "bfbff8e5848c09ebbdbe0d97d523e3ab4beafacd7b29064e54a8286e9c08f4a7"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "481e8948c7ea06e04449f077af5256798656f9814ffe604715ef296856666a76"
+    },
+    {
+      "path": "apps/office/src/sc/browser/editor/cell-input.ts",
+      "sha256": "716e9b6bf59adb036f85b73cba19fe5a20fec6775548145720434023edc2a198"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+      "sha256": "499fc9743c95e8ce552dc54f86f897e5f6236feaf82ba4a841326cc734338b2e"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx",
+      "sha256": "8c14def08d0c6bc9e4a8460b98471886bc3d4a9c37ab318f828d30e3e34f838a"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScCellDiagonalBorders.tsx",
+      "sha256": "02962b170f8be84c7644c9f5cc2d97d35091613427d988b3de2ee77f619a5dda"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScCellText.tsx",
+      "sha256": "fdd72a4ba59d7ead105315b7e6ab389d1ea089151c1c3fd89b5518f0583a8903"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGoToTabDlg.tsx",
+      "sha256": "28b88819cd4e52a2ed28c7ac0926b38f7dfc9e6b430d57b0352505ab61030e25"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "ca4c931152d02eab814be3f985dc3e04a5677a247f1c7128b3b3bb56c618e868"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.test.tsx",
+      "sha256": "978375248d783e49c8298002856e069e6cff65bcf469dafa14426de949113a58"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.tsx",
+      "sha256": "60596a1bdaf99401be0f4e7f8c73b49e27b7e43fb49bc5bdf7c9f4260e554b06"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScInputWindow.tsx",
+      "sha256": "24c5fb956b9877204ad706707920afeb913aa5a8eb7ee7fa329f5edbdbc6e6ef"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScMetricInputDlg.tsx",
+      "sha256": "933c0cd750d998be4a7c73987eeb737c8ca85cd06823da3e6909548bfa5b2534"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScTabControl.tsx",
+      "sha256": "497d9275eef53ad79ed9c7ffaf6ce1d195060f6999a451886ff0b551562d3d76"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-alignment.test.tsx",
+      "sha256": "d1e74a9717c4d30932aa1a5b75967cbf87ca863dafadcd780b226f4406671b80"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+      "sha256": "7d39fad911ae132809a2f0ed18efd28c70800c62d29639d24c545450ff18ee55"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-boundary-controls.test.tsx",
+      "sha256": "6e3e23822571df83f0720980d6c19492f5982850f957caed17a50d1e3bf3c9d5"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+      "sha256": "153f69f0fd179aed4f2784cdd07e064de6af65517bb049a9fda6303803641685"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-cell-style-inheritance.test.tsx",
+      "sha256": "01cf4ccf57ff2cb7df7292f4f3efcae6099b755b7a4755a9db1b6a09c606f537"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+      "sha256": "8548bb2444ca01a049de098c19a6541403ef7e81f95872fbc80e238ebb3d2ad2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+      "sha256": "9e1ecb6d60490159f978f27309bedef54f0d6f5183791a7367fe59d3fb4a41ce"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-color.test.tsx",
+      "sha256": "03f80fad6920bb25141ad29701ce7b3fbdb9c2739f2b2d03be1b14f1615fc7d6"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+      "sha256": "b1971ed6d893733d96ef9d7de3f61d213ef7fd5275d64ce6abd7a0701469e892"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
+      "sha256": "ba683e7d36f9f533418fa58abd1bfe66246752b7adab15129c745c15c8a6f501"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-deselect-bindings.test.tsx",
+      "sha256": "84ee893607ca5bcc382bd65999880d3380aed667bc36c48ab2b821feb8b69053"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-deselect.test.tsx",
+      "sha256": "6f961306e61a6174b0c4b3da42f9b650c4ab794427a1fdc756c639094de28240"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+      "sha256": "1e10aad7773ad962ef3f48514b279d85f0e30f6e84b47b805feaacfac351b89c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+      "sha256": "a957c71bc1e9ff7692f8e745af56ddebabc654da9e9138f09f4aab41c23601c4"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+      "sha256": "87cfdce3a697e181d1e68f992d7f23f7160a60da23c3076d40898054a42a87e2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+      "sha256": "d134235365f2d029755cfb370072599257294e8add2f831c094ef0df466f0102"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+      "sha256": "704cde837deef304231c69a7eb104a671e6086600a14a6093653878081136b05"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-grid-borders.ts",
+      "sha256": "a022d13b044aed664641125686489bd4573fbc8ad66f33abc12ab4e65de0f1b1"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-header-sizing.test.tsx",
+      "sha256": "898779f3ef0b798dd9449046e6ce1214365568d43c585d7305edcf8adb5a5021"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+      "sha256": "cbacde7135a5ce4474928672017d9862c0f1abe543ee4971fb2f9c85669c7ffc"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+      "sha256": "50348805a0fe081c82c6386af38fbd54466d91745dc6e10b92efc2f3d18be89d"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-modal-focus.test.tsx",
+      "sha256": "b84a1e1ac3c1d9314164c5d404bb86cc0e62ac3be0eea206e977c3f003274fd1"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-optional-icons.test.tsx",
+      "sha256": "1e07913cddd711de7c4680166ae13c665db4064eb16cdc8aab20a49f8f1effee"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+      "sha256": "81e1d98f725d806b824d6abe1d9f042ecdb4aa847cd90cd802fe2cbb38a4c57c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+      "sha256": "7123a86c1ae38ab5f6b0d40ed00a7e5e4aca7c46f84bb8bb4a4a0a65b068b0e2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "sha256": "e7bdd7bd36ad05bdd233da206ecde84f362b51acd24fff5251c4bcce2935e5c2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-primary-save.test.tsx",
+      "sha256": "54750487fe92d7878ca596b06d33c5439b153cc61e66722b7fb1f295e268be64"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx",
+      "sha256": "eba7981ecfcd9769dd55a55cd1342f2a95dc2caa7b3ab8b46296329e908fd90a"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+      "sha256": "8e0f56b0bfe5ca980c07366ed060e3e5962b2c1ad5c81c8fd895564a674d1867"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-sheet-popup.test.tsx",
+      "sha256": "ed27b7113660775c1486cf64a0e588a91d335d0544007d636bbacca033f6b1c5"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+      "sha256": "7854115f12603d3a628c6d4088dd441f134de9512c345ac37ff6aa0b6aa945c9"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+      "sha256": "8b95fb8b9b3fa7bda2bd5d2788fe9a32d063a327fb61b0f573b3d07c559b9307"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-visible-selection.test.tsx",
+      "sha256": "ebffc4961788e05c4835e2b11448b5dd1b72736ac6e96ab1e9a5cce80c006fcb"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+      "sha256": "82ac058ceba2421d0b1ee5aaca4b72897492398e5e90dcb4e397e6263d9efc23"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "e4d1dbe5b4dbc6d1be32c9148a1905e6355ada351da91294f1ae31a8683d33eb"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "sha256": "8b3b295a63336dc68cc2082857977b4c11f1625868ada3cd0b571393edbf1fe4"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/column-geometry.test.ts",
+      "sha256": "43927ef7936fe99bb6478ec3b008c4334372463144ea1c1b3f167429f051ebab"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/column-geometry.ts",
+      "sha256": "909499e68f5236c47a6d0be7ef380871510e865578f174af450e957da19d837e"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/row-geometry.ts",
+      "sha256": "53b3dff776419b171febadd1c94105b21ef8829d9f00e0db64b39b5d46a8a4ad"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+      "sha256": "0b20678cf3690b650dfea9817cca84e8dbaf54e004fb40e7b9be479fa0fb94cd"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-aggregate-ods.test.ts",
+      "sha256": "60152f659fea617944d711fdaace3e2cff357ec99a17b0e1644e530d669d766f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-file-workflows.ts",
+      "sha256": "07e52afeff2d4f70a2f13907330fe30f1bac7fa9801813ffeda5c42d8db47e15"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-large-ods.test.ts",
+      "sha256": "fdc0e59ccda9c96ae8b0a51e3abf319d9ad006c82c8af75c56ec8afc11fb497c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+      "sha256": "5870a23b4f67c27ac601282494db266924d1974acdfc9d981c65465d2dcfe8af"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+      "sha256": "38791a9116f0590369a590de2f740e19e115fd69ae8e67611892db9ee8984073"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+      "sha256": "685a525db127cb251efabc479f60f9d7764bb0fc6fe3d3de348804b7f384ec4d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/FilterData.ts",
+      "sha256": "051468b77d69782bf89fc33760a8a28aa9d391108c7a09a00827beb740887e7d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/address.test.ts",
+      "sha256": "432dac200295731d8f0e714b5d2b197ce117d1ebae52b506476a18cb597edefd"
+    },
+    {
+      "path": "apps/office/src/sc/inc/address.ts",
+      "sha256": "84c6bb85857ff994c6ddbb41af2987775e7c0cbfa6b9be20acd2a0603261b523"
+    },
+    {
+      "path": "apps/office/src/sc/inc/arraysumfunctor.ts",
+      "sha256": "420178b982e7e8b851d2551a0c8a5b923a870f5d29406b9a693c5517e0eebd2f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/attarray.ts",
+      "sha256": "6a228b65e511bdcc7012dd9c44764148dab36307c51c0e42a2c6d2a29f29328c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/attrib.ts",
+      "sha256": "2657a78cb7b325e0c6e53b6d3cde8754687c3a326fd6442ef91b06f4dbf9b9d8"
+    },
+    {
+      "path": "apps/office/src/sc/inc/bigrange.ts",
+      "sha256": "1b45d400cad08edbbffaa43e0108ea0c727ef8bcaa38f348547c90209475765f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/brdcst.ts",
+      "sha256": "887abdce91daaa31967c39642301d4821db2bffa1bafac42b5f6cfd5404c8463"
+    },
+    {
+      "path": "apps/office/src/sc/inc/bulkdatahint.ts",
+      "sha256": "17730cdc9c20dfbeefe19a4a1253232f2ca0d7aea6ce8a211dda1b52831a7b73"
+    },
+    {
+      "path": "apps/office/src/sc/inc/calcconfig.ts",
+      "sha256": "fa2d73b79e0fab999c9bb2f6b17e14a19554621b1e3de0eb506aadc295479cea"
+    },
+    {
+      "path": "apps/office/src/sc/inc/celltextattr.ts",
+      "sha256": "9e7f867eb6b66f544ba188c6654923ad96d6042bc3715249e5df4d641ae8ee38"
+    },
+    {
+      "path": "apps/office/src/sc/inc/cellvalue.ts",
+      "sha256": "9523b2227822b068a3779da440c7d9007a52ddeec6442505af5edf1a8a105daa"
+    },
+    {
+      "path": "apps/office/src/sc/inc/clipparam.ts",
+      "sha256": "3877d58a0800cb606141679232f91c6a5b1c2565eaf9645a9bb63211c52b68da"
+    },
+    {
+      "path": "apps/office/src/sc/inc/column.ts",
+      "sha256": "e537098bd44eed646a615749adf7f9b2dcb47b4846b7d6c8ad3507e43807434c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/columnspanset.ts",
+      "sha256": "cfc9db54d17fc0495568178233692ad7658ab67d2ee1de3255ec4912d7a9c8c4"
+    },
+    {
+      "path": "apps/office/src/sc/inc/compiler.ts",
+      "sha256": "4a8f4a58180a081161a2b4eb13e6cca31b4a033376e64411444a9e4690b68cad"
+    },
+    {
+      "path": "apps/office/src/sc/inc/compressedarray.ts",
+      "sha256": "3f2ef95367ad1409f2b9ea30ad79fce2f000da57a6e36da1c9662eef034e9e9c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/dociter.ts",
+      "sha256": "18dd4d8b56e74ff48f5960f539aed72be1b2b10c3be09ffeeb34ca8ae3e4d122"
+    },
+    {
+      "path": "apps/office/src/sc/inc/docoptio.ts",
+      "sha256": "9e4276945cf26c2e8473d91c5700623c0ad077450e2d774c7f93b8868a0576e5"
+    },
+    {
+      "path": "apps/office/src/sc/inc/document.ts",
+      "sha256": "167a16245f9c629d3b421d3d89d4effddbf9ecfc878aa7fa2f7059da73cfe2b8"
+    },
+    {
+      "path": "apps/office/src/sc/inc/documentimport.ts",
+      "sha256": "ecc76eed6f7c4c72b15b1b8e369e39811046a4816a177e7e8bf36d304f9fe67c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/formulacell.ts",
+      "sha256": "14683272b59153f0305a092a14b0260d2b9c83917c8cbd92c4d14ea3def81989"
+    },
+    {
+      "path": "apps/office/src/sc/inc/formularesult.ts",
+      "sha256": "31f20895087460082f38e6f785439de587c00dddd3b6258a15f7952de57a8205"
+    },
+    {
+      "path": "apps/office/src/sc/inc/fstalgorithm.test.ts",
+      "sha256": "3f6bd0066e705a63932df213c880289d62b9bd715c6a66975cf03424c576422f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/fstalgorithm.ts",
+      "sha256": "79e8ddf70093b1e36de4ef79cbe3f2c96292a8b61b69136403a77fd70fb60c44"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "57738fe45768b027d7e1849bf980cb47a3b325377b1de56da3f349963defd99b"
+    },
+    {
+      "path": "apps/office/src/sc/inc/globalnames.ts",
+      "sha256": "c92f34544395ce912d775a92e57b532dc080e56526edef3b3814f3a9d4948f88"
+    },
+    {
+      "path": "apps/office/src/sc/inc/globstr.ts",
+      "sha256": "351e912e5a9d67f1cb15c0707c5e6f3e201a2ab7726550c7f737135224903416"
+    },
+    {
+      "path": "apps/office/src/sc/inc/grouparealistener.ts",
+      "sha256": "9c134ebfd60a290339b5ad657bec6f78ca8753752bb1b3ca65db4d21693dcd4d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/interpretercontext.ts",
+      "sha256": "5d9a41af41e3d98c35d51fb5906d86fa66bb08bb620aee58fb2886963099a846"
+    },
+    {
+      "path": "apps/office/src/sc/inc/kahan.test.ts",
+      "sha256": "5b5c0a7b6dcb70d95343f9cd75332572dbb4c4c0d521cc3c3e149c836ad45cb1"
+    },
+    {
+      "path": "apps/office/src/sc/inc/kahan.ts",
+      "sha256": "d9fd9945b6372d718430064ee772f3035f3f763a62149228c48605f2bf306275"
+    },
+    {
+      "path": "apps/office/src/sc/inc/listenercontext.ts",
+      "sha256": "46c397ce433be8a7a85ed3a223b1db05f1d6691992ebd5549e683ccda141aa1a"
+    },
+    {
+      "path": "apps/office/src/sc/inc/listenerquery.ts",
+      "sha256": "13504716f4fc3b8dcd798308c6b62f9162eb69dff97737b57b9922572d6c648e"
+    },
+    {
+      "path": "apps/office/src/sc/inc/listenerqueryids.ts",
+      "sha256": "12472dfdbb15ddb3ff6a96da3f7e4c7f3b6c4ece1247bb6c117c05423de264bb"
+    },
+    {
+      "path": "apps/office/src/sc/inc/markarr.ts",
+      "sha256": "f5268797f62861cda19219916cfae14a71a9f8063300348736ec62148a4091cb"
+    },
+    {
+      "path": "apps/office/src/sc/inc/markdata.ts",
+      "sha256": "6af280a5856abcc5ee52074cb12112eba2c29a6fd63c1bb07c9fabe5de7e7485"
+    },
+    {
+      "path": "apps/office/src/sc/inc/markmulti.ts",
+      "sha256": "e49c707ae6db72983145554c0f2dd7389de03cda2417d89647080ca8031d49a3"
+    },
+    {
+      "path": "apps/office/src/sc/inc/math.ts",
+      "sha256": "36db9276dd0cc6e7b666685637a72025042eba04d7d2e7f83a410b12d3de6853"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mid.ts",
+      "sha256": "4449bfc388899dd5c357938a77b0e764bfa4ab5c4cb16eeca572cf411b42f2b3"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvcellfunc.ts",
+      "sha256": "6271617d922055afb6efb53689fdf34689ded1bfe3963635540d17fdab3df827"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-append.test.ts",
+      "sha256": "7919539feab38a9d5e114a193673d0c8d007efc531b5e94bdef37704aa6dae07"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-callback.test.ts",
+      "sha256": "0115d7686f11e2bbc7f538dc6c6d1b01477571fd85e577883e8390e5d989039c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts",
+      "sha256": "d4fd0eb549eb0020384776d800d1eb60157f249f5494dedd23b2573f2c64e8f9"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+      "sha256": "e0b3948dd01ad7ac474a8f48e735dd37da4b1484a07a19a1628e27e9b4618b39"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-matrix.test.ts",
+      "sha256": "77a8548ca7c4ed054b30be28d74a4bac491ff6f365e51ac78955b3e25ad329e0"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-range.test.ts",
+      "sha256": "9597d2d51ad0647e4667d46697ebf1f52be82577a4d5bd2134bed9fff7388778"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-set.test.ts",
+      "sha256": "28e08e98e9ce4e5e5847db18b614418cf1693efe6b0a39b0e28de665f2948887"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements-store.test.ts",
+      "sha256": "0897ea9bdadf4196d51c2ca87f3d96a7e24ed728afad7c29d5f220a9ced73586"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements.test.ts",
+      "sha256": "55158f08bd79f2c06fbdc0c1a35944db79dd142411769b1d570025e84f58a015"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements.ts",
+      "sha256": "625cab098a8b6c9a575e09add13b66414c593d84f0a96ec9b299c067e2525727"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvfunctions.ts",
+      "sha256": "dc96baa524b09041d0353e1547800ef675d18f6b31890e630d4ca715fcdb9802"
+    },
+    {
+      "path": "apps/office/src/sc/inc/patattr.ts",
+      "sha256": "1125dfee7ffd6c0bbf1240088c56c15fec63bcbff3fb1f991bb0fb15c02d29f5"
+    },
+    {
+      "path": "apps/office/src/sc/inc/poolcach.ts",
+      "sha256": "218ee20834154fe7d4995250295451abba65f3c9c3cbdad219c261a060b4e90d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/rangelst.ts",
+      "sha256": "52bc78b941d0b4e444a08dea6e01efbc0c17f563b39fa9963c5ace4d04a795b4"
+    },
+    {
+      "path": "apps/office/src/sc/inc/ref-address.test.ts",
+      "sha256": "aee51388d3aee80748adc41bddeb78447f6e37a1cc1ed52143628fa8e2d14467"
+    },
+    {
+      "path": "apps/office/src/sc/inc/refdata.ts",
+      "sha256": "1d4b3ac6939a142db1a2f826d4da6911386dfc68bc81ecb3c3afc580b52f0f5e"
+    },
+    {
+      "path": "apps/office/src/sc/inc/refupdatecontext.ts",
+      "sha256": "3ecbd3fdd25be8fb4e52f6f8c6e5a85dca0fdb7da30afd7c376c5e8e94b11f8e"
+    },
+    {
+      "path": "apps/office/src/sc/inc/rowheightcontext.ts",
+      "sha256": "99edc1b9693a22a8fc25a5a16e3f76569b7ba6e59156f0ce6c318d08999fceb6"
+    },
+    {
+      "path": "apps/office/src/sc/inc/scitems.ts",
+      "sha256": "97529d734c6cc2ca5be78eae79b0e29b2a1d37d0635402cdbbf923f57b04e00d"
+    },
+    {
+      "path": "apps/office/src/sc/inc/scmatrix.ts",
+      "sha256": "2fc9e43d3b41e3b414c88a616693368ac7d01814398f63e7f457f6f9b29e4f9c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/segmenttree.ts",
+      "sha256": "03fbd6f8fab40f847b2394aebb8f2d49d971e0dd41bf1eb3e7ebca85021f8b8c"
+    },
+    {
+      "path": "apps/office/src/sc/inc/sharedformula.ts",
+      "sha256": "666d13c55c31f57d91012f65be3ef6ca700a3fc6b58fb2e6ef993a192308505f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/sheetlimits.test.ts",
+      "sha256": "fb5c7d85b2db577a9fc23fd89e0bc4ec37f8a532d489238d779eeaff4fe8550b"
+    },
+    {
+      "path": "apps/office/src/sc/inc/sheetlimits.ts",
+      "sha256": "636f2f56677906ab15e98fb641f68b84a5ae2ed87519b21c57e9e87101b68a1b"
+    },
+    {
+      "path": "apps/office/src/sc/inc/stlpool.ts",
+      "sha256": "4f5138f584345c050275283af7a71f00cdf0c65f34842483ff9c2465dda68c61"
+    },
+    {
+      "path": "apps/office/src/sc/inc/stringutil.ts",
+      "sha256": "cf7ad56ad46f121adcbd8874741ea1859281a11a59c6ec046acb2c4bf8bf61d3"
+    },
+    {
+      "path": "apps/office/src/sc/inc/stylehelper.ts",
+      "sha256": "75497d17e320c900b3ad373095d8c7065fc4c1b66543703519b5d3f4b8469276"
+    },
+    {
+      "path": "apps/office/src/sc/inc/table.ts",
+      "sha256": "dd3455a859e1a66d5273ff84e4da8cac079b338558be59b140e8ae191269de20"
+    },
+    {
+      "path": "apps/office/src/sc/inc/token.ts",
+      "sha256": "12810f1578ba5d7421619d19b21a9eb4dba91e8462186e91917e5257340f97ef"
+    },
+    {
+      "path": "apps/office/src/sc/inc/tokenarray.ts",
+      "sha256": "43743c2c665ba96e103c9470c2435277a52cc558cb74d71cf7a6e457e6a599ce"
+    },
+    {
+      "path": "apps/office/src/sc/inc/types.ts",
+      "sha256": "183efac29d321589584cfe8c0a6ad635f297bdc261ef3a36cf7ed273c1727445"
+    },
+    {
+      "path": "apps/office/src/sc/inc/viewopti.ts",
+      "sha256": "117b883cc7440c7b870cdf984c7f4a6a5eb451074707d121559a945e990dd5f2"
+    },
+    {
+      "path": "apps/office/src/sc/sdi/formatsh.ts",
+      "sha256": "ecc25be5ac860a59fff22568459bd7253bdefad057f1dc0d4a2fb3c3a10b01b1"
+    },
+    {
+      "path": "apps/office/src/sc/sdi/scalc.ts",
+      "sha256": "379ff43cc79112339af7bf96445a54889bab523b2d4d36c28b4738fd198721a0"
+    },
+    {
+      "path": "apps/office/src/sc/sdi/tabvwsh.ts",
+      "sha256": "7024d0b0c641cdd6cb49b80c26b97c173d8a766ed75bc705baca60243fb1ede3"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/FilterData.ts",
+      "sha256": "518fca3c43a50eddff1fec3b7ba5925b1b6e9c9d102009f0e05d1d943d7e2b07"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/alignmentattr.test.ts",
+      "sha256": "721a4e19a5954d7459f1e9aebfb35467bd83f0c91311ef3a72d35154b69d65c6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/asianattr.test.ts",
+      "sha256": "62feb5e364e331ce2adf54bce5cd2a9eef62dd6743431e7112f96c92cf3f05f2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.test.ts",
+      "sha256": "0c3603f304e14fd7c7cb8a997e86a2703569c98d6f4b050279934c3f92f620cf"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "0d29a262d729898313993214a667096537dd5ec6bb23c7d692ad4499b572e5ee"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attrib.page.ts",
+      "sha256": "54a757d08e14465a3b24ff7837b458a9821dabdab8836b357b0d6f1d0246d796"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attrib.ts",
+      "sha256": "6fdf1fcf50a8936c50fbdf0c01757894f0f97a14c5d6598cdaba892960693779"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attrib.values.test.ts",
+      "sha256": "489b1ace2a08ce9da5136bcd6113d353d6eb54387e63bd3a288ee2eeb44d998b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attrib.values.ts",
+      "sha256": "00ca45037c3c06fd47bced11d7f04edb12879e08f1a21fd11329c51220363db8"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/background-brush.test.ts",
+      "sha256": "fdc7e042b41d63197e3fd4b228b6895fcdfa2dd24c127fb786dfedeedd38a574"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/bcaslot.ts",
+      "sha256": "6cf03226435ecf3881da6fdbb427e00ebd3e4cc9a1c1a0777be38563d3338d2c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/bigrange.test.ts",
+      "sha256": "c15549cfe0c200fa806331f2e39afb4cccff48986f788f491ddd63f9240d2d4d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/bigrange.ts",
+      "sha256": "02fef6a08ca4e38b29712ec75da5efdeea3f85c01ae8487ac075d3d4514d0c51"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
+      "sha256": "2d9d6de5173ee0d898a484097bd5f7ca77345b5095c59070411e726e368f0fd1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/border-boundaries.test.ts",
+      "sha256": "a392c0cdaaa61ae5839e18afc8691df78cae440f96e452463600171352bc968a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/border-frame.test.ts",
+      "sha256": "6d1de1f2f135cfb4ade3eb7a137762320118c2a5c556e25f90d8e474f65316e9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cell-style-association.test.ts",
+      "sha256": "38f5e360c5a3bd2d4c905a26bb598e5e4025cdeea89f0b2671f3c55ecb7aea77"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+      "sha256": "efb61302760f2748291a33213ff3fefe5be06b2ea1c4f09f9d8c6080cfb19f02"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/celltextattr.ts",
+      "sha256": "8ba2ded4a2bd451dd9b81440c877a4836d163059b522e28de9bfac73b7028230"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+      "sha256": "09d205546eee4665b6d81b343f34919cc2e6cbd7cce4ce83cecea363e2f6bd9a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue.test.ts",
+      "sha256": "f0146019adac19de706508869eb245fc0f086d13d631f329d5896971cc3a10ed"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue.ts",
+      "sha256": "6f21eb7a60adcf350520fbd947ca4353ca31ae15b5e9a24362abc1421d472fbe"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipparam.test.ts",
+      "sha256": "cf37859b31f9510a5f13385a472c2000088fc0660970ba5da2edd0fa4ed48bd6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipparam.ts",
+      "sha256": "f46889b7d054cf6532aeb2ca63415fb48dc780e36eb3e1cffe10b50439e12340"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/color-defaults.test.ts",
+      "sha256": "b682e5bb3cf92df60a5d46a29edef2afc20caa042f049c6f9db22ce265d6f986"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+      "sha256": "e4da4c29bd3177151fba91287ea67472190497f13ab66b681a085be9c1b29afc"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "59c90b0ae3d3f2b4eb76476990387e8008c85b54c0460278de28c1afdb017df5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column2.ts",
+      "sha256": "42bab2d6fca29aa50b8dcccce33d7097d9846ed08f15ba076999e54ebb5e8b60"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column3.ts",
+      "sha256": "ee04f7934c5c5ae58a843f64c33fe156453fc99505535c56faa7e56d263d8b41"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column4.ts",
+      "sha256": "4d92e3b1093fbd4d4f229a44cdc7569e6145c7b5a14c006c4a5e4a23c8243854"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/columnspanset.ts",
+      "sha256": "f1f3b8e152dc1ecf6619a751cedce901b175d3dfb01507ec26857e8d01ff5624"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/compressedarray.test.ts",
+      "sha256": "2e3ffe26714d21b62ab3b08ed4bd8da1cfee667c04b7ac96a00c2828fc19c90d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/compressedarray.ts",
+      "sha256": "6bfaed10e661423fb3a754107bd7d54533c6a179b118162dd3948edff0e0a696"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/connected-area.test.ts",
+      "sha256": "e78bcdc90f3b729a9476e27e9184a3ef3fcd36da61fb172b29bf3853ca15bfce"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/diagonalattr.test.ts",
+      "sha256": "e9150a348615e5b160ba0e162f45d327aeff6e252fe784e74732486fb900b2c3"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/dociter.test.ts",
+      "sha256": "e825fa2b2a3c4a52c4646a607e6069acaddd0f68d2af4354998a4efa0e33c361"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/dociter.ts",
+      "sha256": "d585ec20cc782b75a766b5b86f5c605a5179ddd67e5d55bc69fdf80bf875bee1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool-style-defaults.test.ts",
+      "sha256": "db41d1b53098ff304ca3ebb43ef448d36bc005390cc9f7bb315d1b42e364634c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool.test.ts",
+      "sha256": "d8dfaee51067f91b0643299910b3774b6cb9a6e97d54d4764d4cbd2e2c2382c0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool.ts",
+      "sha256": "1070a9294990f23d452fb770b4b9bd159f3f0ceec49b9f1f8d387bdd81b8c827"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen2.ts",
+      "sha256": "f5e02d0f178bbfde807dadb7ae8fb490b8274a8013e622d075e6a427e3da2384"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen6.ts",
+      "sha256": "535405dfd07b51194632e51afc4fe4941fc0fba182861f461b7dec8ecea8ebc4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "ebefa5507825a0d5f84be0f81845e1765d7b48ddc0dc8f48aa54c3c56512500d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.formula.test.ts",
+      "sha256": "8232d49a64d2012a030658d5b910a9ae508bc9e923c8cf6c7c391a8dc5053528"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.references.test.ts",
+      "sha256": "b32bbc1a6f9fae87ea22c8c858940c081a8f263fb6ce9db6307922079b32bd9e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+      "sha256": "83202993c39cb698464debd8cb1118cef65528606f4ff1fb1b32d8907c281ba9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "71c39bdd45dd8c0105409d68ffbf87f3edc3afd1bee913082dc1ef233872c391"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+      "sha256": "d6e70e729258c11d2cd6b54a0cdc028d794ef25f1c9de032640a2f8808cc4b15"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "d3b1b46f514f1fa23ecf4f35d2cce3d0decf1d2fd4a2d66a760c1c379e8125b6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.ts",
+      "sha256": "a7d38903037b924349d4efe7c824ebcc3a6e889ab8fd6112fe0721443c0cb78b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/edit-item-transfer.test.ts",
+      "sha256": "662cd4dd8d578b7d348e3f5c22ce07a7ecb91f8545ab59aed89708eaf41a5291"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/font-family-defaults.test.ts",
+      "sha256": "7afa620986e60b4a360547fa5831a1f6af646c1bc597183980abfb4ed27c1a80"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/fonteffectsattr.test.ts",
+      "sha256": "858215cf9c8b5fc4b71cf5008dc0794d8e70d9a718ecc61aef54840d4a5196fb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-block-address.test.ts",
+      "sha256": "42c784367e379ec975e6df1101ebb613c001c435bb24447c94e7ec4ded197764"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-compare.test.ts",
+      "sha256": "fddb01bcec5bcf56e21de5ea85cefb3fa1471c971ecf5ce47959ccae8d9e9f0c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+      "sha256": "d6184df682359d8b033078e5f5d0494826cb53c63e4eeb5657f8ba739f023381"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+      "sha256": "2b4880e6996291bbeccf1d938f67dbcbb2d7affefc04a6b4bfca5bae694ab7b0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "sha256": "c52cd8771801f57d8ceb9971d4ec30e8a246c5057c9fb4d5d345acf8daeef8e5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacellgroup.ts",
+      "sha256": "6f67417abcc130e5eb48b9dbd9b0b0929f422cbc7800196e40e11c990dc3ad6f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global.ts",
+      "sha256": "a4fe4a640905d571a41f4af0f94abeec1a6de82ae88da7038760ee1c80e30a83"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/heightattr.test.ts",
+      "sha256": "4a14794f84dc77f0f88166eb998ed11b5d7abe72e16fb5475c820ed13f375256"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/indentattr.test.ts",
+      "sha256": "3a8d5eb7b9da3ec6d5f2a3f1c3ed56458d547c2c71725fd58079bedd49475da1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/language-item.test.ts",
+      "sha256": "96bbf979c9b93c19fbafece8e7d99d3b642d9c8a94d0fca5c6bcd83aac04098d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/listener-context.test.ts",
+      "sha256": "a8455bf3db0147ca49503260a905c73ec4c6d0102988290404463653915d04ac"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/listenercontext.ts",
+      "sha256": "5877017695b38e57bba44c8b720b45552943202ca855b901e09116e51008a05c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/marginattr.test.ts",
+      "sha256": "b5affdf0a76792eafb22e3edaa35a69a0470d749002624b45d488dbaaf60cf45"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markarr.test.ts",
+      "sha256": "c7be5c9b4004ddf58223f804f5fa28eac0fce615d3d81e83b94b4223f91532ae"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markarr.ts",
+      "sha256": "8c1d96f8832ce7277ba630c0c083ef426937675c6c4483b082f7daa475b801e4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markdata.test.ts",
+      "sha256": "07a9429aca0934cb33d9d38a394fc92283a3224e9978a39e712eec69b8688dcc"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markdata.ts",
+      "sha256": "6dfabdd33221185965032372e753a1e6be1c5d705d54e6bd3bf78fc4e1fd38db"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markmulti.test.ts",
+      "sha256": "b2e194c4aa0eed2b40d29ccbf4171958ff8e71feba4605040d41fdf00efeb60a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/markmulti.ts",
+      "sha256": "5e44e07d4cf4281ce12ffed7b221ba69783a00c76b3fb38df41c1bec031de6ed"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/mergeattr.test.ts",
+      "sha256": "c5ecddf52ea85ccee386fb6b7f6d2df5dce346f3a405b20b61ebb2e6ed2ba643"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/mergeflag.test.ts",
+      "sha256": "ea33360d5d7e9b0d89853a7a70a6dc82d7f453c4d91c49277ed27f0ff70e3bdf"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/mtvelements.ts",
+      "sha256": "fa44c7e705dccdf425179100f6609e9d242372265b47687618e17d8d84e4a970"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/namespace-map.test.ts",
+      "sha256": "73fd2241522df9be3ec4550f688a01a92b6a210be4d83d06d0ecfd209eec7cc0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/native-column-width.test.ts",
+      "sha256": "13a04dde0282cdaba3a15abadb73ca1b205ba628daa9b11c4b33796bdc99f252"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+      "sha256": "cb6883f8bdad06ef92204255055b6b4bd967a48a3ade02ca423a3d840b5bf4fe"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/native-document-pool-complete.test.ts",
+      "sha256": "0ad9445273b354a02d7d8f78500dd9a56a0f2813ecce292315aa81cbaee459d2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/native-page-hf.test.ts",
+      "sha256": "f5714189dc4d826ae0910b5806f5b2b5a1c1b52f8e4218527dd357f33ba25b8f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+      "sha256": "1150e74ec721f46953ce242e1b34bb0d605c72d6b704aeadad185ba34305ee91"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/pageattr.test.ts",
+      "sha256": "e589cfbfc2623dade578269798d69e8ba14e846d7114e7b4891d873540085d18"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/patattr.test.ts",
+      "sha256": "30cfa243e95bf95dbc21f561be55d3c839bbec8d8713413664ee542d22471f8b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/patattr.ts",
+      "sha256": "2952b4166cccc5ffe7bc04a5efaa210b7a7097d3ca4a9bc23d45a3630d34f120"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/poolcach.ts",
+      "sha256": "e0664ef45f71fcb5046cb0f6b80dff999a653d519511bf97a3d48f309e56fe1f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/poolhelp.ts",
+      "sha256": "ad6611935e2b2a893fc7ca16e38fd5d105201d7fd6ac985ee886eef3c57a3b4f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/postureattr.test.ts",
+      "sha256": "a77302d028c0310df04577e4635b805010776e922259838ec960217d63a188c3"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/protectionattr.test.ts",
+      "sha256": "3ee49677a947e41a2d416b3fa2fec7ca37bf7f788674483b6f0ca66abb533dfd"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/refcellvalue.test.ts",
+      "sha256": "eafcce53994b3898ca521820c00c2d48709d7df1a5f497c983905d2d37f457cc"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+      "sha256": "752014fe5127cefc2b0a4e9cf0ebb6f6df87b92111a8027db9711e54f8215f37"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/refupdatecontext.ts",
+      "sha256": "d7fea0b38ce2731168c3b275160af651c21406f8826b138d59993e1378539a47"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/rotateattr.test.ts",
+      "sha256": "913b701afc3e429852dfdd13ee4b509e4a7cc7d7168da882a7b0b825dca9b686"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "sha256": "4fd6b5bb20ee3aca1fc8c640e04a3f27002f09af88813588964e2d71ce8b649b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+      "sha256": "3a7d624eff8a088b2e3a477530c51ede2fe9fd20497b7798d84ad85f4cdb40fd"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/script-type.test.ts",
+      "sha256": "06b2497c98d85f9c11ccf844cf73e9c19a42d9b4ffd7a3ec65a18a992a032f56"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+      "sha256": "1ca88bd6bfb03089a441b67f67984dd74ba1d042924b8666fb73e9dbd53a6ff5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/segmenttree.ts",
+      "sha256": "0dac56616de6f197b050791154721d006ca97dec86186fa583ca15ea8704793e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/selection-pattern.test.ts",
+      "sha256": "c1fef23a47187cd1098798bf490cb3fc6b86c655f58b5f2a4ae3ed3ea43af7b5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/shadowattr.test.ts",
+      "sha256": "906d9fca10cf76884551fefe4e2017772891a7520762e47e93ce588308e430c2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/stlpool.ts",
+      "sha256": "20939b339e3720db7ff160e2557ba4ae1d127c9ae5cb72d2fb4cb919e40e6b13"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/strikeout-emphasisattr.test.ts",
+      "sha256": "31d5b41cc6bbf4932327d459b3abd486ff1826957c47aaa410e14b59cea70696"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "d0689aad2c0e4caabe9d29efb052598d3b90550fa8d5f3e5c682ece9296f902c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table1.ts",
+      "sha256": "ac35f927c5a57a09607423a213cae3f677519b31dda00879816670df853b084d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/text-line-items.test.ts",
+      "sha256": "292cb357ca93d3fa396a5f87945e7a75558e41b960daa38337c19c29cd0e67b0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+      "sha256": "eeb268dfba8fc73090a5e68aa3808ae2e35a761d074fda0413f2605d54780b2d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/types.ts",
+      "sha256": "2595121a0283b5d63f3b104eac334dff05c0545f6ca55c5d2ab95831f57cae00"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+      "sha256": "65096c21c974f2862d1f092f61ef23e122d8f517dbb342c6cc261852577a8a6f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/weightattr.test.ts",
+      "sha256": "59abf6b624eda7a89a08aa245b428bec6e2619e0b6bde11432bd5fee4cafa90a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/xml-attributes.test.ts",
+      "sha256": "ed964a8aac3c5fa39f6673b23cbbd2f2bba29de1e95ebfa2103feb30cd6eac40"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/bcaslot.ts",
+      "sha256": "700008c5e14f6d08e099eb0d1542db3a817381a35759cf93348efcea9db5f7d5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/interpre.ts",
+      "sha256": "7ab27da63274dde3dae1716bd59fdeb18c860ea127fd52675e8c69c781a71b2b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/parclass.ts",
+      "sha256": "9d24d32ffac49e18f69120c2963227a5d1cc74baf2cbbc45ab5e2b34b7f61b27"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/poolhelp.ts",
+      "sha256": "e0b444f283c4877341a8ac2dccdac7e2232142a78344de323ba653ebbd5d494d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/refupdat.ts",
+      "sha256": "58e7acd18730125f703b828e4c87323c784f9de71c85cef7fc7d3a98fe271f7f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/inc/scrdata.ts",
+      "sha256": "3bff7d4638a69d089fb3b18938fba7000d42f1e7c0d5b76d52cca557e2d66912"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/address.test.ts",
+      "sha256": "74b14ebe7010bdd49338b5ea33a1d980ceb6f5ed03b4bffdb2c22c12eee4b745"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/address.ts",
+      "sha256": "c7b62ee08da28f054c265efe157c307e8467ba9b580e38bd872ee546adbd9e2e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/aggregate-formula.test.ts",
+      "sha256": "46d01928c2e5788c00d882cc76e3bf0c78a0ea4fa604b2b58dfbef70733ecd94"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+      "sha256": "c952c9887b165481dfe205481fbd3ed6da13ac942f20cf782ffd3ca91aa12672"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+      "sha256": "abe226a931481cab1b7577d18e9fa946c1a87a919e83c88e3f88707801c9af00"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/calcconfig.ts",
+      "sha256": "e37a4d310a877f0b1bff68c602f9ad299d7d3e75d9193a8a1ea2e1129290f508"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler-format-type.test.ts",
+      "sha256": "9f2f4e27c8134783efbcff3f727efaed57be04d2dcc00e6fc2a919401e1b54e1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "8d49780e5575278fa6e9c298599637779c499284e6fb8791af70a66c7b104633"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+      "sha256": "e987d5889faac91fb779fbb0f86a52d1ea4e2760267e310620cdf1914f81a4af"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/docoptio.test.ts",
+      "sha256": "23418ddb86576cab3080545f99efba7309720d9f33cfcb9f46b51ed7dd1a8bdc"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/docoptio.ts",
+      "sha256": "83e10157ddcb4bedee8029ff4676abde6663023973265eb782e1fa2a10cc3ffc"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/external-token.test.ts",
+      "sha256": "272af66ff073c6132b442d0fcbbba89879628e45067abb365ab165f2c58f7236"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/formula-output.test.ts",
+      "sha256": "1686dcedfeb7fe7f9e4b5407568641464c5b0becd942525d1e37c7cd6bc07327"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+      "sha256": "96eef46d9bddde3b39ff64c053dc93ea397f384a2b9dff4c0a4cc9167d95371b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+      "sha256": "7dd4fa4f656bda040ff3bad0fb6652b5bd2700013694af1ddc67865e1daf3861"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+      "sha256": "9d60bff3e012c11e6685f48c4291ad759ac26da3133907d5c3b6e69ba9280db0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/group-area-listener.test.ts",
+      "sha256": "b18e5f647c7cf7931ec92dcd5c04c443baaaafb24f5120218a9e78ef0f3f6de7"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/grouparealistener.ts",
+      "sha256": "62b9eda80e854c63b47e4663e347b22918aba0de5fba0660accb792ddb795c85"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/implicit-intersection.test.ts",
+      "sha256": "ecc0054a45f81918d9a22c956afe9ac126f7c31e8f4c2f43893b50419f7f78cd"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr4.ts",
+      "sha256": "6e28f9e5ac85f0c1ef6d3fe2f1578a835a8fd70957f922e24abcea4acc2b8b34"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr6.ts",
+      "sha256": "eef13f89dd9db6914f1f7b388618e4ffaa59dc76c2dc8b8fdeb48753c1ad1d21"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpretercontext.ts",
+      "sha256": "ed8afe56e2cb752c169f474fcaa427fd3b85e2239e6d16b63b16946415932429"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+      "sha256": "8c9826f1083ce3b805508c15b330194fdd0bbeb0038b6e71a432fb0883aab74c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/listenerquery.ts",
+      "sha256": "5428b904230487e6f40bae929fb0c08e5f7004e0de57934236057b7cd19765c5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/math.ts",
+      "sha256": "48faa7d8954a2d82b1d4305cbc4c4ef021ac13f9463a2c3f8750209251692d6a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+      "sha256": "44ad788eba9b56d3d9c69e1baa6fe1c8d3694408f35309d4420df7eb5f843f51"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "sha256": "0bb69f202d05f8f98e74108a9d180549a47ad76ed6e397da0bb4b46b3b9fa910"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-address.test.ts",
+      "sha256": "3acf8cdd204b09dc2e35e26bb0e0f1213a31d9089dc39425a94716f39ea29295"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+      "sha256": "96a0fcba8f50924ce590b4b876524deea655faa6ccd644b4169c83513f9f3a3a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/optutil.ts",
+      "sha256": "748174613b26ef2a5497837af8f209442d1703cef1a906fefcedeec28c0f83b7"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/parameter-classification.test.ts",
+      "sha256": "260bb17143039f93ca863ce6f134f85ceadff60972050be995945de9c2520de0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/parclass.ts",
+      "sha256": "ab722572c321cfda45525340fb6f65f4e1da9f2fd196ee5e8bf4082c582a3c69"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/range-extension.test.ts",
+      "sha256": "fa46f5d1c64feff39e1d9d2bb6bdca6aa2d753a87108e61f352e9a03e1c7dc8e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+      "sha256": "a33636424f7cc1d50fbcc11521c40a36ebc8769d7ad2fabf0a2dce7bc1492f26"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/range-matrix.test.ts",
+      "sha256": "bd011dff94a2950be8b630b41c127a0ae8d99a94095113e55b387c756de6492b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+      "sha256": "25cb2332aaf7eaf6f4e50c2ee3acc3ec7d342918bc2e35c7c046348024f1e51f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/rangelst.test.ts",
+      "sha256": "10d779275434a60a86cfbfa5dc41e52bce526b10e98fff315393af00156bc966"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/rangelst.ts",
+      "sha256": "83e7e79f58d9075827d7beeb0c270f6e99b6d3f230a978522a445d9cf1111cba"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+      "sha256": "0860f866c65f9353c8e4fc1a92b60461bfdeb07dbc4578eb9a2e23ab4dc4f6b1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refdata.test.ts",
+      "sha256": "b4f20fa43f53b3a3f08c098e19ce6c0a452077d0e2b77d57a2b12987e53a6b27"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refdata.ts",
+      "sha256": "2b58bcfa9a9516fd837ceb939533c960dab0fccb846c0c3f6810048743b4a1a1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/reference-token.test.ts",
+      "sha256": "d944f7b8050bec0fdd728386650baaa6eb499726b5f0728bc1f6800bc86f24f9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+      "sha256": "d11516abcf08ee92faee9d065a127a6776ce008451ed90e07c55911e6dda330c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refupdat.ts",
+      "sha256": "1b23e192d7b5600b930ff55f87c9475fcf48f1395dda9c0f87dcd459b8cf5c21"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+      "sha256": "429374ebfe14c269c0c0ca02f0e2dbea9b85f89192f4f4f4bb3377c36d6342c0"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+      "sha256": "93cd40a83bbcf792d42462fdb0b5671cb24a5617e687bf3c12f00665ebfe9047"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+      "sha256": "4ecd161aba24dcd494f3ecbdb2c05a704f2388739cd1a057c279c119ac416cd1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+      "sha256": "06c937ef63112027c8ef62c3dd95a97f8f9bef03ea14ada7d1f253b38ccd8b25"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+      "sha256": "570f9055c2f353fcc8b69e5cd90e25240e1e1cedec34718a1756a5bade0a0998"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
+      "sha256": "65dd4b22b8e013cc7bfbf4c0981023ef3361f35dc38c72534eb1dff08964384b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+      "sha256": "361cda19fd3dc6f92cacca5efaa80f43cee4353831d9fc3e137d9e00a4a70a9e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+      "sha256": "4fcd1041371ea694d58de6cef6e4eafe5edb5dba95e45a0d9f8035af544dd851"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/sharedformula.ts",
+      "sha256": "f4745173ebffbc68e56f422123358d9f5b2e359e9c5225496b3582a29c438384"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+      "sha256": "a672ed16db6267a496366e478947825470b11a9558a83fdf6fb84585032bddc1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/stringutil.test.ts",
+      "sha256": "8b34133f369ad1944548496400e453ec336fd534cb019554616d5b052b506e24"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/stringutil.ts",
+      "sha256": "4f5af18896a9350f21665e0ea0398bd44cc10fc663066b7c451a20f539b7055e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/stylehelper.test.ts",
+      "sha256": "3cef30b378a27a189f28711a47998b1288ac5980b49a9e6815494d83effa75c4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/stylehelper.ts",
+      "sha256": "cc1837724b6687c74021cf11018e46c46c0a63ef46d9aae69495226ff697c46c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token-clone.test.ts",
+      "sha256": "ecacbd7ee8c7c8a12c4ec4f192f2854ac17397e3fe19dedec736a0058678832b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token-copy.test.ts",
+      "sha256": "602e2bb7674655db1977a0784f80f7f216123a82cd23213ca3bee195c10d5e38"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token-hash.test.ts",
+      "sha256": "6f899b9e038e9e0666e03f6a169b1ed05c26325e5b2225ed8703d4cb02a1ec80"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ranges.ts",
+      "sha256": "4d9a7ff369bebb890027a183b7f012aa58891aae2eaa50ec640d6517c032bc7c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+      "sha256": "12d014e16766f2f9da47b788c72c02f70dcd2e3113d08cf2ab99084074c54370"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+      "sha256": "88f136f67fb0b4f53e08f81aeb7336bb95d0fc70ffef3df6c3e24240038457ac"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "bdbbd24fbffac89da83cbb7f816eb98f4a3b2a2f6092f2b8f327acd5c2a0a5f1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+      "sha256": "01b4fbde628800903ad58b79864f5ef068200d73f0c69fffcdba8615c7c42d78"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/viewopti.grid.ts",
+      "sha256": "caeb79fba989e691497dc7367d780912031cf2cecda3578c48be5bc6a046e317"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/viewopti.test.ts",
+      "sha256": "029e39e3dbb573df9c24fc716a94620bb4fe7e999a38a7eb00d001efef677376"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/viewopti.ts",
+      "sha256": "2ce5a1f034be750d78f8d14cb359205afd50aaf3b8eb1e2a789ed72fd45fae22"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/celltextparacontext.ts",
+      "sha256": "39b4936cf589785a89777c129d545ea59c3c3856efd65a2f61b760e3451859a7"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/format-export-failures.test.ts",
+      "sha256": "bd2573b96481a380cecb125edea4e5e8fa7668ac19c1f7bb41282d0b7b2c1098"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/importcontext.ts",
+      "sha256": "ccdd42a45a761722971533e24c502e131c2dc4711ce40169105a63ff90928ec5"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/native-alignment-handlers.test.ts",
+      "sha256": "f1351e7d224a9cfc422b09de52f74df8dfa8ba5dd5e5a3cdf4eea975306f62f1"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+      "sha256": "12e5ed18d9327c12e71984491a26e1b1a2574160966330103debfa032cf0bf25"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
+      "sha256": "1c383851f045bc78083bcc218f47d1a8032986ffbe706a114ab27e35c68a05c8"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-native-borders.test.ts",
+      "sha256": "48910bffe91e17b3db2982ad9c0786a0df6aba4b560fe5a84a8a5d7a8f124129"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+      "sha256": "84de6d91eee30eec3d8637a1ae55cd560cce974abbd7f38efd0725f1afc53673"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-native-columns.test.ts",
+      "sha256": "c8188e9cc2806fb919d86e5581ea06454cb37e76491380e8ed7f4da504e16295"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-native-fonts.test.ts",
+      "sha256": "615e157fffb37877256fc487489fceb0755242f4370722b4b8b56fc20610fda7"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-sparse-export.test.ts",
+      "sha256": "0ae88f4eedecdf71e28c470901df62b6424aa26f482ce2b56e12b442d6b2cb2f"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-style-routing.test.ts",
+      "sha256": "09d47525ea244111568bf360d28ce3aa38f82cb0bf8532634556b4587563234b"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "sha256": "dc627035d47c21289e2f7ee5bcd2890b372a5ba3494455c47d8fcc2942eb2636"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/wrap-text.test.ts",
+      "sha256": "692a95753d399acbb18205af99a77bfbea340bcf5074b86b112268de71f34f50"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlbodyi.ts",
+      "sha256": "96d29a3f2c52a37830464a35ad0a160f040d348179126c318bb310cb8df349e8"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlcelli.ts",
+      "sha256": "dc348dd18ec856c72b8857ed80955a14b2b1f4c3a84e134b0ebd26d42dd8d5df"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlcoli.ts",
+      "sha256": "4ecee95f5f3c09a4f015b9f3381341dd0731d81b3dd8acbaf0f7a8b163457887"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "f40fd10cc8a97af6e7105c7fa9c6bc3085733816c5ea84f000d1178f90bf1d39"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "sha256": "f413a74e1e85f2bb5e116cfff01be7ef7cab96c6bab472dab45121e494e0555a"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+      "sha256": "e23e68528d1a2c72a24e4090d205107cd41e7aaf9809d4bee470f85025427b49"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts",
+      "sha256": "eb8908d3b87cbe1fa9d635ede1228f75b12d48a2ef65249fafa221c86c63f6b1"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.font-effects.ts",
+      "sha256": "814f7f17d99a6fa5ba44ea1180ad4a24869e19e6463ba4b6f4b826c2ceac9756"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.strikeout.ts",
+      "sha256": "04dfa8ccca8344b74961c899b3c211e89b5919d5081a722f8cba8acd52388724"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+      "sha256": "792e46f60f1b9eeeb404cf4fa541a2a3ded726a166ec97d93b79d1fe63a99334"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "d6f796a86ffcd452c9f1247bf9f8b93be3c9525335e3d4bcb8fc411d6aee2be0"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmltabi.ts",
+      "sha256": "50d9b3e8f5156ea4ec8a74bba5ad81185f82914664b48fe4c4107a677ebf56e0"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+      "sha256": "97ff694a5bb9ea572facedf505ffc0c72196ca4ca0735341211057ddba71f69d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/app/inputhdl.test.ts",
+      "sha256": "7d7e84a2f35230eaeea7ad6506f5f0ce6645813d93e84385436435bf187a440e"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/app/inputhdl.ts",
+      "sha256": "3b8c0a44f0dfff8f08bf1d45245f02ae1dfb81ddcb97f4d41d86b05f00963440"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfunc.ts",
+      "sha256": "95f91dc7a613de7dcda97d2cc38b35df872c7da6b59de5608d5c55168300316f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docfuncutil.ts",
+      "sha256": "cbf6b180c527fe1180a131821170ab47b020067697b4638c762fa4b2a1083231"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+      "sha256": "5151b03d10adb68f8808ce7a9937d49b97c328bfae6142b9ff5ef1e88fe30205"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "sha256": "e09495da8b2c7397e55376cfbf1821effb39f45e1d7445b57108eafc4bfc7f96"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/colrowba.ts",
+      "sha256": "5d56ae7296d2dbc1156058e91d77c9087ad6985d1d230880026a9fccf2f05368"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/hdrcont.ts",
+      "sha256": "ac827d4b03e8bfc4c562c0e0be43ff5cf0b3d160a93abd1ee07764407f7113ee"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/inputhdl.ts",
+      "sha256": "5ca2fbfc289af0d8e021627e7de52716a8c27eb22302f95407b4cd6ff8cc26e4"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/tabview.ts",
+      "sha256": "4ee698251ddabaa6a139e383e7f31544d9fc2183d83d4f01e8a9e8fcd7f6d4cf"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/tabvwsh.ts",
+      "sha256": "b166b11042d2ee2d08729822c3502f2a34db71f22d96ac02d56fdd0bb8e2f431"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/undocell.ts",
+      "sha256": "f4d46b28ee8697a61577311c1e89c72486b6d190f1ddd155a14612b71b189089"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/inc/viewdata.ts",
+      "sha256": "cedd2bf7106d63d5fb03add7a0e7ace1db764d63be25c9e9322663c3ee2c04d8"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+      "sha256": "2e95b92f7df7f3aee6f5429236a07ac0cd229782500e1dd68c4e43b486c33bb0"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.ts",
+      "sha256": "de7823a31dcd8f3f10db39109e654b648523f2e2a89a0fabfab9ee4cc31e56ae"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/ApplyAttributesOperation.ts",
+      "sha256": "e7e5e5f6c9604abed23d5db076d2e25309444494aa6f6751968a8383eb3b27ad"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+      "sha256": "ad6355bd1f0621f269330813fd5dde4f706b62c4d1e5fb5ecf753b524bdc47dd"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts",
+      "sha256": "21ba5b3b3b5444dfb2c826825713e403302f2f00adc009f46d34f739e94d0b40"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts",
+      "sha256": "d065a635b469f584bde91450f2018dd9827872d0c14ea0a523e540fa5bafb818"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/Operation.ts",
+      "sha256": "8d5dea8afed745e3278e37f2d7816c7a12229287290105f9222f78d569aac8ee"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/SetFormulaOperation.ts",
+      "sha256": "6f87ee6af314c0ce21383df45abab23788293d2cf93916201a907912fa95e736"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk.ts",
+      "sha256": "78eedde9b1a7cb977934c121aee2877514365141a24f1955761b41c0369ba9c7"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk2.ts",
+      "sha256": "53626a0ed2726c2c1213fe97803dba081a9b7fd642b28ea15d169affd4ccc4e6"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "sha256": "924c406a14937e426f23be93cb4a6d68bfd5025009e29b5a351eb284ce226c47"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undocell.test.ts",
+      "sha256": "32184bc223b802acda1bd64785e0da34eddbe00cd4c736d60298199593b17c26"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undocell.ts",
+      "sha256": "86adea466a641485fb4922917b38677905b2965d76a9e1827741c1991ed52ba3"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/border-history.test.ts",
+      "sha256": "f21aee272ce74c1f8e1f6db41e7a371b7c563641393df37c62f03ad3664c30b4"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+      "sha256": "76b6f3ca20faf8996cca613f54af1b85ad146efc167fdb39790fd39d38e00292"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/cellsh3.ts",
+      "sha256": "eb7f89095f3c8cbaea08c2ee68e147f546eb7ba18eaca4a26102cc6cf809ebdd"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/colrowba.test.ts",
+      "sha256": "961220685f1b653c17e91bb527acb5414e96b497655ef2b526c657ba7dce8e61"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/colrowba.ts",
+      "sha256": "59b724f3ca1209cd52bce568858bdc194500f567db351ab430d258f4b1a33f93"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/column-width.test.ts",
+      "sha256": "5813ebd83ac382f4c36ffd61bb6c0c7d10dc230ea1dbeea870042ba704910e94"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/deselect.test.ts",
+      "sha256": "afd1b56c187b7ca123c6fb3ecfe6ae359dc3e395c7e2c2398313d4fc5d96ca8d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/format-boundaries.test.ts",
+      "sha256": "ef02084ad49f97a3b375d71140df0bb3b17010f5cbc7e907b4693e2e66c4bbc4"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "905add3f2d9cd70f24552fee1b07b26beac9b5f77191e35f1ba3cfa657bb2d9a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+      "sha256": "b70417b379368beca14688876df3f34615a6da340202db6644f0a8884f06aa1a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.test.ts",
+      "sha256": "c57ff9d303866d496e54d372fa9f63b8c908a88a49f9f9c48c85c24573155d53"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "59ac5457ef6182fd970cdd7acfe21adcc98e2eabc68dc1ec3a8051de0d4f8fba"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+      "sha256": "b06edd73d8b833c999627a263caa1ce4e6b922c844dde38c77b9b4d9519c621f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwshc.ts",
+      "sha256": "f02ad8c42e482f5e0b42a104cf2756d6e25495a844c7617c558fe1d9f3639698"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/view-options.test.ts",
+      "sha256": "656f05dd0c7785678641d59cccb3aa9f3dc0b567323b267374b81158721d574f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewdata.test.ts",
+      "sha256": "cef68c3a58a0efed2224f31d349e6d8fd5d59f60295863ed33db39c428153d1a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewdata.ts",
+      "sha256": "2beef9997efa8c2b26ac0b05cda764762ffe475626acfb3d1e4956167fa0a2b4"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "sha256": "0cc29642848a49c17a43c1a72638d6ab4526d015a78d6e7b863cc4b25dda5b23"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "c8650cbb1f4386b79e212778eee5f450c8bdbe9bb188cc9367ee4b129859927b"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewutil.ts",
+      "sha256": "461f242ba62daf585a03373bb485a8444c1a3645a1c3074ec3a2a77156c2aab7"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+      "sha256": "fa9afcbe1f3918960c2b98b89321476bc40b990e201de46c1cb60b3f10f0ffb9"
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+      "sha256": "b72605b8e75e7201fac34f7933d28aeabb492ed9295abb6ad64432b5eb00528c"
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/popupmenu/sheettab.ts",
+      "sha256": "3a9ae9af64ddb19544b4960474c9373fc689bf79b4a000249a376aee2a0de8fc"
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/toolbar/formatobjectbar.ts",
+      "sha256": "cae77006af3c94e7f96d192e2d901b3055f3eec1769c2bfee9fdcf2fb75fecb3"
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+      "sha256": "45d8727a00fb82534367933787f6d38a691a226496b5fdcf5f4db4045b8dca6a"
+    },
+    {
+      "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "sha256": "644653c402ac2404693f3649b77aced242b0685bfb82e3236e1d4e13ffe7b917"
+    },
+    {
+      "path": "apps/office/src/svl/inc/zforlist.ts",
+      "sha256": "72d0931fef7c4b5cf40f604c47f04b1201162667e5c2c26afec2737248f678eb"
+    }
+  ],
+  "archiveSha256": "b3f5d37ad86d4958db4da72cd060b363c4ead6eaa9acde96279748a392a6ddfe",
+  "rawPaths": [
+    "output/playwright/task75-acceptance-calc-results.json",
+    "output/playwright/task75-acceptance-calc.log",
+    "output/playwright/task75-acceptance-calc-coverage/coverage-final.json",
+    "output/playwright/task75-acceptance-calc-coverage/coverage-summary.json",
+    "output/playwright/task75-acceptance-source-hashes.json",
+    "output/playwright/task75-final-browser.log",
+    "output/playwright/task75-final-build.log",
+    "output/playwright/task75-final-static.log",
+    "output/playwright/task75-final-routing.log",
+    "output/playwright/task75-final-source.log",
+    "output/playwright/task75-final-provenance-repair.log",
+    "output/playwright/task75-final-registry.log",
+    "output/playwright/task75-final-format.log",
+    "output/playwright/task75-acceptance-lint.log",
+    "output/playwright/task75-acceptance-types.log",
+    "output/playwright/task75-acceptance-docs.log",
+    "output/playwright/task75-acceptance-size.log",
+    "output/playwright/task75-final-owner.log",
+    "output/playwright/task75-final-owner-results.json",
+    "output/playwright/task75-zero-tail-validation.log",
+    "output/playwright/task75-final-profile.log",
+    "output/playwright/task75-final-profile-results.json",
+    "output/playwright/task75-unchanged-full-profile-reuse.json",
+    "output/playwright/task75-final-path-budget.json",
+    "output/playwright/task75-audit-admitted-ii-profile.ts",
+    "output/playwright/task75-admitted-ii-profile.json"
+  ],
+  "approvedScopeBudget": 200,
+  "sourceTestRegistryPaths": 184,
+  "additionalAuditProbePaths": 1,
+  "totalCountedScopePaths": 185,
+  "calcAndRelated": {
+    "tests": 796,
+    "files": 202,
+    "failed": 0,
+    "skipped": 0,
+    "exit": 0,
+    "rawCoverage": {
+      "lines": {
+        "total": 12838,
+        "covered": 12838,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14335,
+        "covered": 14335,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2439,
+        "covered": 2439,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 8768,
+        "covered": 8768,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "coverageOwners": 160
+  },
+  "browser": {
+    "cases": 6,
+    "result": "pass",
+    "realms": "Chromium and actual DOM-free Worker",
+    "scope": "group code/listeners,all four document modes,local range and aggregate formulas,ODS,style association and EditEngine transfer"
+  },
+  "gates": "Production build,static smoke,typecheck,scoped lint,format,JSDoc,size,boundaries,source-tree,source provenance,Calc registry,resources,routing and doctor pass. One evidence-path schema mismatch in the first provenance run is retained;repaired record references pass without source/checker changes.",
+  "fullCheckpointReuse": {
+    "archive": "../full-checkpoint",
+    "fullTests": 18359,
+    "files": 1191,
+    "toolingTests": 137,
+    "inventoryTests": 124,
+    "browserCases": 457,
+    "unchangedNonCalcRuntimeOwners": 799,
+    "scope": "Original complete all-app checkpoint plus recorded browser/inventory test repairs. All799non-Calc runtime hashes remain identical. This is version-valid reuse,not another full-suite execution on changed Calc source."
+  },
+  "relatedSharedStyle": {
+    "archive": "../progress-modes",
+    "tests": 22,
+    "files": 4,
+    "scope": "Unmodified shared style/model/first-import owners;prior current-source results remain valid."
+  },
+  "sourceProof": "../accepted-profile/README.md with real pure classification audit and explicit supported-domain limits",
+  "coverageAccounting": "All current measured files are raw100with unchanged thresholds,no ignores or exclusions. Previous768profile totals14374statements/8819branches/2441functions/12865lines differ from final14335/8768/2439/12838because proven duplicate conditions and unadmitted private matrix/function paths were omitted.28genuine new scenarios cover native public argument/lifetime/ownership and malformed-expression behavior. No broad native-parity claim follows from coverage.",
+  "limits": "Existing scalar/string/error/local-reference/aggregate slice. Matrix evaluation,full Calc styles/formatter,external/named/3D/device/OpenCL services and clipboard reset/resource sharing/paste remain outside75. Full74AutoSum/UI and dependent76 remain open;the large5000-row ODS autosave/export-limit issue is unchanged.",
+  "stopRule": "Close75after evaluator/verification/persistence gates,then pause goal before starting any new task."
+}

@@ -1,0 +1,300 @@
+{
+  "task": "202610221740-JMM9C5",
+  "archiveSha256": "c1f070575e6f784ef4927d710ac52d89a466ccfe92622ce4704a67c5b1495634",
+  "sources": [
+    {
+      "path": "apps/office/e2e/calc/aggregate-formulas.spec.ts",
+      "sha256": "9a78108aaedb88ae6c51194372c9b14cf60660cab57038bbdaed52537d7d3be9"
+    },
+    {
+      "path": "apps/office/src/formula/inc/core_resource.ts",
+      "sha256": "1d8b2753072a5ec767f475de9ac0d1a60fc82d035cb38fddcb8aa655596ff5bc"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+      "sha256": "68c88acdf7879ec9614f58bf245b5481681c1411e2233b9f74aa6c89d4b4105b"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts",
+      "sha256": "9fdaceb86107b51e0712882db6de1e2ec7fe933403aa2ef74eba9c79293143b2"
+    },
+    {
+      "path": "apps/office/src/formula/source/core/api/compiler-output.test.ts",
+      "sha256": "ce9aef6bcdffb3b06219203d8cae1bf414c8b6beba04cec7937e35d66a3f845b"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+      "sha256": "ffa60560a1ba9ebd8ce5f00aa1ce794c4fe9baaa52beb5d8f04d6b13e89bfb70"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "sha256": "2f19d7f4ee803ab70c6404a5d9442f632b68edc5b0dbe244b39eebb467457f0c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-alignment.test.tsx",
+      "sha256": "d1e74a9717c4d30932aa1a5b75967cbf87ca863dafadcd780b226f4406671b80"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-boundary-controls.test.tsx",
+      "sha256": "6e3e23822571df83f0720980d6c19492f5982850f957caed17a50d1e3bf3c9d5"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+      "sha256": "153f69f0fd179aed4f2784cdd07e064de6af65517bb049a9fda6303803641685"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+      "sha256": "8548bb2444ca01a049de098c19a6541403ef7e81f95872fbc80e238ebb3d2ad2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+      "sha256": "9e1ecb6d60490159f978f27309bedef54f0d6f5183791a7367fe59d3fb4a41ce"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-color.test.tsx",
+      "sha256": "03f80fad6920bb25141ad29701ce7b3fbdb9c2739f2b2d03be1b14f1615fc7d6"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+      "sha256": "b1971ed6d893733d96ef9d7de3f61d213ef7fd5275d64ce6abd7a0701469e892"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
+      "sha256": "ba683e7d36f9f533418fa58abd1bfe66246752b7adab15129c745c15c8a6f501"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+      "sha256": "1e10aad7773ad962ef3f48514b279d85f0e30f6e84b47b805feaacfac351b89c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+      "sha256": "a957c71bc1e9ff7692f8e745af56ddebabc654da9e9138f09f4aab41c23601c4"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+      "sha256": "87cfdce3a697e181d1e68f992d7f23f7160a60da23c3076d40898054a42a87e2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+      "sha256": "d134235365f2d029755cfb370072599257294e8add2f831c094ef0df466f0102"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+      "sha256": "704cde837deef304231c69a7eb104a671e6086600a14a6093653878081136b05"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+      "sha256": "cbacde7135a5ce4474928672017d9862c0f1abe543ee4971fb2f9c85669c7ffc"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+      "sha256": "50348805a0fe081c82c6386af38fbd54466d91745dc6e10b92efc2f3d18be89d"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+      "sha256": "81e1d98f725d806b824d6abe1d9f042ecdb4aa847cd90cd802fe2cbb38a4c57c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+      "sha256": "7123a86c1ae38ab5f6b0d40ed00a7e5e4aca7c46f84bb8bb4a4a0a65b068b0e2"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+      "sha256": "8e0f56b0bfe5ca980c07366ed060e3e5962b2c1ad5c81c8fd895564a674d1867"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+      "sha256": "7854115f12603d3a628c6d4088dd441f134de9512c345ac37ff6aa0b6aa945c9"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+      "sha256": "a89c04e37a1f2060c90ae6ab77545d51f2a0d1af4ed8871edd31949ce6ab189f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "sha256": "8b3b295a63336dc68cc2082857977b4c11f1625868ada3cd0b571393edbf1fe4"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-aggregate-ods.test.ts",
+      "sha256": "60152f659fea617944d711fdaace3e2cff357ec99a17b0e1644e530d669d766f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/kahan.test.ts",
+      "sha256": "5b5c0a7b6dcb70d95343f9cd75332572dbb4c4c0d521cc3c3e149c836ad45cb1"
+    },
+    {
+      "path": "apps/office/src/sc/inc/kahan.ts",
+      "sha256": "4f8ddd0ed2bfed0d780ce5e35cd77999ec577f1aeaf0329922723cf7ac83a203"
+    },
+    {
+      "path": "apps/office/src/sc/inc/native-kahan-cases.json",
+      "sha256": "12b2115a8445c6f768ef8f0f8f0fa5629fd2d6cf2b813578bc27dcccb021aaab"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue.ts",
+      "sha256": "6f21eb7a60adcf350520fbd947ca4353ca31ae15b5e9a24362abc1421d472fbe"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/aggregate-formula.test.ts",
+      "sha256": "46d01928c2e5788c00d882cc76e3bf0c78a0ea4fa604b2b58dfbef70733ecd94"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "sha256": "12f0c79896fad93bce6a0a41d8b3374c6483d91daa7bd5185b6bdc2a654561a7"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr4.ts",
+      "sha256": "7e763e5d24b1ed5df7c39a348e41f58107411dd36296e743c020116095a30900"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "sha256": "48f757389bcfe4ea1a8b41af2870bb32036ed297be337d5b15421ca5d700c839"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+      "sha256": "96a0fcba8f50924ce590b4b876524deea655faa6ccd644b4169c83513f9f3a3a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "bf29d37792612ed8c268f7fed162c7655faf04ebaa4d6bea2bb4c7bd4a82468a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/deselect.test.ts",
+      "sha256": "afd1b56c187b7ca123c6fb3ecfe6ae359dc3e395c7e2c2398313d4fc5d96ca8d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+      "sha256": "fa9afcbe1f3918960c2b98b89321476bc40b990e201de46c1cb60b3f10f0ffb9"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "82f6fc7c694bdcb7bec222de06aab42515f4c64922b4fe76ca05a44777d6ab71"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/kahan.ts.json",
+      "sha256": "d21c96bbe136f9d2cc3a60372f464ab62d4df6c40c5b1ca3932f8a40e0e7a11c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/cellvalue.ts.json",
+      "sha256": "2f79363ba59410ab4276d6b99a83b32797515aec7a7dd3beb30a91059813fc91"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/compiler.ts.json",
+      "sha256": "6fec4bfa84ff9ce15ca59c3976e38443856b5935e82fb71f3945558f4cd8b4f2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/interpr4.ts.json",
+      "sha256": "17a581551c2582547486cdd6989b77e95930378837982a77c09bab183be834d2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/token.ts.json",
+      "sha256": "190b3e5f0038debfa43334e6db733052074431abd97be33d37fc47bd026c1710"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/kahan.ts.json",
+      "sha256": "05c11773bb1985cee49aea11c56b814901080f3d23c3cf64e64a5788d6a75297"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/cellvalue.ts.json",
+      "sha256": "996c1f9ba0e4d473e74f0950f92cd8013d322dd703589db3964bd2d10f2ce301"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/compiler.ts.json",
+      "sha256": "5858b7c2b9c4ef63e41122724ae317b35f598a2970680b0f523ef06bf46233cd"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/interpr4.ts.json",
+      "sha256": "63525090beb79f664384f02b5609a1452eeb778e90d9608d85d570a498926ca0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/token.ts.json",
+      "sha256": "53bdb26c15bf3ea465329913751dcf318bbb7e88e125d74143f046876a37d632"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/formula/inc/core_resource.ts.json",
+      "sha256": "a1d26585560f67103c3e3ab380dc71aadaf53af953f3acca2b739b285ccb620d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "ed19ccf429387d6f5dfc073286d0fba0706020be813fe9fd7c60fe06c853d6ac"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/formula/inc/core_resource.ts.json",
+      "sha256": "8da826ba3232c36904bcbd8655522ac5f72a0b97eabfedaf185a97862fd4323f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/formula/source/core/api/FormulaCompiler.ts.json",
+      "sha256": "5a1da6f30db2b63c26e983035641905ba2f27b9f811577c3b208d4de7deac199"
+    },
+    {
+      "path": "scripts/calc-kahan-native-probe.mjs",
+      "sha256": "9d65bd05f34cec2a293fdc0e2347f879d5c4a4f9b5f7a31a12f17eca7931fcab"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task72-calc-results.json",
+    "output/playwright/task72-calc-coverage/coverage-final.json",
+    "output/playwright/task72-calc-coverage/coverage-summary.json",
+    "output/playwright/task72-calc-tests.log",
+    "output/playwright/task72-shared-results.json",
+    "output/playwright/task72-shared-coverage/coverage-final.json",
+    "output/playwright/task72-shared-coverage/coverage-summary.json",
+    "output/playwright/task72-shared-tests.log",
+    "output/playwright/task72-e2e.log",
+    "output/playwright/task72-gate-exits.json",
+    "output/playwright/task72-run-gates.mjs",
+    "output/playwright/task72-gates.log",
+    "output/playwright/task72-browser-sum.txt",
+    "output/playwright/task72-browser-changed.txt",
+    "output/playwright/task72-browser-undo.txt",
+    "output/playwright/task72-browser-redo.txt",
+    "output/playwright/task72-browser-saved.txt",
+    "output/playwright/task72-browser-saved.png",
+    "output/playwright/task72-browser-open-list.txt",
+    "output/playwright/task72-browser-reopened.txt",
+    "output/playwright/task72-browser-reopened.png",
+    "output/playwright/calc-kahan-native/driver.cpp",
+    "output/playwright/calc-kahan-native/manifest.json",
+    "output/playwright/calc-kahan-native/normal-caller.values",
+    "output/playwright/calc-kahan-native/asan-caller.values",
+    "output/playwright/calc-kahan-native/asan-caller.stderr",
+    "output/playwright/task72-native-kahan-final-write.log",
+    "vendor/libreoffice-reference/sc/inc/kahan.hxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/interpr6.cxx",
+    "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+    "vendor/libreoffice-reference/formula/source/core/api/FormulaCompiler.cxx",
+    "output/playwright/task72-gate-lint.log",
+    "output/playwright/task72-gate-format.log",
+    "output/playwright/task72-gate-dependencies.log",
+    "output/playwright/task72-gate-docs.log",
+    "output/playwright/task72-gate-size.log",
+    "output/playwright/task72-gate-tree.log",
+    "output/playwright/task72-gate-types.log",
+    "output/playwright/task72-gate-provenance.log",
+    "output/playwright/task72-gate-calc-resources.log",
+    "output/playwright/task72-gate-registry.log",
+    "output/playwright/task72-gate-writer-resources.log",
+    "output/playwright/task72-gate-static.log",
+    "output/playwright/task72-gate-routing.log",
+    "output/playwright/task72-gate-doctor.log",
+    "output/playwright/task72-gate-native.log"
+  ],
+  "scope": "Native aggregate variable-argument compiler and portable Kahan scalar/single-reference interpreter slice;actual browser input,history,live dependencies,ODS and primary persistence. Native range/area broadcasts remain dependent73. No full formula-engine parity claim.",
+  "verification": {
+    "calc": {
+      "tests": 617,
+      "files": 183,
+      "owners": 136
+    },
+    "shared": {
+      "tests": 46,
+      "files": 12,
+      "owners": 2
+    },
+    "e2e": 2,
+    "gates": 15,
+    "nativeRows": 2050,
+    "nativeObjects": 138
+  },
+  "limitations": "Original human5000-row filename remains unspecified;the existing independent import/autosave/reopen regression is included in Calc. Nondefault aggregate services,other functions,matrix/range/named/external operands and localized string conversion are unsupported. Original portable cancellation behavior is preserved and documented in CALC-249."
+}

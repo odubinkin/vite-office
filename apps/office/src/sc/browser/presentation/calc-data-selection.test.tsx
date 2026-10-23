@@ -111,7 +111,7 @@ it("rejects unsupported drafts and commits admitted input before either selectio
   try {
     for (const command of [".uno:SelectAll", ".uno:SelectData"]) {
       c.Select(1, 1);
-      c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+      c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
       expect(d.Execute(command)).toMatchObject({ status: "executed", value: false });
       c.Header("column", 1);
       c.Header("row", 1);

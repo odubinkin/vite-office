@@ -1,6 +1,12 @@
-/** @fileoverview Numeric/local-A1 native and ODFF compilation. Names, cross-sheet/range references, functions, string literals and localized input formatting remain unsupported. */
+/** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet references,other functions and localized input formatting remain unsupported. */
+import { ScParameterClassification } from "../inc/parclass";
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
-import { FormulaByteToken, FormulaSpaceToken } from "../../../../formula/inc/token";
+import {
+  FormulaByteToken,
+  FormulaSpaceToken,
+  FormulaMissingToken,
+  StackVar,
+} from "../../../../formula/inc/token";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
@@ -11,12 +17,12 @@ import {
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScDocument } from "../../../inc/document";
-import { ScSingleRefData } from "../../../inc/refdata";
+import { ScSingleRefData, ScComplexRefData } from "../../../inc/refdata";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ScRefFlags, ScAddress } from "../../../inc/address";
+import { ScRefFlags, ScAddress, ScRange } from "../../../inc/address";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../../formula/inc/core_resource";
-import { ScSingleRefToken } from "../../../inc/token";
+import { ScSingleRefToken, ScDoubleRefToken, extendRangeReference } from "../../../inc/token";
 import type { FormulaToken } from "../../../../formula/inc/token";
 
 const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
@@ -33,19 +39,181 @@ const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
       ]) => [symbol, op],
     ),
 );
+// Existing per-realm compiler symbol bootstrap binds the classification part of
+// native ScGlobal::Init after symbols,without a replacement global service.
+ScParameterClassification.Init();
 /** Actual shared grammar with the Calc first-error hook and bounded numeric scanner. */
 export class ScCompiler extends FormulaCompiler {
+  /** Original scalar implicit-intersection branch for the consumed local-sheet reference convention. 3D cases remain unported. @param range - Non-singleton native range. @param address - Selected address output. @param position - Formula position. @returns Unique source position. */
+  static DoubleRefToPosSingleRefScalarCase(
+    range: ScRange,
+    address: ScAddress,
+    position: ScAddress,
+  ): boolean {
+    if (range.aStart.Tab() !== range.aEnd.Tab() || range.aStart.Tab() !== position.Tab())
+      throw new Error("3D implicit intersection is not implemented");
+    if (range.aStart.Col() <= position.Col() && position.Col() <= range.aEnd.Col()) {
+      if (range.aStart.Row() === range.aEnd.Row()) {
+        address.Set(position.Col(), range.aStart.Row(), range.aStart.Tab());
+        return true;
+      }
+    } else if (range.aStart.Row() <= position.Row() && position.Row() <= range.aEnd.Row()) {
+      if (range.aStart.Col() === range.aEnd.Col()) {
+        address.Set(range.aStart.Col(), position.Row(), range.aStart.Tab());
+        return true;
+      }
+    }
+    return false;
+  }
   readonly aPos: ScAddress;
-  /** Native document/position/array-or-grammar constructor subset. @param rDoc - Document. @param position - Formula position. @param arrayOrGrammar - Existing array or scanning grammar. @param grammar - Existing-array grammar. @returns Compiler. */
+  /** Original document/source-scanning constructor family. @param doc - Actual document. @param position - Formula origin. @param grammar - Native grammar or unspecified. @param computeII - Original implicit-intersection switch. @param matrixFlag - Original matrix context. @returns Compiler. */
+  constructor(
+    doc: ScDocument,
+    position: ScAddress,
+    grammar?: Grammar,
+    computeII?: boolean,
+    matrixFlag?: boolean,
+  );
+  /** Original existing-token-array constructor family. @param doc - Actual document. @param position - Origin. @param array - Actual code owner. @param grammar - Native grammar or unspecified. @param computeII - II switch. @param matrixFlag - Matrix context. @returns Compiler. */
+  constructor(
+    doc: ScDocument,
+    position: ScAddress,
+    array: ScTokenArray,
+    grammar?: Grammar,
+    computeII?: boolean,
+    matrixFlag?: boolean,
+  );
+  /** Binds the original overload values and unspecified-grammar resolution before SetGrammar. @param rDoc - Actual document. @param position - Origin. @param arrayOrGrammar - Existing array or grammar. @param grammarOrCompute - Array grammar or scanning II flag. @param computeOrMatrix - Array II flag or scanning matrix flag. @param matrixFlag - Array matrix context. @returns Compiler. */
   constructor(
     private readonly rDoc: ScDocument,
     position: ScAddress,
-    arrayOrGrammar: ScTokenArray | Grammar,
-    grammar?: Grammar,
+    arrayOrGrammar: ScTokenArray | Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED,
+    grammarOrCompute: Grammar | boolean = FormulaGrammar.Grammar.GRAM_UNSPECIFIED,
+    computeOrMatrix = false,
+    matrixFlag = false,
   ) {
-    super(arrayOrGrammar instanceof ScTokenArray ? arrayOrGrammar : new ScTokenArray(rDoc));
+    const existing = arrayOrGrammar instanceof ScTokenArray;
+    super(
+      existing ? arrayOrGrammar : new ScTokenArray(rDoc),
+      existing ? computeOrMatrix : typeof grammarOrCompute === "boolean" ? grammarOrCompute : false,
+      existing ? matrixFlag : computeOrMatrix,
+    );
     this.aPos = new ScAddress(position);
-    this.SetGrammar(arrayOrGrammar instanceof ScTokenArray ? (grammar as Grammar) : arrayOrGrammar);
+    const grammar = existing ? (grammarOrCompute as Grammar) : arrayOrGrammar;
+    this.SetGrammar(
+      grammar === FormulaGrammar.Grammar.GRAM_UNSPECIFIED ? rDoc.GetGrammar() : grammar,
+    );
+  }
+  private readonly mPendingImplicitIntersectionOptimizations: {
+    parameterLocation: readonly [FormulaToken[], number];
+    parameter: FormulaToken;
+    operation: FormulaToken;
+  }[] = [];
+  private readonly mUnhandledPossibleImplicitIntersections = new Set<FormulaToken>();
+  /** Original II hook for the admitted scalar grammar. Every shared-parser call is already gated by mbComputeII;native array/function exclusions remain at admission. @param token - Operation. @param parameters - Borrowed actual RPN slot locations. @param count - Argument count. @returns Nothing. */
+  protected override HandleIIOpCode(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): void {
+    this.HandleIIOpCodeInternal(token, parameters, count);
+  }
+  /** Original pointer validation,candidate scheduling and aggregate reference bookkeeping for the accepted opcode slice. @param token - Operation. @param parameters - Actual RPN locations. @param count - Native count. @returns Handled. */
+  private HandleIIOpCodeInternal(
+    token: FormulaToken,
+    parameters: readonly (readonly [FormulaToken[], number])[] | null,
+    count: number,
+  ): boolean {
+    for (let index = 0; index < count; index++) {
+      const location = parameters?.[index];
+      if (!location || !location[0][location[1]]) return false;
+    }
+    const opcode = token.GetOpCode();
+    if (opcode === OpCode.ocPush) {
+      if (token.GetType() === StackVar.svDoubleRef)
+        this.mUnhandledPossibleImplicitIntersections.add(token);
+      return true;
+    }
+    if (
+      opcode >= OpCode.ocStartBinaryOperators &&
+      opcode < OpCode.ocStopBinaryOperators &&
+      opcode !== OpCode.ocAnd &&
+      opcode !== OpCode.ocOr
+    ) {
+      // The admitted binary grammar supplies exactly two scalar/array-value parameters.
+      // Array contexts and matrix operands are rejected before parsing.
+      const locations = parameters as readonly (readonly [FormulaToken[], number])[],
+        first = locations[0] as readonly [FormulaToken[], number],
+        second = locations[1] as readonly [FormulaToken[], number];
+      if ((first[0][first[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
+        this.addPendingIntersection(first, token);
+      if ((second[0][second[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
+        this.addPendingIntersection(second, token);
+      return true;
+    }
+    if (
+      (opcode >= OpCode.ocStartUnaryOperators && opcode < OpCode.ocStopUnaryOperators) ||
+      opcode === OpCode.ocPercentSign
+    ) {
+      // Unary negation and percent have one scalar/array-value parameter in native data.
+      const location = (
+        parameters as readonly (readonly [FormulaToken[], number])[]
+      )[0] as readonly [FormulaToken[], number];
+      if ((location[0][location[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
+        this.addPendingIntersection(location, token);
+      return true;
+    }
+    // The admitted SUM,SUMSQ,PRODUCT,AVERAGE parameters are all reference-like.
+    // Other native function families remain outside scalar admission.
+    for (let index = 0; index < count; index++) {
+      const location = (parameters as readonly (readonly [FormulaToken[], number])[])[
+        index
+      ] as readonly [FormulaToken[], number];
+      this.mUnhandledPossibleImplicitIntersections.delete(location[0][location[1]] as FormulaToken);
+    }
+    return true;
+  }
+
+  /** Original PendingImplicitIntersectionOptimization member capture;the location borrows the real code buffer. @param location - Actual slot. @param operation - Operation. @returns Nothing. */
+  private addPendingIntersection(
+    location: readonly [FormulaToken[], number],
+    operation: FormulaToken,
+  ): void {
+    this.mPendingImplicitIntersectionOptimizations.push({
+      parameterLocation: location,
+      parameter: location[0][location[1]] as FormulaToken,
+      operation,
+    });
+  }
+  /** Original delayed optimization runs after the admitted scalar code buffer is complete. @returns Nothing. */
+  protected override PostProcessCode(): void {
+    // Bad expressions can capture one slot twice;retain the native identity
+    // check after the first replacement. A surviving non-null slot is in this
+    // same dense code buffer,so the native pointer-end check is implied.
+    // Admission forbids forced-array context propagation and matrix functions.
+    for (const item of this.mPendingImplicitIntersectionOptimizations) {
+      const [buffer, offset] = item.parameterLocation;
+      if (buffer[offset] !== item.parameter) continue;
+      this.ReplaceDoubleRefII(item.parameterLocation);
+    }
+    this.mPendingImplicitIntersectionOptimizations.length = 0;
+  }
+  /** Original local-sheet double-to-single optimization preserves lexical tokens and skips fully absolute rows,trivial ranges and ambiguous intersections. @param location - Actual RPN slot. @returns Nothing. */
+  private ReplaceDoubleRefII(location: readonly [FormulaToken[], number]): void {
+    const token = location[0][location[1]] as ScDoubleRefToken,
+      range = token.GetDoubleRef();
+    if (!range.Ref1.IsRowRel() && !range.Ref2.IsRowRel()) return;
+    const absolute = range.toAbs(this.rDoc, this.aPos);
+    if (absolute.aStart.equals(absolute.aEnd)) return;
+    const address = new ScAddress();
+    if (!ScCompiler.DoubleRefToPosSingleRefScalarCase(absolute, address, this.aPos)) return;
+    const reference = new ScSingleRefData();
+    reference.InitFlags();
+    reference.SetColRel(range.Ref1.IsColRel());
+    reference.SetRowRel(true);
+    reference.SetTabRel(range.Ref1.IsTabRel());
+    reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
+    location[0][location[1]] = new ScSingleRefToken(this.rDoc.GetSheetLimits(), reference);
   }
   /** Selects the implemented native Calc grammar and reference convention. @param grammar - Grammar. @returns Nothing. */
   SetGrammar(grammar: Grammar): void {
@@ -58,15 +226,13 @@ export class ScCompiler extends FormulaCompiler {
       throw new Error("Formula language or reference convention is not implemented");
     this.meGrammar = grammar;
   }
-  /** Emits native ODFF bracket/dot/absolute flags from the actual reference at the formula position. @param token - Single-reference token. @returns Reference text. */
-  protected override CreateStringFromSingleRef(token: FormulaToken): string {
-    const reference = (token as ScSingleRefToken).GetSingleRef();
+  /** Original local native/ODF one-reference convention operation. @param reference - Actual reference data. @param odf - ODF convention. @param singleton - Native none/column/row display. @returns Reference fragment. */
+  private MakeOneRefStrImpl(
+    reference: ScSingleRefData,
+    odf: boolean,
+    singleton: 0 | 1 | 2,
+  ): string {
     const address = reference.toAbs(this.rDoc, this.aPos);
-    const odf =
-      FormulaGrammar.extractRefConvention(this.meGrammar) ===
-      FormulaGrammar.AddressConvention.CONV_ODF;
-    if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
-      return "[#REF!]";
     if (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
       throw new Error("Sheet-qualified formula output is not implemented");
     let column = address.Col() + 1,
@@ -76,18 +242,104 @@ export class ScCompiler extends FormulaCompiler {
       letters = String.fromCharCode(65 + (column % 26)) + letters;
       column = Math.floor(column / 26);
     }
-    return (
-      (odf ? "[." : "") +
-      (reference.IsColRel() ? "" : "$") +
-      (reference.IsColDeleted() || !this.rDoc.GetSheetLimits().ValidCol(address.Col())
-        ? "#REF!"
-        : letters) +
-      (reference.IsRowRel() ? "" : "$") +
-      (reference.IsRowDeleted() || !this.rDoc.GetSheetLimits().ValidRow(address.Row())
-        ? "#REF!"
-        : address.Row() + 1) +
-      (odf ? "]" : "")
-    );
+    let output = odf ? "." : "";
+    if (singleton !== 2)
+      output +=
+        (reference.IsColRel() ? "" : "$") +
+        (reference.IsColDeleted() || !this.rDoc.ValidCol(address.Col()) ? "#REF!" : letters);
+    if (singleton !== 1)
+      output +=
+        (reference.IsRowRel() ? "" : "$") +
+        (reference.IsRowDeleted() || !this.rDoc.ValidRow(address.Row())
+          ? "#REF!"
+          : address.Row() + 1);
+    return output;
+  }
+  /** Emits the actual single-reference convention and native ODFF invalid-reference wrapper. @param token - Source token. @returns Reference text. */
+  protected override CreateStringFromSingleRef(token: FormulaToken): string {
+    const reference = (token as ScSingleRefToken).GetSingleRef(),
+      address = reference.toAbs(this.rDoc, this.aPos),
+      odf =
+        FormulaGrammar.extractRefConvention(this.meGrammar) ===
+        FormulaGrammar.AddressConvention.CONV_ODF;
+    if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
+      return "[#REF!]";
+    const value = this.MakeOneRefStrImpl(reference, odf, 0);
+    return odf ? "[" + value + "]" : value;
+  }
+  /** Emits original two-endpoint range text and entire-axis display with retained relative/absolute flags. @param token - Actual range token. @returns Range source. */
+  protected override CreateStringFromDoubleRef(token: FormulaToken): string {
+    const reference = (token as ScDoubleRefToken).GetDoubleRef(),
+      a = reference.Ref1.toAbs(this.rDoc, this.aPos),
+      b = reference.Ref2.toAbs(this.rDoc, this.aPos),
+      limits = this.rDoc.GetSheetLimits(),
+      odf =
+        FormulaGrammar.extractRefConvention(this.meGrammar) ===
+        FormulaGrammar.AddressConvention.CONV_ODF;
+    if (odf && (reference.IsDeleted() || !limits.ValidAddress(a) || !limits.ValidAddress(b)))
+      return "[#REF!]";
+    let singleton: 0 | 1 | 2 = 0;
+    if (
+      limits.ValidColRow(a.Col(), a.Row()) &&
+      limits.ValidColRow(b.Col(), b.Row()) &&
+      !reference.IsDeleted()
+    ) {
+      const named = this.mpArr.IsFromRangeName();
+      if (
+        reference.IsEntireCol(limits) ||
+        (!named &&
+          a.Row() === 0 &&
+          b.Row() === this.rDoc.MaxRow() &&
+          reference.Ref1.IsRowRel() &&
+          reference.Ref2.IsRowRel())
+      )
+        singleton = 1;
+      else if (
+        reference.IsEntireRow(limits) ||
+        (!named &&
+          a.Col() === 0 &&
+          b.Col() === this.rDoc.MaxCol() &&
+          reference.Ref1.IsColRel() &&
+          reference.Ref2.IsColRel())
+      )
+        singleton = 2;
+    }
+    const value =
+      this.MakeOneRefStrImpl(reference.Ref1, odf, singleton) +
+      ":" +
+      this.MakeOneRefStrImpl(reference.Ref2, odf, singleton);
+    return odf ? "[" + value + "]" : value;
+  }
+  /** Original virtual range merge delegates to existing native token extension. @param left - Left token. @param right - Right token. @returns Extended token or null. */
+  protected override ExtendRangeReference(
+    left: FormulaToken,
+    right: FormulaToken,
+  ): FormulaToken | null {
+    return extendRangeReference(this.rDoc.GetSheetLimits(), left, right, this.aPos, true);
+  }
+  /** Binds the actual local range parser flags to native complex reference data. @param name - Unwrapped range source. @returns Parsed range. */
+  private ParseDoubleReference(name: string): boolean {
+    const range = new ScRange(this.aPos, this.aPos),
+      input = unicode(name);
+    let flags: ScRefFlags;
+    try {
+      flags = range.Parse(input, this.rDoc, ScAddress.detailsOOOa1);
+    } finally {
+      input.dispose();
+    }
+    if (!(flags & ScRefFlags.VALID)) throw new Error("Range/name fallback is not implemented");
+    const reference = new ScComplexRefData();
+    reference.InitRange(range);
+    reference.Ref1.SetColRel(!(flags & ScRefFlags.COL_ABS));
+    reference.Ref1.SetRowRel(!(flags & ScRefFlags.ROW_ABS));
+    reference.Ref1.SetTabRel(!(flags & ScRefFlags.TAB_ABS));
+    reference.Ref2.SetColRel(!(flags & ScRefFlags.COL2_ABS));
+    reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
+    reference.Ref2.SetTabRel(!(flags & ScRefFlags.TAB2_ABS));
+    reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
+    if (!(this.mpArr as ScTokenArray).AddDoubleReference(reference))
+      this.SetError(FormulaError.CodeOverflow);
+    return true;
   }
   /** Records the first actual code error. @param error - Error. @returns Nothing. */
   protected override SetError(error: FormulaError): void {
@@ -148,10 +400,67 @@ export class ScCompiler extends FormulaCompiler {
         index++;
         continue;
       }
+      if (ch === '"') {
+        index++;
+        let value = "",
+          closed = false;
+        while (index < source.length) {
+          const character = source[index++] as string;
+          if (character === '"') {
+            if (source[index] === '"') index++;
+            else {
+              closed = true;
+              break;
+            }
+          }
+          if (value.length < 1022) value += character;
+          else this.SetError(FormulaError.StringOverflow);
+        }
+        if (!closed) throw new Error("Unterminated string/name fallback is not implemented");
+        const native = unicode(value);
+        try {
+          const shared = this.rDoc.GetSharedStringPool().intern(native);
+          try {
+            if (!array.AddString(shared)) {
+              this.SetError(FormulaError.CodeOverflow);
+              break;
+            }
+          } finally {
+            shared.dispose();
+          }
+        } finally {
+          native.dispose();
+        }
+        last = OpCode.ocPush;
+        continue;
+      }
+      const identifier = /^[A-Za-z_][A-Za-z0-9_.]*/.exec(source.slice(index));
+      if (identifier && /^[ \t\r\n]*\(/.test(source.slice(index + identifier[0].length))) {
+        const functionCode = symbols[identifier[0].toUpperCase()];
+        if (functionCode === undefined)
+          throw new Error("Formula function/name lookup is not implemented");
+        if (!array.AddOpCode(functionCode)) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+        index += identifier[0].length;
+        last = functionCode;
+        continue;
+      }
       const odf =
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
       if (!odf) {
+        const range =
+          /^(?:\$?[A-Za-z]+\$?[1-9][0-9]*:\$?[A-Za-z]+\$?[1-9][0-9]*|\$?[A-Za-z]+:\$?[A-Za-z]+|\$?[1-9][0-9]*:\$?[1-9][0-9]*)/.exec(
+            source.slice(index),
+          );
+        if (range) {
+          this.ParseDoubleReference(range[0]);
+          last = OpCode.ocPush;
+          index += range[0].length;
+          continue;
+        }
         const reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/.exec(source.slice(index));
         if (reference) {
           this.ParseSingleReference(reference[0]);
@@ -164,7 +473,9 @@ export class ScCompiler extends FormulaCompiler {
         const close = source.indexOf("]", index + 1);
         if (close < 0 || source[index + 1] !== ".")
           throw new Error("Only bracketed local ODF references are implemented");
-        this.ParseSingleReference(source.slice(index + 2, close));
+        const name = source.slice(index + 2, close);
+        if (name.includes(":")) this.ParseDoubleReference(name.replace(":.", ":"));
+        else this.ParseSingleReference(name);
         last = OpCode.ocPush;
         index = close + 1;
         continue;
@@ -198,10 +509,21 @@ export class ScCompiler extends FormulaCompiler {
       if (
         op === OpCode.ocSub &&
         (last === OpCode.ocOpen ||
+          last === OpCode.ocSep ||
           last === OpCode.ocNegSub ||
           (last >= OpCode.ocStartBinaryOperators && last < OpCode.ocStopBinaryOperators))
       )
         op = OpCode.ocNegSub;
+      if (
+        (last !== OpCode.ocOpen || op !== OpCode.ocClose) &&
+        (last === OpCode.ocOpen || last === OpCode.ocSep) &&
+        (op === OpCode.ocSep || op === OpCode.ocClose)
+      ) {
+        if (!array.AddToken(new FormulaMissingToken())) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+      }
       if (op === OpCode.ocOpen) brackets++;
       if (op === OpCode.ocClose) {
         if (brackets === 0) this.SetError(FormulaError.PairExpected);
@@ -220,6 +542,7 @@ export class ScCompiler extends FormulaCompiler {
         break;
       }
     if (forced >= 2) array.SetRecalcModeForced();
+    array.GenHash();
     return array;
   }
 }

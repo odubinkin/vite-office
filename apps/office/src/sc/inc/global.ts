@@ -77,3 +77,38 @@ export enum ScSizeMode {
 
 /** Original indentation step in twips. */
 export const SC_INDENT_STEP = 200;
+
+/** Original aggregate/subtotal row and error flags;ordinary iterator consumers use NONE. */
+export enum SubtotalFlags {
+  NONE = 0x00,
+  IgnoreNestedStAg = 0x08,
+  IgnoreErrVal = 0x04,
+  IgnoreHidden = 0x02,
+  IgnoreFiltered = 0x01,
+}
+
+/** Original directional order from global.hxx used by native outer-function reference traversal. */
+export enum ScDirection {
+  DIR_BOTTOM,
+  DIR_RIGHT,
+  DIR_TOP,
+  DIR_LEFT,
+}
+
+/** Original attribute query mask values from global.hxx. */
+export enum HasAttrFlags {
+  NONE = 0x0000,
+  Lines = 0x0001,
+  Merged = 0x0002,
+  Overlapped = 0x0004,
+  Protected = 0x0008,
+  Shadow = 0x0010,
+  NeedHeight = 0x0020,
+  ShadowRight = 0x0040,
+  ShadowDown = 0x0080,
+  AutoFilter = 0x0100,
+  Conditional = 0x0200,
+  Rotate = 0x0400,
+  NotOverlapped = 0x0800,
+  RightOrCenter = 0x1000,
+}

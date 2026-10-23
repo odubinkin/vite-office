@@ -134,7 +134,7 @@ it("uses the office script for weak/empty cells and source range scripts for gro
     c.Select(0, 0);
     c.StartInput(ScInputMode.SC_INPUT_TABLE, "漢");
     expect(c.SetFontFamily(font)).toBe(true);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     expect(c.SetFontFamily(font)).toBe(false);
     c.Cancel();
     expect(

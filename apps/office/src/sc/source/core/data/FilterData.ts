@@ -64,6 +64,19 @@ export class FilterData {
     if (last) last[0] = data.mnRow2;
     return data.mbValue;
   }
+  /** Original segmented nonfiltered count includes hidden rows and stops at the represented domain boundary. @param first - First row. @param last - Last row. @returns Nonfiltered row count. */
+  countNonFilteredRows(first: number, last: number): number {
+    let count = 0,
+      row = first;
+    const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };
+    while (row <= last) {
+      if (!this.mpFilteredRows.getRangeData(row, data)) break;
+      if (data.mnRow2 > last) data.mnRow2 = last;
+      if (!data.mbValue) count += data.mnRow2 - row + 1;
+      row = data.mnRow2 + 1;
+    }
+    return count;
+  }
   /** Original hidden-segment mutation without unrepresented object callbacks. @param first - First row. @param last - Last row. @param hidden - State. @returns Changed. */
   setRowHidden(first: number, last: number, hidden: boolean): boolean {
     return hidden

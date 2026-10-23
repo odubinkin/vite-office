@@ -1,4 +1,4 @@
-/** @fileoverview Actual owning cell snapshots and native same-position formula cloning. */
+/** @fileoverview Actual owning cell snapshots and native detached formula cloning. */
 import { expect, it } from "vitest";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { ScDocument } from "../../../inc/document";
@@ -103,10 +103,12 @@ it("clones cached results and dirty state without listeners and preserves the na
   const empty = new ScFormulaCell(doc, b, unicode("= "), FormulaGrammar.Grammar.GRAM_NATIVE);
   expect(empty.GetCode().GetLen()).toBe(0);
   expect(empty.Clone().GetCode().GetCodeError()).toBe(empty.GetCode().GetCodeError());
-  expect(
-    /** Unsupported relocation is explicit. @returns Cell. */ () =>
-      new ScFormulaCell(snapshot, doc, a),
-  ).toThrow(/relocation/);
+  const relocated = new ScFormulaCell(snapshot, doc, a);
+  expect(relocated.aPos).toEqual(a);
+  expect(relocated.GetCode()).not.toBe(snapshot.GetCode());
+  expect(relocated.GetValue()).toBe(6);
+  expect(relocated.GetDirty()).toBe(false);
+  relocated.Dispose();
   expect(
     /** Unsupported foreign document copy is explicit. @returns Cell. */ () =>
       new ScFormulaCell(snapshot, fixture(), b),

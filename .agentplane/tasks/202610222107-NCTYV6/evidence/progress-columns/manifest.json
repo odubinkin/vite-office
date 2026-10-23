@@ -1,0 +1,513 @@
+{
+  "task": "202610222107-NCTYV6",
+  "final": false,
+  "verification": "pending",
+  "parentSourceCommit": "419c9ccb675d",
+  "archiveSha256": "9cbdaf32aa88fe4e8f24feb520d32a1eee76fb43f4f1a161aa3aea3d22e999b7",
+  "sources": [
+    {
+      "path": "apps/office/e2e/calc/formula-groups.spec.ts",
+      "sha256": "0178a502caea3ca5b3fb0dbe62b1b19f002ede111a560e4f93e75c469f034629"
+    },
+    {
+      "path": "apps/office/src/sc/inc/columnspanset.ts",
+      "sha256": "cfc9db54d17fc0495568178233692ad7658ab67d2ee1de3255ec4912d7a9c8c4"
+    },
+    {
+      "path": "apps/office/src/sc/inc/formulacell.ts",
+      "sha256": "2fc673049cae7d2c573d8fc753c780e790781c85f5a4f8a9059dc504b1404165"
+    },
+    {
+      "path": "apps/office/src/sc/inc/listenercontext.ts",
+      "sha256": "46c397ce433be8a7a85ed3a223b1db05f1d6691992ebd5549e683ccda141aa1a"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvelements.ts",
+      "sha256": "625cab098a8b6c9a575e09add13b66414c593d84f0a96ec9b299c067e2525727"
+    },
+    {
+      "path": "apps/office/src/sc/inc/mtvfunctions.ts",
+      "sha256": "dc96baa524b09041d0353e1547800ef675d18f6b31890e630d4ca715fcdb9802"
+    },
+    {
+      "path": "apps/office/src/sc/inc/sharedformula.ts",
+      "sha256": "666d13c55c31f57d91012f65be3ef6ca700a3fc6b58fb2e6ef993a192308505f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/types.ts",
+      "sha256": "183efac29d321589584cfe8c0a6ad635f297bdc261ef3a36cf7ed273c1727445"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "sha256": "59c90b0ae3d3f2b4eb76476990387e8008c85b54c0460278de28c1afdb017df5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column3.ts",
+      "sha256": "63ad119c50ada805af3e5e05634deccf881a7704fae39a703760dda2bbafa09f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column4.ts",
+      "sha256": "4d92e3b1093fbd4d4f229a44cdc7569e6145c7b5a14c006c4a5e4a23c8243854"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/columnspanset.ts",
+      "sha256": "f1f3b8e152dc1ecf6619a751cedce901b175d3dfb01507ec26857e8d01ff5624"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "ebefa5507825a0d5f84be0f81845e1765d7b48ddc0dc8f48aa54c3c56512500d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "05ec05f13e7a3265f27492a2d91c2672817978c46f15c178d066f24bbf144fb6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+      "sha256": "d6e70e729258c11d2cd6b54a0cdc028d794ef25f1c9de032640a2f8808cc4b15"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "d3b1b46f514f1fa23ecf4f35d2cce3d0decf1d2fd4a2d66a760c1c379e8125b6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-compare.test.ts",
+      "sha256": "a09bb9fe47b0d58ea4c719763f7f09a993ad25de7c71c15714d62dbff2a59cff"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "sha256": "6c0e9a469843ef2b6dd5d6957427aa1bd999114c0a3c01d4f7b2cc717b35ec94"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/listener-context.test.ts",
+      "sha256": "a8455bf3db0147ca49503260a905c73ec4c6d0102988290404463653915d04ac"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/listenercontext.ts",
+      "sha256": "5877017695b38e57bba44c8b720b45552943202ca855b901e09116e51008a05c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/mtvelements.ts",
+      "sha256": "fa44c7e705dccdf425179100f6609e9d242372265b47687618e17d8d84e4a970"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "d0689aad2c0e4caabe9d29efb052598d3b90550fa8d5f3e5c682ece9296f902c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/group-area-listener.test.ts",
+      "sha256": "aff5ebe150c9362db0a8bed3b9b610a0991bfdbf3b80cf982a96e9f623f1f9ea"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+      "sha256": "8b4ca5c0be63fde62cd8fcc9dfdc23a5aa9431296c7a7626a686b22377ee40e2"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/sharedformula.ts",
+      "sha256": "f4745173ebffbc68e56f422123358d9f5b2e359e9c5225496b3582a29c438384"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undocell.test.ts",
+      "sha256": "32184bc223b802acda1bd64785e0da34eddbe00cd4c736d60298199593b17c26"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "adc7108a195920ca4f8db116ac556cffd705eba1a563420c6c6a04245849fd1a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/columnspanset.ts.json",
+      "sha256": "f4427bb46d4b07935c09e1bddcabdbd453165305fd2a86bf0fd370a4bfb32534"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/formulacell.ts.json",
+      "sha256": "41aa20ff74700d96fd9ff7a7b4bed50e3877ba1c58cb3a253d4b726fb447a7de"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/listenercontext.ts.json",
+      "sha256": "d0aacb42fc5e7defad04a18981d598a557442c9a5d59b2f5b91bef0b0728df01"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/mtvelements.ts.json",
+      "sha256": "775c3cb6bf1d25f974869b3acb51318a41e1be48cd2bd500c45126308e4bc9b5"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/mtvfunctions.ts.json",
+      "sha256": "0e5b499679e4ab334633f6e5d5bc2f8e8c064533ecd827d909412b7ec874f7eb"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/sharedformula.ts.json",
+      "sha256": "2ecc1051a3f3813fb9f2f9766753bc2eb12c996330a4028210e1aee511807442"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/types.ts.json",
+      "sha256": "fd86484535871b8e474920c7ca298593aebdb6945cff897ed7f0273401749f7a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "sha256": "c0cc6770224ce2c4d891a6008e002f09ab71c183e120ccc450ff6f00a2444024"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+      "sha256": "10c418484c440245253028420d524551d0d14170e7aca07ed8467daf9e057592"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column4.ts.json",
+      "sha256": "2e071d186360669b5303b3b7df9e0fde539f5f9488c9ae39d3ebc64695827fe1"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/columnspanset.ts.json",
+      "sha256": "0adea236a766199d43941e967bf5eea792fa93d9019b15b91ad68436f9275735"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+      "sha256": "0db37485e911e52307403bd8066aaa55b9c28c38554c09cfe6931e1dbe22d99e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "8929f70c7366e9133b7a5fbbd412811fd119ef167c250f3940a3344790a4cade"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document10.ts.json",
+      "sha256": "df5cdebe2dae27ff19e4a32422f00294afe95e282610e8cad53f676ea4c3b1ab"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "sha256": "aa58f87f65aa82b4130b6faafd8873130af04b40943262a3a35f6f74d6b36862"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/listenercontext.ts.json",
+      "sha256": "1dc1be8533564b9bf3e9212068dba390f48af18cfc7b0b37d887c501828c97be"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/mtvelements.ts.json",
+      "sha256": "f53b28d1a47413366c2b7acced8dc179e39eed0cbc286ad2c99a96fe3aabe696"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "sha256": "971a30ff1e0f2a883617bf5daaaec24a4fdae1fa91466bc55b9719b438980b73"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/sharedformula.ts.json",
+      "sha256": "f9d678800ce2bf91e6824f2f1fc6febea3fe7bd8ba14615d2f8f146830e6a6c8"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/columnspanset.ts.json",
+      "sha256": "e637624f994680cf9bbb5de9e59a6c518148c1a913c9a1a49d5e78c34bcde8ee"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/formulacell.ts.json",
+      "sha256": "723f255fb2693564bce960d10ee9f0c44ba07536577781694964ded26ee79827"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/listenercontext.ts.json",
+      "sha256": "9ccc638f59869c0043ea4444cb6388dcd658966a0a45e342eb0791115c942a2a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/mtvelements.ts.json",
+      "sha256": "f4478a01d1aafbb95e2b2773174c67a121debdd6310d60bfc698a7b22ed88aa0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/mtvfunctions.ts.json",
+      "sha256": "cf89bdff8e56736c6bbfe8e3061aa16baffab0f9a5e7087dcd957bbe0222f421"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/sharedformula.ts.json",
+      "sha256": "df6e8cd14a1ea814fff2a8d92a002b3d0f89c2baf6c9fe5eea2e2bdcfe0f209f"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/types.ts.json",
+      "sha256": "9fdd93049f99377fecf583597036c3791e8049a99ab25f803800df76f6b3a6ce"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "sha256": "ac9b6e93463bfd93b6ee93e2ead0086452701418e9913f4d914365808c20c99a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+      "sha256": "e3da6732e453018a6d90dd8457819d6fb57826d88dbe2b62b6d741470dfea358"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column4.ts.json",
+      "sha256": "893b54c394136e8ee8bbb7f851d2ea2c7b1fbb240502fd41d35fee77f44a7c0a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/columnspanset.ts.json",
+      "sha256": "b0bdb2c8d5162e8cdd92326fa6592597e721d648c79fbdf3d9e21ea64479cacf"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+      "sha256": "6ff816b4250053f00902489f7a30e41493be6c5d8b3265f75c14e85d0e238703"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "476178d06435411eabe0df21b6f0501d5f2cb5c50783af115d07d0fb216e2199"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document10.ts.json",
+      "sha256": "2725638662c3751e8a83b77efd207a047fc2b38753c38eee855acdef366d7a66"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "sha256": "474995d534c335e2afca522fd1bbe118cee164e17000f94084f76207ec1c39d4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/listenercontext.ts.json",
+      "sha256": "70da64f288247c8e9c9947b4f8ce29a3734e964b8c9af3d16e26de9f896c9282"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/mtvelements.ts.json",
+      "sha256": "2f1d09cf851db8bb4289c4db54caa6005ba3d022be0996ec2800176fbfc42554"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "sha256": "adfb17abe60c8e5d7f5edd6c115748c7d2bf9ebbe4b80111cc1701dfccedb9fc"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/sharedformula.ts.json",
+      "sha256": "edf597c643f73e501a0ef717bb494b6ccb4764e50d6430bafb009974fbd6478d"
+    }
+  ],
+  "cumulativeScopePaths": 122,
+  "approvedScopeBudget": 135,
+  "rawPaths": [
+    "output/playwright/task75-adoption-complete-results.json",
+    "output/playwright/task75-history-focused-results.json",
+    "output/playwright/task75-adoption-complete-coverage/coverage-summary.json",
+    "output/playwright/task75-adoption-complete-coverage/coverage-final.json",
+    "output/playwright/task75-adoption-complete.log",
+    "output/playwright/task75-history-focused.log",
+    "output/playwright/task75-history-types.log",
+    "output/playwright/task75-history-lint.log",
+    "output/playwright/task75-history-format.log",
+    "output/playwright/task75-history-docs.log",
+    "output/playwright/task75-history-provenance.log",
+    "output/playwright/task75-history-registry.log",
+    "output/playwright/task75-adoption-size.log",
+    "output/playwright/task75-adoption-boundaries.log",
+    "output/playwright/task75-adoption-tree.log",
+    "output/playwright/task75-adoption-build.log",
+    "output/playwright/task75-adoption-browser.log",
+    "output/playwright/task75-adoption-static.log",
+    "output/playwright/task75-adoption-resources.log",
+    "output/playwright/task75-adoption-routing.log",
+    "output/playwright/task75-adoption-doctor.log",
+    "output/playwright/task75-columns-registry.py",
+    "output/playwright/task75-save-columns-progress.mjs",
+    "output/playwright/task75-columns-findings.txt",
+    "output/playwright/task75-columns-verification.txt",
+    "output/playwright/task75-resume-scope.txt",
+    "output/playwright/task75-resume-plan.txt"
+  ],
+  "calcScope": {
+    "files": [
+      "apps/office/src/sc/browser/presentation/calc-outline.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-visible-selection.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-clear-format.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-column-width.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-cell-style-inheritance.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-boundary-controls.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-primary-save.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-overline.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-input-group.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-deselect-bindings.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-optional-icons.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-font-step.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-sheet-popup.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-cell-selection.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-data-selection.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-color.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-view-options.test.tsx",
+      "apps/office/src/sc/browser/presentation/row-visibility.test.ts",
+      "apps/office/src/sc/browser/presentation/calc-wrap-text.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-header-sizing.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-deselect.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx",
+      "apps/office/src/sc/browser/presentation/ScHeaderResizeHandle.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-strikeout.test.tsx",
+      "apps/office/src/sc/browser/presentation/column-geometry.test.ts",
+      "apps/office/src/sc/browser/presentation/calc-font-size.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-modal-focus.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-alignment.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+      "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+      "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+      "apps/office/src/sc/browser/workflows/calc-aggregate-ods.test.ts",
+      "apps/office/src/sc/browser/workflows/calc-large-ods.test.ts",
+      "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+      "apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts",
+      "apps/office/src/sc/inc/fstalgorithm.test.ts",
+      "apps/office/src/sc/inc/mtvelements-range.test.ts",
+      "apps/office/src/sc/inc/mtvelements.test.ts",
+      "apps/office/src/sc/inc/mtvelements-store.test.ts",
+      "apps/office/src/sc/inc/ref-address.test.ts",
+      "apps/office/src/sc/inc/mtvelements-matrix.test.ts",
+      "apps/office/src/sc/inc/kahan.test.ts",
+      "apps/office/src/sc/inc/mtvelements-append.test.ts",
+      "apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+      "apps/office/src/sc/inc/mtvelements-callback.test.ts",
+      "apps/office/src/sc/inc/address.test.ts",
+      "apps/office/src/sc/inc/sheetlimits.test.ts",
+      "apps/office/src/sc/inc/mtvelements-set.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-native-borders.test.ts",
+      "apps/office/src/sc/source/filter/xml/native-alignment-handlers.test.ts",
+      "apps/office/src/sc/source/filter/xml/format-export-failures.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-native-fonts.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-native-columns.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-indent-rows.test.ts",
+      "apps/office/src/sc/source/filter/xml/wrap-text.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-native-alignment.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-sparse-export.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods-style-routing.test.ts",
+      "apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "apps/office/src/sc/source/ui/miscdlgs/mtrindlg.test.ts",
+      "apps/office/src/sc/source/ui/view/column-width.test.ts",
+      "apps/office/src/sc/source/ui/view/visible-selection.test.ts",
+      "apps/office/src/sc/source/ui/view/border-history.test.ts",
+      "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+      "apps/office/src/sc/source/ui/view/view-options.test.ts",
+      "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+      "apps/office/src/sc/source/ui/view/deselect.test.ts",
+      "apps/office/src/sc/source/ui/view/colrowba.test.ts",
+      "apps/office/src/sc/source/ui/view/format-boundaries.test.ts",
+      "apps/office/src/sc/source/ui/view/viewdata.test.ts",
+      "apps/office/src/sc/source/ui/view/tabview3.test.ts",
+      "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+      "apps/office/src/sc/source/core/tool/token-clone.test.ts",
+      "apps/office/src/sc/source/core/tool/token-copy.test.ts",
+      "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+      "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+      "apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+      "apps/office/src/sc/source/core/tool/rangepair.test.ts",
+      "apps/office/src/sc/source/core/tool/native-address.test.ts",
+      "apps/office/src/sc/source/core/tool/refwrap.test.ts",
+      "apps/office/src/sc/source/core/tool/refupdate.test.ts",
+      "apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+      "apps/office/src/sc/source/core/tool/sticky-range.test.ts",
+      "apps/office/src/sc/source/core/tool/reference-token.test.ts",
+      "apps/office/src/sc/source/core/tool/token-hash.test.ts",
+      "apps/office/src/sc/source/core/tool/formula-output.test.ts",
+      "apps/office/src/sc/source/core/tool/token.test.ts",
+      "apps/office/src/sc/source/core/tool/group-area-listener.test.ts",
+      "apps/office/src/sc/source/core/tool/docoptio.test.ts",
+      "apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+      "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+      "apps/office/src/sc/source/core/tool/viewopti.test.ts",
+      "apps/office/src/sc/source/core/tool/external-token.test.ts",
+      "apps/office/src/sc/source/core/tool/stringutil.test.ts",
+      "apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+      "apps/office/src/sc/source/core/tool/refdata.test.ts",
+      "apps/office/src/sc/source/core/tool/rangelist-update.test.ts",
+      "apps/office/src/sc/source/core/tool/refupdat.test.ts",
+      "apps/office/src/sc/source/core/tool/range-matrix.test.ts",
+      "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
+      "apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+      "apps/office/src/sc/source/core/tool/stylehelper.test.ts",
+      "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+      "apps/office/src/sc/source/core/tool/address.test.ts",
+      "apps/office/src/sc/source/core/tool/big-refupdate.test.ts",
+      "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+      "apps/office/src/sc/source/core/tool/aggregate-formula.test.ts",
+      "apps/office/src/sc/source/core/tool/compiler-format-type.test.ts",
+      "apps/office/src/sc/source/core/tool/rangelst.test.ts",
+      "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+      "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
+      "apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+      "apps/office/src/sc/source/core/tool/range-extension.test.ts",
+      "apps/office/src/sc/source/ui/undo/undocell.test.ts",
+      "apps/office/src/sc/source/ui/app/inputhdl.test.ts",
+      "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+      "apps/office/src/sc/source/core/data/asianattr.test.ts",
+      "apps/office/src/sc/source/core/data/protectionattr.test.ts",
+      "apps/office/src/sc/source/core/data/dociter.test.ts",
+      "apps/office/src/sc/source/core/data/document.references.test.ts",
+      "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+      "apps/office/src/sc/source/core/data/refcellvalue.test.ts",
+      "apps/office/src/sc/source/core/data/bigrange.test.ts",
+      "apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "apps/office/src/sc/source/core/data/border-frame.test.ts",
+      "apps/office/src/sc/source/core/data/cellvalue.test.ts",
+      "apps/office/src/sc/source/core/data/document.ui-edit.test.ts",
+      "apps/office/src/sc/source/core/data/native-delete-hardattr.test.ts",
+      "apps/office/src/sc/source/core/data/native-page-hf.test.ts",
+      "apps/office/src/sc/source/core/data/native-column-width.test.ts",
+      "apps/office/src/sc/source/core/data/postureattr.test.ts",
+      "apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+      "apps/office/src/sc/source/core/data/markdata.test.ts",
+      "apps/office/src/sc/source/core/data/indentattr.test.ts",
+      "apps/office/src/sc/source/core/data/docpool.test.ts",
+      "apps/office/src/sc/source/core/data/segmenttree.test.ts",
+      "apps/office/src/sc/source/core/data/patattr.test.ts",
+      "apps/office/src/sc/source/core/data/numeric-segments.test.ts",
+      "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+      "apps/office/src/sc/source/core/data/attarray.test.ts",
+      "apps/office/src/sc/source/core/data/alignmentattr.test.ts",
+      "apps/office/src/sc/source/core/data/formula-compare.test.ts",
+      "apps/office/src/sc/source/core/data/rotateattr.test.ts",
+      "apps/office/src/sc/source/core/data/connected-area.test.ts",
+      "apps/office/src/sc/source/core/data/namespace-map.test.ts",
+      "apps/office/src/sc/source/core/data/background-brush.test.ts",
+      "apps/office/src/sc/source/core/data/font-family-defaults.test.ts",
+      "apps/office/src/sc/source/core/data/shadowattr.test.ts",
+      "apps/office/src/sc/source/core/data/clipparam.test.ts",
+      "apps/office/src/sc/source/core/data/pageattr.test.ts",
+      "apps/office/src/sc/source/core/data/document.formula.test.ts",
+      "apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
+      "apps/office/src/sc/source/core/data/selection-pattern.test.ts",
+      "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+      "apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+      "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+      "apps/office/src/sc/source/core/data/diagonalattr.test.ts",
+      "apps/office/src/sc/source/core/data/docpool-style-defaults.test.ts",
+      "apps/office/src/sc/source/core/data/border-boundaries.test.ts",
+      "apps/office/src/sc/source/core/data/color-defaults.test.ts",
+      "apps/office/src/sc/source/core/data/mergeflag.test.ts",
+      "apps/office/src/sc/source/core/data/attrib.values.test.ts",
+      "apps/office/src/sc/source/core/data/strikeout-emphasisattr.test.ts",
+      "apps/office/src/sc/source/core/data/markarr.test.ts",
+      "apps/office/src/sc/source/core/data/script-type.test.ts",
+      "apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+      "apps/office/src/sc/source/core/data/fonteffectsattr.test.ts",
+      "apps/office/src/sc/source/core/data/formula-group-owner.test.ts",
+      "apps/office/src/sc/source/core/data/markmulti.test.ts",
+      "apps/office/src/sc/source/core/data/xml-attributes.test.ts",
+      "apps/office/src/sc/source/core/data/compressedarray.test.ts",
+      "apps/office/src/sc/source/core/data/weightattr.test.ts",
+      "apps/office/src/sc/source/core/data/listener-context.test.ts",
+      "apps/office/src/sc/source/core/data/marginattr.test.ts",
+      "apps/office/src/sc/source/core/data/formula-block-address.test.ts",
+      "apps/office/src/sc/source/core/data/text-line-items.test.ts",
+      "apps/office/src/sc/source/core/data/native-document-pool-complete.test.ts",
+      "apps/office/src/sc/source/core/data/heightattr.test.ts",
+      "apps/office/src/sc/source/core/data/cell-style-association.test.ts",
+      "apps/office/src/sc/source/core/data/edit-item-transfer.test.ts",
+      "apps/office/src/sc/source/core/data/text-size-context.test.ts",
+      "apps/office/src/sc/source/core/data/mergeattr.test.ts",
+      "apps/office/src/sc/source/core/data/language-item.test.ts",
+      "apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+      "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+      "apps/office/src/svl/source/items/native-target-which.test.ts"
+    ],
+    "scenarios": 712,
+    "relatedSharedScenarios": 22
+  },
+  "progress": "Original CompareByTokenArray,real listening contexts/shared column cursors/deferred broadcaster purge,SharedFormulaUtil grouping/split/join/unshare/lexical subscriptions,production column insertion/removal and partial group listening,actual whole-column regroup and delayed-range ownership. Exact column SingleCellListening versus table ConvertToGroupListening defaults and NoListening flags are retained. Rejected adoption disposes transferred owners;CALC257 documents failed cursor initialization retention. Current full production profile passes734 scenarios/200files (Calc712/196 plus22/4 related shared);unchanged raw100 coverage gate fails99.46S/99.09B/100F/99.59L. Both changed shared owners are raw100. Later current40 scenarios/7files add native group-edit Undo/Redo and valid fresh rejection ownership;these are separate result profiles. Current build and3 Chromium/DOM-free Worker scenarios,type/scoped lint/format/JSDoc/size/boundary/tree/provenance/registry/static/resources/routing/doctor pass.",
+  "nativeObservationReuse": {
+    "archive": "../progress-groups",
+    "archiveSha256": "4dfeb86915b69899d3afe547a6262e92cfff2e65344204d1d652f0e64281087f",
+    "unchangedPrimitiveOwner": {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "bdbbd24fbffac89da83cbb7f816eb98f4a3b2a2f6092f2b8f327acd5c2a0a5f1"
+    },
+    "scope": "Original11-case normal/ASan-UBSan standard-library double hash primitive only;no whole-native Calc/group differential claim."
+  },
+  "remaining": "Native document modes/pool identity and group compileCode/compute-II services,remaining native observations and final all-Calc/changed-shared raw100/quality acceptance. Defensive native assertions are not covered by fabricated private owner graphs. Clipboard reset/pooling/fill/paste Undo remain76;full AutoSum/UI acceptance remains74;all-app checkpoint80."
+}

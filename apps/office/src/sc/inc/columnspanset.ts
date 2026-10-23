@@ -1,2 +1,9 @@
 /** @fileoverview Original columnspanset.hxx numerical span values; document/column span-set consumers remain separate source owners. */
-export { RowSpan, ColRowSpan } from "../source/core/data/columnspanset";
+export {
+  RowSpan,
+  ColRowSpan,
+  RangeColumnSpanSet,
+  ColumnSpanSet,
+  type ColumnAction,
+  type SpanAction,
+} from "../source/core/data/columnspanset";

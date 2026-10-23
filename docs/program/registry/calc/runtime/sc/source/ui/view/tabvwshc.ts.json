@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/tabvwshc.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "autosum-input",
+    "capabilityIds": [
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/tabvwshc.ts",
+        "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/tabvwshc.cxx"
+      ],
+      "justification": "Original AutoSum orchestration over actual marks and the represented filtered-row query. Named database collections are unrepresented rather than replaced with a fake empty collection. Empty marked blocks requiring native clipboard fill explicitly fail and are unavailable in browser bindings until that service is implemented. Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DoAutoSum",
+        "UseSubTotal"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/ui/view/tabvwshc.cxx",
+      "upstreamSymbols": [
+        "ScTabViewShell::DoAutoSum",
+        "ScTabViewShell::UseSubTotal"
+      ]
+    }
+  }
+}

@@ -56,7 +56,7 @@ it("applies source selected-mark input to independent sheet positions under one 
   expect(doc.GetValue(new ScAddress(1, 1, 2))).toBe(18);
   c.SelectAllTables();
   const history = c.shell.GetUndoManager().GetUndoActionCount();
-  c.StartInput(ScInputMode.SC_INPUT_TYPE, "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TYPE, "=UNPORTED(A1)");
   expect(c.Commit()).toBe(false);
   expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(history);
   expect(c.shell.GetUndoManager().IsInListAction()).toBe(false);

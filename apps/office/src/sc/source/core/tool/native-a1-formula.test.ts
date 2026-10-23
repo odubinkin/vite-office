@@ -58,12 +58,18 @@ it("rejects unimplemented grammars and semantic reference families without silen
   const doc = new ScDocument(),
     pos = new ScAddress(0, 0, 0);
   doc.InsertTab(0, unicode("Sheet1"));
-  for (const grammar of [G.GRAM_PODF, G.GRAM_NATIVE_XL_A1, G.GRAM_UNSPECIFIED])
+  for (const grammar of [G.GRAM_PODF, G.GRAM_NATIVE_XL_A1])
     expect(
       /** Unavailable convention has no implementation. @returns Compiler. */ () =>
         new ScCompiler(doc, pos, grammar),
     ).toThrow(/not implemented/);
-  for (const source of ["=[.A1]", "=A1:B2", "=Sheet2.A1", "=SUM(A1)", "=XFE1", "=A1048577"])
+  const defaultCompiler = new ScCompiler(doc, pos, G.GRAM_UNSPECIFIED);
+  expect(defaultCompiler.CompileString(unicode("=A1+2")).GetLen()).toBe(3);
+  expect(
+    /** Native SetGrammar requires an explicit grammar even though constructors resolve unspecified. @returns Nothing. */ () =>
+      defaultCompiler.SetGrammar(G.GRAM_UNSPECIFIED),
+  ).toThrow(/not implemented/);
+  for (const source of ["=[.A1]", "=A1#B2", "=Sheet2.A1", "=UNPORTED(A1)", "=XFE1", "=A1048577"])
     expect(
       /** Unsupported reference families reject. @returns Tokens. */ () =>
         new ScCompiler(doc, pos, G.GRAM_NATIVE).CompileString(unicode(source)),

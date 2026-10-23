@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -15,7 +16,7 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/inc/itemset";
 import { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
-import { AdjustBlockHeight } from "./viewfun2";
+import { AutoSum, GetAutoSumArea, GetAutoSumFormula, AdjustBlockHeight } from "./viewfun2";
 import { ScViewUtil } from "./viewutil";
 import { ScTabView } from "./tabview3";
 import type { ScDocShell } from "../docshell/docsh";
@@ -24,7 +25,12 @@ import { ScPatternAttr } from "../../../inc/patattr";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScRange, ScAddress } from "../../../inc/address";
 import { ScUndoWidthOrHeight } from "../undo/undoblk2";
+import { ScRangeList } from "../../../inc/rangelst";
+import { OpCode } from "../../../../formula/inc/opcode";
 import { ScDocument } from "../../../inc/document";
+import { ScFormulaCell } from "../../../inc/formulacell";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { ColRowSpan } from "../../../inc/columnspanset";
 import type { ScViewData } from "../inc/viewdata";
@@ -90,6 +96,47 @@ export class ScViewFunc extends ScTabView {
     private readonly shell: ScDocShell,
   ) {
     super(data);
+  }
+  /** Original range inference delegates to the native viewfun2 implementation. @param ranges - Ordered output ranges. @returns Found data. */
+  GetAutoSumArea(ranges: ScRangeList): boolean {
+    return GetAutoSumArea(this.GetViewData(), ranges);
+  }
+  /** Original aggregate source construction through actual tokens and current document grammar. @param ranges - References. @param subtotal - Filtered request. @param address - Result position. @param code - Function opcode. @returns Formula source. */
+  GetAutoSumFormula(
+    ranges: ScRangeList,
+    subtotal: boolean,
+    address: ScAddress,
+    code: OpCode,
+  ): OUString {
+    return GetAutoSumFormula(this.GetViewData(), ranges, subtotal, address, code);
+  }
+  /** Original selected-block aggregate placement. @param range - Selection. @param subtotal - Filtered request. @param setCursor - Cursor update. @param continueMarks - Previous blocks. @param code - Aggregate. @returns Placement possible. */
+  AutoSum(
+    range: ScRange,
+    subtotal: boolean,
+    setCursor: boolean,
+    continueMarks: boolean,
+    code: OpCode,
+  ): boolean {
+    return AutoSum(this, range, subtotal, setCursor, continueMarks, code);
+  }
+  /** Consumed ordinary-formula EnterData path,using native concrete formula operations and per-cell list history. Nonformula/rich-edit/matrix processing remains unported here. @param col - Column. @param row - Row. @param tab - Source sheet. @param source - Formula text. @returns Nothing. */
+  EnterData(col: number, row: number, tab: number, source: OUStringConstReference): void {
+    if (!text(source).startsWith("="))
+      throw new Error("Nonformula EnterData processing is not implemented");
+    const doc = this.data.GetDocument(),
+      manager = this.shell.GetUndoManager();
+    void tab;
+    manager.EnterListAction("Input");
+    try {
+      for (const selected of this.data.GetMarkData().GetSelectedTabs()) {
+        const position = new ScAddress(col, row, selected),
+          cell = new ScFormulaCell(doc, position, source, doc.GetGrammar());
+        this.shell.GetDocFunc().SetFormulaCell(position, cell, true);
+      }
+    } finally {
+      manager.LeaveListAction();
+    }
   }
   /** Original GetSelectionFrame consumes marked-frame query or cloned cursor items with non-table distance flags. @returns Actual outer and inner frame items. */
   GetSelectionFrame(): [SvxBoxItem, SvxBoxInfoItem] {
@@ -223,8 +270,8 @@ export class ScViewFunc extends ScTabView {
         ) => state !== SfxItemState.INVALID,
       )
     ) {
-      const oldSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
-        newSet = new SfxItemSet(doc.GetPool(), [[100, 155]]),
+      const oldSet = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
+        newSet = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 155]]),
         updated = new SvxBorderLine();
       try {
         const border = selected.Get(150) as SvxBoxItem,

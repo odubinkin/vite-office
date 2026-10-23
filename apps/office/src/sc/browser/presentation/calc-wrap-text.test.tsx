@@ -153,7 +153,7 @@ it("commits genuine pending input, refuses unsupported input and retains origina
     const record = new SfxRequest(10230, [new ScLineBreakCell(false)]);
     expect(c.ExecuteWrapText(record)).toBe(true);
     expect(record.IsDone()).toBe(true);
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const rejected = new SfxRequest(10230);
     expect(c.ExecuteWrapText(rejected)).toBe(false);
     expect(rejected.IsDone()).toBe(false);

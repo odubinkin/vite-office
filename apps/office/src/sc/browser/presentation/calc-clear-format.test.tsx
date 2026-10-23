@@ -122,7 +122,7 @@ it("keeps disjoint gaps and grouped sheets through actual marked deletion and hi
     c.ResetAttributes();
     c.Undo();
     c.Redo();
-    c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
+    c.StartInput(ScInputMode.SC_INPUT_TOP, "=UNPORTED(A1)");
     const count = c.shell.GetUndoManager().GetUndoActionCount();
     expect(c.ResetAttributes()).toBe(false);
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(count);

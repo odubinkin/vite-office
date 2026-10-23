@@ -24,6 +24,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
           "marker": "preserves local A1 details"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [
@@ -61,7 +65,8 @@
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
       "Original seven sticky movement and conditional insertion/deletion adjustment methods on the same ScRange owner, with native narrowing before limit checks.",
       "Native differential acceptance proves all 768 configured sticky result/error outputs against unchanged extracted C++ definitions; ASan/UBSan clean and full source/body hashes recorded.",
-      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity.",
+      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/address.cxx",

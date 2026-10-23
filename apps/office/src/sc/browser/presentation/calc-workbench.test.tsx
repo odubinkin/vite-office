@@ -4,7 +4,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createCalcModuleFactory, createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
-import { ScAddress } from "../../inc/address";
+import { ScAddress, ScRange } from "../../inc/address";
 
 afterEach(
   /** Releases mounted clients and browser geometry overrides. @returns Nothing. */ () => {
@@ -48,7 +48,7 @@ it("mounts the lazy production factory and edits actual scalar/formula cells thr
   expect(line).toHaveValue("=A1*3");
   fireEvent.click(screen.getByRole("button", { name: "Formula" }));
   expect(line).toHaveFocus();
-  expect(line).toHaveValue("=");
+  expect(line).toHaveValue("=A1*3");
   fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
   fireEvent.doubleClick(screen.getByRole("gridcell", { name: "A1" }));
   fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell A1" }), {
@@ -102,7 +102,7 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   expect(name).toHaveValue("AA1000");
   fireEvent.keyDown(name, { key: "a" });
   fireEvent.focus(line);
-  fireEvent.change(line, { target: { value: "=SUM(A1)" } });
+  fireEvent.change(line, { target: { value: "=UNPORTED(A1)" } });
   fireEvent.keyDown(line, { key: "Enter" });
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
   expect(screen.getByRole("alert")).toBeVisible();
@@ -171,5 +171,100 @@ it("dispatches source SDI named arguments and defers input until InputLineEnter 
   expect(c.shell.GetDocument().GetValue(new ScAddress())).toBe(2);
   dispatcher.Execute(".uno:Redo");
   expect(c.shell.GetDocument().GetValue(new ScAddress())).toBe(3);
+  session.Close();
+});
+
+it("uses native Sum reference selection,accept/cancel and live formula history in the mounted input line", /** The actual formula button inserts source-derived ranges and selects only its arguments. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller;
+  c.EnterString("4");
+  c.Navigate(0, 1);
+  c.EnterString("6");
+  c.Navigate(0, 1);
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  const line = screen.getByRole("textbox", { name: "Input line" }) as HTMLInputElement;
+  expect(line).toHaveValue("=SUM(A1:A2)");
+  expect(line).toHaveFocus();
+  expect([line.selectionStart, line.selectionEnd]).toEqual([5, 10]);
+  fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
+  fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+  expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  cleanup();
+  session.Close();
+});
+
+it("keeps grid focus after selected AutoSum and presents an unavailable block-fill command without document edits", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    doc = c.shell.GetDocument();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetValue(new ScAddress(0, 1, 0), 3);
+  c.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 1, 0));
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
+  expect(screen.getByRole("grid")).toHaveFocus();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  doc.SetValue(new ScAddress(1, 0, 0), 4);
+  act(
+    /** Uses actual public view marks and the native command boundary. @returns Nothing. */ () => {
+      c.viewData.SetCurX(1);
+      c.viewData.SetCurY(1);
+      c.viewData.GetMarkData().SetMarkArea(new ScRange(1, 1, 0, 1, 2, 0));
+      expect(c.AutoSum()).toBeUndefined();
+    },
+  );
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Native EnterBlock/PasteFromClip block fill is not implemented",
+  );
+  expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
+  cleanup();
+  session.Close();
+});
+
+it("starts an empty native Sum argument draft and cancels without a document edit or history", /** A fresh worksheet has no inferred range;native input selection stays inside the actual empty parentheses. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller;
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  const line = screen.getByRole("textbox", { name: "Input line" }) as HTMLInputElement;
+  expect(line).toHaveValue("=SUM()");
+  expect(line).toHaveFocus();
+  expect([line.selectionStart, line.selectionEnd]).toEqual([5, 5]);
+  expect(c.shell.GetDocument().GetFormulaCell(new ScAddress())).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Cancel input" }));
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  expect(c.shell.GetDocument().GetFormulaCell(new ScAddress())).toBeNull();
+  expect(screen.getByRole("grid")).toHaveFocus();
+  cleanup();
   session.Close();
 });

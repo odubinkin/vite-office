@@ -1,4 +1,5 @@
 /** @fileoverview Native pattern style association and registered-style ownership using genuine shared style classes;no Calc style-pool substitute. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr, CellAttributeHolder, CellAttributeHelper } from "../../../inc/patattr";
@@ -28,7 +29,7 @@ function make(pool: SfxStyleSheetPool, value: string): SfxStyleSheet {
 /** Real Calc pool/helper plus actual shared style pool. @returns Owners. */
 function fixture() {
   const doc = new ScDocument(),
-    pool = new SfxStyleSheetPool(doc.GetPool()),
+    pool = new SfxStyleSheetPool(doc.GetPool() as ScDocumentPool),
     helper = doc.getCellAttributeHelper();
   return {
     doc,
@@ -86,7 +87,7 @@ it("retains unbound names on null attachment,copies names on detachment,and dist
     name = unicode("Unbound"),
     p = new ScPatternAttr(f.helper, undefined, name),
     style = make(f.pool, "Linked"),
-    otherPool = new SfxStyleSheetPool(f.doc.GetPool()),
+    otherPool = new SfxStyleSheetPool(f.doc.GetPool() as ScDocumentPool),
     other = make(otherPool, "Linked"),
     q = new ScPatternAttr(f.helper),
     renamed = unicode("Changed");
@@ -121,11 +122,13 @@ it("uses only explicitly SET direct or inherited symbol fonts rather than pool d
   const f = fixture(),
     style = make(f.pool, "Symbols"),
     p = new ScPatternAttr(f.helper),
-    symbol = (f.doc.GetPool().GetUserOrPoolDefaultItem(100) as SvxFontItem).Clone();
+    symbol = (
+      (f.doc.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(100) as SvxFontItem
+    ).Clone();
   try {
     expect(p.IsSymbolFont()).toBe(false);
     symbol.SetCharSet(RTL_TEXTENCODING_SYMBOL);
-    f.doc.GetPool().SetUserDefaultItem(symbol);
+    (f.doc.GetPool() as ScDocumentPool).SetUserDefaultItem(symbol);
     expect(p.IsSymbolFont()).toBe(false);
     style.GetItemSet().Put(symbol);
     p.SetStyleSheet(style);
@@ -146,7 +149,7 @@ it("uses only explicitly SET direct or inherited symbol fonts rather than pool d
 it("renames only exact borrowed style identities and reindexes canonical holders while preserving same-named unbound and other styles", /** Exercises source remove/rename/reinsert ordering on real registry owners. @returns Nothing. */ () => {
   const f = fixture(),
     style = make(f.pool, "旧😀\u0000Name"),
-    otherPool = new SfxStyleSheetPool(f.doc.GetPool()),
+    otherPool = new SfxStyleSheetPool(f.doc.GetPool() as ScDocumentPool),
     other = make(otherPool, "旧😀\u0000Name"),
     name = unicode("旧😀\u0000Name"),
     next = unicode("New"),

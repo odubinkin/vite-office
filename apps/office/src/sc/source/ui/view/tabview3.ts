@@ -64,12 +64,20 @@ export class ScTabView {
     marks.ResetMark();
     marks.SetMarkArea(range);
   }
-  /** Original MarkRange no-cursor normal-grid path;device alignment and cursor-setting path remain unported. @param range - Native rectangle. @param _setCursor - Supported source false branch. @returns Nothing. */
-  MarkRange(range: ScRange, _setCursor: false): void {
+  /** Original normal-grid cursor assignment;window/overlay notifications are projected by the browser. @param col - Column. @param row - Row. @param refresh - Force same-position update. @returns Nothing. */
+  SetCursor(col: number, row: number, refresh = false): void {
+    if (col === this.aViewData.GetCurX() && row === this.aViewData.GetCurY() && !refresh) return;
+    this.aViewData.SetCurX(col);
+    this.aViewData.SetCurY(row);
+  }
+  /** Original MarkRange no-cursor normal-grid path;device alignment and cursor-setting path remain unported. @param range - Native rectangle. @param _setCursor - Supported source false branch. @param continueMarks - Preserve existing blocks as native multi marks. @returns Nothing. */
+  MarkRange(range: ScRange, _setCursor: false, continueMarks = false): void {
     void _setCursor;
     this.SetTabNo(range.aStart.Tab());
     const marks = this.aViewData.GetMarkData();
-    marks.ResetMark();
+    if (continueMarks) marks.MarkToMulti();
+    else marks.ResetMark();
+    marks.SetMarkNegative(false);
     marks.SetMarkArea(range);
   }
   /** Original MarkDataArea normal-grid path. @param includeCursor - Native include-old flag,default true. @returns Nothing. */

@@ -1,4 +1,5 @@
 /** @fileoverview Actual Calc pattern itemset contracts with existing native shared pool/state/value owners. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import { aScPatternAttrSchema } from "./patattr";
@@ -30,7 +31,7 @@ function resolveAutoColor(
   textColor?: Readonly<Color>,
 ): ComplexColor {
   const doc = new ScDocument(),
-    items = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    items = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]),
     result = new ComplexColor();
   try {
     items.Put(new SvxColorItem(font, 109));
@@ -161,9 +162,9 @@ it("retains source current-view,configuration-cache and kit read-site distinctio
 });
 it("uses original conditional/table/direct precedence including the direct-black table exception", /** All values belong to actual native itemsets and pools. @returns Nothing. */ () => {
   const doc = new ScDocument(),
-    base = new SfxItemSet(doc.GetPool(), [[100, 148]]),
-    table = new SfxItemSet(doc.GetPool(), [[100, 148]]),
-    conditional = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    base = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]),
+    table = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]),
+    conditional = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]),
     result = new ComplexColor(),
     environment: ScPatternColorEnvironment = {
       isKitActive: false,

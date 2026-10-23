@@ -5,7 +5,9 @@ import { installKernelFixture } from "../shared/kernel-fixture";
 test("loads native ODS data and edits/saves the same real document in page and Worker", /** Prepared upstream data bytes are input only;all native source references are absent during execution. @param fixtures - Page. @returns Completion. */ async ({
   page,
 }) => {
-  const input = Array.from(readFileSync("apps/office/e2e/calc/fixtures/basic-cell-content.ods"));
+  const input = Array.from(
+    readFileSync(new URL("./fixtures/basic-cell-content.ods", import.meta.url)),
+  );
   await page.goto("/");
   await installKernelFixture(page, "CalcODSFixture", [
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },

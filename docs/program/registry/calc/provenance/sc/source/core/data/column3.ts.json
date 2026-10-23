@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/column3.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/column3.cxx",
+    "localSymbols": [
+      "GroupFormulaCells",
+      "RegroupFormulaCells"
+    ],
+    "upstreamSymbols": [
+      "GroupFormulaCells",
+      "ScColumn::RegroupFormulaCells"
+    ],
+    "preservedResponsibilities": [
+      "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
+      "Native header-only RegroupFormulaCells default stays on ScColumn;the out-of-class definition receives the bound nullable argument without a duplicate default. Original IllegalArgumentException and row assertions remain. Genuine public predeclared group prefix/top adoption and formula-position/adoption-row arguments exercise native validation without private store edits."
+    ],
+    "omittedResponsibilities": [
+      "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column3.ts",
+          "marker": "GroupFormulaCells"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+          "marker": "RegroupFormulaCells"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
+          "marker": "validates an unfinished native group adoption before regrouping"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "GroupFormulaCells"
+        }
+      ]
+    }
+  }
+}

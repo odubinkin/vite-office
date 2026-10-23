@@ -1,4 +1,5 @@
 /** @fileoverview Actual Calc column/pattern style inheritance projected by the existing shared Writer UI;StyleApply and Calc style-pool construction remain separate unported paths. */
+import type { ScDocumentPool } from "../../source/core/data/docpool";
 import { expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { createCalcSession } from "../composition/calc-module";
@@ -17,7 +18,7 @@ it("projects inherited native three-script fonts from the real registered column
   const session = createCalcSession(),
     doc = session.controller.shell.GetDocument(),
     helper = doc.getCellAttributeHelper(),
-    pool = new SfxStyleSheetPool(doc.GetPool()),
+    pool = new SfxStyleSheetPool(doc.GetPool() as ScDocumentPool),
     name = unicode("Native inheritance"),
     value = unicode("Latin漢عربي"),
     position = new ScAddress(0, 0, 0),

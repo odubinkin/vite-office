@@ -1,4 +1,5 @@
 /** @fileoverview Source Calc/EditEngine attribute transfer,precedence,unit conversion and orientation over actual native item pools. */
+import type { ScDocumentPool } from "./docpool";
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScPatternAttr } from "../../../inc/patattr";
@@ -31,9 +32,9 @@ function fixture() {
   const doc = new ScDocument(),
     pattern = new ScPatternAttr(doc.getCellAttributeHelper()),
     source = pattern.GetItemSetWritable(),
-    edit = new SfxItemSet(doc.GetPool(), [[E.EE_ITEMS_START, E.EE_ITEMS_END]]),
-    conditional = new SfxItemSet(doc.GetPool(), [[100, 148]]),
-    table = new SfxItemSet(doc.GetPool(), [[100, 148]]);
+    edit = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[E.EE_ITEMS_START, E.EE_ITEMS_END]]),
+    conditional = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]),
+    table = new SfxItemSet(doc.GetPool() as ScDocumentPool, [[100, 148]]);
   return {
     doc,
     pattern,
@@ -216,7 +217,9 @@ it("retains conditional,table and direct precedence while table posture,line and
 });
 it("uses inherited edit SET values but omits absent and INVALID reverse attributes,and leaves existing cell alignment for Left", /** Preserves source reverse omissions. @returns Nothing. */ () => {
   const f = fixture(),
-    parent = new SfxItemSet(f.doc.GetPool(), [[E.EE_ITEMS_START, E.EE_ITEMS_END]]);
+    parent = new SfxItemSet(f.doc.GetPool() as ScDocumentPool, [
+      [E.EE_ITEMS_START, E.EE_ITEMS_END],
+    ]);
   try {
     parent.Put(new SvxFontHeightItem(353, 100, E.EE_CHAR_FONTHEIGHT));
     f.edit.SetParent(parent);
@@ -296,7 +299,9 @@ it("snapshots every source value before target notifications and emits original 
       }
     }
   }
-  const edit = new ObservedEditSet(f.doc.GetPool(), [[E.EE_ITEMS_START, E.EE_ITEMS_END]]);
+  const edit = new ObservedEditSet(f.doc.GetPool() as ScDocumentPool, [
+    [E.EE_ITEMS_START, E.EE_ITEMS_END],
+  ]);
   try {
     f.source.Put(new SvxFontHeightItem(401, 100, A.ATTR_CTL_FONT_HEIGHT));
     f.pattern.FillEditItemSet(edit);

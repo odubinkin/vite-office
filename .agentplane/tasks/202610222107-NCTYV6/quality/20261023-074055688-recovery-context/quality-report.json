@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610222107-NCTYV6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-23T07:40:55.688Z",
+  "verdict": "pass",
+  "summary": "Task75 accepted at d3810ffa8dee10ab643a28b592a7600ef752d5db: approved native copying/group lifetime slice, source-bound acceptance evidence, raw100 and closure checks satisfied.",
+  "evaluated_sha": "d3810ffa8dee10ab643a28b592a7600ef752d5db",
+  "blueprint_digest": "c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530",
+  "findings": [
+    "Reviewed final production diff and accepted-profile source proof. Native group/code/top/span error contracts remain; genuine public-boundary and lifetime cases replace no owner with a simulated backend. Scalar-only private compiler specialization is bounded by the actual parser admission and audited native classifications; the essential pending-token identity guard remains. No broader native matrix/function parity is claimed.",
+    "Validated all 17 committed source/record hashes and 404 acceptance source/test hashes, readable immutable raw archive, 796 passing scenarios with no pending/failing cases, and raw totals 14335/14335 statements, 8768/8768 branches, 2439/2439 functions and 12838/12838 lines. Six real Chromium/Worker scenarios pass. Required build/static/type/lint/format/source/provenance/registry/resource/routing gates are recorded as passing.",
+    "The earlier 18359-case full checkpoint and its repaired browser failures are preserved, with 799 unchanged non-Calc instrumented owner hashes. Fresh final Calc coverage is separately recorded; evidence does not claim a second full all-app execution. Scope185/200 remains approved. No required gap remains within75; recommend finish and immediate goal pause before76."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610222107-NCTYV6/README.md",
+    "d3810ffa8dee10ab643a28b592a7600ef752d5db",
+    ".agentplane/tasks/202610222107-NCTYV6/evidence/acceptance/manifest.json",
+    ".agentplane/tasks/202610222107-NCTYV6/evidence/acceptance/raw.json.gz",
+    ".agentplane/tasks/202610222107-NCTYV6/evidence/accepted-profile/README.md",
+    ".agentplane/tasks/202610222107-NCTYV6/evidence/full-checkpoint"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full matrix/forced-array/reference-return frontend, complete formatter/style factory, clipboard sharing/reset/paste and task74 UI completion remain outside this accepted native slice. The reported large-file ODS autosave export limit remains unchanged and queued."
+  ]
+}

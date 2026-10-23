@@ -3518,3 +3518,203 @@ by the constructor contract. Task `202610210335-7QBK8C` retains native zero and
 checks default/member/copy/move/assignment plus signed16 boundary values against
 original generated C++ over unchanged libraries. Do not normalize the default to
 -1 in browser code or replace the actual generated exception with a JS Error.
+
+## CALC-249: approximate Kahan cancellation can discard an integer remainder
+
+Status: suspicious numerical consequence; original portable native output reproduced.
+
+In the pinned `sc/inc/kahan.hxx`, `KahanSum::get()` returns zero when the delayed
+term and the compensated total have opposite signs and `rtl::math::approxEqual`
+considers them equal in magnitude. This test precedes adding the delayed term.
+The consumed non-SSE2 path consequently returns zero after adding
+`1e16`, `1`, `-1e16` to a default accumulator, although their exact mathematical
+sum is one. Reversing those three input terms produces the same result. This
+may be intentional cancellation policy; the intended numerical contract and
+upstream history have not been established.
+
+Evidence: `scripts/calc-kahan-native-probe.mjs --check` compiles the unchanged
+complete original header with verified full SAL dependencies. Cases zero and
+one in `apps/office/src/sc/inc/native-kahan-cases.json` contain both initialized
+input orders and bit-exact zero outputs from matching normal and ASan/UBSan
+runs. `apps/office/src/sc/inc/kahan.test.ts` compares the actual local owner
+against those original observations. The document aggregate test also retains
+`=SUM(1E16;1;-1E16)` as zero, following the native reverse argument traversal.
+The local accumulator preserves this source behavior; no numerical correction
+is authorized by this observation. SSE2 and long-double paths remain outside
+this native observation profile.
+
+## CALC-250: full-sheet area teardown stops before the last slot
+
+Status: suspicious source condition; exact boundary retained locally.
+
+The optimized whole-sheet branch in `sc/source/core/data/bcaslot.cxx`,
+`ScBroadcastAreaSlotMachine::EndListeningArea`, sets `pStop = ppSlots + nEnd`
+and iterates with `++pp < pStop`. With the inclusive final offset
+`nEnd == mnBcaSlots - 1`, this visits offsets zero through `nEnd - 1`.
+The general range branch uses `nOff <= nEnd` instead. The corresponding
+optimized deletion/update branches use the same ending bound.
+
+The default native logarithmic distribution has 172032 slots per sheet, so
+the optimized end-listening traversal ends at offset 172030. The initialized
+geometry witness in `sc/source/core/data/bcaslot.test.ts` retains that exact
+bound. This is source-derived evidence, not a compiled full-native area
+lifecycle observation. Whether higher-level invariants guarantee an empty
+last slot in these calls has not been established. The local ordinary area
+machine preserves the source ending bound.
+
+## CALC-251: nested area iteration resets the erased-entry shortcut
+
+Status: source-derived reentrant edge; intent not established.
+
+Both `ScBroadcastAreaSlot::AreaBroadcast` overloads set
+`mbHasErasedArea = false` when beginning an iteration, including a nested
+iteration of the same slot. Entries already marked for deferred erasure are
+skipped only when this shortcut is true. A nested iteration after the last
+listeners have been removed can therefore visit those marked entries and
+report a broadcast attempt through their empty Svt broadcasters. Physical
+erasure still waits for the outer iteration to finish.
+
+The reentrant case in `sc/source/core/data/bcaslot.test.ts` retains this
+source behavior: the nested call returns true while no extra listener callback
+runs. Full compiled native area-object observations are not claimed. The
+local code keeps the original reset and deferred-erasure order.
+
+## CALC-252: mixed encoded NaN error payloads vary between native builds
+
+Status: original complete native header observations differ across normal
+and ASan/UBSan builds; no sanitizer error was reported.
+
+`sc/inc/arraysumfunctor.hxx` intentionally sends non-NoValue NaNs back through
+compensated floating arithmetic when rescanning an array containing encoded
+empty values. Its source comment already questions the intended error
+propagation. Multiple distinct encoded NaN errors can then compete through
+ordinary arithmetic. An observation with encoded NoValue, encoded
+DivisionByZero and 42 produces different NaN payloads on the second mutating
+Kahan getter between the normal and instrumented native callers.
+
+Evidence is retained in the task73 numeric observation archive, including
+`ambiguous-driver.cpp` and both `ambiguous-*-caller.values` streams. The caller
+uses unchanged complete original `arraysumfunctor.hxx`/`kahan.hxx` and verified
+original SAL objects. The accepted bit-exact array fixture separately uses
+4096 finite/NoValue-empty and isolated infinity profiles with identical normal/instrumented output.
+Mixed error-NaN payload attribution is not certified by that fixture.
+
+The local implementation retains source arithmetic and rescan ordering.
+Mutable local double references use Float64Array backing so JavaScript packed
+number-array canonicalization does not erase the only encoded NoValue payload
+before the native rescan can recognize it. This storage adaptation preserves
+native scalar bits; it does not resolve the upstream mixed-payload ambiguity.
+
+
+## CALC-253: AutoSum adjacency checks only the scan axis
+
+Pinned source: `sc/source/core/tool/token.cxx`,
+`ScTokenArray::GetAdjacentExtendOfOuterFuncRefs`.
+
+The four directional branches compare only the referenced row or column with
+its neighboring scan coordinate. They do not require the other coordinate or
+sheet to match the formula position. For example, a formula at A4 containing
+`SUM(B1:B3)` reports a top-adjacent reference with extent row0,despite referring
+to column B. The AutoSum classification in `sc/source/ui/view/viewfun2.cxx`
+consumes this outcome when deciding whether to sum existing aggregates.
+
+This is a source-derived suspicion rather than a certified whole-application
+failure. Preserve the original axis-only checks;adding a same-column/same-row
+filter would change the upstream contract. The actual-token witness is in
+`sc/source/ui/view/native-autosum.test.ts`.
+
+## CALC-254: a table area retained in RPN can be skipped by both traversal paths
+
+Pinned source: `sc/source/core/tool/token.cxx`, anonymous `TokenPointers`,
+`ScTokenArray::AdjustReferenceOnCopy` and `ScTokenArray::AdjustAbsoluteRefs`.
+
+When a source-order `ScTableRefToken` retains the very same area token that
+also appears in RPN, that area has at least two native owning references.
+`getHandledToken` therefore returns the table token instead of its area,
+with a comment that the area is handled in RPN. However, `skipToken` skips
+an RPN token whose reference count exceeds one. Under this ownership graph,
+neither adjustment loop visits the area reference.
+
+This is a conditional source-derived suspicion. It does not establish that
+the compiler produces this graph for an ordinary table formula, nor that
+the full application exposes a user-visible failure. Keep the original
+skip/projection rules. The actual retained-area/RPN identity vector is in
+`sc/source/core/tool/token-copy.test.ts`;it checks the skipped outcome rather
+than silently changing traversal to visit the area.
+
+## CALC-255: a fixed-end group listener can notify a nonoverlapping member
+
+Pinned source: `sc/source/core/tool/grouparealistener.cxx`,
+`FormulaGroupAreaListener::collectFormulaCells(SCROW,SCROW,...)`.
+
+When the start row is relative and the end row is fixed, the method first
+checks the changed span against the top member's range. Its subsequent loop
+uses `nRefRow1 <= nRefRow2`, where the second value is the fixed reference end;
+it does not stop at the changed span's last row.
+
+For a valid three-cell group referencing row ranges [2,4], [3,4], [4,4],
+a change confined to row3 selects all three formulas. The final member's
+range does not overlap the changed row. This appears to cause excess dirty
+notification rather than an incorrect value by itself. Preserve the original
+loop bound;the actual grouped-cell/column witness is in
+`sc/source/core/tool/group-area-listener.test.ts`. This is source-derived
+evidence,not a whole-application native differential.
+
+## CALC-256: direct area deletion can leave a pending grouped-area pointer
+
+Pinned source: `sc/source/core/data/bcaslot.cxx`,
+`ScBroadcastAreaSlot::DelBroadcastAreasInRange`, `EraseArea`,
+and `ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas`.
+
+When direct range deletion removes an area's last slot membership during a
+bulk broadcast, `DelBroadcastAreasInRange` removes it from the ordinary
+`aBulkBroadcastAreas` set and deletes it. It does not remove the area from
+`m_BulkGroupAreas`. In contrast, the last-membership path in `EraseArea`
+explicitly calls `RemoveBulkGroupArea`. If a grouped area was already queued
+when direct deletion frees it, the grouped map may retain a dangling pointer
+until its later flush.
+
+This is a conditional ownership suspicion. No native use-after-free execution
+or reachable whole-application failure has been established. Retain the
+distinct source removal points. JavaScript GC replaces physical deletion;
+do not manufacture native dangling-memory behavior or silently add the missing
+group-map removal to the direct-deletion path.
+
+## CALC-257: failed column cursor initialization remains cached
+
+Reference: `sc/source/core/data/mtvelements.cxx`,
+`ColumnBlockPositionSet::getBlockPosition`, pinned LibreOffice source
+`9bc445578031fecf56086729d8e4940c77e14d65`.
+
+The first lookup inserts a `ColumnBlockPosition` before calling
+`InitColumnBlockPosition`. If initialization fails, the method returns null
+without erasing the inserted entry. A second lookup for the same sheet and
+column returns that retained entry directly, without another initialization.
+Thus a missing-sheet lookup can return null first and an uninitialized cursor
+on repetition.
+
+This is a conditional caller-contract suspicion; no whole-application native
+failure is established. Preserve insertion, lookup and failure ordering.
+The source-bound context test observes the cached owner through public lookup
+without consuming its uninitialized iterators. Managed allocation does not
+simulate native allocator failure or physical mutex behavior.
+
+## CALC-258: unspecified parameter classifications stop returning Value after slot six
+
+Reference: `sc/source/core/tool/parclass.cxx`, the assumptions above `pRawData`
+and `ScParameterClassification::GetParameterType`, pinned LibreOffice source
+`9bc445578031fecf56086729d8e4940c77e14d65`.
+
+The introductory comment says unspecified opcodes accept only Value parameters,
+without a parameter-count check or Bounds result. The executable lookup instead
+returns Value for the seven zero-initialized parameter slots, but Bounds for
+indices seven and above when the opcode has no repeated-parameter definition.
+For example, `ocAbs` is absent from the static table; its parameter six resolves
+to Value and parameter seven resolves to Bounds. The return-type sentinel still
+resolves to Value.
+
+This is a source-comment/lookup-contract discrepancy, not an established valid
+formula regression: ABS itself does not accept eight arguments. Preserve the
+runtime lookup, including UInt16 narrowing and the distinct return sentinel.
+Independent source vectors cover the boundary;no whole-native class execution
+or user-visible LibreOffice failure is claimed.

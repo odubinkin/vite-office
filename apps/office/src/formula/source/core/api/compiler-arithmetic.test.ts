@@ -119,7 +119,7 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
   const array = tokens([1]);
   new RecordingCompiler(array).CompileTokenArray();
   const original = array.GetCode();
-  array.AddToken(new FormulaByteToken(OpCode.ocSum));
+  array.AddToken(new FormulaByteToken(OpCode.ocIf));
   expect(
     /** Rejects missing function compilation. @returns Native subtotal flag. */ () =>
       new RecordingCompiler(array).CompileTokenArray(),
@@ -139,9 +139,7 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
     /** Rejects inherited array context until its actual propagation is implemented. @returns Subtotal flag. */ () =>
       new FormulaCompiler(flagged).CompileTokenArray(),
   ).toThrow(/array context/);
-  expect(
-    /** Rejects missing II services. @returns Compiler. */ () => new FormulaCompiler(array, true),
-  ).toThrow(/Implicit/);
+  expect(new FormulaCompiler(array, true)).toBeInstanceOf(FormulaCompiler);
   expect(
     /** Rejects missing matrix services. @returns Compiler. */ () =>
       new FormulaCompiler(array, false, true),
@@ -159,4 +157,54 @@ it("preserves the native expression and token-recursion limits", /** Bounded sou
     expect(array.GetCodeError()).toBe(FormulaError.StackOverflow);
     expect(array.GetCode()).toBeNull();
   }
+});
+
+it("uses native variable-argument Factor arity and close/error boundaries", /** Exercises shared grammar independently of Calc scanner injection. @returns Nothing. */ () => {
+  for (const op of ["ocSum", "ocSumSQ", "ocProduct", "ocAverage"] as const) {
+    const array = tokens([op, "ocOpen", "ocClose"]);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(FormulaError.NONE);
+    expect((Array.from(array.RPNTokens())[0] as FormulaByteToken).GetByte()).toBe(0);
+  }
+  for (const [input, error] of [
+    [["ocSum", 1], FormulaError.OperatorExpected],
+    [["ocSum", "ocOpen", 1, "ocAdd", "ocClose"], FormulaError.ParameterExpected],
+    [["ocSum", "ocOpen", 1], FormulaError.PairExpected],
+    [["ocSum", "ocOpen", 1, "ocSep", "ocMul", 2, "ocClose"], FormulaError.VariableExpected],
+  ] as const) {
+    const array = tokens(input);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(error);
+    expect(array.GetCodeLen()).toBe(0);
+  }
+});
+
+it("retains native range precedence and base nonmerging RPN contracts", /** The shared compiler emits a range operator when its actual virtual extension has no Calc range service. @returns Nothing. */ () => {
+  for (const [input, expected] of [
+    [
+      [1, "ocRange", 2, "ocAdd", 3],
+      [1, 2, "ocRange", 3, "ocAdd"],
+    ],
+    [
+      [1, "ocRange", "ocSum", "ocOpen", 2, "ocClose"],
+      [1, 2, "ocSum", "ocRange"],
+    ],
+    [
+      ["ocNegSub", 1, "ocRange", 2],
+      [1, 2, "ocRange", "ocNegSub"],
+    ],
+  ] as const) {
+    const array = tokens(input);
+    new RecordingCompiler(array).CompileTokenArray();
+    expect(array.GetCodeError()).toBe(FormulaError.NONE);
+    expect(rpn(array)).toEqual(expected);
+  }
+  const malformed = tokens(["ocRange", 1]);
+  new RecordingCompiler(malformed).CompileTokenArray();
+  expect(malformed.GetCodeError()).toBe(FormulaError.VariableExpected);
+});
+it("retains the original empty base II hooks when compute mode is enabled", /** Shared compilation accepts the original flag while Calc owns reference optimization. @returns Nothing. */ () => {
+  const array = tokens([1, "ocAdd", 2]);
+  expect(new FormulaCompiler(array, true).CompileTokenArray()).toBe(false);
+  expect(rpn(array)).toEqual([1, 2, "ocAdd"]);
 });

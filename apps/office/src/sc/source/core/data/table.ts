@@ -1,4 +1,6 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { ConvertToGroupListening } from "../../../inc/types";
+import { HasAttrFlags } from "../../../inc/global";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScLineFlags } from "../../../inc/attarray";
@@ -20,6 +22,8 @@ import { SharedString, type SharedStringConstReference } from "../../../../svl/i
 import type { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
+import type { ColumnBlockPosition } from "../../../inc/mtvelements";
+import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScMarkData } from "../../../inc/markdata";
 
 import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
@@ -39,6 +43,12 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table7 allocated-column regroup routing. @param col - Column. @returns Nothing. */
+  RegroupFormulaCells(col: number): void {
+    if (this.rDocument.ValidCol(col) && col < this.aCol.length)
+      (this.aCol[col] as ScColumn).RegroupFormulaCells();
+  }
+
   /** Original const cached-script query only visits actually allocated columns. @param col - Column. @param row - Row. @returns Cached flags or NONE. */
   GetScriptType(col: number, row: number): SvtScriptType {
     return this.rDocument.ValidCol(col) && col < this.aCol.length
@@ -322,6 +332,28 @@ export class ScTable {
       result = Math.max(result, (this.aCol[col] as ScColumn).GetLastDataPos(row));
     return result;
   }
+  /** Original table2 attribute query scans allocated columns then the real default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param mask - Native mask. @returns Found. */
+  HasAttrib(
+    firstCol: number,
+    firstRow: number,
+    lastCol: number,
+    lastRow: number,
+    mask: HasAttrFlags,
+  ): boolean {
+    for (let col = firstCol; col <= lastCol && col < this.aCol.length; col++)
+      if ((this.aCol[col] as ScColumn).HasAttrib(firstRow, lastRow, mask)) return true;
+    if (lastCol >= this.aCol.length) return this.aDefaultColData.HasAttrib(firstRow, lastRow, mask);
+    return false;
+  }
+  /** Original table2 typed-cell block emptiness for the consumed scalar stores;notes and sparklines are unrepresented families. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @returns Empty block. */
+  IsBlockEmpty(firstCol: number, firstRow: number, lastCol: number, lastRow: number): boolean {
+    if (!this.rDocument.ValidCol(firstCol) || !this.rDocument.ValidCol(lastCol)) return false;
+    lastCol = this.ClampToAllocatedColumns(lastCol);
+    let empty = true;
+    for (let col = firstCol; col <= lastCol && empty; col++)
+      empty = (this.aCol[col] as ScColumn).IsEmptyData(firstRow, lastRow);
+    return empty;
+  }
   /** Finds native first occupied coordinates using actual column stores. @param col - Column output. @param row - Row output. @returns Nothing. */
   GetFirstDataPos(col: [number], row: [number]): void {
     col[0] = 0;
@@ -565,6 +597,28 @@ export class ScTable {
   GetColumnData(col: number): ScColumnData {
     return col < this.aCol.length ? (this.aCol[col] as ScColumn) : this.aDefaultColData;
   }
+  /** Original table2.cxx const FetchColumn overload returns only allocated valid columns without creating storage. The mutable allocation overload is not consumed here. @param col - Requested column. @returns Actual column or null. */
+  FetchColumn(col: number): ScColumn | null {
+    return this.rDocument.ValidCol(col) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn)
+      : null;
+  }
+  /** Original mutable column cursor initialization allocates a valid requested column. @param position - Actual cursor. @param col - Column. @returns Initialized. */
+  InitColumnBlockPosition(position: ColumnBlockPosition, col: number): boolean {
+    if (!this.rDocument.ValidCol(col)) return false;
+    this.CreateColumnIfNotExists(col).InitBlockPosition(position);
+    return true;
+  }
+  /** Original table1 broadcaster deletion does not allocate missing columns. @param position - Initialized cursor. @param col - Column. @param first - First row. @param last - Last row. @returns Nothing. */
+  DeleteBroadcasters(
+    position: ColumnBlockPosition,
+    col: number,
+    first: number,
+    last: number,
+  ): void {
+    if (!this.rDocument.ValidCol(col) || col >= this.aCol.length) return;
+    (this.aCol[col] as ScColumn).DeleteBroadcasters(position, first, last);
+  }
   /** Releases canonical pattern ownership on sheet removal. @returns Nothing. */
   DisposeAttributes(): void {
     for (const col of this.aCol) col.DisposeAttributes();
@@ -643,12 +697,32 @@ export class ScTable {
       : null;
   }
   /** Starts actual single-cell listening, allocating only required columns. @param address - Position. @param listener - Listener. @returns Nothing. */
-  StartListening(address: ScAddress, listener: SvtListener<SfxHint>): void {
+  StartListening(
+    ...args:
+      [ScAddress, SvtListener<SfxHint>] | [StartListeningContext, ScAddress, SvtListener<SfxHint>]
+  ): void {
+    if (args.length === 3) {
+      const [context, address, listener] = args;
+      if (this.rDocument.ValidCol(address.Col()))
+        this.CreateColumnIfNotExists(address.Col()).StartListening(context, address, listener);
+      return;
+    }
+    const [address, listener] = args;
     if (this.rDocument.ValidColRow(address.Col(), address.Row()))
       this.CreateColumnIfNotExists(address.Col()).StartListening(listener, address.Row());
   }
   /** Ends single-cell listening without allocating. @param address - Position. @param listener - Listener. @returns Nothing. */
-  EndListening(address: ScAddress, listener: SvtListener<SfxHint>): void {
+  EndListening(
+    ...args:
+      [ScAddress, SvtListener<SfxHint>] | [EndListeningContext, ScAddress, SvtListener<SfxHint>]
+  ): void {
+    if (args.length === 3) {
+      const [context, address, listener] = args;
+      if (this.rDocument.ValidCol(address.Col()) && address.Col() < this.aCol.length)
+        (this.aCol[address.Col()] as ScColumn).EndListening(context, address, listener);
+      return;
+    }
+    const [address, listener] = args;
     if (
       this.rDocument.ValidColRow(address.Col(), address.Row()) &&
       address.Col() < this.aCol.length
@@ -674,9 +748,11 @@ export class ScTable {
   }
   /** Adopts compiled formula content through the actual column. @param col - Column. @param row - Row. @param cell - Matching compiled owner. @returns Adopted cell or null. */
   SetFormulaCell(col: number, row: number, cell: ScFormulaCell): ScFormulaCell | null {
-    return this.rDocument.ValidColRow(col, row)
-      ? this.CreateColumnIfNotExists(col).SetFormulaCell(row, cell)
-      : null;
+    if (!this.rDocument.ValidColRow(col, row)) {
+      cell.Dispose();
+      return null;
+    }
+    return this.CreateColumnIfNotExists(col).SetFormulaCell(row, cell, ConvertToGroupListening);
   }
   /** Borrows a formula cell without allocating storage. @param col - Column. @param row - Row. @returns Cell or null. */
   GetFormulaCell(col: number, row: number): ScFormulaCell | null {

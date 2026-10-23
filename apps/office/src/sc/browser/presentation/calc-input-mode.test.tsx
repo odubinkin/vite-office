@@ -68,10 +68,10 @@ it("commits TOP before F2 and retains rejected drafts instead of entering TABLE"
   expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
   expect(screen.getByRole("textbox", { name: "Edit cell A1" })).toHaveFocus();
   fireEvent.focus(line);
-  fireEvent.change(line, { target: { value: "=SUM(A1)" } });
+  fireEvent.change(line, { target: { value: "=UNPORTED(A1)" } });
   fireEvent.keyDown(line, { key: "F2" });
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
-  expect(line).toHaveValue("=SUM(A1)");
+  expect(line).toHaveValue("=UNPORTED(A1)");
   expect(screen.getByRole("alert")).toBeInTheDocument();
   s.Close();
 });
@@ -99,7 +99,7 @@ it("routes scalar TYPE arrows to cell movement while modifiers and TABLE retain 
   act(
     /** Keeps unsupported input pending in the active real cell. @returns Nothing. */ () => {
       c.Select(2, 2);
-      c.StartInput(ScInputMode.SC_INPUT_TYPE, "=SUM(A1)");
+      c.StartInput(ScInputMode.SC_INPUT_TYPE, "=UNPORTED(A1)");
     },
   );
   const input = screen.getByRole("textbox", { name: "Edit cell C3" });

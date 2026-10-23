@@ -1,0 +1,148 @@
+{
+  "task": "202610222107-NCTYV6",
+  "final": false,
+  "verification": "pending",
+  "archiveSha256": "581eada22d99eeb57298c03625dd3fd4b860c0d91bbab3f32d865da0d9b0ea34",
+  "sources": [
+    {
+      "path": "apps/office/src/sc/inc/clipparam.ts",
+      "sha256": "3877d58a0800cb606141679232f91c6a5b1c2565eaf9645a9bb63211c52b68da"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/FilterData.ts",
+      "sha256": "518fca3c43a50eddff1fec3b7ba5925b1b6e9c9d102009f0e05d1d943d7e2b07"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+      "sha256": "09d205546eee4665b6d81b343f34919cc2e6cbd7cce4ce83cecea363e2f6bd9a"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipparam.test.ts",
+      "sha256": "cf37859b31f9510a5f13385a472c2000088fc0660970ba5da2edd0fa4ed48bd6"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/clipparam.ts",
+      "sha256": "f46889b7d054cf6532aeb2ca63415fb48dc780e36eb3e1cffe10b50439e12340"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen7.ts",
+      "sha256": "8e4b6b67b6152a440d512e77c790e71b5857d91157277a14c9308f85e9724ef8"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "1d56b2404f3efc6da1d9fdf80fdae2ea4cc796c40b6c16170eadbb821a963925"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+      "sha256": "08d85dcdf003f2248ba5be1a5aaa25a4670a7ec97834f2cdae2a377874aef22b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "sha256": "3fe7d9ee755dcaf4cbe47de45d6d5db0f6b3425633def15713a23582a6c1350b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token-copy.test.ts",
+      "sha256": "602e2bb7674655db1977a0784f80f7f216123a82cd23213ca3bee195c10d5e38"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/token.ts",
+      "sha256": "fbcf7b952a6c04e208fad019dc2f4095e217a628027ab9f5fb5bf50259378293"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
+      "sha256": "c68c55066cb39709c1684905f13fae4069ac721051a792a559d1ba63d3184dd7"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "033fc4305765d4c66eb545666ca74af70d32471e27ef076d271ea78faab90e34"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/clipparam.ts.json",
+      "sha256": "ee911af1aba70c6028dc4b68bdd3643c5b615771c1d71f63e9cd1cde0cf27068"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/FilterData.ts.json",
+      "sha256": "0ffdd1c7adabd09f3eb0852b07bc15e738aae4f5e495a28e9957da2e2caa9c8c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/clipparam.ts.json",
+      "sha256": "6b667296acb29ea00cba0112922cea36a5cda3d1866bd5fae820e1e340353883"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+      "sha256": "051b7ab5b1d46f3ff2bed23bf71f34378bb6cbc0ce1d00fab998d706a084a3f2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "327a296adf0aa2936773c63adccdf986f83442b70de782e7bdd8e946c80be77a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "sha256": "87ee5c17118dac0ccfbbe760a8cdfbd7cab7c117d06ce6f55bb6ddc0eac7c16e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/token.ts.json",
+      "sha256": "dc74ff3b4466089424621429a681d32851a41a98e3be8935275947234fa370b2"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/clipparam.ts.json",
+      "sha256": "bdf25c9995aa8dc8945bd47c4c36c073b5147a0d0d7a799809458a71c8385121"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/FilterData.ts.json",
+      "sha256": "5a6438af8cf04b45d9911060c452636088ccad48d341f78e5affa067ad5f2fb5"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/clipparam.ts.json",
+      "sha256": "0050e223c9d7a3ae2175389086c580efb0ff79232327518617bdb50fe2eb3d21"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+      "sha256": "0ff08fa1696fdd81833bcd1e76baf10a4d8331da453a51a68b68e384d99053ba"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "3e273a67e052d7cc3d03bd2ca9ba4b5814608f411c9b613cfb6081dd8f41ca0a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "sha256": "e72f240ac2773d11802a6b552a962f5173f06cd847f3fdbb9a73eb5e9ff1602c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/token.ts.json",
+      "sha256": "955655338a08c0a856e76fbc62e930dff19dbf5df6ee4caf339a2103c0eebb88"
+    }
+  ],
+  "rawPaths": [
+    "output/playwright/task75-calc-progress.log",
+    "output/playwright/task75-calc-progress-results.json",
+    "output/playwright/task75-calc-progress-coverage/coverage-final.json",
+    "output/playwright/task75-calc-progress-coverage/coverage-summary.json",
+    "output/playwright/task75-copy-owners.log",
+    "output/playwright/task75-copy-owners-results.json",
+    "output/playwright/task75-copy-owners-coverage/coverage-summary.json",
+    "output/playwright/task75-related-owners.log",
+    "output/playwright/task75-related-owners-results.json",
+    "output/playwright/task75-related-owners-coverage/coverage-final.json",
+    "output/playwright/task75-related-owners-coverage/coverage-summary.json",
+    "output/playwright/task75-final-focused.log",
+    "output/playwright/task75-final-focused-results.json",
+    "output/playwright/task75-lint-current.log",
+    "output/playwright/task75-format-current.log",
+    "output/playwright/task75-docs-current.log",
+    "output/playwright/task75-size-current.log",
+    "output/playwright/task75-provenance-current.log",
+    "output/playwright/task75-registry-final-progress.log",
+    "output/playwright/task75-boundaries-progress.log",
+    "output/playwright/task75-tree-progress.log",
+    "output/playwright/task75-types-bounds.log",
+    "output/playwright/task75-lint-bounds.log",
+    "output/playwright/task75-build-progress.log",
+    "output/playwright/task75-routing-progress.log",
+    "output/playwright/task75-doctor-progress.log",
+    "output/playwright/task75-registry-progress.py",
+    "output/playwright/task75-save-progress.mjs"
+  ],
+  "progress": "Same-pool token-based relocation and actual clipboard parameter prerequisites. Full Calc666 scenarios pass but coverage99.56S/99.20B/100F/99.65L fails unchanged100 thresholds;this diagnostic predates internal unused-default cleanup and final negative/bounds tests. Current related403 scenarios pass;token,formula-cell,clipboard-parameter,filter-data and documen7 owners raw100. Selected-document coverage below100;profile excludes unrelated browser presentation tests. Latest focused12 scenarios include boundary adoption. Types/scoped lint/format/JSDoc/size/boundary/tree/provenance/registry/build/routing/doctor pass. No final all-Calc raw100 or broad parity claim.",
+  "remaining": "Native document modes,shared group code/hash/member lifetime,column splitting/rejoining and group area listeners;history/ODS/browser/Worker/native observations and final all-Calc/changed-shared raw100 and complete gates. Dependent76 clipboard reset,pooling,paste/Undo and74 final UI acceptance remain pending. Goal active."
+}
