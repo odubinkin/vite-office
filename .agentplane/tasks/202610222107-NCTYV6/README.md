@@ -1,10 +1,10 @@
 ---
 id: "202610222107-NCTYV6"
 title: "Implement native formula copying and shared-group lifetime"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 36
+revision: 44
 origin:
   system: "manual"
 depends_on:
@@ -15,15 +15,15 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-23T05:10:22.309Z"
+  updated_at: "2026-10-23T05:35:52.965Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-10-23T05:10:40.423Z"
+  updated_at: "2026-10-23T06:19:19.018Z"
   updated_by: "CODER"
-  note: "Full18359 app tests pass;137 tooling and124 inventory with raw100 pass;all457 browser cases pass after3 test-only repairs. Whole-app raw100 fails99.85S/99.75B/100F/99.90L,all misses Calc. Native mode/pool prerequisites remain unfinished and135-path scope is exhausted;200-path approval is pending. No task closure or goal pause yet."
-  attempts: 1
+  note: "Current native mode/pool checkpoint within human-approved200 paths(177used):all768Calc/related scenarios202files and22shared-style scenarios4files pass;4current Chromium/DOM-free Worker cases and current build/static/type/lint/format/source/registry/routing gates pass. Changed shared owners raw100;Calc raw99.75S/99.46B/100F/99.88L leaves35statements/46branches/15lines across10owners. Immutable progress-modes archive stores exact source hashes and raw counters. Task75 not closed;continue genuine valid-owner tests/source audit to required100,then finish75 and pause goal before any new task."
+  attempts: 2
 commit: null
 comments:
   -
@@ -41,6 +41,12 @@ comments:
   -
     author: "CODER"
     body: "Blocked: current135-path budget is exhausted. Native document-mode/pool ownership completion requires a bounded175-path forecast;human200-path approval is pending. Full tests and repaired browser/inventory profiles pass,but Calc raw100 and native prerequisites remain unfinished. Do not close task or pause goal before real completion."
+  -
+    author: "CODER"
+    body: "Start: continue only source-bound constructor/matrix-token and native AutoSum coverage cases in existing approved135 paths. New mode/pool module paths remain blocked pending200-path approval."
+  -
+    author: "CODER"
+    body: "Start: Continue approved native document-mode and pool-ownership scope with the human-approved cumulative limit of 200 paths; close task 75 after verification and then pause the goal."
 events:
   -
     type: "status"
@@ -83,19 +89,41 @@ events:
     from: "DOING"
     to: "BLOCKED"
     note: "Blocked: current135-path budget is exhausted. Native document-mode/pool ownership completion requires a bounded175-path forecast;human200-path approval is pending. Full tests and repaired browser/inventory profiles pass,but Calc raw100 and native prerequisites remain unfinished. Do not close task or pause goal before real completion."
+  -
+    type: "status"
+    at: "2026-10-23T05:18:30.849Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue only source-bound constructor/matrix-token and native AutoSum coverage cases in existing approved135 paths. New mode/pool module paths remain blocked pending200-path approval."
+  -
+    type: "status"
+    at: "2026-10-23T05:39:34.664Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: Continue approved native document-mode and pool-ownership scope with the human-approved cumulative limit of 200 paths; close task 75 after verification and then pause the goal."
+  -
+    type: "verify"
+    at: "2026-10-23T06:19:19.018Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Current native mode/pool checkpoint within human-approved200 paths(177used):all768Calc/related scenarios202files and22shared-style scenarios4files pass;4current Chromium/DOM-free Worker cases and current build/static/type/lint/format/source/registry/routing gates pass. Changed shared owners raw100;Calc raw99.75S/99.46B/100F/99.88L leaves35statements/46branches/15lines across10owners. Immutable progress-modes archive stores exact source hashes and raw counters. Task75 not closed;continue genuine valid-owner tests/source audit to required100,then finish75 and pause goal before any new task."
 doc_version: 3
-doc_updated_at: "2026-10-23T05:11:22.966Z"
+doc_updated_at: "2026-10-23T06:19:19.160Z"
 doc_updated_by: "CODER"
 description: "Block75 kernel prerequisite for completing74 without flat clipboard-fill substitutes. Implement original ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,default document/clipboard/undo mode identity and shared formula group creation,splitting,ownership and listening over actual columns and native area broadcasters. Support the existing numeric/string/error/local-reference and aggregate slice;keep external/named/3D/matrix/device/OpenCL services explicit. Preserve source flags,logical sharing,member/code ownership and default behavior;JS GC replaces physical allocation only. No browser evaluator,formula-source reparse substitute,per-cell flattening of native groups or reduced-original probe facade. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,independent source vectors and genuine original native observations where feasible,browser/Worker and all static/build/source gates. Full all-app checkpoint80."
 sections:
   Summary: "Port native formula copy/clone and shared-group ownership/listening needed by internal clipboard fill and full range recalculation."
-  Scope: "Block75 depends on73. Native ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,normal/clipboard/undo mode identity,shared formula group creation/splitting/code ownership and area listening over actual stores. Existing numeric/string/error/local-reference/aggregate slice only;external/named/3D/matrix/OpenCL/device services remain explicit. Up to135 source/test/registry/probe paths;only calc checkout/branch,no network/external writes or merges. Clipboard document pooling/paste undo belongs to dependent76;UI completion remains74."
+  Scope: "Block75 depends on73. Native ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,normal/clipboard/undo mode identity,shared formula group creation/splitting/code ownership and area listening over actual stores. Existing numeric/string/error/local-reference/aggregate slice only;external/named/3D/matrix/OpenCL/device services remain explicit. Up to200 source/test/registry/probe paths;only calc checkout/branch,no network/external writes or merges. Clipboard document pooling/paste undo belongs to dependent76;UI completion remains74."
   Plan: |-
     Inspect complete original copy/group/mode/reference/listener paths;implement genuine token/reference copying and mode identity first,then original group ownership/column splitting and native area listening. Add independent source vectors and unchanged original native observations where feasible without facade probes. Verify real edits/deletion/undo/ODS/Worker lifetimes,Calc and changed shared raw100 and all static/build/source gates. Keep74 pending until clipboard76 and final74 acceptance are complete.
 
     Human approval on 2026-10-23 expands the cumulative source/test/registry/probe budget to135 paths for completion of existing formula-group/context scope and its required provenance records. No feature or acceptance criterion is removed or added.
 
-    User stop rule,2026-10-23: after the next full checkpoint,complete necessary repairs,required coverage and current task closure,then pause the goal. The agent started that full diagnostic at75,earlier than the previous80 cadence;the user specified the stop condition rather than explicitly selecting the earlier timing. Complete necessary repairs,required coverage and final task closure,then pause the broad goal before starting any new task. This records the requested stop condition;the cumulative path budget remains135 until the pending200-path expansion is explicitly answered. Current full diagnostic checks are read-only and already authorized.
+    User stop rule,2026-10-23: after the next full checkpoint,complete necessary repairs,required coverage and current task closure,then pause the goal. The agent started that full diagnostic at75,earlier than the previous80 cadence;the user specified the stop condition rather than explicitly selecting the earlier timing. Complete necessary repairs,required coverage and final task closure,then pause the broad goal before starting any new task. This records the requested stop condition;the human explicitly confirmed the cumulative200-path expansion on2026-10-23. The completed full diagnostic is preserved;remaining implementation and required repairs are authorized within200 paths.
+
+    Human confirmation on2026-10-23 approves up to200 cumulative source/test/registry/probe paths for completing the existing task75 native mode/pool ownership and raw100 scope. Forecast175 includes nullable GetPool callers,original pool-helper/style-pool allocation/document-pointer prerequisites and paired provenance. No new UI feature,matrix evaluator,clipboard resource reset/share/paste service or acceptance reduction is added. Finish75 and pause the goal before starting76 or any other task. Revalidate affected Calc/shared owners;reuse the immutable full checkpoint only for unchanged runtime owners.
   Verify Steps: "Require independent original-source vectors for relative/absolute reference copying,bounds,mode/flag/default behavior and code/RPN identity;genuine original native observations where feasible without transformed/replacement services. Real groups must share original code,split/rejoin correctly and retain source listener/bulk/teardown behavior under edits,member removal,history and serialization. No formula-source reparsing substitute,flat per-cell group replacement or copied spreadsheet model. Full Calc and changed shared owners raw100 S/B/F/L with unchanged thresholds,related tests,actual browser/DOM-free Worker,production build and type/lint/format/boundary/JSDoc/size/source/provenance/registry/resources/static/routing/doctor gates. User-requested full all-app/inventory/tooling/browser checkpoint is advanced to this task75;repair failures and required raw100,close this task,then pause the goal before new tasks."
   Verification: |-
     Rework required;task75 is not accepted or complete. Full04c runtime diagnostic passed18359 application scenarios/1191 files,137 tooling scenarios/21 files and,repeated after one load-sensitive timeout,124 inventory scenarios/38 files with raw100. All457 browser cases pass across original454 successes and3 corrected-test repeats. Current additional Calc19 scenarios/2 files pass separately. Whole-app raw100 fails99.85S/99.75B/100F/99.90L;all14 incomplete owners belong to Calc,while all Writer/shared owners are raw100. Runtime source remains04c5bcc1cfb1;only browser test corrections,new Calc tests and task evidence changed. Native document-mode/pool ownership prerequisites and final Calc raw100 remain pending;135-path budget is exhausted and200-path request awaits approval. User stop condition remains:finish repairs and actual task75 closure,then pause goal before any new task.
@@ -129,6 +157,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-23T06:19:19.018Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Current native mode/pool checkpoint within human-approved200 paths(177used):all768Calc/related scenarios202files and22shared-style scenarios4files pass;4current Chromium/DOM-free Worker cases and current build/static/type/lint/format/source/registry/routing gates pass. Changed shared owners raw100;Calc raw99.75S/99.46B/100F/99.88L leaves35statements/46branches/15lines across10owners. Immutable progress-modes archive stores exact source hashes and raw counters. Task75 not closed;continue genuine valid-owner tests/source audit to required100,then finish75 and pause goal before any new task.
+    Attempts: 2
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T06:19:17.947Z, excerpt_hash=sha256:c7ca8d4131e54f40f7d69e64aee12944ac986f4e524fd3ef14d9bad75006e340
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222107-NCTYV6/blueprint/resolved-snapshot.json
+    - old_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+    - current_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222107-NCTYV6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610222107-NCTYV6 -m 🧩 NCTYV6 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -185,6 +243,26 @@ sections:
     Calc's initial project completed before adding four new source-bound cases to the existing native AutoSum/workbench test files. These tests cover real ordered aggregate chains/live dependency updates/history,MaxRow/MaxCol and occupied destination spans,directional SUMSQ classification,marked text fallback,and mounted selected-AutoSum focus/explicit unsupported block-fill presentation. Current related19 scenarios/2 files pass. A fixture initially called nonexistent SetRawString and used forbidden non-null assertions;it was corrected to actual SetTextCell and checked public cell queries. Current lint/format/types/JSDoc/size/boundary checks pass. The focused19-case report is separate from the original full18359-case report;do not claim the latter executed the new four cases.
 
     The current path budget is135/135. A bounded native type-planning probe,with exact byte-for-byte source restoration,identified15 callers affected by the truthful nullable GetPool contract. The forecast with original pool-helper/style-pool ownership/document-pointer prerequisites and mandatory paired metadata reaches175 paths;the requested200-path headroom remains pending human response. No source outside135 was modified. Task75 cannot yet close: native document modes/pool-helper identity and final Calc raw100 remain unfinished. Do not weaken thresholds,omit task acceptance,manufacture private invalid owner states,or mark the partial checkpoint accepted. Preserve the stop instruction:after required fixes and actual task75 closure,pause the broad goal without starting76 or another task.
+
+    Current approved200-path document-mode checkpoint (not task closure):
+
+    Human explicitly approved135-to200 cumulative paths on2026-10-23. Current cumulative source/test/registry scope is177 paths. ScDocument now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,auto-calc defaults,independent string pools,normal/function-access-only actual ScPoolHelper/BASM allocation,and nullable item/style pool APIs. ScPoolHelper owns the real ScDocumentPool and a ScStyleSheetPool on the existing SfxStyleSheetPool base;source destruction clears the actual style-pool document pointer. CellAttributeHelper is lazy;unshared temporary documents reject creation. Calc style factories explicitly reject unported ScStyleSheet creation,without substituting shared styles. Native NoListening and formula change-track state preserve start/end asymmetry. Clipboard copies retain code errors and defer ordinary reference invalidation;undo preserves its original absolute-adjustment branch. Existing normal shell/export/test pool borrowers now acknowledge the nullable API at original guaranteed dereferences. Actual clipboard sharing/reset/paste remains task76,not implemented here.
+
+    Command: focused formula-copy suite;Result:pass11scenarios before the final FUNCTIONACCESS dependency assertions. Evidence:output/playwright/task75-modes-focused3.log. Scope:actual mode/pool identities,copy metadata,ordinary/context listeners,valid and genuinely relocated invalid references. Typecheck,scopedlint,productionbuild,source-tree/provenance,moduleboundaries,JSDoc,size and Calc registry gates pass;fresh final checks continue. Four existing browser/DOM-free Worker cases for groups,ODS,cell-style associations and EditEngine transfer pass;the mode-extended Worker case is being checked separately.
+
+    The first all-Calc mode diagnostic loaded formula-cell runtime before a subsequent clipboard-branch correction but discovered the new test later in the same run;it reports755pass/1failure and is not a current-source acceptance profile. Preserve that diagnostic rather than treating mismatched source/test timings as final evidence. The current source was snapshotted before a fresh stable Calc/changedshared profile;do not mutate runtime/test source until that profile completes. Required raw100 and final task closure remain pending. The earlier18359-test full checkpoint is immutable and reusable only for unchanged runtime owners. User stop rule remains:finish75 with necessary repairs/coverage,then pause goal before any new task.
+
+    Native mode/pool checkpoint,final task acceptance still pending:
+
+    Evidence archive:evidence/progress-modes/manifest.json and raw.json.gz(2973138bytes),immutable snapshots of53intentional source/test/record paths,404Calc/changed-shared source/test hashes,original native input hashes,actual profiles and raw coverage. Human-approved cumulative scope200;used177. The final source did not change during the768-scenario run.
+
+    Command:Vitest all Calc plus three Calc integration files and four related formula test files,coverage enabled,unchanged100thresholds,maxWorkers2. Result:all768scenarios/202files pass,0failed/0skipped;coverage gate fails. Calc raw99.75S/99.46B/100F/99.88L;missing35statements,46branches,15lines across10owners. Both measured changed shared owners are raw100S/B/F/L. Actual JSON counters and exact maps remain in the archive;no merging of changed source versions or threshold weakening.
+
+    The stable earlier profile had one unchanged30000ms character-format UI timeout under simultaneous heavy validation,767other scenarios passed. Isolated current retry plus genuine copy-mode tests passes18/2files;the final two-worker complete profile passes all768without increasing timeouts. Native copy retry was corrected after that earlier profile:UNDO clears nonempty source code errors but skips ordinary compilation;normal retry enables actual compute-II/matrix constructor arguments and clears the result on successful recompilation,as native CompileTokenArray does.
+
+    Current4Chromium/DOM-free Worker scenarios pass,including actual allocation/defaults/lifetime for all four document modes,group edits,ODS/style/EditEngine integration. Related unmodified shared style allocation/model/first-import tests pass22/4files. Current productionbuild,static smoke,typecheck,scopedlint,format,JSDoc,size,source/provenance,Calc registry,boundaries,resources,routing anddoctor gates pass. Shared physical ownership still uses existing managed references;there is no global reference-count facade or fake formatter/style factory.
+
+    Remaining native/source audit targets:real optional column-regroup output,retained cold-listener repair after real edits,invalid references created by actual formula relocation/grouping,precompiled matrix-reference metadata/diagnostic output and browser observer-error handling. Defensive store/group/arity/context guards must be assessed against complete source/accepted-owner invariants;do not fabricate invalid private graphs or remove branches merely to improve coverage. Native matrix evaluation,full styles/formatter and clipboard sharing/reset/paste remain explicitly outside this slice. Task75 stays DOING/needs_rework. Continue required raw100 work;close75onlyafteractualacceptance,then pause the goal before76or any new task.
 id_source: "generated"
 ---
 ## Summary
@@ -193,7 +271,7 @@ Port native formula copy/clone and shared-group ownership/listening needed by in
 
 ## Scope
 
-Block75 depends on73. Native ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,normal/clipboard/undo mode identity,shared formula group creation/splitting/code ownership and area listening over actual stores. Existing numeric/string/error/local-reference/aggregate slice only;external/named/3D/matrix/OpenCL/device services remain explicit. Up to135 source/test/registry/probe paths;only calc checkout/branch,no network/external writes or merges. Clipboard document pooling/paste undo belongs to dependent76;UI completion remains74.
+Block75 depends on73. Native ScFormulaCell copy/clone relocation,ScTokenArray reference adjustment,normal/clipboard/undo mode identity,shared formula group creation/splitting/code ownership and area listening over actual stores. Existing numeric/string/error/local-reference/aggregate slice only;external/named/3D/matrix/OpenCL/device services remain explicit. Up to200 source/test/registry/probe paths;only calc checkout/branch,no network/external writes or merges. Clipboard document pooling/paste undo belongs to dependent76;UI completion remains74.
 
 ## Plan
 
@@ -201,7 +279,9 @@ Inspect complete original copy/group/mode/reference/listener paths;implement gen
 
 Human approval on 2026-10-23 expands the cumulative source/test/registry/probe budget to135 paths for completion of existing formula-group/context scope and its required provenance records. No feature or acceptance criterion is removed or added.
 
-User stop rule,2026-10-23: after the next full checkpoint,complete necessary repairs,required coverage and current task closure,then pause the goal. The agent started that full diagnostic at75,earlier than the previous80 cadence;the user specified the stop condition rather than explicitly selecting the earlier timing. Complete necessary repairs,required coverage and final task closure,then pause the broad goal before starting any new task. This records the requested stop condition;the cumulative path budget remains135 until the pending200-path expansion is explicitly answered. Current full diagnostic checks are read-only and already authorized.
+User stop rule,2026-10-23: after the next full checkpoint,complete necessary repairs,required coverage and current task closure,then pause the goal. The agent started that full diagnostic at75,earlier than the previous80 cadence;the user specified the stop condition rather than explicitly selecting the earlier timing. Complete necessary repairs,required coverage and final task closure,then pause the broad goal before starting any new task. This records the requested stop condition;the human explicitly confirmed the cumulative200-path expansion on2026-10-23. The completed full diagnostic is preserved;remaining implementation and required repairs are authorized within200 paths.
+
+Human confirmation on2026-10-23 approves up to200 cumulative source/test/registry/probe paths for completing the existing task75 native mode/pool ownership and raw100 scope. Forecast175 includes nullable GetPool callers,original pool-helper/style-pool allocation/document-pointer prerequisites and paired provenance. No new UI feature,matrix evaluator,clipboard resource reset/share/paste service or acceptance reduction is added. Finish75 and pause the goal before starting76 or any other task. Revalidate affected Calc/shared owners;reuse the immutable full checkpoint only for unchanged runtime owners.
 
 ## Verify Steps
 
@@ -240,6 +320,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-23T06:19:19.018Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Current native mode/pool checkpoint within human-approved200 paths(177used):all768Calc/related scenarios202files and22shared-style scenarios4files pass;4current Chromium/DOM-free Worker cases and current build/static/type/lint/format/source/registry/routing gates pass. Changed shared owners raw100;Calc raw99.75S/99.46B/100F/99.88L leaves35statements/46branches/15lines across10owners. Immutable progress-modes archive stores exact source hashes and raw counters. Task75 not closed;continue genuine valid-owner tests/source audit to required100,then finish75 and pause goal before any new task.
+Attempts: 2
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-23T06:19:17.947Z, excerpt_hash=sha256:c7ca8d4131e54f40f7d69e64aee12944ac986f4e524fd3ef14d9bad75006e340
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222107-NCTYV6/blueprint/resolved-snapshot.json
+- old_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+- current_digest: c045f7752ab9acf203ea93875b6296f251c76756673a42055b26065acf8fd530
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222107-NCTYV6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610222107-NCTYV6 -m 🧩 NCTYV6 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -301,3 +411,23 @@ Command: all Playwright projects,workers2,using the04c production build. Initial
 Calc's initial project completed before adding four new source-bound cases to the existing native AutoSum/workbench test files. These tests cover real ordered aggregate chains/live dependency updates/history,MaxRow/MaxCol and occupied destination spans,directional SUMSQ classification,marked text fallback,and mounted selected-AutoSum focus/explicit unsupported block-fill presentation. Current related19 scenarios/2 files pass. A fixture initially called nonexistent SetRawString and used forbidden non-null assertions;it was corrected to actual SetTextCell and checked public cell queries. Current lint/format/types/JSDoc/size/boundary checks pass. The focused19-case report is separate from the original full18359-case report;do not claim the latter executed the new four cases.
 
 The current path budget is135/135. A bounded native type-planning probe,with exact byte-for-byte source restoration,identified15 callers affected by the truthful nullable GetPool contract. The forecast with original pool-helper/style-pool ownership/document-pointer prerequisites and mandatory paired metadata reaches175 paths;the requested200-path headroom remains pending human response. No source outside135 was modified. Task75 cannot yet close: native document modes/pool-helper identity and final Calc raw100 remain unfinished. Do not weaken thresholds,omit task acceptance,manufacture private invalid owner states,or mark the partial checkpoint accepted. Preserve the stop instruction:after required fixes and actual task75 closure,pause the broad goal without starting76 or another task.
+
+Current approved200-path document-mode checkpoint (not task closure):
+
+Human explicitly approved135-to200 cumulative paths on2026-10-23. Current cumulative source/test/registry scope is177 paths. ScDocument now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,auto-calc defaults,independent string pools,normal/function-access-only actual ScPoolHelper/BASM allocation,and nullable item/style pool APIs. ScPoolHelper owns the real ScDocumentPool and a ScStyleSheetPool on the existing SfxStyleSheetPool base;source destruction clears the actual style-pool document pointer. CellAttributeHelper is lazy;unshared temporary documents reject creation. Calc style factories explicitly reject unported ScStyleSheet creation,without substituting shared styles. Native NoListening and formula change-track state preserve start/end asymmetry. Clipboard copies retain code errors and defer ordinary reference invalidation;undo preserves its original absolute-adjustment branch. Existing normal shell/export/test pool borrowers now acknowledge the nullable API at original guaranteed dereferences. Actual clipboard sharing/reset/paste remains task76,not implemented here.
+
+Command: focused formula-copy suite;Result:pass11scenarios before the final FUNCTIONACCESS dependency assertions. Evidence:output/playwright/task75-modes-focused3.log. Scope:actual mode/pool identities,copy metadata,ordinary/context listeners,valid and genuinely relocated invalid references. Typecheck,scopedlint,productionbuild,source-tree/provenance,moduleboundaries,JSDoc,size and Calc registry gates pass;fresh final checks continue. Four existing browser/DOM-free Worker cases for groups,ODS,cell-style associations and EditEngine transfer pass;the mode-extended Worker case is being checked separately.
+
+The first all-Calc mode diagnostic loaded formula-cell runtime before a subsequent clipboard-branch correction but discovered the new test later in the same run;it reports755pass/1failure and is not a current-source acceptance profile. Preserve that diagnostic rather than treating mismatched source/test timings as final evidence. The current source was snapshotted before a fresh stable Calc/changedshared profile;do not mutate runtime/test source until that profile completes. Required raw100 and final task closure remain pending. The earlier18359-test full checkpoint is immutable and reusable only for unchanged runtime owners. User stop rule remains:finish75 with necessary repairs/coverage,then pause goal before any new task.
+
+Native mode/pool checkpoint,final task acceptance still pending:
+
+Evidence archive:evidence/progress-modes/manifest.json and raw.json.gz(2973138bytes),immutable snapshots of53intentional source/test/record paths,404Calc/changed-shared source/test hashes,original native input hashes,actual profiles and raw coverage. Human-approved cumulative scope200;used177. The final source did not change during the768-scenario run.
+
+Command:Vitest all Calc plus three Calc integration files and four related formula test files,coverage enabled,unchanged100thresholds,maxWorkers2. Result:all768scenarios/202files pass,0failed/0skipped;coverage gate fails. Calc raw99.75S/99.46B/100F/99.88L;missing35statements,46branches,15lines across10owners. Both measured changed shared owners are raw100S/B/F/L. Actual JSON counters and exact maps remain in the archive;no merging of changed source versions or threshold weakening.
+
+The stable earlier profile had one unchanged30000ms character-format UI timeout under simultaneous heavy validation,767other scenarios passed. Isolated current retry plus genuine copy-mode tests passes18/2files;the final two-worker complete profile passes all768without increasing timeouts. Native copy retry was corrected after that earlier profile:UNDO clears nonempty source code errors but skips ordinary compilation;normal retry enables actual compute-II/matrix constructor arguments and clears the result on successful recompilation,as native CompileTokenArray does.
+
+Current4Chromium/DOM-free Worker scenarios pass,including actual allocation/defaults/lifetime for all four document modes,group edits,ODS/style/EditEngine integration. Related unmodified shared style allocation/model/first-import tests pass22/4files. Current productionbuild,static smoke,typecheck,scopedlint,format,JSDoc,size,source/provenance,Calc registry,boundaries,resources,routing anddoctor gates pass. Shared physical ownership still uses existing managed references;there is no global reference-count facade or fake formatter/style factory.
+
+Remaining native/source audit targets:real optional column-regroup output,retained cold-listener repair after real edits,invalid references created by actual formula relocation/grouping,precompiled matrix-reference metadata/diagnostic output and browser observer-error handling. Defensive store/group/arity/context guards must be assessed against complete source/accepted-owner invariants;do not fabricate invalid private graphs or remove branches merely to improve coverage. Native matrix evaluation,full styles/formatter and clipboard sharing/reset/paste remain explicitly outside this slice. Task75 stays DOING/needs_rework. Continue required raw100 work;close75onlyafteractualacceptance,then pause the goal before76or any new task.
