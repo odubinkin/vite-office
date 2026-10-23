@@ -4,7 +4,7 @@ title: "Canonicalize Writer font size controls and grow shrink commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Original font-size controls and Grow/Shrink wired through actual Writer items/ranges/history and shared Calc scalar boundary;109 current focused cases, related43-file passes plus repaired UI file,31 boundary cases,18 current-build Chromium scenarios and strict24-owner S1665/B1245/F396/L1485 all100 source audit; all declared local gates pass. Full suite follows one-in-ten cadence; task7. Native service gaps remain documented."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-23T00:34:12.497Z"
+  updated_by: "EVALUATOR"
+  note: "Consumed native font-size/control and Writer Grow Shrink implementation matches reviewed pinned source branches and is connected to actual frame, ranges, grouped history and document I/O. Verified source commit d05c726543c3,24 current owner identities, current built asset hashes and all local gate exit codes."
+  evaluated_sha: "d05c726543c342fdccc1ad66cd2bb1aff6780738"
+  blueprint_digest: "81766790ba2944cfaa75b07c0ab58676c98a83ccd60342871ae2cb19f6ff92b0"
+  evidence_refs:
+    - ".agentplane/tasks/202610222322-014VCW/README.md"
+    - ".agentplane/tasks/202610222322-014VCW/quality/20261023-003412497-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610222322-014VCW/quality/20261023-003412497-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610222322-014VCW/quality/20261023-003412497-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610222322-014VCW/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-font-sizing/incremental-coverage-audit.json"
+    - "output/playwright/writer-font-sizing/final-gates.json"
+    - "output/playwright/writer-font-sizing/browser-build-identity.json"
+    - "output/playwright/writer-font-sizing/browser-current-build.log"
+  findings:
+    - "Original32 sizes, absolute empty/invalid/unit/rounding contracts and toolbox acceptance retained; Grow Shrink40twip/19998/uint32/exact-disabled semantics documented and tested. Original contribution traversal remains source ordered; real PaM ownership and script metadata are used without simulated native providers."
+    - "Failed old UI expectations, missing canonical operation/divergence records and type-induced stale bundle validation were repaired; current18-scenario browser run is tied to successful build hashes. Raw partial coverage failure is disclosed separately from exact source-bound incremental audit."
 commit: null
 comments:
   -
