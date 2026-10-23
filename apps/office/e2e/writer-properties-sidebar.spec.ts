@@ -47,12 +47,13 @@ for (const width of [1280, 390]) {
     await sidebar
       .getByRole("combobox", { name: "Font name", exact: true })
       .selectOption("Liberation Sans");
-    await sidebar.getByRole("combobox", { name: "Font size", exact: true }).selectOption("14");
+    await sidebar.getByRole("combobox", { name: "Font size", exact: true }).fill("14");
+    await sidebar.getByRole("combobox", { name: "Font size", exact: true }).press("Tab");
     await expect(toolbar.getByRole("combobox", { name: "Font name", exact: true })).toHaveValue(
       "Liberation Sans",
     );
     await expect(toolbar.getByRole("combobox", { name: "Font size", exact: true })).toHaveValue(
-      "14",
+      "14 pt",
     );
     const lower = sidebar.getByRole("spinbutton", { name: "Below Paragraph Spacing", exact: true }),
       previousLower = await lower.inputValue();

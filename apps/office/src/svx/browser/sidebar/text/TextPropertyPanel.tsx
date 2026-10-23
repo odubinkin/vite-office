@@ -1,6 +1,15 @@
 /** @fileoverview Consumed Character panel font/effects/color controls from sidebartextpanel.ui over actual Sfx bindings. */
 import { useRef } from "react";
-import { Bold, Italic, Underline, Strikethrough, Superscript, Subscript } from "lucide-react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Superscript,
+  Subscript,
+  AArrowUp,
+  AArrowDown,
+} from "lucide-react";
 import { SidebarPanel } from "../../../../sfx2/browser/presentation/SidebarPanel";
 import { CommandSelectControl } from "../../../../framework/browser/presentation/CommandSelectControl";
 import { CommandButton } from "../../../../framework/browser/presentation/CommandToolbar";
@@ -59,12 +68,20 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 binding,
               ) => (
                 <FontSizeSelect
+                  inSidebar
+                  {...(props.focusDocument === undefined
+                    ? {}
+                    : { focusDocument: props.focusDocument })}
                   {...binding}
                   label={getCommandResource(".uno:FontHeight").controlLabel as string}
                 />
               )
             }
           </CommandSelectControl>
+        </div>
+        <div className="flex justify-end gap-1" role="group" aria-label="Font Size Adjustment">
+          <CommandButton {...props} commandId=".uno:Grow" icon={AArrowUp} />
+          <CommandButton {...props} commandId=".uno:Shrink" icon={AArrowDown} />
         </div>
         <div className="flex flex-wrap gap-1" role="group" aria-label="Font Effects">
           {[

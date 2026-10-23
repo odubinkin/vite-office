@@ -5,6 +5,31 @@ import path from "node:path";
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Original absolute FontSizeBox uses vcl::TextToValue/ConvertValue, not an alternate numeric parser.
+  ["svtools/source/control/ctrlbox.fontsize.ts", new Set(["vcl/source/control/field.ts"])],
+  // Browser toolbox binding borrows actual system decimal fields like original SvtSysLocale; no locale provider is supplied.
+  ["svx/browser/tbxctrls/font-size-binding.ts", new Set(["unotools/source/misc/syslocale.ts"])],
+  // Original languageoptions.cxx borrows MsLangId and ScriptType scalar contracts; existing host fields supply system resolution.
+  [
+    "svl/source/config/languageoptions.ts",
+    new Set([
+      "i18nlangtag/source/isolang/mslangid.ts",
+      "i18nlangtag/source/isolang/mslangid.script.ts",
+      "i18nlangtag/inc/lang.ts",
+      "offapi/com/sun/star/i18n/ScriptType.ts",
+    ]),
+  ],
+  // Original GetWhichOfScript uses actual application locale language in the WEAK branch.
+  ["sw/source/core/attr/hints.ts", new Set(["i18nlangtag/source/isolang/mslangid.ts"])],
+  // Original layout-absent GetScriptType executes BreakIterator script queries and borrows original language fields.
+  [
+    "sw/source/core/edit/edattr-script.ts",
+    new Set([
+      "i18npool/source/breakiterator/breakiteratorImpl.ts",
+      "i18nlangtag/source/isolang/mslangid.ts",
+      "i18nlangtag/inc/lang.ts",
+    ]),
+  ],
   // Original page.cxx uses o3tl unit conversion and the Paper enum from paperinf/papersizelistbox headers.
   [
     "cui/source/tabpages/page.ts",

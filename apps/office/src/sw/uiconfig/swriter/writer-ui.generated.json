@@ -20,6 +20,8 @@
     "exportText": ".uno:ExportTo",
     "fontName": ".uno:CharFontName",
     "fontHeight": ".uno:FontHeight",
+    "growFont": ".uno:Grow",
+    "shrinkFont": ".uno:Shrink",
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
@@ -475,6 +477,38 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10015
+    },
+    ".uno:Grow": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Increase",
+      "label": "Increase",
+      "iconName": "lc_grow.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+BRACKETRIGHT", "Meta+BRACKETRIGHT"],
+      "slotId": 20403
+    },
+    ".uno:Shrink": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Decrease",
+      "label": "Decrease",
+      "iconName": "lc_shrink.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+BRACKETLEFT", "Meta+BRACKETLEFT"],
+      "slotId": 20404
     },
     ".uno:HyperlinkDialog": {
       "browserOwned": false,
@@ -1503,6 +1537,22 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:FontHeight",
       "sources": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:Grow",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:Shrink",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -3589,22 +3639,6 @@
       "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:OutlineFont",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Grow",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Shrink",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6172,22 +6206,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Grow",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Shrink",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:UnderlineDouble",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -7710,7 +7728,10 @@
               { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
               { "kind": "separator" },
               { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Grow", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Shrink", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Text"
@@ -7948,6 +7969,8 @@
       { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:FontHeight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Grow", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Shrink", "kind": "command", "visible": false },
       { "kind": "separator" },
       { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
@@ -9247,18 +9270,6 @@
         "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:OutlineFont"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Grow"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Shrink"
       },
       {
         "classification": "X",
@@ -11144,8 +11155,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:EditStyle"
       },
-      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Grow" },
-      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Shrink" },
       {
         "classification": "X",
         "context": [],

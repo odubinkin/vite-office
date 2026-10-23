@@ -10,6 +10,9 @@ import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { RES_TXTATR_INETFMT, RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwPaM } from "../crsr/pam";
 import type { SwUndoCursorState } from "../undo/undobj";
+import { getSwItemWithPaM, type SwItemWithPaM } from "./edattr-items";
+import { getSwSelectionScriptType } from "./edattr-script";
+import type { SvtScriptType } from "../../../../svl/inc/languageoptions";
 
 /** Reads native edit-shell admission across the actual cursor ring; current page-body frame geometry remains a browser layout accommodation. @param document - Original document. @param cursor - Native cursor ring. @param right - Increase direction. @param modulus - Native snapping policy. @returns Original represented admission. */
 export function isMoveLeftMargin(
@@ -165,6 +168,14 @@ function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
 
 /** Consumed character-only GetCurAttr path. Native paragraph/merged/redline queries remain in their existing or unported owners. */
 export abstract class SwEditShell extends SwNumberingEditShell {
+  /** Original character contribution traversal without changing current cursor ownership. @param which - Character Which. @returns Borrowed source items and independent ranges. */
+  public GetItemWithPaM(which: number): SwItemWithPaM[] {
+    return getSwItemWithPaM(this.GetDoc(), this.GetCursor(), which);
+  }
+  /** Original represented layout-absent selection script query. @returns Native script flags. */
+  public GetScriptType(): SvtScriptType {
+    return getSwSelectionScriptType(this.GetDoc(), this.GetCursor());
+  }
   /** Reads original caret typing items. @returns Current native items. */
   public abstract GetPendingCharacterItems(): SfxItemSet;
   /** Assigns native typing items. @param items - Independent set. @returns Nothing. */

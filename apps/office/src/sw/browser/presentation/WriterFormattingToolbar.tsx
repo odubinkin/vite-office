@@ -156,6 +156,7 @@ function renderSpecialToolbarItem(
               />
             ) : (
               <FontSizeSelect
+                {...(focusDocument === undefined ? {} : { focusDocument })}
                 {...binding}
                 label={getCommandResource(item.commandId).controlLabel}
               />

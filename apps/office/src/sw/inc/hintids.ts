@@ -19,6 +19,12 @@ export const RES_CHRATR_FONT = 7 as const;
 
 /** Western font height in twips, `RES_CHRATR_BEGIN + 7`. */
 export const RES_CHRATR_FONTSIZE = 8 as const;
+/** Original western language identity, RES_CHRATR_BEGIN +9. */
+export const RES_CHRATR_LANGUAGE = 10 as const;
+/** Original Asian language identity, RES_CHRATR_BEGIN +23. */
+export const RES_CHRATR_CJK_LANGUAGE = 24 as const;
+/** Original complex language identity, RES_CHRATR_BEGIN +28. */
+export const RES_CHRATR_CTL_LANGUAGE = 29 as const;
 
 /** Western font posture, `RES_CHRATR_BEGIN + 10`. */
 export const RES_CHRATR_POSTURE = 11 as const;

@@ -1,11 +1,16 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
 import { SwBaseShell } from "./basesh";
+import { canChangeWriterFontSize, changeWriterFontSize } from "./txtattr-fontsize";
 import {
   createCharacterFormatItems,
   createFontHeightItems,
   createCharacterColorItems,
 } from "../../core/txtnode/ndhints-font";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { MID_FONTHEIGHT } from "../../../../editeng/inc/memberids";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
@@ -105,7 +110,16 @@ export interface SwTextShellTarget extends Pick<
     }>;
   }>;
   readonly GetCurAttr: (state: SfxItemSet) => boolean;
-  readonly SetAttrSet: (items: SfxItemSet) => boolean;
+  readonly SetAttrSet: (
+    items: SfxItemSet,
+    mode?: import("../../../inc/swtypes").SetAttrMode,
+    pam?: SwPaM,
+  ) => boolean;
+  readonly GetPaMAttr: (pam: SwPaM, items: SfxItemSet) => boolean;
+  readonly GetScriptType: () => import("../../../../svl/inc/languageoptions").SvtScriptType;
+  readonly GetItemWithPaM: (
+    which: number,
+  ) => import("../../core/edit/edattr-items").SwItemWithPaM[];
   readonly GetPendingCharacterItems: () => SfxItemSet;
   readonly IsMoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
   readonly MoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
@@ -416,9 +430,18 @@ export class SwTextShell extends SwBaseShell {
 
   /** Applies a font height through one text-shell history action. @param fontSizePt - Requested height in points. @returns Whether changed. */
   public SetFontSize(fontSizePt: number): boolean {
-    const fontSizeTwips = fontSizePt * 20;
-    if (!Number.isFinite(fontSizePt) || fontSizePt <= 0 || !Number.isInteger(fontSizeTwips))
-      throw new Error("Writer font size must be a positive value representable in twips.");
+    const height = SvxFontHeightItem.CreateDefault();
+    const requested = new Any([fontSizePt], "double");
+    try {
+      if (
+        !Number.isFinite(fontSizePt) ||
+        !height.PutValue(requested, MID_FONTHEIGHT | CONVERT_TWIPS)
+      )
+        throw new Error("Writer font size is outside the native font-height range.");
+    } finally {
+      requested.dispose();
+    }
+    const fontSizeTwips = height.GetHeight();
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.ApplyPendingCharacterItems(createFontHeightItems(fontSizeTwips));
@@ -441,6 +464,15 @@ export class SwTextShell extends SwBaseShell {
           this.target.CaptureCursorState(),
         ),
     );
+  }
+
+  /** Original font-step enabled state. @param grow - Original grow slot. @returns Enabled. */
+  public CanChangeFontSize(grow: boolean): boolean {
+    return canChangeWriterFontSize(this.target, grow);
+  }
+  /** Original font-step execution. @param grow - Original grow slot. @returns Whether selected ranges changed. */
+  public ChangeFontSize(grow: boolean): boolean {
+    return changeWriterFontSize(this.target, grow);
   }
 
   /** Applies foreground or highlight color at the caret or over selected text. @param property - Color attribute. @param value - Hex color or automatic marker. @returns Whether selected text changed. */

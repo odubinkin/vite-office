@@ -65,10 +65,11 @@ test("Writer headline-adjacent text reflow retains a source caret beyond the old
       document.dispatchEvent(new Event("selectionchange"));
     },
   );
-  await page
+  const fontSize = page
     .getByRole("toolbar", { name: "Writer formatting toolbar" })
-    .getByRole("combobox", { name: "Font size", exact: true })
-    .selectOption("48");
+    .getByRole("combobox", { name: "Font size", exact: true });
+  await fontSize.fill("48");
+  await fontSize.press("Enter");
   await expect
     .poll(
       /** Counts actual source text-frame fragments. @returns Fragment count. */ () =>

@@ -5,7 +5,8 @@ import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwUndoAttr } from "../undo/unattr";
 import type { SwUndoRedoContext } from "../undo/undobj";
 import { SwTextNode } from "../txtnode/ndtxt";
-import type { WriterTextRange } from "../crsr/pam";
+import type { WriterTextRange, SwPaM } from "../crsr/pam";
+import { SetAttrMode } from "../../../inc/swtypes";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../txtnode/ndhints";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
@@ -13,13 +14,15 @@ import { MakeTextAttr } from "../txtnode/thints";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 /** Character item edits remain in the native editing-shell core. */
 export abstract class SwEditShell extends SwAttributeEditShell {
-  /** Applies complete request items through original node/hint/history owners. @param items - Native character request. @returns Whether selected content changed; caret typing state is updated independently. */
-  public SetAttrSet(items: SfxItemSet): boolean {
+  /** Applies complete request items through original node/hint/history owners. @param items - Native character request. @param mode - Consumed DEFAULT mode. @param pam - Original optional explicit range, independent from the live cursor. @returns Whether selected content changed; caret typing state is updated independently. */
+  public SetAttrSet(items: SfxItemSet, mode = SetAttrMode.DEFAULT, pam?: SwPaM): boolean {
+    if (mode !== SetAttrMode.DEFAULT)
+      throw new Error("Character SetAttrSet mode is not implemented.");
     const before = this.CaptureCursorState();
     const pending = this.GetPendingCharacterItems().Clone();
     pending.PutSet(items);
     this.SetPendingCharacterItems(pending);
-    const cursor = this.GetCursor();
+    const cursor = pam ?? this.GetCursor();
     if (!cursor.HasMark() && !cursor.IsMultiSelection()) {
       this.GetDoc().GetUndoManager().BreakUndoGrouping();
       this.NotifySelectionChanged();

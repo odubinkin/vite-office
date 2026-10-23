@@ -266,6 +266,7 @@ export class SwAttrPool extends SfxItemPool {
           item.SetProp(value.prop, value.propUnit);
           return item;
         },
+        which === RES_CHRATR_FONTSIZE ? 10015 : which === RES_CHRATR_CJK_FONTSIZE ? 10888 : 10893,
       );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(

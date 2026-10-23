@@ -77,6 +77,18 @@ export function createWriterTextCommandRegistry(
   }
   return createWriterInterface([
     ...createWriterEscapementCommands(target),
+    ...([true, false] as const).map(
+      /** Original distinct Grow/Shrink slots share native execute/state logic. @param grow - Native grow direction. @returns Original handler. */ (
+        grow,
+      ) => ({
+        capabilityId: "CAP-0109" as const,
+        id: grow ? ".uno:Grow" : ".uno:Shrink",
+        /** Executes actual shell range processing. @returns Whether changed. */ execute: () =>
+          target.ChangeFontSize(grow),
+        /** Retains native exact-bound disabling. @returns Enabled. */ isEnabled: () =>
+          target.CanChangeFontSize(grow),
+      }),
+    ),
     {
       capabilityId: "CAP-0125",
       id: WRITER_COMMAND_IDS.paragraphMargins,
