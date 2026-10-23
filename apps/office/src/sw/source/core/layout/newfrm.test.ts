@@ -236,10 +236,10 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
         createSwPageFrames([{ ...paragraph("first", 1), pageStyleName: "Missing" }], standard),
     ).toThrow("page style is missing");
   });
-  it("projects physical print widths for portrait, landscape, and custom paper", /** Verifies paper-size rounding independent of paragraph text. @returns Nothing. */ () => {
+  it("projects inclusive physical print bounds for portrait, landscape, and custom paper", /** Verifies paper-size rounding independent of paragraph text. @returns Nothing. */ () => {
     const node = createWriterDocument().paragraphs[0];
     if (node === undefined) throw new Error("Writer document has no first paragraph");
-    expect(projectSwTextPrintBounds(node, standardPage)).toEqual({ left: 0, right: 9638 });
+    expect(projectSwTextPrintBounds(node, standardPage)).toEqual({ left: 0, right: 9637 });
     expect(
       projectSwTextPrintBounds(node, {
         ...standardPage,
@@ -247,14 +247,14 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
         height: 11906,
         landscape: true,
       }),
-    ).toEqual({ left: 0, right: 14570 });
+    ).toEqual({ left: 0, right: 14569 });
     expect(projectSwTextPrintBounds(node, { ...standardPage, width: 12240 })).toEqual({
       left: 0,
-      right: 9972,
+      right: 9971,
     });
     expect(projectSwTextPrintBounds(node, { ...standardPage, width: 12000 })).toEqual({
       left: 0,
-      right: 9732,
+      right: 9731,
     });
   });
   it("moves a kept paragraph with the next paragraph", /** Handles Writer formatting state.  @returns Callback result. */ () => {

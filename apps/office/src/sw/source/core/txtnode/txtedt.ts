@@ -33,10 +33,12 @@ export function resetParagraphTextAttributes(
   }
   if (changed) {
     if (hints.CanBeDeleted()) node.SetTextHints(hints);
-    else
+    else {
+      hints.MergePortions(node);
       node
         .GetDoc()
         .NotifyModelChange({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
+    }
   }
 }
 

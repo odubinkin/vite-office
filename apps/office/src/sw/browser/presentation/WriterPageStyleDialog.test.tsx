@@ -89,20 +89,27 @@ describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @retur
     expect(onSubmit).toHaveBeenLastCalledWith(initialValue);
   });
 
-  it("reports a non-Error callback failure without dismissing the dialog", /** Checks reports a non-Error callback failure without dismissing the dialog. @returns Test callback result. */ () => {
-    const initialValue = createDefaultWriterPageDescriptor("en-US").GetValue();
-    render(
-      <WriterPageStyleDialog
-        initialValue={initialValue}
-        onCancel={vi.fn()}
-        onSubmit={
-          /** Runs the test callback. @returns Test callback result. */ () => {
-            throw "rejected";
+  it.each([new Error("Page update rejected"), "rejected"])(
+    "reports callback failure %s without dismissing the dialog",
+    /** Checks callback failure rendering without dismissing the dialog. @param failure - Original callback failure. @returns Nothing. */ (
+      failure,
+    ) => {
+      const initialValue = createDefaultWriterPageDescriptor("en-US").GetValue();
+      render(
+        <WriterPageStyleDialog
+          initialValue={initialValue}
+          onCancel={vi.fn()}
+          onSubmit={
+            /** Runs the test callback. @returns Test callback result. */ () => {
+              throw failure;
+            }
           }
-        }
-      />,
-    );
-    fireEvent.click(screen.getByText("OK"));
-    expect(screen.getByText("Invalid page geometry.")).toBeInTheDocument();
-  });
+        />,
+      );
+      fireEvent.click(screen.getByText("OK"));
+      expect(
+        screen.getByText(failure instanceof Error ? failure.message : "Invalid page geometry."),
+      ).toBeInTheDocument();
+    },
+  );
 });

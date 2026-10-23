@@ -161,10 +161,16 @@ it("renders native formatting placements with the bound shared font-size control
     />,
   );
   const bar = screen.getByRole("toolbar", { name: "Calc formatting toolbar" }),
-    controls = [...bar.querySelectorAll('button,select,summary[aria-label="Border Style"]')].filter(
+    controls = [
+      ...bar.querySelectorAll(
+        'button,input[role="combobox"],select,summary[aria-label="Border Style"]',
+      ),
+    ].filter(
       /** Palette contents belong to the dropdown rather than the toolbar placement order. @param control - Rendered control. @returns Whether a top-level toolbar control. */ (
         control,
-      ) => !control.closest("[data-office-palette]"),
+      ) =>
+        !control.closest("[data-office-palette]") &&
+        !control.hasAttribute("data-office-combobox-toggle"),
     );
   const labels = [
     "Font Name",
@@ -211,14 +217,15 @@ it("renders native formatting placements with the bound shared font-size control
   const fonts = controls.filter(
     /** Selects font placements outside palette dropdowns. @param control - Top-level control. @returns Whether a selector. */ (
       control,
-    ) => control.tagName === "SELECT",
+    ) => control.tagName === "SELECT" || control.getAttribute("role") === "combobox",
   );
   expect(fonts).toHaveLength(2);
   expect(fontsRequested).toHaveBeenCalled();
   expect(fonts[0]).toBeEnabled();
   expect(fonts[0]).toHaveValue(session.controller.GetFontFamily());
   expect(fonts[1]).toBeEnabled();
-  expect(fonts[1]).toHaveValue("10");
+  expect(fonts[1]).toHaveValue("10 pt");
+  expect(within(bar).getByRole("button", { name: "Show Font Size" })).toBeEnabled();
   for (const button of controls.filter(
     /** Selects actual toolbar buttons rather than palette choices. @param control - Top-level control. @returns Whether a button. */ (
       control,

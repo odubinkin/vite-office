@@ -6,9 +6,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
 import { createSwPageFrames } from "../layout/newfrm";
-import { projectSwLineNumbers, type SwTextFrameInput } from "./txtfrm";
+import { createSwTextFrameInputs, projectSwLineNumbers, type SwTextFrameInput } from "./txtfrm";
 
 import { SwDoc } from "../doc/doc";
+import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwFrame } from "../layout/wsfrm";
 let owner = new SwDoc();
 afterEach(
@@ -108,4 +109,15 @@ describe("Writer line numbering on text frames", /** Groups page-frame line-numb
         projectSwLineNumbers(pages, [], new SwLineNumberInfo().QueryValue()),
     ).toThrow("no measured text node");
   });
+});
+
+it("transports an explicit native page-number restart from the paragraph item into physical pages", /** Uses actual page-reference items and the shared frame-input projection. @returns Nothing. */ () => {
+  const node = owner.paragraphs[0];
+  if (node === undefined) throw new Error("Missing initial paragraph");
+  const measurements = [{ id: "restart", lines: [{ start: 0, end: 0, height: 300 }] }];
+  expect(createSwTextFrameInputs(owner, measurements)[0]).not.toHaveProperty("pageNumber");
+  node.SetAttr(new SwFormatPageDesc("Standard", 7));
+  const inputs = createSwTextFrameInputs(owner, measurements);
+  expect(inputs[0]).toMatchObject({ pageStyleName: "Standard", pageNumber: 7 });
+  expect(createSwPageFrames(inputs, owner.GetPageDesc().GetValue())[0]?.number).toBe(7);
 });

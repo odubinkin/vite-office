@@ -121,7 +121,7 @@ describe("parity mapping CLI" /**
       parityReady: false,
       recordCount: 49,
       runtime: {
-        commandCount: 59,
+        commandCount: 62,
         placeholderSuiteCount: runtimeDeclaration.placeholderSuites.length,
         schemaVersion: 3,
         semanticViolationCount: 0,

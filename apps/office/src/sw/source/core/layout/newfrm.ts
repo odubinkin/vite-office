@@ -67,10 +67,10 @@ export function projectSwTextPrintBounds(
   const left =
     (resolveSwListTextLeftMargin(paragraph) ?? paragraph.GetParagraphTextLeftMargin()) +
     resolveSwListFirstLineIndent(paragraph);
-  return {
-    left,
-    right: page.width - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin(),
-  };
+  const width =
+    page.width - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin() - left;
+  // SwRect::dumpAsXmlAttributes uses inclusive Right(), including its zero-width case.
+  return { left, right: width ? left + width - 1 : left };
 }
 
 /** Immutable descriptor graph supplied to DOM-neutral page-frame creation. */
