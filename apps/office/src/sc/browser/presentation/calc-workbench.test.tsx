@@ -4,7 +4,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createCalcModuleFactory, createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
-import { ScAddress } from "../../inc/address";
+import { ScAddress, ScRange } from "../../inc/address";
 
 afterEach(
   /** Releases mounted clients and browser geometry overrides. @returns Nothing. */ () => {
@@ -203,6 +203,43 @@ it("uses native Sum reference selection,accept/cancel and live formula history i
   expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("");
   fireEvent.click(screen.getByRole("button", { name: "Redo" }));
   expect(screen.getByRole("gridcell", { name: "A3" })).toHaveTextContent("10");
+  cleanup();
+  session.Close();
+});
+
+it("keeps grid focus after selected AutoSum and presents an unavailable block-fill command without document edits", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    doc = c.shell.GetDocument();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetValue(new ScAddress(0, 1, 0), 3);
+  c.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 1, 0));
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Sum" }));
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
+  expect(screen.getByRole("grid")).toHaveFocus();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  doc.SetValue(new ScAddress(1, 0, 0), 4);
+  act(
+    /** Uses actual public view marks and the native command boundary. @returns Nothing. */ () => {
+      c.viewData.SetCurX(1);
+      c.viewData.SetCurY(1);
+      c.viewData.GetMarkData().SetMarkArea(new ScRange(1, 1, 0, 1, 2, 0));
+      expect(c.AutoSum()).toBeUndefined();
+    },
+  );
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Native EnterBlock/PasteFromClip block fill is not implemented",
+  );
+  expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
   cleanup();
   session.Close();
 });

@@ -359,3 +359,99 @@ it("queries original NeedHeight attributes through actual sparse patterns and de
   ).toThrow(/NeedHeight/);
   shell.Close();
 });
+
+it("retains original selected aggregate chains in both axes with live native dependencies", /** Actual SUM references determine ordered sum-of-sums ranges rather than flattening numeric results. @returns Nothing. */ () => {
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    const first = new ScAddress(0, 0, 0),
+      second = horizontal ? new ScAddress(1, 0, 0) : new ScAddress(0, 1, 0),
+      third = horizontal ? new ScAddress(2, 0, 0) : new ScAddress(0, 2, 0),
+      fourth = horizontal ? new ScAddress(3, 0, 0) : new ScAddress(0, 3, 0),
+      result = horizontal ? new ScAddress(4, 0, 0) : new ScAddress(0, 4, 0);
+    doc.SetValue(first, 1);
+    doc.SetFormula(second, unicode("=SUM(A1:A1)"), doc.GetGrammar());
+    doc.SetValue(third, 2);
+    doc.SetFormula(fourth, unicode(horizontal ? "=SUM(C1:C1)" : "=SUM(A3:A3)"), doc.GetGrammar());
+    expect(functions.AutoSum(new ScRange(first, fourth), false, false, false, OpCode.ocSum)).toBe(
+      true,
+    );
+    const resultCell = doc.GetFormulaCell(result);
+    assert(resultCell);
+    expect(text(resultCell.GetFormula(doc.GetGrammar()))).toBe(
+      horizontal ? "=SUM(D1:D1;B1:B1)" : "=SUM(A4:A4;A2:A2)",
+    );
+    expect(doc.GetValue(result)).toBe(3);
+    doc.SetValue(first, 5);
+    expect(doc.GetValue(result)).toBe(7);
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+    shell.Undo();
+    expect(doc.GetFormulaCell(result)).toBeNull();
+    shell.Redo();
+    expect(doc.GetValue(result)).toBe(7);
+    shell.Close();
+  }
+});
+it("preserves original row and column placement boundaries and skips occupied output spans", /** Sparse actual cells exercise source MaxRow/MaxCol limits without replacing document dimensions. @returns Nothing. */ () => {
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    const bound = horizontal ? doc.MaxCol() : doc.MaxRow(),
+      first = horizontal ? new ScAddress(bound - 1, 0, 0) : new ScAddress(0, bound - 1, 0),
+      last = horizontal ? new ScAddress(bound, 0, 0) : new ScAddress(0, bound, 0);
+    doc.SetValue(first, 2);
+    doc.SetValue(last, 3);
+    expect(functions.AutoSum(new ScRange(first, last), false, true, false, OpCode.ocSum)).toBe(
+      false,
+    );
+    const before = horizontal ? new ScAddress(bound - 2, 0, 0) : new ScAddress(0, bound - 2, 0);
+    doc.SetValue(before, 1);
+    expect(functions.AutoSum(new ScRange(before, first), false, true, false, OpCode.ocSum)).toBe(
+      false,
+    );
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+    shell.Close();
+  }
+  for (const horizontal of [false, true]) {
+    const { doc, functions, shell } = setup();
+    doc.SetValue(new ScAddress(), 2);
+    doc.SetValue(horizontal ? new ScAddress(1, 0, 0) : new ScAddress(0, 1, 0), 3);
+    doc.SetValue(horizontal ? new ScAddress(2, 0, 0) : new ScAddress(0, 2, 0), 9);
+    const end = horizontal ? new ScAddress(1, 0, 0) : new ScAddress(0, 1, 0),
+      output = horizontal ? new ScAddress(3, 0, 0) : new ScAddress(0, 3, 0);
+    expect(
+      functions.AutoSum(new ScRange(new ScAddress(), end), false, true, false, OpCode.ocSum),
+    ).toBe(true);
+    expect(doc.GetValue(output)).toBe(5);
+    const outputCell = doc.GetFormulaCell(output);
+    assert(outputCell);
+    expect(text(outputCell.GetFormula(doc.GetGrammar()))).toBe(
+      horizontal ? "=SUM(A1:B1)" : "=SUM(A1:A2)",
+    );
+    shell.Close();
+  }
+});
+it("retains directional unknown-function classification and marked text fallback without a fake block fill", /** Genuine SUMSQ references and public marked input reach independent native negative paths. @returns Nothing. */ () => {
+  const { doc, functions, view, shell } = setup();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetFormula(new ScAddress(1, 0, 0), unicode("=SUMSQ(A1:A1)"), doc.GetGrammar());
+  expect(functions.AutoSum(new ScRange(1, 0, 0, 1, 1, 0), false, true, false, OpCode.ocSum)).toBe(
+    false,
+  );
+  doc.SetTextCell(new ScAddress(2, 0, 0), unicode("text"));
+  view.GetMarkData().SetMarkArea(new ScRange(2, 0, 0, 2, 0, 0));
+  const finder: [boolean] = [true],
+    subtotal: [boolean] = [true],
+    fallback = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(text(fallback)).toBe("=SUM()");
+  fallback.dispose();
+  expect(finder[0]).toBe(false);
+  expect(subtotal[0]).toBe(false);
+  view.GetMarkData().SetMarkArea(new ScRange(0, 1, 0, 0, 2, 0));
+  view.SetCurX(0);
+  view.SetCurY(1);
+  expect(
+    /** Requests the still-unported native clipboard fill through actual marks. @returns Formula or explicit unsupported boundary. */ () =>
+      functions.DoAutoSum(finder, subtotal, OpCode.ocSum),
+  ).toThrow("Native EnterBlock/PasteFromClip block fill is not implemented");
+  expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
+  shell.Close();
+});
