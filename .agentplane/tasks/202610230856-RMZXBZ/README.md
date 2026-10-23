@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize all checkouts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Integrate and verify the user-approved Writer and Calc branches, then synchronize the three checkouts and remote branches."
 doc_version: 3
-doc_updated_at: "2026-10-23T08:56:22.529Z"
+doc_updated_at: "2026-10-23T09:19:16.960Z"
 doc_updated_by: "CODER"
 description: "Push current Writer and Calc work, merge both into main, resolve conflicts, run full verification and repair regressions, publish main and merge it back into both development branches. User explicitly authorized all three repositories and network pushes."
 sections:
@@ -55,7 +55,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve original commits in Git history. If integration fails, repair before publication; use a reviewed revert if a published merge must be reversed. Never reset user work or force push."
-  Findings: ""
+  Findings: "Initial SSH pushes failed; HTTPS to the same authorized GitHub repository succeeded for both development branches. Writer merged cleanly; Calc conflicts in writer-native-paper.spec.ts and xmlexprt.ts were resolved by preserving label selection, range-based export and pattern-name caching. Added an exporter reuse/style-edit regression test (3 sparse-export tests pass). Updated two Calc persistence tests from ZIP bytes to actual unpacked XML storage (both pass; typecheck passes). Added seven missing runtime and seven matching provenance records for existing browser I/O infrastructure; registry/parity and source provenance now pass, and inventory tests pass 124/124 with strict 100 percent coverage. Full application coverage initially hit ENOSPC; removed only failed-run generated coverage and switched to sequential full-suite Istanbul shards with merged counters and unchanged final strict 100 percent thresholds. All static gates, initial full format/lint and subsequent changed-file checks pass. E2E is in progress; two transient page-loading timeouts occurred during a concurrent deterministic static rebuild and require isolated reruns on the stable build."
 id_source: "generated"
 ---
 ## Summary
@@ -86,3 +86,5 @@ Run npm run verify (format, lint, tools/application typechecks, boundaries, gene
 Preserve original commits in Git history. If integration fails, repair before publication; use a reviewed revert if a published merge must be reversed. Never reset user work or force push.
 
 ## Findings
+
+Initial SSH pushes failed; HTTPS to the same authorized GitHub repository succeeded for both development branches. Writer merged cleanly; Calc conflicts in writer-native-paper.spec.ts and xmlexprt.ts were resolved by preserving label selection, range-based export and pattern-name caching. Added an exporter reuse/style-edit regression test (3 sparse-export tests pass). Updated two Calc persistence tests from ZIP bytes to actual unpacked XML storage (both pass; typecheck passes). Added seven missing runtime and seven matching provenance records for existing browser I/O infrastructure; registry/parity and source provenance now pass, and inventory tests pass 124/124 with strict 100 percent coverage. Full application coverage initially hit ENOSPC; removed only failed-run generated coverage and switched to sequential full-suite Istanbul shards with merged counters and unchanged final strict 100 percent thresholds. All static gates, initial full format/lint and subsequent changed-file checks pass. E2E is in progress; two transient page-loading timeouts occurred during a concurrent deterministic static rebuild and require isolated reruns on the stable build.

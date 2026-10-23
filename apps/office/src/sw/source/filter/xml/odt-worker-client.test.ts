@@ -321,3 +321,87 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     }
   });
 });
+
+it("exports browser XML, imports unpacked streams and rejects incompatible result kinds", /** Checks XML protocol branches with the canonical graph and real preparation path. @returns Completion. */ async () => {
+  const worker = new FakeWorker(),
+    client = new OdtWorkerClient(
+      /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+        worker,
+    ),
+    source = snapshot();
+  const xml = {
+    format: "xml" as const,
+    files: { mimetype: "application/vnd.oasis.opendocument.text" },
+  };
+  const importing = client.Import(xml, metadata(), { zipLimits: { maxArchiveBytes: 1 } as never });
+  expect(worker.posted.at(-1)?.transfer).toEqual([]);
+  worker.emit({
+    id: postedId(worker),
+    protocol: 1,
+    type: "result",
+    payload: { operation: "import", document: createOdtWorkerDocument(source) },
+  });
+  const imported = await importing;
+  expect(imported.title).toBe(source.title);
+  imported.document.Dispose();
+  const pending = client.ExportXml(source);
+  await vi.waitFor(
+    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+      expect(worker.posted.at(-1)?.message).toMatchObject({ payload: { operation: "export-xml" } }),
+  );
+  worker.emit({
+    id: postedId(worker),
+    protocol: 1,
+    type: "result",
+    payload: { operation: "export-xml", data: xml },
+  });
+  expect(await pending).toEqual(xml);
+  const wrong = client.ExportXml(source, {
+    isCurrent:
+      /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+        true,
+  });
+  await vi.waitFor(
+    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+      expect(worker.posted.at(-1)?.message).toMatchObject({
+        id: 3,
+        payload: { operation: "export-xml" },
+      }),
+  );
+  worker.emit({
+    id: postedId(worker),
+    protocol: 1,
+    type: "result",
+    payload: { operation: "export", bytes: new ArrayBuffer(0) },
+  });
+  await expect(wrong).rejects.toMatchObject({ category: "protocol" });
+  const signal = new AbortController();
+  signal.abort();
+  await expect(client.Export(source, { signal: signal.signal })).rejects.toMatchObject({
+    category: "cancelled",
+  });
+  await expect(client.ExportXml(source, { signal: signal.signal })).rejects.toMatchObject({
+    category: "cancelled",
+  });
+  await expect(
+    client.ExportXml(source, {
+      isCurrent:
+        /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+          false,
+    }),
+  ).rejects.toThrow("stale");
+  client.Close();
+  await expect(client.ExportXml(source)).rejects.toMatchObject({ category: "internal" });
+  source.document.Dispose();
+});
+it("rejects a prepared XML capture when the service closes before the request is posted", /** Prevents closed service work from escaping the asynchronous snapshot boundary. @returns Completion. */ async () => {
+  const client = new OdtWorkerClient(
+      /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
+        new FakeWorker(),
+    ),
+    source = snapshot(),
+    pending = client.ExportXml(source);
+  client.Close();
+  await expect(pending).rejects.toThrow("closed");
+  source.document.Dispose();
+});
