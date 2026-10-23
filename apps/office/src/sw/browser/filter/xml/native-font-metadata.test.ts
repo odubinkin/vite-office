@@ -3,7 +3,13 @@ import { expect, it } from "vitest";
 import { Font } from "../../../../vcl/source/font/font";
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { Size } from "../../../../tools/inc/gen";
-import { FontFamily, FontPitch, TextAlign } from "../../../../tools/inc/fontenum";
+import {
+  FontFamily,
+  FontPitch,
+  TextAlign,
+  FontWeight,
+  FontItalic,
+} from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
 import { SwNumFormat, SwNumRule } from "../../../source/core/doc/number";
 import { createWriterDocument } from "../../../source/core/doc/doc";
@@ -35,6 +41,8 @@ it("preserves all represented metadata through numbering copies and Worker recor
     family: FontFamily.FAMILY_DECORATIVE,
     pitch: FontPitch.PITCH_FIXED,
     charSet: RTL_TEXTENCODING_SYMBOL,
+    weight: FontWeight.WEIGHT_DONTKNOW,
+    italic: FontItalic.ITALIC_NONE,
     color: 0xffffffff,
     fillColor: 0xffffffff,
     transparent: true,
@@ -91,6 +99,8 @@ it("preserves every represented Font value through real numbering and structured
   font.SetTransparent(false);
   font.SetAlignment(TextAlign.ALIGN_BOTTOM);
   font.SetFontSize(new Size(-12, 1234));
+  font.SetWeight(FontWeight.WEIGHT_SEMIBOLD);
+  font.SetItalic(FontItalic.ITALIC_NORMAL);
   const format = new SwNumFormat();
   format.SetBulletFont(font);
   const doc = createWriterDocument(),
@@ -109,5 +119,16 @@ it("preserves every represented Font value through real numbering and structured
     restored?.GetAlignment(),
     restored?.GetAverageFontWidth(),
     restored?.GetFontHeight(),
-  ]).toEqual([0x80123456, 0xabcdef, false, 2, -12, 1234]);
+    restored?.GetWeight(),
+    restored?.GetItalic(),
+  ]).toEqual([
+    0x80123456,
+    0xabcdef,
+    false,
+    2,
+    -12,
+    1234,
+    FontWeight.WEIGHT_SEMIBOLD,
+    FontItalic.ITALIC_NORMAL,
+  ]);
 });

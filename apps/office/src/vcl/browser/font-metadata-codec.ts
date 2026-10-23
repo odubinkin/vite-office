@@ -10,15 +10,20 @@ interface FontStoredValues {
   readonly alignment: number;
   readonly fontSize: readonly [number, number];
 }
+/** Stored weight/italic were added after the paint group; older records retain native defaults. */
+interface FontFaceValues {
+  readonly weight: number;
+  readonly italic: number;
+}
 /** Original metadata fields plus optional complete new value group for existing persisted browser records. */
-export interface FontMetadataRecord extends Partial<FontStoredValues> {
+export interface FontMetadataRecord extends Partial<FontStoredValues>, Partial<FontFaceValues> {
   readonly styleName: string;
   readonly family: number;
   readonly pitch: number;
   readonly charSet: number;
 }
 /** Complete newly encoded represented Font state. */
-export type CompleteFontMetadataRecord = FontMetadataRecord & FontStoredValues;
+export type CompleteFontMetadataRecord = FontMetadataRecord & FontStoredValues & FontFaceValues;
 /** Reads actual native stored values into independent primitive transport. @param font - Real font. @returns Stored fields. */
 function storedValues(font: ConstFont): FontStoredValues {
   return {
@@ -36,6 +41,8 @@ export function encodeFontMetadata(font: ConstFont): CompleteFontMetadataRecord 
     family: font.GetFamilyType(),
     pitch: font.GetPitch(),
     charSet: font.GetCharSet(),
+    weight: font.GetWeight(),
+    italic: font.GetItalic(),
     ...storedValues(font),
   };
 }
@@ -54,6 +61,13 @@ export function restoreFontMetadata(font: Font, value: unknown): void {
     !integer(record.family, -2147483648, 2147483647) ||
     !integer(record.pitch, -2147483648, 2147483647) ||
     !integer(record.charSet, 0, 65535)
+  )
+    throw bad();
+  const faceValues = "weight" in record || "italic" in record;
+  if (
+    faceValues &&
+    (!integer(record.weight, -2147483648, 2147483647) ||
+      !integer(record.italic, -2147483648, 2147483647))
   )
     throw bad();
   const complete = ["color", "fillColor", "transparent", "alignment", "fontSize"].some(
@@ -76,13 +90,14 @@ export function restoreFontMetadata(font: Font, value: unknown): void {
       ))
   )
     throw bad();
-  const data = complete
-    ? (record as unknown as CompleteFontMetadataRecord)
-    : storedValues(new Font());
+  const data = complete ? (record as unknown as FontStoredValues) : storedValues(new Font());
   font.SetStyleName(record.styleName);
   font.SetFamily(record.family);
   font.SetPitch(record.pitch);
   font.SetCharSet(record.charSet);
+  const defaults = new Font();
+  font.SetWeight(faceValues ? (record.weight as number) : defaults.GetWeight());
+  font.SetItalic(faceValues ? (record.italic as number) : defaults.GetItalic());
   font.SetColor(new Color(ColorTransparency, data.color, "ColorTransparencyTag"));
   font.SetFillColor(new Color(ColorTransparency, data.fillColor, "ColorTransparencyTag"));
   // Fill assignment has native side effects;the separately transported flag must be restored afterward.

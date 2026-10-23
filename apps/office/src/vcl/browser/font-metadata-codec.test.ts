@@ -4,7 +4,7 @@ import { encodeFontMetadata, restoreFontMetadata } from "./font-metadata-codec";
 import { Font } from "../source/font/font";
 import { Color, ColorTransparency } from "../../tools/inc/color";
 import { Size } from "../../tools/inc/gen";
-import { TextAlign, FontFamily, FontPitch } from "../../tools/inc/fontenum";
+import { TextAlign, FontFamily, FontPitch, FontWeight, FontItalic } from "../../tools/inc/fontenum";
 /** Actual nondefault native value. @returns Font. */ function font(): Font {
   const f = new Font();
   f.SetFamilyName("Owner");
@@ -12,6 +12,8 @@ import { TextAlign, FontFamily, FontPitch } from "../../tools/inc/fontenum";
   f.SetFamily(FontFamily.FAMILY_MODERN);
   f.SetPitch(FontPitch.PITCH_FIXED);
   f.SetCharSet(10);
+  f.SetWeight(FontWeight.WEIGHT_BOLD);
+  f.SetItalic(FontItalic.ITALIC_OBLIQUE);
   f.SetColor(new Color(ColorTransparency, 0x80123456, "ColorTransparencyTag"));
   f.SetFillColor(new Color(0xabcdef));
   f.SetTransparent(false);
@@ -120,4 +122,36 @@ it("rejects partial or malformed new value groups without silent field defaults"
     ).toThrow("font metadata");
     expect(target.Equals(copy)).toBe(true);
   }
+});
+
+it("restores pre-face paint records with native defaults and rejects partial face groups atomically", /** Older records may contain the complete paint group without weight and italic. @returns Nothing. */ () => {
+  const target = font(),
+    record = encodeFontMetadata(font());
+  const { weight, italic, ...legacy } = record;
+  expect([weight, italic]).toEqual([FontWeight.WEIGHT_BOLD, FontItalic.ITALIC_OBLIQUE]);
+  restoreFontMetadata(target, legacy);
+  expect([target.GetWeight(), target.GetItalic()]).toEqual([
+    FontWeight.WEIGHT_DONTKNOW,
+    FontItalic.ITALIC_NONE,
+  ]);
+  const copy = new Font(target);
+  for (const value of [
+    { ...legacy, weight: 5 },
+    { ...legacy, italic: 0 },
+    { ...record, weight: undefined },
+    { ...record, weight: 1.5 },
+    { ...record, weight: -2147483649 },
+    { ...record, weight: 2147483648 },
+    { ...record, italic: null },
+    { ...record, italic: -2147483649 },
+    { ...record, italic: 2147483648 },
+  ]) {
+    expect(
+      /** Invalid transport must not mutate stored native values. @returns Nothing. */ () =>
+        restoreFontMetadata(target, value),
+    ).toThrow("font metadata");
+    expect(target.Equals(copy)).toBe(true);
+  }
+  restoreFontMetadata(target, { ...record, weight: -2147483648, italic: 2147483647 });
+  expect([target.GetWeight(), target.GetItalic()]).toEqual([-2147483648, 2147483647]);
 });
