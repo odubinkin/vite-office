@@ -1,6 +1,7 @@
 /** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
 import { lower, text } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { decodeBrowserFontFamily } from "./font-family";
+import { getCssFontFaceSources } from "./css-font-source";
 import { readBrowserFontFaceSource } from "./font-face-source";
 import { Font } from "../source/font/font";
 import { GetEnglishSearchFontName } from "../../unotools/source/misc/fontdefs";
@@ -64,14 +65,21 @@ export interface BrowserLocalFontData {
 }
 /** Actual registered face or approved local-font record; browser metadata is retained without inventing native physical metrics. */
 export type BrowserPhysicalFont =
-  | Readonly<{ kind: "registered"; family: string; face: FontFace }>
+  | Readonly<{ kind: "registered"; family: string; face: FontFace; sourceUrl?: string }>
   | Readonly<{ kind: "local"; family: string; data: BrowserLocalFontData }>;
 
 /** Reads bytes only from an actual source: an owned FontFace constructor buffer or approved Local Font Access blob. @param font - Real physical record. @returns Source bytes or undefined when the platform exposes names only. */
 export async function readBrowserPhysicalFont(
   font: BrowserPhysicalFont,
 ): Promise<ArrayBuffer | undefined> {
-  if (font.kind === "registered") return readBrowserFontFaceSource(font.face);
+  if (font.kind === "registered") {
+    const owned = readBrowserFontFaceSource(font.face);
+    if (owned !== undefined || font.sourceUrl === undefined) return owned;
+    await font.face.load();
+    const response = await fetch(font.sourceUrl, { credentials: "same-origin" });
+    if (!response.ok) throw new Error(`Font source read failed: ${response.status}`);
+    return response.arrayBuffer();
+  }
   const blob = await font.data.blob?.();
   return blob?.arrayBuffer();
 }
@@ -111,10 +119,12 @@ export class FontList {
   public static async FromBrowser(window_: Window = window): Promise<FontList> {
     const query = (window_ as Window & { queryLocalFonts?: LocalFontQuery }).queryLocalFonts;
     const registered: string[] = [];
+    const cssFaces: FontFace[] = [];
     const faces: BrowserPhysicalFont[] = [];
     window_.document?.fonts?.forEach(
       /** Includes actual bundled and document FontFaces even when system enumeration is unavailable. @param face - Registered browser face. @returns Nothing. */
       (face) => {
+        cssFaces.push(face);
         const family = decodeBrowserFontFamily(face.family);
         if (face.status !== "error" && family !== "") {
           registered.push(family);
@@ -153,6 +163,19 @@ export class FontList {
       /** Uses native UTF16 ordering of the ASCII-folded keys, retaining actual family spelling. @param key - Existing family key. @returns Registered name. */
       (key) => families.get(key) as string,
     );
-    return new FontList(names, faces);
+    const sources =
+      window_.document?.styleSheets === undefined
+        ? new Map<FontFace, string>()
+        : getCssFontFaceSources(window_.document, cssFaces);
+    return new FontList(
+      names,
+      faces.map(
+        /** Associates only source URLs established by actual unambiguous CSSOM descriptors. @param font - Physical record. @returns Source-bearing record or original opaque record. */
+        (font) => {
+          const sourceUrl = font.kind === "registered" ? sources.get(font.face) : undefined;
+          return sourceUrl === undefined ? font : { ...font, sourceUrl };
+        },
+      ),
+    );
   }
 }
