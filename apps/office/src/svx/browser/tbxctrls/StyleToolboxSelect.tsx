@@ -25,6 +25,7 @@ export function StyleToolboxSelect(props: StyleToolboxSelectProps): React.JSX.El
   );
   return (
     <ComboBox
+      resetKey={props.options}
       options={props.options}
       value={current === undefined ? "" : props.getLabel(current)}
       enabled={props.enabled}

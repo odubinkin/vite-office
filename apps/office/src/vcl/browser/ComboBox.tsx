@@ -15,6 +15,8 @@ import { ChevronDown } from "lucide-react";
 export interface ComboBoxProps<T> {
   readonly options: readonly T[];
   readonly value: string;
+  /** Actual parent assignment identity; asynchronous list refreshes need not discard an unchanged editable assignment. */
+  readonly resetKey: unknown;
   readonly enabled: boolean;
   readonly label: string;
   readonly getText: (entry: T) => string;
@@ -29,12 +31,11 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
   const { options, value: saved, enabled, label, getText: getLabel } = props;
   const listId = useId(),
     input = useRef<HTMLInputElement>(null);
-  const [draft, setDraft] =
-    useState<Readonly<{ bound: string; text: string; options: readonly T[] }>>();
+  const [draft, setDraft] = useState<Readonly<{ bound: string; text: string; owner: unknown }>>();
   const [open, setOpen] = useState(false);
   const anchor = useRef<HTMLSpanElement>(null),
     popup = useRef<HTMLDivElement>(null);
-  const selected = draft?.bound === saved && draft.options === options ? draft.text : saved;
+  const selected = draft?.bound === saved && draft.owner === props.resetKey ? draft.text : saved;
   const activeIndex = options.findIndex(
     /** Resolves the current row for accessible keyboard travel. @param entry - Row. @returns Whether selected. */
     (entry) => getLabel(entry) === selected,
@@ -89,7 +90,7 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
         }
         onChange={
           /** Typing retains a tentative draft only. @param event - Entry change. @returns Nothing. */
-          (event) => setDraft({ options, bound: saved, text: event.target.value })
+          (event) => setDraft({ owner: props.resetKey, bound: saved, text: event.target.value })
         }
         onKeyDown={
           /** Routes original Enter, Tab, Escape and nondispatching travel. @param event - Actual key. @returns Nothing. */
@@ -137,7 +138,8 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
             }
             event.preventDefault();
             const entry = options[next];
-            if (entry !== undefined) setDraft({ options, bound: saved, text: getLabel(entry) });
+            if (entry !== undefined)
+              setDraft({ owner: props.resetKey, bound: saved, text: getLabel(entry) });
           }
         }
       />

@@ -156,6 +156,7 @@ function renderSpecialToolbarItem(
           ) =>
             item.kind === "font-select" ? (
               <FontNameSelect
+                {...(focusDocument === undefined ? {} : { focusDocument })}
                 {...binding}
                 label={getCommandResource(item.commandId).controlLabel}
                 embeddedFontFamilies={embeddedFontFamilies}

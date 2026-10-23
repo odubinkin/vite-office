@@ -33,6 +33,7 @@ it("dispatches the actual shared family selector through Calc and real attribute
       /** Publishes the native UI operation inside React. @returns Operation result. */ () =>
         fireEvent.change(select, { target: { value: "Liberation Mono" } }),
     );
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(c.GetFontFamily()).toBe("Liberation Mono");
     expect(
       (doc.GetPattern(new ScAddress(0, 0, 0))?.GetItem(100) as SvxFontItem).GetFamilyName(),

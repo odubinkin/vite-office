@@ -84,20 +84,10 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       const execute = vi.spyOn(owner.source, "Execute");
       try {
         render(<owner.Toolbar />);
-        const selects = screen.getAllByRole("combobox");
-        const font = selects.find(
-          /** Finds the device-backed font selector. @param select - Candidate selector. @returns Whether it lists the font. */ (
-            select,
-          ) =>
-            [...((select as HTMLSelectElement).options ?? [])].some(
-              /** Matches the requested font. @param option - Native option. @returns Match. */ (
-                option,
-              ) => option.value === "Liberation Serif",
-            ),
-        );
+        const font = screen.getByRole("combobox", { name: "Font name" });
         const size = screen.getByRole("combobox", { name: "Font size" });
-        if (font === undefined) throw new Error("Missing font selector");
         fireEvent.change(font, { target: { value: "Liberation Serif" } });
+        fireEvent.keyDown(font, { key: "Enter" });
         fireEvent.change(size, { target: { value: "14" } });
         fireEvent.keyDown(size, { key: "Enter" });
         expect(execute).toHaveBeenCalledWith(".uno:CharFontName", {

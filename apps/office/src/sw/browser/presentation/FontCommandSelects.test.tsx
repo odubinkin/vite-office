@@ -118,6 +118,7 @@ it("dispatches Writer family and nonstandard sizes through real bindings and pre
     fireEvent.change(screen.getByRole("combobox", { name: "Shared family" }), {
       target: { value: "Liberation Sans" },
     });
+    fireEvent.keyDown(screen.getByRole("combobox", { name: "Shared family" }), { key: "Enter" });
     expect(execute).toHaveBeenLastCalledWith(".uno:CharFontName", {
       from: "shared",
       fontFamily: createBrowserFontItem("Liberation Sans"),

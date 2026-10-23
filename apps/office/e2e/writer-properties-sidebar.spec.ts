@@ -1,4 +1,5 @@
 /** @fileoverview Exercises source-shaped Writer Properties panels,actual slot/history synchronization and genuine ODT output in Chromium. */
+import { pickComboBoxEntry } from "./shared/combo-box";
 import { pickWriterStyle } from "./writer-style-box";
 import { expect, test } from "@playwright/test";
 import { readFile, writeFile } from "node:fs/promises";
@@ -46,9 +47,10 @@ for (const width of [1280, 390]) {
     await expect(
       toolbar.getByRole("combobox", { name: "Paragraph style", exact: true }),
     ).toHaveValue("Heading 1");
-    await sidebar
-      .getByRole("combobox", { name: "Font name", exact: true })
-      .selectOption("Liberation Sans");
+    await pickComboBoxEntry(
+      sidebar.getByRole("combobox", { name: "Font name", exact: true }),
+      "Liberation Sans",
+    );
     await sidebar.getByRole("combobox", { name: "Font size", exact: true }).fill("14");
     await sidebar.getByRole("combobox", { name: "Font size", exact: true }).press("Tab");
     await expect(toolbar.getByRole("combobox", { name: "Font name", exact: true })).toHaveValue(

@@ -1,17 +1,22 @@
 /** @fileoverview Actual Writer font-family/point-size widgets shared with Calc;the frame supplies selected value,availability and acceptance ports. */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ComboBox } from "../../../vcl/browser/ComboBox";
 import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
 import { createBrowserFontItem } from "./font-item";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
+const noEmbeddedFontFamilies: readonly string[] = [];
+
 /** Device-backed font selector. @param props - Command surface properties. @returns Selector. */
 export function FontNameSelect({
   value,
   enabled,
   label,
   onSelect,
-  embeddedFontFamilies = [],
+  embeddedFontFamilies = noEmbeddedFontFamilies,
   fontAvailability = {},
   unavailableFontMessage,
+  focusDocument,
+  inSidebar,
 }: {
   readonly value: unknown;
   readonly enabled: boolean;
@@ -20,6 +25,8 @@ export function FontNameSelect({
   readonly embeddedFontFamilies?: readonly string[];
   readonly fontAvailability?: Readonly<Record<string, boolean>>;
   readonly unavailableFontMessage?: string;
+  readonly focusDocument?: () => void;
+  readonly inSidebar?: boolean;
 }): React.JSX.Element {
   const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
   const selected = String(value ?? "");
@@ -40,40 +47,51 @@ export function FontNameSelect({
     },
     [enabled],
   );
-  const options = [...new Set([selected, ...embeddedFontFamilies, ...fonts])];
+  const options = useMemo(
+    /** Lists available names without fabricating an installed face for the current typed value. @returns Actual family rows. */
+    () => [...new Set([...embeddedFontFamilies, ...fonts])],
+    [embeddedFontFamilies, fonts],
+  );
   const unavailable =
     embeddedFontFamilies.includes(selected) && fontAvailability[selected] === false;
   return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        disabled={!enabled}
-        className="h-8 min-w-40 max-w-52 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
-        onChange={
-          /** Applies the selected font. @param event - Select change. @returns Nothing. */ (
-            event,
-          ) => {
-            onSelect(createBrowserFontItem(event.target.value));
+    <span className="contents">
+      <ComboBox
+        resetKey={selected}
+        options={options}
+        value={selected}
+        enabled={enabled}
+        label={label}
+        getText={
+          /** Retains exact native family text. @param name - Family. @returns Text. */
+          (name) => name
+        }
+        getId={
+          /** Uses the available family identity. @param name - Family. @returns Identity. */
+          (name) => name
+        }
+        onAccept={
+          /** Releases frame focus before final CharFontName dispatch; Tab retains normal focus traversal. @param name - Accepted text. @param release - Whether explicit release is requested. @returns Nothing. */
+          (name, release) => {
+            if (release) focusDocument?.();
+            onSelect(createBrowserFontItem(name));
           }
         }
-        style={{ fontFamily: selected }}
-        value={selected}
-      >
-        {options.map(
-          /** Renders one font family. @param font - Family. @returns Option. */ (font) => (
-            <option key={font} style={{ fontFamily: font }}>
-              {font}
-            </option>
-          ),
-        )}
-      </select>
+        onCancel={
+          /** Leaves sidebar Escape to the owning deck and releases toolbar focus on cancellation. @returns Whether consumed. */
+          () => {
+            if (inSidebar) return false;
+            focusDocument?.();
+            return true;
+          }
+        }
+      />
       {unavailable && unavailableFontMessage !== undefined ? (
         <span role="status" className="text-xs text-amber-700">
           {unavailableFontMessage}
         </span>
       ) : null}
-    </label>
+    </span>
   );
 }
 

@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/vcl/browser/ComboBox.tsx#ComboBox",
         "apps/office/src/vcl/browser/ComboBox.test.tsx#@fileoverview",
-        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx#native style-box acceptance"
+        "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx#native style-box acceptance",
+        "apps/office/src/svx/browser/tbxctrls/FontNameBox.test.tsx#@fileoverview",
+        "apps/office/e2e/writer-font-name-focus.spec.ts#@fileoverview",
+        "apps/office/e2e/calc/font-family.spec.ts#@fileoverview"
       ],
-      "justification": "Task6764KT in-progress browser weld ComboBox presentation for font/style controllers, currently connected to the style controller. The widget owns editable draft, nondispatching keyboard travel, explicit acceptance, accessible custom rows, actual DOM overlay geometry and composite focus. Native style-name lookup, document focus release and dispatch remain in SvxStyleBox controller. Overlay measures actual DOM geometry and avoids toolbar overflow clipping. Native platform/full popup parity and production font/style drawing remain unverified; no behavioral/default parity promotion.",
+      "justification": "Task6764KT in-progress browser weld ComboBox presentation for font/style controllers, currently connected to the style controller. The widget owns editable draft, nondispatching keyboard travel, explicit acceptance, accessible custom rows, actual DOM overlay geometry and composite focus. Native style-name lookup, document focus release and dispatch remain in SvxStyleBox controller. Overlay measures actual DOM geometry and avoids toolbar overflow clipping. Native platform/full popup parity and production font/style drawing remain unverified; no behavioral/default parity promotion. Task6764KT replaces the native-HTML font selector with the actual shared editable browser ComboBox. Direct picks and ordinary Enter release the owning Writer document/Calc grid before complete SvxFontItem acceptance; Tab accepts without explicit release, Escape restores the binding and sidebar Escape bubbles to its deck. Raw missing names are accepted without inventing installed rows. Font list enumeration refreshes retain an unchanged typed assignment through the common resetKey port; style option-owner changes still cancel stale drafts. Writer toolbar,Character panel focus entry and Calc workbench pass actual document focus owners. Glyph/cmap-dependent custom font row drawing,live preview/EndPreview owners,MRU/completion and full native platform behavior remain unfinished; no font/UI parity flag is promoted.",
       "knownViolations": [],
       "localSymbols": [
         "ComboBox"

@@ -24,7 +24,11 @@ export function CalcFormattingToolbar({
   commandSource,
   resolveArguments,
   objectShell,
-}: BrowserCommandSurfaceProps & { readonly objectShell: SfxObjectShell }): React.JSX.Element {
+  focusDocument,
+}: BrowserCommandSurfaceProps & {
+  readonly objectShell: SfxObjectShell;
+  readonly focusDocument?: () => void;
+}): React.JSX.Element {
   return (
     <CommandToolbarItems
       commandSource={commandSource}
@@ -97,7 +101,11 @@ export function CalcFormattingToolbar({
                   binding,
                 ) =>
                   item.kind === "font-select" ? (
-                    <FontNameSelect {...binding} label={item.label} />
+                    <FontNameSelect
+                      {...(focusDocument === undefined ? {} : { focusDocument })}
+                      {...binding}
+                      label={item.label}
+                    />
                   ) : (
                     <FontSizeSelect {...binding} label={item.label} />
                   )

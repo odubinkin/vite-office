@@ -20,6 +20,7 @@ function mount() {
   const tree = render(
     <div data-testid="toolbar" style={{ overflow: "hidden" }}>
       <ComboBox
+        resetKey={rows}
         options={rows}
         value="Alpha"
         enabled
