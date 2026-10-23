@@ -1,10 +1,11 @@
 ---
 id: "202610231209-DVQ9ES"
 title: "Complete Writer sidebar paragraph-style acceptance and by-example commands"
-status: "DOING"
+result_summary: "Implemented editable Writer paragraph styles and native by-example creation and update with history and ODT persistence"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Source contract review preserves original asynchronous request ownership, family precedence, real cursor-ring iteration and by-example history quirks WRITER067/068; no parallel style store or semantic-parity promotion."
     - "Initial standalone ResetAttributes assumption was false: disabled placement is explicit, private StyleApply reset remains separately tested. Latest user prioritization moves font/style previews and existing-core/UI wiring ahead of new standalone reset pipeline."
     - "Main focused7169 passed; supplemental initially exposed four stale UI/jsdom focus fixtures. Final affected3files30cases pass and Chromium38pass; audited25runtime source hashes match with S/L/F/B100,skipped0. Declared type/build/static/resource/dependency/docs/tree/provenance/inventory/doctor/routing checks pass."
-commit: null
+commit:
+  hash: "74bedef47d19edf8c0b2c02a15005ae5cf1b5e3e"
+  message: "🧩 DVQ9ES writer: implement editable styles and native by-example commands"
 comments:
   -
     author: "CODER"
     body: "Start: continue the approved Writer current-slice consistency work after merge; implement source-backed editable paragraph-style/sidebar by-example commands, native owner/history/ODT contracts and existing reset placement with focused verification."
+  -
+    author: "CODER"
+    body: "Verified: editable paragraph-style acceptance and by-example commands retain real Writer/Sfx ownership, native history quirks and ODT persistence. Strict100 current-source coverage, final editor30 and Chromium38 cases plus declared gates pass; bounded unavailable commands documented."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native editable paragraph-style acceptance and by-example ownership/history/ODT. Main focused7169 passed, final repaired editor30 passed, Chromium38 passed; current-source strict100 across25 touched runtime files; all declared static/resource/type/provenance/routing checks pass. Standalone ResetAttributes premise corrected and disabled, no parity claim. See task Verification and DVQ9ES audit/logs."
+  -
+    type: "status"
+    at: "2026-10-23T14:27:45.999Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: editable paragraph-style acceptance and by-example commands retain real Writer/Sfx ownership, native history quirks and ODT persistence. Strict100 current-source coverage, final editor30 and Chromium38 cases plus declared gates pass; bounded unavailable commands documented."
 doc_version: 3
-doc_updated_at: "2026-10-23T14:26:22.926Z"
+doc_updated_at: "2026-10-23T14:27:46.000Z"
 doc_updated_by: "CODER"
 description: "Resume after merged full checkpoint. Canonicalize the existing Style/Character sidebar slice: native editable style-box acceptance and original Styles panel command grouping, real paragraph StyleNewByExample/StyleUpdateByExample ownership through Writer/Sfx and current style pool, source-backed history and ODT persistence; connect already implemented ResetAttributes in Character native group. Preserve existing browser I/O deviations, native item/default/selection semantics and JS lifetime. No deep locale work, network, branch/merge or changes outside writer checkout. Up to80 implementation/test/tooling paths plus paired canonical records/generated views. First task since YQHS8E full checkpoint; focused tests/coverage only."
 sections:
