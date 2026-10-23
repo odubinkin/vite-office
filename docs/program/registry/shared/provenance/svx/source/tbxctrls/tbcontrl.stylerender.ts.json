@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.ts",
+    "localSymbols": [
+      "calcStylePreviewBounds",
+      "drawStylePreviewEntry",
+      "StylePreviewScriptInfo",
+      "StylePreviewFonts",
+      "StylePreviewTextDevice"
+    ],
+    "upstreamPath": "svx/source/tbxctrls/tbcontrl.cxx",
+    "upstreamSymbols": [
+      "SvxStyleBox_Base::CalcBoundRect",
+      "SvxStyleBox_Base::UserDrawEntry",
+      "ScriptInfo"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT extracts actual SvxStyleBox CalcBoundRect and UserDrawEntry. Supplied native ScriptInfo data retains UTF16 endpoints and measured advances;exact ASIAN/COMPLEX comparisons choose optional fonts,otherwise western. Each run scopes/restores the actual Font;ratio scaling uses integer Size. Measurement unions unshifted native closed-interval ink rectangles and caches advances separately. Drawing preserves eight-pixel left inset,Bottom-based scaling/vertical placement and individually truncated pen advances. Original uint16 run indices are retained. Full EditEngine CheckScript,SetupEntry decorations/colors,device text shaping and actual browser row wiring remain unported. Empty drawing vectors violate the native unchecked-index precondition and receive an explicit JS boundary error;measurement retains its original empty-vector fallback. Device fixtures are source-algorithm evidence,not raster or installed-font evidence. WRITER075 documents the unshifted ink union. No broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full EditEngine script/direction analysis,style decorations/colors,actual Canvas row wiring and device/widget parity remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.ts",
+          "marker": "calcStylePreviewBounds"
+        },
+        {
+          "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxStyleBox_Base::CalcBoundRect"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+          "marker": "SvxStyleBox_Base::UserDrawEntry"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps native style row measurement/drawing in svx/source/tbxctrls, split from existing border and style item-input helpers in the same native translation-unit owner. The actual text device and script analyzer remain separate responsibilities."
+    }
+  }
+}
