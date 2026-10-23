@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+import { ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImport } from "./xmlimprt";
 import { writeOdsDocument, readOdsDocument } from "./xmlwrap";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
@@ -43,4 +44,29 @@ it("recomputes format ranges when the same exporter is reused after a model edit
   const next = exporter.exportContent();
   expect(next).toContain('office:value="7"');
   expect(next).not.toContain('office:value="42"');
+});
+
+it("refreshes cached style names and row runs after a format edit between exports", /** Reuses the merged exporter across a native attribute mutation. @returns Nothing. */ () => {
+  const doc = styled(),
+    exporter = new ScXMLExport(doc);
+  exporter.exportContent();
+  const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+  pattern.ItemSetPut(new SvxFontHeightItem(440, 100, 101));
+  doc.ApplyPatternAreaTab(0, 2, 9, 2, 0, pattern);
+  pattern.Dispose();
+  const copy = new ScDocument();
+  new ScXMLImport(copy).importContent(exporter.exportContent());
+  for (const [row, height] of [
+    [1, 360],
+    [2, 440],
+    [3, 360],
+  ] as const)
+    for (const col of [0, 9])
+      expect(
+        (
+          copy.GetPattern(new ScAddress(col, row, 0))?.GetItem(101) as SvxFontHeightItem
+        ).GetHeight(),
+      ).toBe(height);
+  doc.DisposeAttributes();
+  copy.DisposeAttributes();
 });
