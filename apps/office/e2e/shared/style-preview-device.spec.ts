@@ -7,13 +7,17 @@ type SourceExports = typeof import("../../src/sw/browser/composition/writer-modu
   typeof import("../../src/sw/source/uibase/app/docstyle") &
   typeof import("../../src/svx/source/tbxctrls/tbcontrl.stylepreview") &
   typeof import("../../src/svx/source/tbxctrls/tbcontrl.stylerender") &
+  typeof import("../../src/editeng/source/editeng/impedit2.script") &
+  typeof import("../../src/editeng/inc/ParagraphPortion") &
+  typeof import("../../src/offapi/com/sun/star/i18n/ScriptType") &
+  typeof import("../../src/i18nlangtag/inc/lang") &
+  typeof import("../../src/i18nlangtag/source/isolang/isolang.tables") &
   typeof import("../../src/vcl/browser/style-preview-device") &
   typeof import("../../src/vcl/source/font/font") &
   typeof import("../../src/tools/inc/gen") &
   typeof import("../../src/tools/inc/mapunit") &
   typeof import("../../src/tools/inc/fontenum") &
   typeof import("../../src/editeng/inc/editids") &
-  typeof import("../../src/svl/inc/languageoptions") &
   typeof import("../../src/o3tl/inc/unit_conversion");
 test("actual Canvas style paint from real Writer preview items", /** Measures and paints actual style fonts on a production page using separately bundled repository exports. @param fixtures - Chromium page. @param testInfo - Local witness artifacts. @returns Completion. */ async ({
   page,
@@ -51,8 +55,16 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
     },
     {
       module: "src/svx/source/tbxctrls/tbcontrl.stylerender.ts",
-      names: ["calcStylePreviewBounds", "drawStylePreviewEntry"],
+      names: ["calcStylePreviewBounds", "drawStylePreviewEntry", "checkStylePreviewScripts"],
     },
+    {
+      module: "src/editeng/source/editeng/impedit2.script.ts",
+      names: ["getSingleParagraphItemScriptType"],
+    },
+    { module: "src/editeng/inc/ParagraphPortion.ts", names: ["ScriptTypePosInfo"] },
+    { module: "src/offapi/com/sun/star/i18n/ScriptType.ts", names: ["LATIN"] },
+    { module: "src/i18nlangtag/inc/lang.ts", names: ["LANGUAGE_ENGLISH_US"] },
+    { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
     { module: "src/vcl/browser/style-preview-device.ts", names: ["BrowserStylePreviewDevice"] },
     { module: "src/vcl/source/font/font.ts", names: ["Font"] },
     { module: "src/tools/inc/gen.ts", names: ["Rectangle", "Size"] },
@@ -67,11 +79,10 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
         "SID_ATTR_CHAR_WEIGHT",
       ],
     },
-    { module: "src/svl/inc/languageoptions.ts", names: ["SvtScriptType"] },
     { module: "src/o3tl/inc/unit_conversion.ts", names: ["convert", "Length"] },
   ]);
   const result = await page.evaluate(
-    /** Uses actual document/style/value/device owners;the supplied Latin ScriptInfo is an explicit analyzer fixture. @returns Source values and real host measurements. */ async () => {
+    /** Uses actual document/style/value/device owners and source caret sampling over an explicit initialized Latin cache;not ICU analysis. @returns Source values and real host measurements. */ async () => {
       const api = (globalThis as unknown as { WriterStylePaint: SourceExports }).WriterStylePaint;
       const session = api.createWriterDocumentSession(),
         doc = session.docShell.GetDoc();
@@ -128,9 +139,19 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
           await document.fonts.load(cssFont);
           device.SetFont(ui);
           const name = index === 0 ? "Heading 1" : "Heading 4";
-          const changes = [
-            { scriptType: api.SvtScriptType.LATIN, changePos: name.length, textWidth: 0 },
-          ];
+          const nativeName = api.unicode(name);
+          const types = [new api.ScriptTypePosInfo(api.LATIN, 0, name.length)];
+          let changes: ReturnType<SourceExports["checkStylePreviewScripts"]>;
+          try {
+            changes = api.checkStylePreviewScripts(
+              nativeName,
+              /** Executes actual source caret lookup over the explicitly initialized cached script span. @param selection - Actual ESelection. @returns Source flags. */ (
+                selection,
+              ) => api.getSingleParagraphItemScriptType(types, selection, api.LANGUAGE_ENGLISH_US),
+            );
+          } finally {
+            nativeName.dispose();
+          }
           const fonts = { latin: value };
           const bounds = api.calcStylePreviewBounds(device, name, changes, fonts);
           api.drawStylePreviewEntry(
@@ -148,6 +169,11 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
             weight: value.GetWeight(),
             cssFont,
             advance: changes[0]?.textWidth,
+            scriptChanges: changes.map(
+              /** Records source cursor-sampling results. @param change - Actual run. @returns Script/end pair. */ (
+                change,
+              ) => [change.scriptType, change.changePos],
+            ),
             bounds: [bounds.Left(), bounds.Top(), bounds.Right(), bounds.Bottom()],
           });
         }
@@ -180,6 +206,7 @@ test("actual Canvas style paint from real Writer preview items", /** Measures an
     expect(value.advance).toBeGreaterThan(0);
     expect(value.bounds[3]).toBeGreaterThan(0);
     expect(value.family.length).toBeGreaterThan(0);
+    expect(value.scriptChanges).toEqual([[1, 9]]);
   }
   await writeFile(
     testInfo.outputPath("style-preview-device.json"),

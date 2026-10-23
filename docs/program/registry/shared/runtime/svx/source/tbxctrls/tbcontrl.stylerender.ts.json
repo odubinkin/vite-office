@@ -18,23 +18,27 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.ts#calcStylePreviewBounds",
-        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.test.ts#@fileoverview"
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylerender.test.ts#@fileoverview",
+        "apps/office/src/editeng/source/editeng/impedit2.script.test.ts#@fileoverview"
       ],
-      "justification": "Task6764KT extracts actual SvxStyleBox CalcBoundRect and UserDrawEntry. Supplied native ScriptInfo data retains UTF16 endpoints and measured advances;exact ASIAN/COMPLEX comparisons choose optional fonts,otherwise western. Each run scopes/restores the actual Font;ratio scaling uses integer Size. Measurement unions unshifted native closed-interval ink rectangles and caches advances separately. Drawing preserves eight-pixel left inset,Bottom-based scaling/vertical placement and individually truncated pen advances. Original uint16 run indices are retained. Full EditEngine CheckScript,SetupEntry decorations/colors,device text shaping and actual browser row wiring remain unported. Empty drawing vectors violate the native unchecked-index precondition and receive an explicit JS boundary error;measurement retains its original empty-vector fallback. Device fixtures are source-algorithm evidence,not raster or installed-font evidence. WRITER075 documents the unshifted ink union. No broad parity promotion.",
+      "justification": "Task6764KT extracts actual SvxStyleBox CalcBoundRect and UserDrawEntry. Supplied native ScriptInfo data retains UTF16 endpoints and measured advances;exact ASIAN/COMPLEX comparisons choose optional fonts,otherwise western. Each run scopes/restores the actual Font;ratio scaling uses integer Size. Measurement unions unshifted native closed-interval ink rectangles and caches advances separately. Drawing preserves eight-pixel left inset,Bottom-based scaling/vertical placement and individually truncated pen advances. Original uint16 run indices are retained. Full EditEngine CheckScript,SetupEntry decorations/colors,device text shaping and actual browser row wiring remain unported. Empty drawing vectors violate the native unchecked-index precondition and receive an explicit JS boundary error;measurement retains its original empty-vector fallback. Device fixtures are source-algorithm evidence,not raster or installed-font evidence. WRITER075 documents the unshifted ink union. No broad parity promotion. Task6764KT adds original CheckScript cursor positions and emission order through actual ESelection values and a caller-owned native script query. Nonempty source precondition is explicit;WRITER073 preceding-character/terminal-script behavior remains preserved. Tests compose it with the actual extracted single-paragraph GetItemScriptType operation over initialized native script-position values. Actual EditEngine text initialization and ICU direction analysis remain pending;no live widget/raster claim.",
       "knownViolations": [],
       "localSymbols": [
         "calcStylePreviewBounds",
         "drawStylePreviewEntry",
         "StylePreviewScriptInfo",
         "StylePreviewFonts",
-        "StylePreviewTextDevice"
+        "StylePreviewTextDevice",
+        "checkStylePreviewScripts",
+        "StylePreviewScriptQuery"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "svx/source/tbxctrls/tbcontrl.cxx",
       "upstreamSymbols": [
         "SvxStyleBox_Base::CalcBoundRect",
         "SvxStyleBox_Base::UserDrawEntry",
-        "ScriptInfo"
+        "ScriptInfo",
+        "CheckScript"
       ]
     }
   }

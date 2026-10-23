@@ -2,6 +2,28 @@
 import { Font, type ConstFont } from "../../../vcl/source/font/font";
 import { Rectangle, Size, type ReadonlyPoint } from "../../../tools/inc/gen";
 import { SvtScriptType } from "../../../svl/inc/languageoptions";
+import { ESelection } from "../../../editeng/inc/ESelection";
+import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+
+/** Actual EditEngine GetScriptType request shape;the caller retains text ownership and initialization. */
+export type StylePreviewScriptQuery = (selection: ESelection) => SvtScriptType;
+
+/** Original CheckScript sampling and emission order,including the preceding-character caret boundary behavior. Empty text violates the source assertion and is rejected at this JS boundary. @param name - Actual style label. @param getScriptType - Actual source script query. @returns Native ScriptInfo values without advance measurements. */
+export function checkStylePreviewScripts(
+  name: OUStringConstReference,
+  getScriptType: StylePreviewScriptQuery,
+): StylePreviewScriptInfo[] {
+  if (name.isEmpty()) throw new Error("Style preview requires nonempty text.");
+  const changes: StylePreviewScriptInfo[] = [];
+  let script = getScriptType(new ESelection(0, 0, 0, 0));
+  for (let index = 1; index <= name.getLength(); ++index) {
+    const next = getScriptType(new ESelection(0, index, 0, index));
+    if (next !== script || index === name.getLength())
+      changes.push({ scriptType: script, changePos: index, textWidth: 0 });
+    script = next;
+  }
+  return changes;
+}
 
 /** Original ScriptInfo data; CalcBoundRect writes advance widths for the later drawing pass. */
 export interface StylePreviewScriptInfo {
