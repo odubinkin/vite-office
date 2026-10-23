@@ -271,3 +271,13 @@ it.each(["=$A$1+A1", "=SUM($A$1:$A$1)+SUM(A1:A1)"])(
     doc.Dispose();
   },
 );
+
+it("rejects lazy attribute creation after observable document closure", /** A genuine empty document closes before any attribute helper is needed;late consumers must not manufacture a replacement pool. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.Dispose();
+  expect(doc.GetPool()).toBeNull();
+  expect(
+    /** Exercises the consumed native no-pool diagnostic after actual resource release. @returns No helper. */ () =>
+      doc.getCellAttributeHelper(),
+  ).toThrow("No SfxItemPool");
+});

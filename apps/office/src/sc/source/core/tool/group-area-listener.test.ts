@@ -3,6 +3,7 @@ import { assert, expect, it, vi } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress, ScRange, BCA_LISTEN_ALWAYS } from "../../../inc/address";
 import { ScFormulaCell, ScFormulaCellGroup } from "../../../inc/formulacell";
+import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { ScCompiler } from "../../../inc/compiler";
 import { FormulaGroupAreaListener } from "../../../inc/grouparealistener";
 import { ColumnSpanSet, type ColumnAction } from "../../../inc/columnspanset";
@@ -454,4 +455,87 @@ it("serializes actual shared code at every member position and reopens formulas 
   ).toEqual([48, 105, 72, 75]);
   reopened.Dispose();
   doc.Dispose();
+});
+
+it("repairs a retained cold listener when a real top formula becomes an independent singleton", /** Production column edits unshare every member;the separately retained listener observes the resulting live store. @returns Nothing. */ () => {
+  const { doc, range } = fixture(),
+    cold = new FormulaGroupAreaListener(range, doc, new ScAddress(1, 10, 0), 4, false, false);
+  for (let row = 10; row < 14; row++)
+    doc.SetFormula(new ScAddress(1, row, 0), unicode("=" + row), doc.GetGrammar());
+  expect(selected(cold, 3)).toEqual([]);
+  cold.Dispose();
+  doc.Dispose();
+});
+
+it.each([false, true])(
+  "retains native cold-listener diagnostics during unfinished group adoption,missingTop=%s",
+  /** The public native group constructor permits allocation before every cell has entered the column;the retained observer handles that transfer boundary. @param missingTop - Top still awaiting adoption. @returns Nothing. */ (
+    missingTop,
+  ) => {
+    const doc = new ScDocument();
+    doc.InsertTab(0, unicode("Data"));
+    const compiler = new ScCompiler(doc, new ScAddress(1, 0, 0)),
+      code = compiler.CompileString(unicode("=SUM(A1:A3)"));
+    compiler.CompileTokenArray();
+    const group = new ScFormulaCellGroup();
+    group.setCode(code);
+    group.mnLength = 3;
+    const top = new ScFormulaCell(doc, new ScAddress(1, 0, 0), group, doc.GetGrammar());
+    group.mpTopCell = top;
+    const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+    assert(column);
+    if (!missingTop) column.SetFormulaCell(0, top, 1);
+    const member = new ScFormulaCell(doc, new ScAddress(1, 1, 0), group, doc.GetGrammar());
+    column.SetFormulaCell(1, member, 1);
+    const cold = new FormulaGroupAreaListener(
+        new ScRange(0, 0, 0, 0, 2, 0),
+        doc,
+        new ScAddress(1, missingTop ? 1 : 0, 0),
+        3,
+        false,
+        false,
+      ),
+      cells: ScFormulaCell[] = [];
+    if (missingTop) {
+      cold.collectFormulaCells(0, 2, cells);
+      expect(cells).toEqual([]);
+      expect(cold.getTopCell()).toBeNull();
+    } else {
+      expect(
+        /** Native span assertion runs after recording the actual available block size. @returns No notification. */ () =>
+          cold.collectFormulaCells(0, 2, cells),
+      ).toThrow("formula group length exceeds formula block");
+      expect(cold.getListeningRange()).toEqual(new ScRange(0, 0, 0, 0, 3, 0));
+    }
+    cold.Dispose();
+    doc.Dispose();
+    if (missingTop) top.Dispose();
+  },
+);
+it("retains native backtracking validation while an incoming group top is not adopted", /** A genuine detached top and adopted member exercise the column listening boundary before transfer completes. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const compiler = new ScCompiler(doc, new ScAddress(1, 0, 0)),
+    code = compiler.CompileString(unicode("=7"));
+  compiler.CompileTokenArray();
+  const group = new ScFormulaCellGroup();
+  group.setCode(code);
+  group.mnLength = 2;
+  const top = new ScFormulaCell(doc, new ScAddress(1, 0, 0), group, doc.GetGrammar());
+  group.mpTopCell = top;
+  const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+  assert(column);
+  column.SetFormulaCell(
+    1,
+    new ScFormulaCell(doc, new ScAddress(1, 1, 0), group, doc.GetGrammar()),
+    1,
+  );
+  const start = new StartListeningContext(doc),
+    end = new EndListeningContext(doc);
+  expect(
+    /** Source assertion rejects traversal before the actual block begins. @returns No listening traversal. */ () =>
+      column.StartListeningFormulaCells(start, end, 1, 1),
+  ).toThrow("Shared top precedes formula block");
+  doc.Dispose();
+  top.Dispose();
 });

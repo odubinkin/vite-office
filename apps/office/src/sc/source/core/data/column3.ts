@@ -78,7 +78,7 @@ export class GroupFormulaCells {
   }
 }
 /** Original whole-column regroup does not rebuild formulas or subscriptions. @param this - Actual column. @param positions - Optional changed-group positions. @returns Nothing. */
-export function RegroupFormulaCells(this: ScColumn, positions: ScAddress[] | null = null): void {
+export function RegroupFormulaCells(this: ScColumn, positions: ScAddress[] | null): void {
   const cells = this.GetCellStore(),
     action = new GroupFormulaCells(positions);
   for (

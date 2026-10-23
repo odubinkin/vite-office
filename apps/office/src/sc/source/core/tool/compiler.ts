@@ -1,5 +1,4 @@
 /** @fileoverview Numeric/string/local-A1 native and ODFF compilation with consumed aggregate symbols. Names,cross-sheet references,other functions and localized input formatting remain unsupported. */
-import { ParamClass } from "../../../../formula/inc/paramclass";
 import { ScParameterClassification } from "../inc/parclass";
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
 import {
@@ -111,34 +110,12 @@ export class ScCompiler extends FormulaCompiler {
     operation: FormulaToken;
   }[] = [];
   private readonly mUnhandledPossibleImplicitIntersections = new Set<FormulaToken>();
-  /** Original classification predicate. @param token - Actual operation. @param parameter - Native argument offset. @returns Candidate scalar/array argument. */
-  private static ParameterMayBeImplicitIntersection(
-    token: FormulaToken,
-    parameter: number,
-  ): boolean {
-    const classification = ScParameterClassification.GetParameterType(token, parameter);
-    return classification === ParamClass.Value || classification === ParamClass.Array;
-  }
-  /** Original matrix/forced-array/reference-return optimization exclusion. @param token - Operation. @returns Skip optimization. */
-  private SkipImplicitIntersectionOptimization(token: FormulaToken): boolean {
-    if (this.mbMatrixFlag) return true;
-    const parameter = token.GetInForceArray();
-    if (
-      parameter === ParamClass.ForceArray ||
-      parameter === ParamClass.ReferenceOrForceArray ||
-      parameter === ParamClass.SuppressedReferenceOrForceArray ||
-      parameter === ParamClass.ReferenceOrRefArray
-    )
-      return true;
-    return ScParameterClassification.GetParameterType(token, 65535) === ParamClass.Reference;
-  }
-  /** Original enabled II hook for current scalar/local-reference/aggregate opcodes;unconsumed function families are rejected by the shared compiler admission guard. @param token - Operation. @param parameters - Borrowed actual RPN slot locations. @param count - Argument count. @returns Nothing. */
+  /** Original II hook for the admitted scalar grammar. Every shared-parser call is already gated by mbComputeII;native array/function exclusions remain at admission. @param token - Operation. @param parameters - Borrowed actual RPN slot locations. @param count - Argument count. @returns Nothing. */
   protected override HandleIIOpCode(
     token: FormulaToken,
     parameters: readonly (readonly [FormulaToken[], number])[] | null,
     count: number,
   ): void {
-    if (!this.mbComputeII) return;
     this.HandleIIOpCodeInternal(token, parameters, count);
   }
   /** Original pointer validation,candidate scheduling and aggregate reference bookkeeping for the accepted opcode slice. @param token - Operation. @param parameters - Actual RPN locations. @param count - Native count. @returns Handled. */
@@ -163,25 +140,14 @@ export class ScCompiler extends FormulaCompiler {
       opcode !== OpCode.ocAnd &&
       opcode !== OpCode.ocOr
     ) {
-      if (count !== 2) return false;
-      if (
-        !ScCompiler.ParameterMayBeImplicitIntersection(token, 0) ||
-        !ScCompiler.ParameterMayBeImplicitIntersection(token, 1)
-      )
-        return false;
-      if (this.SkipImplicitIntersectionOptimization(token)) return false;
+      // The admitted binary grammar supplies exactly two scalar/array-value parameters.
+      // Array contexts and matrix operands are rejected before parsing.
       const locations = parameters as readonly (readonly [FormulaToken[], number])[],
         first = locations[0] as readonly [FormulaToken[], number],
         second = locations[1] as readonly [FormulaToken[], number];
-      if (
-        (first[0][first[1]] as FormulaToken).GetType() === StackVar.svDoubleRef &&
-        (second[0][second[1]] as FormulaToken).GetType() !== StackVar.svMatrix
-      )
+      if ((first[0][first[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
         this.addPendingIntersection(first, token);
-      if (
-        (second[0][second[1]] as FormulaToken).GetType() === StackVar.svDoubleRef &&
-        (first[0][first[1]] as FormulaToken).GetType() !== StackVar.svMatrix
-      )
+      if ((second[0][second[1]] as FormulaToken).GetType() === StackVar.svDoubleRef)
         this.addPendingIntersection(second, token);
       return true;
     }
@@ -189,9 +155,7 @@ export class ScCompiler extends FormulaCompiler {
       (opcode >= OpCode.ocStartUnaryOperators && opcode < OpCode.ocStopUnaryOperators) ||
       opcode === OpCode.ocPercentSign
     ) {
-      if (count !== 1) return false;
-      if (!ScCompiler.ParameterMayBeImplicitIntersection(token, 0)) return false;
-      if (this.SkipImplicitIntersectionOptimization(token)) return false;
+      // Unary negation and percent have one scalar/array-value parameter in native data.
       const location = (
         parameters as readonly (readonly [FormulaToken[], number])[]
       )[0] as readonly [FormulaToken[], number];
@@ -199,32 +163,17 @@ export class ScCompiler extends FormulaCompiler {
         this.addPendingIntersection(location, token);
       return true;
     }
-    let possible = false;
+    // The admitted SUM,SUMSQ,PRODUCT,AVERAGE parameters are all reference-like.
+    // Other native function families remain outside scalar admission.
     for (let index = 0; index < count; index++) {
       const location = (parameters as readonly (readonly [FormulaToken[], number])[])[
         index
       ] as readonly [FormulaToken[], number];
-      if (
-        ScCompiler.ParameterMayBeImplicitIntersection(token, index) &&
-        (location[0][location[1]] as FormulaToken).GetType() === StackVar.svDoubleRef
-      ) {
-        possible = true;
-        break;
-      }
+      this.mUnhandledPossibleImplicitIntersections.delete(location[0][location[1]] as FormulaToken);
     }
-    if (!possible) {
-      for (let index = 0; index < count; index++) {
-        const location = (parameters as readonly (readonly [FormulaToken[], number])[])[
-          index
-        ] as readonly [FormulaToken[], number];
-        this.mUnhandledPossibleImplicitIntersections.delete(
-          location[0][location[1]] as FormulaToken,
-        );
-      }
-      return true;
-    }
-    return false;
+    return true;
   }
+
   /** Original PendingImplicitIntersectionOptimization member capture;the location borrows the real code buffer. @param location - Actual slot. @param operation - Operation. @returns Nothing. */
   private addPendingIntersection(
     location: readonly [FormulaToken[], number],
@@ -236,13 +185,15 @@ export class ScCompiler extends FormulaCompiler {
       operation,
     });
   }
-  /** Original delayed optimization waits for the final operation's array context and current slot identity. @returns Nothing. */
+  /** Original delayed optimization runs after the admitted scalar code buffer is complete. @returns Nothing. */
   protected override PostProcessCode(): void {
+    // Bad expressions can capture one slot twice;retain the native identity
+    // check after the first replacement. A surviving non-null slot is in this
+    // same dense code buffer,so the native pointer-end check is implied.
+    // Admission forbids forced-array context propagation and matrix functions.
     for (const item of this.mPendingImplicitIntersectionOptimizations) {
       const [buffer, offset] = item.parameterLocation;
       if (buffer[offset] !== item.parameter) continue;
-      if (offset >= this.mpCode.length) continue;
-      if (item.operation.IsInForceArray()) continue;
       this.ReplaceDoubleRefII(item.parameterLocation);
     }
     this.mPendingImplicitIntersectionOptimizations.length = 0;

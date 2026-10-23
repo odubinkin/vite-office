@@ -267,7 +267,7 @@ function lcl_GetAutoSumForColumnRange(
 ): ScAutoSum {
   const start = range.aStart,
     end = range.aEnd;
-  if (start.Col() !== end.Col()) return ScAutoSum.None;
+  // The sole native caller constructs both endpoints with the same column.
   const tab = end.Tab(),
     col = end.Col(),
     extend: [number] = [0];
@@ -302,7 +302,7 @@ function lcl_GetAutoSumForRowRange(
 ): ScAutoSum {
   const start = range.aStart,
     end = range.aEnd;
-  if (start.Row() !== end.Row()) return ScAutoSum.None;
+  // The sole native caller constructs both endpoints with the same row.
   const tab = end.Tab(),
     row = end.Row(),
     extend: [number] = [0];
@@ -417,19 +417,19 @@ export function AutoSum(
       if (!doc.IsBlockEmpty(col, startRow, col, sumEndRow, tab)) {
         const ranges = new ScRangeList(),
           area = new ScRange(col, range.aStart.Row(), tab, col, sumEndRow, tab);
-        if ((value = lcl_GetAutoSumForColumnRange(doc, ranges, area)) !== ScAutoSum.None) {
-          if (++rowSums === 1) rowSumsStartCol = ranges.front().aStart.Col();
-          const formula = view.GetAutoSumFormula(
-            ranges,
-            subtotal,
-            new ScAddress(col, insertRow, tab),
-            code,
-          );
-          try {
-            view.EnterData(col, insertRow, tab, formula);
-          } finally {
-            formula.dispose();
-          }
+        value = lcl_GetAutoSumForColumnRange(doc, ranges, area);
+
+        if (++rowSums === 1) rowSumsStartCol = ranges.front().aStart.Col();
+        const formula = view.GetAutoSumFormula(
+          ranges,
+          subtotal,
+          new ScAddress(col, insertRow, tab),
+          code,
+        );
+        try {
+          view.EnterData(col, insertRow, tab, formula);
+        } finally {
+          formula.dispose();
         }
       }
     }
@@ -442,19 +442,19 @@ export function AutoSum(
       if (!doc.IsBlockEmpty(startCol, row, sumEndCol, row, tab)) {
         const ranges = new ScRangeList(),
           area = new ScRange(range.aStart.Col(), row, tab, sumEndCol, row, tab);
-        if ((value = lcl_GetAutoSumForRowRange(doc, ranges, area)) !== ScAutoSum.None) {
-          if (++colSums === 1) colSumsStartRow = ranges.front().aStart.Row();
-          const formula = view.GetAutoSumFormula(
-            ranges,
-            subtotal,
-            new ScAddress(insertCol, row, tab),
-            code,
-          );
-          try {
-            view.EnterData(insertCol, row, tab, formula);
-          } finally {
-            formula.dispose();
-          }
+        value = lcl_GetAutoSumForRowRange(doc, ranges, area);
+
+        if (++colSums === 1) colSumsStartRow = ranges.front().aStart.Row();
+        const formula = view.GetAutoSumFormula(
+          ranges,
+          subtotal,
+          new ScAddress(insertCol, row, tab),
+          code,
+        );
+        try {
+          view.EnterData(insertCol, row, tab, formula);
+        } finally {
+          formula.dispose();
         }
       }
     }

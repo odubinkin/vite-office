@@ -2,7 +2,7 @@
 import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
-import { ScFormulaCell } from "../../../inc/formulacell";
+import { ScFormulaCell, ScFormulaCellGroup } from "../../../inc/formulacell";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -334,4 +334,304 @@ it("disposes rejected compiled owners at the actual document and table adoption 
     expect(cell.HasBroadcaster()).toBe(false);
   }
   doc.Dispose();
+});
+
+it("retains already deferred flags through a second native NoListening replacement", /** Repeated actual column edits preserve pending survivors without resetting or fabricating their flags. @returns Nothing. */ () => {
+  const { doc, column } = fixture(5, "=$A$1");
+  column.SetFormulaCell(
+    2,
+    new ScFormulaCell(doc, new ScAddress(1, 2, 0), unicode("=2"), doc.GetGrammar()),
+    2,
+  );
+  expect(doc.GetFormulaCell(new ScAddress(1, 3, 0))?.NeedsListening()).toBe(true);
+  column.SetFormulaCell(
+    4,
+    new ScFormulaCell(doc, new ScAddress(1, 4, 0), unicode("=3"), doc.GetGrammar()),
+    2,
+  );
+  expect(doc.GetFormulaCell(new ScAddress(1, 3, 0))?.NeedsListening()).toBe(true);
+  doc.Dispose();
+});
+it.each(["=$A$1+A1", "=SUM($A$1:$A$2)+SUM(A1:A2)"])(
+  "skips genuine invalid references in automatically grouped relocated formulas: %s",
+  /** Both copied formulas cross the first column while retaining valid absolute references and actual grouping/listening owners. @param input - Formula. @returns Nothing. */ (
+    input,
+  ) => {
+    const doc = new ScDocument();
+    doc.InsertTab(0, unicode("Data"));
+    const source = new ScFormulaCell(doc, new ScAddress(1, 1, 0), unicode(input), doc.GetGrammar());
+    for (let row = 2; row < 4; row++) {
+      const pos = new ScAddress(0, row, 0);
+      doc.SetFormulaCell(pos, source.Clone(pos));
+    }
+    const top = doc.GetFormulaCell(new ScAddress(0, 2, 0));
+    assert(top);
+    expect(top.GetSharedLength()).toBe(2);
+    const column = doc.FetchTable(0)?.FetchColumn(0);
+    assert(column);
+    column.StartListeningFormulaCells(
+      new StartListeningContext(doc),
+      new EndListeningContext(doc),
+      2,
+      3,
+    );
+    source.Dispose();
+    doc.Dispose();
+  },
+);
+
+it("rejects group-listening before replaced shared code has been synchronized", /** The real public code replacement/synchronization lifecycle preserves borrowed-code identity. @returns Nothing. */ () => {
+  const { doc, column, first, pointer } = fixture(3);
+  const group = first.GetCellGroup();
+  assert(group);
+  assert(group.mpCode);
+  group.setCode(group.mpCode.CloneValue());
+  expect(
+    /** Native shared-code precondition catches an unfinished code replacement. @returns No subscription. */ () =>
+      SharedFormulaUtil.startListeningAsGroup(new StartListeningContext(doc), pointer),
+  ).toThrow("Shared code differs");
+  for (let row = 2; row < 5; row++) column.GetFormulaCell(row)?.SyncSharedCode();
+  SharedFormulaUtil.startListeningAsGroup(new StartListeningContext(doc), pointer);
+  expect(first.GetCode()).toBe(group.mpCode);
+  doc.Dispose();
+});
+it.each(["different", "merge", "extend"] as const)(
+  "validates an unfinished native group adoption before regrouping: %s",
+  /** Public group construction can precede complete column adoption;native RegroupFormulaCells must reject an overlong incoming span. @param kind - Original validation path. @returns Nothing. */ (
+    kind,
+  ) => {
+    const doc = new ScDocument();
+    doc.InsertTab(0, unicode("Data"));
+    doc.DelayFormulaGrouping(true);
+    const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+    assert(column);
+    /** Adopts actual native predeclared group members,leaving the caller-specified remainder pending. @param start - Top row. @param length - Declared total. @param adopted - Present prefix. @returns Nothing. */
+    function adopt(start: number, length: number, adopted: number): void {
+      const template = new ScFormulaCell(
+          doc,
+          new ScAddress(1, start, 0),
+          unicode("=7"),
+          doc.GetGrammar(),
+        ),
+        group = new ScFormulaCellGroup();
+      group.setCode(template.GetCode().CloneValue());
+      group.mnLength = length;
+      for (let offset = 0; offset < adopted; offset++) {
+        const cell = new ScFormulaCell(
+          doc,
+          new ScAddress(1, start + offset, 0),
+          group,
+          doc.GetGrammar(),
+        );
+        if (!offset) group.mpTopCell = cell;
+        column?.SetFormulaCell(start + offset, cell, 1);
+      }
+      template.Dispose();
+    }
+    if (kind === "merge") {
+      adopt(0, 2, 2);
+      adopt(2, 3, 2);
+    } else {
+      column.SetFormulaCell(
+        0,
+        new ScFormulaCell(
+          doc,
+          new ScAddress(1, 0, 0),
+          unicode(kind === "different" ? "=8" : "=7"),
+          doc.GetGrammar(),
+        ),
+        1,
+      );
+      adopt(1, 2, 1);
+    }
+    expect(
+      /** Native IllegalArgumentException boundary rejects a span whose pending members are not adopted yet. @returns No completed regroup. */ () =>
+        column.RegroupFormulaCells(),
+    ).toThrow("Shared group exceeds formula block");
+    doc.Dispose();
+  },
+);
+
+it.each(["split", "unshare"] as const)(
+  "retains native pending-group span assertions during %s",
+  /** Real predeclared groups enter the column through native constructors;partial adoption must be diagnosed before any out-of-block traversal. @param operation - Native helper. @returns Nothing. */ (
+    operation,
+  ) => {
+    const doc = new ScDocument();
+    doc.InsertTab(0, unicode("Data"));
+    doc.DelayFormulaGrouping(true);
+    const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+    assert(column);
+    /** Creates a genuine incoming group whose final member is still pending adoption. @param row - Top. @param length - Declared count. @param count - Adopted prefix. @returns Group. */
+    function incoming(row: number, length: number, count: number): ScFormulaCellGroup {
+      const source = new ScFormulaCell(
+          doc,
+          new ScAddress(1, row, 0),
+          unicode("=7"),
+          doc.GetGrammar(),
+        ),
+        group = new ScFormulaCellGroup();
+      group.setCode(source.GetCode().CloneValue());
+      group.mnLength = length;
+      for (let offset = 0; offset < count; offset++) {
+        const cell = new ScFormulaCell(
+          doc,
+          new ScAddress(1, row + offset, 0),
+          group,
+          doc.GetGrammar(),
+        );
+        if (!offset) group.mpTopCell = cell;
+        column?.SetFormulaCell(row + offset, cell, 1);
+      }
+      source.Dispose();
+      return group;
+    }
+    if (operation === "split") {
+      incoming(0, 4, 2);
+      expect(
+        /** Splitting cannot traverse the pending tail. @returns No complete split. */ () =>
+          SharedFormulaUtil.splitFormulaCellGroup(column.GetCellStore().position(1)),
+      ).toThrow("goes beyond the formula block");
+    } else {
+      incoming(0, 4, 3);
+      const member = column.GetFormulaCell(1);
+      assert(member);
+      expect(
+        /** Unsharing cannot traverse the pending tail. @returns No complete unshare. */ () =>
+          SharedFormulaUtil.unshareFormulaCell(column.GetCellStore().position(1), member),
+      ).toThrow("goes beyond the formula block");
+    }
+    doc.Dispose();
+  },
+);
+
+it("diagnoses public adoption arguments whose row and formula position disagree", /** Actual native constructors and column calls preserve coordinate preconditions;no private cell/store field is changed. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+  assert(column);
+  const first = new ScFormulaCell(doc, new ScAddress(1, 2, 0), unicode("=7"), doc.GetGrammar()),
+    second = new ScFormulaCell(doc, new ScAddress(1, 1, 0), unicode("=7"), doc.GetGrammar());
+  column.SetFormulaCell(0, first, 1);
+  expect(
+    /** Native adjacent adoption validates the upper cell position. @returns No completed join. */ () =>
+      column.SetFormulaCell(1, second, 1),
+  ).toThrow("Formula row differs from block position");
+  expect(
+    /** Native regroup validates the previous actual formula coordinate. @returns No regroup. */ () =>
+      column.RegroupFormulaCells(),
+  ).toThrow("Previous formula row differs from storage");
+  doc.Dispose();
+});
+it("requires native top metadata to be committed before flagging a prepended member", /** These are the original public SetCellGroup,mpTopCell,length mutation steps used by native regroup;premature flag traversal is diagnosed. @returns Nothing. */ () => {
+  const { doc, column, first } = fixture(2, "=7"),
+    group = first.GetCellGroup();
+  assert(group);
+  doc.DelayFormulaGrouping(true);
+  const above = new ScFormulaCell(doc, new ScAddress(1, 1, 0), unicode("=7"), doc.GetGrammar());
+  column.SetFormulaCell(1, above, 1);
+  above.SetCellGroup(group);
+  expect(
+    /** Source precondition prevents traversal with the old top during ownership handover. @returns No flags. */ () =>
+      column.SetNeedsListeningGroup(1),
+  ).toThrow("Negative shared top delta");
+  group.mpTopCell = above;
+  ++group.mnLength;
+  column.SetNeedsListeningGroup(1);
+  for (let row = 1; row < 4; row++) expect(column.GetFormulaCell(row)?.NeedsListening()).toBe(true);
+  doc.Dispose();
+});
+it("requires the adopted incoming top identity before group traversal", /** A live detached top and its incoming replacement use genuine group constructors;the original identity assertion protects the handover. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+  assert(column);
+  const source = new ScFormulaCell(doc, new ScAddress(1, 0, 0), unicode("=7"), doc.GetGrammar()),
+    group = new ScFormulaCellGroup();
+  group.setCode(source.GetCode().CloneValue());
+  group.mnLength = 2;
+  const detached = new ScFormulaCell(doc, new ScAddress(1, 0, 0), group, doc.GetGrammar());
+  group.mpTopCell = detached;
+  const incoming = new ScFormulaCell(doc, new ScAddress(1, 0, 0), group, doc.GetGrammar());
+  column.SetFormulaCell(0, incoming, 1);
+  expect(
+    /** Actual top pointer must match the adopted cell. @returns No flags. */ () =>
+      column.SetNeedsListeningGroup(0),
+  ).toThrow("Shared top differs from store");
+  expect(
+    /** A pending top cannot be traversed as a singleton. @returns No subscriptions. */ () =>
+      column.StartListeningFormulaCells(
+        new StartListeningContext(doc),
+        new EndListeningContext(doc),
+        0,
+        0,
+      ),
+  ).toThrow("Expected singleton or shared top");
+  group.mpTopCell = incoming;
+  column.SetFormulaCell(
+    1,
+    new ScFormulaCell(doc, new ScAddress(1, 1, 0), group, doc.GetGrammar()),
+    1,
+  );
+  column.SetNeedsListeningGroup(0);
+  expect(incoming.NeedsListening()).toBe(true);
+  doc.Dispose();
+  detached.Dispose();
+  source.Dispose();
+});
+
+it("diagnoses an invalid public group adoption row before restarting recorded survivors", /** Native constructors declare positions separately from ScColumn adoption arguments;the source assertion rejects their disagreement without a private store replacement. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+  assert(column);
+  const source = new ScFormulaCell(doc, new ScAddress(1, 2, 0), unicode("=7"), doc.GetGrammar()),
+    group = new ScFormulaCellGroup();
+  group.setCode(source.GetCode().CloneValue());
+  group.mnLength = 2;
+  const top = new ScFormulaCell(doc, new ScAddress(1, 2, 0), group, doc.GetGrammar());
+  group.mpTopCell = top;
+  column.SetFormulaCell(0, top, 1);
+  column.SetFormulaCell(
+    1,
+    new ScFormulaCell(doc, new ScAddress(1, 3, 0), group, doc.GetGrammar()),
+    1,
+  );
+  const replacement = new ScFormulaCell(
+    doc,
+    new ScAddress(1, 0, 0),
+    unicode("=8"),
+    doc.GetGrammar(),
+  );
+  expect(
+    /** Source survivor precondition prevents dereferencing a missing recorded formula. @returns No completed adoption. */ () =>
+      column.SetFormulaCell(0, replacement, 2),
+  ).toThrow("Missing surviving formula top");
+  doc.Dispose();
+  source.Dispose();
+});
+
+it("retains native zero-tail split behavior for an invalid public adoption coordinate", /** The constructor's reference position and column row are independent public inputs;the original split path retains its zero-lower-part behavior for their disagreement. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const column = doc.FetchTable(0)?.CreateColumnIfNotExists(1);
+  assert(column);
+  const source = new ScFormulaCell(doc, new ScAddress(1, 0, 0), unicode("=7"), doc.GetGrammar()),
+    group = new ScFormulaCellGroup();
+  group.setCode(source.GetCode().CloneValue());
+  group.mnLength = 2;
+  const top = new ScFormulaCell(doc, new ScAddress(1, 0, 0), group, doc.GetGrammar());
+  group.mpTopCell = top;
+  column.SetFormulaCell(0, top, 1);
+  column.SetFormulaCell(
+    1,
+    new ScFormulaCell(doc, new ScAddress(1, 1, 0), unicode("=8"), doc.GetGrammar()),
+    1,
+  );
+  const tail = new ScFormulaCell(doc, new ScAddress(1, 1, 0), group, doc.GetGrammar());
+  column.SetFormulaCell(2, tail, 1);
+  expect(SharedFormulaUtil.splitFormulaCellGroup(column.GetCellStore().position(2))).toBe(true);
+  expect(top.GetSharedLength()).toBe(2);
+  doc.Dispose();
+  source.Dispose();
 });

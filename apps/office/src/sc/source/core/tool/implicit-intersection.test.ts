@@ -311,3 +311,60 @@ it("rejects actual matrix operands at the explicit unported compilation boundary
   }
   doc.Dispose();
 });
+
+it("retains native diagnostic output for precompiled reference metadata without an origin token", /** The public owned-token constructor accepts the original explicit mode;no private matrix state is changed. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    code = new ScTokenArray(doc),
+    token = new FormulaDoubleToken(1);
+  code.AddToken(token);
+  code.CreateNewRPNArrayFromData([token], 1);
+  const cell = new ScFormulaCell(
+    doc,
+    new ScAddress(),
+    code,
+    doc.GetGrammar(),
+    ScMatrixMode.Reference,
+  );
+  expect(text(cell.GetFormula(doc.GetGrammar()))).toBe("{=}");
+  cell.Dispose();
+  doc.Dispose();
+});
+it("formats a genuinely relocated matrix reference beyond the first row", /** Native Clone marks the real relative reference invalid rather than replacing or mutating a private cell graph. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    pos = new ScAddress(1, 1, 0),
+    ref = new ScSingleRefData();
+  ref.InitAddressRel(doc, new ScAddress(), pos);
+  const token = new ScSingleRefToken(doc.GetSheetLimits(), ref, OpCode.ocMatRef),
+    code = new ScTokenArray(doc);
+  code.AddToken(token);
+  code.CreateNewRPNArrayFromData([token], 1);
+  const cell = new ScFormulaCell(doc, pos, code, doc.GetGrammar(), ScMatrixMode.Reference),
+    copy = cell.Clone(new ScAddress(1, 0, 0));
+  expect(text(copy.GetFormula(doc.GetGrammar()))).toContain("#REF!");
+  copy.Dispose();
+  cell.Dispose();
+  doc.Dispose();
+});
+
+it.each([
+  ["=(A1:A3):A5+1", 3],
+  ["=-((A1):(A3))", -2],
+  ["=SUM((A1:A3+1);(A1):(A3))", 9],
+  ["=SUMSQ(A1:A3)", 14],
+  ["=PRODUCT(A1:A3)", 6],
+  ["=AVERAGE(A1:A3)", 2],
+] as const)(
+  "retains native scalar operand roots through nested range reduction: %s",
+  /** Actual compiler and interpreter retain previously captured roots when a later operand merges its range tail. @param input - Native source. @param expected - Independent arithmetic result. @returns Nothing. */ (
+    input,
+    expected,
+  ) => {
+    const doc = new ScDocument();
+    doc.InsertTab(0, unicode("Data"));
+    for (let row = 0; row < 5; row++) doc.SetValue(new ScAddress(0, row, 0), row + 1);
+    const position = new ScAddress(1, 1, 0);
+    doc.SetFormula(position, unicode(input), doc.GetGrammar());
+    expect(doc.GetValue(position)).toBe(expected);
+    doc.Dispose();
+  },
+);

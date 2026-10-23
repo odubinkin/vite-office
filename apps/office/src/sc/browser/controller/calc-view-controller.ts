@@ -590,7 +590,8 @@ export class CalcViewController {
           open = value.indexOf("(");
         this.StartInput(ScInputMode.SC_INPUT_TOP, value);
         if (rangeFinder[0] && open !== -1 && length > open)
-          return [open + (subtotal[0] ? 3 : 1), length - 1];
+          // GetAutoSumFormula rejects SUBTOTAL before returning in this kernel slice.
+          return [open + 1, length - 1];
         return [length - 1, length - 1];
       } finally {
         formula.dispose();

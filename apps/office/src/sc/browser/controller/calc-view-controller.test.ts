@@ -207,3 +207,20 @@ it("keeps bounded cell input/display semantics and shell save-position ownership
   expect(clean.shell.IsModified()).toBe(false);
   clean.Close();
 });
+
+it("reports a non-Error presenter failure during a native Sum draft", /** Real public subscription and input owners exercise browser error projection without a replacement view shell. @returns Nothing. */ () => {
+  const controller = new CalcViewController();
+  let first = true;
+  const detach = controller.Subscribe(
+    /** A presenter can fail while handling an actual invalidation. @returns Nothing. */ () => {
+      if (first) {
+        first = false;
+        throw "presenter invalidation failed";
+      }
+    },
+  );
+  expect(controller.AutoSum()).toBeUndefined();
+  expect(controller.error).toBe("presenter invalidation failed");
+  detach();
+  controller.Close();
+});
