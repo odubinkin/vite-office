@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
+import {ScParameterClassification} from '../../apps/office/src/sc/source/core/tool/parclass';
+import {FormulaByteToken} from '../../apps/office/src/formula/inc/token';
+import {ParamClass} from '../../apps/office/src/formula/inc/paramclass';
+import {OpCode} from '../../apps/office/src/formula/inc/opcode';
+const path='apps/office/src/formula/source/core/api/FormulaCompiler.ts',source=fs.readFileSync(path,'utf8');
+const admitted=[...source.slice(source.indexOf('const arithmetic'),source.indexOf('/** Shared source-shaped')).matchAll(/OpCode\.(\w+)/g)].map(x=>x[1]);
+const binaries=['ocAdd','ocSub','ocMul','ocDiv','ocPow'],unaries=['ocNegSub','ocPercentSign'],aggregates=['ocSum','ocSumSQ','ocProduct','ocAverage'];
+assert.deepEqual(admitted.filter(n=>!['ocPush','ocStop','ocOpen','ocClose','ocSpaces','ocWhitespace','ocSep','ocMissing','ocRange'].includes(n)).sort(),[...binaries,...unaries,...aggregates].sort());
+ScParameterClassification.Init();
+const rows=[...binaries,...unaries,...aggregates].map(name=>{
+ const op=OpCode[name as keyof typeof OpCode],arity=binaries.includes(name)?2:1,token=new FormulaByteToken(op,arity),params=Array.from({length:aggregates.includes(name)?8:arity},(_,i)=>ScParameterClassification.GetParameterType(token,i)),returns=ScParameterClassification.GetParameterType(token,65535);
+ assert(params.every(value=>aggregates.includes(name)?[ParamClass.Reference,ParamClass.ReferenceOrRefArray].includes(value):[ParamClass.Value,ParamClass.Array].includes(value)),name);
+ if(!aggregates.includes(name))assert.notEqual(returns,ParamClass.Reference,name);
+ return {name,arity,params,returns};
+});
+const sha=(p:string)=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const result={scope:'Static admission/call-shape and real pure classification audit,not complete native Calc execution. Existing238-row source-data audit supplies the pinned native table correspondence.',admitted,rows,sources:[path,'apps/office/src/sc/source/core/tool/compiler.ts','apps/office/src/sc/source/core/tool/parclass.ts','vendor/libreoffice-reference/sc/source/core/tool/parclass.cxx','vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx'].map(path=>({path,sha256:sha(path)}))};
+fs.writeFileSync('output/playwright/task75-admitted-ii-profile.json',JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({admitted:admitted.length,checkedOperations:rows.length,allParameterClassesMatch:true}));
