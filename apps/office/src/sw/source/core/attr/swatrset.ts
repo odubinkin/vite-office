@@ -1,7 +1,24 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
-import { SID_ATTR_TABSTOP, SID_ATTR_LRSPACE } from "../../../../editeng/inc/editids";
+import {
+  SID_ATTR_TABSTOP,
+  SID_ATTR_LRSPACE,
+  SID_ATTR_CHAR_FONT,
+  SID_ATTR_CHAR_POSTURE,
+  SID_ATTR_CHAR_WEIGHT,
+  SID_ATTR_CHAR_STRIKEOUT,
+  SID_ATTR_CHAR_UNDERLINE,
+  SID_ATTR_CHAR_FONTHEIGHT,
+  SID_ATTR_CHAR_CJK_FONT,
+  SID_ATTR_CHAR_CJK_FONTHEIGHT,
+  SID_ATTR_CHAR_CJK_POSTURE,
+  SID_ATTR_CHAR_CJK_WEIGHT,
+  SID_ATTR_CHAR_CTL_FONT,
+  SID_ATTR_CHAR_CTL_FONTHEIGHT,
+  SID_ATTR_CHAR_CTL_POSTURE,
+  SID_ATTR_CHAR_CTL_WEIGHT,
+} from "../../../../editeng/inc/editids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -198,7 +215,11 @@ export class SwAttrPool extends SfxItemPool {
         getDefaultFontSelection(device, "text", getWriterDefaultFontLanguage(locale, "ctl"), "ctl"),
       ],
     ]);
-    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+    for (const [which, slot] of [
+      [RES_CHRATR_FONT, SID_ATTR_CHAR_FONT],
+      [RES_CHRATR_CJK_FONT, SID_ATTR_CHAR_CJK_FONT],
+      [RES_CHRATR_CTL_FONT, SID_ATTR_CHAR_CTL_FONT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxFontItem(
           FontFamily.FAMILY_DONTKNOW,
@@ -245,8 +266,13 @@ export class SwAttrPool extends SfxItemPool {
             which,
           );
         },
+        slot,
       );
-    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+    for (const [which, slot] of [
+      [RES_CHRATR_FONTSIZE, SID_ATTR_CHAR_FONTHEIGHT],
+      [RES_CHRATR_CJK_FONTSIZE, SID_ATTR_CHAR_CJK_FONTHEIGHT],
+      [RES_CHRATR_CTL_FONTSIZE, SID_ATTR_CHAR_CTL_FONTHEIGHT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxFontHeightItem(12 * 20, 100, which),
         /** Restores all native height/property/unit state without applying the property twice. @param value - Complete logical state. @returns Font-height item. */ (
@@ -267,29 +293,41 @@ export class SwAttrPool extends SfxItemPool {
           item.SetProp(value.prop, value.propUnit);
           return item;
         },
-        which === RES_CHRATR_FONTSIZE ? 10015 : which === RES_CHRATR_CJK_FONTSIZE ? 10888 : 10893,
+        slot,
       );
-    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+    for (const [which, slot] of [
+      [RES_CHRATR_POSTURE, SID_ATTR_CHAR_POSTURE],
+      [RES_CHRATR_CJK_POSTURE, SID_ATTR_CHAR_CJK_POSTURE],
+      [RES_CHRATR_CTL_POSTURE, SID_ATTR_CHAR_CTL_POSTURE],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxPostureItem(FontItalic.ITALIC_NONE, which),
         /** Restores a posture item. @param value - Persisted enum value. @returns Concrete posture item. */
         (value) => new SvxPostureItem(Number(value) as FontItalic, which),
+        slot,
       );
-    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+    for (const [which, slot] of [
+      [RES_CHRATR_WEIGHT, SID_ATTR_CHAR_WEIGHT],
+      [RES_CHRATR_CJK_WEIGHT, SID_ATTR_CHAR_CJK_WEIGHT],
+      [RES_CHRATR_CTL_WEIGHT, SID_ATTR_CHAR_CTL_WEIGHT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which),
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
+        slot,
       );
     this.RegisterDefaultItem(
       new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT),
       /** Restores the complete native strikeout enum. @param value - Stored enum. @returns Item. */
       (value) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
+      SID_ATTR_CHAR_STRIKEOUT,
     );
     this.RegisterDefaultItem(
       new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
+      SID_ATTR_CHAR_UNDERLINE,
     );
     for (const [which, value] of [
       [RES_CHRATR_COLOR, "auto"],
