@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-23T18:51:57.975Z"
+doc_updated_at: "2026-10-23T19:13:25.937Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -156,6 +156,25 @@ sections:
     All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-undo-init stores raw Istanbul,logs and447 stable source/test/config hashes. Conservative cumulative footprint103/110 includes the previously removed generated images;no generated screenshots are committed in this block.
 
     Remaining:full document CopyFromClip orchestration,original one-source-row optimization and its real ScCellFormat/number-formatter/script services,native paste history and EnterBlock/AutoSum integration. Those formatting owners remain unported;do not substitute ad-hoc display formatting or skip the source optimization to enable UI. Number-format inheritance remains under review. Then perform final76 acceptance and74 acceptance. Task76 stays DOING/verification pending;74 waits on76. Full all-application checkpoint80 remains the requested stop point after fixes,coverage and current-task closure. Goal remains active.
+
+    Task76 single-row table-copy checkpoint:ported native ScTable.CopyOneCellFromClip and GetOriginalHeight using actual clipboard/context/column owners. Column modulo repetition retains source script attributes and genuine shared formulas. Full-axis paste copies original source height across the range and preserves upstream first-row-only ManualSize flag updates (CALC-263). Missing native height/flag owners retain original guards;no replacement buffers,formatter or workbook are introduced.
+
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-row-calc-coverage.
+    Result:pass,881/881 scenarios across219 physical files;raw100 S15824/B9645/F2724/L14164. Four new genuine-owner scenarios cover value/script repetition,shared formulas/relative and absolute refs/fresh ODS recalculation,all16384 columns and native height/manual flag asymmetry,missing source and Undo geometry owners. Coverage configuration,thresholds and exclusions unchanged.
+
+    Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+    Result:pass,1/1 actual Chromium/DOM-free Worker scenario;native repeated-row values[3,7,3,3,7,3],existing dependency results21/34 and=D6+1 preserved.
+    Scope:actual table-level single-row copy;document optimized entry and user-facing paste history remain incomplete.
+
+    Production build/app types,tools types,scoped lint/format,JSDoc,size,boundaries,source-tree,resources,static,routing and doctor pass. Immutable evidence/progress-single-row stores raw coverage,logs and448 stable source/test/config hashes. Footprint104/110 includes prior removed images. Human baseline .DS_Store and output/.DS_Store remain untouched and outside task commits.
+
+    Command:npm run check:source-provenance.
+    Result:fail,ENOENT vendor/icu-reference/source/common/ucase.h.
+    Command:npm run inventory:parity:calc.
+    Result:fail,ENOENT vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl.
+    Scope:full source-comparison gates. Human intentionally removed ignored research references to reclaim disk. Ordinary Calc tests/build/browser work without them. CLI inspection confirms no upstream-absent switch for these two checks. Direct canonical provenance validation of only changed table.ts/table7.ts passes against the retained pinned LO source;this does not substitute full gates. No sources were downloaded,checks weakened,or final acceptance/approved skip claimed. Final source/registry verification remains pending.
+
+    Remaining:document CopyFromClip orchestration,optimized single-row entry with genuine formatting/script services,native paste history and EnterBlock/AutoSum,then final76 and74 acceptance. Task76 remains DOING/verification pending;74 depends on76. Full all-app checkpoint80 and human stop instruction remain unchanged. Goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -291,3 +310,22 @@ Scope:native Undo initialization and block-copy graph,not complete user-facing p
 All current app/tools types,production build,changed source/test/E2E lint and format,JSDoc,size,boundary,source-tree,provenance,Calc registry,resources,static,routing and doctor checks pass. Immutable evidence/progress-undo-init stores raw Istanbul,logs and447 stable source/test/config hashes. Conservative cumulative footprint103/110 includes the previously removed generated images;no generated screenshots are committed in this block.
 
 Remaining:full document CopyFromClip orchestration,original one-source-row optimization and its real ScCellFormat/number-formatter/script services,native paste history and EnterBlock/AutoSum integration. Those formatting owners remain unported;do not substitute ad-hoc display formatting or skip the source optimization to enable UI. Number-format inheritance remains under review. Then perform final76 acceptance and74 acceptance. Task76 stays DOING/verification pending;74 waits on76. Full all-application checkpoint80 remains the requested stop point after fixes,coverage and current-task closure. Goal remains active.
+
+Task76 single-row table-copy checkpoint:ported native ScTable.CopyOneCellFromClip and GetOriginalHeight using actual clipboard/context/column owners. Column modulo repetition retains source script attributes and genuine shared formulas. Full-axis paste copies original source height across the range and preserves upstream first-row-only ManualSize flag updates (CALC-263). Missing native height/flag owners retain original guards;no replacement buffers,formatter or workbook are introduced.
+
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-row-calc-coverage.
+Result:pass,881/881 scenarios across219 physical files;raw100 S15824/B9645/F2724/L14164. Four new genuine-owner scenarios cover value/script repetition,shared formulas/relative and absolute refs/fresh ODS recalculation,all16384 columns and native height/manual flag asymmetry,missing source and Undo geometry owners. Coverage configuration,thresholds and exclusions unchanged.
+
+Command:npx playwright test e2e/calc/clipboard-copy.spec.ts --config playwright.config.ts --project=calc.
+Result:pass,1/1 actual Chromium/DOM-free Worker scenario;native repeated-row values[3,7,3,3,7,3],existing dependency results21/34 and=D6+1 preserved.
+Scope:actual table-level single-row copy;document optimized entry and user-facing paste history remain incomplete.
+
+Production build/app types,tools types,scoped lint/format,JSDoc,size,boundaries,source-tree,resources,static,routing and doctor pass. Immutable evidence/progress-single-row stores raw coverage,logs and448 stable source/test/config hashes. Footprint104/110 includes prior removed images. Human baseline .DS_Store and output/.DS_Store remain untouched and outside task commits.
+
+Command:npm run check:source-provenance.
+Result:fail,ENOENT vendor/icu-reference/source/common/ucase.h.
+Command:npm run inventory:parity:calc.
+Result:fail,ENOENT vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl.
+Scope:full source-comparison gates. Human intentionally removed ignored research references to reclaim disk. Ordinary Calc tests/build/browser work without them. CLI inspection confirms no upstream-absent switch for these two checks. Direct canonical provenance validation of only changed table.ts/table7.ts passes against the retained pinned LO source;this does not substitute full gates. No sources were downloaded,checks weakened,or final acceptance/approved skip claimed. Final source/registry verification remains pending.
+
+Remaining:document CopyFromClip orchestration,optimized single-row entry with genuine formatting/script services,native paste history and EnterBlock/AutoSum,then final76 and74 acceptance. Task76 remains DOING/verification pending;74 depends on76. Full all-app checkpoint80 and human stop instruction remain unchanged. Goal remains active.
