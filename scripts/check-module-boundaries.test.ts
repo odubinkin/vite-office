@@ -649,10 +649,21 @@ it("permits original SVTools scalar metric dependencies while preserving reverse
     expect(isForbiddenModuleEdge("svtools", target)).toBe(false);
     expect(isForbiddenModuleEdge(target, "svtools")).toBe(true);
   }
-  for (const target of ["sc", "sw", "framework", "vcl"])
+  for (const target of ["sc", "sw", "framework"])
     expect(isForbiddenModuleEdge("svtools", target)).toBe(true);
   expect(getRuntimeOwnershipLayer("svtools/source/misc/unitconv.ts")).toBe("upstream-mechanism");
   expect(getRuntimeOwnershipViolation("svtools/source/misc/unitconv.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
+
+it("admits native SVTools font preview dependencies without reversing application ownership", /** Pinned sampletext.cxx and Library_svt consume the actual font, script, encoding and language owners. @returns Nothing. */ () => {
+  for (const target of ["external", "i18nlangtag", "i18nutil", "unotools", "sal", "offapi", "vcl"])
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(false);
+  for (const target of ["sc", "sw", "framework", "sfx2", "svx"])
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(true);
+  expect(isForbiddenModuleEdge("vcl", "svtools")).toBe(true);
+  expect(getRuntimeOwnershipViolation("svtools/source/misc/sampletext.ts", "", "react")).toMatch(
     /presentation package/u,
   );
 });

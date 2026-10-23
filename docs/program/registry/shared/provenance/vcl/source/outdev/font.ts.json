@@ -8,14 +8,17 @@
     "upstreamPath": "vcl/source/outdev/font.cxx",
     "localSymbols": [
       "createDefaultFontMetadata",
-      "getDefaultFontWithoutDevice"
+      "getDefaultFontWithoutDevice",
+      "hasGlyphsInFontCharMap"
     ],
     "upstreamSymbols": [
-      "OutputDevice::GetDefaultFont"
+      "OutputDevice::GetDefaultFont",
+      "OutputDevice::HasGlyphs"
     ],
     "preservedResponsibilities": [
       "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
-      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated."
+      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated.",
+      "Task6764KT in-progress native font dropdown prerequisite: real Font/FontCharMap values, exact OS/2 bit identities and original sampletext symbol/script/glyph decisions. Source failure offsets, sparse traversal, masking and CJK/name exceptions are preserved; WRITER069/070/071 document observed source boundaries and the explicitly synthetic-only dominated edge. Current-source focused tests pin actual represented values, not installed font support. Browser font-data acquisition, dropdown paint/acceptance and Writer/Calc style item-set preview remain unfinished; no font/style/UI parity status is promoted. JS lifetime is used without C++ reference-counting emulation."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -29,12 +32,20 @@
         {
           "path": "apps/office/src/vcl/source/outdev/font.test.ts",
           "marker": "uses actual configured"
+        },
+        {
+          "path": "apps/office/src/vcl/source/outdev/font-glyphs.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/vcl/source/outdev/font.cxx",
           "marker": "OutputDevice::GetDefaultFont"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/outdev/font.cxx",
+          "marker": "OutputDevice::HasGlyphs"
         }
       ]
     }

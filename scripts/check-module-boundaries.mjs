@@ -141,7 +141,23 @@ const allowedEdges = new Map([
   // Original SharedStringPool borrows CharClass; Library_svl links utl.
   ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools", "udkapi", "unotools"])],
   // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
-  ["svtools", new Set(["tools", "o3tl"])],
+  // Original sampletext.cxx consumes VCL font/charmap/capabilities, ICU script codes,
+  // i18nutil Unicode classes, SAL encoding and UNO ScriptType. Library_svt links
+  // i18nlangtag/i18nutil/utl/vcl/sal and ICU; retain these native dependency directions.
+  [
+    "svtools",
+    new Set([
+      "tools",
+      "o3tl",
+      "external",
+      "i18nlangtag",
+      "i18nutil",
+      "unotools",
+      "sal",
+      "offapi",
+      "vcl",
+    ]),
+  ],
   // Original sdangitm.hxx includes tools/degree.hxx.
   // Original rotmodit.cxx exposes Any and CellVertJustify2.
   // Original pageitem.cxx clears the actual rtl OUString presentation output.

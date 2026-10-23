@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/vcl/source/font/fontcharmap.ts",
+    "localSymbols": [
+      "FontCharMap"
+    ],
+    "upstreamPath": "vcl/source/font/fontcharmap.cxx",
+    "upstreamSymbols": [
+      "FontCharMap::HasChar",
+      "FontCharMap::CountCharsInRange",
+      "FontCharMap::GetCharFromIndex"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT in-progress native font dropdown prerequisite: real Font/FontCharMap values, exact OS/2 bit identities and original sampletext symbol/script/glyph decisions. Source failure offsets, sparse traversal, masking and CJK/name exceptions are preserved; WRITER069/070/071 document observed source boundaries and the explicitly synthetic-only dominated edge. Current-source focused tests pin actual represented values, not installed font support. Browser font-data acquisition, dropdown paint/acceptance and Writer/Calc style item-set preview remain unfinished; no font/style/UI parity status is promoted. JS lifetime is used without C++ reference-counting emulation."
+    ],
+    "omittedResponsibilities": [
+      "Remaining physical-font acquisition, shaping, renderer and style-family/UI integration remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/font/fontcharmap.ts",
+          "marker": "FontCharMap"
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/fontcharmap.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/font/fontcharmap.cxx",
+          "marker": "FontCharMap::HasChar"
+        }
+      ]
+    }
+  }
+}

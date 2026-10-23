@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svtools/source/misc/sampletext-data.ts",
+    "localSymbols": [
+      "shortSamples",
+      "minimalSamples",
+      "coverageScripts"
+    ],
+    "upstreamPath": "svtools/source/misc/sampletext.cxx",
+    "upstreamSymbols": [
+      "makeShortRepresentativeTextForScript",
+      "makeShortMinimalTextForScript",
+      "otCoverageToScript"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT in-progress native font dropdown prerequisite: real Font/FontCharMap values, exact OS/2 bit identities and original sampletext symbol/script/glyph decisions. Source failure offsets, sparse traversal, masking and CJK/name exceptions are preserved; WRITER069/070/071 document observed source boundaries and the explicitly synthetic-only dominated edge. Current-source focused tests pin actual represented values, not installed font support. Browser font-data acquisition, dropdown paint/acceptance and Writer/Calc style item-set preview remain unfinished; no font/style/UI parity status is promoted. JS lifetime is used without C++ reference-counting emulation."
+    ],
+    "omittedResponsibilities": [
+      "Remaining physical-font acquisition, shaping, renderer and style-family/UI integration remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/source/misc/sampletext-data.ts",
+          "marker": "shortSamples"
+        },
+        {
+          "path": "apps/office/src/svtools/source/misc/sampletext.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/misc/sampletext.cxx",
+          "marker": "makeShortRepresentativeTextForScript"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svtools/source/misc/sampletext-data.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original literal script samples and coverage switch table from the original sampletext decision functions; both stay in svtools/source/misc and use actual native script and coverage identities. No alternative font service or script inference is introduced."
+    }
+  }
+}

@@ -11,6 +11,22 @@ import { DefaultFontType } from "../../../unotools/inc/fontdefs";
 import { getConfiguredDefaultFont } from "../../../unotools/source/config/fontcfg";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import type { FontCharMap } from "../font/fontcharmap";
+
+/** Consumed OutputDevice::HasGlyphs loop over the actual face map, retaining native UTF16-unit iteration and failure offsets. @param map - Current physical face map, absent when unavailable. @param value - Requested text. @param index - First UTF16 offset. @param length - Requested length or minus one. @returns First missing offset or minus one. */
+export function hasGlyphsInFontCharMap(
+  map: FontCharMap | undefined,
+  value: string,
+  index = 0,
+  length = -1,
+): number {
+  if (index >= value.length) return index;
+  const end = length === -1 ? value.length : Math.min(value.length, index + length);
+  if (map === undefined || map.IsDefaultMap()) return index;
+  for (let i = index; index < end; ++i, ++index)
+    if (!map.HasChar(value.charCodeAt(i))) return index;
+  return -1;
+}
 /** Projects source metadata for a known family name; the name need not represent a physically installed face. @param family - Logical family. @param type - Native role. @param threadEncoding - Actual platform encoding. @returns Independent Font. */
 export function createDefaultFontMetadata(
   family: string,
