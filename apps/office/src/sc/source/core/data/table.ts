@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import * as table7 from "./table7";
 import { ConvertToGroupListening } from "../../../inc/types";
 import { HasAttrFlags } from "../../../inc/global";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
@@ -43,6 +44,10 @@ import { SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original table7 pre-paste forwarding on this actual table instance. @param args - Native context/source/broadcast arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof table7.DeleteBeforeCopyFromClip>): void {
+    table7.DeleteBeforeCopyFromClip.apply(this, args);
+  }
   /** Original table2 clipboard listening clamps to actual allocated columns and native bounds. @param start - Start context. @param end - End context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
   StartListeningFormulaCells(
     start: StartListeningContext,

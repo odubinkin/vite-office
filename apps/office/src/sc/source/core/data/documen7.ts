@@ -24,7 +24,7 @@ import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS } from "../../../inc/ad
 import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
-import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import { type StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 
 /** Original document.cxx initialized-column cursor forwarding. @param this - Actual document. @param position - Actual cursor. @param tab - Sheet. @param col - Column. @returns Initialized. */
 export function InitColumnBlockPosition(
@@ -529,4 +529,12 @@ export function GetSelectionFrame(
   inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
   inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
   inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+}
+
+/** Original bulk listener teardown shares one purge context and returns immediately for empty input. @param this - Actual document. @param cells - Borrowed actual formulas. @returns Nothing. */
+export function EndListeningFormulaCells(this: ScDocument, cells: readonly ScFormulaCell[]): void {
+  if (!cells.length) return;
+  const context = new EndListeningContext(this);
+  for (const cell of cells) cell.EndListeningTo(context);
+  context.purgeEmptyBroadcasters();
 }

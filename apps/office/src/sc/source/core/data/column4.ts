@@ -4,8 +4,8 @@ import { formula_block, element_type_formula } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
-import { CellType } from "../../../inc/global";
-import { RowSpan } from "../../../inc/columnspanset";
+import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { RowSpan, type ColumnSpanSet } from "../../../inc/columnspanset";
 import { string_element_callbacks } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
 import { ScAddress } from "../../../inc/address";
@@ -232,4 +232,27 @@ export function CopyOneCellFromClip(
     new delayed_delete_vector_iterator(attrs, length),
     celltextattr_element_callbacks,
   );
+}
+
+/** Original default-content pre-paste deletion records broadcasts and surviving formula extents;unrepresented note/sparkline/edit stores contain no entries. @param this - Actual column. @param context - Native paste context. @param clipColumn - Actual source column. @param broadcasts - Deferred changed spans. @returns Nothing. */
+export function DeleteBeforeCopyFromClip(
+  this: ScColumn,
+  context: CopyFromClipContext,
+  clipColumn: ScColumn,
+  broadcasts: ColumnSpanSet,
+): void {
+  const range = context.getDestRange(),
+    doc = this.GetDoc();
+  if (!doc.ValidRow(range.mnRow1) || !doc.ValidRow(range.mnRow2)) return;
+  const position = context.getBlockPosition(this.GetTab(), this.GetCol());
+  if (!position) return;
+  const flags = context.getDeleteFlag();
+  if (context.isSkipEmptyCells() || flags !== InsertDeleteFlags.CONTENTS)
+    throw new Error("Nondefault pre-paste deletion is not implemented");
+  // CONTENTS does not delete patterns. Rich edit,notes and sparklines cannot be inserted in this represented store.
+  void clipColumn;
+  const result = this.DeleteCells(position, range.mnRow1, range.mnRow2, flags);
+  broadcasts.set(doc, this.GetTab(), this.GetCol(), result.aDeletedRows, true);
+  for (const [first, last] of result.aFormulaRanges)
+    context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), first, this.GetCol(), last);
 }

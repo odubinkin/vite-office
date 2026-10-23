@@ -1,0 +1,16 @@
+[WebServer] (node:92597) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 5 tests using 2 workers
+
+(node:92618) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:92619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 1280px (1.5s)
+  ✓  2 [calc] › e2e/calc/formula-pointing.spec.ts:5:3 › points formula references and cell/header blocks at 1280px (2.4s)
+  ✓  3 [calc] › e2e/calc/cell-selection.spec.ts:4:3 › Calc row and column selection at 390px (1.1s)
+  ✓  4 [calc] › e2e/calc/formula-pointing.spec.ts:5:3 › points formula references and cell/header blocks at 390px (1.5s)
+  ✓  5 [calc] › e2e/calc/formula-pointing.spec.ts:115:1 › dispatches pointing-created formulas through actual owners in Chromium and a DOM-free Worker (846ms)
+
+  5 passed (6.3s)

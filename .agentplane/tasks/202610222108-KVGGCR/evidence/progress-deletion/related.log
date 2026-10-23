@@ -1,0 +1,16 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ✓ |calc| src/sc/source/core/tool/shared-formula.test.ts (26 tests) 123ms
+ ✓ |calc| src/sc/source/core/tool/group-area-listener.test.ts (16 tests) 171ms
+ ✓ |calc| src/sc/inc/fstalgorithm.test.ts (3 tests) 65ms
+ ✓ |calc| src/sc/source/core/data/clipboard-context.test.ts (5 tests) 52ms
+ ✓ |calc| src/sc/source/core/data/clipboard-deletion.test.ts (6 tests) 41ms
+ ✓ |calc| src/sc/source/core/data/listener-context.test.ts (5 tests) 37ms
+ ✓ |calc| src/sc/source/core/data/clipboard-formula-clone.test.ts (3 tests) 28ms
+
+ Test Files  7 passed (7)
+      Tests  64 passed (64)
+   Start at  00:13:09
+   Duration  11.48s (transform 11.45s, setup 738ms, import 15.80s, tests 517ms, environment 4.43s)
+

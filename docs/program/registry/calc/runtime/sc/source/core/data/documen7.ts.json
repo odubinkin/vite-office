@@ -24,19 +24,22 @@
         "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
         "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
         "apps/office/src/sc/source/core/data/clipboard-context.test.ts",
-        "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts"
+        "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts",
+        "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts"
       ],
-      "justification": "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity. The unchanged native GetSelectionFrame definition was partitioned onto the same ScDocument instance through documen7 alongside existing out-of-class document.cxx definitions to keep document.ts below1000 authored lines;no additional state or frame contract was introduced.",
+      "justification": "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity. The unchanged native GetSelectionFrame definition was partitioned onto the same ScDocument instance through documen7 alongside existing out-of-class document.cxx definitions to keep document.ts below1000 authored lines;no additional state or frame contract was introduced. Task76 pre-paste deletion progress ports SingleColumnSpanSet set/getSpans/swap/empty and the ColumnSpanSet single-column overload;native DeleteCells captures actual formula group extents before shared-context teardown and explicit broadcaster purge,then splits top/bottom boundaries and empties real typed stores in reverse span order. Original document10/table7/column4 pre-deletion cycles sparse source tabs and columns,visits allocated destinations only,and defers broadcasts/listener restoration to CopyFromClipContext. Default CONTENTS preserves destination patterns. Native toSpanArray is reused. Selective date/number deletion requires the unported formatter;skip-empty,nondefault flags and absent rich-edit/note/sparkline stores remain explicit. CellStorageModified formula-group compute cache and stream-valid notifications are unrepresented rather than simulated. Full document copy/paste/reference completion,paste Undo/Redo,EnterBlock and browser acceptance remain pending;this is not task76 completion or full parity. These additions supersede only earlier omissions of these specific pre-deletion/span/listener methods;unconsumed overloads and broader parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "Broadcast",
-        "TrackFormulas"
+        "TrackFormulas",
+        "EndListeningFormulaCells"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/documen7.cxx",
       "upstreamSymbols": [
         "ScDocument::Broadcast",
-        "ScDocument::TrackFormulas"
+        "ScDocument::TrackFormulas",
+        "ScDocument::EndListeningFormulaCells"
       ]
     }
   }

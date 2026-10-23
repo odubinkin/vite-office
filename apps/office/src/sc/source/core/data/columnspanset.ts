@@ -1,8 +1,10 @@
 /** @fileoverview Original RowSpan and ColRowSpan value constructors from columnspanset.cxx. */
+import { toSpanArray } from "../../../inc/fstalgorithm";
 import { ScAddress, ScRange, ValidTab } from "../../../inc/address";
 import type { SCROW, SCCOLROW } from "../../../inc/types";
 import { flat_segment_tree } from "../../../../external/mdds/include/mdds/flat_segment_tree";
 import type { const_iterator } from "../../../../external/mdds/include/mdds/flat_segment_tree_itr";
+import type { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScDocument } from "../../../inc/document";
 
 /** Original inclusive row endpoint value. */
@@ -42,6 +44,39 @@ export interface SpanAction {
   /** Processes native inclusive span as position and length. @param position - Top position. @param length - Row count. @param value - Span flag. @returns Nothing. */
   execute(position: ScAddress, length: number, value: boolean): void;
 }
+/** Original single-column segmented deletion result;unconsumed scan overloads remain separate. */
+export class SingleColumnSpanSet {
+  private readonly maSpans: flat_segment_tree<boolean>;
+  /** Initializes the source false range using the actual immutable limits. @param mrSheetLimits - Native limits. @returns Owner. */
+  constructor(private readonly mrSheetLimits: ScSheetLimits) {
+    this.maSpans = new flat_segment_tree(0, mrSheetLimits.GetMaxRowCount(), false);
+  }
+  /** Original inclusive insertion preserves adjacent span coalescing. @param first - First row. @param last - Last row. @param value - Flag. @returns Nothing. */
+  set(first: number, last: number, value: boolean): void {
+    this.maSpans.insert_back(first, last + 1, value);
+  }
+  /** Replaces the caller's output with original true inclusive spans. @param spans - Output vector. @returns Nothing. */
+  getSpans(spans: RowSpan[]): void {
+    spans.length = 0;
+    for (const span of toSpanArray(this.maSpans, RowSpan)) spans.push(span);
+  }
+
+  /** Original tree swap leaves each limits reference bound to its constructor. @param other - Other span owner. @returns Nothing. */
+  swap(other: SingleColumnSpanSet): void {
+    this.maSpans.swap(other.maSpans);
+  }
+  /** Original empty predicate checks the initial false segment and exclusive end. @returns Empty state. */
+  empty(): boolean {
+    const iterator = this.maSpans.begin(),
+      first = iterator.value();
+    return (
+      first.first === 0 &&
+      !first.second &&
+      !iterator.increment().equals(this.maSpans.end()) &&
+      iterator.value().first === this.mrSheetLimits.GetMaxRowCount()
+    );
+  }
+}
 /** Original optional per-column segmented owner and insertion hint. */
 class ColumnType {
   readonly maSpans: flat_segment_tree<boolean>;
@@ -65,7 +100,13 @@ export class ColumnSpanSet {
   /** Original range overload consumes its valid ordered range precondition. @param doc - Limits owner. @param range - Inclusive range. @param value - Flag. @returns Nothing. */
   set(doc: ScDocument, range: ScRange, value: boolean): void;
   /** Original one-row overload validates coordinates. @param doc - Limits owner. @param tab - Sheet. @param col - Column. @param row - Row. @param value - Flag. @returns Nothing. */
-  set(doc: ScDocument, tab: number, col: number, row: number, value: boolean): void;
+  set(
+    doc: ScDocument,
+    tab: number,
+    col: number,
+    row: number | SingleColumnSpanSet,
+    value: boolean,
+  ): void;
   /** Original inclusive row-span overload validates endpoints. @param doc - Limits owner. @param tab - Sheet. @param col - Column. @param first - First row. @param last - Last row. @param value - Flag. @returns Nothing. */
   set(doc: ScDocument, tab: number, col: number, first: number, last: number, value: boolean): void;
   /** Selects native range and coordinate overloads without flattening spans into rows. @param doc - Limits owner. @param args - Original overload arguments. @returns Nothing. */
@@ -73,7 +114,7 @@ export class ColumnSpanSet {
     doc: ScDocument,
     ...args:
       | [ScRange, boolean]
-      | [number, number, number, boolean]
+      | [number, number, number | SingleColumnSpanSet, boolean]
       | [number, number, number, number, boolean]
   ): void {
     if (args[0] instanceof ScRange) {
@@ -88,6 +129,20 @@ export class ColumnSpanSet {
             value,
           )[0];
         }
+      return;
+    }
+    if (args[2] instanceof SingleColumnSpanSet) {
+      const spans: RowSpan[] = [];
+      args[2].getSpans(spans);
+      for (const span of spans)
+        this.set(
+          doc,
+          args[0] as number,
+          args[1] as number,
+          span.mnRow1,
+          span.mnRow2,
+          args[3] as boolean,
+        );
       return;
     }
     const [tab, col, first] = args as [number, number, number, boolean],

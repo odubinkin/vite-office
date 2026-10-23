@@ -79,6 +79,14 @@ export enum HardRecalcState {
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   private pDelayedFormulaGrouping: ScRange | null = null;
+  /** Original clipboard pre-deletion forwarding on this actual document. @param args - Native arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof document10.DeleteBeforeCopyFromClip>): void {
+    document10.DeleteBeforeCopyFromClip.apply(this, args);
+  }
+  /** Original vector listener teardown forwards to the same native document. @param cells - Actual formulas. @returns Nothing. */
+  EndListeningFormulaCells(cells: readonly ScFormulaCell[]): void {
+    documen7.EndListeningFormulaCells.call(this, cells);
+  }
   /** Original delay owner presence. @returns Delayed. */
   IsDelayedFormulaGrouping(): boolean {
     return this.pDelayedFormulaGrouping !== null;

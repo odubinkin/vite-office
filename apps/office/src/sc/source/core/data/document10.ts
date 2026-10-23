@@ -1,4 +1,8 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
+import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import type { ScMarkData } from "../../../inc/markdata";
+import type { ColumnSpanSet } from "../../../inc/columnspanset";
+import type { ScTable } from "../../../inc/table";
 import { ScAddress, ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -32,4 +36,24 @@ export function SharePooledResources(this: ScDocument, source: ScDocument): void
   this["mpCellStringPool"] = source["mpCellStringPool"];
   source.getCellAttributeHelper();
   this["mpCellAttributeHelper"] = source["mpCellAttributeHelper"];
+}
+
+/** Original document10 pre-paste deletion cycles actual sparse clipboard tabs only for selected existing destinations. @param this - Destination document. @param context - Paste context. @param marks - Native selected tabs. @param broadcasts - Deferred changed spans. @returns Nothing. */
+export function DeleteBeforeCopyFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  marks: ScMarkData,
+  broadcasts: ColumnSpanSet,
+): void {
+  let clipTab = 0;
+  const clip = context.getClipDoc(),
+    count = clip.GetTableCount();
+  for (let tab = context.getTabStart(); tab <= context.getTabEnd(); ++tab) {
+    const table = this.FetchTable(tab);
+    if (!table || !marks.GetTableSelect(tab)) continue;
+    // A populated clipboard is the original caller precondition.
+    while (!clip.FetchTable(clipTab)) clipTab = (clipTab + 1) % count;
+    table.DeleteBeforeCopyFromClip(context, clip.FetchTable(clipTab) as ScTable, broadcasts);
+    clipTab = (clipTab + 1) % count;
+  }
 }

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/table7.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/table7.cxx",
+    "localSymbols": [
+      "DeleteBeforeCopyFromClip"
+    ],
+    "upstreamSymbols": [
+      "ScTable::DeleteBeforeCopyFromClip"
+    ],
+    "preservedResponsibilities": [
+      "Task76 pre-paste deletion progress ports SingleColumnSpanSet set/getSpans/swap/empty and the ColumnSpanSet single-column overload;native DeleteCells captures actual formula group extents before shared-context teardown and explicit broadcaster purge,then splits top/bottom boundaries and empties real typed stores in reverse span order. Original document10/table7/column4 pre-deletion cycles sparse source tabs and columns,visits allocated destinations only,and defers broadcasts/listener restoration to CopyFromClipContext. Default CONTENTS preserves destination patterns. Native toSpanArray is reused. Selective date/number deletion requires the unported formatter;skip-empty,nondefault flags and absent rich-edit/note/sparkline stores remain explicit. CellStorageModified formula-group compute cache and stream-valid notifications are unrepresented rather than simulated. Full document copy/paste/reference completion,paste Undo/Redo,EnterBlock and browser acceptance remain pending;this is not task76 completion or full parity. These additions supersede only earlier omissions of these specific pre-deletion/span/listener methods;unconsumed overloads and broader parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete CopyFromClip,CopyOneCellFromClip,stream-valid shell notifications,protected/conditional attribute mutation and nondefault paste services remain outside this pre-deletion foundation."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+          "marker": "pre-paste"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
+          "marker": "ScTable::DeleteBeforeCopyFromClip"
+        }
+      ]
+    }
+  }
+}

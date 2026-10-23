@@ -171,6 +171,14 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original pre-paste deletion forwards actual context/source/deferred spans. @param args - Native arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof column4.DeleteBeforeCopyFromClip>): void {
+    column4.DeleteBeforeCopyFromClip.apply(this, args);
+  }
+  /** Original cached typed-store deletion. @param args - Native deletion arguments. @returns Compact deletion result. */
+  DeleteCells(...args: Parameters<typeof column3.DeleteCells>): column3.DeleteCellsResult {
+    return column3.DeleteCells.apply(this, args);
+  }
   /** Original column4 single-cell row repetition. @param args - Context,row bounds and source offset. @returns Nothing. */
   CopyOneCellFromClip(...args: Parameters<typeof column4.CopyOneCellFromClip>): void {
     column4.CopyOneCellFromClip.apply(this, args);

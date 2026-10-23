@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 check:calc-resources
+> tsx scripts/generate-calc-ui-resources.ts --check
+
+Calc resources: 464 commands;11 top menus;17 policy dispositions.
