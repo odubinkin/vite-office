@@ -4,7 +4,7 @@ title: "Implement upstream font and style dropdown previews for Writer and Calc"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 79
+revision: 83
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,38 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-24T13:10:19.227Z"
+  updated_by: "CODER"
+  note: "Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-24T13:11:04.546Z"
+  updated_by: "EVALUATOR"
+  note: "Approved visible font/style preview scope and all full-run repairs satisfy the task contract on8843ee2ca048;finish this same task and honor the requested goal pause."
+  evaluated_sha: "8843ee2ca0486e2353b55811db92cca04de892d4"
+  blueprint_digest: "fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8"
+  evidence_refs:
+    - ".agentplane/tasks/202610231428-6764KT/README.md"
+    - ".agentplane/tasks/202610231428-6764KT/quality/20261024-131104546-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610231428-6764KT/quality/20261024-131104546-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610231428-6764KT/quality/20261024-131104546-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-full-checkpoint/6764KT-full-app-final.log"
+    - "output/playwright/writer-full-checkpoint/6764KT-final-repair-coverage.log"
+    - "output/playwright/writer-full-checkpoint/6764KT-current-aggregate-summary.json"
+    - "output/playwright/writer-full-checkpoint/6764KT-aggregate-coverage.mjs"
+    - "output/playwright/writer-full-checkpoint/6764KT-e2e-closure.log"
+    - "output/playwright/writer-full-checkpoint/6764KT-inventory-quiet-final.log"
+    - "output/playwright/writer-full-checkpoint/6764KT-full-tooling-final.log"
+    - "output/playwright/writer-full-checkpoint/6764KT-close-gates.json"
+    - "output/playwright/writer-full-checkpoint/6764KT-close-source-manifest.json"
+  findings:
+    - "Shared actual physical-font preview paths serve Writer and Calc;Writer toolbar/sidebar style rows consume actual native shell item sets and source script/font/color/bounds algorithms. Calc hidden StyleApply remains source-hidden;no fabricated style pool or executable handler is introduced."
+    - "Full application discovery19099cases exposed4remaining failures;all are repaired and pass in432current related cases. Model-owned focus preserves PaM during table/label capture,ordinary browser focus admits moving carets/ranges,and external control return retains shell restoration. Final production Chromium512/512passes."
+    - "All1050current runtime owners have source-validated aggregate100%statement,branch,function,line coverage. The changed focus owner is independently100%;unchanged owner instrumentation maps and all source hashes are verified before aggregation. Raw nonzero full/narrow-command results are retained and not represented as a passing single full application command."
+    - "Full inventory124/124and tooling143/143pass;typecheck,build,scoped lint/format,resource,static,provenance,registry,invariant,dependency,tree,size,doctor,routing and diff gates pass.171primary paths remain inside180approved;implementation is committed on writer with no unrelated changes."
 commit: null
 comments:
   -
@@ -55,8 +82,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: continue the complete font/style dropdown scope; human now requires full suite and repairs before closing this task and pausing the goal."
+  -
+    type: "verify"
+    at: "2026-10-24T13:10:19.227Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T13:06:03.597Z"
+doc_updated_at: "2026-10-24T13:10:19.283Z"
 doc_updated_by: "CODER"
 description: "Implement upstream font dropdown previews in Writer and Calc and actual Writer style item-set previews in existing toolbar/sidebar selectors. Work only in vite-office-writer on writer. Human approval permits180 implementation/test/tooling paths plus paired canonical/generated/task records solely to complete this feature and full-run repairs. Prefer equivalent native JS/browser mechanisms;preserve native owners,defaults and intentional browser document-I/O differences. Full suite has run;repair failures,verify source-bound coverage and final gates,finish this same task,then pause the goal. No new task,branch,merge or feature expansion."
 sections:
@@ -75,6 +108,16 @@ sections:
     Full-run closure repair extension approved by the human on2026-10-24: preserve actual browser-created caret/range on editing-host focus while retaining explicit control-return restoration;clamp the real line-spacing floating panel to viewport geometry;update stale toolbar order and native ComboBox/sidebar assertions. Budget180 primary implementation/test/tooling paths plus canonical/generated/task records. Re-run all failed cases,complete fresh full application coverage and browser verification,record actual results and residual limits,finish202610231428-6764KT,and pause the goal without starting another task.
   Verify Steps: "Run focused Vitest for font-list/font capability/value/parser/sample-text and SVX controls plus actual Writer/Calc style projections and affected native owners. Cover glyph-missing/symbol/script/name rendering, source sample-selection order, fitting and selection colors, inherited style attributes and disabled/pointer/keyboard/focus/acceptance. Collect source-bound focused strict100 coverage for touched runtime owners without reducing thresholds or adding coverage ignores. Run production build and relevant Chromium dropdown scenarios in both Writer and Calc at desktop/narrow widths, inspect screenshots and browser errors. Run typecheck,scoped format/lint,check:docs,check:dependencies,check:file-size,check:source-tree,check:source-provenance,inventory:registry:build,inventory:invariants,inventory:parity,check:writer-resources,check:calc-resources,static build smoke,ap doctor,routing and diff checks. After the entire existing task scope is implemented and focused checks pass,run the full suite. Repair failures,add/fix tests and verify coverage before finishing this task and pausing the goal. Human authorization on2026-10-24 supersedes the previous leaf2/no-full restriction. Do not start another task. Record real source parity limits,source commit,EVALUATOR and clean closure."
   Verification: |-
+    Final verification on implementation commit8843ee2ca048; all approved feature work and full-run repairs are complete. Historical checkpoints below retain their original failures and unfinished-state statements for traceability; this final result supersedes them.
+    Command: npm run test:coverage -- --coverage.reportOnFailure (cwd apps/office). Result: complete discovery executed19099cases/1273files,19095passed/4failed; raw log6764KT-full-app-final.log. Scope: complete Writer,Calc and shared application. All four failures were repaired and rechecked: table row/column capture and marker affinity now preserve native PaM during explicit host focus;the Calc primary-save test awaits the actual IndexedDB listing instead of a polling deadline. No production Calc persistence contract or timeout was changed.
+    Command: npm run test:writer -- src/sw/browser/editor. Result: pass394cases/97files;6764KT-all-editor-final.log. Command: npx vitest run src/sw/browser/editor src/sw/browser/presentation/writer-view-style-focus.test.tsx src/sw/browser/presentation/writer-view.test.tsx src/vcl/browser/ComboBox.test.tsx src/sc/browser/presentation/calc-font-family.test.tsx src/sc/browser/presentation/calc-primary-save.test.tsx --coverage --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.include=src/vcl/browser/ComboBox.tsx --coverage.include=src/sc/browser/presentation/CalcFormattingToolbar.tsx --coverage.reportsDirectory=coverage/6764KT-final-repairs (cwd apps/office). Result: all432tests/102files pass;changed focus owner100%. This narrow command exits1because its unchanged Calc toolbar/ComboBox owners need their full-run evidence for existing unrelated paths;the raw focused report is preserved in6764KT-final-repair-coverage.log.
+    Command: node output/playwright/writer-full-checkpoint/6764KT-aggregate-coverage.mjs. Result: pass1050current runtime owners,S67664/B41915/F12233/L61425 all100%,skipped0. Evidence:6764KT-current-aggregate-summary.json and6764KT-current-aggregate-coverage.log. Scope: source-validated complete discovery plus targeted repairs,not a passing single complete command. Every full-run runtime source hash is rechecked;the sole changed runtime owner is replaced by its independently100% fresh report. Unchanged Calc toolbar/ComboBox coverage merges only after exact statement/function/branch instrumentation-map equality. Coverage configuration,thresholds and ignores were not weakened.
+    Command: npm run test:inventory:coverage. Result: pass124cases/38files,strict100 S1734/B1290/F437/L1670;6764KT-inventory-quiet-final.log. Command: npm run test:tooling. Result: pass143cases/27files;6764KT-full-tooling-final.log. Earlier concurrent-load inventory failures remain in their raw logs;the quiet final rerun uses unchanged timeouts and thresholds.
+    Command: npm run build; npx playwright test --config apps/office/playwright.config.ts. Result: pass512/512production Chromium scenarios in8.4minutes on final bundle index-d955-iwR.js;6764KT-close-build.log and6764KT-e2e-closure.log. Scope: complete Writer,Calc and shared browser discovery,including actual font/style drawing,pointer/keyboard/focus/history,table capture,storage,worker and import/export checks. Desktop/narrow actual preview screenshots were inspected and retained in6764KT-live-style-images. Browser Canvas/SVG/device metrics are not a claim of pixel-identical desktop rendering.
+    Command: npm run typecheck;scoped ESLint/Prettier;check:docs;check:dependencies;check:file-size;check:source-tree;check:source-provenance;inventory:registry:build;inventory:invariants;inventory:parity;check:writer-resources;check:calc-resources;node scripts/check-static-build.mjs;ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass;6764KT-close-{typecheck,lint,format,registry}.log,6764KT-close-gates.json and6764KT-frozen-{writer,calc}-resources.log. Scope: final source,resource,build and task checkout gates. Source freeze manifest6764KT-close-source-manifest.json has no later application/test changes. Incident collection has zero promotion candidates.171primary paths stay within the human-approved180path limit. EVALUATOR and deterministic task closure are the remaining lifecycle steps;then pause the goal without another task.
+
+    Historical execution evidence:
+
     Closure verification in progress; no final pass or task closure yet. Approved scope is171primary paths within the human180path limit. The final complete application execution ran19099cases in1273files:19095passed and4failed. All four failures have been addressed: explicit model-owned table/label focus now retains the native PaM,and the Calc persistence test waits for its real IndexedDB list operation. The complete browser editor suite passes394cases/97files;the final repair/coverage set passes432cases/102files,including every previously failed application scenario. The latter narrow coverage command exits1because unchanged Calc toolbar/ComboBox paths are intentionally not all rediscovered by that filter;the changed focus owner itself is100%.
     Current aggregate coverage is source-validated:1050runtime files,S67664/B41915/F12233/L61425 all100%,skipped0. Full-run source hashes match all current owners except browser-writer-edit-window.ts,which is replaced by its independently100% fresh report. The other two unchanged owners merge only after exact statement/function/branch map equality checks. Evidence:6764KT-current-aggregate-summary.json,6764KT-aggregate-coverage.mjs,6764KT-current-aggregate-coverage.log. This is a full-discovery-plus-targeted-repair result,not a passing single complete command. Original failing logs remain preserved.
     The quiet full inventory rerun passes124cases/38files,S1734/B1290/F437/L1670 all100%;all143tooling cases pass27files. Production build and full typecheck pass. Scoped ESLint/Prettier and11final static/source gates pass. The complete512case production Chromium closure run is still running on the latest build;final evaluator,finish and requested goal pause follow its completion.
@@ -190,8 +233,46 @@ sections:
 
     Full-run repair checkpoint (not final verification): npm run test:all completed the complete application discovery with19082passed/11failed,1275files,19093cases,1688.78seconds;the pipeline stopped at this failure,so later stages were executed separately. Inventory full coverage passed1734statements/1290branches/437functions/1670lines all100;all143tooling cases passed after correcting original Library_svt->VCL dependency expectations and keeping shared tests independent of Writer imports. Complete Chromium run finished476passed/36failed of512cases in11.7minutes. All real failures are retained in output/playwright/writer-full-checkpoint/6764KT-full-test-all.log and6764KT-full-e2e.log;no skips/retries or passing full-run claim.
     Related repairs passed38font/control/application cases,25native color attribute/history cases,and49live style preview cases with exact five-owner coverage238statements/112branches/36functions/216lines all100. A genuine host focus restoration bug was isolated by observing ArrowLeft move from4to3 before host focus restored4,and by a focusin diagnostic that resolved seven actual production scenarios. Browser-only production fix preserves actual new DOM caret/range while retaining explicit control-return restoration;33focused editor/frame tests pass. Current-build recheck of all36failed Chromium cases is running. Final full application coverage,remaining repairs,quality gates,evaluator,finish and goal pause remain pending;the task is not complete.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-24T13:10:19.227Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:10:02.988Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: stale
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+    - old_digest: 42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f
+    - current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610231428-6764KT
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit; preserve user integration commits,prior leaf and unrelated active tasks. No reset,branch or merge operations."
   Findings: |-
+    Final closure findings: real physical-font previews now run in the existing Writer and Calc font selectors;actual native Writer style preview item sets run in both toolbar and sidebar. Calc StyleApply remains hidden by its original formatobjectbar resource;no fake ScStyleSheetPool or command handler was introduced. Browser device acquisition/Canvas/SVG rendering remains an explicit platform adaptation,with readable labels when actual face metrics are unavailable;native script/sample/fitting/color decisions retain their source owners. No whole LibreOffice GUI/raster parity claim is made. The actual typed SvxColorItem(default black,explicit style resets automatic),source slots,worker opaque/automatic/alpha values and import/export tests are connected;unsupported complex-color worker metadata is rejected instead of silently flattened. Existing intentional browser I/O/autosave/recovery deviations remain.
+    Full application run failures were repaired in the existing task,not moved to another task. Final512browser cases pass;432related repair cases pass;current source-validated aggregate application coverage and full inventory coverage are100%. Raw initial/final full-command failures remain documented;aggregate evidence is not represented as a green single application run. No known failing case or missing feature from the approved visible-control scope remains. Additional toolbar/sidebar/File wiring is a later user priority and has not been started. User-directed stop rule:finish this task,then pause the existing broad Writer goal.
+
+    Historical findings follow; earlier pending markers describe their original checkpoints:
+
     In progress, not feature-complete. Native FontCharMap/OS2 capabilities/sampletext were committed at e180eacbc0b0. This phase adds actual FontNameBox DrawPreview/item sizing, five-pixel fit, exact fallback/minimal/symbol loop ordering, right-aligned UTF16 trimming and scoped font/color restoration; a VCL Canvas device reads actual TextMetrics and actual acquired face metadata, never CSS glyph-probe estimates. WRITER072 records the preserved full-to-minimal sample overwrite. Added source paragraph GetItemSetForPreview/FillPreview flattening: actual owned collections are flattened root-first; unused builtin parents/follow styles are created using the real document pool, flattened, then removed in reverse creation order without persistent pool, model revision, modified or undo/redo changes. Existing unused nonnative GetDocumentStylePoolManager accessor is renamed to native getIDocumentStylePoolAccess; no second pool or style registry. Deterministic paint protocol tests do not prove installed-font or Chromium-raster behavior. Found127 actual bundled runtime fonts and authoritative lo-runtime-fonts.css inside this checkout; they can supply real offline face bytes. Actual registered/local faces are now retained with descriptor/PostScript identity and lazy blob access; package FontFace constructor buffers are retained by JS weak identity. CSS source acquisition and native cmap selection remain pending. Pinned LO uses HarfBuzz14.2.1 for cmap collection; local reference has only recipe/patches. A single asynchronous question requests approval to read that exact upstream version over network, per AGENTS Scope Boundary/config require_network=true; no network action taken and independent local work continues. Remaining: physical-font source/cmap acquisition, shared accessible popup and production font previews; native style attribute/slot projection and Writer/Calc style UI; browser acceptance/screenshots and final source-bound coverage/gates. Writer SwAttrPool now registers all fourteen represented font/height/posture/weight/underline/strikeout slots using the source init.cxx identities; color/other nonnative compatibility items are not misrepresented as native typed preview items. Calc StyleApply visibility/native owner path must use actual ScStyleSheetPool, not a fabricated handler. Boundary font-preview tests were split out after the existing1000-line gate caught the prior test file at1002lines; focused tests remain in normal root tooling discovery. Task remains second leaf after prior full checkpoint, no full suite replay. Next priority after this task remains existing-core toolbar/sidebar/File wiring.
 
     - Observation: Actual registered-font inventory is now connected to FontList: real document/bundled FontFaces survive denied system enumeration, empty/error faces are excluded, native ASCII-folded keys deduplicate names and sort in UTF16 order. Existing CSS decoder is shared with default-font resolution.
@@ -337,6 +418,16 @@ Run focused Vitest for font-list/font capability/value/parser/sample-text and SV
 
 ## Verification
 
+Final verification on implementation commit8843ee2ca048; all approved feature work and full-run repairs are complete. Historical checkpoints below retain their original failures and unfinished-state statements for traceability; this final result supersedes them.
+Command: npm run test:coverage -- --coverage.reportOnFailure (cwd apps/office). Result: complete discovery executed19099cases/1273files,19095passed/4failed; raw log6764KT-full-app-final.log. Scope: complete Writer,Calc and shared application. All four failures were repaired and rechecked: table row/column capture and marker affinity now preserve native PaM during explicit host focus;the Calc primary-save test awaits the actual IndexedDB listing instead of a polling deadline. No production Calc persistence contract or timeout was changed.
+Command: npm run test:writer -- src/sw/browser/editor. Result: pass394cases/97files;6764KT-all-editor-final.log. Command: npx vitest run src/sw/browser/editor src/sw/browser/presentation/writer-view-style-focus.test.tsx src/sw/browser/presentation/writer-view.test.tsx src/vcl/browser/ComboBox.test.tsx src/sc/browser/presentation/calc-font-family.test.tsx src/sc/browser/presentation/calc-primary-save.test.tsx --coverage --coverage.include=src/sw/browser/editor/browser-writer-edit-window.ts --coverage.include=src/vcl/browser/ComboBox.tsx --coverage.include=src/sc/browser/presentation/CalcFormattingToolbar.tsx --coverage.reportsDirectory=coverage/6764KT-final-repairs (cwd apps/office). Result: all432tests/102files pass;changed focus owner100%. This narrow command exits1because its unchanged Calc toolbar/ComboBox owners need their full-run evidence for existing unrelated paths;the raw focused report is preserved in6764KT-final-repair-coverage.log.
+Command: node output/playwright/writer-full-checkpoint/6764KT-aggregate-coverage.mjs. Result: pass1050current runtime owners,S67664/B41915/F12233/L61425 all100%,skipped0. Evidence:6764KT-current-aggregate-summary.json and6764KT-current-aggregate-coverage.log. Scope: source-validated complete discovery plus targeted repairs,not a passing single complete command. Every full-run runtime source hash is rechecked;the sole changed runtime owner is replaced by its independently100% fresh report. Unchanged Calc toolbar/ComboBox coverage merges only after exact statement/function/branch instrumentation-map equality. Coverage configuration,thresholds and ignores were not weakened.
+Command: npm run test:inventory:coverage. Result: pass124cases/38files,strict100 S1734/B1290/F437/L1670;6764KT-inventory-quiet-final.log. Command: npm run test:tooling. Result: pass143cases/27files;6764KT-full-tooling-final.log. Earlier concurrent-load inventory failures remain in their raw logs;the quiet final rerun uses unchanged timeouts and thresholds.
+Command: npm run build; npx playwright test --config apps/office/playwright.config.ts. Result: pass512/512production Chromium scenarios in8.4minutes on final bundle index-d955-iwR.js;6764KT-close-build.log and6764KT-e2e-closure.log. Scope: complete Writer,Calc and shared browser discovery,including actual font/style drawing,pointer/keyboard/focus/history,table capture,storage,worker and import/export checks. Desktop/narrow actual preview screenshots were inspected and retained in6764KT-live-style-images. Browser Canvas/SVG/device metrics are not a claim of pixel-identical desktop rendering.
+Command: npm run typecheck;scoped ESLint/Prettier;check:docs;check:dependencies;check:file-size;check:source-tree;check:source-provenance;inventory:registry:build;inventory:invariants;inventory:parity;check:writer-resources;check:calc-resources;node scripts/check-static-build.mjs;ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass;6764KT-close-{typecheck,lint,format,registry}.log,6764KT-close-gates.json and6764KT-frozen-{writer,calc}-resources.log. Scope: final source,resource,build and task checkout gates. Source freeze manifest6764KT-close-source-manifest.json has no later application/test changes. Incident collection has zero promotion candidates.171primary paths stay within the human-approved180path limit. EVALUATOR and deterministic task closure are the remaining lifecycle steps;then pause the goal without another task.
+
+Historical execution evidence:
+
 Closure verification in progress; no final pass or task closure yet. Approved scope is171primary paths within the human180path limit. The final complete application execution ran19099cases in1273files:19095passed and4failed. All four failures have been addressed: explicit model-owned table/label focus now retains the native PaM,and the Calc persistence test waits for its real IndexedDB list operation. The complete browser editor suite passes394cases/97files;the final repair/coverage set passes432cases/102files,including every previously failed application scenario. The latter narrow coverage command exits1because unchanged Calc toolbar/ComboBox paths are intentionally not all rediscovered by that filter;the changed focus owner itself is100%.
 Current aggregate coverage is source-validated:1050runtime files,S67664/B41915/F12233/L61425 all100%,skipped0. Full-run source hashes match all current owners except browser-writer-edit-window.ts,which is replaced by its independently100% fresh report. The other two unchanged owners merge only after exact statement/function/branch map equality checks. Evidence:6764KT-current-aggregate-summary.json,6764KT-aggregate-coverage.mjs,6764KT-current-aggregate-coverage.log. This is a full-discovery-plus-targeted-repair result,not a passing single complete command. Original failing logs remain preserved.
 The quiet full inventory rerun passes124cases/38files,S1734/B1290/F437/L1670 all100%;all143tooling cases pass27files. Production build and full typecheck pass. Scoped ESLint/Prettier and11final static/source gates pass. The complete512case production Chromium closure run is still running on the latest build;final evaluator,finish and requested goal pause follow its completion.
@@ -453,11 +544,49 @@ Concrete bidi/script verification:Command npx vitest run src/external/icu/source
 Full-run repair checkpoint (not final verification): npm run test:all completed the complete application discovery with19082passed/11failed,1275files,19093cases,1688.78seconds;the pipeline stopped at this failure,so later stages were executed separately. Inventory full coverage passed1734statements/1290branches/437functions/1670lines all100;all143tooling cases passed after correcting original Library_svt->VCL dependency expectations and keeping shared tests independent of Writer imports. Complete Chromium run finished476passed/36failed of512cases in11.7minutes. All real failures are retained in output/playwright/writer-full-checkpoint/6764KT-full-test-all.log and6764KT-full-e2e.log;no skips/retries or passing full-run claim.
 Related repairs passed38font/control/application cases,25native color attribute/history cases,and49live style preview cases with exact five-owner coverage238statements/112branches/36functions/216lines all100. A genuine host focus restoration bug was isolated by observing ArrowLeft move from4to3 before host focus restored4,and by a focusin diagnostic that resolved seven actual production scenarios. Browser-only production fix preserves actual new DOM caret/range while retaining explicit control-return restoration;33focused editor/frame tests pass. Current-build recheck of all36failed Chromium cases is running. Final full application coverage,remaining repairs,quality gates,evaluator,finish and goal pause remain pending;the task is not complete.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-24T13:10:19.227Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:10:02.988Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: stale
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+- old_digest: 42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f
+- current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610231428-6764KT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this task implementation commit; preserve user integration commits,prior leaf and unrelated active tasks. No reset,branch or merge operations.
 
 ## Findings
+
+Final closure findings: real physical-font previews now run in the existing Writer and Calc font selectors;actual native Writer style preview item sets run in both toolbar and sidebar. Calc StyleApply remains hidden by its original formatobjectbar resource;no fake ScStyleSheetPool or command handler was introduced. Browser device acquisition/Canvas/SVG rendering remains an explicit platform adaptation,with readable labels when actual face metrics are unavailable;native script/sample/fitting/color decisions retain their source owners. No whole LibreOffice GUI/raster parity claim is made. The actual typed SvxColorItem(default black,explicit style resets automatic),source slots,worker opaque/automatic/alpha values and import/export tests are connected;unsupported complex-color worker metadata is rejected instead of silently flattened. Existing intentional browser I/O/autosave/recovery deviations remain.
+Full application run failures were repaired in the existing task,not moved to another task. Final512browser cases pass;432related repair cases pass;current source-validated aggregate application coverage and full inventory coverage are100%. Raw initial/final full-command failures remain documented;aggregate evidence is not represented as a green single application run. No known failing case or missing feature from the approved visible-control scope remains. Additional toolbar/sidebar/File wiring is a later user priority and has not been started. User-directed stop rule:finish this task,then pause the existing broad Writer goal.
+
+Historical findings follow; earlier pending markers describe their original checkpoints:
 
 In progress, not feature-complete. Native FontCharMap/OS2 capabilities/sampletext were committed at e180eacbc0b0. This phase adds actual FontNameBox DrawPreview/item sizing, five-pixel fit, exact fallback/minimal/symbol loop ordering, right-aligned UTF16 trimming and scoped font/color restoration; a VCL Canvas device reads actual TextMetrics and actual acquired face metadata, never CSS glyph-probe estimates. WRITER072 records the preserved full-to-minimal sample overwrite. Added source paragraph GetItemSetForPreview/FillPreview flattening: actual owned collections are flattened root-first; unused builtin parents/follow styles are created using the real document pool, flattened, then removed in reverse creation order without persistent pool, model revision, modified or undo/redo changes. Existing unused nonnative GetDocumentStylePoolManager accessor is renamed to native getIDocumentStylePoolAccess; no second pool or style registry. Deterministic paint protocol tests do not prove installed-font or Chromium-raster behavior. Found127 actual bundled runtime fonts and authoritative lo-runtime-fonts.css inside this checkout; they can supply real offline face bytes. Actual registered/local faces are now retained with descriptor/PostScript identity and lazy blob access; package FontFace constructor buffers are retained by JS weak identity. CSS source acquisition and native cmap selection remain pending. Pinned LO uses HarfBuzz14.2.1 for cmap collection; local reference has only recipe/patches. A single asynchronous question requests approval to read that exact upstream version over network, per AGENTS Scope Boundary/config require_network=true; no network action taken and independent local work continues. Remaining: physical-font source/cmap acquisition, shared accessible popup and production font previews; native style attribute/slot projection and Writer/Calc style UI; browser acceptance/screenshots and final source-bound coverage/gates. Writer SwAttrPool now registers all fourteen represented font/height/posture/weight/underline/strikeout slots using the source init.cxx identities; color/other nonnative compatibility items are not misrepresented as native typed preview items. Calc StyleApply visibility/native owner path must use actual ScStyleSheetPool, not a fabricated handler. Boundary font-preview tests were split out after the existing1000-line gate caught the prior test file at1002lines; focused tests remain in normal root tooling discovery. Task remains second leaf after prior full checkpoint, no full suite replay. Next priority after this task remains existing-core toolbar/sidebar/File wiring.
 

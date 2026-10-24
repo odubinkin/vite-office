@@ -1,0 +1,32 @@
+# EVALUATOR opinion: pass
+
+Approved visible font/style preview scope and all full-run repairs satisfy the task contract on8843ee2ca048;finish this same task and honor the requested goal pause.
+
+## Findings
+- Shared actual physical-font preview paths serve Writer and Calc;Writer toolbar/sidebar style rows consume actual native shell item sets and source script/font/color/bounds algorithms. Calc hidden StyleApply remains source-hidden;no fabricated style pool or executable handler is introduced.
+- Full application discovery19099cases exposed4remaining failures;all are repaired and pass in432current related cases. Model-owned focus preserves PaM during table/label capture,ordinary browser focus admits moving carets/ranges,and external control return retains shell restoration. Final production Chromium512/512passes.
+- All1050current runtime owners have source-validated aggregate100%statement,branch,function,line coverage. The changed focus owner is independently100%;unchanged owner instrumentation maps and all source hashes are verified before aggregation. Raw nonzero full/narrow-command results are retained and not represented as a passing single full application command.
+- Full inventory124/124and tooling143/143pass;typecheck,build,scoped lint/format,resource,static,provenance,registry,invariant,dependency,tree,size,doctor,routing and diff gates pass.171primary paths remain inside180approved;implementation is committed on writer with no unrelated changes.
+
+## Evidence
+- .agentplane/tasks/202610231428-6764KT/README.md
+- output/playwright/writer-full-checkpoint/6764KT-full-app-final.log
+- output/playwright/writer-full-checkpoint/6764KT-final-repair-coverage.log
+- output/playwright/writer-full-checkpoint/6764KT-current-aggregate-summary.json
+- output/playwright/writer-full-checkpoint/6764KT-aggregate-coverage.mjs
+- output/playwright/writer-full-checkpoint/6764KT-e2e-closure.log
+- output/playwright/writer-full-checkpoint/6764KT-inventory-quiet-final.log
+- output/playwright/writer-full-checkpoint/6764KT-full-tooling-final.log
+- output/playwright/writer-full-checkpoint/6764KT-close-gates.json
+- output/playwright/writer-full-checkpoint/6764KT-close-source-manifest.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Browser font/device acquisition and Canvas/SVG rasterization are platform adaptations;desktop pixel identity and full GUI/kernel parity are not claimed.
+- This is complete discovery followed by validated repairs and aggregate coverage,not one green full application command. All previously failing cases pass in current related rechecks.
+- Existing unsupported complex-color worker metadata is rejected explicitly;Calc source-hidden style application is not exposed as a fake command. Subsequent toolbar/sidebar/File work remains outside this closed task.
