@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/page-desc-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "storage-contract",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0131",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/page-desc-codec.ts#encodePageDesc"
+      ],
+      "justification": "Browser-owned lossless optional page descriptor snapshots and historical pair decoding;original core Any properties remain independent from JSON.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodePageDesc",
+        "decodePageDesc"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

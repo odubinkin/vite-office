@@ -1,6 +1,9 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
+import { SvXMLUnitConverter } from "../core/xmluconv";
 import { exportTextCharacterProperties } from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
@@ -732,7 +735,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
       : [`style:auto-text-indent="${properties.autoTextIndent}"`]),
     ...(properties.pageNumber === undefined
       ? []
-      : [`style:page-number="${properties.pageNumber}"`]),
+      : [`style:page-number="${exportPageNumber(properties.pageNumber)}"`]),
     ...(properties.rightMargin === undefined
       ? []
       : [`fo:margin-right="${exportOdfLength(properties.rightMargin)}"`]),
@@ -947,4 +950,13 @@ function getOdfStyleName(paragraph: XMLTextParagraphSource): string {
         ? "Heading_20_1"
         : paragraph.style)
   );
+}
+
+/** Projects the represented Writer unsigned16 offset through the original signed UNO/XML property. @param offset - Offset or void sentinel. @returns Native XML lexeme. */
+function exportPageNumber(offset: number | "auto"): string {
+  const value = new Any(),
+    output: [string] = [""];
+  if (offset !== "auto") value.insert([(offset << 16) >> 16], "sal_Int16");
+  new XMLNumberWithAutoForVoidPropHdl().exportXML(output, value, new SvXMLUnitConverter("twip"));
+  return output[0];
 }

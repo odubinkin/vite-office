@@ -11,3 +11,5 @@
 /** Native width type member. */ export const MID_FRMSIZE_WIDTH_TYPE = 14;
 /** Native rel width relation member. */ export const MID_FRMSIZE_REL_WIDTH_RELATION = 15;
 /** Native rel height relation member. */ export const MID_FRMSIZE_REL_HEIGHT_RELATION = 16;
+/** Native page descriptor name member. */ export const MID_PAGEDESC_PAGEDESCNAME = 0;
+/** Native optional page number offset member. */ export const MID_PAGEDESC_PAGENUMOFFSET = 1;

@@ -148,3 +148,28 @@ export class XMLMeasurePropHdl {
     return true;
   }
 }
+
+/** Original XML_TYPE_NUMBER16_AUTO conversion and void export from xmlbahdl.cxx. */
+export class XMLNumberWithAutoForVoidPropHdl {
+  /** Converts signed32 lexical input and saturates to signed16,or clears exact auto. @param input - XML lexeme. @param value - Property Any. @param converter - Native converter contract. @returns Original conversion result. */
+  public importXML(input: string, value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const number: [number] = [0];
+    if (Converter.convertNumber(number, input)) {
+      value.insert([Math.max(-32768, Math.min(32767, number[0]))], "sal_Int16");
+      return true;
+    }
+    if (input === "auto") {
+      value.clear();
+      return true;
+    }
+    return false;
+  }
+  /** Exports signed16 Any or auto for void/unextractable input. @param output - XML destination. @param value - Property Any. @param converter - Native converter contract. @returns Original true. */
+  public exportXML(output: [string], value: Any, converter: SvXMLUnitConverter): boolean {
+    void converter;
+    const number: [number] = [0];
+    output[0] = value.extract(number, "sal_Int16") ? String(number[0]) : "auto";
+    return true;
+  }
+}

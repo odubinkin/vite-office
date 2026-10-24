@@ -2,7 +2,7 @@
 import { writerTextColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../../core/attr/swatrset";
-import { encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
+import { encodeSfxPoolItem, decodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import { createTabs, tabStops } from "../../../../../test/tab-item-fixtures";
 import { describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
@@ -121,11 +121,11 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
 
   it("preserves direct and inherited pagination items with explicit defaults", /** Checks Writer split, widow, orphan and page-break serialization. @returns Completion after reimport. */ async () => {
     const pageReference = new SwFormatPageDesc("Standard", 3);
-    expect(pageReference.QueryValue()).toEqual(["Standard", 3]);
+    expect(encodeSfxPoolItem(pageReference).value).toEqual({ name: "Standard", numOffset: 3 });
     expect(pageReference.Clone().equals(pageReference)).toBe(true);
     expect(pageReference.equals(new SwFormatPageDesc("Standard", 4))).toBe(false);
     expect(pageReference.equals(new SfxInt16Item(RES_BREAK, 4))).toBe(false);
-    expect(new SwFormatPageDesc().QueryValue()).toEqual(["", 0]);
+    expect(encodeSfxPoolItem(new SwFormatPageDesc()).value).toEqual({ name: "" });
     expect(
       /** Creates an invalid page-number restart. @returns Invalid item. */ () =>
         new SwFormatPageDesc("Standard", -1),
@@ -133,14 +133,18 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const writer = createWriterDocument();
     expect(
       (
-        writer
-          .GetAttrPool()
-          .CreateItem({ which: RES_PAGEDESC, value: ["Standard", 3] }) as SwFormatPageDesc
+        decodeSfxPoolItem(writer.GetAttrPool(), {
+          which: RES_PAGEDESC,
+          value: ["Standard", 3],
+        }) as SwFormatPageDesc
       ).GetNumOffset(),
     ).toBe(3);
     expect(
       (
-        writer.GetAttrPool().CreateItem({ which: RES_PAGEDESC, value: ["", 0] }) as SwFormatPageDesc
+        decodeSfxPoolItem(writer.GetAttrPool(), {
+          which: RES_PAGEDESC,
+          value: ["", 0],
+        }) as SwFormatPageDesc
       ).GetNumOffset(),
     ).toBeUndefined();
     expect(
@@ -238,12 +242,6 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         from: 'fo:break-before="page"',
         to: 'fo:break-before="column"',
         error: "Unsupported ODF break-before",
-      },
-      {
-        entry: "content.xml",
-        from: 'style:page-number="3"',
-        to: 'style:page-number="bad"',
-        error: "Unsupported ODF page number",
       },
     ])
       await expect(
@@ -951,7 +949,7 @@ it("round-trips source page-number offset boundaries without the dialog widget r
     writer.paragraphs[0]?.SetAttr(new SwFormatPageDesc("Standard", offset));
     const bytes = writeOdtDocument(writer, metadata);
     expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
-      `style:page-number="${offset}"`,
+      `style:page-number="${(offset << 16) >> 16}"`,
     );
     const reopened = await readOdtDocument(bytes, metadata);
     expect(

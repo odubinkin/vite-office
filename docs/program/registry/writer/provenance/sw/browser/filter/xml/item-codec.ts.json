@@ -69,7 +69,10 @@
       "kind": "local-infrastructure",
       "rationale": "Dedicated Worker structured-clone encoding is a browser execution boundary and is not part of the native SfxPoolItem value contract."
     },
-    "status": "local-only"
+    "status": "local-only",
+    "preservedResponsibilities": [
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
+    ]
   },
   "legacyOrder": 88
 }

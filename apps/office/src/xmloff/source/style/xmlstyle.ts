@@ -5,6 +5,9 @@ import { XMLToken } from "../core/xmltoken";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
+import { SvXMLUnitConverter } from "../core/xmluconv";
 import { importOdfLength } from "../core/xmluconv";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -420,14 +423,20 @@ function importParagraphProperties(
     "automatic first-line indent",
   );
   const rawPageNumber = attributes.get(XMLToken.STYLE_PAGE_NUMBER);
-  const pageNumber =
-    rawPageNumber === null || rawPageNumber === "auto"
-      ? rawPageNumber
-      : /^\d+$/u.test(rawPageNumber) && Number(rawPageNumber) >= 0 && Number(rawPageNumber) <= 65535
-        ? Number(rawPageNumber)
-        : undefined;
-  if (rawPageNumber !== null && pageNumber === undefined)
-    throw new Error(`Unsupported ODF page number: ${rawPageNumber}`);
+  const numberProperty = new Any(),
+    numberValue: [number] = [0];
+  const hasNumber =
+    rawPageNumber !== null &&
+    new XMLNumberWithAutoForVoidPropHdl().importXML(
+      rawPageNumber,
+      numberProperty,
+      new SvXMLUnitConverter("twip"),
+    );
+  const pageNumber = !hasNumber
+    ? undefined
+    : numberProperty.extract(numberValue, "sal_Int16")
+      ? numberValue[0] & 65535
+      : ("auto" as const);
   const countLineNumbers = importOptionalBoolean(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",

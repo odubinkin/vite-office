@@ -1100,3 +1100,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `cui/uiconfig/ui/textflowpage.ui`, `adjustment3`; `SvxExtParagraphTabPage::FillItemSet` and `sw/source/uibase/utlui/uitool.cxx`, `SfxToSwPageDescAttr`.
 - Observation: the page-number spin has an implicit lower bound zero and upper 55535,although the item is unsigned16 and Writer permits offsets through65535. Reset visually clamps imported larger values but unchanged saved widget state does not emit a replacement. Whether the upper limit is intentional remains unconfirmed.
 - Preservation: keep original widget bounds,retained saved-state semantics and unsigned16 item including zero. Do not change imported out-of-widget-range offsets merely by opening and accepting the dialog.
+
+### WRITER092 — page offset XML import saturates signed16 while export exposes unsigned16 as signed
+
+- Source: pinned `sw/source/core/layout/atrfrm.cxx`, `SwFormatPageDesc::QueryValue`/`PutValue`; `xmloff/source/style/xmlbahdl.cxx`, `XMLNumberWithAutoForVoidPropHdl` and `lcl_xmloff_setAny`; `xmloff/source/text/txtexppr.cxx`, `CTF_PAGENUMBEROFFSET`.
+- Observation: native offset65535 queries as signed16 -1 and exports as -1. Importing positive65535 saturates to32767,whereas importing -1 reaches unsigned65535. Thus numerically equivalent modulo65536 XML inputs can produce different offsets. Zero is valid in ODF1.3;older-version special handling is outside the current fixed1.3 writer. This is preserved source behavior,not a confirmed upstream defect.
+- Preservation: use the original Any member projection,SAX lexical conversion,signed16 saturation and signed XML output. Invalid lexical input leaves a property unset;exact auto means void. Tests pin boundaries and actual Writer ODT/browser worker cycles.

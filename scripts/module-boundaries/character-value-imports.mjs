@@ -309,6 +309,9 @@ const originalCharacterValueImports = new Map([
     "xmloff/source/style/XMLConstantsPropertyHandler.ts",
     new Set(["cppu/inc/com/sun/star/uno/Any.ts", "udkapi/com/sun/star/uno/TypeClass.ts"]),
   ],
+  // Original xmlstyle.cxx and txtparae.cxx consume actual UNO Any;only this concrete value type is admitted.
+  ["xmloff/source/style/xmlstyle.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  ["xmloff/source/text/txtparae.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   ["xmloff/source/style/xmlbahdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   ["xmloff/source/text/txtprmap.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
 ]);

@@ -538,14 +538,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores pinned SvxBreak ordinal. @param value - Stored mode. @returns Break item. */
       (value) => new SfxInt16Item(RES_BREAK, Number(value)),
     );
-    this.RegisterDefaultItem(
-      new SwFormatPageDesc(),
-      /** Restores a page-style name and restart offset. @param value - Stored pair. @returns Page descriptor item. */
-      (value) => {
-        const pair = value as readonly [string, number];
-        return new SwFormatPageDesc(pair[0], pair[1] === 0 ? undefined : pair[1]);
-      },
-    );
+    this.RegisterDefaultItem(new SwFormatPageDesc());
     this.RegisterDefaultItem(
       new SwNumRuleItem(),
       /** Restores a numbering-rule item. @param value - Persisted rule name. @returns Concrete rule item. */
