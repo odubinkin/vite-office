@@ -19,7 +19,7 @@ export default tseslint.config(
       "**/playwright-report/**",
       "**/test-results/**",
       "vendor/**",
-      "output/playwright/**/fast_float-*/**",
+      "output/playwright/**",
     ],
   },
   js.configs.recommended,

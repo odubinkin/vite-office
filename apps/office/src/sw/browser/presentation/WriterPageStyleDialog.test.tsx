@@ -5,6 +5,7 @@ import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
@@ -130,3 +131,69 @@ it("focuses the mounted page control and cancels with Escape without accepting",
   expect(cancel).toHaveBeenCalledOnce();
   expect(submit).not.toHaveBeenCalled();
 });
+
+it("edits custom height and every margin through native geometry while retaining modal pointer ownership", /** Verifies physical units and source form acceptance without replacing the page draft. @returns Nothing. */ () => {
+  const submit = vi.fn(),
+    cancel = vi.fn();
+  render(
+    <WriterPageStyleDialog
+      initialValue={createDefaultWriterPageDescriptor("en-US").GetValue()}
+      onCancel={cancel}
+      onSubmit={submit}
+    />,
+  );
+  const format = screen.getByLabelText("Paper format"),
+    dialog = screen.getByRole("dialog");
+  expect(fireEvent.mouseDown(dialog)).toBe(false);
+  expect(fireEvent.mouseDown(format)).toBe(true);
+  expect(format).toHaveFocus();
+  expect(cancel).not.toHaveBeenCalled();
+  fireEvent.change(format, { target: { value: "11" } });
+  for (const [name, value] of [
+    ["Width (cm)", "8 in"],
+    ["Height (cm)", "10 in"],
+    ["Left (cm)", "0.5 in"],
+    ["Right (cm)", "1 in"],
+    ["Top (cm)", "1.5 in"],
+    ["Bottom (cm)", "2 in"],
+  ] as const)
+    fireEvent.change(screen.getByLabelText(name), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "OK" }));
+  expect(submit).toHaveBeenCalledWith(
+    expect.objectContaining({
+      width: 11520,
+      height: 14400,
+      leftMargin: 720,
+      rightMargin: 1440,
+      topMargin: 2160,
+      bottomMargin: 2880,
+    }),
+  );
+});
+
+it.each([
+  [FieldUnit.INCH, "Width (in)", "8.50″"],
+  [FieldUnit.MM, "Width (mm)", "215.90 mm"],
+] as const)(
+  "retains physical Letter geometry in module unit %s",
+  /** Actual represented inch and millimetre labels and display values must not rewrite the native page on Cancel. @param unit - Configured unit. @param label - Original accessible field label. @param value - Displayed physical width. @returns Nothing. */ (
+    unit,
+    label,
+    value,
+  ) => {
+    const cancel = vi.fn(),
+      submit = vi.fn();
+    render(
+      <WriterPageStyleDialog
+        initialValue={createDefaultWriterPageDescriptor("en-US").GetValue()}
+        unit={unit}
+        onCancel={cancel}
+        onSubmit={submit}
+      />,
+    );
+    expect(screen.getByRole("spinbutton", { name: label })).toHaveValue(value);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(cancel).toHaveBeenCalledOnce();
+    expect(submit).not.toHaveBeenCalled();
+  },
+);

@@ -355,12 +355,33 @@ describe("native join flags and body-text kernel", /** Registers direct core and
       expect(doc.GetDocumentContentOperationsManager().DeleteAndJoin(range)).toBe(true);
       expect(doc.paragraphs).toEqual([last]);
       expect(last.GetText()).toBe("gh");
-      expect(last.GetpSwAttrSet()?.GetItemIfSet(100, false)?.QueryValue()).toEqual(
-        kind === "breaks" ? ["first-page", 3] : undefined,
-      );
+      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(100, false) as
+        SwFormatPageDesc | undefined;
+      expect(descriptor?.GetPageDescName()).toBe(kind === "breaks" ? "first-page" : undefined);
+      expect(descriptor?.GetNumOffset()).toBe(kind === "breaks" ? 3 : undefined);
       expect(last.GetpSwAttrSet()?.GetItemIfSet(101, false)?.QueryValue()).toBe(
         kind === "breaks" ? 1 : undefined,
       );
+      range.Dispose();
+      a.Dispose();
+      b.Dispose();
+    },
+  );
+  it.each([0, 32768, 65535])(
+    "JoinPrev preserves native descriptor offset %s",
+    /** Zero and signed-UNO high values remain native unsigned16 during joining. @param offset - Original offset. @returns Nothing. */ (
+      offset,
+    ) => {
+      const { doc, first, last } = fixture();
+      first.SetAttr(new SwFormatPageDesc("first-page", offset));
+      last.SetAttr(new SwFormatPageDesc("last-page", 9));
+      const a = new SwPosition(first, 0),
+        b = new SwPosition(last, 2),
+        range = new SwPaM(a, b);
+      expect(doc.GetDocumentContentOperationsManager().DeleteAndJoin(range)).toBe(true);
+      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(100, false) as SwFormatPageDesc;
+      expect(descriptor.GetPageDescName()).toBe("first-page");
+      expect(descriptor.GetNumOffset()).toBe(offset);
       range.Dispose();
       a.Dispose();
       b.Dispose();

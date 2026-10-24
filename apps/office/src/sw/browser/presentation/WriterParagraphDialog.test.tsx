@@ -230,3 +230,18 @@ it("owns source tab keys before spin steps,retains tab changes and uses native f
   fireEvent.keyDown(first, { key: "Escape" });
   expect(cancel).toHaveBeenCalledWith(41);
 });
+it("cancels the original request from the heading without submitting its draft", /** The shared Close control must retain the paragraph request identity. @returns Nothing. */ () => {
+  const cancel = vi.fn(),
+    submit = vi.fn();
+  render(
+    <WriterParagraphDialog
+      dialogRequest={{ id: 51, request }}
+      fontSizePt={12}
+      onDialogCancel={cancel}
+      onDialogSubmit={submit}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Close" }));
+  expect(cancel).toHaveBeenCalledWith(51);
+  expect(submit).not.toHaveBeenCalled();
+});

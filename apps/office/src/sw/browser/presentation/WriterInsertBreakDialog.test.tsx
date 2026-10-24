@@ -17,3 +17,14 @@ it("focuses the actual choice and retains native form/cancel keyboard ownership"
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
   expect(cancel).toHaveBeenCalledTimes(2);
 });
+it("keeps backdrop pointer presses from stealing the mounted break choice", /** The same guard permits actual widget presses and never accepts or cancels a request. @returns Nothing. */ () => {
+  const cancel = vi.fn(),
+    submit = vi.fn();
+  render(<WriterInsertBreakDialog onCancel={cancel} onSubmit={submit} />);
+  const choice = screen.getByRole("radio");
+  expect(fireEvent.mouseDown(screen.getByRole("dialog"))).toBe(false);
+  expect(fireEvent.mouseDown(choice)).toBe(true);
+  expect(choice).toHaveFocus();
+  expect(cancel).not.toHaveBeenCalled();
+  expect(submit).not.toHaveBeenCalled();
+});
