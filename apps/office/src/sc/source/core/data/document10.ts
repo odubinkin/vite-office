@@ -1,4 +1,8 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
+import { UpdateScriptTypes } from "./column4";
+import { RefUpdateContext } from "../../../inc/refupdatecontext";
+import { UpdateRefMode } from "../../../inc/global";
+
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ColumnSpanSet } from "../../../inc/columnspanset";
@@ -136,4 +140,52 @@ export function StartAllListeners(this: ScDocument, range: ScRange): void {
       range.aEnd.Row(),
     );
   }
+}
+
+/** Original document10 single-row fast path through native context preparation,real table/column copying and original reference completion. Notes/sparklines have no represented stores in this CONTENTS slice and no fake getters are installed. @param this - Actual destination. @param context - Actual paste context. @param col1 - First destination column. @param row1 - First destination row. @param col2 - Last destination column. @param row2 - Last destination row. @returns Whether this native fast path handled the source. */
+export function CopyOneCellFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+): boolean {
+  const clip = context.getClipDoc();
+  if (clip.GetClipParam().mbCutMode) return false;
+  const range = clip.GetClipParam().getWholeRange();
+  if (range.aStart.Row() !== range.aEnd.Row()) return false;
+  const width = range.aEnd.Col() - range.aStart.Col() + 1;
+  if (col2 - col1 + 1 < width) return false;
+  if (clip.GetTableCount() > 1) return false;
+  const source = new ScAddress(range.aStart);
+  for (let col = range.aStart.Col(); col <= range.aEnd.Col(); ++col) {
+    const test = new ScAddress(source);
+    test.SetCol(col);
+    if (clip.IsMerged(test)) return false;
+  }
+  const table = clip.FetchTable(source.Tab());
+  if (!table) return false;
+  context.setSingleCellColumnSize(width);
+  for (let offset = 0; offset < width; ++offset, source.IncCol()) {
+    context.setSingleCellPattern(offset, clip.GetPattern(source));
+    const column = table.FetchColumn(source.Col());
+    if (!column) throw Error("Clipboard source column assertion");
+    UpdateScriptTypes.call(column, source.Row(), source.Row());
+    context.setSingleCell(source, column);
+  }
+  const end = context.getTabEnd();
+  for (let tab = context.getTabStart(); tab <= end && tab < this.GetTableCount(); ++tab) {
+    const target = this.FetchTable(tab);
+    if (!target) throw Error("Clipboard destination table assertion");
+    target.CopyOneCellFromClip(context, col1, row1, col2, row2, range.aStart.Row(), table);
+  }
+  const update = new RefUpdateContext(this);
+  update.maRange.assign(new ScRange(col1, row1, context.getTabStart(), col2, row2, end));
+  update.mnColDelta = col1 - source.Col();
+  update.mnRowDelta = row1 - source.Row();
+  update.mnTabDelta = context.getTabStart() - source.Tab();
+  update.meMode = UpdateRefMode.URM_COPY;
+  this.UpdateReference(update, context.getUndoDoc(), false);
+  return true;
 }

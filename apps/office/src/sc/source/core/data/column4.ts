@@ -1,5 +1,20 @@
 /** @fileoverview Original column4.cxx group-listening block handler,including partial-span backtracking and excess-member teardown. */
-import { ProcessBlock, type BlockFunction, type CellStoreNode } from "../../../inc/mtvfunctions";
+import { ScCellFormat } from "../tool/cellform";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScPatternAttr } from "../../../inc/patattr";
+import type { ScCondFormatItem } from "../../../inc/attrib";
+import { ATTR_CONDITIONAL } from "../../../inc/scitems";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { element_type_empty } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
+import { element_type_celltextattr, celltextattr_block } from "../../../inc/mtvelements";
+import type { Color } from "../../../../tools/inc/color";
+
+import {
+  ParseBlock,
+  ProcessBlock,
+  type BlockFunction,
+  type CellStoreNode,
+} from "../../../inc/mtvfunctions";
 import { formula_block, element_type_formula } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
@@ -313,4 +328,57 @@ export function EndListeningFormulaCells(
   ProcessBlock(cells.begin(), cells, action, first, last);
   if (startRow) startRow[0] = action.getStartRow();
   if (endRow) endRow[0] = action.getEndRow();
+}
+
+/** Original UpdateScriptTypes/ScriptTypeUpdater consumed path over actual nonempty cells and text-attribute cursors. The typed ParseAllNonEmpty dispatch is erased to this real block walk,without copying or reparsing cell storage. Conditional-result evaluation and CellStorageModified compute/stream caches remain unported. @param this - Actual column. @param first - First row. @param last - Last row. @returns Nothing. */
+export function UpdateScriptTypes(this: ScColumn, first: number, last: number): void {
+  const doc = this.GetDoc();
+  if (!doc.ValidRow(first) || !doc.ValidRow(last) || first > last) return;
+  const attrs = this.GetCellAttrStore(),
+    cells = this.GetCellStore(),
+    context = doc.GetNonThreadedContext(),
+    position = new ScAddress(this.GetCol(), 0, this.GetTab());
+  let attrCursor = attrs.begin();
+  ParseBlock(
+    cells.cbegin(),
+    cells,
+    {
+      /** Original nonempty functor dispatch retains each addressed row and cached metadata. @param node - Borrowed cell block. @param offset - First element. @param size - Native run count. @returns Nothing. */
+      call: (node, offset, size): void => {
+        if (node.type === element_type_empty) return;
+        for (let i = offset; i < offset + size; ++i) {
+          const row = node.position + i,
+            found = attrs.position(attrCursor, row);
+          attrCursor = found.first;
+          if (attrCursor.get().type !== element_type_celltextattr) continue;
+          const attr = celltextattr_block.at(
+            attrCursor.get().data as base_element_block,
+            found.second,
+          );
+          if (attr.mnScriptType !== SvtScriptType.UNKNOWN) continue;
+          // Every valid row has the actual attr-array default pattern;the source defensive null guard is unreachable in this admitted store invariant.
+          const pattern = this.GetPattern(row) as ScPatternAttr;
+          if (!(pattern.GetItem(ATTR_CONDITIONAL) as ScCondFormatItem).GetCondFormatData().empty())
+            throw Error("Conditional-result script formatting is not implemented");
+          position.SetRow(row);
+          const cell = new ScRefCellValue(doc, position),
+            color: [Color | null] = [null];
+          const output = ScCellFormat.GetString(
+            cell,
+            pattern.GetNumberFormat(context),
+            color,
+            context,
+            doc,
+          );
+          try {
+            attr.mnScriptType = doc.GetStringScriptType(output);
+          } finally {
+            output.dispose();
+          }
+        }
+      },
+    },
+    first,
+    last,
+  );
 }

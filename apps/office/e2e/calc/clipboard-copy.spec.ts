@@ -3,7 +3,9 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/vcl/inc/scheduler") &
+type Fixture = typeof import("../../src/sc/source/core/data/document10") &
+  typeof import("../../src/i18npool/source/breakiterator/breakiteratorImpl") &
+  typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/vcl/browser/sal-timer") &
   typeof import("../../src/sc/inc/chartlis") &
   typeof import("../../src/sc/inc/reftokenhelper") &
@@ -37,6 +39,11 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/source/core/data/document10.ts", names: ["CopyOneCellFromClip"] },
+    {
+      module: "src/i18npool/source/breakiterator/breakiteratorImpl.ts",
+      names: ["BreakIteratorImpl"],
+    },
     { module: "src/vcl/inc/scheduler.ts", names: ["bindSchedulerPlatform", "Scheduler"] },
     { module: "src/vcl/browser/sal-timer.ts", names: ["browserSchedulerPlatform"] },
     { module: "src/sc/inc/chartlis.ts", names: ["ScChartListener"] },
@@ -206,15 +213,18 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           ),
           rowSpans = new n.ColumnSpanSet();
         if (!rowSource) throw Error("Missing actual single-row source");
-        rowContext.setSingleCellColumnSize(2);
-        for (let col = 0; col < 2; ++col)
-          rowContext.setSingleCell(
-            new n.ScAddress(col, 0, 0),
-            rowSource.CreateColumnIfNotExists(col),
-          );
+        rowContext.setTabRange(0, 0);
+        rowClip.GetBreakIterator(
+          /** Actual native script service binding. @returns Service. */ () =>
+            new n.BreakIteratorImpl(),
+        );
         doc.SetAutoCalc(false);
         doc.SetInsertingFromOtherDoc(true);
-        target.CopyOneCellFromClip(rowContext, 6, 8, 8, 9, 0, rowSource);
+        const rowPrepared = n.CopyOneCellFromClip.call(doc, rowContext, 6, 8, 8, 9);
+        const preparedScripts = [
+          rowContext.getSingleCellAttr(0).mnScriptType,
+          rowContext.getSingleCellAttr(1).mnScriptType,
+        ];
         doc.SetInsertingFromOtherDoc(false);
         rowContext.setListeningFormulaSpans(0, 6, 8, 8, 9);
         rowContext.startListeningFormulas();
@@ -557,6 +567,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           sparse,
           undoGeometryDisabled,
           undoShared,
+          rowPrepared,
+          preparedScripts,
           singleRow,
           formatRequests,
           undoCopy,
@@ -627,6 +639,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     sparse: true,
     undoGeometryDisabled: true,
     undoShared: true,
+    rowPrepared: true,
+    preparedScripts: [1, 1],
     singleRow: [3, 7, 3, 3, 7, 3],
     pastePreparation: {
       anchor: true,

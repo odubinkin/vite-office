@@ -1,4 +1,7 @@
 /** @fileoverview Original global.cxx calculation state used by segment index readiness; other ScGlobal services remain separate unimplemented responsibilities. */
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { getConfiguredSystemUILanguage } from "../../../../i18nlangtag/source/isolang/mslangid";
 import { getScriptType, ScriptType } from "../../../../i18nlangtag/source/isolang/mslangid.script";
@@ -7,6 +10,33 @@ import { EditTextObject, type EditTextObjectConstReference } from "../../../../e
 /** Original ScGlobal state owner, with the source-initialized threaded-group flag. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original ScGlobal static state owner.
 export class ScGlobal {
+  /** Original GetErrorString branch selection over the resolved English resource/symbol fields already used by this browser build. Native gettext/compiler symbol-map services are not fabricated here. @param error - Actual FormulaError. @returns Owned UTF16 error text. */
+  static GetErrorString(error: FormulaError): OUString {
+    switch (error) {
+      case FormulaError.NoRef:
+        return unicode("#REF!"); // STR_NO_REF_TABLE
+      case FormulaError.NoAddin:
+        return unicode("#ADDIN?"); // STR_NO_ADDIN
+      case FormulaError.NoMacro:
+        return unicode("#MACRO?"); // STR_NO_MACRO
+      case FormulaError.NotAvailable:
+        return unicode("#N/A"); // ocErrNA
+      case FormulaError.NoName:
+        return unicode("#NAME?"); // ocErrName
+      case FormulaError.NoValue:
+        return unicode("#VALUE!"); // ocErrValue
+      case FormulaError.NoCode:
+        return unicode("#NULL!"); // ocErrNull
+      case FormulaError.DivisionByZero:
+        return unicode("#DIV/0!"); // ocErrDivZero
+      case FormulaError.IllegalFPOperation:
+        return unicode("#NUM!"); // ocErrNum
+      case FormulaError.Spill:
+        return unicode("#SPILL!"); // ocErrSpill
+      default:
+        return unicode(`Err:${error}`); // STR_ERROR_STR plus original integer code.
+    }
+  }
   /** Original nullable rich-text comparison,including same-pointer fast path and nonvirtual base pool-insensitive Equals. @param left - Actual borrowed text or null. @param right - Actual borrowed text or null. @returns Native equality. */
   static EETextObjEqual(
     left: EditTextObjectConstReference | null,

@@ -1,4 +1,12 @@
 /** @fileoverview Source-owned clipboard reset,sparse sheet and pooled-resource lifetime acceptance. */
+import { ScCellFormat } from "../tool/cellform";
+import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import { ScGlobal } from "../../../inc/global";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { ScEmptyCellToken } from "../../../inc/token";
+import { Color } from "../../../../tools/inc/color";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SimpleReferenceObject } from "../../../../salhelper/source/simplereferenceobject";
 import { ScPoolHelper } from "./poolhelp";
 import type { ScTable } from "../../../inc/table";
@@ -250,4 +258,100 @@ it("retains native intrusive staticization and zero-count virtual destruction", 
   permanent.acquire();
   permanent.release();
   expect(permanent.destroyed).toBe(false);
+});
+
+it("formats real borrowed scalar and formula cells through the native nonthreaded context", /** Original color/context/reset and evaluation branches remain on actual core owners. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const color: [Color | null] = [new Color(0x123456)];
+  /** Reads and destroys an actual formatted result. @param cell - Borrowed cell. @param showZero - Original null-value flag. @param formula - Original formula flag. @returns Text. */
+  function display(cell: ScRefCellValue, showZero = true, formula = false): string {
+    const out = ScCellFormat.GetString(cell, 0, color, null, doc, showZero, formula);
+    try {
+      return text(out);
+    } finally {
+      out.dispose();
+    }
+  }
+  expect(display(new ScRefCellValue())).toBe("");
+  expect(color[0]).toBeNull();
+  doc.GetFormatTable().SetNoZero(true);
+  color[0] = new Color(0x654321);
+  expect(display(new ScRefCellValue(0))).toBe("");
+  expect(color[0]).toBeNull();
+  doc.GetFormatTable().SetNoZero(false);
+  expect(display(new ScRefCellValue(0), false)).toBe("");
+  expect(display(new ScRefCellValue(0))).toBe("0");
+  expect(display(new ScRefCellValue(12.125))).toBe("12.125");
+  const pos = new ScAddress();
+  doc.SetTextCell(pos, unicode("漢字"));
+  expect(display(new ScRefCellValue(doc, pos))).toBe("漢字");
+  for (const [formula, expected] of [
+    ["=1+2", "3"],
+    ["=0", "0"],
+    ["=1/0", "#DIV/0!"],
+    ['="abc"', "abc"],
+  ] as const) {
+    const f = new ScFormulaCell(doc, pos, unicode(formula), FormulaGrammar.Grammar.GRAM_NATIVE);
+    const ref = new ScRefCellValue(f);
+    expect(display(ref)).toBe(expected);
+    expect(display(ref, false)).toBe(expected === "0" ? "" : expected);
+    expect(display(ref, true, true)).toBe(formula);
+    f.Dispose();
+  }
+  const f = new ScFormulaCell(doc, pos, unicode("=1"), FormulaGrammar.Grammar.GRAM_NATIVE);
+  f.GetValue();
+  f.SetResultToken(new ScEmptyCellToken(false, true));
+  expect(display(new ScRefCellValue(f))).toBe("");
+  doc.IncInterpretLevel();
+  expect(display(new ScRefCellValue(f))).toBe("...");
+  doc.DecInterpretLevel();
+  f.GetCode().Clear();
+  f.GetCode().SetCodeError(FormulaError.NoName);
+  expect(display(new ScRefCellValue(f), true, true)).toBe("#NAME?");
+  f.Dispose();
+  const context = doc.GetNonThreadedContext(),
+    out = new OUString();
+  expect(context.GetFormatTable()).toBe(doc.GetFormatTable());
+  const bound = new ScInterpreterContext(doc, doc.GetFormatTable());
+  bound.NFGetOutputString(9, 0, out, color, true);
+  expect(text(out)).toBe("9");
+  const str = unicode("text");
+  context.NFGetOutputString(str, 0, out, color);
+  expect(text(out)).toBe("text");
+  str.dispose();
+  out.dispose();
+  expect(
+    /** Actual unsupported formatter family follows its explicit admission boundary. @returns No string. */ () =>
+      ScCellFormat.GetString(new ScRefCellValue(1), 1, color, context, doc),
+  ).toThrow("only native General");
+  ScGlobal.bThreadedGroupCalcInProgress = true;
+  try {
+    expect(
+      /** Unported threaded preparation must not return a fake RO formatter. @returns No formatter. */ () =>
+        context.GetFormatTable(),
+    ).toThrow("Threaded formatter");
+  } finally {
+    ScGlobal.bThreadedGroupCalcInProgress = false;
+  }
+  doc.Dispose();
+});
+it("uses original error-string selection and native owned-string results", /** English resolved resource/symbol values retain original global.cxx selection. @returns Nothing. */ () => {
+  for (const [error, expected] of [
+    [FormulaError.NoRef, "#REF!"],
+    [FormulaError.NoAddin, "#ADDIN?"],
+    [FormulaError.NoMacro, "#MACRO?"],
+    [FormulaError.NotAvailable, "#N/A"],
+    [FormulaError.NoName, "#NAME?"],
+    [FormulaError.NoValue, "#VALUE!"],
+    [FormulaError.NoCode, "#NULL!"],
+    [FormulaError.DivisionByZero, "#DIV/0!"],
+    [FormulaError.IllegalFPOperation, "#NUM!"],
+    [FormulaError.Spill, "#SPILL!"],
+    [FormulaError.CircularReference, "Err:522"],
+  ] as const) {
+    const result = ScGlobal.GetErrorString(error);
+    expect(text(result)).toBe(expected);
+    result.dispose();
+  }
 });

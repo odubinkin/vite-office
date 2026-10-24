@@ -15,14 +15,16 @@
       "CanDelayStartListeningFormulaCells",
       "EnableDelayDeletingBroadcasters",
       "StartAllListeners",
-      "IsMerged"
+      "IsMerged",
+      "CopyOneCellFromClip"
     ],
     "upstreamSymbols": [
       "ScDocument::RegroupFormulaCells",
       "ScDocument::DelayFormulaGrouping",
       "ScDocument::AddDelayedFormulaGroupingCell",
       "ScDocument::DeleteBeforeCopyFromClip",
-      "ScDocument::IsMerged"
+      "ScDocument::IsMerged",
+      "ScDocument::CopyOneCellFromClip"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -30,7 +32,8 @@
       "Task76 clone-copy progress: Original native delayed-listening map preserves existing pending intervals under nested enable calls,accepts overlap/adjacency and rejects disjoint spans unchanged;finish restores actual formula/group subscriptions before map erasure.",
       "Native EnableDelayDeletingBroadcasters preserves the equal-state early return and flushes actual populated sheets only when disabling. StartAllListeners skips clip/undo/no-listening owners,shares Start/EndListeningContext cursors and visits existing sheets in the original inclusive range.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
-      "Native pool-helper ownership now retains actual salhelper SimpleReferenceObject acquire/release operations at document initialization,rtl::Reference assignment and destruction. ScPoolHelper owns a lazy actual General/NatNum0 SvNumberFormatter and copies default/document options into its null-date,precision and two-digit-year fields. Shared clipboard/Undo owners retain the formatter after source closure;the last intrusive release destroys its owned parsed values. Number-color callbacks,edit-engine and physical style/item-pool shutdown remain unported;no fake service is installed. Document paste and UI acceptance remain pending."
+      "Native pool-helper ownership now retains actual salhelper SimpleReferenceObject acquire/release operations at document initialization,rtl::Reference assignment and destruction. ScPoolHelper owns a lazy actual General/NatNum0 SvNumberFormatter and copies default/document options into its null-date,precision and two-digit-year fields. Shared clipboard/Undo owners retain the formatter after source closure;the last intrusive release destroys its owned parsed values. Number-color callbacks,edit-engine and physical style/item-pool shutdown remain unported;no fake service is installed. Document paste and UI acceptance remain pending.",
+      "Original CopyOneCellFromClip now runs source cut/row/width/sheet/merge guards,pattern/script/value preparation,actual table/column single-row copying and real reference completion on the same ScDocument. Native source-column and destination-table dereference preconditions are explicit assertions. The post-loop source-column delta is preserved (CALC279). Current CONTENTS slice has no note/sparkline stores and introduces no fake getters. General document CopyFromClip orchestration,paste Undo/EnterBlock and task74 remain pending."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -68,6 +71,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/document10.ts",
           "marker": "IsMerged"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
+          "marker": "original document fast path"
         }
       ],
       "upstream": [

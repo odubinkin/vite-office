@@ -14,7 +14,9 @@
     "upstreamSymbols": [
       "ScFormulaCell::ScFormulaCell",
       "ScFormulaCell::GetValue",
-      "ScFormulaCell::GetErrCode"
+      "ScFormulaCell::GetErrCode",
+      "ScFormulaCell::IsEmptyDisplayedAsString",
+      "ScFormulaCell::GetFormula"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
@@ -34,7 +36,8 @@
       "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
       "Task76 also routes the ordinary source-string constructor through original Compile(formula,true,grammar), preserving changed/compile state and the native clipboard/undo early return with an empty token-array fallback. Undo-copy error tests use actual precompiled arrays rather than relying on the previous nonnative undo source-string compilation. Shared compiler subtotal/named/bad-opcode admission remains explicit;absent registration services are not simulated.",
       "Task76: Original mbNeedsNumberFormat and mbAllowNumberFormatChange defaults,SetNeedNumberFormat,NeedsNumberFormat and copy-constructor request/reset behavior are represented. Full native result-format interpretation/compatibility and hard-format mutation remain unported;these metadata changes do not claim completion of those formatter services.",
-      "Represented scalar interpretation brackets the real interpreter with native document nesting increment/decrement,including exceptional cleanup. Matrix/group-threaded interpretation remains outside this slice;no replacement interpreter is introduced."
+      "Represented scalar interpretation brackets the real interpreter with native document nesting increment/decrement,including exceptional cleanup. Matrix/group-threaded interpretation remains outside this slice;no replacement interpreter is introduced.",
+      "Original IsEmptyDisplayedAsString delegates through MaybeInterpret to the real formula result. Empty-code GetFormula errors now return actual ScGlobal GetErrorString values instead of the previous unsupported-localization throw;other serialization/grammar paths remain unchanged."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -101,6 +104,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
           "marker": "actual"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
+          "marker": "original document fast path"
         }
       ],
       "upstream": [

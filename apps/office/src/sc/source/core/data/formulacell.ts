@@ -4,6 +4,7 @@ import {
   type SvtDyingHint,
   type SvtQueryBase,
 } from "../../../../svl/source/notify/listener";
+import { ScGlobal } from "../../../inc/global";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScSingleRefToken, ScDoubleRefToken, ScTableRefToken } from "../../../inc/token";
 import {
@@ -351,7 +352,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */
   GetFormula(grammar: Grammar): OUString {
     if (this.pCode.GetCodeError() !== FormulaError.NONE && !this.pCode.GetLen())
-      throw new Error("Localized empty-code error strings are not implemented");
+      return ScGlobal.GetErrorString(this.pCode.GetCodeError());
     const output = new OUString();
     try {
       let emit = true;
@@ -790,6 +791,11 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       default:
         break;
     }
+  }
+  /** Original lazy empty-as-string result query. @returns Native empty-display flag. */
+  IsEmptyDisplayedAsString(): boolean {
+    this.MaybeInterpret();
+    return this.aResult.IsEmptyDisplayedAsString();
   }
   /** Reads native numeric/error classification after lazy interpretation. @returns Is numeric or error. */
   IsValue(): boolean {

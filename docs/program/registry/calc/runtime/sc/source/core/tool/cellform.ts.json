@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/cellform.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-output-formatting",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/cellform.ts",
+        "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+        "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/cellform.cxx"
+      ],
+      "justification": "Original ScCellFormat first GetString overload resets color,selects actual context and dispatches empty/numeric/shared-string/formula values through real NFGetOutputString. Preserves zero suppression,formula output,error-before-empty/value ordering and the current native no-macro interpreter-level ellipsis path. Current core admits macro level0 only;macro/running callbacks,rich text,coordinate overload and other format families remain unported. Default formula grammar resolves to the real formula document grammar. No browser formatting,alternate cells or fake formatter services are introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScCellFormat"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/cellform.cxx",
+      "upstreamSymbols": [
+        "ScCellFormat::GetString"
+      ]
+    }
+  }
+}

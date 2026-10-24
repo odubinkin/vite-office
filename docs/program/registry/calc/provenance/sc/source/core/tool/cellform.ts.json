@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/cellform.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/cellform.cxx",
+    "localSymbols": [
+      "ScCellFormat"
+    ],
+    "upstreamSymbols": [
+      "ScCellFormat::GetString"
+    ],
+    "preservedResponsibilities": [
+      "Original ScCellFormat first GetString overload resets color,selects actual context and dispatches empty/numeric/shared-string/formula values through real NFGetOutputString. Preserves zero suppression,formula output,error-before-empty/value ordering and the current native no-macro interpreter-level ellipsis path. Current core admits macro level0 only;macro/running callbacks,rich text,coordinate overload and other format families remain unported. Default formula grammar resolves to the real formula document grammar. No browser formatting,alternate cells or fake formatter services are introduced."
+    ],
+    "omittedResponsibilities": [
+      "Coordinate overload,rich text,macro/running callbacks,full format families and threaded RO preparation remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/cellform.ts",
+          "marker": "ScCellFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+          "marker": "formats real borrowed scalar"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/cellform.cxx",
+          "marker": "ScCellFormat::GetString"
+        }
+      ]
+    }
+  }
+}

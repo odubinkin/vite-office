@@ -3923,3 +3923,9 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `include/svl/numformat.hxx`, string `GetOutputString` comment;`svl/source/numbers/zforlist.cxx`, string `SvNFEngine::GetOutputString`.
 - The header says a format without text type or a fourth subformat yields an empty output string. The implementation instead resets the color pointer and copies the input string when both conditions are absent. General therefore preserves ordinary text,including input/output aliasing.
 - This appears to be stale documentation rather than a runtime defect. Preserve the actual copied-input behavior;do not clear General text to follow the contradictory comment.
+
+### CALC-279 — Single-row fast-path reference delta uses the post-loop source column
+
+- Pinned source: `sc/source/core/data/document10.cxx`, `ScDocument::CopyOneCellFromClip`, source-column preparation and following `RefUpdateContext`.
+- The preparation loop increments `aSrcPos` after every source column,including the final one. The subsequent `mnColDelta = nCol1 - aSrcPos.Col()` therefore uses the first column after the source range rather than its starting column. For a one-column source at column0 pasted at column2,the recorded delta is1 rather than2.
+- The existing clone path already relocates relative references,and no active incorrect result is established by the admitted local-sheet scenarios. Preserve the exact post-loop position and delta calculation;do not silently change it to the initial source coordinate.
