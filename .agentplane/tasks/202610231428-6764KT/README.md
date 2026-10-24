@@ -1,10 +1,11 @@
 ---
 id: "202610231428-6764KT"
 title: "Implement upstream font and style dropdown previews for Writer and Calc"
-status: "DOING"
+result_summary: "verified-202610231428-6764KT"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 85
+revision: 87
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-24T13:12:09.933Z"
+  updated_at: "2026-10-24T13:12:18.956Z"
   updated_by: "CODER"
-  note: "Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid."
+  note: "verified-202610231428-6764KT"
   attempts: 0
 quality_review:
   state: "pass"
@@ -49,7 +50,9 @@ quality_review:
     - "Full application discovery19099cases exposed4remaining failures;all are repaired and pass in432current related cases. Model-owned focus preserves PaM during table/label capture,ordinary browser focus admits moving carets/ranges,and external control return retains shell restoration. Final production Chromium512/512passes."
     - "All1050current runtime owners have source-validated aggregate100%statement,branch,function,line coverage. The changed focus owner is independently100%;unchanged owner instrumentation maps and all source hashes are verified before aggregation. Raw nonzero full/narrow-command results are retained and not represented as a passing single full application command."
     - "Full inventory124/124and tooling143/143pass;typecheck,build,scoped lint/format,resource,static,provenance,registry,invariant,dependency,tree,size,doctor,routing and diff gates pass.171primary paths remain inside180approved;implementation is committed on writer with no unrelated changes."
-commit: null
+commit:
+  hash: "0f861d1a7b40284f773371275ea7c2813f334698"
+  message: "✅ 6764KT verify: refresh current closure blueprint evidence"
 comments:
   -
     author: "CODER"
@@ -60,6 +63,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue the complete font/style dropdown scope; human now requires full suite and repairs before closing this task and pausing the goal."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610231428-6764KT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -100,8 +106,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid."
+  -
+    type: "verify"
+    at: "2026-10-24T13:12:18.956Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610231428-6764KT"
+  -
+    type: "status"
+    at: "2026-10-24T13:12:19.097Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610231428-6764KT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-24T13:12:09.997Z"
+doc_updated_at: "2026-10-24T13:12:19.098Z"
 doc_updated_by: "CODER"
 description: "Implement upstream font dropdown previews in Writer and Calc and actual Writer style item-set previews in existing toolbar/sidebar selectors. Work only in vite-office-writer on writer. Human approval permits180 implementation/test/tooling paths plus paired canonical/generated/task records solely to complete this feature and full-run repairs. Prefer equivalent native JS/browser mechanisms;preserve native owners,defaults and intentional browser document-I/O differences. Full suite has run;repair failures,verify source-bound coverage and final gates,finish this same task,then pause the goal. No new task,branch,merge or feature expansion."
 sections:
@@ -337,6 +356,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-24T13:12:18.956Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610231428-6764KT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:12:09.997Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+    - old_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit 0f861d1a7b40284f773371275ea7c2813f334698
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit; preserve user integration commits,prior leaf and unrelated active tasks. No reset,branch or merge operations."
   Findings: |-
@@ -466,6 +515,10 @@ sections:
     - Observation: First closure attempt rejected a stale blueprint snapshot after task description metadata was updated.
       Impact: Lifecycle closeout only;no source,test,approved plan,route or verification criterion changed.
       Resolution: Ran ap blueprint snapshot;route_changed=no and current digest recorded,then renewed verification before retrying closeout.
+extensions:
+  implementation_commit:
+    hash: "8843ee2ca0486e2353b55811db92cca04de892d4"
+    message: "🖋️ 6764KT style: render native Writer previews and repair full-run regressions"
 id_source: "generated"
 ---
 ## Summary
@@ -704,6 +757,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit a4b9cafafb0950224ac46ee0a1187fccfc28f768
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-24T13:12:18.956Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610231428-6764KT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:12:09.997Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+- old_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit 0f861d1a7b40284f773371275ea7c2813f334698
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
