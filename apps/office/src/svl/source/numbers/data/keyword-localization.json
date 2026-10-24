@@ -1,0 +1,178 @@
+[
+  {
+    "name": "LANGUAGE_GERMAN",
+    "value": 1031
+  },
+  {
+    "name": "LANGUAGE_GERMAN_SWISS",
+    "value": 2055
+  },
+  {
+    "name": "LANGUAGE_GERMAN_AUSTRIAN",
+    "value": 3079
+  },
+  {
+    "name": "LANGUAGE_GERMAN_LUXEMBOURG",
+    "value": 4103
+  },
+  {
+    "name": "LANGUAGE_GERMAN_LIECHTENSTEIN",
+    "value": 5127
+  },
+  {
+    "name": "LANGUAGE_DUTCH",
+    "value": 1043
+  },
+  {
+    "name": "LANGUAGE_DUTCH_BELGIAN",
+    "value": 2067
+  },
+  {
+    "name": "LANGUAGE_FRENCH",
+    "value": 1036
+  },
+  {
+    "name": "LANGUAGE_FRENCH_BELGIAN",
+    "value": 2060
+  },
+  {
+    "name": "LANGUAGE_FRENCH_CANADIAN",
+    "value": 3084
+  },
+  {
+    "name": "LANGUAGE_FRENCH_SWISS",
+    "value": 4108
+  },
+  {
+    "name": "LANGUAGE_FRENCH_LUXEMBOURG",
+    "value": 5132
+  },
+  {
+    "name": "LANGUAGE_FRENCH_MONACO",
+    "value": 6156
+  },
+  {
+    "name": "LANGUAGE_FINNISH",
+    "value": 1035
+  },
+  {
+    "name": "LANGUAGE_ITALIAN",
+    "value": 1040
+  },
+  {
+    "name": "LANGUAGE_ITALIAN_SWISS",
+    "value": 2064
+  },
+  {
+    "name": "LANGUAGE_DANISH",
+    "value": 1030
+  },
+  {
+    "name": "LANGUAGE_NORWEGIAN",
+    "value": 20
+  },
+  {
+    "name": "LANGUAGE_NORWEGIAN_BOKMAL",
+    "value": 1044
+  },
+  {
+    "name": "LANGUAGE_NORWEGIAN_NYNORSK",
+    "value": 2068
+  },
+  {
+    "name": "LANGUAGE_SWEDISH",
+    "value": 1053
+  },
+  {
+    "name": "LANGUAGE_SWEDISH_FINLAND",
+    "value": 2077
+  },
+  {
+    "name": "LANGUAGE_PORTUGUESE",
+    "value": 2070
+  },
+  {
+    "name": "LANGUAGE_PORTUGUESE_BRAZILIAN",
+    "value": 1046
+  },
+  {
+    "name": "LANGUAGE_SPANISH_MODERN",
+    "value": 3082
+  },
+  {
+    "name": "LANGUAGE_SPANISH_DATED",
+    "value": 1034
+  },
+  {
+    "name": "LANGUAGE_SPANISH_MEXICAN",
+    "value": 2058
+  },
+  {
+    "name": "LANGUAGE_SPANISH_GUATEMALA",
+    "value": 4106
+  },
+  {
+    "name": "LANGUAGE_SPANISH_COSTARICA",
+    "value": 5130
+  },
+  {
+    "name": "LANGUAGE_SPANISH_PANAMA",
+    "value": 6154
+  },
+  {
+    "name": "LANGUAGE_SPANISH_DOMINICAN_REPUBLIC",
+    "value": 7178
+  },
+  {
+    "name": "LANGUAGE_SPANISH_VENEZUELA",
+    "value": 8202
+  },
+  {
+    "name": "LANGUAGE_SPANISH_COLOMBIA",
+    "value": 9226
+  },
+  {
+    "name": "LANGUAGE_SPANISH_PERU",
+    "value": 10250
+  },
+  {
+    "name": "LANGUAGE_SPANISH_ARGENTINA",
+    "value": 11274
+  },
+  {
+    "name": "LANGUAGE_SPANISH_ECUADOR",
+    "value": 12298
+  },
+  {
+    "name": "LANGUAGE_SPANISH_CHILE",
+    "value": 13322
+  },
+  {
+    "name": "LANGUAGE_SPANISH_URUGUAY",
+    "value": 14346
+  },
+  {
+    "name": "LANGUAGE_SPANISH_PARAGUAY",
+    "value": 15370
+  },
+  {
+    "name": "LANGUAGE_SPANISH_BOLIVIA",
+    "value": 16394
+  },
+  {
+    "name": "LANGUAGE_SPANISH_EL_SALVADOR",
+    "value": 17418
+  },
+  {
+    "name": "LANGUAGE_SPANISH_HONDURAS",
+    "value": 18442
+  },
+  {
+    "name": "LANGUAGE_SPANISH_NICARAGUA",
+    "value": 19466
+  },
+  {
+    "name": "LANGUAGE_SPANISH_PUERTO_RICO",
+    "value": 20490
+  }
+]

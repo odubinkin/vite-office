@@ -126,3 +126,48 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
     empty.dispose();
   }
 });
+
+import { prepareGeneralKeywords } from "./zforscan";
+import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
+import { getLoadedLocale } from "../../../unotools/source/i18n/localedatawrapper";
+
+it("prepares General from the actually loaded locale and native localization language list", /** Requested de-ZZ loads de-DE;EnglishOnly still retains the localized General name,as in SetDependentKeywords. @returns Nothing. */ () => {
+  const language = unicode("de"),
+    country = unicode("ZZ"),
+    empty = unicode(""),
+    requested = new Locale(language, country, empty),
+    loaded = getLoadedLocale(requested),
+    mapper = new NumberFormatCodeMapper();
+  try {
+    expect(text(loaded.Country)).toBe("DE");
+    for (const mode of Object.values(KeywordLocalization)) {
+      const prepared = prepareGeneralKeywords(mapper, loaded, mode);
+      try {
+        expect(prepared.localization).toBe(mode);
+        expect(text(prepared.standardName)).toBe("Standard");
+      } finally {
+        prepared.standardName.dispose();
+      }
+    }
+    const en = unicode("en"),
+      us = unicode("US"),
+      american = new Locale(en, us, empty),
+      prepared = prepareGeneralKeywords(mapper, american);
+    try {
+      expect(prepared.localization).toBe(KeywordLocalization.EnglishOnly);
+      expect(text(prepared.standardName)).toBe("General");
+    } finally {
+      prepared.standardName.dispose();
+      american.dispose();
+      us.dispose();
+      en.dispose();
+    }
+  } finally {
+    mapper.dispose();
+    loaded.dispose();
+    requested.dispose();
+    language.dispose();
+    country.dispose();
+    empty.dispose();
+  }
+});

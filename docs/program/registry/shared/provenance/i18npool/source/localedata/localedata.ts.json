@@ -20,14 +20,18 @@
       "getLocaleFormatElements",
       "numberFormatResources",
       "getLocaleAllFormats",
-      "Formats"
+      "Formats",
+      "getLocaleLanguageCountryInfo",
+      "getLocaleDateSeparator"
     ],
     "upstreamSymbols": [
       "LocaleDataImpl::getLocaleItem2",
       "LocaleDataImpl::getFirstLocaleServiceName",
       "LocaleDataImpl::getFallbackLocaleServiceNames",
       "LocaleDataImpl::getTransliterations",
-      "LocaleDataImpl::getAllFormats"
+      "LocaleDataImpl::getAllFormats",
+      "LocaleDataImpl::getLanguageCountryInfo",
+      "LocaleDataImpl::getLocaleItem"
     ],
     "preservedResponsibilities": [
       "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine.",
@@ -38,7 +42,8 @@
       "TaskRV75WR implements native1280twip compressed column widths,source FilterData hidden runs,geometry-only document copies,marked/grouped direct/show/hide commands and real ScUndoWidthOrHeight documents. ColumnWidth26290 uses typed UInt16 HMM and optional one-based FN_PARAM_1;the actual metric dialog normalizes two decimals in the configured CM/INCH unit,preserves default/current toggling,and records a separate completed even-HMM request. Shared SfxRequest now separates cloned SetReturnValue from Done and implements source call-mode flags/AppendItem/removal;both common dispatch adapters and the actual Writer style caller use that contract. React reuses shared Writer menus/dialog styling and reads actual native column geometry with bounded scrolling and hidden-column keyboard skipping. Independent ODS column style/repeat/visibility and genuine byte reopens preserve represented widths and cells. Full pool/recorder/UNO argument transforms,optimal widths,protection,merged/outline/drawing/alternate views,native widget/font/device services and complete application parity remain unverified. Existing primary saving/open/no-recovery policy remains.",
       "Adds the original getTransliterations resource-field responsibility with every ordered LC_TRANSLITERATION/ref result from all284 actual aLibTable locales from the285-XML tree (ti_ET is unregistered). The source-derived projection/checker mirrors LocaleNode::LCTransliterationNode ref generation;the existing real locale-name/language/qlt/default field resolver is generalized without changing prior decimal/measurement values. Returned module names use actual owned Sequence<OUString> values. This field binding does not implement the whole LocaleDataImpl/XLocaleData service,load native dynamic libraries,filter unimplemented services or promote semantic/default/readiness status. Native JavaScript handles physical data and lifetime.",
       "Task76 adds the original getAllFormats resource-field responsibility:both LC_FORMAT sections from all284 registered native locales,exact original order,FormatElement fields,ref chains and outer-to/leaf-from currency replacement. Generated resources contain15186 actual rows and are checked against the pinned XML/LocaleNode/filewriter implementations. Existing native locale/language/qlt/default fallback is reused;each query returns independent scalar value rows. This field binding is not a full LocaleDataImpl/UNO service and does not promote full formatter or Calc paste readiness.",
-      "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending."
+      "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending.",
+      "Task76 adds exact five LC_INFO fields and referenced LC_CTYPE DateSeparator for all284 registered services. The existing native locale resolver selects independent value projections;no whole LanguageCountryInfo UNO struct/service or fabricated locale identity is introduced. Generator --check compares all15186 existing format rows plus all identity/date records and native keyword language constants against pinned source. Native temporary query/fallback Locale and OUString owners are now released explicitly after primitive field extraction,without changing fallback order. CALC-274 retains ti_ET request fallback to en_US because native language-only fallback chooses unregistered ti_ET despite registered ti_ER."
     ],
     "omittedResponsibilities": [
       "Complete LanguageTag/LocaleData service and configuration-event synchronization remain pending. Task188 implements public system fallback and current configured scalar field behavior."
@@ -76,6 +81,10 @@
         {
           "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
           "marker": "getLocaleFormatElements"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+          "marker": "getLocaleLanguageCountryInfo"
         }
       ],
       "upstream": [
@@ -94,6 +103,14 @@
         {
           "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/isolang.cxx",
           "marker": "lookupFallbackLocale"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/localedata/localedata.cxx",
+          "marker": "LocaleDataImpl::getLanguageCountryInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/localedata/localedata.cxx",
+          "marker": "LocaleDataImpl::getLocaleItem"
         }
       ]
     }

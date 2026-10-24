@@ -439,3 +439,74 @@ it("searches the exact start key in numeric order and stops at a different langu
     values.dispose();
   }
 });
+
+import { SvNFLanguageData } from "./zforlist";
+import { NfEvalDateFormat } from "../../inc/zforlist";
+
+it("owns native language/cache/scanner state and preserves scanner/precision on ChangeIntl", /** Actual service and resources populate the real owner;no fake language data or mapper is used. @returns Nothing. */ () => {
+  const mapper = new NumberFormatCodeMapper(),
+    current = new SvNFLanguageData(mapper, 0x0407),
+    table = new SvNFFormatData(),
+    input = unicode("general");
+  try {
+    const scanner = current.GetFormatScanner(),
+      decimal = current.GetNumDecimalSep(),
+      locale = current.fields.locale;
+    expect(current.GetIniLanguage()).toBe(0x0407);
+    expect(current.GetEvalDateFormat()).toBe(NfEvalDateFormat.International);
+    expect([
+      text(decimal),
+      text(current.GetNumDecimalSepAlt()),
+      text(current.GetNumThousandSep()),
+      text(current.GetDateSep()),
+    ]).toEqual([",", "", ".", "."]);
+    expect(current.GetStandardPrec()).toBe(2);
+    current.ChangeStandardPrec(65535);
+    current.SetEvalDateFormat(NfEvalDateFormat.InternationalThenFormat);
+    expect(current.GetEvalDateFormat()).toBe(2);
+    current.ChangeIntl(0x10407);
+    expect(current.fields.locale).toBe(locale);
+    expect(scanner.ScanFormat(input)).toBe(0);
+    expect(text(input)).toBe("Standard");
+    current.ChangeIntl(0x0409);
+    expect(current.GetIniLanguage()).toBe(0x0407);
+    expect(current.GetFormatScanner()).toBe(scanner);
+    expect(current.GetStandardPrec()).toBe(65535);
+    expect(scanner.GetResultStringsCnt()).toBe(1);
+    expect(current.GetNumDecimalSep()).toBe(decimal);
+    expect([
+      text(decimal),
+      text(current.GetNumDecimalSepAlt()),
+      text(current.GetNumThousandSep()),
+      text(current.GetDateSep()),
+    ]).toEqual([".", "", ",", "/"]);
+    generateStandardNumberFormat(
+      table,
+      mapper,
+      current.fields.locale,
+      scanner,
+      current.fields.ActLnge,
+      current.GetNumDecimalSep(),
+      0,
+    );
+    const entry = table.GetEntry(0) as SvNumberformat,
+      out = unicode("");
+    try {
+      entry.GetOutputString(
+        1.25,
+        out,
+        [null],
+        current.GetStandardPrec(),
+        current.GetNumDecimalSep().getStr()[0] as number,
+      );
+      expect(text(out)).toBe("1.25");
+    } finally {
+      out.dispose();
+    }
+  } finally {
+    table.dispose();
+    current.dispose();
+    input.dispose();
+    mapper.dispose();
+  }
+});

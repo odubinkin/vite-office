@@ -3893,3 +3893,9 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpInsertFormat`.
 - The additional-format branch computes `nCLOffset = nPos - (nPos % SV_COUNTRY_LANGUAGE_OFFSET)` and subsequently checks `nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET`. For every uint32 `nPos`,the difference is exactly its remainder modulo10000 and is therefore between0 and9999. The guard cannot report "too many format codes" for a valid argument.
 - The caller's additional-format loop has a separate block-capacity check;this observation does not establish an active UI defect. The port preserves the same selection/insertion results and documents the unreachable guard proof instead of inventing an input outside the unsigned argument domain or changing the offset calculation.
+
+### CALC-274 — Ethiopian Tigrinya locale falls back to US English despite an Eritrean data service
+
+- Pinned source: `i18npool/source/localedata/localedata.cxx`, `aLibTable`, `lcl_LookupTableHelper::getFunctionSymbolByName`, `LocaleDataImpl::getFallbackLocaleServiceNames` and `getFunctionSymbol`;`i18nlangtag/source/isolang/isolang.cxx`, native Tigrinya language-country entries.
+- The data-service table registers `ti_ER` but not `ti_ET`. An ordinary `ti_ET` request tries its exact service and then language-only `ti`. The latter resolves through the native first Tigrinya fallback entry `ti_ET`,which is also absent,so the final `en_US` service is selected. The existing `ti_ET.xml` file alone does not register a service.
+- This may be an intentional registration/default choice;no active UI defect is established. Preserve the service-table and fallback order instead of choosing `ti_ER` because it looks linguistically closer. The loaded-identity tests retain `[en,US,empty]` for this request.

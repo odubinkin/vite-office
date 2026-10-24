@@ -41,3 +41,11 @@ export const NfIndexTableOffset = {
 export const SV_MAX_COUNT_STANDARD_FORMATS = 100;
 /** Original missing-entry unsigned32 sentinel. */
 export const NUMBERFORMAT_ENTRY_NOT_FOUND = 0xffffffff;
+
+/** Original date-format evaluation order;date parsing remains a separate responsibility. */
+export const NfEvalDateFormat = {
+  International: 0,
+  Format: 1,
+  InternationalThenFormat: 2,
+  FormatThenInternational: 3,
+} as const;

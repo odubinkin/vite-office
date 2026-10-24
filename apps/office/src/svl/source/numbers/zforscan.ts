@@ -1,4 +1,7 @@
 /** @fileoverview Original standard-name extraction and admitted single-General scanner state/compilation;full language/service initialization and other pattern families remain unported. */
+import localizedKeywordLanguages from "./data/keyword-localization.json" with { type: "json" };
+import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
+import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { uppercase } from "../../../unotools/inc/charclass";
@@ -10,6 +13,33 @@ export const KeywordLocalization = { LocaleLegacy: 0, EnglishOnly: 1, AllowEngli
 export const NF_KEY_GENERAL = 39;
 /** Original flag set by FinalScan when the General keyword occurs. */
 export const FLAG_STANDARD_IN_FORMAT = 1000;
+
+/** Original SetDependentKeywords language anyOf values,generated from the pinned scanner/lang.h. */
+const localizedLanguages = new Set(
+  localizedKeywordLanguages.map(
+    /** Projects the native LanguageType literal. @param entry - Original constant/value. @returns Language ID. */ (
+      entry,
+    ) => entry.value,
+  ),
+);
+/** Original dependent-General-keyword field preparation uses the loaded Locale,not the requested one. Other keyword families and complete service initialization are separate responsibilities. @param mapper - Actual native code mapper interface. @param loadedLocale - Actual loaded LC_INFO locale. @param localization - Original requested keyword policy. @returns Owned standard name and native selected localization field. */
+export function prepareGeneralKeywords(
+  mapper: XNumberFormatCode,
+  loadedLocale: LocaleConstReference,
+  localization: number = KeywordLocalization.AllowEnglish,
+): { standardName: OUString; localization: number } {
+  if (
+    localization !== KeywordLocalization.EnglishOnly &&
+    !localizedLanguages.has(convertLocaleToLanguage(loadedLocale))
+  )
+    localization = KeywordLocalization.EnglishOnly;
+  const format = mapper.getFormatCode(0, loadedLocale);
+  try {
+    return { standardName: extractStandardGeneralName(format.Code), localization };
+  } finally {
+    format.dispose();
+  }
+}
 
 /** Original lcl_extractStandardGeneralName pointer walk,including malformed/nested modifier behavior and the first unbracketed semicolon terminator. No regular-expression normalization or synthetic parsed format is introduced. @param code - Actual locale format-code value. @returns Owned standard name. */
 export function extractStandardGeneralName(code: OUStringConstReference): OUString {
@@ -56,12 +86,28 @@ export class ImpSvNumberformatScan {
   private nStandardPrec = 2;
   /** Consumed native scanner constructor/dependent-General-keyword initialization. The caller owns prepared locale fields,as the native language-data owner does. @param locale - Borrowed actual CharClass locale. @param standardName - Actual extracted standard name from loaded locale format0. @param localization - Original selected keyword-localization field after dependent-keyword initialization. @returns Actual scanner state. */
   constructor(
-    private readonly locale: LocaleConstReference,
+    private locale: LocaleConstReference,
     standardName: OUStringConstReference,
-    private readonly localization: number,
+    private localization: number,
   ) {
     this.sNameStandardFormat = new OUString(standardName);
     this.generalKeyword = uppercase(standardName, locale);
+  }
+  /** Original ChangeIntl/next dependent-General-keyword initialization over explicitly prepared current language fields. Scanner identity,parse state and standard precision are preserved;full lazy keyword/service initialization remains unported. @param locale - New actual CharClass locale. @param standardName - Actual loaded-locale standard name. @param localization - Native selected keyword policy. @returns Nothing. */
+  ChangeIntl(
+    locale: LocaleConstReference,
+    standardName: OUStringConstReference,
+    localization: number,
+  ): void {
+    this.locale = locale;
+    this.localization = localization;
+    this.sNameStandardFormat.assign(standardName);
+    const upper = uppercase(standardName, locale);
+    try {
+      this.generalKeyword.assign(upper);
+    } finally {
+      upper.dispose();
+    }
   }
   /** Original Reset scalar state for admitted General tokens;the fixed source symbol storage remains owned until destruction. @returns Nothing. */
   Reset(): void {

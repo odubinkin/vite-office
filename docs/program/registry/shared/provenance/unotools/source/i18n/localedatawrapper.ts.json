@@ -9,13 +9,20 @@
     "localSymbols": [
       "MeasurementSystem",
       "mapMeasurementStringToEnum",
-      "getMeasurementSystemEnum"
+      "getMeasurementSystemEnum",
+      "getNumDecimalSep",
+      "getNumDecimalSepAlt",
+      "getNumThousandSep",
+      "getDateSep",
+      "getLoadedLocale"
     ],
     "upstreamSymbols": [
-      "LocaleDataWrapper::mapMeasurementStringToEnum"
+      "LocaleDataWrapper::mapMeasurementStringToEnum",
+      "LocaleDataWrapper::getLoadedLanguageTag"
     ],
     "preservedResponsibilities": [
-      "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit."
+      "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit.",
+      "Task76 adds original cached decimal/alternate/group/date field projections as owned actual OUStrings for the consuming native language-data owner. getLoadedLocale projects the actual LC_INFO Locale consumed before original getLoadedLanguageTag constructs LanguageTag;it does not fabricate a LanguageTag or whole LocaleDataWrapper service. Actual Locale constructors/string copies/destruction preserve field ownership. Full wrapper/cache/service ABI and LanguageTag canonicalization remain unported."
     ],
     "omittedResponsibilities": [
       "Full ScDocCfg,user configuration,formatter services and connected Calc document/UI/ODS remain pending."
@@ -25,12 +32,36 @@
         {
           "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
           "marker": "MeasurementSystem"
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
+          "marker": "getNumDecimalSep"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/unotools/source/i18n/localedatawrapper.cxx",
           "marker": "LocaleDataWrapper::mapMeasurementStringToEnum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/i18n/localedatawrapper.cxx",
+          "marker": "LocaleDataWrapper::getLoadedLanguageTag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/localedatawrapper.hxx",
+          "marker": "getNumDecimalSep"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/localedatawrapper.hxx",
+          "marker": "getNumDecimalSepAlt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/localedatawrapper.hxx",
+          "marker": "getNumThousandSep"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/localedatawrapper.hxx",
+          "marker": "getDateSep"
         }
       ]
     }

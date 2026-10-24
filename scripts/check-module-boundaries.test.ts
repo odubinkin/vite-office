@@ -840,7 +840,7 @@ it("distinguishes emitted imports from erased type syntax before runtime cycle d
     ].sort(),
   );
   expect([...getRuntimeImportSpecifiers("const value=1;")]).toEqual([]);
-  for (const target of ["udkapi", "offapi"])
+  for (const target of ["udkapi", "offapi", "i18nlangtag"])
     expect(isForbiddenModuleEdge("svl", target)).toBe(false);
   for (const module of ["sc", "sw", "vcl", "framework", "svl"])
     for (const owner of ["udkapi", "cppu", "offapi"])

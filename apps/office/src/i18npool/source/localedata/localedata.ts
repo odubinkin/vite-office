@@ -1,5 +1,7 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
 import transliterations from "./data/transliterations.json" with { type: "json" };
+import languageCountryInfo from "./data/language-country-info.json" with { type: "json" };
+import dateSeparators from "./data/date-separators.json" with { type: "json" };
 import numberFormats from "./data/number-formats.json" with { type: "json" };
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import numeric from "./data/numeric-separators.json" with { type: "json" };
@@ -46,12 +48,22 @@ const resources = new Map<string, string>(Object.entries(separators));
 const measurementResources = new Map<string, string>(Object.entries(measurements));
 /** Uses the real native language-only fallback owner instead of a second projected lookup table. @param name - Prepared service language. @returns Source service name. */
 function fallbackServiceName(name: string): string {
-  const locale = MsLangId.getFallbackLocale(
-    new Locale(unicode(name), new OUString(), new OUString()),
-  );
-  return text(locale.Language) === "qlt"
-    ? text(locale.Variant).replaceAll("-", "_")
-    : text(locale.Language) + (text(locale.Country) ? "_" + text(locale.Country) : "");
+  const query = new Locale(),
+    language = unicode(name);
+  query.Language = language;
+  language.dispose();
+  try {
+    const locale = MsLangId.getFallbackLocale(query);
+    try {
+      return text(locale.Language) === "qlt"
+        ? text(locale.Variant).replaceAll("-", "_")
+        : text(locale.Language) + (text(locale.Country) ? "_" + text(locale.Country) : "");
+    } finally {
+      locale.dispose();
+    }
+  } finally {
+    query.dispose();
+  }
 }
 /** Original lookup-table exact or language-only fallback over the selected generated resource field. @param name - Locale service name. @param values - Source field table. @returns Selected field resource, absent when the native service would not be found. */
 function lookup<T>(name: string, values: ReadonlyMap<string, T>): T | undefined {
@@ -82,6 +94,31 @@ function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap
     if (value !== undefined) return value;
   }
   return values.get("en_US") as T;
+}
+
+/** Original LC_INFO fields projected from LCInfoNode/getLanguageCountryInfo;this is not a fabricated UNO LanguageCountryInfo value/ABI. */
+export interface LocaleLanguageCountryInfo {
+  Language: string;
+  LanguageDefaultName: string;
+  Country: string;
+  CountryDefaultName: string;
+  Variant: string;
+}
+/** Original five ordered LC_INFO fields for all registered locale services. */
+const languageCountryResources = new Map<string, LocaleLanguageCountryInfo>(
+  Object.entries(languageCountryInfo),
+);
+/** Source-generated original LC_CTYPE DateSeparator after native ref resolution. */
+const dateResources = new Map<string, string>(Object.entries(dateSeparators));
+/** Actual loaded LC_INFO fields use the same native service resolution as other fields;the caller receives its own value projection. @param locale - Original requested locale. @returns Loaded locale identity fields. */
+export function getLocaleLanguageCountryInfo(
+  locale: LocaleConstReference,
+): LocaleLanguageCountryInfo {
+  return { ...getLocaleDataField(locale, languageCountryResources) };
+}
+/** Original date-separator field with the same locale/ref fallback. @param locale - Requested locale. @returns Source date separator. */
+export function getLocaleDateSeparator(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, dateResources);
 }
 
 /** Original decimal field through shared locale-name fallback resolution. @param locale - Prepared locale. @returns Separator. */

@@ -62,6 +62,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         "ImpGetFormatCodeIndex",
         "ImpAdjustFormatCodeDefault",
         "SvNFFormatData",
+        "SvNFLanguageData",
         "generateStandardNumberFormat",
       ],
     },
@@ -436,8 +437,44 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         if (!tableEntry) throw Error("Missing actual generated General entry");
         tableEntry.GetOutputString(12.5, compiledOut, [null], 65535, 44);
         const tableOutput = n.text(compiledOut);
+        const languageData = new n.SvNFLanguageData(mapper, 0x0407),
+          originalScanner = languageData.GetFormatScanner(),
+          languageTable = new n.SvNFFormatData();
+        languageData.ChangeStandardPrec(65535);
+        languageData.ChangeIntl(0x0409);
+        n.generateStandardNumberFormat(
+          languageTable,
+          mapper,
+          languageData.fields.locale,
+          languageData.GetFormatScanner(),
+          languageData.fields.ActLnge,
+          languageData.GetNumDecimalSep(),
+          0,
+        );
+        const languageEntry = languageTable.GetEntry(0);
+        if (!languageEntry) throw Error("Missing actual language-owned General entry");
+        languageEntry.GetOutputString(
+          12.5,
+          compiledOut,
+          [null],
+          languageData.GetStandardPrec(),
+          languageData.GetNumDecimalSep().getStr()[0] as number,
+        );
+        const languageState = {
+          initial: languageData.GetIniLanguage(),
+          decimal: n.text(languageData.GetNumDecimalSep()),
+          thousand: n.text(languageData.GetNumThousandSep()),
+          scannerRetained: originalScanner === languageData.GetFormatScanner(),
+          precision: languageData.GetStandardPrec(),
+          code: n.text(languageEntry.GetFormatstring()),
+          output: n.text(compiledOut),
+        };
+        languageTable.dispose();
+        languageData.dispose();
+
         compiledCopy.GetOutputString(0.125, compiledOut, [null], 65535, 44);
         const formatFoundation = {
+          languageState,
           tableOutput,
           tableType: formatTable.GetType(0),
           tableLastKey: tableEntry.GetLastInsertKey(),
@@ -578,6 +615,15 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      languageState: {
+        initial: 0x0407,
+        decimal: ".",
+        thousand: ",",
+        scannerRetained: true,
+        precision: 65535,
+        code: "General",
+        output: "12.5",
+      },
       tableOutput: "12,5",
       tableType: 16,
       tableLastKey: 100,

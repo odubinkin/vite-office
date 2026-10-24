@@ -9,13 +9,24 @@ import * as Type from "../../../offapi/com/sun/star/i18n/KNumberFormatType";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import {
   NfIndexTableOffset as Offset,
+  NfEvalDateFormat,
   SvNumFormatType,
   SV_COUNTRY_LANGUAGE_OFFSET,
   SV_MAX_COUNT_STANDARD_FORMATS,
   NUMBERFORMAT_ENTRY_NOT_FOUND,
 } from "../../inc/zforlist";
 import { SvNumberformat } from "./zformat";
-import type { ImpSvNumberformatScan } from "./zforscan";
+import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
+import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";
+import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import {
+  getLoadedLocale,
+  getNumDecimalSep,
+  getNumDecimalSepAlt,
+  getNumThousandSep,
+  getDateSep,
+} from "../../../unotools/source/i18n/localedatawrapper";
+
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { NumberFormatCodeConstReference } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
@@ -88,6 +99,141 @@ export function ImpAdjustFormatCodeDefault(formats: SequenceElements, count: num
   }
   if (selected === -1) selected = 0;
   NumberFormatCode.borrowed(formats.get(selected * 40) as NumberFormatCodeAddress).Default = true;
+}
+
+/** Original SvNFLanguageData consumed locale/scanner/cached-field ownership. Real Locale values project LanguageTag/LocaleData fields;the actual mapper interface projects the component-context service lookup. Full LanguageTag,calendar,transliteration,input-number scanner,color callback and UNO service ABI are not fabricated. */
+export class SvNFLanguageData {
+  /** Original friend-visible state grouped after erasing C++ friend access;only native format-table/engine/formatter callers consume it. locale/loadedLocale are explicit real Locale projections,not replacement LanguageTag objects. */
+  readonly fields: {
+    readonly IniLnge: number;
+    ActLnge: [number];
+    locale: Locale;
+    loadedLocale: Locale;
+    pFormatScanner: ImpSvNumberformatScan;
+    aDecimalSep: OUString;
+    aDecimalSepAlt: OUString;
+    aThousandSep: OUString;
+    aDateSep: OUString;
+    eEvalDateFormat: number;
+  };
+  /** Original constructor's represented language/cache/scanner path;the actual provider must outlive this borrowed service-field binding. @param mapper - Actual prepared XNumberFormatCode service field. @param language - Native initial language. @returns Owned language/scanner state. */
+  constructor(
+    private readonly mapper: XNumberFormatCode,
+    language: number,
+  ) {
+    language &= 65535;
+    const locale = convertLanguageToLocale(language, false),
+      loadedLocale = getLoadedLocale(locale),
+      decimal = getNumDecimalSep(locale),
+      alternate = getNumDecimalSepAlt(locale),
+      thousand = getNumThousandSep(locale),
+      date = getDateSep(locale),
+      prepared = prepareGeneralKeywords(mapper, loadedLocale);
+    try {
+      this.fields = {
+        IniLnge: language,
+        ActLnge: [language],
+        locale,
+        loadedLocale,
+        pFormatScanner: new ImpSvNumberformatScan(
+          locale,
+          prepared.standardName,
+          prepared.localization,
+        ),
+        aDecimalSep: decimal,
+        aDecimalSepAlt: alternate,
+        aThousandSep: thousand,
+        aDateSep: date,
+        eEvalDateFormat: NfEvalDateFormat.International,
+      };
+    } finally {
+      prepared.standardName.dispose();
+    }
+  }
+  /** Original initial language remains unchanged after ChangeIntl. @returns Original uint16 language. */
+  GetIniLanguage(): number {
+    return this.fields.IniLnge;
+  }
+  /** Original borrowed cached decimal field. @returns Actual owned member. */
+  GetNumDecimalSep(): OUStringConstReference {
+    return this.fields.aDecimalSep;
+  }
+  /** Original borrowed cached alternate decimal field. @returns Actual owned member. */
+  GetNumDecimalSepAlt(): OUStringConstReference {
+    return this.fields.aDecimalSepAlt;
+  }
+  /** Original borrowed cached grouping field. @returns Actual owned member. */
+  GetNumThousandSep(): OUStringConstReference {
+    return this.fields.aThousandSep;
+  }
+  /** Original borrowed cached date separator. @returns Actual owned member. */
+  GetDateSep(): OUStringConstReference {
+    return this.fields.aDateSep;
+  }
+  /** Original current format-scanner reference retains object identity across language changes. @returns Actual scanner. */
+  GetFormatScanner(): ImpSvNumberformatScan {
+    return this.fields.pFormatScanner;
+  }
+  /** Original date evaluation setter. @param order - Original enum. @returns Nothing. */
+  SetEvalDateFormat(order: number): void {
+    this.fields.eEvalDateFormat = order;
+  }
+  /** Original date evaluation field. @returns Original enum. */
+  GetEvalDateFormat(): number {
+    return this.fields.eEvalDateFormat;
+  }
+  /** Original precision forwarding preserves scanner state and uint16 conversion. @param precision - Native short argument. @returns Nothing. */
+  ChangeStandardPrec(precision: number): void {
+    this.fields.pFormatScanner.ChangeStandardPrec(precision);
+  }
+  /** Original precision query. @returns Current scanner precision. */
+  GetStandardPrec(): number {
+    return this.fields.pFormatScanner.GetStandardPrec();
+  }
+  /** Original no-op for the current language,otherwise locale/cache updates precede scanner ChangeIntl. Unrepresented language/service wrappers are explicit projections,not substitute providers. @param language - Native uint16 current language. @returns Nothing. */
+  ChangeIntl(language: number): void {
+    language &= 65535;
+    const fields = this.fields;
+    if (fields.ActLnge[0] === language) return;
+    fields.ActLnge[0] = language;
+    const locale = convertLanguageToLocale(language, false),
+      loadedLocale = getLoadedLocale(locale),
+      oldLocale = fields.locale,
+      oldLoaded = fields.loadedLocale,
+      decimal = getNumDecimalSep(locale),
+      alternate = getNumDecimalSepAlt(locale),
+      thousand = getNumThousandSep(locale),
+      date = getDateSep(locale),
+      prepared = prepareGeneralKeywords(this.mapper, loadedLocale);
+    try {
+      fields.locale = locale;
+      fields.loadedLocale = loadedLocale;
+      fields.aDecimalSep.assign(decimal);
+      fields.aDecimalSepAlt.assign(alternate);
+      fields.aThousandSep.assign(thousand);
+      fields.aDateSep.assign(date);
+      fields.pFormatScanner.ChangeIntl(locale, prepared.standardName, prepared.localization);
+    } finally {
+      prepared.standardName.dispose();
+      date.dispose();
+      thousand.dispose();
+      alternate.dispose();
+      decimal.dispose();
+      oldLoaded.dispose();
+      oldLocale.dispose();
+    }
+  }
+  /** Original cached string/scanner/locale member destruction for represented owners;the prepared mapper remains borrowed. @returns Nothing. */
+  dispose(): void {
+    const fields = this.fields;
+    fields.aDateSep.dispose();
+    fields.aThousandSep.dispose();
+    fields.aDecimalSepAlt.dispose();
+    fields.aDecimalSep.dispose();
+    fields.pFormatScanner.dispose();
+    fields.loadedLocale.dispose();
+    fields.locale.dispose();
+  }
 }
 
 /** Original format-table owner;native fields are grouped solely to erase C++ friend access without inventing individual accessor APIs. Actual Map entries own actual parsed formats. Language generation,engine accessors and formatter services remain separate unported responsibilities. */

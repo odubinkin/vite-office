@@ -101,3 +101,41 @@ it("uses native language,qlt and default fallback and returns independent mutabl
     missing.dispose();
   }
 });
+
+import { getLocaleLanguageCountryInfo, getLocaleDateSeparator } from "./localedata";
+import identities from "./data/language-country-info.json";
+import dates from "./data/date-separators.json";
+
+it("returns all actual LC_INFO/date fields and independent value projections", /** The generator separately checks all284 records against native XML/ref chains. @returns Nothing. */ () => {
+  for (const [name, expected] of Object.entries(identities)) {
+    const value = locale("qlt", "", name.replaceAll("_", "-"));
+    try {
+      const info = getLocaleLanguageCountryInfo(value);
+      expect(info).toEqual(expected);
+      expect(getLocaleDateSeparator(value)).toBe(dates[name as keyof typeof dates]);
+      info.Language = "caller mutation";
+      expect(getLocaleLanguageCountryInfo(value).Language).toBe(expected.Language);
+    } finally {
+      value.dispose();
+    }
+  }
+});
+
+it("selects loaded locale identity through native fallback rather than copying requested fields", /** LC_INFO remains local even when format/date sections reference another locale. @returns Nothing. */ () => {
+  for (const [language, country, variant, expected] of [
+    ["zz", "ZZ", "", ["en", "US", ""]],
+    ["de", "ZZ", "", ["de", "DE", ""]],
+    ["qlt", "", "de-ZZ", ["de", "DE", ""]],
+    ["qlt", "", "ca-ES-valencia", ["qlt", "ES", "ca-ES-valencia"]],
+    ["ar", "SA", "", ["ar", "SA", ""]],
+    ["ti", "ET", "", ["en", "US", ""]],
+  ] as const) {
+    const value = locale(language, country, variant);
+    try {
+      const info = getLocaleLanguageCountryInfo(value);
+      expect([info.Language, info.Country, info.Variant]).toEqual(expected);
+    } finally {
+      value.dispose();
+    }
+  }
+});
