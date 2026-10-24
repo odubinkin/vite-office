@@ -1,10 +1,11 @@
 ---
 id: "202610241509-9N3MFW"
 title: "Connect native Writer numbering object toolbar to active shell context"
-status: "DOING"
+result_summary: "Connected native Writer numbering object toolbar with verified context and history"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Generated numobjectbar visible order and existing Sfx state are reused;native NumberList selection admits the bar and table context retains priority in the same object-bar strip. No parallel list store,kernel command or hidden source entry is added."
     - "Real integration covers plain/list/table transitions,0/9level limits,pointer admission,undo/redo and ODT. The upstream list-continuation fixture uses its native selected range.41focused tests and4production Chromium scenarios pass;strict measured coverage for presenter/Chrome is100%S11/B21/F5/L10 without new ignores or threshold changes."
     - "All16declared static/source/resource gates pass,screenshots1280/390 were inspected,and paired provenance retains browser adaptation status. WRITER085 preserves the surprising native Invisible registration normalization instead of changing upstream logic."
-commit: null
+commit:
+  hash: "a3649dfa78aed2eb7deef4865bbb0c12c674b26d"
+  message: "✅ 9N3MFW verify: record numbering toolbar coverage and browser evidence"
 comments:
   -
     author: "CODER"
     body: "Start: connect the existing native numbering object-bar resource to actual Writer context and bindings,verify related behavior,then close this one task and stop as requested."
+  -
+    author: "CODER"
+    body: "Verified: connected the existing native numbering object toolbar to actual Writer context and bindings,retaining table priority,pointer caret,history and ODT behavior;41focused tests,4Chromium scenarios,strict measured100coverage and16static/source gates pass. EVALUATOR verdict is pass. This is the single requested next task;pause the goal after clean closure."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: actual native NumberList context now renders existing source-visible numbering placements with table priority;41focused cases and4production Chromium scenarios pass. New presenter/Chrome owners have strict100coverage S11/B21/F5/L10;native list/history/ODT regressions pass. All16static/source/build gates pass;WRITER085 records source visibility normalization. Exactly this one task will close,then the goal stops."
+  -
+    type: "status"
+    at: "2026-10-24T15:22:05.463Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: connected the existing native numbering object toolbar to actual Writer context and bindings,retaining table priority,pointer caret,history and ODT behavior;41focused tests,4Chromium scenarios,strict measured100coverage and16static/source gates pass. EVALUATOR verdict is pass. This is the single requested next task;pause the goal after clean closure."
 doc_version: 3
-doc_updated_at: "2026-10-24T15:21:00.765Z"
+doc_updated_at: "2026-10-24T15:22:05.464Z"
 doc_updated_by: "CODER"
 description: "Human requests exactly one next task after6764KT,then stop again. Connect the existing generated numobjectbar resource and implemented promote/demote/continue-numbering commands to the Writer workspace. Preserve native NumberList context,table object-bar priority,source visibility/order and actual command state/focus/history. Work only in vite-office-writer on writer;no new core operations,network,other tasks or full suite. Up to16primary implementation/test paths plus paired canonical/task/generated records. Related unit/integration strict coverage,production Chromium1280/390,ODT/history and static/source gates;finish this task then pause goal."
 sections:
@@ -116,6 +129,10 @@ sections:
     Native listsh.cxx registers Num_Toolbox at SFX_OBJECTBAR_OBJECT. Although the registration passes Invisible,CreateObjectBarUI_Impl converts it to Standard,and IsObjectBarVisible returns true. Native view.cxx pushes list below text and table shells;the table object bar wins the same position. Preserve this actual source behavior rather than inferring permanent hidden visibility from the enum name. Existing numobjectbar adapter already filters hidden bullet/number toggles;only promote,demote and continue-numbering are represented by visible supported commands.
 
     Final: the existing source-visible three-command numbering bar now occupies the same browser object-bar strip as the table bar,with table priority. Actual NumberList context and actual Sfx enabled state supply all behavior;kernel/list/history/import/export algorithms were unchanged. Pointer activation retains editing-host focus,while native keyboard button behavior remains available. WRITER085 documents the surprising Invisible-to-Standard upstream registration contract without changing it or claiming a confirmed upstream defect. Initial test corrections fixed a wrong import and an incorrect collapsed-cursor continuation expectation:upstream tdf113213 requires the existing selected two-paragraph range to join the earlier rule. Initial Chromium assertion expected the inner paragraph to remain active;actual browser focus belongs to its contenteditable host. Final tests assert that host and real subsequent typing instead. No runtime workaround,threshold reduction,coverage ignore or fabricated command was added. Broader native toolbar customization and unsupported commands are outside this existing-control connection.
+extensions:
+  implementation_commit:
+    hash: "82cd787b0d2eb829c41a4c1df22e9a4aedfc7036"
+    message: "🖋️ 9N3MFW numbering: connect contextual toolbar to native Writer commands"
 id_source: "generated"
 ---
 ## Summary
