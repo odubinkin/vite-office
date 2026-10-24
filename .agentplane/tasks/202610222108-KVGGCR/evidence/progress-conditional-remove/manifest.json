@@ -1,0 +1,126 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native conditional-index removal verified;full paste/Undo remains incomplete",
+  "sourceBaseline": "4eef3d667cd0106445724784e0bcd32cd89d8bb6",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 694,
+  "relatedFiles": 158,
+  "currentSevenOwnerCoverage": {
+    "lines": {
+      "total": 2183,
+      "covered": 2183,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 2497,
+      "covered": 2497,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 441,
+      "covered": 441,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1527,
+      "covered": 1527,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "currentColumn3Raw100": "S301/B136/F28/L273",
+  "calcCoverage": {
+    "lines": {
+      "total": 14681,
+      "covered": 14681,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16422,
+      "covered": 16422,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2856,
+      "covered": 2856,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9921,
+      "covered": 9921,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 178,
+  "sourceHashes": 458,
+  "coverageMethod": "Actual related694 coverage of seven owners,with only repaired final column3 replaced by the successful current694 column3 measurement. Remaining six owners are byte-identical to the original related run;all other Calc owners hash-match the prior conditional-index baseline. This is compositional raw100,not a new complete Calc replay. No fabricated counters or threshold/exclusion/ignore changes.",
+  "baselineArchive": ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-conditional-index/raw.json.gz",
+  "baselineSha256": "1f9132a341c0d9ee6e4b644d7dec322261bdc643ce99c35081cf3c5fa5716acb",
+  "browserWorker": "1/1 pass;real indices21/22 remove separately and clear to an explicit empty item in Chromium and DOM-free Worker",
+  "passedChecks": [
+    "production build/app types",
+    "tools types",
+    "static smoke",
+    "scoped ESLint",
+    "Prettier",
+    "JSDoc2973",
+    "size",
+    "boundaries",
+    "source tree",
+    "routing",
+    "doctor",
+    "canonical scoped provenance7 owners"
+  ],
+  "diagnostics": "First694 scenarios passed but an internal duplicated default argument left one branch uncovered;default remains only in the public class contract. First build caught moved private BroadcastNewCell access;fixed using established same-instance private-member binding. Final build and current694/column3 raw100 pass. Static smoke of the prior build was not accepted as the failed new build;final smoke reran after successful new build.",
+  "fullSourceGates": "Previously observed deleted ICU/mdds references remain unwaived;no restoration/network access or new full source-gate claim.",
+  "taskFootprint": "134/160 conservative cumulative paths;no new source/test/registry/probe paths in this block",
+  "remaining": "Native conditional-format copy/style owners,chart/Idle and formatter/script services,full document/table copy,paste history,EnterBlock and final74 acceptance.",
+  "stopRule": "Human update2026-10-24 supersedes checkpoint80:finish only active76 and74,run full all-application suites,fix failures/add missing tests and verify required100percent coverage,close current tasks and pause goal. Do not start planned78-80 before stopping.",
+  "fullAllApplicationRun": "Not executed in this progress block.",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/attarray.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/column3.ts",
+    "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table2.ts",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json"
+  ],
+  "rawSha256": "747abe94b691116c0bfea4f8b3807ad0fa67655710bdfde241332d8960e1a405",
+  "compressedBytes": 494069
+}
