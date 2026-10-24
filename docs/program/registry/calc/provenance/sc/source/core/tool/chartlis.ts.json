@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/chartlis.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/chartlis.cxx",
+    "localSymbols": [
+      "ScChartListener"
+    ],
+    "upstreamSymbols": [
+      "ScChartListener"
+    ],
+    "preservedResponsibilities": [
+      "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service."
+    ],
+    "omittedResponsibilities": [
+      "Live notification/listening,external links,UNO chart data,chart loading and native Idle collection scheduling are not yet bound. Full document paste/history and UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/chartlis.ts",
+          "marker": "ScChartListener"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+          "marker": "pointer-vector equality"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chartlis.cxx",
+          "marker": "ScChartListener"
+        }
+      ]
+    }
+  }
+}

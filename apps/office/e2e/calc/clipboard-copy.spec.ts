@@ -3,7 +3,8 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/inc/reftokenhelper") &
+type Fixture = typeof import("../../src/sc/inc/chartlis") &
+  typeof import("../../src/sc/inc/reftokenhelper") &
   typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
@@ -25,6 +26,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/inc/chartlis.ts", names: ["ScChartListener"] },
     {
       module: "src/sc/inc/reftokenhelper.ts",
       names: [
@@ -309,6 +311,17 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           count: referenceRanges.size(),
           overlap: n.intersects(doc, [referenceToken], referenceToken, new n.ScAddress()),
         };
+        const chartName = n.unicode("Copied chart"),
+          chartListener = new n.ScChartListener(chartName, doc, [referenceToken]);
+        chartName.dispose();
+        chartListener.SetDirty(true);
+        const chartOwnership = {
+          range: chartListener.GetRangeList().at(0).GetVars(),
+          used: chartListener.IsUsed(),
+          dirty: chartListener.IsDirty(),
+          selfEqual: chartListener.equals(chartListener),
+        };
+        chartListener.Dispose();
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -333,6 +346,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           clearedIndexes,
           tableUndo,
           referenceHelper,
+          chartOwnership,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -373,6 +387,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   );
   const expected = {
     referenceHelper: { range: [2, 4, 0, 2, 5, 0], sheetFlag: true, count: 1, overlap: true },
+    chartOwnership: { range: [2, 4, 0, 2, 5, 0], used: false, dirty: true, selfEqual: true },
     value: 21,
     changed: 34,
     formula: "=D6+1",

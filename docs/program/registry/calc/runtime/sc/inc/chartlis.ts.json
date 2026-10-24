@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/chartlis.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+        "apps/office/e2e/calc/clipboard-copy.spec.ts"
+      ],
+      "justification": "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScChartListener"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/chartlis.hxx",
+      "upstreamSymbols": [
+        "ScChartListener"
+      ]
+    }
+  }
+}
