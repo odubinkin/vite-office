@@ -69,12 +69,14 @@ export function WriterDialogPresenter({
 
       {request?.request.kind !== "hyperlink" ? null : (
         <WriterHyperlinkDialog
+          key={request.id}
           {...(request.request.initialHyperlink === undefined
             ? {}
             : { initialHyperlink: request.request.initialHyperlink })}
           onCancel={
-            /** Cancels the exact shell-owned dialog request. @returns Nothing. */ () => {
+            /** Cancels the exact shell-owned dialog request and returns document focus. @returns Nothing. */ () => {
               controller.Cancel(request.id);
+              focusDocument();
             }
           }
           onSubmit={
@@ -84,6 +86,7 @@ export function WriterDialogPresenter({
                 hyperlink,
                 text,
               });
+              focusDocument();
             }
           }
         />

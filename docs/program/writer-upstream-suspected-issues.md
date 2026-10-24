@@ -1076,3 +1076,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/doc/docbm.cxx`, `MarkManager::getUniqueMarkName`.
 - Observation: after a collision,the candidate string starts empty and the loop runs only while the cached signed counter is below INT32_MAX. A cache already at INT32_MAX returns empty. At INT32_MAX-1,a colliding final candidate is returned when the counter reaches the bound. Reaching these cache values requires billions of allocations and is not practical ordinary document behavior;no native GUI defect is claimed.
 - Preservation: retain loop,cache update and return values in the extracted normal naming helper. Direct helper tests use explicitly artificial counter values to preserve coverage;they do not claim these states are practically reachable.
+
+### WRITER088 — Internet query removal also truncates a question mark inside a fragment
+
+- Source: pinned `cui/source/dialogs/hyperlinkinternettabpage.cxx`, `HyperlinkInternetTP::RemoveQueryString`.
+- Observation: the handler finds the first literal `?` without checking for a preceding `#`. Thus `https://example.test/a#fragment?keep` becomes `https://example.test/a#fragment`, even though the question mark is inside the URI fragment. A following hash and its suffix are preserved literally. This is a source control-handler observation,not a confirmed desktop defect after all native URL normalization paths.
+- Preservation: retain literal string slicing and source event/session preference behavior. Tests cover this ordinary string input;using `URL.search` would change the source contract.

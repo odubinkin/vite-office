@@ -293,3 +293,41 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     shell.GetDocShell().Close();
   });
 });
+
+it("edits common fields from the insertion dialog without inserting the hidden empty Text value", /** Existing native link range remains owned by the real core action and history. @returns Completion. */ async () => {
+  const { dialogs, runValue, shell } = createFixture();
+  shell.Insert("Linked");
+  const node = shell.GetActiveParagraph();
+  shell.SetPaM(new SwPosition(node, 6), new SwPosition(node, 0));
+  shell.SetHyperlink({ url: "https://example.test/old", name: " Old ", targetFrame: "_blank" });
+  shell.SetPaM(new SwPosition(node, 3));
+  const change = runValue(WRITER_COMMAND_IDS.hyperlinkDialog) as Promise<boolean>;
+  const request = dialogs.GetSnapshot();
+  if (request === undefined || request.request.kind !== "hyperlink")
+    throw Error("Missing actual hyperlink request");
+  expect(request.request.initialHyperlink).toMatchObject({ name: " Old ", targetFrame: "_blank" });
+  dialogs.Complete(request.id, {
+    hyperlink: { url: "https://example.test/new", name: "  ", targetFrame: " Custom " },
+    text: "",
+  });
+  expect(await change).toBe(true);
+  expect(node.GetText()).toBe("Linked");
+  expect(shell.GetTextShell().GetHyperlinkAtCursor()).toMatchObject({
+    url: "https://example.test/new",
+    name: "  ",
+    targetFrame: " Custom ",
+  });
+  shell.Undo();
+  expect(node.GetText()).toBe("Linked");
+  expect(shell.GetTextShell().GetHyperlinkAtCursor()).toMatchObject({
+    name: " Old ",
+    targetFrame: "_blank",
+  });
+  shell.Redo();
+  expect(node.GetText()).toBe("Linked");
+  expect(shell.GetTextShell().GetHyperlinkAtCursor()).toMatchObject({
+    name: "  ",
+    targetFrame: " Custom ",
+  });
+  shell.GetDocShell().Close();
+});

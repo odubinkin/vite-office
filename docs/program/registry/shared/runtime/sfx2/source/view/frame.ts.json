@@ -23,17 +23,19 @@
         "apps/office/src/sfx2/source/control/request.test.ts#carries structured UNO arguments in SfxUnoAnyItem",
         "vendor/libreoffice-reference/sfx2/source/view/frame.cxx#SfxUnoAnyItem::QueryValue"
       ],
-      "justification": "The implemented SfxUnoAnyItem equality now follows the pinned always-false operator and the class lives at its source owner. JavaScript object/UNO Any copying and broader request-value semantics remain unverified.",
+      "justification": "The implemented SfxUnoAnyItem equality now follows the pinned always-false operator and the class lives at its source owner. JavaScript object/UNO Any copying and broader request-value semantics remain unverified. TaskH0Q3NZ adds consumed SfxFrame::GetDefaultTargetList append order including empty No Target;actual native frame/window lifecycle remains unrepresented.",
       "knownViolations": [],
       "localSymbols": [
-        "SfxUnoAnyItem"
+        "SfxUnoAnyItem",
+        "SfxFrame"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sfx2/source/view/frame.cxx",
       "upstreamSymbols": [
         "SfxUnoAnyItem",
         "SfxUnoAnyItem::Clone",
-        "SfxUnoAnyItem::operator=="
+        "SfxUnoAnyItem::operator==",
+        "SfxFrame::GetDefaultTargetList"
       ]
     }
   }

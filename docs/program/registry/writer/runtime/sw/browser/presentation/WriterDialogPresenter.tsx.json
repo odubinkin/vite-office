@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterDialogPresenter.tsx#WriterDialogPresenter"
       ],
-      "justification": "TaskXBHM4Z extracts actual shell-owned hyperlink,bookmark,break and metric-aware page-style request rendering from WriterWorkbench under the unchanged1000-line limit. The actual WriterDialogController and immutable request ID/payload remain authoritative;no second model,compatibility facade or native controller is introduced. TaskQZAHNT: Actual live bookmark names and frame operation port allow native immediate actions without completing the pending request or creating a second mark store.",
+      "justification": "TaskXBHM4Z extracts actual shell-owned hyperlink,bookmark,break and metric-aware page-style request rendering from WriterWorkbench under the unchanged1000-line limit. The actual WriterDialogController and immutable request ID/payload remain authoritative;no second model,compatibility facade or native controller is introduced. TaskQZAHNT: Actual live bookmark names and frame operation port allow native immediate actions without completing the pending request or creating a second mark store. TaskH0Q3NZ keys original hyperlink requests by identity and returns accepted/cancelled hyperlink focus through the actual mounted document port.",
       "knownViolations": [],
       "localSymbols": [
         "WriterDialogPresenter"

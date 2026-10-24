@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cui/source/dialogs/hyperlinkinternettabpage.ts",
+    "status": "mapped",
+    "upstreamPath": "cui/source/dialogs/hyperlinkinternettabpage.cxx",
+    "localSymbols": [
+      "HyperlinkInternetTP"
+    ],
+    "upstreamSymbols": [
+      "HyperlinkInternetTP::RemoveQueryString"
+    ],
+    "preservedResponsibilities": [
+      "Consumed original Internet query-removal string slicing,entry-change/toggle events and namespace-session preference including cancelled dialogs. Browser URL parsing,protocol normalization,clipboard,mark window,complete hyperlink common fields and native widget services remain unported or unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete native Internet URL,clipboard,mark-window and widget services."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/dialogs/hyperlinkinternettabpage.ts",
+          "marker": "HyperlinkInternetTP"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/dialogs/hyperlinkinternettabpage.cxx",
+          "marker": "HyperlinkInternetTP::RemoveQueryString"
+        }
+      ]
+    }
+  }
+}

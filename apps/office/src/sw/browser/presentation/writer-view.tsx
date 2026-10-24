@@ -808,7 +808,7 @@ export function WriterWorkbench({
       ) : null}
       <WriterDialogPresenter
         focusDocument={
-          /** Returns closed bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
+          /** Returns closed hyperlink/bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
             (editingHostRef.current as HTMLElement).focus()
         }
         bookmarkNames={view.GetWrtShell().GetTextShell().GetBookmarkNames()}

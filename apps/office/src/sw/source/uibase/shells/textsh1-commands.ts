@@ -204,13 +204,19 @@ export function createWriterTextCommandRegistry(
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
         const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
         if (args?.hyperlink !== undefined) return target.SetHyperlink(args.hyperlink, args.text);
+        const initialHyperlink = target.GetHyperlinkAtCursor();
         return dialogController
-          .RequestHyperlinkDialog(WRITER_COMMAND_IDS.hyperlinkDialog, target.GetHyperlinkAtCursor())
+          .RequestHyperlinkDialog(WRITER_COMMAND_IDS.hyperlinkDialog, initialHyperlink)
           .then(
             /** Applies only an accepted controller result. @param result - Typed dialog fields or cancellation. @returns Whether Writer changed. */ (
               result,
             ) =>
-              result === undefined ? false : target.SetHyperlink(result.hyperlink, result.text),
+              result === undefined
+                ? false
+                : target.SetHyperlink(
+                    result.hyperlink,
+                    initialHyperlink === undefined ? result.text : undefined,
+                  ),
           );
       },
       /** Exposes current hyperlink metadata to the dialog presenter. @returns Hyperlink or undefined. */

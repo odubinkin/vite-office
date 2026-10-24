@@ -16,7 +16,7 @@
       "WriterHyperlinkDialogProps",
       "WriterHyperlinkDialog"
     ],
-    "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+    "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner. TaskH0Q3NZ exposes editable native target defaults/custom targets,raw Name,Internet immediate query toggle/session preference,instance ref focus and Escape;existing accepted-request lifecycle and smart-URL handling remain bounded.",
     "responsibilities": [
       "Renders the accessible browser counterpart of LibreOffice Writer's hyperlink create and edit dialog."
     ],
