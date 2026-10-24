@@ -1,10 +1,11 @@
 ---
 id: "202610241710-Z2BZNW"
 title: "Canonize Writer paragraph split widow and orphan controls"
-status: "DOING"
+result_summary: "Connected native paragraph split widow and orphan controls to existing attributes"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Native definite-state reset/handler order,bounds,sensitivity asymmetry,inactive numbers and changed-output semantics are reused by actual Paragraph requests. Existing core/history/filter ownership remains authoritative;source suspicion documented as WRITER090."
     - "Strict2owner100coverage,14focused cases,52consumer cases and2production Chromium1280/390 cases pass. Real cancellation,undo/redo and ODT round-trip verified;declared gates pass after final format correction without suppression or parity promotion."
-commit: null
+commit:
+  hash: "14f54f1d5de0394e8b3f696106f1d64885cc3d83"
+  message: "🖋️ Z2BZNW writer: connect native paragraph split widow and orphan controls"
 comments:
   -
     author: "CODER"
     body: "Start: connect source paragraph split/widow/orphan controls to actual existing attributes;verify and close first of two tasks."
+  -
+    author: "CODER"
+    body: "Verified: represented native paragraph split widow and orphan control contracts pass strict new-owner100coverage,related tests,production Chromium and actual undo/redo/ODT. Source asymmetry documented and preserved. First of two tasks closed;continue one keyboard/focus task before pausing goal."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14focused cases,strict2owner100coverage S53 B48 F14 L46;52related cases;2production Chromium cases with actual undo/redo/ODT,screenshot inspection and no errors;build and declared gates pass after format correction. Close first of two tasks."
+  -
+    type: "status"
+    at: "2026-10-24T17:17:23.152Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: represented native paragraph split widow and orphan control contracts pass strict new-owner100coverage,related tests,production Chromium and actual undo/redo/ODT. Source asymmetry documented and preserved. First of two tasks closed;continue one keyboard/focus task before pausing goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T17:16:07.463Z"
+doc_updated_at: "2026-10-24T17:17:23.153Z"
 doc_updated_by: "CODER"
 description: "First of exactly two tasks after J1K3KF. Connect existing keepTogether/widow/orphan core attributes through consumed native SvxExtParagraphTabPage control rules,source numeric bounds,checkboxes,handler-order sensitivity and changed-output semantics. Only writer checkout/branch,up to24primary implementation/test/doc paths plus paired records. No mixed/HTML/full textflow service port,network,other task or full suite. Task6after checkpoint. Close first task then execute one keyboard/dialog-focus task and pause goal."
 sections:
@@ -109,6 +122,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task commits;retain earlier work and other tasks."
   Findings: "Source definite-state handler order and changed-output behavior preserved without a second document model;old inverse checkbox labels were migrated to native Allow to split paragraph while core expectations remain unchanged. WRITER090 documents source asymmetric off-handler sensitivity and numeric rows remaining sensitive when split checkboxes disable. Strict100new-owner coverage,actual kernel/history/ODT and production browser evidence pass. Initial new browser test formatting needed a second formatting pass;final scoped check passed. Full mixed/HTML and other textflow services remain outside this leaf;no broad parity promotion,network or full suite. First of two requested tasks;one formatting keyboard/focus task follows."
+extensions:
+  implementation_commit:
+    hash: "14f54f1d5de0394e8b3f696106f1d64885cc3d83"
+    message: "🖋️ Z2BZNW writer: connect native paragraph split widow and orphan controls"
 id_source: "generated"
 ---
 ## Summary
