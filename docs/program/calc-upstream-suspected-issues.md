@@ -3887,3 +3887,9 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpAdjustFormatCodeDefault`.
 - The comment promises one default for a format-code group. The MEDIUM arm records the latest index but does not clear earlier medium defaults;the final assignment enables the latest default without disabling its predecessors. Duplicate-medium input therefore retains multiple defaults.
 - Optional locale-data diagnostics report duplicate defaults but do not repair them. This may rely on valid source locale catalogs rather than cause a current UI defect. Preserve the original algorithm and test duplicate-medium input instead of silently normalizing it.
+
+### CALC-273 — Additional-format insertion range guard cannot reject a uint32 position
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpInsertFormat`.
+- The additional-format branch computes `nCLOffset = nPos - (nPos % SV_COUNTRY_LANGUAGE_OFFSET)` and subsequently checks `nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET`. For every uint32 `nPos`,the difference is exactly its remainder modulo10000 and is therefore between0 and9999. The guard cannot report "too many format codes" for a valid argument.
+- The caller's additional-format loop has a separate block-capacity check;this observation does not establish an active UI defect. The port preserves the same selection/insertion results and documents the unreachable guard proof instead of inventing an input outside the unsigned argument domain or changing the offset calculation.

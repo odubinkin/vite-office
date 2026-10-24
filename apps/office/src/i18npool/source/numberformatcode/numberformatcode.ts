@@ -9,6 +9,7 @@ import {
   type NumberFormatCodeAddress,
 } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import type { FormatElementAddress } from "../../../offapi/com/sun/star/i18n/FormatElement";
+import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
 import * as Type from "../../../offapi/com/sun/star/i18n/KNumberFormatType";
 import * as Usage from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
 import { getLocaleAllFormats } from "../localedata/localedata";
@@ -106,7 +107,7 @@ function containerToSequence(values: NumberFormatCode[]): Sequence<NumberFormatC
 }
 
 /** Original consumed XNumberFormatCode service owner;the actual embedded LocaleData field binding replaces only native service-manager lookup. */
-export class NumberFormatCodeMapper {
+export class NumberFormatCodeMapper implements XNumberFormatCode {
   private readonly m_aFormatElementCache: [Locale, Sequence<FormatElementAddress>][] = [];
   /** Original default selection checks default,type and usage in source order. @param type - Native short type. @param usage - Native short usage. @param locale - Borrowed original locale. @returns Owned selected value or original all-zero/empty struct. */
   getDefault(type: number, usage: number, locale: LocaleConstReference): NumberFormatCode {

@@ -202,10 +202,10 @@ it("owns original locale and case-mapping dependencies without browser or revers
     expect(isForbiddenModuleEdge(dependency, "i18nutil")).toBe(true);
   }
   // Original transliteration.hxx consumes the generated IDL enum, whose hdl includes SAL types/sentinel.
-  expect(isForbiddenModuleEdge("offapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "offapi")).toBe(true);
   // Original cppumaker normal enum getters use CPPU static type initialization.
-  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(false);
+  for (const target of ["sal", "cppu", "udkapi"])
+    expect(isForbiddenModuleEdge("offapi", target)).toBe(false);
   for (const owner of ["udkapi", "i18nutil", "offapi"])
     for (const dependency of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
@@ -565,7 +565,7 @@ it("permits Calc attribute Any transport while protecting reverse and browser bo
 it("keeps original enum extraction below SVL and Calc without reverse or browser edges", /** Checks exact native helper dependencies. @returns Nothing. */ () => {
   for (const target of ["comphelper", "cppu"])
     expect(isForbiddenModuleEdge("svl", target)).toBe(false);
-  for (const target of ["cppu", "udkapi"])
+  for (const target of ["sal", "cppu", "udkapi"])
     expect(isForbiddenModuleEdge("comphelper", target)).toBe(false);
   for (const target of ["sc", "sw", "svl", "framework"])
     expect(isForbiddenModuleEdge("comphelper", target)).toBe(true);

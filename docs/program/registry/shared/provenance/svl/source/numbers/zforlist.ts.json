@@ -8,17 +8,28 @@
     "upstreamPath": "svl/source/numbers/zforlist.cxx",
     "localSymbols": [
       "ImpGetFormatCodeIndex",
-      "ImpAdjustFormatCodeDefault"
+      "ImpAdjustFormatCodeDefault",
+      "SvNFFormatData",
+      "generateStandardNumberFormat"
     ],
     "upstreamSymbols": [
       "SvNFFormatData::ImpGetFormatCodeIndex",
-      "SvNFFormatData::ImpAdjustFormatCodeDefault"
+      "SvNFFormatData::ImpAdjustFormatCodeDefault",
+      "SvNFFormatData::SvNFFormatData",
+      "SvNFFormatData::GetEntry",
+      "SvNFFormatData::GetFormatEntry",
+      "SvNFFormatData::GetType",
+      "SvNFFormatData::ImpGetCLOffset",
+      "SvNFFormatData::ImpIsEntry",
+      "SvNFFormatData::ImpInsertFormat",
+      "SvNFFormatData::ImpGenerateFormats"
     ],
     "preservedResponsibilities": [
-      "Task76 ports Original exact-index/default/currency-decimal/currency-integer/zero selection and actual empty Sequence assignment with native default-initialized NumberFormatCode and locale decimal separator. Default adjustment mutates original compound storage after caller COW,retains medium/long ordering and duplicate-medium flags CALC-272. Decimal projects only the consumed current-language field;optional LocaleData diagnostics are not represented. Full formatter constructor/table and document paste remain pending."
+      "Task76 ports Original exact-index/default/currency-decimal/currency-integer/zero selection and actual empty Sequence assignment with native default-initialized NumberFormatCode and locale decimal separator. Default adjustment mutates original compound storage after caller COW,retains medium/long ordering and duplicate-medium flags CALC-272. Decimal projects only the consumed current-language field;optional LocaleData diagnostics are not represented. Full formatter constructor/table and document paste remain pending.",
+      "Task76 adds the actual SvNFFormatData table owner,exact native key/type lookup,locale-block lookup and case-sensitive ordered same-language search. ImpInsertFormat consumes real scanner/ActLnge projections and generated NumberFormatCode values;it preserves native empty-code failure,duplicate-code/position disposal,default marking and owned comment assignment. Currency/prefix/other pattern services remain explicit unported admission boundaries. The General-only phase of ImpGenerateFormats uses the real XNumberFormatCode interface and source mapper,actual Sequence COW/default policy,scanner and compiled entries,then forces NUMBER/standard and overwrites the shared nThousand field with builtin limit100. It does not replace or claim the remaining builtin generator or a complete SvNumberFormatter service. Native object fields retain MaxCLOffset0,missing-currency sentinel,bNoZerofalse and empty format/default-key maps. Numeric sorting preserves consumed std::map traversal;physical STL tree destructor order is not represented and admitted entries have no destructor callbacks. CALC-273 documents the provably unreachable position-offset>=10000 guard after offset=position-position%10000 for all uint32 positions;observable source insertion results are preserved. Full language/formatter construction,remaining builtins,document paste/history and task74 remain pending."
     ],
     "omittedResponsibilities": [
-      "Full formatter/scanner/format table ownership,custom patterns,non-NUMBER types,NatNum and complete clipboard/paste/UI remain unported."
+      "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."
     ],
     "evidence": {
       "local": [
@@ -29,12 +40,20 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforlist.test.ts",
           "marker": "ImpGetFormatCodeIndex"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.ts",
+          "marker": "generateStandardNumberFormat"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
           "marker": "SvNFFormatData::ImpGetFormatCodeIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/nfengine.hxx",
+          "marker": "class SVL_DLLPUBLIC SvNFFormatData"
         }
       ]
     }

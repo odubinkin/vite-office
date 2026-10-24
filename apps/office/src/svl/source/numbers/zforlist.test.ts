@@ -255,3 +255,187 @@ it("selects actual mapper General without replacing its compiled Sequence owner"
     decimal.dispose();
   }
 });
+
+import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
+import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+import { SvNumberformat } from "./zformat";
+import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
+/** Actual source-backed fields/owners used by native table operations;no service peer is fabricated. @returns Owned native values. */
+function tableValues() {
+  const languageText = unicode("de"),
+    country = unicode("DE"),
+    empty = unicode(""),
+    locale = new Locale(languageText, country, empty),
+    mapper = new NumberFormatCodeMapper(),
+    code = mapper.getFormatCode(0, locale),
+    name = extractStandardGeneralName(code.Code),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish),
+    decimal = unicode(","),
+    table = new SvNFFormatData();
+  return {
+    locale,
+    mapper,
+    code,
+    scanner,
+    decimal,
+    table,
+    language: [0x0407] as [number],
+    /** Releases actual owners in consumer-before-provider order. @returns Nothing. */
+    dispose() {
+      table.dispose();
+      scanner.dispose();
+      decimal.dispose();
+      name.dispose();
+      code.dispose();
+      mapper.dispose();
+      locale.dispose();
+      languageText.dispose();
+      country.dispose();
+      empty.dispose();
+    },
+  };
+}
+
+it("generates actual standard NUMBER entry through the mapper,scanner and owning table", /** Real source General phase overwrites its shared nThousand field with builtin limit100. @returns Nothing. */ () => {
+  const values = tableValues(),
+    out = unicode(""),
+    comment = unicode("source comment");
+  try {
+    expect(values.table.GetEntry(0)).toBeNull();
+    expect(values.table.GetType(0)).toBe(SvNumFormatType.UNDEFINED);
+    expect(values.table.ImpGetCLOffset(0x0407)).toBe(10000);
+    generateStandardNumberFormat(
+      values.table,
+      values.mapper,
+      values.locale,
+      values.scanner,
+      values.language,
+      values.decimal,
+      0,
+    );
+    const entry = values.table.GetEntry(0) as SvNumberformat;
+    expect(values.table.GetFormatEntry(0x100000000)).toBe(entry);
+    expect(entry.GetType()).toBe(16);
+    expect(values.table.GetType(0)).toBe(16);
+    expect(entry.IsStandard()).toBe(true);
+    expect(text(entry.GetFormatstring())).toBe("Standard");
+    expect(entry.GetLastInsertKey()).toBe(100);
+    expect(values.table.ImpGetCLOffset(0x10407)).toBe(0);
+    expect(values.table.ImpGetCLOffset(0x0409)).toBe(10000);
+    expect(entry.GetOutputString(12.5, out, [null], 65535, 44)).toBe(false);
+    expect(text(out)).toBe("12,5");
+    entry.SetComment(comment);
+    const copy = new SvNumberformat(entry);
+    try {
+      expect(text(copy.GetComment())).toBe("source comment");
+      expect(copy.GetLastInsertKey()).toBe(100);
+    } finally {
+      copy.dispose();
+    }
+    entry.SetLastInsertKey(65537);
+    expect(entry.GetLastInsertKey()).toBe(1);
+    entry.SetType(1);
+    expect(values.table.GetType(0)).toBe(1);
+    entry.SetType(256);
+    expect(values.table.GetType(0)).toBe(256);
+    entry.SetType(16);
+    generateStandardNumberFormat(
+      values.table,
+      values.mapper,
+      values.locale,
+      values.scanner,
+      values.language,
+      values.decimal,
+      0,
+    );
+    expect(values.table.GetEntry(0)).toBe(entry);
+    expect(entry.GetLastInsertKey()).toBe(1);
+  } finally {
+    out.dispose();
+    comment.dispose();
+    values.dispose();
+  }
+});
+
+it("keeps insertion,duplicate,reserved-index and failure ownership contracts", /** Only actual generated struct values and scanner states are passed to the table. @returns Nothing. */ () => {
+  const values = tableValues(),
+    title = unicode("Named General"),
+    empty = unicode(""),
+    extra = new NumberFormatCode(values.code),
+    emptyCode = new NumberFormatCode(values.code);
+  try {
+    values.code.Default = false;
+    values.code.DefaultName = title;
+    const entry = values.table.ImpInsertFormat(
+      values.scanner,
+      values.language,
+      values.code,
+      0,
+    ) as SvNumberformat;
+    expect(entry.IsStandard()).toBe(false);
+    expect(text(entry.GetComment())).toBe("Named General");
+    const refs = values.code.Code.pData.refCount;
+    expect(
+      values.table.ImpInsertFormat(values.scanner, values.language, values.code, 0),
+    ).toBeNull();
+    expect(values.code.Code.pData.refCount).toBe(refs);
+    extra.Index = 62;
+    expect(values.table.ImpInsertFormat(values.scanner, values.language, extra, 101)).toBeNull();
+    emptyCode.Code = empty;
+    expect(values.table.ImpInsertFormat(values.scanner, values.language, emptyCode, 5)).toBeNull();
+    extra.Index = 51;
+    expect(
+      /** Original reserved-index assertion. @returns Insertion result. */ () =>
+        values.table.ImpInsertFormat(values.scanner, values.language, extra, 5),
+    ).toThrow(/reserved/);
+    extra.Index = 12;
+    extra.Usage = 8;
+    expect(
+      /** Explicit unported currency admission. @returns Insertion result. */ () =>
+        values.table.ImpInsertFormat(values.scanner, values.language, extra, 5),
+    ).toThrow(/currency/);
+    extra.Index = 62;
+    extra.Usage = 4;
+    expect(
+      values.table.ImpInsertFormat(values.scanner, values.language, extra, 10001),
+    ).not.toBeNull();
+    expect(values.table.ImpIsEntry(extra.Code, 10000, 0x0407)).toBe(NUMBERFORMAT_ENTRY_NOT_FOUND);
+    expect(values.table.ImpInsertFormat(values.scanner, values.language, extra, -1)).not.toBeNull();
+    expect(values.table.GetEntry(0xffffffff)).not.toBeNull();
+  } finally {
+    emptyCode.dispose();
+    extra.dispose();
+    title.dispose();
+    empty.dispose();
+    values.dispose();
+  }
+});
+
+it("searches the exact start key in numeric order and stops at a different language", /** Source std::map traversal is independent of JavaScript insertion order and does not lower_bound a missing key. @returns Nothing. */ () => {
+  const values = tableValues(),
+    distinct = unicode("STANDARD"),
+    missing = unicode("missing");
+  try {
+    const other = new NumberFormatCode(values.code);
+    try {
+      other.Code = distinct;
+      expect(
+        values.table.ImpInsertFormat(values.scanner, values.language, other, 2),
+      ).not.toBeNull();
+      expect(
+        values.table.ImpInsertFormat(values.scanner, values.language, values.code, 0),
+      ).not.toBeNull();
+      expect(values.table.ImpIsEntry(distinct, 0, 0x0407)).toBe(2);
+      expect(values.table.ImpIsEntry(missing, 0, 0x0407)).toBe(NUMBERFORMAT_ENTRY_NOT_FOUND);
+      expect(values.table.ImpInsertFormat(values.scanner, [0x0409], values.code, 1)).not.toBeNull();
+      expect(values.table.ImpIsEntry(distinct, 0, 0x0407)).toBe(NUMBERFORMAT_ENTRY_NOT_FOUND);
+      expect(values.table.ImpIsEntry(distinct, 2, 0x10407)).toBe(2);
+    } finally {
+      other.dispose();
+    }
+  } finally {
+    distinct.dispose();
+    missing.dispose();
+    values.dispose();
+  }
+});

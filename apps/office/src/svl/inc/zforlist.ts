@@ -33,4 +33,11 @@ export const NfIndexTableOffset = {
   NF_CURRENCY_1000DEC2_CCC: 16,
   NF_CURRENCY_1000DEC2_DASHED: 17,
   NF_CURRENCY_END: 17,
+  NF_INDEX_TABLE_RESERVED_START: 51,
+  NF_INDEX_TABLE_ENTRIES: 62,
 } as const;
+
+/** Original builtin entry limit per locale block. */
+export const SV_MAX_COUNT_STANDARD_FORMATS = 100;
+/** Original missing-entry unsigned32 sentinel. */
+export const NUMBERFORMAT_ENTRY_NOT_FOUND = 0xffffffff;

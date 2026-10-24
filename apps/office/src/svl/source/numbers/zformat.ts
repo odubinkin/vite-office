@@ -161,6 +161,7 @@ export class SvNumberformat {
     new ImpSvNumFor(),
   ];
   private readonly sFormatstring = new OUString();
+  private readonly sComment = new OUString();
   private bStandard = false;
   private eType: number = SvNumFormatType.DEFINED;
   private readonly language: number;
@@ -177,6 +178,7 @@ export class SvNumberformat {
       this.rScan = args.length === 2 ? args[1] : source.rScan;
       this.language = source.language;
       this.sFormatstring.assign(source.sFormatstring);
+      this.sComment.assign(source.sComment);
       this.eType = source.eType;
       this.bStandard = source.bStandard;
       for (let index = 0; index < 4; ++index)
@@ -206,6 +208,34 @@ export class SvNumberformat {
   /** Original built-in generation marks the compiled standard entry after successful insertion. @returns Nothing. */
   SetStandard(): void {
     this.bStandard = true;
+  }
+  /** Original complete type flags. @returns Native type. */
+  GetType(): number {
+    return this.eType;
+  }
+  /** Original type assignment. @param type - Original flags. @returns Nothing. */
+  SetType(type: number): void {
+    this.eType = type;
+  }
+  /** Original standard-entry flag. @returns Native standard status. */
+  IsStandard(): boolean {
+    return this.bStandard;
+  }
+  /** Original comment assignment preserves the owned member identity. @param comment - Original format name/comment. @returns Nothing. */
+  SetComment(comment: OUStringConstReference): void {
+    this.sComment.assign(comment);
+  }
+  /** Original borrowed comment member. @returns Actual field. */
+  GetComment(): OUStringConstReference {
+    return this.sComment;
+  }
+  /** Original formatter-private field access;the C++ friend access tag is erased,not a new state or policy. Only the format table/formatter may use this on standard format0/10000/etc. @returns Last allocated key within the locale block. */
+  GetLastInsertKey(): number {
+    return (this.NumFor[0] as ImpSvNumFor).Info().nThousand;
+  }
+  /** Original formatter-private write to the standard entry's shared nThousand field. @param key - Native uint16 last key. @returns Nothing. */
+  SetLastInsertKey(key: number): void {
+    (this.NumFor[0] as ImpSvNumFor).Info().nThousand = key & 65535;
   }
   /** Original native type with the DEFINED flag removed. @returns Format flags. */
   GetMaskedType(): number {
@@ -241,6 +271,7 @@ export class SvNumberformat {
   }
   /** Original compiled entry member destruction. @returns Nothing. */
   dispose(): void {
+    this.sComment.dispose();
     this.sFormatstring.dispose();
     for (let index = this.NumFor.length - 1; index >= 0; --index)
       (this.NumFor[index] as ImpSvNumFor).dispose();

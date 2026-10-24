@@ -58,7 +58,12 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     },
     {
       module: "src/svl/source/numbers/zforlist.ts",
-      names: ["ImpGetFormatCodeIndex", "ImpAdjustFormatCodeDefault"],
+      names: [
+        "ImpGetFormatCodeIndex",
+        "ImpAdjustFormatCodeDefault",
+        "SvNFFormatData",
+        "generateStandardNumberFormat",
+      ],
     },
     {
       module: "src/svl/source/numbers/zforscan.ts",
@@ -425,27 +430,39 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         compiled.SetStandard();
         compiled.GetOutputString(0.125, compiledOut, [null], 65535, 44);
         const compiledCopy = new n.SvNumberformat(compiled),
-          formatFoundation = {
-            compiledCheck: compiledCheck[0],
-            compiledCode: n.text(compiledCopy.GetFormatstring()),
-            compiledType: compiledCopy.GetMaskedType(),
-            compiledOutput: n.text(compiledOut),
-            selectedFormat,
-            standardName: n.text(standardName),
-            general: n.text(general),
-            input: n.text(input),
-            correctedRound: n.round(16.83 * 650),
-            localeGeneral: numberFormats.find(
-              /** Reads the native General format record. @param row - Original value row. @returns Match. */
-              (row) => row.formatIndex === 0,
-            )?.formatCode,
-            localeFormats: numberFormats.length,
-            mappedCode: n.text(mapped.Code),
-            mappedType: mapped.Type,
-            mappedUsage: mapped.Usage,
-            mappedCount: mappedSequence.getLength(),
-            mappedFirst: n.text(n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(0)).Code),
-          };
+          formatTable = new n.SvNFFormatData();
+        n.generateStandardNumberFormat(formatTable, mapper, locale, scanner, [0x0407], decimal, 0);
+        const tableEntry = formatTable.GetEntry(0);
+        if (!tableEntry) throw Error("Missing actual generated General entry");
+        tableEntry.GetOutputString(12.5, compiledOut, [null], 65535, 44);
+        const tableOutput = n.text(compiledOut);
+        compiledCopy.GetOutputString(0.125, compiledOut, [null], 65535, 44);
+        const formatFoundation = {
+          tableOutput,
+          tableType: formatTable.GetType(0),
+          tableLastKey: tableEntry.GetLastInsertKey(),
+          tableStandard: tableEntry.IsStandard(),
+          compiledCheck: compiledCheck[0],
+          compiledCode: n.text(compiledCopy.GetFormatstring()),
+          compiledType: compiledCopy.GetMaskedType(),
+          compiledOutput: n.text(compiledOut),
+          selectedFormat,
+          standardName: n.text(standardName),
+          general: n.text(general),
+          input: n.text(input),
+          correctedRound: n.round(16.83 * 650),
+          localeGeneral: numberFormats.find(
+            /** Reads the native General format record. @param row - Original value row. @returns Match. */
+            (row) => row.formatIndex === 0,
+          )?.formatCode,
+          localeFormats: numberFormats.length,
+          mappedCode: n.text(mapped.Code),
+          mappedType: mapped.Type,
+          mappedUsage: mapped.Usage,
+          mappedCount: mappedSequence.getLength(),
+          mappedFirst: n.text(n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(0)).Code),
+        };
+        formatTable.dispose();
         compiledCopy.dispose();
         compiledOut.dispose();
         compiled.dispose();
@@ -561,6 +578,10 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      tableOutput: "12,5",
+      tableType: 16,
+      tableLastKey: 100,
+      tableStandard: true,
       compiledCheck: 0,
       compiledCode: "Standard",
       compiledType: 16,

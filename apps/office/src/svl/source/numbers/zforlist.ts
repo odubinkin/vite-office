@@ -7,7 +7,20 @@ import {
 } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import * as Type from "../../../offapi/com/sun/star/i18n/KNumberFormatType";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import { NfIndexTableOffset as Offset } from "../../inc/zforlist";
+import {
+  NfIndexTableOffset as Offset,
+  SvNumFormatType,
+  SV_COUNTRY_LANGUAGE_OFFSET,
+  SV_MAX_COUNT_STANDARD_FORMATS,
+  NUMBERFORMAT_ENTRY_NOT_FOUND,
+} from "../../inc/zforlist";
+import { SvNumberformat } from "./zformat";
+import type { ImpSvNumberformatScan } from "./zforscan";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import type { NumberFormatCodeConstReference } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
+import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
+import { FIXED_NUMBER, CURRENCY } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
+
 /** Original declared initializer-list/sequence specialization. */
 const Codes = Sequence.specialize<NumberFormatCodeAddress>(
   cppu_detail_getUnoType_NumberFormatCode,
@@ -75,4 +88,148 @@ export function ImpAdjustFormatCodeDefault(formats: SequenceElements, count: num
   }
   if (selected === -1) selected = 0;
   NumberFormatCode.borrowed(formats.get(selected * 40) as NumberFormatCodeAddress).Default = true;
+}
+
+/** Original format-table owner;native fields are grouped solely to erase C++ friend access without inventing individual accessor APIs. Actual Map entries own actual parsed formats. Language generation,engine accessors and formatter services remain separate unported responsibilities. */
+export class SvNFFormatData {
+  private readonly fields = {
+    aFTable: new Map<number, SvNumberformat>(),
+    aDefaultFormatKeys: new Map<number, number>(),
+    MaxCLOffset: 0,
+    nDefaultSystemCurrencyFormat: NUMBERFORMAT_ENTRY_NOT_FOUND,
+    bNoZero: false,
+  };
+  /** Original exact-key lookup;native unsigned32 argument conversion is explicit. @param key - Format key. @returns Actual borrowed entry or null. */
+  GetEntry(key: number): SvNumberformat | null {
+    return this.fields.aFTable.get(key >>> 0) ?? null;
+  }
+  /** Original public const format lookup shares the same actual entry. @param key - Format key. @returns Borrowed entry or null. */
+  GetFormatEntry(key: number): SvNumberformat | null {
+    return this.GetEntry(key);
+  }
+  /** Original category query with missing UNDEFINED and masked ALL-to-DEFINED conversion. @param key - Native format key. @returns Native category. */
+  GetType(key: number): number {
+    const format = this.GetFormatEntry(key);
+    if (!format) return SvNumFormatType.UNDEFINED;
+    const type = format.GetMaskedType();
+    return type === SvNumFormatType.ALL ? SvNumFormatType.DEFINED : type;
+  }
+  /** Original locale-block search,including returning one block beyond MaxCLOffset on a miss. @param language - Native uint16 language. @returns Existing or next block offset. */
+  ImpGetCLOffset(language: number): number {
+    language &= 65535;
+    let offset = 0;
+    while (offset <= this.fields.MaxCLOffset) {
+      const format = this.GetFormatEntry(offset);
+      if (format && format.GetLanguage() === language) return offset;
+      offset += SV_COUNTRY_LANGUAGE_OFFSET;
+    }
+    return offset;
+  }
+  /** Original find-at-CLOffset then same-language ordered-map traversal. Sorting primitive keys preserves std::map ordering without replacing entry owners;an absent exact start key does not lower_bound to a later entry. @param code - Native exact case-sensitive string view. @param offset - Exact first key. @param language - Native uint16 language. @returns Matching key or native missing sentinel. */
+  ImpIsEntry(code: OUStringConstReference, offset: number, language: number): number {
+    offset >>>= 0;
+    language &= 65535;
+    const keys = [...this.fields.aFTable.keys()].sort(
+      /** Original sal_uInt32 map order. @param left - First key. @param right - Second key. @returns Numeric ordering. */ (
+        left,
+        right,
+      ) => left - right,
+    );
+    let index = keys.indexOf(offset);
+    while (index >= 0 && index < keys.length) {
+      const key = keys[index] as number,
+        format = this.fields.aFTable.get(key) as SvNumberformat;
+      if (format.GetLanguage() !== language) break;
+      if (format.GetFormatstring().equals(code)) return key;
+      ++index;
+    }
+    return NUMBERFORMAT_ENTRY_NOT_FOUND;
+  }
+  /** Original ImpInsertFormat General/NatNum0 path and additional-code duplicate check over actual compiled entries. Prepared scanner/ActLnge fields replace only their original language-data member access. Currency delimiter stripping,other pattern families and diagnostic-only checks are not admitted here. Native-number/input-number services are unconsumed on this path. @param scanner - Actual scanner. @param language - Original ActLnge in/out field. @param code - Borrowed generated struct. @param position - Original uint32 map key. @returns Borrowed inserted entry or null. */
+  ImpInsertFormat(
+    scanner: ImpSvNumberformatScan,
+    language: [number],
+    code: NumberFormatCodeConstReference,
+    position: number,
+  ): SvNumberformat | null {
+    position >>>= 0;
+    if (
+      Offset.NF_INDEX_TABLE_RESERVED_START <= code.Index &&
+      code.Index < Offset.NF_INDEX_TABLE_ENTRIES
+    )
+      throw new Error("reserved formatIndex assertion");
+    if (
+      code.Index < Offset.NF_INDEX_TABLE_RESERVED_START &&
+      code.Usage === CURRENCY &&
+      code.Index !== Offset.NF_CURRENCY_1000DEC2_CCC
+    )
+      throw new Error("Automatic currency format insertion is not implemented");
+    const codeString = new OUString(code.Code),
+      check: [number] = [0];
+    let format: SvNumberformat;
+    try {
+      format = new SvNumberformat(codeString, scanner, check, language);
+    } finally {
+      codeString.dispose();
+    }
+    if (check[0] !== 0) {
+      format.dispose();
+      return null;
+    }
+    if (code.Index >= Offset.NF_INDEX_TABLE_RESERVED_START) {
+      const offset = position - (position % SV_COUNTRY_LANGUAGE_OFFSET);
+      if (
+        this.ImpIsEntry(format.GetFormatstring(), offset, language[0]) !==
+        NUMBERFORMAT_ENTRY_NOT_FOUND
+      ) {
+        format.dispose();
+        return null;
+      }
+      // Native position-offset >=10000 guard is unreachable:offset is position-(position%10000),so the difference is in [0,9999] for every uint32 position.
+    }
+    if (this.fields.aFTable.has(position)) {
+      format.dispose();
+      return null;
+    }
+    this.fields.aFTable.set(position, format);
+    if (code.Default) format.SetStandard();
+    if (!code.DefaultName.isEmpty()) format.SetComment(code.DefaultName);
+    return format;
+  }
+  /** Original map member destruction releases every actual owned entry. Physical STL tree destruction order is not represented;the admitted entries have no destructor callbacks. @returns Nothing. */
+  dispose(): void {
+    for (const format of this.fields.aFTable.values()) format.dispose();
+    this.fields.aFTable.clear();
+  }
+}
+
+/** Original General-number phase of ImpGenerateFormats,not a replacement for the remaining builtin/table generator. The admitted scanner is in native non-conversion mode;actual prepared locale/scanner/language/decimal fields are supplied explicitly,without a fake SvNFLanguageData service. @param table - Actual owning format table. @param mapper - Actual source-code mapper. @param locale - Original locale. @param scanner - Actual prepared scanner. @param language - Original ActLnge field. @param decimal - Original decimal separator field. @param offset - Native locale block offset. @returns Nothing. */
+export function generateStandardNumberFormat(
+  table: SvNFFormatData,
+  mapper: XNumberFormatCode,
+  locale: LocaleConstReference,
+  scanner: ImpSvNumberformatScan,
+  language: [number],
+  decimal: OUStringConstReference,
+  offset: number,
+): void {
+  offset >>>= 0;
+  const formats = mapper.getAllFormatCode(FIXED_NUMBER, locale);
+  try {
+    ImpAdjustFormatCodeDefault(formats.getArray() as SequenceElements, formats.getLength());
+    const index = ImpGetFormatCodeIndex(formats, Offset.NF_NUMBER_STANDARD, decimal);
+    const standard = table.ImpInsertFormat(
+      scanner,
+      language,
+      NumberFormatCode.borrowed(formats.operatorIndex(index)),
+      (offset + Offset.NF_NUMBER_STANDARD) >>> 0,
+    );
+    if (standard) {
+      standard.SetType(SvNumFormatType.NUMBER);
+      standard.SetStandard();
+      standard.SetLastInsertKey(SV_MAX_COUNT_STANDARD_FORMATS);
+    }
+  } finally {
+    formats.dispose();
+  }
 }

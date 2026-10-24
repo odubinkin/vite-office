@@ -98,7 +98,8 @@ const allowedEdges = new Map([
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
-  ["offapi", new Set(["cppu", "sal"])],
+  // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
+  ["offapi", new Set(["cppu", "sal", "udkapi"])],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
