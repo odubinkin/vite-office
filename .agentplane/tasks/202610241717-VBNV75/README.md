@@ -1,10 +1,11 @@
 ---
 id: "202610241717-VBNV75"
 title: "Canonize Writer formatting dialog keyboard and focus lifetime"
-status: "DOING"
+result_summary: "Aligned formatting dialog keyboard tab navigation and frame focus lifetime"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual original tab/page draft and controller identity remain authoritative;native direction/shortcut/wrap decisions are consumed before spin keys. Paragraph native form,roving tabs/ARIA and deactivation preserve authored tab exchange. Page Style/Break mounted focus and all3dialog backdrop guards retain input ownership without global lookup,timer,async workaround or second model."
     - "Source-hash-bound final proof:49focused cases/8files,new source owner strict100coverage S12 B20 F1 L8,37related cases,4production Chromium1280/390 cases and15final gates pass. Actual Enter/Escape,cancel/accept,continued document typing,new hard-break paragraph,first-task history/ODT replay and current ODT export verified. Both screenshots inspected;large changed UI owners exercised without claiming whole-owner100coverage."
-commit: null
+commit:
+  hash: "28a06aa84062b0d6a17cd176fbb317230dcc4800"
+  message: "🖋️ VBNV75 writer: align formatting dialog keyboard and focus lifetime"
 comments:
   -
     author: "CODER"
     body: "Start: canonize native formatting dialog keyboard/tab/focus lifetime through actual requests;close second task then pause goal."
+  -
+    author: "CODER"
+    body: "Verified: native tab keyboard ownership,default form acceptance,Escape,modal backdrop focus and original keyed request/frame focus lifetime pass49focused cases,37related cases,4production Chromium cases and15final gates. New native key owner has strict100coverage. Both authorized tasks are complete;pause goal after clean-state check."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact-final49cases/8files;strict new tab owner100coverage S12 B20 F1 L8;37related cases/4files;4production Chromium1280/390 cases with modal backdrop/focus,Enter/Escape,retained tabs,document typing,history/ODT and screenshot inspection. Build and15/15final gates pass. Source hashes recorded;close second task and pause goal."
+  -
+    type: "status"
+    at: "2026-10-24T17:33:20.701Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native tab keyboard ownership,default form acceptance,Escape,modal backdrop focus and original keyed request/frame focus lifetime pass49focused cases,37related cases,4production Chromium cases and15final gates. New native key owner has strict100coverage. Both authorized tasks are complete;pause goal after clean-state check."
 doc_version: 3
-doc_updated_at: "2026-10-24T17:32:49.600Z"
+doc_updated_at: "2026-10-24T17:33:20.703Z"
 doc_updated_by: "CODER"
 description: "Second and last of exactly two tasks after J1K3KF. Connect consumed native tab navigation and formatting dialog keyboard/focus behavior for Paragraph,Page Style and Insert Break. Preserve tab deactivation/drafts and real request identity;remove Paragraph backdrop cancellation,add Escape/Enter where missing,return focus to actual frame. Only writer checkout/branch,up to24primary paths plus paired records. No new formatting/core features,network or full suite. Task7after checkpoint. Close this task then pause goal."
 sections:
@@ -118,6 +131,10 @@ sections:
     Paragraph backdrop cancellation was removed. Browser evidence exposed backdrop pointer focus escaping the modal,so actual background mouse-down now prevents default focus transfer in all3represented formatting dialogs,while child controls retain their input behavior. Escape then reaches the active modal and cancels only its original request.
     Initial browser fixtures had non-exact metric labels matching spin buttons and assumed a split paragraph retained the first paragraph accessible name;selectors now use exact spinbutton and actual Writer paragraph2 identities. A DOM-only diagnostic confirmed that hard-break acceptance already focused the real editing host and caret in paragraph2;no async focus workaround or kernel change was introduced. Diagnostic injection was removed from the final test. Earlier failures remain in original logs. An initial nonexistent tab-session filename filter was replaced by actual WriterNativeTabulatorDialog/native-tab-page-acceptance tests in the final run.
     Full VCL widget/modal/focus-trap platform services,other formatting features and entire large-owner coverage remain unported/unverified. No broad parity/status promotion,network,merge or full suite. Both requested tasks are implemented;finish this second task and pause goal.
+extensions:
+  implementation_commit:
+    hash: "28a06aa84062b0d6a17cd176fbb317230dcc4800"
+    message: "🖋️ VBNV75 writer: align formatting dialog keyboard and focus lifetime"
 id_source: "generated"
 ---
 ## Summary
