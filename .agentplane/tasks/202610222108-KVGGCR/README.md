@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 57
+revision: 61
 origin:
   system: "manual"
 depends_on:
@@ -15,7 +15,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-24T12:20:26.351Z"
+  updated_at: "2026-10-24T14:06:38.532Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -35,6 +35,9 @@ comments:
   -
     author: "CODER"
     body: "Start: resume human-approved200-path native clipboard/paste/history scope in calc;finish active76 and74 before full all-application tests,fixes,required100percent coverage,final closure and goal pause."
+  -
+    author: "CODER"
+    body: "Start: human-approved216-path extension for canonical native copy and actual UI Undo snapshot ownership;preserve all final verification and stop conditions."
 events:
   -
     type: "status"
@@ -57,14 +60,24 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: resume human-approved200-path native clipboard/paste/history scope in calc;finish active76 and74 before full all-application tests,fixes,required100percent coverage,final closure and goal pause."
+  -
+    type: "status"
+    at: "2026-10-24T14:06:38.925Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: human-approved216-path extension for canonical native copy and actual UI Undo snapshot ownership;preserve all final verification and stop conditions."
 doc_version: 3
-doc_updated_at: "2026-10-24T13:53:56.921Z"
+doc_updated_at: "2026-10-24T14:06:38.925Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
   Summary: "Implement the original internal clipboard/PasteFromClip path required by empty-marked AutoSum instead of a repeated-cell shortcut."
-  Scope: "Real clipboard/reset/shared pool lifetime,ScClipParam,default content-only single-cell clipboard fill through native contexts/stores and document/table copy,paste Undo/Redo and original marks/cursor rules required by task74 AutoSum. Up to200 source/test/registry/probe paths,human-approved2026-10-24;shared VCL scheduling and chart owners are permitted where consumed by native copy contracts. Preserve represented scalar/local-reference/aggregate/default-format profile and upstream defaults;OS clipboard,rich edit,drawings,notes,external/3D/matrix and nondefault paste services stay explicit. Only calc checkout/branch,no merges,network or restoration of deleted research references. Complete76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause;do not wait for10tasks or start78-80."
-  Plan: "Continue the approved native internal clipboard/default PasteFromClip and Undo/Redo implementation,then finish task74 AutoSum/formula-bar acceptance. Human explicitly approved expansion from160 to200 source/test/registry/probe paths on2026-10-24. Inspect exact AutoSum/Undo call paths and port only consumed native responsibilities;shared VCL Task/Timer/Idle/Scheduler and chart-listener collection are permitted when required by the original copy/geometry contracts. Preserve upstream owners,defaults,formula token identity and module boundaries;no fake service or alternate workbook. Keep all work in vite-office-calc branch calc;no merges,network or restoration of deleted reference caches. Existing verification requirements remain unchanged:Calc and changed-shared raw100,related tests,browser/Worker/ODS/history and all static/build/source gates. Finish already-active76 and74,then full all-application tests,fix failures/add missing scenarios,verify required100percent coverage,record final closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80."
+  Scope: "Real clipboard/reset/shared pool lifetime,ScClipParam,default content-only single-cell clipboard fill through native contexts/stores and document/table copy,paste Undo/Redo and original marks/cursor rules required by task74 AutoSum. Up to216 source/test/registry/probe paths,human-approved2026-10-24;shared VCL scheduling and chart owners are permitted where consumed by native copy contracts. Preserve represented scalar/local-reference/aggregate/default-format profile and upstream defaults;OS clipboard,rich edit,drawings,notes,external/3D/matrix and nondefault paste services stay explicit. Only calc checkout/branch,no merges,network or restoration of deleted research references. Complete76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause;do not wait for10tasks or start78-80."
+  Plan: |-
+    Continue the approved native internal clipboard/default PasteFromClip and Undo/Redo implementation,then finish task74 AutoSum/formula-bar acceptance. Human explicitly approved expansion from160 to200 source/test/registry/probe paths on2026-10-24. Inspect exact AutoSum/Undo call paths and port only consumed native responsibilities;shared VCL Task/Timer/Idle/Scheduler and chart-listener collection are permitted when required by the original copy/geometry contracts. Preserve upstream owners,defaults,formula token identity and module boundaries;no fake service or alternate workbook. Keep all work in vite-office-calc branch calc;no merges,network or restoration of deleted reference caches. Existing verification requirements remain unchanged:Calc and changed-shared raw100,related tests,browser/Worker/ODS/history and all static/build/source gates. Finish already-active76 and74,then full all-application tests,fix failures/add missing scenarios,verify required100percent coverage,record final closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80.
+
+    Human confirmed extension from200 to216 paths on2026-10-24 after canonical CopyToDocument exposed legacy normal-document Undo snapshots. Add the five existing operation/history modules,their ten registry records and three affected consumer tests listed in output/playwright/task76-copy-proposed-expansion.json. Preserve native SCDOCMODE_UNDO/InitUndo/AddUndoTab allocation,pooled-resource ownership and destructor order. Preserve all verification requirements and the active76->74->full tests/fixes/coverage->closure/pause stop rule.
   Verify Steps: "Verify original clipboard/reset/default/pool ownership and parameter values,real sparse sheet/source selection,relative/absolute formula copying and shared group behavior through the native context/store paths. Empty marked AutoSum must use actual EnterBlock/PasteFromClip and native paste undo,including multi-selection source fallback;no repeated EnterData loop,formula-source reparse or alternate workbook model. Test row/column/sheet bounds,empty/error content,default formats,style/geometry preservation,Undo/Redo and fresh ODS reopen. Complete Calc and changed shared raw100 S/B/F/L with unchanged thresholds,related consumers,actual Chromium/DOM-free Worker,production build and all type/lint/format/boundary/JSDoc/size/source/provenance/registry/resources/static/routing/doctor gates. Final74 acceptance remains required after this prerequisite. Human-approved stop schedule (2026-10-24):finish the already-active Calc tasks76 and74,then run the full all-application test suites,fix failures/add missing scenarios,verify required100percent coverage,record final task closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80 before stopping."
   Verification: |-
     In progress;not final task acceptance. Native VCL Task/Timer/Idle scheduling passes17/17 related scenarios across2files;changed-shared raw100 S300/B143/F59/L268 over10actual owners. Fifteen source/test/probe hashes frozen across final measurement;467 prior Calc hashes unchanged,prior Calc raw100 archive-referenced. Actual Chromium/DOM-free Worker1/1 verifies priority/auto/copy behavior. Production build,app/tools types,scoped statics,canonical provenance11modules,resources,static smoke,routing and doctor pass. Evidence:progress-vcl-scheduler/manifest.json and raw.json.gz. Native/browser boundary is explicit injected platform contract,without gate waivers. Missing-liblangtag full source failures remain unwaived. Conservative footprint195/200. Full chart/formatter/document paste/history and final74 acceptance incomplete. Finish active76/74 then full all-application tests/fixes/required100percent coverage/final closure/pause.
@@ -348,11 +361,13 @@ Implement the original internal clipboard/PasteFromClip path required by empty-m
 
 ## Scope
 
-Real clipboard/reset/shared pool lifetime,ScClipParam,default content-only single-cell clipboard fill through native contexts/stores and document/table copy,paste Undo/Redo and original marks/cursor rules required by task74 AutoSum. Up to200 source/test/registry/probe paths,human-approved2026-10-24;shared VCL scheduling and chart owners are permitted where consumed by native copy contracts. Preserve represented scalar/local-reference/aggregate/default-format profile and upstream defaults;OS clipboard,rich edit,drawings,notes,external/3D/matrix and nondefault paste services stay explicit. Only calc checkout/branch,no merges,network or restoration of deleted research references. Complete76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause;do not wait for10tasks or start78-80.
+Real clipboard/reset/shared pool lifetime,ScClipParam,default content-only single-cell clipboard fill through native contexts/stores and document/table copy,paste Undo/Redo and original marks/cursor rules required by task74 AutoSum. Up to216 source/test/registry/probe paths,human-approved2026-10-24;shared VCL scheduling and chart owners are permitted where consumed by native copy contracts. Preserve represented scalar/local-reference/aggregate/default-format profile and upstream defaults;OS clipboard,rich edit,drawings,notes,external/3D/matrix and nondefault paste services stay explicit. Only calc checkout/branch,no merges,network or restoration of deleted research references. Complete76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause;do not wait for10tasks or start78-80.
 
 ## Plan
 
 Continue the approved native internal clipboard/default PasteFromClip and Undo/Redo implementation,then finish task74 AutoSum/formula-bar acceptance. Human explicitly approved expansion from160 to200 source/test/registry/probe paths on2026-10-24. Inspect exact AutoSum/Undo call paths and port only consumed native responsibilities;shared VCL Task/Timer/Idle/Scheduler and chart-listener collection are permitted when required by the original copy/geometry contracts. Preserve upstream owners,defaults,formula token identity and module boundaries;no fake service or alternate workbook. Keep all work in vite-office-calc branch calc;no merges,network or restoration of deleted reference caches. Existing verification requirements remain unchanged:Calc and changed-shared raw100,related tests,browser/Worker/ODS/history and all static/build/source gates. Finish already-active76 and74,then full all-application tests,fix failures/add missing scenarios,verify required100percent coverage,record final closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80.
+
+Human confirmed extension from200 to216 paths on2026-10-24 after canonical CopyToDocument exposed legacy normal-document Undo snapshots. Add the five existing operation/history modules,their ten registry records and three affected consumer tests listed in output/playwright/task76-copy-proposed-expansion.json. Preserve native SCDOCMODE_UNDO/InitUndo/AddUndoTab allocation,pooled-resource ownership and destructor order. Preserve all verification requirements and the active76->74->full tests/fixes/coverage->closure/pause stop rule.
 
 ## Verify Steps
 
