@@ -128,7 +128,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     expect(new SwFormatPageDesc().QueryValue()).toEqual(["", 0]);
     expect(
       /** Creates an invalid page-number restart. @returns Invalid item. */ () =>
-        new SwFormatPageDesc("Standard", 0),
+        new SwFormatPageDesc("Standard", -1),
     ).toThrow("page-number offset");
     const writer = createWriterDocument();
     expect(
@@ -943,4 +943,19 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         writeOdtDocument(writer, metadata),
     ).toThrow("Unsupported ODF font color");
   });
+});
+
+it("round-trips source page-number offset boundaries without the dialog widget range truncating them", /** Native unsigned16 offsets include zero and imported values above55535. @returns Completion. */ async () => {
+  for (const offset of [0, 55535, 65535]) {
+    const writer = createWriterDocument();
+    writer.paragraphs[0]?.SetAttr(new SwFormatPageDesc("Standard", offset));
+    const bytes = writeOdtDocument(writer, metadata);
+    expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+      `style:page-number="${offset}"`,
+    );
+    const reopened = await readOdtDocument(bytes, metadata);
+    expect(
+      (reopened.document.paragraphs[0]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
+    ).toBe(offset);
+  }
 });

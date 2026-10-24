@@ -1094,3 +1094,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `cui/source/tabpages/paragrph.cxx`, `SvxExtParagraphTabPage::AllowSplitHdl`, `WidowHdl`, `OrphanHdl` and Reset handler order.
 - Observation: Widow false when Orphan is false disables Allow Split; Orphan false when Widow is false enables it. Reset calls Widow then Orphan,so both-off initial state permits splitting,while later unchecking Widow last can disable that control. AllowSplit changes checkbox sensitivity but does not directly disable checked numeric rows. This is a source control-state observation,not a confirmed desktop defect.
 - Preservation: retain exact handler order and definite-state sensitivity effects;tests exercise both orders and retained numeric rows. Complete mixed-state/native widget services remain unrepresented.
+
+### WRITER091 — paragraph page-number widget permits zero and stops at 55535
+
+- Source: pinned `cui/uiconfig/ui/textflowpage.ui`, `adjustment3`; `SvxExtParagraphTabPage::FillItemSet` and `sw/source/uibase/utlui/uitool.cxx`, `SfxToSwPageDescAttr`.
+- Observation: the page-number spin has an implicit lower bound zero and upper 55535,although the item is unsigned16 and Writer permits offsets through65535. Reset visually clamps imported larger values but unchanged saved widget state does not emit a replacement. Whether the upper limit is intentional remains unconfirmed.
+- Preservation: keep original widget bounds,retained saved-state semantics and unsigned16 item including zero. Do not change imported out-of-widget-range offsets merely by opening and accepting the dialog.

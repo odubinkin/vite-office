@@ -13,7 +13,7 @@ export class SwFormatPageDesc extends SfxPoolItem {
     super(RES_PAGEDESC);
     if (
       numOffset !== undefined &&
-      (!Number.isInteger(numOffset) || numOffset < 1 || numOffset > 65535)
+      (!Number.isInteger(numOffset) || numOffset < 0 || numOffset > 65535)
     )
       throw new Error("Writer page-number offset is invalid.");
   }

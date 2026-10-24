@@ -25,7 +25,8 @@
       "Live SwPageDesc pointer registration and SwClient notifications are outside the current browser document slice."
     ],
     "preservedResponsibilities": [
-      "Stores Writer's paragraph page-style reference and optional page-number restart in a pooled item."
+      "Stores Writer's paragraph page-style reference and optional page-number restart in a pooled item.",
+      "Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/fmtpdsc.hxx",

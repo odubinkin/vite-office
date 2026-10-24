@@ -10,10 +10,11 @@
       "SvxExtParagraphTabPage"
     ],
     "upstreamSymbols": [
-      "SvxExtParagraphTabPage::AllowSplitHdl"
+      "SvxExtParagraphTabPage::AllowSplitHdl",
+      "SvxExtParagraphTabPage::PageBreakHdl"
     ],
     "preservedResponsibilities": [
-      "Consumed definite split/widow/orphan reset,source handler-order sensitivity,bounds and changed-output decisions. Mixed/HTML and remaining native paragraph controls/services remain unported."
+      "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported."
     ],
     "omittedResponsibilities": [
       "Complete native textflow and mixed/HTML widget services."
@@ -29,6 +30,10 @@
         {
           "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
           "marker": "SvxExtParagraphTabPage::AllowSplitHdl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxExtParagraphTabPage::PageBreakHdl"
         }
       ]
     }

@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/cui/source/tabpages/paragrph.ts#SvxExtParagraphTabPage"
       ],
-      "justification": "Consumed definite split/widow/orphan reset,source handler-order sensitivity,bounds and changed-output decisions. Mixed/HTML and remaining native paragraph controls/services remain unported.",
+      "justification": "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported.",
       "knownViolations": [],
       "localSymbols": [
         "SvxExtParagraphTabPage"

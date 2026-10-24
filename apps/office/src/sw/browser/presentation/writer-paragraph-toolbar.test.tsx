@@ -67,11 +67,10 @@ it("connects advanced toolbar controls to Writer paragraph items", /** Verifies 
   });
   fireEvent.click(screen.getByText("New"));
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
-  fireEvent.change(screen.getByLabelText("Page style"), { target: { value: "Standard" } });
-  fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
+  fireEvent.click(screen.getByRole("checkbox", { name: /^Insert$/ }));
+  fireEvent.click(screen.getByLabelText("With page style"));
+  fireEvent.click(screen.getByLabelText("Page number"));
   fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
-  fireEvent.change(screen.getByLabelText("Break before"), { target: { value: "page" } });
-  fireEvent.change(screen.getByLabelText("Break after"), { target: { value: "page" } });
   fireEvent.click(screen.getByLabelText("Allow to split paragraph"));
   fireEvent.change(screen.getByLabelText("Orphan control (lines)"), { target: { value: "3" } });
   fireEvent.change(screen.getByLabelText("Widow control (lines)"), { target: { value: "4" } });
@@ -107,7 +106,7 @@ it("connects advanced toolbar controls to Writer paragraph items", /** Verifies 
   expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(
     4,
   );
-  expect((shell.GetActiveParagraph().GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(6);
+  expect((shell.GetActiveParagraph().GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
   expect(
     (
       shell.GetActiveParagraph().GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
@@ -122,8 +121,8 @@ it("connects advanced toolbar controls to Writer paragraph items", /** Verifies 
   fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
   expect(screen.getByLabelText("Page style")).toHaveValue("Standard");
   expect(screen.getByLabelText("Start page number")).toHaveValue(2);
-  expect(screen.getByLabelText("Break before")).toHaveValue("page");
-  expect(screen.getByLabelText("Break after")).toHaveValue("page");
+  expect(screen.getByRole("checkbox", { name: /^Insert$/ })).toBeChecked();
+  expect(screen.getByLabelText("Position")).toHaveValue("before");
   expect(screen.getByLabelText("Allow to split paragraph")).not.toBeChecked();
   expect(screen.getByLabelText("Orphan control (lines)")).toHaveValue(3);
   expect(screen.getByLabelText("Widow control (lines)")).toHaveValue(4);

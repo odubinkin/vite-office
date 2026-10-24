@@ -5,6 +5,7 @@ import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
+import { WriterParagraphBreakControls } from "./WriterParagraphBreakControls";
 import { WriterParagraphSplitControls } from "./WriterParagraphSplitControls";
 import { tabControlDirection } from "../../../vcl/source/control/tabctrl";
 import { useEffect, useId, useRef, useState } from "react";
@@ -47,7 +48,10 @@ export function WriterParagraphDialog({
   );
   const [flow] = useState(
     /** Creates original definite paragraph split controls for this request. @returns Native page. */ () =>
-      new SvxExtParagraphTabPage(dialogRequest.request.initialValue),
+      new SvxExtParagraphTabPage(
+        dialogRequest.request.initialValue,
+        dialogRequest.request.pageStyleNames,
+      ),
   );
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
@@ -308,100 +312,7 @@ export function WriterParagraphDialog({
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               {activeTab === "flow" ? (
                 <>
-                  <label className="flex flex-col gap-1">
-                    Page style
-                    <select
-                      aria-label="Page style"
-                      className="rounded border px-2 py-1"
-                      value={draft.pageStyleName ?? ""}
-                      onChange={
-                        /** Selects a document page descriptor. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) => setDraft({ ...draft, pageStyleName: event.target.value })
-                      }
-                    >
-                      <option value="">Follow current</option>
-                      {(dialogRequest.request.pageStyleNames ?? ["Standard"]).map(
-                        /** Renders a named page descriptor. @param name - Writer name. @returns Option. */ (
-                          name,
-                        ) => (
-                          <option key={name} value={name}>
-                            {name}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1">
-                    Page numbering
-                    <select
-                      aria-label="Page numbering"
-                      className="rounded border px-2 py-1"
-                      value={
-                        draft.pageNumber === undefined || draft.pageNumber === "auto"
-                          ? "auto"
-                          : "restart"
-                      }
-                      onChange={
-                        /** Selects automatic or restarted page numbering. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({
-                            ...draft,
-                            pageNumber: event.target.value === "auto" ? "auto" : 1,
-                          })
-                      }
-                    >
-                      <option value="auto">Continue</option>
-                      <option value="restart">Restart at</option>
-                    </select>
-                  </label>
-                  {draft.pageNumber !== undefined && draft.pageNumber !== "auto" ? (
-                    <NumberField
-                      label="Start page number"
-                      value={draft.pageNumber}
-                      min={1}
-                      onChange={
-                        /** Changes the first printed page number. @param value - Page number. @returns Nothing. */ (
-                          value,
-                        ) => setDraft({ ...draft, pageNumber: value })
-                      }
-                    />
-                  ) : null}
-                  <label className="flex flex-col gap-1">
-                    Break before
-                    <select
-                      aria-label="Break before"
-                      className="rounded border px-2 py-1"
-                      value={draft.breakBefore ?? "auto"}
-                      onChange={
-                        /** Sets a page break before the paragraph. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({ ...draft, breakBefore: event.target.value as "auto" | "page" })
-                      }
-                    >
-                      <option value="auto">Automatic</option>
-                      <option value="page">Page</option>
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1">
-                    Break after
-                    <select
-                      aria-label="Break after"
-                      className="rounded border px-2 py-1"
-                      value={draft.breakAfter ?? "auto"}
-                      onChange={
-                        /** Sets a page break after the paragraph. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({ ...draft, breakAfter: event.target.value as "auto" | "page" })
-                      }
-                    >
-                      <option value="auto">Automatic</option>
-                      <option value="page">Page</option>
-                    </select>
-                  </label>
+                  <WriterParagraphBreakControls page={flow} />
                   <WriterParagraphSplitControls page={flow} />
                   <label className="sm:col-span-2 flex items-center gap-2">
                     <input

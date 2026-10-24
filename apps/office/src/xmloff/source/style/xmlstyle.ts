@@ -423,7 +423,7 @@ function importParagraphProperties(
   const pageNumber =
     rawPageNumber === null || rawPageNumber === "auto"
       ? rawPageNumber
-      : /^\d+$/u.test(rawPageNumber) && Number(rawPageNumber) >= 1 && Number(rawPageNumber) <= 65535
+      : /^\d+$/u.test(rawPageNumber) && Number(rawPageNumber) >= 0 && Number(rawPageNumber) <= 65535
         ? Number(rawPageNumber)
         : undefined;
   if (rawPageNumber !== null && pageNumber === undefined)

@@ -131,7 +131,7 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
       }),
     ).toBe(true);
     expect(shell.ApplyParagraphFormat({ ...base, pageStyleName: "Missing" })).toBe(false);
-    expect(shell.ApplyParagraphFormat({ ...base, pageNumber: 0 })).toBe(false);
+    expect(shell.ApplyParagraphFormat({ ...base, pageNumber: 0 })).toBe(true);
     expect(shell.ApplyParagraphFormat({ ...base, pageNumber: 65536 })).toBe(false);
     const { firstLineIndentPt, pageStyleName, ...withoutOptionalMetrics } = base;
     void firstLineIndentPt;
