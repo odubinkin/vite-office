@@ -1,0 +1,70 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native clipboard start/selected-sheet merge envelope verified;remaining UI scope expansion requested and not yet approved",
+  "sourceBaseline": "327ddcdb3fce4091728d58d7584ab6c2a8e0e607",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "approvedScopePathCount": 300,
+  "conservativeAllPathsCount": 304,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 8,
+  "checks": {
+    "related": "17files/162scenarios pass with unchanged thresholds",
+    "measuredOwner": "document10.ts only;current whole-Calc/full all-app certification is not claimed",
+    "coverage": {
+      "lines": {
+        "total": 309,
+        "covered": 309,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 368,
+        "covered": 368,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 28,
+        "covered": 28,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 173,
+        "covered": 173,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "browserWorker": "fresh build then actual GetClipStart and selected-sheet merge envelope in Chromium/DOM-free Worker1/1 pass",
+    "scopedProvenance": "2actual owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "Native GetClipStart assigns only from a real nonempty clipboard and retains caller outputs otherwise.",
+    "Native ExtendMergeSel uses each selected existing sheet from original end coordinates,skips sparse holes,stops at table count,and only grows final outputs;default refreshfalse is preserved.",
+    "Refresh remains an explicit unavailable service. Existing ValidNewTabName body moves unchanged to the same-instance source partition;duplicate Grammar imports consolidate under the1000-line facade gate."
+  ],
+  "failuresAndRepairs": [
+    "Initial selected coverage omitted existing delayed-copy-listening consumers;including them gives raw100 without changing thresholds or tests for old methods.",
+    "Facade reached1000 counted lines;duplicate grammar imports were consolidated without erasing API or changing size policy."
+  ],
+  "remaining": [
+    "PasteFromClip/EnterBlock and task74 acceptance remain pending;current approved300 paths are fully used.",
+    "User approval requested to remove only the numerical path cap for existing76/74 functional scope;no dependent outside-scope source has been modified.",
+    "Source viewdata,viewutil,viewfun2/viewfun3 and native editability responsibilities with their tests/registry evidence are required for the remaining UI connection.",
+    "Full all-application suites/fixes/required100coverage/final closure/goal pause remain required. Missing reference/source gates are not waived."
+  ]
+}
