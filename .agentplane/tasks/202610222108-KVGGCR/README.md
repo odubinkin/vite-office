@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 76
+revision: 77
 origin:
   system: "manual"
 depends_on:
@@ -14,9 +14,9 @@ tags:
   - "code"
 verify: []
 plan_approval:
-  state: "approved"
-  updated_at: "2026-10-24T14:57:45.248Z"
-  updated_by: "ORCHESTRATOR"
+  state: "pending"
+  updated_at: null
+  updated_by: null
   note: null
 verification:
   state: "pending"
@@ -98,7 +98,7 @@ events:
     to: "BLOCKED"
     note: "Blocked: approved218-path native preparation is committed and checked. Completing default document paste requires absent native number/cell formatting owners outside the approved footprint. Awaiting the pending human scope decision;no new source paths,task74 acceptance or final all-application closure are authorized by this status."
 doc_version: 3
-doc_updated_at: "2026-10-24T15:17:06.073Z"
+doc_updated_at: "2026-10-24T15:17:53.724Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -110,6 +110,8 @@ sections:
     Human confirmed extension from200 to216 paths on2026-10-24 after canonical CopyToDocument exposed legacy normal-document Undo snapshots. Add the five existing operation/history modules,their ten registry records and three affected consumer tests listed in output/playwright/task76-copy-proposed-expansion.json. Preserve native SCDOCMODE_UNDO/InitUndo/AddUndoTab allocation,pooled-resource ownership and destructor order. Preserve all verification requirements and the active76->74->full tests/fixes/coverage->closure/pause stop rule.
 
     Human confirmed2026-10-24:extend the216-path footprint to218 for apps/office/src/sc/browser/presentation/calc-borders.test.tsx and calc-shadow-relief.test.tsx. Apply the prepared unmount-before-session-Close test cleanup,then replay complete Calc coverage. Human explicitly approved218 paths in this chat;apply the prepared two-file cleanup and retain all existing verification and stop conditions.
+
+    Pending material scope proposal;NOT human-approved:replace the exhausted218-path numeric budget with a bounded dependency scope covering only the original native number/cell formatting owners required by default CopyFromClip/CopyOneCellFromClip/EnterBlock,the native paste and Undo/Redo owners,and their required tests,registry/resource records and browser/Worker evidence. No unrelated feature families,network,reference-cache restoration,branches,merges or planned78-80 work. Existing verification and76->74->full all-application tests/fixes/coverage->final closure/pause requirements remain unchanged. Human decision was requested in this chat and has not arrived. The completed218-path preparation remains committed at2e49ba8126b7;this proposal does not authorize new source paths.
   Verify Steps: "Verify original clipboard/reset/default/pool ownership and parameter values,real sparse sheet/source selection,relative/absolute formula copying and shared group behavior through the native context/store paths. Empty marked AutoSum must use actual EnterBlock/PasteFromClip and native paste undo,including multi-selection source fallback;no repeated EnterData loop,formula-source reparse or alternate workbook model. Test row/column/sheet bounds,empty/error content,default formats,style/geometry preservation,Undo/Redo and fresh ODS reopen. Complete Calc and changed shared raw100 S/B/F/L with unchanged thresholds,related consumers,actual Chromium/DOM-free Worker,production build and all type/lint/format/boundary/JSDoc/size/source/provenance/registry/resources/static/routing/doctor gates. Final74 acceptance remains required after this prerequisite. Human-approved stop schedule (2026-10-24):finish the already-active Calc tasks76 and74,then run the full all-application test suites,fix failures/add missing scenarios,verify required100percent coverage,record final task closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80 before stopping."
   Verification: "Intermediate verification only;task76 remains incomplete. Evidence:progress-paste-preparation/manifest.json and raw.json.gz. Native merged-anchor query chain and borrowed single-row pattern preparation pass related10files/79scenarios. Strict raw100 S191/B80/F44/L160 applies only to clipcontext.ts,document10.ts,table7.ts. Actual Chromium/DOM-free Worker1/1,production build,app/tools types,changed-path ESLint,format,JSDoc,size,boundaries and7-owner provenance pass. Previous full Calc960/229 raw100 precedes these latest changes;do not use it as current-source whole Calc certification. Default document paste,formatter/script services,paste Undo/Redo,EnterBlock and task74 remain incomplete. New paths beyond218 await human approval. Final Calc/changed-shared/all-application checks,unwaived source-reference/Writer-lint failures,closure and goal pause remain required."
   Rollback Plan: "Revert only task-owned clipboard/paste commits,preserving completed75 and the74 UI checkpoint."
@@ -409,6 +411,8 @@ Continue the approved native internal clipboard/default PasteFromClip and Undo/R
 Human confirmed extension from200 to216 paths on2026-10-24 after canonical CopyToDocument exposed legacy normal-document Undo snapshots. Add the five existing operation/history modules,their ten registry records and three affected consumer tests listed in output/playwright/task76-copy-proposed-expansion.json. Preserve native SCDOCMODE_UNDO/InitUndo/AddUndoTab allocation,pooled-resource ownership and destructor order. Preserve all verification requirements and the active76->74->full tests/fixes/coverage->closure/pause stop rule.
 
 Human confirmed2026-10-24:extend the216-path footprint to218 for apps/office/src/sc/browser/presentation/calc-borders.test.tsx and calc-shadow-relief.test.tsx. Apply the prepared unmount-before-session-Close test cleanup,then replay complete Calc coverage. Human explicitly approved218 paths in this chat;apply the prepared two-file cleanup and retain all existing verification and stop conditions.
+
+Pending material scope proposal;NOT human-approved:replace the exhausted218-path numeric budget with a bounded dependency scope covering only the original native number/cell formatting owners required by default CopyFromClip/CopyOneCellFromClip/EnterBlock,the native paste and Undo/Redo owners,and their required tests,registry/resource records and browser/Worker evidence. No unrelated feature families,network,reference-cache restoration,branches,merges or planned78-80 work. Existing verification and76->74->full all-application tests/fixes/coverage->final closure/pause requirements remain unchanged. Human decision was requested in this chat and has not arrived. The completed218-path preparation remains committed at2e49ba8126b7;this proposal does not authorize new source paths.
 
 ## Verify Steps
 
