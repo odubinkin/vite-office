@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/inc/saltimer.ts",
+    "status": "mapped",
+    "upstreamPath": "vcl/inc/saltimer.hxx",
+    "localSymbols": [
+      "SalTimer",
+      "SALTIMERPROC"
+    ],
+    "upstreamSymbols": [
+      "SalTimer",
+      "SALTIMERPROC"
+    ],
+    "preservedResponsibilities": [
+      "Original SalTimer nullable SALTIMERPROC ownership,callback replacement/delivery and abstract unsigned64 Start/Stop platform boundary. The explicit empty base destructor matches salvtables.cxx. VersionedEvent is not ported. Native Task/Timer/Idle/Scheduler,chart collection and document paste/history remain incomplete;no fake queue or service is installed."
+    ],
+    "omittedResponsibilities": [
+      "VersionedEvent,native scheduler/platform instances,full chart/paste integration are not yet ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/inc/saltimer.ts",
+          "marker": "SalTimer"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/sal-timer.test.ts",
+          "marker": "callback"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/inc/saltimer.hxx",
+          "marker": "class VCL_PLUGIN_PUBLIC SalTimer"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/inc/salwtype.hxx",
+          "marker": "SALTIMERPROC"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/app/salvtables.cxx",
+          "marker": "SalTimer::~SalTimer"
+        }
+      ]
+    }
+  }
+}

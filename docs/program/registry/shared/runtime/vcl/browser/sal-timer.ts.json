@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/sal-timer.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "browser-system-timer",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/sal-timer.test.ts",
+        "apps/office/e2e/shared/sal-timer.spec.ts"
+      ],
+      "justification": "Actual browser/Worker single-shot host timer implements SalTimer,using current callback dispatch,pending-event replacement,cancellation and explicit destruction. The old handle is released before callback entry so native reentrant restart survives. Unsigned64 arguments are converted at the boundary;delays above signed32 host capacity are capped for the native scheduler deadline recheck,avoiding JavaScript overflow-to-immediate. Upstream QtTimer is also single-shot;browser event scheduling replaces the native Sal plugin. Full native scheduler/OS input/threads are not represented by this platform adapter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BrowserSalTimer"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

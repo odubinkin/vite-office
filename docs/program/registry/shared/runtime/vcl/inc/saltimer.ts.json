@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/inc/saltimer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-system-timer",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/sal-timer.test.ts",
+        "apps/office/e2e/shared/sal-timer.spec.ts"
+      ],
+      "justification": "Original SalTimer nullable SALTIMERPROC ownership,callback replacement/delivery and abstract unsigned64 Start/Stop platform boundary. The explicit empty base destructor matches salvtables.cxx. VersionedEvent is not ported. Native Task/Timer/Idle/Scheduler,chart collection and document paste/history remain incomplete;no fake queue or service is installed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SalTimer",
+        "SALTIMERPROC"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vcl/inc/saltimer.hxx",
+      "upstreamSymbols": [
+        "SalTimer",
+        "SALTIMERPROC"
+      ]
+    }
+  }
+}

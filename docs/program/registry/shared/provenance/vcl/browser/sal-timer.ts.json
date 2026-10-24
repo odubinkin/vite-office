@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/vcl/browser/sal-timer.ts",
+    "rationale": "Browser and DOM-free Worker host events implement the actual native SalTimer plugin boundary while queue ownership,priority selection and task lifecycle remain with the separate upstream VCL scheduler.",
+    "responsibilities": [
+      "Actual browser/Worker single-shot host timer implements SalTimer,using current callback dispatch,pending-event replacement,cancellation and explicit destruction. The old handle is released before callback entry so native reentrant restart survives. Unsigned64 arguments are converted at the boundary;delays above signed32 host capacity are capped for the native scheduler deadline recheck,avoiding JavaScript overflow-to-immediate. Upstream QtTimer is also single-shot;browser event scheduling replaces the native Sal plugin. Full native scheduler/OS input/threads are not represented by this platform adapter."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "JavaScript host timers replace Qt/X11/macOS/Windows event-loop timers;native VCL task scheduling remains above this boundary."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/sal-timer.ts",
+          "marker": "BrowserSalTimer"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/sal-timer.test.ts",
+          "marker": "reentrant restart"
+        }
+      ]
+    }
+  }
+}
