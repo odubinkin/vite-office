@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on:
@@ -48,7 +48,7 @@ events:
     to: "DOING"
     note: "Start: resume approved native formatter,paste and Undo/Redo owners after human-confirmed expansion to160 paths in calc;preserve all verification and checkpoint80 stop conditions."
 doc_version: 3
-doc_updated_at: "2026-10-24T08:48:32.837Z"
+doc_updated_at: "2026-10-24T08:51:27.069Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -228,6 +228,10 @@ sections:
     Diagnostic recovery:initial temporary-document tests omitted actual source pool sharing and were corrected through SharePooledResources. Type checking exposed a scalar-only block access witness and a write-only private flag across source partitions;the generic implementation now uses the existing canonical mdds BlockConstructor,while original column2 cleanup runs directly on the same column instance and reads its actual flag. The native pointer precondition is expressed by a type assertion rather than a new null fallback. A static shell lacked the explicit Node PATH;the corrected command passes. No production behavior was changed to satisfy these diagnostics.
 
     Immutable evidence/progress-document-listening preserves exact commands,current raw coverage,hash/composition proofs,diagnostics and final passing logs. Conservative cumulative footprint127/160;only the new document-copy-listening test adds a path beyond the previous126-path checkpoint. Task76 remains DOING/verification pending;74 still depends on76. Remaining document/table copy orchestration,formatter/script services,paste Undo/Redo,EnterBlock and final74 acceptance are not marked complete. Checkpoint80 and the human stop rule remain unchanged. Manual work continued after the user's status question;the controller's earlier blocked status cannot be resumed through the available goal update tool.
+
+    Controller recheck after the second code checkpoint now reports active. This supersedes earlier blocked observations;the task scope approval remains in force and neither goal pause nor completion was requested. Native copy/attribute foundation is committed as13eb0024f8c8;copied-range listening/deferred destruction as a0b4de502352. Both checkpoints retain immutable raw100 evidence. Continue task76,then74,then planned78-80;five task completions remain before the full all-application checkpoint and human stop rule.
+
+    Next document/table copy work must retain native default bColRowFlags=true and real conditional-format/chart owners. ScDocument.GetStyleSheetPool and complete ScRangeList Join/DeleteArea/UpdateReference/intersection mechanisms already exist. Native ordinary document construction allocates ScChartListenerCollection;temporary documents retain null. Conditional-format copying must use substantive original owner state/entries,not an empty service facade. Actual chart collection construction binds a REPAINT Idle;the owner is not represented yet. Source CopyToDocument/UndoToDocument/table2 CopyToTable contracts remain unported and are not bypassed through a false geometry flag or alternate copy model. All corresponding current task acceptance boundaries remain explicit.
 id_source: "generated"
 ---
 ## Summary
@@ -425,3 +429,7 @@ Production build/app types,tools types,scoped ESLint/Prettier,JSDoc2970,size,bou
 Diagnostic recovery:initial temporary-document tests omitted actual source pool sharing and were corrected through SharePooledResources. Type checking exposed a scalar-only block access witness and a write-only private flag across source partitions;the generic implementation now uses the existing canonical mdds BlockConstructor,while original column2 cleanup runs directly on the same column instance and reads its actual flag. The native pointer precondition is expressed by a type assertion rather than a new null fallback. A static shell lacked the explicit Node PATH;the corrected command passes. No production behavior was changed to satisfy these diagnostics.
 
 Immutable evidence/progress-document-listening preserves exact commands,current raw coverage,hash/composition proofs,diagnostics and final passing logs. Conservative cumulative footprint127/160;only the new document-copy-listening test adds a path beyond the previous126-path checkpoint. Task76 remains DOING/verification pending;74 still depends on76. Remaining document/table copy orchestration,formatter/script services,paste Undo/Redo,EnterBlock and final74 acceptance are not marked complete. Checkpoint80 and the human stop rule remain unchanged. Manual work continued after the user's status question;the controller's earlier blocked status cannot be resumed through the available goal update tool.
+
+Controller recheck after the second code checkpoint now reports active. This supersedes earlier blocked observations;the task scope approval remains in force and neither goal pause nor completion was requested. Native copy/attribute foundation is committed as13eb0024f8c8;copied-range listening/deferred destruction as a0b4de502352. Both checkpoints retain immutable raw100 evidence. Continue task76,then74,then planned78-80;five task completions remain before the full all-application checkpoint and human stop rule.
+
+Next document/table copy work must retain native default bColRowFlags=true and real conditional-format/chart owners. ScDocument.GetStyleSheetPool and complete ScRangeList Join/DeleteArea/UpdateReference/intersection mechanisms already exist. Native ordinary document construction allocates ScChartListenerCollection;temporary documents retain null. Conditional-format copying must use substantive original owner state/entries,not an empty service facade. Actual chart collection construction binds a REPAINT Idle;the owner is not represented yet. Source CopyToDocument/UndoToDocument/table2 CopyToTable contracts remain unported and are not bypassed through a false geometry flag or alternate copy model. All corresponding current task acceptance boundaries remain explicit.
