@@ -793,8 +793,10 @@ export function WriterWorkbench({
           unit={snapshot.metricUnit}
           value={snapshot.lineNumberInfo}
           onCancel={
-            /** Discards line-numbering draft. @returns Nothing. */ () =>
-              setLineNumberingDialog(false)
+            /** Discards line-numbering draft and returns original client focus. @returns Nothing. */ () => {
+              setLineNumberingDialog(false);
+              (editingHostRef.current as HTMLElement).focus();
+            }
           }
           onSubmit={
             /** Commits line-number settings. @param value - Accepted settings. @returns Nothing. */ (
@@ -802,6 +804,7 @@ export function WriterWorkbench({
             ) => {
               activeDocument.SetLineNumberInfo(SwLineNumberInfo.FromValue(value));
               setLineNumberingDialog(false);
+              (editingHostRef.current as HTMLElement).focus();
             }
           }
         />

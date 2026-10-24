@@ -12,7 +12,7 @@
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterLineNumberingDialog.tsx",
-    "rationale": "Presents supported document line-number settings in a browser dialog. The browser presenter forwards accepted values to the existing Writer command or document owner without storing document state.",
+    "rationale": "Presents supported document line-number settings in a browser dialog. The browser presenter forwards accepted values to the existing Writer command or document owner without storing document state. TaskHGNC48 connects original line-number draft,sensitivity,grouping,bounds and mounted focus/cancellation through actual document ownership;unrepresented source controls remain unverified.",
     "responsibilities": [
       "Presents supported document line-number settings in a browser dialog.",
       "TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained."
