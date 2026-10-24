@@ -1,0 +1,92 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;actual shared SalTimer contract and browser/Worker platform binding verified;full VCL scheduler and chart/paste/history remain incomplete",
+  "sourceBaseline": "69f7cfdffba6",
+  "approvalCommit": "062482bfa11d",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 4,
+  "relatedFiles": 1,
+  "changedSharedCoverage": {
+    "lines": {
+      "total": 15,
+      "covered": 15,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16,
+      "covered": 16,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 7,
+      "covered": 7,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 4,
+      "covered": 4,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "baselineArchive": ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-chart-owner/raw.json.gz",
+  "baselineSha256": "495108c8bc6a0edb098a86d253fb3ad251eed7001dfc40efa27c25f00b86aa7e",
+  "priorCalcHashCount": 467,
+  "priorCalcHashesUnchanged": true,
+  "coverageScope": "Current changed-shared owners only;all467 previous Calc/source/test/probe/config hashes unchanged. Prior Calc composition is referenced by archive,not represented as a new full Calc or shared replay. No thresholds,exclusions,ignore directives or counters altered.",
+  "browserWorker": "1/1 actual Chromium/DOM-free Worker test passes using real host timer events and actual SalTimer owner.",
+  "passedChecks": [
+    "production build",
+    "app types",
+    "tools types",
+    "scoped ESLint",
+    "Prettier",
+    "JSDoc",
+    "file size",
+    "module boundaries",
+    "source tree",
+    "scoped canonical provenance2modules",
+    "static smoke",
+    "routing",
+    "doctor"
+  ],
+  "diagnostics": "Initial local-only provenance rationale was below the validator minimum length;expanded the actual browser-boundary explanation,final canonical provenance passes. Original diagnostic retained.",
+  "nativePath": "EnterBlock invokes PasteFromClip(CONTENTS,...,ATTRIB),which captures native Undo via CopyToDocument. Chart geometry notification and Idle are dependencies of the general native copy contract,not the AutoSum formula evaluator.",
+  "unported": [
+    "VersionedEvent (not consumed by this adapter)",
+    "Task/Timer/Idle/Scheduler queue",
+    "chart collection/live notification",
+    "formatter/script services",
+    "full document/table copy,paste/history,EnterBlock and final74 acceptance"
+  ],
+  "referenceAvailability": {
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c": false,
+    "vendor/liblangtag-reference/liblangtag/lt-error.h": false
+  },
+  "fullSourceGates": "Prior missing-liblangtag source failures remain unwaived;no restoration or network action claimed.",
+  "taskFootprint": "164/200 conservative cumulative paths:prior156 plus8new shared source/test/probe/registry paths. Human approved200-path expansion2026-10-24;plan approval and start-ready recorded sequentially.",
+  "goalState": "active (read back after human approval);prior scope blocker resolved.",
+  "stopRule": "Finish active76 and74,then full all-application tests,fix failures/add missing scenarios,verify required100percent coverage,record final closure and pause. Do not wait for10tasks or start78-80.",
+  "fullAllApplicationRun": "Not executed in this progress block.",
+  "newPaths": [
+    "apps/office/e2e/shared/sal-timer.spec.ts",
+    "apps/office/src/vcl/browser/sal-timer.test.ts",
+    "apps/office/src/vcl/browser/sal-timer.ts",
+    "apps/office/src/vcl/inc/saltimer.ts",
+    "docs/program/registry/shared/provenance/vcl/browser/sal-timer.ts.json",
+    "docs/program/registry/shared/provenance/vcl/inc/saltimer.ts.json",
+    "docs/program/registry/shared/runtime/vcl/browser/sal-timer.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/saltimer.ts.json"
+  ],
+  "rawSha256": "a035ecf927db8ae506ce594ae5e1e498184dd97283ace2de0ed0e60b9febd765",
+  "compressedBytes": 8128
+}
