@@ -3820,3 +3820,12 @@ Evidence: the pinned method and
 (`copies whole-row heights but updates only the first destination row's manual-size flag`).
 Decision: preserve both the full-range height update and the first-row-only
 flag update without extending that flag mutation for consistency.
+
+
+### CALC-264 — End-listening output rows describe different visited objects
+
+- Pinned source: `sc/source/core/data/column4.cxx`, `EndListeningFormulaCellsHandler` and `ScColumn::EndListeningFormulaCells`.
+- The handler assigns its start row at every visited formula block and can backtrack it to a shared top. It assigns the end row only when it visits a shared top;singletons never update that field.
+- A singleton-only interval therefore returns its row as start and `-1` as end. A later singleton block can leave start greater than the end of an earlier visited shared group. With no formulas anywhere in the column,the wrapper leaves both caller outputs untouched;with formulas elsewhere but none in the requested interval,it writes `-1` into both outputs.
+- Impact: these outputs are not a normalized covering interval. Consumers must preserve the original sentinel and assignment contract;the port intentionally retains it. This may be intentional metadata rather than a defect.
+- Evidence: `apps/office/src/sc/source/core/data/delayed-copy-listening.test.ts` uses real separated shared groups and a singleton to observe all four cases.

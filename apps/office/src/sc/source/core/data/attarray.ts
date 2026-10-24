@@ -10,6 +10,7 @@ import {
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
+import { ScMF, ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_BORDER } from "../../../inc/scitems";
 import { ScIndentItem } from "../../../inc/attrib";
@@ -747,6 +748,62 @@ export class ScAttrArray {
       if (insert) (this.mvData[insert - 1] as ScAttrEntry).nEndRow = start - 1;
       (this.mvData[insert] as ScAttrEntry).nEndRow = end;
       (this.mvData[insert] as ScAttrEntry).setScPatternAttr(pattern);
+    }
+  }
+  /** Original native attribute run copying,including offset clipping,canonical defaults,merge-flag stripping and actual helper migration. @param first - Destination first row. @param last - Destination last row. @param dy - Source-to-destination displacement. @param target - Actual target attribute owner. @param strip - Original default NONE. @returns Nothing. */
+  CopyArea(first: number, last: number, dy: number, target: ScAttrArray, strip = ScMF.NONE): void {
+    first -= dy;
+    last -= dy;
+    let destination = Math.max(first + dy, 0);
+    const end = Math.min(last + dy, this.rDocument.MaxRow()),
+      sameHelper =
+        this.rDocument.getCellAttributeHelper() === target.rDocument.getCellAttributeHelper(),
+      sourceDefault = this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+      targetDefault = target.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    if (!this.mvData.length) {
+      const holder = new CellAttributeHolder(targetDefault);
+      try {
+        target.SetPatternArea(destination, end, holder);
+      } finally {
+        holder.Dispose();
+      }
+      return;
+    }
+    for (let index = 0; index < this.mvData.length && destination <= end; ++index) {
+      const entry = this.mvData[index] as ScAttrEntry;
+      if (entry.nEndRow >= first) {
+        const pattern = entry.getScPatternAttr() as ScPatternAttr;
+        let holder: CellAttributeHolder;
+        if (ScPatternAttr.areSame(sourceDefault, pattern))
+          holder = new CellAttributeHolder(targetDefault);
+        else if (strip !== ScMF.NONE) {
+          const temporary = new ScPatternAttr(pattern),
+            flags =
+              strip === ScMF.All
+                ? ScMF.NONE
+                : (((temporary.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).GetValue() &
+                    ~strip) as ScMF);
+          if (flags !== ScMF.NONE) temporary.ItemSetPut(new ScMergeFlagAttr(flags));
+          else temporary.ItemSetClearItem(ATTR_MERGE_FLAG);
+          if (sameHelper) holder = new CellAttributeHolder(temporary, true);
+          else {
+            try {
+              holder = temporary.MigrateToDocument(target.rDocument, this.rDocument);
+            } finally {
+              temporary.Dispose();
+            }
+          }
+        } else
+          holder = sameHelper
+            ? new CellAttributeHolder(pattern)
+            : pattern.MigrateToDocument(target.rDocument, this.rDocument);
+        try {
+          target.SetPatternArea(destination, Math.min(entry.nEndRow + dy, end), holder);
+        } finally {
+          holder.Dispose();
+        }
+      }
+      destination = Math.max(destination, (this.mvData[index] as ScAttrEntry).nEndRow + dy + 1);
     }
   }
 }

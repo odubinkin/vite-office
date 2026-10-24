@@ -256,3 +256,61 @@ export function DeleteBeforeCopyFromClip(
   for (const [first, last] of result.aFormulaRanges)
     context.setListeningFormulaSpans(this.GetTab(), this.GetCol(), first, this.GetCol(), last);
 }
+
+/** Original block handler ends whole intersected groups and retains source output sentinel behavior. */
+export class EndListeningFormulaCellsHandler implements BlockFunction {
+  private mnStartRow = -1;
+  private mnEndRow = -1;
+  /** Borrows the actual teardown context. @param mrEndCxt - Actual end-listening context. @returns Handler. */
+  constructor(private readonly mrEndCxt: EndListeningContext) {}
+  /** Original singleton/group traversal backtracks the first group and tears down excess end members. @param node - Actual store block. @param offset - First requested member. @param size - Requested count. @returns Nothing. */
+  call(node: CellStoreNode, offset: number, size: number): void {
+    if (node.type !== element_type_formula) return;
+    this.mnStartRow = node.position + offset;
+    const data = node.data as base_element_block;
+    let index = offset;
+    const first = formula_block.at(data, index) as ScFormulaCell;
+    if (first.IsShared() && !first.IsSharedTop()) {
+      const back = Math.max(0, first.aPos.Row() - first.GetSharedTopRow());
+      index -= back;
+      this.mnStartRow -= back;
+    }
+    for (; index < offset + size; ++index) {
+      const cell = formula_block.at(data, index) as ScFormulaCell;
+      if (!cell.IsSharedTop()) {
+        cell.EndListeningTo(this.mrEndCxt);
+        continue;
+      }
+      const endGroup = index - offset + cell.GetSharedLength();
+      this.mnEndRow = node.position + offset + endGroup - 1;
+      for (let member = index; member < index + cell.GetSharedLength(); ++member)
+        (formula_block.at(data, member) as ScFormulaCell).EndListeningTo(this.mrEndCxt);
+      if (endGroup > size) index = offset + size - 1;
+      else index += cell.GetSharedLength() - 1;
+    }
+  }
+  /** Original last visited block's start output. @returns Row or minus one. */
+  getStartRow(): number {
+    return this.mnStartRow;
+  }
+  /** Original last visited group's end output;singletons do not assign it. @returns Row or minus one. */
+  getEndRow(): number {
+    return this.mnEndRow;
+  }
+}
+/** Original column4 group-aware end listening;an entirely formula-free column leaves output arguments untouched. @param this - Actual column. @param context - Actual teardown owner. @param first - First row. @param last - Last row. @param startRow - Optional native output. @param endRow - Optional native output. @returns Nothing. */
+export function EndListeningFormulaCells(
+  this: ScColumn,
+  context: EndListeningContext,
+  first: number,
+  last: number,
+  startRow: [number] | null = null,
+  endRow: [number] | null = null,
+): void {
+  if (!this.HasFormulaCell()) return;
+  const action = new EndListeningFormulaCellsHandler(context),
+    cells = this.GetCellStore();
+  ProcessBlock(cells.begin(), cells, action, first, last);
+  if (startRow) startRow[0] = action.getStartRow();
+  if (endRow) endRow[0] = action.getEndRow();
+}

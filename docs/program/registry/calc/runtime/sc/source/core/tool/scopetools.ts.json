@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/scopetools.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/scopetools.ts",
+        "apps/office/src/sc/source/core/data/delayed-copy-listening.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/scopetools.cxx"
+      ],
+      "justification": "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DelayFormulaGroupingSwitch",
+        "DelayStartListeningFormulaCells"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/scopetools.cxx",
+      "upstreamSymbols": [
+        "DelayFormulaGroupingSwitch",
+        "DelayStartListeningFormulaCells"
+      ]
+    }
+  }
+}

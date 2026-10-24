@@ -33,6 +33,7 @@ import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LANGUAGE_SYSTEM, type LanguageType } from "../../../../i18nlangtag/inc/lang";
 import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
+import type { ScDocument } from "../../../inc/document";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { ScGlobal } from "../../../inc/global";
 /** Original automatic-font color modes from patattr.hxx,co-located with the represented native owner. */
@@ -354,7 +355,7 @@ export class ScPatternAttr {
     return this.moName ?? this.pStyle?.GetName() ?? null;
   }
   /** Original const style pointer borrow;this pattern does not own style lifetime. @returns Native style reference or null. */
-  GetStyleSheet(): Pick<ScPatternStyleReference, "GetName"> | null {
+  GetStyleSheet(): ScPatternStyleReference | null {
     return this.pStyle;
   }
   /** Original inherited SET clearing and style-parent association. Native null detaches the pointer and parent but deliberately keeps an existing stored name. Represented derived caches are invalidated. @param style - Borrowed style or null. @param clearDirectFormat - Clear only fields SET by the style,including its parent chain. @returns Nothing. */
@@ -551,6 +552,22 @@ export class ScPatternAttr {
   ItemSetClearItem(which: number): void {
     this.InvalidateCacheFor(which);
     this.maLocalSfxItemSet.ClearItem(which);
+  }
+  /** Original MigrateToDocument branch without a style/format-exchange/validation service owner. Actual direct SET items move to the destination helper;the native absent-validation-list branch resets its index. @param destination - Actual target document. @param source - Actual source document. @returns Canonical owned migrated pattern. */
+  MigrateToDocument(destination: ScDocument, source: ScDocument): CellAttributeHolder {
+    if (destination !== source && this.pStyle !== null)
+      throw new Error("Foreign cell-style migration requires native style-pool copying");
+    const next = new ScPatternAttr(destination.getCellAttributeHelper()),
+      items = next.GetItemSetWritable();
+    if (destination !== source) next.SetStyleSheet(null);
+    for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; ++which) {
+      if (this.maLocalSfxItemSet.GetItemState(which, false) !== SfxItemState.SET) continue;
+      const item = this.maLocalSfxItemSet.GetItemIfSet(which, false) as SfxPoolItem;
+      // No validation-list or format-exchange owner exists in this admitted document slice.
+      // This is the native absent-list/no-exchange branch,not a fabricated service.
+      items.Put(which === 153 ? new SfxUInt32Item(153, 0) : item);
+    }
+    return new CellAttributeHolder(next, true);
   }
   /** Original validity check treats mixed selection items as invalid. @returns Both number-format fields are valid. */
   HasValidNumberFormat(): boolean {

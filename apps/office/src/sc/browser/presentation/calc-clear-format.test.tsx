@@ -10,6 +10,7 @@ import { SfxItemState } from "../../../svl/inc/itemset";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScXMLImport } from "../../source/filter/xml/xmlimprt";
 import { ScDocument } from "../../inc/document";
+import { createDeleteContentsUndoDoc } from "../../source/ui/docshell/docfuncutil";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScViewData } from "../../source/ui/view/viewdata";
 import { ScViewFunc } from "../../source/ui/view/viewfunc";
@@ -236,5 +237,48 @@ it("releases actual string snapshot ownership when delete history is discarded",
     }
   } finally {
     s.Close();
+  }
+});
+
+it("preserves compiled string-result formulas across clear-format undo and redo", /** Uses real controller history and native undo-mode snapshots. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    controller = session.controller,
+    doc = controller.shell.GetDocument(),
+    position = new ScAddress();
+  try {
+    controller.EnterString('="Formula text"');
+    const formula = doc.GetFormulaCell(position) as NonNullable<
+      ReturnType<ScDocument["GetFormulaCell"]>
+    >;
+    expect(formula).not.toBeNull();
+    controller.SetCharacterFormat("bold", true);
+    expect(controller.ResetAttributes()).toBe(true);
+    expect(controller.Undo()).toBe(true);
+    expect(doc.GetFormulaCell(position)).toBe(formula);
+    expect(text(formula.GetString().getString())).toBe("Formula text");
+    expect(controller.Redo()).toBe(true);
+    expect(doc.GetFormulaCell(position)).toBe(formula);
+    expect(controller.Undo()).toBe(true);
+    expect(doc.GetFormulaCell(position)).toBe(formula);
+  } finally {
+    session.Close();
+  }
+});
+
+it("refuses unported note-content snapshots through the actual document-copy boundary", /** Native flags request full content for notes;this slice cannot copy note owners. @returns Nothing. */ () => {
+  const session = createCalcSession();
+  try {
+    expect(
+      /** Requests actual native note-copy flags. @returns Snapshot or the real unsupported boundary. */ () =>
+        createDeleteContentsUndoDoc(
+          session.controller.shell.GetDocument(),
+          session.controller.viewData.GetMarkData(),
+          new ScRange(new ScAddress()),
+          false,
+          InsertDeleteFlags.NOTE,
+        ),
+    ).toThrow("Only attribute document copying is implemented");
+  } finally {
+    session.Close();
   }
 });

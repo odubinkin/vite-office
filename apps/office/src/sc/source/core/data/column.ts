@@ -68,6 +68,7 @@ import type { ScMarkData } from "../../../inc/markdata";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
 
 import { ScAttrArray } from "./attarray";
@@ -334,14 +335,20 @@ export class ScColumn extends ScColumnData {
         formula_block.at(data, position.second + 1) as ScFormulaCell,
       );
   }
-  /** Original affected upper/lower spans restart using one actual shared cursor set. Delayed-start batching is outside this normal immediate-edit profile. @param rows - Zero,two or four inclusive endpoints. @returns Nothing. */
+  /** Original affected upper/lower spans restart using one actual shared cursor set. Actual native delay admission batches adjacent surviving spans. @param rows - Zero,two or four inclusive endpoints. @returns Nothing. */
   StartListeningUnshared(rows: readonly number[]): void {
     if (!rows.length || this.rDocument.IsDelayedFormulaGrouping()) return;
     const positions = new ColumnBlockPositionSet(this.rDocument),
       start = new StartListeningContext(this.rDocument, positions),
       end = new EndListeningContext(this.rDocument, positions);
-    this.StartListeningFormulaCells(start, end, rows[0] as number, rows[1] as number);
-    if (rows.length >= 4)
+    if (
+      !this.rDocument.CanDelayStartListeningFormulaCells(this, rows[0] as number, rows[1] as number)
+    )
+      this.StartListeningFormulaCells(start, end, rows[0] as number, rows[1] as number);
+    if (
+      rows.length >= 4 &&
+      !this.rDocument.CanDelayStartListeningFormulaCells(this, rows[2] as number, rows[3] as number)
+    )
       this.StartListeningFormulaCells(start, end, rows[2] as number, rows[3] as number);
   }
   /** Original whole-column grouping functor on actual storage. @param positions - Optional changed-group positions. @returns Nothing. */
@@ -397,46 +404,39 @@ export class ScColumn extends ScColumnData {
     this.pAttrArray.SetPattern(row, holder);
   }
 
-  /** Consumed unmarked CopyToColumn STRING/CopyByCloneHandler string-block path;native typed-store writes and text metadata avoid introducing setter broadcasts. Attribute copying remains with the existing document run-copy owner. @param first - First row. @param last - Last row. @param target - Actual target column. @returns Nothing. */
-  CopyToColumn(first: number, last: number, target: ScColumn): void {
-    const end = this.maCells.cend();
-    for (
-      const position = this.maCells.cposition(first).first;
-      !position.equals(end);
-      position.increment()
-    ) {
-      const block = position.get();
-      if (block.position > last) break;
-      if (block.type !== element_type_string) continue;
-      for (
-        let row = Math.max(first, block.position);
-        row <= Math.min(last, block.position + block.size - 1);
-        row++
-      ) {
-        const string = this.GetSharedString(row);
-        try {
-          const rows = target.DetachFormulaCell(row);
-          if (string.isEmpty()) {
-            target.maCells.set_empty(row, row);
-            target.maCellTextAttrs.set_empty(row, row);
-          } else {
-            const copy =
-              this.rDocument.GetPool() === target.rDocument.GetPool()
-                ? new SharedString(string)
-                : target.rDocument.GetSharedStringPool().intern(string.getString());
-            try {
-              target.maCells.set(row, copy, string_element_callbacks);
-              target.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
-            } finally {
-              copy.dispose();
-            }
-          }
-          target.StartListeningUnshared(rows);
-        } finally {
-          string.dispose();
-        }
-      }
-    }
+  /** Existing STRING call binds the same native context and handler. @param first - First row. @param last - Last row. @param target - Actual destination. @returns Nothing. */
+  CopyToColumn(first: number, last: number, target: ScColumn): void;
+  /** Original default clone-copy contract over the actual context. @param context - Native destination context. @param first - First row. @param last - Last row. @param flags - Native mask. @param marked - Original multi-mark mode. @param target - Actual destination. @param marks - Original selection. @param asLink - Original default false. @returns Nothing. */
+  CopyToColumn(
+    context: CopyToDocContext,
+    first: number,
+    last: number,
+    flags: InsertDeleteFlags,
+    marked: boolean,
+    target: ScColumn,
+    marks?: ScMarkData | null,
+    asLink?: boolean,
+  ): void;
+  /** Binds both consumed forms to one native handler and store graph. @param args - Original arguments or existing STRING binding. @returns Nothing. */
+  CopyToColumn(
+    ...args: [number, number, ScColumn] | Parameters<typeof column3.CopyToColumn>
+  ): void {
+    if (typeof args[0] === "number") {
+      const target = args[2] as ScColumn;
+      column3.CopyToColumn.call(
+        this,
+        new CopyToDocContext(target.GetDoc()),
+        args[0],
+        args[1] as number,
+        InsertDeleteFlags.STRING,
+        false,
+        target,
+      );
+    } else column3.CopyToColumn.apply(this, args as Parameters<typeof column3.CopyToColumn>);
+  }
+  /** Original whole-group teardown with optional native row outputs. @param args - Original context,bounds and outputs. @returns Nothing. */
+  EndListeningFormulaCells(...args: Parameters<typeof column4.EndListeningFormulaCells>): void {
+    column4.EndListeningFormulaCells.apply(this, args);
   }
   /** Consumed native column3.cxx attribute-only deletion;unrepresented content/style deletion is rejected before mutation. Plain cells have no EditEngine attributes to strip. @param first - First row. @param last - Last row. @param flags - HARDATTR/EDITATTR and optional internal NOCAPTIONS. @returns Nothing. */
   DeleteArea(first: number, last: number, flags: InsertDeleteFlags): void {

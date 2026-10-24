@@ -806,3 +806,52 @@ export function AddUndoTab(
   for (let tab = first; tab <= last; ++tab)
     if (!tabs[tab]) tabs[tab] = new ScTable(this, tab, new OUString(), colInfo, rowInfo);
 }
+
+/** Original selected-sheet DeleteArea body,partitioned unchanged on the same document owner. @param this - Actual document. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param marks - Selected sheets. @param flags - Native deletion flags. @returns Nothing. */
+export function DeleteArea(
+  this: ScDocument,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+  marks: ScMarkData,
+  flags: InsertDeleteFlags,
+): void {
+  const oldAutoCalc = this.GetAutoCalc();
+  this.SetAutoCalc(false);
+  try {
+    [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
+    [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
+    for (let tab = 0; tab < this.GetTableCount(); tab++)
+      if (marks.GetTableSelect(tab))
+        (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
+  } finally {
+    this.SetAutoCalc(oldAutoCalc);
+  }
+}
+
+/** Existing native data-area clipping body,partitioned unchanged onto this same document. @param this - Actual document. @param tab - Sheet. @param firstCol - First column output. @param firstRow - First row output. @param lastCol - Last column output. @param lastRow - Last row output. @returns Valid clipped range. */
+export function ShrinkToDataArea(
+  this: ScDocument,
+  tab: number,
+  firstCol: [number],
+  firstRow: [number],
+  lastCol: [number],
+  lastRow: [number],
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table === null) return false;
+  const col1: [number] = [0],
+    row1: [number] = [0],
+    col2: [number] = [0],
+    row2: [number] = [0];
+  table.GetFirstDataPos(col1, row1);
+  table.GetLastDataPos(col2, row2);
+  if (col1[0] > col2[0] || row1[0] > row2[0]) return false;
+  if (firstCol[0] < col1[0]) firstCol[0] = col1[0];
+  if (col2[0] < lastCol[0]) lastCol[0] = col2[0];
+  if (firstRow[0] < row1[0]) firstRow[0] = row1[0];
+  if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
+  if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
+  return true;
+}

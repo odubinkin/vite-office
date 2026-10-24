@@ -21,7 +21,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sc/inc/document.ts", names: ["ScDocument", "ScDocumentMode"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
     { module: "src/sc/inc/markdata.ts", names: ["ScMarkData"] },
-    { module: "src/sc/inc/clipcontext.ts", names: ["CopyFromClipContext"] },
+    { module: "src/sc/inc/clipcontext.ts", names: ["CopyFromClipContext", "CopyToDocContext"] },
     { module: "src/sc/inc/columnspanset.ts", names: ["ColumnSpanSet"] },
     { module: "src/sc/inc/global.ts", names: ["InsertDeleteFlags", "UpdateRefMode"] },
     { module: "src/sc/inc/refupdatecontext.ts", names: ["RefUpdateContext"] },
@@ -99,6 +99,35 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           sparse = clip.FetchTable(0) === null,
           formatRequests = [source.NeedsNumberFormat(), formulaCell.NeedsNumberFormat()];
         string.dispose();
+        const snapshot = undoTable.CreateColumnIfNotExists(2),
+          snapshotContext = new n.CopyToDocContext(undo);
+        snapshotContext.setStartListening(false);
+        target
+          .CreateColumnIfNotExists(2)
+          .CopyToColumn(snapshotContext, 4, 5, n.InsertDeleteFlags.CONTENTS, false, snapshot);
+        const saved = snapshot.GetFormulaCell(5);
+        if (!saved) throw Error("Missing actual Undo formula snapshot");
+        const snapshotFormula = saved.GetFormula(grammar),
+          snapshotCodeIndependent = saved.GetCode() !== formulaCell.GetCode();
+        const undoCopy = {
+          value: snapshot.GetValue(4),
+          formula: n.text(snapshotFormula),
+          independent: snapshotCodeIndependent,
+          needsFormat: saved.NeedsNumberFormat(),
+        };
+        snapshotFormula.dispose();
+        doc.SetAutoCalc(false);
+        snapshot.CopyToColumn(
+          new n.CopyToDocContext(doc),
+          4,
+          5,
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          target.CreateColumnIfNotExists(2),
+        );
+        doc.SetAutoCalc(true);
+        doc.SetValue(new n.ScAddress(3, 5, 0), 30);
+        const restoredDependency = doc.GetValue(new n.ScAddress(5, 0, 0));
         const rowClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
         rowClip.ResetClip(doc, 0);
         rowClip.SetClipArea(new n.ScRange(0, 0, 0, 1, 0, 0));
@@ -149,6 +178,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           undoShared,
           singleRow,
           formatRequests,
+          undoCopy,
+          restoredDependency,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -196,6 +227,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoShared: true,
     singleRow: [3, 7, 3, 3, 7, 3],
     formatRequests: [false, false],
+    undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
+    restoredDependency: 44,
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

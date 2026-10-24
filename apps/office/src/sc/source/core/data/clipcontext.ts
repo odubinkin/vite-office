@@ -168,3 +168,21 @@ export class CopyFromClipContext extends ClipContextBase {
     for (const cell of this.maSingleCells) cell.clear();
   }
 }
+
+/** Original CopyToDocContext owns the genuine destination cursor cache and listening policy. */
+export class CopyToDocContext extends ClipContextBase {
+  private mbStartListening: boolean;
+  /** Binds the actual destination with original immediate-listening default. @param doc - Destination owner. @returns Context. */
+  constructor(doc: ScDocument) {
+    super(doc);
+    this.mbStartListening = true;
+  }
+  /** Original policy setter. @param value - Start listening during copy. @returns Nothing. */
+  setStartListening(value: boolean): void {
+    this.mbStartListening = value;
+  }
+  /** Original policy query. @returns Start listening during copy. */
+  isStartListening(): boolean {
+    return this.mbStartListening;
+  }
+}

@@ -24,6 +24,17 @@ import {
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, RowSpan } from "../../../inc/columnspanset";
+import { NoListening, type StartListeningType } from "../../../inc/types";
+import type { CopyToDocContext } from "../../../inc/clipcontext";
+import type { ScMarkData } from "../../../inc/markdata";
+import { ScMultiSelIter } from "../../../inc/markmulti";
+import { EndListeningContext } from "../../../inc/listenercontext";
+import { DelayStartListeningFormulaCells } from "../../../inc/scopetools";
+import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import { CellTextAttr } from "../../../inc/celltextattr";
+import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
+import { string_element_callbacks } from "../../../inc/mtvelements";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SingleCellListening } from "../../../inc/types";
 import { InsertDeleteFlags } from "../../../inc/global";
 import type { ScDocument } from "../../../inc/document";
@@ -412,5 +423,241 @@ export function CopyFromClip(
     ParseBlock(sourceAttrs.cbegin(), sourceAttrs, attributes, first - delta, last - delta);
   } finally {
     attributes.Dispose();
+  }
+}
+
+/** Original CopyByCloneHandler for represented default contents/formula/string alternatives;no second workbook or formula-source reparse. */
+export class CopyByCloneHandler implements BlockFunction {
+  private readonly maDestPos = new ColumnBlockPosition();
+  private meListenType: StartListeningType = SingleCellListening;
+  /** Captures copied native cursor values and real source/destination/string owners. @param mrDestCol - Destination column. @param mpDestPos - Operation cursor or native null. @param mnCopyFlags - Native copy mask. @param mpSharedStringPool - Foreign destination pool or null. @returns Handler. */
+  constructor(
+    private readonly mrDestCol: ScColumn,
+    private readonly mpDestPos: ColumnBlockPosition | null,
+    private readonly mnCopyFlags: InsertDeleteFlags,
+    private readonly mpSharedStringPool: SharedStringPool | null,
+  ) {
+    if (mpDestPos) assignBlockPosition(this.maDestPos, mpDestPos);
+  }
+  /** Original listening-policy conversion. @param value - Start listening while copying. @returns Nothing. */
+  setStartListening(value: boolean): void {
+    this.meListenType = value ? SingleCellListening : NoListening;
+  }
+  /** Original destination text metadata reset. @param row - Target row. @returns Nothing. */
+  private setDefaultAttrToDest(row: number): void {
+    this.maDestPos.miCellTextAttrPos = this.mrDestCol
+      .GetCellAttrStore()
+      .set(
+        this.maDestPos.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+        row,
+        new CellTextAttr(),
+        celltextattr_element_callbacks,
+      );
+  }
+  /** Original represented formula clone branch;STRING-only copying consumes actual string results and keeps rich multiline output an explicit boundary. @param row - Row. @param source - Actual formula. @returns Nothing. */
+  private cloneFormulaCell(row: number, source: ScFormulaCell): void {
+    if (this.mnCopyFlags & InsertDeleteFlags.FORMULA) {
+      if (source.GetMatrixFlag() !== ScMatrixMode.NONE)
+        throw new Error("Matrix document copying is not implemented");
+      const cell = new ScFormulaCell(
+        source,
+        this.mrDestCol.GetDoc(),
+        new ScAddress(this.mrDestCol.GetCol(), row, this.mrDestCol.GetTab()),
+      );
+      cell.SetDirtyVar();
+      this.mrDestCol.SetFormulaCell(
+        this.maDestPos,
+        row,
+        cell,
+        this.meListenType,
+        source.NeedsNumberFormat(),
+      );
+      this.setDefaultAttrToDest(row);
+      return;
+    }
+    if (this.mrDestCol.GetDoc().IsUndo()) return;
+    const string = source.GetString();
+    if (string.isEmpty()) return;
+    if (text(string.getString()).includes("\n"))
+      throw new Error("Multiline formula-result copy requires native edit-text storage");
+    this.maDestPos.miCellPos = this.mrDestCol
+      .GetCellStore()
+      .set(
+        this.maDestPos.miCellPos as ReturnType<CellStoreType["begin"]>,
+        row,
+        string,
+        string_element_callbacks,
+      );
+    this.setDefaultAttrToDest(row);
+  }
+  /** Original block alternatives retain empty-source no-op semantics and empty-string removal sentinels. CONTENTS admits both numeric/date classes,so unrepresented format classification cannot affect that result. @param node - Actual block. @param offset - First source element. @param size - Count. @returns Nothing. */
+  call(node: CellStoreNode, offset: number, size: number): void {
+    let row = node.position + offset;
+    switch (node.type) {
+      case element_type_numeric:
+        if (!(this.mnCopyFlags & (InsertDeleteFlags.VALUE | InsertDeleteFlags.DATETIME))) return;
+        for (let index = 0; index < size; ++index, ++row) {
+          this.maDestPos.miCellPos = this.mrDestCol
+            .GetCellStore()
+            .set(
+              this.maDestPos.miCellPos as ReturnType<CellStoreType["begin"]>,
+              row,
+              numeric_block.at(node.data as base_element_block, offset + index),
+              double_element_callbacks,
+            );
+          this.setDefaultAttrToDest(row);
+        }
+        break;
+      case element_type_string:
+        if (!(this.mnCopyFlags & InsertDeleteFlags.STRING)) return;
+        for (let index = 0; index < size; ++index, ++row) {
+          const string = string_block.at(node.data as base_element_block, offset + index);
+          if (string.isEmpty()) {
+            this.maDestPos.miCellPos = this.mrDestCol
+              .GetCellStore()
+              .set_empty(this.maDestPos.miCellPos as ReturnType<CellStoreType["begin"]>, row, row);
+            this.maDestPos.miCellTextAttrPos = this.mrDestCol
+              .GetCellAttrStore()
+              .set_empty(
+                this.maDestPos.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+                row,
+                row,
+              );
+          } else {
+            const interned = this.mpSharedStringPool?.intern(string.getString());
+            try {
+              this.maDestPos.miCellPos = this.mrDestCol
+                .GetCellStore()
+                .set(
+                  this.maDestPos.miCellPos as ReturnType<CellStoreType["begin"]>,
+                  row,
+                  interned ?? string,
+                  string_element_callbacks,
+                );
+            } finally {
+              interned?.dispose();
+            }
+            this.setDefaultAttrToDest(row);
+          }
+        }
+        break;
+      case element_type_formula: {
+        const delay = new DelayStartListeningFormulaCells(this.mrDestCol);
+        try {
+          if (size > 1024 && this.mnCopyFlags & InsertDeleteFlags.FORMULA) {
+            this.mrDestCol.EndListeningFormulaCells(
+              new EndListeningContext(this.mrDestCol.GetDoc()),
+              row,
+              row + size - 1,
+              null,
+              null,
+            );
+            delay.set();
+          }
+          for (let index = 0; index < size; ++index, ++row)
+            this.cloneFormulaCell(
+              row,
+              formula_block.at(node.data as base_element_block, offset + index) as ScFormulaCell,
+            );
+        } finally {
+          delay.Dispose();
+        }
+        break;
+      }
+      default:
+        return;
+    }
+  }
+  /** Original destructor repairs the broadcaster cursor before writing every actual cursor value back. @returns Nothing. */
+  Dispose(): void {
+    if (!this.mpDestPos) return;
+    const temporary = new ColumnBlockPosition();
+    this.mrDestCol.InitBlockPosition(temporary);
+    this.maDestPos.miBroadcasterPos = temporary.miBroadcasterPos as NonNullable<
+      ColumnBlockPosition["miBroadcasterPos"]
+    >;
+    assignBlockPosition(this.mpDestPos, this.maDestPos);
+  }
+}
+/** Original column.cxx marked recursion and default clone dispatch. Canonical attribute runs and same-helper target-style retention accompany admitted CONTENTS/FORMULA/STRING copying;link/selective numeric-result services remain unported. @param this - Actual source column. @param context - Actual destination context. @param first - First row. @param last - Last row. @param flags - Admitted native flags. @param marked - Restrict to original multi marks. @param target - Actual target column. @param marks - Original selection or null. @param asLink - Original default false. @returns Nothing. */
+export function CopyToColumn(
+  this: ScColumn,
+  context: CopyToDocContext,
+  first: number,
+  last: number,
+  flags: InsertDeleteFlags,
+  marked: boolean,
+  target: ScColumn,
+  marks: ScMarkData | null = null,
+  asLink = false,
+): void {
+  if (marked) {
+    if (marks?.IsMultiMarked()) {
+      const iter = new ScMultiSelIter(marks.GetMultiSelData(), this.GetCol());
+      for (let span = iter.Next(0, 0); span[0] && span[1] <= last; span = iter.Next(0, 0))
+        if (span[2] >= first)
+          this.CopyToColumn(
+            context,
+            Math.max(first, span[1]),
+            Math.min(last, span[2]),
+            flags,
+            false,
+            target,
+            marks,
+            asLink,
+          );
+    }
+    return;
+  }
+  const content = flags & InsertDeleteFlags.CONTENTS;
+  if (
+    asLink ||
+    flags &
+      ~(
+        InsertDeleteFlags.CONTENTS |
+        InsertDeleteFlags.ATTRIB |
+        InsertDeleteFlags.EDITATTR |
+        InsertDeleteFlags.NOCAPTIONS
+      ) ||
+    (content !== InsertDeleteFlags.NONE &&
+      content !== InsertDeleteFlags.STRING &&
+      content !== InsertDeleteFlags.FORMULA &&
+      content !== InsertDeleteFlags.CONTENTS)
+  )
+    throw new Error("Nondefault document copy services are not implemented");
+  if (flags & InsertDeleteFlags.ATTRIB) {
+    if ((flags & InsertDeleteFlags.STYLES) !== InsertDeleteFlags.STYLES) {
+      if (this.GetDoc().getCellAttributeHelper() !== target.GetDoc().getCellAttributeHelper())
+        throw new Error("Foreign hard-attribute copy requires native style migration");
+      for (let row = first; row <= last; ++row) {
+        const style = (target.GetPattern(row) as ScPatternAttr).GetStyleSheet(),
+          pattern = new ScPatternAttr(this.GetPattern(row) as ScPatternAttr);
+        pattern.SetStyleSheet(style);
+        const holder = new CellAttributeHolder(pattern, true);
+        try {
+          target.SetPattern(row, holder);
+        } finally {
+          holder.Dispose();
+        }
+      }
+    } else this["pAttrArray"].CopyArea(first, last, 0, target["pAttrArray"]);
+  }
+  if (!content) return;
+  const pool =
+      this.GetDoc().GetPool() === target.GetDoc().GetPool()
+        ? null
+        : target.GetDoc().GetSharedStringPool(),
+    action = new CopyByCloneHandler(
+      target,
+      context.getBlockPosition(target.GetTab(), target.GetCol()),
+      flags,
+      pool,
+    ),
+    cells = this.GetCellStore();
+  action.setStartListening(context.isStartListening());
+  try {
+    ParseBlock(cells.cbegin(), cells, action, first, last);
+  } finally {
+    action.Dispose();
   }
 }

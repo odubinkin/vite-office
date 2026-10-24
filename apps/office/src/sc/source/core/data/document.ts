@@ -39,6 +39,7 @@ import type { SvtListener } from "../../../../svl/source/notify/listener";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import type { ScColumn } from "../../../inc/column";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
@@ -108,6 +109,19 @@ export class ScDocument {
     documen3.UpdateReference.apply(this, args);
   }
   private pDelayedFormulaGrouping: ScRange | null = null;
+  private readonly pDelayedStartListeningFormulaCells = new Map<ScColumn, [number, number]>();
+  /** Original per-column start-listening delay control. @param column - Actual column. @param delay - Enable or finish. @returns Nothing. */
+  EnableDelayStartListeningFormulaCells(column: ScColumn, delay: boolean): void {
+    document10.EnableDelayStartListeningFormulaCells.call(this, column, delay);
+  }
+  /** Original per-column delay query. @param column - Actual column. @returns Enabled. */
+  IsEnabledDelayStartListeningFormulaCells(column: ScColumn): boolean {
+    return this.pDelayedStartListeningFormulaCells.has(column);
+  }
+  /** Original adjacent-span admission. @param column - Actual column. @param first - First row. @param last - Last row. @returns Deferred. */
+  CanDelayStartListeningFormulaCells(column: ScColumn, first: number, last: number): boolean {
+    return document10.CanDelayStartListeningFormulaCells.call(this, column, first, last);
+  }
   /** Original selected-sheet clipboard dirty forwarding. @param args - Native bounds,marks,flags and deferred spans. @returns Nothing. */
   SetDirtyFromClip(...args: Parameters<typeof documen7.SetDirtyFromClip>): void {
     documen7.SetDirtyFromClip.apply(this, args);
@@ -480,17 +494,7 @@ export class ScDocument {
     marks: ScMarkData,
     flags: InsertDeleteFlags,
   ): void {
-    const oldAutoCalc = this.GetAutoCalc();
-    this.SetAutoCalc(false);
-    try {
-      [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
-      [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
-      for (let tab = 0; tab < this.GetTableCount(); tab++)
-        if (marks.GetTableSelect(tab))
-          (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
-    } finally {
-      this.SetAutoCalc(oldAutoCalc);
-    }
+    documen7.DeleteArea.call(this, firstCol, firstRow, lastCol, lastRow, marks, flags);
   }
   /** Original selected-sheet deletion on this document. @param args - Native flags and marks. @returns Nothing. */
   DeleteSelection(...args: Parameters<typeof documen7.DeleteSelection>): void {
@@ -505,21 +509,7 @@ export class ScDocument {
     lastCol: [number],
     lastRow: [number],
   ): boolean {
-    const table = this.FetchTable(tab);
-    if (table === null) return false;
-    const col1: [number] = [0],
-      row1: [number] = [0],
-      col2: [number] = [0],
-      row2: [number] = [0];
-    table.GetFirstDataPos(col1, row1);
-    table.GetLastDataPos(col2, row2);
-    if (col1[0] > col2[0] || row1[0] > row2[0]) return false;
-    if (firstCol[0] < col1[0]) firstCol[0] = col1[0];
-    if (col2[0] < lastCol[0]) lastCol[0] = col2[0];
-    if (firstRow[0] < row1[0]) firstRow[0] = row1[0];
-    if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
-    if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
-    return true;
+    return documen7.ShrinkToDataArea.call(this, tab, firstCol, firstRow, lastCol, lastRow);
   }
   private pSelectionAttr: ScPatternAttr | undefined;
   /** Original owned selection pattern assembled by native table/column/run merges. @param marks - Actual sheet and cell marks. @param deep - Include inherited items. @returns Independent pattern. */
