@@ -1,10 +1,11 @@
 ---
 id: "202610241702-J1K3KF"
 title: "Canonize Writer line-number core widths and ODT interval import"
-status: "DOING"
+result_summary: "Preserved native line-number scalar widths and ODT interval contracts"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Unsigned16 core storage and strict transfer validation remain distinct from source ODT signed16 narrowing/property admission. Existing SAX converter is reused;positive main/nonnegative separator and ignored-invalid behavior are preserved. Export uses original signed16 property representation;WRITER089 documents the suspected discontinuity."
     - "Current source hashes match implementation evidence. Strict3owner100coverage S79 B70 F35 L72 with zero skips;14focused cases,152related cases,2production Chromium1280/390 cases and15final gates pass. Real ODT import/re-export and first-task source UI normalization are exercised. No new library,ignore,threshold reduction or broad parity promotion."
-commit: null
+commit:
+  hash: "5c462d03774c2de3829f645aa8195f76b7d4ed1c"
+  message: "🖋️ J1K3KF writer: preserve native line-number scalar and ODT contracts"
 comments:
   -
     author: "CODER"
     body: "Start: implement native line-number unsigned scalar and ODT signed interval contracts,verify and close second task then pause goal."
+  -
+    author: "CODER"
+    body: "Verified: native unsigned line-number scalar ownership and signed ODT interval import/export contracts pass source-bound strict100coverage,related model/layout cases,production Chromium and all15declared gates. Suspected source behavior documented and preserved. Both authorized tasks are complete;pause goal after clean-state audit."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14focused cases strict3owner100coverage S79 B70 F35 L72;152related cases/20files;2production Chromium cases1280/390;final build and15/15static/source gates pass. Native parser/narrowing/export edge values and real ODT round-trip covered;source hashes recorded. Second task;close and pause goal."
+  -
+    type: "status"
+    at: "2026-10-24T17:07:50.777Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native unsigned line-number scalar ownership and signed ODT interval import/export contracts pass source-bound strict100coverage,related model/layout cases,production Chromium and all15declared gates. Suspected source behavior documented and preserved. Both authorized tasks are complete;pause goal after clean-state audit."
 doc_version: 3
-doc_updated_at: "2026-10-24T17:07:42.680Z"
+doc_updated_at: "2026-10-24T17:07:50.778Z"
 doc_updated_by: "CODER"
 description: "Second and last of exactly two tasks authorized after H0Q3NZ. Align existing unsigned16 line-number core scalar fields and strict transfer validation with native typed ownership;reuse existing sax Converter for original ODT signed16 interval narrowing and UNO main-positive/separator-nonnegative admission. Preserve ignored-invalid behavior rather than throwing for interval values. Test boundaries,defaults,real ODT re-export and source UI normalization. No other import attributes,format/style services,network or other tasks. Only writer checkout/branch,up to24primary paths plus paired records. Task5after checkpoint,no full suite due. Close this task and pause goal."
 sections:
@@ -115,6 +128,10 @@ sections:
     Native core countBy,dividerCountBy,posFromLeft are unsigned16. Constructor and typed setters retain integer narrowing;untrusted transfer restoration validates the stored domain rather than silently accepting impossible-width state. Existing SAX Converter is reused;no library or second parser was introduced.
     The source ODT interval path converts with minimum0,then narrows to signed16. Main interval must be positive;separator interval may be0. Invalid,narrowed-negative or nonpositive main values retain the original defaults. Existing exception expectation for negative interval input was replaced by source-backed fallback/ODT assertions. Tests preserve leading/trailing whitespace,empty strings,invalid/plus/fractional lexemes and signed32/16 boundaries. Native property reads/export narrow unsigned core intervals to signed16 too;XML export retains that behavior and rare direct-core negative interval round-trip is tested. WRITER089 documents this surprising upstream behavior without fixing it.
     Full UNO supplier/style services and other ODT boolean,format,position/offset paths remain bounded existing implementation and are not certified by this leaf. No classifications/default parity states promoted,no parser-wide changes,network,other tasks,merge or full suite. Initial test endFastElement type mismatch was repaired with its actual token argument. Exactly two authorized tasks are now implemented;after this closure pause goal.
+extensions:
+  implementation_commit:
+    hash: "5c462d03774c2de3829f645aa8195f76b7d4ed1c"
+    message: "🖋️ J1K3KF writer: preserve native line-number scalar and ODT contracts"
 id_source: "generated"
 ---
 ## Summary
