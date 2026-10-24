@@ -1,4 +1,4 @@
-/** @fileoverview Original ScriptHintProvider and GreedyScriptChangeScanner from scriptchangescanner.cxx over the original direction-scanner contract; no approximate bidi provider is supplied. */
+/** @fileoverview Original ScriptHintProvider and GreedyScriptChangeScanner from scriptchangescanner.cxx over the original direction-scanner contract; the concrete direction scanner consumes the original default ICU bidi path. */
 import type { ScriptHintType } from "../../inc/scriptchangescanner";
 import * as HintValue from "../../../offapi/com/sun/star/text/ScriptHintType";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
@@ -7,6 +7,9 @@ import { unicode } from "./unicode";
 import * as ScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
 import * as UnicodeType from "../../../offapi/com/sun/star/i18n/UnicodeType";
 import { u_getIntPropertyValue } from "../../../external/icu/source/common/uprops";
+import { resolveDefaultBidiLevels } from "../../../external/icu/source/common/ubidi";
+import { u_charDirection } from "../../../external/icu/source/common/ubidi_props";
+import { UCharDirection as U } from "../../../external/icu/source/common/unicode/uchar";
 import { UProperty } from "../../../external/icu/source/common/unicode/uchar";
 import { UScriptCode } from "../../../external/icu/source/common/unicode/uscript";
 
@@ -23,7 +26,7 @@ export interface ScriptChange {
   m_nEndIndex: number;
   m_nScriptType: number;
 }
-/** Original direction scanner abstraction; the ICU concrete factory is a separate pending owner. */
+/** Original direction scanner abstraction; the concrete factory retains original ICU levels and logical-run traversal. */
 export abstract class DirectionChangeScanner {
   /** Original cursor state. @returns Whether exhausted. */
   abstract AtEnd(): boolean;
@@ -236,4 +239,128 @@ export function MakeScriptChangeScanner(
   hints: ScriptHintProvider,
 ): ScriptChangeScanner {
   return new GreedyScriptChangeScanner(text, defaultScript, direction, hints);
+}
+
+/** Original IcuDirectionChangeScanner state machine over the real ICU default-mode value result. Native memory ownership is left to JS. */
+class IcuDirectionChangeScanner extends DirectionChangeScanner {
+  private readonly levels: readonly number[];
+  private readonly m_nCount: number;
+  private m_nCurrIndex = 0;
+  private m_nCurr = 0;
+  private m_bAtEnd = true;
+  private m_stCurr: DirectionChange;
+  /** Resolves the actual text once and starts the original logical-run cursor. @param m_rText - Actual borrowed OUString. @param m_nInitialDirection - Actual paragraph direction. @returns Scanner. */
+  constructor(
+    private readonly m_rText: OUStringConstReference,
+    private readonly m_nInitialDirection: 0 | 1,
+  ) {
+    super();
+    const units = m_rText.getStr();
+    let text = "";
+    for (let index = 0; index < m_rText.getLength(); ++index)
+      text += String.fromCharCode(units[index] as number);
+    this.levels = resolveDefaultBidiLevels(text, m_nInitialDirection);
+    let count = this.levels.length === 0 ? 0 : 1;
+    for (let i = 1; i < this.levels.length; ++i) if (this.levels[i] !== this.levels[i - 1]) ++count;
+    this.m_nCount = count;
+    this.m_stCurr = {
+      m_nStartIndex: 0,
+      m_nEndIndex: 0,
+      m_nLevel: m_nInitialDirection,
+      m_bHasEmbeddedStrongLTR: false,
+    };
+    this.Reset();
+  }
+  /** Original code-unit scan deliberately calls u_charDirection on each UTF16 unit. @param start - Actual run start. @param end - Actual run end. @returns Whether strong LTR is present. */
+  private RangeHasStrongLTR(start: number, end: number): boolean {
+    const text = this.m_rText.getStr();
+    for (let i = start; i < end; ++i) {
+      const dir = u_charDirection(text[i] as number);
+      if (
+        dir === U.U_LEFT_TO_RIGHT ||
+        dir === U.U_LEFT_TO_RIGHT_EMBEDDING ||
+        dir === U.U_LEFT_TO_RIGHT_OVERRIDE
+      )
+        return true;
+    }
+    return false;
+  }
+  /** Original logical run query over actual ICU levels;private calls satisfy the API's in-range precondition. @param start - Valid UTF16 index. @returns Original logical end and level. */
+  private LogicalRun(start: number): { end: number; level: number } {
+    const level = this.levels[start] as number;
+    let end = start + 1;
+    while (end < this.levels.length && this.levels[end] === level) ++end;
+    return { end, level };
+  }
+  /** Original PopulateCurr control-terminal adjustment and one-character-run skip. @returns Nothing. */
+  private PopulateCurr(): void {
+    const run = this.LogicalRun(this.m_nCurrIndex);
+    let end = run.end;
+    const embedded =
+      run.level % 2 === 0 && run.level > 1 ? this.RangeHasStrongLTR(this.m_nCurrIndex, end) : false;
+    if (end < this.m_rText.getLength()) {
+      const c = this.m_rText.getStr()[end] as number,
+        dir = u_charDirection(c);
+      const advance =
+        c === 0x200e ||
+        c === 0x200f ||
+        dir === U.U_LEFT_TO_RIGHT_EMBEDDING ||
+        dir === U.U_RIGHT_TO_LEFT_EMBEDDING ||
+        dir === U.U_LEFT_TO_RIGHT_OVERRIDE ||
+        dir === U.U_RIGHT_TO_LEFT_OVERRIDE;
+      if (advance) {
+        const control = this.LogicalRun(end);
+        ++end;
+        if (end === control.end) ++this.m_nCurr;
+      }
+    }
+    this.m_stCurr = {
+      m_nStartIndex: this.m_nCurrIndex,
+      m_nEndIndex: end,
+      m_nLevel: run.level,
+      m_bHasEmbeddedStrongLTR: embedded,
+    };
+    this.m_nCurrIndex = end;
+    ++this.m_nCurr;
+    this.m_bAtEnd = false;
+  }
+  /** Original reset restores the sentinel then populates only when runs exist. @returns Nothing. */
+  public override Reset(): void {
+    this.m_nCurrIndex = this.m_nCurr = 0;
+    this.m_stCurr = {
+      m_nStartIndex: 0,
+      m_nEndIndex: 0,
+      m_nLevel: this.m_nInitialDirection,
+      m_bHasEmbeddedStrongLTR: false,
+    };
+    this.m_bAtEnd = true;
+    if (this.m_nCurr < this.m_nCount) this.PopulateCurr();
+  }
+  /** Original terminal flag. @returns Whether exhausted. */
+  public override AtEnd(): boolean {
+    return this.m_bAtEnd;
+  }
+  /** Original run-count guard before advancing. @returns Nothing. */
+  public override Advance(): void {
+    if (this.m_nCurr >= this.m_nCount) {
+      this.m_bAtEnd = true;
+      return;
+    }
+    this.PopulateCurr();
+  }
+  /** Original copied current run. @returns By-value run. */
+  public override Peek(): DirectionChange {
+    return { ...this.m_stCurr };
+  }
+  /** Original getLevelAt returns0 for out-of-range indices,independently of traversal. @param index - Signed32 UTF16 index. @returns Actual level or source invalid-index0. */
+  public override GetLevelAt(index: number): number {
+    return this.levels[index | 0] ?? 0;
+  }
+}
+/** Original concrete direction factory for the actually consumed paragraph LTR/RTL path. @param text - Actual borrowed text. @param initialDirection - Actual paragraph direction. @returns Native scanner abstraction. */
+export function MakeDirectionChangeScanner(
+  text: OUStringConstReference,
+  initialDirection: 0 | 1,
+): DirectionChangeScanner {
+  return new IcuDirectionChangeScanner(text, initialDirection);
 }

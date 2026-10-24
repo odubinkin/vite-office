@@ -2,7 +2,8 @@
 import { expect, it, vi } from "vitest";
 import { ESelection } from "../../inc/ESelection";
 import { ScriptTypePosInfo } from "../../inc/ParagraphPortion";
-import { getSingleParagraphItemScriptType } from "./impedit2.script";
+import * as scannerApi from "../../../i18nutil/inc/scriptchangescanner";
+import { initPlainParagraphScriptTypes, getSingleParagraphItemScriptType } from "./impedit2.script";
 import * as Script from "../../../offapi/com/sun/star/i18n/ScriptType";
 import { SvtScriptType as Svt } from "../../../svl/inc/languageoptions";
 import { LANGUAGE_ENGLISH_US, LANGUAGE_ARABIC_SAUDI_ARABIA } from "../../../i18nlangtag/inc/lang";
@@ -113,5 +114,62 @@ it("emits the last unchanged run and refuses an empty style label before queryin
   } finally {
     name.dispose();
     empty.dispose();
+  }
+});
+
+it("initializes actual plain label script values before the native collapsed-caret query", /** Real pinned bidi and greedy cursors replace the old explicit cached-run fixture for this integration. @returns Nothing. */ () => {
+  const text = unicode("A中");
+  try {
+    const actual = initPlainParagraphScriptTypes(text, LANGUAGE_ENGLISH_US, false);
+    expect(actual).toEqual([
+      new ScriptTypePosInfo(Script.LATIN, 0, 1),
+      new ScriptTypePosInfo(Script.ASIAN, 1, 2),
+    ]);
+    const changes = checkStylePreviewScripts(
+      text,
+      /** Queries actual initialized source positions. @param selection - Source caret request. @returns Script flags. */
+      (selection) => getSingleParagraphItemScriptType(actual, selection, LANGUAGE_ENGLISH_US),
+    );
+    // WRITER073: the final one-character Asian span is not emitted by source CheckScript.
+    expect(changes).toEqual([{ scriptType: Svt.LATIN, changePos: 2, textWidth: 0 }]);
+  } finally {
+    text.dispose();
+  }
+});
+it("retains empty input,actual RTL direction and weak-only default-language fallback", /** No field or script-hint owner is fabricated for these literal paragraphs. @returns Nothing. */ () => {
+  for (const [name, language, rtl, script] of [
+    ["", LANGUAGE_ENGLISH_US, false, Script.LATIN],
+    ["אב 12", LANGUAGE_ENGLISH_US, true, Script.COMPLEX],
+    ["\u200d", LANGUAGE_ARABIC_SAUDI_ARABIA, false, Script.COMPLEX],
+  ] as const) {
+    const text = unicode(name);
+    try {
+      expect(initPlainParagraphScriptTypes(text, language, rtl)).toEqual(
+        name.length === 0 ? [] : [new ScriptTypePosInfo(script, 0, name.length)],
+      );
+    } finally {
+      text.dispose();
+    }
+  }
+});
+it("preserves the source empty-output fallback on an explicitly pre-exhausted real scanner", /** Ordinary nonempty literal initialization constructs a fresh scanner and cannot reach the right-hand true arm of the source OR. This direct factory-boundary test advances a real scanner first;it is not claimed as a real document path. @returns Nothing. */ () => {
+  const text = unicode("A"),
+    direction = scannerApi.MakeDirectionChangeScanner(text, 0);
+  const scanner = scannerApi.MakeScriptChangeScanner(
+    text,
+    Script.LATIN,
+    direction,
+    new scannerApi.ScriptHintProvider(),
+  );
+  scanner.Advance();
+  expect(scanner.AtEnd()).toBe(true);
+  const factory = vi.spyOn(scannerApi, "MakeScriptChangeScanner").mockReturnValue(scanner);
+  try {
+    expect(initPlainParagraphScriptTypes(text, LANGUAGE_ENGLISH_US, false)).toEqual([
+      new ScriptTypePosInfo(Script.LATIN, 1, 1),
+    ]);
+  } finally {
+    factory.mockRestore();
+    text.dispose();
   }
 });
