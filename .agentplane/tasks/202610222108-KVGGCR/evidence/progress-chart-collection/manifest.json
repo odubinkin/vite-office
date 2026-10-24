@@ -1,0 +1,91 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;local chart collection verified;document paste/history and AutoSum incomplete",
+  "sourceBaseline": "5c54d8fdd216c597201a9b6349ff088e25ff7f6b",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcTests": 949,
+  "calcFiles": 229,
+  "calcOwners": 181,
+  "calcSummary": {
+    "lines": {
+      "total": 14997,
+      "covered": 14997,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16780,
+      "covered": 16780,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2952,
+      "covered": 2952,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10118,
+      "covered": 10118,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "sharedTests": 17,
+  "sharedOwners": 10,
+  "sharedSummary": {
+    "lines": {
+      "total": 269,
+      "covered": 269,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 301,
+      "covered": 301,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 60,
+      "covered": 60,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 145,
+      "covered": 145,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "chromiumAndDomFreeWorker": "pass;actual live local reference notification through real Idle/host timer in both realms",
+  "unchangedPatternBody": true,
+  "conservativeFootprint": 198,
+  "approvedBudget": 200,
+  "footprintReason": "Prior conservative195 plus one new test and two boundary-check files. FormulaCell source and both registry records already occur in the earlier121-path footprint;no extra three-path charge.",
+  "limitations": [
+    "External chart references and drawing-backed chart loading remain explicitly unsupported.",
+    "Browser isInputPending(false) excludes continuous input but is not an OS keyboard-only queue.",
+    "Full all-application run follows completion of active76 and74;it has not occurred.",
+    "Full ESLint also reports five pre-existing Writer odt-xml-boundaries.test.ts errors;changed-file ESLint passes after local JSDoc fixes.",
+    "Full source/provenance/registry gates remain unwaived due to the previously reported missing liblangtag files. No restore or network operation performed."
+  ],
+  "stopRule": "Finish active76 then74;full all-application tests/fixes/required100percent coverage/final closure;pause goal. Do not start78-80.",
+  "coverageNote": "Current complete Calc run at unchanged production sources. Subsequent changes to the new Calc test are JSDoc comments;final related replay remeasures chart owner at100. Current shared measurement is exact ten-owner coverage. No thresholds/exclusions/coverage ignores changed.",
+  "rawSha256": "c77c340030a6b2f258c1f152d5741d560b4045c31cb3634fc80f0ffd2c6f82b2",
+  "rawBytes": 507860
+}
