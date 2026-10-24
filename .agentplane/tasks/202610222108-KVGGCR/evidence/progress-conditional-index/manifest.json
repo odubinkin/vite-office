@@ -1,0 +1,91 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;conditional-index attribute binding verified;native full paste/Undo remains incomplete",
+  "sourceBaseline": "9af32ca7bc4f6fade73042f0c1fed92638d21344",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 693,
+  "relatedFiles": 158,
+  "sixOwnerRaw100": "S2168/B1389/F406/L1885",
+  "finalColumnRaw100": "S411/B238/F88/L361",
+  "calcCoverage": {
+    "lines": {
+      "total": 14644,
+      "covered": 14644,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16380,
+      "covered": 16380,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2848,
+      "covered": 2848,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9907,
+      "covered": 9907,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 178,
+  "sourceHashes": 458,
+  "coverageMethod": "Actual successful693 six-owner coverage with only final column replaced by successful current693 column coverage after moving native AddCondFormat from base to actual ScColumn. All remaining Calc owners hash-match the preceding baseline. This is compositional raw100,not a new full Calc replay. No fabricated counters,threshold/exclusion/ignore changes or shared implementation edits.",
+  "baselineArchive": ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-conditional-copy/raw.json.gz",
+  "baselineSha256": "6565e81833ca626a42b4977a1e4b238f64c2bd37d64a0c283884c2095160ad71",
+  "browserWorker": "1/1 final pass;real document/table/column attributes contain key21 exactly once in Chromium and DOM-free Worker",
+  "passedChecks": [
+    "production build and app types",
+    "tools types",
+    "static smoke",
+    "scoped ESLint",
+    "Prettier",
+    "JSDoc2973",
+    "file size",
+    "module boundaries",
+    "source tree",
+    "routing",
+    "doctor",
+    "canonical scoped provenance6 owners"
+  ],
+  "fullSourceGates": "Previously observed deleted ICU/mdds reference failures remain unwaived;no new full source gate run or restoration/network access.",
+  "diagnostics": "Initial core-only selection passed scenarios but lacked old consumer branch coverage;adding actual existing consumer tests reached raw100. Lint/JSDoc/size diagnostics corrected. Native inline AddCondFormat moved from ScColumnData to ScColumn and reverified.",
+  "taskFootprint": "134/160 conservative cumulative paths;no new source/test/registry/probe paths in this block",
+  "remaining": "Conditional-copy orchestration and style migration,chart/Idle and formatter/script services,native document/table copy,paste history,EnterBlock,final74 acceptance.",
+  "fullAllApplicationCheckpoint": "80;not executed;stop rule unchanged",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/attarray.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table2.ts",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json"
+  ],
+  "rawSha256": "1f9132a341c0d9ee6e4b644d7dec322261bdc643ce99c35081cf3c5fa5716acb",
+  "compressedBytes": 489275
+}
