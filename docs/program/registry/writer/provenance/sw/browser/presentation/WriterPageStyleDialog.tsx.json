@@ -12,7 +12,7 @@
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
-    "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state.",
+    "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state. TaskVBNV75 connects consumed native formatting dialog tab/default-button/Escape and mounted control/frame focus semantics through actual keyed requests;full toolkit/modal services remain unported.",
     "responsibilities": [
       "Presents the bounded page-format controls and validates page settings.",
       "TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained.",

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/source/control/tabctrl.ts",
+    "status": "mapped",
+    "upstreamPath": "vcl/source/control/tabctrl.cxx",
+    "localSymbols": [
+      "tabControlDirection"
+    ],
+    "upstreamSymbols": [
+      "TabControl::ImplHandleKeyEvent",
+      "TabControl::KeyInput"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native TabControl key-direction ownership only;actual browser tab/page owner applies original wraparound. Complete native tab widgets,pages and platform dispatch services remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete native tab controls and widget/page lifecycle."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/control/tabctrl.ts",
+          "marker": "tabControlDirection"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/control/tabctrl.cxx",
+          "marker": "TabControl::ImplHandleKeyEvent"
+        }
+      ]
+    }
+  }
+}

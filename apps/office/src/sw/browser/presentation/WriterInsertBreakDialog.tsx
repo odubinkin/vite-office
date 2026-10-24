@@ -1,5 +1,6 @@
 /** @fileoverview Browser counterpart of pinned Writer insertbreak.ui for the supported hard page break. */
 
+import { useEffect, useRef } from "react";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
@@ -8,6 +9,13 @@ export function WriterInsertBreakDialog({
   onCancel,
   onSubmit,
 }: Readonly<{ onCancel: () => void; onSubmit: () => void }>): React.JSX.Element {
+  const choice = useRef<HTMLInputElement>(null);
+  useEffect(
+    /** Focuses this mounted represented break choice. @returns Nothing. */ () => {
+      choice.current?.focus();
+    },
+    [],
+  );
   const localization = useBrowserLocalization();
   return (
     <div
@@ -22,6 +30,13 @@ export function WriterInsertBreakDialog({
             event.stopPropagation();
             onCancel();
           }
+        }
+      }
+      onMouseDown={
+        /** Retains the active modal control when the background receives a pointer press. @param event - Actual pointer input. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.target === event.currentTarget) event.preventDefault();
         }
       }
       role="dialog"
@@ -47,7 +62,7 @@ export function WriterInsertBreakDialog({
               {localization.GetText("writer.insert-break.type", "Type")}
             </legend>
             <label className="flex items-center gap-2 text-sm">
-              <input checked readOnly type="radio" />
+              <input ref={choice} checked readOnly type="radio" />
               {localization.GetText("writer.insert-break.page", "Page break")}
             </label>
           </fieldset>

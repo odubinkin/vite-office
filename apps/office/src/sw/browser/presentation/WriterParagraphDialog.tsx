@@ -6,7 +6,8 @@ import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
 import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
 import { WriterParagraphSplitControls } from "./WriterParagraphSplitControls";
-import { useState } from "react";
+import { tabControlDirection } from "../../../vcl/source/control/tabctrl";
+import { useEffect, useId, useRef, useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 import type {
   WriterParagraphDialogRequest,
@@ -28,6 +29,15 @@ export function WriterParagraphDialog({
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
   const [activeTab, setActiveTab] = useState<"spacing" | "flow" | "tabs">("spacing");
+  const tabIds = ["spacing", "flow", "tabs"] as const;
+  const tabIdentity = useId(),
+    tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
+  useEffect(
+    /** Focuses the actual active native tab on opening this request. @returns Nothing. */ () => {
+      tabRefs.current.spacing?.focus();
+    },
+    [],
+  );
   const [showLineNumbersDraft, setShowLineNumbersDraft] = useState(
     dialogRequest.request.paintLineNumbers,
   );
@@ -43,19 +53,72 @@ export function WriterParagraphDialog({
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
     () => new TabulatorDialogSession(dialogRequest.request.tabContext, unit),
   );
+  /** Runs original tab deactivation before changing the active page. @param next - Original tab identity. @returns Nothing. */
+  function activate(next: (typeof tabIds)[number]): void {
+    if (next === activeTab) return;
+    if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    setActiveTab(next);
+  }
+  /** Accepts original request values through the existing controller port. @returns Nothing. */
+  function accept(): void {
+    if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    onDialogSubmit(dialogRequest.id, {
+      tabStopItems: tabs.output,
+      paragraphFormat: { ...draft, ...flow.FillItemSet() },
+      paintLineNumbers: showLineNumbersDraft,
+    });
+  }
   return (
     <div
       data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4"
       onMouseDown={
-        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
+        /** Keeps a backdrop click from stealing the active modal control focus. @param event - Actual pointer input. @returns Nothing. */ (
           event,
         ) => {
-          if (event.target === event.currentTarget) onDialogCancel(dialogRequest.id);
+          if (event.target === event.currentTarget) event.preventDefault();
         }
       }
     >
-      <section
+      <form
+        onSubmit={
+          /** Uses native browser default-button acceptance for input Enter. @param event - Form submission. @returns Nothing. */ (
+            event,
+          ) => {
+            event.preventDefault();
+            accept();
+          }
+        }
+        onKeyDownCapture={
+          /** Gives original tab shortcuts priority over page spin keys. @param event - Key input. @returns Nothing. */ (
+            event,
+          ) => {
+            const direction = tabControlDirection(
+              event.key,
+              event.ctrlKey || event.metaKey,
+              event.shiftKey,
+              (event.target as HTMLElement).getAttribute("role") === "tab",
+            );
+            if (direction === undefined) return;
+            event.preventDefault();
+            event.stopPropagation();
+            const next = tabIds[
+              (tabIds.indexOf(activeTab) + direction + tabIds.length) % tabIds.length
+            ] as (typeof tabIds)[number];
+            activate(next);
+            tabRefs.current[next]?.focus();
+          }
+        }
+        onKeyDown={
+          /** Cancels only unconsumed Escape from this modal. @param event - Key input. @returns Nothing. */ (
+            event,
+          ) => {
+            if (event.key === "Escape" && !event.defaultPrevented) {
+              event.stopPropagation();
+              onDialogCancel(dialogRequest.id);
+            }
+          }
+        }
         aria-label="Paragraph"
         aria-modal="true"
         data-writer-modal-panel="true"
@@ -88,13 +151,22 @@ export function WriterParagraphDialog({
                   label,
                 ]) => (
                   <button
+                    id={`${tabIdentity}-${id}`}
+                    aria-controls={`${tabIdentity}-panel`}
+                    tabIndex={activeTab === id ? 0 : -1}
+                    ref={
+                      /** Retains only the actual mounted tab control. @param element - Button. @returns Nothing. */ (
+                        element,
+                      ) => {
+                        tabRefs.current[id] = element;
+                      }
+                    }
                     aria-selected={activeTab === id}
                     className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
                     key={id}
                     onClick={
                       /** Handles Writer formatting state.  @returns Callback result. */ () => {
-                        if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
-                        setActiveTab(id);
+                        activate(id);
                       }
                     }
                     role="tab"
@@ -107,6 +179,8 @@ export function WriterParagraphDialog({
             </div>
             <div
               className="writer-dialog-scroll grid min-w-0 grid-cols-1 content-start gap-3 text-sm sm:grid-cols-2"
+              id={`${tabIdentity}-panel`}
+              aria-labelledby={`${tabIdentity}-${activeTab}`}
               role="tabpanel"
             >
               {activeTab === "spacing" ? (
@@ -381,24 +455,11 @@ export function WriterParagraphDialog({
           >
             Cancel
           </button>
-          <button
-            className="writer-dialog-primary"
-            onClick={
-              /** Handles Writer formatting state.  @returns Callback result. */ () => {
-                if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
-                onDialogSubmit(dialogRequest.id, {
-                  tabStopItems: tabs.output,
-                  paragraphFormat: { ...draft, ...flow.FillItemSet() },
-                  paintLineNumbers: showLineNumbersDraft,
-                });
-              }
-            }
-            type="button"
-          >
+          <button className="writer-dialog-primary" type="submit">
             OK
           </button>
         </div>
-      </section>
+      </form>
     </div>
   );
 }

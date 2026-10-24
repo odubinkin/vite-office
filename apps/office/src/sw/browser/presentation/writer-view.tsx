@@ -554,13 +554,19 @@ export function WriterWorkbench({
                 onDialogCancel={
                   /** Cancels the exact paragraph request. @param id - Request identity. @returns Nothing. */ (
                     id,
-                  ) => dialogController.Cancel(id)
+                  ) => {
+                    dialogController.Cancel(id);
+                    (editingHostRef.current as HTMLElement).focus();
+                  }
                 }
                 onDialogSubmit={
                   /** Completes the exact paragraph request. @param id - Request identity. @param value - Accepted draft. @returns Nothing. */ (
                     id,
                     value,
-                  ) => dialogController.Complete(id, value)
+                  ) => {
+                    dialogController.Complete(id, value);
+                    (editingHostRef.current as HTMLElement).focus();
+                  }
                 }
               />
             }

@@ -117,33 +117,40 @@ export function WriterDialogPresenter({
       )}
       {request?.request.kind !== "insert-break" ? null : (
         <WriterInsertBreakDialog
+          key={request.id}
           onCancel={
             /** Cancels Insert Break. @returns Nothing. */
             () => {
               controller.Cancel(request.id);
+              focusDocument();
             }
           }
           onSubmit={
             /** Inserts a hard page break. @returns Nothing. */
             () => {
               controller.Complete(request.id, { breakKind: "page" });
+              focusDocument();
             }
           }
         />
       )}
       {request?.request.kind !== "page-style" ? null : (
         <WriterPageStyleDialog
+          key={request.id}
           unit={unit}
           initialValue={request.request.initialValue}
           onCancel={
-            /** Cancels the exact Page Style request. @returns Nothing. */ () =>
-              controller.Cancel(request.id)
+            /** Cancels the exact Page Style request and returns document focus. @returns Nothing. */ () => {
+              controller.Cancel(request.id);
+              focusDocument();
+            }
           }
           onSubmit={
             /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @returns Nothing. */ (
               pageDescriptor,
             ) => {
               controller.Complete(request.id, { pageDescriptor });
+              focusDocument();
             }
           }
         />

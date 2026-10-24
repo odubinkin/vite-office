@@ -164,3 +164,69 @@ it("exchanges the native tab page with the documented absent first-line scalar d
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
   expect(submit.mock.calls[0]?.[1].tabStopItems).toBeInstanceOf(SfxItemSet);
 });
+
+it("owns source tab keys before spin steps,retains tab changes and uses native form acceptance", /** Actual tab identity and deactivation survive keyboard and pointer switching. @returns Nothing. */ () => {
+  const cancel = vi.fn(),
+    submit = vi.fn();
+  render(
+    <WriterParagraphDialog
+      dialogRequest={{ id: 41, request }}
+      fontSizePt={12}
+      unit={F.INCH}
+      onDialogCancel={cancel}
+      onDialogSubmit={submit}
+    />,
+  );
+  const first = screen.getByRole("tab", { name: "Indents & Spacing" }),
+    flow = screen.getByRole("tab", { name: "Text Flow" }),
+    tabs = screen.getByRole("tab", { name: "Tabs" });
+  expect(first).toHaveFocus();
+  expect(first).toHaveAttribute("tabindex", "0");
+  expect(flow).toHaveAttribute("tabindex", "-1");
+  fireEvent.keyDown(first, { key: "ArrowLeft" });
+  expect(tabs).toHaveFocus();
+  expect(tabs).toHaveAttribute("aria-selected", "true");
+  fireEvent.change(screen.getByRole("combobox", { name: "Position" }), {
+    target: { value: "1 in" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "New" }));
+  fireEvent.keyDown(screen.getByRole("combobox", { name: "Position" }), {
+    key: "PageDown",
+    ctrlKey: true,
+  });
+  expect(first).toHaveFocus();
+  const metric = screen.getByLabelText("Above paragraph (in)");
+  fireEvent.keyDown(metric, { key: "PageDown", ctrlKey: true });
+  expect(flow).toHaveFocus();
+  fireEvent.keyDown(flow, { key: "PageDown", ctrlKey: true });
+  expect(tabs).toHaveFocus();
+  expect(
+    screen
+      .getAllByRole("option")
+      .some(
+        /** Identifies the retained new stop. @param option - Actual option. @returns Whether matching. */ (
+          option,
+        ) => option.textContent === "1.00″",
+      ),
+  ).toBe(true);
+  fireEvent.keyDown(tabs, { key: "PageUp", ctrlKey: true });
+  expect(flow).toHaveFocus();
+  fireEvent.keyDown(flow, { key: "ArrowRight" });
+  expect(tabs).toHaveFocus();
+  fireEvent.click(tabs);
+  expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", tabs.id);
+  expect(tabs).toHaveAttribute("aria-controls", screen.getByRole("tabpanel").id);
+  fireEvent.keyDown(tabs, { key: "PageDown", ctrlKey: true, shiftKey: true });
+  expect(tabs).toHaveAttribute("aria-selected", "true");
+  fireEvent.click(first);
+  expect(screen.getByLabelText("Above paragraph (in)")).toHaveValue("1.00″");
+  fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);
+  expect(cancel).not.toHaveBeenCalled();
+  fireEvent.submit(screen.getByRole("dialog"));
+  expect(submit).toHaveBeenCalledWith(
+    41,
+    expect.objectContaining({ paragraphFormat: request.initialValue }),
+  );
+  fireEvent.keyDown(first, { key: "Escape" });
+  expect(cancel).toHaveBeenCalledWith(41);
+});

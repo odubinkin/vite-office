@@ -12,7 +12,7 @@
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
-    "rationale": "Adapts the pinned insertbreak.ui to an accessible browser dialog for hard page breaks while retaining the authoritative break item in the Writer document model.",
+    "rationale": "Adapts the pinned insertbreak.ui to an accessible browser dialog for hard page breaks while retaining the authoritative break item in the Writer document model. TaskVBNV75 connects consumed native formatting dialog tab/default-button/Escape and mounted control/frame focus semantics through actual keyed requests;full toolkit/modal services remain unported.",
     "responsibilities": [
       "Renders WriterInsertBreakDialog and forwards accepted commands to Writer shell ownership."
     ],

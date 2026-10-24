@@ -360,6 +360,8 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByText("Delete"));
     expect(screen.queryByRole("option", { name: "24.0 pt" })).toBeNull();
     fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);
+    expect(screen.queryByRole("dialog")).toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(screen.queryByRole("dialog")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "leading" } });

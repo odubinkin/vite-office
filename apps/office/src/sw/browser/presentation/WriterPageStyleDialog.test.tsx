@@ -113,3 +113,20 @@ describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @retur
     },
   );
 });
+
+it("focuses the mounted page control and cancels with Escape without accepting", /** Native modal keyboard cancellation retains document draft isolation. @returns Nothing. */ () => {
+  const cancel = vi.fn(),
+    submit = vi.fn();
+  render(
+    <WriterPageStyleDialog
+      initialValue={createDefaultWriterPageDescriptor("en-US").GetValue()}
+      onCancel={cancel}
+      onSubmit={submit}
+    />,
+  );
+  expect(screen.getByLabelText("Paper format")).toHaveFocus();
+  fireEvent.keyDown(screen.getByLabelText("Paper format"), { key: "ArrowDown" });
+  fireEvent.keyDown(screen.getByLabelText("Paper format"), { key: "Escape" });
+  expect(cancel).toHaveBeenCalledOnce();
+  expect(submit).not.toHaveBeenCalled();
+});
