@@ -1,10 +1,10 @@
 ---
 id: "202610222108-KVGGCR"
 title: "Implement native internal clipboard fill and paste undo"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 63
+revision: 64
 origin:
   system: "manual"
 depends_on:
@@ -38,6 +38,9 @@ comments:
   -
     author: "CODER"
     body: "Start: human-approved216-path extension for canonical native copy and actual UI Undo snapshot ownership;preserve all final verification and stop conditions."
+  -
+    author: "CODER"
+    body: "Blocked: canonical copy progress is committed at the approved216-path footprint. Complete Calc verification requires the prepared two-file UI unmount-before-session-Close fix;the separate human218-path scope request is pending. Neither additional test file has been mutated. Full paste/history/EnterBlock and task74 remain incomplete."
 events:
   -
     type: "status"
@@ -67,8 +70,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: human-approved216-path extension for canonical native copy and actual UI Undo snapshot ownership;preserve all final verification and stop conditions."
+  -
+    type: "status"
+    at: "2026-10-24T14:48:54.381Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: canonical copy progress is committed at the approved216-path footprint. Complete Calc verification requires the prepared two-file UI unmount-before-session-Close fix;the separate human218-path scope request is pending. Neither additional test file has been mutated. Full paste/history/EnterBlock and task74 remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-24T14:47:24.176Z"
+doc_updated_at: "2026-10-24T14:48:54.381Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
