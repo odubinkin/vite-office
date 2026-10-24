@@ -4,7 +4,7 @@ title: "Canonize Writer hyperlink Internet fields and query removal"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-24T16:48:17.664Z"
+  updated_by: "CODER"
+  note: "Passed exact-final focused27/4 and strict3owner100coverage S64 B30 F24 L60;related native consumers1027/24;shell7/1;production Chromium3/3 at1280/390 with screenshot inspection,raw metadata/query preference/Undo/Redo/ODT clearing;all16declared final gates passed. Source hash manifest matches final reviewed paths. Task3after checkpoint;no full suite due. Close one task then pause goal."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-24T16:48:49.899Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed4df3d5fc282d against the approved represented Internet/common-field scope;source-hash-bound checks and actual browser/model/filter evidence satisfy closure."
+  evaluated_sha: "4df3d5fc282df55ecf9ad88d6a712b605d172dce"
+  blueprint_digest: "c06184d07039031d2c3511d489e6312560d1c9719aba270fd3515103386a05d5"
+  evidence_refs:
+    - ".agentplane/tasks/202610241638-H0Q3NZ/README.md"
+    - ".agentplane/tasks/202610241638-H0Q3NZ/quality/20261024-164849899-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610241638-H0Q3NZ/quality/20261024-164849899-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610241638-H0Q3NZ/quality/20261024-164849899-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610241638-H0Q3NZ/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-source-hashes.json"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-coverage-final.log"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-native-consumers-final.log"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-shell-exact.log"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-e2e-final.log"
+    - "output/playwright/writer-full-checkpoint/H0Q3NZ-final-gates.json"
+  findings:
+    - "Native default target order and editable custom Frame/raw Name fields reuse real core/filter ownership. Source query entry/checkbox/session preference uses JS string operations with exact literal question/hash behavior;WRITER088 documents the suspected source edge. No extra library,second document model or broad parity promotion."
+    - "Metadata-only acceptance captures original hyperlink presence and passes undefined replacement text to the existing range-aware core;explicit insertion payloads remain unchanged. Real shell history and production ODT/browser tests retain link text while fields update or clear. Escape and accepted/cancelled frame focus are tested through real mounted clients."
+    - "Reviewed25source/record/doc hashes match the implementation commit;strict3ownercoverage S64/64 B30/30 F24/24 L60/60 with zero skips.27focused cases,1027related consumer cases,7shell cases and3production Chromium cases pass;all16final deterministic gates pass. Original dialog regression cases remain present. Screenshots at1280/390 show accessible represented controls and footer."
 commit: null
 comments:
   -
@@ -35,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement source common hyperlink fields and query toggle through actual Writer owners;verify and close this one task then pause goal."
+  -
+    type: "verify"
+    at: "2026-10-24T16:48:17.664Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed exact-final focused27/4 and strict3owner100coverage S64 B30 F24 L60;related native consumers1027/24;shell7/1;production Chromium3/3 at1280/390 with screenshot inspection,raw metadata/query preference/Undo/Redo/ODT clearing;all16declared final gates passed. Source hash manifest matches final reviewed paths. Task3after checkpoint;no full suite due. Close one task then pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T16:47:53.334Z"
+doc_updated_at: "2026-10-24T16:48:17.718Z"
 doc_updated_by: "CODER"
 description: "Human authorizes exactly one further task after QZAHNT,then stop. Fix represented Hyperlink Internet common fields: native editable target list/order including arbitrary targets,raw Name metadata,source query-removal toggle and session preference,per-instance focus and cancellation. Reuse actual controller,frame dispatch,core hyperlink and ODT owners. No display-text replacement,other hyperlink pages,modeless Apply redesign,smart-URL parser expansion,clipboard or networking. Only vite-office-writer branch writer;up to24primary implementation/test/doc paths plus paired canonical/task/generated records. Related tests and focused Chromium1280/390;task3after prior full checkpoint,no full suite due. Finish exactly this task then pause goal."
 sections:
@@ -59,6 +88,39 @@ sections:
 
     Command: exact final scoped Prettier/ESLint,typecheck,docs,deps,size,tree,provenance,writer-resources,registry build/invariants/parity,static smoke,routing,doctor,diff argv in H0Q3NZ-final-gates.json.
     Result: pass:16/16commands. Evidence: corresponding H0Q3NZ-final-gate-N.log;source SHA256 manifest H0Q3NZ-source-hashes.json ties final primary/paired records to reviewed commit. Scope: all changed paths and declared repository gates. Full suite is not due at task3after full checkpoint. Close exactly this one task and pause goal.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-24T16:48:17.664Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed exact-final focused27/4 and strict3owner100coverage S64 B30 F24 L60;related native consumers1027/24;shell7/1;production Chromium3/3 at1280/390 with screenshot inspection,raw metadata/query preference/Undo/Redo/ODT clearing;all16declared final gates passed. Source hash manifest matches final reviewed paths. Task3after checkpoint;no full suite due. Close one task then pause goal.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T16:47:53.334Z, excerpt_hash=sha256:8c48b76fed5e93a91db170db049c38184750aac73af4d42341bea301eb5f825e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241638-H0Q3NZ/blueprint/resolved-snapshot.json
+    - old_digest: c06184d07039031d2c3511d489e6312560d1c9719aba270fd3515103386a05d5
+    - current_digest: c06184d07039031d2c3511d489e6312560d1c9719aba270fd3515103386a05d5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610241638-H0Q3NZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610241638-H0Q3NZ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task commits;preserve other active tasks and prior completed work."
   Findings: |-
     Pinned SfxFrame::GetDefaultTargetList appends empty,_top,_parent,_blank,_self;editable DOM input/datalist retains actual custom and imported frame names. Source HyperlinkTabPageBase transfers internal Name without trimming. The source Internet checkbox rewrites its entry immediately and stores a namespace-static preference across requests,even cancelled requests;unchecking does not restore deleted query text. Native JS indexOf/slice matches the consumed handler and requires no additional library. The GTK set_entry_text owner suppresses changed notifications,so the query handler performs one rewrite rather than an invented recursive normalization. WRITER088 records question marks inside fragments being treated as a query delimiter;source behavior remains preserved.
@@ -102,6 +164,39 @@ Result: pass. Evidence:7cases/1file,H0Q3NZ-shell-exact.log. Scope: actual comman
 
 Command: exact final scoped Prettier/ESLint,typecheck,docs,deps,size,tree,provenance,writer-resources,registry build/invariants/parity,static smoke,routing,doctor,diff argv in H0Q3NZ-final-gates.json.
 Result: pass:16/16commands. Evidence: corresponding H0Q3NZ-final-gate-N.log;source SHA256 manifest H0Q3NZ-source-hashes.json ties final primary/paired records to reviewed commit. Scope: all changed paths and declared repository gates. Full suite is not due at task3after full checkpoint. Close exactly this one task and pause goal.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-24T16:48:17.664Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed exact-final focused27/4 and strict3owner100coverage S64 B30 F24 L60;related native consumers1027/24;shell7/1;production Chromium3/3 at1280/390 with screenshot inspection,raw metadata/query preference/Undo/Redo/ODT clearing;all16declared final gates passed. Source hash manifest matches final reviewed paths. Task3after checkpoint;no full suite due. Close one task then pause goal.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T16:47:53.334Z, excerpt_hash=sha256:8c48b76fed5e93a91db170db049c38184750aac73af4d42341bea301eb5f825e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241638-H0Q3NZ/blueprint/resolved-snapshot.json
+- old_digest: c06184d07039031d2c3511d489e6312560d1c9719aba270fd3515103386a05d5
+- current_digest: c06184d07039031d2c3511d489e6312560d1c9719aba270fd3515103386a05d5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610241638-H0Q3NZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610241638-H0Q3NZ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
