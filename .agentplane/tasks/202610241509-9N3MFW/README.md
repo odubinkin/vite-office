@@ -4,7 +4,7 @@ title: "Connect native Writer numbering object toolbar to active shell context"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-24T15:21:00.713Z"
+  updated_by: "CODER"
+  note: "Verified: actual native NumberList context now renders existing source-visible numbering placements with table priority;41focused cases and4production Chromium scenarios pass. New presenter/Chrome owners have strict100coverage S11/B21/F5/L10;native list/history/ODT regressions pass. All16static/source/build gates pass;WRITER085 records source visibility normalization. Exactly this one task will close,then the goal stops."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-24T15:21:39.077Z"
+  updated_by: "EVALUATOR"
+  note: "Existing native numbering object toolbar is connected to real Writer context and commands on82cd787b0d2e;verified scope is complete and this one task can close before stopping."
+  evaluated_sha: "82cd787b0d2eb829c41a4c1df22e9a4aedfc7036"
+  blueprint_digest: "a86e0f268f04c803cdd0aab1978093cd7ef81f6c8588bb7290670946ea99cee1"
+  evidence_refs:
+    - ".agentplane/tasks/202610241509-9N3MFW/README.md"
+    - ".agentplane/tasks/202610241509-9N3MFW/quality/20261024-152139077-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610241509-9N3MFW/quality/20261024-152139077-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610241509-9N3MFW/quality/20261024-152139077-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610241509-9N3MFW/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-full-checkpoint/9N3MFW-coverage.log"
+    - "output/playwright/writer-full-checkpoint/9N3MFW-integration-final.log"
+    - "output/playwright/writer-full-checkpoint/9N3MFW-browser-final.log"
+    - "output/playwright/writer-full-checkpoint/9N3MFW-gates.json"
+    - "output/playwright/writer-full-checkpoint/9N3MFW-source-hashes.json"
+    - "docs/program/writer-upstream-suspected-issues.md"
+  findings:
+    - "Generated numobjectbar visible order and existing Sfx state are reused;native NumberList selection admits the bar and table context retains priority in the same object-bar strip. No parallel list store,kernel command or hidden source entry is added."
+    - "Real integration covers plain/list/table transitions,0/9level limits,pointer admission,undo/redo and ODT. The upstream list-continuation fixture uses its native selected range.41focused tests and4production Chromium scenarios pass;strict measured coverage for presenter/Chrome is100%S11/B21/F5/L10 without new ignores or threshold changes."
+    - "All16declared static/source/resource gates pass,screenshots1280/390 were inspected,and paired provenance retains browser adaptation status. WRITER085 preserves the surprising native Invisible registration normalization instead of changing upstream logic."
 commit: null
 comments:
   -
@@ -35,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: connect the existing native numbering object-bar resource to actual Writer context and bindings,verify related behavior,then close this one task and stop as requested."
+  -
+    type: "verify"
+    at: "2026-10-24T15:21:00.713Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: actual native NumberList context now renders existing source-visible numbering placements with table priority;41focused cases and4production Chromium scenarios pass. New presenter/Chrome owners have strict100coverage S11/B21/F5/L10;native list/history/ODT regressions pass. All16static/source/build gates pass;WRITER085 records source visibility normalization. Exactly this one task will close,then the goal stops."
 doc_version: 3
-doc_updated_at: "2026-10-24T15:20:26.146Z"
+doc_updated_at: "2026-10-24T15:21:00.765Z"
 doc_updated_by: "CODER"
 description: "Human requests exactly one next task after6764KT,then stop again. Connect the existing generated numobjectbar resource and implemented promote/demote/continue-numbering commands to the Writer workspace. Preserve native NumberList context,table object-bar priority,source visibility/order and actual command state/focus/history. Work only in vite-office-writer on writer;no new core operations,network,other tasks or full suite. Up to16primary implementation/test paths plus paired canonical/task/generated records. Related unit/integration strict coverage,production Chromium1280/390,ODT/history and static/source gates;finish this task then pause goal."
 sections:
@@ -49,6 +78,39 @@ sections:
     Command: npm run test:writer -- src/sw/browser/presentation/WriterNumObjectBar.test.tsx src/sw/source/uibase/shells/listsh-odt.test.ts. Result: pass4cases/2files;9N3MFW-integration-final.log. Native indent/history related profile also passes8cases/2files in9N3MFW-focused-final.log. These profiles overlap and are not a unique-test total.
     Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-numbering-toolbar.spec.ts apps/office/e2e/writer-native-list-context.spec.ts. Result: pass4/4production Chromium scenarios1280/390;9N3MFW-build.log and9N3MFW-browser-final.log. Scope: actual context menus and numbering toolbar,pointer retains the real contenteditable host,caret typing continues,history restores levels,and an upstream ODT fixture joins a selected list range through the actual toolbar. No page errors. Screenshots9N3MFW-numbering-1280.png and9N3MFW-numbering-390.png inspected;all three controls fit the viewport. No desktop pixel/raster parity claim.
     Command: full typecheck,scoped ESLint/Prettier,check:docs,check:dependencies,check:file-size,check:source-tree,check:source-provenance,check:writer-resources,inventory:registry:build,invariants,parity,static smoke,doctor,routing,git diff --check. Result: pass16gates;9N3MFW-gates.json and associated9N3MFW-*.log. Provenance1224modules:1030mapped171browser23infra. Runtime source hashes9N3MFW-source-hashes.json. Registered IO/autosave/recovery behavior retained. No full suite is due on the first task after the preceding full checkpoint;human requested exactly one next task and stop after closure. EVALUATOR and clean final commit follow.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-24T15:21:00.713Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: actual native NumberList context now renders existing source-visible numbering placements with table priority;41focused cases and4production Chromium scenarios pass. New presenter/Chrome owners have strict100coverage S11/B21/F5/L10;native list/history/ODT regressions pass. All16static/source/build gates pass;WRITER085 records source visibility normalization. Exactly this one task will close,then the goal stops.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T15:20:26.146Z, excerpt_hash=sha256:03f5c7945ded4987755494a49c71e9a8909ca81ddf438b92f09977378fa0c33c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241509-9N3MFW/blueprint/resolved-snapshot.json
+    - old_digest: a86e0f268f04c803cdd0aab1978093cd7ef81f6c8588bb7290670946ea99cee1
+    - current_digest: a86e0f268f04c803cdd0aab1978093cd7ef81f6c8588bb7290670946ea99cee1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610241509-9N3MFW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610241509-9N3MFW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task commits;preserve existing user and other task work."
   Findings: |-
     Native listsh.cxx registers Num_Toolbox at SFX_OBJECTBAR_OBJECT. Although the registration passes Invisible,CreateObjectBarUI_Impl converts it to Standard,and IsObjectBarVisible returns true. Native view.cxx pushes list below text and table shells;the table object bar wins the same position. Preserve this actual source behavior rather than inferring permanent hidden visibility from the enum name. Existing numobjectbar adapter already filters hidden bullet/number toggles;only promote,demote and continue-numbering are represented by visible supported commands.
@@ -78,6 +140,39 @@ Command: npx vitest run src/sw/browser/presentation/WriterNumObjectBar.test.tsx 
 Command: npm run test:writer -- src/sw/browser/presentation/WriterNumObjectBar.test.tsx src/sw/source/uibase/shells/listsh-odt.test.ts. Result: pass4cases/2files;9N3MFW-integration-final.log. Native indent/history related profile also passes8cases/2files in9N3MFW-focused-final.log. These profiles overlap and are not a unique-test total.
 Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-numbering-toolbar.spec.ts apps/office/e2e/writer-native-list-context.spec.ts. Result: pass4/4production Chromium scenarios1280/390;9N3MFW-build.log and9N3MFW-browser-final.log. Scope: actual context menus and numbering toolbar,pointer retains the real contenteditable host,caret typing continues,history restores levels,and an upstream ODT fixture joins a selected list range through the actual toolbar. No page errors. Screenshots9N3MFW-numbering-1280.png and9N3MFW-numbering-390.png inspected;all three controls fit the viewport. No desktop pixel/raster parity claim.
 Command: full typecheck,scoped ESLint/Prettier,check:docs,check:dependencies,check:file-size,check:source-tree,check:source-provenance,check:writer-resources,inventory:registry:build,invariants,parity,static smoke,doctor,routing,git diff --check. Result: pass16gates;9N3MFW-gates.json and associated9N3MFW-*.log. Provenance1224modules:1030mapped171browser23infra. Runtime source hashes9N3MFW-source-hashes.json. Registered IO/autosave/recovery behavior retained. No full suite is due on the first task after the preceding full checkpoint;human requested exactly one next task and stop after closure. EVALUATOR and clean final commit follow.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-24T15:21:00.713Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: actual native NumberList context now renders existing source-visible numbering placements with table priority;41focused cases and4production Chromium scenarios pass. New presenter/Chrome owners have strict100coverage S11/B21/F5/L10;native list/history/ODT regressions pass. All16static/source/build gates pass;WRITER085 records source visibility normalization. Exactly this one task will close,then the goal stops.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T15:20:26.146Z, excerpt_hash=sha256:03f5c7945ded4987755494a49c71e9a8909ca81ddf438b92f09977378fa0c33c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241509-9N3MFW/blueprint/resolved-snapshot.json
+- old_digest: a86e0f268f04c803cdd0aab1978093cd7ef81f6c8588bb7290670946ea99cee1
+- current_digest: a86e0f268f04c803cdd0aab1978093cd7ef81f6c8588bb7290670946ea99cee1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610241509-9N3MFW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610241509-9N3MFW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
