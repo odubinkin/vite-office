@@ -1,0 +1,72 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;actual single-row document fast path now prepares formatted scripts and completes references;general paste orchestration,Undo/EnterBlock and task74 remain pending",
+  "sourceBaseline": "81dfd409a31af3625e71347355607a5a1e9f75eb",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 300,
+  "changedPaths": 22,
+  "checks": {
+    "relatedTests": "22files/220scenarios pass with unchanged timeout/coverage thresholds;single-worker scheduling",
+    "coverage": {
+      "lines": {
+        "total": 313,
+        "covered": 313,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 374,
+        "covered": 374,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 205,
+        "covered": 205,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "finalScenarios": "2files/18scenarios pass after stronger real-color reset and fresh-ODS-reopen assertions",
+    "formulaConsumers": "5files/17scenarios pass",
+    "browserWorker": "fresh production build then actual document single-row preparation/script service/table copy/reference completion in Chromium and DOM-free Worker1/1 pass",
+    "scopedProvenance": "6source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "ScCellFormat first GetString overload color reset,context choice,scalar/string/formula dispatch,zero suppression,error/empty/value ordering and admitted native macro-level0 ellipsis branch.",
+    "Real nonthreaded context borrows actual formatter;no formatter/RO policy or cache replacement. Threaded prep/currency/global services remain explicitly unported.",
+    "Original GetErrorString selection over admitted resolved English resource/symbol fields,actual owned output strings;no fake gettext or compiler-symbol service.",
+    "Formula-cell lazy empty-string query and actual empty-code error serialization.",
+    "UpdateScriptTypes actual nonempty block walk,text-attribute cursor/cache guards,real formatted value and existing document script-service classification.",
+    "Document CopyOneCellFromClip cut/row/width/sheet/merge guards,source patterns/scripts/values and actual table/column copy and reference completion. The post-loop column delta is preserved as CALC279.",
+    "A source row with formulas repeats across the real destination;changed values recalculate,including after a fresh ODS reopen."
+  ],
+  "explicitBoundaries": [
+    "ScCellFormat coordinate overload,rich text,macro/running callbacks and other format families remain unported.",
+    "Native interpreter prepFormatterForRoMode,currency table,language-copy and threaded cache policy remain unrepresented;nonthreaded field/caller projection is not a full native context claim.",
+    "Conditional result formatting and CellStorageModified compute/stream caches are unported;nonempty conditional indexes reject explicitly. Existing script-service host binding is required.",
+    "Notes/sparklines have no represented stores in this CONTENTS slice;no null-result service peers were introduced.",
+    "The native theoretical null-pattern guard is unreachable for valid local attr-array rows,which always supply the genuine default pattern.",
+    "General CopyFromClip orchestration,paste Undo/EnterBlock and task74 UI acceptance are pending. Whole current Calc/changed-shared/all-application100coverage and missing liblangtag source gates remain unwaived."
+  ],
+  "failuresAndRepairs": [
+    "Initial test expected precision2 despite actual Calc default unlimited65535;corrected expected12.125 without changing defaults.",
+    "Native mutable range assignment uses existing ScRange.assign rather than replacing readonly field. Test text insertion uses actual document setter;callback captures original this without alias.",
+    "A wrong-cwd test-edit attempt failed before mutation and created one agent-owned route log;the log was moved to ignored root output and the edit rerun in the authoritative checkout. No extra path remains.",
+    "Initial coverage omitted existing shared/group listener scenarios;the related consumer tests close original handler coverage without fake providers or weakened checks."
+  ]
+}
