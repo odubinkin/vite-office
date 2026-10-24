@@ -1,0 +1,68 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;represented native language/scanner/cache ownership implemented;full formatter/document paste/history/task74 pending",
+  "sourceBaseline": "cff01bfaac4084aa29a32eb05e8a017b46e7b652",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 280,
+  "changedPaths": 26,
+  "checks": {
+    "relatedTests": "7files/35scenarios pass",
+    "coverage": {
+      "lines": {
+        "total": 339,
+        "covered": 339,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 369,
+        "covered": 369,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 61,
+        "covered": 61,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 121,
+        "covered": 121,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh build then real language change/table-generation/output Chromium/DOM-free Worker1/1 pass",
+    "boundaryTests": "47/47 pass",
+    "scopedProvenance": "5source owners pass",
+    "resourceGenerator": "--check verifies15186format rows,284 LC_INFO/date records and exact native keyword language anyOf values",
+    "other": "app/tools types,changed ESLint/supported Prettier,Python compile+generator,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff check pass"
+  },
+  "preserved": [
+    "Actual registered LC_INFO identity/date resource fields with unchanged native locale/ref fallback.",
+    "Actual Locale/OUString cached field ownership and explicit release of temporary fallback query/results.",
+    "Exact loaded-locale General name and native localization language list from zforscan/lang.h.",
+    "Represented SvNFLanguageData initial/current/cache/scanner ownership,International0 default,stable string/scanner identity,precision/parse retention and cache-before-scanner ChangeIntl ordering.",
+    "Source fallback ti_ET->en_US retained and documented CALC-274.",
+    "Canonical svl->i18nlangtag dependency follows Library_svl and native LanguageTag/MsLangId usage."
+  ],
+  "limits": [
+    "Not final all-Calc/changed-shared/all-application acceptance.",
+    "Locale/loaded-Locale fields and actual mapper interface explicitly project unrepresented LanguageTag/component-context service fields;full wrappers,calendar,transliteration,input scanner,color/date and UNO service/reference ABI are not fabricated.",
+    "Full lazy keyword/service initialization and language copy constructor remain unported.",
+    "Remaining builtin generator/full SvNumberFormatter,document formatter/paste/history and task74 remain pending.",
+    "Human-deleted liblangtag references remain absent;broad source/provenance/registry gates remain unwaived."
+  ],
+  "initialFailures": [
+    "New expectations incorrectly assumed German alternate decimal dot and ti_ET->ti_ER;corrected against source de_DE.xml/native registry/fallback without changing implementation selection.",
+    "Initial related selection omitted existing transliteration consumer coverage;adding actual native-transliteration-catalog tests restores raw100 without threshold/exclusion changes."
+  ]
+}
