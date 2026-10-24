@@ -1,4 +1,6 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { writerTextColorValue } from "../../source/core/attr/swatrset";
+import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../inc/hintids";
 
@@ -214,6 +216,31 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
 export class WriterViewProjection {
   private nextNodeId = 1;
   private readonly nodeIds = new WeakMap<SwTextNode, string>();
+  private styleOptionsOwner: SwDoc | undefined;
+  private styleOptions: readonly WriterParagraphStyleOption[] = [];
+  /** Keeps the immutable native style-row assignment stable across unrelated caret/bindings invalidations. Actual owner or row changes still reset the editable controller. @param document - Current real style-pool owner. @returns Stable detached style rows. */
+  private GetStyleOptions(document: SwDoc): readonly WriterParagraphStyleOption[] {
+    const next = createParagraphStyleOptions(document);
+    if (
+      this.styleOptionsOwner !== document ||
+      next.length !== this.styleOptions.length ||
+      next.some(
+        /** Compares actual native row values rather than a model revision that also changes on caret travel. @param entry - Current row. @param index - Source position. @returns Whether assignment changed. */
+        (entry, index) => {
+          const previous = this.styleOptions[index] as WriterParagraphStyleOption;
+          return (
+            entry.id !== previous.id ||
+            entry.name !== previous.name ||
+            entry.resourceId !== previous.resourceId
+          );
+        },
+      )
+    ) {
+      this.styleOptionsOwner = document;
+      this.styleOptions = next;
+    }
+    return this.styleOptions;
+  }
 
   /** Returns a stable view-only key for one live node. @param node - Canonical text node. @returns Projection key. */
   public GetNodeId(node: SwTextNode): string {
@@ -300,7 +327,7 @@ export class WriterViewProjection {
           /** Projects positions for paragraph formatting without discarding ruler identity. @param stop - Immutable ruler tab. @returns Position in points. */
           (stop) => stop.positionPt,
         );
-        const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
+        const color = writerTextColorValue(node.GetAttr(RES_CHRATR_COLOR) as SvxColorItem);
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
@@ -463,7 +490,7 @@ export class WriterViewProjection {
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
       textNodes: Object.freeze(textNodes),
-      paragraphStyleOptions: createParagraphStyleOptions(document),
+      paragraphStyleOptions: this.GetStyleOptions(document),
       paragraphStyleNames: [
         ...document.GetTextFormatColls().map(
           /** Retains names of all actual pool owners, even outside visible rows. @param style - Owned style. @returns Name. */
@@ -688,7 +715,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
               }
             : {}),
           ...(authored(RES_CHRATR_COLOR)
-            ? { color: (handler.ReadItem(RES_CHRATR_COLOR) as SfxStringItem).GetValue() }
+            ? { color: writerTextColorValue(handler.ReadItem(RES_CHRATR_COLOR) as SvxColorItem) }
             : {}),
           ...(authored(RES_CHRATR_HIGHLIGHT)
             ? { highlight: (handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue() }

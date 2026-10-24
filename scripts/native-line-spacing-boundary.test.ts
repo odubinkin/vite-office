@@ -29,6 +29,7 @@ it.each([
   },
 );
 it("retains the restricted shared library graph", /** Scalar fields cannot introduce general service dependencies. @returns Nothing. */ () => {
-  expect(isForbiddenModuleEdge("svtools", "vcl")).toBe(true);
+  // Library_svt links VCL; sampletext and font-name previews consume real device font data.
+  expect(isForbiddenModuleEdge("svtools", "vcl")).toBe(false);
   expect(isForbiddenModuleEdge("svx", "unotools")).toBe(true);
 });

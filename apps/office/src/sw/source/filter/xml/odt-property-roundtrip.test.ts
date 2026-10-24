@@ -1,5 +1,7 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
-
+import { writerTextColorValue } from "../../core/attr/swatrset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import { createTabs, tabStops } from "../../../../../test/tab-item-fixtures";
 import { describe, expect, it } from "vitest";
@@ -734,7 +736,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const writer = createWriterDocument();
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
-    paragraph.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
+    paragraph.SetAttr(createWriterTextColorItem("#123456"));
     paragraph.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
     paragraph.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
     paragraph.SetAttr(new SfxBoolItem(RES_KEEP, true));
@@ -770,7 +772,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
 
     const reopened = await readOdtDocument(bytes, metadata);
     const reopenedParagraph = reopened.document.paragraphs[0];
-    expect((reopenedParagraph?.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue()).toBe(
+    expect(writerTextColorValue(reopenedParagraph?.GetAttr(RES_CHRATR_COLOR) as SvxColorItem)).toBe(
       "#123456",
     );
     expect((reopenedParagraph?.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue()).toBe(
@@ -790,7 +792,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   it("preserves automatic style colors and rejects unsupported property values", /** Covers upstream automatic-color and strict bounded import behavior. @returns Completion after import failures. */ async () => {
     const writer = createWriterDocument();
     const heading = writer.GetTextFormatColl("heading-1");
-    heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "auto"));
+    heading.SetFormatAttr(createWriterTextColorItem("auto"));
     heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
     const defaultStyle = writer.GetDfltTextFormatColl();
     defaultStyle.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
@@ -804,12 +806,12 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     expect(styles).toContain('text:number-lines="true"');
     const reopened = await readOdtDocument(bytes, metadata);
     expect(
-      (
+      writerTextColorValue(
         reopened.document
           .GetTextFormatColl("heading-1")
           .GetAttrSet()
-          .Get(RES_CHRATR_COLOR) as SfxStringItem
-      ).GetValue(),
+          .Get(RES_CHRATR_COLOR) as SvxColorItem,
+      ),
     ).toBe("auto");
 
     await expect(
@@ -935,7 +937,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ),
     );
 
-    heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "named-red"));
+    heading.SetFormatAttr(createWriterTextColorItem(0x80123456));
     expect(
       /** Exports an invalid bounded color. @returns Bytes. */ () =>
         writeOdtDocument(writer, metadata),

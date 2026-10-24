@@ -3,6 +3,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
+import { CalcFormattingToolbar } from "./CalcFormattingToolbar";
+import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
 import { ScAddress } from "../../inc/address";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
@@ -221,5 +223,28 @@ it("updates only source-selected scripts and retains every field through ODS and
     }
   } finally {
     s.Close();
+  }
+});
+
+it("accepts a font from the standalone formatting surface without a grid focus callback", /** The optional focus port must preserve native dispatch when embedded independently. @returns Nothing. */ () => {
+  const session = createCalcSession();
+  const mounted = render(
+    <CalcFormattingToolbar
+      objectShell={session.controller.shell}
+      commandSource={createBrowserCommandSource(session.frame)}
+      resolveArguments={
+        /** Uses the same empty base arguments as the production workbench. @returns No base arguments. */ () =>
+          undefined
+      }
+    />,
+  );
+  try {
+    const font = screen.getByRole("combobox", { name: "Font Name" });
+    fireEvent.change(font, { target: { value: "Liberation Mono" } });
+    fireEvent.keyDown(font, { key: "Enter" });
+    expect(session.controller.GetFontFamily()).toBe("Liberation Mono");
+  } finally {
+    mounted.unmount();
+    session.Close();
   }
 });

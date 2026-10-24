@@ -32,6 +32,7 @@ it.each([
   },
 );
 it("retains the restricted library graph", /** Source field access cannot introduce an executable module cycle or font/config service. @returns Nothing. */ () => {
-  expect(isForbiddenModuleEdge("svtools", "vcl")).toBe(true);
+  // Library_svt links VCL; sampletext and font-name previews consume real device font data.
+  expect(isForbiddenModuleEdge("svtools", "vcl")).toBe(false);
   expect(isForbiddenModuleEdge("svx", "unotools")).toBe(true);
 });

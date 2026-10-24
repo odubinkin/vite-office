@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { writerTextColorValue } from "../../core/attr/swatrset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
@@ -865,7 +867,7 @@ export function getCharacterProperties(
     !(asianPosture instanceof SvxPostureItem) ||
     !(complexPosture instanceof SvxPostureItem) ||
     !(underline instanceof SvxUnderlineItem) ||
-    (color !== undefined && !(color instanceof SfxStringItem)) ||
+    (color !== undefined && !(color instanceof SvxColorItem)) ||
     (highlight !== undefined && !(highlight instanceof SfxStringItem)) ||
     !(fontSize instanceof SvxFontHeightItem) ||
     !(asianFontSize instanceof SvxFontHeightItem) ||
@@ -881,7 +883,7 @@ export function getCharacterProperties(
         ? getFontFamilyGeneric(complexFont.GetFamily())
         : undefined;
   return {
-    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
+    ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem
       ? {
           fontFamily: font.GetFamilyName(),

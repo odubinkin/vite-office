@@ -20,3 +20,10 @@ it("admits native VCL HarfBuzz use while protecting the cmap owner from browser 
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("admits original style label language and Writer complex-color dependencies", /** Library_svxcore and Library_sw retain actual original dependency directions. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svx", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("sw", "docmodel")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nlangtag", "svx")).toBe(true);
+  expect(isForbiddenModuleEdge("docmodel", "sw")).toBe(true);
+});

@@ -172,8 +172,10 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
   await expect(
-    page.getByRole("complementary", { name: "Writer properties sidebar" }),
-  ).toContainText("Heading 1");
+    page
+      .getByRole("complementary", { name: "Writer properties sidebar" })
+      .getByRole("combobox", { name: "Paragraph style", exact: true }),
+  ).toHaveValue("Heading 1");
   const centerButton = page
     .getByRole("toolbar", { name: "Writer formatting toolbar" })
     .getByRole("button", { exact: true, name: "Center" });
@@ -186,9 +188,10 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
       .getByRole("button", { name: "Center", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: "Add paragraph" })).toHaveCount(0);
+  await writerEditor.focus();
   await writerEditor.evaluate(
     /**
-     * Places the Chromium selection at the end of the controlled contenteditable paragraph before testing Enter.
+     * Places the Chromium selection at the end of the focused controlled contenteditable paragraph before testing Enter.
      *
      * @param element - Browser-rendered Writer paragraph whose contents own the desired collapsed caret.
      * @returns Nothing; the document selection receives the collapsed end-of-paragraph range.
@@ -202,6 +205,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
       range.collapse(false);
       selection.removeAllRanges();
       selection.addRange(range);
+      document.dispatchEvent(new Event("selectionchange"));
     },
   );
   await writerEditor.press("Enter");

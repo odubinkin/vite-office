@@ -58,8 +58,8 @@ afterEach(
   },
 );
 
-/** Renders actual custom rows inside a deliberately clipping toolbar. @returns Observable controller calls and widget. */
-function mount() {
+/** Renders actual custom rows inside a deliberately clipping toolbar. @param popupWidth - Optional owner-measured preview width. @returns Observable controller calls and widget. */
+function mount(popupWidth = 0) {
   const accept = vi.fn(),
     cancel = vi.fn().mockReturnValue(true);
   const tree = render(
@@ -70,6 +70,7 @@ function mount() {
         value="Alpha"
         enabled
         label="Custom"
+        popupWidth={popupWidth}
         getId={
           /** Reads row identity. @param row - Actual row. @returns Identity. */ (row) => row.id
         }
@@ -172,4 +173,12 @@ it("scrolls real active rows into view while retaining keyboard focus", /** Pins
   fireEvent.keyDown(f.box, { key: "ArrowDown" });
   expect(scroll).toHaveBeenCalledWith({ block: "nearest" });
   expect(f.box).toHaveFocus();
+});
+
+it("uses the preview owner's measured optimal width instead of an already clipped list width", /** Real style painting publishes an optimal width after popup admission. @returns Nothing. */ () => {
+  const f = mount(420);
+  vi.spyOn(f.list, "scrollWidth", "get").mockReturnValue(200);
+  fireEvent.resize(window);
+  expect(f.list.style.width).toBe("420px");
+  expect(f.box).toHaveAttribute("aria-expanded", "true");
 });

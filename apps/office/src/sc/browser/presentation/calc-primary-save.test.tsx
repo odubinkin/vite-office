@@ -119,9 +119,15 @@ it("persists imported ODS immediately and reopens its bytes from a new browser s
   imported.Close();
   const reopened = createCalcSession(db);
   mount(reopened);
+  const listed = vi.spyOn(db, "list");
   fireEvent.click(screen.getByRole("button", { name: "Open" }));
+  await act(
+    /** Awaits the actual IndexedDB listing instead of depending on a polling deadline under full-suite load. @returns Completion. */ async () => {
+      await required(listed.mock.results[0]).value;
+    },
+  );
   const opened = vi.spyOn(reopened.fileWorkflows, "OpenStored");
-  const stored = await screen.findByRole("button", { name: "External" });
+  const stored = screen.getByRole("button", { name: "External" });
   await act(
     /** Waits for actual primary storage or UI completion. @returns Completion. */ async () => {
       fireEvent.click(stored);

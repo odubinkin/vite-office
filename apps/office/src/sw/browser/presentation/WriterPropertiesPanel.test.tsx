@@ -130,6 +130,7 @@ it("shares actual style,font,size,effect and color state with the formatting too
   fireEvent.change(sidebar.getByRole("combobox", { name: "Font name" }), {
     target: { value: "Liberation Sans" },
   });
+  fireEvent.keyDown(sidebar.getByRole("combobox", { name: "Font name" }), { key: "Enter" });
   expect(toolbar.getByRole("combobox", { name: "Font name" })).toHaveValue("Liberation Sans");
   fireEvent.change(sidebar.getByRole("combobox", { name: "Font size" }), {
     target: { value: "14" },

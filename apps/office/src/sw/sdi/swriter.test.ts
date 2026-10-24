@@ -46,6 +46,8 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:Cut",
       ".uno:Copy",
       ".uno:Paste",
+      ".uno:FormatPaintbrush",
+      ".uno:ResetAttributes",
       ".uno:Undo",
       ".uno:Redo",
       ".uno:InsertTable",

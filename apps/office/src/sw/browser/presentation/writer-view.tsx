@@ -514,6 +514,7 @@ export function WriterWorkbench({
         }
         formattingToolbar={
           <WriterFormattingToolbar
+            objectShell={view.GetDocShell()}
             unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
             focusDocument={
@@ -586,6 +587,7 @@ export function WriterWorkbench({
         propertiesSidebar={
           <>
             <WriterPropertiesPanel
+              objectShell={view.GetDocShell()}
               isTable={currentTable !== undefined}
               unit={snapshot.metricUnit}
               paragraphStyleOptions={snapshot.paragraphStyleOptions}

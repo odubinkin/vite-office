@@ -5,6 +5,7 @@ import type { StyleToolboxEntry } from "./style-toolbox-control";
 
 /** Original frame-owned style pool lookup and dispatch ports. */
 export interface StyleToolboxSelectProps {
+  readonly popupWidth?: number;
   readonly options: readonly StyleToolboxEntry[];
   readonly value: string;
   readonly enabled: boolean;
@@ -25,6 +26,7 @@ export function StyleToolboxSelect(props: StyleToolboxSelectProps): React.JSX.El
   );
   return (
     <ComboBox
+      {...(props.popupWidth === undefined ? {} : { popupWidth: props.popupWidth })}
       resetKey={props.options}
       options={props.options}
       value={current === undefined ? "" : props.getLabel(current)}

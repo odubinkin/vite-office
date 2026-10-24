@@ -1,6 +1,9 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
+import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
 import {
   SID_ATTR_TABSTOP,
   SID_ATTR_LRSPACE,
@@ -329,15 +332,16 @@ export class SwAttrPool extends SfxItemPool {
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
       SID_ATTR_CHAR_UNDERLINE,
     );
-    for (const [which, value] of [
-      [RES_CHRATR_COLOR, "auto"],
-      [RES_CHRATR_HIGHLIGHT, "transparent"],
-    ] as const)
-      this.RegisterDefaultItem(
-        new SfxStringItem(which, value),
-        /** Restores a string-valued compatibility item. @param stored - Persisted value. @returns String item. */
-        (stored) => new SfxStringItem(which, String(stored)),
-      );
+    this.RegisterDefaultItem(
+      new SvxColorItem(RES_CHRATR_COLOR),
+      createWriterTextColorItem,
+      SID_ATTR_CHAR_COLOR,
+    );
+    this.RegisterDefaultItem(
+      new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"),
+      /** Retains the existing unported highlight compatibility boundary. @param stored - Persisted value. @returns Existing highlight item. */
+      (stored) => new SfxStringItem(RES_CHRATR_HIGHLIGHT, String(stored)),
+    );
     this.RegisterDefaultItem(
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
@@ -713,4 +717,25 @@ export class SwAttrSet extends SfxItemSet {
     if (includeItems) this.CopyItemsTo(clone);
     return clone;
   }
+}
+
+/** Converts only the existing validated Writer hex/automatic request and legacy worker values to the real native color item. New worker values retain the full packed transparency word. This is a compatibility boundary,not an alternate core color class. @param value - Existing request/transfer value. @returns Native Writer color item. */
+export function createWriterTextColorItem(value: unknown): SvxColorItem {
+  if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 0xffffffff)
+    return new SvxColorItem(
+      new Color(ColorTransparency, value, "ColorTransparencyTag"),
+      RES_CHRATR_COLOR,
+    );
+  if (value === "auto") return new SvxColorItem(COL_AUTO, RES_CHRATR_COLOR);
+  if (typeof value === "string" && /^#[0-9a-f]{6}$/iu.test(value))
+    return new SvxColorItem(new Color(Number.parseInt(value.slice(1), 16)), RES_CHRATR_COLOR);
+  throw new Error("Writer text color value is invalid.");
+}
+/** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
+export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
+  const color = item.GetValue();
+  if (color.equals(COL_AUTO)) return "auto";
+  if (color.GetAlpha() !== 255)
+    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
+  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
 }

@@ -1,11 +1,14 @@
 /** @fileoverview Canvas style device protocol over actual native font and geometry values;explicit metrics are fixtures,not native raster evidence. */
+import { browserColor, browserComputedColor } from "./color";
 import { expect, it, vi } from "vitest";
-import { BrowserStylePreviewDevice } from "./style-preview-device";
+import { MapUnit } from "../../tools/inc/mapunit";
+import { Size } from "../../tools/inc/gen";
+import { stylePreviewLogicToCssPixel, BrowserStylePreviewDevice } from "./style-preview-device";
 import { Font } from "../source/font/font";
 import { Point, Rectangle } from "../../tools/inc/gen";
 import { FontItalic, FontWeight, TextAlign } from "../../tools/inc/fontenum";
 import { SvtScriptType } from "../../svl/inc/languageoptions";
-import { Color, COL_WHITE } from "../../tools/inc/color";
+import { Color, ColorAlpha, COL_WHITE } from "../../tools/inc/color";
 import {
   calcStylePreviewBounds,
   drawStylePreviewEntry,
@@ -236,4 +239,82 @@ it("connects actual Canvas operations to source style measurement,drawing and fo
   expect(f.context.fillText).toHaveBeenCalledWith("Heading", 8, 23);
   expect(f.device.GetFont().Equals(f.ui)).toBe(true);
   expect(f.context.font).toBe("normal 400 20px ui-serif, serif");
+});
+
+it("converts actual absolute shell units with native signed rounding and rejects host-relative units", /** Covers physical-unit and pixel boundaries without depending on user ruler preference. @returns Nothing. */ () => {
+  for (const [unit, value, expected] of [
+    [MapUnit.Map100thMM, 2540, 96],
+    [MapUnit.Map10thMM, 254, 96],
+    [MapUnit.MapMM, 254, 960],
+    [MapUnit.MapCM, 254, 9600],
+    [MapUnit.Map1000thInch, 1000, 96],
+    [MapUnit.Map100thInch, 100, 96],
+    [MapUnit.Map10thInch, 10, 96],
+    [MapUnit.MapInch, 1, 96],
+    [MapUnit.MapPoint, 72, 96],
+    [MapUnit.MapTwip, 1440, 96],
+    [MapUnit.MapPixel, 96, 96],
+  ] as const) {
+    const actual = stylePreviewLogicToCssPixel(new Size(value, -value), unit);
+    expect([actual.Width(), actual.Height()]).toEqual([expected, -expected]);
+  }
+  // Boundary witness only: real native Size stores integers,so fractional pixel inputs are not document-reachable.
+  const half = stylePreviewLogicToCssPixel(
+    {
+      Width: /** Supplies the synthetic half-pixel boundary. @returns Half pixel. */ () => 0.5,
+      Height: /** Supplies the signed synthetic boundary. @returns Negative half pixel. */ () =>
+        -0.5,
+    },
+    MapUnit.MapPixel,
+  );
+  expect([half.Width(), half.Height()]).toEqual([1, -1]);
+  for (const unit of [MapUnit.MapAppFont, MapUnit.MapSysFont, MapUnit.MapRelative])
+    expect(
+      /** Converts an unsupported host-relative unit. @returns No pixel size. */ () =>
+        stylePreviewLogicToCssPixel(new Size(1, 1), unit),
+    ).toThrow("absolute shell map unit");
+});
+it("passes detached source font,actual baseline and color to the SVG paint sink", /** The sink adapts only output and cannot change the native device font. @returns Nothing. */ () => {
+  const f = fixture(),
+    sink = vi.fn();
+  const device = new BrowserStylePreviewDevice(
+    f.context as unknown as CanvasRenderingContext2D,
+    f.ui,
+    "#123456",
+    { background: COL_WHITE, fillColor: COL_WHITE, lineColor: undefined },
+    sink,
+  );
+  device.DrawText(new Point(2, 3), "Heading", 1, 3);
+  expect(sink).toHaveBeenCalledWith(
+    expect.objectContaining({
+      text: "ead",
+      x: 2,
+      y: 23,
+      cssFont: f.context.font,
+      color: "#123456",
+    }),
+  );
+  expect(f.context.fillText).not.toHaveBeenCalled();
+  const output = sink.mock.calls[0]?.[0];
+  output.font.SetFontHeight(99);
+  expect(device.GetFont().GetFontHeight()).toBe(20);
+});
+
+it("projects source channels and distinguishes unknown CSS color spaces", /** Tests the actual accepted computed-style grammar and channel limits. @returns Nothing. */ () => {
+  expect(browserColor(new Color(0x123456))).toBe("#123456");
+  expect(browserColor(new Color(ColorAlpha, 0, 1, 2, 3, "ColorAlphaTag"))).toBe("transparent");
+  const alpha = new Color(ColorAlpha, 128, 1, 2, 3, "ColorAlphaTag");
+  expect(browserColor(alpha)).toBe(`rgba(1, 2, 3, ${128 / 255})`);
+  expect(browserComputedColor("rgb(18, 52, 86)")?.toUInt32()).toBe(0x123456);
+  expect(browserComputedColor("rgba(1, 2, 3, 0.5)")?.equals(alpha)).toBe(true);
+  for (const css of [
+    "oklch(30% 0.2 30)",
+    "transparent",
+    "rgba(256, 0, 0, 1)",
+    "rgb(0, 256, 0)",
+    "rgb(0, 0, 256)",
+    "rgba(0, 0, 0, 2)",
+    "rgba(0, 0, 0, .)",
+  ])
+    expect(browserComputedColor(css)).toBeUndefined();
 });

@@ -1,9 +1,11 @@
 /** @fileoverview Actual Canvas text device for source style preview algorithms; CSS descriptor projection follows native SVG export, while browser font metrics/shaping remain browser-owned. */
 import { Font, type ConstFont } from "../source/font/font";
-import { Rectangle, type ReadonlyPoint } from "../../tools/inc/gen";
+import { Rectangle, Size, type ReadonlySize, type ReadonlyPoint } from "../../tools/inc/gen";
 import { FontItalic, FontWeight, TextAlign } from "../../tools/inc/fontenum";
 import { quoteFontFamily } from "./font-preview-device";
 import { Color } from "../../tools/inc/color";
+import { MapUnit, MapToO3tlLength } from "../../tools/inc/mapunit";
+import { Length, convert } from "../../o3tl/inc/unit_conversion";
 import { browserColor } from "./color";
 
 /** Actual host paint state; undefined line color explicitly disables the native rectangle outline. */
@@ -11,6 +13,35 @@ export interface BrowserStylePreviewPaintState {
   readonly background: Readonly<Color>;
   readonly fillColor: Readonly<Color>;
   readonly lineColor: Readonly<Color> | undefined;
+}
+
+/** Explicit host-device unavailability;core model/item errors are not swallowed by preview hosts. */
+export class BrowserStylePreviewUnavailable extends Error {}
+
+/** Actual text-output operation after source font choice,scaling and baseline conversion; browser SVG can supply native decorated text while Canvas retains actual metrics. */
+export interface BrowserStylePreviewText {
+  readonly text: string;
+  readonly x: number;
+  readonly y: number;
+  readonly font: ConstFont;
+  readonly cssFont: string;
+  readonly color: string;
+}
+/** Actual browser text-paint boundary; no layout or font decision is delegated to this callback. */
+export type BrowserStylePreviewTextSink = (text: BrowserStylePreviewText) => void;
+
+/** Original default MapMode length resolution and lcl_logicToPixel rounding,projected to browser CSS pixels (96per inch) before the actual backing-store DPR transform. Font-relative/native application units are not guessed. @param size - Actual logical size. @param unit - Actual shell map unit. @returns Integral CSS-pixel size. */
+export function stylePreviewLogicToCssPixel(size: ReadonlySize, unit: MapUnit): Size {
+  const length = MapToO3tlLength(unit);
+  if (length === Length.invalid)
+    throw new BrowserStylePreviewUnavailable("Style preview requires an absolute shell map unit.");
+  const factor = unit === MapUnit.MapPixel ? 1 / 96 : convert(1, length, Length.in);
+  /** Retains original multiply order and std::llround ties away from zero. @param n - Native signed logical extent. @returns Source rounded pixel extent. */
+  function pixel(n: number): number {
+    const value = n * factor * 96;
+    return value < 0 ? Math.ceil(value - 0.5) : Math.floor(value + 0.5);
+  }
+  return new Size(pixel(size.Width()), pixel(size.Height()));
 }
 
 /** Original CSS weight projection from SVGAttributeWriter::SetFontAttr; SEMILIGHT and unknown values use400. @param weight - Actual stored weight. @returns CSS weight. */
@@ -44,12 +75,13 @@ export class BrowserStylePreviewDevice {
   private readonly background: Readonly<Color>;
   private fillColor: Readonly<Color>;
   private readonly lineColor: Readonly<Color> | undefined;
-  /** Binds real Canvas and an actual UI font whose family is the computed CSS family list. @param context - Actual Canvas context. @param uiFont - Actual UI family and stored pixel font values. @param color - Actual UI text color. @param paint - Explicit host background, fill and outline state. @returns Device. */
+  /** Binds real Canvas and an actual UI font whose family is the computed CSS family list. @param context - Actual Canvas context. @param uiFont - Actual UI family and stored pixel font values. @param color - Actual UI text color. @param paint - Explicit host background, fill and outline state. @param textSink - Optional actual browser SVG text output. @returns Device. */
   constructor(
     private readonly context: CanvasRenderingContext2D,
     uiFont: ConstFont,
     color: string,
     paint: BrowserStylePreviewPaintState,
+    private readonly textSink?: BrowserStylePreviewTextSink,
   ) {
     this.font = new Font(uiFont);
     this.uiFamily = uiFont.GetFamilyName();
@@ -101,7 +133,9 @@ export class BrowserStylePreviewDevice {
   /** Projects original SVG CSS style/weight values and preserves the actual family identity. Native arbitrary average-width matching is unavailable through Canvas and is not guessed. @param value - Actual font. @returns Nothing. */
   public SetFont(value: ConstFont): void {
     if (value.GetAverageFontWidth() !== 0 || value.GetFontHeight() <= 0)
-      throw new Error("Canvas style preview requires a positive height and default average width.");
+      throw new BrowserStylePreviewUnavailable(
+        "Canvas style preview requires a positive height and default average width.",
+      );
     const italic = value.GetItalic();
     const style =
       italic === FontItalic.ITALIC_NONE
@@ -154,7 +188,19 @@ export class BrowserStylePreviewDevice {
   public DrawText(point: ReadonlyPoint, text: string, start: number, length: number): void {
     const fragment = text.slice(start, start + length);
     const offset = this.baselineOffset(this.context.measureText(fragment));
-    if (offset === undefined) throw new Error("Canvas style preview font metrics are unavailable.");
-    this.context.fillText(fragment, point.X(), point.Y() + offset);
+    if (offset === undefined)
+      throw new BrowserStylePreviewUnavailable(
+        "Canvas style preview font metrics are unavailable.",
+      );
+    if (this.textSink !== undefined)
+      this.textSink({
+        text: fragment,
+        x: point.X(),
+        y: point.Y() + offset,
+        font: new Font(this.font),
+        cssFont: this.context.font,
+        color: this.context.fillStyle as string,
+      });
+    else this.context.fillText(fragment, point.X(), point.Y() + offset);
   }
 }

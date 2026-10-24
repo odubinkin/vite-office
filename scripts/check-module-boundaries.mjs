@@ -162,7 +162,22 @@ const allowedEdges = new Map([
   // Original sdangitm.hxx includes tools/degree.hxx.
   // Original rotmodit.cxx exposes Any and CellVertJustify2.
   // Original pageitem.cxx clears the actual rtl OUString presentation output.
-  ["svx", new Set(["cppu", "editeng", "o3tl", "offapi", "sal", "svl", "svtools", "tools", "vcl"])],
+  // Library_svxcore links i18nlangtag; style label analysis uses actual LANGUAGE_DONTKNOW.
+  [
+    "svx",
+    new Set([
+      "i18nlangtag",
+      "cppu",
+      "editeng",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "svtools",
+      "tools",
+      "vcl",
+    ]),
+  ],
   [
     "sw",
     new Set([
@@ -172,6 +187,8 @@ const allowedEdges = new Map([
       // Original Library_sw links cppu; native property transport uses real Any values.
       "cppu",
       "cui",
+      // Library_sw links docmodel; real SvxColorItem transfer retains complex-color state.
+      "docmodel",
       "editeng",
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.

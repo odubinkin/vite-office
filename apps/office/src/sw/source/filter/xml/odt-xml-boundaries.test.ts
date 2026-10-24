@@ -59,7 +59,8 @@ it("reads raw and typed embedded resources from browser XML and rejects a missin
       metadata,
     );
   const xml = writeOdtXml(opened.document, metadata),
-    font = opened.document.GetEmbeddedFonts()[0]!;
+    font = opened.document.GetEmbeddedFonts()[0];
+  if (font === undefined) throw new Error("Embedded font fixture is missing.");
   const loaded = await readOdtDocument(xml, metadata);
   expect(loaded.document.GetEmbeddedFonts()[0]?.bytes).toEqual(font.bytes);
   const bytes = xml.files[font.path] as Uint8Array;
@@ -73,7 +74,7 @@ it("reads raw and typed embedded resources from browser XML and rejects a missin
   );
   textLoaded.document.Dispose();
   const files = { ...xml.files };
-  delete files[font.path];
+  Reflect.deleteProperty(files, font.path);
   Object.defineProperty(files, font.path, {
     enumerable: true,
     get: /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
@@ -114,7 +115,8 @@ it("invalidates captured shell guards after generation changes and same-generati
     /** Checks the browser XML and worker regression boundary. @param options - Controlled regression input. @returns Regression result or completion. */ (
       options?: OdtFilterOperationOptions,
     ) => {
-      writerGuards.push(options!.isCurrent!);
+      if (options?.isCurrent === undefined) throw new Error("Writer filter guard is missing.");
+      writerGuards.push(options.isCurrent);
     };
   const exportSpy = vi.spyOn(writerFilter, "Export").mockImplementation(
     /** Checks the browser XML and worker regression boundary. @param _doc - Controlled regression input. @param options - Controlled regression input. @returns Regression result or completion. */ async (
@@ -173,7 +175,8 @@ it("invalidates captured shell guards after generation changes and same-generati
       xml,
       isCurrent,
     ) => {
-      calcGuards.push(isCurrent!);
+      if (isCurrent === undefined) throw new Error("Calc filter guard is missing.");
+      calcGuards.push(isCurrent);
       return (xml ? { format: "xml", files: {} } : new Uint8Array()) as never;
     },
   );

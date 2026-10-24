@@ -2,6 +2,8 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 
 import {
@@ -120,6 +122,18 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
+  if (item instanceof SvxColorItem) {
+    const complex = item.getComplexColor(),
+      empty = new ComplexColor();
+    // Source equality omits usage/final fields;checking it alone could lose native state.
+    if (
+      !complex.equals(empty) ||
+      complex.getThemeColorUsage() !== empty.getThemeColorUsage() ||
+      !complex.getFinalColor().equals(empty.getFinalColor())
+    )
+      throw new Error("Writer complex color transfer is not implemented.");
+    return { which: item.Which(), value: item.GetValue().toUInt32() };
+  }
   if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
   if (item instanceof SvxEscapementItem)
     return {

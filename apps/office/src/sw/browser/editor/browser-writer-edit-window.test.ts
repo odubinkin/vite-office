@@ -322,3 +322,119 @@ it("preserves the native point during projection-driven paragraph focus and rest
     session.Close();
   }
 });
+
+it("keeps the browser-created moving caret and reversed range when Chromium focuses the owning host", /** Host focus is part of native selection creation;it must not restore an older shell cursor before selectionchange. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession(),
+    shell = session.view.GetWrtShell(),
+    node = shell.GetActiveParagraph();
+  shell.Insert("abcdefgh");
+  const root = document.createElement("article"),
+    paragraph = document.createElement("p");
+  paragraph.dataset.writerParagraphId = "focus-original";
+  paragraph.dataset.writerNodeIndex = String(node.GetIndex());
+  paragraph.textContent = "abcdefgh";
+  root.append(paragraph);
+  document.body.append(root);
+  const adapter = new BrowserWriterEditWindow(
+    session.view.GetEditWin(),
+    {
+      document,
+      getSelection: /** Uses the actual host Selection. @returns Browser selection. */ () =>
+        window.getSelection(),
+    },
+    /** Resolves the real mounted paragraph. @returns Paragraph. */ () => paragraph,
+  );
+  const retained = {
+    point: { paragraphId: "focus-original", nodeIndex: node.GetIndex(), offset: 8 },
+  };
+  const text = paragraph.firstChild;
+  if (text === null) throw new Error("Focus fixture text is missing.");
+  try {
+    window.getSelection()?.setBaseAndExtent(text, 3, text, 3);
+    adapter.HandleFocus(
+      {
+        target: root,
+        currentTarget: root,
+        relatedTarget: paragraph,
+      } as unknown as React.FocusEvent<HTMLElement>,
+      retained,
+    );
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(3);
+    window.getSelection()?.setBaseAndExtent(text, 6, text, 2);
+    adapter.HandleFocus(
+      {
+        target: root,
+        currentTarget: root,
+        relatedTarget: paragraph,
+      } as unknown as React.FocusEvent<HTMLElement>,
+      retained,
+    );
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(2);
+    expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(6);
+    window.getSelection()?.removeAllRanges();
+    const current = {
+      point: { ...retained.point, offset: 2 },
+      mark: { ...retained.point, offset: 6 },
+    };
+    adapter.HandleFocus(
+      {
+        target: root,
+        currentTarget: root,
+        relatedTarget: null,
+      } as unknown as React.FocusEvent<HTMLElement>,
+      current,
+    );
+    expect(window.getSelection()?.focusOffset).toBe(2);
+    const input = document.createElement("input");
+    document.body.append(input);
+    input.focus();
+    window.getSelection()?.setBaseAndExtent(text, 0, text, 0);
+    adapter.HandleFocus(
+      {
+        target: root,
+        currentTarget: root,
+        relatedTarget: input,
+      } as unknown as React.FocusEvent<HTMLElement>,
+      current,
+    );
+    expect(window.getSelection()?.focusOffset).toBe(2);
+    input.remove();
+    // Synthetic boundary only: a connected foreground editing host cannot receive focus with no active document element.
+    const active = vi.spyOn(document, "activeElement", "get").mockReturnValue(null);
+    try {
+      window.getSelection()?.setBaseAndExtent(text, 1, text, 1);
+      adapter.HandleFocus(
+        {
+          target: root,
+          currentTarget: root,
+          relatedTarget: null,
+        } as unknown as React.FocusEvent<HTMLElement>,
+        current,
+      );
+      expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
+    } finally {
+      active.mockRestore();
+    }
+    window.getSelection()?.removeAllRanges();
+    adapter.HandleFocus({
+      target: root,
+      currentTarget: root,
+      relatedTarget: null,
+    } as unknown as React.FocusEvent<HTMLElement>);
+    expect(window.getSelection()?.rangeCount).toBe(0);
+    const decoration = document.createElement("button");
+    decoration.contentEditable = "false";
+    root.append(decoration);
+    const point = shell.CaptureCursorState().point;
+    adapter.HandleFocus({
+      target: decoration,
+      currentTarget: root,
+      relatedTarget: null,
+    } as unknown as React.FocusEvent<HTMLElement>);
+    expect(shell.CaptureCursorState().point).toEqual(point);
+  } finally {
+    window.getSelection()?.removeAllRanges();
+    root.remove();
+    session.Close();
+  }
+});

@@ -1,8 +1,11 @@
 /** @fileoverview Checks live document-owned style population, dispatch and history through actual Sfx bindings. */
+import type { StylePreviewSource } from "../../../svx/browser/tbxctrls/style-preview-state";
+import { useWriterStylePreviews } from "./use-writer-style-previews";
+import { MapUnit } from "../../../tools/inc/mapunit";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
-import { useSyncExternalStore } from "react";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { isValidElement, useSyncExternalStore } from "react";
+import { act, cleanup, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
@@ -266,4 +269,65 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     );
     owner.close();
   });
+});
+
+it("retains an editable style draft across unrelated native binding invalidation", /** Actual pool rows and owner identity are unchanged by a caret/state refresh. @returns Nothing. */ () => {
+  const f = attach();
+  try {
+    render(<f.Toolbar />);
+    const input = screen.getByRole("combobox", { name: "Paragraph style" });
+    const before = f.store.GetSnapshot().paragraphStyleOptions;
+    fireEvent.change(input, { target: { value: "Draft custom name" } });
+    act(
+      /** Publishes an unrelated native state refresh. @returns Nothing. */ () => {
+        f.frame.GetBindings().Invalidate("selection");
+      },
+    );
+    expect(f.store.GetSnapshot().paragraphStyleOptions).toBe(before);
+    expect(input).toHaveValue("Draft custom name");
+  } finally {
+    f.close();
+  }
+});
+
+it("reads actual shell style items for localized,custom,missing and closed preview owners", /** Checks the actual shared toolbar/sidebar preview contract without mounting an invented style pool. @returns Nothing. */ () => {
+  const f = attach();
+  try {
+    const entries = f.store.GetSnapshot().paragraphStyleOptions;
+    const hook = renderHook(
+      /** Binds the real owning shell. @returns Preview ports. */ () =>
+        useWriterStylePreviews(
+          f.shell,
+          entries,
+          /** Localizes only resource-backed entries. @param id - Actual resource identity. @returns Label. */ (
+            id,
+          ) => ({ label: id }),
+        ),
+    );
+    const builtin = entries[0];
+    if (builtin === undefined) throw new Error("Style fixture is missing.");
+    const renderItem = hook.result.current.renderItem;
+    if (renderItem === undefined) throw new Error("Style preview renderer is missing.");
+    const builtinRow = renderItem(builtin, false),
+      customRow = renderItem({ id: "unknown-style", name: "Custom name" }, true);
+    if (
+      !isValidElement<{ source: StylePreviewSource; name: string }>(builtinRow) ||
+      !isValidElement<{ source: StylePreviewSource; name: string }>(customRow)
+    )
+      throw new Error("Preview row is missing.");
+    expect(builtinRow.props.source.mapUnit).toBe(MapUnit.MapTwip);
+    expect(builtinRow.props.source.getItemSet()).toBeDefined();
+    expect(customRow.props.name).toBe("Custom name");
+    expect(customRow.props.source.getItemSet()).toBeDefined();
+    act(
+      /** Publishes actual measured host extents. @returns Nothing. */ () =>
+        builtinRow.props.source.controller.ReportWidth(builtin.id, 321),
+    );
+    expect(hook.result.current.popupWidth).toBe(321);
+    f.shell.Close();
+    expect(builtinRow.props.source.getItemSet()).toBeUndefined();
+    hook.unmount();
+  } finally {
+    f.close();
+  }
 });

@@ -115,7 +115,10 @@ for (const width of [1280, 390])
       .locator("..")
       .getByRole("button", { name: "Show Paragraph style", exact: true })
       .click();
-    await expect(select.locator("..").getByRole("option")).toHaveText([
+    const popup = page.locator(`id=${await select.getAttribute("aria-controls")}`);
+    await expect(
+      popup.getByRole("option").locator("[data-office-style-preview] > span"),
+    ).toHaveText([
       "Default Paragraph Style",
       "Text body",
       "Title",
@@ -130,7 +133,7 @@ for (const width of [1280, 390])
       "Owned child",
       "Unused: & 字",
     ]);
-    await select.locator("..").getByRole("option", { name: "Unused: & 字", exact: true }).click();
+    await popup.getByRole("option", { name: "Unused: & 字", exact: true }).click();
     await expect(select).toHaveValue("Unused: & 字");
     await expect(paragraph).toHaveAttribute("data-style", "UnusedCustom");
     await editor.press("Control+z");

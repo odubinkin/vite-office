@@ -34,6 +34,7 @@
     ],
     "omittedResponsibilities": [
       "Full native component and framework services remain unported;no whole-component parity claim."
-    ]
+    ],
+    "rationale": " Task6764KT adds original SID_ATTR_CHAR_COLOR10017 for actual native style foreground slot lookup."
   }
 }

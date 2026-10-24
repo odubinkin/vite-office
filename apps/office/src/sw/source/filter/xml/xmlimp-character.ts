@@ -1,4 +1,5 @@
 /** @fileoverview Character-property conversion shard of the existing SwXMLImport bridge; original item member validation is retained, without a substitute UNO service. */
+import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { MID_ESC, MID_ESC_HEIGHT } from "../../../../editeng/inc/memberids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
@@ -23,7 +24,6 @@ import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
-  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
@@ -64,7 +64,7 @@ export function putCharacterProperties(
   }
   if (properties.strikeout !== undefined)
     put(new SvxCrossedOutItem(properties.strikeout as FontStrikeout, RES_CHRATR_CROSSEDOUT));
-  if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
+  if (properties.color !== undefined) put(createWriterTextColorItem(properties.color));
   for (const [suffix, which] of [
     ["", RES_CHRATR_FONT],
     ["Asian", RES_CHRATR_CJK_FONT],

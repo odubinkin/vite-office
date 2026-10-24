@@ -14,6 +14,7 @@ import { ChevronDown } from "lucide-react";
 
 /** Browser widget ports; document commands and focus ownership belong to the calling controller. */
 export interface ComboBoxProps<T> {
+  readonly popupWidth?: number;
   readonly options: readonly T[];
   readonly mruOptions?: readonly T[];
   readonly value: string;
@@ -195,6 +196,7 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
       {open &&
         createPortal(
           <ComboBoxPopup
+            preferredWidth={props.popupWidth ?? 0}
             anchor={anchor}
             popup={popup}
             onDismiss={
@@ -260,13 +262,20 @@ export function ComboBox<T>(props: ComboBoxProps<T>): React.JSX.Element {
 
 /** Browser popup stays in the document overlay layer while retaining the combo's actual focus boundary. */
 interface PopupProps extends HTMLAttributes<HTMLDivElement> {
+  readonly preferredWidth: number;
   readonly anchor: RefObject<HTMLSpanElement | null>;
   readonly popup: RefObject<HTMLDivElement | null>;
   readonly onDismiss: () => void;
 }
 
 /** Positions actual measured content within the current viewport; native UI command ownership is outside this primitive. @param props - Actual anchor, popup and DOM attributes. @returns Overlay list. */
-function ComboBoxPopup({ anchor, popup, onDismiss, ...attributes }: PopupProps): React.JSX.Element {
+function ComboBoxPopup({
+  anchor,
+  popup,
+  onDismiss,
+  preferredWidth,
+  ...attributes
+}: PopupProps): React.JSX.Element {
   useLayoutEffect(
     /** Tracks browser geometry and pointer dismissal for this mounted list only. @returns Cleanup. */
     () => {
@@ -275,7 +284,10 @@ function ComboBoxPopup({ anchor, popup, onDismiss, ...attributes }: PopupProps):
         const owner = anchor.current as HTMLSpanElement,
           list = popup.current as HTMLDivElement;
         const rect = owner.getBoundingClientRect();
-        const width = Math.min(window.innerWidth, Math.max(rect.width, list.scrollWidth));
+        const width = Math.min(
+          window.innerWidth,
+          Math.max(rect.width, preferredWidth > 0 ? preferredWidth : list.scrollWidth),
+        );
         const below = window.innerHeight - rect.bottom;
         const above = rect.top;
         const down = below >= Math.min(240, list.scrollHeight) || below >= above;
@@ -295,16 +307,23 @@ function ComboBoxPopup({ anchor, popup, onDismiss, ...attributes }: PopupProps):
           onDismiss();
       }
       position();
+      const observer = new MutationObserver(position);
+      observer.observe(popup.current as HTMLDivElement, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
       window.addEventListener("resize", position);
       window.addEventListener("scroll", position, true);
       document.addEventListener("pointerdown", dismiss, true);
       return /** Releases this mounted popup's browser listeners. @returns Nothing. */ () => {
+        observer.disconnect();
         window.removeEventListener("resize", position);
         window.removeEventListener("scroll", position, true);
         document.removeEventListener("pointerdown", dismiss, true);
       };
     },
-    [anchor, popup, onDismiss],
+    [anchor, popup, onDismiss, preferredWidth],
   );
   return (
     <div

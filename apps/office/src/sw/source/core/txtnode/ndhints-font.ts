@@ -24,14 +24,13 @@ import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat } from "./txatbase";
 import { assertTextRange, clipHintOutsideRange } from "./ndhints-range";
-import type { SwAttrPool } from "../attr/swatrset";
+import { createWriterTextColorItem, type SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 
 /** Copies all original direct items and applies complete font values at their real boundaries. @param hints - Source ranges. @param pool - Document pool. @param textLength - Logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param font - Requested five-field item. @param inherited - Node defaults. @returns Independent canonical range snapshot. */
@@ -92,7 +91,11 @@ export function createCharacterColorItems(
   property: "color" | "highlight",
   value: string,
 ): SfxPoolItem[] {
-  return [new SfxStringItem(property === "color" ? RES_CHRATR_COLOR : RES_CHRATR_HIGHLIGHT, value)];
+  return [
+    property === "color"
+      ? createWriterTextColorItem(value)
+      : new SfxStringItem(RES_CHRATR_HIGHLIGHT, value),
+  ];
 }
 
 /** Applies actual item-set deltas at native hint boundaries without projecting unrelated values. @param hints - Original ranges. @param pool - Document pool. @param textLength - Complete logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param delta - Native item changes. @param inherited - Node defaults. @returns Independent native snapshot. */

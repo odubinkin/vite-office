@@ -1,6 +1,9 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import { writerTextColorValue } from "../attr/swatrset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { createWriterTextColorItem } from "../attr/swatrset";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
@@ -414,7 +417,7 @@ export function createSwFormatAutoFormat(
 ): SwFormatAutoFormat {
   const items = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
   if (attributes.color !== inherited.color && attributes.color !== undefined)
-    items.Put(new SfxStringItem(RES_CHRATR_COLOR, attributes.color));
+    items.Put(createWriterTextColorItem(attributes.color));
   if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       items.Put(
@@ -508,7 +511,7 @@ export function projectWriterCharacterAttributes(
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
   return {
-    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
+    ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),

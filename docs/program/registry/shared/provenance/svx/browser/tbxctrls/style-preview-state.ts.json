@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/style-preview-state.ts",
+          "marker": "BrowserStylePreviewState"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StylePreviewRow.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/shared/style-name-preview.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svx/browser/tbxctrls/style-preview-state.ts",
+    "rationale": "Owns persistent native optional font members and actual measured widths/subscriptions for one mounted style box. Actual document style pool and shell units remain outside this UI state.",
+    "responsibilities": [
+      "Owns persistent native optional font members and actual measured widths/subscriptions for one mounted style box. Actual document style pool and shell units remain outside this UI state."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Owns persistent native optional font members and actual measured widths/subscriptions for one mounted style box. Actual document style pool and shell units remain outside this UI state."
+    },
+    "status": "local-only"
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { createWriterTextColorItem } from "../../source/core/attr/swatrset";
 import { createTabs } from "../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
@@ -26,7 +27,6 @@ import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import {
-  RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
@@ -277,9 +277,17 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     const selector = within(
       screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
-    ).getByLabelText("Font name") as HTMLSelectElement;
-    expect(within(selector).getByRole("option", { name: "Package Serif" })).toBeInTheDocument();
+    ).getByLabelText("Font name") as HTMLInputElement;
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Show Font name" },
+      ),
+    );
+    expect(screen.getByRole("option", { name: "Package Serif" })).toBeInTheDocument();
+    fireEvent.keyDown(selector, { key: "Escape" });
     fireEvent.change(selector, { target: { value: "Package Serif" } });
+    fireEvent.keyDown(selector, { key: "Enter" });
     await waitFor(
       /** Observes command state and font fallback. @returns Nothing. */ () => {
         expect(selector.value).toBe("Package Serif");
@@ -321,20 +329,14 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
         );
       },
     );
-    expect(
-      within(
-        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
-          "Font name",
-        ),
-      ).getByRole("option", { name: "Replacement Serif" }),
-    ).toBeInTheDocument();
-    expect(
-      within(
-        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
-          "Font name",
-        ),
-      ).queryByRole("option", { name: "Package Serif" }),
-    ).toBeNull();
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Show Font name" },
+      ),
+    );
+    expect(screen.getByRole("option", { name: "Replacement Serif" })).toBeInTheDocument();
+    expect(screen.queryByRole("option", { name: "Package Serif" })).toBeNull();
     rendered.unmount();
     session.Close();
   });
@@ -481,7 +483,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   it("projects explicit paragraph colors without altering native text attributes", /** Checks projects explicit paragraph colors without altering native text attributes. @returns Test callback result. */ () => {
     const document = createWriterDocument();
     const node = document.paragraphs[0]!;
-    node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
+    node.SetAttr(createWriterTextColorItem("#123456"));
     node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
     node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]));
     const cursor = new SwPaM(new SwPosition(node, 0));

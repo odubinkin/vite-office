@@ -457,10 +457,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           /** Restores the retained shell cursor when the owning client explicitly regains focus. @param event - Host or paragraph focus. @returns Nothing. */ (
             event,
           ) => {
-            controller.HandleFocus(event);
-            if (event.target === event.currentTarget) {
-              controller.RestoreSelection(props.cursorSelection);
-            }
+            controller.HandleFocus(event, props.cursorSelection);
           }
         }
         onContextMenu={

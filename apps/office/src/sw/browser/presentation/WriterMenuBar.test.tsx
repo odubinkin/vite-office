@@ -371,6 +371,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         ),
         { target: { value: "Noto Serif" } },
       );
+      fireEvent.keyDown(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
+          "Font name",
+        ),
+        { key: "Enter" },
+      );
       fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);

@@ -1,4 +1,7 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
+import { writerTextColorValue } from "../source/core/attr/swatrset";
+import { SvxColorItem } from "../../editeng/inc/colritem";
+import { createWriterTextColorItem } from "../source/core/attr/swatrset";
 import { encodeSfxPoolItem } from "../browser/filter/xml/item-codec";
 import { createTabs } from "../../../test/tab-item-fixtures";
 import { FontItalic, FontWeight } from "../../tools/inc/fontenum";
@@ -346,7 +349,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((hanging.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(11);
     expect((heading.Get(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
     expect((caption.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
-    expect((comment.Get(RES_CHRATR_COLOR) as SfxStringItem).GetValue()).toBe("auto");
+    expect(writerTextColorValue(comment.Get(RES_CHRATR_COLOR) as SvxColorItem)).toBe("auto");
     expect((comment.Get(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue()).toBe("transparent");
     const quotations = document.GetTextFormatColl("quotations").GetAttrSet();
     expect((quotations.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
@@ -357,7 +360,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       document.GetAttrPool().CreateItem({ which: RES_MARGIN_RIGHT, value: 10 }),
     ).toBeInstanceOf(SvxRightMarginItem);
     expect(document.GetAttrPool().CreateItem({ which: RES_CHRATR_COLOR, value: "auto" })).toEqual(
-      new SfxStringItem(RES_CHRATR_COLOR, "auto"),
+      createWriterTextColorItem("auto"),
     );
     expect(
       document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),

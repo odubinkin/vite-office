@@ -1,4 +1,6 @@
 /** @fileoverview Composes the consumed native Writer Style,Character and Paragraph Properties panels over the active frame. */
+import type { SwDocShell } from "../../source/uibase/app/docsh";
+import { useWriterStylePreviews } from "./use-writer-style-previews";
 import { TableEditPanel } from "../sidebar/TableEditPanel";
 import { Ellipsis, Paintbrush, RefreshCw, FilePlus } from "lucide-react";
 import { StylesPropertyPanel } from "../../../svx/browser/sidebar/styles/StylesPropertyPanel";
@@ -66,6 +68,7 @@ export function WriterParagraphProperties(
 export function WriterPropertiesPanel(
   props: WriterParagraphPropertiesProps &
     Readonly<{
+      objectShell?: SwDocShell;
       paragraphStyleNames?: readonly string[];
       paragraphStyleOptions: readonly WriterParagraphStyleOption[];
       isTable: boolean;
@@ -78,6 +81,7 @@ export function WriterPropertiesPanel(
   function resource(url: string) {
     return selectWriterCommandResource(localization, url);
   }
+  const preview = useWriterStylePreviews(props.objectShell, props.paragraphStyleOptions, resource);
   const style = useBrowserCommandPresentation(
     props.commandSource,
     WRITER_COMMAND_IDS.styleApply,
@@ -86,6 +90,7 @@ export function WriterPropertiesPanel(
   return (
     <>
       <StylesPropertyPanel
+        {...preview}
         title={localization.GetText("writer.properties.style", "Style")}
         inSidebar
         tools={
