@@ -4,7 +4,7 @@
   "resolverInput": {
     "taskId": "202610231428-6764KT",
     "title": "Implement upstream font and style dropdown previews for Writer and Calc",
-    "description": "Implement shared native font dropdown previews in Writer and Calc and real style item-set previews in existing selectors. Work only in vite-office-writer branch writer. User reapproval2026-10-24 expands scope to160 implementation/test/tooling paths plus paired canonical records/generated views and permits necessary pinned source downloads inside Writer only. Prefer native JS/browser behavior when equivalent;do not port/install whole libraries or emulate native memory/lifetimes. Preserve native module/command/style owners and intentional browser I/O differences. Verify related tests/strict100/browser/source gates;second leaf after full checkpoint,so no full run now. Next priority remains existing-core toolbar/sidebar/File wiring.",
+    "description": "Implement upstream font dropdown previews in Writer and Calc and actual Writer style item-set previews in existing toolbar/sidebar selectors. Work only in vite-office-writer on writer. Human approval permits180 implementation/test/tooling paths plus paired canonical/generated/task records solely to complete this feature and full-run repairs. Prefer equivalent native JS/browser mechanisms;preserve native owners,defaults and intentional browser document-I/O differences. Full suite has run;repair failures,verify source-bound coverage and final gates,finish this same task,then pause the goal. No new task,branch,merge or feature expansion.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f"
+    "value": "fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8"
   }
 }

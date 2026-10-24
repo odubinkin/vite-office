@@ -4,7 +4,7 @@ title: "Implement upstream font and style dropdown previews for Writer and Calc"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 83
+revision: 85
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-24T13:10:19.227Z"
+  updated_at: "2026-10-24T13:12:09.933Z"
   updated_by: "CODER"
-  note: "Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal."
+  note: "Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid."
   attempts: 0
 quality_review:
   state: "pass"
@@ -88,8 +88,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete approved font/style preview scope and full-run repairs verified on8843ee2ca048:512/512final Chromium;432/432repair cases including all4full-application failures;394/394editor cases;124/124inventory and143/143tooling. Source-validated aggregate current application coverage1050owners all100%,fresh changed focus owner100%,inventory100%;raw full-command failures retained without claiming a single green application command. Final type/build/scoped lint/format/source/resource/registry/static/doctor/routing/diff gates pass.171primary paths within180approval;close this task and pause the goal."
+  -
+    type: "verify"
+    at: "2026-10-24T13:11:43.064Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610231428-6764KT"
+  -
+    type: "verify"
+    at: "2026-10-24T13:12:09.933Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid."
 doc_version: 3
-doc_updated_at: "2026-10-24T13:10:19.283Z"
+doc_updated_at: "2026-10-24T13:12:09.997Z"
 doc_updated_by: "CODER"
 description: "Implement upstream font dropdown previews in Writer and Calc and actual Writer style item-set previews in existing toolbar/sidebar selectors. Work only in vite-office-writer on writer. Human approval permits180 implementation/test/tooling paths plus paired canonical/generated/task records solely to complete this feature and full-run repairs. Prefer equivalent native JS/browser mechanisms;preserve native owners,defaults and intentional browser document-I/O differences. Full suite has run;repair failures,verify source-bound coverage and final gates,finish this same task,then pause the goal. No new task,branch,merge or feature expansion."
 sections:
@@ -265,6 +277,66 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-24T13:11:43.064Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610231428-6764KT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:10:19.283Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: stale
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+    - old_digest: 42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f
+    - current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit a4b9cafafb0950224ac46ee0a1187fccfc28f768
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-24T13:12:09.933Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:11:43.129Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+    - old_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit a4b9cafafb0950224ac46ee0a1187fccfc28f768
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit; preserve user integration commits,prior leaf and unrelated active tasks. No reset,branch or merge operations."
   Findings: |-
@@ -390,6 +462,10 @@ sections:
     - Task6764KT live style integration checkpoint: actual Writer toolbar and Properties sidebar now share owning-shell preview ports, source optional-font state, absolute MapUnit conversion, real InitScriptTypes/CheckScript and source bounds/fitting/draw positions. Canvas supplies actual browser metrics and backgrounds; SVG supplies native text decoration projection. Source style items remain in the real Writer pool. Calc's source StyleApply placement remains hidden; no fabricated named-style engine was added. Writer foreground now uses genuine SvxColorItem/slot10017 and source black pool default; specific automatic style resets retain COL_AUTO. Worker records preserve the packed transparency word and read legacy hex/auto values. Unsupported complex metadata rejects rather than silently losing state. Existing ODT mapper explicitly rejects unsupported character transparency.
     - Command: production build followed by Chromium shared/style-name-preview.spec.ts. Result: pass,2/2 desktop1280/narrow390. Evidence: actual Heading1 Liberation Sans24px700,Heading4 italic,Preformatted Liberation Mono,SVG ink,viewport bounds,selected paint and actual row acceptance/document focus. A real pointer regression was reproduced: replacing SVG text under a hovered pointer could invalidate the click target. Final fix excludes paint-only Canvas/SVG layers from hit testing;actual button owns pointer events. Earlier max-content geometry and row-identity hypotheses did not resolve this failure and are not claimed as its root cause. Stable native row assignment separately preserves drafts across unrelated bindings invalidation.
     - Command: focused native color/import/export/history and UI checks. Result: pass,51 related cases plus19 actual selector/sidebar/row cases. Explicit browser fixture metrics do not establish native raster parity. Typecheck,JSDoc,source-tree,dependency and registry/provenance gates pass after original Library_svxcore i18nlangtag and Library_sw docmodel dependencies were documented. Full test:all is now running; no full-suite success,final coverage,evaluator,task closure or goal pause is claimed yet. This checkpoint remains the same task and does not authorize additional work.
+
+    - Observation: First closure attempt rejected a stale blueprint snapshot after task description metadata was updated.
+      Impact: Lifecycle closeout only;no source,test,approved plan,route or verification criterion changed.
+      Resolution: Ran ap blueprint snapshot;route_changed=no and current digest recorded,then renewed verification before retrying closeout.
 id_source: "generated"
 ---
 ## Summary
@@ -575,6 +651,66 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-24T13:11:43.064Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610231428-6764KT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:10:19.283Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: stale
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+- old_digest: 42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f
+- current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit a4b9cafafb0950224ac46ee0a1187fccfc28f768
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-24T13:12:09.933Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: refreshed the current code.direct blueprint snapshot after final descriptive metadata update;route is unchanged. Implementation8843ee2ca048 remains source-identical to final512/512Chromium,432/432repair checks and1050owner100%aggregate coverage;all declared gates and EVALUATOR pass remain valid.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T13:11:43.129Z, excerpt_hash=sha256:10de27c0b161a63ebc6f31c1dc19c20a7ac95030308516290fefd574f6007cff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610231428-6764KT/blueprint/resolved-snapshot.json
+- old_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- current_digest: fca2c1ef878793994016448e03f96af640c98e8b41ea9a227896266d1ab909c8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610231428-6764KT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610231428-6764KT --result verified-202610231428-6764KT --commit a4b9cafafb0950224ac46ee0a1187fccfc28f768
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -705,3 +841,7 @@ Additional actual embedded-font-selection assertions pin Hebrew plus digits rema
 - Task6764KT live style integration checkpoint: actual Writer toolbar and Properties sidebar now share owning-shell preview ports, source optional-font state, absolute MapUnit conversion, real InitScriptTypes/CheckScript and source bounds/fitting/draw positions. Canvas supplies actual browser metrics and backgrounds; SVG supplies native text decoration projection. Source style items remain in the real Writer pool. Calc's source StyleApply placement remains hidden; no fabricated named-style engine was added. Writer foreground now uses genuine SvxColorItem/slot10017 and source black pool default; specific automatic style resets retain COL_AUTO. Worker records preserve the packed transparency word and read legacy hex/auto values. Unsupported complex metadata rejects rather than silently losing state. Existing ODT mapper explicitly rejects unsupported character transparency.
 - Command: production build followed by Chromium shared/style-name-preview.spec.ts. Result: pass,2/2 desktop1280/narrow390. Evidence: actual Heading1 Liberation Sans24px700,Heading4 italic,Preformatted Liberation Mono,SVG ink,viewport bounds,selected paint and actual row acceptance/document focus. A real pointer regression was reproduced: replacing SVG text under a hovered pointer could invalidate the click target. Final fix excludes paint-only Canvas/SVG layers from hit testing;actual button owns pointer events. Earlier max-content geometry and row-identity hypotheses did not resolve this failure and are not claimed as its root cause. Stable native row assignment separately preserves drafts across unrelated bindings invalidation.
 - Command: focused native color/import/export/history and UI checks. Result: pass,51 related cases plus19 actual selector/sidebar/row cases. Explicit browser fixture metrics do not establish native raster parity. Typecheck,JSDoc,source-tree,dependency and registry/provenance gates pass after original Library_svxcore i18nlangtag and Library_sw docmodel dependencies were documented. Full test:all is now running; no full-suite success,final coverage,evaluator,task closure or goal pause is claimed yet. This checkpoint remains the same task and does not authorize additional work.
+
+- Observation: First closure attempt rejected a stale blueprint snapshot after task description metadata was updated.
+  Impact: Lifecycle closeout only;no source,test,approved plan,route or verification criterion changed.
+  Resolution: Ran ap blueprint snapshot;route_changed=no and current digest recorded,then renewed verification before retrying closeout.
