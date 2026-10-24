@@ -72,4 +72,5 @@ export function UpdateReference(
   const last = Math.min(context.maRange.aEnd.Col(), this.GetAllocatedColumnsCount() - 1);
   for (let col = Math.max(0, context.maRange.aStart.Col()); col <= last; ++col)
     (this["aCol"][col] as ScColumn).UpdateReference(context, undo);
+  this["mpCondFormatList"]?.UpdateReference(context);
 }

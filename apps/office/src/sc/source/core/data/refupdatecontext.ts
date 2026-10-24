@@ -86,3 +86,44 @@ export class RefUpdateContext {
     return this.mpBlockPos?.getBlockPosition(tab, col) ?? null;
   }
 }
+
+/** Original sheet insertion inputs and per-operation named-expression updates. */
+export class RefUpdateInsertTabContext {
+  readonly maUpdatedNames = new UpdatedRangeNames();
+  /** Stores native caller inputs. @param mrDoc - Owner. @param mnInsertPos - First inserted sheet. @param mnSheets - Count. @returns Context. */
+  constructor(
+    readonly mrDoc: ScDocument,
+    public mnInsertPos: number,
+    public mnSheets: number,
+  ) {}
+}
+/** Original sheet deletion inputs retain their independent first-error accumulator. */
+export class RefUpdateDeleteTabContext {
+  readonly maUpdatedNames = new UpdatedRangeNames();
+  readonly maRefErrors = new RefErrorContext();
+  /** Stores native caller inputs. @param mrDoc - Owner. @param mnDeletePos - First deleted sheet. @param mnSheets - Count. @returns Context. */
+  constructor(
+    readonly mrDoc: ScDocument,
+    public mnDeletePos: number,
+    public mnSheets: number,
+  ) {}
+}
+/** Original sheet-move context and exact inclusive index remapping. */
+export class RefUpdateMoveTabContext {
+  readonly maUpdatedNames = new UpdatedRangeNames();
+  /** Stores native move endpoints. @param mrDoc - Owner. @param mnOldPos - Original position. @param mnNewPos - New position. @returns Context. */
+  constructor(
+    readonly mrDoc: ScDocument,
+    public mnOldPos: number,
+    public mnNewPos: number,
+  ) {}
+  /** Original lower/upper bounds and directional shifts. @param tab - Old sheet index. @returns New index. */
+  getNewTab(tab: number): number {
+    const lower = Math.min(this.mnOldPos, this.mnNewPos),
+      upper = Math.max(this.mnOldPos, this.mnNewPos);
+    if (tab < lower || upper < tab) return tab;
+    if (tab === this.mnOldPos) return this.mnNewPos;
+    if (this.mnOldPos < this.mnNewPos) return tab - 1;
+    return tab + 1;
+  }
+}

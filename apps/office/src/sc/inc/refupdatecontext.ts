@@ -4,4 +4,7 @@ export {
   UpdatedRangeNames,
   RefErrorContext,
   RefUpdateContext,
+  RefUpdateInsertTabContext,
+  RefUpdateDeleteTabContext,
+  RefUpdateMoveTabContext,
 } from "../source/core/data/refupdatecontext";

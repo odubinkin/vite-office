@@ -12,7 +12,10 @@
       "CopyFromClip",
       "SetDirtyFromClip",
       "BroadcastBroadcasters",
-      "DeleteEmptyBroadcasters"
+      "DeleteEmptyBroadcasters",
+      "GetCondFormList",
+      "SetCondFormList",
+      "DeleteConditionalFormat"
     ],
     "upstreamSymbols": [
       "ScTable::SetValue",
@@ -30,7 +33,9 @@
       "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
       "Task76 adds original InitUndo,InitUndoSelected and AddUndoTab with source-shared pooled resources,empty native names,sparse actual sheet vectors and false/false geometry defaults. ScTable now allocates genuine column width/flag and row height/flag owners independently under original constructor defaults true/true;no fake geometry buffers are allocated when disabled. Native width/height getters,mutators and geometry-copy guards honor actual absent stores. Borrowed browser geometry-range helpers,CopyRowHeight and optimal-height calculation keep their original allocated-geometry caller precondition;casts preserve that boundary without inventing absent ranges. GetClipArea is partitioned unchanged on the same document instance. Empty selected initialization keeps the original one-null-slot result (CALC-262). Source shell-medium URL propagation and unrepresented formatter/drawing/printing services remain unported;native paste history,document CopyFromClip,single-row script/format services and EnterBlock are still pending. No whole-module parity promotion.",
       "Task76 adds original table7 CopyOneCellFromClip over prepared actual single-row context values,with native modulo column repetition and existing native column bulk formula-group cloning. Whole-row paste copies original nonhidden source height across the destination range but changes the ManualSize bit only at its first row (CALC-263). GetOriginalHeight preserves native invalid/absent-height fallback. Optional actual row/flag owners are respected. Context admission remains default CONTENTS;conditional formats/drawings and document-level single-row script/format preparation remain unrepresented. Native document CopyFromClip,paste history and EnterBlock/AutoSum are still pending;no whole-module parity promotion.",
-      "Native DeleteEmptyBroadcasters visits only actual allocated column owners;no columns or listeners are synthesized."
+      "Native DeleteEmptyBroadcasters visits only actual allocated column owners;no columns or listeners are synthesized.",
+      "TaskKVGGCR adds the actual native ScTable-owned ScConditionalFormatList default,mutable GetCondFormList lazy allocation,SetCondFormList unique ownership transfer and DeleteConditionalFormat. Managed sheet teardown releases real entries/cache listeners before canonical column attributes. Real date entries,style-string refcounts,replacement,null ownership and document close are covered. Const-overload binding and full table conditional-format copying/rendering/XML remain unported;this is not a full conditional-format UI claim.",
+      "Native table1 UpdateReference now forwards to the real conditional-format list after column traversal;cache values are reset even for nonintersecting copied cells. Original list UpdateReference prunes empty ranges only in URM_INSDEL. Broader sheet insert/delete/move token/table consumers remain unported and are not replaced by a SetTabNo shortcut."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -132,6 +137,14 @@
         {
           "path": "apps/office/src/sc/source/core/data/document-copy-listening.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [
@@ -198,6 +211,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
           "marker": "DeleteEmptyBroadcasters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetCondFormList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionalFormatList::UpdateReference"
         }
       ]
     },

@@ -8,6 +8,8 @@ type Fixture = typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/markdata") &
   typeof import("../../src/sc/inc/clipcontext") &
   typeof import("../../src/sc/inc/scopetools") &
+  typeof import("../../src/sc/inc/conditio") &
+  typeof import("../../src/sc/inc/rangelst") &
   typeof import("../../src/svl/source/notify/listener") &
   typeof import("../../src/sc/inc/refupdatecontext") &
   typeof import("../../src/sc/inc/columnspanset") &
@@ -21,6 +23,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
+    { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
     { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters"] },
     { module: "src/svl/source/notify/listener.ts", names: ["SvtListener"] },
     { module: "src/sc/inc/document.ts", names: ["ScDocument", "ScDocumentMode"] },
@@ -182,6 +186,26 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           flag: doc.IsDelayedDeletingBroadcasters(),
         };
         listener.Dispose();
+        const conditional = new n.ScConditionalFormat(21, doc);
+        conditional.SetRange(new n.ScRangeList(new n.ScRange(9, 9, 0, 9, 9, 0)));
+        conditional.AddEntry(new n.ScCondDateFormatEntry(doc));
+        const sourceTable = doc.FetchTable(0);
+        if (!sourceTable) throw Error("Missing actual conditional-format table");
+        sourceTable.GetCondFormList().InsertNew(conditional);
+        conditional.SetCache([4]);
+        doc.SetValue(new n.ScAddress(9, 9, 0), 2);
+        undoTable.SetCondFormList(sourceTable.GetCondFormList().Clone(undo));
+        const conditionalSnapshot = undoTable.GetCondFormList().GetFormat(21);
+        if (!conditionalSnapshot) throw Error("Missing actual conditional-format snapshot");
+        const conditionalValues = conditionalSnapshot.GetCache();
+        if (!conditionalValues) throw Error("Missing actual conditional-format cache");
+        const conditionalCopy = {
+          invalidated: conditional.GetCache()?.length === 0,
+          independent: conditionalSnapshot.GetEntry(0) !== conditional.GetEntry(0),
+          range: conditionalSnapshot.GetRange().at(0).GetVars(),
+          type: conditionalSnapshot.GetEntry(0)?.GetType(),
+          cached: Array.from(conditionalValues),
+        };
         rowContext.Dispose();
         rowClip.Dispose();
         context.Dispose();
@@ -200,6 +224,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           undoCopy,
           restoredDependency,
           delayedBroadcasters,
+          conditionalCopy,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -250,6 +275,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
     restoredDependency: 44,
     delayedBroadcasters: { retained: true, removed: true, flag: false },
+    conditionalCopy: {
+      invalidated: true,
+      independent: true,
+      range: [9, 9, 0, 9, 9, 0],
+      type: 5,
+      cached: [],
+    },
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

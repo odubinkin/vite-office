@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/conditio.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/conditio.ts",
+        "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+        "vendor/libreoffice-reference/sc/inc/conditio.hxx"
+      ],
+      "justification": "TaskKVGGCR ports substantive native conditional-format copy owners with real date-entry enum/style state,polymorphic cloning,key-ordered unique list ownership,range value assignment,copy-as-move ordering and sheet-local deletion. Real ScColorFormatCache subscribes through existing area-slot owners,keeps a listening superset when ranges shrink,invalidates actual borrowed values on changes and ends subscriptions on Dying. Clone binds ranges before entries and temporary documents do not register live listeners. Native default IsEqual remains false for date entries. Calendar/date evaluation,condition-expression entry families,painting,repaint Idle,full table copy/paste orchestration and XML transport,nondefault styles and broad native service/parity remain unported. JS Map iteration orders the represented nonreentrant traversal by native key;reentrant collection mutation/iterator equivalence is not certified. No fake formatter,empty collection facade or alternate workbook is introduced. Native table1 UpdateReference now forwards to the real conditional-format list after column traversal;cache values are reset even for nonintersecting copied cells. Original list UpdateReference prunes empty ranges only in URM_INSDEL. Broader sheet insert/delete/move token/table consumers remain unported and are not replaced by a SetTabNo shortcut. The native implicit SvtListener base destructor is bound through super.Dispose even when the derived temporary-cache destructor skips area work. Real inherited registrations are observed through an independently alive broadcaster. Native private destination-copy constructor logic remains internal to Clone;public constructors accept only empty or same-document copy forms. Unsigned32 keys and unsigned16 entry positions preserve native argument narrowing.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScFormatEntry",
+        "ScCondDateFormatEntry",
+        "ScColorFormatCache",
+        "ScConditionalFormat",
+        "ScConditionalFormatList"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/conditio.hxx",
+      "upstreamSymbols": [
+        "ScFormatEntry",
+        "ScCondDateFormatEntry",
+        "ScColorFormatCache",
+        "ScConditionalFormat",
+        "ScConditionalFormatList"
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { ScConditionalFormatList } from "../../../inc/conditio";
 import * as table2 from "./table2";
 import * as table7 from "./table7";
 import { ConvertToGroupListening } from "../../../inc/types";
@@ -45,6 +46,23 @@ import { UpdateReference, SetOptimalHeightsToRows } from "./table1";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  private mpCondFormatList: ScConditionalFormatList | null = new ScConditionalFormatList();
+  /** Original table1 mutable getter creates an absent owned list. @returns Actual owner. */
+  GetCondFormList(): ScConditionalFormatList {
+    if (!this.mpCondFormatList) this.mpCondFormatList = new ScConditionalFormatList();
+    return this.mpCondFormatList;
+  }
+  /** Original unique-pointer reset transfers ownership before destroying the previous list. @param next - New owned list or native null. @returns Nothing. */
+  SetCondFormList(next: ScConditionalFormatList | null): void {
+    const previous = this.mpCondFormatList;
+    this.mpCondFormatList = next;
+    previous?.Dispose();
+  }
+  /** Original table1 deletion assumes its normal non-null list owner. @param index - Conditional index. @returns Nothing. */
+  DeleteConditionalFormat(index: number): void {
+    (this.mpCondFormatList as ScConditionalFormatList).erase(index);
+  }
+
   /** Original single-source-row repetition on this actual sheet. @param args - Native context,bounds and source geometry. @returns Nothing. */
   CopyOneCellFromClip(...args: Parameters<typeof table7.CopyOneCellFromClip>): void {
     table7.CopyOneCellFromClip.apply(this, args);
@@ -693,8 +711,9 @@ export class ScTable {
     if (!this.rDocument.ValidCol(col) || col >= this.aCol.length) return;
     (this.aCol[col] as ScColumn).DeleteBroadcasters(position, first, last);
   }
-  /** Releases canonical pattern ownership on sheet removal. @returns Nothing. */
+  /** Releases native conditional-format and canonical pattern ownership on sheet teardown. @returns Nothing. */
   DisposeAttributes(): void {
+    this.mpCondFormatList?.Dispose();
     for (const col of this.aCol) col.DisposeAttributes();
     this.aDefaultColData.DisposeAttributes();
   }
