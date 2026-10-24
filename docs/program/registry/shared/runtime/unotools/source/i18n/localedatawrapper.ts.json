@@ -21,7 +21,7 @@
         "apps/office/src/unotools/source/i18n/measurement.test.ts",
         "docs/program/calc-ui-readiness.md#Native document calculation options (task185)"
       ],
-      "justification": "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit. Task76 adds original cached decimal/alternate/group/date field projections as owned actual OUStrings for the consuming native language-data owner. getLoadedLocale projects the actual LC_INFO Locale consumed before original getLoadedLanguageTag constructs LanguageTag;it does not fabricate a LanguageTag or whole LocaleDataWrapper service. Actual Locale constructors/string copies/destruction preserve field ownership. Full wrapper/cache/service ABI and LanguageTag canonicalization remain unported.",
+      "justification": "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit. Task76 adds original cached decimal/alternate/group/date field projections as owned actual OUStrings for the consuming native language-data owner. getLoadedLocale projects the actual LC_INFO Locale consumed before original getLoadedLanguageTag constructs LanguageTag;it does not fabricate a LanguageTag or whole LocaleDataWrapper service. Actual Locale constructors/string copies/destruction preserve field ownership. Full wrapper/cache/service ABI and LanguageTag canonicalization remain unported. The field-specific NumberFormatMapper::create context lookup is bound to actual owned NumberFormatCodeMapper instances. No replacement context,service manager,format database or numeric model is created;existing native provider/Sequence/Locale/SAL owners remain authoritative. Full UNO/reference/service-manager ABI is not claimed. The formatter owns the real provider through its clients and destroys it afterward.",
       "knownViolations": [],
       "localSymbols": [
         "MeasurementSystem",
@@ -31,13 +31,15 @@
         "getNumDecimalSepAlt",
         "getNumThousandSep",
         "getDateSep",
-        "getLoadedLocale"
+        "getLoadedLocale",
+        "createNumberFormatCodeMapper"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "unotools/source/i18n/localedatawrapper.cxx",
       "upstreamSymbols": [
         "LocaleDataWrapper::mapMeasurementStringToEnum",
-        "LocaleDataWrapper::getLoadedLanguageTag"
+        "LocaleDataWrapper::getLoadedLanguageTag",
+        "NumberFormatMapper::create"
       ]
     }
   }

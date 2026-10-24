@@ -277,3 +277,15 @@ export class SvNumberformat {
       (this.NumFor[index] as ImpSvNumFor).dispose();
   }
 }
+
+/** Original borrowed const parsed-entry surface consumed by public formatter clients;mutation,destruction and formatter-private key access remain with the actual owning table/formatter. */
+export type SvNumberformatConstReference = Pick<
+  SvNumberformat,
+  | "GetType"
+  | "GetMaskedType"
+  | "GetLanguage"
+  | "IsStandard"
+  | "GetComment"
+  | "GetFormatstring"
+  | "GetOutputString"
+>;

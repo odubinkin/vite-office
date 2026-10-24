@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/misc/date.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/misc/date.cxx",
+    "localSymbols": [
+      "isLeapYear",
+      "getDaysInMonth",
+      "isValidDate",
+      "normalize"
+    ],
+    "upstreamSymbols": [
+      "isValidDate",
+      "normalize"
+    ],
+    "preservedResponsibilities": [
+      "Actual comphelper date.hxx/date.cxx validity,leap/month and normalization algorithms preserve source condition order,BCE traversal,empty/valid returns,year-zero skipping,month-driven signed16 narrowing and day-overflow clamps. DateFields projects the original three addressed uint16/uint16/int16 values. The native assert-enabled month/year preconditions are explicit;the postassert release-mode invalid-month return cannot be reached in this profile and is erased with that proof. CALC275-276 preserve suspicious BCE direction/month-year wrap. Calendar day-number conversion and broader date APIs remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only represented native value/normalization responsibilities are ported;clock,UNO/calendar ABI,day arithmetic and full formatter/document integration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/date.ts",
+          "marker": "isLeapYear"
+        },
+        {
+          "path": "apps/office/src/tools/source/datetime/tdate.test.ts",
+          "marker": "normalize"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/comphelper/source/misc/date.cxx",
+          "marker": "isValidDate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/comphelper/date.hxx",
+          "marker": "isLeapYear"
+        }
+      ]
+    }
+  }
+}

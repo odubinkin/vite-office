@@ -3899,3 +3899,27 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `i18npool/source/localedata/localedata.cxx`, `aLibTable`, `lcl_LookupTableHelper::getFunctionSymbolByName`, `LocaleDataImpl::getFallbackLocaleServiceNames` and `getFunctionSymbol`;`i18nlangtag/source/isolang/isolang.cxx`, native Tigrinya language-country entries.
 - The data-service table registers `ti_ER` but not `ti_ET`. An ordinary `ti_ET` request tries its exact service and then language-only `ti`. The latter resolves through the native first Tigrinya fallback entry `ti_ET`,which is also absent,so the final `en_US` service is selected. The existing `ti_ET.xml` file alone does not register a service.
 - This may be an intentional registration/default choice;no active UI defect is established. Preserve the service-table and fallback order instead of choosing `ti_ER` because it looks linguistically closer. The loaded-identity tests retain `[en,US,empty]` for this request.
+
+### CALC-275 — BCE date normalization advances overflow days toward earlier months
+
+- Pinned source: `comphelper/source/misc/date.cxx`, `comphelper::date::normalize`.
+- For a negative year,day overflow subtracts the current month length and decrements the month,or decrements the year and selects December. For example,`32/01/-2` becomes `01/12/-3`;the positive-year branch instead advances to the following month.
+- This may reflect historical packed-date conventions rather than an intended chronological normalization rule. Preserve the original branch direction,including the minimum-year clamp;do not replace it with JavaScript Date or a generic forward-month algorithm.
+
+### CALC-276 — Month normalization can wrap the signed16 year instead of saturating
+
+- Pinned source: `comphelper/source/misc/date.cxx`, `comphelper::date::normalize`, `sal_Int16` year assignments.
+- Month overflow performs `rYear += rMonth / 12`;month zero performs `--rYear`. On the represented two's-complement signed16 narrowing profile,`01/13/32767` becomes `01/01/-32768`,and `01/00/-32768` becomes `01/12/32767`. The separate day-overflow branches explicitly clamp year endpoints instead.
+- These are boundary inputs and no active UI defect is established. Preserve native-width assignments and the source's distinct month/day policies;do not silently saturate month-induced year changes.
+
+### CALC-277 — Zero suppression leaves the output color pointer unchanged
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, numeric `SvNFEngine::GetOutputString`.
+- When `GetNoZero()` is true and the number equals zero,the function clears the output text and returns before resetting or assigning `ppColor`. A caller-provided previous color therefore remains present. Regular General output clears the pointer through the parsed entry.
+- A higher-level caller may initialize its pointer for every request,so this is not established as an active cell-rendering defect. Preserve the early-return order and the retained pointer in direct engine/formatter tests.
+
+### CALC-278 — String-output documentation promises empty text but General preserves input
+
+- Pinned source: `include/svl/numformat.hxx`, string `GetOutputString` comment;`svl/source/numbers/zforlist.cxx`, string `SvNFEngine::GetOutputString`.
+- The header says a format without text type or a fourth subformat yields an empty output string. The implementation instead resets the color pointer and copies the input string when both conditions are absent. General therefore preserves ordinary text,including input/output aliasing.
+- This appears to be stale documentation rather than a runtime defect. Preserve the actual copied-input behavior;do not clear General text to follow the contradictory comment.

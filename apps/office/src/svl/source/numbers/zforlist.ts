@@ -1,4 +1,4 @@
-/** @fileoverview Original SvNFFormatData format-code selection/default-adjustment responsibilities over genuine UNO sequences. The decimal field is projected explicitly;LocaleData diagnostic logging and the formatter/table/service owners are separate responsibilities. */
+/** @fileoverview Original represented format-code,language,table,General formatter and engine owners over genuine UNO/SAL/Date values;remaining builtin/pattern/UNO-registry services stay explicit unported boundaries. */
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
   NumberFormatCode,
@@ -15,11 +15,16 @@ import {
   SV_MAX_COUNT_STANDARD_FORMATS,
   NUMBERFORMAT_ENTRY_NOT_FOUND,
 } from "../../inc/zforlist";
-import { SvNumberformat } from "./zformat";
+import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
+import type { Color } from "../../../tools/inc/color";
+import { LANGUAGE_DONTKNOW, LANGUAGE_ENGLISH_US } from "../../../i18nlangtag/inc/lang";
+import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
+import { getYear2000Default } from "./zforlist.defaults";
 import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
 import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";
 import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import {
+  createNumberFormatCodeMapper,
   getLoadedLocale,
   getNumDecimalSep,
   getNumDecimalSepAlt,
@@ -115,6 +120,8 @@ export class SvNFLanguageData {
     aThousandSep: OUString;
     aDateSep: OUString;
     eEvalDateFormat: number;
+    inputNullDate: ToolsDate;
+    inputYear2000: number;
   };
   /** Original constructor's represented language/cache/scanner path;the actual provider must outlive this borrowed service-field binding. @param mapper - Actual prepared XNumberFormatCode service field. @param language - Native initial language. @returns Owned language/scanner state. */
   constructor(
@@ -145,6 +152,8 @@ export class SvNFLanguageData {
         aThousandSep: thousand,
         aDateSep: date,
         eEvalDateFormat: NfEvalDateFormat.International,
+        inputNullDate: new ToolsDate(30, 12, 1899),
+        inputYear2000: getYear2000Default(),
       };
     } finally {
       prepared.standardName.dispose();
@@ -181,6 +190,10 @@ export class SvNFLanguageData {
   /** Original date evaluation field. @returns Original enum. */
   GetEvalDateFormat(): number {
     return this.fields.eEvalDateFormat;
+  }
+  /** Original GetNullDate borrows the format scanner's date;input-scanner date storage is a separate represented field. @returns Actual format null date. */
+  GetNullDate(): DateConstReference {
+    return this.fields.pFormatScanner.GetNullDate();
   }
   /** Original precision forwarding preserves scanner state and uint16 conversion. @param precision - Native short argument. @returns Nothing. */
   ChangeStandardPrec(precision: number): void {
@@ -259,6 +272,14 @@ export class SvNFFormatData {
     if (!format) return SvNumFormatType.UNDEFINED;
     const type = format.GetMaskedType();
     return type === SvNumFormatType.ALL ? SvNumFormatType.DEFINED : type;
+  }
+  /** Original zero suppression field read. @returns Actual flag. */
+  GetNoZero(): boolean {
+    return this.fields.bNoZero;
+  }
+  /** Original zero suppression field write. @param suppress - Native boolean. @returns Nothing. */
+  SetNoZero(suppress: boolean): void {
+    this.fields.bNoZero = suppress;
   }
   /** Original locale-block search,including returning one block beyond MaxCLOffset on a miss. @param language - Native uint16 language. @returns Existing or next block offset. */
   ImpGetCLOffset(language: number): number {
@@ -377,5 +398,156 @@ export function generateStandardNumberFormat(
     }
   } finally {
     formats.dispose();
+  }
+}
+
+/** Original static-only engine namespace after erasing C++ class syntax,with no instance state. General/NatNum0 formatting is represented. Date/time substitution,other pattern output and full read/write policies remain explicit unported boundaries. */
+export const SvNFEngine = {
+  /** Original null-date update order:format scanner normalizes/validates,then input scanner receives the original raw Date value. Only the actual input date field is projected;no input-scanner service is fabricated. @param current - Real current language state. @param day - Native day. @param month - Native month. @param year - Native year. @returns Nothing. */
+  ChangeNullDate(current: SvNFLanguageData, day: number, month: number, year: number): void {
+    current.GetFormatScanner().ChangeNullDate(day, month, year);
+    current.fields.inputNullDate.assign(new ToolsDate(day, month, year));
+  },
+  /** Original numeric/string engine dispatch for admitted actual General entries. General has no substituted date/time type,no text/fourth subformat,and no STAR token,so the unconsumed supplier/accessor/star arguments are erased. Unknown entries use actual format0 as in source;an absent required format0 is an invalid engine state,not a fabricated fallback string. @param current - Actual language/cache/scanner owner. @param table - Actual owned format table. @param value - Native numeric/string overload. @param key - Native unsigned32 format key. @param output - Actual mutable output. @param color - Actual color pointer output. @returns Nothing. */
+  GetOutputString(
+    current: SvNFLanguageData,
+    table: SvNFFormatData,
+    value: number | OUStringConstReference,
+    key: number,
+    output: OUString,
+    color: [Color | null],
+  ): void {
+    if (typeof value === "number" && table.GetNoZero() && value === 0) {
+      output.clear();
+      return;
+    }
+    const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(0);
+    if (!format) throw new Error("Required native standard format0 is absent");
+    if (format.GetMaskedType() !== SvNumFormatType.NUMBER)
+      throw new Error("Number-format output outside General is not implemented");
+    if (typeof value === "number") {
+      current.ChangeIntl(format.GetLanguage());
+      format.GetOutputString(
+        value,
+        output,
+        color,
+        current.GetStandardPrec(),
+        current.GetNumDecimalSep().getStr()[0] as number,
+      );
+    } else {
+      color[0] = null;
+      output.assign(value);
+    }
+  },
+};
+
+/** Original SvNumberFormatter owner for the admitted General/NatNum0 slice. Real provider,language,scanner and parsed table owners are composed through the source General initialization phase. Remaining builtin generation and all nonzero format keys are explicitly unavailable,not synthetic entries or silent General substitutes. Context lookup is bound to actual providers;UNO ABI,global registry and mutex scheduling are not claimed. */
+export class SvNumberFormatter {
+  private readonly IniLnge: number;
+  private readonly mapper = createNumberFormatCodeMapper();
+  private readonly m_aFormatData = new SvNFFormatData();
+  private readonly m_aCurrentLanguage: SvNFLanguageData;
+  /** Original represented constructor path creates actual language/table owners and General entry. Separate real provider lifetimes retain native scanner-service versus local generation-service roles. @param language - Original native language;UNKNOWN substitutes US as in source. @returns Formatter owner for admitted General entries. */
+  constructor(language: number) {
+    language &= 65535;
+    this.IniLnge = language !== LANGUAGE_DONTKNOW ? language : LANGUAGE_ENGLISH_US;
+    this.m_aCurrentLanguage = new SvNFLanguageData(this.mapper, this.IniLnge);
+    const generator = createNumberFormatCodeMapper(),
+      current = this.m_aCurrentLanguage;
+    try {
+      generateStandardNumberFormat(
+        this.m_aFormatData,
+        generator,
+        current.fields.locale,
+        current.GetFormatScanner(),
+        current.fields.ActLnge,
+        current.GetNumDecimalSep(),
+        0,
+      );
+    } catch (error) {
+      this.m_aFormatData.dispose();
+      current.dispose();
+      this.mapper.dispose();
+      throw error;
+    } finally {
+      generator.dispose();
+    }
+  }
+  /** Explicit admission boundary for unported builtin/user-defined format families;their absence is never represented as a synthetic General entry. @param key - Native unsigned32 key. @returns Nothing. */
+  private admitKey(key: number): void {
+    if (key >>> 0 !== 0)
+      throw new Error("SvNumberFormatter currently admits only native General format0");
+  }
+  /** Original borrowed exact-entry lookup within the admitted slice. @param key - Native key. @returns Actual parsed entry or null. */
+  GetEntry(key: number): SvNumberformatConstReference | null {
+    this.admitKey(key);
+    return this.m_aFormatData.GetFormatEntry(key);
+  }
+  /** Original actual category query. @param key - Native key. @returns Native type. */
+  GetType(key: number): number {
+    this.admitKey(key);
+    return this.m_aFormatData.GetType(key);
+  }
+  /** Original standard precision assignment. @param precision - Native short precision. @returns Nothing. */
+  ChangeStandardPrec(precision: number): void {
+    this.m_aCurrentLanguage.ChangeStandardPrec(precision);
+  }
+  /** Original standard precision read. @returns Current precision. */
+  GetStandardPrec(): number {
+    return this.m_aCurrentLanguage.GetStandardPrec();
+  }
+  /** Original date evaluation field forwarding. @param order - Native enum. @returns Nothing. */
+  SetEvalDateFormat(order: number): void {
+    this.m_aCurrentLanguage.SetEvalDateFormat(order);
+  }
+  /** Original null-date update dispatch. @param day - Native day. @param month - Native month. @param year - Native year. @returns Nothing. */
+  ChangeNullDate(day: number, month: number, year: number): void {
+    SvNFEngine.ChangeNullDate(this.m_aCurrentLanguage, day, month, year);
+  }
+  /** Original borrowed format-scanner null date. @returns Actual Date value. */
+  GetNullDate(): DateConstReference {
+    return this.m_aCurrentLanguage.GetNullDate();
+  }
+  /** Original input-scanner two-digit-year field assignment;the field is represented without fabricating a whole input scanner. @param year - Native uint16 threshold. @returns Nothing. */
+  SetYear2000(year: number): void {
+    this.m_aCurrentLanguage.fields.inputYear2000 = year & 65535;
+  }
+  /** Original actual two-digit-year field. @returns Native threshold. */
+  GetYear2000(): number {
+    return this.m_aCurrentLanguage.fields.inputYear2000;
+  }
+  /** Original zero-suppression write. @param suppress - Native flag. @returns Nothing. */
+  SetNoZero(suppress: boolean): void {
+    this.m_aFormatData.SetNoZero(suppress);
+  }
+  /** Original zero-suppression read. @returns Actual flag. */
+  GetNoZero(): boolean {
+    return this.m_aFormatData.GetNoZero();
+  }
+  /** Original numeric/string output forwarding for admitted General entries. Star formatting is unconsumed because these real compiled entries contain no STAR token. @param value - Actual numeric/string overload. @param key - Native format key. @param output - Actual mutable string. @param color - Actual output pointer. @param _useStarFormat - Original defaultfalse flag. @returns Nothing. */
+  GetOutputString(
+    value: number | OUStringConstReference,
+    key: number,
+    output: OUString,
+    color: [Color | null],
+    _useStarFormat = false,
+  ): void {
+    // The admitted actual General stream has no STAR token;explicitly erase this unconsumed source flag.
+    void _useStarFormat;
+    this.admitKey(key);
+    SvNFEngine.GetOutputString(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      value,
+      key,
+      output,
+      color,
+    );
+  }
+  /** Original owned table entries are destroyed before language/scanner/provider owners. Unrepresented global registry/mutex services have no fake lifetime hooks. @returns Nothing. */
+  dispose(): void {
+    this.m_aFormatData.dispose();
+    this.m_aCurrentLanguage.dispose();
+    this.mapper.dispose();
   }
 }

@@ -510,3 +510,114 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
     mapper.dispose();
   }
 });
+
+import { SvNumberFormatter, SvNFEngine } from "./zforlist";
+import { Color } from "../../../tools/inc/color";
+
+it("composes actual formatter providers,language,parsed table,settings and numeric/string output", /** Real owned source graph is constructed rather than a fake formatter or parsed-state fixture. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x0407),
+    fallback = new SvNumberFormatter(0x03ff),
+    out = unicode("previous"),
+    literal = unicode("actual text"),
+    oldColor = new Color(0x123456),
+    color: [Color | null] = [oldColor];
+  try {
+    const entry = formatter.GetEntry(0) as SvNumberformat;
+    expect(text(entry.GetFormatstring())).toBe("Standard");
+    expect(entry.GetLastInsertKey()).toBe(100);
+    expect(formatter.GetType(0x100000000)).toBe(16);
+    expect(formatter.GetStandardPrec()).toBe(2);
+    formatter.GetOutputString(1.2345, 0, out, color);
+    expect(text(out)).toBe("1,23");
+    expect(color[0]).toBeNull();
+    formatter.ChangeStandardPrec(65535);
+    formatter.SetEvalDateFormat(NfEvalDateFormat.InternationalThenFormat);
+    formatter.GetOutputString(1e-10, 0, out, color, true);
+    expect(text(out)).toBe("1E-10");
+    expect(formatter.GetNoZero()).toBe(false);
+    formatter.SetNoZero(true);
+    expect(formatter.GetNoZero()).toBe(true);
+    color[0] = oldColor;
+    formatter.GetOutputString(-0, 0, out, color);
+    expect(text(out)).toBe("");
+    expect(color[0]).toBe(oldColor);
+    formatter.GetOutputString(1.25, 0, out, color);
+    expect(text(out)).toBe("1,25");
+    expect(color[0]).toBeNull();
+    formatter.GetOutputString(literal, 0, out, color);
+    expect(text(out)).toBe("actual text");
+    formatter.GetOutputString(out, 0, out, color);
+    expect(text(out)).toBe("actual text");
+    expect(formatter.GetNullDate().GetDate()).toBe(18991230);
+    const nullDate = formatter.GetNullDate();
+    formatter.ChangeNullDate(32, 2, 1999);
+    expect(formatter.GetNullDate()).toBe(nullDate);
+    expect(nullDate.GetDate()).toBe(19990304);
+    formatter.ChangeNullDate(1, 1, 2000);
+    expect(nullDate.GetDate()).toBe(20000101);
+    expect(formatter.GetYear2000()).toBe(1950);
+    formatter.SetYear2000(65536 + 1980);
+    expect(formatter.GetYear2000()).toBe(1980);
+    expect(
+      /** Original scanner assertion retains the prior valid field. @returns Nothing. */ () =>
+        formatter.ChangeNullDate(0, 0, 0),
+    ).toThrow(/valid null/);
+    expect(formatter.GetNullDate().GetDate()).toBe(20000101);
+    expect(
+      /** Unported builtin keys are not supplied as fake General entries. @returns Entry. */ () =>
+        formatter.GetEntry(1),
+    ).toThrow(/admits only/);
+    fallback.ChangeStandardPrec(65535);
+    fallback.GetOutputString(1.25, 0, out, color);
+    expect(text(out)).toBe("1.25");
+  } finally {
+    fallback.dispose();
+    formatter.dispose();
+    out.dispose();
+    literal.dispose();
+  }
+  expect(
+    /** Real prefix admission failure executes native-owner cleanup. @returns Owned formatter. */ () =>
+      new SvNumberFormatter(0x0455),
+  ).toThrow(/not implemented/);
+});
+
+it("keeps real engine fallback and separately represented input/format null-date fields", /** Invalid/default table states are real native owners,not formatter service test doubles. @returns Nothing. */ () => {
+  const values = tableValues(),
+    current = new SvNFLanguageData(values.mapper, 0x0407),
+    out = unicode(""),
+    textValue = unicode("literal"),
+    color: [Color | null] = [null];
+  try {
+    expect(
+      /** An absent required format0 is an invalid source state. @returns Nothing. */ () =>
+        SvNFEngine.GetOutputString(current, values.table, 1, 0, out, color),
+    ).toThrow(/absent/);
+    generateStandardNumberFormat(
+      values.table,
+      values.mapper,
+      values.locale,
+      values.scanner,
+      values.language,
+      values.decimal,
+      0,
+    );
+    SvNFEngine.GetOutputString(current, values.table, 1.2345, 404, out, color);
+    expect(text(out)).toBe("1,23");
+    const entry = values.table.GetEntry(0) as SvNumberformat;
+    entry.SetType(2);
+    expect(
+      /** Unported date substitution/output does not produce General text. @returns Nothing. */ () =>
+        SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color),
+    ).toThrow(/outside General/);
+    entry.SetType(16);
+    SvNFEngine.ChangeNullDate(current, 32, 2, 1999);
+    expect(current.GetNullDate().GetDate()).toBe(19990304);
+    expect(current.fields.inputNullDate.GetDate()).toBe(19990232);
+  } finally {
+    current.dispose();
+    out.dispose();
+    textValue.dispose();
+    values.dispose();
+  }
+});

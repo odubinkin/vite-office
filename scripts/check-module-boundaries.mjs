@@ -221,7 +221,8 @@ const allowedEdges = new Map([
   ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
-  ["tools", new Set(["o3tl", "cppu"])],
+  // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
+  ["tools", new Set(["o3tl", "cppu", "comphelper"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   ["xmloff", new Set(["o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.

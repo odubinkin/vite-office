@@ -7,6 +7,7 @@ import {
   getLocaleDateSeparator,
   getLocaleLanguageCountryInfo,
 } from "../../../i18npool/source/localedata/localedata";
+import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
@@ -56,4 +57,9 @@ export function getLoadedLocale(locale: LocaleConstReference): Locale {
     country.dispose();
     language.dispose();
   }
+}
+
+/** Field-specific binding of the original NumberFormatMapper::create component-context lookup to its actual native provider. It creates an owned real mapper,not a fake context/service manager or alternate format data. Native UNO interface/reference ABI remains unrepresented. @returns Owned provider;the consumer destroys it after its actual borrowed clients. */
+export function createNumberFormatCodeMapper(): NumberFormatCodeMapper {
+  return new NumberFormatCodeMapper();
 }

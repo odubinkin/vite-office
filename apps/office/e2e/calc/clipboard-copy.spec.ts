@@ -63,6 +63,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         "ImpAdjustFormatCodeDefault",
         "SvNFFormatData",
         "SvNFLanguageData",
+        "SvNumberFormatter",
         "generateStandardNumberFormat",
       ],
     },
@@ -471,9 +472,22 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         };
         languageTable.dispose();
         languageData.dispose();
+        const formatter = new n.SvNumberFormatter(0x0407);
+        formatter.ChangeStandardPrec(65535);
+        formatter.ChangeNullDate(32, 2, 1999);
+        formatter.SetYear2000(1980);
+        formatter.GetOutputString(12.5, 0, compiledOut, [null]);
+        const formatterState = {
+          output: n.text(compiledOut),
+          type: formatter.GetType(0),
+          nullDate: formatter.GetNullDate().GetDate(),
+          year: formatter.GetYear2000(),
+        };
+        formatter.dispose();
 
         compiledCopy.GetOutputString(0.125, compiledOut, [null], 65535, 44);
         const formatFoundation = {
+          formatterState,
           languageState,
           tableOutput,
           tableType: formatTable.GetType(0),
@@ -615,6 +629,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      formatterState: { output: "12,5", type: 16, nullDate: 19990304, year: 1980 },
       languageState: {
         initial: 0x0407,
         decimal: ".",

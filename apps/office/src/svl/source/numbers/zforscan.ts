@@ -2,6 +2,7 @@
 import localizedKeywordLanguages from "./data/keyword-localization.json" with { type: "json" };
 import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
+import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { uppercase } from "../../../unotools/inc/charclass";
@@ -84,6 +85,7 @@ export class ImpSvNumberformatScan {
   private eScannedType: number = SvNumFormatType.UNDEFINED;
   private nThousand = 0;
   private nStandardPrec = 2;
+  private readonly maNullDate = new ToolsDate(30, 12, 1899);
   /** Consumed native scanner constructor/dependent-General-keyword initialization. The caller owns prepared locale fields,as the native language-data owner does. @param locale - Borrowed actual CharClass locale. @param standardName - Actual extracted standard name from loaded locale format0. @param localization - Original selected keyword-localization field after dependent-keyword initialization. @returns Actual scanner state. */
   constructor(
     private locale: LocaleConstReference,
@@ -114,6 +116,19 @@ export class ImpSvNumberformatScan {
     this.nResultStringsCnt = 0;
     this.eScannedType = SvNumFormatType.UNDEFINED;
     this.nThousand = 0;
+  }
+  /** Original null-date member borrow. @returns Actual owned Date value. */
+  GetNullDate(): DateConstReference {
+    return this.maNullDate;
+  }
+  /** Original ChangeNullDate validates/normalizes a real Date,then assigns its actual value. The assertion-enabled profile rejects a remaining invalid date;after that assertion the final validity guard is necessarily true. @param day - Native uint16 day. @param month - Native uint16 month. @param year - Native signed16 year. @returns Nothing. */
+  ChangeNullDate(day: number, month: number, year: number): void {
+    const date = new ToolsDate(day, month, year);
+    if (!date.IsValidDate()) {
+      date.Normalize();
+      if (!date.IsValidDate()) throw new Error("valid null date assertion");
+    }
+    this.maNullDate.assign(date);
   }
   /** Original precision assignment retains unsigned16 width. @param precision - Native standard precision. @returns Nothing. */
   ChangeStandardPrec(precision: number): void {
