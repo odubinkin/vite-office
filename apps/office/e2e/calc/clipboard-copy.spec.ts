@@ -217,6 +217,17 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             ).GetCondFormatData(),
           ),
         };
+        for (let col = 2; col <= 9; ++col)
+          sourceTable
+            .CreateColumnIfNotExists(col)
+            .CopyToColumn(
+              snapshotContext,
+              4,
+              9,
+              n.InsertDeleteFlags.CONTENTS | n.InsertDeleteFlags.ATTRIB,
+              false,
+              undoTable.CreateColumnIfNotExists(col),
+            );
         doc.AddCondFormatData(conditional.GetRange(), 0, 22);
         doc.RemoveCondFormatData(conditional.GetRange(), 0, 21);
         const removedIndexes = Array.from(
@@ -234,6 +245,39 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             >
           ).GetCondFormatData(),
         );
+        doc.SetValue(new n.ScAddress(2, 4, 0), 999);
+        doc.SetValue(new n.ScAddress(2, 5, 0), 999);
+        doc.SetAutoCalc(false);
+        undoTable.UndoToTable(
+          new n.CopyToDocContext(doc),
+          2,
+          4,
+          9,
+          9,
+          n.InsertDeleteFlags.CONTENTS | n.InsertDeleteFlags.ATTRIB,
+          false,
+          sourceTable,
+        );
+        doc.SetAutoCalc(true);
+        sourceTable.SetStreamValid(true);
+        doc.LockStreamValid(true);
+        sourceTable.SetRowManualBreaks(new Set([8, 2]));
+        const lockedStream = sourceTable.IsStreamValid(),
+          breaks = new Set<number>();
+        sourceTable.GetAllRowBreaks(breaks, false, true);
+        doc.LockStreamValid(false);
+        sourceTable.RemoveManualBreaks();
+        const tableUndo = {
+          value: doc.GetValue(new n.ScAddress(2, 4, 0)),
+          formula: doc.GetValue(new n.ScAddress(2, 5, 0)),
+          dependency: doc.GetValue(new n.ScAddress(5, 0, 0)),
+          independent:
+            sourceTable.GetCondFormList().GetFormat(21)?.GetEntry(0) !==
+            conditionalSnapshot.GetEntry(0),
+          breaks: Array.from(breaks),
+          lockedStream,
+          invalidatedStream: !sourceTable.IsStreamValid(),
+        };
         rowContext.Dispose();
         rowClip.Dispose();
         context.Dispose();
@@ -255,6 +299,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           conditionalCopy,
           removedIndexes,
           clearedIndexes,
+          tableUndo,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -305,6 +350,15 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
     restoredDependency: 44,
     delayedBroadcasters: { retained: true, removed: true, flag: false },
+    tableUndo: {
+      value: 13,
+      formula: 31,
+      dependency: 44,
+      independent: true,
+      breaks: [2, 8],
+      lockedStream: true,
+      invalidatedStream: true,
+    },
     removedIndexes: [22],
     clearedIndexes: [],
     conditionalCopy: {

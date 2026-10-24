@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/table5.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/native-table-undo.test.ts"
+      ],
+      "justification": "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RemoveManualBreaks",
+        "HasManualBreaks",
+        "SetRowManualBreaks",
+        "SetColManualBreaks",
+        "GetAllRowBreaks",
+        "GetAllColBreaks",
+        "SetRowBreak",
+        "SetColBreak"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/table5.cxx",
+      "upstreamSymbols": [
+        "ScTable::RemoveManualBreaks",
+        "ScTable::HasManualBreaks",
+        "ScTable::SetRowManualBreaks",
+        "ScTable::SetColManualBreaks",
+        "ScTable::GetAllRowBreaks",
+        "ScTable::GetAllColBreaks",
+        "ScTable::SetRowBreak",
+        "ScTable::SetColBreak"
+      ]
+    }
+  }
+}

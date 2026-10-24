@@ -1,4 +1,6 @@
 /** @fileoverview Original table2.cxx default-content clipboard dispatch over real contiguous columns. */
+import type { CopyToDocContext } from "../../../inc/clipcontext";
+import { InsertDeleteFlags } from "../../../inc/global";
 import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { ScTable } from "../../../inc/table";
@@ -86,5 +88,55 @@ export function RemoveCondFormatData(
     const last = this.ClampToAllocatedColumns(range.aEnd.Col());
     for (let col = range.aStart.Col(); col <= last; ++col)
       (this["aCol"][col] as ScColumn).RemoveCondFormat(range.aStart.Row(), range.aEnd.Row(), index);
+  }
+}
+
+/** Original table2 Undo traverses all allocated columns and restores full-axis geometry. Sheet-local names are outside the represented kernel. @param this - Actual Undo sheet. @param context - Destination copy context. @param col1 - First edited column. @param row1 - First edited row. @param col2 - Last edited column. @param row2 - Last edited row. @param flags - Original copy flags. @param marked - Original mark argument. @param target - Actual destination. @returns Nothing. */
+export function UndoToTable(
+  this: ScTable,
+  context: CopyToDocContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  flags: InsertDeleteFlags,
+  marked: boolean,
+  target: ScTable,
+): void {
+  const doc = this["rDocument"];
+  if (!(doc.ValidColRow(col1, row1) && doc.ValidColRow(col2, row2))) return;
+  const width =
+    row1 === 0 &&
+    row2 === doc.MaxRow() &&
+    this["mpColWidth"] !== null &&
+    target["mpColWidth"] !== null;
+  const height =
+    col1 === 0 &&
+    col2 === doc.MaxCol() &&
+    this["mpRowHeights"] !== null &&
+    target["mpRowHeights"] !== null;
+  for (let col = 0; col < this["aCol"].length; ++col) {
+    const destination = target.CreateColumnIfNotExists(col),
+      source = this["aCol"][col] as ScColumn;
+    if (col >= col1 && col <= col2)
+      source.UndoToColumn(context, row1, row2, flags, marked, destination);
+    else
+      source.CopyToColumn(context, 0, doc.MaxRow(), InsertDeleteFlags.FORMULA, false, destination);
+  }
+  if (flags & InsertDeleteFlags.ATTRIB)
+    target.SetCondFormList(
+      (this["mpCondFormatList"] as NonNullable<ScTable["mpCondFormatList"]>).Clone(
+        target["rDocument"],
+      ),
+    );
+  if (!(width || height)) return;
+  if (width) {
+    const destination = target["mpColWidth"] as NonNullable<ScTable["mpColWidth"]>;
+    destination.CopyFrom(this["mpColWidth"] as NonNullable<ScTable["mpColWidth"]>, col1, col2);
+    target.SetColManualBreaks(new Set(this["maColManualBreaks"]));
+  }
+  if (height) {
+    target.CopyRowHeight(this, row1, row2, 0);
+    target.SetRowManualBreaks(new Set(this["maRowManualBreaks"]));
   }
 }

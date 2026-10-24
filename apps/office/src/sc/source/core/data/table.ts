@@ -1,6 +1,7 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
 import { ScConditionalFormatList } from "../../../inc/conditio";
 import * as table2 from "./table2";
+import * as table5 from "./table5";
 import * as table7 from "./table7";
 import { ConvertToGroupListening } from "../../../inc/types";
 import { HasAttrFlags } from "../../../inc/global";
@@ -41,11 +42,83 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { FilterData } from "../../../inc/FilterData";
-import { UpdateReference, SetOptimalHeightsToRows } from "./table1";
+import { UpdateReference, SetOptimalHeightsToRows, SetStreamValid } from "./table1";
 /** Original ColumnDataApply callable contract. */
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original pagination-cache bit,visible to native out-of-class friend definitions. */
+  mbPageBreaksValid = false;
+  private bStreamValid = false;
+  private maRowManualBreaks = new Set<number>();
+  private maColManualBreaks = new Set<number>();
+  private readonly maRowPageBreaks = new Set<number>();
+  private readonly maColPageBreaks = new Set<number>();
+  /** Original validated page-break query. @param row - Native index. @returns Membership. */
+  HasRowPageBreak(row: number): boolean {
+    return this.rDocument.ValidRow(row) && this.maRowPageBreaks.has(row);
+  }
+  /** Original validated page-break query. @param col - Native index. @returns Membership. */
+  HasColPageBreak(col: number): boolean {
+    return this.rDocument.ValidCol(col) && this.maColPageBreaks.has(col);
+  }
+  /** Original validated manual-break query. @param row - Native index. @returns Membership. */
+  HasRowManualBreak(row: number): boolean {
+    return this.rDocument.ValidRow(row) && this.maRowManualBreaks.has(row);
+  }
+  /** Original validated manual-break query. @param col - Native index. @returns Membership. */
+  HasColManualBreak(col: number): boolean {
+    return this.rDocument.ValidCol(col) && this.maColManualBreaks.has(col);
+  }
+  /** Original stream validity query. @returns Whether valid. */
+  IsStreamValid(): boolean {
+    return this.bStreamValid;
+  }
+  /** Original stream state assignment respects the document lock. @param value - New state. @param ignoreLock - Native default false. @returns Nothing. */
+  SetStreamValid(value: boolean, ignoreLock = false): void {
+    SetStreamValid.call(this, value, ignoreLock);
+  }
+  /** Original page-break cache invalidation. @returns Nothing. */
+  InvalidatePageBreaks(): void {
+    this.mbPageBreaksValid = false;
+  }
+  /** Original sheet Undo dispatch on the same actual table. @param args - Context,rectangle,flags,mark and destination. @returns Nothing. */
+  UndoToTable(...args: Parameters<typeof table2.UndoToTable>): void {
+    table2.UndoToTable.apply(this, args);
+  }
+  /** Original table5 clears manual breaks. @param args - Native arguments. @returns Native result. */
+  RemoveManualBreaks(...args: Parameters<typeof table5.RemoveManualBreaks>): void {
+    return table5.RemoveManualBreaks.apply(this, args);
+  }
+  /** Original table5 queries manual breaks. @param args - Native arguments. @returns Native result. */
+  HasManualBreaks(...args: Parameters<typeof table5.HasManualBreaks>): boolean {
+    return table5.HasManualBreaks.apply(this, args);
+  }
+  /** Original table5 moves row manual breaks. @param args - Native arguments. @returns Native result. */
+  SetRowManualBreaks(...args: Parameters<typeof table5.SetRowManualBreaks>): void {
+    return table5.SetRowManualBreaks.apply(this, args);
+  }
+  /** Original table5 moves column manual breaks. @param args - Native arguments. @returns Native result. */
+  SetColManualBreaks(...args: Parameters<typeof table5.SetColManualBreaks>): void {
+    return table5.SetColManualBreaks.apply(this, args);
+  }
+  /** Original table5 collects row breaks. @param args - Native arguments. @returns Native result. */
+  GetAllRowBreaks(...args: Parameters<typeof table5.GetAllRowBreaks>): void {
+    return table5.GetAllRowBreaks.apply(this, args);
+  }
+  /** Original table5 collects column breaks. @param args - Native arguments. @returns Native result. */
+  GetAllColBreaks(...args: Parameters<typeof table5.GetAllColBreaks>): void {
+    return table5.GetAllColBreaks.apply(this, args);
+  }
+  /** Original table5 sets row break flags. @param args - Native arguments. @returns Native result. */
+  SetRowBreak(...args: Parameters<typeof table5.SetRowBreak>): void {
+    return table5.SetRowBreak.apply(this, args);
+  }
+  /** Original table5 sets column break flags. @param args - Native arguments. @returns Native result. */
+  SetColBreak(...args: Parameters<typeof table5.SetColBreak>): void {
+    return table5.SetColBreak.apply(this, args);
+  }
+
   private mpCondFormatList: ScConditionalFormatList | null = new ScConditionalFormatList();
   /** Original table1 mutable getter creates an absent owned list. @returns Actual owner. */
   GetCondFormList(): ScConditionalFormatList {
@@ -491,11 +564,14 @@ export class ScTable {
   GetDoc(): ScDocument {
     return this.rDocument;
   }
-  /** Original UInt16 column-width setter retains zero-to-standard fallback;page-break services remain outside this slice. @param column - Column. @param width - Native unsigned16 twips. @returns Nothing. */
+  /** Original UInt16 column-width setter retains zero-to-standard fallback and invalidates native pagination. @param column - Column. @param width - Native unsigned16 twips. @returns Nothing. */
   SetColWidth(column: number, width: number): void {
     if (this.rDocument.ValidCol(column) && this.mpColWidth) {
       width = width & 0xffff || STD_COL_WIDTH;
-      if (width !== this.mpColWidth.GetValue(column)) this.mpColWidth.SetValue(column, width);
+      if (width !== this.mpColWidth.GetValue(column)) {
+        this.mpColWidth.SetValue(column, width);
+        this.InvalidatePageBreaks();
+      }
     }
   }
   /** Original width-only setter shares the represented width mutation without page-break services. @param column - Column. @param width - UInt16 twips. @returns Nothing. */

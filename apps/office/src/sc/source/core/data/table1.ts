@@ -74,3 +74,9 @@ export function UpdateReference(
     (this["aCol"][col] as ScColumn).UpdateReference(context, undo);
   this["mpCondFormatList"]?.UpdateReference(context);
 }
+
+/** Original stream validity short circuit and lock/default ordering. @param this - Actual sheet. @param value - New state. @param ignoreLock - Resolved native argument. @returns Nothing. */
+export function SetStreamValid(this: ScTable, value: boolean, ignoreLock: boolean): void {
+  if (!this["bStreamValid"] && !value) return;
+  if (ignoreLock || !this["rDocument"].IsStreamValidLocked()) this["bStreamValid"] = value;
+}

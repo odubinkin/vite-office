@@ -26,7 +26,6 @@ import {
   element_type_empty,
   CellTextAttrStoreType,
   string_element_callbacks,
-  string_value_type,
   formula_element_callbacks,
   element_type_formula,
   formula_block,
@@ -184,6 +183,28 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original column.cxx Undo copies formulas outside the edited rows and the requested flags within them. @param context - Actual destination context. @param first - First edited row. @param last - Last edited row. @param flags - Edited payload. @param marked - Original mark argument. @param target - Destination column. @returns Nothing. */
+  UndoToColumn(
+    context: CopyToDocContext,
+    first: number,
+    last: number,
+    flags: InsertDeleteFlags,
+    marked: boolean,
+    target: ScColumn,
+  ): void {
+    if (first > 0)
+      this.CopyToColumn(context, 0, first - 1, InsertDeleteFlags.FORMULA, false, target);
+    this.CopyToColumn(context, first, last, flags, marked, target);
+    if (last < this.GetDoc().MaxRow())
+      this.CopyToColumn(
+        context,
+        last + 1,
+        this.GetDoc().MaxRow(),
+        InsertDeleteFlags.FORMULA,
+        false,
+        target,
+      );
+  }
   /** Original inline conditional-index removal. @param first - First row. @param last - Last row. @param index - Key,or zero for all. @returns Nothing. */
   RemoveCondFormat(first: number, last: number, index: number): void {
     this.pAttrArray.RemoveCondFormat(first, last, index);
@@ -919,9 +940,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Returns an independent shared string value,or its native empty default. @param row - Valid row. @returns Shared text. */
   GetSharedString(row: number): SharedString {
-    return this.maCells.get_type(row) === element_type_string
-      ? this.maCells.get(row, string_element_callbacks, string_value_type)
-      : new SharedString();
+    return column3.GetSharedString.call(this, row);
   }
   /** Clears content and its text metadata in the represented scalar stores. @param row - Valid row. @returns Nothing. */
   Delete(row: number): void {

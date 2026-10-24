@@ -80,6 +80,15 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private mbStreamValidLocked = false;
+  /** Original stream-validity lock query. @returns Lock state. */
+  IsStreamValidLocked(): boolean {
+    return this.mbStreamValidLocked;
+  }
+  /** Original document.cxx lock assignment. @param lock - Lock state. @returns Nothing. */
+  LockStreamValid(lock: boolean): void {
+    this.mbStreamValidLocked = lock;
+  }
   /** Original contiguous Undo initialization. @param args - Native source,sheets and allocation defaults. @returns Nothing. */
   InitUndo(...args: Parameters<typeof documen7.InitUndo>): void {
     documen7.InitUndo.apply(this, args);

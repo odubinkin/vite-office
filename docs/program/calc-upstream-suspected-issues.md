@@ -3829,3 +3829,12 @@ flag update without extending that flag mutation for consistency.
 - A singleton-only interval therefore returns its row as start and `-1` as end. A later singleton block can leave start greater than the end of an earlier visited shared group. With no formulas anywhere in the column,the wrapper leaves both caller outputs untouched;with formulas elsewhere but none in the requested interval,it writes `-1` into both outputs.
 - Impact: these outputs are not a normalized covering interval. Consumers must preserve the original sentinel and assignment contract;the port intentionally retains it. This may be intentional metadata rather than a defect.
 - Evidence: `apps/office/src/sc/source/core/data/delayed-copy-listening.test.ts` uses real separated shared groups and a singleton to observe all four cases.
+
+
+### CALC-265 — Column Undo forwards a mark flag without the mark data
+
+- Pinned source: `sc/source/core/data/column.cxx`, `ScColumn::UndoToColumn` and `ScColumn::CopyToColumn`;`sc/inc/column.hxx` supplies the null mark-data default.
+- `UndoToColumn` forwards `bMarked` for the edited rows but never supplies a `ScMarkData` pointer. Its own source comment asks `TODO: bMarked ????`. `CopyToColumn` enters its marked branch only to require non-null multi-mark data;with the default null pointer it copies no edited cells.
+- Formula-only copies before and after the edited rows explicitly pass false and still run. Consequently,`bMarked=true` can update outside formulas while leaving the selected payload unchanged.
+- This may be an unused caller profile rather than an active UI defect. The port preserves the exact flag/default interaction and does not synthesize selection data or force the argument false.
+- Evidence: `apps/office/src/sc/source/core/data/native-table-undo.test.ts` uses real compiled Undo snapshots and destination formula dependencies to verify both branches.

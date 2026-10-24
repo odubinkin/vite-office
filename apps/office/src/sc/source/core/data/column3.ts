@@ -1,4 +1,6 @@
 /** @fileoverview Original column3.cxx GroupFormulaCells functor and whole-column regrouping over actual typed storage. */
+import { SharedString } from "../../../../svl/inc/sharedstring";
+import { string_value_type } from "../../../inc/mtvelements";
 import {
   formula_block,
   element_type_formula,
@@ -694,4 +696,11 @@ export function SetValue(
   }
   this["StartListeningUnshared"](rows);
   if (broadcast) this["BroadcastNewCell"](row);
+}
+
+/** Original column3.cxx string lookup on the same native store. @param this - Actual column. @param row - Row. @returns Independent shared string or native empty default. */
+export function GetSharedString(this: ScColumn, row: number): SharedString {
+  return this["maCells"].get_type(row) === element_type_string
+    ? this["maCells"].get(row, string_element_callbacks, string_value_type)
+    : new SharedString();
 }
