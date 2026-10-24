@@ -1,4 +1,7 @@
 /** @fileoverview Native CopyToDocContext and column clone-copy ownership used by paste Undo snapshots. */
+import { ScDocShell } from "../../ui/docshell/docsh";
+import { ScUndoPaste, ScUndoPasteOptions } from "../../ui/undo/undoblk";
+import { ScRangeList } from "../../../inc/rangelst";
 import { expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScColumn } from "../../../inc/column";
@@ -359,4 +362,183 @@ it("uses actual sparse table presence and native minimum table-count bounds", /*
   target.Dispose();
   source.Dispose();
   doc.Dispose();
+});
+
+it("undoes and redoes real pasted formula groups through native documents and shared Sfx history", /** Actual lazy Redo capture retains text,empty,value and formula owners across selected sheets and fresh ODS reopen. @returns Completion. */ async () => {
+  const doc = document();
+  doc.InsertTab(1, unicode("Second"));
+  const shell = new ScDocShell(doc),
+    range = new ScRange(1, 3, 0, 1, 4, 0),
+    marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SetMarkArea(range);
+  marks.SelectTable(0, true);
+  marks.SelectTable(1, true);
+  marks.SelectTable(3, true); // Native actions tolerate retained marks beyond the current sheet count.
+  for (let tab = 0; tab < 2; ++tab) {
+    doc.SetValue(new ScAddress(0, 3, tab), 3 + tab * 2);
+    doc.SetValue(new ScAddress(0, 4, tab), 4 + tab * 2);
+  }
+  doc.SetValue(new ScAddress(), 10);
+  doc.SetTextCell(new ScAddress(1, 3, 0), unicode("old"));
+  doc.SetFormula(new ScAddress(1, 3, 1), unicode("=A4+100"), grammar);
+  doc.SetValue(new ScAddress(1, 4, 1), 7);
+  const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  undo.InitUndoSelected(doc, marks);
+  doc.CopyToDocument(new ScRange(1, 3, 0, 1, 4, 1), InsertDeleteFlags.CONTENTS, false, undo);
+  const clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  clip.ResetClip(doc, 0);
+  clip.SetClipArea(new ScRange(1, 0, 0, 1, 0, 0));
+  doc.SetFormula(new ScAddress(1, 0, 0), unicode("=A1*2"), grammar);
+  doc.GetValue(new ScAddress(1, 0, 0));
+  doc.CopyToDocument(new ScRange(1, 0, 0, 1, 0, 0), InsertDeleteFlags.CONTENTS, false, clip);
+  doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, clip);
+  const options = new ScUndoPasteOptions(),
+    action = new ScUndoPaste(
+      shell,
+      new ScRangeList(range),
+      marks,
+      undo,
+      null,
+      InsertDeleteFlags.CONTENTS,
+      null,
+      false,
+      options,
+    );
+  expect(action.GetComment()).toBe("Paste");
+  expect(action["aPasteOptions"]).toEqual(options);
+  expect(action.GetMarkData()).not.toBe(marks);
+  expect(action.getAffectedRange().equals(range)).toBe(true);
+  shell.GetUndoManager().AddUndoAction(action);
+  expect(doc.GetValue(new ScAddress(1, 3, 0))).toBe(6);
+  expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(12);
+  expect(shell.Undo()).toBe(true);
+  const restoredString = doc.GetSharedString(new ScAddress(1, 3, 0));
+  expect(text(restoredString.getString())).toBe("old");
+  restoredString.dispose();
+  expect(doc.GetCellType(new ScAddress(1, 4, 0))).toBe(CellType.CELLTYPE_NONE);
+  expect(doc.GetValue(new ScAddress(1, 3, 1))).toBe(105);
+  expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(7);
+  expect(shell.Redo()).toBe(true);
+  expect(doc.GetValue(new ScAddress(1, 3, 0))).toBe(6);
+  expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(12);
+  doc.SetValue(new ScAddress(0, 4, 1), 20);
+  expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(40);
+  expect(shell.Undo()).toBe(true);
+  expect(shell.Redo()).toBe(true);
+  expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(40);
+  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  reopened.SetValue(new ScAddress(0, 4, 1), 30);
+  expect(reopened.GetValue(new ScAddress(1, 4, 1))).toBe(60);
+  reopened.Dispose();
+  clip.Dispose();
+  shell.Close();
+});
+
+it.each([false, true])(
+  "retains prefilled/lazy existing Redo owners with filled=%s",
+  /** Actual copied options and documents retain native constructor/default and first-undo behavior. @param filled - Original filled flag. @returns Nothing. */ (
+    filled,
+  ) => {
+    const doc = document(),
+      shell = new ScDocShell(doc),
+      range = new ScRange(0, 0, 0, 0, 1, 0),
+      marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SetMarkArea(range);
+    marks.SelectTable(0, true);
+    const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+      redo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+    undo.InitUndo(doc, 0, 0);
+    redo.InitUndo(doc, 0, 0);
+    undo.SetValue(new ScAddress(), 1);
+    redo.SetValue(new ScAddress(), 2);
+    doc.SetValue(new ScAddress(), 2);
+    const action = new ScUndoPaste(
+      shell,
+      new ScRangeList(range),
+      marks,
+      undo,
+      redo,
+      InsertDeleteFlags.CONTENTS,
+      null,
+      filled,
+    );
+    action.Undo();
+    expect(doc.GetValue(new ScAddress())).toBe(1);
+    action.Redo();
+    expect(doc.GetValue(new ScAddress())).toBe(2);
+    action.Dispose();
+    shell.Close();
+  },
+);
+it("retains whole-axis Redo geometry and empty-range native undo guards", /** Column/row snapshot allocation follows actual full-axis bounds rather than forced disabled flags. @returns Nothing. */ () => {
+  for (const rows of [false, true]) {
+    const doc = document(),
+      shell = new ScDocShell(doc),
+      range = rows
+        ? new ScRange(0, 0, 0, doc.MaxCol(), 0, 0)
+        : new ScRange(0, 0, 0, 0, doc.MaxRow(), 0),
+      marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SetMarkArea(range);
+    marks.SelectTable(0, true);
+    const table = doc.FetchTable(0) as ScTable;
+    if (rows) table.SetRowHeightOnly(0, 0, 500);
+    else table.SetColWidth(0, 700);
+    const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+    undo.InitUndoSelected(doc, marks, !rows, rows);
+    doc.CopyToDocument(range, InsertDeleteFlags.CONTENTS, false, undo);
+    if (rows) table.SetRowHeightOnly(0, 0, 900);
+    else table.SetColWidth(0, 1200);
+    const action = new ScUndoPaste(
+      shell,
+      new ScRangeList(range),
+      marks,
+      undo,
+      null,
+      InsertDeleteFlags.CONTENTS,
+      null,
+      false,
+    );
+    action.Undo();
+    expect(rows ? table.GetOriginalHeight(0) : table.GetColWidth(0)).toBe(rows ? 500 : 700);
+    action.Redo();
+    expect(rows ? table.GetOriginalHeight(0) : table.GetColWidth(0)).toBe(rows ? 900 : 1200);
+    action.Dispose();
+    shell.Close();
+  }
+  const doc = document(),
+    shell = new ScDocShell(doc),
+    marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  undo.InitUndo(doc, 0, 0);
+  const empty = new ScUndoPaste(
+    shell,
+    new ScRangeList(),
+    marks,
+    undo,
+    null,
+    InsertDeleteFlags.CONTENTS,
+    null,
+    true,
+  );
+  empty.Redo();
+  empty.Undo();
+  empty.Dispose();
+  const rejected = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  rejected.InitUndo(doc, 0, 0);
+  expect(
+    /** Unavailable flag families still destroy the actually transferred unique owner. @returns No action. */ () =>
+      new ScUndoPaste(
+        shell,
+        new ScRangeList(),
+        marks,
+        rejected,
+        null,
+        InsertDeleteFlags.ATTRIB,
+        null,
+        false,
+      ),
+  ).toThrow("Nondefault paste undo");
+  expect(rejected.GetPool()).toBeNull();
+  shell.Close();
 });

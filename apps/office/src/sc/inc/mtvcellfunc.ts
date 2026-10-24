@@ -11,22 +11,22 @@ type OtherAction = (type: number, first: number, length: number) => void;
 type CellIterator = ReturnType<CellStoreType["begin"]>;
 /** Visits actual nonnull formula pointers in row order,skipping other block types. @param store - Cell store. @param func - Native row/cell functor. @returns Nothing. */
 export function ProcessFormula(store: CellStoreType, func: FormulaAction): void;
-/** Original bounded overload dispatches non-formula spans to its separate native template functor. @param position - Mutable cursor. @param store - Cell store. @param first - First row. @param last - Last row. @param func - Formula functor. @param other - Non-formula functor. @returns Last cursor. */
+/** Original bounded formula-only/two-functor overloads retain the optional stateless FuncElseNoOp erasure and real non-formula span dispatch. @param position - Mutable cursor. @param store - Cell store. @param first - First row. @param last - Last row. @param func - Formula functor. @param other - Non-formula functor. @returns Last cursor. */
 export function ProcessFormula(
   position: CellIterator,
   store: CellStoreType,
   first: number,
   last: number,
   func: FormulaAction,
-  other: OtherAction,
+  other?: OtherAction,
 ): CellIterator;
 /** Binds original whole-store and bounded template overloads. @param args - Native specialization arguments. @returns Original result. */
 export function ProcessFormula(
   ...args:
     | [CellStoreType, FormulaAction]
-    | [CellIterator, CellStoreType, number, number, FormulaAction, OtherAction]
+    | [CellIterator, CellStoreType, number, number, FormulaAction, (OtherAction | undefined)?]
 ): void | CellIterator {
-  if (args.length === 6) {
+  if (args.length !== 2) {
     const [position, store, first, last, func, other] = args;
     return ProcessBlock(
       position,
@@ -36,7 +36,7 @@ export function ProcessFormula(
         call(node, offset, length) {
           const row = node.position + offset;
           if (node.type !== element_type_formula) {
-            other(node.type, row, length);
+            other?.(node.type, row, length); // Original absent functor is stateless FuncElseNoOp.
             return;
           }
           for (let index = 0; index < length; ++index)

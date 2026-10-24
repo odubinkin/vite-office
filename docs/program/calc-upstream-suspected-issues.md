@@ -3941,3 +3941,9 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `sc/source/core/data/document.cxx`, `CopyFromClip`;`sc/source/core/data/document10.cxx`, `CopyOneCellFromClip`.
 - `CopyFromClip` computes source dimensions with `bIncludeFiltered`,but attempts the single-row fast path before the filtered/generic branch. That fast path has no include-filtered parameter or row-filter guard. A fully filtered one-row source therefore still copies with `bIncludeFiltered=false` in the represented direct core call.
 - Preserve the actual dispatch order and copied result. Higher UI layers may avoid this call for an entirely filtered source;no broader UI defect is asserted here.
+
+### CALC-282 — UndoToDocument overloads disable auto-calculation on different documents
+
+- Pinned source: `sc/source/core/data/document.cxx`, coordinate and range `ScDocument::UndoToDocument` overloads.
+- The coordinate overload constructs `AutoCalcSwitch(rDestDoc,false)`,while the range overload constructs `AutoCalcSwitch(*this,false)`. The latter therefore disables calculation on the source Undo document rather than directly on the destination;its paired-sheet traversal and tail sentinel also differ from the coordinate overload.
+- No active incorrect result is established by the represented restoration scenarios. Preserve both actual receivers,guards and tail ranges;do not normalize the overloads into one supposedly equivalent implementation.

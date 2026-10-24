@@ -229,13 +229,13 @@ export class ScDocument {
   InitClipPtrs(source: ScDocument): void {
     documen2.InitClipPtrs.call(this, source);
   }
-  /** Stores a clipboard's one owned range and cut flag. @param range - Source area. @param cut - Cut mode. @returns Nothing. */
-  SetClipArea(range: ScRange, cut = false): void {
-    if (!this.IsClipboard()) return;
-    const parameter = this.GetClipParam();
-    parameter.maRanges.RemoveAll();
-    parameter.maRanges.push_back(range);
-    parameter.mbCutMode = cut;
+  /** Original owned clipboard range/cut assignment. @param args - Source area and original defaultfalse cut mode. @returns Nothing. */
+  SetClipArea(...args: Parameters<typeof document10.SetClipArea>): void {
+    document10.SetClipArea.apply(this, args);
+  }
+  /** Original range/coordinate Undo restoration on actual native documents. @param args - Native overload arguments. @returns Nothing. */
+  UndoToDocument(...args: Parameters<typeof document10.UndoToDocument>): void {
+    document10.UndoToDocument.apply(this, args);
   }
   /** Original clipboard dimensions on this actual document. @param args - Dimension outputs and filtered mode. @returns Nothing. */
   GetClipArea(...args: Parameters<typeof documen7.GetClipArea>): void {

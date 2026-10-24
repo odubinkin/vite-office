@@ -382,3 +382,39 @@ export function UpdateScriptTypes(this: ScColumn, first: number, last: number): 
     last,
   );
 }
+
+/** Original column4 boundary-group teardown records real top/bottom addresses before deletion splits the groups. @param this - Actual column. @param context - Shared end context. @param first - First row. @param last - Last row. @param groups - Optional native output vector. @returns Nothing. */
+export function EndListeningIntersectedGroups(
+  this: ScColumn,
+  context: EndListeningContext,
+  first: number,
+  last: number,
+  groups: ScAddress[] | null,
+): void {
+  const cells = this.GetCellStore();
+  let position = cells.position(first),
+    node = position.first.get();
+  if (node.type === element_type_formula) {
+    const cell = formula_block.at(
+        node.data as base_element_block,
+        position.second,
+      ) as ScFormulaCell,
+      group = cell.GetCellGroup();
+    if (group) {
+      if (!cell.IsSharedTop()) cell.EndListeningTo(context);
+      if (groups) groups.push(new ScAddress((group.mpTopCell as ScFormulaCell).aPos));
+    }
+  }
+  position = cells.position(position.first, last);
+  node = position.first.get();
+  if (node.type !== element_type_formula) return;
+  const cell = formula_block.at(node.data as base_element_block, position.second) as ScFormulaCell,
+    group = cell.GetCellGroup();
+  if (!group) return;
+  if (!cell.IsSharedTop()) cell.EndListeningTo(context);
+  if (groups) {
+    const address = new ScAddress((group.mpTopCell as ScFormulaCell).aPos);
+    address.IncRow(group.mnLength - 1);
+    groups.push(address);
+  }
+}

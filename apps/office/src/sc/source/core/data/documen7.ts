@@ -1,4 +1,10 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import {
+  EndListeningIntersectedGroups,
+  SetNeedsListeningGroups,
+  StartNeededListeners,
+  SetDirtyIncludingEmptyCells,
+} from "./document10";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
@@ -356,16 +362,66 @@ export function CreateSelectionPattern(
   }
 }
 
-/** Original document.cxx copy orchestration,scope order and default geometry policy. @param this - Actual source. @param range - Copied range. @param flags - Native flags. @param marked - Restrict columns to actual multi marks. @param destination - Actual target. @param marks - Original optional marks. @param colRowFlags - Original default true. @returns Nothing. */
+/** Original document.cxx coordinate/range copy overloads retain validation,scope order and default geometry true. @param this - Actual source. @param args - Native coordinates or range,flags,marks,destination and optional original policy arguments. @returns Nothing. */
 export function CopyToDocument(
   this: ScDocument,
-  range: ScRange,
-  flags: InsertDeleteFlags,
-  marked: boolean,
-  destination: ScDocument,
-  marks: ScMarkData | null = null,
-  colRowFlags = true,
+  ...args:
+    | [
+        ScRange,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        (boolean | undefined)?,
+      ]
+    | [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        boolean?,
+      ]
 ): void {
+  if (!(args[0] instanceof ScRange)) {
+    const [x1, y1, t1, x2, y2, t2, flags, marked, destination, marks = null, colRowFlags = true] =
+      args as [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        boolean?,
+      ];
+    if (ValidTab(t1) && ValidTab(t2))
+      this.CopyToDocument(
+        new ScRange(x1, y1, t1, x2, y2, t2),
+        flags,
+        marked,
+        destination,
+        marks,
+        colRowFlags,
+      );
+    return;
+  }
+  const [range, flags, marked, destination, marks = null, colRowFlags = true] = args as [
+    ScRange,
+    InsertDeleteFlags,
+    boolean,
+    ScDocument,
+    (ScMarkData | null | undefined)?,
+    boolean?,
+  ];
   const ordered = new ScRange(range);
   ordered.PutInOrder();
   if (destination["aDocName"].isEmpty()) destination["aDocName"].assign(this["aDocName"]);
@@ -541,20 +597,38 @@ export class BroadcastAction implements ColumnAction {
   }
 }
 
-/** Original selected-sheet deletion,partitioned unchanged onto this same document instance. @param this - Actual document. @param flags - Deletion flags. @param marks - Actual selection. @returns Nothing. */
+/** Original content/attribute selection deletion retains boundary groups and native broadcast policy. @param this - Actual document. @param flags - Deletion flags. @param marks - Actual selection. @param broadcast - Original defaulttrue. @returns Nothing. */
 export function DeleteSelection(
   this: ScDocument,
   flags: InsertDeleteFlags,
   marks: ScMarkData,
+  broadcast = true,
 ): void {
-  const autoCalc = new AutoCalcSwitch(this, false);
+  const scope = new AutoCalcSwitch(this, false);
   try {
+    const groups: ScAddress[] = [],
+      content = (flags & ~InsertDeleteFlags.CONTENTS) !== flags;
+    if (content) {
+      const context = new EndListeningContext(this),
+        ranges = new ScRangeList();
+      marks.FillRangeListWithMarks(ranges, false);
+      for (const range of ranges) EndListeningIntersectedGroups.call(this, context, range, groups);
+      context.purgeEmptyBroadcasters();
+    }
     for (const tab of marks.GetSelectedTabs()) {
       if (tab >= this.GetTableCount()) break;
-      (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
+      this.FetchTable(tab)?.DeleteSelection(flags, marks, broadcast);
     }
+    if (!content) return;
+    SetNeedsListeningGroups.call(this, groups);
+    StartNeededListeners.call(this);
+    if (!groups.length) return;
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    for (const range of ranges) SetDirtyIncludingEmptyCells.call(this, range);
+    for (const address of groups) this.GetFormulaCell(address)?.SetDirty(true);
   } finally {
-    autoCalc.Dispose();
+    scope.Dispose();
   }
 }
 /** Original block copying and consecutive-sheet reference phase for the admitted CONTENTS context;source clipboard must contain an actual sheet. Same-pool cut/move services remain unported. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected sheets. @param dx - Column displacement. @param dy - Row displacement. @returns Nothing. */

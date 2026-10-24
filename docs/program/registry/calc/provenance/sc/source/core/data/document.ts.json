@@ -59,7 +59,8 @@
       "The original document.hxx SetName value assignment is bound to the real aDocName owner,allowing canonical nonempty destination-name retention during CopyToDocument without private-state injection.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
       "Native pool-helper ownership now retains actual salhelper SimpleReferenceObject acquire/release operations at document initialization,rtl::Reference assignment and destruction. ScPoolHelper owns a lazy actual General/NatNum0 SvNumberFormatter and copies default/document options into its null-date,precision and two-digit-year fields. Shared clipboard/Undo owners retain the formatter after source closure;the last intrusive release destroys its owned parsed values. Number-color callbacks,edit-engine and physical style/item-pool shutdown remain unported;no fake service is installed. Document paste and UI acceptance remain pending.",
-      "The public CopyFromClip facade now delegates to actual same-instance document.cxx clipboard orchestration partitioned in document10. Existing StartListeningFromClip is extracted unchanged to that same owner;its native signature is retained by Parameters forwarding. Original nullable pFormatExchangeList and GetFormatExchangeList borrow are represented without a synthetic exchange map. Foreign merge/global clipboard and broader paste services remain unported;no full parity claim."
+      "The public CopyFromClip facade now delegates to actual same-instance document.cxx clipboard orchestration partitioned in document10. Existing StartListeningFromClip is extracted unchanged to that same owner;its native signature is retained by Parameters forwarding. Original nullable pFormatExchangeList and GetFormatExchangeList borrow are represented without a synthetic exchange map. Foreign merge/global clipboard and broader paste services remain unported;no full parity claim.",
+      "Native UndoToDocument overloads delegate to actual same-instance source definitions. SetClipArea moves unchanged out of the large facade. Coordinate CopyToDocument retains original validation and default geometry true."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -193,6 +194,14 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
           "marker": "orchestrates real default-content"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "undoes and redoes real pasted"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+          "marker": "restores actual boundary group"
         }
       ],
       "upstream": [

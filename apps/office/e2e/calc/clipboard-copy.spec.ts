@@ -3,7 +3,9 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/source/core/data/document10") &
+type Fixture = typeof import("../../src/sc/source/ui/undo/undoblk") &
+  typeof import("../../src/sc/source/ui/docshell/docsh") &
+  typeof import("../../src/sc/source/core/data/document10") &
   typeof import("../../src/i18npool/source/breakiterator/breakiteratorImpl") &
   typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/vcl/browser/sal-timer") &
@@ -39,6 +41,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/source/ui/undo/undoblk.ts", names: ["ScUndoPaste"] },
+    { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
     { module: "src/sc/source/core/data/document10.ts", names: ["CopyOneCellFromClip"] },
     {
       module: "src/i18npool/source/breakiterator/breakiteratorImpl.ts",
@@ -617,6 +621,74 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         };
         pasteClip.Dispose();
         pasteDocument.Dispose();
+        const historyDocument = new n.ScDocument(),
+          historyShell = new n.ScDocShell(historyDocument);
+        historyDocument.SetValue(new n.ScAddress(), 1);
+        historyDocument.SetValue(new n.ScAddress(0, 2, 0), 3);
+        historyDocument.SetValue(new n.ScAddress(0, 3, 0), 4);
+        historyDocument.SetValue(new n.ScAddress(1, 2, 0), 9);
+        const historyRange = new n.ScRange(1, 2, 0, 1, 3, 0),
+          historyMarks = new n.ScMarkData(historyDocument.GetSheetLimits());
+        historyMarks.SetMarkArea(historyRange);
+        historyMarks.SelectTable(0, true);
+        const historyUndo = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_UNDO);
+        historyUndo.InitUndoSelected(historyDocument, historyMarks);
+        historyDocument.CopyToDocument(
+          historyRange,
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          historyUndo,
+        );
+        historyDocument.SetFormula(new n.ScAddress(1, 0, 0), n.unicode("=A1+1"), grammar);
+        historyDocument.GetValue(new n.ScAddress(1, 0, 0));
+        const historyClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
+        historyClip.ResetClip(historyDocument, 0);
+        historyClip.SetClipArea(new n.ScRange(1, 0, 0, 1, 0, 0));
+        historyDocument.CopyToDocument(
+          new n.ScRange(1, 0, 0, 1, 0, 0),
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          historyClip,
+        );
+        historyDocument.CopyFromClip(
+          historyRange,
+          historyMarks,
+          n.InsertDeleteFlags.CONTENTS,
+          null,
+          historyClip,
+        );
+        historyShell
+          .GetUndoManager()
+          .AddUndoAction(
+            new n.ScUndoPaste(
+              historyShell,
+              new n.ScRangeList(historyRange),
+              historyMarks,
+              historyUndo,
+              null,
+              n.InsertDeleteFlags.CONTENTS,
+              null,
+              false,
+            ),
+          );
+        const historyBefore = historyDocument.GetValue(new n.ScAddress(1, 3, 0)),
+          historyUndone = historyShell.Undo(),
+          historyRestored = historyDocument.GetValue(new n.ScAddress(1, 2, 0)),
+          historyEmpty = historyDocument.GetCellType(new n.ScAddress(1, 3, 0)),
+          historyRedone = historyShell.Redo(),
+          historyAfter = historyDocument.GetValue(new n.ScAddress(1, 3, 0));
+        historyDocument.SetValue(new n.ScAddress(0, 3, 0), 10);
+        const pasteHistory = {
+          before: historyBefore,
+          undone: historyUndone,
+          restored: historyRestored,
+          empty: historyEmpty,
+          redone: historyRedone,
+          after: historyAfter,
+          recalculated: historyDocument.GetValue(new n.ScAddress(1, 3, 0)),
+        };
+        historyClip.Dispose();
+        historyShell.Close();
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -632,6 +704,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           sparse,
           undoGeometryDisabled,
           undoShared,
+          pasteHistory,
           publicPaste,
           rowPrepared,
           preparedScripts,
@@ -705,6 +778,15 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     sparse: true,
     undoGeometryDisabled: true,
     undoShared: true,
+    pasteHistory: {
+      before: 5,
+      undone: true,
+      restored: 9,
+      empty: 0,
+      redone: true,
+      after: 5,
+      recalculated: 11,
+    },
     publicPaste: {
       before: 11,
       after: 21,

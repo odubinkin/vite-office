@@ -61,6 +61,16 @@ export class SingleColumnSpanSet {
     for (const span of toSpanArray(this.maSpans, RowSpan)) spans.push(span);
   }
 
+  /** Original true-span expansion replaces the caller vector by native swap semantics. @param rows - Output row vector. @returns Nothing. */
+  getRows(rows: number[]): void {
+    const spans: RowSpan[] = [];
+    this.getSpans(spans);
+    const values: number[] = [];
+    for (const span of spans)
+      for (let row = span.mnRow1; row <= span.mnRow2; ++row) values.push(row);
+    rows.length = 0;
+    for (const row of values) rows.push(row);
+  }
   /** Original tree swap leaves each limits reference bound to its constructor. @param other - Other span owner. @returns Nothing. */
   swap(other: SingleColumnSpanSet): void {
     this.maSpans.swap(other.maSpans);

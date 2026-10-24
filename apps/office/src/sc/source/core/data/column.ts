@@ -468,21 +468,16 @@ export class ScColumn extends ScColumnData {
   EndListeningFormulaCells(...args: Parameters<typeof column4.EndListeningFormulaCells>): void {
     column4.EndListeningFormulaCells.apply(this, args);
   }
-  /** Consumed native column3.cxx attribute-only deletion;unrepresented content/style deletion is rejected before mutation. Plain cells have no EditEngine attributes to strip. @param first - First row. @param last - Last row. @param flags - HARDATTR/EDITATTR and optional internal NOCAPTIONS. @returns Nothing. */
-  DeleteArea(first: number, last: number, flags: InsertDeleteFlags): void {
-    if (
-      flags &
-      ~(InsertDeleteFlags.HARDATTR | InsertDeleteFlags.EDITATTR | InsertDeleteFlags.NOCAPTIONS)
-    )
-      throw new Error("Only native hard-attribute deletion is implemented");
-    if (flags & InsertDeleteFlags.HARDATTR) this.pAttrArray.DeleteHardAttr(first, last);
+  /** Original column3 DeleteArea consumes actual cell and attribute stores. @param args - Native rows,flags,broadcast defaulttrue and optional span collector. @returns Nothing. */
+  DeleteArea(...args: Parameters<typeof column3.DeleteArea>): void {
+    column3.DeleteArea.apply(this, args);
   }
-  /** Original DeleteSelection visits only actual multi-mark row spans for this allocated column. @param flags - Consumed deletion flags. @param marks - Native marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
+  /** Original multi-mark deletion preserves its broadcast default and native row traversal. @param flags - Native deletion flags. @param marks - Actual marks. @param broadcast - Original defaulttrue. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {
     if (marks.IsMultiMarked()) {
       const iterator = new ScMultiSelIter(marks.GetMultiSelData(), this.nCol);
       for (let result = iterator.Next(0, 0); result[0]; result = iterator.Next(0, 0))
-        this.DeleteArea(result[1], result[2], flags);
+        this.DeleteArea(result[1], result[2], flags, broadcast);
     }
   }
   /** Original disjoint row-span traversal over native multi-selection data. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited values. @returns Nothing. */

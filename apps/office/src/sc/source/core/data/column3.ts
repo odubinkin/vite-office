@@ -17,6 +17,12 @@ import {
 } from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, type ScFormulaCellGroup, CompareState } from "../../../inc/formulacell";
+import { ProcessFormula } from "../../../inc/mtvcellfunc";
+import { ScHint } from "../../../inc/brdcst";
+import { SfxHintId } from "../../../../svl/inc/hint";
+import { AutoCalcSwitch } from "../../../inc/scopetools";
+import type { ColumnSpanSet } from "../../../inc/columnspanset";
+import type { StartListeningContext } from "../../../inc/listenercontext";
 import { ScAddress } from "../../../inc/address";
 import type { ScColumn } from "../../../inc/column";
 import {
@@ -732,4 +738,96 @@ export function Dispose(this: ScColumn): void {
   this["maBroadcasters"].dispose();
   this.GetCellAttrStore().dispose();
   this.DisposeAttributes();
+}
+
+/** Original column3 row-vector broadcast reuses one native hint and visits only collected rows. @param this - Actual column. @param rows - Actual changed rows. @param id - Native hint. @returns Nothing. */
+export function BroadcastCells(this: ScColumn, rows: number[], id: SfxHintId): void {
+  if (!rows.length) return;
+  const hint = new ScHint(id, new ScAddress(this.GetCol(), 0, this.GetTab()));
+  for (const row of rows) {
+    hint.SetAddressRow(row);
+    this.GetDoc().Broadcast(hint);
+  }
+}
+/** Original column3 DeleteArea content/attribute order over actual DeleteCellsResult. Unsupported style resetting and absent notes/sparkline/edit services remain explicit boundaries rather than dummy stores. @param this - Actual column. @param first - First row. @param last - Last row. @param flags - Native flags. @param broadcast - Original defaulttrue. @param spans - Original optional collector. @returns Nothing. */
+export function DeleteArea(
+  this: ScColumn,
+  first: number,
+  last: number,
+  flags: InsertDeleteFlags,
+  broadcast = true,
+  spans: ColumnSpanSet | null = null,
+): void {
+  if (
+    flags &
+    ~(
+      InsertDeleteFlags.CONTENTS |
+      InsertDeleteFlags.HARDATTR |
+      InsertDeleteFlags.EDITATTR |
+      InsertDeleteFlags.NOCAPTIONS
+    )
+  )
+    throw Error("Only native content and hard-attribute deletion are implemented");
+  let mask = InsertDeleteFlags.CONTENTS;
+  if (flags & InsertDeleteFlags.NOTE) mask |= InsertDeleteFlags.NOCAPTIONS;
+  const content = flags & mask,
+    position = new ColumnBlockPosition();
+  this.InitBlockPosition(position);
+  let result: DeleteCellsResult | null = null;
+  if (!this.IsEmptyData() && content !== InsertDeleteFlags.NONE) {
+    result = this.DeleteCells(position, first, last, flags);
+    if (spans) {
+      const rows: RowSpan[] = [];
+      result.aDeletedRows.getSpans(rows);
+      for (const row of rows)
+        spans.set(this.GetDoc(), this.GetTab(), this.GetCol(), row.mnRow1, row.mnRow2, true);
+    }
+  }
+  if (flags & InsertDeleteFlags.HARDATTR) this["pAttrArray"].DeleteHardAttr(first, last);
+  if (result && broadcast) {
+    const rows: number[] = [];
+    result.aDeletedRows.getRows(rows);
+    BroadcastCells.call(this, rows, SfxHintId.ScDataChanged);
+  }
+}
+/** Original column3 StartListeners handler with actual needed flags and native group-span skipping. @param this - Actual column. @param context - Real shared start context. @param all - Original listener policy. @returns Nothing. */
+export function StartListeners(this: ScColumn, context: StartListeningContext, all: boolean): void {
+  const cells = this.GetCellStore();
+  for (const iterator = cells.begin(); !iterator.equals(cells.end()); iterator.increment()) {
+    const node = iterator.get();
+    if (node.type !== element_type_formula) continue;
+    const data = node.data as base_element_block;
+    for (let i = 0; i < node.size; ++i) {
+      const cell = formula_block.at(data, i) as ScFormulaCell;
+      if (!all && !cell.NeedsListening()) continue;
+      if (cell.IsSharedTop()) {
+        SharedFormulaUtil.startListeningAsGroup(context, formula_block.data(data).advance(i));
+        i += cell.GetSharedLength() - 1;
+      } else cell.StartListeningTo(context);
+    }
+  }
+}
+
+/** Original column.cxx SetDirty BROADCAST_BROADCASTERS branch,consumed by document include-empty restoration. Other broadcast modes retain their separate existing owners. @param this - Actual column. @param first - First row. @param last - Last row. @returns Nothing. */
+export function SetDirtyIncludingEmptyCells(this: ScColumn, first: number, last: number): void {
+  const scope = new AutoCalcSwitch(this.GetDoc(), false);
+  try {
+    ProcessFormula(
+      this.GetCellStore().begin(),
+      this.GetCellStore(),
+      first,
+      last,
+      /** Original formula-only dirty handler. @param row - Native row. @param cell - Actual formula. @returns Nothing. */ (
+        row,
+        cell,
+      ) => {
+        void row;
+        cell.SetDirty();
+      },
+    );
+    if (this.BroadcastBroadcasters(first, last, SfxHintId.ScDataChanged))
+      this.GetDoc().TrackFormulas();
+  } finally {
+    scope.Dispose();
+  }
 }

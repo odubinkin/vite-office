@@ -19,7 +19,11 @@
       "SetValue",
       "GetSharedString",
       "ImplDestroy",
-      "Dispose"
+      "Dispose",
+      "DeleteArea",
+      "BroadcastCells",
+      "StartListeners",
+      "SetDirtyIncludingEmptyCells"
     ],
     "upstreamSymbols": [
       "GroupFormulaCells",
@@ -31,7 +35,10 @@
       "CopyCellsFromClipHandler",
       "CopyTextAttrsFromClipHandler",
       "ScColumn::SetValue",
-      "ScColumn::GetSharedString"
+      "ScColumn::GetSharedString",
+      "ScColumn::DeleteArea",
+      "ScColumn::BroadcastCells",
+      "ScColumn::StartListeners"
     ],
     "preservedResponsibilities": [
       "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
@@ -43,7 +50,8 @@
       "Task76 attribute-copy progress: Clone-copy now also uses native attribute CopyArea when STYLES is selected and original per-row target-style retention for same-helper hard-only copying. Existing STRING compatibility calls use the same actual CopyToDocContext;native default clone consumers can preserve both CONTENTS and ATTRIB for EnterBlock undo. Foreign hard-only style preservation remains explicit unsupported native style migration;link,selective numeric-result and nondefault clone services remain unported.",
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
-      "Native CopyToColumn admits the original NOTE-stripped full scalar payload from ordinary table copies while retaining selective-number/link/foreign-style boundaries. Original marked recursion omits the clone-policy argument (CALC-269). ImplDestroy stops real store events,clears and resizes represented cell/text stores;actual member destruction releases shared strings and formula subscriptions through native value callbacks. Note/sparkline stores and CellStorageModified compute/stream services remain unported."
+      "Native CopyToColumn admits the original NOTE-stripped full scalar payload from ordinary table copies while retaining selective-number/link/foreign-style boundaries. Original marked recursion omits the clone-policy argument (CALC-269). ImplDestroy stops real store events,clears and resizes represented cell/text stores;actual member destruction releases shared strings and formula subscriptions through native value callbacks. Note/sparkline stores and CellStorageModified compute/stream services remain unported.",
+      "Original DeleteArea uses actual DeleteCellsResult,optional deleted-span collection,hard-attribute deletion and changed-row broadcast order. Absent note/sparkline/edit owners have no dummy stores;style reset rejects explicitly. BroadcastCells reuses one real ScHint. StartListeners retains real needed flags and shared top/group-length skipping. Consumed column.cxx SetDirty BROADCAST_BROADCASTERS uses the actual formula-only ProcessFormula overload,broadcaster walk and TrackFormulas. Other mode bodies remain separate existing/unported responsibilities."
     ],
     "omittedResponsibilities": [
       "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
@@ -89,6 +97,14 @@
         {
           "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
           "marker": "relocated ranges"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "undoes and redoes real pasted"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+          "marker": "restores actual boundary group"
         }
       ],
       "upstream": [
@@ -119,6 +135,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
           "marker": "ScColumn::ImplDestroy"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+          "marker": "ScColumn::SetDirty("
         }
       ]
     }

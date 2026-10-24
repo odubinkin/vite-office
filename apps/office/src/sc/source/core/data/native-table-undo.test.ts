@@ -1,7 +1,7 @@
 /** @fileoverview Original column/table Undo,manual-break ownership and stream-validity lock behavior over actual native stores. */
 import { assert, expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
-import { ScAddress, ScRange } from "../../../inc/address";
+import { ScAddress, ScRange, MAXTAB } from "../../../inc/address";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { CopyToDocContext } from "../../../inc/clipcontext";
 import { InsertDeleteFlags } from "../../../inc/global";
@@ -328,4 +328,94 @@ it("owns native ordered manual/page sets and honors stream-validity locking and 
   } finally {
     doc.Dispose();
   }
+});
+
+it.each([false, true])(
+  "restores native document Undo data and outside-sheet formulas via coordinate overload=%s",
+  /** Actual source and target documents retain distinct native overload scope rules and geometry defaults. @param coordinates - Select coordinate overload. @returns Nothing. */ (
+    coordinates,
+  ) => {
+    const doc = document();
+    doc.InsertTab(1, unicode("Second"));
+    doc.InsertTab(2, unicode("Third"));
+    const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+    undo.InitUndo(doc, 0, 2);
+    for (let tab = 0; tab < 3; ++tab) {
+      doc.SetValue(new ScAddress(0, 0, tab), 3);
+      const pos = new ScAddress(1, 0, tab),
+        original = new ScFormulaCell(
+          doc,
+          pos,
+          unicode("=A1+1"),
+          FormulaGrammar.Grammar.GRAM_NATIVE,
+        );
+      undo.SetFormulaCell(pos, new ScFormulaCell(original, undo, pos));
+      original.Dispose();
+      doc.SetFormula(pos, unicode("=99"), FormulaGrammar.Grammar.GRAM_NATIVE);
+    }
+    undo.SetValue(new ScAddress(0, 0, 1), 55);
+    if (coordinates) undo.UndoToDocument(0, 0, 1, 0, 0, 1, InsertDeleteFlags.CONTENTS, false, doc);
+    else undo.UndoToDocument(new ScRange(0, 0, 1, 0, 0, 1), InsertDeleteFlags.CONTENTS, false, doc);
+    expect(doc.GetValue(new ScAddress(0, 0, 1))).toBe(55);
+    expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(4);
+    expect(doc.GetValue(new ScAddress(1, 0, 1))).toBe(56);
+    expect(doc.GetValue(new ScAddress(1, 0, 2))).toBe(4);
+    expect(doc.GetAutoCalc()).toBe(true);
+    expect(undo.GetAutoCalc()).toBe(false);
+    undo.Dispose();
+    doc.Dispose();
+  },
+);
+it("retains native UndoToDocument bounds,range clamping and sparse MAXTAB coordinate tail", /** Both actual overloads keep their different native tail conditions and preconditions. @returns Nothing. */ () => {
+  const doc = document(),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  undo.InitUndo(doc, 0, 0);
+  undo.SetValue(new ScAddress(0, 1, 0), 9);
+  undo.UndoToDocument(0, 1, 0, 0, 0, 0, InsertDeleteFlags.CONTENTS, false, doc);
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(9);
+  undo.UndoToDocument(0, 0, -1, 0, 1, 0, InsertDeleteFlags.CONTENTS, false, doc);
+  expect(
+    /** The coordinate overload asserts real paired sheet counts. @returns Nothing. */ () =>
+      undo.UndoToDocument(0, 0, 0, 0, 0, 1, InsertDeleteFlags.CONTENTS, false, doc),
+  ).toThrow("sheet-count");
+  expect(doc.GetAutoCalc()).toBe(true);
+  undo.UndoToDocument(new ScRange(0, 0, 0, 0, 1, 2), InsertDeleteFlags.CONTENTS, false, doc);
+  undo.CopyToDocument(0, 0, -1, 0, 0, 0, InsertDeleteFlags.CONTENTS, false, doc);
+  undo.CopyToDocument(0, 0, 0, 0, 0, MAXTAB + 1, InsertDeleteFlags.CONTENTS, false, doc);
+  const lastSource = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    lastTarget = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  lastSource.InitUndo(doc, MAXTAB, MAXTAB);
+  lastTarget.InitUndo(doc, MAXTAB, MAXTAB);
+  lastSource.SetValue(new ScAddress(0, 0, MAXTAB), 17);
+  lastSource.UndoToDocument(
+    0,
+    0,
+    MAXTAB,
+    0,
+    0,
+    MAXTAB,
+    InsertDeleteFlags.CONTENTS,
+    false,
+    lastTarget,
+  );
+  expect(lastTarget.GetValue(new ScAddress(0, 0, MAXTAB))).toBe(17);
+  lastSource.Dispose();
+  lastTarget.Dispose();
+  undo.Dispose();
+  doc.Dispose();
+});
+
+it("skips real missing source and target slots in both UndoToDocument overloads", /** Native coordinate assertions admit paired vector sizes while actual sheet owners can be absent. @returns Nothing. */ () => {
+  const doc = document();
+  doc.InsertTab(1, unicode("Second"));
+  doc.InsertTab(2, unicode("Third"));
+  const source = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    target = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  source.InitUndo(doc, 1, 1);
+  target.InitUndo(doc, 2, 2);
+  source.UndoToDocument(new ScRange(0, 0, 0, 0, 0, 1), InsertDeleteFlags.CONTENTS, false, target);
+  source.UndoToDocument(0, 0, 0, 0, 0, 1, InsertDeleteFlags.CONTENTS, false, target);
+  source.Dispose();
+  target.Dispose();
+  doc.Dispose();
 });

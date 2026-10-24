@@ -364,9 +364,9 @@ export class ScTable {
       for (let col = firstCol; col <= lastCol; col++)
         (this.aCol[col] as ScColumn).DeleteArea(firstRow, lastRow, flags);
   }
-  /** Original DeleteSelection traverses allocated columns only;no synthetic column allocation or default-tail correction. @param flags - Attribute-only flags. @param marks - Actual native marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
-    for (const column of this.aCol) column.DeleteSelection(flags, marks);
+  /** Original DeleteSelection traverses allocated columns only and forwards the native broadcast policy. @param flags - Native deletion flags. @param marks - Actual native marks. @param broadcast - Original defaulttrue. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {
+    for (const column of this.aCol) column.DeleteSelection(flags, marks, broadcast);
   }
   /** Original multi-column spans clamp to allocated columns and retain sparse storage. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited items. @returns Nothing. */
   MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {

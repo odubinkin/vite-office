@@ -1,4 +1,7 @@
 /** @fileoverview Original table7.cxx pre-paste deletion over actual allocated columns and source columns. */
+import { EndListeningIntersectedGroups as endColumnGroups } from "./column4";
+import type { EndListeningContext } from "../../../inc/listenercontext";
+import type { ScAddress } from "../../../inc/address";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScTable } from "../../../inc/table";
@@ -60,4 +63,25 @@ export function CopyOneCellFromClip(
       else flags.AndValue(row1, CRFlags.All & ~CRFlags.ManualSize);
     }
   }
+}
+
+/** Original table7 allocated-column boundary teardown. @param this - Actual table. @param context - Shared end context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param groups - Optional native output. @returns Nothing. */
+export function EndListeningIntersectedGroups(
+  this: ScTable,
+  context: EndListeningContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  groups: ScAddress[] | null,
+): void {
+  if (
+    col2 < col1 ||
+    col1 < 0 ||
+    col1 >= this.GetAllocatedColumnsCount() ||
+    !this.GetDoc().ValidCol(col2)
+  )
+    return;
+  for (let col = col1; col <= this.ClampToAllocatedColumns(col2); ++col)
+    endColumnGroups.call(this.FetchColumn(col) as ScColumn, context, row1, row2, groups);
 }

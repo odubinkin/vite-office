@@ -1,4 +1,6 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
+import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
+import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
 import { UpdateScriptTypes } from "./column4";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { ScBulkBroadcast } from "../inc/bcaslot";
@@ -11,7 +13,7 @@ import { ExtendMerge as extendTableMerge } from "./table2";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { UpdateRefMode } from "../../../inc/global";
 
-import { CopyFromClipContext } from "../../../inc/clipcontext";
+import { CopyToDocContext, CopyFromClipContext } from "../../../inc/clipcontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn } from "../../../inc/column";
@@ -383,5 +385,211 @@ export function CopyFromClip(
     context?.Dispose();
     merge?.Dispose();
     autoCalc.Dispose();
+  }
+}
+
+/** Original document.cxx clipboard range ownership,partitioned unchanged from the facade. @param this - Actual clipboard. @param range - Source range. @param cut - Original defaultfalse mode. @returns Nothing. */
+export function SetClipArea(this: ScDocument, range: ScRange, cut = false): void {
+  if (!this.IsClipboard()) return;
+  const parameter = this.GetClipParam();
+  parameter.maRanges.RemoveAll();
+  parameter.maRanges.push_back(range);
+  parameter.mbCutMode = cut;
+}
+/** Original document.cxx UndoToDocument overloads deliberately retain different auto-calc receivers,assertions,bounds and tail-copy sentinels. All CopyToDocument calls retain native geometry defaults. @param this - Actual source Undo document. @param args - Native range/flags/mark/destination or six coordinates/flags/mark/destination. @returns Nothing. */
+export function UndoToDocument(
+  this: ScDocument,
+  ...args:
+    | [ScRange, InsertDeleteFlags, boolean, ScDocument]
+    | [number, number, number, number, number, number, InsertDeleteFlags, boolean, ScDocument]
+): void {
+  if (args[0] instanceof ScRange) {
+    const [input, flags, marked, target] = args as [
+      ScRange,
+      InsertDeleteFlags,
+      boolean,
+      ScDocument,
+    ];
+    const autoCalc = new AutoCalcSwitch(this, false);
+    try {
+      const range = new ScRange(input);
+      range.PutInOrder();
+      const first = range.aStart.Tab(),
+        last = range.aEnd.Tab(),
+        context = new CopyToDocContext(target);
+      if (first > 0)
+        this.CopyToDocument(
+          0,
+          0,
+          0,
+          this.MaxCol(),
+          this.MaxRow(),
+          first - 1,
+          InsertDeleteFlags.FORMULA,
+          false,
+          target,
+        );
+      const count = Math.min(this.GetTableCount(), target.GetTableCount());
+      for (let tab = first; tab <= last && tab < count; ++tab) {
+        const source = this.FetchTable(tab),
+          destination = target.FetchTable(tab);
+        if (source && destination)
+          source.UndoToTable(
+            context,
+            range.aStart.Col(),
+            range.aStart.Row(),
+            range.aEnd.Col(),
+            range.aEnd.Row(),
+            flags,
+            marked,
+            destination,
+          );
+      }
+      if (last < this.GetTableCount())
+        this.CopyToDocument(
+          0,
+          0,
+          last + 1,
+          this.MaxCol(),
+          this.MaxRow(),
+          this.GetTableCount(),
+          InsertDeleteFlags.FORMULA,
+          false,
+          target,
+        );
+    } finally {
+      autoCalc.Dispose();
+    }
+    return;
+  }
+  const [x1, y1, t1, x2, y2, t2, flags, marked, target] = args as [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    InsertDeleteFlags,
+    boolean,
+    ScDocument,
+  ];
+  const col1 = Math.min(x1, x2),
+    col2 = Math.max(x1, x2),
+    row1 = Math.min(y1, y2),
+    row2 = Math.max(y1, y2),
+    first = Math.min(t1, t2),
+    last = Math.max(t1, t2);
+  if (!ValidTab(first) || !ValidTab(last)) return;
+  const autoCalc = new AutoCalcSwitch(target, false);
+  try {
+    if (first > 0)
+      this.CopyToDocument(
+        0,
+        0,
+        0,
+        this.MaxCol(),
+        this.MaxRow(),
+        first - 1,
+        InsertDeleteFlags.FORMULA,
+        false,
+        target,
+      );
+    const context = new CopyToDocContext(target);
+    if (last >= this.GetTableCount() || last >= target.GetTableCount())
+      throw Error("UndoToDocument sheet-count assertion");
+    for (let tab = first; tab <= last; ++tab) {
+      const source = this.FetchTable(tab),
+        destination = target.FetchTable(tab);
+      if (source && destination)
+        source.UndoToTable(context, col1, row1, col2, row2, flags, marked, destination);
+    }
+    if (last < MAXTAB)
+      this.CopyToDocument(
+        0,
+        0,
+        last + 1,
+        this.MaxCol(),
+        this.MaxRow(),
+        MAXTAB,
+        InsertDeleteFlags.FORMULA,
+        false,
+        target,
+      );
+  } finally {
+    autoCalc.Dispose();
+  }
+}
+
+/** Original document10 sparse-sheet boundary-group teardown through actual table7/column4 owners. @param this - Actual document. @param context - Shared end context. @param range - Native area. @param groups - Optional native outputs. @returns Nothing. */
+export function EndListeningIntersectedGroups(
+  this: ScDocument,
+  context: EndListeningContext,
+  range: ScRange,
+  groups: ScAddress[] | null,
+): void {
+  for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); ++tab) {
+    const table = this.FetchTable(tab);
+    if (!table) continue;
+    endTableGroups.call(
+      table,
+      context,
+      range.aStart.Col(),
+      range.aStart.Row(),
+      range.aEnd.Col(),
+      range.aEnd.Row(),
+      groups,
+    );
+  }
+}
+/** Original document10 needs-listening marking returns at the first absent sheet. @param this - Actual document. @param groups - Actual group addresses. @returns Nothing. */
+export function SetNeedsListeningGroups(this: ScDocument, groups: ScAddress[]): void {
+  for (const address of groups) {
+    const table = this.FetchTable(address.Tab());
+    if (!table) return;
+    if (this.ValidCol(address.Col()))
+      table.CreateColumnIfNotExists(address.Col()).SetNeedsListeningGroup(address.Row());
+  }
+}
+/** Original no-ColumnSet StartNeededListeners/Table::StartListeners path shares one real context and visits actual allocated columns. @param this - Actual document. @returns Nothing. */
+export function StartNeededListeners(this: ScDocument): void {
+  const context = new StartListeningContext(this);
+  for (const table of this["maTabs"])
+    if (table)
+      for (let col = 0; col < table.GetAllocatedColumnsCount(); ++col)
+        StartListeners.call(table.FetchColumn(col) as ScColumn, context, false);
+}
+/** Original document.cxx SetDirty include-empty branch with native table/column scopes and area-only final broadcast. Optional UNO/stream side effects remain unrepresented. @param this - Actual document. @param range - Native dirty area. @returns Nothing. */
+export function SetDirtyIncludingEmptyCells(this: ScDocument, range: ScRange): void {
+  const old = this.GetAutoCalc();
+  this["bAutoCalc"] = false;
+  const bulk = new ScBulkBroadcast(this.GetBASM(), SfxHintId.ScDataChanged);
+  try {
+    for (
+      let tab = range.aStart.Tab();
+      tab <= range.aEnd.Tab() && tab < this.GetTableCount();
+      ++tab
+    ) {
+      const table = this.FetchTable(tab);
+      if (!table) continue;
+      const scope = new AutoCalcSwitch(this, false);
+      try {
+        for (
+          let col = range.aStart.Col();
+          col <= table.ClampToAllocatedColumns(range.aEnd.Col());
+          ++col
+        )
+          dirtyColumn.call(
+            table.FetchColumn(col) as ScColumn,
+            range.aStart.Row(),
+            range.aEnd.Row(),
+          );
+      } finally {
+        scope.Dispose();
+      }
+    }
+    this.BroadcastCells(range, SfxHintId.ScDataChanged, false);
+  } finally {
+    bulk.Dispose();
+    this.SetAutoCalc(old);
   }
 }
