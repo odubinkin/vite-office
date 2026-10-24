@@ -36,7 +36,8 @@
     ],
     "preservedResponsibilities": [
       "Owns named collapsed Writer marks and registered zero-width positions through document edits.",
-      "LeafV6W22V aligns the represented collapsed bookmark position query to native GetMarkPos, replacing the old GetPosition adapter spelling and migrating actual shell/export/browser consumers. It remains the existing collapsed ordinary bookmark manager profile; no fabricated expanded mark or DDE/UNO class hierarchy, metadata state or storage format change is introduced."
+      "LeafV6W22V aligns the represented collapsed bookmark position query to native GetMarkPos, replacing the old GetPosition adapter spelling and migrating actual shell/export/browser consumers. It remains the existing collapsed ordinary bookmark manager profile; no fabricated expanded mark or DDE/UNO class hierarchy, metadata state or storage format change is introduced.",
+      "TaskQZAHNT: TaskQZAHNT: Original normal non-mailmerge unique-name cache replaces duplicate-creation rejection,and raw nonempty whitespace names are retained. Actual collapsed mark ownership/positions/notifications stay authoritative. Empty/NUL ingress guards and existing bounded rename failure behavior remain;full native MarkManager and localization services are not claimed."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/docbm.cxx",

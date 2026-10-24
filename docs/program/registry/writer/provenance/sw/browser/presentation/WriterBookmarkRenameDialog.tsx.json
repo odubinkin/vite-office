@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterBookmarkRenameDialog.tsx",
+          "marker": "WriterBookmarkRenameDialog"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterBookmarkRenameDialog.tsx",
+    "rationale": "Browser projection of the consumed SwRenameXNamedDlg prompt,actual live names,raw whitespace and insertion-only forbidden-character filtering. Parent bookmark request stays open;complete native widget/XNamed services remain unported. Native beforeinput selection ranges identify inserted text;unchanged imported characters and history/deletion edits retain their original value.",
+    "responsibilities": [
+      "Represents native rename prompt and insertion filtering over actual live document names."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  }
+}

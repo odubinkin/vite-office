@@ -3,6 +3,7 @@ import { WriterDialogHeader } from "./WriterDialogHeader";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { NewStyleDialog } from "../../../sfx2/browser/presentation/NewStyleDialog";
 import type {
+  WriterBookmarkDialogResult,
   WriterDialogController,
   WriterDialogSnapshot,
 } from "../../source/uibase/dialog/writer-dialog-controller";
@@ -17,10 +18,16 @@ export function WriterDialogPresenter({
   controller,
   request,
   unit,
+  bookmarkNames,
+  onBookmarkOperation,
+  focusDocument,
 }: Readonly<{
   controller: WriterDialogController;
   request: WriterDialogSnapshot;
   unit: FieldUnit;
+  bookmarkNames: readonly string[];
+  onBookmarkOperation: (result: WriterBookmarkDialogResult) => void;
+  focusDocument: () => void;
 }>): React.JSX.Element {
   const localization = useBrowserLocalization();
   return (
@@ -83,20 +90,24 @@ export function WriterDialogPresenter({
       )}
       {request?.request.kind !== "bookmark" ? null : (
         <WriterBookmarkDialog
-          names={request.request.names}
+          key={request.id}
+          names={bookmarkNames}
+          onOperation={onBookmarkOperation}
           {...(request.request.selectedName === undefined
             ? {}
             : { selectedName: request.request.selectedName })}
           onCancel={
-            /** Cancels the bookmark request. @returns Nothing. */
+            /** Cancels the bookmark request and returns focus to its document client. @returns Nothing. */
             () => {
               controller.Cancel(request.id);
+              focusDocument();
             }
           }
           onSubmit={
             /** Applies one bookmark choice. @param result - Accepted operation. @returns Nothing. */
             (result) => {
               controller.Complete(request.id, result);
+              focusDocument();
             }
           }
         />

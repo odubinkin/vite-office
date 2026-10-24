@@ -92,14 +92,13 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
     node.InsertText("x", 0);
     const marks = document.GetIDocumentMarkAccess();
     expect(
-      /** Rejects a blank name. @returns Nothing. */ () => marks.MakeMark(node, 0, " "),
+      /** Rejects a blank name. @returns Nothing. */ () => marks.MakeMark(node, 0, ""),
     ).toThrow("name is invalid");
     marks.MakeMark(node, 0, "valid");
+    expect(marks.MakeMark(node, 0, "valid").GetName()).toBe("valid Copy 1");
+    expect(marks.DeleteMark("valid Copy 1")).toBe(true);
     expect(
-      /** Rejects a duplicate name. @returns Nothing. */ () => marks.MakeMark(node, 0, "valid"),
-    ).toThrow("already exists");
-    expect(
-      /** Rejects a blank replacement. @returns Nothing. */ () => marks.RenameMark("valid", " "),
+      /** Rejects a blank replacement. @returns Nothing. */ () => marks.RenameMark("valid", ""),
     ).toThrow("name is invalid");
     expect(marks.RenameMark("absent", "other")).toBe(false);
     expect(marks.RenameMark("valid", "valid")).toBe(false);

@@ -358,11 +358,13 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       };
     openInsert(/Bookmark/);
     let dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "" } });
     fireEvent.keyDown(dialog, { key: "ArrowDown" });
     fireEvent.submit(within(dialog).getByRole("button", { name: "Insert" }).closest("form")!);
     expect(screen.getByRole("dialog", { name: "Bookmark" })).toBe(dialog);
     fireEvent.keyDown(dialog, { key: "Escape" });
     expect(screen.queryByRole("dialog", { name: "Bookmark" })).toBeNull();
+    expect(rendered.container.querySelector("[contenteditable=true]")).toHaveFocus();
     await act(
       /** Flushes the canceled shell request. @returns Completion. */ async () => undefined,
     );
@@ -370,6 +372,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     dialog = screen.getByRole("dialog", { name: "Bookmark" });
     fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "Middle" } });
     fireEvent.click(within(dialog).getByRole("button", { name: "Insert" }));
+    expect(rendered.container.querySelector("[contenteditable=true]")).toHaveFocus();
     await waitFor(
       /** Waits for the shell action. @returns Nothing. */
       () =>
@@ -396,13 +399,13 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       /** Checks bookmark navigation. @returns Nothing. */
       () => expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(5),
     );
-    openInsert(/Bookmark/);
-    dialog = screen.getByRole("dialog", { name: "Bookmark" });
-    fireEvent.change(within(dialog).getByLabelText("Existing bookmarks"), {
-      target: { value: "Middle" },
-    });
-    fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "Renamed" } });
+    expect(screen.getByRole("dialog", { name: "Bookmark" })).toBe(dialog);
     fireEvent.click(within(dialog).getByRole("button", { name: "Rename" }));
+    const renameDialog = screen.getByRole("dialog", { name: "Rename object: Middle" });
+    fireEvent.change(within(renameDialog).getByLabelText("New name"), {
+      target: { value: "Renamed" },
+    });
+    fireEvent.click(within(renameDialog).getByRole("button", { name: "OK" }));
     await waitFor(
       /** Checks rename. @returns Nothing. */
       () =>
@@ -423,8 +426,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
         ?.GetMarkPos()
         .GetContentIndex(),
     ).toBe(5);
-    openInsert(/Bookmark/);
-    dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    expect(screen.getByRole("dialog", { name: "Bookmark" })).toBe(dialog);
     fireEvent.change(within(dialog).getByLabelText("Existing bookmarks"), {
       target: { value: "Renamed" },
     });
@@ -433,6 +435,10 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       /** Checks deletion. @returns Nothing. */
       () =>
         expect(session.docShell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0),
+    );
+    fireEvent.click(within(dialog).getAllByRole("button", { name: "Close" }).at(-1) as HTMLElement);
+    await act(
+      /** Completes the open native bookmark request. @returns Completion. */ async () => undefined,
     );
     openInsert(/Manual Break/);
     let breakDialog = screen.getByRole("dialog", { name: "Insert Break" });

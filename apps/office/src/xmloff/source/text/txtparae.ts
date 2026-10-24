@@ -532,7 +532,7 @@ function exportMarker(
   marker: Readonly<{ kind: "bookmark" | "soft-page-break"; name?: string; offset: number }>,
 ): string {
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
-  if (marker.name === undefined || marker.name.trim().length === 0)
+  if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");
   return `<text:bookmark text:name="${escapeXml(marker.name)}"/>`;
 }

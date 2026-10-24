@@ -1063,3 +1063,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `include/sfx2/shell.hxx`, `SfxVisibilityFlags`; `sfx2/source/control/objface.cxx`, `CreateObjectBarUI_Impl` and `SfxInterface::IsObjectBarVisible`; `sw/source/uibase/shells/listsh.cxx`, `SwListShell::InitInterface_Impl`.
 - Observation: the `Invisible` enum value is zero and documented as “Never visible”, but `CreateObjectBarUI_Impl` adds `Standard` when that exact value is passed. `IsObjectBarVisible` subsequently returns true for a registered bar. Writer registers its numbering object bar with `Invisible`, so interpreting the registration name literally would incorrectly hide it. This is a surprising source API/comment contract, possibly retained for compatibility; no desktop GUI defect or unintended behavior is confirmed.
 - Preservation: retain the actual normalizing/visible behavior when connecting the represented numbering toolbar. Select it from native NumberList context and preserve the table shell's priority at the same object-bar position. Browser integration does not claim to port the complete SFX object-bar/configuration subsystem or repair the upstream enum comment.
+
+
+### WRITER086 — forbidden bookmark text can still enable actions for a sanitized existing name
+
+- Source: pinned `sw/source/ui/misc/bookmark.cxx`, `SwInsertBookmarkDlg::ModifyHdl`; `sw/source/ui/inc/bookmark.hxx`, `BookmarkTable::aForbiddenChars`.
+- Observation: forbidden characters are removed only from the temporary matching string. `A/B` can therefore select an existing `AB` while the raw entry remains `A/B`. The forbidden flag disables Insert but is absent from Delete/GoTo/Rename admission. This is a source-derived control-state observation,not a confirmed harmful desktop operation.
+- Preservation: retain raw input,temporary matching and distinct button conditions. Value and actual browser-control tests cover the sanitized existing-name path rather than applying an invented global rejection.
+
+### WRITER087 — exhausted bookmark copy counters return an empty or still-colliding name
+
+- Source: pinned `sw/source/core/doc/docbm.cxx`, `MarkManager::getUniqueMarkName`.
+- Observation: after a collision,the candidate string starts empty and the loop runs only while the cached signed counter is below INT32_MAX. A cache already at INT32_MAX returns empty. At INT32_MAX-1,a colliding final candidate is returned when the counter reaches the bound. Reaching these cache values requires billions of allocations and is not practical ordinary document behavior;no native GUI defect is claimed.
+- Preservation: retain loop,cache update and return values in the extracted normal naming helper. Direct helper tests use explicitly artificial counter values to preserve coverage;they do not claim these states are practically reachable.

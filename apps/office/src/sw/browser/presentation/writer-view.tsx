@@ -807,6 +807,18 @@ export function WriterWorkbench({
         />
       ) : null}
       <WriterDialogPresenter
+        focusDocument={
+          /** Returns closed bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
+            (editingHostRef.current as HTMLElement).focus()
+        }
+        bookmarkNames={view.GetWrtShell().GetTextShell().GetBookmarkNames()}
+        onBookmarkOperation={
+          /** Applies immediate native bookmark operations without completing the open request. @param result - Actual operation. @returns Nothing. */ (
+            result,
+          ) => {
+            view.Execute(WRITER_COMMAND_IDS.insertBookmark, { bookmark: result });
+          }
+        }
         controller={dialogController}
         request={dialogRequest}
         unit={snapshot.metricUnit}

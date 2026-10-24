@@ -1,5 +1,6 @@
 /** @fileoverview Owns collapsed Writer bookmarks and imported soft-page positions at the pinned `sw/source/core/doc/docbm.cxx` boundary. */
 
+import { getUniqueBookmarkName } from "./bookmark-name";
 import { SwPosition } from "../crsr/pam";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -36,6 +37,7 @@ export class SwBookmark {
 /** Document-owned subset of LibreOffice's MarkManager plus retained soft pagination hints. */
 export class DocumentMarkAccess {
   private readonly bookmarks = new Map<string, SwBookmark>();
+  private readonly markBasenameUniqueOffsets = new Map<string, number>();
   private readonly softPageBreaks: SwPosition[] = [];
 
   /** Binds the manager to one Writer graph. @param document - Owning document. @returns Nothing. */
@@ -45,9 +47,16 @@ export class DocumentMarkAccess {
   public MakeMark(node: SwTextNode, offset: number, name: string): SwBookmark {
     this.assertNode(node);
     this.assertName(name);
-    if (this.bookmarks.has(name)) throw new Error(`Writer bookmark already exists: ${name}`);
-    const mark = new SwBookmark(name, new SwPosition(node, offset, "mark", "before"));
-    this.bookmarks.set(name, mark);
+    const uniqueName = getUniqueBookmarkName(
+      name,
+      /** Queries the actual mark owner. @param candidate - Proposed name. @returns Whether unused. */ (
+        candidate,
+      ) => !this.bookmarks.has(candidate),
+      this.markBasenameUniqueOffsets,
+      "%1 Copy ",
+    );
+    const mark = new SwBookmark(uniqueName, new SwPosition(node, offset, "mark", "before"));
+    this.bookmarks.set(uniqueName, mark);
     this.document.NotifyModelChange({ kind: "mark-changed" });
     return mark;
   }
@@ -135,7 +144,7 @@ export class DocumentMarkAccess {
 
   /** Validates the name as a bounded nonempty ODF string. @param name - Candidate. @returns Nothing. */
   private assertName(name: string): void {
-    if (name.trim().length === 0 || name.includes("\u0000"))
+    if (name.length === 0 || name.includes("\u0000"))
       throw new Error("Writer bookmark name is invalid.");
   }
 }
