@@ -10,12 +10,18 @@ import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import {
+  cppu_detail_getUnoType_FormatElement,
+  type FormatElementAddress,
+} from "../../../offapi/com/sun/star/i18n/FormatElement";
+import {
   getFallbackStrings,
   decomposeCanonicalLanguageTag,
 } from "../../../i18nlangtag/source/languagetag/languagetag";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 /** Original Sequence<OUString> value specialization. */
 const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
+/** Original compiled Sequence<FormatElement> specialization over the real generated compound type. */
+const Formats = Sequence.specialize<FormatElementAddress>(cppu_detail_getUnoType_FormatElement, 48);
 /** Actual ordered LC_TRANSLITERATION resources,including source ref resolution. */
 const transliterationResources = new Map<string, readonly string[]>(
   Object.entries(transliterations),
@@ -89,6 +95,35 @@ export function getLocaleFormatElements(locale: LocaleConstReference): LocaleFor
       row,
     ) => ({ ...row }),
   );
+}
+/** Original getAllFormats value transport over the same generated fields. Actual shared compound construction owns all five strings;temporary source values are released after Sequence copies them. @param locale - Original queried locale. @returns Owned original FormatElement sequence. */
+export function getLocaleAllFormats(locale: LocaleConstReference): Sequence<FormatElementAddress> {
+  const rows = getLocaleDataField(locale, numberFormatResources),
+    values: OUString[] = [],
+    elements = new Map<number, FormatElementAddress>();
+  try {
+    for (let index = 0; index < rows.length; ++index) {
+      const row = rows[index] as LocaleFormatElement,
+        fields = new Map<number, unknown>();
+      for (const [offset, text] of [
+        [0, row.formatCode],
+        [8, row.formatName],
+        [16, row.formatKey],
+        [24, row.formatType],
+        [32, row.formatUsage],
+      ] as const) {
+        const value = unicode(text);
+        values.push(value);
+        fields.set(offset, value.getDataAddress());
+      }
+      fields.set(40, [(row.formatIndex << 16) >> 16]);
+      fields.set(42, [row.isDefault]);
+      elements.set(index * 48, fields);
+    }
+    return new Formats(elements, rows.length);
+  } finally {
+    for (let index = values.length - 1; index >= 0; --index) (values[index] as OUString).dispose();
+  }
 }
 /** Original MeasurementSystem field through the same locale-name fallback resolution. @param locale - Prepared locale. @returns Source field text. */
 export function getLocaleMeasurementSystem(locale: LocaleConstReference): string {

@@ -90,8 +90,9 @@ const allowedEdges = new Map([
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
   ["i18nlangtag", new Set(["sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
-  ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
+  // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
+  // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
+  ["i18npool", new Set(["cppu", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],

@@ -13,6 +13,8 @@ type Fixture = typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/sal/inc/rtl/math") &
   typeof import("../../src/i18npool/source/localedata/localedata") &
   typeof import("../../src/udkapi/com/sun/star/lang/Locale") &
+  typeof import("../../src/i18npool/inc/numberformatcode") &
+  typeof import("../../src/offapi/com/sun/star/i18n/NumberFormatCode") &
   typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
@@ -52,6 +54,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sal/inc/rtl/math.ts", names: ["round"] },
     { module: "src/i18npool/source/localedata/localedata.ts", names: ["getLocaleFormatElements"] },
     { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
+    { module: "src/i18npool/inc/numberformatcode.ts", names: ["NumberFormatCodeMapper"] },
+    { module: "src/offapi/com/sun/star/i18n/NumberFormatCode.ts", names: ["NumberFormatCode"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
     { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters", "AutoCalcSwitch"] },
@@ -384,6 +388,9 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           variant = n.unicode(""),
           locale = new n.Locale(language, country, variant),
           numberFormats = n.getLocaleFormatElements(locale),
+          mapper = new n.NumberFormatCodeMapper(),
+          mapped = mapper.getDefault(2, 4, locale),
+          mappedSequence = mapper.getAllFormatCodes(locale),
           formatFoundation = {
             general: n.text(general),
             input: n.text(input),
@@ -393,7 +400,18 @@ test("copies sparse clipboard blocks and completes real dependency notifications
               (row) => row.formatIndex === 0,
             )?.formatCode,
             localeFormats: numberFormats.length,
+            mappedCode: n.text(mapped.Code),
+            mappedType: mapped.Type,
+            mappedUsage: mapped.Usage,
+            mappedCount: mappedSequence.getLength(),
+            mappedFirst: n.text(n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(0)).Code),
           };
+        mappedSequence.dispose();
+        mapper.dispose();
+        const retainedMappedCode = n.text(mapped.Code);
+        if (retainedMappedCode !== formatFoundation.mappedCode)
+          throw Error("Mapper return lifetime changed");
+        mapped.dispose();
         general.dispose();
         input.dispose();
         locale.dispose();
@@ -498,6 +516,11 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       correctedRound: 10940,
       localeGeneral: "Standard",
       localeFormats: 55,
+      mappedCode: "Standard",
+      mappedType: 2,
+      mappedUsage: 4,
+      mappedCount: 55,
+      mappedFirst: "Standard",
     },
     formatRequests: [false, false],
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },

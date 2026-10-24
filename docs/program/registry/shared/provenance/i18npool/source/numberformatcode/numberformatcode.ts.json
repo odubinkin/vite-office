@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/numberformatcode/numberformatcode.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/numberformatcode/numberformatcode.cxx",
+    "localSymbols": [
+      "NumberFormatCodeMapper",
+      "mapElementTypeShortToString",
+      "mapElementTypeStringToShort",
+      "mapElementUsageShortToString",
+      "mapElementUsageStringToShort"
+    ],
+    "upstreamSymbols": [
+      "NumberFormatCodeMapper::getDefault",
+      "NumberFormatCodeMapper::getFormatCode",
+      "NumberFormatCodeMapper::getAllFormatCode",
+      "NumberFormatCodeMapper::getAllFormatCodes",
+      "NumberFormatCodeMapper::getFormats",
+      "NumberFormatCodeMapper::mapElementTypeShortToString",
+      "NumberFormatCodeMapper::mapElementTypeStringToShort",
+      "NumberFormatCodeMapper::mapElementUsageShortToString",
+      "NumberFormatCodeMapper::mapElementUsageStringToShort"
+    ],
+    "preservedResponsibilities": [
+      "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full service-manager/interface ABI,normal generated comparison/move families not consumed here,native thread scheduling and complete formatter/Calc paste/UI remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/numberformatcode/numberformatcode.ts",
+          "marker": "NumberFormatCodeMapper"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/numberformatcode/numberformatcode.cxx",
+          "marker": "NumberFormatCodeMapper::getDefault"
+        }
+      ]
+    }
+  }
+}
