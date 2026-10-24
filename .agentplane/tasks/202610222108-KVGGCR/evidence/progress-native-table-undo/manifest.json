@@ -1,0 +1,144 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native column/table Undo verified;full document paste/history remains incomplete",
+  "sourceBaseline": "74cde218f0877083e834a907ca4d57d9f73697bf",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 698,
+  "relatedFiles": 159,
+  "currentSevenOwnerCoverage": {
+    "lines": {
+      "total": 1451,
+      "covered": 1451,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1648,
+      "covered": 1648,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 404,
+      "covered": 404,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 974,
+      "covered": 974,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "calcCoverage": {
+    "lines": {
+      "total": 14768,
+      "covered": 14768,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16523,
+      "covered": 16523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2887,
+      "covered": 2887,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9990,
+      "covered": 9990,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 179,
+  "sourceHashes": 460,
+  "stable": true,
+  "coverageMethod": "Actual successful698 seven-owner raw100 replaces only six changed and one new executable owner in the preceding conditional-remove baseline. Unchanged source/test/probe/config hashes match that baseline;two new source/test files are explicitly captured. This is compositional Calc raw100,not a new complete Calc replay. No fabricated counters or changed thresholds/exclusions/ignore directives.",
+  "baselineArchive": ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-conditional-remove/raw.json.gz",
+  "baselineSha256": "747abe94b691116c0bfea4f8b3807ad0fa67655710bdfde241332d8960e1a405",
+  "browserWorker": "1/1 pass;actual compiled snapshot UndoToTable restores scalar/formula cells and independent conditional entries,with live destination dependencies and native manual-set/stream lock behavior in Chromium and DOM-free Worker",
+  "passedChecks": [
+    "production build/app types",
+    "tools types",
+    "static smoke",
+    "scoped ESLint/Prettier",
+    "JSDoc2975",
+    "size",
+    "boundaries",
+    "source tree",
+    "Calc resources",
+    "routing",
+    "doctor",
+    "canonical scoped provenance7 owners"
+  ],
+  "failedChecks": {
+    "fullSourceProvenance": "ENOENT vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+    "fullCalcRegistry": "ENOENT vendor/liblangtag-reference/liblangtag/lt-error.h"
+  },
+  "referenceAvailability": {
+    "vendor/icu-reference/source/common/ucase.h": true,
+    "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl": true,
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c": false,
+    "vendor/liblangtag-reference/liblangtag/lt-error.h": false
+  },
+  "referencePolicy": "ICU/mdds availability was revalidated;actual full gates now stop on missing liblangtag. No waiver,network action or restoration was performed.",
+  "diagnostics": "Initial fixtures incorrectly compiled text directly in an Undo document,where native compilation is suppressed;fixed fixtures compile ordinary cells once and use the genuine native formula-cell copy constructor into Undo. Initial table-private usage/column size diagnostics fixed with native membership getters and same-instance partition of original column3 GetSharedString. Final698/build/scoped gates pass.",
+  "suspectedIssue": "CALC-265:UndoToColumn forwards bMarked without mark data;native no-copy behavior for edited rows is retained and tested.",
+  "taskFootprint": "138/160 conservative cumulative paths;prior134 plus table5 source/two registry records/new Undo test",
+  "remaining": "Native full document copy/Undo orchestration,conditional style ownership,chart/Idle,formatter/script services,paste/history,EnterBlock and final74 acceptance. Sheet-local names/pagination/streaming consumers remain outside this represented new slice.",
+  "stopRule": "Complete active76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause. Do not wait for or start planned78-80.",
+  "fullAllApplicationRun": "Not executed in this progress block.",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/column3.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table1.ts",
+    "apps/office/src/sc/source/core/data/table2.ts",
+    "apps/office/src/sc/source/core/data/table5.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table1.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table5.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table1.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table5.ts.json"
+  ],
+  "newPaths": [
+    "apps/office/src/sc/source/core/data/table5.ts",
+    "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table5.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table5.ts.json"
+  ],
+  "rawSha256": "89b46a3b9efed0ec1112ec33e2b74c4163bb04cbac4b2ceeb24d5874985702b2",
+  "compressedBytes": 470505
+}
