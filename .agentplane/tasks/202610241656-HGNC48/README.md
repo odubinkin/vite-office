@@ -1,10 +1,11 @@
 ---
 id: "202610241656-HGNC48"
 title: "Canonize Writer line-numbering dialog controls and lifetime"
-status: "DOING"
+result_summary: "Canonized line-number dialog sensitivity bounds and draft lifetime"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Actual source draft preserves source sensitivity,range/sentinel/ushort acceptance and inactive values;actual UI returns original frame focus. Model/filter ownership unchanged;omitted source services remain explicit."
     - "10focused cases with strict2owner100coverage,151related cases and2production Chromium cases with real ODT and screenshots pass. Initial format/capability-record gate failures corrected;other gates pass without ignores or parity promotion."
-commit: null
+commit:
+  hash: "e86b1708ff088e4f0e6ead3e8878bee929997d8b"
+  message: "🖋️ HGNC48 writer: canonize line-number dialog control contracts"
 comments:
   -
     author: "CODER"
     body: "Start: canonize represented native line-number dialog draft and UI;complete first of two authorized tasks with focused proof."
+  -
+    author: "CODER"
+    body: "Verified: native line-number dialog draft,sensitivity,bounds,sentinel,ushort acceptance and actual frame focus pass focused100coverage,151related cases,2production Chromium cases and declared gates. First of two authorized tasks is closed;continue numeric core/ODT follow-up before stopping."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source/UI10cases strict2owner100coverage S32 B9 F22 L32;related151/20;Chromium2/2 with ODT/focus,screenshot review;build and declared gates pass after format/capability record corrections. Evidence in Verification. First of two tasks."
+  -
+    type: "status"
+    at: "2026-10-24T17:01:38.627Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native line-number dialog draft,sensitivity,bounds,sentinel,ushort acceptance and actual frame focus pass focused100coverage,151related cases,2production Chromium cases and declared gates. First of two authorized tasks is closed;continue numeric core/ODT follow-up before stopping."
 doc_version: 3
-doc_updated_at: "2026-10-24T17:01:15.717Z"
+doc_updated_at: "2026-10-24T17:01:38.629Z"
 doc_updated_by: "CODER"
 description: "First of exactly two tasks authorized after H0Q3NZ. Canonize existing represented line-number dialog field grouping,sensitivity,source ranges,offset sentinel and accepted ushort values;mounted focus,Escape and document return. Keep omitted character/format/header-footer services outside this leaf. Only writer checkout/branch,up to24primary paths plus paired records. Focused tests/Chromium;task4after checkpoint,no full suite due. Close then execute exactly one numeric core/ODT follow-up and pause goal."
 sections:
@@ -109,6 +122,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task commits;preserve previous work and other tasks."
   Findings: "Native LineOnOff/Modify sensitivity,0..1000separator interval,1..1000number interval,65535offset initialization and ushort acceptance are preserved in the source draft;disabled values are retained. Character style,numbering format and header/footer remain unrepresented. Old quick-control test now enables numbering before editing disabled fields. Initial gate failures were a formatting second pass and missing CAP-0125 binding on the new source owner;both corrected without classification promotion or gate relaxation. Exactly one numeric core/ODT follow-up remains before goal pause."
+extensions:
+  implementation_commit:
+    hash: "e86b1708ff088e4f0e6ead3e8878bee929997d8b"
+    message: "🖋️ HGNC48 writer: canonize line-number dialog control contracts"
 id_source: "generated"
 ---
 ## Summary
