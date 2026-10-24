@@ -1,4 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import { WriterNumObjectBar } from "./WriterNumObjectBar";
+import { SelectionType } from "../../source/uibase/inc/wrtsh";
 import type { BrowserDocumentSummary } from "../../../framework/browser/storage/document-store";
 import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { SwFormatVertOrient } from "../../inc/fmtornt";
@@ -504,6 +506,14 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
+        numberingToolbar={
+          (view.GetWrtShell().GetSelectionType() & SelectionType.NumberList) !== 0 ? (
+            <WriterNumObjectBar
+              commandSource={commandSource}
+              resolveArguments={resolveCommandArguments}
+            />
+          ) : undefined
+        }
         tableToolbar={
           currentTable === undefined ? undefined : (
             <WriterTableObjectBar

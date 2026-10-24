@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterNumObjectBar.tsx",
+          "marker": "WriterNumObjectBar"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterNumObjectBar.tsx",
+    "rationale": "React numbering object toolbar consumes the existing generated visible numobjectbar placements and actual Sfx frame bindings. Native NumberList context selects it;table object toolbar wins the same source position. No document/list state or command is recreated in the presenter. Full native toolbar management and unsupported source commands remain unported.",
+    "responsibilities": [
+      "Renders the source-visible promote,demote and continue-numbering controls using actual frame command state;pointer activation retains document focus."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+    },
+    "status": "local-only"
+  }
+}
