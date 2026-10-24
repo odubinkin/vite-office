@@ -7,19 +7,29 @@
     "status": "mapped",
     "upstreamPath": "svl/source/numbers/zformat.cxx",
     "localSymbols": [
-      "formatStandardNumber"
+      "formatStandardNumber",
+      "ImpSvNumberformatInfo",
+      "ImpSvNumFor",
+      "SvNumberformat"
     ],
     "upstreamSymbols": [
       "SvNumberformat::GetOutputString",
       "SvNumberformat::ImpGetOutputInputLine",
       "SvNumberformat::ImpGetOutputStandard",
-      "SvNumberformat::ImpGetOutputStdToPrecision"
+      "SvNumberformat::ImpGetOutputStdToPrecision",
+      "ImpSvNumberformatInfo::Copy",
+      "ImpSvNumFor::ImpSvNumFor",
+      "ImpSvNumFor::Enlarge",
+      "ImpSvNumFor::Copy",
+      "SvNumberformat::SvNumberformat",
+      "SvNumberformat::ImpCopyNumberformat"
     ],
     "preservedResponsibilities": [
-      "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending."
+      "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
+      "Task76 now owns actual ImpSvNumberformatInfo arrays/scalars and ImpSvNumFor default initialization,resize,prefix preservation,copy and reverse lifetime. SvNumberformat owns four real subformats,normalized code,type,language and standard flag;the admitted empty/single-General NatNum0 constructor runs actual lexical/type/final scan,Enlarge and CopyInfo before setting type. Empty-code count0 produces native checkPos1;unrepresented pattern families throw at admission rather than returning fabricated native syntax errors. Original copy and scanner-exchange construction copy actual owned token values and metadata;standard NUMBER output resets real output/color fields and consumes explicit current-language precision/decimal projections. Input-number/native-number constructor arguments are erased only where unconsumed in this admitted branch. Full language/table/formatter construction,conditions,prefixes,other patterns,nonstandard output and paste integration remain pending."
     ],
     "omittedResponsibilities": [
-      "Full formatter/scanner/format table ownership,custom patterns,non-NUMBER types,NatNum and complete clipboard/paste/UI remain unported."
+      "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
     ],
     "evidence": {
       "local": [
@@ -30,12 +40,20 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.test.ts",
           "marker": "General"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.ts",
+          "marker": "ImpSvNumberformatInfo"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
           "marker": "SvNumberformat::GetOutputString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "ImpSvNumberformatInfo::Copy"
         }
       ]
     }

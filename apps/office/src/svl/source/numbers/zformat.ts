@@ -1,5 +1,8 @@
-/** @fileoverview Consumed native SvNumberformat General/standard NUMBER output responsibility;custom patterns,other format types and nonzero NatNum are not implemented here. */
-import { OUString } from "../../../sal/inc/rtl/ustring";
+/** @fileoverview Native General/NatNum0 compiled subformats,constructor/copy lifetime and standard NUMBER output responsibilities;other format families and full formatter services remain unported. */
+import type { Color } from "../../../tools/inc/color";
+import { SvNumFormatType } from "../../inc/zforlist";
+import type { ImpSvNumberformatScan } from "./zforscan";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import {
   rtl_math_doubleToUString,
   rtl_math_StringFormat as Format,
@@ -77,4 +80,169 @@ export function formatStandardNumber(value: number, precision: number, decimal: 
     return zero();
   }
   return result;
+}
+
+/** Original ImpSvNumberformatInfo owned token arrays and scalar scan result. Native scalar initialization belongs to ImpSvNumFor,not to a fabricated scanner result. */
+export class ImpSvNumberformatInfo {
+  readonly sStrArray: OUString[] = [];
+  readonly nTypeArray: number[] = [];
+  declare nThousand: number;
+  declare nCntPre: number;
+  declare nCntPost: number;
+  declare nCntExp: number;
+  declare eScannedType: number;
+  declare bThousand: boolean;
+  /** Original value copy requires the destination arrays to have been enlarged first. @param source - Actual original info. @param count - Native uint16 count. @returns Nothing. */
+  Copy(source: ImpSvNumberformatInfo, count: number): void {
+    count &= 65535;
+    for (let index = 0; index < count; ++index) {
+      (this.sStrArray[index] as OUString).assign(source.sStrArray[index] as OUString);
+      this.nTypeArray[index] = source.nTypeArray[index] as number;
+    }
+    this.eScannedType = source.eScannedType;
+    this.bThousand = source.bThousand;
+    this.nThousand = source.nThousand;
+    this.nCntPre = source.nCntPre;
+    this.nCntPost = source.nCntPost;
+    this.nCntExp = source.nCntExp;
+  }
+}
+
+/** Original subformat token/info owner. Color and NatNum prefix services are not admitted by the current General/NatNum0 constructor path. */
+export class ImpSvNumFor {
+  private readonly aI = new ImpSvNumberformatInfo();
+  private nStringsCnt = 0;
+  /** Original constructor initializes the info scalars while both token vectors remain empty. @returns Subformat. */
+  constructor() {
+    this.aI.eScannedType = SvNumFormatType.UNDEFINED;
+    this.aI.bThousand = false;
+    this.aI.nThousand = 0;
+    this.aI.nCntPre = 0;
+    this.aI.nCntPost = 0;
+    this.aI.nCntExp = 0;
+  }
+  /** Original vector resize preserves the retained prefix and destroys removed OUStrings. @param count - Native uint16 count. @returns Nothing. */
+  Enlarge(count: number): void {
+    count &= 65535;
+    if (this.nStringsCnt !== count) {
+      this.nStringsCnt = count;
+      while (this.aI.sStrArray.length > count) (this.aI.sStrArray.pop() as OUString).dispose();
+      while (this.aI.sStrArray.length < count) this.aI.sStrArray.push(new OUString());
+      this.aI.nTypeArray.length = count;
+      for (let index = 0; index < count; ++index) this.aI.nTypeArray[index] ??= 0;
+    }
+  }
+  /** Original mutable info reference;Enlarge must precede token assignment. @returns Actual info owner. */
+  Info(): ImpSvNumberformatInfo {
+    return this.aI;
+  }
+  /** Original symbol count. @returns Native uint16 count. */
+  GetCount(): number {
+    return this.nStringsCnt;
+  }
+  /** Original represented token/info copy. Color rebinding is a separate unported responsibility. @param source - Native General/NatNum0 subformat. @returns Nothing. */
+  Copy(source: ImpSvNumFor): void {
+    this.Enlarge(source.nStringsCnt);
+    this.aI.Copy(source.aI, this.nStringsCnt);
+  }
+  /** Original vector member destruction. @returns Nothing. */
+  dispose(): void {
+    for (let index = this.aI.sStrArray.length - 1; index >= 0; --index)
+      (this.aI.sStrArray[index] as OUString).dispose();
+  }
+}
+
+/** Original SvNumberformat compiled-entry owner for the admitted single General/NatNum0 subformat path. Conditions,other patterns,prefixes and nonstandard output remain explicit unported boundaries. No synthetic parsed entry or formatter service is supplied. */
+export class SvNumberformat {
+  private readonly NumFor = [
+    new ImpSvNumFor(),
+    new ImpSvNumFor(),
+    new ImpSvNumFor(),
+    new ImpSvNumFor(),
+  ];
+  private readonly sFormatstring = new OUString();
+  private bStandard = false;
+  private eType: number = SvNumFormatType.DEFINED;
+  private readonly language: number;
+  private readonly rScan: ImpSvNumberformatScan;
+  /** Original General-only constructor responsibility:scan,Enlarge,CopyInfo,type assignment and normalized code. Input-number scanner/native-number supplier parameters are erased because this admitted path never consumes them;other constructor families must be ported before admission. @param args - Original admitted constructor/copy overload inputs. @returns Owned parsed entry. */
+  constructor(
+    ...args:
+      | [code: OUString, scanner: ImpSvNumberformatScan, checkPos: [number], language: [number]]
+      | [source: SvNumberformat]
+      | [source: SvNumberformat, scanner: ImpSvNumberformatScan]
+  ) {
+    if (args[0] instanceof SvNumberformat) {
+      const source = args[0];
+      this.rScan = args.length === 2 ? args[1] : source.rScan;
+      this.language = source.language;
+      this.sFormatstring.assign(source.sFormatstring);
+      this.eType = source.eType;
+      this.bStandard = source.bStandard;
+      for (let index = 0; index < 4; ++index)
+        (this.NumFor[index] as ImpSvNumFor).Copy(source.NumFor[index] as ImpSvNumFor);
+    } else {
+      const [code, scanner, checkPos, language] = args as [
+        OUString,
+        ImpSvNumberformatScan,
+        [number],
+        [number],
+      ];
+      this.rScan = scanner;
+      this.language = language[0] & 65535;
+      checkPos[0] = scanner.ScanFormat(code);
+      const count = scanner.GetResultStringsCnt();
+      // In the admitted empty/General scanner paths ScanFormat returns zero;other families throw at admission.
+      if (count === 0) checkPos[0] = 1;
+      if (checkPos[0] === 0) {
+        const first = this.NumFor[0] as ImpSvNumFor;
+        first.Enlarge(count);
+        scanner.CopyInfo(first.Info(), count);
+        this.eType = first.Info().eScannedType;
+      }
+      this.sFormatstring.assign(code);
+    }
+  }
+  /** Original built-in generation marks the compiled standard entry after successful insertion. @returns Nothing. */
+  SetStandard(): void {
+    this.bStandard = true;
+  }
+  /** Original native type with the DEFINED flag removed. @returns Format flags. */
+  GetMaskedType(): number {
+    return this.eType & ~SvNumFormatType.DEFINED;
+  }
+  /** Original entry language. @returns Native uint16 language. */
+  GetLanguage(): number {
+    return this.language;
+  }
+  /** Original borrowed normalized code owner. @returns Native const field. */
+  GetFormatstring(): OUStringConstReference {
+    return this.sFormatstring;
+  }
+  /** Original GetOutputString standard NUMBER responsibility;current-language precision/decimal are projected fields. Color is reset before output and the native star-fill return remains false. @param value - Binary64 input. @param output - Actual mutable output. @param color - Original output color pointer. @param precision - Native current standard precision. @param decimal - Original first decimal unit. @returns Whether star-fill occurred. */
+  GetOutputString(
+    value: number,
+    output: OUString,
+    color: [Color | null],
+    precision: number,
+    decimal: number,
+  ): boolean {
+    if (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
+      throw new Error("SvNumberformat nonstandard output is not implemented");
+    output.clear();
+    color[0] = null;
+    const result = formatStandardNumber(value, precision, decimal);
+    try {
+      output.assign(result);
+    } finally {
+      result.dispose();
+    }
+    return false;
+  }
+  /** Original compiled entry member destruction. @returns Nothing. */
+  dispose(): void {
+    this.sFormatstring.dispose();
+    for (let index = this.NumFor.length - 1; index >= 0; --index)
+      (this.NumFor[index] as ImpSvNumFor).dispose();
+  }
 }

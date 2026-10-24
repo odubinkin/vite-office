@@ -52,12 +52,18 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     },
     { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem", "ScMergeAttr"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
-    { module: "src/svl/source/numbers/zformat.ts", names: ["formatStandardNumber"] },
+    {
+      module: "src/svl/source/numbers/zformat.ts",
+      names: ["formatStandardNumber", "SvNumberformat"],
+    },
     {
       module: "src/svl/source/numbers/zforlist.ts",
       names: ["ImpGetFormatCodeIndex", "ImpAdjustFormatCodeDefault"],
     },
-    { module: "src/svl/source/numbers/zforscan.ts", names: ["extractStandardGeneralName"] },
+    {
+      module: "src/svl/source/numbers/zforscan.ts",
+      names: ["extractStandardGeneralName", "ImpSvNumberformatScan", "KeywordLocalization"],
+    },
     { module: "src/sal/inc/rtl/math.ts", names: ["round"] },
     { module: "src/i18npool/source/localedata/localedata.ts", names: ["getLocaleFormatElements"] },
     { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
@@ -407,7 +413,23 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           standardName = n.extractStandardGeneralName(
             n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(selectedFormat)).Code,
           ),
+          scanner = new n.ImpSvNumberformatScan(
+            locale,
+            standardName,
+            n.KeywordLocalization.AllowEnglish,
+          ),
+          code = n.unicode("general"),
+          compiledCheck: [number] = [-1],
+          compiled = new n.SvNumberformat(code, scanner, compiledCheck, [0x0407]),
+          compiledOut = n.unicode("");
+        compiled.SetStandard();
+        compiled.GetOutputString(0.125, compiledOut, [null], 65535, 44);
+        const compiledCopy = new n.SvNumberformat(compiled),
           formatFoundation = {
+            compiledCheck: compiledCheck[0],
+            compiledCode: n.text(compiledCopy.GetFormatstring()),
+            compiledType: compiledCopy.GetMaskedType(),
+            compiledOutput: n.text(compiledOut),
             selectedFormat,
             standardName: n.text(standardName),
             general: n.text(general),
@@ -424,6 +446,11 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             mappedCount: mappedSequence.getLength(),
             mappedFirst: n.text(n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(0)).Code),
           };
+        compiledCopy.dispose();
+        compiledOut.dispose();
+        compiled.dispose();
+        code.dispose();
+        scanner.dispose();
         standardName.dispose();
         decimal.dispose();
         mappedSequence.dispose();
@@ -481,7 +508,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
               script,
               "\n(",
               run.toString(),
-              ")().then(value=>postMessage({value,dom:typeof document}));",
+              ")().then(value=>postMessage({value,dom:typeof document}),error=>postMessage({error:String(error)}));",
             ],
             { type: "text/javascript" },
           ),
@@ -496,7 +523,10 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             worker.onmessage =
               /** Receives the actual native result. @param event - Message. @returns Nothing. */ (
                 event,
-              ) => resolve(event.data);
+              ) => {
+                if (event.data.error) reject(Error(event.data.error));
+                else resolve(event.data);
+              };
             worker.onerror =
               /** Forwards real worker failures. @param event - Error. @returns Nothing. */ (
                 event,
@@ -531,6 +561,10 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      compiledCheck: 0,
+      compiledCode: "Standard",
+      compiledType: 16,
+      compiledOutput: "0,125",
       selectedFormat: 0,
       standardName: "Standard",
       general: "1E-10",

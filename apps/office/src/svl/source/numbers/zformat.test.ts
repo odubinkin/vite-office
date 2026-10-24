@@ -55,3 +55,138 @@ it("preserves fixed precision,negative-zero suppression and the original magnitu
   expect(formatted(1e-300, 400)).toBe("0." + "0".repeat(299) + "1");
   expect(formatted(123.4, 65536)).toBe("123");
 });
+
+import { Color } from "../../../tools/inc/color";
+import { ImpSvNumFor, SvNumberformat } from "./zformat";
+import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvNumFormatType } from "../../inc/zforlist";
+
+it("owns compiled subformat tokens with original resize,copy and scalar defaults", /** Real OUString slots retain their prefix identity and independent copied lifetimes. @returns Nothing. */ () => {
+  const source = new ImpSvNumFor(),
+    copy = new ImpSvNumFor(),
+    token = unicode("Standard");
+  try {
+    expect(source.GetCount()).toBe(0);
+    expect(source.Info().eScannedType).toBe(SvNumFormatType.UNDEFINED);
+    expect([
+      source.Info().bThousand,
+      source.Info().nThousand,
+      source.Info().nCntPre,
+      source.Info().nCntPost,
+      source.Info().nCntExp,
+    ]).toEqual([false, 0, 0, 0, 0]);
+    source.Enlarge(2);
+    const first = source.Info().sStrArray[0] as import("../../../sal/inc/rtl/ustring").OUString;
+    first.assign(token);
+    source.Info().nTypeArray[0] = 39;
+    source.Enlarge(2);
+    source.Enlarge(1);
+    expect(source.Info().sStrArray[0]).toBe(first);
+    source.Info().eScannedType = SvNumFormatType.NUMBER;
+    source.Info().nThousand = 1000;
+    source.Info().nCntPre = 2;
+    source.Info().nCntPost = 3;
+    source.Info().nCntExp = 4;
+    source.Info().bThousand = true;
+    copy.Copy(source);
+    expect(copy.Info().sStrArray[0]).not.toBe(first);
+    expect(text(copy.Info().sStrArray[0] as import("../../../sal/inc/rtl/ustring").OUString)).toBe(
+      "Standard",
+    );
+    expect(copy.Info().nTypeArray).toEqual([39]);
+    expect([
+      copy.Info().eScannedType,
+      copy.Info().bThousand,
+      copy.Info().nThousand,
+      copy.Info().nCntPre,
+      copy.Info().nCntPost,
+      copy.Info().nCntExp,
+    ]).toEqual([16, true, 1000, 2, 3, 4]);
+    source.Enlarge(0);
+    expect(text(copy.Info().sStrArray[0] as import("../../../sal/inc/rtl/ustring").OUString)).toBe(
+      "Standard",
+    );
+  } finally {
+    copy.dispose();
+    source.dispose();
+    token.dispose();
+  }
+});
+
+it("compiles the actual mapper General entry before standard NUMBER output and cross-scanner copies", /** The real source keyword,scan info,compiled entry and SAL output are connected;no parsed-state fixture is injected. @returns Nothing. */ () => {
+  const language = unicode("de"),
+    country = unicode("DE"),
+    empty = unicode(""),
+    locale = new Locale(language, country, empty),
+    mapper = new NumberFormatCodeMapper(),
+    mapped = mapper.getFormatCode(0, locale),
+    name = extractStandardGeneralName(mapped.Code),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish),
+    otherScanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.LocaleLegacy),
+    code = unicode("general"),
+    out = unicode("previous"),
+    check: [number] = [-1];
+  const entry = new SvNumberformat(code, scanner, check, [0x0407]);
+  try {
+    expect(check[0]).toBe(0);
+    expect(text(code)).toBe("Standard");
+    expect(text(entry.GetFormatstring())).toBe("Standard");
+    expect(entry.GetLanguage()).toBe(0x0407);
+    expect(entry.GetMaskedType()).toBe(16);
+    expect(scanner.GetScannedType()).toBe(16);
+    expect(scanner.GetStandardPrec()).toBe(2);
+    scanner.ChangeStandardPrec(65535);
+    expect(scanner.GetStandardPrec()).toBe(65535);
+    expect(
+      /** Calls actual unmarked entry. @returns Native return or explicit unported error. */ () =>
+        entry.GetOutputString(1, out, [null], scanner.GetStandardPrec(), 44),
+    ).toThrow(/nonstandard/);
+    entry.SetStandard();
+    const color: [Color | null] = [new Color(0x123456)];
+    expect(entry.GetOutputString(0.125, out, color, scanner.GetStandardPrec(), 44)).toBe(false);
+    expect(color[0]).toBeNull();
+    expect(text(out)).toBe("0,125");
+    const copy = new SvNumberformat(entry),
+      exchanged = new SvNumberformat(entry, otherScanner);
+    try {
+      code.clear();
+      scanner.Reset();
+      for (const value of [copy, exchanged]) {
+        expect(value.GetOutputString(1e-10, out, [null], 65535, 44)).toBe(false);
+        expect(text(out)).toBe("1E-10");
+        expect(text(value.GetFormatstring())).toBe("Standard");
+      }
+    } finally {
+      exchanged.dispose();
+      copy.dispose();
+    }
+    const invalid = new SvNumberformat(empty, scanner, check, [0x10407]);
+    try {
+      expect(check[0]).toBe(1);
+      expect(invalid.GetMaskedType()).toBe(0);
+      invalid.SetStandard();
+      expect(
+        /** Calls an empty invalid entry. @returns Native return or explicit unported error. */ () =>
+          invalid.GetOutputString(1, out, [null], 65535, 44),
+      ).toThrow(/nonstandard/);
+    } finally {
+      invalid.dispose();
+    }
+  } finally {
+    entry.dispose();
+    otherScanner.dispose();
+    scanner.dispose();
+    name.dispose();
+    mapped.dispose();
+    mapper.dispose();
+    locale.dispose();
+    language.dispose();
+    country.dispose();
+    empty.dispose();
+    code.dispose();
+    out.dispose();
+  }
+});

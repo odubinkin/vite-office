@@ -54,3 +54,75 @@ it("extracts every registered locale's actual index-zero standard name", /** Onl
   }
   expect(count).toBe(284);
 });
+
+import { ImpSvNumberformatScan, KeywordLocalization } from "./zforscan";
+import { ImpSvNumFor } from "./zformat";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+
+it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These are original General paths;other token families remain explicit admission failures. @returns Nothing. */ () => {
+  const language = unicode("de"),
+    country = unicode("DE"),
+    empty = unicode(""),
+    locale = new Locale(language, country, empty),
+    name = unicode("Standard");
+  try {
+    for (const mode of Object.values(KeywordLocalization)) {
+      const scanner = new ImpSvNumberformatScan(locale, name, mode),
+        code = unicode("sTaNdArD"),
+        english = unicode("GENERAL"),
+        unsupported = unicode("0.00"),
+        info = new ImpSvNumFor();
+      try {
+        expect(scanner.ScanFormat(code)).toBe(0);
+        expect(text(code)).toBe("sTaNdArD");
+        expect(scanner.GetResultStringsCnt()).toBe(1);
+        info.Enlarge(1);
+        scanner.CopyInfo(info.Info(), 1);
+        expect(
+          text(info.Info().sStrArray[0] as import("../../../sal/inc/rtl/ustring").OUString),
+        ).toBe("sTaNdArD");
+        expect(info.Info().nTypeArray).toEqual([39]);
+        expect([
+          info.Info().eScannedType,
+          info.Info().nThousand,
+          info.Info().bThousand,
+          info.Info().nCntPre,
+          info.Info().nCntPost,
+          info.Info().nCntExp,
+        ]).toEqual([16, 1000, false, 0, 0, 0]);
+        if (mode === KeywordLocalization.AllowEnglish) {
+          expect(scanner.ScanFormat(english)).toBe(0);
+          expect(text(english)).toBe("Standard");
+        } else
+          expect(
+            /** Enforces the prepared native keyword policy. @returns Control position. */ () =>
+              scanner.ScanFormat(english),
+          ).toThrow(/not implemented/);
+        expect(
+          /** Rejects an unported pattern family without a fabricated syntax error. @returns Control position. */ () =>
+            scanner.ScanFormat(unsupported),
+        ).toThrow(/not implemented/);
+        expect(scanner.ScanFormat(empty)).toBe(0);
+        expect(scanner.GetResultStringsCnt()).toBe(0);
+        expect(scanner.GetScannedType()).toBe(2048);
+        info.Enlarge(0);
+        scanner.CopyInfo(info.Info(), 0);
+        expect(info.Info().nThousand).toBe(0);
+        scanner.ChangeStandardPrec(65536);
+        expect(scanner.GetStandardPrec()).toBe(0);
+      } finally {
+        info.dispose();
+        scanner.dispose();
+        code.dispose();
+        english.dispose();
+        unsupported.dispose();
+      }
+    }
+  } finally {
+    name.dispose();
+    locale.dispose();
+    language.dispose();
+    country.dispose();
+    empty.dispose();
+  }
+});
