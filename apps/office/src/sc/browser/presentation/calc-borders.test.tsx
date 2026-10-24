@@ -25,8 +25,9 @@ it("uses the shared toolbar preset control with original twelve entries and real
   const s = createCalcSession(),
     c = s.controller,
     d = s.frame.GetDispatcher();
+  let surface: ReturnType<typeof render> | undefined;
   try {
-    render(
+    surface = render(
       <CalcWorkbench
         controller={c}
         frame={s.frame}
@@ -80,6 +81,7 @@ it("uses the shared toolbar preset control with original twelve entries and real
     expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(before + 3);
     expect(box(s, 2, 2).GetTop()).toBeUndefined();
   } finally {
+    surface?.unmount();
     s.Close();
   }
 });
