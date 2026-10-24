@@ -872,3 +872,13 @@ export function GetSharedString(this: ScDocument, position: ScAddress): SharedSt
     new SharedString()
   );
 }
+
+/** Original document.cxx conditional-index dispatch ignores absent sheets. @param this - Destination document. @param ranges - Native ranges. @param tab - Destination sheet. @param index - Format key. @returns Nothing. */
+export function AddCondFormatData(
+  this: ScDocument,
+  ranges: ScRangeList,
+  tab: number,
+  index: number,
+): void {
+  this.FetchTable(tab)?.AddCondFormatData(ranges, index);
+}

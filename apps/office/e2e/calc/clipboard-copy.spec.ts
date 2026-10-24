@@ -3,7 +3,8 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/inc/document") &
+type Fixture = typeof import("../../src/sc/inc/attrib") &
+  typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
   typeof import("../../src/sc/inc/clipcontext") &
@@ -23,6 +24,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
     { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters"] },
@@ -192,6 +194,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         const sourceTable = doc.FetchTable(0);
         if (!sourceTable) throw Error("Missing actual conditional-format table");
         sourceTable.GetCondFormList().InsertNew(conditional);
+        doc.AddCondFormatData(conditional.GetRange(), 0, 21);
+        doc.AddCondFormatData(conditional.GetRange(), 0, 21);
         conditional.SetCache([4]);
         doc.SetValue(new n.ScAddress(9, 9, 0), 2);
         undoTable.SetCondFormList(sourceTable.GetCondFormList().Clone(undo));
@@ -205,6 +209,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           range: conditionalSnapshot.GetRange().at(0).GetVars(),
           type: conditionalSnapshot.GetEntry(0)?.GetType(),
           cached: Array.from(conditionalValues),
+          indexes: Array.from(
+            (
+              doc.GetPattern(new n.ScAddress(9, 9, 0))?.GetItem(154) as InstanceType<
+                Fixture["ScCondFormatItem"]
+              >
+            ).GetCondFormatData(),
+          ),
         };
         rowContext.Dispose();
         rowClip.Dispose();
@@ -281,6 +292,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       range: [9, 9, 0, 9, 9, 0],
       type: 5,
       cached: [],
+      indexes: [21],
     },
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });

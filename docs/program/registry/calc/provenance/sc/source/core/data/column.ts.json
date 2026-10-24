@@ -21,7 +21,8 @@
       "CopyToColumn",
       "EndListeningFormulaCells",
       "EndListening",
-      "DeleteEmptyBroadcasters"
+      "DeleteEmptyBroadcasters",
+      "AddCondFormat"
     ],
     "upstreamSymbols": [
       "ScColumn::SetValue",
@@ -38,7 +39,8 @@
       "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
       "Task76: Native ScColumnData.GetNumberFormat forwards to the actual canonical pattern. Both formula-adoption overloads preserve the original inherit-number-format boolean default true and set the genuine formula format request only for General-format keys. Nondefault context language conversion remains an explicit formatter boundary.",
       "Task76 clone-copy progress: Both consumed column-copy signatures bind one actual CopyToDocContext/CopyByCloneHandler graph. Original StartListeningUnshared consults native delay admission for each surviving span. Group-aware EndListeningFormulaCells forwards actual output/sentinel contracts. Default CONTENTS/FORMULA/STRING are admitted;attribute/link/selective numeric-result and nondefault clone services remain unported.",
-      "Native ordinary EndListening now defers empty broadcaster deletion through the actual document flag and per-column pending flag,default false;context-based deferred-position removal keeps its original distinct contract. The original column2 DeleteEmptyBroadcasters body consumes the actual pending flag and managed broadcaster store on this same column instance."
+      "Native ordinary EndListening now defers empty broadcaster deletion through the actual document flag and per-column pending flag,default false;context-based deferred-position removal keeps its original distinct contract. The original column2 DeleteEmptyBroadcasters body consumes the actual pending flag and managed broadcaster store on this same column instance.",
+      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -132,6 +134,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/document-copy-listening.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "binds conditional indices"
         }
       ],
       "upstream": [
@@ -202,6 +208,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
           "marker": "EndListening"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/column.hxx",
+          "marker": "ScColumn::AddCondFormat"
         }
       ]
     },

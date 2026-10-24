@@ -77,6 +77,10 @@ export class ScTable {
   UpdateReference(...args: Parameters<typeof UpdateReference>): void {
     UpdateReference.apply(this, args);
   }
+  /** Original table2 conditional-format attribute forwarding. @param args - Ranges and key. @returns Nothing. */
+  AddCondFormatData(...args: Parameters<typeof table2.AddCondFormatData>): void {
+    table2.AddCondFormatData.apply(this, args);
+  }
   /** Original table2 clipboard dirty forwarding. @param args - Native bounds and changed spans. @returns Nothing. */
   SetDirtyFromClip(...args: Parameters<typeof table2.SetDirtyFromClip>): void {
     table2.SetDirtyFromClip.apply(this, args);

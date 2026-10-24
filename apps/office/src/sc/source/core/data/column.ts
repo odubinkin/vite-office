@@ -75,7 +75,6 @@ import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
-
 import { ScAttrArray } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
@@ -185,6 +184,10 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original column.hxx conditional-index forwarding. @param first - First row. @param last - Last row. @param index - Format key. @returns Nothing. */
+  AddCondFormat(first: number, last: number, index: number): void {
+    this.pAttrArray.AddCondFormat(first, last, index);
+  }
   /** Original reference-update dispatch skips empty and clipboard/undo columns. @param context - Native operation. @param undo - Optional native undo document. @returns Updated flag. */
   UpdateReference(context: RefUpdateContext, undo: ScDocument | null = null): boolean {
     if (this.IsEmptyData() || this.GetDoc().IsClipOrUndo()) return false;
@@ -360,7 +363,6 @@ export class ScColumn extends ScColumnData {
   RegroupFormulaCells(positions: ScAddress[] | null = null): void {
     column3.RegroupFormulaCells.call(this, positions);
   }
-
   /** Original const metadata lookup borrows a real store element or returns null for an empty block. @param row - Valid row. @returns Metadata or null. */
   GetCellTextAttr(row: number): CellTextAttr | null {
     const position = this.maCellTextAttrs.cposition(row),
@@ -388,7 +390,6 @@ export class ScColumn extends ScColumnData {
     if (block.type !== element_type_celltextattr) return;
     celltextattr_block.at(block.data as base_element_block, position.second).mnScriptType = type;
   }
-
   /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(row: number, pattern: ScPatternAttr): void {
     const cache = new ScItemPoolCache(

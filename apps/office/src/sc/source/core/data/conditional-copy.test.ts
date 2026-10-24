@@ -1,6 +1,10 @@
 /** @fileoverview Genuine conditional-format entries,ranges,clone ownership and subscribed cache behavior needed by native copy Undo. */
 import { assert, expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import { ScCondFormatItem } from "../../../inc/attrib";
+import { ATTR_CONDITIONAL } from "../../../inc/scitems";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
 import {
@@ -429,6 +433,55 @@ it("forwards actual table reference updates even when copied cells do not inters
     table.GetCondFormList().UpdateReference(context);
     expect(table.GetCondFormList().GetFormat(9)).toBeNull();
   } finally {
+    doc.Dispose();
+  }
+});
+
+it("binds conditional indices through document sheet column and canonical runs without losing existing attributes", /** Exercises real pattern splitting,coalescing,unsigned keys and absent-sheet dispatch. @returns Nothing. */ () => {
+  const doc = document();
+  /** Reads the actual canonical index vector. @param col - Column. @param row - Row. @returns Stored keys. */
+  function keys(col: number, row: number): number[] {
+    const pattern = doc.GetPattern(new ScAddress(col, row, 0));
+    assert(pattern);
+    return [...(pattern.GetItem(ATTR_CONDITIONAL) as ScCondFormatItem).GetCondFormatData()];
+  }
+  const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+  delta.ItemSetPut(new SvxFontHeightItem(420, 100, 101));
+  try {
+    doc.ApplyPattern(3, 4, 0, delta);
+    const ranges = new ScRangeList(new ScRange(2, 3, 0, 3, 5, 0));
+    doc.AddCondFormatData(ranges, 7, 9);
+    expect(keys(3, 4)).toEqual([]);
+    doc.AddCondFormatData(ranges, 0, 9);
+    doc.AddCondFormatData(new ScRangeList(new ScRange(3, 4, 0, 3, 6, 0)), 0, 2);
+    const before = doc.GetPattern(new ScAddress(3, 4, 0));
+    doc.AddCondFormatData(ranges, 0, 9);
+    expect(doc.GetPattern(new ScAddress(3, 4, 0))).toBe(before);
+    expect(keys(2, 2)).toEqual([]);
+    expect(keys(2, 3)).toEqual([9]);
+    expect(keys(2, 5)).toEqual([9]);
+    expect(keys(2, 6)).toEqual([]);
+    expect(keys(3, 3)).toEqual([9]);
+    expect(keys(3, 4)).toEqual([2, 9]);
+    expect(keys(3, 5)).toEqual([2, 9]);
+    expect(keys(3, 6)).toEqual([2]);
+    expect(((before as ScPatternAttr).GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(420);
+    const table = doc.FetchTable(0);
+    assert(table);
+    const column = table.CreateColumnIfNotExists(3);
+    column.AddCondFormat(-1, 1, 77);
+    column.AddCondFormat(1, doc.MaxRow() + 1, 77);
+    column.AddCondFormat(7, 6, 77);
+    expect(keys(3, 6)).toEqual([2]);
+    doc.AddCondFormatData(new ScRangeList(), 0, 77);
+    column.AddCondFormat(doc.MaxRow(), doc.MaxRow(), -1);
+    expect(keys(3, doc.MaxRow())).toEqual([4294967295]);
+    const a: [number] = [0],
+      b: [number] = [0];
+    column.GetPatternRange(a, b, 5);
+    expect([a[0], b[0]]).toEqual([5, 5]);
+  } finally {
+    delta.Dispose();
     doc.Dispose();
   }
 });

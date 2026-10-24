@@ -88,6 +88,10 @@ export class ScDocument {
   InitUndoSelected(...args: Parameters<typeof documen7.InitUndoSelected>): void {
     documen7.InitUndoSelected.apply(this, args);
   }
+  /** Original conditional-index dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
+  AddCondFormatData(...args: Parameters<typeof documen7.AddCondFormatData>): void {
+    documen7.AddCondFormatData.apply(this, args);
+  }
   /** Original incremental Undo sheet allocation. @param args - Native sheet range and allocation defaults. @returns Nothing. */
   AddUndoTab(...args: Parameters<typeof documen7.AddUndoTab>): void {
     documen7.AddUndoTab.apply(this, args);
@@ -513,7 +517,6 @@ export class ScDocument {
   DeleteSelection(...args: Parameters<typeof documen7.DeleteSelection>): void {
     documen7.DeleteSelection.apply(this, args);
   }
-
   /** Clips only to real cell data, preserving source output mutations on failure. @param tab - Sheet. @param firstCol - Start-column output. @param firstRow - Start-row output. @param lastCol - End-column output. @param lastRow - End-row output. @returns Whether the clipped area is valid. */
   ShrinkToDataArea(
     tab: number,

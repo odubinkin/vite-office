@@ -64,3 +64,14 @@ export function BroadcastBroadcasters(
     this["rDocument"].SetAutoCalc(old);
   }
 }
+
+/** Original conditional-format attribute traversal allocates only the actual covered columns. @param this - Destination sheet. @param ranges - Native ranges. @param index - Format key. @returns Nothing. */
+export function AddCondFormatData(
+  this: ScTable,
+  ranges: import("../../../inc/rangelst").ScRangeList,
+  index: number,
+): void {
+  for (const range of ranges)
+    for (let col = range.aStart.Col(); col <= range.aEnd.Col(); ++col)
+      this.CreateColumnIfNotExists(col).AddCondFormat(range.aStart.Row(), range.aEnd.Row(), index);
+}

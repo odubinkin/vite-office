@@ -16,7 +16,7 @@ import { ATTR_BORDER } from "../../../inc/scitems";
 import { ScIndentItem } from "../../../inc/attrib";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { ScCondFormatItem, ScRotateValueItem } from "../../../inc/attrib";
+import { ScCondFormatItem, ScCondFormatIndexes, ScRotateValueItem } from "../../../inc/attrib";
 import { ATTR_LINEBREAK, ATTR_CONDITIONAL, ATTR_ROTATE_VALUE } from "../../../inc/scitems";
 import { SvxCellHorJustify, SvxCellOrientation } from "../../../../editeng/inc/svxenum";
 import { SC_INDENT_STEP, HasAttrFlags } from "../../../inc/global";
@@ -186,6 +186,42 @@ export class ScAttrArray {
       }
     }
     return changed;
+  }
+  /** Original conditional-index insertion walks canonical runs and retains existing indices and styles. Valid rows always have the document's real default pattern. @param first - First row. @param last - Last row. @param index - Unsigned conditional-format key. @returns Nothing. */
+  AddCondFormat(first: number, last: number, index: number): void {
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (last < first) return;
+    index >>>= 0;
+    let start = first,
+      end: number;
+    do {
+      const pattern = this.GetPattern(start) as ScPatternAttr;
+      const runStart: [number] = [0],
+        runEnd: [number] = [0];
+      this.GetPatternRange(runStart, runEnd, start);
+      end = Math.min(runEnd[0], last);
+      const item = pattern.GetItemSet().GetItemIfSet(ATTR_CONDITIONAL) as ScCondFormatItem | null;
+      let next: ScPatternAttr | null = null;
+      if (item) {
+        const indexes = item.GetCondFormatData();
+        if (indexes.find(index) === -1) {
+          const copied = new ScCondFormatIndexes([...indexes]);
+          copied.insert(index);
+          next = new ScPatternAttr(pattern);
+          next.ItemSetPut(ScCondFormatItem.move(copied));
+        }
+      } else {
+        next = new ScPatternAttr(pattern);
+        next.ItemSetPut(new ScCondFormatItem(index));
+      }
+      const holder = next ? new CellAttributeHolder(next, true) : new CellAttributeHolder(pattern);
+      try {
+        this.SetPatternArea(start, end, holder);
+      } finally {
+        holder.Dispose();
+      }
+      start = end + 1;
+    } while (end < last);
   }
   /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
   ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
