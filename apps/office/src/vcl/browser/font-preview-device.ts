@@ -6,6 +6,7 @@ import { hasGlyphsInFontCharMap } from "../source/outdev/font";
 
 /** Metadata read from one actual registered physical face. */
 export interface BrowserFontPreviewFace {
+  readonly renderingFamily?: string | undefined;
   readonly characterMap?: FontCharMap | undefined;
   readonly capabilities?: FontCapabilities | undefined;
   readonly style?: string | undefined;
@@ -57,7 +58,7 @@ export class BrowserFontPreviewDevice {
     const style = ui ? this.uiStyle.style : (face?.style ?? "normal");
     const weight = ui ? this.uiStyle.weight : (face?.weight ?? "400");
     // The computed UI family is already a valid CSS fallback list; physical names are single strings.
-    const family = ui ? this.uiFamily : quoteFontFamily(name);
+    const family = ui ? this.uiFamily : quoteFontFamily(face?.renderingFamily ?? name);
     this.context.font = `${style} ${weight} ${font.GetFontHeight()}px ${family}`;
   }
 

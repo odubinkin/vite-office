@@ -1,4 +1,5 @@
 /** @fileoverview Browser FontList under its native svtools owner; VCL supplies physical source records and core ctrltool supplies native family lookup. */
+import { isBrowserFontPreviewFace } from "../../vcl/browser/font-preview-registration";
 import { lower } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { decodeBrowserFontFamily } from "../../vcl/browser/font-family";
 import { getCssFontFaceSources } from "../../vcl/browser/css-font-source";
@@ -111,6 +112,7 @@ export class FontList {
     window_.document?.fonts?.forEach(
       /** Includes actual bundled and document FontFaces even when system enumeration is unavailable. @param face - Registered browser face. @returns Nothing. */
       (face) => {
+        if (isBrowserFontPreviewFace(face)) return;
         cssFaces.push(face);
         const family = decodeBrowserFontFamily(face.family);
         if (face.status !== "error" && family !== "") {

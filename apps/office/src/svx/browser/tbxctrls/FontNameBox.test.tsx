@@ -182,3 +182,37 @@ it("retains a mixed/absent value without creating an empty installed-family opti
   fireEvent.keyDown(box, { key: "Enter" });
   expect(select).not.toHaveBeenCalled();
 });
+
+it("keeps fallback rows readable during inventory loading and does not warn for an available embedded face", /** The actual popup opens before device inventory resolves;no physical glyph data is fabricated. @returns Completion. */ async () => {
+  let complete: (list: FontList) => void = /** Initial unused callback. @returns Nothing. */ () =>
+    undefined;
+  const pending = new Promise<FontList>(
+    /** Holds actual font inventory publication. @param resolve - Completion callback. @returns Nothing. */ (
+      resolve,
+    ) => {
+      complete = resolve;
+    },
+  );
+  vi.spyOn(FontList, "FromBrowser").mockReturnValue(pending);
+  render(
+    <FontNameSelect
+      value="Alpha"
+      enabled
+      label="Pending family"
+      onSelect={vi.fn()}
+      embeddedFontFamilies={["Alpha"]}
+      fontAvailability={{ Alpha: true }}
+      unavailableFontMessage="Unavailable"
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Show Pending family" }));
+  expect(screen.getByRole("option", { name: "Arial" })).toHaveTextContent("Arial");
+  expect(screen.queryByRole("status")).toBeNull();
+  await act(
+    /** Publishes real inventory while the native popup is open. @returns Completion. */ async () => {
+      complete(new FontList(["Alpha", "Beta"]));
+      await pending;
+    },
+  );
+  expect(screen.getByRole("option", { name: "Beta" })).toHaveTextContent("Beta");
+});

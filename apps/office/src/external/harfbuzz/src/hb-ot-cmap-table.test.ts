@@ -1,6 +1,10 @@
 /** @fileoverview Source cmap preferences, sanitizer boundaries, collection formats and preserved malformed/edge semantics. */
 import { expect, it } from "vitest";
-import { collectCmapUnicodes, findBestCmapSubtable } from "./hb-ot-cmap-table";
+import {
+  collectCmapUnicodes,
+  findBestCmapSubtable,
+  findBestCmapSubtableDetails,
+} from "./hb-ot-cmap-table";
 import { readHeadIndexToLocFormat } from "./hb-ot-head-table";
 import { readFaceGlyphCount } from "./hb-static";
 import { readMaxpGlyphCount } from "./hb-ot-maxp-table";
@@ -318,4 +322,17 @@ it("uses sanitized head and actual loca length alongside maxp, including the def
   view.setUint16(2, 0x5000);
   view.setUint16(4, 8);
   expect(readFaceGlyphCount(maxp, undefined, new Uint8Array(4))).toBe(8);
+});
+
+it("returns the original symbol-selection output independently of Unicode collection", /** Marks only a valid selected platform3/encoding0 subtable. @returns Nothing. */ () => {
+  const symbol = findBestCmapSubtableDetails(
+    cmap([
+      [3, 0, format0(5)],
+      [3, 1, format0(6)],
+    ]),
+  );
+  expect(symbol?.symbol).toBe(true);
+  expect(symbol?.subtable.getUint16(0)).toBe(0);
+  expect(findBestCmapSubtableDetails(cmap([[3, 1, format0(6)]]))?.symbol).toBe(false);
+  expect(findBestCmapSubtableDetails(new Uint8Array())).toBeUndefined();
 });

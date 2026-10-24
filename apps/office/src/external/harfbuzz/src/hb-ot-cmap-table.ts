@@ -38,7 +38,9 @@ function sanitize(view: DataView): boolean {
 }
 
 /** Finds the source's first preferred non-null sanitized subtable with its original binary search, without sorting or trying duplicate records. @param table - Actual cmap bytes. @returns Selected subtable through the end of cmap, or undefined. */
-export function findBestCmapSubtable(table: Uint8Array): DataView | undefined {
+export function findBestCmapSubtableDetails(
+  table: Uint8Array,
+): Readonly<{ subtable: DataView; symbol: boolean }> | undefined {
   if (table.length < 4) return undefined;
   const data = new DataView(table.buffer, table.byteOffset, table.byteLength);
   const count = data.getUint16(2);
@@ -58,13 +60,18 @@ export function findBestCmapSubtable(table: Uint8Array): DataView | undefined {
         const offset = data.getUint32(record + 4);
         if (offset !== 0 && offset <= table.length) {
           const view = new DataView(table.buffer, table.byteOffset + offset, table.length - offset);
-          if (sanitize(view)) return view;
+          if (sanitize(view)) return { subtable: view, symbol: platform === 3 && encoding === 0 };
         }
         break;
       }
     }
   }
   return undefined;
+}
+
+/** Retains the consumed data-only projection of the source selection. @param table - Actual cmap bytes. @returns Selected subtable or undefined. */
+export function findBestCmapSubtable(table: Uint8Array): DataView | undefined {
+  return findBestCmapSubtableDetails(table)?.subtable;
 }
 
 /** Adds one inclusive source range using JS storage. @param out - Collected unicodes. @param start - Inclusive start. @param end - Inclusive end. @returns Nothing. */

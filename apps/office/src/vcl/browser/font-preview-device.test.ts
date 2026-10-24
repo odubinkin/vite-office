@@ -68,6 +68,7 @@ it("selects actual UI and face descriptors while keeping native font handles ind
   const faces = new Map<string, BrowserFontPreviewFace>([
     ["Physical, Serif", { style: "oblique", weight: "700" }],
     ["Defaults", {}],
+    ["Logical", { renderingFamily: "Actual private face" }],
   ]);
   const device = new BrowserFontPreviewDevice(
     c.native,
@@ -85,6 +86,8 @@ it("selects actual UI and face descriptors while keeping native font handles ind
   physical.SetFamilyName("Changed");
   expect(device.GetFont().GetFamilyName()).toBe("Physical, Serif");
   expect(c.canvas.font).toBe('oblique 700 18px "Physical, Serif"');
+  device.SetFont(font("Logical"));
+  expect(c.canvas.font).toBe('normal 400 13px "Actual private face"');
   device.SetFont(font("Defaults"));
   expect(c.canvas.font).toBe('normal 400 13px "Defaults"');
   device.SetFont(font("Unknown"));

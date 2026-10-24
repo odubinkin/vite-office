@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/browser/FontNamePreview.tsx",
+          "marker": "FontNamePreview"
+        },
+        {
+          "path": "apps/office/src/svtools/browser/FontNamePreview.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/shared/font-name-preview.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svtools/browser/FontNamePreview.tsx",
+    "rationale": "Task6764KT connects the actual Writer/Calc shared FontNameSelect to source FontNameBox sizing/paint and real acquired physical files. Browser metrics use exposed CSS weight/slant and actual local named-style metadata;unavailable native family,pitch,registered named style and local weight/slant remain unknown. Native FontList still owns comparison/duplicate rules;UTF8 document encoding is an explicit browser-device port. Only the retained file loads on demand. Actual cmap/maxp/head/loca and defined OS2 readers supply glyph coverage/capabilities. A private actual FontFace loaded from the same bytes supplies outlines without CSS family substitution or double synthetic bold/slant;the source logical family stays unchanged. Real private registrations are marked by WeakSet identity and excluded from later inventories. Ordinary JS/browser/React ownership releases only private FontFaces and prevents stale asynchronous publication;no native allocator/refcount/cache machinery is ported. Actual row Canvas uses source sample selection,readable-name eligibility,fitting,selection colors and current host color/resize events. Unknown bytes/unresolved collections/load failures keep a readable label;glyph support is never inferred from fallback widths. Native physical OS backend/default named-style resolution,variable/named-instance acquisition,full style dropdowns and native raster parity remain unverified.",
+    "responsibilities": [
+      "Own the actual browser port consumed by production Writer/Calc font preview.",
+      "Preserve actual physical identity,readable unknown values and native JS/browser resource lifetime."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task6764KT connects the actual Writer/Calc shared FontNameSelect to source FontNameBox sizing/paint and real acquired physical files. Browser metrics use exposed CSS weight/slant and actual local named-style metadata;unavailable native family,pitch,registered named style and local weight/slant remain unknown. Native FontList still owns comparison/duplicate rules;UTF8 document encoding is an explicit browser-device port. Only the retained file loads on demand. Actual cmap/maxp/head/loca and defined OS2 readers supply glyph coverage/capabilities. A private actual FontFace loaded from the same bytes supplies outlines without CSS family substitution or double synthetic bold/slant;the source logical family stays unchanged. Real private registrations are marked by WeakSet identity and excluded from later inventories. Ordinary JS/browser/React ownership releases only private FontFaces and prevents stale asynchronous publication;no native allocator/refcount/cache machinery is ported. Actual row Canvas uses source sample selection,readable-name eligibility,fitting,selection colors and current host color/resize events. Unknown bytes/unresolved collections/load failures keep a readable label;glyph support is never inferred from fallback widths. Native physical OS backend/default named-style resolution,variable/named-instance acquisition,full style dropdowns and native raster parity remain unverified."
+    },
+    "status": "local-only"
+  }
+}
