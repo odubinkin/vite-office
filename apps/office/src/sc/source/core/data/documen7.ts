@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
@@ -13,7 +14,7 @@ import type { ScColumn, ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import { SharedString } from "../../../../svl/inc/sharedstring";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScTable } from "../../../inc/table";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
@@ -881,4 +882,35 @@ export function AddCondFormatData(
   index: number,
 ): void {
   this.FetchTable(tab)?.AddCondFormatData(ranges, index);
+}
+
+/** Original literal SetTextCell body on the same document;rich edit-text remains outside this slice. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
+export function SetTextCell(
+  this: ScDocument,
+  position: ScAddress,
+  value: OUStringConstReference,
+): void {
+  const table = this.FetchTable(position.Tab());
+  if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
+  if (/[\r\n]/.test(text(value))) throw new Error("Multiline edit-text cells are not implemented");
+  if (!value.getLength()) {
+    table.SetEmptyCell(position.Col(), position.Row());
+    return;
+  }
+  const shared = this["mpCellStringPool"].intern(value);
+  try {
+    table.SetRawString(position.Col(), position.Row(), shared);
+  } finally {
+    shared.dispose();
+  }
+}
+
+/** Original document.cxx conditional-index removal ignores missing sheets. @param this - Destination document. @param ranges - Native ranges. @param tab - Sheet. @param index - Key,or zero for all. @returns Nothing. */
+export function RemoveCondFormatData(
+  this: ScDocument,
+  ranges: ScRangeList,
+  tab: number,
+  index: number,
+): void {
+  this.FetchTable(tab)?.RemoveCondFormatData(ranges, index);
 }

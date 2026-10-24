@@ -217,6 +217,23 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             ).GetCondFormatData(),
           ),
         };
+        doc.AddCondFormatData(conditional.GetRange(), 0, 22);
+        doc.RemoveCondFormatData(conditional.GetRange(), 0, 21);
+        const removedIndexes = Array.from(
+          (
+            doc.GetPattern(new n.ScAddress(9, 9, 0))?.GetItem(154) as InstanceType<
+              Fixture["ScCondFormatItem"]
+            >
+          ).GetCondFormatData(),
+        );
+        doc.RemoveCondFormatData(conditional.GetRange(), 0, 0);
+        const clearedIndexes = Array.from(
+          (
+            doc.GetPattern(new n.ScAddress(9, 9, 0))?.GetItem(154) as InstanceType<
+              Fixture["ScCondFormatItem"]
+            >
+          ).GetCondFormatData(),
+        );
         rowContext.Dispose();
         rowClip.Dispose();
         context.Dispose();
@@ -236,6 +253,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           restoredDependency,
           delayedBroadcasters,
           conditionalCopy,
+          removedIndexes,
+          clearedIndexes,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -286,6 +305,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
     restoredDependency: 44,
     delayedBroadcasters: { retained: true, removed: true, flag: false },
+    removedIndexes: [22],
+    clearedIndexes: [],
     conditionalCopy: {
       invalidated: true,
       independent: true,

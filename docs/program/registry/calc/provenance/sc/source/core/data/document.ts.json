@@ -18,7 +18,8 @@
       "EnableDelayDeletingBroadcasters",
       "IsDelayedDeletingBroadcasters",
       "StartAllListeners",
-      "AddCondFormatData"
+      "AddCondFormatData",
+      "RemoveCondFormatData"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -27,7 +28,8 @@
       "ScDocument::GetName",
       "ScDocument::InsertTab",
       "ScDocument::SetDirtyFromClip",
-      "ScDocument::AddCondFormatData"
+      "ScDocument::AddCondFormatData",
+      "ScDocument::RemoveCondFormatData"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -38,7 +40,8 @@
       "Task76 adds original InitUndo,InitUndoSelected and AddUndoTab with source-shared pooled resources,empty native names,sparse actual sheet vectors and false/false geometry defaults. ScTable now allocates genuine column width/flag and row height/flag owners independently under original constructor defaults true/true;no fake geometry buffers are allocated when disabled. Native width/height getters,mutators and geometry-copy guards honor actual absent stores. Borrowed browser geometry-range helpers,CopyRowHeight and optimal-height calculation keep their original allocated-geometry caller precondition;casts preserve that boundary without inventing absent ranges. GetClipArea is partitioned unchanged on the same document instance. Empty selected initialization keeps the original one-null-slot result (CALC-262). Source shell-medium URL propagation and unrepresented formatter/drawing/printing services remain unported;native paste history,document CopyFromClip,single-row script/format services and EnterBlock are still pending. No whole-module parity promotion.",
       "Task76 clone-copy progress: Native per-column delayed-listening map stores original [-1,-1] sentinels,merges only adjacent/overlapping intervals,and flushes through actual shared start/end cursor contexts before erasure. Existing DeleteArea/ShrinkToDataArea bodies are partitioned unchanged onto the same document through documen7.",
       "Native broadcaster-deletion delay defaults false;leaving delay flushes populated sheets. Native StartAllListeners range completion uses original clip/undo/no-listening guards and shared block-position contexts. Existing GetCellType/GetSharedString bodies were partitioned unchanged onto the same document instance for the1000-line limit.",
-      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified."
+      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
+      "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -144,6 +147,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
           "marker": "binds conditional indices"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "removes one conditional key"
         }
       ],
       "upstream": [
@@ -218,6 +225,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::AddCondFormatData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::RemoveCondFormatData"
         }
       ]
     }

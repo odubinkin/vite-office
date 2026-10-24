@@ -1,7 +1,7 @@
 /** @fileoverview Genuine conditional-format entries,ranges,clone ownership and subscribed cache behavior needed by native copy Undo. */
 import { assert, expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
-import { ScCondFormatItem } from "../../../inc/attrib";
+import { ScCondFormatItem, ScCondFormatIndexes } from "../../../inc/attrib";
 import { ATTR_CONDITIONAL } from "../../../inc/scitems";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -480,6 +480,82 @@ it("binds conditional indices through document sheet column and canonical runs w
       b: [number] = [0];
     column.GetPatternRange(a, b, 5);
     expect([a[0], b[0]]).toEqual([5, 5]);
+  } finally {
+    delta.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("removes one conditional key or all keys through native runs while retaining unrelated attributes and sparse storage", /** Genuine attribute holders expose empty-item and interval semantics without a second sheet model. @returns Nothing. */ () => {
+  const doc = document();
+  const table = doc.FetchTable(0);
+  assert(table);
+  /** Borrows a real pattern. @param col - Column. @param row - Row. @returns Canonical value. */
+  function pattern(col: number, row: number): ScPatternAttr {
+    const result = doc.GetPattern(new ScAddress(col, row, 0));
+    assert(result);
+    return result;
+  }
+  /** Reads the actual conditional-index vector. @param col - Column. @param row - Row. @returns Keys. */
+  function keys(col: number, row: number): number[] {
+    return [
+      ...(pattern(col, row).GetItem(ATTR_CONDITIONAL) as ScCondFormatItem).GetCondFormatData(),
+    ];
+  }
+  const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+  delta.ItemSetPut(new SvxFontHeightItem(500, 100, 101));
+  try {
+    const ranges = new ScRangeList(new ScRange(2, 3, 0, 3, 8, 0));
+    doc.ApplyPattern(3, 6, 0, delta);
+    doc.AddCondFormatData(ranges, 0, 12);
+    doc.AddCondFormatData(ranges, 0, 4);
+    const before = pattern(3, 6);
+    doc.RemoveCondFormatData(ranges, 9, 4);
+    doc.RemoveCondFormatData(ranges, 0, 55);
+    expect(pattern(3, 6)).toBe(before);
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(2, 4, 0, 3, 6, 0)), 0, 4);
+    expect(keys(2, 3)).toEqual([4, 12]);
+    expect(keys(2, 4)).toEqual([12]);
+    expect(keys(3, 6)).toEqual([12]);
+    expect(keys(3, 7)).toEqual([4, 12]);
+    expect((pattern(3, 6).GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(500);
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(3, 6, 0, 3, 7, 0)), 0, 0);
+    expect(keys(3, 6)).toEqual([]);
+    expect(keys(3, 7)).toEqual([]);
+    expect(pattern(3, 6).GetItemSet().GetItemIfSet(ATTR_CONDITIONAL, false)).toBeInstanceOf(
+      ScCondFormatItem,
+    );
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(2, 4, 0, 2, 4, 0)), 0, 12);
+    expect(keys(2, 4)).toEqual([]);
+    const column = table.CreateColumnIfNotExists(3);
+    column.RemoveCondFormat(-1, 1, 0);
+    column.RemoveCondFormat(1, doc.MaxRow() + 1, 0);
+    column.RemoveCondFormat(9, 8, 0);
+    const count = table.GetAllocatedColumnsCount();
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(0, 0, 0, doc.MaxCol(), 0, 0)), 0, 0);
+    expect(table.GetAllocatedColumnsCount()).toBe(count);
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(20, 0, 0, 21, 4, 0)), 0, 0);
+    doc.RemoveCondFormatData(new ScRangeList(), 0, 0);
+    const duplicates = new ScPatternAttr(doc.getCellAttributeHelper());
+    duplicates.ItemSetPut(new ScCondFormatItem(new ScCondFormatIndexes([4, 4, 7])));
+    try {
+      doc.ApplyPattern(3, 10, 0, duplicates);
+    } finally {
+      duplicates.Dispose();
+    }
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(3, 10, 0, 3, 10, 0)), 0, 4);
+    expect(keys(3, 10)).toEqual([4, 7]);
+    doc.RemoveCondFormatData(new ScRangeList(new ScRange(3, 10, 0, 3, 10, 0)), 0, 4);
+    expect(keys(3, 10)).toEqual([7]);
+    column.AddCondFormat(doc.MaxRow(), doc.MaxRow(), -1);
+    column.RemoveCondFormat(doc.MaxRow(), doc.MaxRow(), -1);
+    expect(keys(3, doc.MaxRow())).toEqual([]);
+    doc.RemoveCondFormatData(ranges, 0, 0);
+    const first: [number] = [0],
+      last: [number] = [0];
+    column.GetPatternRange(first, last, 7);
+    expect([first[0], last[0]]).toEqual([7, 8]);
+    expect((pattern(3, 6).GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(500);
   } finally {
     delta.Dispose();
     doc.Dispose();

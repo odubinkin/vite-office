@@ -661,3 +661,37 @@ export function CopyToColumn(
     action.Dispose();
   }
 }
+
+/** Original scalar/hinted SetValue body on the actual column;out-of-class binding preserves native stores and listeners. @param this - Actual column. @param first - Row or cursor. @param second - Value or row. @param third - Hinted value. @param broadcast - Native broadcast default. @returns Nothing. */
+export function SetValue(
+  this: ScColumn,
+  first: number | ColumnBlockPosition,
+  second: number,
+  third: number | undefined,
+  broadcast: boolean,
+): void {
+  const block = first instanceof ColumnBlockPosition ? first : null,
+    row = block ? second : (first as number),
+    value = block ? (third as number) : second;
+  if (!this["rDocument"].ValidRow(row)) return;
+  const rows = this["DetachFormulaCell"](row);
+  if (block) {
+    block.miCellPos = this["maCells"].set(
+      block.miCellPos as ReturnType<CellStoreType["begin"]>,
+      row,
+      value,
+      double_element_callbacks,
+    );
+    block.miCellTextAttrPos = this["maCellTextAttrs"].set(
+      block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+      row,
+      new CellTextAttr(),
+      celltextattr_element_callbacks,
+    );
+  } else {
+    this["maCells"].set(row, value, double_element_callbacks);
+    this["maCellTextAttrs"].set(row, new CellTextAttr(), celltextattr_element_callbacks);
+  }
+  this["StartListeningUnshared"](rows);
+  if (broadcast) this["BroadcastNewCell"](row);
+}

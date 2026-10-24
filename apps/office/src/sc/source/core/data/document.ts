@@ -88,6 +88,10 @@ export class ScDocument {
   InitUndoSelected(...args: Parameters<typeof documen7.InitUndoSelected>): void {
     documen7.InitUndoSelected.apply(this, args);
   }
+  /** Original conditional-index removal dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
+  RemoveCondFormatData(...args: Parameters<typeof documen7.RemoveCondFormatData>): void {
+    documen7.RemoveCondFormatData.apply(this, args);
+  }
   /** Original conditional-index dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
   AddCondFormatData(...args: Parameters<typeof documen7.AddCondFormatData>): void {
     documen7.AddCondFormatData.apply(this, args);
@@ -976,20 +980,7 @@ export class ScDocument {
   }
   /** Implements the literal single-line content portion of SetTextCell;rich edit-text and number-format attributes are explicit gaps. @param position - Cell address. @param value - Literal Unicode input. @returns Nothing. */
   SetTextCell(position: ScAddress, value: OUStringConstReference): void {
-    const table = this.FetchTable(position.Tab());
-    if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
-    if (/[\r\n]/.test(text(value)))
-      throw new Error("Multiline edit-text cells are not implemented");
-    if (!value.getLength()) {
-      table.SetEmptyCell(position.Col(), position.Row());
-      return;
-    }
-    const shared = this.mpCellStringPool.intern(value);
-    try {
-      table.SetRawString(position.Col(), position.Row(), shared);
-    } finally {
-      shared.dispose();
-    }
+    documen7.SetTextCell.call(this, position, value);
   }
   /** Clears an existing scalar cell without allocating a missing column or sheet. @param position - Cell address. @returns Nothing. */
   SetEmptyCell(position: ScAddress): void {

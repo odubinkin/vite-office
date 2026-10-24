@@ -223,6 +223,47 @@ export class ScAttrArray {
       start = end + 1;
     } while (end < last);
   }
+  /** Original conditional-index removal preserves explicit empty items and all unrelated attributes. Valid rows have a real default pattern. @param first - First row. @param last - Last row. @param index - Unsigned key;zero removes all indices. @returns Nothing. */
+  RemoveCondFormat(first: number, last: number, index: number): void {
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (last < first) return;
+    index >>>= 0;
+    let start = first,
+      end: number;
+    do {
+      const pattern = this.GetPattern(start) as ScPatternAttr;
+      const runStart: [number] = [0],
+        runEnd: [number] = [0];
+      this.GetPatternRange(runStart, runEnd, start);
+      end = Math.min(runEnd[0], last);
+      const item = pattern.GetItemSet().GetItemIfSet(ATTR_CONDITIONAL) as
+        ScCondFormatItem | undefined;
+      if (item) {
+        let next: ScCondFormatItem | null = null;
+        if (index === 0) next = new ScCondFormatItem();
+        else {
+          const indexes = item.GetCondFormatData(),
+            position = indexes.find(index);
+          if (position !== -1) {
+            const copied = new ScCondFormatIndexes([...indexes]);
+            copied.erase_at(position);
+            next = ScCondFormatItem.move(copied);
+          }
+        }
+        if (next) {
+          const replacement = new ScPatternAttr(pattern);
+          replacement.ItemSetPut(next);
+          const holder = new CellAttributeHolder(replacement, true);
+          try {
+            this.SetPatternArea(start, end, holder);
+          } finally {
+            holder.Dispose();
+          }
+        }
+      }
+      start = end + 1;
+    } while (end < last);
+  }
   /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
   ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
     if (!(this.rDocument.ValidRow(first) && this.rDocument.ValidRow(last))) return;

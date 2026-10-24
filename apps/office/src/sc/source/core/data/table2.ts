@@ -75,3 +75,16 @@ export function AddCondFormatData(
     for (let col = range.aStart.Col(); col <= range.aEnd.Col(); ++col)
       this.CreateColumnIfNotExists(col).AddCondFormat(range.aStart.Row(), range.aEnd.Row(), index);
 }
+
+/** Original conditional-index removal clamps to allocated columns without creating storage. @param this - Destination sheet. @param ranges - Native ranges. @param index - Key,or zero for all. @returns Nothing. */
+export function RemoveCondFormatData(
+  this: ScTable,
+  ranges: import("../../../inc/rangelst").ScRangeList,
+  index: number,
+): void {
+  for (const range of ranges) {
+    const last = this.ClampToAllocatedColumns(range.aEnd.Col());
+    for (let col = range.aStart.Col(); col <= last; ++col)
+      (this["aCol"][col] as ScColumn).RemoveCondFormat(range.aStart.Row(), range.aEnd.Row(), index);
+  }
+}

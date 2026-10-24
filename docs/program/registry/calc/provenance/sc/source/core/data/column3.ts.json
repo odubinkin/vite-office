@@ -15,7 +15,8 @@
       "CopyCellsFromClipHandler",
       "CopyTextAttrsFromClipHandler",
       "CopyByCloneHandler",
-      "CopyToColumn"
+      "CopyToColumn",
+      "SetValue"
     ],
     "upstreamSymbols": [
       "GroupFormulaCells",
@@ -25,7 +26,8 @@
       "EmptyCells",
       "ScColumn::CopyFromClip",
       "CopyCellsFromClipHandler",
-      "CopyTextAttrsFromClipHandler"
+      "CopyTextAttrsFromClipHandler",
+      "ScColumn::SetValue"
     ],
     "preservedResponsibilities": [
       "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
@@ -34,7 +36,8 @@
       "Task76 general-copy progress ports original CopyCellsFromClipHandler and CopyTextAttrsFromClipHandler with real typed source blocks,two content/metadata passes,independent native cursor values,context writeback and foreign string re-interning. ScColumn scalar/hinted SetValue/SetRawString/SetFormulaCell overloads retain native defaults,return contracts,broadcast controls and actual group/listener owners. Table2 CopyFromClip validates/clamps the destination and dispatches actual source columns;CONTENTS preserves destination patterns and geometry. ParseBlock now represents its actual container-event template and borrowed node fields;bounded ProcessFormula dispatches real formula pointers and separate non-formula spans. Original column/table/document SetDirtyFromClip,rectangular individual/area BroadcastCells and deferred BroadcastAction use existing bulk owners and actual subscriptions;cached formula results are dirtied only in completion. Matrix,foreign-pool formulas,number-format inheritance,full formatter/notes/edit/drawing services,group-compute cache invalidation and shell/UNO stream notifications remain unrepresented. Native general document/reference orchestration,paste undo/redo and EnterBlock/UI acceptance remain pending;this is not full task76 acceptance or full parity.",
       "Task76: Native CopyCellsFromClipHandler forwards ScFormulaCell.NeedsNumberFormat into the hinted formula-adoption call rather than implicitly enabling inheritance. Existing actual store/group/context owners remain unchanged.",
       "Task76 clone-copy progress: Original column.cxx clone handler/marked recursion are partitioned onto this same ScColumn implementation module. Actual typed-store numeric/string/formula blocks,empty-string removal,foreign scalar re-interning,source NeedsNumberFormat,shared code/listening policies and broadcaster-cursor repair are preserved. The native >1024 formula-copy threshold uses real group teardown and delayed listening scopes. CONTENTS includes both numeric/date flags,so unrepresented classification cannot change acceptance;selective masks remain explicit unsupported services. String-only formula copying uses actual results;rich multiline storage and matrix copying remain explicit boundaries. Attribute copying,nondefault clone/link and numeric formula-result copies are not claimed.",
-      "Task76 attribute-copy progress: Clone-copy now also uses native attribute CopyArea when STYLES is selected and original per-row target-style retention for same-helper hard-only copying. Existing STRING compatibility calls use the same actual CopyToDocContext;native default clone consumers can preserve both CONTENTS and ATTRIB for EnterBlock undo. Foreign hard-only style preservation remains explicit unsupported native style migration;link,selective numeric-result and nondefault clone services remain unported."
+      "Task76 attribute-copy progress: Clone-copy now also uses native attribute CopyArea when STYLES is selected and original per-row target-style retention for same-helper hard-only copying. Existing STRING compatibility calls use the same actual CopyToDocContext;native default clone consumers can preserve both CONTENTS and ATTRIB for EnterBlock undo. Foreign hard-only style preservation remains explicit unsupported native style migration;link,selective numeric-result and nondefault clone services remain unported.",
+      "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending."
     ],
     "omittedResponsibilities": [
       "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
@@ -64,6 +67,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "removes one conditional key"
         }
       ],
       "upstream": [
@@ -82,6 +89,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
           "marker": "class CopyByCloneHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::SetValue"
         }
       ]
     }

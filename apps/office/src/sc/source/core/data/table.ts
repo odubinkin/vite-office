@@ -77,6 +77,10 @@ export class ScTable {
   UpdateReference(...args: Parameters<typeof UpdateReference>): void {
     UpdateReference.apply(this, args);
   }
+  /** Original table2 conditional-index removal forwarding. @param args - Ranges and key. @returns Nothing. */
+  RemoveCondFormatData(...args: Parameters<typeof table2.RemoveCondFormatData>): void {
+    table2.RemoveCondFormatData.apply(this, args);
+  }
   /** Original table2 conditional-format attribute forwarding. @param args - Ranges and key. @returns Nothing. */
   AddCondFormatData(...args: Parameters<typeof table2.AddCondFormatData>): void {
     table2.AddCondFormatData.apply(this, args);

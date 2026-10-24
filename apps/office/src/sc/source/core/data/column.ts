@@ -184,6 +184,10 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original inline conditional-index removal. @param first - First row. @param last - Last row. @param index - Key,or zero for all. @returns Nothing. */
+  RemoveCondFormat(first: number, last: number, index: number): void {
+    this.pAttrArray.RemoveCondFormat(first, last, index);
+  }
   /** Original column.hxx conditional-index forwarding. @param first - First row. @param last - Last row. @param index - Format key. @returns Nothing. */
   AddCondFormat(first: number, last: number, index: number): void {
     this.pAttrArray.AddCondFormat(first, last, index);
@@ -603,30 +607,7 @@ export class ScColumn extends ScColumnData {
     third?: number,
     broadcast = true,
   ): void {
-    const block = first instanceof ColumnBlockPosition ? first : null,
-      row = block ? second : (first as number),
-      value = block ? (third as number) : second;
-    if (!this.rDocument.ValidRow(row)) return;
-    const rows = this.DetachFormulaCell(row);
-    if (block) {
-      block.miCellPos = this.maCells.set(
-        block.miCellPos as ReturnType<CellStoreType["begin"]>,
-        row,
-        value,
-        double_element_callbacks,
-      );
-      block.miCellTextAttrPos = this.maCellTextAttrs.set(
-        block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
-        row,
-        new CellTextAttr(),
-        celltextattr_element_callbacks,
-      );
-    } else {
-      this.maCells.set(row, value, double_element_callbacks);
-      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
-    }
-    this.StartListeningUnshared(rows);
-    if (broadcast) this.BroadcastNewCell(row);
+    column3.SetValue.call(this, first, second, third, broadcast);
   }
   /** Original literal Unicode/shared-string insertion. @param row - Row. @param value - Literal text. @returns Nothing. */
   SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void;

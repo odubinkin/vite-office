@@ -16,7 +16,8 @@
       "GetCondFormList",
       "SetCondFormList",
       "DeleteConditionalFormat",
-      "AddCondFormatData"
+      "AddCondFormatData",
+      "RemoveCondFormatData"
     ],
     "upstreamSymbols": [
       "ScTable::SetValue",
@@ -26,7 +27,8 @@
       "ScTable::CopyFromClip",
       "ScTable::SetDirtyFromClip",
       "ScTable::BroadcastBroadcasters",
-      "ScTable::AddCondFormatData"
+      "ScTable::AddCondFormatData",
+      "ScTable::RemoveCondFormatData"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -38,7 +40,8 @@
       "Native DeleteEmptyBroadcasters visits only actual allocated column owners;no columns or listeners are synthesized.",
       "TaskKVGGCR adds the actual native ScTable-owned ScConditionalFormatList default,mutable GetCondFormList lazy allocation,SetCondFormList unique ownership transfer and DeleteConditionalFormat. Managed sheet teardown releases real entries/cache listeners before canonical column attributes. Real date entries,style-string refcounts,replacement,null ownership and document close are covered. Const-overload binding and full table conditional-format copying/rendering/XML remain unported;this is not a full conditional-format UI claim.",
       "Native table1 UpdateReference now forwards to the real conditional-format list after column traversal;cache values are reset even for nonintersecting copied cells. Original list UpdateReference prunes empty ranges only in URM_INSDEL. Broader sheet insert/delete/move token/table consumers remain unported and are not replaced by a SetTabNo shortcut.",
-      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified."
+      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
+      "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -152,6 +155,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
           "marker": "binds conditional indices"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "removes one conditional key"
         }
       ],
       "upstream": [
@@ -230,6 +237,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::AddCondFormatData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::RemoveCondFormatData"
         }
       ]
     },

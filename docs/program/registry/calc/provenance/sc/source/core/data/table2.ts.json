@@ -10,17 +10,20 @@
       "CopyFromClip",
       "SetDirtyFromClip",
       "BroadcastBroadcasters",
-      "AddCondFormatData"
+      "AddCondFormatData",
+      "RemoveCondFormatData"
     ],
     "upstreamSymbols": [
       "ScTable::CopyFromClip",
       "ScTable::SetDirtyFromClip",
       "ScTable::BroadcastBroadcasters",
-      "ScTable::AddCondFormatData"
+      "ScTable::AddCondFormatData",
+      "ScTable::RemoveCondFormatData"
     ],
     "preservedResponsibilities": [
       "Task76 general-copy progress ports original CopyCellsFromClipHandler and CopyTextAttrsFromClipHandler with real typed source blocks,two content/metadata passes,independent native cursor values,context writeback and foreign string re-interning. ScColumn scalar/hinted SetValue/SetRawString/SetFormulaCell overloads retain native defaults,return contracts,broadcast controls and actual group/listener owners. Table2 CopyFromClip validates/clamps the destination and dispatches actual source columns;CONTENTS preserves destination patterns and geometry. ParseBlock now represents its actual container-event template and borrowed node fields;bounded ProcessFormula dispatches real formula pointers and separate non-formula spans. Original column/table/document SetDirtyFromClip,rectangular individual/area BroadcastCells and deferred BroadcastAction use existing bulk owners and actual subscriptions;cached formula results are dirtied only in completion. Matrix,foreign-pool formulas,number-format inheritance,full formatter/notes/edit/drawing services,group-compute cache invalidation and shell/UNO stream notifications remain unrepresented. Native general document/reference orchestration,paste undo/redo and EnterBlock/UI acceptance remain pending;this is not full task76 acceptance or full parity.",
-      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified."
+      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
+      "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending."
     ],
     "omittedResponsibilities": [
       "Native nondefault attribute/geometry/conditional format copying and complete table services remain unported."
@@ -30,12 +33,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
           "marker": "general"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "removes one conditional key"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::CopyFromClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::RemoveCondFormatData"
         }
       ]
     }
