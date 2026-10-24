@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/reftokenhelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/reftokenhelper.test.ts",
+        "apps/office/e2e/calc/clipboard-copy.spec.ts"
+      ],
+      "justification": "Task76 ports original reference-token extraction,range-list append/vector replacement,3D display flags,four local/external reference discriminators,endpoint normalization/borrowed identity,and file-ID/range intersection order using existing actual tokens/refdata/ranges. ScTokenRef reuses the project GC-held FormulaToken reference instead of inventing pointer counts. Relative flags and native default-range/external-name asymmetries are preserved (CALC-266/267). Named-expression resolution explicitly requires the unported native range-name owner;compileRangeRepresentation and join are not bound. Chart/Idle and full document paste/history remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getRangeFromToken",
+        "getRangeListFromTokens",
+        "getTokenFromRange",
+        "getTokensFromRangeList",
+        "isRef",
+        "isExternalRef",
+        "intersects",
+        "getDoubleRefDataFromToken",
+        "createRefToken",
+        "getSingleRef"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/reftokenhelper.hxx",
+      "upstreamSymbols": [
+        "getRangeFromToken",
+        "getRangeListFromTokens",
+        "getTokenFromRange",
+        "getTokensFromRangeList",
+        "isRef",
+        "isExternalRef",
+        "intersects",
+        "getDoubleRefDataFromToken",
+        "createRefToken",
+        "getSingleRef"
+      ]
+    }
+  }
+}

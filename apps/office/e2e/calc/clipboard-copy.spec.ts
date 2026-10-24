@@ -3,7 +3,8 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/inc/attrib") &
+type Fixture = typeof import("../../src/sc/inc/reftokenhelper") &
+  typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
@@ -24,6 +25,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    {
+      module: "src/sc/inc/reftokenhelper.ts",
+      names: [
+        "getTokenFromRange",
+        "getRangeFromToken",
+        "getRangeListFromTokens",
+        "getSingleRef",
+        "intersects",
+      ],
+    },
     { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
@@ -282,6 +293,23 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           restoredAutoCalc: doc.GetAutoCalc(),
           invalidatedStream: !sourceTable.IsStreamValid(),
         };
+        const reference: Parameters<Fixture["getTokenFromRange"]>[1] = [null];
+        n.getTokenFromRange(doc, reference, new n.ScRange(2, 4, 0, 2, 5, 0));
+        const referenceToken = reference[0];
+        if (!referenceToken) throw Error("Missing actual range reference token");
+        const referenceRange = new n.ScRange(),
+          referenceRanges = new n.ScRangeList();
+        n.getRangeFromToken(doc, referenceRange, referenceToken, new n.ScAddress());
+        n.getRangeListFromTokens(doc, referenceRanges, [referenceToken], new n.ScAddress());
+        const referenceData = n.getSingleRef(referenceToken);
+        if (!referenceData) throw Error("Missing actual reference endpoint");
+        const referenceHelper = {
+          range: referenceRange.GetVars(),
+          sheetFlag: referenceData.IsFlag3D(),
+          count: referenceRanges.size(),
+          overlap: n.intersects(doc, [referenceToken], referenceToken, new n.ScAddress()),
+        };
+        referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
         context.Dispose();
@@ -304,6 +332,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           removedIndexes,
           clearedIndexes,
           tableUndo,
+          referenceHelper,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -343,6 +372,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     },
   );
   const expected = {
+    referenceHelper: { range: [2, 4, 0, 2, 5, 0], sheetFlag: true, count: 1, overlap: true },
     value: 21,
     changed: 34,
     formula: "=D6+1",

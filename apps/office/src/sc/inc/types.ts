@@ -63,3 +63,6 @@ export type ScConstMatrixRef = Readonly<
 > | null;
 
 export { RangeMatrix, MultiDataCellState } from "../source/core/data/types";
+
+/** Original intrusive token-reference typedef uses the existing GC-held FormulaToken identity and nullable value. */
+export type ScTokenRef = import("../../formula/inc/types").FormulaTokenRef;

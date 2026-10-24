@@ -3838,3 +3838,19 @@ flag update without extending that flag mutation for consistency.
 - Formula-only copies before and after the edited rows explicitly pass false and still run. Consequently,`bMarked=true` can update outside formulas while leaving the selected payload unchanged.
 - This may be an unused caller profile rather than an active UI defect. The port preserves the exact flag/default interaction and does not synthesize selection data or force the argument false.
 - Evidence: `apps/office/src/sc/source/core/data/native-table-undo.test.ts` uses real compiled Undo snapshots and destination formula dependencies to verify both branches.
+
+
+### CALC-266 — Range-list reconstruction appends a default range after extraction fails
+
+- Pinned source: `sc/source/core/tool/reftokenhelper.cxx`, `ScRefTokenHelper::getRangeListFromTokens` and `getRangeFromToken`.
+- The loop creates a default `ScRange`,ignores the boolean result of `getRangeFromToken`,and appends that range unconditionally. Its call also leaves `bExternal` at the original false default.
+- A scalar/non-reference token therefore appends A1 rather than being dropped. An external-reference token is rejected by the default internal-family extraction and also appends A1. Existing output ranges remain in the list.
+- Callers may rely on an internal-reference-only invariant;this observation is not a claim of an active UI defect. The port retains the default-range append and the original external-flag default.
+- Evidence: `apps/office/src/sc/source/core/tool/reftokenhelper.test.ts` uses real scalar,internal and external tokens and observes their output ranges.
+
+### CALC-267 — External reference intersection filters file IDs but not table names
+
+- Pinned source: `sc/source/core/tool/reftokenhelper.cxx`, `ScRefTokenHelper::intersects`.
+- After checking internal/external families,the function compares external file IDs and numeric range coordinates. It never compares the external tokens' table-name strings. The separate joining helper in the same file does compare those strings.
+- Two real external tokens with the same file ID and intersecting numeric sheet/row/column spans can therefore intersect even when their table names differ. This may reflect a caller-specific sheet-coordinate invariant rather than a defect.
+- The port preserves the original comparison order and does not add a table-name filter. `reftokenhelper.test.ts` verifies both different-file rejection and the different-name/same-file result using actual external reference owners.
