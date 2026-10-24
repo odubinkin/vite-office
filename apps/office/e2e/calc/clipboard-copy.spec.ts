@@ -486,7 +486,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         formatter.dispose();
 
         compiledCopy.GetOutputString(0.125, compiledOut, [null], 65535, 44);
+        const compiledOutput = n.text(compiledOut);
+        const pooledFormatter = doc.GetFormatTable();
+        pooledFormatter.ChangeStandardPrec(65535);
+        pooledFormatter.GetOutputString(42.125, 0, compiledOut, [null]);
+        const pooledFormatting = {
+          output: n.text(compiledOut),
+          shared: undo.GetFormatTable() === pooledFormatter,
+        };
         const formatFoundation = {
+          pooledFormatting,
           formatterState,
           languageState,
           tableOutput,
@@ -496,7 +505,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           compiledCheck: compiledCheck[0],
           compiledCode: n.text(compiledCopy.GetFormatstring()),
           compiledType: compiledCopy.GetMaskedType(),
-          compiledOutput: n.text(compiledOut),
+          compiledOutput,
           selectedFormat,
           standardName: n.text(standardName),
           general: n.text(general),
@@ -629,6 +638,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      pooledFormatting: { output: "42.125", shared: true },
       formatterState: { output: "12,5", type: 16, nullDate: 19990304, year: 1980 },
       languageState: {
         initial: 0x0407,

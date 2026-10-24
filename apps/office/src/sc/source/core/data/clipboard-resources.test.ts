@@ -1,4 +1,6 @@
 /** @fileoverview Source-owned clipboard reset,sparse sheet and pooled-resource lifetime acceptance. */
+import { SimpleReferenceObject } from "../../../../salhelper/source/simplereferenceobject";
+import { ScPoolHelper } from "./poolhelp";
 import type { ScTable } from "../../../inc/table";
 import { expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
@@ -137,4 +139,115 @@ it("reports inclusive clipboard extents and counts filtered rows on the first ac
   expect([x[0], y[0]]).toEqual([5, 0]);
   clip.Dispose();
   source.Dispose();
+});
+
+it("owns one lazy formatter across real source, clipboard and undo lifetimes", /** The final intrusive owner releases the actual parsed format string. @returns Nothing. */ () => {
+  const source = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  const options = new ScDocOptions(source.GetDocOptions());
+  options.SetDate(1, 1, 1904);
+  options.SetStdPrecision(5);
+  options.SetYear2000(1975);
+  source.SetDocOptions(options);
+  const formatter = source.GetFormatTable();
+  expect(formatter.GetStandardPrec()).toBe(5);
+  expect(formatter.GetYear2000()).toBe(1975);
+  expect(formatter.GetNullDate().GetDate()).toBe(19040101);
+  clip.SharePooledResources(source);
+  clip.SharePooledResources(source);
+  undo.SharePooledResources(clip);
+  expect(clip.GetFormatTable()).toBe(formatter);
+  expect(undo.GetFormatTable()).toBe(formatter);
+  const entry = formatter.GetEntry(0);
+  if (!entry) throw Error("Missing native General entry");
+  const body = entry.GetFormatstring().pData;
+  if (!body) throw Error("Missing actual General string body");
+  const refs = body.refCount;
+  source.Dispose();
+  expect(body.refCount).toBe(refs);
+  expect(clip.GetFormatTable()).toBe(formatter);
+  clip.Dispose();
+  expect(body.refCount).toBe(refs);
+  undo.Dispose();
+  expect(body.refCount).toBeLessThan(refs);
+});
+it("updates existing formatter options and releases replaced pooled owners", /** A real helper factory also starts with native default options independently of the source document. @returns Nothing. */ () => {
+  const source = new ScDocument(),
+    replacement = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  const formatter = source.GetFormatTable();
+  const options = new ScDocOptions(source.GetDocOptions());
+  options.SetDate(2, 3, 1901);
+  options.SetStdPrecision(7);
+  options.SetYear2000(1980);
+  source.SetDocOptions(options);
+  expect(source.GetFormatTable()).toBe(formatter);
+  expect(formatter.GetStandardPrec()).toBe(7);
+  expect(formatter.GetYear2000()).toBe(1980);
+  expect(formatter.GetNullDate().GetDate()).toBe(19010302);
+  const helper = new ScPoolHelper(source);
+  helper.acquire();
+  const independent = helper.CreateNumberFormatter();
+  expect(independent.GetStandardPrec()).toBe(new ScDocOptions().GetStdPrecision());
+  independent.dispose();
+  helper.SourceDocumentGone();
+  expect(
+    /** Exercises the native absent-source assertion. @returns No formatter. */ () =>
+      helper.CreateNumberFormatter(),
+  ).toThrow("Source style-pool document assertion");
+  helper.release();
+  clip.SharePooledResources(source);
+  source.Dispose();
+  const entry = formatter.GetEntry(0);
+  if (!entry) throw Error("Missing native General entry");
+  const body = entry.GetFormatstring().pData;
+  if (!body) throw Error("Missing actual General string body");
+  const refs = body.refCount;
+  clip.SharePooledResources(replacement);
+  expect(body.refCount).toBeLessThan(refs);
+  expect(clip.GetFormatTable()).toBe(replacement.GetFormatTable());
+  clip.Dispose();
+  replacement.Dispose();
+  const empty = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  expect(
+    /** Exercises the native absent-helper dereference precondition. @returns No formatter. */ () =>
+      empty.GetFormatTable(),
+  ).toThrow("Document pool helper assertion");
+  empty.Dispose();
+});
+it("retains native intrusive staticization and zero-count virtual destruction", /** A real derived native reference object exposes its protected lifetime hooks for assertions. @returns Nothing. */ () => {
+  /** Actual derived native reference object with observable virtual destruction. */
+  class Reference extends SimpleReferenceObject {
+    destroyed = false;
+    /** Exposes native protected staticization. @returns Nothing. */
+    makeStatic(): void {
+      this.staticize();
+    }
+    /** Exposes the native protected destructor assertion. @returns Nothing. */
+    assertDestroyed(): void {
+      super.destroy();
+    }
+    /** Virtual derived destructor participates in the actual base release. @returns Nothing. */
+    protected override destroy(): void {
+      this.destroyed = true;
+      super.destroy();
+    }
+  }
+  const value = new Reference();
+  value.acquire();
+  value.acquire();
+  value.release();
+  expect(value.destroyed).toBe(false);
+  expect(
+    /** Exercises the native live-reference destructor assertion. @returns Nothing. */ () =>
+      value.assertDestroyed(),
+  ).toThrow("count-zero");
+  value.release();
+  expect(value.destroyed).toBe(true);
+  const permanent = new Reference();
+  permanent.makeStatic();
+  permanent.acquire();
+  permanent.release();
+  expect(permanent.destroyed).toBe(false);
 });

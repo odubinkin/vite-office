@@ -8,3 +8,11 @@ it("admits original Tools date helpers while retaining reverse and application p
     for (const app of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, app)).toBe(true);
 });
+
+it("admits native salhelper intrusive lifetime dependencies only in their source direction", /** Original salhelper depends on sal and Calc depends on salhelper. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("salhelper", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sc", "salhelper")).toBe(false);
+  for (const target of ["sc", "sw", "svl", "tools", "framework"])
+    expect(isForbiddenModuleEdge("salhelper", target)).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "salhelper")).toBe(true);
+});

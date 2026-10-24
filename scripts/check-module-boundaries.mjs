@@ -29,6 +29,7 @@ const moduleNames = [
   "offapi",
   "package",
   "sal",
+  "salhelper",
   "sax",
   "sc",
   "sfx2",
@@ -103,6 +104,8 @@ const allowedEdges = new Map([
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
+  // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
+  ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
   ["sax", new Set(["sal", "udkapi"])],
   [
@@ -123,6 +126,8 @@ const allowedEdges = new Map([
       "package",
       // Original Calc global.hxx/token.hxx use rtl/ustring.hxx; hybrid results own OUString.
       "sal",
+      // Native poolhelp.hxx derives SimpleReferenceObject;Library_sc links salhelper.
+      "salhelper",
       "sax",
       "sfx2",
       "svl",

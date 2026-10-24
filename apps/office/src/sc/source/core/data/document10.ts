@@ -41,7 +41,11 @@ export function AddDelayedFormulaGroupingCell(this: ScDocument, cell: ScFormulaC
 
 /** Original document10 pooled-resource sharing uses genuine owners and initializes the source helper first. @param this - Destination document. @param source - Source document. @returns Nothing. */
 export function SharePooledResources(this: ScDocument, source: ScDocument): void {
-  this["mxPoolHelper"] = source["mxPoolHelper"];
+  const next = source["mxPoolHelper"],
+    previous = this["mxPoolHelper"];
+  next?.acquire(); // Original rtl::Reference::set also retains/releases on same-body assignment.
+  this["mxPoolHelper"] = next;
+  previous?.release();
   this["mpCellStringPool"] = source["mpCellStringPool"];
   source.getCellAttributeHelper();
   this["mpCellAttributeHelper"] = source["mpCellAttributeHelper"];

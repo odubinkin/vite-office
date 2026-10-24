@@ -4,6 +4,7 @@ import { ScPoolHelper } from "../inc/poolhelp";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { uppercase } from "../../../../unotools/inc/charclass";
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { ScDocument } from "./document";
 import { ScTable } from "../../../inc/table";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -20,6 +21,7 @@ export function Dispose(this: ScDocument): void {
   machine?.Dispose();
   this.Clear();
   if (this["mxPoolHelper"] && !this.IsClipOrUndo()) this["mxPoolHelper"].SourceDocumentGone();
+  this["mxPoolHelper"]?.release();
   this["mxPoolHelper"] = null;
   this["aDocName"].dispose();
 }
@@ -72,7 +74,9 @@ export function ResetClip(
 /** Original documen2 construction of mode-dependent native resources and the independent string pool. @param this - Actual document. @returns Nothing. */
 export function InitializeResources(this: ScDocument): void {
   if (this.GetAutoCalc()) {
-    this["mxPoolHelper"] = new ScPoolHelper(this);
+    const helper = new ScPoolHelper(this);
+    helper.acquire(); // Original rtl::Reference assignment from the newly constructed raw pointer.
+    this["mxPoolHelper"] = helper;
     this["pBASM"] = new ScBroadcastAreaSlotMachine(this);
     this["pChartListenerCollection"] = new ScChartListenerCollection(this);
   }
@@ -83,4 +87,11 @@ export function InitializeResources(this: ScDocument): void {
       return uppercase(value, locale);
     },
   });
+}
+
+/** Original documen2 GetFormatTable borrows its actual pool owner. A helper must exist,as required by the native dereference;threaded group calculation is outside this slice. @param this - Actual document. @returns Borrowed actual formatter. */
+export function GetFormatTable(this: ScDocument): SvNumberFormatter {
+  const helper = this["mxPoolHelper"];
+  if (!helper) throw new Error("Document pool helper assertion");
+  return helper.GetFormTable();
 }

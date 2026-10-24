@@ -25,6 +25,7 @@ import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScClipParam } from "../../../inc/clipparam";
 import type { ScDocumentPool } from "./docpool";
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { ScPoolHelper } from "../inc/poolhelp";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
@@ -632,6 +633,10 @@ export class ScDocument {
   /** Borrows the actual native style pool when this document owns pooled resources. @returns Pool or null. */
   GetStyleSheetPool(): ScStyleSheetPool | null {
     return this.mxPoolHelper ? this.mxPoolHelper.GetStylePool() : null;
+  }
+  /** Original documen2 formatter query through the actual shared pool. @returns Borrowed formatter. */
+  GetFormatTable(): SvNumberFormatter {
+    return documen2.GetFormatTable.call(this);
   }
   /** Native clipboard mode query. @returns Mode flag. */
   IsClipboard(): boolean {
