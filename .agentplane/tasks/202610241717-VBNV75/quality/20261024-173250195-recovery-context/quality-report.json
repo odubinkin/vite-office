@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241717-VBNV75",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T17:32:50.195Z",
+  "verdict": "pass",
+  "summary": "Formatting dialog keyboard and focus lifetime satisfy second-task acceptance;ready to close and pause goal.",
+  "evaluated_sha": "28a06aa84062b0d6a17cd176fbb317230dcc4800",
+  "blueprint_digest": "c6e5091c48e67b2536b25485100cdc3d4c5a7f4557aabfcec193c107c6262bef",
+  "findings": [
+    "Actual original tab/page draft and controller identity remain authoritative;native direction/shortcut/wrap decisions are consumed before spin keys. Paragraph native form,roving tabs/ARIA and deactivation preserve authored tab exchange. Page Style/Break mounted focus and all3dialog backdrop guards retain input ownership without global lookup,timer,async workaround or second model.",
+    "Source-hash-bound final proof:49focused cases/8files,new source owner strict100coverage S12 B20 F1 L8,37related cases,4production Chromium1280/390 cases and15final gates pass. Actual Enter/Escape,cancel/accept,continued document typing,new hard-break paragraph,first-task history/ODT replay and current ODT export verified. Both screenshots inspected;large changed UI owners exercised without claiming whole-owner100coverage."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241717-VBNV75/README.md",
+    "output/playwright/writer-full-checkpoint/VBNV75-hashes.json",
+    "output/playwright/writer-full-checkpoint/VBNV75-coverage-final.log",
+    "output/playwright/writer-full-checkpoint/VBNV75-consumers.log",
+    "output/playwright/writer-full-checkpoint/VBNV75-e2e-last.log",
+    "output/playwright/writer-full-checkpoint/VBNV75-final-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native widget/modal/focus-trap services remain unported;scope is represented formatting dialogs. No broad parity promotion. Full suite is not due at task7after checkpoint;close second task then pause goal."
+  ]
+}
