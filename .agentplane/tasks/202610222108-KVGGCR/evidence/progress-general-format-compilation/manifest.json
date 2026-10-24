@@ -1,0 +1,65 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;admitted General/NatNum0 compilation and owned parsed entries implemented;full formatter and paste/history/task74 pending",
+  "sourceBaseline": "6082f3bf47afb615e1c45da2b0b764daaad0e205",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 271,
+  "changedPaths": 9,
+  "checks": {
+    "relatedTests": "4files/18scenarios pass",
+    "coverage": {
+      "lines": {
+        "total": 171,
+        "covered": 171,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 186,
+        "covered": 186,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 27,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 72,
+        "covered": 72,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "browserWorker": "fresh production build then actual parsed General/copy/output Chromium/DOM-free Worker1/1 pass",
+    "scopedProvenance": "3source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff check pass"
+  },
+  "preserved": [
+    "Actual ImpSvNumberformatInfo and ImpSvNumFor token arrays,scalar defaults,resize/prefix retention,copy and reverse destruction.",
+    "General-only ScanFormat uses actual CharClass uppercase,locale keyword precedence,AllowEnglish normalization and locale-case retention;NUMBER type,standard flag1000,precision2 and reset state preserved.",
+    "SvNumberformat empty/General constructor consumes actual scan info through Enlarge/CopyInfo before type assignment;empty count0 yields native checkPos1.",
+    "Original copy/scanner-exchange owners retain independent token/code values and real native language/standard fields.",
+    "Original standard NUMBER output consumes native scalar precision/decimal and resets an actual Color pointer to null."
+  ],
+  "limits": [
+    "This is not final all-Calc/changed-shared raw100 or all-application acceptance.",
+    "Scanner constructor explicitly projects original prepared locale/name/localization fields;full language/SetDependentKeywords/date/color service initialization is not supplied.",
+    "Conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output and full formatter/table construction remain unported admission boundaries.",
+    "Document paste/history and task74 remain pending.",
+    "Broad source/provenance/registry gates still require human-deleted liblangtag references;no restoration/download or skip approved."
+  ],
+  "initialFailures": [
+    "Missing JSDoc on test closures repaired.",
+    "Initial browser fixture omitted actual scanner exports;Worker async rejection hung until unchanged30second timeout. Exports repaired and actual async errors now reject immediately through the test fixture;final browser passes."
+  ]
+}
