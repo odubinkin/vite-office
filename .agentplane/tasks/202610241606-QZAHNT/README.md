@@ -4,7 +4,7 @@ title: "Canonize Writer bookmark dialog selection naming and operation lifetime"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: "CODER"
   note: "Passed native consumers192/15, exact-final focused27/4 with strict four-owner100coverage S117 B76 F30 L106, shared XML18/3, production Chromium2/2 at1280/390 with screenshot review, build/static/typecheck/lint/format/docs/deps/size/tree/provenance/resources/registry/invariants/parity/doctor/routing/diff. Evidence and exact commands in Verification; source hashes recorded. One task only;no full suite due."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-24T16:31:25.918Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed a7ad714366d9 against approved represented bookmark scope and source-bound final checks;ready to close exactly this task."
+  evaluated_sha: "a7ad714366d96f65c11d5b9ed554ede8fe7ef119"
+  blueprint_digest: "1cfc5fcfda721951915a6bffc8cf878e2e75607f58e0fefa01f7cbe6894fcac9"
+  evidence_refs:
+    - ".agentplane/tasks/202610241606-QZAHNT/README.md"
+    - ".agentplane/tasks/202610241606-QZAHNT/quality/20261024-163125918-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610241606-QZAHNT/quality/20261024-163125918-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610241606-QZAHNT/quality/20261024-163125918-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610241606-QZAHNT/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-source-hashes.json"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-coverage-final.log"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-native-consumers.log"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-shared.log"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-e2e-final.log"
+    - "output/playwright/writer-full-checkpoint/QZAHNT-final-gates.json"
+  findings:
+    - "Live names come from the actual mark owner;immediate GoTo/Delete/Rename reuse frame dispatch while the original dialog request remains pending. Close preserves changes and returns focus through the actual mounted document port;Chromium verifies resumed typing and ODT reopen at1280/390."
+    - "Native temporary-name matching,token counts,selection differences,raw whitespace,unique-name cache and practically unreachable counter branches are retained;WRITER086/087 document suspected source issues. No second mark model,coverage ignore,threshold reduction or broad parity promotion."
+    - "Final source-hash manifest matches all31implementation/record/doc paths in the reviewed commit;strict four-owner coverage totals117statements,76branches,30functions,106lines with zero skipped.192native-consumer and18shared XML scenarios pass;27exact-final focused cases and2production browser cases pass. All declared static/source/lifecycle gates pass."
 commit: null
 comments:
   -
