@@ -1,5 +1,5 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
-import type { OUString } from "../../../../sal/inc/rtl/ustring";
+import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
@@ -23,7 +23,8 @@ import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScTable } from "../../../inc/table";
 import { ScAddress, ScRange } from "../../../inc/address";
-import type { ScDocument } from "../../../inc/document";
+import { uppercase } from "../../../../unotools/inc/charclass";
+import { ScDocument } from "../../../inc/document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 /** Original merged-anchor query returns false for an absent sheet and delegates otherwise. @param this - Actual document. @param position - Queried cell. @returns Merged anchor. */
 export function IsMerged(this: ScDocument, position: ScAddress): boolean {
@@ -227,7 +228,7 @@ function getMarkedTableRange(doc: ScDocument, marks: ScMarkData): [number, numbe
   }
   return [first, last];
 }
-/** Original document non-refresh merge extension through actual tables;refresh/filter services are outside this consumed path. @param this - Clipboard. @param col - First column. @param row - First row. @param endCol - Last column output. @param endRow - Last row output. @param tab - Source sheet. @returns Merge found. */
+/** Original document non-refresh merge extension through actual tables;refresh/filter services are outside this consumed path. @param this - Clipboard. @param col - First column. @param row - First row. @param endCol - Last column output. @param endRow - Last row output. @param tab - Source sheet. @param refresh - Native defaultfalse;refresh services are unported. @returns Merge found. */
 export function ExtendMerge(
   this: ScDocument,
   col: number,
@@ -235,9 +236,11 @@ export function ExtendMerge(
   endCol: [number],
   endRow: [number],
   tab: number,
+  refresh = false,
 ): boolean {
   if (!this.ValidColRow(col, row) || !this.ValidColRow(endCol[0], endRow[0]) || !ValidTab(tab))
     return false;
+  if (refresh) throw Error("Refresh merge/filter services are not implemented");
   const table = this.FetchTable(tab);
   return table ? extendTableMerge.call(table, col, row, endCol, endRow) : false;
 }
@@ -615,5 +618,48 @@ export function GetName(this: ScDocument, tab: number, output: OUString): boolea
     return false;
   }
   output.assign(table.GetName());
+  return true;
+}
+
+/** Original GetClipStart only assigns outputs for a real nonempty clipboard. @param this - Actual document. @param col - Column output. @param row - Row output. @returns Nothing. */
+export function GetClipStart(this: ScDocument, col: [number], row: [number]): void {
+  if (this.IsClipboard()) {
+    const ranges = this.GetClipParam().maRanges;
+    if (!ranges.empty()) {
+      col[0] = ranges.front().aStart.Col();
+      row[0] = ranges.front().aStart.Row();
+    }
+  }
+}
+/** Original independent-sheet merge envelope always starts each sheet from the original end coordinates. @param this - Actual document. @param col - Start column. @param row - Start row. @param endCol - End column output. @param endRow - End row output. @param marks - Selected sheets. @param refresh - Native defaultfalse. @returns Nothing. */
+export function ExtendMergeSel(
+  this: ScDocument,
+  col: number,
+  row: number,
+  endCol: [number],
+  endRow: [number],
+  marks: ScMarkData,
+  refresh = false,
+): void {
+  const originalCol = endCol[0],
+    originalRow = endRow[0],
+    count = this.GetTableCount();
+  for (const tab of marks) {
+    if (tab >= count) break;
+    if (this.FetchTable(tab)) {
+      const currentCol: [number] = [originalCol],
+        currentRow: [number] = [originalRow];
+      ExtendMerge.call(this, col, row, currentCol, currentRow, tab, refresh);
+      if (currentCol[0] > endCol[0]) endCol[0] = currentCol[0];
+      if (currentRow[0] > endRow[0]) endRow[0] = currentRow[0];
+    }
+  }
+}
+/** Existing native name-validation body moved unchanged from the size-bounded facade. @param this - Actual document. @param name - Candidate. @returns Availability. */
+export function ValidNewTabName(this: ScDocument, name: OUStringConstReference): boolean {
+  if (!ScDocument.ValidTabName(name)) return false;
+  const candidate = uppercase(name, this["locale"]);
+  for (const table of this["maTabs"])
+    if (table && uppercase(table.GetName(), this["locale"]).equals(candidate)) return false;
   return true;
 }

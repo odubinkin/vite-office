@@ -611,7 +611,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           null,
           pasteClip,
         );
+        const clipX: [number] = [-1],
+          clipY: [number] = [-1],
+          mergeX: [number] = [6],
+          mergeY: [number] = [10];
+        pasteClip.GetClipStart(clipX, clipY);
+        pasteDocument.ApplyAttr(6, 10, 0, new n.ScMergeAttr(3, 2));
+        pasteDocument.ExtendMergeSel(6, 10, mergeX, mergeY, pasteMarks);
         const publicPaste = {
+          clipStart: [clipX[0], clipY[0]],
+          mergeEnvelope: [mergeX[0], mergeY[0]],
           ...firstPublicPaste,
           generic: [
             pasteDocument.GetValue(new n.ScAddress(6, 10, 0)),
@@ -809,6 +818,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       recalculated: 11,
     },
     publicPaste: {
+      clipStart: [0, 0],
+      mergeEnvelope: [8, 11],
       before: 11,
       after: 21,
       autoCalc: true,

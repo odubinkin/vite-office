@@ -1,4 +1,6 @@
 /** @fileoverview Native general clipboard column/table copying through actual typed storage and shared formula/metadata owners. */
+import { ScPatternAttr } from "../../../inc/patattr";
+import { ScMergeAttr } from "../../../inc/attrib";
 import { expect, it } from "vitest";
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -502,4 +504,47 @@ it("uses native populated selected-sheet ranges and keeps an empty selection env
   undo.Dispose();
   clip.Dispose();
   source.Dispose();
+});
+
+it("retains clip-start outputs and extends each marked sheet from the original independent merge envelope", /** Native sparse-sheet and unchanged output contracts are exercised without an alternate view model. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP),
+    x: [number] = [7],
+    y: [number] = [9];
+  doc.GetClipStart(x, y);
+  clip.GetClipStart(x, y);
+  expect([x[0], y[0]]).toEqual([7, 9]);
+  for (let tab = 0; tab < 3; ++tab) doc.InsertTab(tab, unicode(`M${tab}`));
+  clip.ResetClip(doc, 2);
+  clip.SetClipArea(new ScRange(3, 4, 2, 3, 4, 2));
+  clip.GetClipStart(x, y);
+  expect([x[0], y[0]]).toEqual([3, 4]);
+  const pattern = new ScPatternAttr(doc.getCellAttributeHelper()),
+    marks = new ScMarkData(doc.GetSheetLimits());
+  pattern.ItemSetPut(new ScMergeAttr(2, 1));
+  doc.ApplyPattern(0, 0, 0, pattern);
+  pattern.ItemSetPut(new ScMergeAttr(4, 1));
+  doc.ApplyPattern(1, 0, 1, pattern);
+  pattern.ItemSetPut(new ScMergeAttr(1, 3));
+  doc.ApplyPattern(0, 0, 2, pattern);
+  marks.SelectTable(0, true);
+  marks.SelectTable(1, true);
+  marks.SelectTable(2, true);
+  marks.SelectTable(4, true);
+  x[0] = 0;
+  y[0] = 0;
+  doc.ExtendMergeSel(0, 0, x, y, marks);
+  expect([x[0], y[0]]).toEqual([1, 2]);
+  const sparse = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  sparse.InitUndo(doc, 2, 2);
+  sparse.ExtendMergeSel(0, 0, x, y, marks, false);
+  expect([x[0], y[0]]).toEqual([1, 2]);
+  expect(
+    /** Native refresh services remain explicit until represented. @returns Nothing. */ () =>
+      doc.ExtendMergeSel(0, 0, x, y, marks, true),
+  ).toThrow("Refresh merge/filter");
+  pattern.Dispose();
+  sparse.Dispose();
+  clip.Dispose();
+  doc.Dispose();
 });

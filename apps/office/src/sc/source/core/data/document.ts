@@ -39,7 +39,6 @@ import { ScSheetLimits } from "../../../inc/sheetlimits";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScColumn } from "../../../inc/column";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScTable } from "../../../inc/table";
 import {
@@ -54,13 +53,12 @@ import {
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../inc/global";
 import type { HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
-import { uppercase } from "../../../../unotools/inc/charclass";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 /** Native document construction modes from document.hxx. */
@@ -240,6 +238,14 @@ export class ScDocument {
   /** Original clipboard dimensions on this actual document. @param args - Dimension outputs and filtered mode. @returns Nothing. */
   GetClipArea(...args: Parameters<typeof documen7.GetClipArea>): void {
     documen7.GetClipArea.apply(this, args);
+  }
+  /** Original clipboard start query retains caller outputs for an empty/non-clip owner. @param args - Column and row outputs. @returns Nothing. */
+  GetClipStart(...args: Parameters<typeof document10.GetClipStart>): void {
+    document10.GetClipStart.apply(this, args);
+  }
+  /** Original selected-sheet merge envelope. @param args - Native bounds,marks and refresh defaultfalse. @returns Nothing. */
+  ExtendMergeSel(...args: Parameters<typeof document10.ExtendMergeSel>): void {
+    document10.ExtendMergeSel.apply(this, args);
   }
   private mpClipParam: ScClipParam | undefined;
   /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */
@@ -933,11 +939,7 @@ export class ScDocument {
   }
   /** Rejects duplicate names using the existing real uppercase operation. @param name - New name. @returns Availability. */
   ValidNewTabName(name: OUStringConstReference): boolean {
-    if (!ScDocument.ValidTabName(name)) return false;
-    const candidate = uppercase(name, this.locale);
-    for (const table of this.maTabs)
-      if (table && uppercase(table.GetName(), this.locale).equals(candidate)) return false;
-    return true;
+    return document10.ValidNewTabName.call(this, name);
   }
   /** Inserts a normal scalar sheet and updates shifted sheet/column positions. External-document/undo-delete modes remain unsupported APIs. @param position - Position or native append sentinel. @param name - Native sheet name. @returns Inserted. */
   InsertTab(position: number, name: OUStringConstReference): boolean {
