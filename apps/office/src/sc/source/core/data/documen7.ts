@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
@@ -618,15 +619,14 @@ export function DeleteSelection(
   flags: InsertDeleteFlags,
   marks: ScMarkData,
 ): void {
-  const oldAutoCalc = this.GetAutoCalc();
-  this.SetAutoCalc(false);
+  const autoCalc = new AutoCalcSwitch(this, false);
   try {
     for (const tab of marks.GetSelectedTabs()) {
       if (tab >= this.GetTableCount()) break;
       (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
     }
   } finally {
-    this.SetAutoCalc(oldAutoCalc);
+    autoCalc.Dispose();
   }
 }
 /** Original block copying and consecutive-sheet reference phase for the admitted CONTENTS context;source clipboard must contain an actual sheet. Same-pool cut/move services remain unported. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected sheets. @param dx - Column displacement. @param dy - Row displacement. @returns Nothing. */
@@ -819,8 +819,7 @@ export function DeleteArea(
   marks: ScMarkData,
   flags: InsertDeleteFlags,
 ): void {
-  const oldAutoCalc = this.GetAutoCalc();
-  this.SetAutoCalc(false);
+  const autoCalc = new AutoCalcSwitch(this, false);
   try {
     [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
     [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
@@ -828,7 +827,7 @@ export function DeleteArea(
       if (marks.GetTableSelect(tab))
         (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
   } finally {
-    this.SetAutoCalc(oldAutoCalc);
+    autoCalc.Dispose();
   }
 }
 

@@ -9,15 +9,18 @@
     "localSymbols": [
       "DelayFormulaGroupingSwitch",
       "DelayStartListeningFormulaCells",
-      "DelayDeletingBroadcasters"
+      "DelayDeletingBroadcasters",
+      "AutoCalcSwitch"
     ],
     "upstreamSymbols": [
       "DelayFormulaGroupingSwitch",
-      "DelayStartListeningFormulaCells"
+      "DelayStartListeningFormulaCells",
+      "AutoCalcSwitch"
     ],
     "preservedResponsibilities": [
       "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending.",
-      "DelayDeletingBroadcasters now exposes the actual document-wide scope owner alongside grouping/listening scopes."
+      "DelayDeletingBroadcasters now exposes the actual document-wide scope owner alongside grouping/listening scopes.",
+      "Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete."
     ],
     "omittedResponsibilities": [
       "Unconsumed scopetools owners and native destructor diagnostic exception suppression are not represented;task76 is still in progress."
@@ -35,6 +38,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/document-copy-listening.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts",
+          "marker": "native source/destination identities"
         }
       ],
       "upstream": [
@@ -45,6 +52,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/scopetools.hxx",
           "marker": "DelayDeletingBroadcasters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scopetools.hxx",
+          "marker": "AutoCalcSwitch"
         }
       ]
     }

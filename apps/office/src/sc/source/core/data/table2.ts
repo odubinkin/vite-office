@@ -1,4 +1,5 @@
 /** @fileoverview Original table2.cxx default-content clipboard dispatch over real contiguous columns. */
+import { AutoCalcSwitch } from "../../../inc/scopetools";
 import type { CopyToDocContext } from "../../../inc/clipcontext";
 import { InsertDeleteFlags } from "../../../inc/global";
 import type { ColumnSpanSet } from "../../../inc/columnspanset";
@@ -53,8 +54,7 @@ export function BroadcastBroadcasters(
   row2: number,
   id: SfxHintId,
 ): boolean {
-  const old = this["rDocument"].GetAutoCalc();
-  this["rDocument"].SetAutoCalc(false);
+  const autoCalc = new AutoCalcSwitch(this["rDocument"], false);
   let delivered = false;
   try {
     col2 = this.ClampToAllocatedColumns(col2);
@@ -63,7 +63,7 @@ export function BroadcastBroadcasters(
         (this["aCol"][col] as ScColumn).BroadcastBroadcasters(row1, row2, id) || delivered;
     return delivered;
   } finally {
-    this["rDocument"].SetAutoCalc(old);
+    autoCalc.Dispose();
   }
 }
 

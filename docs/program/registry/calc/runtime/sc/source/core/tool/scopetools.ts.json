@@ -18,20 +18,23 @@
       "evidence": [
         "apps/office/src/sc/source/core/tool/scopetools.ts",
         "apps/office/src/sc/source/core/data/delayed-copy-listening.test.ts",
-        "vendor/libreoffice-reference/sc/source/core/tool/scopetools.cxx"
+        "vendor/libreoffice-reference/sc/source/core/tool/scopetools.cxx",
+        "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts"
       ],
-      "justification": "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending. TaskKVGGCR document-copy listening: DelayDeletingBroadcasters captures actual prior document state,enables delay and restores the prior value on managed scope exit;native valid-owner restoration is retained,while C++ diagnostic exception suppression is not represented.",
+      "justification": "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending. TaskKVGGCR document-copy listening: DelayDeletingBroadcasters captures actual prior document state,enables delay and restores the prior value on managed scope exit;native valid-owner restoration is retained,while C++ diagnostic exception suppression is not represented. Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete.",
       "knownViolations": [],
       "localSymbols": [
         "DelayFormulaGroupingSwitch",
         "DelayStartListeningFormulaCells",
-        "DelayDeletingBroadcasters"
+        "DelayDeletingBroadcasters",
+        "AutoCalcSwitch"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/scopetools.cxx",
       "upstreamSymbols": [
         "DelayFormulaGroupingSwitch",
-        "DelayStartListeningFormulaCells"
+        "DelayStartListeningFormulaCells",
+        "AutoCalcSwitch::AutoCalcSwitch"
       ]
     }
   }

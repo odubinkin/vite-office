@@ -1,6 +1,22 @@
 /** @fileoverview Native scopetools.cxx grouping/listening scope state restoration over actual document owners. */
 import type { ScDocument } from "../../../inc/document";
 import type { ScColumn } from "../../../inc/column";
+/** Original AutoCalcSwitch retains the actual document and the prior calculation policy. */
+export class AutoCalcSwitch {
+  private readonly mbOldValue: boolean;
+  /** Original unconditional setter after capturing the same document's state. @param mrDoc - Actual document. @param autoCalc - Temporary calculation policy. @returns Scope. */
+  constructor(
+    private readonly mrDoc: ScDocument,
+    autoCalc: boolean,
+  ) {
+    this.mbOldValue = mrDoc.GetAutoCalc();
+    mrDoc.SetAutoCalc(autoCalc);
+  }
+  /** Original destructor restores the captured value through the native setter. @returns Nothing. */
+  Dispose(): void {
+    this.mrDoc.SetAutoCalc(this.mbOldValue);
+  }
+}
 /** Original grouping scope retains the previous actual document state. */
 export class DelayFormulaGroupingSwitch {
   private readonly mbOldValue: boolean;

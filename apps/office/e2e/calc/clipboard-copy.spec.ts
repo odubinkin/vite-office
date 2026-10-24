@@ -27,7 +27,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
-    { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters"] },
+    { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters", "AutoCalcSwitch"] },
     { module: "src/svl/source/notify/listener.ts", names: ["SvtListener"] },
     { module: "src/sc/inc/document.ts", names: ["ScDocument", "ScDocumentMode"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
@@ -247,18 +247,21 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         );
         doc.SetValue(new n.ScAddress(2, 4, 0), 999);
         doc.SetValue(new n.ScAddress(2, 5, 0), 999);
-        doc.SetAutoCalc(false);
-        undoTable.UndoToTable(
-          new n.CopyToDocContext(doc),
-          2,
-          4,
-          9,
-          9,
-          n.InsertDeleteFlags.CONTENTS | n.InsertDeleteFlags.ATTRIB,
-          false,
-          sourceTable,
-        );
-        doc.SetAutoCalc(true);
+        const undoCalc = new n.AutoCalcSwitch(doc, false);
+        try {
+          undoTable.UndoToTable(
+            new n.CopyToDocContext(doc),
+            2,
+            4,
+            9,
+            9,
+            n.InsertDeleteFlags.CONTENTS | n.InsertDeleteFlags.ATTRIB,
+            false,
+            sourceTable,
+          );
+        } finally {
+          undoCalc.Dispose();
+        }
         sourceTable.SetStreamValid(true);
         doc.LockStreamValid(true);
         sourceTable.SetRowManualBreaks(new Set([8, 2]));
@@ -276,6 +279,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             conditionalSnapshot.GetEntry(0),
           breaks: Array.from(breaks),
           lockedStream,
+          restoredAutoCalc: doc.GetAutoCalc(),
           invalidatedStream: !sourceTable.IsStreamValid(),
         };
         rowContext.Dispose();
@@ -357,6 +361,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       independent: true,
       breaks: [2, 8],
       lockedStream: true,
+      restoredAutoCalc: true,
       invalidatedStream: true,
     },
     removedIndexes: [22],
