@@ -9,7 +9,8 @@
     "responsibilities": [
       "Actual browser/Worker single-shot host timer implements SalTimer,using current callback dispatch,pending-event replacement,cancellation and explicit destruction. The old handle is released before callback entry so native reentrant restart survives. Unsigned64 arguments are converted at the boundary;delays above signed32 host capacity are capped for the native scheduler deadline recheck,avoiding JavaScript overflow-to-immediate. Upstream QtTimer is also single-shot;browser event scheduling replaces the native Sal plugin. Full native scheduler/OS input/threads are not represented by this platform adapter.",
       "Task76 additionally binds native monotonic system-tick comparisons to browser performance.now and queued-input admission to the actual host isInputPending capability when available. Browser/Worker realm isolation and host-managed rendering replace OS mutex/input/paint machinery;unsupported host input/paint queues are not certified as native event-loop parity.",
-      "The actual browserSchedulerPlatform descriptor supplies this host adapter,clock and input capability to explicit scheduler initialization;no browser module is imported by the native scheduler."
+      "The actual browserSchedulerPlatform descriptor supplies this host adapter,clock and input capability to explicit scheduler initialization;no browser module is imported by the native scheduler.",
+      "Host isInputPending accepts the consumed continuous-input policy with unchanged true default. False excludes continuous input but cannot expose an OS keyboard-only queue;this browser limitation remains explicit."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

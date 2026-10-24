@@ -7,16 +7,20 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/chartlis.cxx",
     "localSymbols": [
-      "ScChartListener"
+      "ScChartListener",
+      "ScChartListenerCollection",
+      "ScChartHiddenRangeListener"
     ],
     "upstreamSymbols": [
-      "ScChartListener"
+      "ScChartListener",
+      "ScChartListenerCollection",
+      "ScChartHiddenRangeListener"
     ],
     "preservedResponsibilities": [
-      "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service."
+      "Native local cell/area subscriptions,ScChartUnoData callback/source reference ownership,ALL event payload,interpreter/manual-calculation deferral and actual repaint Idle collection now execute through original document owners. Native sorted name order,empty copy construction,reentrant insertion/removal interruption,hidden-range copied geometry and borrowed client lifetime are retained. External-link management,drawing-backed chart loading and unused collection management APIs remain explicitly unported;this is not a complete chart service or task76 acceptance."
     ],
     "omittedResponsibilities": [
-      "Live notification/listening,external links,UNO chart data,chart loading and native Idle collection scheduling are not yet bound. Full document paste/history and UI acceptance remain unverified."
+      "External chart links,drawing-backed chart loading and unused collection service management remain unported. Full document paste/history and UI acceptance remain pending."
     ],
     "evidence": {
       "local": [
@@ -27,6 +31,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/chartlis.test.ts",
           "marker": "pointer-vector equality"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
+          "marker": "actual"
         }
       ],
       "upstream": [

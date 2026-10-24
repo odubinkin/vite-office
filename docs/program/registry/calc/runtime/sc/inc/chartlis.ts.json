@@ -17,12 +17,15 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/tool/chartlis.test.ts",
-        "apps/office/e2e/calc/clipboard-copy.spec.ts"
+        "apps/office/e2e/calc/clipboard-copy.spec.ts",
+        "apps/office/src/sc/source/core/tool/chart-collection.test.ts"
       ],
-      "justification": "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service.",
+      "justification": "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service. Exports the represented original chart listener,collection and hidden-range boundaries plus type-only consumed UNO event/callback fields. No drawing service or fake chart backend is supplied.",
       "knownViolations": [],
       "localSymbols": [
-        "ScChartListener"
+        "ScChartListener",
+        "ScChartListenerCollection",
+        "ScChartHiddenRangeListener"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/chartlis.hxx",

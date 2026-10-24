@@ -8,7 +8,7 @@ export interface SchedulerPlatform {
   /** Reads native monotonic millisecond ticks. @returns Unsigned64 time. */
   getSystemTicks(): bigint;
   /** Queries platform input admission for lower-priority idles. @returns Pending input. */
-  hasPendingInput(): boolean;
+  hasPendingInput(includeContinuous?: boolean): boolean;
 }
 
-export { Scheduler, bindSchedulerPlatform } from "../source/app/scheduler";
+export { Scheduler, bindSchedulerPlatform, isSchedulerInputPending } from "../source/app/scheduler";

@@ -214,11 +214,18 @@ const allowedEdges = new Map([
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
 }
-/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
+/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool and ScChartListenerCollection. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
 export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
+  // These kernel contracts use an explicitly bound platform;they never import browser adapters.
+  if (
+    source === "sc/source/core/tool/chartlis.ts" &&
+    ["vcl/inc/idle", "vcl/inc/task", "vcl/inc/scheduler"].includes(target)
+  )
+    return false;
   // docpool.cxx consumes FontRelief and GetDefaultFont; these represented modules contain no browser/device adapter.
   return (
     source !== "sc/source/core/data/docpool.ts" ||

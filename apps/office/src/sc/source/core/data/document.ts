@@ -4,11 +4,11 @@ import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/doco
 import { ScViewOptions } from "../../../inc/viewopti";
 import * as documen3 from "./documen3";
 import * as documen2 from "./documen2";
+import type { ScChartListenerCollection } from "../../../inc/chartlis";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
 import * as document10 from "./document10";
-import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
-import { ScItemPoolCache } from "../../../inc/poolcach";
+import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
 import { GetStringScriptType as classifyString } from "./documen6";
@@ -24,10 +24,8 @@ import {
 import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScClipParam } from "../../../inc/clipparam";
-import { SfxItemState } from "../../../../svl/inc/itemset";
-import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { ScDocumentPool } from "./docpool";
-import { ScPoolHelper } from "../inc/poolhelp";
+import type { ScPoolHelper } from "../inc/poolhelp";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
@@ -61,7 +59,7 @@ import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../i
 import type { HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
-import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
+import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { uppercase } from "../../../../unotools/inc/charclass";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -577,6 +575,34 @@ export class ScDocument {
   private bCalculatingFormulaTree = false;
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
+  private pChartListenerCollection: ScChartListenerCollection | null = null;
+  private nInterpretLevel = 0;
+  private bImportingXML = false;
+  private bInDtorClear = false;
+  /** Borrows the native chart collection,absent in Clip/Undo documents. @returns Collection or null. */
+  GetChartListenerCollection(): ScChartListenerCollection | null {
+    return this.pChartListenerCollection;
+  }
+  /** Original interpreter nesting query. @returns Active. */
+  IsInInterpreter(): boolean {
+    return this.nInterpretLevel !== 0;
+  }
+  /** Original saturating unsigned-short nesting increment. @returns Nothing. */
+  IncInterpretLevel(): void {
+    if (this.nInterpretLevel < 0xffff) ++this.nInterpretLevel;
+  }
+  /** Original nesting decrement retains zero. @returns Nothing. */
+  DecInterpretLevel(): void {
+    if (this.nInterpretLevel) --this.nInterpretLevel;
+  }
+  /** Original XML-import query. @returns Importing. */
+  IsImportingXML(): boolean {
+    return this.bImportingXML;
+  }
+  /** Original document teardown query. @returns Clearing. */
+  IsInDtorClear(): boolean {
+    return this.bInDtorClear;
+  }
   private bAutoCalc: boolean;
   private readonly maTabs: (ScTable | null)[] = [];
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
@@ -585,24 +611,14 @@ export class ScDocument {
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
-  private mpCellStringPool: SharedStringPool;
+  declare private mpCellStringPool: SharedStringPool;
   /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
   constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
     this.bIsClip = mode === ScDocumentMode.SCDOCMODE_CLIP;
     this.bIsUndo = mode === ScDocumentMode.SCDOCMODE_UNDO;
     this.bIsFunctionAccess = mode === ScDocumentMode.SCDOCMODE_FUNCTIONACCESS;
     this.bAutoCalc = mode === ScDocumentMode.SCDOCMODE_DOCUMENT || this.bIsFunctionAccess;
-    if (this.bAutoCalc) {
-      this.mxPoolHelper = new ScPoolHelper(this);
-      this.pBASM = new ScBroadcastAreaSlotMachine(this);
-    }
-    const locale = this.locale;
-    this.mpCellStringPool = new SharedStringPool({
-      /** Applies the existing real whole-string classifier field binding. @param value - Unicode source. @returns Uppercase value. */
-      uppercase(value) {
-        return uppercase(value, locale);
-      },
-    });
+    documen2.InitializeResources.call(this);
   }
   /** Borrows the native document pool, absent before temporary-document resource sharing. @returns Pool or null. */
   GetPool(): ScDocumentPool | null {
@@ -676,37 +692,7 @@ export class ScDocument {
   }
   /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
-    let set = false;
-    for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
-      set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
-    if (!set) return false;
-    let changed = false;
-    if (marks.IsMarked() && !marks.IsMultiMarked()) {
-      const range = marks.GetMarkArea();
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        changed =
-          this.ApplyPatternAreaTab(
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-            tab,
-            delta,
-          ) || changed;
-      }
-    } else {
-      const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
-      try {
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
-        }
-      } finally {
-        cache.Dispose();
-      }
-    }
-    return changed;
+    return documen7.ApplySelectionPattern.call(this, delta, marks);
   }
   /** Copies consumed ATTRIB and optional source STRING undo payload through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
   CopyToDocument(...args: Parameters<typeof documen7.CopyToDocument>): void {

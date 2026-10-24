@@ -20,7 +20,8 @@
       "AddCondFormatData",
       "RemoveCondFormatData",
       "SetTextCell",
-      "DeleteSelection"
+      "DeleteSelection",
+      "ApplySelectionPattern"
     ],
     "upstreamSymbols": [
       "ScDocument::Broadcast",
@@ -39,7 +40,8 @@
       "Existing document.cxx GetCellType/GetSharedString bodies moved unchanged onto this same document instance to keep document.ts below1000lines;no new state owner or fallback semantics.",
       "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
-      "Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete."
+      "Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete.",
+      "The unchanged existing document.cxx ApplySelectionPattern body is partitioned here on the same ScDocument instance to preserve the authored file-size limit without another state owner."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -109,6 +111,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts",
           "marker": "native source/destination identities"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
+          "marker": "actual"
         }
       ],
       "upstream": [
@@ -175,6 +181,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::DeleteSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ApplySelectionPattern"
         }
       ]
     }

@@ -877,6 +877,17 @@ it("admits only source-backed VCL variation and original UTF16 decimal header bi
 });
 
 it("admits only original pure document-pool VCL dependencies while retaining domain/browser gates", /** Verifies the exact consumed native edge and negative browser/reverse cases. @returns Nothing. */ () => {
+  for (const target of ["vcl/inc/idle.ts", "vcl/inc/task.ts", "vcl/inc/scheduler.ts"])
+    expect(isForbiddenDomainVclImport("sc/source/core/tool/chartlis.ts", target)).toBe(false);
+  for (const target of [
+    "vcl/browser/sal-timer.ts",
+    "vcl/source/app/scheduler.ts",
+    "vcl/inc/idle-other.ts",
+  ])
+    expect(isForbiddenDomainVclImport("sc/source/core/tool/chartlis.ts", target)).toBe(true);
+  expect(isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/inc/idle.ts")).toBe(
+    true,
+  );
   const source = "sc/source/core/data/docpool.ts";
   for (const target of [
     "vcl/inc/fntstyle.ts",

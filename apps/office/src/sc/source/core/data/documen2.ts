@@ -1,4 +1,9 @@
 /** @fileoverview Consumed native ScDocument observable destructor from documen2.cxx,running on its original instance before GC reclaims physical stores. */
+import { ScChartListenerCollection } from "../../../inc/chartlis";
+import { ScPoolHelper } from "../inc/poolhelp";
+import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
+import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
+import { uppercase } from "../../../../unotools/inc/charclass";
 import type { ScDocument } from "./document";
 import { ScTable } from "../../../inc/table";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -7,6 +12,10 @@ import { ScHorizontalCellIterator } from "../../../inc/dociter";
 
 /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @param this - Actual document instance. @returns Nothing. */
 export function Dispose(this: ScDocument): void {
+  this["bInDtorClear"] = true;
+  const charts = this["pChartListenerCollection"];
+  this["pChartListenerCollection"] = null;
+  charts?.Dispose();
   const machine = this["pBASM"];
   this["pBASM"] = null;
   machine?.Dispose();
@@ -66,4 +75,20 @@ export function ResetClip(
     tabs[index] = table;
     table.SetLayoutRTL(original.IsLayoutRTL());
   }
+}
+
+/** Original documen2 construction of mode-dependent native resources and the independent string pool. @param this - Actual document. @returns Nothing. */
+export function InitializeResources(this: ScDocument): void {
+  if (this.GetAutoCalc()) {
+    this["mxPoolHelper"] = new ScPoolHelper(this);
+    this["pBASM"] = new ScBroadcastAreaSlotMachine(this);
+    this["pChartListenerCollection"] = new ScChartListenerCollection(this);
+  }
+  const locale = this["locale"];
+  this["mpCellStringPool"] = new SharedStringPool({
+    /** Applies the existing real whole-string classifier field binding. @param value - Unicode source. @returns Uppercase value. */
+    uppercase(value) {
+      return uppercase(value, locale);
+    },
+  });
 }

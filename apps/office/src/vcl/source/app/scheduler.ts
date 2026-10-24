@@ -20,6 +20,10 @@ function getPlatform(): SchedulerPlatform {
 function getSystemTicks(): bigint {
   return getPlatform().getSystemTicks();
 }
+/** Platform input query for native clients such as chart TimerHdl;non-continuous input is the browser projection of its keyboard admission guard. @param includeContinuous - Include pointer movement. @returns Pending host input. */
+export function isSchedulerInputPending(includeContinuous = true): boolean {
+  return getPlatform().hasPendingInput(includeContinuous);
+}
 
 /** Native uint64 addition/subtraction at absolute timer deadlines. @param value - Arithmetic result. @returns Unsigned64 value. */
 function uint64(value: bigint): bigint {

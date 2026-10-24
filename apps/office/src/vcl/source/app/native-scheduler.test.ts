@@ -78,6 +78,8 @@ it("retains native static identity,defaults,callback pointer overloads and publi
   expect(n.PRIO_COUNT).toBe(10);
   expect(n.EDIT_UPDATEDATA_TIMEOUT).toBe(350);
   expect(n.getSystemTicks()).toBe(1000n);
+  expect(n.isSchedulerInputPending()).toBe(false);
+  expect(n.isSchedulerInputPending(false)).toBe(false);
   expect([timer.IsActive(), timer.IsStatic(), task.DecideTransferredExecution()]).toEqual([
     false,
     false,

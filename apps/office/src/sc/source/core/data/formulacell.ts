@@ -603,6 +603,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       return false;
     }
     this.bRunning = true;
+    this.rDocument.IncInterpretLevel();
     try {
       if (this.pCode.GetCodeError() === FormulaError.NONE) {
         const interpreter = new ScInterpreter(
@@ -619,6 +620,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       if (!this.pCode.IsRecalcModeAlways()) this.rDocument.RemoveFromFormulaTree(this);
       return true;
     } finally {
+      this.rDocument.DecInterpretLevel();
       this.bRunning = false;
     }
   }

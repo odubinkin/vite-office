@@ -10,8 +10,8 @@ export function getSystemTicks(): bigint {
   return BigInt.asUintN(64, BigInt(Math.floor(globalThis.performance.now())));
 }
 
-/** Queries actual host queued input where exposed. Browser rendering and unsupported host input queues remain controlled by the host event loop;no synthetic pending-event service is installed. @returns Host pending input. */
-export function hasPendingInput(): boolean {
+/** Queries actual host queued input where exposed. Browser rendering and unsupported host input queues remain controlled by the host event loop;no synthetic pending-event service is installed. @param includeContinuous - Include continuous pointer input. @returns Host pending input. */
+export function hasPendingInput(includeContinuous = true): boolean {
   const scheduling = (
     globalThis.navigator as
       | (Navigator & {
@@ -19,7 +19,7 @@ export function hasPendingInput(): boolean {
         })
       | undefined
   )?.scheduling;
-  return scheduling?.isInputPending({ includeContinuous: true }) ?? false;
+  return scheduling?.isInputPending({ includeContinuous }) ?? false;
 }
 
 /** One actual host timer per native system-timer instance;no task queue or chart service is implemented here. */

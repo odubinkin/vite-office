@@ -1,4 +1,7 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
+import { ScItemPoolCache } from "../../../inc/poolcach";
+import { SfxItemState } from "../../../../svl/inc/itemset";
+import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -912,4 +915,43 @@ export function RemoveCondFormatData(
   index: number,
 ): void {
   this.FetchTable(tab)?.RemoveCondFormatData(ranges, index);
+}
+
+/** Original document.cxx simple-area or selected-cache dispatch on the same document. @param this - Actual document. @param delta - Source pattern. @param marks - Actual selection. @returns Attribute change. */
+export function ApplySelectionPattern(
+  this: ScDocument,
+  delta: ScPatternAttr,
+  marks: ScMarkData,
+): boolean {
+  let set = false;
+  for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
+    set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
+  if (!set) return false;
+  let changed = false;
+  if (marks.IsMarked() && !marks.IsMultiMarked()) {
+    const range = marks.GetMarkArea();
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      changed =
+        this.ApplyPatternAreaTab(
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+          tab,
+          delta,
+        ) || changed;
+    }
+  } else {
+    const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
+    try {
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
+      }
+    } finally {
+      cache.Dispose();
+    }
+  }
+  return changed;
 }

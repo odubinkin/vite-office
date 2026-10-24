@@ -3,7 +3,9 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/inc/chartlis") &
+type Fixture = typeof import("../../src/vcl/inc/scheduler") &
+  typeof import("../../src/vcl/browser/sal-timer") &
+  typeof import("../../src/sc/inc/chartlis") &
   typeof import("../../src/sc/inc/reftokenhelper") &
   typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/document") &
@@ -26,6 +28,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/vcl/inc/scheduler.ts", names: ["bindSchedulerPlatform", "Scheduler"] },
+    { module: "src/vcl/browser/sal-timer.ts", names: ["browserSchedulerPlatform"] },
     { module: "src/sc/inc/chartlis.ts", names: ["ScChartListener"] },
     {
       module: "src/sc/inc/reftokenhelper.ts",
@@ -56,12 +60,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   ]);
   const observations = await page.evaluate(
     /** Runs actual compiled source owners without DOM dependencies. @returns Main/Worker observations. */ async () => {
-      /** Executes the real default-content phases;document-level paste orchestration and history are not claimed here. @returns Native values. */ function run() {
+      /** Executes the real default-content phases;document-level paste orchestration and history are not claimed here. @returns Native values. */ async function run() {
         const n = (globalThis as unknown as { CalcClipboardFixture: Fixture }).CalcClipboardFixture,
           doc = new n.ScDocument(),
           clip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP),
           undo = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_UNDO),
           grammar = n.FormulaGrammar.Grammar.GRAM_NATIVE;
+        n.bindSchedulerPlatform(n.browserSchedulerPlatform);
         for (let tab = 0; tab < 3; ++tab) doc.InsertTab(tab, n.unicode(`Sheet${tab}`));
         undo.InitUndo(doc, 0, 0);
         const undoTable = undo.FetchTable(0);
@@ -321,7 +326,27 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           dirty: chartListener.IsDirty(),
           selfEqual: chartListener.equals(chartListener),
         };
-        chartListener.Dispose();
+        const collection = doc.GetChartListenerCollection();
+        if (!collection) throw Error("Missing actual chart collection");
+        const notified = new Promise<number>(
+          /** The real chart callback resolves host-delivered completion. @param resolve - Completion. @returns Nothing. */ (
+            resolve,
+          ) => {
+            chartListener.SetUno(
+              {
+                /** Observes the actual native ALL event. @param event - Changed data. @returns Nothing. */
+                chartDataChanged(event) {
+                  resolve(event.Type);
+                },
+              },
+              null,
+            );
+          },
+        );
+        collection.insert(chartListener);
+        collection.StartAllListeners();
+        doc.SetValue(new n.ScAddress(2, 4, 0), 17);
+        const chartNotification = { type: await notified, dirty: chartListener.IsDirty() };
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -329,6 +354,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         clip.Dispose();
         undo.Dispose();
         doc.Dispose();
+        n.Scheduler.ImplDeInitScheduler();
         return {
           value,
           changed,
@@ -347,6 +373,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           tableUndo,
           referenceHelper,
           chartOwnership,
+          chartNotification,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -357,7 +384,12 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       if (!script) throw Error("Missing native clipboard bundle");
       const url = URL.createObjectURL(
           new Blob(
-            [script, "\npostMessage({value:(", run.toString(), ")(),dom:typeof document});"],
+            [
+              script,
+              "\n(",
+              run.toString(),
+              ")().then(value=>postMessage({value,dom:typeof document}));",
+            ],
             { type: "text/javascript" },
           ),
         ),
@@ -378,7 +410,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
               ) => reject(Error(event.message));
           },
         );
-        return { main: run(), other };
+        return { main: await run(), other };
       } finally {
         worker.terminate();
         URL.revokeObjectURL(url);
@@ -388,6 +420,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   const expected = {
     referenceHelper: { range: [2, 4, 0, 2, 5, 0], sheetFlag: true, count: 1, overlap: true },
     chartOwnership: { range: [2, 4, 0, 2, 5, 0], used: false, dirty: true, selfEqual: true },
+    chartNotification: { type: 0, dirty: false },
     value: 21,
     changed: 34,
     formula: "=D6+1",
