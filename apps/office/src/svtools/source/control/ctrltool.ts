@@ -1,4 +1,9 @@
 /** @fileoverview Original FontList scalable-size resource and consumed family lookup from ctrltool.cxx; physical device enumeration remains browser-owned. */
+import { Font, type ConstFont } from "../../../vcl/source/font/font";
+import { FontWeight } from "../../../tools/inc/fontenum";
+import { rtl_ustr_compare_WithLength } from "../../../sal/rtl/ustring";
+import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+
 const aStdSizeAry = Object.freeze([
   60, 70, 80, 90, 100, 105, 110, 120, 130, 140, 150, 160, 180, 200, 210, 220, 240, 260, 280, 320,
   360, 400, 420, 440, 480, 540, 600, 660, 720, 800, 880, 960, 0,
@@ -71,4 +76,61 @@ export function findFontListFamily(
   if (direct !== undefined) return direct;
   const alias = aliases.get(key);
   return alias === undefined ? undefined : findFontListKey(keys, alias);
+}
+
+/** Source FontList metric with an opaque caller-owned physical identity; no native linked-list lifetime is reproduced. */
+export interface FontListMetricEntry<T> {
+  readonly metric: ConstFont;
+  readonly value: T;
+}
+
+/** Original sortWeightValue puts NORMAL first, followed by lighter then heavier weights, including unknown. @param weight - Native weight enum. @returns Source comparison rank. */
+function sortWeightValue(weight: FontWeight): number {
+  if (weight < FontWeight.WEIGHT_NORMAL) return weight + 1;
+  if (weight > FontWeight.WEIGHT_NORMAL) return weight - 1;
+  return 0;
+}
+
+/** Original ImplCompareFontMetric orders italic,normal-first weight and exact OUString style name. @param left - First actual metric. @param right - Second actual metric. @returns Original comparison result. */
+export function compareFontListMetrics(left: ConstFont, right: ConstFont): number {
+  if (left.GetItalic() < right.GetItalic()) return -1;
+  if (left.GetItalic() > right.GetItalic()) return 1;
+  const firstWeight = sortWeightValue(left.GetWeight()),
+    secondWeight = sortWeightValue(right.GetWeight());
+  if (firstWeight < secondWeight) return -1;
+  if (firstWeight > secondWeight) return 1;
+  const first = left.GetStyleName(),
+    second = right.GetStyleName();
+  const firstUnits = new Uint16Array(first.length),
+    secondUnits = new Uint16Array(second.length);
+  for (let i = 0; i < first.length; ++i) firstUnits[i] = first.charCodeAt(i);
+  for (let i = 0; i < second.length; ++i) secondUnits[i] = second.charCodeAt(i);
+  return rtl_ustr_compare_WithLength(firstUnits, first.length, secondUnits, second.length);
+}
+
+/** Extracted per-family insertion from FontList::ImplInsertFonts, including duplicate/system-charset replacement. The caller supplies real metrics and device encoding; no names are parsed to invent either. @param entries - Owned metric rows in source order. @param incoming - Actual incoming metric/physical identity. @param systemEncoding - Actual device thread encoding. @returns Nothing. */
+export function insertFontListMetric<T>(
+  entries: FontListMetricEntry<T>[],
+  incoming: FontListMetricEntry<T>,
+  systemEncoding: rtl_TextEncoding,
+): void {
+  const added: FontListMetricEntry<T> = {
+    metric: new Font(incoming.metric),
+    value: incoming.value,
+  };
+  for (let i = 0; i < entries.length; ++i) {
+    const current = entries[i] as FontListMetricEntry<T>,
+      comparison = compareFontListMetrics(added.metric, current.metric);
+    if (comparison <= 0) {
+      if (comparison === 0) {
+        if (
+          current.metric.GetCharSet() !== systemEncoding &&
+          added.metric.GetCharSet() === systemEncoding
+        )
+          entries[i] = added;
+      } else entries.splice(i, 0, added);
+      return;
+    }
+  }
+  entries.push(added);
 }

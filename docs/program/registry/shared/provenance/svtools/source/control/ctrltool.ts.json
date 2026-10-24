@@ -10,7 +10,9 @@
       "makeFontListSearchString",
       "makeFontListSearchStringFromName",
       "makeFontListAliases",
-      "findFontListFamily"
+      "findFontListFamily",
+      "compareFontListMetrics",
+      "insertFontListMetric"
     ],
     "upstreamPath": "svtools/source/control/ctrltool.cxx",
     "upstreamSymbols": [
@@ -18,11 +20,14 @@
       "ImplMakeSearchString",
       "ImplMakeSearchStringFromName",
       "FontList::ImplFind",
-      "FontList::ImplFindByName"
+      "FontList::ImplFindByName",
+      "ImplCompareFontMetric",
+      "FontList::ImplInsertFonts"
     ],
     "preservedResponsibilities": [
       "Task014VCW connects original32 scalable font sizes and consumed absolute FontSizeBox numeric conversion/bounds to a shared editable browser combo and original toolbox float/status/focus/acceptance lifecycle. Actual SvxFontHeightItem PutValue handles float rounding and independent zero admission. Writer Grow/Shrink keeps40twip increments,19998 maximum, exact-bound disabling, unsigned32 arithmetic and all-script SetHeight reset. Real layout-absent BreakIterator/script-language/Which queries and source-ordered node/automatic-hint GetItemWithPaM contributions feed explicit native PaM edits with grouped history, preserving current cursor ownership. Writer consumed height-default registration now carries the original three slot IDs through its existing bounded Sfx registration boundary; complete native ItemInfoPackage registration remains separate. Full native font/device/relative/named-size/LanguageTag/ApplicationSettings/ScriptInfo/field expansion/character-style/merged/redline/readonly/services remain unverified. No existing classification/status/default or deliberate browser I/O/recovery policy is promoted. Portable evidence:109 current focused tests;24 executable owner source identities audited at S1665/B1245/F396/L1485 all100, with fresh changed counters and exact unchanged-span carry only;18 current-build Chromium Writer/Calc desktop/mobile scenarios including hotkeys, grouped history and physical ODT/ODS reopen. Related source tests and local gates are recorded in task014VCW. Native binary and omitted services remain unverified.",
-      "Task6764KT extends the existing original scalable-size resource without replacing it. Extracted ImplMakeSearchString/ImplMakeSearchStringFromName and read-only ImplFind/ImplFindByName preserve ASCII-only keys,feature-before-alternate parsing,no trimming/no alternative fallback,the original fast-last and binary search,and direct-family precedence over a single explicit device-alias lookup. Actual alias ingestion mirrors insert_or_assign ASCII normalization. Insertion-point output,physical metric ordering and full native device enumeration remain separate;no fake native service or glyph certificate is introduced."
+      "Task6764KT extends the existing original scalable-size resource without replacing it. Extracted ImplMakeSearchString/ImplMakeSearchStringFromName and read-only ImplFind/ImplFindByName preserve ASCII-only keys,feature-before-alternate parsing,no trimming/no alternative fallback,the original fast-last and binary search,and direct-family precedence over a single explicit device-alias lookup. Actual alias ingestion mirrors insert_or_assign ASCII normalization. Insertion-point output,physical metric ordering and full native device enumeration remain separate;no fake native service or glyph certificate is introduced.",
+      "Task6764KT extracts original ImplCompareFontMetric and per-family ImplInsertFonts metric insertion. It retains italic-first comparison,normal-first weight rank,actual SAL OUString UTF16 style comparison and duplicate replacement only when the incoming charset matches the actual device system encoding and the old one does not. WRITER083 documents the SEMILIGHT/MEDIUM rank collision and resulting duplicate loss; no tie-breaker repairs it. Native JS arrays retain opaque actual browser physical identities without native linked-list memory/lifetime machinery. GetBrowserPreviewMetric consumes explicit actual face metrics/device encoding and the existing family/alias lookup; incomplete candidate metadata stays unknown rather than choosing an arbitrary record. Raw GetBrowserFaces keeps original inventory order. Concrete physical metric acquisition,backend encoding resolution and live WYSIWYG painting remain unfinished."
     ],
     "omittedResponsibilities": [
       "Complete font/device/name/relative modes, LanguageTag/ApplicationSettings/full ScriptInfo/field expansion/character-style/merged/redline/readonly graph and native compilation remain unverified; consumed platform fields and native source owners do not fabricate those services."
@@ -36,12 +41,20 @@
         {
           "path": "apps/office/src/svtools/source/control/ctrltool.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svtools/source/control/ctrltool-metrics.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/svtools/source/control/ctrltool.cxx",
           "marker": "FontList::aStdSizeAry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrltool.cxx",
+          "marker": "ImplCompareFontMetric"
         }
       ]
     }

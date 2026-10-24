@@ -3,7 +3,11 @@ import { lower } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { decodeBrowserFontFamily } from "../../vcl/browser/font-family";
 import { getCssFontFaceSources } from "../../vcl/browser/css-font-source";
 import type { BrowserPhysicalFont, BrowserLocalFontData } from "../../vcl/browser/font-list";
+import type { ConstFont } from "../../vcl/source/font/font";
+import type { rtl_TextEncoding } from "../../sal/inc/rtl/textenc";
 import {
+  insertFontListMetric,
+  type FontListMetricEntry,
   findFontListFamily,
   makeFontListAliases,
   makeFontListSearchString,
@@ -83,6 +87,20 @@ export class FontList {
     return key === undefined
       ? []
       : (this.physicalFamilies.get(key) as readonly BrowserPhysicalFont[]);
+  }
+  /** Resolves the original first family metric using actual caller-supplied physical metadata and encoding. Missing metadata leaves selection unknown rather than choosing an arbitrary inventory row. @param family - Requested family expression. @param metrics - Actual physical-face metrics. @param systemEncoding - Actual device encoding. @returns Source first metric/physical record,or unknown. */
+  public GetBrowserPreviewMetric(
+    family: string,
+    metrics: ReadonlyMap<BrowserPhysicalFont, ConstFont>,
+    systemEncoding: rtl_TextEncoding,
+  ): FontListMetricEntry<BrowserPhysicalFont> | undefined {
+    const rows: FontListMetricEntry<BrowserPhysicalFont>[] = [];
+    for (const face of this.GetBrowserFaces(family)) {
+      const metric = metrics.get(face);
+      if (metric === undefined) return undefined;
+      insertFontListMetric(rows, { metric, value: face }, systemEncoding);
+    }
+    return rows[0];
   }
   /** Queries Local Font Access and falls back offline. @param window_ - Browser boundary. @returns Populated list. */
   public static async FromBrowser(window_: Window = window): Promise<FontList> {
