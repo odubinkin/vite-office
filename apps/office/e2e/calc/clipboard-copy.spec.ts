@@ -10,6 +10,8 @@ type Fixture = typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/patattr") &
   typeof import("../../src/svl/source/numbers/zformat") &
+  typeof import("../../src/svl/source/numbers/zforlist") &
+  typeof import("../../src/svl/source/numbers/zforscan") &
   typeof import("../../src/sal/inc/rtl/math") &
   typeof import("../../src/i18npool/source/localedata/localedata") &
   typeof import("../../src/udkapi/com/sun/star/lang/Locale") &
@@ -51,6 +53,11 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem", "ScMergeAttr"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
     { module: "src/svl/source/numbers/zformat.ts", names: ["formatStandardNumber"] },
+    {
+      module: "src/svl/source/numbers/zforlist.ts",
+      names: ["ImpGetFormatCodeIndex", "ImpAdjustFormatCodeDefault"],
+    },
+    { module: "src/svl/source/numbers/zforscan.ts", names: ["extractStandardGeneralName"] },
     { module: "src/sal/inc/rtl/math.ts", names: ["round"] },
     { module: "src/i18npool/source/localedata/localedata.ts", names: ["getLocaleFormatElements"] },
     { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
@@ -391,7 +398,18 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           mapper = new n.NumberFormatCodeMapper(),
           mapped = mapper.getDefault(2, 4, locale),
           mappedSequence = mapper.getAllFormatCodes(locale),
+          decimal = n.unicode(",");
+        n.ImpAdjustFormatCodeDefault(
+          mappedSequence.getArray() as import("../../src/cppu/inc/com/sun/star/uno/Sequence").SequenceElements,
+          mappedSequence.getLength(),
+        );
+        const selectedFormat = n.ImpGetFormatCodeIndex(mappedSequence, 0, decimal),
+          standardName = n.extractStandardGeneralName(
+            n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(selectedFormat)).Code,
+          ),
           formatFoundation = {
+            selectedFormat,
+            standardName: n.text(standardName),
             general: n.text(general),
             input: n.text(input),
             correctedRound: n.round(16.83 * 650),
@@ -406,6 +424,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             mappedCount: mappedSequence.getLength(),
             mappedFirst: n.text(n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(0)).Code),
           };
+        standardName.dispose();
+        decimal.dispose();
         mappedSequence.dispose();
         mapper.dispose();
         const retainedMappedCode = n.text(mapped.Code);
@@ -511,6 +531,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       newPattern: null,
     },
     formatFoundation: {
+      selectedFormat: 0,
+      standardName: "Standard",
       general: "1E-10",
       input: "0.0000000001",
       correctedRound: 10940,

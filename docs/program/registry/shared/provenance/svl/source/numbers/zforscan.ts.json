@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "extractStandardGeneralName"
+    ],
+    "upstreamSymbols": [
+      "lcl_extractStandardGeneralName"
+    ],
+    "preservedResponsibilities": [
+      "Task76 ports Original UTF16 pointer walk extracts the locale standard name,including bracket modifiers,unbracketed semicolon termination and malformed/nested modifier behavior. It does not replace symbol scanning,type/final scanning or synthesize a parsed format entry. Tests include all284 source locale standard names. Full scanner,formatter ownership and document paste remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full formatter/scanner/format table ownership,custom patterns,non-NUMBER types,NatNum and complete clipboard/paste/UI remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.ts",
+          "marker": "extractStandardGeneralName"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.test.ts",
+          "marker": "extractStandardGeneralName"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "lcl_extractStandardGeneralName"
+        }
+      ]
+    }
+  }
+}

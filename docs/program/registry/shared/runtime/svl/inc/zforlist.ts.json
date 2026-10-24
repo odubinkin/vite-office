@@ -20,17 +20,19 @@
         "apps/office/src/sc/source/core/tool/compiler-format-type.test.ts",
         "vendor/libreoffice-reference/include/svl/zforlist.hxx"
       ],
-      "justification": "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified. Task76: Original SV_COUNTRY_LANGUAGE_OFFSET=10000 is shared by actual pattern and column General-format key handling. Formatter services remain separate unported owners.",
+      "justification": "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified. Task76: Original SV_COUNTRY_LANGUAGE_OFFSET=10000 is shared by actual pattern and column General-format key handling. Formatter services remain separate unported owners. Task76 adds consumed original built-in General and currency index constants,without inventing remaining format-family generation.",
       "knownViolations": [],
       "localSymbols": [
         "SvNumFormatType",
-        "SV_COUNTRY_LANGUAGE_OFFSET"
+        "SV_COUNTRY_LANGUAGE_OFFSET",
+        "NfIndexTableOffset"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/svl/zforlist.hxx",
       "upstreamSymbols": [
         "SvNumFormatType",
-        "SV_COUNTRY_LANGUAGE_OFFSET"
+        "SV_COUNTRY_LANGUAGE_OFFSET",
+        "NfIndexTableOffset"
       ]
     }
   }

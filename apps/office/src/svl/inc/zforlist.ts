@@ -21,3 +21,16 @@ export type SvNumFormatType = number;
 
 /** Original number-format key block size per country/language. */
 export const SV_COUNTRY_LANGUAGE_OFFSET = 10000;
+
+/** Consumed original NfIndexTableOffset values;remaining built-in families retain their separate unported generation responsibilities. */
+export const NfIndexTableOffset = {
+  NF_NUMBER_STANDARD: 0,
+  NF_CURRENCY_START: 12,
+  NF_CURRENCY_1000INT: 12,
+  NF_CURRENCY_1000DEC2: 13,
+  NF_CURRENCY_1000INT_RED: 14,
+  NF_CURRENCY_1000DEC2_RED: 15,
+  NF_CURRENCY_1000DEC2_CCC: 16,
+  NF_CURRENCY_1000DEC2_DASHED: 17,
+  NF_CURRENCY_END: 17,
+} as const;

@@ -3881,3 +3881,9 @@ flag update without extending that flag mutation for consistency.
 - On a cache miss,the code defines `FORMATELEMENTCACHE_SIZE = 3`,pops the oldest entry only when the current size is strictly greater than that constant,and then appends the new locale. The fourth distinct locale grows the cache from three to four entries;later misses retain four entries by popping before appending.
 - This may be an intentional soft limit or an imprecise constant name rather than an active defect. Preserve the strict `>` comparison and insertion order when this native mapper owner is ported;do not change it to `>=`.
 - The mapper port preserves the strict comparison and FIFO order. `apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts` observes actual Locale/OUString ownership:four distinct locale values remain retained,a hit does not refresh their order,and a fifth locale releases the first cached value while an already returned format code remains valid. The separate locale resource-field binding has no fabricated cache.
+
+### CALC-272 — Default adjustment leaves multiple medium defaults enabled
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpAdjustFormatCodeDefault`.
+- The comment promises one default for a format-code group. The MEDIUM arm records the latest index but does not clear earlier medium defaults;the final assignment enables the latest default without disabling its predecessors. Duplicate-medium input therefore retains multiple defaults.
+- Optional locale-data diagnostics report duplicate defaults but do not repair them. This may rely on valid source locale catalogs rather than cause a current UI defect. Preserve the original algorithm and test duplicate-medium input instead of silently normalizing it.

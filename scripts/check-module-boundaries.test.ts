@@ -840,11 +840,11 @@ it("distinguishes emitted imports from erased type syntax before runtime cycle d
     ].sort(),
   );
   expect([...getRuntimeImportSpecifiers("const value=1;")]).toEqual([]);
-  expect(isForbiddenModuleEdge("svl", "udkapi")).toBe(false);
-  for (const module of ["sc", "sw", "vcl", "framework"]) {
-    expect(isForbiddenModuleEdge("udkapi", module)).toBe(true);
-    expect(isForbiddenModuleEdge("cppu", module)).toBe(true);
-  }
+  for (const target of ["udkapi", "offapi"])
+    expect(isForbiddenModuleEdge("svl", target)).toBe(false);
+  for (const module of ["sc", "sw", "vcl", "framework", "svl"])
+    for (const owner of ["udkapi", "cppu", "offapi"])
+      expect(isForbiddenModuleEdge(owner, module)).toBe(true);
 });
 it("admits only source-backed VCL variation and original UTF16 decimal header bindings", /** Preserves reverse/application edge rejection and exact shared SAL/o3tl named bindings. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("vcl", "o3tl")).toBe(false);

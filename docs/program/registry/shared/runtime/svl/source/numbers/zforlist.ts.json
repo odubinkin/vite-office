@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.ts",
+        "apps/office/src/svl/source/numbers/zforlist.test.ts",
+        "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx"
+      ],
+      "justification": "Task76 ports Original exact-index/default/currency-decimal/currency-integer/zero selection and actual empty Sequence assignment with native default-initialized NumberFormatCode and locale decimal separator. Default adjustment mutates original compound storage after caller COW,retains medium/long ordering and duplicate-medium flags CALC-272. Decimal projects only the consumed current-language field;optional LocaleData diagnostics are not represented. Full formatter constructor/table and document paste remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImpGetFormatCodeIndex",
+        "ImpAdjustFormatCodeDefault"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFFormatData::ImpGetFormatCodeIndex",
+        "SvNFFormatData::ImpAdjustFormatCodeDefault"
+      ]
+    }
+  }
+}
