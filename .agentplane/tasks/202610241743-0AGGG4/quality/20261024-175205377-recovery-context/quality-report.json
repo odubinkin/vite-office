@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241743-0AGGG4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T17:52:05.377Z",
+  "verdict": "pass",
+  "summary": "Represented page-break controls use actual native page draft and accepted Writer attributes.",
+  "evaluated_sha": "75a9e09dc2f8184fb7b52b08c069266f60ba3c1b",
+  "blueprint_digest": "057a24a73a7410c4fb147b0c83d0a1cdcf654a74c98fa917d3a82ead9a673c8b",
+  "findings": [
+    "Reviewed paragrph.cxx Reset/Fill/handlers and textflowpage.ui;retained disabled drafts,source offset bounds,known/unknown styles and changed-only emission. Zero offset reaches existing core and ODT. Mixed/HTML/columns are explicitly unrepresented.",
+    "76focused and consumer cases pass;source owner strict100coverage without ignores;2production browser widths verify model/history/ODT. All15source gates pass and reviewed source hashes match."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241743-0AGGG4/README.md",
+    "output/playwright/writer-full-checkpoint/0AGGG4-hashes.json",
+    "output/playwright/writer-full-checkpoint/0AGGG4-coverage-exact.log",
+    "output/playwright/writer-full-checkpoint/0AGGG4-e2e-exact.log",
+    "output/playwright/writer-full-checkpoint/0AGGG4-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Complete native property-service/XML numeric semantics and zero/absent transfer distinction remain bounded follow-up in second authorized task;no blanket parity claim."
+  ]
+}
