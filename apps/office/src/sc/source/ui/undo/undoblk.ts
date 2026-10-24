@@ -50,7 +50,6 @@ export class ScUndoIndent extends SfxUndoAction<ScDocShell> {
   }
   /** Releases owned canonical attributes and strings. @returns Nothing. */
   override Dispose(): void {
-    this.undo.DisposeAttributes();
-    this.undo.GetSharedStringPool().dispose();
+    this.undo.Dispose();
   }
 }

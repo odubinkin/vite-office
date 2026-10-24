@@ -902,12 +902,8 @@ it("admits only original pure document-pool VCL dependencies while retaining dom
     "vcl/source/font/font.ts",
   ])
     expect(isForbiddenDomainVclImport(source, target)).toBe(true);
-  expect(
-    isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/source/outdev/font.ts"),
-  ).toBe(true);
-  expect(isForbiddenDomainVclImport("sw/source/core/doc/doc.ts", "vcl/source/outdev/font.ts")).toBe(
-    true,
-  );
+  for (const caller of ["sc/source/core/data/document.ts", "sw/source/core/doc/doc.ts"])
+    expect(isForbiddenDomainVclImport(caller, "vcl/source/outdev/font.ts")).toBe(true);
   expect(
     isForbiddenDomainVclImport(
       "sc/browser/presentation/ScGridWindow.tsx",

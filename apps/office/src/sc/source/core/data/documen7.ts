@@ -2,6 +2,9 @@
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
+import { CopyToDocContext } from "../../../inc/clipcontext";
+import { ScCloneFlags } from "../../../inc/global";
+import { DelayDeletingBroadcasters } from "../../../inc/scopetools";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -14,9 +17,9 @@ import {
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
 import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
-import type { ScColumn, ScColumnData } from "../../../inc/column";
+import type { ScColumn } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
-import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import { ScPatternAttr } from "../../../inc/patattr";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScTable } from "../../../inc/table";
@@ -353,129 +356,51 @@ export function CreateSelectionPattern(
   }
 }
 
-/** Original document.cxx consumed document copy definition on the same instance. @param this - Actual document. @param range - Copied area. @param flags - Native flags. @param marked - Restrict to marks. @param destination - Actual receiving document. @param marks - Optional real mark data. @returns Nothing. */
+/** Original document.cxx copy orchestration,scope order and default geometry policy. @param this - Actual source. @param range - Copied range. @param flags - Native flags. @param marked - Restrict columns to actual multi marks. @param destination - Actual target. @param marks - Original optional marks. @param colRowFlags - Original default true. @returns Nothing. */
 export function CopyToDocument(
   this: ScDocument,
   range: ScRange,
   flags: InsertDeleteFlags,
   marked: boolean,
   destination: ScDocument,
-  marks?: ScMarkData,
+  marks: ScMarkData | null = null,
+  colRowFlags = true,
 ): void {
-  if (flags === InsertDeleteFlags.NONE) {
-    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-      if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+  const ordered = new ScRange(range);
+  ordered.PutInOrder();
+  if (destination["aDocName"].isEmpty()) destination["aDocName"].assign(this["aDocName"]);
+  const autoCalc = new AutoCalcSwitch(destination, false),
+    bulk = new ScBulkBroadcast(destination.GetBASM(), SfxHintId.ScDataChanged),
+    delay = new DelayDeletingBroadcasters(this),
+    context = new CopyToDocContext(destination);
+  context.setStartListening(false);
+  try {
+    const count = Math.min(this.GetTableCount(), destination.GetTableCount());
+    for (let tab = ordered.aStart.Tab(); tab <= ordered.aEnd.Tab() && tab < count; ++tab) {
       const source = this.FetchTable(tab),
         target = destination.FetchTable(tab);
-      if (source && target)
-        source.CopyToTable(
-          range.aStart.Col(),
-          range.aStart.Row(),
-          range.aEnd.Col(),
-          range.aEnd.Row(),
-          target,
-        );
-    }
-    return;
-  }
-  if (
-    (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
-    flags &
-      ~(
-        InsertDeleteFlags.ATTRIB |
-        InsertDeleteFlags.STRING |
-        InsertDeleteFlags.EDITATTR |
-        InsertDeleteFlags.NOCAPTIONS
-      )
-  )
-    throw new Error("Only attribute document copying is implemented");
-  if (marked) {
-    if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
-    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-      if (!marks.GetTableSelect(tab)) continue;
-      for (const part of marks.GetMarkedRangesForTab(tab)) {
-        const firstCol = Math.max(part.aStart.Col(), range.aStart.Col()),
-          firstRow = Math.max(part.aStart.Row(), range.aStart.Row()),
-          lastCol = Math.min(part.aEnd.Col(), range.aEnd.Col()),
-          lastRow = Math.min(part.aEnd.Row(), range.aEnd.Row());
-        if (firstCol > lastCol || firstRow > lastRow) continue;
-        this.CopyToDocument(
-          new ScRange(firstCol, firstRow, tab, lastCol, lastRow, tab),
-          flags,
-          false,
-          destination,
-          marks,
-        );
-      }
-    }
-    return;
-  }
-  const start = range.aStart,
-    end = range.aEnd;
-  for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
-    if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
-    const source = this.FetchTable(tab),
-      target = destination.FetchTable(tab);
-    if (!source || !target) continue;
-    const last =
-      end.Col() === this.MaxCol()
-        ? Math.max(
-            start.Col(),
-            source.GetAllocatedColumnsCount(),
-            target.GetAllocatedColumnsCount(),
-          ) - 1
-        : end.Col();
-    for (let col = start.Col(); col <= last; col++) {
-      copyColumnAttributes(
-        source.GetColumnData(col),
-        target.CreateColumnIfNotExists(col),
-        start.Row(),
-        end.Row(),
-        destination,
-      );
-      if (flags & InsertDeleteFlags.STRING && col < source.GetAllocatedColumnsCount())
-        source
-          .CreateColumnIfNotExists(col)
-          .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
-    }
-    if (end.Col() === this.MaxCol()) {
-      // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
-      target.CreateColumnIfNotExists(last);
-      copyColumnAttributes(
-        source.GetDefaultColumnData(),
-        target.GetDefaultColumnData(),
-        start.Row(),
-        end.Row(),
-        destination,
+      if (!source || !target) continue;
+      source.CopyToTable(
+        context,
+        ordered.aStart.Col(),
+        ordered.aStart.Row(),
+        ordered.aEnd.Col(),
+        ordered.aEnd.Row(),
+        flags,
+        marked,
+        target,
+        marks,
+        false,
+        colRowFlags,
+        ScCloneFlags.Default,
+        true,
       );
     }
-  }
-}
-/** Copies real pattern runs across actual helper/pool ownership. @param source - Source attributes. @param target - Target attributes. @param start - First row. @param end - Last row. @param destination - Target document. @returns Nothing. */
-function copyColumnAttributes(
-  source: ScColumnData,
-  target: ScColumnData,
-  start: number,
-  end: number,
-  destination: ScDocument,
-): void {
-  const first: [number] = [0],
-    last: [number] = [0];
-  for (let row = start; row <= end;) {
-    const old = source.GetPatternRange(first, last, row) as ScPatternAttr;
-    const next = new ScPatternAttr(
-      destination.getCellAttributeHelper(),
-      old.GetItemSet(),
-      old.GetStyleName() ?? undefined,
-    );
-    const holder = new CellAttributeHolder(next, true);
-    try {
-      const stop = Math.min(end, last[0]);
-      target.SetPatternArea(row, stop, holder);
-      row = stop + 1;
-    } finally {
-      holder.Dispose();
-    }
+    destination.StartAllListeners(ordered);
+  } finally {
+    delay.Dispose();
+    bulk.Dispose();
+    autoCalc.Dispose();
   }
 }
 

@@ -1,4 +1,16 @@
 /** @fileoverview Original table2.cxx default-content clipboard dispatch over real contiguous columns. */
+import { ScRange } from "../../../inc/address";
+import type { ScDocument } from "../../../inc/document";
+import type { ScMarkData } from "../../../inc/markdata";
+import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
+import {
+  ScConditionalFormatList,
+  ScConditionalFormat,
+  ScCondDateFormatEntry,
+} from "../../../inc/conditio";
+import { RefUpdateContext } from "../../../inc/refupdatecontext";
+import { UpdateRefMode, ScCloneFlags } from "../../../inc/global";
+import { DelayFormulaGroupingSwitch } from "../../../inc/scopetools";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import type { CopyToDocContext } from "../../../inc/clipcontext";
 import { InsertDeleteFlags } from "../../../inc/global";
@@ -138,5 +150,241 @@ export function UndoToTable(
   if (height) {
     target.CopyRowHeight(this, row1, row2, 0);
     target.SetRowManualBreaks(new Set(this["maRowManualBreaks"]));
+  }
+}
+
+/** Original table2 scalar and range row-height definitions on this actual sheet. @param this - Sheet. @param first - Scalar or first row. @param second - Scalar hidden policy or last row. @param hidden - Range hidden policy. @returns Twips. */
+export function GetRowHeight(
+  this: ScTable,
+  first: number,
+  second: boolean | number,
+  hidden: boolean,
+): number {
+  const doc = this.GetDoc(),
+    heights = this["mpRowHeights"];
+  if (typeof second === "boolean") {
+    if (!doc.ValidRow(first) || !heights) return this.GetOptimalMinRowHeight();
+    return second && this.RowHidden(first) ? 0 : heights.getValue(first);
+  }
+  if (!doc.ValidRow(first) || !doc.ValidRow(second) || !heights)
+    return (second - first + 1) * this.GetOptimalMinRowHeight();
+  let height = 0,
+    row = first;
+  while (row <= second) {
+    const end: [number] = [-1];
+    if (!(this.RowHidden(row, undefined, end) && hidden)) {
+      if (end[0] > second) end[0] = second;
+      height += Number(heights.getSumValue(row, end[0]));
+    }
+    row = end[0] + 1;
+  }
+  return height;
+}
+
+/** Original table2 full copy dispatch for represented native cells,attributes and geometry. Names,database ranges,outline,sparkline and caption owners remain outside this kernel profile. @param this - Actual source. @param context - Destination context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param flags - Native mask. @param marked - Restrict actual multi marks. @param target - Actual target. @param marks - Optional original marks. @param asLink - Link policy. @param colRowFlags - Geometry policy. @param cloneFlags - Clone policy. @param copyCaptions - Caption policy,unconsumed without note owners. @returns Nothing. */
+export function CopyToTable(
+  this: ScTable,
+  context: CopyToDocContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  flags: InsertDeleteFlags,
+  marked: boolean,
+  target: ScTable,
+  marks: ScMarkData | null,
+  asLink: boolean,
+  colRowFlags: boolean,
+  cloneFlags: ScCloneFlags,
+  copyCaptions: boolean,
+): void {
+  const doc = this.GetDoc();
+  if (!doc.ValidColRow(col1, row1) || !doc.ValidColRow(col2, row2)) return;
+  const toUndo = target.GetDoc().IsUndo(),
+    fromUndo = doc.IsUndo();
+  if (toUndo && flags & InsertDeleteFlags.ATTRIB && col2 >= this.GetAllocatedColumnsCount())
+    this["aDefaultColData"]["pAttrArray"].CopyArea(
+      row1,
+      row2,
+      0,
+      target["aDefaultColData"]["pAttrArray"],
+    );
+  if (flags !== InsertDeleteFlags.NONE) {
+    const temporary = flags & ~(InsertDeleteFlags.NOTE | InsertDeleteFlags.ADDNOTES),
+      grouping = new DelayFormulaGroupingSwitch(target.GetDoc(), true);
+    try {
+      target.CreateColumnIfNotExists(this.ClampToAllocatedColumns(col2));
+      for (let col = col1; col <= this.ClampToAllocatedColumns(col2); ++col)
+        (this["aCol"][col] as ScColumn).CopyToColumn(
+          context,
+          row1,
+          row2,
+          toUndo ? flags : temporary,
+          marked,
+          target.CreateColumnIfNotExists(col),
+          marks,
+          asLink,
+          cloneFlags,
+        );
+      if (fromUndo && flags & InsertDeleteFlags.ATTRIB && col2 >= this.GetAllocatedColumnsCount()) {
+        const defaults = this["aDefaultColData"]["pAttrArray"];
+        defaults.CopyArea(row1, row2, 0, target["aDefaultColData"]["pAttrArray"]);
+        const last = target.ClampToAllocatedColumns(col2);
+        for (let col = this.GetAllocatedColumnsCount(); col <= last; ++col)
+          defaults.CopyArea(row1, row2, 0, (target["aCol"][col] as ScColumn)["pAttrArray"]);
+      }
+    } finally {
+      grouping.Dispose();
+    }
+  }
+  if (!colRowFlags) return;
+  if (toUndo && flags & InsertDeleteFlags.ATTRIB)
+    target.SetCondFormList(
+      (this["mpCondFormatList"] as ScConditionalFormatList).Clone(target.GetDoc()),
+    );
+  const charts = target.GetDoc().GetChartListenerCollection();
+  let changed = false;
+  if (row1 === 0 && row2 === doc.MaxRow() && this["mpColWidth"] && target["mpColWidth"]) {
+    const targetWidth = target["mpColWidth"].begin().add(col1),
+      sourceWidth = this["mpColWidth"].begin().add(col1);
+    target["mpColWidth"].CopyFrom(this["mpColWidth"], col1, col2);
+    (target["mpColFlags"] as ScBitMaskCompressedArray).CopyFrom(
+      this["mpColFlags"] as ScBitMaskCompressedArray,
+      col1,
+      col2,
+    );
+    for (let col = col1; col <= col2; ++col) {
+      const hidden = this.ColHidden(col),
+        hiddenChange = target.ColHidden(col) !== hidden,
+        widthChange = hiddenChange || targetWidth.getValue() !== sourceWidth.getValue();
+      target.SetColHidden(col, col, hidden);
+      if (hiddenChange && charts)
+        charts.SetRangeDirty(new ScRange(col, 0, this["nTab"], col, doc.MaxRow(), this["nTab"]));
+      if (widthChange) changed = true;
+      targetWidth.increment();
+      sourceWidth.increment();
+    }
+    target.SetColManualBreaks(new Set(this["maColManualBreaks"]));
+  }
+  if (col1 === 0 && col2 === doc.MaxCol() && this["mpRowHeights"] && target["mpRowHeights"]) {
+    if (target.GetRowHeight(row1, row2) !== this.GetRowHeight(row1, row2)) changed = true;
+    target.CopyRowHeight(this, row1, row2, 0);
+    (target["pRowFlags"] as ScBitMaskCompressedArray).CopyFrom(
+      this["pRowFlags"] as ScBitMaskCompressedArray,
+      row1,
+      row2,
+    );
+    for (let row = row1; row <= row2; ++row) {
+      const last: [number] = [0],
+        hidden = this.RowHidden(row, undefined, last);
+      if (last[0] >= row2) last[0] = row2;
+      const hiddenChanged = target.SetRowHidden(row, last[0], hidden);
+      if (hiddenChanged && charts)
+        charts.SetRangeDirty(
+          new ScRange(0, row, this["nTab"], doc.MaxCol(), last[0], this["nTab"]),
+        );
+      if (hiddenChanged) changed = true;
+      row = last[0];
+    }
+    for (let row = row1; row <= row2; ++row) {
+      const last: [number] = [0],
+        filtered = this.getFilterData().rowFiltered(row, undefined, last);
+      if (last[0] >= row2) last[0] = row2;
+      target.getFilterData().setRowFiltered(row, last[0], filtered);
+      row = last[0];
+    }
+    target.SetRowManualBreaks(new Set(this["maRowManualBreaks"]));
+  }
+  if (changed) target.InvalidatePageBreaks();
+  if (flags & InsertDeleteFlags.ATTRIB) {
+    (target["mpCondFormatList"] as ScConditionalFormatList).DeleteArea(col1, row1, col2, row2);
+    target.CopyConditionalFormat(col1, row1, col2, row2, 0, 0, this);
+  }
+  // No caption/outline/sparkline store can be created in this represented native profile.
+  void copyCaptions;
+}
+
+/** Original deduplication for represented date/empty entries. Date IsEqual is native false;empty entries are not range-dependent. Color-scale,databar and icon-set entry owners are unported. @param doc - Target owner. @param old - Existing format. @param incoming - Real copied format. @param tab - Destination sheet. @returns Deduplicated. */
+function CheckAndDeduplicateCondFormat(
+  doc: ScDocument,
+  old: ScConditionalFormat | null,
+  incoming: ScConditionalFormat,
+  tab: number,
+): boolean {
+  if (!old) return false;
+  if (old.EqualEntries(incoming, true)) {
+    const ranges = incoming.GetRange(),
+      destination = old.GetRangeList();
+    for (const range of ranges) destination.Join(range);
+    doc.AddCondFormatData(ranges, tab, old.GetKey());
+    return true;
+  }
+  return false;
+}
+/** Original conditional-format intersection,clone,reference relocation,key allocation and style dispatch. Current concrete entries are native date entries;range-dependent visual entry families remain unported. @param this - Destination sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param dx - Column displacement. @param dy - Row displacement. @param source - Actual source sheet. @returns Nothing. */
+export function CopyConditionalFormat(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  dx: number,
+  dy: number,
+  source: ScTable,
+): void {
+  const doc = this.GetDoc(),
+    tab = this["nTab"],
+    sourceTab = source["nTab"],
+    oldRange = new ScRange(col1 - dx, row1 - dy, sourceTab, col2 - dx, row2 - dy, sourceTab),
+    newRange = new ScRange(col1, row1, tab, col2, row2, tab),
+    undo = doc.IsUndo() || source.GetDoc().IsUndo(),
+    same = doc.GetStyleSheetPool() === source.GetDoc().GetStyleSheetPool(),
+    destination = this["mpCondFormatList"] as ScConditionalFormatList;
+  for (const format of source["mpCondFormatList"] as ScConditionalFormatList) {
+    const ranges = format.GetRange();
+    if (!ranges.Intersects(oldRange)) continue;
+    const intersection = ranges.GetIntersectedRange(oldRange),
+      incoming = format.Clone(doc);
+    let retained = false;
+    try {
+      incoming.SetRange(intersection);
+      const context = new RefUpdateContext(doc);
+      context.meMode = UpdateRefMode.URM_COPY;
+      context.maRange.assign(newRange);
+      context.mnColDelta = dx;
+      context.mnRowDelta = dy;
+      context.mnTabDelta = tab - sourceTab;
+      incoming.UpdateReference(context, true);
+      if (
+        !undo &&
+        same &&
+        sourceTab === tab &&
+        CheckAndDeduplicateCondFormat(doc, destination.GetFormat(format.GetKey()), incoming, tab)
+      )
+        continue;
+      let max = 0,
+        duplicate = false;
+      for (const existing of destination) {
+        if (!undo && CheckAndDeduplicateCondFormat(doc, existing, incoming, tab)) {
+          duplicate = true;
+          break;
+        }
+        if (existing.GetKey() > max) max = existing.GetKey();
+      }
+      if (duplicate) continue;
+      incoming.SetKey(max + 1);
+      destination.InsertNew(incoming);
+      retained = true;
+      if (!same)
+        for (let index = 0; index < incoming.size(); ++index) {
+          const entry = incoming.GetEntry(index) as ScCondDateFormatEntry,
+            name = entry.GetStyleName();
+          if (!name.isEmpty())
+            throw Error("Foreign conditional-format styles require native style-pool copying");
+        }
+      doc.AddCondFormatData(incoming.GetRange(), tab, incoming.GetKey());
+    } finally {
+      if (!retained) incoming.Dispose();
+    }
   }
 }

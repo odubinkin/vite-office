@@ -40,6 +40,15 @@ export enum ScInputMode {
   SC_INPUT_TOP = 3,
 }
 
+/** Original formula/note clone flags from global.hxx. Only Default is consumed by this copy profile. */
+export enum ScCloneFlags {
+  Default = 0x0000,
+  StartListening = 0x0001,
+  NoMakeAbsExternal = 0x0002,
+  NamesToLocal = 0x0004,
+  AdjustCrossSheetRefs = 0x0008,
+}
+
 /** Consumed native attribute-copy flags; content/object flag operations remain separate. */
 export enum InsertDeleteFlags {
   NONE = 0x0000,

@@ -7,7 +7,7 @@ import { ScFormulaCell, ScMatrixMode } from "../../../inc/formulacell";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMarkData } from "../../../inc/markdata";
-import { InsertDeleteFlags, CellType } from "../../../inc/global";
+import { InsertDeleteFlags, ScCloneFlags, CellType } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DelayFormulaGroupingSwitch } from "../../../inc/scopetools";
@@ -268,5 +268,95 @@ it("keeps matrix cloning and multiline result storage at genuine unported owner 
   ).toThrow("Multiline");
   expect(target.GetValue(0)).toBe(9);
   expect(target.GetValue(1)).toBe(8);
+  doc.Dispose();
+});
+
+it("uses source-native default clone flags inside marked recursion", /** A real multi mark reaches the native default recursive call despite an outer nondefault flag. @returns Nothing. */ () => {
+  const doc = document(),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  undo.InitUndo(doc, 0, 0);
+  const source = doc.FetchTable(0)?.CreateColumnIfNotExists(0),
+    target = undo.FetchTable(0)?.CreateColumnIfNotExists(0);
+  if (!source || !target) throw Error("Missing native column");
+  doc.SetValue(new ScAddress(), 7);
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  marks.SetMultiMarkArea(new ScRange());
+  source.CopyToColumn(
+    new CopyToDocContext(undo),
+    0,
+    0,
+    InsertDeleteFlags.CONTENTS,
+    true,
+    target,
+    marks,
+    false,
+    ScCloneFlags.NoMakeAbsExternal,
+  );
+  expect(target.GetValue(0)).toBe(7);
+  expect(
+    /** Unmarked admission preserves the still-unsupported clone policy. @returns Nothing. */ () =>
+      source.CopyToColumn(
+        new CopyToDocContext(undo),
+        0,
+        0,
+        InsertDeleteFlags.CONTENTS,
+        false,
+        target,
+        null,
+        false,
+        ScCloneFlags.NoMakeAbsExternal,
+      ),
+  ).toThrow("Nondefault document copy services");
+  undo.Dispose();
+  doc.Dispose();
+});
+
+it("copies compiled document payload through native scope guards and completes restored listening", /** Same-pool Undo owns compiled tokens and default geometry remains optional at the document boundary. @returns Nothing. */ () => {
+  const doc = document(),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  undo.InitUndo(doc, 0, 0);
+  const sourceName = unicode("Source"),
+    targetName = unicode("Snapshot");
+  doc.SetName(sourceName);
+  undo.SetName(targetName);
+  sourceName.dispose();
+  targetName.dispose();
+  doc.SetValue(new ScAddress(), 2);
+  const input = unicode("=A1+1"),
+    formula = new ScFormulaCell(doc, new ScAddress(1, 0, 0), input, grammar);
+  input.dispose();
+  doc.SetFormulaCell(new ScAddress(1, 0, 0), formula);
+  expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(3);
+  const range = new ScRange(0, 0, 0, 1, 0, 0);
+  range.aStart.SetCol(1);
+  range.aEnd.SetCol(0);
+  doc.CopyToDocument(range, InsertDeleteFlags.CONTENTS, false, undo, null, false);
+  const stored = undo.GetFormulaCell(new ScAddress(1, 0, 0));
+  expect(stored).not.toBe(formula);
+  expect(doc.IsDelayedDeletingBroadcasters()).toBe(false);
+  expect(doc.GetAutoCalc()).toBe(true);
+  doc.SetValue(new ScAddress(1, 0, 0), 18);
+  doc.SetColWidth(0, 0, 777);
+  undo.CopyToDocument(range, InsertDeleteFlags.CONTENTS, false, doc, null, false);
+  doc.SetValue(new ScAddress(), 11);
+  expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(12);
+  expect(doc.GetColWidth(0, 0)).toBe(777);
+  undo.Dispose();
+  doc.Dispose();
+});
+it("uses actual sparse table presence and native minimum table-count bounds", /** Native range iteration skips null source/target slots without using sheet selection as an alternate filter. @returns Nothing. */ () => {
+  const doc = document(),
+    source = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    target = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO);
+  source.InitUndo(doc, 0, 0);
+  source.AddUndoTab(2, 2);
+  target.InitUndo(doc, 1, 1);
+  source.SetValue(new ScAddress(), 9);
+  source.CopyToDocument(new ScRange(0, 0, 0, 0, 0, 9), InsertDeleteFlags.CONTENTS, false, target);
+  expect(target.GetTableCount()).toBe(2);
+  expect(target.GetValue(new ScAddress(0, 0, 1))).toBe(0);
+  target.Dispose();
+  source.Dispose();
   doc.Dispose();
 });

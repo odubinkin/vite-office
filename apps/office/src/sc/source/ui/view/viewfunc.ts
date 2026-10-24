@@ -28,11 +28,10 @@ import { ScRange, ScAddress } from "../../../inc/address";
 import { ScUndoWidthOrHeight } from "../undo/undoblk2";
 import { ScRangeList } from "../../../inc/rangelst";
 import { OpCode } from "../../../../formula/inc/opcode";
-import { ScDocument } from "../../../inc/document";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ColRowSpan } from "../../../inc/columnspanset";
 import type { ScViewData } from "../inc/viewdata";
 /** Original ShowFilteredRows skips actual filter runs when manually resizing or hiding. @param doc - Actual document. @param tab - Sheet. @param first - First row. @param last - Last row. @param show - Visibility. @returns Nothing. */
@@ -335,13 +334,10 @@ export class ScViewFunc extends ScTabView {
     const removeAdjacent = outer.IsRemoveAdjacentCellBorder(),
       cover = new ScRange(range);
     if (removeAdjacent) marks.GetSelectionCover(cover);
-    const undo = new ScDocument(),
-      name = new OUString();
-    for (let tab = 0; tab < doc.GetTableCount(); tab++) {
-      doc.GetName(tab, name);
-      undo.InsertTab(tab, name);
-    }
-    name.dispose();
+    const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+      tab = range.aStart.Tab();
+    undo.InitUndo(doc, tab, tab);
+    for (const selected of marks) if (selected !== tab) undo.AddUndoTab(selected, selected);
     const copy = new ScRange(cover),
       copyOnlyMarked = !removeAdjacent && multi;
     copy.aStart.SetTab(0);

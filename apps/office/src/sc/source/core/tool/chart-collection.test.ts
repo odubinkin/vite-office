@@ -357,3 +357,69 @@ it("ignores unrelated/dying hints and rejects unsupported external subscriptions
   shared.dispose();
   key.dispose();
 });
+
+it("notifies real chart listeners after native full-axis hidden geometry copying", /** The native table copy retains the source sheet index in chart-dirty ranges. @returns Completion. */ async () => {
+  const [{ CopyToDocContext }, { InsertDeleteFlags, ScCloneFlags }] = await Promise.all([
+    import("../../../inc/clipcontext"),
+    import("../../../inc/global"),
+  ]);
+  const doc = document(),
+    name = n.unicode("Target");
+  doc.InsertTab(1, name);
+  name.dispose();
+  const source = doc.FetchTable(0),
+    target = doc.FetchTable(1);
+  assert(source && target);
+  const calls: ScChartDataChangeEvent[] = [];
+  listen(
+    doc,
+    "Geometry",
+    /** Receives actual queued geometry data changes. @param event - Native event. @returns Recorded length. */ (
+      event,
+    ) => calls.push(event),
+  );
+  source.SetColWidth(1, 444);
+  source.SetColHidden(1, 1, true);
+  source.CopyToTable(
+    new CopyToDocContext(doc),
+    1,
+    0,
+    2,
+    doc.MaxRow(),
+    InsertDeleteFlags.NONE,
+    false,
+    target,
+    null,
+    false,
+    true,
+    ScCloneFlags.Default,
+    true,
+  );
+  expect(target.ColHidden(1)).toBe(true);
+  expect(target.GetColWidth(1, false)).toBe(444);
+  vi.advanceTimersByTime(10);
+  expect(calls).toHaveLength(1);
+  source.SetRowHeightOnly(1, 3, 300);
+  source.SetRowHidden(2, 2, true);
+  source.getFilterData().setRowFiltered(3, 3, true);
+  source.CopyToTable(
+    new CopyToDocContext(doc),
+    0,
+    1,
+    doc.MaxCol(),
+    3,
+    InsertDeleteFlags.NONE,
+    false,
+    target,
+    null,
+    false,
+    true,
+    ScCloneFlags.Default,
+    true,
+  );
+  expect(target.RowHidden(2)).toBe(true);
+  expect(target.GetRowHeight(1, 3, false)).toBe(900);
+  expect(target.getFilterData().rowFiltered(3)).toBe(true);
+  vi.advanceTimersByTime(10);
+  expect(calls).toHaveLength(2);
+});

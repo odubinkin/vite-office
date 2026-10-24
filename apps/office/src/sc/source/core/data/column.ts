@@ -435,19 +435,14 @@ export class ScColumn extends ScColumnData {
     this.pAttrArray.SetPattern(row, holder);
   }
 
+  /** Original destructor binding on the actual native column. @returns Nothing. */
+  Dispose(): void {
+    column3.Dispose.call(this);
+  }
   /** Existing STRING call binds the same native context and handler. @param first - First row. @param last - Last row. @param target - Actual destination. @returns Nothing. */
   CopyToColumn(first: number, last: number, target: ScColumn): void;
-  /** Original default clone-copy contract over the actual context. @param context - Native destination context. @param first - First row. @param last - Last row. @param flags - Native mask. @param marked - Original multi-mark mode. @param target - Actual destination. @param marks - Original selection. @param asLink - Original default false. @returns Nothing. */
-  CopyToColumn(
-    context: CopyToDocContext,
-    first: number,
-    last: number,
-    flags: InsertDeleteFlags,
-    marked: boolean,
-    target: ScColumn,
-    marks?: ScMarkData | null,
-    asLink?: boolean,
-  ): void;
+  /** Original clone-copy signature with native defaults. @param args - Context,bounds,flags,marks,destination and native clone policy. @returns Nothing. */
+  CopyToColumn(...args: Parameters<typeof column3.CopyToColumn>): void;
   /** Binds both consumed forms to one native handler and store graph. @param args - Original arguments or existing STRING binding. @returns Nothing. */
   CopyToColumn(
     ...args: [number, number, ScColumn] | Parameters<typeof column3.CopyToColumn>

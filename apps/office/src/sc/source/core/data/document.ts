@@ -575,6 +575,11 @@ export class ScDocument {
   private bCalculatingFormulaTree = false;
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
+  private readonly aDocName = new OUString();
+  /** Original document.hxx document-name assignment. @param name - Source value. @returns Nothing. */
+  SetName(name: OUStringConstReference): void {
+    this.aDocName.assign(name);
+  }
   private pChartListenerCollection: ScChartListenerCollection | null = null;
   private nInterpretLevel = 0;
   private bImportingXML = false;
@@ -694,7 +699,7 @@ export class ScDocument {
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
     return documen7.ApplySelectionPattern.call(this, delta, marks);
   }
-  /** Copies consumed ATTRIB and optional source STRING undo payload through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
+  /** Copies through the original document/table/column owner chain with native scope guards and listening completion. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
   CopyToDocument(...args: Parameters<typeof documen7.CopyToDocument>): void {
     documen7.CopyToDocument.apply(this, args);
   }

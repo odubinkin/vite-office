@@ -24,7 +24,8 @@
       "DeleteEmptyBroadcasters",
       "AddCondFormat",
       "RemoveCondFormat",
-      "UndoToColumn"
+      "UndoToColumn",
+      "Dispose"
     ],
     "upstreamSymbols": [
       "ScColumn::SetValue",
@@ -44,7 +45,8 @@
       "Native ordinary EndListening now defers empty broadcaster deletion through the actual document flag and per-column pending flag,default false;context-based deferred-position removal keeps its original distinct contract. The original column2 DeleteEmptyBroadcasters body consumes the actual pending flag and managed broadcaster store on this same column instance.",
       "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
-      "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced."
+      "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
+      "CopyToColumn exposes the original clone-policy argument through the existing native handler;the older STRING binding remains only an adapter onto that same context/handler. Native destructor binding consumes ImplDestroy and actual typed value/broadcaster/attribute member destruction."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -150,6 +152,14 @@
         {
           "path": "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
           "marker": "restores requested rows"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "native scope guards"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "relocated ranges"
         }
       ],
       "upstream": [
@@ -232,6 +242,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
           "marker": "ScColumn::UndoToColumn"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+          "marker": "ScColumn::~ScColumn"
         }
       ]
     },

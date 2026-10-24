@@ -128,12 +128,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           sparse = clip.FetchTable(0) === null,
           formatRequests = [source.NeedsNumberFormat(), formulaCell.NeedsNumberFormat()];
         string.dispose();
-        const snapshot = undoTable.CreateColumnIfNotExists(2),
-          snapshotContext = new n.CopyToDocContext(undo);
-        snapshotContext.setStartListening(false);
-        target
-          .CreateColumnIfNotExists(2)
-          .CopyToColumn(snapshotContext, 4, 5, n.InsertDeleteFlags.CONTENTS, false, snapshot);
+        doc.CopyToDocument(
+          new n.ScRange(2, 4, 0, 2, 5, 0),
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          undo,
+        );
+        const snapshot = undoTable.CreateColumnIfNotExists(2);
         const saved = snapshot.GetFormulaCell(5);
         if (!saved) throw Error("Missing actual Undo formula snapshot");
         const snapshotFormula = saved.GetFormula(grammar),
@@ -146,13 +147,11 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         };
         snapshotFormula.dispose();
         doc.SetAutoCalc(false);
-        snapshot.CopyToColumn(
-          new n.CopyToDocContext(doc),
-          4,
-          5,
+        undo.CopyToDocument(
+          new n.ScRange(2, 4, 0, 2, 5, 0),
           n.InsertDeleteFlags.CONTENTS,
           false,
-          target.CreateColumnIfNotExists(2),
+          doc,
         );
         doc.SetAutoCalc(true);
         doc.SetValue(new n.ScAddress(3, 5, 0), 30);
@@ -235,6 +234,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             ).GetCondFormatData(),
           ),
         };
+        const snapshotContext = new n.CopyToDocContext(undo);
+        snapshotContext.setStartListening(false);
         for (let col = 2; col <= 9; ++col)
           sourceTable
             .CreateColumnIfNotExists(col)

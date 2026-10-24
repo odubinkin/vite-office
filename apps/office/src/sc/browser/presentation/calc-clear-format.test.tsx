@@ -10,6 +10,10 @@ import { SfxItemState } from "../../../svl/inc/itemset";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScXMLImport } from "../../source/filter/xml/xmlimprt";
 import { ScDocument } from "../../inc/document";
+import { ChangeIndentOperation } from "../../source/ui/operation/ChangeIndentOperation";
+import { ScMarkData } from "../../inc/markdata";
+import { ATTR_INDENT } from "../../inc/scitems";
+import type { SfxUInt16Item } from "../../../svl/inc/intitem";
 import { createDeleteContentsUndoDoc } from "../../source/ui/docshell/docfuncutil";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScViewData } from "../../source/ui/view/viewdata";
@@ -265,20 +269,48 @@ it("preserves compiled string-result formulas across clear-format undo and redo"
   }
 });
 
-it("refuses unported note-content snapshots through the actual document-copy boundary", /** Native flags request full content for notes;this slice cannot copy note owners. @returns Nothing. */ () => {
+it("captures supported scalar payload through native note-content snapshot flags", /** Native flags request full content for notes;this slice cannot copy note owners. @returns Nothing. */ () => {
   const session = createCalcSession();
   try {
-    expect(
-      /** Requests actual native note-copy flags. @returns Snapshot or the real unsupported boundary. */ () =>
-        createDeleteContentsUndoDoc(
-          session.controller.shell.GetDocument(),
-          session.controller.viewData.GetMarkData(),
-          new ScRange(new ScAddress()),
-          false,
-          InsertDeleteFlags.NOTE,
-        ),
-    ).toThrow("Only attribute document copying is implemented");
+    const doc = session.controller.shell.GetDocument();
+    doc.SetValue(new ScAddress(), 17);
+    const snapshot = createDeleteContentsUndoDoc(
+      doc,
+      session.controller.viewData.GetMarkData(),
+      new ScRange(new ScAddress()),
+      false,
+      InsertDeleteFlags.NOTE,
+    );
+    expect(snapshot.IsUndo()).toBe(true);
+    expect(snapshot.GetPool()).toBe(doc.GetPool());
+    expect(snapshot.GetValue(new ScAddress())).toBe(17);
+    snapshot.Dispose();
   } finally {
     session.Close();
+  }
+});
+
+it("captures only valid selected Undo sheets for native indentation", /** Original sorted mark traversal stops at the table-count boundary and shares genuine resources. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("One"));
+  doc.InsertTab(1, unicode("Two"));
+  const shell = new ScDocShell(doc),
+    marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  marks.SelectTable(1, true);
+  marks.SelectTable(9, true);
+  marks.SetMultiMarkArea(new ScRange());
+  const before = (
+    doc.GetPattern(new ScAddress())?.GetItem(ATTR_INDENT) as SfxUInt16Item
+  ).GetValue();
+  try {
+    expect(new ChangeIndentOperation(shell, marks, true, true).run()).toBe(true);
+    expect(
+      (doc.GetPattern(new ScAddress())?.GetItem(ATTR_INDENT) as SfxUInt16Item).GetValue(),
+    ).toBeGreaterThan(before);
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+    shell.GetUndoManager().Clear();
+  } finally {
+    shell.Close();
   }
 });

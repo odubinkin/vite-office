@@ -529,7 +529,7 @@ export class ScTable {
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
   private readonly mpColWidth: ScCompressedArray | null;
-  private readonly mpColFlags: ScBitMaskCompressedArray | null;
+  declare private readonly mpColFlags: ScBitMaskCompressedArray | null;
   private readonly maFilterData: FilterData;
   private readonly mpRowHeights: ScFlatUInt16RowSegments | null;
   private readonly pRowFlags: ScBitMaskCompressedArray | null;
@@ -600,43 +600,13 @@ export class ScTable {
     if (this.rDocument.ValidCol(column) && !this.ColHidden(column) !== show)
       this.SetColHidden(column, column, !show);
   }
-  /** Consumed native geometry-only CopyToTable width/flag/hidden path;no cells or patterns are copied. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param target - Real destination sheet. @returns Nothing. */
-  CopyToTable(
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-    target: ScTable,
-  ): void {
-    if (
-      firstRow === 0 &&
-      lastRow === this.rDocument.MaxRow() &&
-      this.mpColWidth &&
-      target.mpColWidth
-    ) {
-      target.mpColWidth.CopyFrom(this.mpColWidth, firstCol, lastCol);
-      (target.mpColFlags as ScBitMaskCompressedArray).CopyFrom(
-        this.mpColFlags as ScBitMaskCompressedArray,
-        firstCol,
-        lastCol,
-      );
-      target.maFilterData.copyColHidden(this.maFilterData, firstCol, lastCol);
-    }
-    if (
-      firstCol === 0 &&
-      lastCol === this.rDocument.MaxCol() &&
-      this.mpRowHeights &&
-      target.mpRowHeights
-    ) {
-      target.CopyRowHeight(this, firstRow, lastRow, 0);
-      (target.pRowFlags as ScBitMaskCompressedArray).CopyFrom(
-        this.pRowFlags as ScBitMaskCompressedArray,
-        firstRow,
-        lastRow,
-      );
-      target.maFilterData.copyRowHidden(this.maFilterData, firstRow, lastRow);
-      target.maFilterData.copyRowFiltered(this.maFilterData, firstRow, lastRow);
-    }
+  /** Original table2 copy on this same native sheet. @param args - Context,range,flags,destination,marks and original copy policies. @returns Nothing. */
+  CopyToTable(...args: Parameters<typeof table2.CopyToTable>): void {
+    table2.CopyToTable.apply(this, args);
+  }
+  /** Original conditional format transfer. @param args - Destination bounds,offset and source. @returns Nothing. */
+  CopyConditionalFormat(...args: Parameters<typeof table2.CopyConditionalFormat>): void {
+    table2.CopyConditionalFormat.apply(this, args);
   }
   /** Reads native per-sheet override or startup minimum; device-dependent global initialization remains separate. @returns Twips. */
   GetOptimalMinRowHeight(): number {
@@ -646,10 +616,9 @@ export class ScTable {
   SetOptimalMinRowHeight(height: number): void {
     this.mnOptimalMinRowHeight = height & 0xffff;
   }
-  /** Reads actual visible/raw row geometry from native segments. @param row - Row. @param hiddenAsZero - Original visibility default,true. @returns Twips or source invalid-row minimum. */
-  GetRowHeight(row: number, hiddenAsZero = true): number {
-    if (!this.rDocument.ValidRow(row) || !this.mpRowHeights) return this.GetOptimalMinRowHeight();
-    return hiddenAsZero && this.RowHidden(row) ? 0 : this.mpRowHeights.getValue(row);
+  /** Original scalar/range row-height overloads. @param first - First or scalar row. @param second - Hidden policy or last row. @param hidden - Range hidden policy. @returns Twips. */
+  GetRowHeight(first: number, second: boolean | number = true, hidden = true): number {
+    return table2.GetRowHeight.call(this, first, second, hidden);
   }
   /** Original independent row-hidden query. @param row - Row. @param first - Span output. @param last - Span output. @returns Hidden. */
   RowHidden(row: number, first?: [number], last?: [number]): boolean {
@@ -800,6 +769,12 @@ export class ScTable {
     this.mpCondFormatList?.Dispose();
     for (const col of this.aCol) col.DisposeAttributes();
     this.aDefaultColData.DisposeAttributes();
+  }
+  /** Releases represented members in native reverse declaration order after document-level conditional listeners are cleared. @returns Nothing. */
+  Dispose(): void {
+    this.aDefaultColData.DisposeAttributes();
+    this.mpCondFormatList?.Dispose();
+    for (const column of this.aCol) column.Dispose();
   }
   /** Reads actual native/default column attributes. @param col - Column. @param row - Row. @returns Pattern or null. */
   GetPattern(col: number, row: number): ScPatternAttr | null {

@@ -56,7 +56,7 @@ it("uses original1280twip widths,UInt16/zero fallback and source hidden span out
     doc.DisposeAttributes();
   }
 });
-it("copies source geometry without changing cells or allocating data columns and honors selected sheets", /** Real compressed-array/hidden-run copies distinguish geometry from attribute or content transfer. @returns Nothing. */ () => {
+it("copies source geometry without changing cells or allocating data columns and uses range sheet bounds independently of marks", /** Real compressed-array/hidden-run copies distinguish geometry from attribute or content transfer. @returns Nothing. */ () => {
   const source = document(),
     target = document(),
     marks = new ScMarkData(source.GetSheetLimits());
@@ -93,7 +93,7 @@ it("copies source geometry without changing cells or allocating data columns and
       target,
       marks,
     );
-    expect(target.GetColWidth(0, 0)).toBe(900);
+    expect(target.GetColWidth(0, 0)).toBe(800);
     source.CopyToDocument(
       new ScRange(0, 0, 2, 0, source.MaxRow(), 2),
       InsertDeleteFlags.NONE,

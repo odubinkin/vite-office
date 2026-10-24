@@ -91,7 +91,7 @@ export class ScUndoSelectionAttr extends SfxUndoAction<ScDocShell> {
   }
   /** Releases real canonical history registrations. @returns Nothing. */
   override Dispose(): void {
-    this.pUndoDoc.DisposeAttributes();
+    this.pUndoDoc.Dispose();
     this.aApplyPattern.Dispose();
   }
 }
@@ -163,12 +163,6 @@ export class ScUndoDeleteContents extends SfxUndoAction<ScDocShell> {
   }
   /** Releases owned native string stores/pool and attribute registrations from the actual undo document. @returns Nothing. */
   override Dispose(): void {
-    for (let tab = 0; tab < this.undo.GetTableCount(); tab++) {
-      const table = this.undo.FetchTable(tab) as NonNullable<ReturnType<ScDocument["FetchTable"]>>;
-      for (let col = 0; col < table.GetAllocatedColumnsCount(); col++)
-        table.CreateColumnIfNotExists(col).GetCellStore().clear();
-    }
-    this.undo.DisposeAttributes();
-    this.undo.GetSharedStringPool().dispose();
+    this.undo.Dispose();
   }
 }

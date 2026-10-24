@@ -3861,3 +3861,16 @@ flag update without extending that flag mutation for consistency.
 - The comment says an active timeout change renews the clock, but `SetTimeout` changes the duration and requests a system-timer wakeup without changing the task record's `mnUpdateTime`. Readiness still uses the original record timestamp plus the new duration.
 - For a timer started at tick1000 with timeout100, changing the timeout to20 at tick1010 leaves its task deadline at1020. An independent scheduler wakeup observes the remaining10 ticks; it does not establish a new deadline at1030.
 - This may be intentional elapsed-time behavior with an imprecise comment, rather than a defect. The port preserves the source timestamp and earlier-wakeup selection. `apps/office/src/vcl/source/app/native-scheduler.test.ts` verifies actual native owners through the browser system-timer boundary.
+
+### CALC-269 — Marked column-copy recursion resets clone flags
+
+- Pinned source: `sc/source/core/data/column.cxx`, `ScColumn::CopyToColumn`;`sc/inc/column.hxx` supplies the default `ScCloneFlags::Default` argument.
+- The marked branch forwards the context,clipped rows,copy flags,destination,mark pointer and link policy to its recursive unmarked call,but omits `nCloneFlags`. An explicit nondefault clone policy therefore becomes Default for actual marked spans.
+- The port preserves this omission instead of forwarding the outer policy. Nondefault unmarked clone services remain an explicit unsupported boundary of the represented local-reference profile.
+
+### CALC-270 — Table geometry copy positions width iterators before replacing their array data
+
+- Pinned source: `sc/source/core/data/table2.cxx`, `ScTable::CopyToTable`;`sc/inc/compressedarray.hxx`, `ScCompressedArray::Iterator`.
+- Both width iterators are positioned before destination `CopyFrom`. Iterator dereference subsequently uses the live array at the retained compressed-entry index,while increment advances the retained logical region. CopyFrom can replace the destination run partition.
+- The later width-change comparison therefore does not compare a stable snapshot of pre-copy widths. This may depend on caller/run-partition invariants;it is not established as an active UI defect.
+- The port uses the genuine compressed-array iterator owners in the same order;it does not replace them with fresh point lookups or pre-copy width snapshots.

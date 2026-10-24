@@ -178,10 +178,11 @@ it("retains non-height item deltas and copies real simple attributes across docu
     /** Rejects unsupported partial attribute copy flags. @returns Never. */ () =>
       source.CopyToDocument(new ScRange(), InsertDeleteFlags.HARDATTR, false, dest),
   ).toThrow(/attribute document/);
-  expect(
-    /** Enforces the native marked-copy precondition. @returns Never. */ () =>
-      source.CopyToDocument(new ScRange(), InsertDeleteFlags.ATTRIB, true, dest),
-  ).toThrow(/requires mark data/);
+  const unchanged = height(dest, 0, 0);
+  delta.ItemSetPut(new SvxFontHeightItem(500, 100, 101));
+  source.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
+  source.CopyToDocument(new ScRange(), InsertDeleteFlags.ATTRIB, true, dest);
+  expect(height(dest, 0, 0)).toBe(unchanged);
   const table = source.FetchTable(0) as ScTable;
   expect(table.GetDefaultColumnData().ApplyPatternArea(-1, 0, delta)).toBe(false);
   expect(table.GetDefaultColumnData().ApplyPatternArea(0, source.MaxRow() + 1, delta)).toBe(false);

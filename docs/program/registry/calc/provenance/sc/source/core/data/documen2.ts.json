@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
-      "Native constructor resource definitions execute on the same ScDocument instance;ordinary/function-access modes own actual chart collections while Clip/Undo retain null. Original destructor sets bInDtorClear and destroys the collection before area broadcasters and formula cells. Existing pool/string resource semantics are preserved."
+      "Native constructor resource definitions execute on the same ScDocument instance;ordinary/function-access modes own actual chart collections while Clip/Undo retain null. Original destructor sets bInDtorClear and destroys the collection before area broadcasters and formula cells. Existing pool/string resource semantics are preserved.",
+      "The represented native document destructor delegates to actual Clear after chart/area destruction;typed column value destruction releases Undo strings instead of destroying a source-shared string pool. The owned document-name value is released. Native string-pool reference counting/delayed purge and unported global services remain outside this profile."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -49,6 +50,14 @@
         {
           "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
           "marker": "actual"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "native scope guards"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "relocated ranges"
         }
       ],
       "upstream": [

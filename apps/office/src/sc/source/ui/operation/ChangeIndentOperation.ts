@@ -2,10 +2,9 @@
 import { Operation, OperationType } from "./Operation";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScMarkData } from "../../../inc/markdata";
-import { ScDocument } from "../../../inc/document";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScRange } from "../../../inc/address";
 import { InsertDeleteFlags } from "../../../inc/global";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScUndoIndent } from "../undo/undoblk";
 /** Original indentation document operation. */
 export class ChangeIndentOperation extends Operation {
@@ -23,15 +22,12 @@ export class ChangeIndentOperation extends Operation {
     const doc = this.shell.GetDocument(),
       marks = new ScMarkData(this.marks),
       range = new ScRange(marks.GetMultiMarkArea()),
-      undo = new ScDocument(),
-      name = new OUString();
-    try {
-      for (let tab = 0; tab < doc.GetTableCount(); tab++) {
-        doc.GetName(tab, name);
-        undo.InsertTab(tab, name);
-      }
-    } finally {
-      name.dispose();
+      undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+      tab = range.aStart.Tab();
+    undo.InitUndo(doc, tab, tab);
+    for (const selected of marks) {
+      if (selected >= doc.GetTableCount()) break;
+      if (selected !== tab) undo.AddUndoTab(selected, selected);
     }
     range.aStart.SetTab(0);
     range.aEnd.SetTab(doc.GetTableCount() - 1);

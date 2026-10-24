@@ -561,3 +561,97 @@ it("removes one conditional key or all keys through native runs while retaining 
     doc.Dispose();
   }
 });
+
+it("copies intersected native date formats across documents with relocated ranges and new keys", /** Actual lists and document attributes receive independent cloned entries. @returns Nothing. */ () => {
+  const source = document(),
+    target = document(),
+    a = source.FetchTable(0),
+    b = target.FetchTable(0);
+  assert(a && b);
+  a.GetCondFormList().InsertNew(format(source, 21, new ScRange(1, 1, 0, 3, 3, 0)));
+  a.GetCondFormList().InsertNew(format(source, 22, new ScRange(8, 8, 0, 9, 9, 0)));
+  b.GetCondFormList().InsertNew(format(target, 0, new ScRange(7, 7, 0, 7, 7, 0)));
+  try {
+    b.CopyConditionalFormat(4, 5, 5, 6, 3, 4, a);
+    const copied = b.GetCondFormList().GetFormat(1);
+    assert(copied);
+    expect(copied.GetRange().at(0).GetVars()).toEqual([4, 5, 0, 5, 6, 0]);
+    expect(copied.GetEntry(0)).not.toBe(a.GetCondFormList().GetFormat(21)?.GetEntry(0));
+    expect(b.GetCondFormList().size()).toBe(2);
+    expect([
+      ...(
+        target.GetPattern(new ScAddress(4, 5, 0))?.GetItem(ATTR_CONDITIONAL) as ScCondFormatItem
+      ).GetCondFormatData(),
+    ]).toEqual([1]);
+    expect(a.GetCondFormList().GetFormat(21)?.GetRange().at(0).GetVars()).toEqual([
+      1, 1, 0, 3, 3, 0,
+    ]);
+  } finally {
+    target.Dispose();
+    source.Dispose();
+  }
+});
+it("retains native empty-entry deduplication on shared-pool same-sheet and cross-sheet copies", /** A genuine Clip document shares source resources;empty formats retain original native equality. @returns Nothing. */ () => {
+  const source = document(2),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  clip.ResetClip(source, null);
+  const a = source.FetchTable(0),
+    second = source.FetchTable(1),
+    target = clip.FetchTable(0);
+  assert(a && second && target);
+  const empty = new ScConditionalFormat(5, source),
+    old = new ScConditionalFormat(5, clip);
+  empty.SetRange(new ScRangeList(new ScRange(1, 1, 0, 1, 1, 0)));
+  old.SetRange(new ScRangeList(new ScRange(3, 3, 0, 3, 3, 0)));
+  a.GetCondFormList().InsertNew(empty);
+  target.GetCondFormList().InsertNew(old);
+  try {
+    target.CopyConditionalFormat(1, 1, 1, 1, 0, 0, a);
+    expect(target.GetCondFormList().size()).toBe(1);
+    expect(old.GetRange().Contains(new ScRange(1, 1, 0, 1, 1, 0))).toBe(true);
+    a.GetCondFormList().InsertNew(format(source, 7));
+    target.CopyConditionalFormat(0, 0, 0, 0, 0, 0, a);
+    expect(target.GetCondFormList().GetFormat(6)?.size()).toBe(1);
+    const incoming = new ScConditionalFormat(9, source);
+    incoming.SetRange(new ScRangeList(new ScRange(2, 2, 1, 2, 2, 1)));
+    second.GetCondFormList().InsertNew(incoming);
+    target.CopyConditionalFormat(2, 2, 2, 2, 0, 0, second);
+    expect(target.GetCondFormList().size()).toBe(2);
+    expect(old.GetRange().Contains(new ScRange(2, 2, 0, 2, 2, 0))).toBe(true);
+  } finally {
+    clip.Dispose();
+    source.Dispose();
+  }
+});
+it("avoids conditional-format deduplication during Undo and leaves foreign style services explicit", /** Real Undo resources and actual date-style values exercise native ownership boundaries. @returns Nothing. */ () => {
+  const source = document(),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    foreign = document();
+  undo.InitUndo(source, 0, 0);
+  const a = source.FetchTable(0),
+    b = undo.FetchTable(0),
+    c = foreign.FetchTable(0);
+  assert(a && b && c);
+  const empty = new ScConditionalFormat(2, source);
+  empty.SetRange(new ScRangeList(new ScRange()));
+  a.GetCondFormList().InsertNew(empty);
+  b.GetCondFormList().InsertNew(new ScConditionalFormat(4, undo));
+  try {
+    b.CopyConditionalFormat(0, 0, 0, 0, 0, 0, a);
+    expect(b.GetCondFormList().GetFormat(5)).not.toBeNull();
+    const dated = format(source, 7),
+      entry = dated.GetEntry(0) as ScCondDateFormatEntry,
+      name = unicode("UnboundStyle");
+    entry.SetStyleName(name);
+    name.dispose();
+    a.GetCondFormList().InsertNew(dated);
+    expect(
+      /** Requires the original missing style-copy owner. @returns Nothing. */ () =>
+        c.CopyConditionalFormat(0, 0, 0, 0, 0, 0, a),
+    ).toThrow("style-pool copying");
+  } finally {
+    foreign.Dispose();
+    undo.Dispose();
+    source.Dispose();
+  }
+});

@@ -38,7 +38,7 @@ import { double_element_callbacks } from "../../../../external/mdds/include/mdds
 import { string_element_callbacks } from "../../../inc/mtvelements";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SingleCellListening } from "../../../inc/types";
-import { InsertDeleteFlags } from "../../../inc/global";
+import { InsertDeleteFlags, ScCloneFlags } from "../../../inc/global";
 import type { ScDocument } from "../../../inc/document";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -581,7 +581,7 @@ export class CopyByCloneHandler implements BlockFunction {
     assignBlockPosition(this.mpDestPos, this.maDestPos);
   }
 }
-/** Original column.cxx marked recursion and default clone dispatch. Canonical attribute runs and same-helper target-style retention accompany admitted CONTENTS/FORMULA/STRING copying;link/selective numeric-result services remain unported. @param this - Actual source column. @param context - Actual destination context. @param first - First row. @param last - Last row. @param flags - Admitted native flags. @param marked - Restrict to original multi marks. @param target - Actual target column. @param marks - Original selection or null. @param asLink - Original default false. @returns Nothing. */
+/** Original column.cxx marked recursion and default clone dispatch. Canonical attribute runs and same-helper target-style retention accompany admitted CONTENTS/FORMULA/STRING copying;link/selective numeric-result services remain unported. @param this - Actual source column. @param context - Actual destination context. @param first - First row. @param last - Last row. @param flags - Admitted native flags. @param marked - Restrict to original multi marks. @param target - Actual target column. @param marks - Original selection or null. @param asLink - Original default false. @param cloneFlags - Native default clone policy. @returns Nothing. */
 export function CopyToColumn(
   this: ScColumn,
   context: CopyToDocContext,
@@ -592,6 +592,7 @@ export function CopyToColumn(
   target: ScColumn,
   marks: ScMarkData | null = null,
   asLink = false,
+  cloneFlags = ScCloneFlags.Default,
 ): void {
   if (marked) {
     if (marks?.IsMultiMarked()) {
@@ -611,9 +612,15 @@ export function CopyToColumn(
     }
     return;
   }
-  const content = flags & InsertDeleteFlags.CONTENTS;
+  const content =
+    flags &
+    (InsertDeleteFlags.VALUE |
+      InsertDeleteFlags.DATETIME |
+      InsertDeleteFlags.STRING |
+      InsertDeleteFlags.FORMULA);
   if (
     asLink ||
+    cloneFlags !== ScCloneFlags.Default ||
     flags &
       ~(
         InsertDeleteFlags.CONTENTS |
@@ -624,13 +631,17 @@ export function CopyToColumn(
     (content !== InsertDeleteFlags.NONE &&
       content !== InsertDeleteFlags.STRING &&
       content !== InsertDeleteFlags.FORMULA &&
-      content !== InsertDeleteFlags.CONTENTS)
+      content !==
+        (InsertDeleteFlags.VALUE |
+          InsertDeleteFlags.DATETIME |
+          InsertDeleteFlags.STRING |
+          InsertDeleteFlags.FORMULA))
   )
     throw new Error("Nondefault document copy services are not implemented");
   if (flags & InsertDeleteFlags.ATTRIB) {
     if ((flags & InsertDeleteFlags.STYLES) !== InsertDeleteFlags.STYLES) {
       if (this.GetDoc().getCellAttributeHelper() !== target.GetDoc().getCellAttributeHelper())
-        throw new Error("Foreign hard-attribute copy requires native style migration");
+        throw new Error("Foreign hard-attribute document copy requires native style migration");
       for (let row = first; row <= last; ++row) {
         const style = (target.GetPattern(row) as ScPatternAttr).GetStyleSheet(),
           pattern = new ScPatternAttr(this.GetPattern(row) as ScPatternAttr);
@@ -703,4 +714,22 @@ export function GetSharedString(this: ScColumn, row: number): SharedString {
   return this["maCells"].get_type(row) === element_type_string
     ? this["maCells"].get(row, string_element_callbacks, string_value_type)
     : new SharedString();
+}
+
+/** Original column3 ImplDestroy body for the represented cell/text stores. Note/sparkline stores and CellStorageModified compute/stream services are not represented. @param this - Actual column. @returns Nothing. */
+export function ImplDestroy(this: ScColumn): void {
+  this.GetCellStore().event_handler().stop();
+  const rows = this.GetDoc().GetMaxRowCount();
+  this.GetCellStore().clear();
+  this.GetCellStore().resize(rows);
+  this.GetCellAttrStore().clear();
+  this.GetCellAttrStore().resize(rows);
+}
+/** Original ScColumn destructor consumes ImplDestroy before reverse member/base destruction. Managed physical storage is reclaimed by GC;actual value callbacks and broadcaster destruction run here. @param this - Actual column. @returns Nothing. */
+export function Dispose(this: ScColumn): void {
+  ImplDestroy.call(this);
+  this.GetCellStore().dispose();
+  this["maBroadcasters"].dispose();
+  this.GetCellAttrStore().dispose();
+  this.DisposeAttributes();
 }
