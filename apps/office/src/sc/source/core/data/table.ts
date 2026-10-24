@@ -75,6 +75,10 @@ export class ScTable {
   DeleteBeforeCopyFromClip(...args: Parameters<typeof table7.DeleteBeforeCopyFromClip>): void {
     table7.DeleteBeforeCopyFromClip.apply(this, args);
   }
+  /** Original table1 cleanup visits only actual allocated columns. @returns Nothing. */
+  DeleteEmptyBroadcasters(): void {
+    for (const column of this.aCol) column.DeleteEmptyBroadcasters();
+  }
   /** Original table2 clipboard listening clamps to actual allocated columns and native bounds. @param start - Start context. @param end - End context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
   StartListeningFormulaCells(
     start: StartListeningContext,

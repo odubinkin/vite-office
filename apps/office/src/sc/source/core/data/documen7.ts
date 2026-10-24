@@ -12,6 +12,7 @@ import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn, ScColumnData } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import { SharedString } from "../../../../svl/inc/sharedstring";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScTable } from "../../../inc/table";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
@@ -19,7 +20,7 @@ import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
+import { CellType, HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -854,4 +855,20 @@ export function ShrinkToDataArea(
   if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
   if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
   return true;
+}
+
+/** Original document.cxx GetCellType body,partitioned unchanged on the same instance. @param this - Actual document. @param position - Cell address. @returns Native value. */
+export function GetCellType(this: ScDocument, position: ScAddress): CellType {
+  return (
+    this.FetchTable(position.Tab())?.GetCellType(position.Col(), position.Row()) ??
+    CellType.CELLTYPE_NONE
+  );
+}
+
+/** Original document.cxx GetSharedString body,partitioned unchanged on the same instance. @param this - Actual document. @param position - Cell address. @returns Native value. */
+export function GetSharedString(this: ScDocument, position: ScAddress): SharedString {
+  return (
+    this.FetchTable(position.Tab())?.GetSharedString(position.Col(), position.Row()) ??
+    new SharedString()
+  );
 }

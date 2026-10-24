@@ -101,3 +101,29 @@ export function CanDelayStartListeningFormulaCells(
   }
   return true;
 }
+
+/** Original delay toggle flushes allocated sheets only when leaving delay. @param this - Actual document. @param delay - Enable or flush. @returns Nothing. */
+export function EnableDelayDeletingBroadcasters(this: ScDocument, delay: boolean): void {
+  if (this["bDelayedDeletingBroadcasters"] === delay) return;
+  this["bDelayedDeletingBroadcasters"] = delay;
+  if (!delay) for (const table of this["maTabs"]) table?.DeleteEmptyBroadcasters();
+}
+/** Original copied-range completion shares native block cursors across populated sheets. @param this - Actual document. @param range - Copied range. @returns Nothing. */
+export function StartAllListeners(this: ScDocument, range: ScRange): void {
+  if (this.IsClipOrUndo() || this.GetNoListening()) return;
+  const positions = new ColumnBlockPositionSet(this),
+    start = new StartListeningContext(this, positions),
+    end = new EndListeningContext(this, positions);
+  for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); ++tab) {
+    const table = this.FetchTable(tab);
+    if (!table) continue;
+    table.StartListeningFormulaCells(
+      start,
+      end,
+      range.aStart.Col(),
+      range.aStart.Row(),
+      range.aEnd.Col(),
+      range.aEnd.Row(),
+    );
+  }
+}

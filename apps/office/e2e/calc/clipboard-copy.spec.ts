@@ -1,4 +1,5 @@
 /** @fileoverview Actual general clipboard copy/completion owners in Chromium and a DOM-free Worker. */
+import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
@@ -6,6 +7,8 @@ type Fixture = typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
   typeof import("../../src/sc/inc/clipcontext") &
+  typeof import("../../src/sc/inc/scopetools") &
+  typeof import("../../src/svl/source/notify/listener") &
   typeof import("../../src/sc/inc/refupdatecontext") &
   typeof import("../../src/sc/inc/columnspanset") &
   typeof import("../../src/sc/inc/global") &
@@ -18,6 +21,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
+    { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters"] },
+    { module: "src/svl/source/notify/listener.ts", names: ["SvtListener"] },
     { module: "src/sc/inc/document.ts", names: ["ScDocument", "ScDocumentMode"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
     { module: "src/sc/inc/markdata.ts", names: ["ScMarkData"] },
@@ -163,6 +168,20 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         for (let row = 8; row < 10; ++row)
           for (let col = 6; col < 9; ++col)
             singleRow.push(doc.GetValue(new n.ScAddress(col, row, 0)));
+        const listener = new n.SvtListener<SfxHint>(),
+          listeningColumn = doc.FetchTable(0)?.CreateColumnIfNotExists(9);
+        if (!listeningColumn) throw Error("Missing actual listening column");
+        listeningColumn.StartListening(listener, 9);
+        const delay = new n.DelayDeletingBroadcasters(doc);
+        listeningColumn.EndListening(listener, 9);
+        const retained = listeningColumn.GetBroadcaster(9) !== null;
+        delay.Dispose();
+        const delayedBroadcasters = {
+          retained,
+          removed: listeningColumn.GetBroadcaster(9) === null,
+          flag: doc.IsDelayedDeletingBroadcasters(),
+        };
+        listener.Dispose();
         rowContext.Dispose();
         rowClip.Dispose();
         context.Dispose();
@@ -180,6 +199,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           formatRequests,
           undoCopy,
           restoredDependency,
+          delayedBroadcasters,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -229,6 +249,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     formatRequests: [false, false],
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
     restoredDependency: 44,
+    delayedBroadcasters: { retained: true, removed: true, flag: false },
   };
   expect(observations).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

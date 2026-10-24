@@ -108,6 +108,19 @@ export class ScDocument {
   UpdateReference(...args: Parameters<typeof documen3.UpdateReference>): void {
     documen3.UpdateReference.apply(this, args);
   }
+  private bDelayedDeletingBroadcasters = false;
+  /** Original document10 defers semantic broadcaster deletion. @param delay - Enable or flush. @returns Nothing. */
+  EnableDelayDeletingBroadcasters(delay: boolean): void {
+    document10.EnableDelayDeletingBroadcasters.call(this, delay);
+  }
+  /** Original broadcaster delay query. @returns Delayed. */
+  IsDelayedDeletingBroadcasters(): boolean {
+    return this.bDelayedDeletingBroadcasters;
+  }
+  /** Original range listener completion. @param range - Copied range. @returns Nothing. */
+  StartAllListeners(range: ScRange): void {
+    document10.StartAllListeners.call(this, range);
+  }
   private pDelayedFormulaGrouping: ScRange | null = null;
   private readonly pDelayedStartListeningFormulaCells = new Map<ScColumn, [number, number]>();
   /** Original per-column start-listening delay control. @param column - Actual column. @param delay - Enable or finish. @returns Nothing. */
@@ -952,17 +965,11 @@ export class ScDocument {
   }
   /** Reads the actual stored scalar discriminator. @param position - Cell address. @returns Type. */
   GetCellType(position: ScAddress): CellType {
-    return (
-      this.FetchTable(position.Tab())?.GetCellType(position.Col(), position.Row()) ??
-      CellType.CELLTYPE_NONE
-    );
+    return documen7.GetCellType.call(this, position);
   }
   /** Returns an independent shared-string value. @param position - Cell address. @returns Shared text. */
   GetSharedString(position: ScAddress): SharedString {
-    return (
-      this.FetchTable(position.Tab())?.GetSharedString(position.Col(), position.Row()) ??
-      new SharedString()
-    );
+    return documen7.GetSharedString.call(this, position);
   }
   /** Implements the literal single-line content portion of SetTextCell;rich edit-text and number-format attributes are explicit gaps. @param position - Cell address. @param value - Literal Unicode input. @returns Nothing. */
   SetTextCell(position: ScAddress, value: OUStringConstReference): void {

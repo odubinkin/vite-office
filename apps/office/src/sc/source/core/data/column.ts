@@ -1,5 +1,10 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
-import { ParseBlock, ProcessBlock, type CellStoreNode } from "../../../inc/mtvfunctions";
+import {
+  SetElementsToEmpty1,
+  ParseBlock,
+  ProcessBlock,
+  type CellStoreNode,
+} from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
 import * as column3 from "./column3";
 import * as column4 from "./column4";
@@ -507,6 +512,7 @@ export class ScColumn extends ScColumnData {
   /** Native friend-visible logical counters used by CellStoreEvent; no lifetime accounting. */
   mnBlkCountFormula = 0;
   mnBlkCountCellNotes = 0;
+  private mbEmptyBroadcastersPending = false;
   private readonly maBroadcasters: BroadcasterStoreType;
   private readonly maCells: CellStoreType;
   private readonly maCellTextAttrs: CellTextAttrStoreType;
@@ -865,7 +871,23 @@ export class ScColumn extends ScColumnData {
     const broadcaster = this.GetBroadcaster(row);
     if (!broadcaster) return;
     listener.EndListening(broadcaster);
-    if (!broadcaster.HasListeners()) this.maBroadcasters.set_empty(row, row);
+    if (!broadcaster.HasListeners()) {
+      if (this.rDocument.IsDelayedDeletingBroadcasters()) this.mbEmptyBroadcastersPending = true;
+      else this.maBroadcasters.set_empty(row, row);
+    }
+  }
+  /** Original column2 pending cleanup scans actual managed broadcaster elements. @returns Nothing. */
+  DeleteEmptyBroadcasters(): void {
+    if (!this.mbEmptyBroadcastersPending) return;
+    SetElementsToEmpty1(
+      broadcaster_block,
+      this.maBroadcasters,
+      /** Original BroadcasterNoListenersPredicate. @param _row - Native row. @param broadcaster - Actual owner. @returns Unobserved. */ (
+        _row,
+        broadcaster,
+      ) => !(broadcaster as SvtBroadcaster<SfxHint>).HasListeners(),
+    );
+    this.mbEmptyBroadcastersPending = false;
   }
   /** Original detach records surviving native group spans before unsharing the removed member. @param row - Valid row. @returns Inclusive surviving span pairs. */
   private DetachFormulaCell(row: number): number[] {

@@ -45,3 +45,17 @@ export class DelayStartListeningFormulaCells {
     this.ImplDestroy();
   }
 }
+
+/** Original document-wide broadcaster deletion scope retains nested delay state. */
+export class DelayDeletingBroadcasters {
+  private readonly mOldValue: boolean;
+  /** Captures native prior state before deferring removal. @param mDoc - Actual document. @returns Scope. */
+  constructor(private readonly mDoc: ScDocument) {
+    this.mOldValue = mDoc.IsDelayedDeletingBroadcasters();
+    mDoc.EnableDelayDeletingBroadcasters(true);
+  }
+  /** Original valid-owner scope exit restores prior delay and flushes at the outer boundary. @returns Nothing. */
+  Dispose(): void {
+    this.mDoc.EnableDelayDeletingBroadcasters(this.mOldValue);
+  }
+}

@@ -4,6 +4,12 @@ import type {
   ContainerEvent,
 } from "../../external/mdds/include/mdds/multi_type_vector/soa/main";
 import type { CellStoreType } from "./mtvelements";
+import { const_iterator_base } from "../../external/mdds/include/mdds/multi_type_vector/soa/iterator";
+import type {
+  base_element_block,
+  BlockConstructor,
+  element_block,
+} from "../../external/mdds/include/mdds/multi_type_vector/types";
 /** Native callback argument is an actual borrowed store node,not a copied cell list. */
 export type CellStoreNode = Pick<
   ReturnType<ReturnType<CellStoreType["cbegin"]>["get"]>,
@@ -57,4 +63,53 @@ export function ProcessBlock(
     current += size;
   }
   return iterator;
+}
+
+/** Original typed CheckElem scans borrowed elements without copying the store. @param block - Actual block specialization. @param store - Actual owner. @param iterator - Borrowed const block. @param offset - First element. @param size - Count. @param predicate - Original row/value predicate. @returns Found const position or end. */
+export function CheckElem<T, E extends ContainerEvent>(
+  block: BlockConstructor<T> & Pick<typeof element_block, "at">,
+  store: multi_type_vector<E>,
+  iterator: ReturnType<multi_type_vector<E>["cbegin"]>,
+  offset: number,
+  size: number,
+  predicate: (row: number, value: T) => boolean,
+): [ReturnType<multi_type_vector<E>["cbegin"]>, number] {
+  const node = iterator.get();
+  for (let index = offset; index < offset + size; ++index)
+    if (predicate(node.position + index, block.at<T>(node.data as base_element_block, index)))
+      return [iterator, index];
+  return [store.cend(), 0];
+}
+
+/** Original SetElementsToEmpty1 retains mutable cursor continuation after every matching run is removed. @param block - Actual typed specialization. @param store - Actual owner. @param predicate - Original row/value predicate. @returns Nothing. */
+export function SetElementsToEmpty1<T, E extends ContainerEvent>(
+  block: BlockConstructor<T> & Pick<typeof element_block, "at">,
+  store: multi_type_vector<E>,
+  predicate: (row: number, value: T) => boolean,
+): void {
+  let iterator = store.begin();
+  for (; !iterator.equals(store.end()); iterator.increment()) {
+    if (iterator.get().type !== block.block_type) continue;
+    const position = const_iterator_base.from_mutable(iterator),
+      first = CheckElem(block, store, position, 0, iterator.get().size, predicate);
+    if (first[0].equals(store.cend())) continue;
+    const remaining = iterator.get().size - first[1],
+      last = CheckElem(
+        block,
+        store,
+        position,
+        first[1],
+        remaining,
+        /** Original FuncNotElem negates the same borrowed predicate. @param row - Native row. @param value - Borrowed element. @returns Inverse result. */ (
+          row,
+          value,
+        ) => !predicate(row, value),
+      ),
+      lastOffset = last[0].equals(store.cend()) ? iterator.get().size - 1 : last[1] - 1;
+    iterator = store.set_empty(
+      iterator,
+      iterator.get().position + first[1],
+      iterator.get().position + lastOffset,
+    );
+  }
 }
