@@ -196,9 +196,11 @@ const allowedEdges = new Map([
   // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
   // Original Library_vcl links i18nlangtag; GetDefaultFont consumes resolved language/Locale values.
   // Original field.cxx includes i18nutil/unicode.hxx; Library_vcl.mk links i18nutil.
+  // Native PhysicalFontFace.cxx uses hb_face_collect_unicodes; Library_vcl.mk links external HarfBuzz.
   [
     "vcl",
     new Set([
+      "external",
       "i18nutil",
       "i18nlangtag",
       "o3tl",
@@ -293,6 +295,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   )
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
+  if (portablePath.startsWith("external/harfbuzz/src/")) return "upstream-mechanism";
   if (
     portablePath.startsWith("sal/rtl/") ||
     portablePath.startsWith("sal/inc/rtl/") ||

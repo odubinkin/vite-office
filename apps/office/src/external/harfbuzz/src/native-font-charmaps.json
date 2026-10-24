@@ -1,0 +1,769 @@
+{
+  "source": "HarfBuzz14.2.1 original harfbuzz.cc; hb_face_get_glyph_count and hb_face_collect_unicodes, default build configuration",
+  "archiveSha256": "a54a5d8e9380a41fbb762ce367bcbf7704792dfca0d93f1bbca86c5a57902e0e",
+  "unicodeDigest": "SHA256 of JSON.stringify of sorted unicode codepoint array",
+  "fonts": {
+    "Alef-Bold.ttf": {
+      "fontSha256": "39c262cf1aedb7f404c03f35c629fd74a62630f1544e53b999e80b000bb33d20",
+      "glyphs": 424,
+      "characters": 423,
+      "unicodesSha256": "3471176f0fc697a363d5b4227166a72b0cb1504996172b0bfa0a0bea75851a5b"
+    },
+    "Alef-Regular.ttf": {
+      "fontSha256": "d424d553c4b1ab0473ca7198a980d767c1e697f2d74a1d95705c9855c02f41de",
+      "glyphs": 424,
+      "characters": 423,
+      "unicodesSha256": "3471176f0fc697a363d5b4227166a72b0cb1504996172b0bfa0a0bea75851a5b"
+    },
+    "Amiri-Bold.ttf": {
+      "fontSha256": "f6d598013a0a0a00dc732d8a22e5848d52384fbcd3771bfdde0e9f85f94d90d8",
+      "glyphs": 6551,
+      "characters": 1548,
+      "unicodesSha256": "e2898a9e4d89074d8d72a550a1ba879f26107522a508cc0caadd2c27b0d8d972"
+    },
+    "Amiri-BoldItalic.ttf": {
+      "fontSha256": "1e608ac4a4c97916937fdb1c832856d92df89aad902e675a9b15b076c41de223",
+      "glyphs": 6555,
+      "characters": 1549,
+      "unicodesSha256": "b544a7ec3e4d47dff639d974cd5be4d857d2d66d9111fda18e8723a37897ed4c"
+    },
+    "Amiri-Italic.ttf": {
+      "fontSha256": "2e4cacd084ad74eb865cd132b2d3a51aa522ec3b740b747dcb0e041c880be3fe",
+      "glyphs": 6705,
+      "characters": 1693,
+      "unicodesSha256": "c2a4abaab2b369a30d41989af83bd93d2035bd78e76dad9c4276babc2de9f634"
+    },
+    "Amiri-Regular.ttf": {
+      "fontSha256": "72b2702e947f423f5e553224d4bb6f5e32bfbda230a42cad2830b052de24245f",
+      "glyphs": 6710,
+      "characters": 1699,
+      "unicodesSha256": "14b99fea0458ddd2a4bea1b16b3a5f31443b4f5a2468ded85320971efd64ff31"
+    },
+    "AmiriQuran.ttf": {
+      "fontSha256": "a406aa685f307d96327deecaae6d69322d28e30cd7ec8929badbee19a7e6c585",
+      "glyphs": 1446,
+      "characters": 266,
+      "unicodesSha256": "81c737d6de37a3c1cfebb87d37878f88cff04d89d50514745c621396ad06a194"
+    },
+    "Caladea-Bold.ttf": {
+      "fontSha256": "74eda4fc5ffba0d8dc4aa76d41499f5ab76168d9ed6141c6417064c6244db9b6",
+      "glyphs": 420,
+      "characters": 417,
+      "unicodesSha256": "f3fa9f106eab55fccca55b185381158f2c9f2b40762860a8d9973aa8dcb7f171"
+    },
+    "Caladea-BoldItalic.ttf": {
+      "fontSha256": "f47a35ad6cd0efa9914d93f9d03c93e30c55da43674bccfabac73b3c0d522c01",
+      "glyphs": 420,
+      "characters": 417,
+      "unicodesSha256": "f3fa9f106eab55fccca55b185381158f2c9f2b40762860a8d9973aa8dcb7f171"
+    },
+    "Caladea-Italic.ttf": {
+      "fontSha256": "9c968bf60ba1e851cdfea77c71e3540c57792f77482dd241acc29d1425569c4e",
+      "glyphs": 420,
+      "characters": 417,
+      "unicodesSha256": "f3fa9f106eab55fccca55b185381158f2c9f2b40762860a8d9973aa8dcb7f171"
+    },
+    "Caladea-Regular.ttf": {
+      "fontSha256": "d2f6cad33f191e65b68bd74e6d4f7708080a41b32db635866109df3090265d91",
+      "glyphs": 420,
+      "characters": 417,
+      "unicodesSha256": "f3fa9f106eab55fccca55b185381158f2c9f2b40762860a8d9973aa8dcb7f171"
+    },
+    "Carlito-Bold.ttf": {
+      "fontSha256": "0f62ab34ad5d079a0a28fac01bcf7c7a724a4db4d6cb99cab9cabff382fbb80f",
+      "glyphs": 2782,
+      "characters": 2116,
+      "unicodesSha256": "7bad1c26ed69c04d2aa55c4276b005566da51fae1e834cc0993418cf6b8e0fdf"
+    },
+    "Carlito-BoldItalic.ttf": {
+      "fontSha256": "380764b6898d7b73ceae6384b2958b196d2a0428962ef3adf138d27947228666",
+      "glyphs": 2781,
+      "characters": 2116,
+      "unicodesSha256": "7bad1c26ed69c04d2aa55c4276b005566da51fae1e834cc0993418cf6b8e0fdf"
+    },
+    "Carlito-Italic.ttf": {
+      "fontSha256": "718a0663864d37a4868220a19b9668a5fe10a46197f6df367b4c2c30c04c026c",
+      "glyphs": 2782,
+      "characters": 2116,
+      "unicodesSha256": "7bad1c26ed69c04d2aa55c4276b005566da51fae1e834cc0993418cf6b8e0fdf"
+    },
+    "Carlito-Regular.ttf": {
+      "fontSha256": "b4ff23ba370cc95a3c349336b73f9c28514a1371210f89832efc85c4b1ea7131",
+      "glyphs": 2782,
+      "characters": 2116,
+      "unicodesSha256": "7bad1c26ed69c04d2aa55c4276b005566da51fae1e834cc0993418cf6b8e0fdf"
+    },
+    "DavidCLM-Bold.otf": {
+      "fontSha256": "9eab2bf76bbd24e44efc78cf372bb70b1310a92c4bd41eaac7f0ccdce1621703",
+      "glyphs": 242,
+      "characters": 233,
+      "unicodesSha256": "94258476810ffa0625e5441aeb0a275232b654812fae72737cddb30fbded1b17"
+    },
+    "DavidCLM-BoldItalic.otf": {
+      "fontSha256": "b2c50c677491b11f39cb4149cb3c746856698a6460f32c3d928dc31d59fbb830",
+      "glyphs": 242,
+      "characters": 233,
+      "unicodesSha256": "94258476810ffa0625e5441aeb0a275232b654812fae72737cddb30fbded1b17"
+    },
+    "DavidCLM-Medium.otf": {
+      "fontSha256": "5122bf1c6351da6c5ceddad533c473082a3bd2e48c3e875c952b235419097c5d",
+      "glyphs": 242,
+      "characters": 233,
+      "unicodesSha256": "94258476810ffa0625e5441aeb0a275232b654812fae72737cddb30fbded1b17"
+    },
+    "DavidCLM-MediumItalic.otf": {
+      "fontSha256": "1f62726d3e6a2433212b126b97f1d56061be6f92449f6c4fb5aa72db83bdb857",
+      "glyphs": 242,
+      "characters": 233,
+      "unicodesSha256": "94258476810ffa0625e5441aeb0a275232b654812fae72737cddb30fbded1b17"
+    },
+    "DavidLibre-Bold.ttf": {
+      "fontSha256": "f7e9f02f5fcf400b65d8c44137e8e1a0b85945e6c874b266943c4434167b1833",
+      "glyphs": 837,
+      "characters": 795,
+      "unicodesSha256": "66ca8684a37d36cd1c3c82442d818e22527a27a100665b2a3802a55202dc98bd"
+    },
+    "DavidLibre-Regular.ttf": {
+      "fontSha256": "127235d6c9a01b004487506968a5bf3af70de22312da68b57ba62cc2d6a0287d",
+      "glyphs": 837,
+      "characters": 795,
+      "unicodesSha256": "66ca8684a37d36cd1c3c82442d818e22527a27a100665b2a3802a55202dc98bd"
+    },
+    "DejaVuMathTeXGyre.ttf": {
+      "fontSha256": "40da67c0b6b03076504fbda4bf3e7b4f20b35999c98063019a3392fe9b1294fe",
+      "glyphs": 4282,
+      "characters": 2112,
+      "unicodesSha256": "0f04f0075ea639e1617a49f9265c536410845361d38eeaf3e642a274f2006ada"
+    },
+    "DejaVuSans-Bold.ttf": {
+      "fontSha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+      "glyphs": 6196,
+      "characters": 5898,
+      "unicodesSha256": "88108ce6d5b75fe5ac02fd84e24ee6ff4062f8dcc6cc164905e2532be2bf5c3a"
+    },
+    "DejaVuSans-BoldOblique.ttf": {
+      "fontSha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+      "glyphs": 5413,
+      "characters": 5341,
+      "unicodesSha256": "ec31e069dca5068328d354d415c3d192ac55a95970fb6f370bda42d57f775730"
+    },
+    "DejaVuSans-ExtraLight.ttf": {
+      "fontSha256": "6cb0746a1f68d176bebe83752cee35ebdf726cb1a1e88a01fc038ddf76de9ea8",
+      "glyphs": 2032,
+      "characters": 1986,
+      "unicodesSha256": "bbb51968a1c6305c9236be7b2fad8c55892a542a0ec26c13dcab4b4c596a14df"
+    },
+    "DejaVuSans-Oblique.ttf": {
+      "fontSha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+      "glyphs": 5355,
+      "characters": 5283,
+      "unicodesSha256": "9e9dd78a18befc739eb6a5b585a962072e06185dc4b7aebd90f14c72c0a80e45"
+    },
+    "DejaVuSans.ttf": {
+      "fontSha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "glyphs": 6253,
+      "characters": 5918,
+      "unicodesSha256": "9593a2767bf5e87477979f279f4c6965d6cfc51bcc54cf2a6aa88928c8b61ecf"
+    },
+    "DejaVuSansCondensed-Bold.ttf": {
+      "fontSha256": "38098d0b8edd8430a0f53fb2831b5d36037563a998a620d3c87a4d7591766d20",
+      "glyphs": 6196,
+      "characters": 5898,
+      "unicodesSha256": "88108ce6d5b75fe5ac02fd84e24ee6ff4062f8dcc6cc164905e2532be2bf5c3a"
+    },
+    "DejaVuSansCondensed-BoldOblique.ttf": {
+      "fontSha256": "43f9fd6b77edf174553cf94857c77c63de7ddb0c6751fd1390e73223518e128f",
+      "glyphs": 5413,
+      "characters": 5341,
+      "unicodesSha256": "ec31e069dca5068328d354d415c3d192ac55a95970fb6f370bda42d57f775730"
+    },
+    "DejaVuSansCondensed-Oblique.ttf": {
+      "fontSha256": "dc3526fa25fae4278c4e34b47d4c049b6923421c70921032a0db11bfe9c1b0cf",
+      "glyphs": 5355,
+      "characters": 5283,
+      "unicodesSha256": "9e9dd78a18befc739eb6a5b585a962072e06185dc4b7aebd90f14c72c0a80e45"
+    },
+    "DejaVuSansCondensed.ttf": {
+      "fontSha256": "8550cd5ca1acb65a8fc7877c46939cd0b4d909f8e7bc1e24716873d918c5e549",
+      "glyphs": 6253,
+      "characters": 5918,
+      "unicodesSha256": "9593a2767bf5e87477979f279f4c6965d6cfc51bcc54cf2a6aa88928c8b61ecf"
+    },
+    "DejaVuSansMono-Bold.ttf": {
+      "fontSha256": "bce60f1b4421acd9ea51ba6623d7024ecbe6817a953e3654df62a5e6bdf8f769",
+      "glyphs": 3316,
+      "characters": 3261,
+      "unicodesSha256": "0e6777ba718d74a945b35832688b0d1c9b47092d9db87c2a3f7331c32b391555"
+    },
+    "DejaVuSansMono-BoldOblique.ttf": {
+      "fontSha256": "91713a71d550bba22c2a6b2bb2a9ad8f9a159e12e4e9f0a5b2677998ba21213e",
+      "glyphs": 2711,
+      "characters": 2683,
+      "unicodesSha256": "eae89dac108f850c4c70440d09cff02f91751770f5a921d2658b293cf510ad3e"
+    },
+    "DejaVuSansMono-Oblique.ttf": {
+      "fontSha256": "742097840c541870e8d6dc5c9b37bb1ceeea6c0dedd1d475faf903ef9df734b0",
+      "glyphs": 2710,
+      "characters": 2683,
+      "unicodesSha256": "7881f9ec7f8f8f040476bb5fe3bfd5403bd84632358a44d600493da70aac9ebb"
+    },
+    "DejaVuSansMono.ttf": {
+      "fontSha256": "b4a6c3e4faab8773f4ff761d56451646409f29abedd68f05d38c2df667d3c582",
+      "glyphs": 3377,
+      "characters": 3322,
+      "unicodesSha256": "6a15063a130b607cf0b3266f5de54a9568b1ea9ba75760509f389b9b414ae1d7"
+    },
+    "DejaVuSerif-Bold.ttf": {
+      "fontSha256": "c47b5527bcdc8dcf9ea8c77054454c5a884beaca2f44851a2a823ee639cbf07f",
+      "glyphs": 3506,
+      "characters": 3443,
+      "unicodesSha256": "7fb210dd3cfac641484d52bf1b167b273b63ba367e833885c188f45b366b4143"
+    },
+    "DejaVuSerif-BoldItalic.ttf": {
+      "fontSha256": "8d3dd3d31350309042ed226af82b34539bd773518e6107cb352712853ba80308",
+      "glyphs": 3506,
+      "characters": 3435,
+      "unicodesSha256": "2e03b4aa1de93edf1fff170e4c56aee26e697ac956f63905d1972ba69039b33f"
+    },
+    "DejaVuSerif-Italic.ttf": {
+      "fontSha256": "2e39b1d50f90b933b00c7bb54a96afd3f86419b3d717c7cf202e36f2d4973e47",
+      "glyphs": 3507,
+      "characters": 3436,
+      "unicodesSha256": "d3810965c5951bde64a70cf38103e92b2fc48e6710d68b82454d661ee064e11f"
+    },
+    "DejaVuSerif.ttf": {
+      "fontSha256": "42d1edeb7952f31b1f96d767ed7030b08a39e0c372b0071641518864e2bffb51",
+      "glyphs": 3528,
+      "characters": 3447,
+      "unicodesSha256": "82580f708aa9e7cff8fe29ea3614ee61e53b4688a257dad8d44763b9168700e3"
+    },
+    "DejaVuSerifCondensed-Bold.ttf": {
+      "fontSha256": "e09aa87c60c3e8de7f4e6c7bfeec8fd9489b6cd975e3033259bca3d6009aed18",
+      "glyphs": 3506,
+      "characters": 3443,
+      "unicodesSha256": "7fb210dd3cfac641484d52bf1b167b273b63ba367e833885c188f45b366b4143"
+    },
+    "DejaVuSerifCondensed-BoldItalic.ttf": {
+      "fontSha256": "4cfc5a3700c72413f51c4bb54f09617401a0a63eccb9ff577713e20afa047fa5",
+      "glyphs": 3506,
+      "characters": 3435,
+      "unicodesSha256": "2e03b4aa1de93edf1fff170e4c56aee26e697ac956f63905d1972ba69039b33f"
+    },
+    "DejaVuSerifCondensed-Italic.ttf": {
+      "fontSha256": "dfe5bf5336d62ca71de419cccf7fd18ab19a57245dc392891ee76347129807e1",
+      "glyphs": 3507,
+      "characters": 3436,
+      "unicodesSha256": "d3810965c5951bde64a70cf38103e92b2fc48e6710d68b82454d661ee064e11f"
+    },
+    "DejaVuSerifCondensed.ttf": {
+      "fontSha256": "685dcdfb8daf32a453d3426a4eb8d881c72146ddd999229354fb757511357995",
+      "glyphs": 3528,
+      "characters": 3447,
+      "unicodesSha256": "82580f708aa9e7cff8fe29ea3614ee61e53b4688a257dad8d44763b9168700e3"
+    },
+    "FrankRuehlCLM-Bold.otf": {
+      "fontSha256": "0f836360f6861474ba1c156d9e145d73c7fbd6c4eadf7d6ca28603e4915f2f28",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "FrankRuehlCLM-BoldOblique.otf": {
+      "fontSha256": "f2a3f47822f859f98420ebde4d1bdaa03d27023de4003fddffdfeed415a582b1",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "FrankRuehlCLM-Medium.otf": {
+      "fontSha256": "6c0ab8bb2fb605160dbb348abad5de33e47719ab1af7b5df3324c9c338afad58",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "FrankRuehlCLM-MediumOblique.otf": {
+      "fontSha256": "42d8c68b5c4e12e51a8a4f49380e941cd0c37a98546c68fc57e663023e2782f5",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "FrankRuhlHofshi-Bold.otf": {
+      "fontSha256": "738df99ce285d69e83e2cd2809c340591d805f4af9b2609ca9ec50c14c3f9691",
+      "glyphs": 511,
+      "characters": 451,
+      "unicodesSha256": "01868b0f422f19b29c29210fd9f94a15b637892d3cd7dc18dd62ed914e60f383"
+    },
+    "FrankRuhlHofshi-Regular.otf": {
+      "fontSha256": "4c949aee5e93d7f816e9e76ef807d964ab2ba821c4533b77f4d451f89f581698",
+      "glyphs": 511,
+      "characters": 451,
+      "unicodesSha256": "01868b0f422f19b29c29210fd9f94a15b637892d3cd7dc18dd62ed914e60f383"
+    },
+    "LiberationMono-Bold.ttf": {
+      "fontSha256": "bd62a0672d0b9b6710b01df434c80ad54fa5f0835207eb7b17b7a761463067bb",
+      "glyphs": 2423,
+      "characters": 2305,
+      "unicodesSha256": "d2da23dc65a05b89eb0db0da1c17492aaea01f703bb5450bad7e6a5b8c24921b"
+    },
+    "LiberationMono-BoldItalic.ttf": {
+      "fontSha256": "79451f3c09fe25116098853b7a2ca6e2436220ccc11af022979adbcf195be130",
+      "glyphs": 2425,
+      "characters": 2305,
+      "unicodesSha256": "d2da23dc65a05b89eb0db0da1c17492aaea01f703bb5450bad7e6a5b8c24921b"
+    },
+    "LiberationMono-Italic.ttf": {
+      "fontSha256": "605c01c711b44480a7508d349dfbf3264e81fa43d69e61cfa7d10b86e764c4d1",
+      "glyphs": 2425,
+      "characters": 2305,
+      "unicodesSha256": "d2da23dc65a05b89eb0db0da1c17492aaea01f703bb5450bad7e6a5b8c24921b"
+    },
+    "LiberationMono-Regular.ttf": {
+      "fontSha256": "f2b83c763e8afd21709333370bed4774337fae82267937e2b5aea7e2fbd922c1",
+      "glyphs": 2423,
+      "characters": 2305,
+      "unicodesSha256": "d2da23dc65a05b89eb0db0da1c17492aaea01f703bb5450bad7e6a5b8c24921b"
+    },
+    "LiberationSans-Bold.ttf": {
+      "fontSha256": "788abee4c806d660e8aee46689dd8540cd4bb98da03dcc9d171ce3efd99a9173",
+      "glyphs": 2620,
+      "characters": 2327,
+      "unicodesSha256": "1f922f53badf9194da4329c8659d8092e850af31a274d7434e47467cae73e0ca"
+    },
+    "LiberationSans-BoldItalic.ttf": {
+      "fontSha256": "698da70fc191cc5f33ad4d6d3fe830fe4624b898ea2e3169955928b7c491f1ee",
+      "glyphs": 2622,
+      "characters": 2327,
+      "unicodesSha256": "1f922f53badf9194da4329c8659d8092e850af31a274d7434e47467cae73e0ca"
+    },
+    "LiberationSans-Italic.ttf": {
+      "fontSha256": "e5bae5c4cde31f22142753855f4f8fb86da6ff39955ed3c0a11248b0d16948b0",
+      "glyphs": 2622,
+      "characters": 2327,
+      "unicodesSha256": "1f922f53badf9194da4329c8659d8092e850af31a274d7434e47467cae73e0ca"
+    },
+    "LiberationSans-Regular.ttf": {
+      "fontSha256": "76d04c18ea243f426b7de1f3ad208e927008f961dc5945e5aad352d0dfde8ee8",
+      "glyphs": 2620,
+      "characters": 2327,
+      "unicodesSha256": "1f922f53badf9194da4329c8659d8092e850af31a274d7434e47467cae73e0ca"
+    },
+    "LiberationSansNarrow-Bold.ttf": {
+      "fontSha256": "8e5eb5090ef4a3143794c230b82f174f7f2fbbfcd6cb789ccfa1f90bf8795d54",
+      "glyphs": 681,
+      "characters": 668,
+      "unicodesSha256": "929bb7d9ca6f824c63b29ccf05c6cc6a5fe20f94ada91984ae354cd88613306a"
+    },
+    "LiberationSansNarrow-BoldItalic.ttf": {
+      "fontSha256": "57fe1513fa84379d36e7da6fd9a45d053ded5e895042ab36692d8d05a8c4f4d8",
+      "glyphs": 681,
+      "characters": 668,
+      "unicodesSha256": "929bb7d9ca6f824c63b29ccf05c6cc6a5fe20f94ada91984ae354cd88613306a"
+    },
+    "LiberationSansNarrow-Italic.ttf": {
+      "fontSha256": "c5de4127c273dbcfc173414d170448cbe800c3a7fb1f97beaeee1b076d6a5eea",
+      "glyphs": 681,
+      "characters": 668,
+      "unicodesSha256": "929bb7d9ca6f824c63b29ccf05c6cc6a5fe20f94ada91984ae354cd88613306a"
+    },
+    "LiberationSansNarrow-Regular.ttf": {
+      "fontSha256": "546e8957e5dccece4ac07ea02f57a5cdb3dc3b0e902ea75a837a7784ba4b7eef",
+      "glyphs": 681,
+      "characters": 668,
+      "unicodesSha256": "929bb7d9ca6f824c63b29ccf05c6cc6a5fe20f94ada91984ae354cd88613306a"
+    },
+    "LiberationSerif-Bold.ttf": {
+      "fontSha256": "d754ba427cfe0bca54ae052384baa8f842da5bd6550ad4da024ac441e7a7d5ce",
+      "glyphs": 2602,
+      "characters": 2321,
+      "unicodesSha256": "a0033111505ec1fcba9fcfceeba6063afde00333d71230672e7a43a5d055b1b3"
+    },
+    "LiberationSerif-BoldItalic.ttf": {
+      "fontSha256": "f17db8af71e24d2066b587546021d4f0b296be389512b658dec3c09affeb11a7",
+      "glyphs": 2605,
+      "characters": 2322,
+      "unicodesSha256": "a467a51779501d3910cde1fca19ebbdd48f91600f65e8d41b4ced69b35de41e6"
+    },
+    "LiberationSerif-Italic.ttf": {
+      "fontSha256": "0e3dea9f8d613e006ccfa62201f33e265d19167bd0907725c3e145368b04fc2e",
+      "glyphs": 2610,
+      "characters": 2329,
+      "unicodesSha256": "258b23716922879b89e513f60a567a46d2f9f272932e6c8249dcb67fd0812872"
+    },
+    "LiberationSerif-Regular.ttf": {
+      "fontSha256": "058ea80864aef09a23f45cbec2bb5400bc3dfbdea01c3f10538a21fcb497fb74",
+      "glyphs": 2602,
+      "characters": 2321,
+      "unicodesSha256": "a0033111505ec1fcba9fcfceeba6063afde00333d71230672e7a43a5d055b1b3"
+    },
+    "LinBiolinum_RB_G.ttf": {
+      "fontSha256": "a6071ef33992942eeb6cd476fc7f94c5c886ea504b5f2329296ddb129416d649",
+      "glyphs": 2459,
+      "characters": 2455,
+      "unicodesSha256": "bab12687db0477b4de6259529f491d9fd0670a8bda0de9bd82f2b28c933b8672"
+    },
+    "LinBiolinum_RI_G.ttf": {
+      "fontSha256": "c575bb983083bb6939a17d8d605b3a353a514b6bd9a576ac653b166ad7a22913",
+      "glyphs": 2442,
+      "characters": 2439,
+      "unicodesSha256": "b58e9887079092441ed6847b15610236ea070a82296368dcac363e50bcc26b82"
+    },
+    "LinBiolinum_R_G.ttf": {
+      "fontSha256": "b4928a849043c5e5d82b258bf485861a7b2e3f11d7fc2fc38127a7479f942ef2",
+      "glyphs": 2516,
+      "characters": 2513,
+      "unicodesSha256": "477ad9df7e48d14099ac805280053fb46947382da66435906ce2bc1fc22e67fc"
+    },
+    "LinLibertine_DR_G.ttf": {
+      "fontSha256": "ca753adfa44deeb4dd0508d385911d96df27ae107cf70899b1c4ade4e594f4b4",
+      "glyphs": 2268,
+      "characters": 2265,
+      "unicodesSha256": "34a2876ad95ea0bb9d26c6a8468a0e7decd377bec86093c6042d53b382940a7c"
+    },
+    "LinLibertine_RBI_G.ttf": {
+      "fontSha256": "ac81a23c8436e2c00dbb32b12bf346e7d091e18fb2e6ef986441faed818558fb",
+      "glyphs": 1795,
+      "characters": 1791,
+      "unicodesSha256": "c4c372430f3c4967690106421fcfb2c89a7f7a826d0d60858b5bbacaa41f4378"
+    },
+    "LinLibertine_RB_G.ttf": {
+      "fontSha256": "392338c6e2926d7b435ecea51807b597b0937ce718226bf8468f60cfdd109a14",
+      "glyphs": 2470,
+      "characters": 2467,
+      "unicodesSha256": "d554382ae049817421062858a6d62c33690d5ae86ab39b9509477bc517f1b2c4"
+    },
+    "LinLibertine_RI_G.ttf": {
+      "fontSha256": "96f10a95e199601143b0d511c8c2731f9fc8d1482abe48e9d832abd097e0ee04",
+      "glyphs": 2422,
+      "characters": 2418,
+      "unicodesSha256": "50adc7e0b3b2eacff77471ef9f67d3ca567d030d9a12cb437009a24e48a52bce"
+    },
+    "LinLibertine_RZI_G.ttf": {
+      "fontSha256": "0673c58840e04974af40c7661883541e05f9012c0473d3402590625390fa5954",
+      "glyphs": 2376,
+      "characters": 2373,
+      "unicodesSha256": "40e628ba09b495063ad00457b4eedef1e61a6dd0c7c16e38cffab462991a2962"
+    },
+    "LinLibertine_RZ_G.ttf": {
+      "fontSha256": "8980dee9eb4c43b75392a1d2ab6a1fa3d00cd223b214c0fb74abcdab80f887ca",
+      "glyphs": 2377,
+      "characters": 2374,
+      "unicodesSha256": "ea661c1bc91d917e2d214ff9af40bbbd5e0b01ca5c160c2b7ea9a8db14726591"
+    },
+    "LinLibertine_R_G.ttf": {
+      "fontSha256": "dbbdbc37105a59dbd64a4a552b5841002c0990c30fd225fdcac198058e60266a",
+      "glyphs": 2740,
+      "characters": 2737,
+      "unicodesSha256": "14abd211549b6c17f664dde53182ca1ec94c82162dc5ff9185a8ecb8146aba9c"
+    },
+    "MiriamCLM-Bold.otf": {
+      "fontSha256": "e119adeffcc47301d1cce9b6dc61e8c8f0b228af406401005fe32b6f6a4f0b56",
+      "glyphs": 173,
+      "characters": 164,
+      "unicodesSha256": "70a0d3d8815619c261e96f5c4bca1504aecfc09c0963fdcb7e070e6c97161256"
+    },
+    "MiriamCLM-Book.otf": {
+      "fontSha256": "b6bf0af80cf77817ce47b687bad28e11ecc9f3f7a07ff0f0bfbbee2f44be9b5c",
+      "glyphs": 173,
+      "characters": 164,
+      "unicodesSha256": "70a0d3d8815619c261e96f5c4bca1504aecfc09c0963fdcb7e070e6c97161256"
+    },
+    "MiriamLibre-Bold.otf": {
+      "fontSha256": "8c88ae118709ac4606f42356bed7a1ec68f6493a66424d030de5b270f6421c4b",
+      "glyphs": 465,
+      "characters": 446,
+      "unicodesSha256": "3a3c8ad2f6ce75c197bd8f29a35bdefe7fc12925c4faa81158abcb77e24b0638"
+    },
+    "MiriamLibre-Regular.otf": {
+      "fontSha256": "6c366f3f075dedfd88824caba785ab5374c1c45eb5d97994137e5fdbe982a635",
+      "glyphs": 465,
+      "characters": 446,
+      "unicodesSha256": "3a3c8ad2f6ce75c197bd8f29a35bdefe7fc12925c4faa81158abcb77e24b0638"
+    },
+    "MiriamMonoCLM-Bold.ttf": {
+      "fontSha256": "d7382ff624ee873791f55636378100fa27f316572317e1572e424498deab25ce",
+      "glyphs": 356,
+      "characters": 346,
+      "unicodesSha256": "33d7ce8a0859255f26c787e5a1e4611cc4f30c0b50466e9e1a9a8513a2ef5a17"
+    },
+    "MiriamMonoCLM-BoldOblique.ttf": {
+      "fontSha256": "42eb2b5f70044dc17cb2349e8f963d778f90c4a47fc449f4989d7abdf1f54866",
+      "glyphs": 356,
+      "characters": 346,
+      "unicodesSha256": "33d7ce8a0859255f26c787e5a1e4611cc4f30c0b50466e9e1a9a8513a2ef5a17"
+    },
+    "MiriamMonoCLM-Book.ttf": {
+      "fontSha256": "8fc659fa1a7ffd7ec78ed0b061267adc9e08ff57873f21d7487af7c07f5d37bd",
+      "glyphs": 358,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "MiriamMonoCLM-BookOblique.ttf": {
+      "fontSha256": "19d2ca80a0244ef4a14c67c956a24a32f95a98d94d5985f819be7d4216d35b4c",
+      "glyphs": 356,
+      "characters": 346,
+      "unicodesSha256": "33d7ce8a0859255f26c787e5a1e4611cc4f30c0b50466e9e1a9a8513a2ef5a17"
+    },
+    "NachlieliCLM-Bold.otf": {
+      "fontSha256": "4b43572203b7fb64ef50ec93a48b104ef5536d2c1179b4d08dd5fad96a95b509",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "NachlieliCLM-BoldOblique.otf": {
+      "fontSha256": "08b6d6783e351a9b016bd7f31bbd47b71d9af745afc7250c742389f32870ba1f",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "NachlieliCLM-Light.otf": {
+      "fontSha256": "41a9ea4e896702036c2cae75368fcde2ac3042611eefb38d22f92463098a64a7",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "NachlieliCLM-LightOblique.otf": {
+      "fontSha256": "ac622e7c34566584568631af14693f218f56ea8979f7bcae2362e38f0fada0c0",
+      "glyphs": 357,
+      "characters": 348,
+      "unicodesSha256": "48a9cd3d946b81671b449fb96274ecef35b8defbb51e40cc63be2ad1160308a7"
+    },
+    "NotoKufiArabic-Bold.ttf": {
+      "fontSha256": "ffd4190ce8cb521cb186cc2cbaca2a2fdff1d848d1189bb499ded060ce3517d9",
+      "glyphs": 1698,
+      "characters": 1549,
+      "unicodesSha256": "a1e7495a50c293cc5e3fada055b44f69aa6490af00aa1d1d101ce6544be1de7a"
+    },
+    "NotoKufiArabic-Regular.ttf": {
+      "fontSha256": "e07e440b4310bc6081992f9dacedc8f69700b5682281b8062aae4d392798cf35",
+      "glyphs": 1698,
+      "characters": 1549,
+      "unicodesSha256": "a1e7495a50c293cc5e3fada055b44f69aa6490af00aa1d1d101ce6544be1de7a"
+    },
+    "NotoNaskhArabic-Bold.ttf": {
+      "fontSha256": "d328b92b6bb762fd61d6438dddb7b00dd0663115afb292a358101808efe117b2",
+      "glyphs": 1719,
+      "characters": 1551,
+      "unicodesSha256": "086b9315903e5f37bcc10aba658b978798937236d8fa1d640458b2f5a2b4838d"
+    },
+    "NotoNaskhArabic-Regular.ttf": {
+      "fontSha256": "c9a039ce48a477243c1eb7d561b13de115cfd651d8a83fa42e2f4d63c2e11b00",
+      "glyphs": 1719,
+      "characters": 1551,
+      "unicodesSha256": "086b9315903e5f37bcc10aba658b978798937236d8fa1d640458b2f5a2b4838d"
+    },
+    "NotoSans-Bold.ttf": {
+      "fontSha256": "3a08a47daa00cade516425c15c57615aef2fd418ec9811a7b9f465088f92cc05",
+      "glyphs": 4515,
+      "characters": 3094,
+      "unicodesSha256": "6c5c414f04372672e5bc0df6b9c382b96346dc6fc371ea10ea8f1c09b545a41e"
+    },
+    "NotoSans-BoldItalic.ttf": {
+      "fontSha256": "2e34b41a4b9c234b1be7dff6d06cba18811ecb694b41350873edf0ec16a0f0fa",
+      "glyphs": 4526,
+      "characters": 3091,
+      "unicodesSha256": "d7096b945ce5e280455688060cb9c2b10b5a1892bcb23d62adc010c8103898b7"
+    },
+    "NotoSans-Italic.ttf": {
+      "fontSha256": "126522ae1bb9cd92120287fc47dfc74ef981e73931d93e52c565fb7e09b2d74a",
+      "glyphs": 4526,
+      "characters": 3091,
+      "unicodesSha256": "d7096b945ce5e280455688060cb9c2b10b5a1892bcb23d62adc010c8103898b7"
+    },
+    "NotoSans-Regular.ttf": {
+      "fontSha256": "f5f552c8c5edb61fe6efb824baf4d4de47b1a8689ab4925ff43f7bd6a4ebece5",
+      "glyphs": 4515,
+      "characters": 3094,
+      "unicodesSha256": "6c5c414f04372672e5bc0df6b9c382b96346dc6fc371ea10ea8f1c09b545a41e"
+    },
+    "NotoSansArabic-Bold.ttf": {
+      "fontSha256": "457926cb001ac787dc7415c89e6f5b1c4ce3a0f2c91d0cabc1bc19a05638e7de",
+      "glyphs": 1661,
+      "characters": 1161,
+      "unicodesSha256": "12e920b877a246ecc8bcce42943d4b6c56cba67513e34fdea4f8b26c1119a7d6"
+    },
+    "NotoSansArabic-Regular.ttf": {
+      "fontSha256": "d6efa4c9fac8ecefd2de19676acc3a396ba7aee99ba7a2d513950246841b6725",
+      "glyphs": 1661,
+      "characters": 1161,
+      "unicodesSha256": "12e920b877a246ecc8bcce42943d4b6c56cba67513e34fdea4f8b26c1119a7d6"
+    },
+    "NotoSansArmenian-Bold.ttf": {
+      "fontSha256": "1607ef2d90b3c7c7796a9dcee7c8f5e323c7196c5753e4219bcc80b0cb7ec542",
+      "glyphs": 436,
+      "characters": 430,
+      "unicodesSha256": "7bebd3ddcd00f606f05c08836b92c2a7cabf4f1b5206f5b16a4edb89c9f6a7f1"
+    },
+    "NotoSansArmenian-Regular.ttf": {
+      "fontSha256": "ae242d055bb82f7c00ae02f10e8880197725805b0e4586d1b33b384a099f362a",
+      "glyphs": 436,
+      "characters": 430,
+      "unicodesSha256": "7bebd3ddcd00f606f05c08836b92c2a7cabf4f1b5206f5b16a4edb89c9f6a7f1"
+    },
+    "NotoSansGeorgian-Bold.ttf": {
+      "fontSha256": "0c9a27690575bc2753b7a24d0a823bb0d33936ce8828dd8ad4c294b778abf053",
+      "glyphs": 554,
+      "characters": 509,
+      "unicodesSha256": "a25e265af5f9e3518be152e0fd617ee9b2069ce08c35493b94255432ef511c7f"
+    },
+    "NotoSansGeorgian-Regular.ttf": {
+      "fontSha256": "89207521ae620f9988e85f0afc26070af34fffd454c3f0cb0655e494f3f3364d",
+      "glyphs": 554,
+      "characters": 509,
+      "unicodesSha256": "a25e265af5f9e3518be152e0fd617ee9b2069ce08c35493b94255432ef511c7f"
+    },
+    "NotoSansHebrew-Bold.ttf": {
+      "fontSha256": "96f88305d31a8432f0fe6648c853cb9ef77db8e52ada8948ed0c577037d45423",
+      "glyphs": 470,
+      "characters": 464,
+      "unicodesSha256": "d029b8cfc654ccf428909731520cd393684615427bc02d370fa63ca643c2b2d2"
+    },
+    "NotoSansHebrew-Regular.ttf": {
+      "fontSha256": "671951828bd5c95db818e5bb12dcea2d0c0dda00311888522be061ee6835125e",
+      "glyphs": 470,
+      "characters": 464,
+      "unicodesSha256": "d029b8cfc654ccf428909731520cd393684615427bc02d370fa63ca643c2b2d2"
+    },
+    "NotoSansLao-Bold.ttf": {
+      "fontSha256": "9f7d30ce049ceac2a24e9d3b8799249e734bc2b42be9f240dbed5dc451a1796e",
+      "glyphs": 466,
+      "characters": 421,
+      "unicodesSha256": "023624ba6be195f466957ae2f1e90e0809aafd0754c79f99d120c9cfcfbfc93f"
+    },
+    "NotoSansLao-Regular.ttf": {
+      "fontSha256": "123d912762592efc26466671be8443958bd117aeac2e4beee0310b5b834e63f9",
+      "glyphs": 466,
+      "characters": 421,
+      "unicodesSha256": "023624ba6be195f466957ae2f1e90e0809aafd0754c79f99d120c9cfcfbfc93f"
+    },
+    "NotoSansLisu-Bold.ttf": {
+      "fontSha256": "2940c8397a096f2bb295a869a318a5d91fbbf3b70e09995308febe9c483eb9e2",
+      "glyphs": 395,
+      "characters": 390,
+      "unicodesSha256": "8acb9b2438583c01d3a071de66a803cb7e7d6fa3d6cf636eaec892413a2e4193"
+    },
+    "NotoSansLisu-Regular.ttf": {
+      "fontSha256": "7aa2279848cc8647198185807616555759bd68b8a3edb21ecc467d071aa7a6a4",
+      "glyphs": 395,
+      "characters": 390,
+      "unicodesSha256": "8acb9b2438583c01d3a071de66a803cb7e7d6fa3d6cf636eaec892413a2e4193"
+    },
+    "NotoSerif-Bold.ttf": {
+      "fontSha256": "96656aa5cec8f1d6fd0e804c1fad397e1a1cfa082e6642124e0bda68cd8363ce",
+      "glyphs": 3830,
+      "characters": 2965,
+      "unicodesSha256": "569ec919016e1b4f692635410deaf2732a72ad192523d1e26bf3b7b4238bd44a"
+    },
+    "NotoSerif-BoldItalic.ttf": {
+      "fontSha256": "c710c5b9cf354ae46e7a10472a08019b28220fafeb5887a482a76856f8f6fc0b",
+      "glyphs": 3834,
+      "characters": 2962,
+      "unicodesSha256": "89d9eb38fdec435cbffc65422ac3cdf9930e1b50119c4a86f43b96b82a45a8be"
+    },
+    "NotoSerif-Italic.ttf": {
+      "fontSha256": "749e80e313ef711f9373c6cce17c72297ef05490b3dcda7967d1d5d90bf1183f",
+      "glyphs": 3834,
+      "characters": 2962,
+      "unicodesSha256": "89d9eb38fdec435cbffc65422ac3cdf9930e1b50119c4a86f43b96b82a45a8be"
+    },
+    "NotoSerif-Regular.ttf": {
+      "fontSha256": "19e72cd8d595fae5bd74a5206f5d938512e1183d4fed7abb1ec1be1d7efa5f88",
+      "glyphs": 3830,
+      "characters": 2965,
+      "unicodesSha256": "569ec919016e1b4f692635410deaf2732a72ad192523d1e26bf3b7b4238bd44a"
+    },
+    "NotoSerifArmenian-Bold.ttf": {
+      "fontSha256": "5b972a930590304f9e853ea6a4dfd956980365d726536f8514025188d463ecce",
+      "glyphs": 435,
+      "characters": 430,
+      "unicodesSha256": "7bebd3ddcd00f606f05c08836b92c2a7cabf4f1b5206f5b16a4edb89c9f6a7f1"
+    },
+    "NotoSerifArmenian-Regular.ttf": {
+      "fontSha256": "240b3884bb5002e049bb1ea945e904777fada7bb86214e01da5c8774881937b2",
+      "glyphs": 435,
+      "characters": 430,
+      "unicodesSha256": "7bebd3ddcd00f606f05c08836b92c2a7cabf4f1b5206f5b16a4edb89c9f6a7f1"
+    },
+    "NotoSerifGeorgian-Bold.ttf": {
+      "fontSha256": "f7fc391a93f8d50a5e19649c2e6706a00c9c8412cd820c860fc2e3c28c2c5084",
+      "glyphs": 550,
+      "characters": 509,
+      "unicodesSha256": "a25e265af5f9e3518be152e0fd617ee9b2069ce08c35493b94255432ef511c7f"
+    },
+    "NotoSerifGeorgian-Regular.ttf": {
+      "fontSha256": "eea3e8415a37dd496dbb6fad16e95b1513d3fc14863c6cc8886456f273eb1cdf",
+      "glyphs": 550,
+      "characters": 509,
+      "unicodesSha256": "a25e265af5f9e3518be152e0fd617ee9b2069ce08c35493b94255432ef511c7f"
+    },
+    "NotoSerifHebrew-Bold.ttf": {
+      "fontSha256": "8b450085462e6692df13688585ffe2bc1537a38fd2cccbdffec19b807b5e7071",
+      "glyphs": 472,
+      "characters": 463,
+      "unicodesSha256": "acbf2a0d18db1d9cff3e3758d87f007793007c766cdfb06381bbb6fe71f35c75"
+    },
+    "NotoSerifHebrew-Regular.ttf": {
+      "fontSha256": "1aa72c35d0510d1ce8a61389db01ed5b765026bee0f26b7f4b52492e90276193",
+      "glyphs": 472,
+      "characters": 463,
+      "unicodesSha256": "acbf2a0d18db1d9cff3e3758d87f007793007c766cdfb06381bbb6fe71f35c75"
+    },
+    "NotoSerifLao-Bold.ttf": {
+      "fontSha256": "bdf8a669685277125be9a0071ede42baf80147180bbd4bbb541301c7266250a4",
+      "glyphs": 467,
+      "characters": 421,
+      "unicodesSha256": "023624ba6be195f466957ae2f1e90e0809aafd0754c79f99d120c9cfcfbfc93f"
+    },
+    "NotoSerifLao-Regular.ttf": {
+      "fontSha256": "ff5ab4f3270c448b99b113a8ac6275bc6e4a4ca922ed2271df9a95132b5c2db6",
+      "glyphs": 467,
+      "characters": 421,
+      "unicodesSha256": "023624ba6be195f466957ae2f1e90e0809aafd0754c79f99d120c9cfcfbfc93f"
+    },
+    "ReemKufi.ttf": {
+      "fontSha256": "33ead1986cd48c138c4d906c9e5a6341877268461f97623409a2014de1cd4aa4",
+      "glyphs": 815,
+      "characters": 667,
+      "unicodesSha256": "cbcaf7359b9b801b2c017e5fb271899ef47cad0db60146a1dc118a965a0b2b6a"
+    },
+    "Rubik-Bold.ttf": {
+      "fontSha256": "b1c36dfcbc5fe5011c552c76725c84d989a71d56440e8bfbfa0cb68b593dbad6",
+      "glyphs": 657,
+      "characters": 586,
+      "unicodesSha256": "f5a51e212e00f9cab85b6c7a623bf81f187d98d322504478056f4269194883b7"
+    },
+    "Rubik-BoldItalic.ttf": {
+      "fontSha256": "38638b7aef713b932ad19976f614d5ae14658269c4c9d879b409022675525fbf",
+      "glyphs": 657,
+      "characters": 586,
+      "unicodesSha256": "f5a51e212e00f9cab85b6c7a623bf81f187d98d322504478056f4269194883b7"
+    },
+    "Rubik-Italic.ttf": {
+      "fontSha256": "be159c7ef033367c65fb31d4a8461edfbdb23665e37a0bc75d6adccc0b7444dc",
+      "glyphs": 657,
+      "characters": 586,
+      "unicodesSha256": "f5a51e212e00f9cab85b6c7a623bf81f187d98d322504478056f4269194883b7"
+    },
+    "Rubik-Regular.ttf": {
+      "fontSha256": "bd1490f4314d27ca1ac5d8869fdda068852edd623318c9bee13e812b793b301b",
+      "glyphs": 657,
+      "characters": 586,
+      "unicodesSha256": "f5a51e212e00f9cab85b6c7a623bf81f187d98d322504478056f4269194883b7"
+    },
+    "Scheherazade-Bold.ttf": {
+      "fontSha256": "62dde529b296df074efbf75b40a986e8ff82e997b98cec9ad7ab6795bb17a622",
+      "glyphs": 1411,
+      "characters": 629,
+      "unicodesSha256": "9bb21df8b97431098f2222c6c6f566cb11400447c4b2861b960453d7301b965f"
+    },
+    "Scheherazade-Regular.ttf": {
+      "fontSha256": "034c3ed203ccf91e20a75181350759cc5878e0e369bb0e2e83acee15a829184f",
+      "glyphs": 1411,
+      "characters": 629,
+      "unicodesSha256": "9bb21df8b97431098f2222c6c6f566cb11400447c4b2861b960453d7301b965f"
+    },
+    "opens___.ttf": {
+      "fontSha256": "f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140",
+      "glyphs": 1066,
+      "characters": 1062,
+      "unicodesSha256": "d2ddde89508c761b3eac3c42f044123bd0b443136ef2300961188dfb701ee9a4"
+    }
+  }
+}

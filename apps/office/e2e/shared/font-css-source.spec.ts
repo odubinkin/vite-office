@@ -3,7 +3,8 @@ import { writeFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "./kernel-fixture";
 /** Actual repository exports used by the isolated browser witness. */
-type SourceExports = typeof import("../../src/svtools/browser/font-list");
+type SourceExports = typeof import("../../src/svtools/browser/font-list") &
+  typeof import("../../src/vcl/browser/font-character-map");
 for (const app of ["writer", "calc"]) {
   test(`${app} actual registered CSS font sources`, /** Checks actual registered face identity, CSS serialization and byte reads without app test globals. @param fixtures - Actual Chromium page. @param testInfo - Source evidence output. @returns Completion. */ async ({
     page,
@@ -14,6 +15,7 @@ for (const app of ["writer", "calc"]) {
         module: "src/svtools/browser/font-list.ts",
         names: ["FontList", "readBrowserPhysicalFont", "readBrowserFontCapabilities"],
       },
+      { module: "src/vcl/browser/font-character-map.ts", names: ["readBrowserFontCharMap"] },
     ]);
     const result = await page.evaluate(
       /** Runs the actual bundled repository adapter against real browser FontFaces and CSSOM. @returns Bounded source observations. */ async () => {
@@ -76,7 +78,10 @@ for (const app of ["writer", "calc"]) {
           const bytes = await api.readBrowserPhysicalFont(record);
           if (bytes === undefined) throw new Error(`Missing physical source: ${family}`);
           const capabilities = await api.readBrowserFontCapabilities(record);
+          const map = await api.readBrowserFontCharMap(record, false);
           samples.push({
+            characters: map?.GetCharCount(),
+            defaultMap: map?.IsDefaultMap(),
             unicodeCoverage: capabilities?.oUnicodeRange?.size,
             codePageCoverage: capabilities?.oCodePageRange?.size,
             family,
@@ -119,6 +124,8 @@ for (const app of ["writer", "calc"]) {
     expect(result.unresolved).toEqual([]);
     for (const sample of result.samples) {
       expect(sample.bytes).toBeGreaterThan(1000);
+      expect(sample.characters).toBeGreaterThan(0);
+      expect(sample.defaultMap).toBe(false);
       expect(sample.loaded).toBe(true);
       expect(sample.unicodeCoverage).toBeGreaterThan(0);
       expect(sample.codePageCoverage).toBeGreaterThanOrEqual(0);

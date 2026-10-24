@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/font-character-map.ts",
+          "marker": "readBrowserFontCharMap"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/font-character-map.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/font-character-map.ts",
+    "rationale": "Task6764KT binds actual acquired source bytes to HarfBuzz cmap and glyph-population algorithms and PhysicalFontFace range/default projection. Bytes and unresolved TTC identity remain unknown; no fallback-rendered width probes infer glyph coverage.",
+    "responsibilities": [
+      "Acquire actual source bytes from the existing physical record boundary.",
+      "Require explicit collection identity and actual backend symbol-encoding flag.",
+      "Project actual source cmap/maxp/head/loca data into the consumed character-map value."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser APIs do not expose installed glyph coverage; only acquired file bytes are parsed. JavaScript owns storage and browser Canvas retains shaping/rasterization."
+    },
+    "status": "local-only"
+  }
+}

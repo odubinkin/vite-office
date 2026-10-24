@@ -49,6 +49,7 @@ vendor/libreoffice-reference/
 # Optional pinned external dependency research; ordinary tests use portable fixtures.
 /vendor/mdds-reference
 /vendor/icu-reference
+/vendor/harfbuzz-reference
 /vendor/boost-reference
 .playwright-cli
 

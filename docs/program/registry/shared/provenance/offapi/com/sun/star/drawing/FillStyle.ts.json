@@ -10,7 +10,12 @@
     ],
     "upstreamPath": "offapi/com/sun/star/drawing/FillStyle.idl",
     "upstreamSymbols": [
-      "FillStyle"
+      "FillStyle",
+      "NONE",
+      "SOLID",
+      "GRADIENT",
+      "HATCH",
+      "BITMAP"
     ],
     "preservedResponsibilities": [
       "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed."
@@ -32,7 +37,7 @@
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/offapi/com/sun/star/drawing/FillStyle.idl",
-          "marker": "FillStyle"
+          "marker": "published enum FillStyle"
         }
       ]
     }

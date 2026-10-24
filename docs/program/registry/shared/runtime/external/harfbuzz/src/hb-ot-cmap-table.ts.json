@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/harfbuzz/src/hb-ot-cmap-table.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-script-attributes",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/harfbuzz/src/hb-ot-cmap-table.ts#findBestCmapSubtable",
+        "apps/office/src/external/harfbuzz/src/hb-ot-cmap-table.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT transfers only the consumed HarfBuzz14.2.1 sanitized table selection,unicode collection and glyph-population algorithms. Source archive SHA-256 is pinned by LibreOffice download.lst. Native JavaScript Set,DataView and garbage collection own storage; browser Canvas continues shaping/rasterization. No HarfBuzz memory manager,library install or full text shaper is ported. Source encoding binary search,preference,format0/4/6/10/12/13/14 handling,remaining-cmap format4 bounds,ordered segment mutation,uint32 arithmetic and default beyond-64K loca population are retained. WRITER081/082 document suspected upstream collection discrepancies. Real physical style/weight/encoding selection,collection identity resolution and dropdown paint integration remain unfinished; no full font/UI parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "findBestCmapSubtable",
+        "collectCmapUnicodes"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/harfbuzz-reference/src/hb-ot-cmap-table.hh",
+      "upstreamSymbols": [
+        "find_best_subtable",
+        "collect_unicodes"
+      ]
+    }
+  }
+}

@@ -27,7 +27,12 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "offapi/com/sun/star/drawing/FillStyle.idl",
       "upstreamSymbols": [
-        "FillStyle"
+        "FillStyle",
+        "NONE",
+        "SOLID",
+        "GRADIENT",
+        "HATCH",
+        "BITMAP"
       ]
     }
   }

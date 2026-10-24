@@ -4,7 +4,7 @@
   "resolverInput": {
     "taskId": "202610231428-6764KT",
     "title": "Implement upstream font and style dropdown previews for Writer and Calc",
-    "description": "Nearest user priority after DVQ9ES: implement shared native font dropdown preview behavior in Writer and Calc and real style item-set previews in existing style selectors. Match pinned svtools ctrlbox/sampletext and svx tbcontrl naming, symbol/script samples, glyph availability, fitting, highlight/color and inherited style contracts through real VCL/SVX/native style owners. Changes only in vite-office-writer branch writer. Browser font capability acquisition must use actual browser-exposed data; no fake font support or style registries and no native memory/lifecycle emulation. Include relevant tests and browser acceptance, canonical provenance and generated records. Bound scope up to100 implementation/test/tooling paths plus paired canonical records. Second leaf since full checkpoint; focused verification only. Next priority after this leaf is audit/connect already implemented core commands to toolbar/sidebar/File in upstream positions.",
+    "description": "Implement shared native font dropdown previews in Writer and Calc and real style item-set previews in existing selectors. Work only in vite-office-writer branch writer. User reapproval2026-10-24 expands scope to160 implementation/test/tooling paths plus paired canonical records/generated views and permits necessary pinned source downloads inside Writer only. Prefer native JS/browser behavior when equivalent;do not port/install whole libraries or emulate native memory/lifetimes. Preserve native module/command/style owners and intentional browser I/O differences. Verify related tests/strict100/browser/source gates;second leaf after full checkpoint,so no full run now. Next priority remains existing-core toolbar/sidebar/File wiring.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "645969fa6a6e5a305d7b7da64e030361ee6ead2c59e227b8255c47b2ee787a03"
+    "value": "42446d21cdd0741fa5412a550561092679a209065069397f53b04eeb68fa5b2f"
   }
 }
