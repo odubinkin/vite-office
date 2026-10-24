@@ -18,6 +18,9 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { ScTable } from "../../../inc/table";
 import type { ScColumn } from "../../../inc/column";
+import { ScMergeAttr } from "../../../inc/attrib";
+import type { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_MERGE } from "../../../inc/scitems";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
 /** Original validated general clipboard rectangle;CONTENTS preserves destination attributes and row/column geometry. @param this - Actual destination sheet. @param context - Native paste context. @param col1 - First destination column. @param row1 - First destination row. @param col2 - Last destination column. @param row2 - Last destination row. @param dx - Source-to-destination column displacement. @param dy - Source-to-destination row displacement. @param source - Actual clipboard sheet. @returns Nothing. */
 export function CopyFromClip(
@@ -387,4 +390,38 @@ export function CopyConditionalFormat(
       if (!retained) incoming.Dispose();
     }
   }
+}
+
+/** Original table2 non-refresh merge extension,including allocated-column clamp and default-column invariant. The native inline ScColumn delegate is erased directly to its actual attribute-array owner. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Extended column output. @param lastRow - Extended row output. @returns Whether a merge was found. */
+export function ExtendMerge(
+  this: ScTable,
+  firstCol: number,
+  firstRow: number,
+  lastCol: [number],
+  lastRow: [number],
+): boolean {
+  const doc = this.GetDoc();
+  if (!doc.ValidCol(firstCol) || !doc.ValidCol(lastCol[0])) return false;
+  if (
+    lastCol[0] >= this.GetAllocatedColumnsCount() &&
+    (
+      (this.GetDefaultColumnData().GetPattern(firstRow) as ScPatternAttr).GetItem(
+        ATTR_MERGE,
+      ) as ScMergeAttr
+    ).IsMerged()
+  )
+    throw Error("Merged default-column assertion");
+  let found = false;
+  const endCol = this.ClampToAllocatedColumns(lastCol[0]),
+    endRow = lastRow[0];
+  for (let col = firstCol; col <= endCol; ++col)
+    found =
+      (this.FetchColumn(col) as ScColumn)["pAttrArray"].ExtendMerge(
+        col,
+        firstRow,
+        endRow,
+        lastCol,
+        lastRow,
+      ) || found;
+  return found;
 }

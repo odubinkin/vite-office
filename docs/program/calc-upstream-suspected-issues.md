@@ -3929,3 +3929,15 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `sc/source/core/data/document10.cxx`, `ScDocument::CopyOneCellFromClip`, source-column preparation and following `RefUpdateContext`.
 - The preparation loop increments `aSrcPos` after every source column,including the final one. The subsequent `mnColDelta = nCol1 - aSrcPos.Col()` therefore uses the first column after the source range rather than its starting column. For a one-column source at column0 pasted at column2,the recorded delta is1 rather than2.
 - The existing clone path already relocates relative references,and no active incorrect result is established by the admitted local-sheet scenarios. Preserve the exact post-loop position and delta calculation;do not silently change it to the initial source coordinate.
+
+### CALC-280 — Single-row paste traverses unselected sheets inside the selected envelope
+
+- Pinned source: `sc/source/core/data/document10.cxx`, `ScDocument::CopyOneCellFromClip`;`sc/source/core/data/document.cxx`, `getMarkedTableRange` and `CopyFromClip`.
+- The context stores the first and last populated selected sheets. The single-row fast path then copies to every sheet in that interval without checking `ScMarkData::GetTableSelect`,while pre-deletion and generic block copying do check the marks. With sheets0 and2 selected,a one-row source also overwrites sheet1.
+- The actual native control flow is preserved and covered with genuine documents and sparse marks. Do not silently restrict the fast path to selected sheets;the upstream inconsistency needs a separate reviewed decision.
+
+### CALC-281 — Single-row paste fast path does not consult source filtering
+
+- Pinned source: `sc/source/core/data/document.cxx`, `CopyFromClip`;`sc/source/core/data/document10.cxx`, `CopyOneCellFromClip`.
+- `CopyFromClip` computes source dimensions with `bIncludeFiltered`,but attempts the single-row fast path before the filtered/generic branch. That fast path has no include-filtered parameter or row-filter guard. A fully filtered one-row source therefore still copies with `bIncludeFiltered=false` in the represented direct core call.
+- Preserve the actual dispatch order and copied result. Higher UI layers may avoid this call for an entirely filtered source;no broader UI defect is asserted here.

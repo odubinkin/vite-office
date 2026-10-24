@@ -1,5 +1,8 @@
 /** @fileoverview Original table7 single-source-row repetition and geometry propagation through real clipboard stores. */
-import { CopyOneCellFromClip } from "./document10";
+import { ExtendMerge as extendDocumentMerge, CopyOneCellFromClip } from "./document10";
+import { ExtendMerge as extendTableMerge } from "./table2";
+import { ScAttrArray } from "../../../inc/attarray";
+import { CellAttributeHolder } from "../../../inc/patattr";
 import { UpdateScriptTypes } from "./column4";
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { ScCondFormatItem, ScCondFormatIndexes } from "../../../inc/attrib";
@@ -338,5 +341,88 @@ it("updates only unknown scripts in actual nonempty metadata and rejects unporte
       UpdateScriptTypes.call(col, 3, 3),
   ).toThrow("Conditional-result");
   conditional.Dispose();
+  doc.Dispose();
+});
+
+it("extends merged source ranges through actual native attribute entries and allocated columns", /** Native entry starts,bounds clamps and default-column assertions remain distinct. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+  pattern.ItemSetPut(new ScMergeAttr(3, 4));
+  doc.ApplyPattern(0, 0, 0, pattern);
+  doc.ApplyPattern(0, 8, 0, pattern);
+  const col: [number] = [0],
+    row: [number] = [0];
+  expect(extendDocumentMerge.call(doc, 0, 0, col, row, 0)).toBe(true);
+  expect([col[0], row[0]]).toEqual([2, 3]);
+  col[0] = 4;
+  row[0] = 12;
+  expect(extendDocumentMerge.call(doc, 0, 8, col, row, 0)).toBe(true);
+  expect([col[0], row[0]]).toEqual([4, 12]);
+  const vertical = new ScPatternAttr(doc.getCellAttributeHelper());
+  vertical.ItemSetPut(new ScMergeAttr(1, 4));
+  doc.ApplyPattern(0, 16, 0, vertical);
+  const verticalCol: [number] = [0],
+    verticalRow: [number] = [16];
+  expect(extendDocumentMerge.call(doc, 0, 16, verticalCol, verticalRow, 0)).toBe(true);
+  expect([verticalCol[0], verticalRow[0]]).toEqual([0, 19]);
+  vertical.Dispose();
+  const table = doc.FetchTable(0) as ScTable;
+  expect(extendTableMerge.call(table, -1, 0, [0], [0])).toBe(false);
+  expect(extendTableMerge.call(table, 0, 0, [-1], [0])).toBe(false);
+  for (const [first, end, tab] of [
+    [-1, 0, 0],
+    [0, -1, 0],
+    [0, 0, -1],
+    [0, 0, 1],
+  ] as const)
+    expect(extendDocumentMerge.call(doc, first, 0, [end], [0], tab)).toBe(false);
+  const attrs = new ScAttrArray(doc.MaxCol(), 0, doc),
+    holder = new CellAttributeHolder(pattern);
+  attrs.SetPatternArea(doc.MaxRow(), doc.MaxRow(), holder);
+  const boundaryCol: [number] = [doc.MaxCol()],
+    boundaryRow: [number] = [doc.MaxRow()];
+  expect(
+    attrs.ExtendMerge(doc.MaxCol(), doc.MaxRow(), doc.MaxRow(), boundaryCol, boundaryRow),
+  ).toBe(true);
+  expect([boundaryCol[0], boundaryRow[0]]).toEqual([doc.MaxCol(), doc.MaxRow()]);
+  expect(
+    /** Refresh has no substitute filter/flag backend. @returns Nothing. */ () =>
+      attrs.ExtendMerge(0, 0, 0, [0], [0], true),
+  ).toThrow("Merge flag refresh");
+  const defaults = new ScAttrArray(-1, 0, doc);
+  expect(
+    /** The native default-column method precondition remains explicit. @returns Nothing. */ () =>
+      defaults.ExtendMerge(0, 0, 0, [0], [0]),
+  ).toThrow("Default-column");
+  table.GetDefaultColumnData()["pAttrArray"].SetPatternArea(0, 0, holder);
+  expect(
+    /** Actual mutated default-column attributes violate the original invariant. @returns Nothing. */ () =>
+      extendTableMerge.call(table, 0, 0, [doc.MaxCol()], [0]),
+  ).toThrow("Merged default-column");
+  defaults.Dispose();
+  attrs.Dispose();
+  holder.Dispose();
+  pattern.Dispose();
+  doc.Dispose();
+});
+it("includes the original merged-source overlap in generic document paste dimensions", /** Contents outside the nominal one-cell source area are reached through the actual native merge extension. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  doc.InsertTab(0, unicode("Data"));
+  clip.ResetClip(doc, 0);
+  clip.SetClipArea(new ScRange());
+  clip.SetValue(new ScAddress(), 9);
+  clip.SetValue(new ScAddress(1, 1, 0), 77);
+  const pattern = new ScPatternAttr(clip.getCellAttributeHelper());
+  pattern.ItemSetPut(new ScMergeAttr(3, 4));
+  clip.ApplyPattern(0, 0, 0, pattern);
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  doc.CopyFromClip(new ScRange(3, 3, 0, 4, 4, 0), marks, InsertDeleteFlags.CONTENTS, null, clip);
+  expect(doc.GetValue(new ScAddress(3, 3, 0))).toBe(9);
+  expect(doc.GetValue(new ScAddress(4, 4, 0))).toBe(77);
+  pattern.Dispose();
+  clip.Dispose();
   doc.Dispose();
 });

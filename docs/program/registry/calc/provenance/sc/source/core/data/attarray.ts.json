@@ -13,13 +13,15 @@
       "CopyArea",
       "AddCondFormat",
       "RemoveCondFormat",
-      "IsMerged"
+      "IsMerged",
+      "ExtendMerge"
     ],
     "upstreamSymbols": [
       "ScAttrArray",
       "ScAttrArray::AddCondFormat",
       "ScAttrArray::RemoveCondFormat",
-      "ScAttrArray::IsMerged"
+      "ScAttrArray::IsMerged",
+      "ScAttrArray::ExtendMerge"
     ],
     "preservedResponsibilities": [
       "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
@@ -33,7 +35,8 @@
       "Task76 attribute-copy progress: Original CopyArea retains row-offset/clipping order,canonical source/destination defaults,empty-run handling,source run traversal,merge-flag stripping (including All),actual holder lifetimes and helper migration through native MigrateToDocument. Source runs/defaults are not materialized as another table model. Unported migration style/validation/format services retain their stated admission boundaries.",
       "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
-      "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete."
+      "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
+      "Original non-refresh ScAttrArray::ExtendMerge scans actual canonical entries,uses each entry start,retains native row/column bounds and default-column assertion. Refresh needs unported flag/filter services and rejects explicitly."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -67,6 +70,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/attarray.ts",
           "marker": "IsMerged"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
+          "marker": "orchestrates real default-content"
         }
       ],
       "upstream": [

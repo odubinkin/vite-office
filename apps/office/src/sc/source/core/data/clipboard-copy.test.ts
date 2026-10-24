@@ -1,5 +1,7 @@
 /** @fileoverview Native general clipboard column/table copying through actual typed storage and shared formula/metadata owners. */
 import { expect, it } from "vitest";
+import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
+import { ScRangeList } from "../../../inc/rangelst";
 import { BroadcastAction } from "./documen7";
 import { ScMarkData } from "../../../inc/markdata";
 import { ColumnSpanSet } from "../../../inc/columnspanset";
@@ -323,4 +325,181 @@ it("preserves rectangular individual-versus-area broadcast controls and native h
   ).toThrow("initialized column");
   clip.Dispose();
   doc.Dispose();
+});
+
+it("orchestrates real default-content range paste,subscriptions,recalculation and fresh ODS reopen", /** One source row repeats through actual document preparation and native final notification phases. @returns Completion. */ async () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  doc.InsertTab(0, unicode("Data"));
+  doc.SetValue(new ScAddress(), 3);
+  doc.SetFormula(new ScAddress(1, 0, 0), unicode("=A1+1"), grammar);
+  expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(4);
+  clip.ResetClip(doc, 0);
+  clip.SetClipArea(new ScRange(0, 0, 0, 1, 0, 0));
+  doc.CopyToDocument(new ScRange(0, 0, 0, 1, 0, 0), InsertDeleteFlags.CONTENTS, false, clip);
+  clip.GetBreakIterator(
+    /** Binds the genuine native script service. @returns Service. */ () => new BreakIteratorImpl(),
+  );
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  doc.SetFormula(new ScAddress(3, 3, 0), unicode("=$A$1+100"), grammar);
+  doc.CopyFromClip(new ScRange(2, 3, 0, 5, 5, 0), marks, InsertDeleteFlags.CONTENTS, null, clip);
+  expect(doc.GetAutoCalc()).toBe(true);
+  expect(doc.IsInsertingFromOtherDoc()).toBe(false);
+  expect(doc.GetFormatExchangeList()).toBeNull();
+  expect(doc.GetValue(new ScAddress(3, 3, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(4);
+  doc.SetValue(new ScAddress(4, 5, 0), 20);
+  expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(21);
+  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  reopened.SetValue(new ScAddress(4, 5, 0), 40);
+  expect(reopened.GetValue(new ScAddress(5, 5, 0))).toBe(41);
+  reopened.Dispose();
+  clip.Dispose();
+  doc.Dispose();
+});
+it("tiles generic filtered source rows across multiple real destination ranges", /** Native source-row cursors reset for each column chunk and continue between destination ranges. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  doc.InsertTab(0, unicode("Data"));
+  clip.ResetClip(doc, 0);
+  clip.SetClipArea(new ScRange(0, 0, 0, 1, 2, 0));
+  for (let row = 0; row < 3; ++row) {
+    clip.SetValue(new ScAddress(0, row, 0), [3, 7, 11][row] as number);
+    clip.SetTextCell(new ScAddress(1, row, 0), unicode(["a", "b", "c"][row] as string));
+  }
+  clip.SetRowFiltered(1, 1, 0, true);
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  const ranges = new ScRangeList();
+  ranges.push_back(new ScRange(4, 5, 0, 7, 6, 0));
+  ranges.push_back(new ScRange(4, 10, 0, 7, 11, 0));
+  doc.SetAutoCalc(false);
+  doc.CopyFromClip(
+    new ScRange(4, 5, 0, 7, 11, 0),
+    marks,
+    InsertDeleteFlags.CONTENTS,
+    null,
+    clip,
+    false,
+    false,
+    false,
+    false,
+    ranges,
+  );
+  expect(doc.GetAutoCalc()).toBe(false);
+  for (const row of [5, 6, 10, 11]) {
+    expect(doc.GetValue(new ScAddress(4, row, 0))).toBe(row === 5 || row === 10 ? 3 : 11);
+    expect(doc.GetValue(new ScAddress(6, row, 0))).toBe(row === 5 || row === 10 ? 3 : 11);
+  }
+  expect(doc.GetCellType(new ScAddress(4, 8, 0))).toBe(CellType.CELLTYPE_NONE);
+  clip.Dispose();
+  doc.Dispose();
+});
+it("preserves native clipboard no-op guards and explicit unported admission boundaries", /** Scoped auto-calc/formatter state is restored even when an unavailable service rejects. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP),
+    foreign = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  foreign.InsertTab(0, unicode("Other"));
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  const range = new ScRange();
+  clip.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, null);
+  doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, clip);
+  doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, foreign);
+  expect(
+    /** Native global clipboard dependency is not replaced with another document. @returns Nothing. */ () =>
+      doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, null),
+  ).toThrow("Global clipboard");
+  clip.ResetClip(foreign, 0);
+  clip.SetClipArea(range);
+  clip.SetValue(new ScAddress(), 7);
+  expect(
+    /** Real distinct formatters require the actual unported merge implementation. @returns Nothing. */ () =>
+      doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, clip),
+  ).toThrow("Foreign number-formatter");
+  expect(doc.GetAutoCalc()).toBe(true);
+  clip.ResetClip(doc, 0);
+  clip.SetClipArea(range);
+  clip.SetValue(new ScAddress(), 8);
+  for (const flags of [
+    InsertDeleteFlags.NOTE | InsertDeleteFlags.ADDNOTES,
+    InsertDeleteFlags.ATTRIB,
+  ])
+    expect(
+      /** Nondefault contexts retain their real admission boundary. @returns Nothing. */ () =>
+        doc.CopyFromClip(range, marks, flags, null, clip),
+    ).toThrow("Nondefault clipboard");
+  clip.SetClipArea(range, true);
+  expect(
+    /** Same-document cut reference movement remains explicit. @returns Nothing. */ () =>
+      doc.CopyFromClip(range, marks, InsertDeleteFlags.CONTENTS, null, clip),
+  ).toThrow("Same-document cut");
+  expect(doc.GetAutoCalc()).toBe(true);
+  expect(doc.IsInsertingFromOtherDoc()).toBe(false);
+  expect(doc.GetFormatExchangeList()).toBeNull();
+  clip.Dispose();
+  foreign.Dispose();
+  doc.Dispose();
+});
+
+it.each([true, false])(
+  "preserves upstream fast-path sheet/filter behavior with includeFiltered=%s",
+  /** The original fast path traverses the entire selected-sheet envelope and does not consult source row filters. @param filtered - Native include-filtered control. @returns Nothing. */ (
+    filtered,
+  ) => {
+    const doc = new ScDocument(),
+      clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+    for (let tab = 0; tab < 3; ++tab) doc.InsertTab(tab, unicode(`Sheet${tab}`));
+    clip.ResetClip(doc, 0);
+    clip.SetClipArea(new ScRange());
+    clip.SetValue(new ScAddress(), 37);
+    clip.SetRowFiltered(0, 0, 0, true);
+    doc.SetValue(new ScAddress(2, 2, 1), 9);
+    const marks = new ScMarkData(doc.GetSheetLimits());
+    marks.SelectTable(0, true);
+    marks.SelectTable(2, true);
+    doc.CopyFromClip(
+      new ScRange(2, 2, 0, 2, 2, 2),
+      marks,
+      InsertDeleteFlags.CONTENTS,
+      null,
+      clip,
+      true,
+      false,
+      filtered,
+    );
+    expect(doc.GetValue(new ScAddress(2, 2, 0))).toBe(37);
+    expect(doc.GetValue(new ScAddress(2, 2, 1))).toBe(37);
+    expect(doc.GetValue(new ScAddress(2, 2, 2))).toBe(37);
+    clip.Dispose();
+    doc.Dispose();
+  },
+);
+it("uses native populated selected-sheet ranges and keeps an empty selection envelope inert", /** Sparse Undo sheets and absent selected tabs are actual native vector slots. @returns Nothing. */ () => {
+  const source = new ScDocument(),
+    undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  for (let tab = 0; tab < 3; ++tab) source.InsertTab(tab, unicode(`Sheet${tab}`));
+  const selected = new ScMarkData(source.GetSheetLimits());
+  selected.SelectTable(0, true);
+  selected.SelectTable(2, true);
+  undo.InitUndoSelected(source, selected);
+  clip.ResetClip(source, 0);
+  clip.SetClipArea(new ScRange(0, 0, 0, 0, 1, 0));
+  clip.SetValue(new ScAddress(), 5);
+  clip.SetValue(new ScAddress(0, 1, 0), 6);
+  const marks = new ScMarkData(source.GetSheetLimits());
+  for (const tab of [0, 1, 2, 4]) marks.SelectTable(tab, true);
+  undo.CopyFromClip(new ScRange(2, 2, 0, 2, 3, 2), marks, InsertDeleteFlags.CONTENTS, null, clip);
+  expect(undo.FetchTable(1)).toBeNull();
+  expect(undo.GetValue(new ScAddress(2, 2, 2))).toBe(5);
+  const absent = new ScMarkData(source.GetSheetLimits());
+  absent.SelectTable(4, true);
+  undo.CopyFromClip(new ScRange(3, 2, 0, 3, 3, 2), absent, InsertDeleteFlags.CONTENTS, null, clip);
+  expect(undo.GetCellType(new ScAddress(3, 2, 0))).toBe(CellType.CELLTYPE_NONE);
+  undo.Dispose();
+  clip.Dispose();
+  source.Dispose();
 });

@@ -1,11 +1,19 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
 import { UpdateScriptTypes } from "./column4";
+import { AutoCalcSwitch } from "../../../inc/scopetools";
+import { ScBulkBroadcast } from "../inc/bcaslot";
+import { SfxHintId } from "../../../../svl/inc/hint";
+import { ScRangeList } from "../../../inc/rangelst";
+import { InsertDeleteFlags } from "../../../inc/global";
+import { MAXTAB, ValidTab } from "../../../inc/address";
+import { BroadcastAction } from "./documen7";
+import { ExtendMerge as extendTableMerge } from "./table2";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { UpdateRefMode } from "../../../inc/global";
 
-import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import { CopyFromClipContext } from "../../../inc/clipcontext";
 import type { ScMarkData } from "../../../inc/markdata";
-import type { ColumnSpanSet } from "../../../inc/columnspanset";
+import { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn } from "../../../inc/column";
 import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
@@ -188,4 +196,192 @@ export function CopyOneCellFromClip(
   update.meMode = UpdateRefMode.URM_COPY;
   this.UpdateReference(update, context.getUndoDoc(), false);
   return true;
+}
+
+/** Original document.cxx single-sheet clipboard listener forwarding,partitioned on the same ScDocument instance. @param this - Actual document. @param start - Actual start context. @param end - Actual end context. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
+export function StartListeningFromClip(
+  this: ScDocument,
+  start: StartListeningContext,
+  end: EndListeningContext,
+  tab: number,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+): void {
+  this.FetchTable(tab)?.StartListeningFormulaCells(start, end, col1, row1, col2, row2);
+}
+/** Original getMarkedTableRange sentinel/default and ascending selected-sheet traversal. @param doc - Actual document. @param marks - Actual marks. @returns First and last populated selected sheets. */
+function getMarkedTableRange(doc: ScDocument, marks: ScMarkData): [number, number] {
+  let first = MAXTAB,
+    last = 0;
+  for (const tab of marks.GetSelectedTabs()) {
+    if (tab >= doc.GetTableCount()) break;
+    if (!doc.FetchTable(tab)) continue;
+    if (tab < first) first = tab;
+    last = tab;
+  }
+  return [first, last];
+}
+/** Original document non-refresh merge extension through actual tables;refresh/filter services are outside this consumed path. @param this - Clipboard. @param col - First column. @param row - First row. @param endCol - Last column output. @param endRow - Last row output. @param tab - Source sheet. @returns Merge found. */
+export function ExtendMerge(
+  this: ScDocument,
+  col: number,
+  row: number,
+  endCol: [number],
+  endRow: [number],
+  tab: number,
+): boolean {
+  if (!this.ValidColRow(col, row) || !this.ValidColRow(endCol[0], endRow[0]) || !ValidTab(tab))
+    return false;
+  const table = this.FetchTable(tab);
+  return table ? extendTableMerge.call(table, col, row, endCol, endRow) : false;
+}
+/** Original nested formatter-merge scope on the actual document. Only the genuine same-formatter branch is admitted;foreign formatter merging has no dummy exchange map. */
+class NumFmtMergeHandler {
+  /** Runs original formatter queries before their identity check. @param doc - Actual destination. @param source - Clipboard source. @returns Scope. */
+  constructor(
+    private readonly doc: ScDocument,
+    source: ScDocument,
+  ) {
+    const own = doc.GetFormatTable(),
+      other = source.GetFormatTable();
+    if (other !== own) throw Error("Foreign number-formatter merging is not implemented");
+  }
+  /** Original destructor clears the borrowed exchange-table pointer. @returns Nothing. */
+  Dispose(): void {
+    this.doc["pFormatExchangeList"] = null;
+  }
+}
+/** Original document.cxx CopyFromClip control flow over actual default-CONTENTS owners. Physical partition onto this ScDocument source module preserves its instance/state contracts. Attribute preallocation is unreachable in this admitted context;global clipboard lookup,foreign formatter merge and nondefault paste remain explicit boundaries. @param this - Actual destination. @param destination - Overall destination rectangle. @param marks - Native selected sheets. @param flags - Native insertion flags. @param undo - Reference Undo or null. @param clip - Actual clipboard or unsupported global lookup null. @param resetCut - Original defaulttrue. @param asLink - Original defaultfalse. @param includeFiltered - Original defaulttrue. @param skipEmpty - Original defaultfalse. @param destinations - Native optional destination ranges. @returns Nothing. */
+export function CopyFromClip(
+  this: ScDocument,
+  destination: ScRange,
+  marks: ScMarkData,
+  flags: InsertDeleteFlags,
+  undo: ScDocument | null,
+  clip: ScDocument | null,
+  resetCut = true,
+  asLink = false,
+  includeFiltered = true,
+  skipEmpty = false,
+  destinations: ScRangeList | null = null,
+): void {
+  if (this.IsClipboard()) return;
+  if (!clip) throw Error("Global clipboard lookup is not implemented");
+  if (!clip.IsClipboard() || !clip.GetTableCount()) return;
+  const autoCalc = new AutoCalcSwitch(this, false);
+  let merge: NumFmtMergeHandler | null = null,
+    context: CopyFromClipContext | null = null;
+  try {
+    merge = new NumFmtMergeHandler(this, clip);
+    const range = clip.GetClipParam().getWholeRange();
+    let width = 0,
+      height = 0;
+    for (let tab = 0; tab < clip.GetTableCount(); ++tab) {
+      if (!clip.FetchTable(tab)) continue;
+      const endCol: [number] = [range.aEnd.Col()],
+        endRow: [number] = [range.aEnd.Row()];
+      ExtendMerge.call(clip, range.aStart.Col(), range.aStart.Row(), endCol, endRow, tab);
+      width = Math.max(width, endCol[0] - range.aEnd.Col());
+      height = Math.max(height, endRow[0] - range.aEnd.Row());
+    }
+    const cols: [number] = [0],
+      rows: [number] = [0];
+    clip.GetClipArea(cols, rows, includeFiltered);
+    width += cols[0];
+    height += rows[0];
+    let deletion = flags;
+    if (flags & InsertDeleteFlags.CONTENTS) deletion |= InsertDeleteFlags.FORMULA;
+    if (
+      (flags & (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ADDNOTES)) ===
+      (InsertDeleteFlags.NOTE | InsertDeleteFlags.ADDNOTES)
+    )
+      deletion &= ~InsertDeleteFlags.NOTE;
+    if (flags & InsertDeleteFlags.ATTRIB) deletion |= InsertDeleteFlags.ATTRIB;
+    context = new CopyFromClipContext(this, undo, clip, flags, asLink, skipEmpty);
+    const tabs = getMarkedTableRange(this, marks);
+    context.setTabRange(tabs[0], tabs[1]);
+    context.setDeleteFlag(deletion);
+    const local = new ScRangeList();
+    if (!destinations) {
+      local.push_back(destination);
+      destinations = local;
+    }
+    this.SetInsertingFromOtherDoc(true);
+    const broadcasts = new ColumnSpanSet();
+    const clipCol = range.aStart.Col(),
+      clipEnd = range.aEnd.Row();
+    let clipRow = range.aStart.Row();
+    try {
+      for (const target of destinations) {
+        const col1 = target.aStart.Col(),
+          row1 = target.aStart.Row(),
+          col2 = target.aEnd.Col(),
+          row2 = target.aEnd.Row();
+        context.setDestRange(col1, row1, col2, row2);
+        this.DeleteBeforeCopyFromClip(context, marks, broadcasts);
+        if (CopyOneCellFromClip.call(this, context, col1, row1, col2, row2)) continue;
+        let c1 = col1,
+          r1 = row1,
+          c2 = Math.min(c1 + width, col2),
+          r2 = Math.min(r1 + height, row2);
+        do {
+          const saved = clipRow;
+          do {
+            clipRow = saved;
+            const dx = c1 - clipCol,
+              dy = r1 - clipRow;
+            if (includeFiltered) {
+              this.CopyBlockFromClip(context, c1, r1, c2, r2, marks, dx, dy);
+              clipRow += r2 - r1 + 1;
+            } else {
+              const cursor: [number] = [clipRow];
+              this.CopyNonFilteredFromClip(context, c1, r1, c2, r2, marks, dx, cursor, clipEnd);
+              clipRow = cursor[0];
+            }
+            c1 = c2 + 1;
+            c2 = Math.min(c1 + width, col2);
+          } while (c1 <= col2);
+          if (clipRow > clipEnd) clipRow = range.aStart.Row();
+          c1 = col1;
+          c2 = Math.min(c1 + width, col2);
+          r1 = r2 + 1;
+          r2 = Math.min(r1 + height, row2);
+        } while (r1 <= row2);
+      }
+    } finally {
+      this.SetInsertingFromOtherDoc(false);
+    }
+    // The actual context constructor admits exactly CONTENTS,so the native content guard is proven true here.
+    for (const tab of marks.GetSelectedTabs())
+      context.setListeningFormulaSpans(
+        tab,
+        destination.aStart.Col(),
+        destination.aStart.Row(),
+        destination.aEnd.Col(),
+        destination.aEnd.Row(),
+      );
+    context.startListeningFormulas();
+    const bulk = new ScBulkBroadcast(this.GetBASM(), SfxHintId.ScDataChanged);
+    try {
+      this.SetDirtyFromClip(
+        destination.aStart.Col(),
+        destination.aStart.Row(),
+        destination.aEnd.Col(),
+        destination.aEnd.Row(),
+        marks,
+        flags,
+        broadcasts,
+      );
+      broadcasts.executeColumnAction(this, new BroadcastAction(this));
+    } finally {
+      bulk.Dispose();
+    }
+    if (resetCut) clip.GetClipParam().mbCutMode = false;
+  } finally {
+    context?.Dispose();
+    merge?.Dispose();
+    autoCalc.Dispose();
+  }
 }

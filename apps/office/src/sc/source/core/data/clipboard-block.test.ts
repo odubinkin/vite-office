@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScAddress, ScRange } from "../../../inc/address";
+import { ScRangeList } from "../../../inc/rangelst";
 import { ScMarkData } from "../../../inc/markdata";
 import { CopyFromClipContext } from "../../../inc/clipcontext";
 import { ColumnSpanSet } from "../../../inc/columnspanset";
@@ -250,6 +251,39 @@ it("retains the native maximum source-sheet guard without allocating intervening
   expect(clip.GetTableCount()).toBe(10000);
   expect(clip.FetchTable(9998)).toBe(null);
   context.Dispose();
+  clip.Dispose();
+  doc.Dispose();
+});
+
+it("continues a partial native source chunk between destination ranges across sparse clipboard slots", /** The original source cursor is shared across ranges rather than reset or filled through a browser loop. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  for (let tab = 0; tab < 3; ++tab) doc.InsertTab(tab, unicode(`Sheet${tab}`));
+  clip.ResetClip(doc, 2);
+  clip.SetClipArea(new ScRange(0, 0, 2, 0, 2, 2));
+  for (let row = 0; row < 3; ++row)
+    clip.SetValue(new ScAddress(0, row, 2), [3, 7, 11][row] as number);
+  const marks = new ScMarkData(doc.GetSheetLimits());
+  marks.SelectTable(0, true);
+  const ranges = new ScRangeList();
+  ranges.push_back(new ScRange(2, 3, 0, 2, 3, 0));
+  ranges.push_back(new ScRange(2, 5, 0, 2, 6, 0));
+  doc.CopyFromClip(
+    new ScRange(2, 3, 0, 2, 6, 0),
+    marks,
+    InsertDeleteFlags.CONTENTS,
+    null,
+    clip,
+    true,
+    false,
+    true,
+    false,
+    ranges,
+  );
+  expect(doc.GetValue(new ScAddress(2, 3, 0))).toBe(3);
+  expect(doc.GetCellType(new ScAddress(2, 4, 0))).toBe(0);
+  expect(doc.GetValue(new ScAddress(2, 5, 0))).toBe(7);
+  expect(doc.GetValue(new ScAddress(2, 6, 0))).toBe(11);
   clip.Dispose();
   doc.Dispose();
 });

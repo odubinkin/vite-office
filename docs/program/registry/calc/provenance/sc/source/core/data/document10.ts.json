@@ -16,7 +16,12 @@
       "EnableDelayDeletingBroadcasters",
       "StartAllListeners",
       "IsMerged",
-      "CopyOneCellFromClip"
+      "CopyOneCellFromClip",
+      "CopyFromClip",
+      "ExtendMerge",
+      "StartListeningFromClip",
+      "NumFmtMergeHandler",
+      "getMarkedTableRange"
     ],
     "upstreamSymbols": [
       "ScDocument::RegroupFormulaCells",
@@ -33,7 +38,8 @@
       "Native EnableDelayDeletingBroadcasters preserves the equal-state early return and flushes actual populated sheets only when disabling. StartAllListeners skips clip/undo/no-listening owners,shares Start/EndListeningContext cursors and visits existing sheets in the original inclusive range.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
       "Native pool-helper ownership now retains actual salhelper SimpleReferenceObject acquire/release operations at document initialization,rtl::Reference assignment and destruction. ScPoolHelper owns a lazy actual General/NatNum0 SvNumberFormatter and copies default/document options into its null-date,precision and two-digit-year fields. Shared clipboard/Undo owners retain the formatter after source closure;the last intrusive release destroys its owned parsed values. Number-color callbacks,edit-engine and physical style/item-pool shutdown remain unported;no fake service is installed. Document paste and UI acceptance remain pending.",
-      "Original CopyOneCellFromClip now runs source cut/row/width/sheet/merge guards,pattern/script/value preparation,actual table/column single-row copying and real reference completion on the same ScDocument. Native source-column and destination-table dereference preconditions are explicit assertions. The post-loop source-column delta is preserved (CALC279). Current CONTENTS slice has no note/sparkline stores and introduces no fake getters. General document CopyFromClip orchestration,paste Undo/EnterBlock and task74 remain pending."
+      "Original CopyOneCellFromClip now runs source cut/row/width/sheet/merge guards,pattern/script/value preparation,actual table/column single-row copying and real reference completion on the same ScDocument. Native source-column and destination-table dereference preconditions are explicit assertions. The post-loop source-column delta is preserved (CALC279). Current CONTENTS slice has no note/sparkline stores and introduces no fake getters. General document CopyFromClip orchestration,paste Undo/EnterBlock and task74 remain pending.",
+      "Original document.cxx CopyFromClip orchestration is partitioned beside the existing same-instance clipboard phases to retain source-family ownership and the facade size bound. Original default flags,marked-table envelope,merge overlap,deletion,one-row fast path,column/row chunking,filtered source cursor,post-insertion listening,bulk dirty/broadcast and reset-cut phases run through actual owners. NumFmtMergeHandler admits the genuine same-formatter identity branch and clears the real exchange-table pointer;foreign merging and global clipboard lookup remain explicit unported services with no fake tables/providers. AutoCalc and context owners are released in finally;local admission errors reset the same insertion flag without a synthetic transaction. Native attr-preallocation and final negative CONTENTS branch are unreachable because the actual context constructor admits exactly CONTENTS. StartListeningFromClip forwarding moves unchanged from the facade onto the same ScDocument instance. Non-refresh document merge extension delegates through actual tables. Native fast-path selected-sheet/filter inconsistencies are preserved as CALC280-281. Paste Undo/EnterBlock and task74 remain pending."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -75,6 +81,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
           "marker": "original document fast path"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
+          "marker": "orchestrates real default-content"
         }
       ],
       "upstream": [
@@ -93,6 +103,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
           "marker": "ScDocument::IsMerged"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::CopyFromClip("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::NumFmtMergeHandler::NumFmtMergeHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "getMarkedTableRange"
         }
       ]
     }

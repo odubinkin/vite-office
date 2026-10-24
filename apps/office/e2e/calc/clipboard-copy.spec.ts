@@ -552,6 +552,71 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         language.dispose();
         country.dispose();
         variant.dispose();
+        const pasteDocument = new n.ScDocument(),
+          pasteClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
+        pasteDocument.InsertTab(0, n.unicode("Paste"));
+        pasteDocument.SetValue(new n.ScAddress(), 10);
+        pasteDocument.SetFormula(new n.ScAddress(1, 0, 0), n.unicode("=A1+1"), grammar);
+        pasteDocument.GetValue(new n.ScAddress(1, 0, 0));
+        pasteClip.ResetClip(pasteDocument, 0);
+        pasteClip.SetClipArea(new n.ScRange(0, 0, 0, 1, 0, 0));
+        pasteDocument.CopyToDocument(
+          new n.ScRange(0, 0, 0, 1, 0, 0),
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          pasteClip,
+        );
+        pasteClip.GetBreakIterator(
+          /** Uses the actual existing script service. @returns Service. */ () =>
+            new n.BreakIteratorImpl(),
+        );
+        const pasteMarks = new n.ScMarkData(pasteDocument.GetSheetLimits());
+        pasteMarks.SelectTable(0, true);
+        pasteDocument.CopyFromClip(
+          new n.ScRange(2, 3, 0, 3, 5, 0),
+          pasteMarks,
+          n.InsertDeleteFlags.CONTENTS,
+          null,
+          pasteClip,
+        );
+        const beforePasteChange = pasteDocument.GetValue(new n.ScAddress(3, 5, 0));
+        pasteDocument.SetValue(new n.ScAddress(2, 5, 0), 20);
+        const firstPublicPaste = {
+          before: beforePasteChange,
+          after: pasteDocument.GetValue(new n.ScAddress(3, 5, 0)),
+          autoCalc: pasteDocument.GetAutoCalc(),
+          inserting: pasteDocument.IsInsertingFromOtherDoc(),
+          exchange: pasteDocument.GetFormatExchangeList(),
+        };
+        pasteDocument.SetValue(new n.ScAddress(0, 1, 0), 30);
+        pasteDocument.SetTextCell(new n.ScAddress(1, 1, 0), n.unicode("tail"));
+        pasteClip.ResetClip(pasteDocument, 0);
+        pasteClip.SetClipArea(new n.ScRange(0, 0, 0, 1, 1, 0));
+        pasteDocument.CopyToDocument(
+          new n.ScRange(0, 0, 0, 1, 1, 0),
+          n.InsertDeleteFlags.CONTENTS,
+          false,
+          pasteClip,
+        );
+        pasteDocument.CopyFromClip(
+          new n.ScRange(6, 10, 0, 7, 13, 0),
+          pasteMarks,
+          n.InsertDeleteFlags.CONTENTS,
+          null,
+          pasteClip,
+        );
+        const publicPaste = {
+          ...firstPublicPaste,
+          generic: [
+            pasteDocument.GetValue(new n.ScAddress(6, 10, 0)),
+            pasteDocument.GetValue(new n.ScAddress(6, 11, 0)),
+            pasteDocument.GetValue(new n.ScAddress(6, 12, 0)),
+            pasteDocument.GetValue(new n.ScAddress(6, 13, 0)),
+            pasteDocument.GetValue(new n.ScAddress(7, 10, 0)),
+          ],
+        };
+        pasteClip.Dispose();
+        pasteDocument.Dispose();
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -567,6 +632,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           sparse,
           undoGeometryDisabled,
           undoShared,
+          publicPaste,
           rowPrepared,
           preparedScripts,
           singleRow,
@@ -639,6 +705,14 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     sparse: true,
     undoGeometryDisabled: true,
     undoShared: true,
+    publicPaste: {
+      before: 11,
+      after: 21,
+      autoCalc: true,
+      inserting: false,
+      exchange: null,
+      generic: [10, 30, 10, 30, 11],
+    },
     rowPrepared: true,
     preparedScripts: [1, 1],
     singleRow: [3, 7, 3, 3, 7, 3],

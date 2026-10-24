@@ -1,5 +1,4 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
-import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import { ScViewOptions } from "../../../inc/viewopti";
 import * as documen3 from "./documen3";
@@ -201,17 +200,18 @@ export class ScDocument {
     documen7.DeleteBroadcasters.apply(this, args);
   }
   static readonly HardRecalcState = HardRecalcState;
-  /** Original clipboard listening delegates through actual selected sheets and columns. @param start - Listening start context. @param end - End context. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
-  StartListeningFromClip(
-    start: StartListeningContext,
-    end: EndListeningContext,
-    tab: number,
-    col1: number,
-    row1: number,
-    col2: number,
-    row2: number,
-  ): void {
-    this.FetchTable(tab)?.StartListeningFormulaCells(start, end, col1, row1, col2, row2);
+  /** Original clipboard listening on the same document and actual source contexts. @param args - Native contexts,sheet and bounds. @returns Nothing. */
+  StartListeningFromClip(...args: Parameters<typeof document10.StartListeningFromClip>): void {
+    document10.StartListeningFromClip.apply(this, args);
+  }
+  /** Original document clipboard paste orchestration. @param args - Native range,marks,flags,documents and original policy defaults. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof document10.CopyFromClip>): void {
+    document10.CopyFromClip.apply(this, args);
+  }
+  private pFormatExchangeList: Map<number, number> | null = null;
+  /** Original borrowed formatter exchange-table pointer. @returns Actual table or null. */
+  GetFormatExchangeList(): Map<number, number> | null {
+    return this.pFormatExchangeList;
   }
   /** Shares the actual source pool helper,string pool and canonical attribute helper. @param source - Resource owner. @returns Nothing. */
   SharePooledResources(source: ScDocument): void {
