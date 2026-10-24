@@ -74,13 +74,13 @@ export class ScUndoPasteOptions {
     }
   }
 }
-/** Native content-only ScUndoPaste owns actual Undo/Redo documents and base range/mark value fields. ScMultiBlockUndo drawing/view,change tracking,cut RefUndoData and Repeat services remain unrepresented;no replacement snapshots or fake shell are installed. */
+/** Native default-content ScUndoPaste with optional full attribute undo owns actual Undo/Redo documents and base range/mark value fields. ScMultiBlockUndo drawing/view,change tracking,cut RefUndoData and Repeat services remain unrepresented;no replacement snapshots or fake shell are installed. */
 export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
   private readonly maBlockRanges: ScRangeList;
   private readonly aMarkData: ScMarkData;
   /** Native private repeat-option value projects to protected TypeScript state while Repeat dispatch is unrepresented;no public accessor or fake lifecycle hook is added. */
   protected readonly aPasteOptions: ScUndoPasteOptions;
-  /** Original ownership/default fields;only copy-mode null RefUndoData and CONTENTS are admitted. @param shell - Actual owning shell. @param ranges - Actual base range list copied by value. @param marks - Original native marks. @param undo - Owned native Undo document. @param redo - Optional owned Redo document. @param flags - Original content flags. @param _refData - Native null copy-mode reference data. @param redoFilled - Original filled flag. @param options - Original optional repeat options. @returns Action. */
+  /** Original ownership/default fields;only copy-mode null RefUndoData and native default-content/attribute undo flags are admitted. @param shell - Actual owning shell. @param ranges - Actual base range list copied by value. @param marks - Original native marks. @param undo - Owned native Undo document. @param redo - Optional owned Redo document. @param flags - Original content flags. @param _refData - Native null copy-mode reference data. @param redoFilled - Original filled flag. @param options - Original optional repeat options. @returns Action. */
   constructor(
     private readonly shell: ScDocShell,
     ranges: ScRangeList,
@@ -94,7 +94,12 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
   ) {
     super();
     void _refData;
-    if (flags !== InsertDeleteFlags.CONTENTS) {
+    if (
+      flags !== InsertDeleteFlags.CONTENTS &&
+      flags !== (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.NOCAPTIONS) &&
+      flags !==
+        (InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS)
+    ) {
       // Original unique_ptr parameters/members are destroyed when construction cannot complete.
       undo.Dispose();
       redo?.Dispose();
@@ -108,8 +113,9 @@ export class ScUndoPaste extends SfxUndoAction<ScDocShell> {
   private DoChange(backward: boolean): void {
     const doc = this.shell.GetDocument(),
       count = doc.GetTableCount();
-    // Constructor admission proves native CONTENTS normalization equals the actual stored flags and ATTRIB is absent.
-    let flags = this.flags;
+    // Constructor admission retains native all-or-none content and attribute normalization.
+    let flags = InsertDeleteFlags.CONTENTS;
+    if (this.flags & InsertDeleteFlags.ATTRIB) flags |= InsertDeleteFlags.ATTRIB;
     flags &= ~InsertDeleteFlags.OBJECTS;
     flags |= InsertDeleteFlags.NOCAPTIONS;
     if (backward && !this.redoFilled) {

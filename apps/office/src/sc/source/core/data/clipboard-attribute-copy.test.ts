@@ -1,11 +1,13 @@
 /** @fileoverview Native attribute CopyArea and MigrateToDocument used by actual paste Undo snapshots. */
+import { ScAddress } from "../../../inc/address";
 import { expect, it } from "vitest";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import type { ScTable } from "../../../inc/table";
 import type { ScDocumentPool } from "./docpool";
 import { ScAttrArray } from "../../../inc/attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
-import { ScMF, ScMergeFlagAttr } from "../../../inc/attrib";
-import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { ScMF, ScMergeFlagAttr, ScMergeAttr } from "../../../inc/attrib";
+import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SfxUInt32Item } from "../../../../svl/inc/intitem";
 import { SfxItemState } from "../../../../svl/inc/itemset";
@@ -222,5 +224,56 @@ it("saves and restores actual content and attributes through a genuine shared-po
   expect((live.GetPattern(0)?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(300);
   pattern.Dispose();
   undo.Dispose();
+  doc.Dispose();
+});
+
+it("deletes full native attributes while removing anchor merges and retaining outside overlap/filter flags", /** Actual row runs preserve flags belonging to other merged anchors and clear the full rectangle owned by a deleted anchor. @returns Nothing. */ () => {
+  const doc = document(),
+    array = new ScAttrArray(0, 0, doc),
+    defaults = new ScAttrArray(-1, 0, doc);
+  set(array, doc, 0, 1, 300, ScMF.Hor);
+  set(array, doc, 2, 3, 500, ScMF.Auto);
+  set(array, doc, 4, 5, 700);
+  array.DeleteArea(1, 4);
+  expect(height(array, 0)).toBe(300);
+  expect(height(array, 1)).toBe(200);
+  expect(height(array, 3)).toBe(200);
+  expect(height(array, 4)).toBe(200);
+  expect(height(array, 5)).toBe(700);
+  expect(flags(array, 1)).toBe(ScMF.Hor);
+  expect(flags(array, 3)).toBe(ScMF.Auto);
+  array.DeleteArea(1, 4);
+  defaults.DeleteArea(0, 2);
+  expect(
+    /** Native default-column precondition. @returns Nothing. */ () =>
+      defaults.RemoveAreaMerge(0, 0),
+  ).toThrow("real column");
+  expect(height(defaults, 0)).toBe(200);
+  doc.ApplyAttr(0, 1, 0, new ScMergeAttr(2, 2));
+  doc.ApplyAttr(1, 1, 0, new ScMergeFlagAttr(ScMF.Hor));
+  doc.ApplyAttr(1, 1, 0, new ScMergeFlagAttr(ScMF.Hor));
+  doc.ApplyAttr(-1, 0, 0, new ScMergeFlagAttr(ScMF.Hor));
+  doc.ApplyAttr(0, 0, 1, new ScMergeFlagAttr(ScMF.Hor));
+  doc.ApplyAttr(0, 2, 0, new ScMergeFlagAttr(ScMF.Ver));
+  doc.ApplyAttr(1, 2, 0, new ScMergeFlagAttr(ScMF.Hor | ScMF.Ver));
+  doc.SetValue(new ScAddress(0, 1, 0), 9);
+  (doc.FetchTable(0) as ScTable)
+    .CreateColumnIfNotExists(0)
+    .DeleteArea(1, 1, InsertDeleteFlags.ATTRIB);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(0, 1, 0)) as ScPatternAttr).GetItem(ATTR_MERGE) as ScMergeAttr
+    ).IsMerged(),
+  ).toBe(false);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(1, 2, 0)) as ScPatternAttr).GetItem(
+        ATTR_MERGE_FLAG,
+      ) as ScMergeFlagAttr
+    ).GetValue(),
+  ).toBe(ScMF.NONE);
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(9);
+  array.Dispose();
+  defaults.Dispose();
   doc.Dispose();
 });

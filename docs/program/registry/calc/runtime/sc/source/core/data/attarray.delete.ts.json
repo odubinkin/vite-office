@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/attarray.delete.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/attarray.delete.ts#DeleteArea",
+        "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts#deletes full native attributes",
+        "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#ScAttrArray::DeleteArea"
+      ],
+      "justification": "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RemoveAreaMerge",
+        "SetPatternAreaSafe",
+        "DeleteArea"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/attarray.cxx",
+      "upstreamSymbols": [
+        "ScAttrArray::RemoveAreaMerge",
+        "ScAttrArray::SetPatternAreaSafe",
+        "ScAttrArray::DeleteArea"
+      ]
+    }
+  }
+}

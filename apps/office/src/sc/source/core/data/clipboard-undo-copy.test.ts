@@ -1,4 +1,6 @@
 /** @fileoverview Native CopyToDocContext and column clone-copy ownership used by paste Undo snapshots. */
+import { ScPatternAttr } from "../../../inc/patattr";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { ScDocShell } from "../../ui/docshell/docsh";
 import { ScUndoPaste, ScUndoPasteOptions } from "../../ui/undo/undoblk";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -540,5 +542,47 @@ it("retains whole-axis Redo geometry and empty-range native undo guards", /** Co
       ),
   ).toThrow("Nondefault paste undo");
   expect(rejected.GetPool()).toBeNull();
+  shell.Close();
+});
+
+it("restores native paste attributes and content together through lazy Undo and Redo", /** Original EnterBlock undo-extra flags capture actual canonical patterns alongside cell owners. @returns Nothing. */ () => {
+  const doc = document(),
+    shell = new ScDocShell(doc),
+    range = new ScRange(1, 0, 0, 1, 1, 0),
+    marks = new ScMarkData(doc.GetSheetLimits()),
+    pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+  marks.SelectTable(0, true);
+  marks.SetMarkArea(range);
+  pattern.ItemSetPut(new SvxFontHeightItem(300, 100, 101));
+  doc.ApplyPatternAreaTab(1, 0, 1, 1, 0, pattern);
+  doc.SetValue(new ScAddress(1, 0, 0), 9);
+  const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+    flags = InsertDeleteFlags.CONTENTS | InsertDeleteFlags.ATTRIB | InsertDeleteFlags.NOCAPTIONS;
+  undo.InitUndoSelected(doc, marks);
+  doc.CopyToDocument(range, flags, false, undo);
+  doc.SetFormula(new ScAddress(1, 0, 0), unicode("=A1+1"), grammar);
+  pattern.ItemSetPut(new SvxFontHeightItem(500, 100, 101));
+  doc.ApplyPatternAreaTab(1, 0, 1, 1, 0, pattern);
+  shell
+    .GetUndoManager()
+    .AddUndoAction(
+      new ScUndoPaste(shell, new ScRangeList(range), marks, undo, null, flags, null, false),
+    );
+  expect(shell.Undo()).toBe(true);
+  expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(9);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(1, 0, 0)) as ScPatternAttr).GetItem(101) as SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(300);
+  expect(shell.Redo()).toBe(true);
+  expect(
+    (
+      (doc.GetPattern(new ScAddress(1, 0, 0)) as ScPatternAttr).GetItem(101) as SvxFontHeightItem
+    ).GetHeight(),
+  ).toBe(500);
+  doc.SetValue(new ScAddress(), 6);
+  expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(7);
+  pattern.Dispose();
   shell.Close();
 });

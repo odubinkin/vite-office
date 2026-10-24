@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/attarray.delete.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/attarray.cxx",
+    "localSymbols": [
+      "RemoveAreaMerge",
+      "SetPatternAreaSafe",
+      "DeleteArea"
+    ],
+    "upstreamSymbols": [
+      "ScAttrArray::RemoveAreaMerge",
+      "ScAttrArray::SetPatternAreaSafe",
+      "ScAttrArray::DeleteArea"
+    ],
+    "preservedResponsibilities": [
+      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim."
+    ],
+    "omittedResponsibilities": [
+      "Other responsibilities remain with the canonical facade. Complete layout,rich edit,stream invalidation and broader native parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/attarray.delete.ts",
+          "marker": "DeleteArea"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts",
+          "marker": "deletes full native attributes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::RemoveAreaMerge"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::SetPatternAreaSafe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::DeleteArea"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/attarray.delete.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Native attarray.cxx deletion and merge cleanup are physically partitioned from the canonical ScAttrArray facade to satisfy the enforced1000-line source limit. All definitions operate on the original instance and canonical row runs;no alternate model or service is introduced."
+    }
+  }
+}

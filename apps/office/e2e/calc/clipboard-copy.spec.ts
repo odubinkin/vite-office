@@ -3,7 +3,8 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/source/ui/undo/undoblk") &
+type Fixture = typeof import("../../src/editeng/inc/fhgtitem") &
+  typeof import("../../src/sc/source/ui/undo/undoblk") &
   typeof import("../../src/sc/source/ui/docshell/docsh") &
   typeof import("../../src/sc/source/core/data/document10") &
   typeof import("../../src/i18npool/source/breakiterator/breakiteratorImpl") &
@@ -42,6 +43,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   await page.goto("/");
   await installKernelFixture(page, "CalcClipboardFixture", [
     { module: "src/sc/source/ui/undo/undoblk.ts", names: ["ScUndoPaste"] },
+    { module: "src/editeng/inc/fhgtitem.ts", names: ["SvxFontHeightItem"] },
     { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
     { module: "src/sc/source/core/data/document10.ts", names: ["CopyOneCellFromClip"] },
     {
@@ -631,14 +633,16 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           historyMarks = new n.ScMarkData(historyDocument.GetSheetLimits());
         historyMarks.SetMarkArea(historyRange);
         historyMarks.SelectTable(0, true);
+        const historyPattern = new n.ScPatternAttr(historyDocument.getCellAttributeHelper()),
+          historyFlags =
+            n.InsertDeleteFlags.CONTENTS |
+            n.InsertDeleteFlags.ATTRIB |
+            n.InsertDeleteFlags.NOCAPTIONS;
+        historyPattern.ItemSetPut(new n.SvxFontHeightItem(300, 100, 101));
+        historyDocument.ApplyPatternAreaTab(1, 2, 1, 3, 0, historyPattern);
         const historyUndo = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_UNDO);
         historyUndo.InitUndoSelected(historyDocument, historyMarks);
-        historyDocument.CopyToDocument(
-          historyRange,
-          n.InsertDeleteFlags.CONTENTS,
-          false,
-          historyUndo,
-        );
+        historyDocument.CopyToDocument(historyRange, historyFlags, false, historyUndo);
         historyDocument.SetFormula(new n.ScAddress(1, 0, 0), n.unicode("=A1+1"), grammar);
         historyDocument.GetValue(new n.ScAddress(1, 0, 0));
         const historyClip = new n.ScDocument(n.ScDocumentMode.SCDOCMODE_CLIP);
@@ -657,6 +661,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           null,
           historyClip,
         );
+        historyPattern.ItemSetPut(new n.SvxFontHeightItem(500, 100, 101));
+        historyDocument.ApplyPatternAreaTab(1, 2, 1, 3, 0, historyPattern);
         historyShell
           .GetUndoManager()
           .AddUndoAction(
@@ -666,7 +672,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
               historyMarks,
               historyUndo,
               null,
-              n.InsertDeleteFlags.CONTENTS,
+              historyFlags,
               null,
               false,
             ),
@@ -674,11 +680,23 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         const historyBefore = historyDocument.GetValue(new n.ScAddress(1, 3, 0)),
           historyUndone = historyShell.Undo(),
           historyRestored = historyDocument.GetValue(new n.ScAddress(1, 2, 0)),
+          historyRestoredHeight = (
+            historyDocument.GetPattern(new n.ScAddress(1, 2, 0))?.GetItem(101) as InstanceType<
+              typeof n.SvxFontHeightItem
+            >
+          ).GetHeight(),
           historyEmpty = historyDocument.GetCellType(new n.ScAddress(1, 3, 0)),
           historyRedone = historyShell.Redo(),
-          historyAfter = historyDocument.GetValue(new n.ScAddress(1, 3, 0));
+          historyAfter = historyDocument.GetValue(new n.ScAddress(1, 3, 0)),
+          historyRedoHeight = (
+            historyDocument.GetPattern(new n.ScAddress(1, 2, 0))?.GetItem(101) as InstanceType<
+              typeof n.SvxFontHeightItem
+            >
+          ).GetHeight();
         historyDocument.SetValue(new n.ScAddress(0, 3, 0), 10);
         const pasteHistory = {
+          restoredHeight: historyRestoredHeight,
+          redoHeight: historyRedoHeight,
           before: historyBefore,
           undone: historyUndone,
           restored: historyRestored,
@@ -687,6 +705,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           after: historyAfter,
           recalculated: historyDocument.GetValue(new n.ScAddress(1, 3, 0)),
         };
+        historyPattern.Dispose();
         historyClip.Dispose();
         historyShell.Close();
         referenceToken.dispose();
@@ -779,6 +798,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoGeometryDisabled: true,
     undoShared: true,
     pasteHistory: {
+      restoredHeight: 300,
+      redoHeight: 500,
       before: 5,
       undone: true,
       restored: 9,

@@ -1,4 +1,6 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
+import type { OUString } from "../../../../sal/inc/rtl/ustring";
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
 import { UpdateScriptTypes } from "./column4";
@@ -592,4 +594,26 @@ export function SetDirtyIncludingEmptyCells(this: ScDocument, range: ScRange): v
     bulk.Dispose();
     this.SetAutoCalc(old);
   }
+}
+
+/** Original document.cxx single-item dispatch borrows only an existing sheet. @param this - Actual document. @param col - Column. @param row - Row. @param tab - Sheet. @param attr - Borrowed item. @returns Nothing. */
+export function ApplyAttr(
+  this: ScDocument,
+  col: number,
+  row: number,
+  tab: number,
+  attr: SfxPoolItem,
+): void {
+  this.FetchTable(tab)?.ApplyAttr(col, row, attr);
+}
+
+/** Original sheet-name query moved unchanged from the size-bounded facade. @param this - Actual document. @param tab - Sheet. @param output - Unicode output. @returns Found. */
+export function GetName(this: ScDocument, tab: number, output: OUString): boolean {
+  const table = this.FetchTable(tab);
+  if (!table) {
+    output.clear();
+    return false;
+  }
+  output.assign(table.GetName());
+  return true;
 }

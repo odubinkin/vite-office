@@ -464,6 +464,10 @@ export class ScColumn extends ScColumnData {
       );
     } else column3.CopyToColumn.apply(this, args as Parameters<typeof column3.CopyToColumn>);
   }
+  /** Original single-item pattern assignment. @param args - Row and actual item. @returns Nothing. */
+  ApplyAttr(...args: Parameters<typeof column3.ApplyAttr>): void {
+    column3.ApplyAttr.apply(this, args);
+  }
   /** Original whole-group teardown with optional native row outputs. @param args - Original context,bounds and outputs. @returns Nothing. */
   EndListeningFormulaCells(...args: Parameters<typeof column4.EndListeningFormulaCells>): void {
     column4.EndListeningFormulaCells.apply(this, args);

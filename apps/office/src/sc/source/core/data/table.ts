@@ -1,4 +1,5 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { ScConditionalFormatList } from "../../../inc/conditio";
 import * as table2 from "./table2";
 import * as table5 from "./table5";
@@ -363,6 +364,11 @@ export class ScTable {
     )
       for (let col = firstCol; col <= lastCol; col++)
         (this.aCol[col] as ScColumn).DeleteArea(firstRow, lastRow, flags);
+  }
+  /** Original table2 single-item assignment validates coordinates before allocation. @param col - Column. @param row - Row. @param attr - Actual item. @returns Nothing. */
+  ApplyAttr(col: number, row: number, attr: SfxPoolItem): void {
+    if (this.rDocument.ValidColRow(col, row))
+      this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
   }
   /** Original DeleteSelection traverses allocated columns only and forwards the native broadcast policy. @param flags - Native deletion flags. @param marks - Actual native marks. @param broadcast - Original defaulttrue. @returns Nothing. */
   DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {

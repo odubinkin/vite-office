@@ -36,7 +36,8 @@
       "SetColBreak",
       "CopyConditionalFormat",
       "Dispose",
-      "IsMerged"
+      "IsMerged",
+      "ApplyAttr"
     ],
     "upstreamSymbols": [
       "ScTable::SetValue",
@@ -65,7 +66,8 @@
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
       "Original CopyToTable,CopyConditionalFormat and scalar/range GetRowHeight signatures execute in table2 on this same owner. Represented destructor bindings release default attributes,conditional listeners and actual columns in native member order. Geometry-only five-argument CopyToTable is removed.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
-      "DeleteSelection forwards the native broadcast defaulttrue through actual allocated columns. No default-tail cells or geometry are invented."
+      "DeleteSelection forwards the native broadcast defaulttrue through actual allocated columns. No default-tail cells or geometry are invented.",
+      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -313,6 +315,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
           "marker": "ScTable::IsMerged"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::ApplyAttr"
         }
       ]
     },

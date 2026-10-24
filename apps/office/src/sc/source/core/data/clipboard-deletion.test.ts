@@ -301,9 +301,11 @@ it("retains real empty/sparse listener guards and native all-listener traversal"
     .DeleteArea(0, 0, InsertDeleteFlags.NOTE | InsertDeleteFlags.NOCAPTIONS);
   expect(doc.GetValue(new ScAddress())).toBe(3);
   expect(
-    /** Unported style reset remains explicit before content changes. @returns Nothing. */ () =>
-      column.DeleteArea(0, 0, InsertDeleteFlags.ATTRIB),
+    /** Unrepresented drawing deletion rejects before touching actual cell owners. @returns Nothing. */ () =>
+      column.DeleteArea(0, 0, InsertDeleteFlags.OBJECTS),
   ).toThrow("hard-attribute deletion");
+  column.DeleteArea(0, 0, InsertDeleteFlags.ATTRIB);
+  expect(column.GetFormulaCell(0)).not.toBeNull();
   const changedSpans = new ColumnSpanSet();
   column.DeleteArea(2, 2, InsertDeleteFlags.CONTENTS, true, changedSpans);
   expect(column.GetFormulaCell(2)).toBeNull();

@@ -683,6 +683,10 @@ export class ScDocument {
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);
   }
+  /** Original single-item dispatch. @param args - Coordinates and actual item. @returns Nothing. */
+  ApplyAttr(...args: Parameters<typeof document10.ApplyAttr>): void {
+    document10.ApplyAttr.apply(this, args);
+  }
   /** Original document.cxx cursor-pattern assignment delegates through the actual sheet. @param col - Column. @param row - Row. @param tab - Sheet. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(col: number, row: number, tab: number, holder: CellAttributeHolder): void {
     this.FetchTable(tab)?.SetPattern(col, row, holder);
@@ -920,13 +924,7 @@ export class ScDocument {
   }
   /** Copies the sheet name or clears the output for a missing sheet. @param tab - Sheet. @param output - Unicode target. @returns Found. */
   GetName(tab: number, output: OUString): boolean {
-    const table = this.FetchTable(tab);
-    if (!table) {
-      output.clear();
-      return false;
-    }
-    output.assign(table.GetName());
-    return true;
+    return document10.GetName.call(this, tab, output);
   }
   /** Applies native editable sheet-name character constraints without a fabricated length limit. @param name - Native Unicode name. @returns Validity. */
   static ValidTabName(name: OUStringConstReference): boolean {

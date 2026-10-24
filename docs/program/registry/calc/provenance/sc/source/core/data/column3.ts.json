@@ -23,7 +23,8 @@
       "DeleteArea",
       "BroadcastCells",
       "StartListeners",
-      "SetDirtyIncludingEmptyCells"
+      "SetDirtyIncludingEmptyCells",
+      "ApplyAttr"
     ],
     "upstreamSymbols": [
       "GroupFormulaCells",
@@ -51,7 +52,8 @@
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
       "Native CopyToColumn admits the original NOTE-stripped full scalar payload from ordinary table copies while retaining selective-number/link/foreign-style boundaries. Original marked recursion omits the clone-policy argument (CALC-269). ImplDestroy stops real store events,clears and resizes represented cell/text stores;actual member destruction releases shared strings and formula subscriptions through native value callbacks. Note/sparkline stores and CellStorageModified compute/stream services remain unported.",
-      "Original DeleteArea uses actual DeleteCellsResult,optional deleted-span collection,hard-attribute deletion and changed-row broadcast order. Absent note/sparkline/edit owners have no dummy stores;style reset rejects explicitly. BroadcastCells reuses one real ScHint. StartListeners retains real needed flags and shared top/group-length skipping. Consumed column.cxx SetDirty BROADCAST_BROADCASTERS uses the actual formula-only ProcessFormula overload,broadcaster walk and TrackFormulas. Other mode bodies remain separate existing/unported responsibilities."
+      "Original DeleteArea uses actual DeleteCellsResult,optional deleted-span collection,hard-attribute deletion and changed-row broadcast order. Absent note/sparkline/edit owners have no dummy stores;style reset rejects explicitly. BroadcastCells reuses one real ScHint. StartListeners retains real needed flags and shared top/group-length skipping. Consumed column.cxx SetDirty BROADCAST_BROADCASTERS uses the actual formula-only ProcessFormula overload,broadcaster walk and TrackFormulas. Other mode bodies remain separate existing/unported responsibilities.",
+      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
       "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
@@ -139,6 +141,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
           "marker": "ScColumn::SetDirty("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
+          "marker": "ScColumn::ApplyAttr"
         }
       ]
     }

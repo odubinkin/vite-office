@@ -1,4 +1,5 @@
 /** @fileoverview ScAttrArray canonical pattern row runs, default-column inheritance and native split/merge algorithm. VCL width caches, stream-copy validity and rich edit-text stripping are outside this document slice. */
+import * as deletion from "./attarray.delete";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
 import { ScLineFlags, SC_LINE_EMPTY, SC_LINE_SET, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -114,7 +115,7 @@ function lcl_MergeToFrame(
     inner.SetLine(result[0], InnerEdge.VERT);
 }
 /** Original end-row entry with actual canonical holder ownership. */
-class ScAttrEntry extends CellAttributeHolder {
+export class ScAttrEntry extends CellAttributeHolder {
   nEndRow = 0;
 }
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
@@ -163,8 +164,15 @@ export class ScAttrArray {
     }
     return found;
   }
-  /** Original NeedHeight branch of HasAttrib_Impl over genuine pattern values;other masks remain explicitly unported. @param pattern - Actual pattern. @returns Height-sensitive attribute found. */
-  private HasAttrib_Impl(pattern: ScPatternAttr): boolean {
+  /** Original NeedHeight and deletion merge-flag branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
+  private HasAttrib_Impl(pattern: ScPatternAttr, mask: HasAttrFlags): boolean {
+    if (mask !== HasAttrFlags.NeedHeight) {
+      const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+      return Boolean(
+        (mask & HasAttrFlags.Overlapped && flags.IsOverlapped()) ||
+        (mask & HasAttrFlags.AutoFilter && flags.HasAutoFilter()),
+      );
+    }
     if (pattern.GetCellOrientation() !== SvxCellOrientation.Standard) return true;
     if ((pattern.GetItem(ATTR_LINEBREAK) as SfxBoolItem).GetValue()) return true;
     if (
@@ -176,13 +184,17 @@ export class ScAttrArray {
       return true;
     return (pattern.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem).GetValue() !== 0;
   }
-  /** Original range search and early found termination for the consumed NeedHeight mask. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
+  /** Original range search and early found termination for the consumed NeedHeight/deletion merge-flag masks. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
   HasAttrib(first: number, last: number, mask: HasAttrFlags): boolean {
-    if (mask !== HasAttrFlags.NeedHeight)
-      throw new Error("Only NeedHeight attribute queries are implemented");
+    if (
+      mask !== HasAttrFlags.NeedHeight &&
+      mask !== (HasAttrFlags.Overlapped | HasAttrFlags.AutoFilter)
+    )
+      throw new Error("Only NeedHeight and deletion merge-flag attribute queries are implemented");
     if (this.mvData.length === 0)
       return this.HasAttrib_Impl(
         this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
+        mask,
       );
     const start: [number] = [0],
       end: [number] = [0];
@@ -193,6 +205,7 @@ export class ScAttrArray {
     for (let i = start[0]; i <= end[0] && !found; i++)
       found = this.HasAttrib_Impl(
         (this.mvData[i] as ScAttrEntry).getScPatternAttr() as ScPatternAttr,
+        mask,
       );
     return found;
   }
@@ -749,6 +762,18 @@ export class ScAttrArray {
     const entry = new ScAttrEntry(value);
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
+  }
+  /** Original deletion operates on this native attribute owner. @param first - First row. @param last - Last row. @returns Nothing. */
+  DeleteArea(first: number, last: number): void {
+    deletion.DeleteArea.call(this, first, last);
+  }
+  /** Original merge-anchor cleanup. @param first - First row. @param last - Last row. @returns Nothing. */
+  RemoveAreaMerge(first: number, last: number): void {
+    deletion.RemoveAreaMerge.call(this, first, last);
+  }
+  /** Original assignment retaining overlapping/filter flags. @param first - First row. @param last - Last row. @param wanted - Wanted canonical value. @returns Nothing. */
+  SetPatternAreaSafe(first: number, last: number, wanted: CellAttributeHolder): void {
+    deletion.SetPatternAreaSafe.call(this, first, last, wanted);
   }
   /** Original DeleteHardAttr clears direct items while retaining styles and both merge items;canonical runs are re-searched after replacement. @param first - Ordered valid first row. @param last - Ordered valid last row. @returns Nothing. */
   DeleteHardAttr(first: number, last: number): void {

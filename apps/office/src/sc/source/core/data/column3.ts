@@ -1,4 +1,5 @@
 /** @fileoverview Original column3.cxx GroupFormulaCells functor and whole-column regrouping over actual typed storage. */
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { string_value_type } from "../../../inc/mtvelements";
 import {
@@ -749,7 +750,7 @@ export function BroadcastCells(this: ScColumn, rows: number[], id: SfxHintId): v
     this.GetDoc().Broadcast(hint);
   }
 }
-/** Original column3 DeleteArea content/attribute order over actual DeleteCellsResult. Unsupported style resetting and absent notes/sparkline/edit services remain explicit boundaries rather than dummy stores. @param this - Actual column. @param first - First row. @param last - Last row. @param flags - Native flags. @param broadcast - Original defaulttrue. @param spans - Original optional collector. @returns Nothing. */
+/** Original column3 DeleteArea content/attribute order over actual DeleteCellsResult. Full attribute deletion uses actual canonical runs;absent notes/sparkline/edit services remain unrepresented. @param this - Actual column. @param first - First row. @param last - Last row. @param flags - Native flags. @param broadcast - Original defaulttrue. @param spans - Original optional collector. @returns Nothing. */
 export function DeleteArea(
   this: ScColumn,
   first: number,
@@ -762,11 +763,13 @@ export function DeleteArea(
     flags &
     ~(
       InsertDeleteFlags.CONTENTS |
-      InsertDeleteFlags.HARDATTR |
+      InsertDeleteFlags.ATTRIB |
       InsertDeleteFlags.EDITATTR |
       InsertDeleteFlags.NOCAPTIONS
     )
   )
+    throw Error("Only native content and hard-attribute deletion are implemented");
+  if (flags & InsertDeleteFlags.STYLES && !(flags & InsertDeleteFlags.HARDATTR))
     throw Error("Only native content and hard-attribute deletion are implemented");
   let mask = InsertDeleteFlags.CONTENTS;
   if (flags & InsertDeleteFlags.NOTE) mask |= InsertDeleteFlags.NOCAPTIONS;
@@ -783,7 +786,9 @@ export function DeleteArea(
         spans.set(this.GetDoc(), this.GetTab(), this.GetCol(), row.mnRow1, row.mnRow2, true);
     }
   }
-  if (flags & InsertDeleteFlags.HARDATTR) this["pAttrArray"].DeleteHardAttr(first, last);
+  if ((flags & InsertDeleteFlags.ATTRIB) === InsertDeleteFlags.ATTRIB)
+    this["pAttrArray"].DeleteArea(first, last);
+  else if (flags & InsertDeleteFlags.HARDATTR) this["pAttrArray"].DeleteHardAttr(first, last);
   if (result && broadcast) {
     const rows: number[] = [];
     result.aDeletedRows.getRows(rows);
@@ -830,4 +835,19 @@ export function SetDirtyIncludingEmptyCells(this: ScColumn, first: number, last:
   } finally {
     scope.Dispose();
   }
+}
+
+/** Original column.cxx single-item ApplyAttr creates a genuine complete pattern and canonicalizes equality. @param this - Actual column. @param row - Row. @param attr - Borrowed item. @returns Nothing. */
+export function ApplyAttr(this: ScColumn, row: number, attr: SfxPoolItem): void {
+  const old = this["pAttrArray"].GetPattern(row) as ScPatternAttr,
+    next = new ScPatternAttr(old);
+  next.ItemSetPut(attr);
+  if (!ScPatternAttr.areSame(next, old)) {
+    const holder = new CellAttributeHolder(next, true);
+    try {
+      this["pAttrArray"].SetPattern(row, holder);
+    } finally {
+      holder.Dispose();
+    }
+  } else next.Dispose();
 }
