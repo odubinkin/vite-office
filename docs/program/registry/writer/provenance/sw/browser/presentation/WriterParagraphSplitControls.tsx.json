@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterParagraphSplitControls.tsx",
+          "marker": "WriterParagraphSplitControls"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/presentation/WriterParagraphSplitControls.tsx",
+    "rationale": "Browser projection of actual CUI paragraph split draft and handler ports;real document/undo/filter ownership remains with existing Writer commands.",
+    "responsibilities": [
+      "Presents supported document line-number settings in a browser dialog.",
+      "TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React and DOM controls replace native VCL widgets."
+    },
+    "status": "local-only",
+    "localSymbols": [
+      "WriterParagraphSplitControls"
+    ]
+  }
+}

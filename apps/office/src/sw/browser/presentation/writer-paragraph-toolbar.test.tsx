@@ -72,7 +72,7 @@ it("connects advanced toolbar controls to Writer paragraph items", /** Verifies 
   fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
   fireEvent.change(screen.getByLabelText("Break before"), { target: { value: "page" } });
   fireEvent.change(screen.getByLabelText("Break after"), { target: { value: "page" } });
-  fireEvent.click(screen.getByLabelText("Do not split paragraph"));
+  fireEvent.click(screen.getByLabelText("Allow to split paragraph"));
   fireEvent.change(screen.getByLabelText("Orphan control (lines)"), { target: { value: "3" } });
   fireEvent.change(screen.getByLabelText("Widow control (lines)"), { target: { value: "4" } });
   fireEvent.click(screen.getByLabelText("Keep with next paragraph"));
@@ -124,7 +124,7 @@ it("connects advanced toolbar controls to Writer paragraph items", /** Verifies 
   expect(screen.getByLabelText("Start page number")).toHaveValue(2);
   expect(screen.getByLabelText("Break before")).toHaveValue("page");
   expect(screen.getByLabelText("Break after")).toHaveValue("page");
-  expect(screen.getByLabelText("Do not split paragraph")).toBeChecked();
+  expect(screen.getByLabelText("Allow to split paragraph")).not.toBeChecked();
   expect(screen.getByLabelText("Orphan control (lines)")).toHaveValue(3);
   expect(screen.getByLabelText("Widow control (lines)")).toHaveValue(4);
   fireEvent.click(screen.getByText("Cancel"));

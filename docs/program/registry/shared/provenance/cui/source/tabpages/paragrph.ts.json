@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cui/source/tabpages/paragrph.ts",
+    "status": "mapped",
+    "upstreamPath": "cui/source/tabpages/paragrph.cxx",
+    "localSymbols": [
+      "SvxExtParagraphTabPage"
+    ],
+    "upstreamSymbols": [
+      "SvxExtParagraphTabPage::AllowSplitHdl"
+    ],
+    "preservedResponsibilities": [
+      "Consumed definite split/widow/orphan reset,source handler-order sensitivity,bounds and changed-output decisions. Mixed/HTML and remaining native paragraph controls/services remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete native textflow and mixed/HTML widget services."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
+          "marker": "SvxExtParagraphTabPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxExtParagraphTabPage::AllowSplitHdl"
+        }
+      ]
+    }
+  }
+}

@@ -4,6 +4,8 @@ import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-s
 import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
+import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
+import { WriterParagraphSplitControls } from "./WriterParagraphSplitControls";
 import { useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 import type {
@@ -32,6 +34,10 @@ export function WriterParagraphDialog({
   const [draft, setDraft] = useState<WriterParagraphFormatValue>(
     /** Handles Writer formatting state.  @returns Callback result. */ () =>
       dialogRequest.request.initialValue,
+  );
+  const [flow] = useState(
+    /** Creates original definite paragraph split controls for this request. @returns Native page. */ () =>
+      new SvxExtParagraphTabPage(dialogRequest.request.initialValue),
   );
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
@@ -322,38 +328,7 @@ export function WriterParagraphDialog({
                       <option value="page">Page</option>
                     </select>
                   </label>
-                  <label className="sm:col-span-2 flex items-center gap-2">
-                    <input
-                      checked={draft.keepTogether ?? false}
-                      onChange={
-                        /** Updates paragraph split permission. @param event - Checkbox change. @returns Nothing. */ (
-                          event,
-                        ) => setDraft({ ...draft, keepTogether: event.target.checked })
-                      }
-                      type="checkbox"
-                    />
-                    Do not split paragraph
-                  </label>
-                  <NumberField
-                    label="Orphan control (lines)"
-                    value={draft.orphans ?? 2}
-                    min={0}
-                    onChange={
-                      /** Updates minimum lines before a split. @param value - Count. @returns Nothing. */ (
-                        value,
-                      ) => setDraft({ ...draft, orphans: value })
-                    }
-                  />
-                  <NumberField
-                    label="Widow control (lines)"
-                    value={draft.widows ?? 2}
-                    min={0}
-                    onChange={
-                      /** Updates minimum lines after a split. @param value - Count. @returns Nothing. */ (
-                        value,
-                      ) => setDraft({ ...draft, widows: value })
-                    }
-                  />
+                  <WriterParagraphSplitControls page={flow} />
                   <label className="sm:col-span-2 flex items-center gap-2">
                     <input
                       checked={draft.keepWithNext}
@@ -413,7 +388,7 @@ export function WriterParagraphDialog({
                 if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
                 onDialogSubmit(dialogRequest.id, {
                   tabStopItems: tabs.output,
-                  paragraphFormat: draft,
+                  paragraphFormat: { ...draft, ...flow.FillItemSet() },
                   paintLineNumbers: showLineNumbersDraft,
                 });
               }
