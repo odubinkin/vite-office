@@ -1,10 +1,11 @@
 ---
 id: "202610241606-QZAHNT"
 title: "Canonize Writer bookmark dialog selection naming and operation lifetime"
-status: "DOING"
+result_summary: "Canonized bookmark names selection and persistent operations with ODT preservation"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Live names come from the actual mark owner;immediate GoTo/Delete/Rename reuse frame dispatch while the original dialog request remains pending. Close preserves changes and returns focus through the actual mounted document port;Chromium verifies resumed typing and ODT reopen at1280/390."
     - "Native temporary-name matching,token counts,selection differences,raw whitespace,unique-name cache and practically unreachable counter branches are retained;WRITER086/087 document suspected source issues. No second mark model,coverage ignore,threshold reduction or broad parity promotion."
     - "Final source-hash manifest matches all31implementation/record/doc paths in the reviewed commit;strict four-owner coverage totals117statements,76branches,30functions,106lines with zero skipped.192native-consumer and18shared XML scenarios pass;27exact-final focused cases and2production browser cases pass. All declared static/source/lifecycle gates pass."
-commit: null
+commit:
+  hash: "a7ad714366d96f65c11d5b9ed554ede8fe7ef119"
+  message: "🖋️ QZAHNT writer: canonize bookmark names selection and persistent operations"
 comments:
   -
     author: "CODER"
     body: "Start: canonize represented native bookmark name,selection and persistent operation behavior through actual model/frame owners;verify this one task then close and stop."
+  -
+    author: "CODER"
+    body: "Verified: native bookmark naming and selection rules,persistent GoTo/Delete/Rename,nested rename and actual document focus are connected to real frame/mark owners. Exact-final four-owner100coverage,related tests,production Chromium1280/390,ODT round-trip and declared gates pass;evaluator pass recorded. Closed exactly one further task;pause goal."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed native consumers192/15, exact-final focused27/4 with strict four-owner100coverage S117 B76 F30 L106, shared XML18/3, production Chromium2/2 at1280/390 with screenshot review, build/static/typecheck/lint/format/docs/deps/size/tree/provenance/resources/registry/invariants/parity/doctor/routing/diff. Evidence and exact commands in Verification; source hashes recorded. One task only;no full suite due."
+  -
+    type: "status"
+    at: "2026-10-24T16:31:40.721Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native bookmark naming and selection rules,persistent GoTo/Delete/Rename,nested rename and actual document focus are connected to real frame/mark owners. Exact-final four-owner100coverage,related tests,production Chromium1280/390,ODT round-trip and declared gates pass;evaluator pass recorded. Closed exactly one further task;pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T16:30:56.076Z"
+doc_updated_at: "2026-10-24T16:31:40.722Z"
 doc_updated_by: "CODER"
 description: "Human requests exactly one further task after9N3MFW,then stop. Bring the existing Bookmark dialog name/selection/button and persistent navigate/delete/rename behavior closer to pinned source. Reuse actual mark operations and frame dispatch;port consumed source name proposal/validation and normal non-mailmerge unique-name behavior where existing trim/duplicate rejection conflicts with the dialog. No expanded bookmark,text editing,protection/hidden-condition implementation,network,other task or full suite. Only vite-office-writer on writer;up to24primary implementation/test/doc paths plus paired canonical/task/generated records. Verify source-bound focused coverage,actual bookmark CRUD/ODT and Chromium1280/390;finish this one task and pause goal."
 sections:
@@ -128,6 +141,10 @@ sections:
     Initial verification exposed obsolete trim/duplicate rejection assumptions and whitespace-name rejection in ODT export; updated affected tests and exporter validation to actual-empty checks. Browser verification exposed missing document focus after Bookmark completion/cancellation; presenter now returns focus through the actual mounted frame port,with real typing and unit assertions. ODT reimport fixture now supplies its real .odt filename/MIME instead of Playwright temporary download basename. React lint findings were resolved by retiring external stale selections during render and keeping the insertion helper internal; no lint suppression introduced. Provenance gate initially rejected macro-expanded symbol spelling and an undocumented split filename; record now names the actual ModifyHdl marker and explains the deterministic name-allocation/lifetime split. All final gates pass.
 
     Expanded bookmark text editing,protected/hidden experimental controls,mailmerge naming,complete native table metadata/XNamed/localization service integration remain outside this approved slice. Native English copy-name template is used by the current core;the extracted decision accepts an actual localized template. Existing duplicate rename rejection remains bounded behavior and is not claimed as complete MarkManager parity. No network,other tasks,merge,push or full suite. Finish exactly this task and pause the goal.
+extensions:
+  implementation_commit:
+    hash: "a7ad714366d96f65c11d5b9ed554ede8fe7ef119"
+    message: "🖋️ QZAHNT writer: canonize bookmark names selection and persistent operations"
 id_source: "generated"
 ---
 ## Summary
