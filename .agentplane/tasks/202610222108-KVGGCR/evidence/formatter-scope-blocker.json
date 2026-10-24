@@ -1,0 +1,39 @@
+{
+  "head": "2e49ba8126b7049e32a20f34897bf9a51720252b",
+  "approvedPaths": 218,
+  "formatter": [
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.ts",
+      "exists": false,
+      "included": false
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.ts",
+      "exists": false,
+      "included": false
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/cellform.ts",
+      "exists": false,
+      "included": false
+    },
+    {
+      "path": "apps/office/src/sc/inc/cellform.ts",
+      "exists": false,
+      "included": false
+    }
+  ],
+  "nativeCalls": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+      "from": 2952,
+      "required": "CopyFromClip -> NumFmtMergeHandler -> MergeNumberFormatter -> ScPoolHelper.GetFormTable"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+      "from": 93,
+      "required": "CopyOneCellFromClip -> ScColumn.UpdateScriptTypes -> ScCellFormat.GetString -> NFGetOutputString"
+    }
+  ],
+  "state": "Native formatter owners absent and outside approved218-path footprint. No human response to pending scope request in current conversation."
+}

@@ -1,10 +1,10 @@
 ---
 id: "202610222108-KVGGCR"
 title: "Implement native internal clipboard fill and paste undo"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 74
+revision: 76
 origin:
   system: "manual"
 depends_on:
@@ -44,6 +44,9 @@ comments:
   -
     author: "CODER"
     body: "Start: human confirmed218 paths;apply the two actual UI test lifecycle cleanups,then continue native clipboard/paste/history verification with the agreed76/74/full-run stop rule."
+  -
+    author: "CODER"
+    body: "Blocked: approved218-path native preparation is committed and checked. Completing default document paste requires absent native number/cell formatting owners outside the approved footprint. Awaiting the pending human scope decision;no new source paths,task74 acceptance or final all-application closure are authorized by this status."
 events:
   -
     type: "status"
@@ -87,8 +90,15 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: human confirmed218 paths;apply the two actual UI test lifecycle cleanups,then continue native clipboard/paste/history verification with the agreed76/74/full-run stop rule."
+  -
+    type: "status"
+    at: "2026-10-24T15:17:06.073Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: approved218-path native preparation is committed and checked. Completing default document paste requires absent native number/cell formatting owners outside the approved footprint. Awaiting the pending human scope decision;no new source paths,task74 acceptance or final all-application closure are authorized by this status."
 doc_version: 3
-doc_updated_at: "2026-10-24T15:15:23.017Z"
+doc_updated_at: "2026-10-24T15:17:06.073Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -380,6 +390,8 @@ sections:
     Human confirmed the218-path scope on2026-10-24. Applied the two prepared test-only unmount-before-session-Close fixes. Complete current Calc regression passes229files/960scenarios,with raw100 S16889/B10182/F2962/L15095 and no unhandled errors. Changed-file lint and formatting pass. Evidence:progress-ui-cleanup/manifest.json and raw.json.gz. This verifies implemented code and its existing regression suite;it does not verify unimplemented document paste,formatter,paste history,EnterBlock or task74 acceptance. No final task verification or all-application checkpoint has occurred. Exact footprint218/218. Original failed full Calc evidence remains immutable in progress-document-copy.
 
     Additional in-budget native paste preparation:ported the exact IsMerged query chain from document10/table7/inline column.hxx/ScAttrArray and the borrowed maSinglePatterns vector/get/set/resize semantics from clipcontext.cxx. Empty/invalid/unallocated query paths do not allocate sheets or columns;actual ATTR_MERGE spans distinguish anchors from overlap flags. Tests cover native stored/default patterns and pointer preservation/null initialization/truncation without taking source ownership. Existing footprint stays218/218;24 previously approved paths changed. Related10files/79scenarios pass,strict raw100 for the three measured preparation owners S191/B80/F44/L160. This is not whole Calc coverage after these latest changes. Chromium and DOM-free Worker1/1 pass the same genuine owner chain. Build,types,scoped lint,format,JSDoc,size,boundaries and7-owner provenance pass. Initial selection/metadata/PATH failures and subsequent corrections are retained in progress-paste-preparation/raw.json.gz. No final task acceptance. New formatter owner scope is pending human approval;no additional source paths were created. Full document paste/history/EnterBlock and task74/full all-application stop checkpoint remain pending.
+
+    Scope blocker revalidated after commit2e49ba8126b7:all tracked implementation changes are committed and the approved footprint remains218. The native SvNumberFormatter/SvNumberformat and ScCellFormat source owners required by document.CopyFromClip and document10.CopyOneCellFromClip do not exist locally and are outside that footprint. Source call chains are captured in evidence/formatter-scope-blocker.json. Task74 depends on76 and cannot be accepted before its actual paste prerequisite. New module creation would materially expand scope;the human question proposing a bounded formatter/paste/history dependency scope has not received a response. No network,reference restoration,unapproved source paths,duplicate test replay or planned78-80 work was performed. Task76 is blocked pending that scope decision;the agreed final76/74/full-all-application/fixes/coverage/closure/pause checkpoint remains incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -688,3 +700,5 @@ Task76 remains incomplete:full default paste,single-row formatter/script owners,
 Human confirmed the218-path scope on2026-10-24. Applied the two prepared test-only unmount-before-session-Close fixes. Complete current Calc regression passes229files/960scenarios,with raw100 S16889/B10182/F2962/L15095 and no unhandled errors. Changed-file lint and formatting pass. Evidence:progress-ui-cleanup/manifest.json and raw.json.gz. This verifies implemented code and its existing regression suite;it does not verify unimplemented document paste,formatter,paste history,EnterBlock or task74 acceptance. No final task verification or all-application checkpoint has occurred. Exact footprint218/218. Original failed full Calc evidence remains immutable in progress-document-copy.
 
 Additional in-budget native paste preparation:ported the exact IsMerged query chain from document10/table7/inline column.hxx/ScAttrArray and the borrowed maSinglePatterns vector/get/set/resize semantics from clipcontext.cxx. Empty/invalid/unallocated query paths do not allocate sheets or columns;actual ATTR_MERGE spans distinguish anchors from overlap flags. Tests cover native stored/default patterns and pointer preservation/null initialization/truncation without taking source ownership. Existing footprint stays218/218;24 previously approved paths changed. Related10files/79scenarios pass,strict raw100 for the three measured preparation owners S191/B80/F44/L160. This is not whole Calc coverage after these latest changes. Chromium and DOM-free Worker1/1 pass the same genuine owner chain. Build,types,scoped lint,format,JSDoc,size,boundaries and7-owner provenance pass. Initial selection/metadata/PATH failures and subsequent corrections are retained in progress-paste-preparation/raw.json.gz. No final task acceptance. New formatter owner scope is pending human approval;no additional source paths were created. Full document paste/history/EnterBlock and task74/full all-application stop checkpoint remain pending.
+
+Scope blocker revalidated after commit2e49ba8126b7:all tracked implementation changes are committed and the approved footprint remains218. The native SvNumberFormatter/SvNumberformat and ScCellFormat source owners required by document.CopyFromClip and document10.CopyOneCellFromClip do not exist locally and are outside that footprint. Source call chains are captured in evidence/formatter-scope-blocker.json. Task74 depends on76 and cannot be accepted before its actual paste prerequisite. New module creation would materially expand scope;the human question proposing a bounded formatter/paste/history dependency scope has not received a response. No network,reference restoration,unapproved source paths,duplicate test replay or planned78-80 work was performed. Task76 is blocked pending that scope decision;the agreed final76/74/full-all-application/fixes/coverage/closure/pause checkpoint remains incomplete.
