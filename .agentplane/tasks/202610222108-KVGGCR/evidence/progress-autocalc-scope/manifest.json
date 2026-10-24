@@ -1,0 +1,123 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native AutoCalcSwitch and existing native consumers verified;document paste/history incomplete",
+  "sourceBaseline": "074d4c3988d82aec1130a098a0dd1f0f21c11938",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 701,
+  "relatedFiles": 160,
+  "currentThreeOwnerCoverage": {
+    "lines": {
+      "total": 442,
+      "covered": 442,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 530,
+      "covered": 530,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 59,
+      "covered": 59,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 309,
+      "covered": 309,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "calcCoverage": {
+    "lines": {
+      "total": 14769,
+      "covered": 14769,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16524,
+      "covered": 16524,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2889,
+      "covered": 2889,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9990,
+      "covered": 9990,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 179,
+  "sourceHashes": 461,
+  "stable": true,
+  "coverageMethod": "Actual successful701 three-owner raw100 replaces only scopetools/documen7/table2 in the verified prior native-table-undo baseline. Other executable owners match baseline hashes. The changed native header is checked by TypeScript AST to contain only re-export declarations;the new scope test is explicitly captured. This is compositional Calc raw100,not a new complete Calc replay. No fabricated counters or changed thresholds/exclusions/ignore directives.",
+  "baselineArchive": ".agentplane/tasks/202610222108-KVGGCR/evidence/progress-native-table-undo/raw.json.gz",
+  "baselineSha256": "89b46a3b9efed0ec1112ec33e2b74c4163bb04cbac4b2ceeb24d5874985702b2",
+  "browserWorker": "1/1 pass;actual table Undo uses the native AutoCalcSwitch in Chromium and DOM-free Worker and restores destination automatic calculation before observing live formula results",
+  "browserIsolation": "Initial standard4173 server collision prevented launch. No process was killed. A temporary ignored config inherits the existing Calc project/device/static preview and changes only its local port/test-output location;successful final port54889.",
+  "passedChecks": [
+    "production build/app types",
+    "tools types",
+    "static smoke",
+    "scoped ESLint/Prettier",
+    "JSDoc2976",
+    "size",
+    "boundaries",
+    "source tree",
+    "routing",
+    "doctor",
+    "canonical scoped provenance4 modules"
+  ],
+  "fullSourceGates": "Prior actual full source/registry failures on missing liblangtag references remain unwaived;the two paths are still absent. No restoration/network action or new full source-gate pass is claimed.",
+  "referenceAvailability": {
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c": false,
+    "vendor/liblangtag-reference/liblangtag/lt-error.h": false
+  },
+  "taskFootprint": "139/160 conservative cumulative paths;prior138 plus new native-autocalc-scope.test.ts",
+  "remaining": "Complete native document/table copy and Undo orchestration,conditional style owners,chart/Idle,formatter/script services,paste/history,EnterBlock and final74 acceptance.",
+  "stopRule": "Complete active76 and74,then full all-application tests/fixes/required100percent coverage/final closure/pause. Do not wait for or start planned78-80.",
+  "fullAllApplicationRun": "Not executed in this progress block.",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/inc/scopetools.ts",
+    "apps/office/src/sc/source/core/data/documen7.ts",
+    "apps/office/src/sc/source/core/data/table2.ts",
+    "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts",
+    "apps/office/src/sc/source/core/tool/scopetools.ts",
+    "docs/program/registry/calc/provenance/sc/inc/scopetools.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/scopetools.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/scopetools.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/scopetools.ts.json"
+  ],
+  "newPaths": [
+    "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts"
+  ],
+  "rawSha256": "32bd013d5afbf9e4b4a05454938fcf511b8081922f6c4ff0046fb2e4aa80b09b",
+  "compressedBytes": 438253
+}
