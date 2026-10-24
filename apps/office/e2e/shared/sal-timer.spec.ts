@@ -3,21 +3,33 @@ import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "./kernel-fixture";
 
 /** Real bundled platform owner. */
-type Fixture = typeof import("../../src/vcl/browser/sal-timer");
+type Fixture = typeof import("../../src/vcl/browser/sal-timer") &
+  typeof import("../../src/vcl/inc/task") &
+  typeof import("../../src/vcl/inc/timer") &
+  typeof import("../../src/vcl/inc/idle") &
+  typeof import("../../src/vcl/inc/scheduler");
 
 test("delivers current native timer callbacks and retains reentrant restart in both browser realms", /** Exercises real host events without replacing the timer API. @param fixtures - Browser. @returns Completion. */ async ({
   page,
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "SalTimerFixture", [
-    { module: "src/vcl/browser/sal-timer.ts", names: ["BrowserSalTimer"] },
+    {
+      module: "src/vcl/browser/sal-timer.ts",
+      names: ["BrowserSalTimer", "browserSchedulerPlatform"],
+    },
+    { module: "src/vcl/inc/task.ts", names: ["TaskPriority"] },
+    { module: "src/vcl/inc/timer.ts", names: ["Timer", "AutoTimer"] },
+    { module: "src/vcl/inc/idle.ts", names: ["Idle"] },
+    { module: "src/vcl/inc/scheduler.ts", names: ["Scheduler", "bindSchedulerPlatform"] },
   ]);
   const observations = await page.evaluate(
     /** Runs identical actual source owners on the main thread and in a Worker. @returns Observed callbacks. */ async () => {
       /** Resolves after two actual host deliveries and explicit timer destruction. @returns Callback sequence. */
-      function run(): Promise<string[]> {
+      async function run() {
         const native = (globalThis as unknown as { SalTimerFixture: Fixture }).SalTimerFixture;
-        return new Promise(
+        native.bindSchedulerPlatform(native.browserSchedulerPlatform);
+        const platform = await new Promise<string[]>(
           /** Schedules real native-platform events. @param resolve - Completed callbacks. @returns Nothing. */ (
             resolve,
           ) => {
@@ -51,6 +63,50 @@ test("delivers current native timer callbacks and retains reentrant restart in b
             timer.Start(0n);
           },
         );
+        const events: string[] = [],
+          high = new native.Idle("browser high"),
+          paint = new native.Idle("browser paint"),
+          timer = new native.AutoTimer("browser repeat");
+        let copyActive = true;
+        const queue = await new Promise<string[]>(
+          /** Drives the actual native queue with real host timer delivery. @param resolve - Native event sequence. @returns Nothing. */ (
+            resolve,
+          ) => {
+            high.SetPriority(native.TaskPriority.HIGHEST);
+            high.SetInvokeHandler(
+              /** Highest-priority native work. @returns Nothing. */ () => {
+                events.push("high");
+              },
+            );
+            paint.SetPriority(native.TaskPriority.REPAINT);
+            paint.SetInvokeHandler(
+              /** Starts the repeating timer through the real native idle callback. @returns Nothing. */ () => {
+                events.push("paint");
+                timer.Start();
+                const copy = new native.Timer(timer);
+                copyActive = copy.IsActive();
+                copy.Dispose();
+              },
+            );
+            timer.SetTimeout(2n);
+            timer.SetInvokeHandler(
+              /** Native AutoTimer repeats until explicitly stopped. @returns Nothing. */ () => {
+                events.push("timer");
+                if (events.length === 4) {
+                  timer.Stop();
+                  resolve(events);
+                }
+              },
+            );
+            paint.Start();
+            high.Start();
+          },
+        );
+        high.Dispose();
+        paint.Dispose();
+        timer.Dispose();
+        native.Scheduler.ImplDeInitScheduler();
+        return { platform, queue, copyActive };
       }
       const main = await run(),
         script = Array.from(document.scripts).find(
@@ -94,7 +150,18 @@ test("delivers current native timer callbacks and retains reentrant restart in b
     },
   );
   expect(observations).toEqual({
-    main: ["current", "current"],
-    other: { value: ["current", "current"], dom: "undefined" },
+    main: {
+      platform: ["current", "current"],
+      queue: ["high", "paint", "timer", "timer"],
+      copyActive: false,
+    },
+    other: {
+      value: {
+        platform: ["current", "current"],
+        queue: ["high", "paint", "timer", "timer"],
+        copyActive: false,
+      },
+      dom: "undefined",
+    },
   });
 });

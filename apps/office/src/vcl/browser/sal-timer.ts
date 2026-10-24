@@ -1,8 +1,26 @@
 /** @fileoverview Browser/Worker SalTimer platform binding. Native VCL scheduler logic remains above this boundary,as with the upstream Qt single-shot system timer. */
 import { SalTimer } from "../inc/saltimer";
+import type { SchedulerPlatform } from "../inc/scheduler";
 
 /** DOM timers accept a signed32 delay;longer native deadlines are delivered early for the VCL scheduler's existing deadline check/rearm. */
 const MAX_BROWSER_TIMER_DELAY = 0x7fffffff;
+
+/** Monotonic millisecond clock at the browser platform boundary for native tools::Time::GetSystemTicks comparisons. @returns Unsigned64 ticks. */
+export function getSystemTicks(): bigint {
+  return BigInt.asUintN(64, BigInt(Math.floor(globalThis.performance.now())));
+}
+
+/** Queries actual host queued input where exposed. Browser rendering and unsupported host input queues remain controlled by the host event loop;no synthetic pending-event service is installed. @returns Host pending input. */
+export function hasPendingInput(): boolean {
+  const scheduling = (
+    globalThis.navigator as
+      | (Navigator & {
+          scheduling?: { isInputPending(options: { includeContinuous: boolean }): boolean };
+        })
+      | undefined
+  )?.scheduling;
+  return scheduling?.isInputPending({ includeContinuous: true }) ?? false;
+}
 
 /** One actual host timer per native system-timer instance;no task queue or chart service is implemented here. */
 export class BrowserSalTimer extends SalTimer {
@@ -34,3 +52,11 @@ export class BrowserSalTimer extends SalTimer {
     super.Dispose();
   }
 }
+
+/** Actual browser platform supplied explicitly to native scheduler initialization;the kernel never imports this adapter. */
+export const browserSchedulerPlatform: SchedulerPlatform = {
+  /** Allocates the actual host event owner. @returns Native platform timer. */
+  createSalTimer: () => new BrowserSalTimer(),
+  getSystemTicks,
+  hasPendingInput,
+};

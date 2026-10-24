@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/inc/svdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-scheduler",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/source/app/native-scheduler.test.ts",
+        "apps/office/e2e/shared/sal-timer.spec.ts"
+      ],
+      "justification": "Task76 ports actual native VCL Task/Timer/Idle scheduling owners:original priority ordering/FIFO lists,record replacement on priority restart,one-shot/auto deletion flags,nullable callbacks,copy/assignment distinctions,original active timeout timestamp,deterministic default/lowest Idle wakeup,nested scheduler stack and release-profile deinitialization. Actual ImplSVData static identity and ImplSchedulerContext own the queues;JS GC releases deleted record links while preserving non-owning comparison identity. A browser SalTimer and monotonic clock replace SAL platform allocation. Isolated browser/Worker realms do not share native mutexes. Browser input admission queries the host capability where exposed;OS paint queues remain host-controlled. Uncaught task errors stop the realm scheduler and escape instead of native process abort. ProcessEventsToIdle,application/window/device services,thread transfer and native debug logging/draining are not bound. Full chart/document paste/history and AutoSum remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplSchedulerContext",
+        "ImplSVData",
+        "ImplGetSVData"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vcl/inc/svdata.hxx",
+      "upstreamSymbols": [
+        "ImplSchedulerContext",
+        "ImplSVData",
+        "ImplGetSVData"
+      ]
+    }
+  }
+}

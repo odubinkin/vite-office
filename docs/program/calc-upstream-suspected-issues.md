@@ -3854,3 +3854,10 @@ flag update without extending that flag mutation for consistency.
 - After checking internal/external families,the function compares external file IDs and numeric range coordinates. It never compares the external tokens' table-name strings. The separate joining helper in the same file does compare those strings.
 - Two real external tokens with the same file ID and intersecting numeric sheet/row/column spans can therefore intersect even when their table names differ. This may reflect a caller-specific sheet-coordinate invariant rather than a defect.
 - The port preserves the original comparison order and does not add a table-name filter. `reftokenhelper.test.ts` verifies both different-file rejection and the different-name/same-file result using actual external reference owners.
+
+### CALC-268 — Active Timer.SetTimeout retains the original task timestamp
+
+- Pinned source: `vcl/source/app/timer.cxx`, `Timer::SetTimeout`, `Timer::UpdateMinPeriod`; `vcl/source/app/scheduler.cxx`, `Task::Start`.
+- The comment says an active timeout change renews the clock, but `SetTimeout` changes the duration and requests a system-timer wakeup without changing the task record's `mnUpdateTime`. Readiness still uses the original record timestamp plus the new duration.
+- For a timer started at tick1000 with timeout100, changing the timeout to20 at tick1010 leaves its task deadline at1020. An independent scheduler wakeup observes the remaining10 ticks; it does not establish a new deadline at1030.
+- This may be intentional elapsed-time behavior with an imprecise comment, rather than a defect. The port preserves the source timestamp and earlier-wakeup selection. `apps/office/src/vcl/source/app/native-scheduler.test.ts` verifies actual native owners through the browser system-timer boundary.
