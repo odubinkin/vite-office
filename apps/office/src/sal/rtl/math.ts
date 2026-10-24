@@ -2,9 +2,125 @@
 import {
   rtl_math_ConversionStatus as Status,
   type rtl_math_StringFormat,
+  rtl_math_RoundingMode as RoundingMode,
 } from "../inc/rtl/math-values";
 import type { rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { doubleToString } from "./strtmpl.math";
+
+/** Consumed nonnegative n10s lookup uses correctly rounded decimal literals;the out-of-table path is libm pow. @param exponent - Nonnegative original integer exponent. @returns Binary64 power. */
+function getN10Exp(exponent: number): number {
+  return exponent <= 308 ? Number("1e" + exponent) : Math.pow(10, exponent);
+}
+/** Original representable-integer exception excludes binary64 integers at or above2^53. @param value - Nonnegative finite value. @returns Representable integer. */
+function isRepresentableInteger(value: number): boolean {
+  return value < 2 ** 53 && Number.isInteger(value);
+}
+/** Original fractional bit count reads the actual IEEE754 significand and exponent. @param value - Positive finite value. @returns Fractional bit count. */
+function getBitsInFracPart(value: number): number {
+  const view = new DataView(new ArrayBuffer(8));
+  view.setFloat64(0, value);
+  const bits = view.getBigUint64(0),
+    exponent = Number((bits >> 52n) & 0x7ffn) - 1023;
+  if (exponent >= 52) return 0;
+  let fraction = bits & 0xfffffffffffffn,
+    least = 53;
+  if (fraction !== 0n) {
+    least = 1;
+    while ((fraction & 1n) === 0n) {
+      ++least;
+      fraction >>= 1n;
+    }
+  }
+  return Math.max(53 - least - exponent, 0);
+}
+/** Original fifteen-significant-digit approximation,including sign-sensitive early guard and overflow restoration. @param value - Binary64 input. @returns Native approximate value. */
+export function rtl_math_approxValue(value: number): number {
+  if (value === 0 || !Number.isFinite(value) || value > 2 ** 41) return value;
+  const original = value,
+    negative = value < 0;
+  if (negative) value = -value;
+  if (isRepresentableInteger(value) || getBitsInFracPart(value) <= 11) return original;
+  const exponent = 14 - Math.floor(Math.log10(value)),
+    factor = getN10Exp(Math.abs(exponent));
+  // Values with magnitude>=2^41 have at most11 fractional bits and already returned.
+  // Thus the remaining exponent is positive;the native negative-scale and final overflow guards are unreachable.
+  value *= factor;
+  if (!Number.isFinite(value)) return original;
+  value = Math.round(value);
+  value /= factor;
+  return negative ? -value : value;
+}
+/** Original RTL rounding over all eight modes. JS has no floating-point environment,so HalfEven executes the native fallback. Proven impossible nDec<=0,positive decimal-power underflow and precision-clamped scaling overflow guards are erased in this typed binary64 domain. @param value - Binary64 input. @param places - Signed32 decimal places. @param mode - Original rounding selector. @returns Rounded binary64 with native sign and overflow restoration. */
+export function rtl_math_round(value: number, places: number, mode: RoundingMode): number {
+  if (!Number.isFinite(value) || value === 0) return value;
+  places |= 0;
+  const original = value,
+    negative = value < 0;
+  if (negative) value = -value;
+  if (places >= 0 && (value >= 2 ** 52 || isRepresentableInteger(value))) return original;
+  let factor = 0;
+  if (places !== 0) {
+    if (places > 0) {
+      const view = new DataView(new ArrayBuffer(8));
+      view.setFloat64(0, value);
+      const decimals = 52 - (Number((view.getBigUint64(0) >> 52n) & 0x7ffn) - 1023);
+      places = Math.min(places, decimals);
+    }
+    factor = getN10Exp(Math.abs(places));
+    if (places < 0 && !Number.isFinite(factor)) return 0;
+    if (!Number.isFinite(factor)) return original;
+    value = places < 0 ? value / factor : value * factor;
+  }
+  if (value < 2 ** 52) {
+    switch (mode) {
+      case RoundingMode.rtl_math_RoundingMode_Corrected:
+        value = Math.floor(rtl_math_approxValue(value + 0.5));
+        break;
+      case RoundingMode.rtl_math_RoundingMode_Down:
+        value = Math.floor(rtl_math_approxValue(value));
+        break;
+      case RoundingMode.rtl_math_RoundingMode_Up:
+        value = Math.ceil(rtl_math_approxValue(value));
+        break;
+      case RoundingMode.rtl_math_RoundingMode_Floor:
+        value = negative
+          ? Math.ceil(rtl_math_approxValue(value))
+          : Math.floor(rtl_math_approxValue(value));
+        break;
+      case RoundingMode.rtl_math_RoundingMode_Ceiling:
+        value = negative
+          ? Math.floor(rtl_math_approxValue(value))
+          : Math.ceil(rtl_math_approxValue(value));
+        break;
+      case RoundingMode.rtl_math_RoundingMode_HalfDown: {
+        const integer = Math.floor(value);
+        value = value - integer <= 0.5 ? integer : Math.ceil(value);
+        break;
+      }
+      case RoundingMode.rtl_math_RoundingMode_HalfUp: {
+        const integer = Math.floor(value);
+        value = value - integer < 0.5 ? integer : Math.ceil(value);
+        break;
+      }
+      case RoundingMode.rtl_math_RoundingMode_HalfEven: {
+        const integer = Math.floor(value);
+        value =
+          value - integer !== 0.5
+            ? Math.floor(value + 0.5)
+            : integer / 2 === Math.floor(integer / 2)
+              ? integer
+              : integer + 1;
+        break;
+      }
+      default:
+        // Native OSL_ASSERT is diagnostic only;the release path leaves the scaled value unchanged.
+        break;
+    }
+  }
+  if (places !== 0) value = places < 0 ? value * factor : value / factor;
+  if (!Number.isFinite(value)) return original;
+  return negative ? -value : value;
+}
 import { newFromStr_WithLength, stringbuffer_insert } from "./strtmpl";
 
 /** Tests the original ASCII digit range, including an exhausted input. @param c - Unit. @returns Digit membership. */

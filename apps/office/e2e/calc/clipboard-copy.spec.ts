@@ -9,6 +9,10 @@ type Fixture = typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/sc/inc/reftokenhelper") &
   typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/patattr") &
+  typeof import("../../src/svl/source/numbers/zformat") &
+  typeof import("../../src/sal/inc/rtl/math") &
+  typeof import("../../src/i18npool/source/localedata/localedata") &
+  typeof import("../../src/udkapi/com/sun/star/lang/Locale") &
   typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
@@ -44,6 +48,10 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     },
     { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem", "ScMergeAttr"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
+    { module: "src/svl/source/numbers/zformat.ts", names: ["formatStandardNumber"] },
+    { module: "src/sal/inc/rtl/math.ts", names: ["round"] },
+    { module: "src/i18npool/source/localedata/localedata.ts", names: ["getLocaleFormatElements"] },
+    { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
     { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters", "AutoCalcSwitch"] },
@@ -369,6 +377,29 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           retainedPattern: rowContext.getSingleCellPattern(0) === borrowedPattern,
           newPattern: rowContext.getSingleCellPattern(2),
         };
+        const general = n.formatStandardNumber(1e-10, 65535, 46),
+          input = n.formatStandardNumber(1e-10, 65534, 46),
+          language = n.unicode("de"),
+          country = n.unicode("DE"),
+          variant = n.unicode(""),
+          locale = new n.Locale(language, country, variant),
+          numberFormats = n.getLocaleFormatElements(locale),
+          formatFoundation = {
+            general: n.text(general),
+            input: n.text(input),
+            correctedRound: n.round(16.83 * 650),
+            localeGeneral: numberFormats.find(
+              /** Reads the native General format record. @param row - Original value row. @returns Match. */
+              (row) => row.formatIndex === 0,
+            )?.formatCode,
+            localeFormats: numberFormats.length,
+          };
+        general.dispose();
+        input.dispose();
+        locale.dispose();
+        language.dispose();
+        country.dispose();
+        variant.dispose();
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -397,6 +428,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           chartOwnership,
           chartNotification,
           pastePreparation,
+          formatFoundation,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -459,6 +491,13 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       allocationUnchanged: true,
       retainedPattern: true,
       newPattern: null,
+    },
+    formatFoundation: {
+      general: "1E-10",
+      input: "0.0000000001",
+      correctedRound: 10940,
+      localeGeneral: "Standard",
+      localeFormats: 55,
     },
     formatRequests: [false, false],
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },

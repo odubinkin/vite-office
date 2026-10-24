@@ -1,5 +1,6 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
 import transliterations from "./data/transliterations.json" with { type: "json" };
+import numberFormats from "./data/number-formats.json" with { type: "json" };
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import numeric from "./data/numeric-separators.json" with { type: "json" };
 import separators from "./data/decimal-separators.json" with { type: "json" };
@@ -18,6 +19,20 @@ const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUS
 /** Actual ordered LC_TRANSLITERATION resources,including source ref resolution. */
 const transliterationResources = new Map<string, readonly string[]>(
   Object.entries(transliterations),
+);
+/** Original FormatElement scalar payload projected from actual generated locale arrays. */
+export interface LocaleFormatElement {
+  formatCode: string;
+  formatName: string;
+  formatKey: string;
+  formatType: string;
+  formatUsage: string;
+  formatIndex: number;
+  isDefault: boolean;
+}
+/** Source-generated LC_FORMAT and LC_FORMAT_1 fields in native order. */
+const numberFormatResources = new Map<string, readonly LocaleFormatElement[]>(
+  Object.entries(numberFormats),
 );
 /** Actual embedded decimal resource values;no current Intl data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
@@ -66,6 +81,14 @@ function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap
 /** Original decimal field through shared locale-name fallback resolution. @param locale - Prepared locale. @returns Separator. */
 export function getLocaleDecimalSeparator(locale: LocaleConstReference): string {
   return getLocaleDataField(locale, resources);
+}
+/** Original getAllFormats field projection over the same native locale resolver;each call returns independent value rows,without a whole UNO service facade. @param locale - Prepared native locale. @returns Both original format sections with generated ref/currency replacements. */
+export function getLocaleFormatElements(locale: LocaleConstReference): LocaleFormatElement[] {
+  return getLocaleDataField(locale, numberFormatResources).map(
+    /** Copies the native value record. @param row - Embedded source fields. @returns Independent value. */ (
+      row,
+    ) => ({ ...row }),
+  );
 }
 /** Original MeasurementSystem field through the same locale-name fallback resolution. @param locale - Prepared locale. @returns Source field text. */
 export function getLocaleMeasurementSystem(locale: LocaleConstReference): string {

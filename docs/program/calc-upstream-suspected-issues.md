@@ -3874,3 +3874,10 @@ flag update without extending that flag mutation for consistency.
 - Both width iterators are positioned before destination `CopyFrom`. Iterator dereference subsequently uses the live array at the retained compressed-entry index,while increment advances the retained logical region. CopyFrom can replace the destination run partition.
 - The later width-change comparison therefore does not compare a stable snapshot of pre-copy widths. This may depend on caller/run-partition invariants;it is not established as an active UI defect.
 - The port uses the genuine compressed-array iterator owners in the same order;it does not replace them with fresh point lookups or pre-copy width snapshots.
+
+### CALC-271 — Number-format locale cache retains four entries for its size-three constant
+
+- Pinned source: `i18npool/source/numberformatcode/numberformatcode.cxx`, `NumberFormatCodeMapper::getFormats`.
+- On a cache miss,the code defines `FORMATELEMENTCACHE_SIZE = 3`,pops the oldest entry only when the current size is strictly greater than that constant,and then appends the new locale. The fourth distinct locale grows the cache from three to four entries;later misses retain four entries by popping before appending.
+- This may be an intentional soft limit or an imprecise constant name rather than an active defect. Preserve the strict `>` comparison and insertion order when this native mapper owner is ported;do not change it to `>=`.
+- Evidence is pinned-source inspection. The current locale-format field binding has no fabricated mapper cache,and the mapper owner remains unported;no runtime parity claim is made here.
