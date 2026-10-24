@@ -132,3 +132,31 @@ describe("SwLineNumberInfo", /** Groups pinned line-number contract checks. @ret
     ).toThrow("invalid");
   });
 });
+
+it("keeps native unsigned16 fields and rejects out-of-width transfer values", /** Typed core arguments wrap while untrusted transfer data must fit the native stored domain. @returns Nothing. */ () => {
+  for (const value of [-1, 0, 32767, 32768, 65535, 65536, 65537, 2147483647]) {
+    const info = new SwLineNumberInfo();
+    info.SetCountBy(value);
+    info.SetDividerCountBy(value);
+    info.SetPosFromLeft(value);
+    expect(info.QueryValue()).toMatchObject({
+      countBy: value & 65535,
+      dividerCountBy: value & 65535,
+      posFromLeft: value & 65535,
+    });
+    const copy = new SwLineNumberInfo({
+      ...info.QueryValue(),
+      countBy: value,
+      dividerCountBy: value,
+      posFromLeft: value,
+    });
+    expect(copy.equals(info)).toBe(true);
+    expect(SwLineNumberInfo.FromValue(info.QueryValue()).equals(info)).toBe(true);
+  }
+  for (const field of ["countBy", "dividerCountBy", "posFromLeft"] as const)
+    for (const value of [-1, 65536, 1.5, NaN, Infinity])
+      expect(
+        /** Supplies an invalid transport scalar. @returns Untrusted restore. */ () =>
+          SwLineNumberInfo.FromValue({ ...new SwLineNumberInfo().QueryValue(), [field]: value }),
+      ).toThrow("invalid");
+});

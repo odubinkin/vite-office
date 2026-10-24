@@ -15,11 +15,11 @@ export function exportLineNumberingConfiguration(value: OdfLineNumberingConfigur
       : [`text:offset="${Number(((value.posFromLeft * 2.54) / 1440).toFixed(4))}cm"`]),
     'style:num-format="1"',
     `text:number-position="${value.position}"`,
-    `text:increment="${value.countBy}"`,
+    `text:increment="${(value.countBy << 16) >> 16}"`,
   ];
   const separator =
     value.divider.length === 0
       ? ""
-      : `<text:linenumbering-separator text:increment="${value.dividerCountBy}">${escapeXml(value.divider)}</text:linenumbering-separator>`;
+      : `<text:linenumbering-separator text:increment="${(value.dividerCountBy << 16) >> 16}">${escapeXml(value.divider)}</text:linenumbering-separator>`;
   return `<text:linenumbering-configuration ${attributes.join(" ")}>${separator}</text:linenumbering-configuration>`;
 }

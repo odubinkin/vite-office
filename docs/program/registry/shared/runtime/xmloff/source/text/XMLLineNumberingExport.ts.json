@@ -19,7 +19,7 @@
         "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts#exportLineNumberingConfiguration",
         "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingExport.cxx#XMLLineNumberingExport::Export"
       ],
-      "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+      "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified. TaskJ1K3KF retains signed16 Interval/SeparatorInterval export values returned by native line-number property access over unsigned16 core storage;the existing filter owns serialization and no separate UNO property service is fabricated.",
       "knownViolations": [],
       "localSymbols": [
         "exportLineNumberingConfiguration"

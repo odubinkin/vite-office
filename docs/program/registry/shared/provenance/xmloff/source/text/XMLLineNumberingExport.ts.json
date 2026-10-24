@@ -25,7 +25,8 @@
       "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
     ],
     "preservedResponsibilities": [
-      "Writes the supported document-level ODF line-number attributes and separator."
+      "Writes the supported document-level ODF line-number attributes and separator.",
+      "TaskJ1K3KF retains signed16 Interval/SeparatorInterval export values returned by native line-number property access over unsigned16 core storage;the existing filter owns serialization and no separate UNO property service is fabricated."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/XMLLineNumberingExport.cxx",

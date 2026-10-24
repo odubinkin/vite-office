@@ -94,7 +94,6 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
 
     for (const [from, to, error] of [
       ['text:number-lines="false"', 'text:number-lines="yes"', "boolean"],
-      ['text:increment="5"', 'text:increment="-1"', "increment"],
       ['text:number-position="left"', 'text:number-position="above"', "position"],
       ['style:num-format="1"', 'style:num-format="A"', "format"],
     ] as const) {
@@ -167,5 +166,62 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
         restartEachPage: false,
       }),
     ).not.toContain("text:offset");
+  });
+});
+
+it("imports native narrowed intervals and reexports applied values instead of original lexemes", /** Real package/model/filter owners retain defaults and zero separator values. @returns Completion. */ async () => {
+  const original = createWriterDocument();
+  const bytes = writeOdtDocument(original, metadata);
+  for (const [raw, count, divider] of [
+    ["32768", 5, 3],
+    ["65537", 1, 1],
+    ["-1", 5, 0],
+    ["invalid", 5, 3],
+    ["0", 5, 0],
+  ] as const) {
+    const changed = await rewriteStyles(
+      bytes,
+      /** Authors interval values into actual ODT settings. @param xml - Styles. @returns Rewritten styles. */ (
+        xml,
+      ) =>
+        xml
+          .replace('text:increment="5"', `text:increment="${raw}"`)
+          .replace(
+            "</text:linenumbering-configuration>",
+            `<text:linenumbering-separator text:increment="${raw}">*</text:linenumbering-separator></text:linenumbering-configuration>`,
+          ),
+    );
+    const reopened = await readOdtDocument(changed, metadata);
+    expect(reopened.document.GetLineNumberInfo().QueryValue()).toMatchObject({
+      countBy: count,
+      dividerCountBy: divider,
+    });
+    const saved = await new ZipFile(writeOdtDocument(reopened.document, metadata)).readTextEntry(
+      "styles.xml",
+    );
+    expect(saved).toContain(`text:increment="${count}"`);
+    expect(saved).toContain(
+      `<text:linenumbering-separator text:increment="${divider}">*</text:linenumbering-separator>`,
+    );
+  }
+});
+
+it("exports the original signed16 interval properties from unsigned native core fields", /** Rare direct-core values preserve the same export/property narrowing as upstream. @returns Completion. */ async () => {
+  const doc = createWriterDocument(),
+    info = doc.GetLineNumberInfo();
+  info.SetCountBy(65535);
+  info.SetDividerCountBy(32768);
+  info.SetDivider("*");
+  doc.SetLineNumberInfo(info);
+  const bytes = writeOdtDocument(doc, metadata),
+    xml = await new ZipFile(bytes).readTextEntry("styles.xml");
+  expect(xml).toContain('text:increment="-1"');
+  expect(xml).toContain(
+    '<text:linenumbering-separator text:increment="-32768">*</text:linenumbering-separator>',
+  );
+  const reopened = await readOdtDocument(bytes, metadata);
+  expect(reopened.document.GetLineNumberInfo().QueryValue()).toMatchObject({
+    countBy: 5,
+    dividerCountBy: 0,
   });
 });

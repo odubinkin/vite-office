@@ -19,7 +19,7 @@
         "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts#XMLLineNumberingImportContext",
         "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx#XMLLineNumberingImportContext::CreateAndInsert"
       ],
-      "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+      "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified. TaskJ1K3KF reuses native SAX signed32 conversion,min0 clamp,signed16 narrowing and original positive main/nonnegative separator property admission. Invalid/narrowed-negative interval lexemes retain defaults;complete UNO import and other attributes remain bounded.",
       "knownViolations": [],
       "localSymbols": [
         "XMLLineNumberingImportContext"

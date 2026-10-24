@@ -1082,3 +1082,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `cui/source/dialogs/hyperlinkinternettabpage.cxx`, `HyperlinkInternetTP::RemoveQueryString`.
 - Observation: the handler finds the first literal `?` without checking for a preceding `#`. Thus `https://example.test/a#fragment?keep` becomes `https://example.test/a#fragment`, even though the question mark is inside the URI fragment. A following hash and its suffix are preserved literally. This is a source control-handler observation,not a confirmed desktop defect after all native URL normalization paths.
 - Preservation: retain literal string slicing and source event/session preference behavior. Tests cover this ordinary string input;using `URL.search` would change the source contract.
+
+### WRITER089 — imported line-number intervals wrap through signed16 before property admission
+
+- Source: pinned `xmloff/source/text/XMLLineNumberingImportContext.cxx`, interval attribute and `CreateAndInsert`; `XMLLineNumberingSeparatorImportContext.cxx`; `sw/source/core/unocore/unosett.cxx`, Interval/SeparatorInterval setters.
+- Observation: SAX converts with a minimum of zero,then the importer narrows to signed16. Values32768..65535 become negative and are ignored;65537 becomes1. Main interval0 is ignored by the property owner,whereas separator interval0 is accepted. Property reads/export also narrow unsigned core intervals to signed16,so rare direct-core values can serialize as negative intervals. This discontinuous range behavior may be surprising;no desktop defect is confirmed.
+- Preservation: reuse the existing SAX converter,retain narrowing and distinct admission conditions. Tests include ordinary and synthetic range boundaries,invalid lexemes and actual ODT re-export;no invented range rejection replaces native fallback behavior.
