@@ -28,7 +28,8 @@
       "DecInterpretLevel",
       "IsImportingXML",
       "IsInDtorClear",
-      "SetName"
+      "SetName",
+      "IsMerged"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -55,7 +56,8 @@
       "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
       "Native chart collection pointer and interpreter unsigned-short nesting guards are retained. IsImportingXML and IsInDtorClear expose original defaults/lifetime. Constructor resource bodies are partitioned to their original documen2 owner;ApplySelectionPattern is partitioned unchanged onto this same instance through documen7. Full XML import state transitions and drawing owners remain unported.",
       "CopyToDocument delegates to the canonical document/table/column graph with original true geometry default. Original document-name value storage supports native conditional name copying. Scalar/table counts and marks retain native contracts rather than filtering ordinary copies by selected sheets.",
-      "The original document.hxx SetName value assignment is bound to the real aDocName owner,allowing canonical nonempty destination-name retention during CopyToDocument without private-state injection."
+      "The original document.hxx SetName value assignment is bound to the real aDocName owner,allowing canonical nonempty destination-name retention during CopyToDocument without private-state injection.",
+      "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -181,6 +183,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
           "marker": "relocated ranges"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "IsMerged"
         }
       ],
       "upstream": [
@@ -275,6 +281,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/document.hxx",
           "marker": "SetName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::IsMerged"
         }
       ]
     }

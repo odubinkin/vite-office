@@ -183,6 +183,10 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original column.hxx inline forwards to the actual attribute runs. @param row - Queried row. @returns Whether the cell is a merged anchor. */
+  IsMerged(row: number): boolean {
+    return this.pAttrArray.IsMerged(row);
+  }
   /** Original column.cxx Undo copies formulas outside the edited rows and the requested flags within them. @param context - Actual destination context. @param first - First edited row. @param last - Last edited row. @param flags - Edited payload. @param marked - Original mark argument. @param target - Destination column. @returns Nothing. */
   UndoToColumn(
     context: CopyToDocContext,

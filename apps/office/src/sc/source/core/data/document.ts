@@ -674,6 +674,10 @@ export class ScDocument {
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
   }
+  /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
+  IsMerged(position: ScAddress): boolean {
+    return document10.IsMerged.call(this, position);
+  }
   /** Original document.cxx cursor-pattern assignment delegates through the actual sheet. @param col - Column. @param row - Row. @param tab - Sheet. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(col: number, row: number, tab: number, holder: CellAttributeHolder): void {
     this.FetchTable(tab)?.SetPattern(col, row, holder);

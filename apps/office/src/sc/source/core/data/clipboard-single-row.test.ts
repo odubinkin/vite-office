@@ -13,7 +13,40 @@ import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { BroadcastAction } from "./documen7";
+import { ScMergeAttr, ScMergeFlagAttr, ScMF } from "../../../inc/attrib";
+import { ScPatternAttr } from "../../../inc/patattr";
 import { readOdsDocument, writeOdsDocument } from "../../filter/xml/xmlwrap";
+
+it("queries merged anchors through actual attribute runs without allocating absent columns or sheets", /** The single-row paste guard distinguishes anchor spans from overlap flags. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  doc.InsertTab(0, unicode("Data"));
+  const table = doc.FetchTable(0) as ScTable,
+    count = table.GetAllocatedColumnsCount(),
+    pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+  try {
+    expect(doc.IsMerged(new ScAddress(0, 0, 1))).toBe(false);
+    expect(doc.IsMerged(new ScAddress(-1, 0, 0))).toBe(false);
+    expect(doc.IsMerged(new ScAddress(doc.MaxCol() + 1, 0, 0))).toBe(false);
+    expect(doc.IsMerged(new ScAddress(count, 0, 0))).toBe(false);
+    expect(table.GetAllocatedColumnsCount()).toBe(count);
+    expect(doc.IsMerged(new ScAddress())).toBe(false);
+    pattern.ItemSetPut(new ScMergeAttr(2, 1));
+    doc.ApplyPattern(0, 3, 0, pattern);
+    expect(doc.IsMerged(new ScAddress(0, 3, 0))).toBe(true);
+    expect(doc.IsMerged(new ScAddress(0, 2, 0))).toBe(false);
+    expect(doc.IsMerged(new ScAddress(0, 4, 0))).toBe(false);
+    pattern.ItemSetPut(new ScMergeAttr(1, 3));
+    doc.ApplyPattern(0, 7, 0, pattern);
+    expect(doc.IsMerged(new ScAddress(0, 7, 0))).toBe(true);
+    pattern.ItemSetPut(new ScMergeAttr(1, 1));
+    pattern.ItemSetPut(new ScMergeFlagAttr(ScMF.Hor | ScMF.Ver));
+    doc.ApplyPattern(0, 8, 0, pattern);
+    expect(doc.IsMerged(new ScAddress(0, 8, 0))).toBe(false);
+  } finally {
+    pattern.Dispose();
+    doc.Dispose();
+  }
+});
 /** Prepares the actual source row's owned cell/text-attribute values,as required by the native table entry. @param doc - Destination. @param clip - Actual clipboard. @returns Prepared native context. */
 function context(doc: ScDocument, clip: ScDocument): CopyFromClipContext {
   const operation = new CopyFromClipContext(

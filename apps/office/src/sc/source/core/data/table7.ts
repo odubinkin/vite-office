@@ -4,6 +4,11 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScTable } from "../../../inc/table";
 import { CRFlags } from "../../../inc/global";
 import type { ScColumn } from "../../../inc/column";
+/** Original allocated-column merge query does not allocate a column for a read. @param this - Actual sheet. @param col - Queried column. @param row - Queried row. @returns Whether the cell is a merged anchor. */
+export function IsMerged(this: ScTable, col: number, row: number): boolean {
+  if (!this.GetDoc().ValidCol(col) || col >= this.GetAllocatedColumnsCount()) return false;
+  return (this["aCol"][col] as ScColumn).IsMerged(row);
+}
 /** Original table7 pre-paste deletion visits allocated destination columns and repeats source columns. Protected/conditional formats are not part of CONTENTS. @param this - Actual table. @param context - Paste context. @param clipTable - Actual source sheet. @param broadcasts - Deferred broadcasts. @returns Nothing. */
 export function DeleteBeforeCopyFromClip(
   this: ScTable,

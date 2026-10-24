@@ -140,6 +140,10 @@ export class ScTable {
   CopyOneCellFromClip(...args: Parameters<typeof table7.CopyOneCellFromClip>): void {
     table7.CopyOneCellFromClip.apply(this, args);
   }
+  /** Original table7 merged-anchor query keeps sparse column allocation unchanged. @param col - Column. @param row - Row. @returns Merged anchor. */
+  IsMerged(col: number, row: number): boolean {
+    return table7.IsMerged.call(this, col, row);
+  }
   /** Original raw height query ignores hidden state and retains the absent/invalid fallback. @param row - Source row. @returns Twips. */
   GetOriginalHeight(row: number): number {
     return this.rDocument.ValidRow(row) && this.mpRowHeights

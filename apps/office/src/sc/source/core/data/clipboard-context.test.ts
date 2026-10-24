@@ -193,3 +193,50 @@ it("retains the original early return when the real context cannot initialize an
   column.DisposeAttributes();
   doc.Dispose();
 });
+
+it("retains borrowed single-row patterns across native vector resize without owning their lifetime", /** The prepared pattern vector preserves existing pointers and initializes only new slots to null. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  doc.InsertTab(0, unicode("Data"));
+  clip.ResetClip(doc, 0);
+  const context = new CopyFromClipContext(
+      doc,
+      null,
+      clip,
+      InsertDeleteFlags.CONTENTS,
+      false,
+      false,
+    ),
+    pattern = clip.GetPattern(new ScAddress());
+  try {
+    context.setSingleCellColumnSize(2);
+    expect([context.getSingleCellPattern(0), context.getSingleCellPattern(1)]).toEqual([
+      null,
+      null,
+    ]);
+    context.setSingleCellPattern(0, pattern);
+    context.setSingleCellPattern(1, pattern);
+    context.setSingleCellColumnSize(1);
+    expect(context.getSingleCellPattern(0)).toBe(pattern);
+    context.setSingleCellColumnSize(2);
+    expect(context.getSingleCellPattern(0)).toBe(pattern);
+    expect(context.getSingleCellPattern(1)).toBeNull();
+    context.setSingleCellPattern(0, null);
+    expect(context.getSingleCellPattern(0)).toBeNull();
+    expect(
+      /** Exercises the native vector assertion boundary. @returns Invalid borrow. */ () =>
+        context.getSingleCellPattern(2),
+    ).toThrow("pattern offset out of range");
+    expect(
+      /** Exercises the native vector assertion boundary. @returns Nothing. */ () =>
+        context.setSingleCellPattern(2, pattern),
+    ).toThrow("pattern offset out of range");
+    context.setSingleCellPattern(0, pattern);
+    context.Dispose();
+    expect(clip.GetPattern(new ScAddress())).toBe(pattern);
+  } finally {
+    context.Dispose();
+    clip.Dispose();
+    doc.Dispose();
+  }
+});

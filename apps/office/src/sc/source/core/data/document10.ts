@@ -9,6 +9,12 @@ import type { ScTable } from "../../../inc/table";
 import { ScAddress, ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
+/** Original merged-anchor query returns false for an absent sheet and delegates otherwise. @param this - Actual document. @param position - Queried cell. @returns Merged anchor. */
+export function IsMerged(this: ScDocument, position: ScAddress): boolean {
+  const table = this.FetchTable(position.Tab());
+  if (!table) return false;
+  return table.IsMerged(position.Col(), position.Row());
+}
 /** Original range/coordinate regroup overloads operate on the same document's actual sheets. @param this - Actual document. @param args - Native range or sheet/column. @returns Nothing. */
 export function RegroupFormulaCells(this: ScDocument, ...args: [ScRange] | [number, number]): void {
   if (args[0] instanceof ScRange) {

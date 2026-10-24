@@ -119,6 +119,17 @@ class ScAttrEntry extends CellAttributeHolder {
 }
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
+  /** Original merged-anchor query uses stored runs or the document's actual default attribute. @param row - Queried row. @returns Whether either merge span exceeds one. */
+  IsMerged(row: number): boolean {
+    if (this.mvData.length) {
+      const index: [number] = [0];
+      this.Search(row, index);
+      const pattern = (this.mvData[index[0]] as ScAttrEntry).getScPatternAttr() as ScPatternAttr;
+      return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+    }
+    const pattern = this.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+  }
   /** Original NeedHeight branch of HasAttrib_Impl over genuine pattern values;other masks remain explicitly unported. @param pattern - Actual pattern. @returns Height-sensitive attribute found. */
   private HasAttrib_Impl(pattern: ScPatternAttr): boolean {
     if (pattern.GetCellOrientation() !== SvxCellOrientation.Standard) return true;

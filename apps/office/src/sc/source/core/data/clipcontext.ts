@@ -2,6 +2,7 @@
 import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import type { ScDocument } from "../../../inc/document";
 import type { ScColumn } from "../../../inc/column";
+import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScAddress } from "../../../inc/address";
 import { ScCellValue } from "../../../inc/cellvalue";
 import { CellTextAttr } from "../../../inc/celltextattr";
@@ -36,6 +37,7 @@ export class CopyFromClipContext extends ClipContextBase {
   private mnDeleteFlag = InsertDeleteFlags.NONE;
   private readonly maSingleCells: ScCellValue[] = [];
   private readonly maSingleCellAttrs: CellTextAttr[] = [];
+  private readonly maSinglePatterns: (ScPatternAttr | null)[] = [];
   /** Captures actual native owners and defaults;nondefault paste services remain an explicit boundary. @param mrDestDoc - Destination. @param mpRefUndoDoc - Reference undo document. @param mpClipDoc - Clipboard. @param mnInsertFlag - Insert flags. @param mbAsLink - Link mode. @param mbSkipEmptyCells - Skip-empty mode. @returns Context. */
   constructor(
     private readonly mrDestDoc: ScDocument,
@@ -142,8 +144,10 @@ export class CopyFromClipContext extends ClipContextBase {
       (this.maSingleCells[index] as ScCellValue).clear();
     while (this.maSingleCells.length < size) this.maSingleCells.push(new ScCellValue());
     while (this.maSingleCellAttrs.length < size) this.maSingleCellAttrs.push(new CellTextAttr());
+    while (this.maSinglePatterns.length < size) this.maSinglePatterns.push(null);
     this.maSingleCells.length = size;
     this.maSingleCellAttrs.length = size;
+    this.maSinglePatterns.length = size;
   }
   /** Borrows the actual owned cell value. @param offset - Source column offset. @returns Cell. */
   getSingleCell(offset: number): ScCellValue {
@@ -155,6 +159,18 @@ export class CopyFromClipContext extends ClipContextBase {
     if (offset >= this.maSingleCellAttrs.length)
       throw new Error("Clipboard attribute offset out of range");
     return this.maSingleCellAttrs[offset] as CellTextAttr;
+  }
+  /** Borrows the original single-row source pattern without taking holder ownership. @param offset - Source column offset. @returns Borrowed pattern or native null default. */
+  getSingleCellPattern(offset: number): ScPatternAttr | null {
+    if (offset >= this.maSinglePatterns.length)
+      throw new Error("Clipboard pattern offset out of range");
+    return this.maSinglePatterns[offset] as ScPatternAttr | null;
+  }
+  /** Stores the original borrowed source pattern pointer. @param offset - Source column offset. @param pattern - Borrowed pattern or null. @returns Nothing. */
+  setSingleCellPattern(offset: number, pattern: ScPatternAttr | null): void {
+    if (offset >= this.maSinglePatterns.length)
+      throw new Error("Clipboard pattern offset out of range");
+    this.maSinglePatterns[offset] = pattern;
   }
   /** Copies a source cell and metadata through original ScCellValue assignment. Default CONTENTS admits all represented cell alternatives. @param position - Source cell. @param column - Actual source column. @returns Nothing. */
   setSingleCell(position: ScAddress, column: ScColumn): void {

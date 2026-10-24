@@ -8,6 +8,7 @@ type Fixture = typeof import("../../src/vcl/inc/scheduler") &
   typeof import("../../src/sc/inc/chartlis") &
   typeof import("../../src/sc/inc/reftokenhelper") &
   typeof import("../../src/sc/inc/attrib") &
+  typeof import("../../src/sc/inc/patattr") &
   typeof import("../../src/sc/inc/document") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/markdata") &
@@ -41,7 +42,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         "intersects",
       ],
     },
-    { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem"] },
+    { module: "src/sc/inc/attrib.ts", names: ["ScCondFormatItem", "ScMergeAttr"] },
+    { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
     { module: "src/sc/inc/conditio.ts", names: ["ScConditionalFormat", "ScCondDateFormatEntry"] },
     { module: "src/sc/inc/rangelst.ts", names: ["ScRangeList"] },
     { module: "src/sc/inc/scopetools.ts", names: ["DelayDeletingBroadcasters", "AutoCalcSwitch"] },
@@ -348,6 +350,25 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         collection.StartAllListeners();
         doc.SetValue(new n.ScAddress(2, 4, 0), 17);
         const chartNotification = { type: await notified, dirty: chartListener.IsDirty() };
+        const allocated = target.GetAllocatedColumnsCount(),
+          sparseMerge = doc.IsMerged(new n.ScAddress(doc.MaxCol(), 0, 0)),
+          allocationUnchanged = target.GetAllocatedColumnsCount() === allocated,
+          mergePattern = new n.ScPatternAttr(doc.getCellAttributeHelper());
+        mergePattern.ItemSetPut(new n.ScMergeAttr(2, 1));
+        doc.ApplyPattern(12, 12, 0, mergePattern);
+        mergePattern.Dispose();
+        const borrowedPattern = doc.GetPattern(new n.ScAddress(12, 12, 0));
+        rowContext.setSingleCellPattern(0, borrowedPattern);
+        rowContext.setSingleCellColumnSize(3);
+        const pastePreparation = {
+          anchor: doc.IsMerged(new n.ScAddress(12, 12, 0)),
+          ordinary: doc.IsMerged(new n.ScAddress(12, 11, 0)),
+          absentSheet: doc.IsMerged(new n.ScAddress(0, 0, 7)),
+          sparseMerge,
+          allocationUnchanged,
+          retainedPattern: rowContext.getSingleCellPattern(0) === borrowedPattern,
+          newPattern: rowContext.getSingleCellPattern(2),
+        };
         referenceToken.dispose();
         rowContext.Dispose();
         rowClip.Dispose();
@@ -375,6 +396,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           referenceHelper,
           chartOwnership,
           chartNotification,
+          pastePreparation,
         };
       }
       const script = Array.from(document.scripts).find(
@@ -429,6 +451,15 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     undoGeometryDisabled: true,
     undoShared: true,
     singleRow: [3, 7, 3, 3, 7, 3],
+    pastePreparation: {
+      anchor: true,
+      ordinary: false,
+      absentSheet: false,
+      sparseMerge: false,
+      allocationUnchanged: true,
+      retainedPattern: true,
+      newPattern: null,
+    },
     formatRequests: [false, false],
     undoCopy: { value: 13, formula: "=D6+1", independent: true, needsFormat: false },
     restoredDependency: 44,

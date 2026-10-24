@@ -9,15 +9,20 @@
     "localSymbols": [
       "ClipContextBase",
       "CopyFromClipContext",
-      "CopyToDocContext"
+      "CopyToDocContext",
+      "getSingleCellPattern",
+      "setSingleCellPattern"
     ],
     "upstreamSymbols": [
       "ClipContextBase::ClipContextBase",
-      "CopyFromClipContext::CopyFromClipContext"
+      "CopyFromClipContext::CopyFromClipContext",
+      "CopyFromClipContext::getSingleCellPattern",
+      "CopyFromClipContext::setSingleCellPattern"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
-      "Task76 clone-copy progress: Original CopyToDocContext uses the genuine destination cursor cache and native start-listening default true;no replacement document state is introduced."
+      "Task76 clone-copy progress: Original CopyToDocContext uses the genuine destination cursor cache and native start-listening default true;no replacement document state is introduced.",
+      "Native single-row pattern preparation retains borrowed ScPatternAttr pointers independently of owned cell values and text metadata;vector resize preserves retained pointers,initializes newly grown slots to null and discards truncated slots without disposing the source patterns. The original get/set bounds assertions remain explicit browser errors."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -31,12 +36,24 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
           "marker": "clipboard"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipcontext.ts",
+          "marker": "getSingleCellPattern"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/clipcontext.cxx",
           "marker": "ClipContextBase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/clipcontext.cxx",
+          "marker": "CopyFromClipContext::getSingleCellPattern"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/clipcontext.cxx",
+          "marker": "CopyFromClipContext::setSingleCellPattern"
         }
       ]
     }
