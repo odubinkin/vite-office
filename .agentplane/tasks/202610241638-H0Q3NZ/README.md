@@ -1,10 +1,11 @@
 ---
 id: "202610241638-H0Q3NZ"
 title: "Canonize Writer hyperlink Internet fields and query removal"
-status: "DOING"
+result_summary: "Canonized hyperlink frame name and query controls with preserved existing link text"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Native default target order and editable custom Frame/raw Name fields reuse real core/filter ownership. Source query entry/checkbox/session preference uses JS string operations with exact literal question/hash behavior;WRITER088 documents the suspected source edge. No extra library,second document model or broad parity promotion."
     - "Metadata-only acceptance captures original hyperlink presence and passes undefined replacement text to the existing range-aware core;explicit insertion payloads remain unchanged. Real shell history and production ODT/browser tests retain link text while fields update or clear. Escape and accepted/cancelled frame focus are tested through real mounted clients."
     - "Reviewed25source/record/doc hashes match the implementation commit;strict3ownercoverage S64/64 B30/30 F24/24 L60/60 with zero skips.27focused cases,1027related consumer cases,7shell cases and3production Chromium cases pass;all16final deterministic gates pass. Original dialog regression cases remain present. Screenshots at1280/390 show accessible represented controls and footer."
-commit: null
+commit:
+  hash: "4df3d5fc282df55ecf9ad88d6a712b605d172dce"
+  message: "🖋️ H0Q3NZ writer: canonize hyperlink frame name and query controls"
 comments:
   -
     author: "CODER"
     body: "Start: implement source common hyperlink fields and query toggle through actual Writer owners;verify and close this one task then pause goal."
+  -
+    author: "CODER"
+    body: "Verified: native editable Frame defaults,raw Name and Internet query toggle/session preference are connected through actual Writer controller/core/filter owners. Metadata-only edits preserve link text;focus,cancel,history and ODT round-trip pass. Strict3owner100coverage,related suites,3production Chromium cases and16final gates pass;evaluator pass recorded. Close exactly one further task then pause goal."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed exact-final focused27/4 and strict3owner100coverage S64 B30 F24 L60;related native consumers1027/24;shell7/1;production Chromium3/3 at1280/390 with screenshot inspection,raw metadata/query preference/Undo/Redo/ODT clearing;all16declared final gates passed. Source hash manifest matches final reviewed paths. Task3after checkpoint;no full suite due. Close one task then pause goal."
+  -
+    type: "status"
+    at: "2026-10-24T16:48:59.525Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native editable Frame defaults,raw Name and Internet query toggle/session preference are connected through actual Writer controller/core/filter owners. Metadata-only edits preserve link text;focus,cancel,history and ODT round-trip pass. Strict3owner100coverage,related suites,3production Chromium cases and16final gates pass;evaluator pass recorded. Close exactly one further task then pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T16:48:17.718Z"
+doc_updated_at: "2026-10-24T16:48:59.526Z"
 doc_updated_by: "CODER"
 description: "Human authorizes exactly one further task after QZAHNT,then stop. Fix represented Hyperlink Internet common fields: native editable target list/order including arbitrary targets,raw Name metadata,source query-removal toggle and session preference,per-instance focus and cancellation. Reuse actual controller,frame dispatch,core hyperlink and ODT owners. No display-text replacement,other hyperlink pages,modeless Apply redesign,smart-URL parser expansion,clipboard or networking. Only vite-office-writer branch writer;up to24primary implementation/test/doc paths plus paired canonical/task/generated records. Related tests and focused Chromium1280/390;task3after prior full checkpoint,no full suite due. Finish exactly this task then pause goal."
 sections:
@@ -130,6 +143,10 @@ sections:
     Browser round-trip/clearing then exposed a real local UI/core mismatch:the general Hyperlink dialog returned hidden empty Text for an existing link,and the command passed it as an explicit insertion payload. The request now captures original hyperlink metadata and sends undefined replacement text for the existing-link path,using the existing range-aware core. Explicit insertion arguments remain unchanged. Actual shell/undo and production ODT/browser tests prove link text remains unchanged. This remains within common-field consistency scope;no text-replacement engine was introduced.
 
     Full modeless Apply lifecycle,other hyperlink pages,editable existing display text,smart URL/protocol normalization,clipboard/mark-window services and complete native frame/widget services remain unported or unverified. Current accepted-request lifecycle and browser datalist are bounded adapters. Runtime classifications/status/default and broad parity claims were not promoted. No network,external files,other tasks,merge or full suite. Finish exactly this task and pause the goal.
+extensions:
+  implementation_commit:
+    hash: "4df3d5fc282df55ecf9ad88d6a712b605d172dce"
+    message: "🖋️ H0Q3NZ writer: canonize hyperlink frame name and query controls"
 id_source: "generated"
 ---
 ## Summary
