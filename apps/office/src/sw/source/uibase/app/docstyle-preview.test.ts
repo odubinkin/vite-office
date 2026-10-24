@@ -1,4 +1,7 @@
 /** @fileoverview Native paragraph FillPreview flattens actual owned/factory styles without materializing document state, dirtying the document or changing history. */
+import { MapUnit } from "../../../../tools/inc/mapunit";
+import { Size } from "../../../../tools/inc/gen";
+import { setupStylePreviewFonts } from "../../../../svx/source/tbxctrls/tbcontrl.stylepreview";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { flattenSwFormatForPreview, getParagraphStyleItemSetForPreview } from "./docstyle";
@@ -138,4 +141,28 @@ it("returns no preview for an unknown identity and flattens the actual root with
   expect(root.GetParent()).toBeUndefined();
   expect(root.GetPool()).toBe(doc.GetAttrPool());
   expect(doc.GetTextFormatColls()).toEqual(before);
+});
+
+it("uses the actual Writer shell's twip unit with pool preview sizes without changing document state", /** Crosses the real shell,temporary native style pool and generic SetupEntry font projection. @returns Nothing. */ () => {
+  const f = fixture();
+  expect(f.docShell.GetMapUnit()).toBe(MapUnit.MapTwip);
+  const before = f.docShell.GetDocumentState();
+  const set = getParagraphStyleItemSetForPreview(f.document, "heading-1");
+  if (set === undefined) throw new Error("Expected native heading style.");
+  const result = setupStylePreviewFonts(
+    set,
+    {},
+    f.docShell.GetMapUnit(),
+    /** Supplies an explicit device conversion for the real source height. @param size - Native twip size. @param unit - Actual owner map unit. @returns Device pixels. */
+    (size, unit) => {
+      expect(unit).toBe(MapUnit.MapTwip);
+      return new Size(0, size.Height() / 15);
+    },
+  );
+  expect(result.latin?.GetFontHeight()).toBe(24);
+  expect(result.latin?.GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+  expect(result.asian?.GetFontHeight()).toBeGreaterThan(0);
+  expect(result.complex?.GetFontHeight()).toBeGreaterThan(0);
+  expect(f.docShell.GetDocumentState()).toEqual(before);
+  expect(f.document.FindTextFormatColl("heading-1")).toBeUndefined();
 });

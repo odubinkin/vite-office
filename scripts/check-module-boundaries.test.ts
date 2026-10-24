@@ -255,8 +255,10 @@ it("owns SAL RTL algorithms and C headers without application or browser depende
     expect(isForbiddenModuleEdge("sal", target)).toBe(true);
 });
 
-it("permits Calc mdds dependency while keeping external owners independent", /** Protects shared external storage from app and browser dependencies. @returns Nothing. */ () => {
+it("permits native storage and shell map-unit dependencies while keeping shared owners independent", /** Protects shared external storage from app and browser dependencies. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("sc", "external")).toBe(false);
+  expect(isForbiddenModuleEdge("sfx2", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "sfx2")).toBe(true);
   for (const app of ["sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("external", app)).toBe(true);
   expect(getRuntimeOwnershipLayer("external/mdds/include/mdds/flat_segment_tree.ts")).toBe(

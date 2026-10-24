@@ -1,6 +1,6 @@
 /** @fileoverview Extracted SvxStyleBox SetFont, SetFontSize and SetFontStyle from pinned tbcontrl.cxx; callers retain actual style pools, shell units and device conversion. */
 import { SfxItemState, type SfxItemSet } from "../../../svl/source/items/itemset";
-import type { Font } from "../../../vcl/source/font/font";
+import { Font } from "../../../vcl/source/font/font";
 import { Size, type ReadonlySize } from "../../../tools/inc/gen";
 import type { MapUnit } from "../../../tools/inc/mapunit";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
@@ -13,6 +13,8 @@ import type { SvxCharReliefItem } from "../../../editeng/inc/charreliefitem";
 import type { SvxUnderlineItem, SvxOverlineItem } from "../../../editeng/inc/udlnitem";
 import type { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import type { SvxEmphasisMarkItem } from "../../../editeng/inc/emphasismarkitem";
+import type { StylePreviewFonts } from "./tbcontrl.stylerender";
+import * as slots from "../../../editeng/inc/editids";
 import {
   SID_ATTR_CHAR_CONTOUR,
   SID_ATTR_CHAR_SHADOWED,
@@ -116,4 +118,53 @@ export function setStylePreviewFontDecorations(
     const value = emphasis.GetEmphasisMark();
     for (const font of fonts) font.SetEmphasisMark(value);
   }
+}
+
+/** Original SetupEntry optional-font commit after posture/weight/decorations. Font and size must both succeed before replacing a script member; missing items or shell retain the previous row's optional member exactly as the source does. Derived SvxFont case mapping does not survive the source base-Font output-device copy. @param set - Actual pool-provided preview items. @param previous - Current native optional members. @param shellUnit - Actual current shell map unit,or no shell. @param logicToPixel - Actual device conversion. @returns Next source optional-font state. */
+export function setupStylePreviewFonts(
+  set: SfxItemSet,
+  previous: StylePreviewFonts,
+  shellUnit: MapUnit | undefined,
+  logicToPixel: StylePreviewLogicToPixel,
+): StylePreviewFonts {
+  const latin = new Font(),
+    asian = new Font(),
+    complex = new Font();
+  setStylePreviewFontStyle(set, slots.SID_ATTR_CHAR_POSTURE, slots.SID_ATTR_CHAR_WEIGHT, latin);
+  setStylePreviewFontStyle(
+    set,
+    slots.SID_ATTR_CHAR_CJK_POSTURE,
+    slots.SID_ATTR_CHAR_CJK_WEIGHT,
+    asian,
+  );
+  setStylePreviewFontStyle(
+    set,
+    slots.SID_ATTR_CHAR_CTL_POSTURE,
+    slots.SID_ATTR_CHAR_CTL_WEIGHT,
+    complex,
+  );
+  setStylePreviewFontDecorations(set, latin, asian, complex);
+  const result = { ...previous };
+  if (
+    setStylePreviewFontName(set, slots.SID_ATTR_CHAR_FONT, latin) &&
+    setStylePreviewFontSize(set, slots.SID_ATTR_CHAR_FONTHEIGHT, latin, shellUnit, logicToPixel)
+  )
+    result.latin = latin;
+  if (
+    setStylePreviewFontName(set, slots.SID_ATTR_CHAR_CJK_FONT, asian) &&
+    setStylePreviewFontSize(set, slots.SID_ATTR_CHAR_CJK_FONTHEIGHT, asian, shellUnit, logicToPixel)
+  )
+    result.asian = asian;
+  if (
+    setStylePreviewFontName(set, slots.SID_ATTR_CHAR_CTL_FONT, complex) &&
+    setStylePreviewFontSize(
+      set,
+      slots.SID_ATTR_CHAR_CTL_FONTHEIGHT,
+      complex,
+      shellUnit,
+      logicToPixel,
+    )
+  )
+    result.complex = complex;
+  return result;
 }

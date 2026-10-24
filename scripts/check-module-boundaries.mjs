@@ -133,7 +133,8 @@ const allowedEdges = new Map([
       "xmloff",
     ]),
   ],
-  ["sfx2", new Set(["svl"])],
+  // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
+  ["sfx2", new Set(["svl", "tools"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.

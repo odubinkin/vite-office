@@ -5,7 +5,7 @@ import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { Font } from "../../../vcl/source/font/font";
 import { FontFamily, FontPitch, FontWeight, FontItalic } from "../../../tools/inc/fontenum";
 import { MapUnit } from "../../../tools/inc/mapunit";
-import { Size } from "../../../tools/inc/gen";
+import { Size, type ReadonlySize } from "../../../tools/inc/gen";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { SvxPostureItem } from "../../../editeng/inc/postitem";
@@ -21,6 +21,7 @@ import {
   setStylePreviewFontSize,
   setStylePreviewFontStyle,
   setStylePreviewFontDecorations,
+  setupStylePreviewFonts,
 } from "./tbcontrl.stylepreview";
 import * as slots from "../../../editeng/inc/editids";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
@@ -248,4 +249,121 @@ it("assigns posture before weight and resolves the two slots independently", /**
   setStylePreviewFontStyle(f.child, POSTURE, WEIGHT, f.font);
   expect(f.font.GetItalic()).toBe(FontItalic.ITALIC_OBLIQUE);
   expect(weight).not.toHaveBeenCalled();
+});
+
+it("commits source optional members only after both assignments and retains other script identities", /** Uses real item-state transitions and the actual source short-circuit ordering across consecutive rows. @returns Nothing. */ () => {
+  const pool = new SfxItemPool();
+  const groups = [
+    [
+      slots.SID_ATTR_CHAR_FONT,
+      slots.SID_ATTR_CHAR_FONTHEIGHT,
+      slots.SID_ATTR_CHAR_POSTURE,
+      slots.SID_ATTR_CHAR_WEIGHT,
+    ],
+    [
+      slots.SID_ATTR_CHAR_CJK_FONT,
+      slots.SID_ATTR_CHAR_CJK_FONTHEIGHT,
+      slots.SID_ATTR_CHAR_CJK_POSTURE,
+      slots.SID_ATTR_CHAR_CJK_WEIGHT,
+    ],
+    [
+      slots.SID_ATTR_CHAR_CTL_FONT,
+      slots.SID_ATTR_CHAR_CTL_FONTHEIGHT,
+      slots.SID_ATTR_CHAR_CTL_POSTURE,
+      slots.SID_ATTR_CHAR_CTL_WEIGHT,
+    ],
+  ] as const;
+  for (const [index, group] of groups.entries()) {
+    const offset = index * 4;
+    pool.RegisterDefaultItem(
+      new SvxFontItem(
+        FontFamily.FAMILY_ROMAN,
+        `Family${index}`,
+        "Regular",
+        FontPitch.PITCH_VARIABLE,
+        0,
+        offset + 1,
+      ),
+      undefined,
+      group[0],
+    );
+    pool.RegisterDefaultItem(
+      new SvxFontHeightItem(240 + index * 60, 100, offset + 2),
+      undefined,
+      group[1],
+    );
+    pool.RegisterDefaultItem(
+      new SvxPostureItem(FontItalic.ITALIC_NONE, offset + 3),
+      undefined,
+      group[2],
+    );
+    pool.RegisterDefaultItem(
+      new SvxWeightItem(FontWeight.WEIGHT_NORMAL, offset + 4),
+      undefined,
+      group[3],
+    );
+  }
+  const parent = new SfxItemSet(pool, [[1, 12]]),
+    child = new SfxItemSet(pool, [[1, 12]], parent);
+  parent.Put(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 4));
+  parent.Put(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, 11));
+  const convert = vi.fn(
+    /** Explicit real-device protocol observation,not a CSS DPI guess. @param size - Native logical size. @param unit - Actual shell map unit. @returns Test device pixel size. */
+    (size: ReadonlySize, unit: MapUnit) => {
+      expect(unit).toBe(MapUnit.MapTwip);
+      return new Size(0, size.Height() / 15);
+    },
+  );
+  const first = setupStylePreviewFonts(child, {}, MapUnit.MapTwip, convert);
+  expect([
+    first.latin?.GetFamilyName(),
+    first.asian?.GetFamilyName(),
+    first.complex?.GetFamilyName(),
+  ]).toEqual(["Family0", "Family1", "Family2"]);
+  expect([
+    first.latin?.GetFontHeight(),
+    first.asian?.GetFontHeight(),
+    first.complex?.GetFontHeight(),
+  ]).toEqual([16, 20, 24]);
+  expect(first.latin?.GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
+  expect(first.complex?.GetItalic()).toBe(FontItalic.ITALIC_OBLIQUE);
+  expect(first.asian?.GetWeight()).toBe(FontWeight.WEIGHT_NORMAL);
+  convert.mockClear();
+  const noShell = setupStylePreviewFonts(child, first, undefined, convert);
+  expect(noShell).toEqual(first);
+  expect(noShell.latin).toBe(first.latin);
+  expect(noShell.asian).toBe(first.asian);
+  expect(noShell.complex).toBe(first.complex);
+  expect(convert).not.toHaveBeenCalled();
+  // Each AND condition preserves both native short-circuit branches.
+  child.DisableItem(1);
+  child.InvalidateItem(6);
+  child.DisableItem(9);
+  const retained = setupStylePreviewFonts(child, first, MapUnit.MapTwip, convert);
+  expect(retained.latin).toBe(first.latin);
+  expect(retained.asian).toBe(first.asian);
+  expect(retained.complex).toBe(first.complex);
+  expect(convert).not.toHaveBeenCalled();
+  child.ClearItem(1);
+  child.ClearItem(6);
+  child.ClearItem(9);
+  child.DisableItem(2);
+  child.DisableItem(5);
+  child.DisableItem(10);
+  const retainedOther = setupStylePreviewFonts(child, first, MapUnit.MapTwip, convert);
+  expect(retainedOther.latin).toBe(first.latin);
+  expect(retainedOther.asian).toBe(first.asian);
+  expect(retainedOther.complex).toBe(first.complex);
+  expect(convert).not.toHaveBeenCalled();
+  child.ClearItem(2);
+  child.ClearItem(5);
+  child.ClearItem(10);
+  child.Put(
+    new SvxFontItem(FontFamily.FAMILY_SWISS, "New Asian", "Bold", FontPitch.PITCH_VARIABLE, 0, 5),
+  );
+  const next = setupStylePreviewFonts(child, retained, MapUnit.MapTwip, convert);
+  expect(next.asian?.GetFamilyName()).toBe("New Asian");
+  expect(first.asian?.GetFamilyName()).toBe("Family1");
+  expect(next.latin).not.toBe(first.latin);
+  expect(next.complex).not.toBe(first.complex);
 });

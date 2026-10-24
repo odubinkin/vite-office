@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
+import { MapUnit } from "../../../../tools/inc/mapunit";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
@@ -60,6 +61,7 @@ export class SwDocShell extends SfxObjectShell {
     private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
     super(documentState, medium);
+    this.SetMapUnit(MapUnit.MapTwip);
     this.defaultFontDevice = document.GetDefaultFontDevice();
     this.defaultLocale = document.GetLocale();
     this.BindUndoManager();
