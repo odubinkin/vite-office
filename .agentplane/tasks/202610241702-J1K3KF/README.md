@@ -4,7 +4,7 @@ title: "Canonize Writer line-number core widths and ODT interval import"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-24T17:07:42.627Z"
+  updated_by: "CODER"
+  note: "14focused cases strict3owner100coverage S79 B70 F35 L72;152related cases/20files;2production Chromium cases1280/390;final build and15/15static/source gates pass. Native parser/narrowing/export edge values and real ODT round-trip covered;source hashes recorded. Second task;close and pause goal."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-24T17:07:43.271Z"
+  updated_by: "EVALUATOR"
+  note: "Native line-number scalar and ODT interval contracts satisfy approved second-task scope;ready to close and pause goal."
+  evaluated_sha: "5c462d03774c2de3829f645aa8195f76b7d4ed1c"
+  blueprint_digest: "2220b98ea3a100b7c87fa5c00a398e4785215e623153db1dda02c1169f5e3dcc"
+  evidence_refs:
+    - ".agentplane/tasks/202610241702-J1K3KF/README.md"
+    - ".agentplane/tasks/202610241702-J1K3KF/quality/20261024-170743271-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610241702-J1K3KF/quality/20261024-170743271-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610241702-J1K3KF/quality/20261024-170743271-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610241702-J1K3KF/blueprint/resolved-snapshot.json"
+    - "output/playwright/writer-full-checkpoint/J1K3KF-hashes.json"
+    - "output/playwright/writer-full-checkpoint/J1K3KF-coverage-final.log"
+    - "output/playwright/writer-full-checkpoint/J1K3KF-consumers.log"
+    - "output/playwright/writer-full-checkpoint/J1K3KF-e2e.log"
+    - "output/playwright/writer-full-checkpoint/J1K3KF-gates.json"
+  findings:
+    - "Unsigned16 core storage and strict transfer validation remain distinct from source ODT signed16 narrowing/property admission. Existing SAX converter is reused;positive main/nonnegative separator and ignored-invalid behavior are preserved. Export uses original signed16 property representation;WRITER089 documents the suspected discontinuity."
+    - "Current source hashes match implementation evidence. Strict3owner100coverage S79 B70 F35 L72 with zero skips;14focused cases,152related cases,2production Chromium1280/390 cases and15final gates pass. Real ODT import/re-export and first-task source UI normalization are exercised. No new library,ignore,threshold reduction or broad parity promotion."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native line-number unsigned scalar and ODT signed interval contracts,verify and close second task then pause goal."
+  -
+    type: "verify"
+    at: "2026-10-24T17:07:42.627Z"
+    author: "CODER"
+    state: "ok"
+    note: "14focused cases strict3owner100coverage S79 B70 F35 L72;152related cases/20files;2production Chromium cases1280/390;final build and15/15static/source gates pass. Native parser/narrowing/export edge values and real ODT round-trip covered;source hashes recorded. Second task;close and pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-24T17:07:13.293Z"
+doc_updated_at: "2026-10-24T17:07:42.680Z"
 doc_updated_by: "CODER"
 description: "Second and last of exactly two tasks authorized after H0Q3NZ. Align existing unsigned16 line-number core scalar fields and strict transfer validation with native typed ownership;reuse existing sax Converter for original ODT signed16 interval narrowing and UNO main-positive/separator-nonnegative admission. Preserve ignored-invalid behavior rather than throwing for interval values. Test boundaries,defaults,real ODT re-export and source UI normalization. No other import attributes,format/style services,network or other tasks. Only writer checkout/branch,up to24primary paths plus paired records. Task5after checkpoint,no full suite due. Close this task and pause goal."
 sections:
@@ -50,6 +77,39 @@ sections:
     Command: exact native consumer argv HGNC48-consumers-args.json. Result: pass,152cases/20files,J1K3KF-consumers.log. Scope: current source model/layout/browser consumers.
     Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-line-number-controls.spec.ts. Result: pass,2production cases1280/390,J1K3KF-build-final.log/J1K3KF-e2e.log;no page errors. Scope: current source UI,actual menu/controller/document/ODT zero separator interval and focus,draft cancellation/acceptance. Both width screenshots inspected for the unchanged UI in the first task.
     Command: exact final15command argv in J1K3KF-gates.json. Result: pass,15/15;corresponding J1K3KF-gate-N.log. Scope: scoped format/lint,typecheck,docs,deps,size,tree,provenance,resources,registry invariants/parity,static,doctor,routing,diff;registry build separately passed. J1K3KF-hashes.json binds all final implementation/test/paired-record/doc paths. Initial build test-type error corrected by supplying the actual base-context end token;runtime tests and final build pass. This is task5after checkpoint;no full suite due. Second and last authorized task;finish and pause goal.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-24T17:07:42.627Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 14focused cases strict3owner100coverage S79 B70 F35 L72;152related cases/20files;2production Chromium cases1280/390;final build and15/15static/source gates pass. Native parser/narrowing/export edge values and real ODT round-trip covered;source hashes recorded. Second task;close and pause goal.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T17:07:13.293Z, excerpt_hash=sha256:037b6ad14683823d2161b8868af62af7f01e22a464aee05cabf508afdc8c3d22
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241702-J1K3KF/blueprint/resolved-snapshot.json
+    - old_digest: 2220b98ea3a100b7c87fa5c00a398e4785215e623153db1dda02c1169f5e3dcc
+    - current_digest: 2220b98ea3a100b7c87fa5c00a398e4785215e623153db1dda02c1169f5e3dcc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610241702-J1K3KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610241702-J1K3KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task commits;preserve first completed task and other work."
   Findings: |-
     Native core countBy,dividerCountBy,posFromLeft are unsigned16. Constructor and typed setters retain integer narrowing;untrusted transfer restoration validates the stored domain rather than silently accepting impossible-width state. Existing SAX Converter is reused;no library or second parser was introduced.
@@ -80,6 +140,39 @@ Result: pass,14cases/5files;strict3owner100coverage S79/B70/F35/L72,zero skips/n
 Command: exact native consumer argv HGNC48-consumers-args.json. Result: pass,152cases/20files,J1K3KF-consumers.log. Scope: current source model/layout/browser consumers.
 Command: npm run build; npx playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-line-number-controls.spec.ts. Result: pass,2production cases1280/390,J1K3KF-build-final.log/J1K3KF-e2e.log;no page errors. Scope: current source UI,actual menu/controller/document/ODT zero separator interval and focus,draft cancellation/acceptance. Both width screenshots inspected for the unchanged UI in the first task.
 Command: exact final15command argv in J1K3KF-gates.json. Result: pass,15/15;corresponding J1K3KF-gate-N.log. Scope: scoped format/lint,typecheck,docs,deps,size,tree,provenance,resources,registry invariants/parity,static,doctor,routing,diff;registry build separately passed. J1K3KF-hashes.json binds all final implementation/test/paired-record/doc paths. Initial build test-type error corrected by supplying the actual base-context end token;runtime tests and final build pass. This is task5after checkpoint;no full suite due. Second and last authorized task;finish and pause goal.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-24T17:07:42.627Z — VERIFY — ok
+
+By: CODER
+
+Note: 14focused cases strict3owner100coverage S79 B70 F35 L72;152related cases/20files;2production Chromium cases1280/390;final build and15/15static/source gates pass. Native parser/narrowing/export edge values and real ODT round-trip covered;source hashes recorded. Second task;close and pause goal.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-24T17:07:13.293Z, excerpt_hash=sha256:037b6ad14683823d2161b8868af62af7f01e22a464aee05cabf508afdc8c3d22
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610241702-J1K3KF/blueprint/resolved-snapshot.json
+- old_digest: 2220b98ea3a100b7c87fa5c00a398e4785215e623153db1dda02c1169f5e3dcc
+- current_digest: 2220b98ea3a100b7c87fa5c00a398e4785215e623153db1dda02c1169f5e3dcc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610241702-J1K3KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610241702-J1K3KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
