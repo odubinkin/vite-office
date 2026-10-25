@@ -4,6 +4,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
+import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
 
@@ -74,6 +75,83 @@ it("keeps consecutive preformatted paragraphs inside one native Markdown fence",
   try {
     expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
       "```\nfirst\nsecond\n```\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("keeps one upstream Markdown hyperlink across differently formatted text runs", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  const fragment = createWriterTextFragment(paragraph, [
+    {
+      text: "Red",
+      attributes: { bold: false, italic: false, underline: false, color: "#ff0000" },
+      hyperlink: { url: "https://example.test" },
+    },
+    {
+      text: "Blue",
+      attributes: { bold: false, italic: false, underline: false, color: "#0000ff" },
+      hyperlink: { url: "https://example.test" },
+    },
+  ]);
+  paragraph.SetText(fragment.text);
+  paragraph.SetTextHints(fragment.hints);
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "[RedBlue](https://example.test)\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("keeps Markdown emphasis open across runs split only by unsupported color", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  const fragment = createWriterTextFragment(paragraph, [
+    {
+      text: "Red",
+      attributes: { bold: true, italic: false, underline: false, color: "#ff0000" },
+    },
+    {
+      text: "Blue",
+      attributes: { bold: true, italic: false, underline: false, color: "#0000ff" },
+    },
+  ]);
+  paragraph.SetText(fragment.text);
+  paragraph.SetTextHints(fragment.hints);
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("**RedBlue**\n");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("preserves upstream delimiter ordering when bold starts with a hyperlink", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  const fragment = createWriterTextFragment(paragraph, [
+    {
+      text: "Bold",
+      attributes: { bold: true, italic: false, underline: false },
+      hyperlink: { url: "https://example.test" },
+    },
+    {
+      text: "Plain",
+      attributes: { bold: false, italic: false, underline: false },
+      hyperlink: { url: "https://example.test" },
+    },
+  ]);
+  paragraph.SetText(fragment.text);
+  paragraph.SetTextHints(fragment.hints);
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "**[Bold**Plain](https://example.test)\n",
     );
   } finally {
     source.Dispose();

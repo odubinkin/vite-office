@@ -1154,3 +1154,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::TableDefinition`, emits row orientation, height, split, padding and cell properties but does not read `SwTable::GetRowsToRepeat` or write `\\trhdr`. Its WW8 and DOCX counterparts do read the repeat count. Pinned `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` maps incoming `TRHDR` to `tblHeader`; `DomainMapperTableManager.cxx` counts only the initial contiguous header rows and clears the count when an eleventh is marked.
 - Observation: an authored Writer table header appears to lose its repeat-row status on RTF export and re-import, although incoming RTF can restore the status. This is a source-level inference, not an independently confirmed desktop round trip.
 - Preservation: the current RTF exporter keeps the source omission. The RTF importer maps `\\trhdr` through the represented `SwTable::SetRowsToRepeat` contract, including the source ten-row workaround. Focused tests distinguish these directions.
+
+### WRITER101 — Markdown hyperlink and character delimiters can cross
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutFormattingChange`, closes code, strikeout, posture and weight before hyperlinks, then opens strikeout, posture and weight before hyperlinks. It retains active state across consecutive text chunks.
+- Observation: when a hyperlink and bold hint start together but bold ends before the link, the emitted sequence can be `**[Bold**Plain](url)`, with crossed delimiters. This is a source-level inference, not an independently confirmed desktop output or parsing result.
+- Preservation: the Markdown writer now follows the source transition order and holds the same link open across adjacent differently formatted runs. Focused tests pin the contiguous-link case and the crossed-delimiter case instead of rearranging markers for syntactic neatness.

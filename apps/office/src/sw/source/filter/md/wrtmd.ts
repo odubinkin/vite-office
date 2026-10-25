@@ -69,22 +69,52 @@ function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>):
 
 /** Emits direct character spans with source-supported Markdown delimiters. @param runs - Native projected text portions. @returns Inline Markdown. */
 function writeRuns(runs: readonly WriterTextRun[], inheritedBold = false): string {
-  return runs
-    .map((run) => {
-      const code = run.attributes.fontFamily === "Liberation Mono";
-      let text = code ? run.text : escapeMarkdown(run.text);
-      if (code) text = `\`${text}\``;
-      if (
+  /** Current source-supported Markdown delimiter state at one text offset. */
+  type State = Readonly<{
+    code: boolean;
+    strikeout: boolean;
+    italic: boolean;
+    bold: boolean;
+    url: string | undefined;
+  }>;
+  const empty: State = {
+    code: false,
+    strikeout: false,
+    italic: false,
+    bold: false,
+    url: undefined,
+  };
+  let previous = empty;
+  let output = "";
+  /** Emits the pinned OutFormattingChange close/open order at a text-run boundary. */
+  function transition(next: State): void {
+    if (previous.code && !next.code) output += "`";
+    if (previous.strikeout && !next.strikeout) output += "~~";
+    if (previous.italic && !next.italic) output += "*";
+    if (previous.bold && !next.bold) output += "**";
+    if (previous.url !== undefined && previous.url !== next.url) output += `](${previous.url})`;
+    if (!previous.strikeout && next.strikeout) output += "~~";
+    if (!previous.italic && next.italic) output += "*";
+    if (!previous.bold && next.bold) output += "**";
+    if (next.url !== undefined && previous.url !== next.url) output += "[";
+    if (!previous.code && next.code) output += "`";
+    previous = next;
+  }
+  for (const run of runs) {
+    const next: State = {
+      code: run.attributes.fontFamily === "Liberation Mono",
+      strikeout:
         run.attributes.strikeout !== undefined &&
-        run.attributes.strikeout !== FontStrikeout.STRIKEOUT_NONE
-      )
-        text = `~~${text}~~`;
-      if (run.attributes.italic) text = `*${text}*`;
-      if (run.attributes.bold && !inheritedBold) text = `**${text}**`;
-      if (run.hyperlink !== undefined) text = `[${text}](${run.hyperlink.url})`;
-      return text;
-    })
-    .join("");
+        run.attributes.strikeout !== FontStrikeout.STRIKEOUT_NONE,
+      italic: run.attributes.italic,
+      bold: run.attributes.bold && !inheritedBold,
+      url: run.hyperlink?.url,
+    };
+    transition(next);
+    output += next.code ? run.text : escapeMarkdown(run.text);
+  }
+  transition(empty);
+  return output;
 }
 
 /** Applies the escape set in upstream OutEscapedChars. @param value - Visible source. @returns Escaped Markdown. */

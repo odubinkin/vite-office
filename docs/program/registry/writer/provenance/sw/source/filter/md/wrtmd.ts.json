@@ -13,7 +13,7 @@
       "SwMDWriter::WriteStream"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body content and direct text formatting as Markdown, including source numbering labels and parent-prefix indentation plus one fenced block for consecutive preformatted paragraphs."
+      "Writes represented Writer body content and direct text formatting as Markdown, including source numbering labels and parent-prefix indentation, one fenced block for consecutive preformatted paragraphs, and source-ordered formatting and hyperlink transitions across adjacent native text runs."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -23,12 +23,20 @@
         {
           "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
           "marker": "round trips"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "one upstream Markdown hyperlink across differently formatted text runs"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
           "marker": "SwMDWriter::WriteStream"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "OutFormattingChange"
         }
       ]
     }
