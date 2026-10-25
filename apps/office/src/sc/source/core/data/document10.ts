@@ -1,5 +1,6 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
@@ -700,4 +701,41 @@ export function LastNonFilteredRow(
   tab: number,
 ): number {
   return this.FetchTable(tab)?.getFilterData().lastNonFilteredRow(first, last) ?? 2147483647;
+}
+
+/** Existing scalar sheet deletion body moved unchanged from the size-bounded facade. @param this - Actual document. @param tab - Sheet. @returns Deleted. */
+export function DeleteTab(this: ScDocument, tab: number): boolean {
+  if (!this.FetchTable(tab) || this["maTabs"].length <= 1) return false;
+  const shifted = new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), this.GetTableCount() - 1);
+  this["pBASM"]?.DelBroadcastAreasInRange(
+    new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), tab),
+  );
+  const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow());
+  const col: [number] = [0],
+    row: [number] = [0];
+  let cell;
+  while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
+  (this["maTabs"][tab] as ScTable).DisposeAttributes();
+  this["maTabs"].splice(tab, 1);
+  for (let index = tab; index < this["maTabs"].length; index++)
+    this["maTabs"][index]?.SetTabNo(index);
+  this["pBASM"]?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, -1);
+  this.SetAllFormulasDirty(new SetFormulaDirtyContext());
+  return true;
+}
+/** Original existing-table editability dispatch for the admitted normal-document profile. Read-only shell services are unrepresented rather than simulated. @param this - Actual document. @param tab - Sheet. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param onlyMatrix - Original optional output. @param noMatrix - Original defaultfalse. @returns Editable. */
+export function IsBlockEditable(
+  this: ScDocument,
+  tab: number,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  onlyMatrix: [boolean] | null = null,
+  noMatrix = false,
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table) return table.IsBlockEditable(col1, row1, col2, row2, onlyMatrix, noMatrix);
+  if (onlyMatrix) onlyMatrix[0] = false;
+  return false;
 }

@@ -1,4 +1,5 @@
 /** @fileoverview Original table2.cxx default-content clipboard dispatch over real contiguous columns. */
+import { MatrixEdge } from "../../../inc/types";
 import { ScRange } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -424,4 +425,78 @@ export function ExtendMerge(
         lastRow,
       ) || found;
   return found;
+}
+
+/** Original HasBlockMatrixFragment visit order for the admitted ordinary-cell profile. Real column queries return Nothing or reject unported matrix geometry,so positive edge tests are erased under that invariant. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param noMatrix - Original defaultfalse. @returns No actual fragment in the admitted nonmatrix profile. */
+export function HasBlockMatrixFragment(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  noMatrix = false,
+): boolean {
+  if (!this.IsColValid(col1)) return false;
+  const last = Math.min(col2, this.GetAllocatedColumnsCount() - 1);
+  if (col1 === last)
+    (this.FetchColumn(col1) as ScColumn).GetBlockMatrixEdges(
+      row1,
+      row2,
+      MatrixEdge.Left | MatrixEdge.Right,
+      noMatrix,
+    );
+  else {
+    (this.FetchColumn(col1) as ScColumn).GetBlockMatrixEdges(row1, row2, MatrixEdge.Left, noMatrix);
+    (this.FetchColumn(last) as ScColumn).GetBlockMatrixEdges(
+      row1,
+      row2,
+      MatrixEdge.Right,
+      noMatrix,
+    );
+  }
+  if (noMatrix) {
+    for (let col = col1; col <= last; ++col)
+      (this.FetchColumn(col) as ScColumn).GetBlockMatrixEdges(
+        row1,
+        row2,
+        MatrixEdge.Nothing,
+        noMatrix,
+      );
+  } else if (row1 === row2) {
+    for (let col = col1; col <= last; ++col)
+      (this.FetchColumn(col) as ScColumn).GetBlockMatrixEdges(
+        row1,
+        row1,
+        MatrixEdge.Bottom | MatrixEdge.Top,
+        noMatrix,
+      );
+  } else {
+    for (let edge = 0; edge < 2; ++edge)
+      for (let col = col1; col <= last; ++col)
+        (this.FetchColumn(col) as ScColumn).GetBlockMatrixEdges(
+          edge === 0 ? row1 : row2,
+          edge === 0 ? row1 : row2,
+          edge === 0 ? MatrixEdge.Top : MatrixEdge.Bottom,
+          noMatrix,
+        );
+  }
+  return false;
+}
+/** Original IsBlockEditable normal unprotected/unlocked nonscenario profile;read-only/protection/scenario services remain unrepresented. Actual cells must pass real matrix-boundary queries. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param onlyMatrix - Optional output. @param noMatrix - Original defaultfalse. @returns Block editable in admitted profile. */
+export function IsBlockEditable(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  onlyMatrix: [boolean] | null = null,
+  noMatrix = false,
+): boolean {
+  if (!this.GetDoc().ValidColRow(col2, row2)) {
+    if (onlyMatrix) onlyMatrix[0] = false;
+    return false;
+  }
+  this.HasBlockMatrixFragment(col1, row1, col2, row2, noMatrix);
+  if (onlyMatrix) onlyMatrix[0] = false;
+  return true;
 }

@@ -1,0 +1,72 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native normal-sheet block editability verified;PasteFromClip/EnterBlock and final74 UI acceptance remain pending",
+  "sourceBaseline": "ca481870f77f3e70df84080d257c5ad749df2e00",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePathLimit": null,
+  "scopeApproval": "Human confirmation2026-10-25 removes numerical path limits only for existing tasks76/74;functional scope,network/reference restrictions and full-run/fixes/coverage/closure/pause rule unchanged. Recorded in2ff174182d1a and a1e44732d9ae.",
+  "authorizedScopePathCount": 317,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 29,
+  "checks": {
+    "related": "145files/687scenarios pass;3 existing targeted scenarios rerun with added boundary/default assertions;no inflation to690 unique scenarios",
+    "measuredOwners": "column3.ts,table2.ts,document10.ts,editable.ts only;not current full Calc/all-app certification",
+    "coverage": {
+      "lines": {
+        "total": 943,
+        "covered": 943,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1089,
+        "covered": 1089,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 89,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 584,
+        "covered": 584,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMethod": "Actual standard istanbul-lib-coverage aggregation of same-source/same-map baseline and final focused counters. Exact source SHA256 and statement/function/branch maps asserted identical. Every raw counter and four unchanged strict100 metrics pass. Focused partial-module threshold failures are retained,not represented as standalone whole-module passes.",
+    "browserWorker": "fresh build then actual normal-sheet editability and missing/invalid bounds in Chromium and DOM-free Worker1/1 pass",
+    "scopedProvenance": "9source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "Native MatrixEdge values and actual typed-store GetBlockMatrixEdges ordinary-cell path preserve coordinate guards,single-row query,multi-block cursor/offset traversal and NONE-mode checking. Positive matrix geometry rejects explicitly before edit admission.",
+    "HasBlockMatrixFragment retains allocated-column clamp and native left/right/body/top/bottom visit order. Positive edge decisions are unreachable because actual column queries return Nothing or reject;no fake empty matrix service is installed.",
+    "Native IsBlockEditable normal unprotected/unlocked nonscenario profile preserves valid-end guard,actual existing/missing table dispatch and optional false matrix outputs. Read-only/protection/scenario/lock services remain unrepresented.",
+    "ScEditableTester real default true/true fields,factory,cumulative false state and inline queries consume actual document methods. Every admitted false document result writes matrixfalse,so native conditional mbOnlyMatrix clearing reduces to the same assignment.",
+    "ApplyPattern and DeleteTab bodies move unchanged to existing same-instance source partitions for file-size policy. Header IsColValid uses native allocated-column bounds."
+  ],
+  "failuresAndRepairs": [
+    "Unused UpdateRefMode import and missing native inline IsColValid discovered by compile and repaired from source.",
+    "Initial test used nonexistent IsDirty alias;correct native GetDirty accessor used. No production alias or mock service introduced.",
+    "First related campaign passed687 scenarios with3 uncovered branches. Default table arguments and actual uninitialized-column null-pattern ownership close them. The first aggregate correctly rejected remaining coverage before the genuine null-owner scenario was added. All unsuccessful attempts remain retained."
+  ],
+  "remaining": [
+    "PasteFromClip/EnterBlock,remaining merge/format operations and final74 UI acceptance remain incomplete;task76 stays DOING/unverified.",
+    "Finish76/74,then full all-application suites,necessary fixes/scenarios,required100coverage,final task closure and goal pause;missing reference/source gates remain unwaived."
+  ]
+}

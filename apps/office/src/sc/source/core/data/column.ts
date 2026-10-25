@@ -421,18 +421,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(row: number, pattern: ScPatternAttr): void {
-    const cache = new ScItemPoolCache(
-        this.rDocument.getCellAttributeHelper(),
-        pattern.GetItemSet(),
-      ),
-      old = new CellAttributeHolder(this.pAttrArray.GetPattern(row));
-    try {
-      const next = cache.ApplyTo(old);
-      if (!CellAttributeHolder.areSame(next, old)) this.pAttrArray.SetPattern(row, next);
-    } finally {
-      old.Dispose();
-      cache.Dispose();
-    }
+    column3.ApplyPattern.call(this, row, pattern);
   }
   /** Original column.hxx cursor pattern assignment. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(row: number, holder: CellAttributeHolder): void {
@@ -467,6 +456,12 @@ export class ScColumn extends ScColumnData {
   /** Original single-item pattern assignment. @param args - Row and actual item. @returns Nothing. */
   ApplyAttr(...args: Parameters<typeof column3.ApplyAttr>): void {
     column3.ApplyAttr.apply(this, args);
+  }
+  /** Original column matrix-boundary query for admitted ordinary cells. @param args - Row bounds,edge mask and matrix policy. @returns Actual native edge flags. */
+  GetBlockMatrixEdges(
+    ...args: Parameters<typeof column3.GetBlockMatrixEdges>
+  ): import("../../../inc/types").MatrixEdge {
+    return column3.GetBlockMatrixEdges.apply(this, args);
   }
   /** Original whole-group teardown with optional native row outputs. @param args - Original context,bounds and outputs. @returns Nothing. */
   EndListeningFormulaCells(...args: Parameters<typeof column4.EndListeningFormulaCells>): void {

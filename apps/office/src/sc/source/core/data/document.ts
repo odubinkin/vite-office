@@ -28,7 +28,6 @@ import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist"
 import type { ScPoolHelper } from "../inc/poolhelp";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
-import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScHint } from "../../../inc/brdcst";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
@@ -52,7 +51,7 @@ import {
   ValidTab,
 } from "../../../inc/address";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
-import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import type { HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
@@ -477,6 +476,10 @@ export class ScDocument {
   /** Original missing-table filtered query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Filtered. */
   RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
     return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
+  }
+  /** Original normal-document block-editability dispatch. @param args - Native sheet,bounds and matrix policy. @returns Editable in represented profile. */
+  IsBlockEditable(...args: Parameters<typeof document10.IsBlockEditable>): boolean {
+    return document10.IsBlockEditable.apply(this, args);
   }
   /** Original document filtered-span dispatch. @param args - Row bounds and sheet. @returns Any filtered row. */
   HasFilteredRows(...args: Parameters<typeof document10.HasFilteredRows>): boolean {
@@ -953,20 +956,7 @@ export class ScDocument {
   }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {
-    if (!this.FetchTable(tab) || this.maTabs.length <= 1) return false;
-    const shifted = new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), this.GetTableCount() - 1);
-    this.pBASM?.DelBroadcastAreasInRange(new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), tab));
-    const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow());
-    const col: [number] = [0],
-      row: [number] = [0];
-    let cell;
-    while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
-    (this.maTabs[tab] as ScTable).DisposeAttributes();
-    this.maTabs.splice(tab, 1);
-    for (let index = tab; index < this.maTabs.length; index++) this.maTabs[index]?.SetTabNo(index);
-    this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, -1);
-    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
-    return true;
+    return document10.DeleteTab.call(this, tab);
   }
   /** Writes a number through the actual sheet/column chain. @param position - Cell address. @param value - Number. @returns Nothing. */
   SetValue(position: ScAddress, value: number): void {

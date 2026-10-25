@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/docshell/editable.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/docshell/editable.cxx",
+    "localSymbols": [
+      "ScEditableTester"
+    ],
+    "upstreamSymbols": [
+      "ScEditableTester::CreateAndTestBlock",
+      "ScEditableTester::TestBlock"
+    ],
+    "preservedResponsibilities": [
+      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed selection/action factories,positive matrix geometry,read-only/protected/locked/scenario services and full native parity remain unported. No replacement document/backend is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/editable.ts",
+          "marker": "ScEditableTester"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-editability.test.ts",
+          "marker": "retains cumulative tester"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx",
+          "marker": "ScEditableTester::CreateAndTestBlock"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx",
+          "marker": "ScEditableTester::TestBlock"
+        }
+      ]
+    }
+  }
+}

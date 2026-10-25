@@ -370,6 +370,18 @@ export class ScTable {
     if (this.rDocument.ValidColRow(col, row))
       this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
   }
+  /** Original table.hxx allocated-column validity. @param col - Column. @returns Allocated native column. */
+  IsColValid(col: number): boolean {
+    return col >= 0 && col < this.aCol.length;
+  }
+  /** Original table2 editability dispatch. @param args - Native block bounds and policy. @returns Editable under represented normal-sheet profile. */
+  IsBlockEditable(...args: Parameters<typeof table2.IsBlockEditable>): boolean {
+    return table2.IsBlockEditable.apply(this, args);
+  }
+  /** Original matrix-fragment dispatch over actual stored cells. @param args - Native bounds and matrix policy. @returns Actual admitted fragment result. */
+  HasBlockMatrixFragment(...args: Parameters<typeof table2.HasBlockMatrixFragment>): boolean {
+    return table2.HasBlockMatrixFragment.apply(this, args);
+  }
   /** Original DeleteSelection traverses allocated columns only and forwards the native broadcast policy. @param flags - Native deletion flags. @param marks - Actual native marks. @param broadcast - Original defaulttrue. @returns Nothing. */
   DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {
     for (const column of this.aCol) column.DeleteSelection(flags, marks, broadcast);

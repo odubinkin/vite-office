@@ -33,7 +33,8 @@ import {
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, RowSpan } from "../../../inc/columnspanset";
-import { NoListening, type StartListeningType } from "../../../inc/types";
+import { ScItemPoolCache } from "../../../inc/poolcach";
+import { MatrixEdge, NoListening, type StartListeningType } from "../../../inc/types";
 import type { CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScMultiSelIter } from "../../../inc/markmulti";
@@ -850,4 +851,63 @@ export function ApplyAttr(this: ScColumn, row: number, attr: SfxPoolItem): void 
       holder.Dispose();
     }
   } else next.Dispose();
+}
+
+/** Existing original column.cxx single-cell pattern body partitioned without changing owners. @param this - Actual column. @param row - Row. @param pattern - Actual delta. @returns Nothing. */
+export function ApplyPattern(this: ScColumn, row: number, pattern: ScPatternAttr): void {
+  const cache = new ScItemPoolCache(
+      this["rDocument"].getCellAttributeHelper(),
+      pattern.GetItemSet(),
+    ),
+    old = new CellAttributeHolder(this["pAttrArray"].GetPattern(row));
+  try {
+    const next = cache.ApplyTo(old);
+    if (!CellAttributeHolder.areSame(next, old)) this["pAttrArray"].SetPattern(row, next);
+  } finally {
+    old.Dispose();
+    cache.Dispose();
+  }
+}
+/** Original GetBlockMatrixEdges ordinary-cell path reads actual typed blocks and rejects the unported positive matrix-edge family. Source edge-mask/open-edge phases are unreachable for admitted NONE cells. @param this - Actual column. @param first - First row. @param last - Last row. @param mask - Original edge mask. @param noMatrix - Original policy. @returns Native Nothing for genuine nonmatrix content. */
+export function GetBlockMatrixEdges(
+  this: ScColumn,
+  first: number,
+  last: number,
+  mask: MatrixEdge,
+  noMatrix: boolean,
+): MatrixEdge {
+  void mask;
+  void noMatrix;
+  if (!this.GetDoc().ValidRow(first) || !this.GetDoc().ValidRow(last) || first > last)
+    return MatrixEdge.Nothing;
+  const cells = this.GetCellStore(),
+    position = cells.position(first),
+    iterator = position.first;
+  if (first === last) {
+    const node = iterator.get();
+    if (node.type !== element_type_formula) return MatrixEdge.Nothing;
+    const cell = formula_block.at(
+      node.data as base_element_block,
+      position.second,
+    ) as ScFormulaCell;
+    if (cell.GetMatrixFlag() === ScMatrixMode.NONE) return MatrixEdge.Nothing;
+    throw Error("Native matrix edge services are not implemented");
+  }
+  let offset = position.second,
+    row = first;
+  for (; !iterator.equals(cells.end()) && row <= last; iterator.increment(), offset = 0) {
+    const node = iterator.get();
+    if (node.type !== element_type_formula) {
+      row += node.size - offset;
+      continue;
+    }
+    const end = Math.min(node.size, offset + last - row + 1);
+    for (let i = offset; i < end; ++i) {
+      const cell = formula_block.at(node.data as base_element_block, i) as ScFormulaCell;
+      if (cell.GetMatrixFlag() !== ScMatrixMode.NONE)
+        throw Error("Native matrix edge services are not implemented");
+    }
+    row += end - offset;
+  }
+  return MatrixEdge.Nothing;
 }

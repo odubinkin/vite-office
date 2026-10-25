@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/docshell/editable.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-cursor",
+    "capabilityIds": [
+      "CAP-318fcdc6-c54d-4669-ab37-0b550ac83495",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f",
+      "CAP-17e6ea35-6788-440f-af21-d5647d785cd0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/docshell/editable.ts#ScEditableTester",
+        "apps/office/src/sc/source/ui/view/paste-editability.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx#ScEditableTester::CreateAndTestBlock"
+      ],
+      "justification": "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScEditableTester"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/docshell/editable.cxx",
+      "upstreamSymbols": [
+        "ScEditableTester::CreateAndTestBlock",
+        "ScEditableTester::TestBlock"
+      ]
+    }
+  }
+}

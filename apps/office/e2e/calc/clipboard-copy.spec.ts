@@ -3,7 +3,8 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/sc/source/ui/inc/viewdata") &
+type Fixture = typeof import("../../src/sc/source/ui/inc/editable") &
+  typeof import("../../src/sc/source/ui/inc/viewdata") &
   typeof import("../../src/sc/source/ui/view/viewutil") &
   typeof import("../../src/editeng/inc/fhgtitem") &
   typeof import("../../src/sc/source/ui/undo/undoblk") &
@@ -48,6 +49,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     { module: "src/editeng/inc/fhgtitem.ts", names: ["SvxFontHeightItem"] },
     { module: "src/sc/source/ui/inc/viewdata.ts", names: ["ScViewData", "ScMarkType"] },
     { module: "src/sc/source/ui/view/viewutil.ts", names: ["ScViewUtil"] },
+    { module: "src/sc/source/ui/inc/editable.ts", names: ["ScEditableTester"] },
     { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
     { module: "src/sc/source/core/data/document10.ts", names: ["CopyOneCellFromClip"] },
     {
@@ -644,6 +646,23 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         nativeView.GetMarkData().SetMarkArea(new n.ScRange(0, 0, 0, 23, pasteDocument.MaxRow(), 0));
         const fitRange = new n.ScRange(0, 0, 0, 1, 1, 0),
           viewSelection = {
+            editable: n.ScEditableTester.CreateAndTestBlock(
+              pasteDocument,
+              0,
+              6,
+              10,
+              8,
+              11,
+            ).IsEditable(),
+            missing: n.ScEditableTester.CreateAndTestBlock(
+              pasteDocument,
+              3,
+              0,
+              0,
+              0,
+              0,
+            ).IsEditable(),
+            invalid: pasteDocument.IsBlockEditable(0, 0, 0, pasteDocument.MaxCol() + 1, 0),
             simple: simpleSelection,
             filtered: filteredSelection,
             simpleEnd,
@@ -841,6 +860,9 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       recalculated: 11,
     },
     viewSelection: {
+      editable: true,
+      missing: false,
+      invalid: false,
       simple: 1,
       filtered: 3,
       simpleEnd: [8, 11],
