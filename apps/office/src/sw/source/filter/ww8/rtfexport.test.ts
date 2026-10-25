@@ -40,6 +40,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
   RES_BREAK,
+  RES_PAGEDESC,
   RES_PARATR_LINESPACING,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -339,6 +340,32 @@ it("writes a native RTF page section and restart before a later paragraph", () =
     expect(rtf).toContain(String.raw`\pgnstarts7\pgnrestart\sbkpage`);
     expect(rtf.indexOf(String.raw`\sect\sectd`)).toBeLessThan(rtf.indexOf("After"));
   } finally {
+    source.Dispose();
+  }
+});
+
+it("imports an exported later page section through native page descriptors", () => {
+  const source = createWriterDocument();
+  let imported: SwDoc | undefined;
+  try {
+    source.paragraphs[0]?.SetText("Before");
+    const alternate = source.MakePageDesc("Second Page", source.GetPageDesc());
+    source.ChgPageDesc({ ...alternate.GetValue(), width: 15120 }, "Second Page");
+    const next = source.nodes.MakeTextNode("After");
+    next.SetAttr(new SwFormatPageDesc("Second Page", 7));
+    imported = new RtfDocumentImpl().Resolve(
+      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
+    );
+    expect(imported.paragraphs.map((paragraph) => paragraph.GetText())).toEqual([
+      "Before",
+      "After",
+    ]);
+    expect(imported.FindPageDesc("Converted1")?.GetValue().width).toBe(15120);
+    expect((imported.paragraphs[1]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset()).toBe(
+      1,
+    );
+  } finally {
+    imported?.Dispose();
     source.Dispose();
   }
 });

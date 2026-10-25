@@ -67,6 +67,7 @@ import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
 /** Paragraph properties represented by the current Writer model. */
 interface RtfParagraphState {
@@ -152,8 +153,13 @@ interface RtfRun extends WriterTextRun {
 
 /** Ordered body content with native rows and cell paragraphs. */
 type RtfBlock =
-  | Readonly<{ kind: "paragraph"; paragraph: RtfParagraph }>
-  | Readonly<{ kind: "table"; rows: readonly RtfTableRow[] }>;
+  | Readonly<{ kind: "paragraph"; paragraph: RtfParagraph; section: number }>
+  | Readonly<{ kind: "table"; rows: readonly RtfTableRow[]; section: number }>;
+
+/** The represented physical subset of a tokenizer section-property group. */
+type RtfSectionPage = Partial<{
+  -readonly [K in Exclude<keyof WriterPageDescriptorValue, "name">]: WriterPageDescriptorValue[K];
+}>;
 
 /** One RTF table row with physical cell boundaries in twips. */
 interface RtfTableRow {
@@ -336,9 +342,10 @@ export class RtfDocumentImpl {
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
   private defaultTabStop = 720;
   private firstRun = true;
-  private readonly firstSectionPage: Partial<{
-    -readonly [K in Exclude<keyof WriterPageDescriptorValue, "name">]: WriterPageDescriptorValue[K];
-  }> = {};
+  private readonly defaultSectionPage: RtfSectionPage = {};
+  private readonly sectionPages: RtfSectionPage[] = [{}];
+  private readonly sectionPageRestarts = new Set<number>();
+  private currentSection = 0;
 
   /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
@@ -352,7 +359,8 @@ export class RtfDocumentImpl {
       this.CommitParagraph();
     this.FlushTable();
     const document = new SwDoc(options);
-    document.ChgPageDesc({ ...document.GetPageDesc().GetValue(), ...this.firstSectionPage });
+    const defaultPage = { ...document.GetPageDesc().GetValue(), ...this.defaultSectionPage };
+    document.ChgPageDesc({ ...defaultPage, ...this.sectionPages[0] });
     // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
     document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
     const defaultTabs = (
@@ -389,16 +397,46 @@ export class RtfDocumentImpl {
       this.ApplyStyleDefinition(collection, definition);
     }
     let firstParagraph = true;
+    const sectionStyles = new Map<number, string>();
     for (const block of this.blocks) {
+      let sectionStyle = sectionStyles.get(block.section);
+      const startsSection = block.section > 0 && sectionStyle === undefined;
+      if (block.section > 0 && sectionStyle === undefined) {
+        let number = block.section;
+        while (document.FindPageDesc(`Converted${number}`) !== undefined) number++;
+        sectionStyle = `Converted${number}`;
+        const page = document.MakePageDesc(sectionStyle);
+        document.ChgPageDesc(
+          { ...defaultPage, ...this.sectionPages[block.section], name: sectionStyle },
+          sectionStyle,
+        );
+        sectionStyles.set(block.section, page.GetName());
+      }
       if (block.kind === "paragraph") {
         const node = firstParagraph ? document.paragraphs[0] : document.nodes.MakeTextNode();
         if (node === undefined) throw new Error("Writer body has no text node.");
         this.ApplyParagraph(node, block.paragraph);
+        if (startsSection && sectionStyle !== undefined)
+          node.SetAttr(
+            new SwFormatPageDesc(
+              sectionStyle,
+              this.sectionPageRestarts.has(block.section) ? 1 : undefined,
+            ),
+          );
         firstParagraph = false;
       } else {
         const table = firstParagraph
           ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
           : document.nodes.MakeTableNode("RTF Table");
+        if (startsSection && sectionStyle !== undefined)
+          table
+            .GetFrameFormat()
+            .SetFormatAttr(
+              new SwFormatPageDesc(
+                sectionStyle,
+                this.sectionPageRestarts.has(block.section) ? 1 : undefined,
+              ),
+            );
         const firstRow = block.rows[0];
         if (firstRow !== undefined) {
           const format = table.GetFrameFormat();
@@ -869,32 +907,69 @@ export class RtfDocumentImpl {
   /** Applies one represented body control. @param name - RTF control. @param parameter - Optional value. @param state - Current group. */
   private DispatchBodyControl(name: string, parameter: number | undefined, state: RtfState): void {
     if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
-    if (this.firstRun) {
-      const page = this.firstSectionPage;
-      if (name === "landscape" || name === "lndscpsxn") page.landscape = true;
-      else if (parameter !== undefined) {
+    if (name === "sect") {
+      if (this.runs.length > 0) this.CommitParagraph(state);
+      this.FlushTable();
+      this.currentSection++;
+      this.sectionPages.push({ ...this.defaultSectionPage });
+      this.terminatedParagraph = true;
+      return;
+    }
+    if (name === "sectd") {
+      this.sectionPages[this.currentSection] = { ...this.defaultSectionPage };
+      this.sectionPageRestarts.delete(this.currentSection);
+      return;
+    }
+    if (name === "pgnrestart") {
+      this.sectionPageRestarts.add(this.currentSection);
+      return;
+    }
+    {
+      const page = this.sectionPages[this.currentSection] as RtfSectionPage;
+      if (name === "landscape" || name === "lndscpsxn") {
+        page.landscape = true;
+        if (name === "landscape") this.defaultSectionPage.landscape = true;
+      } else if (parameter !== undefined) {
         switch (name) {
           case "paperw":
+            this.defaultSectionPage.width = parameter;
+            page.width = parameter;
+            break;
           case "pgwsxn":
             page.width = parameter;
             break;
           case "paperh":
+            this.defaultSectionPage.height = parameter;
+            page.height = parameter;
+            break;
           case "pghsxn":
             page.height = parameter;
             break;
           case "margl":
+            this.defaultSectionPage.leftMargin = parameter;
+            page.leftMargin = parameter;
+            break;
           case "marglsxn":
             page.leftMargin = parameter;
             break;
           case "margr":
+            this.defaultSectionPage.rightMargin = parameter;
+            page.rightMargin = parameter;
+            break;
           case "margrsxn":
             page.rightMargin = parameter;
             break;
           case "margt":
+            this.defaultSectionPage.topMargin = parameter;
+            page.topMargin = parameter;
+            break;
           case "margtsxn":
             page.topMargin = parameter;
             break;
           case "margb":
+            this.defaultSectionPage.bottomMargin = parameter;
+            page.bottomMargin = parameter;
+            break;
           case "margbsxn":
             page.bottomMargin = parameter;
             break;
@@ -1247,14 +1322,18 @@ export class RtfDocumentImpl {
       marks: this.marks.splice(0),
     };
     if (this.inTable) this.tableCell.push(paragraph);
-    else this.blocks.push({ kind: "paragraph", paragraph });
+    else this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
     this.terminatedParagraph = true;
   }
 
   /** Completes rows as one native table block. */
   private FlushTable(): void {
     if (this.tableRows.length === 0) return;
-    this.blocks.push({ kind: "table", rows: this.tableRows.splice(0) });
+    this.blocks.push({
+      kind: "table",
+      rows: this.tableRows.splice(0),
+      section: this.currentSection,
+    });
   }
 
   /** Adds one font-family table token. @param value - Font text. @param state - Current group. */

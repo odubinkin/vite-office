@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T18:46:15.504Z"
+doc_updated_at: "2026-10-25T18:50:07.089Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through f08d57bbdaf3 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks, first-page geometry, table headers, and Markdown source hint semantics. WRITER096-102 document retained upstream asymmetries. This batch adds later direct paragraph/table page descriptor section export, section geometry, page-number restart controls, and source follow-page suppression. WRITER103 records the pinned RTF importer apparent loss of the numeric restart value. Focused 117 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry, module-boundary, and diff checks pass. Remaining current-model gaps: later section import, full page-style chain and section geometry semantics; soft page breaks; further RTF field, style, list, table and paragraph differentials; Markdown hyperlink base URL, additional callback and syntax parity; physical font metrics. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier commits through a6c840675000 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks, page-section export, and Markdown source hint semantics. WRITER096-103 document retained upstream asymmetries. This batch adds RTF section import: tokenizer sect/sectd boundaries, global/default physical section values, document-owned ConvertedN page descriptors on the first paragraph or table, and source pgnrestart-to-1 behavior. Focused 83 RTF/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry, module-boundary, and diff checks pass. Remaining current-model gaps: complete section geometry, empty/continuous section and first/follow-page semantics; soft page breaks; further RTF field, style, list, table and paragraph differentials; Markdown hyperlink base URL, callback and syntax parity; physical font metrics. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through f08d57bbdaf3 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks, first-page geometry, table headers, and Markdown source hint semantics. WRITER096-102 document retained upstream asymmetries. This batch adds later direct paragraph/table page descriptor section export, section geometry, page-number restart controls, and source follow-page suppression. WRITER103 records the pinned RTF importer apparent loss of the numeric restart value. Focused 117 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry, module-boundary, and diff checks pass. Remaining current-model gaps: later section import, full page-style chain and section geometry semantics; soft page breaks; further RTF field, style, list, table and paragraph differentials; Markdown hyperlink base URL, additional callback and syntax parity; physical font metrics. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier commits through a6c840675000 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks, page-section export, and Markdown source hint semantics. WRITER096-103 document retained upstream asymmetries. This batch adds RTF section import: tokenizer sect/sectd boundaries, global/default physical section values, document-owned ConvertedN page descriptors on the first paragraph or table, and source pgnrestart-to-1 behavior. Focused 83 RTF/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry, module-boundary, and diff checks pass. Remaining current-model gaps: complete section geometry, empty/continuous section and first/follow-page semantics; soft page breaks; further RTF field, style, list, table and paragraph differentials; Markdown hyperlink base URL, callback and syntax parity; physical font metrics. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.

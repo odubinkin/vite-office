@@ -20,6 +20,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
   RES_BREAK,
+  RES_PAGEDESC,
   RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
@@ -151,6 +152,73 @@ it("imports RTF global paper and first-section geometry through the document pag
       topMargin: 1200,
       bottomMargin: 1300,
       landscape: true,
+    });
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("materializes a later RTF page section on its first paragraph", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\paperw12000\paperh16000 First\par\sect\sectd\pgwsxn14000\marglsxn900\pgnstarts7\pgnrestart\sbkpage Second\par Third}`,
+  );
+  try {
+    expect(document.paragraphs.map((paragraph) => paragraph.GetText())).toEqual([
+      "First",
+      "Second",
+      "Third",
+    ]);
+    const sectionPage = document.FindPageDesc("Converted1");
+    expect(sectionPage?.GetValue()).toMatchObject({ width: 14000, height: 16000, leftMargin: 900 });
+    expect(document.paragraphs[1]?.GetSwAttrSet().Get(RES_PAGEDESC)).toMatchObject({
+      name: "Converted1",
+      numOffset: 1,
+    });
+    expect(
+      document.paragraphs[2]?.GetpSwAttrSet()?.GetItemIfSet(RES_PAGEDESC, false),
+    ).toBeUndefined();
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("materializes a later RTF page section before its first table", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi First\par\sect\sectd\pgwsxn13000\sbkpage\trowd\cellx1440\intbl Cell\cell\row\pard After}`,
+  );
+  try {
+    const table = document
+      .GetNodes()
+      .getBodyContent()
+      .find((block) => block instanceof SwTableNode);
+    expect(table).toBeInstanceOf(SwTableNode);
+    expect(table?.GetTable().GetFrameFormat().GetAttrSet().Get(RES_PAGEDESC)).toMatchObject({
+      name: "Converted1",
+    });
+    expect(document.FindPageDesc("Converted1")?.GetValue().width).toBe(13000);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("resets each RTF section to global physical defaults and ends a pending paragraph", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\paperw12000\paperh16000\margl1000 First\sect\sectd\pgwsxn14000 Second\sect\sectd Third}`,
+  );
+  try {
+    expect(document.paragraphs.map((paragraph) => paragraph.GetText())).toEqual([
+      "First",
+      "Second",
+      "Third",
+    ]);
+    expect(document.GetPageDesc().GetValue()).toMatchObject({ width: 12000, leftMargin: 1000 });
+    expect(document.FindPageDesc("Converted1")?.GetValue()).toMatchObject({
+      width: 14000,
+      leftMargin: 1000,
+    });
+    expect(document.FindPageDesc("Converted2")?.GetValue()).toMatchObject({
+      width: 12000,
+      leftMargin: 1000,
     });
   } finally {
     document.Dispose();
