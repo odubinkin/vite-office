@@ -13,7 +13,7 @@
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF group-scoped character and paragraph controls, built-in and named stylesheet properties with run inheritance, point bookmarks, list/table metadata and HYPERLINK field results into canonical Writer text nodes, hints, hyperlink spans and paragraph items."
+      "Maps represented RTF group-scoped character and paragraph controls, built-in and named stylesheet properties with run inheritance, point bookmarks, list level starts and bullet glyphs, table metadata and HYPERLINK field results into canonical Writer nodes and items."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, sections and embedded objects remain unverified."

@@ -34,6 +34,7 @@ import {
   getWriterParagraphStyleId,
 } from "../../../inc/poolfmt";
 import { applyWriterParagraphList } from "../../core/doc/list";
+import { SwNumFormat } from "../../core/doc/number";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -67,6 +68,7 @@ interface RtfState {
     | "listtable"
     | "list"
     | "listlevel"
+    | "leveltext"
     | "listoverridetable"
     | "listoverride"
     | "field"
@@ -84,6 +86,7 @@ interface RtfState {
   styleControls: Set<string>;
   characterControls: Set<string>;
   bookmarkName?: string;
+  levelText?: string;
 }
 
 /** Parsed paragraph before the source graph is applied atomically. */
@@ -184,7 +187,10 @@ export class RtfDocumentImpl {
   private readonly marks: { name: string; offset: number }[] = [];
   private readonly fonts = new Map<number, string>();
   private readonly colors: string[] = [];
-  private readonly listFormats = new Map<number, readonly ("bullet" | "numbered")[]>();
+  private readonly listFormats = new Map<
+    number,
+    readonly Readonly<{ kind: "bullet" | "numbered"; start: number; bullet?: number }>[]
+  >();
   private readonly styles = new Map<
     number,
     Readonly<{
@@ -197,7 +203,7 @@ export class RtfDocumentImpl {
   private readonly importedStyles = new Map<number, SwTextFormatColl>();
   private readonly listOverrides = new Map<number, number>();
   private currentListId = 0;
-  private currentListLevels: ("bullet" | "numbered")[] = [];
+  private currentListLevels: { kind: "bullet" | "numbered"; start: number; bullet?: number }[] = [];
   private currentOverrideListId = 0;
   private currentOverrideIndex = 0;
   private fontName = "";
@@ -351,16 +357,26 @@ export class RtfDocumentImpl {
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
-        kind =
+        format =
           sourceList === undefined
             ? undefined
             : this.listFormats.get(sourceList)?.[paragraph.state.listLevel];
-      if (kind !== undefined)
+      if (format !== undefined) {
         applyWriterParagraphList(node, {
-          kind,
+          kind: format.kind,
           level: paragraph.state.listLevel,
           listId: `RTF-list-${override}`,
         });
+        const rule = node.GetNumRule();
+        if (rule !== undefined) {
+          const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
+          native.SetStart(format.start);
+          if (format.kind === "bullet" && format.bullet !== undefined)
+            native.SetBulletChar(format.bullet);
+          rule.Set(paragraph.state.listLevel, native);
+          node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
+        }
+      }
     }
   }
 
@@ -405,6 +421,16 @@ export class RtfDocumentImpl {
             offset: this.runs.reduce((length, run) => length + run.text.length, 0),
           });
       }
+      if (previous?.destination === "leveltext") {
+        const glyph = [...(previous.levelText ?? "")].find(
+          (value) => (value.codePointAt(0) ?? 0) > 0x20 && value !== ";",
+        );
+        if (glyph !== undefined) {
+          const level = this.currentListLevels.at(-1);
+          const bullet = glyph.codePointAt(0);
+          if (level !== undefined && bullet !== undefined) level.bullet = bullet;
+        }
+      }
       if (previous?.destination === "list")
         this.listFormats.set(this.currentListId, [...this.currentListLevels]);
       if (previous?.destination === "listoverride")
@@ -424,6 +450,8 @@ export class RtfDocumentImpl {
         state.styleName = (state.styleName ?? "") + token.value;
       else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
         state.bookmarkName = (state.bookmarkName ?? "") + token.value;
+      else if (state.destination === "leveltext")
+        state.levelText = (state.levelText ?? "") + token.value;
       else if (state.destination === "colortbl") this.ReadColorText(token.value);
       else if (state.destination === "fldinst" && state.field !== undefined)
         state.field.instruction += token.value;
@@ -502,7 +530,12 @@ export class RtfDocumentImpl {
     }
     if (state.destination === "list" && token.name === "listlevel") {
       state.destination = "listlevel";
-      this.currentListLevels.push("numbered");
+      this.currentListLevels.push({ kind: "numbered", start: 1 });
+      return;
+    }
+    if (state.destination === "listlevel" && token.name === "leveltext") {
+      state.destination = "leveltext";
+      state.levelText = "";
       return;
     }
     if (state.destination === "listoverridetable" && token.name === "listoverride") {
@@ -531,11 +564,17 @@ export class RtfDocumentImpl {
     }
     if (state.destination === "list" || state.destination === "listlevel") {
       if (token.name === "listid") this.currentListId = token.parameter ?? 0;
-      else if (token.name === "levelnfc")
-        this.currentListLevels[this.currentListLevels.length - 1] =
-          token.parameter === 23 ? "bullet" : "numbered";
+      else if (token.name === "levelnfc") {
+        const level = this.currentListLevels.at(-1);
+        if (level !== undefined) level.kind = token.parameter === 23 ? "bullet" : "numbered";
+      } else if (token.name === "levelstartat") {
+        const level = this.currentListLevels.at(-1);
+        if (level !== undefined && token.parameter !== undefined)
+          level.start = Math.max(0, token.parameter);
+      }
       return;
     }
+    if (state.destination === "leveltext") return;
     if (state.destination === "listoverride") {
       if (token.name === "listid") this.currentOverrideListId = token.parameter ?? 0;
       else if (token.name === "ls") this.currentOverrideIndex = token.parameter ?? 0;

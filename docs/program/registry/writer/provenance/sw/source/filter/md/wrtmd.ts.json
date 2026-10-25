@@ -13,7 +13,7 @@
       "SwMDWriter::WriteStream"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body content and direct text formatting as Markdown, including one fenced block for consecutive preformatted paragraphs."
+      "Writes represented Writer body content and direct text formatting as Markdown, including source numbering labels and parent-prefix indentation plus one fenced block for consecutive preformatted paragraphs."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."

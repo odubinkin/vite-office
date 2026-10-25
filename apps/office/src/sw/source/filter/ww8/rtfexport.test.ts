@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
+import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwpHints } from "../../core/txtnode/ndhints";
@@ -170,6 +171,61 @@ it("retains numbered list identity and levels through RTF list tables", /** Chec
       ["Two", "numbered", 1],
     ]);
     expect(imported.paragraphs[0]?.GetListId()).toBe(imported.paragraphs[1]?.GetListId());
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("retains represented level starts and bullet glyphs in RTF list definitions", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("First");
+  applyWriterParagraphList(first, { kind: "bullet", level: 0, listId: "Bullets" });
+  const nested = source.nodes.MakeTextNode("Nested");
+  applyWriterParagraphList(nested, { kind: "bullet", level: 1, listId: "Bullets" });
+  const rule = nested.GetNumRule();
+  if (rule === undefined) throw new Error("Missing rule.");
+  const format = new SwNumFormat(rule.Get(1));
+  format.SetBulletChar(0x25aa);
+  format.SetStart(7);
+  rule.Set(1, format);
+  source.GetDocumentListsManager().InvalidateAllLists();
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const encoded = new TextDecoder().decode(bytes);
+    expect(encoded).toContain("\\levelstartat7");
+    expect(encoded).toContain("\\u9642?");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.paragraphs[1]?.GetNumRule()?.Get(1).GetStart()).toBe(7);
+    expect(imported.paragraphs[1]?.GetNumRule()?.Get(1).GetBulletChar()).toBe(0x25aa);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("retains a numbered rule starting above one", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("Seven");
+  applyWriterParagraphList(first, { kind: "numbered", level: 0, listId: "Numbers" });
+  const rule = first.GetNumRule();
+  if (rule === undefined) throw new Error("Missing rule.");
+  const format = new SwNumFormat(rule.Get(0));
+  format.SetStart(7);
+  rule.Set(0, format);
+  source.GetDocumentListsManager().InvalidateAllLists();
+  let imported;
+  try {
+    imported = new RtfDocumentImpl().Resolve(
+      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
+    );
+    expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetStart()).toBe(7);
+    expect(imported.paragraphs[0]?.GetListItemNumber()).toBe(7);
   } finally {
     imported?.Dispose();
     source.Dispose();

@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
+import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
@@ -75,6 +76,35 @@ it("keeps consecutive preformatted paragraphs inside one native Markdown fence",
       "```\nfirst\nsecond\n```\n",
     );
   } finally {
+    source.Dispose();
+  }
+});
+
+it("uses native numbering labels and parent-prefix width for nested Markdown items", () => {
+  const source = createWriterDocument();
+  const parent = source.paragraphs[0];
+  if (parent === undefined) throw new Error("Missing paragraph.");
+  parent.SetText("Parent");
+  applyWriterParagraphList(parent, { kind: "numbered", level: 0, listId: "Numbers" });
+  const child = source.nodes.MakeTextNode("Child");
+  applyWriterParagraphList(child, { kind: "numbered", level: 1, listId: "Numbers" });
+  const rule = parent.GetNumRule();
+  if (rule === undefined) throw new Error("Missing list rule.");
+  const format = new SwNumFormat(rule.Get(0));
+  format.SetStart(10);
+  rule.Set(0, format);
+  source.GetDocumentListsManager().InvalidateAllLists();
+  let imported;
+  try {
+    const markdown = new TextDecoder().decode(new SwMDWriter().WriteDocument(source));
+    expect(markdown).toContain(`${parent.GetNumString()} Parent\n`);
+    expect(markdown).toContain(
+      `\n${" ".repeat(parent.GetNumString().length + 1)}${child.GetNumString()} Child`,
+    );
+    imported = new MarkdownReader().Read(new TextEncoder().encode(markdown));
+    expect(imported.paragraphs[1]?.GetAttrListLevel()).toBe(1);
+  } finally {
+    imported?.Dispose();
     source.Dispose();
   }
 });

@@ -87,6 +87,7 @@ export class SwMarkdownParser {
       nextListId = 0,
       activeListId: string | undefined,
       activeListKind: "bullet" | "numbered" | undefined;
+    let listIndents: { indent: number; continuation: number }[] = [];
     while (offset < lines.length) {
       const line = lines[offset] as string;
       if (line.trim().length === 0) {
@@ -146,7 +147,7 @@ export class SwMarkdownParser {
         activeListKind = undefined;
         continue;
       }
-      if (/^(?: {4}|\t)/u.test(line)) {
+      if (activeListKind === undefined && /^(?: {4}|\t)/u.test(line)) {
         const code: string[] = [];
         while (offset < lines.length) {
           const current = lines[offset] as string;
@@ -188,6 +189,22 @@ export class SwMarkdownParser {
       const list = /^(\s*)([-+*]|\d+[.)])\s+(.+)$/u.exec(line);
       if (list !== null && !/^(?:\s*[-*]\s*){3,}$/u.test(line)) {
         const kind = /^\d/u.test(list[2] as string) ? "numbered" : "bullet";
+        if (activeListKind === undefined) listIndents = [];
+        const indent = (list[1] as string).replaceAll("\t", "    ").length;
+        let level = 0;
+        for (const [index, previous] of listIndents.entries()) {
+          if (indent >= previous.continuation) level = index + 1;
+          else if (indent >= previous.indent) {
+            level = index;
+            break;
+          }
+        }
+        level = Math.min(9, level);
+        listIndents.length = level;
+        listIndents[level] = {
+          indent,
+          continuation: indent + (list[2] as string).length + 1,
+        };
         if (activeListKind !== kind) activeListId = undefined;
         activeListId ??= `Markdown-list-${++nextListId}`;
         activeListKind = kind;
@@ -197,7 +214,7 @@ export class SwMarkdownParser {
             runs: parseMarkdownSpans(list[3] as string),
             list: {
               kind,
-              level: Math.min(9, Math.floor((list[1] as string).length / 2)),
+              level,
               id: activeListId,
             },
           },

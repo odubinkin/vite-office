@@ -19,7 +19,10 @@ export class RtfExport {
   private readonly colors = new Map<string, number>();
   private readonly lists = new Map<
     string,
-    { id: number; levels: readonly ("bullet" | "numbered")[] }
+    {
+      id: number;
+      levels: readonly Readonly<{ kind: "bullet" | "numbered"; start: number; bullet: number }>[];
+    }
   >();
   private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
 
@@ -49,7 +52,14 @@ export class RtfExport {
           /** Selects the native numbering kind at one level. @param _item - Array slot. @param level - List level. @returns Kind. */ (
             _item,
             level,
-          ) => getWriterNumFormatKind(rule.Get(level)),
+          ) => {
+            const format = rule.Get(level);
+            return {
+              kind: getWriterNumFormatKind(format),
+              start: format.GetStart(),
+              bullet: format.GetBulletChar(),
+            };
+          },
         );
         this.lists.set(rule.GetName(), { id: this.lists.size + 1, levels });
       }
@@ -93,11 +103,11 @@ export class RtfExport {
       output += "{\\*\\listtable";
       for (const list of this.lists.values()) {
         output += `{\\list\\listtemplateid${list.id}\\listsimple0`;
-        for (const kind of list.levels)
+        for (const level of list.levels)
           output +=
-            kind === "bullet"
-              ? "{\\listlevel\\levelnfc23\\levelstartat1\\levelfollow0{\\leveltext \\'01\\u8226?;}{\\levelnumbers;}}"
-              : "{\\listlevel\\levelnfc0\\levelstartat1\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}";
+            level.kind === "bullet"
+              ? `{\\listlevel\\levelnfc23\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'01${escapeRtf(String.fromCodePoint(level.bullet || 0x2022))};}{\\levelnumbers;}}`
+              : `{\\listlevel\\levelnfc0\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}`;
         output += `{\\listname ;}\\listid${list.id}}`;
       }
       output += "}{\\*\\listoverridetable";

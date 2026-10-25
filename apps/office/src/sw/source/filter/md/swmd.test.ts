@@ -31,7 +31,7 @@ it("imports headings and nested emphasis as native paragraph styles and hints", 
 });
 
 it("imports ordered and bullet lists with native levels and identities", /** Checks list callback mapping. @returns Nothing. */ () => {
-  const document = read("1. First\n  2. Nested\n- Bullet\n");
+  const document = read("1. First\n   2. Nested\n- Bullet\n");
   try {
     expect(
       document.paragraphs.map((node) => [

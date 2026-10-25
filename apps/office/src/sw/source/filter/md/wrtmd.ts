@@ -12,6 +12,7 @@ export class SwMDWriter {
   public WriteDocument(document: SwDoc): Uint8Array {
     const blocks = document.GetNodes().getBodyContent(),
       output: string[] = [];
+    const listPrefixSizes = new Map<number, number>();
     let previousList = false;
     for (let index = 0; index < blocks.length; index++) {
       const block = blocks[index];
@@ -36,8 +37,8 @@ export class SwMDWriter {
         previousList = false;
         continue;
       }
-      const text = writeParagraph(block);
-      const list = block.GetListKind() !== "none";
+      const text = writeParagraph(block, listPrefixSizes);
+      const list = block.GetNumRule() !== undefined;
       if (output.length > 0 && !(list && previousList)) output.push("");
       output.push(text);
       previousList = list;
@@ -47,16 +48,21 @@ export class SwMDWriter {
 }
 
 /** Emits upstream-style heading, list, quote and fenced-code paragraph markers. @param node - Body paragraph. @returns Markdown block. */
-function writeParagraph(node: SwTextNode): string {
+function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>): string {
   const style = node.GetParagraphStyle(),
     heading = /^heading-([1-6])$/u.exec(style);
   const text = writeRuns(projectWriterTextRuns(node), heading !== null);
   if (heading !== null) return `${"#".repeat(Number(heading[1]))} ${text}`;
   if (style === "quotations") return `> ${text}`;
-  const kind = node.GetListKind();
-  if (kind !== "none") {
-    const prefix = kind === "bullet" ? "-" : `${node.GetListItemNumber() ?? 1}.`;
-    return `${"  ".repeat(node.GetAttrListLevel())}${prefix} ${text}`;
+  if (node.GetNumRule() !== undefined) {
+    const level = node.GetActualListLevel();
+    let marker = node.GetNumString();
+    if (marker.length === 0 && node.HasBullet()) marker = "-";
+    const prefix = `${" ".repeat(listPrefixSizes.get(level - 1) ?? 0)}${marker} `;
+    if (prefix.length > 1) {
+      listPrefixSizes.set(level, prefix.length);
+      return prefix + text;
+    }
   }
   return text;
 }
