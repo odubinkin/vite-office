@@ -103,3 +103,9 @@ imports, DOCX export/reopen, related ODT regressions and real production browser
 Open/download/reopen scenarios. Resource tests alone do not prove DOCX document
 or UI support. All parity attestations remain unverified until their own exact
 contracts and evidence justify them.
+
+## Native parser state
+
+`OOXMLParserState` retains native shared group flags, context handles and document note/target delegation. Cell/row properties reset to allocated empty sets after delivery; table properties persist across rows. Third-level floating table positioning is filtered from a copy without changing the saved properties. Postponed breaks use `OOXMLBreakHandler` and retain native byte markers and context-property delivery order. Explicit `dispose()` binds the native handler destructor, including exception unwinding.
+
+Textbox nesting intentionally keeps the native single saved state (WRITER100). Host errors expose undefined native null-document dereference and table-stack underflow; every valid table push/pop updates all four stacks together, making the native floating-stack nonempty guard redundant after the checked pop precondition. These protocol owners do not yet establish complete XML document dispatch or application Open support.

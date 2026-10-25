@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts#OOXMLParserState",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLParserState.cxx#OOXMLParserState::OOXMLParserState"
+      ],
+      "justification": "Native group defaults, borrowed document delegation, decimal context handles, shared character/cell/row/table property references, repeated row delivery, third floating-level positioning filtering, postponed break delivery and single textbox saved state. Undefined null-document/table-pop paths are explicit host errors; synchronized stack pushes make the native floating-stack nonempty guard redundant after a checked pop. Logging-only SAL_WARN diagnostics and native reference-count ABI are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLParserState",
+        "SavedAlternateState"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLParserState.cxx",
+      "upstreamSymbols": [
+        "OOXMLParserState::OOXMLParserState",
+        "OOXMLParserState::resolveTableProperties",
+        "OOXMLParserState::startTxbxContent",
+        "OOXMLParserState::resolvePostponedBreak"
+      ]
+    }
+  }
+}

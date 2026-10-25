@@ -9,7 +9,8 @@
     "type": "filter",
     "maturity": "mapped",
     "assertions": [
-      "Consumed OOXML resource, property map, URI/package stream and imported-style lookup contracts are implemented; application DOCX import remains in progress."
+      "Consumed OOXML resource, property map, URI/package stream and imported-style lookup contracts are implemented; application DOCX import remains in progress.",
+      "Native parser state and break protocol are implemented; full fast-context/document dispatch and application import remain pending."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -110,6 +111,14 @@
         {
           "path": "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts",
           "marker": "XMLNamedBoolPropertyHdl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts",
+          "marker": "OOXMLParserState"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts",
+          "marker": "OOXMLBreakHandler"
         }
       ],
       "tests": [

@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T18:24:40.894Z"
+doc_updated_at: "2026-10-25T18:29:55.441Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -84,6 +84,10 @@ sections:
     - Observation: Native factory checkpoint: 58 tests in 9 files pass; S421/B347/F58/L392 all100 across 10 measured owners, including all 7 new runtime modules. Native stream now lazily owns FastTokenHandler. Boundary guard48, primary ODT/core regression52 and shared txtprmap3 pass. Full evidence and exact argv/hashes: evidence/native-factory-checkpoint.json.
       Impact: Native schema numeric identity, ordered attribute conversion and bool handoff are verified, including actual SwDoc ODT reopen; full DOCX import/export/UI acceptance is still pending. Full suite is not due.
       Resolution: Build/typechecks, scoped lint/format, docs/dependencies/source-tree/provenance1336/size/registry/static/routing/diff pass. Doctor has only the existing hook readiness warning. Continue native contexts, document/style/section parsing and canonical export/UI in the same approved task.
+
+    - Observation: Native parser state and OOXMLBreakHandler ported with all admitted public state operations, ordered shared property delivery, nested floating-table filtering and postponed breaks. Profile9 passes at S142/B57/F44/L134 all100 across2 owners; OOXML resource/factory/stream regression79 passes. Exact argv/hashes: evidence/parser-state-checkpoint.json.
+      Impact: Actual protocol transitions are verified without claiming complete XML loading or graph import. WRITER100 preserves nested textbox overwrite of the native single saved state. Initial coverage found one unreachable floating-stack guard after checked synchronized pop; eliminated the redundant check by the public push/pop invariant, with no exclusions or private-state mutation.
+      Resolution: Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/provenance1338/size/registry/static/routing/diff pass. Full import/export/UI and task acceptance remain pending; continue native fast contexts and canonical document/style/section application. No full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -144,3 +148,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native factory checkpoint: 58 tests in 9 files pass; S421/B347/F58/L392 all100 across 10 measured owners, including all 7 new runtime modules. Native stream now lazily owns FastTokenHandler. Boundary guard48, primary ODT/core regression52 and shared txtprmap3 pass. Full evidence and exact argv/hashes: evidence/native-factory-checkpoint.json.
   Impact: Native schema numeric identity, ordered attribute conversion and bool handoff are verified, including actual SwDoc ODT reopen; full DOCX import/export/UI acceptance is still pending. Full suite is not due.
   Resolution: Build/typechecks, scoped lint/format, docs/dependencies/source-tree/provenance1336/size/registry/static/routing/diff pass. Doctor has only the existing hook readiness warning. Continue native contexts, document/style/section parsing and canonical export/UI in the same approved task.
+
+- Observation: Native parser state and OOXMLBreakHandler ported with all admitted public state operations, ordered shared property delivery, nested floating-table filtering and postponed breaks. Profile9 passes at S142/B57/F44/L134 all100 across2 owners; OOXML resource/factory/stream regression79 passes. Exact argv/hashes: evidence/parser-state-checkpoint.json.
+  Impact: Actual protocol transitions are verified without claiming complete XML loading or graph import. WRITER100 preserves nested textbox overwrite of the native single saved state. Initial coverage found one unreachable floating-stack guard after checked synchronized pop; eliminated the redundant check by the public push/pop invariant, with no exclusions or private-state mutation.
+  Resolution: Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/provenance1338/size/registry/static/routing/diff pass. Full import/export/UI and task acceptance remain pending; continue native fast contexts and canonical document/style/section application. No full suite due.

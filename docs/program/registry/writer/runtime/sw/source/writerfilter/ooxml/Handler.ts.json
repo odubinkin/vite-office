@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts#OOXMLBreakHandler",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/Handler.cxx#OOXMLBreakHandler::OOXMLBreakHandler"
+      ],
+      "justification": "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLBreakHandler",
+        "BreakContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/Handler.cxx",
+      "upstreamSymbols": [
+        "OOXMLBreakHandler::OOXMLBreakHandler",
+        "OOXMLBreakHandler::~OOXMLBreakHandler",
+        "OOXMLBreakHandler::attribute",
+        "OOXMLBreakHandler::sprm"
+      ]
+    }
+  }
+}

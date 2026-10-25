@@ -20,18 +20,25 @@
         {
           "path": "sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx",
           "marker": "StreamType_t"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx",
+          "marker": "class OOXMLDocument"
         }
       ]
     },
     "upstreamPath": "sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx",
     "localSymbols": [
-      "StreamType_t"
+      "StreamType_t",
+      "OOXMLDocument"
     ],
     "upstreamSymbols": [
-      "StreamType_t"
+      "StreamType_t",
+      "class OOXMLDocument"
     ],
     "preservedResponsibilities": [
-      "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending."
+      "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending.",
+      "Consumed native document setXNoteId/getXNoteId/getTarget declarations retain signed note identity and borrowed target ownership; immutable UTF16 host strings bind const OUString transport. Document resolution remains pending."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

@@ -1148,3 +1148,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `handleUnderlineType`.
 - Observation: `words` inserts `CharWordMode = true` before selecting single underline. The other underline cases update `CharUnderline` without inserting a false word-mode value. On the same property context, `words` followed by `single` therefore retains true word mode. The effect on every style-inheritance path and whether a valid desktop document exposes an unintended result remain unverified.
 - Preservation: keep the separate property writes. Tests pin word mode remaining true after a later single underline; they do not normalize that update into a false word-mode reset.
+
+### WRITER100 — nested textbox content overwrites one saved group state
+
+- Source: pinned `sw/source/writerfilter/ooxml/OOXMLParserState.cxx`, `startTxbxContent` and `endTxbxContent`.
+- Observation: entering nested textbox content emits a warning but still overwrites the single saved paragraph/character/last-paragraph flags. The first close restores the inner entry state; the second close warns and returns, so the outer entry flags are not restored. Whether a valid supported document reaches this nesting remains unverified; no desktop defect is confirmed.
+- Preservation: keep the single saved state and unmatched-close return. Do not introduce a textbox state stack. Tests exercise ordinary, nested and unmatched transitions while retaining the section flag throughout.

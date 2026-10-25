@@ -19,15 +19,17 @@
         "apps/office/src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts#StreamType_t",
         "vendor/libreoffice-reference/sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx#StreamType_t"
       ],
-      "justification": "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "justification": "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Consumed native document setXNoteId/getXNoteId/getTarget declarations retain signed note identity and borrowed target ownership; immutable UTF16 host strings bind const OUString transport. Document resolution remains pending.",
       "knownViolations": [],
       "localSymbols": [
-        "StreamType_t"
+        "StreamType_t",
+        "OOXMLDocument"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx",
       "upstreamSymbols": [
-        "StreamType_t"
+        "StreamType_t",
+        "class OOXMLDocument"
       ]
     }
   }

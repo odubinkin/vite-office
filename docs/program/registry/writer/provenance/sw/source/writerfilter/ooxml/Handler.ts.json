@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native XML UTF16 byte/string carriers and SvRef references bind host immutable text, numeric IDs and references; actual existing UNO Any/OUString and RTL/SAX/unit owners retain typed value behavior."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts",
+          "marker": "OOXMLBreakHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts",
+          "marker": "preserves single textbox saved-state behavior"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/Handler.cxx",
+          "marker": "OOXMLBreakHandler::OOXMLBreakHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/Handler.cxx",
+          "marker": "OOXMLBreakHandler::~OOXMLBreakHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/Handler.cxx",
+          "marker": "OOXMLBreakHandler::attribute"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/Handler.cxx",
+          "marker": "OOXMLBreakHandler::sprm"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/Handler.cxx",
+    "localSymbols": [
+      "OOXMLBreakHandler",
+      "BreakContext"
+    ],
+    "upstreamSymbols": [
+      "OOXMLBreakHandler::OOXMLBreakHandler",
+      "OOXMLBreakHandler::~OOXMLBreakHandler",
+      "OOXMLBreakHandler::attribute",
+      "OOXMLBreakHandler::sprm"
+    ],
+    "preservedResponsibilities": [
+      "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented."
+    ],
+    "omittedResponsibilities": [
+      "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",
+      "Unconsumed native binary/drawing/service variants, complete resource-model interfaces and C++ ABI are not claimed."
+    ]
+  }
+}

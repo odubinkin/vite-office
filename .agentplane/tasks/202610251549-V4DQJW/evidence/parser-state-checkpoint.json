@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T18:29:55.201645+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "runtimeModules": 2,
+  "coverage": {
+    "lines": {
+      "total": 134,
+      "covered": 134,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 142,
+      "covered": 142,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 44,
+      "covered": 44,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 57,
+      "covered": 57,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "coverageArgv": [
+    "npm",
+    "run",
+    "test:coverage",
+    "--",
+    "src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts",
+    "src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLParserState.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/Handler.ts",
+    "--coverage.reportsDirectory=coverage/docx-parser-state"
+  ],
+  "selectedTestsPassed": 9,
+  "runtimeSha256": {
+    "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts": "59e2e7adb759536f76370edcbbfdd6d7e64f0ccf8c6154847551728929586fab",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts": "124cae4c26076ea875383467e2009af7689e2cd8db86977f140dc764dc6eaf51"
+  },
+  "testSha256": {
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts": "01c985114a5e814bec177ba240380ced3f1d041f8ae42e90b76b17a3d81d5811"
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/OOXMLPropertySet.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+      "result": "pass",
+      "testsPassed": 79
+    }
+  ],
+  "checksPassed": [
+    "npm run build (includes application typecheck)",
+    "node scripts/check-static-build.mjs",
+    "scoped ESLint --max-warnings 0",
+    "scoped Prettier",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:source-provenance (1338 modules)",
+    "npm run inventory:registry:build",
+    "npm run inventory:registry:check",
+    "node scripts/check-file-size.mjs",
+    "node scripts/check-lo-source-tree.mjs",
+    "node .agentplane/policy/check-routing.mjs",
+    "git diff --check"
+  ],
+  "nativeResponsibility": "All native parser-state public methods and break-handler behavior in the admitted props/text transport are represented. Test receivers record protocol only; no full document graph/import parity is claimed. Explicit disposal binds native RAII, host errors expose undefined null/underflow boundaries, SAL_WARN diagnostics are omitted.",
+  "nativeGuardBinding": "startTable pushes all four stacks; a checked valid endTable pop guarantees a nonempty floating stack. The redundant native nonempty guard is omitted without changing any defined public path or suppressing instrumentation. No private-state mutation or coverage exclusions are used.",
+  "suspectedUpstreamIssue": "WRITER100 preserves nested textbox overwrite of the single saved state.",
+  "remaining": [
+    "Fast context and document SAX dispatch",
+    "Canonical style/list/table/section application",
+    "DOCX export/reopen and existing UI integration",
+    "Calc XLSX task",
+    "Whole-task acceptance and evaluator verification"
+  ],
+  "fullSuite": "Not due; task remains DOING (second task since SWRD7X full checkpoint)."
+}

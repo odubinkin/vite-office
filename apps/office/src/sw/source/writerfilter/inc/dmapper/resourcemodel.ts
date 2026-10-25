@@ -30,3 +30,9 @@ export interface Properties {
 export interface Table {
   entry(position: number, properties: Reference<Properties>): void;
 }
+
+/** Consumed native Stream delivery surface for parser state and break handlers; other stream callbacks remain with their owning contexts. */
+export interface Stream {
+  props(properties: Reference<Properties>): void;
+  text(data: Uint8Array, length: number): void;
+}

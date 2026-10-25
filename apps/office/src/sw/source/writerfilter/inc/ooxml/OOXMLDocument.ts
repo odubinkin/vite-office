@@ -24,3 +24,10 @@ export enum StreamType_t {
   HEADER,
   VBADATA,
 }
+
+/** Native document callbacks consumed by shared parser state; UTF16 fields bind immutable host XML strings. */
+export interface OOXMLDocument {
+  setXNoteId(id: number): void;
+  getXNoteId(): number;
+  getTarget(): string;
+}

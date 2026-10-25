@@ -32,6 +32,10 @@
         {
           "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
           "marker": "class Table"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Stream"
         }
       ]
     },
@@ -42,16 +46,19 @@
       "Value",
       "Sprm",
       "Properties",
-      "Table"
+      "Table",
+      "Stream"
     ],
     "upstreamSymbols": [
       "class Value",
       "class Sprm",
       "class Properties",
-      "class Table"
+      "class Table",
+      "class Stream"
     ],
     "preservedResponsibilities": [
-      "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending."
+      "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending.",
+      "Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",
