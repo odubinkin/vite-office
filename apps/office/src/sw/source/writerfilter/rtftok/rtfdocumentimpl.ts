@@ -72,6 +72,7 @@ import { ImplSymbolToUnicode } from "../../../../sal/textenc/tcvtbyte";
 import { rtl_getTextEncodingFromWindowsCodePage } from "../../../../sal/textenc/tencinfo";
 import { getTextToUnicodeData } from "../../../../sal/textenc/tables";
 import { ImplConvertUtf8ToUnicode } from "../../../../sal/textenc/tcvtutf8";
+import { ImplDBCSToUnicode } from "../../../../sal/textenc/tcvtmb";
 import { OSTRING_TO_OUSTRING_CVTFLAGS } from "../../../../sal/inc/rtl/ustring.h";
 import { RTL_TEXTTOUNICODE_FLAGS_FLUSH } from "../../../../sal/inc/rtl/textcvt.h";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
@@ -1494,17 +1495,29 @@ export class RtfDocumentImpl {
                 [0],
                 [0],
               )
-            : convertCharToUnicode(
-                encoding.data,
-                null,
-                bytes,
-                bytes.length,
-                destination,
-                destination.length,
-                flags,
-                [0],
-                [0],
-              );
+            : encoding.kind === "dbcs"
+              ? ImplDBCSToUnicode(
+                  encoding.data,
+                  null,
+                  bytes,
+                  bytes.length,
+                  destination,
+                  destination.length,
+                  flags,
+                  [0],
+                  [0],
+                )
+              : convertCharToUnicode(
+                  encoding.data,
+                  null,
+                  bytes,
+                  bytes.length,
+                  destination,
+                  destination.length,
+                  flags,
+                  [0],
+                  [0],
+                );
       let text = "";
       for (let offset = 0; offset < written; offset += 8192)
         text += String.fromCharCode(

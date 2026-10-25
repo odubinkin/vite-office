@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvttcn6.ms950.ts",
+    "upstreamPath": "sal/textenc/tcvttcn6.tab",
+    "localSymbols": [
+      "aMS950UniLeadTab",
+      "aMS950DBCSHighTab",
+      "aImplMS950DBCSEUDCTab",
+      "aImplMS950DBCSCvtData"
+    ],
+    "upstreamSymbols": [
+      "aMS950UniLeadTab",
+      "aMS950DBCSHighTab",
+      "aImplMS950DBCSEUDCTab",
+      "aImplMS950DBCSCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned MS-950 lead, reverse-high, EUDC and complete DBCS converter aggregate."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvttcn6.ms950.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvttcn6.tab source owner is split by MS-950 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvttcn6.ms950.ts",
+          "marker": "aMS950UniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL MS-"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvttcn6.tab",
+          "marker": "aMS950UniLeadTab"
+        }
+      ]
+    }
+  }
+}

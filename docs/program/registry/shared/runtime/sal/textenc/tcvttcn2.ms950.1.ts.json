@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvttcn2.ms950.1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvttcn2.ms950.1.ts#aImplUniToDBCSTab_BIG5_03",
+        "vendor/libreoffice-reference/sal/textenc/tcvttcn2.tab#aImplUniToDBCSTab_BIG5_03",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL MS-"
+      ],
+      "justification": "Pinned MS-950 source-owned reverse numeric tables with every value and original pointer target preserved. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplUniToDBCSTab_BIG5_03",
+        "aImplUniToDBCSTab_BIG5_32",
+        "aImplUniToDBCSTab_BIG5_33",
+        "aImplUniToDBCSTab_BIG5_4E",
+        "aImplUniToDBCSTab_BIG5_51",
+        "aImplUniToDBCSTab_BIG5_57",
+        "aImplUniToDBCSTab_BIG5_58",
+        "aImplUniToDBCSTab_BIG5_5B",
+        "aImplUniToDBCSTab_BIG5_5C",
+        "aImplUniToDBCSTab_BIG5_61",
+        "aImplUniToDBCSTab_BIG5_64",
+        "aImplUniToDBCSTab_BIG5_65",
+        "aImplUniToDBCSTab_BIG5_6B",
+        "aImplUniToDBCSTab_BIG5_71",
+        "aImplUniToDBCSTab_BIG5_7A",
+        "aImplUniToDBCSTab_BIG5_7C",
+        "aImplUniToDBCSTab_BIG5_85",
+        "aImplUniToDBCSTab_BIG5_86",
+        "aImplUniToDBCSTab_BIG5_8C",
+        "aImplUniToDBCSTab_BIG5_8E",
+        "aImplUniToDBCSTab_BIG5_92",
+        "aImplUniToDBCSTab_BIG5_94",
+        "aImplUniToDBCSTab_BIG5_96",
+        "aImplUniToDBCSTab_BIG5_9B",
+        "aImplUniToDBCSTab_BIG5_9D"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvttcn2.tab",
+      "upstreamSymbols": [
+        "aImplUniToDBCSTab_BIG5_03",
+        "aImplUniToDBCSTab_BIG5_32",
+        "aImplUniToDBCSTab_BIG5_33",
+        "aImplUniToDBCSTab_BIG5_4E",
+        "aImplUniToDBCSTab_BIG5_51",
+        "aImplUniToDBCSTab_BIG5_57",
+        "aImplUniToDBCSTab_BIG5_58",
+        "aImplUniToDBCSTab_BIG5_5B",
+        "aImplUniToDBCSTab_BIG5_5C",
+        "aImplUniToDBCSTab_BIG5_61",
+        "aImplUniToDBCSTab_BIG5_64",
+        "aImplUniToDBCSTab_BIG5_65",
+        "aImplUniToDBCSTab_BIG5_6B",
+        "aImplUniToDBCSTab_BIG5_71",
+        "aImplUniToDBCSTab_BIG5_7A",
+        "aImplUniToDBCSTab_BIG5_7C",
+        "aImplUniToDBCSTab_BIG5_85",
+        "aImplUniToDBCSTab_BIG5_86",
+        "aImplUniToDBCSTab_BIG5_8C",
+        "aImplUniToDBCSTab_BIG5_8E",
+        "aImplUniToDBCSTab_BIG5_92",
+        "aImplUniToDBCSTab_BIG5_94",
+        "aImplUniToDBCSTab_BIG5_96",
+        "aImplUniToDBCSTab_BIG5_9B",
+        "aImplUniToDBCSTab_BIG5_9D"
+      ]
+    }
+  }
+}

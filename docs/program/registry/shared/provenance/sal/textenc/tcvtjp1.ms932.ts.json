@@ -1,0 +1,133 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp1.ms932.ts",
+    "upstreamPath": "sal/textenc/tcvtjp1.tab",
+    "localSymbols": [
+      "aImplDBCSToUniTab_MS932_81",
+      "aImplDBCSToUniTab_MS932_87",
+      "aImplDBCSToUniTab_MS932_ED",
+      "aImplDBCSToUniTab_MS932_EE",
+      "aImplDBCSToUniTab_MS932_FA",
+      "aImplDBCSToUniTab_MS932_FB",
+      "aImplDBCSToUniTab_MS932_FC",
+      "aImplDBCSToUniTab_SJIS_82",
+      "aImplDBCSToUniTab_SJIS_83",
+      "aImplDBCSToUniTab_SJIS_84",
+      "aImplDBCSToUniTab_SJIS_88",
+      "aImplDBCSToUniTab_SJIS_89",
+      "aImplDBCSToUniTab_SJIS_8A",
+      "aImplDBCSToUniTab_SJIS_8B",
+      "aImplDBCSToUniTab_SJIS_8C",
+      "aImplDBCSToUniTab_SJIS_8D",
+      "aImplDBCSToUniTab_SJIS_8E",
+      "aImplDBCSToUniTab_SJIS_8F",
+      "aImplDBCSToUniTab_SJIS_90",
+      "aImplDBCSToUniTab_SJIS_91",
+      "aImplDBCSToUniTab_SJIS_92",
+      "aImplDBCSToUniTab_SJIS_93",
+      "aImplDBCSToUniTab_SJIS_94",
+      "aImplDBCSToUniTab_SJIS_95",
+      "aImplDBCSToUniTab_SJIS_96",
+      "aImplDBCSToUniTab_SJIS_97",
+      "aImplDBCSToUniTab_SJIS_98",
+      "aImplDBCSToUniTab_SJIS_99",
+      "aImplDBCSToUniTab_SJIS_9A",
+      "aImplDBCSToUniTab_SJIS_9B",
+      "aImplDBCSToUniTab_SJIS_9C",
+      "aImplDBCSToUniTab_SJIS_9D",
+      "aImplDBCSToUniTab_SJIS_9E",
+      "aImplDBCSToUniTab_SJIS_9F",
+      "aImplDBCSToUniTab_SJIS_E0",
+      "aImplDBCSToUniTab_SJIS_E1",
+      "aImplDBCSToUniTab_SJIS_E2",
+      "aImplDBCSToUniTab_SJIS_E3",
+      "aImplDBCSToUniTab_SJIS_E4",
+      "aImplDBCSToUniTab_SJIS_E5",
+      "aImplDBCSToUniTab_SJIS_E6",
+      "aImplDBCSToUniTab_SJIS_E7",
+      "aImplDBCSToUniTab_SJIS_E8",
+      "aImplDBCSToUniTab_SJIS_E9",
+      "aImplDBCSToUniTab_SJIS_EA"
+    ],
+    "upstreamSymbols": [
+      "aImplDBCSToUniTab_MS932_81",
+      "aImplDBCSToUniTab_MS932_87",
+      "aImplDBCSToUniTab_MS932_ED",
+      "aImplDBCSToUniTab_MS932_EE",
+      "aImplDBCSToUniTab_MS932_FA",
+      "aImplDBCSToUniTab_MS932_FB",
+      "aImplDBCSToUniTab_MS932_FC",
+      "aImplDBCSToUniTab_SJIS_82",
+      "aImplDBCSToUniTab_SJIS_83",
+      "aImplDBCSToUniTab_SJIS_84",
+      "aImplDBCSToUniTab_SJIS_88",
+      "aImplDBCSToUniTab_SJIS_89",
+      "aImplDBCSToUniTab_SJIS_8A",
+      "aImplDBCSToUniTab_SJIS_8B",
+      "aImplDBCSToUniTab_SJIS_8C",
+      "aImplDBCSToUniTab_SJIS_8D",
+      "aImplDBCSToUniTab_SJIS_8E",
+      "aImplDBCSToUniTab_SJIS_8F",
+      "aImplDBCSToUniTab_SJIS_90",
+      "aImplDBCSToUniTab_SJIS_91",
+      "aImplDBCSToUniTab_SJIS_92",
+      "aImplDBCSToUniTab_SJIS_93",
+      "aImplDBCSToUniTab_SJIS_94",
+      "aImplDBCSToUniTab_SJIS_95",
+      "aImplDBCSToUniTab_SJIS_96",
+      "aImplDBCSToUniTab_SJIS_97",
+      "aImplDBCSToUniTab_SJIS_98",
+      "aImplDBCSToUniTab_SJIS_99",
+      "aImplDBCSToUniTab_SJIS_9A",
+      "aImplDBCSToUniTab_SJIS_9B",
+      "aImplDBCSToUniTab_SJIS_9C",
+      "aImplDBCSToUniTab_SJIS_9D",
+      "aImplDBCSToUniTab_SJIS_9E",
+      "aImplDBCSToUniTab_SJIS_9F",
+      "aImplDBCSToUniTab_SJIS_E0",
+      "aImplDBCSToUniTab_SJIS_E1",
+      "aImplDBCSToUniTab_SJIS_E2",
+      "aImplDBCSToUniTab_SJIS_E3",
+      "aImplDBCSToUniTab_SJIS_E4",
+      "aImplDBCSToUniTab_SJIS_E5",
+      "aImplDBCSToUniTab_SJIS_E6",
+      "aImplDBCSToUniTab_SJIS_E7",
+      "aImplDBCSToUniTab_SJIS_E8",
+      "aImplDBCSToUniTab_SJIS_E9",
+      "aImplDBCSToUniTab_SJIS_EA"
+    ],
+    "preservedResponsibilities": [
+      "Pinned MS-932 source-owned forward mapping tables, preserving every numeric entry."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp1.ms932.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp1.tab owner is split by MS-932 responsibility and repository file-size limits while keeping all generated numeric entries and source pointer identities unchanged."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp1.ms932.ts",
+          "marker": "aImplDBCSToUniTab_MS932_81"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "maps MS-932 single bytes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp1.tab",
+          "marker": "aImplDBCSToUniTab_MS932_81"
+        }
+      ]
+    }
+  }
+}

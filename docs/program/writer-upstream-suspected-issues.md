@@ -1214,3 +1214,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::enter_span_callback`, creates `SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_CROSSEDOUT)` for `MD_SPAN_U`. Pinned `sw/inc/hintids.hxx` declares `RES_CHRATR_UNDERLINE` separately from `RES_CHRATR_CROSSEDOUT`.
 - Observation: if md4c emits an underline span, the item's type and Which ID appear inconsistent when `SetAttrs` passes it to `InsertPoolItem`. The configured `MD_DIALECT_GITHUB | MD_FLAG_WIKILINKS` may not emit this span; reachability and resulting desktop behavior remain unverified.
 - Preservation: retain the pinned item-ID choice if this callback is added to the current Markdown parser. Do not silently substitute `RES_CHRATR_UNDERLINE` without source differential evidence.
+
+### WRITER111 — Third DBCS EUDC trail range uses only the second range length
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplDBCSToUnicode`, computes the offset for a third EUDC trail range after reassigning `nTrailCount` to the second range length, rather than adding it to the first range length.
+- Observation: a three-range EUDC descriptor with unequal first and second range sizes would overlap or misplace Unicode points in its third range. The pinned `.tab` descriptors reviewed for this Writer RTF path declare at most two trail ranges, so this is a source-level conditional concern, not an observed failure in MS-932/936/949/950.
+- Preservation: the shared DBCS converter retains this calculation exactly. No corrective sum is applied without an upstream change.

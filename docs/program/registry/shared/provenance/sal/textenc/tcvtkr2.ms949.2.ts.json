@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtkr2.ms949.2.ts",
+    "upstreamPath": "sal/textenc/tcvtkr2.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_KSC5601_21",
+      "aImplUniToDBCSTab_KSC5601_22",
+      "aImplUniToDBCSTab_KSC5601_23",
+      "aImplUniToDBCSTab_KSC5601_24",
+      "aImplUniToDBCSTab_KSC5601_26",
+      "aImplUniToDBCSTab_KSC5601_5F",
+      "aImplUniToDBCSTab_KSC5601_62",
+      "aImplUniToDBCSTab_KSC5601_6C",
+      "aImplUniToDBCSTab_KSC5601_74",
+      "aImplUniToDBCSTab_KSC5601_75",
+      "aImplUniToDBCSTab_KSC5601_77",
+      "aImplUniToDBCSTab_KSC5601_7C",
+      "aImplUniToDBCSTab_KSC5601_80",
+      "aImplUniToDBCSTab_KSC5601_82",
+      "aImplUniToDBCSTab_KSC5601_83",
+      "aImplUniToDBCSTab_KSC5601_85",
+      "aImplUniToDBCSTab_KSC5601_8A",
+      "aImplUniToDBCSTab_KSC5601_8F",
+      "aImplUniToDBCSTab_KSC5601_93",
+      "aImplUniToDBCSTab_KSC5601_96",
+      "aImplUniToDBCSTab_KSC5601_AC",
+      "aImplUniToDBCSTab_KSC5601_B1",
+      "aImplUniToDBCSTab_KSC5601_B6",
+      "aImplUniToDBCSTab_KSC5601_BB",
+      "aImplUniToDBCSTab_KSC5601_C0",
+      "aImplUniToDBCSTab_KSC5601_C5",
+      "aImplUniToDBCSTab_KSC5601_CA",
+      "aImplUniToDBCSTab_KSC5601_CF",
+      "aImplUniToDBCSTab_KSC5601_D4"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_KSC5601_21",
+      "aImplUniToDBCSTab_KSC5601_22",
+      "aImplUniToDBCSTab_KSC5601_23",
+      "aImplUniToDBCSTab_KSC5601_24",
+      "aImplUniToDBCSTab_KSC5601_26",
+      "aImplUniToDBCSTab_KSC5601_5F",
+      "aImplUniToDBCSTab_KSC5601_62",
+      "aImplUniToDBCSTab_KSC5601_6C",
+      "aImplUniToDBCSTab_KSC5601_74",
+      "aImplUniToDBCSTab_KSC5601_75",
+      "aImplUniToDBCSTab_KSC5601_77",
+      "aImplUniToDBCSTab_KSC5601_7C",
+      "aImplUniToDBCSTab_KSC5601_80",
+      "aImplUniToDBCSTab_KSC5601_82",
+      "aImplUniToDBCSTab_KSC5601_83",
+      "aImplUniToDBCSTab_KSC5601_85",
+      "aImplUniToDBCSTab_KSC5601_8A",
+      "aImplUniToDBCSTab_KSC5601_8F",
+      "aImplUniToDBCSTab_KSC5601_93",
+      "aImplUniToDBCSTab_KSC5601_96",
+      "aImplUniToDBCSTab_KSC5601_AC",
+      "aImplUniToDBCSTab_KSC5601_B1",
+      "aImplUniToDBCSTab_KSC5601_B6",
+      "aImplUniToDBCSTab_KSC5601_BB",
+      "aImplUniToDBCSTab_KSC5601_C0",
+      "aImplUniToDBCSTab_KSC5601_C5",
+      "aImplUniToDBCSTab_KSC5601_CA",
+      "aImplUniToDBCSTab_KSC5601_CF",
+      "aImplUniToDBCSTab_KSC5601_D4"
+    ],
+    "preservedResponsibilities": [
+      "Pinned MS-949 source-owned reverse numeric tables with every value and original pointer target preserved."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtkr2.ms949.2.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtkr2.tab source owner is split by MS-949 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtkr2.ms949.2.ts",
+          "marker": "aImplUniToDBCSTab_KSC5601_21"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL MS-"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtkr2.tab",
+          "marker": "aImplUniToDBCSTab_KSC5601_21"
+        }
+      ]
+    }
+  }
+}

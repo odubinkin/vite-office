@@ -250,6 +250,33 @@ it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () =>
   }
 });
 
+it("decodes MS-932 vendor and EUDC bytes through the pinned SAL DBCS tables", () => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg932\'81\'40\'81\'91\'81\'ad\'f0\'40}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("\u3000\uFFE0\uFFFD\uE000");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it.each([
+  [936, "81", "40", "f8", "a1", "\u4E02\uE001"],
+  [949, "81", "41", "c9", "a1", "\uAC02\uE000"],
+  [950, "a1", "40", "fa", "40", "\u3000\uE000"],
+])(
+  "decodes pinned SAL MS-%i normal and EUDC bytes",
+  (codepage, lead, trail, eudcLead, eudcTrail, expected) => {
+    const document = read(
+      String.raw`{\rtf1\ansi\ansicpg${codepage}\'${lead}\'${trail}\'${eudcLead}\'${eudcTrail}}`,
+    );
+    try {
+      expect(document.paragraphs[0]?.GetText()).toBe(expected);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
 it("imports hex CR/LF and a control word after Unicode fallback as separate paragraphs", () => {
   const document = read(String.raw`{\rtf1\ansi A\'0d\'0aB\u233\par?C}`);
   try {
