@@ -1,4 +1,7 @@
 /** @fileoverview Original Any.h/Any.hxx ownership and value metadata at one actual public Any owner; later typed comparison/get/string-expression/ostream families remain explicit source responsibilities. */
+import { RuntimeException } from "./RuntimeException";
+import { cppu_Any_extraction_failure_msg } from "../../../../../source/cppu/cppu_opt";
+import { SAL_NO_ACQUIRE } from "../../../../../../sal/inc/types";
 import type { uno_Any } from "../../../../uno/any2";
 import {
   uno_any_construct,
@@ -255,6 +258,27 @@ export class Any implements uno_Any {
           cpp_release,
         );
     }
+  }
+  /** Original Any::get<T> consumed signed32 specialization uses default initialization, real extraction and the original failure diagnostic. @param argument - Compiler-erased declared type. @returns Extracted native signed32 value. */
+  get(argument: "sal_Int32"): number {
+    const value: [number] = [0];
+    if (!this.extract(value, argument)) {
+      const message = new OUString(
+          cppu_Any_extraction_failure_msg(
+            this,
+            getTypeFavourUnsigned(argument).getTypeLibType() as R,
+          ),
+          SAL_NO_ACQUIRE,
+        ),
+        context = new Reference();
+      try {
+        throw new RuntimeException(message, context);
+      } finally {
+        message.dispose();
+        context.dispose();
+      }
+    }
+    return value[0];
   }
   /** Original internal Any::query<T> definition in Reference.hxx constructs the actual queried Reference. @param argument - Declared interface type. @returns Original owned reference. */
   query(argument: UnoTypeArgument = "XInterface"): Reference {

@@ -14,6 +14,18 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
           "marker": "DomainMapper_Impl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+          "marker": "GetTextDocument"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+          "marker": "GetPageStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+          "marker": "GetUnusedPageStyleName"
         }
       ],
       "upstream": [
@@ -34,15 +46,21 @@
     "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
     "localSymbols": [
       "DomainMapper_Impl",
-      "ContextType"
+      "ContextType",
+      "GetTextDocument",
+      "GetPageStyles",
+      "GetUnusedPageStyleName"
     ],
     "upstreamSymbols": [
       "DomainMapper_Impl::GetPropertyFromStyleSheet",
       "DomainMapper_Impl::GetCurrentParaStyleName",
-      "DomainMapper_Impl::RemoveLastParagraph"
+      "DomainMapper_Impl::RemoveLastParagraph",
+      "DomainMapper_Impl::GetPageStyles",
+      "DomainMapper_Impl::GetUnusedPageStyleName"
     ],
     "preservedResponsibilities": [
-      "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending."
+      "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending.",
+      "V4DQJW section attachment prerequisite adds real SwXPageStyle identity, native typed page factory/family entrypoints, lazy DomainMapper page-family cache and original scan-once Converted suffix allocation using o3tl signed32 prefix conversion. Section contexts now own SectionPropertyMap with original consumed Letter dimensions, one-inch margins, typed ALL layout and disabled grid defaults. GetPageStyle retains cached actual wrappers and original UNO-only catch/name-reservation behavior. ApplyProperties_ retains ordinary-then-character-bag-then-paragraph-bag order, section-only protection exclusion, real UNO failure catch and partial-write semantics. Existing page property algorithms remain on the inherited SwXStyle implementation over actual SwPageDesc; no parallel catalog, property DTO or fabricated model is introduced. Actual Any get signed32 specialization ports default initialization, extraction and original cppu failure diagnostic. This is source-backed evidence, not compiled native differential. Complete section field owners, SetStart/pre-start cursor navigation, CloseSectionGroup/header/footer/columns, section parser mapping, document/style loading, DOCX export and production file workflows remain pending; all previous semantic statuses and intentional file UI/autosave/recovery deviations remain unchanged."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

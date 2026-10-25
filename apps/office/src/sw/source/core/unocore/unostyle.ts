@@ -387,6 +387,13 @@ export class SwXStyle {
     }
   }
 }
+/** Native page-style identity over the existing descriptor/property implementation. */
+export class SwXPageStyle extends SwXStyle {
+  /** Binds the actual page descriptor or an unattached native descriptor. @param doc - Document. @param owner - Actual page descriptor. @returns Page style. */
+  constructor(doc: SwDoc, owner?: SwPageDesc) {
+    super(doc, "PageStyles", owner);
+  }
+}
 const pageFields: Record<
   string,
   "width" | "height" | "leftMargin" | "rightMargin" | "topMargin" | "bottomMargin"
@@ -476,7 +483,19 @@ export class SwXStyleFamily {
             ? findParagraphStyle(this.doc, n)
             : this.doc.FindPageDesc(n);
     if (!owner) noSuchElement();
-    return new SwXStyle(this.doc, this.family, owner);
+    return this.family === "PageStyles"
+      ? new SwXPageStyle(this.doc, owner as SwPageDesc)
+      : new SwXStyle(this.doc, this.family, owner);
+  }
+  /** Original typed page lookup uses the same native style lookup and requires a page family. @param name - Programmatic name. @returns Actual page-style wrapper. */
+  getPageStyleByName(name: OUStringConstReference): SwXPageStyle {
+    const style = this.getByName(name);
+    if (!(style instanceof SwXPageStyle)) throw new Error("Expected native page style family");
+    return style;
+  }
+  /** Original typed insertion shares the same attachment path as UNO insertByName. @param name - Programmatic name. @param style - Actual descriptor. @returns Nothing. */
+  insertStyleByName(name: OUStringConstReference, style: SwXStyle): void {
+    this.insertByName(name, style);
   }
   /** Implements the represented native insertByName operation. @param name - Native property or element name. @param style - Original style input. @returns The represented native operation result. */
   insertByName(name: OUStringConstReference, style: SwXStyle): void {
@@ -490,6 +509,14 @@ export class SwXStyleFamily {
 export class SwXStyleFamilies {
   /** Binds the represented native owner and its declared inputs. @param doc - Canonical document owner. @returns Nothing. */
   constructor(private readonly doc: SwDoc) {}
+  /** Original typed page-family supplier uses the actual document family owner. @returns Page family. */
+  GetPageStyles(): SwXStyleFamily {
+    return new SwXStyleFamily(this.doc, "PageStyles");
+  }
+  /** Original page-style factory creates the native descriptor identity. @param doc - Actual document. @returns Unattached page style. */
+  static CreateStylePage(doc: SwDoc): SwXPageStyle {
+    return new SwXPageStyle(doc);
+  }
   /** Implements the represented native getElementNames operation. @returns The represented native operation result. */
   getElementNames(): string[] {
     return ["ParagraphStyles", "PageStyles", "NumberingStyles"];

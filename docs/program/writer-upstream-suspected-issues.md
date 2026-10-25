@@ -1190,3 +1190,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/inc/hintids.hxx`, `isDrawingLayerAttribute`; `include/svx/xdef.hxx`, `XATTR_END`.
 - Observation: XATTR_END aliases the inclusive XATTR_TEXT_LAST (XATTR_FORMTXTSHDWTRANSP,1047), while the predicate requires WhichId strictly less than XATTR_END. The final drawing attribute is therefore excluded from this predicate, including its default-format notification branch. Desktop impact remains unverified.
 - Preservation: retain the strict upper comparison and the original constants in their SVX owner. Boundary tests explicitly reject1047; no inclusive-end correction is introduced.
+
+### WRITER107 — section style creation failure retains its name and prevents creation on retry
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `SectionPropertyMap::GetPageStyle`.
+- Observation: the method stores an unused page-style name before calling the document factory. A UNO exception from that factory is caught while the name remains nonempty. A later call enters lookup for the retained name instead of trying creation again; when no style was inserted, lookup fails again. Reachability in supported desktop imports and user-visible impact remain unverified.
+- Preservation: retain name assignment order, the UNO-only catch and lookup-on-retry path. Tests inject a real UNO failure at the actual model factory and confirm the missing style is not created on retry. Host implementation errors remain visible.

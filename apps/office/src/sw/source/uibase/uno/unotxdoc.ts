@@ -8,7 +8,7 @@ import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 import { SwXBookmark } from "../../core/unocore/unobkm";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwXText } from "../../core/unocore/unotext";
-import { SwXStyleFamilies, SwXStyle } from "../../core/unocore/unostyle";
+import { SwXStyleFamilies, SwXStyle, SwXPageStyle } from "../../core/unocore/unostyle";
 import { SwXNumberingRules, SwXLineNumberingProperties } from "../../core/unocore/unosett";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -74,6 +74,10 @@ export class SwXTextDocument {
   getStyleFamilies(): SwXStyleFamilies {
     return new SwXStyleFamilies(this.GetDoc());
   }
+  /** Original typed page-style factory validates the actual model lifetime. @returns Unattached page-style descriptor. */
+  createPageStyle(): SwXPageStyle {
+    return SwXStyleFamilies.CreateStylePage(this.GetDoc());
+  }
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(name: OUStringConstReference): SwXStyle | SwXNumberingRules | SwXBookmark {
     const n = text(name),
@@ -86,7 +90,7 @@ export class SwXTextDocument {
       case "com.sun.star.style.NumberingStyle":
         return new SwXStyle(doc, "NumberingStyles");
       case "com.sun.star.style.PageStyle":
-        return new SwXStyle(doc, "PageStyles");
+        return this.createPageStyle();
       case "com.sun.star.text.NumberingRules":
         return new SwXNumberingRules(doc);
       default:

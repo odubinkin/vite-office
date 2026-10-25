@@ -1,9 +1,11 @@
 /** @fileoverview Consumed DomainMapper_Impl property-context and body text-append ownership; all text mutations use existing native SwXText APIs. */
+import { toInt32 } from "../../../../o3tl/inc/string_view";
+import type { SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import type { SwXText } from "../../core/unocore/unotext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
-import { PropertyMap } from "./PropertyMap";
+import { PropertyMap, SectionPropertyMap } from "./PropertyMap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -27,6 +29,9 @@ interface Context {
 
 /** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
 export class DomainMapper_Impl {
+  private m_bIsFirstSection = true;
+  private m_xPageStyles: SwXStyleFamily | undefined;
+  private m_xNextUnusedPageStyleNo: number | undefined;
   private readonly contexts: Context[] = [];
   private readonly body: SwXText;
   private appendedParagraph = false;
@@ -38,9 +43,41 @@ export class DomainMapper_Impl {
   constructor(readonly model: SwXTextDocument) {
     this.body = model.getText();
   }
+  /** Original borrowed document supplier. @returns Actual model. */
+  GetTextDocument(): SwXTextDocument {
+    return this.model;
+  }
+  /** Original lazy page-style-family cache borrows actual document styles. @returns Actual family. */
+  GetPageStyles(): SwXStyleFamily {
+    return (this.m_xPageStyles ??= this.model.getStyleFamilies().GetPageStyles());
+  }
+  /** Original scan-once Converted suffix allocator retains native signed32 prefix parsing. @returns Owned programmatic name. */
+  GetUnusedPageStyleName(): OUString {
+    if (this.m_xNextUnusedPageStyleNo === undefined) {
+      let maximum = 0;
+      for (const name of this.GetPageStyles().getElementNames())
+        if (name.startsWith("Converted")) {
+          const suffix = name.slice(9),
+            units = new Uint16Array(suffix.length);
+          for (let index = 0; index < suffix.length; ++index)
+            units[index] = suffix.charCodeAt(index);
+          const value = toInt32(units);
+          if (value > maximum) maximum = value;
+        }
+      this.m_xNextUnusedPageStyleNo = maximum + 1;
+    }
+    const name = "Converted" + this.m_xNextUnusedPageStyleNo++;
+    const units = new Uint16Array(name.length);
+    for (let index = 0; index < name.length; ++index) units[index] = name.charCodeAt(index);
+    return new OUString(units, units.length);
+  }
   /** Original context creation. @param type - Context type. @returns New map. */
   PushProperties(type: ContextType): PropertyMap {
-    const properties = new PropertyMap();
+    const properties =
+      type === ContextType.CONTEXT_SECTION
+        ? new SectionPropertyMap(this.m_bIsFirstSection)
+        : new PropertyMap();
+    if (type === ContextType.CONTEXT_SECTION) this.m_bIsFirstSection = false;
     this.contexts.push({ type, properties, owned: true });
     return properties;
   }

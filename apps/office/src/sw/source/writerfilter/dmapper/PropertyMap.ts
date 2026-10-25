@@ -1,4 +1,16 @@
 /** @fileoverview Ports consumed native PropertyMap/PropValue ordering, merge/default/cache and four interop grab-bag contracts; actual Any/PropertyValue/Sequence owners retain native value semantics. */
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { Paper } from "../../../../i18nutil/inc/paper";
+import { PaperInfo } from "../../../../i18nutil/source/utility/paper";
+import { TextGridMode } from "../../../../offapi/com/sun/star/text/TextGridMode";
+import {
+  PageStyleLayout,
+  cppu_detail_getUnoType_PageStyleLayout,
+} from "../../../../offapi/com/sun/star/style/PageStyleLayout";
+import type { SwXPageStyle } from "../../core/unocore/unostyle";
+import type { DomainMapper_Impl } from "./DomainMapper_Impl";
+import { text } from "../../core/unocore/unocrsrhelper";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
@@ -6,7 +18,7 @@ import {
   cppu_detail_getUnoType_PropertyValue,
 } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { rtl_uString } from "../../../../sal/inc/rtl/ustring.h";
 import { PropertyIds as P, getPropertyName } from "./PropertyIds";
 
@@ -282,5 +294,140 @@ export class PropertyMap {
     this.Invalidate();
     for (const value of this.map.values()) value.dispose();
     this.map.clear();
+  }
+}
+
+/** Native section property owner. The current admission supplies page defaults, actual style attachment and property application; section finalization is ported on this same owner. */
+export class SectionPropertyMap extends PropertyMap {
+  private readonly m_sPageStyleName = new OUString();
+  private m_aPageStyle: SwXPageStyle | null = null;
+  /** Original consumed constructor defaults use Letter independently of the browser document locale. @param m_bIsFirstSection - Original first-section flag. @returns Section map. */
+  constructor(private readonly m_bIsFirstSection: boolean) {
+    super();
+    const letter = new PaperInfo(Paper.PAPER_LETTER),
+      margin = Number(convert(1n, Length.in, Length.mm100));
+    for (const [id, value] of [
+      [P.PROP_HEIGHT, letter.getHeight()],
+      [P.PROP_WIDTH, letter.getWidth()],
+      [P.PROP_LEFT_MARGIN, margin],
+      [P.PROP_RIGHT_MARGIN, margin],
+      [P.PROP_TOP_MARGIN, margin],
+      [P.PROP_BOTTOM_MARGIN, margin],
+    ] as const) {
+      const any = new Any([value], "sal_Int32");
+      try {
+        this.Insert(id, any);
+      } finally {
+        any.dispose();
+      }
+    }
+    const layout = new Any([PageStyleLayout.ALL], cppu_detail_getUnoType_PageStyleLayout),
+      mode = new Any([TextGridMode.NONE], "sal_Int16"),
+      no = new Any(false);
+    try {
+      this.Insert(P.PROP_PAGE_STYLE_LAYOUT, layout);
+      this.Insert(P.PROP_GRID_DISPLAY, no);
+      this.Insert(P.PROP_GRID_PRINT, no);
+      this.Insert(P.PROP_GRID_MODE, mode);
+    } finally {
+      layout.dispose();
+      mode.dispose();
+      no.dispose();
+    }
+    if (m_bIsFirstSection) this.m_sPageStyleName.assign(getPropertyName(P.PROP_STANDARD));
+  }
+  /** Original first-section predicate. @returns Flag. */
+  IsFirstSection(): boolean {
+    return this.m_bIsFirstSection;
+  }
+  /** Original borrowed page-style name; empty means not yet imported. @returns Name. */
+  GetPageStyleName(): OUStringConstReference {
+    return this.m_sPageStyleName;
+  }
+  /** Original required width property extraction. @returns Width in mm100. */
+  GetPageWidth(): number {
+    const property = this.getProperty(P.PROP_WIDTH);
+    if (!property) throw new Error("Section page width is absent.");
+    try {
+      return property[1].get("sal_Int32");
+    } finally {
+      property[1].dispose();
+    }
+  }
+  /** Original typed page style lookup/creation caches its actual native wrapper; UNO failures return null. @param mapper - Original mapper state. @returns Native page-style wrapper or null. */
+  GetPageStyle(mapper: DomainMapper_Impl): SwXPageStyle | null {
+    const styles = mapper.GetPageStyles();
+    try {
+      if (this.m_sPageStyleName.getLength() === 0) {
+        const name = mapper.GetUnusedPageStyleName();
+        try {
+          this.m_sPageStyleName.assign(name);
+        } finally {
+          name.dispose();
+        }
+        this.m_aPageStyle = mapper.GetTextDocument().createPageStyle();
+        styles.insertStyleByName(this.m_sPageStyleName, this.m_aPageStyle);
+      } else if (!this.m_aPageStyle)
+        this.m_aPageStyle = styles.getPageStyleByName(this.m_sPageStyleName);
+      return this.m_aPageStyle;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+      return null;
+    }
+  }
+  /** Original property application unwraps character and paragraph bags after ordinary properties, omitting section-only protection. Protected access is the compiler-erased native helper boundary. @param style - Actual page style or null. @returns Nothing. */
+  protected ApplyProperties_(style: SwXPageStyle | null): void {
+    if (!style) return;
+    const properties = this.GetPropertyValues(),
+      names: OUString[] = [],
+      values: Any[] = [],
+      extracted: PropertyValue[] = [];
+    try {
+      for (const property of properties) {
+        const name = text(property.Name);
+        if (
+          name !== "CharInteropGrabBag" &&
+          name !== "ParaInteropGrabBag" &&
+          name !== "IsProtected"
+        ) {
+          names.push(property.Name);
+          values.push(property.Value);
+        }
+      }
+      for (const name of ["CharInteropGrabBag", "ParaInteropGrabBag"]) {
+        const property = properties.find(
+          /** Finds the first original named bag. @param entry - Generated property. @returns Match. */ (
+            entry,
+          ) => text(entry.Name) === name,
+        );
+        if (!property) continue;
+        const sequence = new PropertyValues();
+        try {
+          property.Value.extract(sequence.getAddress(), propertySequenceType);
+          for (let index = 0; index < sequence.getLength(); ++index) {
+            const value = propertyAt(sequence, index);
+            extracted.push(value);
+            names.push(value.Name);
+            values.push(value.Value);
+          }
+        } finally {
+          sequence.dispose();
+        }
+      }
+      try {
+        style.setPropertyValues(names, values);
+      } catch (error) {
+        if (!(error instanceof Exception)) throw error;
+        error.dispose();
+      }
+    } finally {
+      release(extracted);
+    }
+  }
+  /** Releases native property/name owners at the actual filter lifetime boundary. @returns Nothing. */
+  override dispose(): void {
+    super.dispose();
+    this.m_sPageStyleName.dispose();
   }
 }
