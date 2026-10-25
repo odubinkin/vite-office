@@ -57,7 +57,8 @@
       "factoryAttributeAction"
     ],
     "preservedResponsibilities": [
-      "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER097. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised."
+      "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER097. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised.",
+      "Consumed native start/end/character actions now dispatch in original order with original resource-ID guards. Generation rejects unconsumed action names and conditional handlers before they reach runtime."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

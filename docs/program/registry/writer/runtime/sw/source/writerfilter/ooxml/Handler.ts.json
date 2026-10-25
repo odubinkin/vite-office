@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts#OOXMLBreakHandler",
         "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/Handler.cxx#OOXMLBreakHandler::OOXMLBreakHandler"
       ],
-      "justification": "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified.",
+      "justification": "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified. Compile-time Pick narrows the consumed props/text Stream callbacks without introducing another runtime transport.",
       "knownViolations": [],
       "localSymbols": [
         "OOXMLBreakHandler",

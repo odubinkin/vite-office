@@ -1,4 +1,4 @@
-/** @fileoverview Consumed native wml factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */
+/** @fileoverview Consumed native factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */
 
 /** Native namespaces table. */
 // prettier-ignore

@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts",
+          "marker": "streamNamespaces"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+          "marker": "retains every native stream namespace registration identity"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl.py",
+          "marker": "getFastParser"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl.py",
+          "marker": "parseNamespaces"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/factoryimpl.py",
+    "localSymbols": [
+      "streamNamespaces"
+    ],
+    "upstreamSymbols": [
+      "getFastParser"
+    ],
+    "preservedResponsibilities": [
+      "All82 native stream URI registrations generated from the unchanged namespaces.py output with original last-duplicate URI collapse and sorted URI order in factoryimpl.py::getFastParser. Native high token bits are retained exactly. Synchronous host parser operation binds original DisableThreadedParser behavior."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts",
+      "rationale": "Native factoryimpl.py emits OOXMLFactory generated implementation and per-stream parser namespace registration code. The constant registration records remain at the same generated-resource boundary in TypeScript, independently of the wml namespace schema tables.",
+      "stackNecessity": "generated-resource-boundary"
+    }
+  }
+}

@@ -17,7 +17,7 @@ function properties(...entries: [number, number][]): Set {
   return result;
 }
 /** Captures actual resource delivery without changing or mocking parser decisions. */
-class Receiver implements Stream {
+class Receiver implements Pick<Stream, "props" | "text"> {
   readonly refs: Reference<Properties>[] = [];
   readonly events: unknown[] = [];
   /** Records delivered property identities and values. @param ref - Native resource. @returns Nothing. */
@@ -95,6 +95,7 @@ it("retains native initial flags, mutable alternate states, context handles and 
     /** Original getter target. @returns ID. */ getXNoteId() {
       return id;
     },
+    /** Records the document progress callback outside this state-only test. @returns Nothing. */ incrementProgress() {},
     /** Original lexical target. @returns Target. */ getTarget() {
       return "word/footnotes.xml";
     },

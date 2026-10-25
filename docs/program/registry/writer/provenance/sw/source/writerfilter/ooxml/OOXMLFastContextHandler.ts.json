@@ -1,0 +1,70 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native XML UTF16 byte/string carriers and SvRef references bind host immutable text, numeric IDs and references; actual existing UNO Any/OUString and RTL/SAX/unit owners retain typed value behavior."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts",
+          "marker": "OOXMLFastContextHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandler::startFastElement"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandler::prepareMceContext"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandler::createUnknownChildContext"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandler::text"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandlerProperties::lcl_endFastElement"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+          "marker": "OOXMLFastContextHandlerValue::lcl_endFastElement"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
+    "localSymbols": [
+      "OOXMLFastContextHandler",
+      "OOXMLFastContextHandlerStream",
+      "OOXMLFastContextHandlerProperties",
+      "OOXMLFastContextHandlerValue",
+      "ResourceEnum_t"
+    ],
+    "upstreamSymbols": [
+      "OOXMLFastContextHandler::startFastElement",
+      "OOXMLFastContextHandler::prepareMceContext",
+      "OOXMLFastContextHandler::createUnknownChildContext",
+      "OOXMLFastContextHandler::text",
+      "OOXMLFastContextHandlerProperties::lcl_endFastElement",
+      "OOXMLFastContextHandlerValue::lcl_endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Native shared parser state, base copy/child constructor distinction, source-ordered actions, grouping/CR/progress, exact inherited xml:space, MCE alternate state/Requires spellings, native property/value handoff and absent-value defaults. Host strings carry immutable UTF16 until actual OOXMLValue/UNO handoff. The native nonvirtual section close clears section state; its repeated negative guard is redundant on defined forwarding paths and omitted without coverage exclusions. Unconsumed math/drawing/table/note/service owners are not implemented."
+    ],
+    "omittedResponsibilities": [
+      "Complete DOCX model loading/export, missing native context owners and existing UI integration remain pending.",
+      "Full UNO/C++ ABI, component/service and native thread/lifetime contracts are not claimed."
+    ]
+  }
+}

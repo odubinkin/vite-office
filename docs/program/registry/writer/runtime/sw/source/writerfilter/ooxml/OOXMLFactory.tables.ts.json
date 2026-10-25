@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts#streamNamespaces",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/factoryimpl.py#getFastParser"
+      ],
+      "justification": "All82 native stream URI registrations generated from the unchanged namespaces.py output with original last-duplicate URI collapse and sorted URI order in factoryimpl.py::getFastParser. Native high token bits are retained exactly. Synchronous host parser operation binds original DisableThreadedParser behavior. Full native parser/UNO service parity and DOCX application acceptance remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "streamNamespaces"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/factoryimpl.py",
+      "upstreamSymbols": [
+        "getFastParser"
+      ]
+    }
+  }
+}

@@ -30,4 +30,6 @@ export interface OOXMLDocument {
   setXNoteId(id: number): void;
   getXNoteId(): number;
   getTarget(): string;
+  /** Native progress callback consumed by paragraph-end context actions. */
+  incrementProgress(): void;
 }

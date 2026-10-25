@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native XML UTF16 byte/string carriers and SvRef references bind host immutable text, numeric IDs and references; actual existing UNO Any/OUString and RTL/SAX/unit owners retain typed value behavior."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.ts",
+          "marker": "OOXMLFastDocumentHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+          "marker": "OOXMLFastDocumentHandler::getContextHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+          "marker": "OOXMLFastDocumentHandler::createFastChildContext"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+          "marker": "OOXMLFastDocumentHandler::createUnknownChildContext"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+          "marker": "OOXMLFastDocumentHandler::setIsSubstream"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+    "localSymbols": [
+      "OOXMLFastDocumentHandler"
+    ],
+    "upstreamSymbols": [
+      "OOXMLFastDocumentHandler::getContextHandler",
+      "OOXMLFastDocumentHandler::createFastChildContext",
+      "OOXMLFastDocumentHandler::createUnknownChildContext",
+      "OOXMLFastDocumentHandler::setIsSubstream"
+    ],
+    "preservedResponsibilities": [
+      "Native lazy root context, original note/forward initialization, root/unknown context distinction and substream section-state initialization. Diagnostic-only SAX callbacks are inert. UNO service registration, locator and processing-instruction hooks are not advertised by this consumed interface."
+    ],
+    "omittedResponsibilities": [
+      "Complete DOCX model loading/export, missing native context owners and existing UI integration remain pending.",
+      "Full UNO/C++ ABI, component/service and native thread/lifetime contracts are not claimed."
+    ]
+  }
+}

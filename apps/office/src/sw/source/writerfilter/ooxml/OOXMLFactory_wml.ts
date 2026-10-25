@@ -7,6 +7,7 @@ import { XML_TOKEN_INVALID } from "../../../../oox/source/token/tokenmap";
 import { namespaceTokens } from "../../../../oox/source/token/namespacemap";
 import type { FactoryAttributeHandler } from "./OOXMLFactory";
 import type { OOXMLValue } from "./OOXMLPropertySet";
+import type { OOXMLFastContextHandler } from "./OOXMLFastContextHandler";
 
 /** Binds generated C++ NMSP/XML constant expressions to their original numeric IDs. @param qname - Canonical namespace alias and exact local lexeme. @returns Native token, or DONTKNOW for invalid expressions. */
 export function nativeToken(qname: string): number {
@@ -107,6 +108,33 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
         row,
       ) => row[0] === define && row[1] === phase,
     );
+  }
+  /** Native generated action guards compare resource IDs and preserve source order. @param handler - Context. @param phase - Generated phase. @param text - Character text. @returns Nothing. */
+  dispatchActions(
+    handler: OOXMLFastContextHandler,
+    phase: "start" | "end" | "characters",
+    text = "",
+  ): void {
+    for (const action of this.getActions(handler.getDefine(), phase)) {
+      if (action[3] !== 0 && handler.getId() !== action[3]) continue;
+      switch (action[2]) {
+        case "text":
+          handler.text(text);
+          break;
+        case "sendPropertiesWithId":
+          handler.sendPropertiesWithId(action[4]);
+          break;
+        default:
+          // Generation rejects new action names/conditions until their native
+          // owners are implemented; attribute setValue belongs to another phase.
+          handler[
+            action[2] as Exclude<
+              (typeof tables.actions)[number][2],
+              "setValue" | "sendPropertiesWithId" | "text"
+            >
+          ]();
+      }
+    }
   }
   /** Original generated attributeAction cases perform statically selected setValue calls. @param handler - Native value context. @param token - Original fast token. @param value - Typed value. @returns Nothing. */
   attributeAction(handler: FactoryAttributeHandler, token: number, value: OOXMLValue): void {

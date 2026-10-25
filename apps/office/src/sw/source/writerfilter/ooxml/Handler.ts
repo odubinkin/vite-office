@@ -15,7 +15,7 @@ export class OOXMLBreakHandler implements Properties {
   /** Borrows context and stream for the native lexical handler lifetime. @param mpFastContext - Context, null for postponed breaks. @param mrStream - Stream. @returns Handler. */
   constructor(
     private readonly mpFastContext: BreakContext | null,
-    private readonly mrStream: Stream,
+    private readonly mrStream: Pick<Stream, "props" | "text">,
   ) {}
   /** Original type selection ignores clear and other attributes. @param name - Resource ID. @param value - Native value. @returns Nothing. */
   attribute(name: Id, value: Value): void {

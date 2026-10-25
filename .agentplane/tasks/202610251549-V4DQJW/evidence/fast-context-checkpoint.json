@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T18:59:40.658394+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "runtimeModules": 10,
+  "coverage": {
+    "lines": {
+      "total": 747,
+      "covered": 747,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 821,
+      "covered": 821,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 191,
+      "covered": 191,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 454,
+      "covered": 454,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "coverageArgv": [
+    "npm",
+    "run",
+    "test:coverage",
+    "--",
+    "src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts",
+    "src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+    "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+    "src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts",
+    "src/sax/source/fastparser/fastparser.test.ts",
+    "src/sax/source/fastparser/FastSaxParser.test.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFast*.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory*.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLParserState.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/Handler.ts",
+    "--coverage.include=src/sax/source/fastparser/fastparser.ts",
+    "--coverage.reportsDirectory=coverage/docx-fast-context"
+  ],
+  "selectedTestFiles": 6,
+  "selectedTestsPassed": 60,
+  "runtimeSha256": {
+    "apps/office/src/sax/source/fastparser/fastparser.ts": "8d27eed2e164b242682030f348c2aa7ee408b8f85c4c19d034b6ec18b54bce3b",
+    "apps/office/src/sw/source/writerfilter/ooxml/Handler.ts": "adf3884f99c27303a9c072403fa7e916567fcfc743c3956228ae300d15c8f79a",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.tables.ts": "56374178a17d217fbed4200339ce1fe070ccb59ada5fa887c8bf0e9c632c1f24",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts": "c121f719ba6ddfd1d47f0aaa6c32361e729299c1b755b0b88e8006685e2fa8ba",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "e1f8cddef4337c32ae69ab56e7515026bbef78e2e88fe5e328c2bb754a84a6d3",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": "bf9a02f7a5df884342bffe99b6dbd62eaa8c1885d7e976b2642a779230965893",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": "f4baf4c508e33ea57c076d07c9b591a8c86acd0f724be1e6648366a523e1f7bd",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.ts": "f578dd0534a68344f4187b7291f2247117675df65cd48748133ef451ab811cae",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts": "01b22b447316a48cee1dc8d7492f9986f782c94f405b09d9b6824c6a01263391",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "c29141976eccd1e9b8ba8e41abbe521eebc91f299ebf73ccd0a42899598832dc"
+  },
+  "testSha256": {
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts": "97ea99fc1cf8c20e892b10a8fa732658b5211e5aff5d8d117740143a17e7a478",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "8312e4d55df506c3adf3a9d94452760c385e104bc475cc426591da1f7610e6e8",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "7907b08697421602e917d22f3e915e6356c2daeb063f8fc6357d0ad3f4e30159",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts": "b9428c42c4b1b14235872a06ddc1e27e671a61a698babbd028edb1f9956fd873",
+    "apps/office/src/sax/source/fastparser/fastparser.test.ts": "d789995bc995eb42db0ba1d3f12d4a7422762df27c50d39254d31ac8d7a99b32",
+    "apps/office/src/sax/source/fastparser/FastSaxParser.test.ts": "44b45ab54fb8845916816c483b08decd9d7a27233e6265249e81aef1d5a6d54a"
+  },
+  "generatorSha256": "a5010879d688581a25777efad3c0d283db28ea16c7f0cfdfedca5028d425aae4",
+  "sourceRegistrationEvidence": "All82 URI registrations independently match native transitional/strict NamespaceMap IDs and original duplicate URI collapse/source sorting. Generator --check validates both namespace and common factory tables with unchanged pinned native inputs.",
+  "actualGraphEvidence": "Native schema run/property/value contexts hand off through actual DomainMapper to SwDoc. Text including supplementary Unicode and explicit bold is read from actual nodes/UNO cursor; section application is intentionally outside this run-context assertion.",
+  "nativeProtocolEvidence": [
+    "Strict/transitional real SAX factory/group dispatch and original CR/end-group ordering",
+    "Inherited xml:space, XML-only trim/normalization and text aggregation across entities/CDATA/comments",
+    "MCE exact Requires, multiple supported Choices and nested alternate state",
+    "Defaulted unknown base-copy identity/parent/state without counter increment; known grammar mismatch returns null",
+    "First callback failure retained; current16KiB UTF8 block continues; failed start frame null; later failures discarded; SAX envelope uses current locator",
+    "UTF8 multibyte sequence split at native block boundary is reassembled without text loss"
+  ],
+  "adaptationLimits": [
+    "Existing host SAX limits/cancellation remain browser constraints, not certified native defaults.",
+    "FastSaxParseError is explicit host transport for SAXParseException fields and the saved reference, not a generated/registered UNO Any or exception value. Host lexical diagnostics and locator details do not claim libxml parity.",
+    "Native nonvirtual section close clears its flag; its redundant negative guard is omitted without suppressing coverage.",
+    "Missing resource/context/cross-namespace owners fail explicitly at the incomplete implementation boundary and must be implemented before application acceptance."
+  ],
+  "additionalChecks": [
+    {
+      "command": "npm run test:writer -- src/sw/source/filter/xml/odt-roundtrip.test.ts src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+      "result": "pass",
+      "testFiles": 2,
+      "testsPassed": 25
+    },
+    {
+      "command": "npm run test:calc -- src/sc/source/filter/xml/ods.test.ts",
+      "result": "pass",
+      "testFiles": 1,
+      "testsPassed": 17
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "testsPassed": 48
+    }
+  ],
+  "checksPassed": [
+    "npm run build (includes application typecheck)",
+    "node scripts/check-static-build.mjs",
+    "scoped ESLint --max-warnings 0",
+    "scoped Prettier",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run inventory:registry:build",
+    "npm run inventory:registry:check",
+    "npm run check:source-provenance (1341 modules)",
+    "node scripts/check-file-size.mjs",
+    "node scripts/check-lo-source-tree.mjs",
+    "python3 scripts/writer-ooxml/generate-factory.py --check",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "doctorResidual": "Existing managed hook shim readiness warning only; no hook changes.",
+  "suspectedUpstreamIssues": [
+    "WRITER101 MCE exact Requires/multiple supported Choice behavior preserved",
+    "WRITER102 first callback cause uses locator at later native input checkpoint, not at failure"
+  ],
+  "remaining": [
+    "Native complete document/model loader and Styles/Sections/Numbering/Tables/Theme owners",
+    "Canonical graph DOCX export and reopen",
+    "Existing shell/filter asynchronous ownership and Open/download production UI integration",
+    "Calc XLSX task",
+    "Task-wide browser acceptance, verification/evaluator and finish"
+  ],
+  "fullSuite": "Not due: second agentplane task since SWRD7X full-suite checkpoint; no task completed at this checkpoint."
+}

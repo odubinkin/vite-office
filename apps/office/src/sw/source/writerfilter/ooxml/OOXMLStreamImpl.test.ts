@@ -58,6 +58,7 @@ it("preserves Writer ordered type matching, first internal match, last duplicate
   expect(doc.getDocumentXml()).toBe("<document/>");
   expect(doc.getDocumentStream()).toBeInstanceOf(Uint8Array);
   expect(doc.getFastTokenHandler()).toBe(doc.getFastTokenHandler());
+  expect(doc.getFastParser()).toBe(doc.getFastParser());
   expect(doc.getFastTokenHandler().getTokenDirect("val")).toBeGreaterThanOrEqual(0);
   expect(doc.getTargetForId("link")).toBe("https://last.test/");
   expect(doc.getTargetForId("anchor")).toBe("#bookmark");
@@ -67,6 +68,7 @@ it("preserves Writer ordered type matching, first internal match, last duplicate
   const styles = await Stream.createStream(doc, T.STYLES);
   expect(styles.getTarget()).toBe("word/styles.xml");
   expect(styles.getFastTokenHandler()).not.toBe(doc.getFastTokenHandler());
+  expect(styles.getFastParser()).not.toBe(doc.getFastParser());
   expect(styles.getDocumentXml()).toBe("<styles/>");
   expect((await Stream.createStream(doc, "10")).getTarget()).toBe("word/styles.xml");
   expect((await Stream.createStream(doc, T.NUMBERING)).getDocumentStream()).toBeNull();

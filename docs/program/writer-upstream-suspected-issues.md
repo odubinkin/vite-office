@@ -1154,3 +1154,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/ooxml/OOXMLParserState.cxx`, `startTxbxContent` and `endTxbxContent`.
 - Observation: entering nested textbox content emits a warning but still overwrites the single saved paragraph/character/last-paragraph flags. The first close restores the inner entry state; the second close warns and returns, so the outer entry flags are not restored. Whether a valid supported document reaches this nesting remains unverified; no desktop defect is confirmed.
 - Preservation: keep the single saved state and unmatched-close return. Do not introduce a textbox state stack. Tests exercise ordinary, nested and unmatched transitions while retaining the section flag throughout.
+
+### WRITER101 — MCE Choice uses exact Requires spelling and does not stop after an earlier supported Choice
+
+- Source: pinned `sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx`, `prepareMceContext`.
+- Observation: the handler compares the entire Requires value against four literal prefixes (`wps`, `wpg`, `w14`, `wpc`), without splitting the whitespace-separated list or resolving feature namespace aliases. It also sets the took-choice flag without testing whether an earlier supported Choice was already taken. Consequently a multi-prefix Requires goes to Fallback, while two separately supported Choices both deliver content. Reachability and desktop impact for valid supported documents remain unverified.
+- Preservation: retain the exact spelling tests, supported-prefix array, multiple-Choice delivery and nested alternate-state save/restore. Do not replace these checks with a standards-correct feature set or first-choice selection.
+
+### WRITER102 — SAX callback failures retain the first cause but report the locator after the input block
+
+- Source: pinned `sax/source/fastparser/fastparser.cxx`, `Entity::saveException`, `Entity::throwException` and `FastSaxParserImpl::parse`.
+- Observation: a consumer failure is saved without immediately stopping the remaining callbacks in the current16KiB block. Later failures are discarded, and the SAXParseException locator is read after the block, rather than captured at the first failing callback. The reported location may consequently differ from where the wrapped first failure arose. The continuation is explicitly intentional for fdo#81214; whether the diagnostic location causes a user-visible defect is unverified.
+- Preservation: retain first-failure selection, continued callbacks, null failed-start frames,16KiB checkpoints and current locator wrapping. Tests do not replace this behavior with immediate cancellation or the first-failure position.

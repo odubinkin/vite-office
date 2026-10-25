@@ -5,6 +5,13 @@ import { OOXMLValue as V } from "./OOXMLPropertySet";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { namespaces } from "./OOXMLFactory_wml.tables";
+import { XML_TOKEN_COUNT } from "../../../../oox/source/token/tokenmap";
+import {
+  OOXMLFastContextHandler,
+  OOXMLFastContextHandlerStream,
+  OOXMLFastContextHandlerProperties,
+  OOXMLFastContextHandlerValue,
+} from "./OOXMLFastContextHandler";
 
 /** Original ResourceType declaration order. */
 export enum ResourceType {
@@ -67,6 +74,78 @@ export interface FactoryAttributeHandler {
 /** Native factory dispatch/lexical conversion owner; document context creation remains with OOXMLFastContextHandler. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original static OOXMLFactory owner (OOXMLFactory.hxx deletes its constructor).
 export class OOXMLFactory {
+  /** Original generated start factory tries namespaces in source order; the admitted slice currently contains wml. @param parent - Parent context. @param element - Native fast token. @returns Child or null. */
+  static createFastChildContextFromStart(
+    parent: OOXMLFastContextHandler,
+    element: number,
+  ): OOXMLFastContextHandler | null {
+    return this.createFastChildContextFromFactory(parent, OOXMLFactory_wml.getInstance(), element);
+  }
+  /** Original token-count guard prevents unknown-token recursion. @param parent - Parent context. @param element - Token. @returns Child or null. */
+  static createFastChildContext(
+    parent: OOXMLFastContextHandler,
+    element: number,
+  ): OOXMLFastContextHandler | null {
+    return (element & 0xffff) < XML_TOKEN_COUNT
+      ? this.createFastChildContextFromFactory(
+          parent,
+          this.getFactoryForNamespace(parent.getDefine()),
+          element,
+        )
+      : null;
+  }
+  /** Native generated resource selection and helper assignment order. Missing ported owners fail explicitly until implemented. @param parent - Parent. @param factory - Namespace factory. @param token - Token. @returns Child or null. */
+  private static createFastChildContextFromFactory(
+    parent: OOXMLFastContextHandler,
+    factory: OOXMLFactory_wml | null,
+    token: number,
+  ): OOXMLFastContextHandler | null {
+    if (!factory) return null;
+    const resource: [ResourceType] = [ResourceType.NoResource],
+      define: [Id] = [0];
+    if (!factory.getElementId(parent.getDefine(), token, resource, define)) return null;
+    const id = factory.getResourceId(parent.getDefine(), token);
+    let context: OOXMLFastContextHandler;
+    switch (resource[0]) {
+      case ResourceType.Stream:
+        context = new OOXMLFastContextHandlerStream(parent);
+        break;
+      case ResourceType.Properties:
+        context = new OOXMLFastContextHandlerProperties(parent);
+        break;
+      case ResourceType.Value:
+        context = new OOXMLFastContextHandlerValue(parent);
+        break;
+      case ResourceType.Any:
+        // Native start dispatch finds this token in another namespace factory
+        // before revisiting wml. That namespace owner is not ported yet.
+        throw new Error("OOXML start namespace factory is not implemented for token: " + token);
+      default:
+        throw new Error("OOXML resource context is not implemented: " + ResourceType[resource[0]]);
+    }
+    if (factory.getDefineName(define[0]) === null)
+      throw new Error("OOXML definition is not implemented: " + define[0]);
+    context.setToken(token);
+    context.setId(id);
+    context.setDefine(define[0]);
+    return context;
+  }
+  /** Original generated namespace start dispatch. @param handler - Context. @returns Nothing. */ static startAction(
+    handler: OOXMLFastContextHandler,
+  ): void {
+    this.getFactoryForNamespace(handler.getDefine())?.dispatchActions(handler, "start");
+  }
+  /** Original generated namespace end dispatch. @param handler - Context. @returns Nothing. */ static endAction(
+    handler: OOXMLFastContextHandler,
+  ): void {
+    this.getFactoryForNamespace(handler.getDefine())?.dispatchActions(handler, "end");
+  }
+  /** Original generated character dispatch. @param handler - Context. @param text - UTF16 text. @returns Nothing. */ static characters(
+    handler: OOXMLFastContextHandler,
+    text: string,
+  ): void {
+    this.getFactoryForNamespace(handler.getDefine())?.dispatchActions(handler, "characters", text);
+  }
   /** Selects the source native namespace from high identity bits; the start handler selects wml explicitly. @param id - Definition identity. @returns Factory or null. */
   static getFactoryForNamespace(id: Id): OOXMLFactory_wml | null {
     return (id & 0xffff0000) === namespaces.NN_wml ? OOXMLFactory_wml.getInstance() : null;

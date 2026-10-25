@@ -58,7 +58,8 @@
     ],
     "preservedResponsibilities": [
       "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending.",
-      "Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared."
+      "Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared.",
+      "Original Stream grouping, UTF16 and info declarations are extended in the same interface. Parser-state and break owners use a compile-time Pick of the consumed props/text callbacks; no separate runtime Stream adapter is introduced."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

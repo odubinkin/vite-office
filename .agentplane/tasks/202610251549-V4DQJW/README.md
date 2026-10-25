@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T18:29:55.441Z"
+doc_updated_at: "2026-10-25T18:59:41.365Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -88,6 +88,10 @@ sections:
     - Observation: Native parser state and OOXMLBreakHandler ported with all admitted public state operations, ordered shared property delivery, nested floating-table filtering and postponed breaks. Profile9 passes at S142/B57/F44/L134 all100 across2 owners; OOXML resource/factory/stream regression79 passes. Exact argv/hashes: evidence/parser-state-checkpoint.json.
       Impact: Actual protocol transitions are verified without claiming complete XML loading or graph import. WRITER100 preserves nested textbox overwrite of the native single saved state. Initial coverage found one unreachable floating-stack guard after checked synchronized pop; eliminated the redundant check by the public push/pop invariant, with no exclusions or private-state mutation.
       Resolution: Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/provenance1338/size/registry/static/routing/diff pass. Full import/export/UI and task acceptance remain pending; continue native fast contexts and canonical document/style/section application. No full suite due.
+
+    - Observation: Native fast text/property/value contexts, document handler and per-stream parser provisioning are implemented with original82 URI registrations. Final profile60/6 files passes at S821/B454/F191/L747 all100 across10 runtime owners. Actual run schema parsing reaches DomainMapper/SwDoc with Unicode text and bold property assertions. Exact argv/hashes: evidence/fast-context-checkpoint.json.
+      Impact: Native strict/transitional dispatch, copy-vs-child context state, xml:space, MCE and group ordering are verified. Source audit corrected an initial immediate callback rethrow: native saves the first failure, continues the current16KiB UTF8 block and wraps at the current locator. WRITER101/102 document preserved suspicious behavior. The SAX error carrier is an explicit host boundary, not a generated UNO Any/exception parity claim.
+      Resolution: ODT regression25, ODS regression17, module guard48 pass. Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/size/registry/provenance1341/static/routing/diff pass; doctor retains only existing hook readiness warning. Full document section/style/list/table loading, export/UI, Calc XLSX and task-wide acceptance remain pending in approved scope. Full suite is not due.
 id_source: "generated"
 ---
 ## Summary
@@ -152,3 +156,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native parser state and OOXMLBreakHandler ported with all admitted public state operations, ordered shared property delivery, nested floating-table filtering and postponed breaks. Profile9 passes at S142/B57/F44/L134 all100 across2 owners; OOXML resource/factory/stream regression79 passes. Exact argv/hashes: evidence/parser-state-checkpoint.json.
   Impact: Actual protocol transitions are verified without claiming complete XML loading or graph import. WRITER100 preserves nested textbox overwrite of the native single saved state. Initial coverage found one unreachable floating-stack guard after checked synchronized pop; eliminated the redundant check by the public push/pop invariant, with no exclusions or private-state mutation.
   Resolution: Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/provenance1338/size/registry/static/routing/diff pass. Full import/export/UI and task acceptance remain pending; continue native fast contexts and canonical document/style/section application. No full suite due.
+
+- Observation: Native fast text/property/value contexts, document handler and per-stream parser provisioning are implemented with original82 URI registrations. Final profile60/6 files passes at S821/B454/F191/L747 all100 across10 runtime owners. Actual run schema parsing reaches DomainMapper/SwDoc with Unicode text and bold property assertions. Exact argv/hashes: evidence/fast-context-checkpoint.json.
+  Impact: Native strict/transitional dispatch, copy-vs-child context state, xml:space, MCE and group ordering are verified. Source audit corrected an initial immediate callback rethrow: native saves the first failure, continues the current16KiB UTF8 block and wraps at the current locator. WRITER101/102 document preserved suspicious behavior. The SAX error carrier is an explicit host boundary, not a generated UNO Any/exception parity claim.
+  Resolution: ODT regression25, ODS regression17, module guard48 pass. Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/size/registry/provenance1341/static/routing/diff pass; doctor retains only existing hook readiness warning. Full document section/style/list/table loading, export/UI, Calc XLSX and task-wide acceptance remain pending in approved scope. Full suite is not due.

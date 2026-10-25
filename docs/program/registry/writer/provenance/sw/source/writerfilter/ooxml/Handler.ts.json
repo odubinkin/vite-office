@@ -51,7 +51,8 @@
       "OOXMLBreakHandler::sprm"
     ],
     "preservedResponsibilities": [
-      "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented."
+      "Native break handler defaults, ignored clear/modifier attributes, context property delivery before clear and exact column/page/textWrapping byte markers. Explicit dispose binds the native destructor lifetime and exception unwinding; other Handler.cxx owners are not implemented.",
+      "Compile-time Pick narrows the consumed props/text Stream callbacks without introducing another runtime transport."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

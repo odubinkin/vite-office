@@ -35,4 +35,15 @@ export interface Table {
 export interface Stream {
   props(properties: Reference<Properties>): void;
   text(data: Uint8Array, length: number): void;
+  /** Native grouping callbacks consumed by fast text contexts. */
+  startSectionGroup(): void;
+  endSectionGroup(): void;
+  markLastSectionGroup(): void;
+  startParagraphGroup(): void;
+  endParagraphGroup(): void;
+  markLastParagraphInSection(): void;
+  startCharacterGroup(): void;
+  endCharacterGroup(): void;
+  utext(data: Uint16Array, length: number): void;
+  info(handle: string): void;
 }

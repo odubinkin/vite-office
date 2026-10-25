@@ -32,6 +32,14 @@
         {
           "path": "sw/source/writerfilter/ooxml/OOXMLFactory.hxx",
           "marker": "enum class ResourceType"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl.py",
+          "marker": "createFastChildContextFromFactory"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl.py",
+          "marker": "createFastChildContextFromStart"
         }
       ]
     },
@@ -50,7 +58,8 @@
       "ResourceType::TwipsMeasure_asZero"
     ],
     "preservedResponsibilities": [
-      "Native schema-ordered attributes, exact ResourceType declaration order/AttributeInfo fields, actual numeric namespace/fast-token/definition identities, first attribute lookup and typed OOXMLValue conversion. Unknown list values remain empty, Integer reuses exact o3tl signed prefix/overflow rules, and negative zero-mode twips become0. Generated attribute actions execute in their native namespace owner. Context creation and generic start/characters/end dispatch remain pending; the complete OOXMLFactory interface is not claimed."
+      "Native schema-ordered attributes, exact ResourceType declaration order/AttributeInfo fields, actual numeric namespace/fast-token/definition identities, first attribute lookup and typed OOXMLValue conversion. Unknown list values remain empty, Integer reuses exact o3tl signed prefix/overflow rules, and negative zero-mode twips become0. Generated attribute actions execute in their native namespace owner. Context creation and generic start/characters/end dispatch remain pending; the complete OOXMLFactory interface is not claimed.",
+      "Native generated context construction and helper assignment order, token-count recursion guard, start/end/character action dispatch. Missing context definitions/resource owners/cross-namespace factories fail explicitly at the incomplete implementation boundary, not as a claimed native behavior replacement. Full document import and UI acceptance remain pending."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

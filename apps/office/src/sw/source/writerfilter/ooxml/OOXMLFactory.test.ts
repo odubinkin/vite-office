@@ -10,10 +10,30 @@ import { OOXMLPropertySet, OOXMLPropertyType as T, OOXMLValue as V } from "./OOX
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import * as TokenMap from "../../../../oox/source/token/tokenmap";
 import { namespaceTokens } from "../../../../oox/source/token/namespacemap";
+import { NamespaceMap } from "../../../../oox/source/token/namespacemap";
+import { streamNamespaces } from "./OOXMLFactory.tables";
 import { DomainMapper } from "../dmapper/DomainMapper";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { createWriterDocument } from "../../core/doc/doc";
 import { unicode, text } from "../../core/unocore/unocrsrhelper";
+
+it("retains every native stream namespace registration identity and duplicate URI collapse order", /** Independently compares generated registrations with original namespace input maps. @returns Nothing. */ () => {
+  const maps = new NamespaceMap(),
+    expected = new Map<string, number>();
+  for (const [id, uri] of maps.maTransitionalNamespaceMap) {
+    expected.set(uri, id);
+    expected.set(maps.maStrictNamespaceMap.get(id) as string, id);
+  }
+  expect(streamNamespaces).toEqual(
+    [...expected].sort(
+      /** Native factory generator sorts URI bytes. @param a - First row. @param b - Second row. @returns Order. */ (
+        a,
+        b,
+      ) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0),
+    ),
+  );
+  expect(streamNamespaces).toHaveLength(82);
+});
 
 /** Source-generated definition identity lookup for readable source-contract cases. @param name - Native define name. @returns Native numeric ID. */
 function define(name: string): number {

@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/ooxml/OOXMLParserState.ts#OOXMLParserState",
         "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLParserState.cxx#OOXMLParserState::OOXMLParserState"
       ],
-      "justification": "Native group defaults, borrowed document delegation, decimal context handles, shared character/cell/row/table property references, repeated row delivery, third floating-level positioning filtering, postponed break delivery and single textbox saved state. Undefined null-document/table-pop paths are explicit host errors; synchronized stack pushes make the native floating-stack nonempty guard redundant after a checked pop. Logging-only SAL_WARN diagnostics and native reference-count ABI are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified.",
+      "justification": "Native group defaults, borrowed document delegation, decimal context handles, shared character/cell/row/table property references, repeated row delivery, third floating-level positioning filtering, postponed break delivery and single textbox saved state. Undefined null-document/table-pop paths are explicit host errors; synchronized stack pushes make the native floating-stack nonempty guard redundant after a checked pop. Logging-only SAL_WARN diagnostics and native reference-count ABI are not implemented. Complete DOCX document import/export and shell/UI acceptance remain pending; whole-module semantic parity is unverified. Compile-time Pick narrows consumed Stream callbacks after the original Stream interface is extended; runtime state behavior is unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "OOXMLParserState",

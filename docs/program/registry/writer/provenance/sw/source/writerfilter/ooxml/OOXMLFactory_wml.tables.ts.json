@@ -61,7 +61,8 @@
       "factoryActions"
     ],
     "preservedResponsibilities": [
-      "Generated records for24 consumed complex definitions plus referenced list definitions use unchanged original namespaces.py, modelpreprocess.py, factoryinc.py, resourceids.py, generate-tokens.py and factoryimpl_ns.py helpers. Records retain original native numeric definition/resource IDs and exact lexical constant bindings; omitted definitions never renumber the slice. Current counts:33 define/name bindings including start,59 attributes,231 element entries,253 resource mappings,82 list values,25 action records. Stream-action metadata is not yet a complete context-dispatch implementation."
+      "Generated records for24 consumed complex definitions plus referenced list definitions use unchanged original namespaces.py, modelpreprocess.py, factoryinc.py, resourceids.py, generate-tokens.py and factoryimpl_ns.py helpers. Records retain original native numeric definition/resource IDs and exact lexical constant bindings; omitted definitions never renumber the slice. Current counts:33 define/name bindings including start,59 attributes,231 element entries,253 resource mappings,82 list values,25 action records. Stream-action metadata is not yet a complete context-dispatch implementation.",
+      "Consumed native stream-action records now feed actual fast contexts; unconsumed document/style/table/section/resource owners remain pending."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

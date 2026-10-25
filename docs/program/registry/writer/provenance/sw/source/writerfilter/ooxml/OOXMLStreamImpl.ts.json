@@ -36,6 +36,10 @@
         {
           "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
           "marker": "OOXMLStreamImpl::getFastTokenHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl.py",
+          "marker": "getFastParser"
         }
       ]
     },
@@ -53,7 +57,8 @@
     ],
     "preservedResponsibilities": [
       "Original ordered XRelationshipAccess attribute lookup, strict/transitional types, last duplicate external-ID cache, customTarget filtering, URI RETAIN resolution and VBA project/data nesting. Host asynchronous factories bind native constructors; mutable streamTargets fields bind original translation-unit globals. Shared ZIP input binds XStorage; complete UNO services, repair/encryption are not implemented.",
-      "Native lazy per-stream FastTokenHandler ownership is preserved."
+      "Native lazy per-stream FastTokenHandler ownership is preserved.",
+      "Native generated getFastParser lazily owns a synchronous parser and registers all original82 URI bindings once. Original generated code is traced through factoryimpl.py; no threaded/parser service registration is claimed."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

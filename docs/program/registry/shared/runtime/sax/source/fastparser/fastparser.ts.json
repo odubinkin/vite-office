@@ -10,30 +10,39 @@
     "capabilityIds": [
       "CAP-0113",
       "CAP-0128",
-      "CAP-a5afdcf9-2789-4ea8-823e-7bb6a5bed84f"
+      "CAP-a5afdcf9-2789-4ea8-823e-7bb6a5bed84f",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sax/source/fastparser/fastparser.ts#parseFastXmlStream",
         "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
         "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does",
-        "apps/office/src/sc/source/filter/xml/ods.test.ts"
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "apps/office/src/sax/source/fastparser/FastSaxParser.test.ts#throws the native IllegalArgumentException"
       ],
-      "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified. Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors. New bounded bindings do not promote broad native parity.",
+      "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified. Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors. New bounded bindings do not promote broad native parity. Native FastSaxParser typed namespace registration errors/ArgumentPosition0, token combination, unknown/fast child selection, null-subtree suppression, pending-text aggregation and first saved callback failure and deferred wrapping now bind the existing host SAX driver. Existing bounded limits are host resource constraints, not certified native defaults. Exact OOXML URI spellings are represented; broader native namespace normalization, threading and UNO parser services remain unverified. Entity saves only the first callback failure, leaves a failed start context null, continues the current16KiB UTF8 block and wraps at its checkpoint. Host FastSaxParseError carries SAXParseException field names and the original saved reference; it is not a generated/registered UNO exception or Any value. Native exception typing/ABI and libxml locator/diagnostic parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "DEFAULT_FAST_XML_LIMITS",
-        "parseFastXmlStream"
+        "parseFastXmlStream",
+        "FastSaxParser",
+        "FastSaxParseError"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sax/source/fastparser/fastparser.cxx",
       "upstreamSymbols": [
         "FastSaxParserImpl",
-        "FastSaxParserImpl::parseStream"
+        "FastSaxParserImpl::parseStream",
+        "FastSaxParserImpl::registerNamespace",
+        "Entity::startElement",
+        "FastSaxParserImpl::sendPendingCharacters",
+        "Entity::saveException",
+        "Entity::throwException"
       ]
     }
   }

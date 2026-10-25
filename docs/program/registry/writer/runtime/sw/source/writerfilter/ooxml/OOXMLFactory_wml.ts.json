@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts#OOXMLFactory_wml",
         "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/factoryimpl_ns.py#factoryAttributeToResourceMap"
       ],
-      "justification": "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER097. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "justification": "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER097. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending. Consumed native start/end/character actions now dispatch in original order with original resource-ID guards. Generation rejects unconsumed action names and conditional handlers before they reach runtime.",
       "knownViolations": [],
       "localSymbols": [
         "OOXMLFactory_wml",

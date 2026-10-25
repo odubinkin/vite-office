@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.ts#OOXMLFastDocumentHandler",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx#OOXMLFastDocumentHandler::getContextHandler",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts#applies schema property/value contexts to a real SwDoc"
+      ],
+      "justification": "Native lazy root context, original note/forward initialization, root/unknown context distinction and substream section-state initialization. Diagnostic-only SAX callbacks are inert. UNO service registration, locator and processing-instruction hooks are not advertised by this consumed interface. Whole DOCX application import/export/UI acceptance and full native semantic parity remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLFastDocumentHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLFastDocumentHandler.cxx",
+      "upstreamSymbols": [
+        "OOXMLFastDocumentHandler::getContextHandler",
+        "OOXMLFastDocumentHandler::createFastChildContext",
+        "OOXMLFastDocumentHandler::createUnknownChildContext",
+        "OOXMLFastDocumentHandler::setIsSubstream"
+      ]
+    }
+  }
+}

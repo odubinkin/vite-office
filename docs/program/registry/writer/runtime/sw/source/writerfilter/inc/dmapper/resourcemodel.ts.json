@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts#Id",
         "vendor/libreoffice-reference/sw/source/writerfilter/inc/dmapper/resourcemodel.hxx#class Value"
       ],
-      "justification": "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending. V4DQJW remains in progress: this resource substrate does not establish DOCX application import/export/UI support; full native interfaces/ABI and unconsumed binary/drawing/service variants remain omitted. Whole-module semantic parity stays unverified. Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared.",
+      "justification": "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending. V4DQJW remains in progress: this resource substrate does not establish DOCX application import/export/UI support; full native interfaces/ABI and unconsumed binary/drawing/service variants remain omitted. Whole-module semantic parity stays unverified. Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared. Original Stream grouping, UTF16 and info declarations are extended in the same interface. Parser-state and break owners use a compile-time Pick of the consumed props/text callbacks; no separate runtime Stream adapter is introduced.",
       "knownViolations": [],
       "localSymbols": [
         "Id",

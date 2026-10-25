@@ -112,7 +112,8 @@ const allowedEdges = new Map([
   // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
   ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
-  ["sax", new Set(["sal", "udkapi"])],
+  // Native sax/Library_sax.mk links cppu; FastSaxParser throws its original typed IllegalArgumentException.
+  ["sax", new Set(["cppu", "sal", "udkapi"])],
   // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
   ["stoc", new Set()],
   [

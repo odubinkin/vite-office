@@ -51,7 +51,8 @@
       "OOXMLParserState::resolvePostponedBreak"
     ],
     "preservedResponsibilities": [
-      "Native group defaults, borrowed document delegation, decimal context handles, shared character/cell/row/table property references, repeated row delivery, third floating-level positioning filtering, postponed break delivery and single textbox saved state. Undefined null-document/table-pop paths are explicit host errors; synchronized stack pushes make the native floating-stack nonempty guard redundant after a checked pop. Logging-only SAL_WARN diagnostics and native reference-count ABI are not implemented."
+      "Native group defaults, borrowed document delegation, decimal context handles, shared character/cell/row/table property references, repeated row delivery, third floating-level positioning filtering, postponed break delivery and single textbox saved state. Undefined null-document/table-pop paths are explicit host errors; synchronized stack pushes make the native floating-stack nonempty guard redundant after a checked pop. Logging-only SAL_WARN diagnostics and native reference-count ABI are not implemented.",
+      "Compile-time Pick narrows consumed Stream callbacks after the original Stream interface is extended; runtime state behavior is unchanged."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

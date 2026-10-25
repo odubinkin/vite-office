@@ -5,6 +5,8 @@ import {
 } from "../../../../comphelper/source/xml/ofopxmlhelper";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
+import { FastSaxParser } from "../../../../sax/source/fastparser/fastparser";
+import { streamNamespaces } from "./OOXMLFactory.tables";
 import {
   UriReferenceFactory,
   RelativeUriExcessParentSegments as Excess,
@@ -53,6 +55,7 @@ export class OOXMLStreamImpl {
   private msTarget = "";
   private document: Uint8Array | null = null;
   private fastTokenHandler: FastTokenHandler | null = null;
+  private fastParser: FastSaxParser | null = null;
   private relationships: readonly (readonly StringPair[])[] = [];
   /** Borrows storage; createStream supplies async native constructor initialization. @param storage - Package. @returns Stream. */
   private constructor(readonly storage: ZipStorage) {}
@@ -110,6 +113,14 @@ export class OOXMLStreamImpl {
   getFastTokenHandler(): FastTokenHandler {
     this.fastTokenHandler ??= new FastTokenHandler();
     return this.fastTokenHandler;
+  }
+  /** Native generated stream lazily owns its synchronous parser and registers each URI once in sorted order. @returns Parser. */
+  getFastParser(): FastSaxParser {
+    if (!this.fastParser) {
+      this.fastParser = new FastSaxParser();
+      for (const [uri, token] of streamNamespaces) this.fastParser.registerNamespace(uri, token);
+    }
+    return this.fastParser;
   }
   /** Borrows the immutable opened input part. @returns Bytes or missing stream. */ getDocumentStream(): Uint8Array | null {
     return this.document;

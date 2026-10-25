@@ -50,6 +50,10 @@ def generate():
                        re.findall(r"const sal_Int32 (\w+) = (\d+);", (temp / "tokenids.hxx").read_text())
                        if name != "XML_TOKEN_COUNT"}
         model = minidom.parseString(original(OOXML / "modelpreprocess.py", temp / "namespaces.txt", OOXML / "model.xml"))
+        stream_namespaces = {}
+        for line in (temp / "namespaces.txt").read_text().splitlines():
+            identifier, alias, uri = line.split(" ")
+            stream_namespaces[uri] = int(identifier)
     model_node = native.getChildByName(model, "model")
     namespaces = {n.getAttribute("name"): n for n in native.getChildrenByName(model_node, "namespace")}
     wml = namespaces["wml"]
@@ -104,6 +108,9 @@ def generate():
             resource_ids.append([identifier, qname(token), token_ids[value]])
         if resource is not None:
             for action in native.getChildrenByName(resource, "action"):
+                admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultStringValue"}
+                if action.getAttribute("action") not in admitted_actions or native.getChildrenByName(action, "cond"):
+                    raise ValueError("Unconsumed native event action or condition: " + action.toxml())
                 actions.append([identifier, action.getAttribute("name"), action.getAttribute("action"),
                                 token_ids[native.idToLabel(action.getAttribute("tokenid"))] if action.hasAttribute("tokenid") else 0,
                                 token_ids[native.idToLabel(action.getAttribute("sendtokenid"))] if action.hasAttribute("sendtokenid") else 0])
@@ -133,7 +140,8 @@ def generate():
             seen.add(text)
             lists.append([identifier, text, token_ids[native.idToLabel(value.getAttribute("tokenid"))]])
     return {"namespaces": {"NN_wml": ids["NN_wml"]}, "defines": used_defines, "attributes": attributes, "elements": elements,
-            "resources": resource_ids, "lists": lists, "actions": actions}
+            "resources": resource_ids, "lists": lists, "actions": actions,
+            "streamNamespaces": [[uri, stream_namespaces[uri]] for uri in sorted(stream_namespaces)]}
 
 
 def main():
@@ -151,8 +159,14 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(source.read_bytes())
     data = generate()
-    path = OUTPUT / "OOXMLFactory_wml.tables.ts"
-    text = "/** @fileoverview Consumed native wml factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */\n"
+    write_tables(OUTPUT / "OOXMLFactory.tables.ts", {"streamNamespaces": data.pop("streamNamespaces")}, args.check)
+    write_tables(OUTPUT / "OOXMLFactory_wml.tables.ts", data, args.check)
+    print("Writer OOXML factory:", ", ".join(f"{key}={len(rows)}" for key, rows in data.items()))
+
+
+def write_tables(path, data, check):
+    """Write source-generated namespace/stream tables with their original owners."""
+    text = "/** @fileoverview Consumed native factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */\n"
     # Native generated table rows are deliberately one record per line, keeping
     # field order visible and avoiding formatter expansion of constant tables.
     for key, rows in data.items():
@@ -161,12 +175,11 @@ def main():
             text += "{\n" + "".join("  " + json.dumps(str(k)) + ": " + json.dumps(v) + ",\n" for k, v in rows.items()) + "} as const;\n"
         else:
             text += "[\n" + "".join("  " + json.dumps(row, ensure_ascii=False) + ",\n" for row in rows) + "] as const;\n"
-    if args.check:
+    if check:
         if not path.exists() or path.read_text() != text:
             raise SystemExit("Writer OOXML native factory tables are stale.")
     else:
         path.write_text(text)
-    print("Writer OOXML factory:", ", ".join(f"{key}={len(rows)}" for key, rows in data.items()))
 
 
 if __name__ == "__main__":

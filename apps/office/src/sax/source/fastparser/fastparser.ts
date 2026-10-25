@@ -1,6 +1,9 @@
 /** @fileoverview Streams bounded namespace-aware SAX events without retaining an XML tree. */
 
 import { SaxesParser, type SaxesAttributeNS, type SaxesTagNS } from "saxes";
+import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 
 /** Resource ceilings for one decoded XML stream. */
 export interface FastXmlLimits {
@@ -35,11 +38,12 @@ export interface FastXmlHandler {
   close(): void;
 }
 
-/** Drives SAX callbacks with bounded resources. @param xml - Decoded XML. @param handler - Import event receiver. @param options - Limits and cancellation. @returns Nothing. */
+/** Drives SAX callbacks with bounded resources. @param xml - Decoded XML. @param handler - Import event receiver. @param options - Limits and cancellation. @param afterChunk - Optional native16KiB input checkpoint and current host locator. @returns Nothing. */
 export function parseFastXmlStream(
   xml: string,
   handler: FastXmlHandler,
   options: FastXmlParseOptions = {},
+  afterChunk?: (line: number, column: number, error?: unknown) => void,
 ): void {
   const limits = { ...DEFAULT_FAST_XML_LIMITS, ...options.limits };
   for (const [name, value] of Object.entries(limits))
@@ -107,8 +111,19 @@ export function parseFastXmlStream(
     },
   );
   try {
-    parser.write(xml).close();
+    if (afterChunk) {
+      // Original FastSaxParserImpl::parse feeds UTF8 blocks of BUFFER_SIZE=16KiB.
+      const bytes = new TextEncoder().encode(xml),
+        decoder = new TextDecoder();
+      for (let offset = 0; offset < bytes.length; offset += 16 * 1024) {
+        parser.write(decoder.decode(bytes.subarray(offset, offset + 16 * 1024), { stream: true }));
+        afterChunk(parser.line, parser.column + 1);
+      }
+      parser.write(decoder.decode()).close();
+      afterChunk(parser.line, parser.column + 1);
+    } else parser.write(xml).close();
   } catch (error) {
+    afterChunk?.(parser.line, parser.column + 1, error);
     if (
       error instanceof Error &&
       /^(ODF |ODT |ODS |Unsupported ODF|Unsupported script-specific ODF|Duplicate ODF|Cyclic ODF|Conflicting ODF)/u.test(
@@ -120,4 +135,222 @@ export function parseFastXmlStream(
   }
   /* istanbul ignore next -- saxes rejects empty, multi-root, and unclosed streams before returning. */
   if (rootsSeen !== 1 || depth !== 0) throw new Error("ODF XML has no complete root.");
+}
+
+/** Consumed native fast attribute transport; unknown attributes are not admitted by the current schema consumers. */
+export interface FastAttribute {
+  readonly token: number;
+  readonly value: string;
+}
+/** Native fast context event contract; strings bind immutable UTF16 transport. */
+export interface FastContext {
+  createFastChildContext(token: number, attributes: readonly FastAttribute[]): FastContext | null;
+  createUnknownChildContext(
+    namespace: string,
+    name: string,
+    attributes: readonly FastAttribute[],
+  ): FastContext | null;
+  startFastElement(token: number, attributes: readonly FastAttribute[]): void;
+  startUnknownElement(namespace: string, name: string, attributes: readonly FastAttribute[]): void;
+  endFastElement(token: number): void;
+  endUnknownElement(namespace: string, name: string): void;
+  characters(text: string): void;
+}
+/** Native document handler adds document lifetime callbacks. */
+export interface FastDocument extends FastContext {
+  startDocument(): void;
+  endDocument(): void;
+}
+/** Native token-handler direct lexical lookup consumed by FastSaxParser. */
+export interface FastTokenHandler {
+  getTokenDirect(local: string): number;
+}
+
+/** Host exception transport for native SAXParseException fields; WrappedException carries the original saved reference rather than claiming a registered UNO Any/exception value. */
+export class FastSaxParseError extends Error {
+  readonly PublicId = "";
+  readonly SystemId = "";
+  /** Native location/error envelope over the host XML engine's diagnostic. @param LineNumber - Current host-backed locator line. @param ColumnNumber - Locator column. @param WrappedException - First saved callback exception or null. @param detail - Lexical error text or native unknown-error default. @returns Error transport. */
+  constructor(
+    readonly LineNumber: number,
+    readonly ColumnNumber: number,
+    readonly WrappedException: unknown,
+    detail: string,
+  ) {
+    super(`[ line ${LineNumber}]: ${detail}`, { cause: WrappedException });
+    this.name = "SAXParseException";
+  }
+  /** Native Message field transported as immutable UTF16 text. @returns Message. */ get Message(): string {
+    return this.message;
+  }
+}
+
+/** Native FastSaxParser namespace registration and context-stack protocol over the existing bounded host SAX driver. */
+export class FastSaxParser {
+  private readonly namespaces = new Map<string, number>();
+  private handler: FastDocument | null = null;
+  private tokenHandler: FastTokenHandler | null = null;
+  /** Borrows the native document receiver. @param handler - Receiver or null. @returns Nothing. */ setFastDocumentHandler(
+    handler: FastDocument | null,
+  ): void {
+    this.handler = handler;
+  }
+  /** Borrows the native lexical token receiver. @param handler - Token handler or null. @returns Nothing. */ setTokenHandler(
+    handler: FastTokenHandler | null,
+  ): void {
+    this.tokenHandler = handler;
+  }
+  /** Original namespace registration validates threshold and rejects duplicate URIs. @param uri - URI. @param token - Native namespace ID. @returns Nothing. */
+  registerNamespace(uri: string, token: number): void {
+    const message =
+      token < 0x10000
+        ? "Invalid namespace token " + token
+        : this.namespaces.has(uri)
+          ? "namespace URL is already registered: " + uri
+          : null;
+    if (message !== null) {
+      const text = new OUString(
+        Uint16Array.from(
+          message.split(""),
+          /** Copies one UTF16 unit. @param c - Unit. @returns Code. */ (c) => c.charCodeAt(0),
+        ),
+        message.length,
+      );
+      try {
+        throw new IllegalArgumentException(text, new Reference(), 0);
+      } finally {
+        text.dispose();
+      }
+    }
+    this.namespaces.set(uri, token);
+  }
+  /** Original namespace/local token combination, with unqualified attributes retaining no namespace bits. @param uri - Resolved URI. @param local - Local name. @returns Fast token or DONTKNOW. */
+  private token(uri: string, local: string): number {
+    const localToken = this.tokenHandler?.getTokenDirect(local) ?? -1;
+    if (localToken === -1) return -1;
+    const namespace = uri === "" ? 0 : this.namespaces.get(uri);
+    return namespace === undefined ? -1 : namespace | localToken;
+  }
+  /** Native character buffering and first-exception saving preserve context stack operations through each16KiB input block. @param xml - Decoded XML binding. @param options - Host limits/cancellation. @returns Nothing. */
+  parseStream(xml: string, options: FastXmlParseOptions = {}): void {
+    const stack: { context: FastContext | null; token: number; namespace: string; name: string }[] =
+      [];
+    let pending = "",
+      saved: unknown = null,
+      hasSaved = false,
+      failure: FastSaxParseError | null = null;
+    const call =
+      /** Native Entity saves the first callback exception while current input continues. @param fn - Callback. @returns Nothing. */ (
+        fn: () => void,
+      ): void => {
+        try {
+          fn();
+        } catch (error) {
+          if (!hasSaved) {
+            saved = error;
+            hasSaved = true;
+          }
+        }
+      };
+    const flush =
+      /** Delivers one combined text string before the next element event. @returns Nothing. */ (): void => {
+        if (pending !== "") {
+          call(
+            /** Delivers text independently of the next element callback. @returns Nothing. */ () =>
+              stack.at(-1)?.context?.characters(pending),
+          );
+          pending = "";
+        }
+      };
+    this.handler?.startDocument();
+    try {
+      parseFastXmlStream(
+        xml,
+        {
+          /** Pushes the native null frame before child construction and commits context only after successful start. @param tag - Element. @param attributes - Attributes. @returns Nothing. */ open: (
+            tag,
+            attributes,
+          ) => {
+            flush();
+            const token = this.token(tag.uri, tag.local),
+              known: FastAttribute[] = [];
+            for (const attribute of attributes) {
+              const id = this.token(attribute.uri, attribute.local);
+              if (id !== -1) known.push({ token: id, value: attribute.value });
+            }
+            const parent =
+              stack.length === 0
+                ? this.handler
+                : (stack.at(-1) as { context: FastContext | null }).context;
+            const frame = {
+              context: null as FastContext | null,
+              token,
+              namespace: tag.uri,
+              name: tag.local,
+            };
+            stack.push(frame);
+            call(
+              /** Native start leaves the pushed frame null if creation or start throws. @returns Nothing. */ () => {
+                const context = parent
+                  ? token === -1
+                    ? parent.createUnknownChildContext(tag.uri, tag.local, known)
+                    : parent.createFastChildContext(token, known)
+                  : null;
+                if (context) {
+                  if (token === -1) context.startUnknownElement(tag.uri, tag.local, known);
+                  else context.startFastElement(token, known);
+                }
+                frame.context = context;
+              },
+            );
+          },
+          /** Appends pending native UTF16 text across lexical SAX fragments. @param text - Text. @returns Nothing. */ characters:
+            (text) => {
+              pending += text;
+            },
+          /** Saves end callback failures but always pops the matching context. @returns Nothing. */ close:
+            () => {
+              flush();
+              const frame = stack.at(-1) as {
+                context: FastContext | null;
+                token: number;
+                namespace: string;
+                name: string;
+              };
+              call(
+                /** Invokes the original known/unknown matching close. @returns Nothing. */ () => {
+                  if (frame.context) {
+                    if (frame.token === -1)
+                      frame.context.endUnknownElement(frame.namespace, frame.name);
+                    else frame.context.endFastElement(frame.token);
+                  }
+                },
+              );
+              stack.pop();
+            },
+        },
+        options,
+        /** Native checks failure after each16KiB input block and wraps it using current locator fields. @param line - Current line. @param column - Current column. @param error - Optional lexical failure. @returns Nothing. */ (
+          line,
+          column,
+          error,
+        ) => {
+          if (failure) throw failure;
+          if (hasSaved || error !== undefined) {
+            failure = new FastSaxParseError(
+              line,
+              column,
+              saved,
+              error instanceof Error ? error.message : "unknown error",
+            );
+            throw failure;
+          }
+        },
+      );
+    } catch (error) {
+      if (failure) throw failure;
+      throw error;
+    }
+    this.handler?.endDocument();
+  }
 }

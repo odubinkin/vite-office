@@ -110,7 +110,7 @@ export class OOXMLParserState {
     return this.document().getTarget();
   }
   /** Emits then releases character properties, preserving callback ordering. @param stream - Receiver. @returns Nothing. */
-  resolveCharacterProperties(stream: Stream): void {
+  resolveCharacterProperties(stream: Pick<Stream, "props" | "text">): void {
     if (this.mpCharacterProps) {
       stream.props(this.mpCharacterProps);
       this.mpCharacterProps = null;
@@ -140,7 +140,7 @@ export class OOXMLParserState {
     }
   }
   /** Native cell resolution replaces an emitted set with an allocated empty set. @param stream - Receiver. @returns Nothing. */
-  resolveCellProperties(stream: Stream): void {
+  resolveCellProperties(stream: Pick<Stream, "props" | "text">): void {
     const index = this.mCellProps.length - 1,
       properties = this.mCellProps[index];
     if (index >= 0 && properties) {
@@ -149,7 +149,7 @@ export class OOXMLParserState {
     }
   }
   /** Native row resolution replaces an emitted set with an allocated empty set. @param stream - Receiver. @returns Nothing. */
-  resolveRowProperties(stream: Stream): void {
+  resolveRowProperties(stream: Pick<Stream, "props" | "text">): void {
     const index = this.mRowProps.length - 1,
       properties = this.mRowProps[index];
     if (index >= 0 && properties) {
@@ -158,7 +158,7 @@ export class OOXMLParserState {
     }
   }
   /** Native third floating table level filters positioning on a copy and retains original table properties for later rows. @param stream - Receiver. @returns Nothing. */
-  resolveTableProperties(stream: Stream): void {
+  resolveTableProperties(stream: Pick<Stream, "props" | "text">): void {
     const properties = this.GetTableProperties();
     if (properties) {
       if (
@@ -192,7 +192,7 @@ export class OOXMLParserState {
     return this.mTableProps.at(-1) ?? null;
   }
   /** Original per-break lexical handler lifetime delivers markers in insertion order. @param stream - Receiver. @returns Nothing. */
-  resolvePostponedBreak(stream: Stream): void {
+  resolvePostponedBreak(stream: Pick<Stream, "props" | "text">): void {
     for (const properties of this.mvPostponedBreaks) {
       const handler = new OOXMLBreakHandler(null, stream);
       try {

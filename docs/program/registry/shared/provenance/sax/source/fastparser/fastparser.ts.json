@@ -18,27 +18,60 @@
         {
           "marker": "FastSaxParserImpl::parseStream",
           "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::registerNamespace"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::startElement"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::sendPendingCharacters"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::saveException"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::throwException"
         }
       ]
     },
     "localPath": "apps/office/src/sax/source/fastparser/fastparser.ts",
     "localSymbols": [
       "DEFAULT_FAST_XML_LIMITS",
-      "parseFastXmlStream"
+      "parseFastXmlStream",
+      "FastSaxParser",
+      "FastSaxParseError"
     ],
     "omittedResponsibilities": [
       "Upstream expat integration, UNO services, and thread-local parser state remain omitted."
     ],
     "preservedResponsibilities": [
       "Preserves bounded namespace-aware SAX event delivery, DTD rejection, inert comments and processing instructions, cancellation, and resource ceilings from the pinned fast parser.",
-      "Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors."
+      "Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors.",
+      "Native FastSaxParser typed namespace registration errors/ArgumentPosition0, token combination, unknown/fast child selection, null-subtree suppression, pending-text aggregation and first saved callback failure and deferred wrapping now bind the existing host SAX driver. Existing bounded limits are host resource constraints, not certified native defaults. Exact OOXML URI spellings are represented; broader native namespace normalization, threading and UNO parser services remain unverified.",
+      "Entity saves only the first callback failure, leaves a failed start context null, continues the current16KiB UTF8 block and wraps at its checkpoint. Host FastSaxParseError carries SAXParseException field names and the original saved reference; it is not a generated/registered UNO exception or Any value. Native exception typing/ABI and libxml locator/diagnostic parity remain unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sax/source/fastparser/fastparser.cxx",
     "upstreamSymbols": [
       "FastSaxParserImpl",
-      "FastSaxParserImpl::parseStream"
-    ]
+      "FastSaxParserImpl::parseStream",
+      "FastSaxParserImpl::registerNamespace",
+      "Entity::startElement",
+      "FastSaxParserImpl::sendPendingCharacters",
+      "Entity::saveException",
+      "Entity::throwException"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing bounded saxes driver binds host lexical XML input while native registered token IDs, context dispatch, buffered UTF16 text and typed UNO exception owners are retained. Host resource ceilings and cancellation are explicit browser constraints; full parser service/thread/URI normalization parity remains unverified."
+    }
   },
   "legacyOrder": 35
 }
