@@ -1,7 +1,6 @@
 /** @fileoverview Character item deltas for font controls and sibling commands;actual automatic hint sets retain complete values. */
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   SvxFontHeightItem,
   SvxWeightItem,
@@ -24,13 +23,16 @@ import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_HIGHLIGHT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat } from "./txatbase";
 import { assertTextRange, clipHintOutsideRange } from "./ndhints-range";
-import { createWriterTextColorItem, type SwAttrPool } from "../attr/swatrset";
+import {
+  createWriterTextColorItem,
+  createWriterHighlightItem,
+  type SwAttrPool,
+} from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 
 /** Copies all original direct items and applies complete font values at their real boundaries. @param hints - Source ranges. @param pool - Document pool. @param textLength - Logical length. @param start - Inclusive offset. @param end - Exclusive offset. @param font - Requested five-field item. @param inherited - Node defaults. @returns Independent canonical range snapshot. */
@@ -92,9 +94,7 @@ export function createCharacterColorItems(
   value: string,
 ): SfxPoolItem[] {
   return [
-    property === "color"
-      ? createWriterTextColorItem(value)
-      : new SfxStringItem(RES_CHRATR_HIGHLIGHT, value),
+    property === "color" ? createWriterTextColorItem(value) : createWriterHighlightItem(value),
   ];
 }
 

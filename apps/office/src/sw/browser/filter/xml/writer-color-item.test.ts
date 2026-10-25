@@ -4,10 +4,13 @@ import { SwDoc } from "../../../source/core/doc/doc";
 import {
   createWriterTextColorItem,
   writerTextColorValue,
+  createWriterHighlightItem,
+  writerHighlightColorValue,
 } from "../../../source/core/attr/swatrset";
 import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
-import { RES_CHRATR_COLOR } from "../../../inc/hintids";
+import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { ThemeColorUsage } from "../../../../docmodel/inc/theme/ThemeColorType";
 import { Color } from "../../../../tools/inc/color";
@@ -40,6 +43,24 @@ it("uses the native black pool default and preserves opaque,automatic and transp
       /** Sends an invalid transport value. @returns No valid item. */ () =>
         createWriterTextColorItem(invalid),
     ).toThrow("invalid");
+});
+it("keeps native highlight brushes and complete color words across worker snapshots", () => {
+  const doc = new SwDoc(),
+    pool = doc.GetAttrPool();
+  expect(pool.GetUserOrPoolDefaultItem(RES_CHRATR_HIGHLIGHT)).toBeInstanceOf(SvxBrushItem);
+  for (const input of ["#12abcd", "transparent", 0x80123456]) {
+    const native = createWriterHighlightItem(input);
+    const encoded = encodeSfxPoolItem(native);
+    expect(typeof encoded.value).toBe("number");
+    const restored = decodeSfxPoolItem(pool, encoded) as SvxBrushItem;
+    expect(restored.GetColor().equals(native.GetColor())).toBe(true);
+    expect(writerHighlightColorValue(restored)).toBe(writerHighlightColorValue(native));
+  }
+  const alpha = createWriterHighlightItem(0x80123456);
+  expect(writerHighlightColorValue(alpha)).toBe(`rgba(18, 52, 86, ${127 / 255})`);
+  expect(
+    createWriterHighlightItem(writerHighlightColorValue(alpha)).GetColor().equals(alpha.GetColor()),
+  ).toBe(true);
 });
 it("rejects complex metadata rather than silently losing it in worker transfer", /** Tests real native complex-color values omitted from source equality as well as ordinary theme state. @returns Nothing. */ () => {
   const item = createWriterTextColorItem("#123456");

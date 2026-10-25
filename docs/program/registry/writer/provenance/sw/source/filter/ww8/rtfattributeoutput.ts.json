@@ -24,7 +24,7 @@
     "preservedResponsibilities": [
       "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
       "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items.",
-      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco."
+      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco, including native brush colors projected with alpha."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."

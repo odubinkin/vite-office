@@ -6,15 +6,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterEditableTable } from "./WriterEditableTable";
-import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { createWriterHighlightItem } from "../../source/core/attr/swatrset";
 import { SvxFontHeightItem } from "../../../editeng/source/items/textitem";
 import { SvxULSpaceItem, SvxFirstLineIndentItem } from "../../../editeng/source/items/frmitems";
-import {
-  RES_CHRATR_HIGHLIGHT,
-  RES_CHRATR_FONTSIZE,
-  RES_MARGIN_FIRSTLINE,
-  RES_UL_SPACE,
-} from "../../inc/hintids";
+import { RES_CHRATR_FONTSIZE, RES_MARGIN_FIRSTLINE, RES_UL_SPACE } from "../../inc/hintids";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
@@ -80,7 +75,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     owner.node.SetAttr(new SvxULSpaceItem(100, 200, RES_UL_SPACE));
     owner.node.SetAttr(new SvxFontHeightItem(280, 100, RES_CHRATR_FONTSIZE));
     owner.node.SetAttr(createWriterTextColorItem("#123456"));
-    owner.node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#abcdef"));
+    owner.node.SetAttr(createWriterHighlightItem("#abcdef"));
     mount(owner);
     const cell = screen.getByLabelText("Row 1 column 1 paragraph 1");
     expect(cell).toHaveStyle({

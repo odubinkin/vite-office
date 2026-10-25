@@ -1,8 +1,9 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
-import { writerTextColorValue } from "../../core/attr/swatrset";
+import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
@@ -15,7 +16,6 @@ import {
   SvxPostureItem,
   SvxUnderlineItem,
 } from "../../../../editeng/source/items/textitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
 import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
@@ -891,7 +891,7 @@ export function getCharacterProperties(
     !(complexPosture instanceof SvxPostureItem) ||
     !(underline instanceof SvxUnderlineItem) ||
     (color !== undefined && !(color instanceof SvxColorItem)) ||
-    (highlight !== undefined && !(highlight instanceof SfxStringItem)) ||
+    (highlight !== undefined && !(highlight instanceof SvxBrushItem)) ||
     !(fontSize instanceof SvxFontHeightItem) ||
     !(asianFontSize instanceof SvxFontHeightItem) ||
     !(complexFontSize instanceof SvxFontHeightItem)
@@ -943,7 +943,9 @@ export function getCharacterProperties(
     ...(set.GetItemIfSet(RES_CHRATR_CTL_FONTSIZE, inherited) !== undefined
       ? { fontSizeTwipsComplex: complexFontSize.GetHeight() }
       : {}),
-    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
+    ...(highlight instanceof SvxBrushItem
+      ? { highlight: writerHighlightColorValue(highlight) }
+      : {}),
     ...(inherited || set.GetItemIfSet(RES_CHRATR_WEIGHT, false) !== undefined
       ? { fontWeight: ConvertFontWeight(weight.GetValue(), "FontWeight") }
       : {}),

@@ -2,7 +2,8 @@
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { Color, ColorTransparency, COL_AUTO, COL_TRANSPARENT } from "../../../../tools/inc/color";
 import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
 import {
   SID_ATTR_TABSTOP,
@@ -349,11 +350,7 @@ export class SwAttrPool extends SfxItemPool {
       createWriterTextColorItem,
       SID_ATTR_CHAR_COLOR,
     );
-    this.RegisterDefaultItem(
-      new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"),
-      /** Retains the existing unported highlight compatibility boundary. @param stored - Persisted value. @returns Existing highlight item. */
-      (stored) => new SfxStringItem(RES_CHRATR_HIGHLIGHT, String(stored)),
-    );
+    this.RegisterDefaultItem(new SvxBrushItem(RES_CHRATR_HIGHLIGHT), createWriterHighlightItem);
     this.RegisterDefaultItem(
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
@@ -726,20 +723,54 @@ export class SwAttrSet extends SfxItemSet {
 
 /** Converts only the existing validated Writer hex/automatic request and legacy worker values to the real native color item. New worker values retain the full packed transparency word. This is a compatibility boundary,not an alternate core color class. @param value - Existing request/transfer value. @returns Native Writer color item. */
 export function createWriterTextColorItem(value: unknown): SvxColorItem {
-  if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 0xffffffff)
-    return new SvxColorItem(
-      new Color(ColorTransparency, value, "ColorTransparencyTag"),
-      RES_CHRATR_COLOR,
-    );
-  if (value === "auto") return new SvxColorItem(COL_AUTO, RES_CHRATR_COLOR);
-  if (typeof value === "string" && /^#[0-9a-f]{6}$/iu.test(value))
-    return new SvxColorItem(new Color(Number.parseInt(value.slice(1), 16)), RES_CHRATR_COLOR);
-  throw new Error("Writer text color value is invalid.");
+  return new SvxColorItem(writerColorFromPrimitive(value, "auto"), RES_CHRATR_COLOR);
 }
 /** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
 export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
   const color = item.GetValue();
   if (color.equals(COL_AUTO)) return "auto";
+  if (color.GetAlpha() !== 255)
+    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
+  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+}
+
+/** Converts the Writer highlight request or full packed worker color to its native brush item. @param value - Requested or persisted color. @returns Native highlight item. */
+export function createWriterHighlightItem(value: unknown): SvxBrushItem {
+  return new SvxBrushItem(writerColorFromPrimitive(value, "transparent"), RES_CHRATR_HIGHLIGHT);
+}
+
+/** Decodes the existing Writer request and worker color forms to one native value. @param value - Primitive boundary value. @param automatic - Applicable automatic marker. @returns Full native color. */
+export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "transparent"): Color {
+  if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 0xffffffff)
+    return new Color(ColorTransparency, value, "ColorTransparencyTag");
+  if (value === automatic) return new Color(automatic === "auto" ? COL_AUTO : COL_TRANSPARENT);
+  if (typeof value === "string" && /^#[0-9a-f]{6}$/iu.test(value))
+    return new Color(Number.parseInt(value.slice(1), 16));
+  if (typeof value === "string") {
+    const rgba = /^rgba\((\d{1,3}), (\d{1,3}), (\d{1,3}), (\d*\.?\d+)\)$/u.exec(value);
+    if (rgba !== null) {
+      const red = Number(rgba[1]),
+        green = Number(rgba[2]),
+        blue = Number(rgba[3]);
+      const alpha = Number(rgba[4]);
+      if (
+        [red, green, blue].every((channel) => Number.isInteger(channel) && channel <= 255) &&
+        alpha >= 0 &&
+        alpha <= 1
+      ) {
+        const color = new Color(red, green, blue);
+        color.SetAlpha(Math.round(alpha * 255));
+        return color;
+      }
+    }
+  }
+  throw new Error(`Writer ${automatic === "auto" ? "text" : "highlight"} color value is invalid.`);
+}
+
+/** Projects a native highlight brush to the Writer text/worker/DOM boundary. @param item - Actual highlight item. @returns Primitive color. */
+export function writerHighlightColorValue(item: Readonly<SvxBrushItem>): string {
+  const color = item.GetColor();
+  if (color.equals(COL_TRANSPARENT)) return "transparent";
   if (color.GetAlpha() !== 255)
     return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
   return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;

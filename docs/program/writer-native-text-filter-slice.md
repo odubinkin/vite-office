@@ -55,7 +55,12 @@ over document-added colors, and nonpalette colors use the source chromatic-schem
 and RGB-error search. A transparent highlight writes index zero; a direct
 automatic character color writes `\\cf0`. RTF import resolves the emitted
 palette index through the source-ordered color table, so nonpalette highlight
-colors are quantized on round trip by the format.
+colors are quantized on round trip by the format. The current Writer attribute
+pool now owns `RES_CHRATR_HIGHLIGHT` as the pinned `SvxBrushItem`, replacing the
+earlier string-item shortcut across ranges, paragraph styles, UNO, ODT and UI.
+The browser worker codec preserves the brush's complete packed color word.
+RTF has no alpha color-table field, so it writes the native RGB channels and
+uses the pinned palette conversion for a partially transparent highlight.
 
 RTF underline dispatch now follows pinned
 `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx` and

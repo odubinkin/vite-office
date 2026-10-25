@@ -2,7 +2,7 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
-import { createWriterTextColorItem } from "../attr/swatrset";
+import { createWriterTextColorItem, createWriterHighlightItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
@@ -28,7 +28,6 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -38,7 +37,6 @@ import {
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
-  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_POSTURE,
@@ -255,7 +253,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, defaults.widows));
   if (defaults.autoColor !== undefined) collection.SetFormatAttr(createWriterTextColorItem("auto"));
   if (defaults.transparentHighlight !== undefined)
-    collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
+    collection.SetFormatAttr(createWriterHighlightItem("transparent"));
   for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
     if (defaults.bold !== undefined)
       collection.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));

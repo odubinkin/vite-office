@@ -1,7 +1,11 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
-import { writerTextColorValue } from "../attr/swatrset";
+import {
+  writerTextColorValue,
+  writerHighlightColorValue,
+  createWriterHighlightItem,
+} from "../attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../attr/swatrset";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
@@ -22,7 +26,7 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
@@ -135,7 +139,9 @@ export class SwFormatAutoFormat extends SfxPoolItem {
       /** Projects one nested item. @param item - Direct pooled item. @returns Primitive item record. */ (
         item,
       ) => ({
-        value: item.QueryValue() as SfxPoolItemSnapshot["value"],
+        value: (item instanceof SvxBrushItem
+          ? item.GetColor().toUInt32()
+          : item.QueryValue()) as SfxPoolItemSnapshot["value"],
         which: item.Which(),
       }),
     );
@@ -446,7 +452,7 @@ export function createSwFormatAutoFormat(
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
-    items.Put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, attributes.highlight));
+    items.Put(createWriterHighlightItem(attributes.highlight));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       items.Put(
@@ -543,7 +549,9 @@ export function projectWriterCharacterAttributes(
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
-    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
+    ...(highlight instanceof SvxBrushItem
+      ? { highlight: writerHighlightColorValue(highlight) }
+      : {}),
     ...(authoredEscapement !== undefined ||
     escapement.GetEsc() !== 0 ||
     escapement.GetProportionalHeight() !== 100

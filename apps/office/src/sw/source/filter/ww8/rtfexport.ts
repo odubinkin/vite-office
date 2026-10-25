@@ -44,6 +44,7 @@ import {
   COL_LIGHTGRAY,
   type Color,
 } from "../../../../tools/inc/color";
+import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
 const RTF_DEFAULT_COLORS = [
@@ -570,7 +571,7 @@ export class RtfExport {
 
   /** Assigns a stable one-based RTF color index. @param color - CSS RGB color. @returns Index. */
   private IndexColor(color: string): number {
-    const key = color.toLowerCase();
+    const key = rtfColorKey(writerColorFromPrimitive(color, "auto"));
     const existing = this.colors.get(key);
     if (existing !== undefined) return existing;
     const index = this.colors.size + 1;

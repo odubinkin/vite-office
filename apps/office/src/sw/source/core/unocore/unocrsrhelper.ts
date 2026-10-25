@@ -19,6 +19,7 @@ import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/contai
 import { ElementExistException } from "../../../../cppu/inc/com/sun/star/container/ElementExistException";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -155,11 +156,8 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
       out.insert([item.GetValue().toInt32()], "sal_Int32");
       return out;
     }
-    const color = (item as SfxStringItem).GetValue();
-    value =
-      color === "auto" || color === "automatic" || color === "transparent"
-        ? -1
-        : parseInt(color.replace("#", ""), 16);
+    if (!(item instanceof SvxBrushItem)) illegal("Invalid character highlight item");
+    value = item.GetColor().toInt32();
   } else if (
     item instanceof SfxBoolItem ||
     item instanceof SfxInt16Item ||
@@ -224,14 +222,9 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
       copy.SetValue(new Color(ColorTransparency, n, "ColorTransparencyTag"));
       return copy;
     }
-    return new SfxStringItem(
-      item.Which(),
-      n === -1
-        ? item.Which() === H.RES_CHRATR_HIGHLIGHT
-          ? "transparent"
-          : "auto"
-        : `#${(n & 0xffffff).toString(16).padStart(6, "0")}`,
-    );
+    if (!(copy instanceof SvxBrushItem)) illegal("Invalid character highlight item");
+    copy.SetColor(new Color(ColorTransparency, n, "ColorTransparencyTag"));
+    return copy;
   }
   if (entry.kind === "font") {
     if (!(copy as SvxFontItem).PutValue(value, entry.member)) illegal("Invalid font member");

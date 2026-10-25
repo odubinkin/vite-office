@@ -55,6 +55,7 @@ import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import { RtfExport } from "./rtfexport";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
+import { createWriterTextColorItem, createWriterHighlightItem } from "../../core/attr/swatrset";
 
 it("writes source highlight palette indices independent of document color indices", () => {
   const output = new RtfAttributeOutput(
@@ -64,6 +65,9 @@ it("writes source highlight palette indices independent of document color indice
   const plain = { bold: false, italic: false, underline: false };
   expect(output.WriteCharacter({ ...plain, highlight: "#6666ff" })).toContain("\\highlight2");
   expect(output.WriteCharacter({ ...plain, highlight: "#ffcc00" })).toContain("\\highlight7");
+  expect(output.WriteCharacter({ ...plain, highlight: "rgba(102, 102, 255, 0.5)" })).toContain(
+    "\\highlight2",
+  );
   expect(output.WriteCharacter({ ...plain, highlight: "transparent", color: "auto" })).toBe(
     "\\cf0\\highlight0",
   );
@@ -86,6 +90,30 @@ it("quantizes a native highlight through the fixed RTF palette on export and imp
     expect(projectWriterTextRuns(imported.paragraphs[0]).at(0)?.attributes.highlight).toBe(
       "#0000ff",
     );
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("exports native alpha colors through RTF RGB channels and highlight palette", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("alpha");
+  paragraph.SetAttr(createWriterTextColorItem(0x80123456));
+  paragraph.SetAttr(createWriterHighlightItem(0x806666ff));
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const rtf = new TextDecoder().decode(bytes);
+    expect(rtf).toContain("\\red18\\green52\\blue86;");
+    expect(rtf).toContain("\\highlight2");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(projectWriterTextRuns(imported.paragraphs[0]).at(0)?.attributes).toMatchObject({
+      color: "#123456",
+      highlight: "#0000ff",
+    });
   } finally {
     imported?.Dispose();
     source.Dispose();

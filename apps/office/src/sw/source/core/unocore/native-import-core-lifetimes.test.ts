@@ -29,7 +29,8 @@ import { Color } from "../../../../tools/inc/color";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { InsertPoolItem } from "../doc/docfmt";
 import { createPropertySetInfo, SwUnoPropertyMap } from "./unomap";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { createWriterHighlightItem, writerHighlightColorValue } from "../attr/swatrset";
 import { INVALID_POOL_ITEM } from "../../../../svl/source/items/poolitem";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
@@ -223,15 +224,15 @@ it("queries legacy transport items and rejects invalid item members before poole
   assert(link);
   assert(orphan);
   try {
-    for (const old of ["auto", "automatic", "transparent", "#123456"]) {
-      const value = queryItem(new SfxStringItem(color.which, old), color),
+    for (const old of ["transparent", "#123456"]) {
+      const value = queryItem(createWriterHighlightItem(old), color),
         actual: [number] = [0];
       expect(value.extract(actual, "sal_Int32")).toBe(true);
       expect(actual[0]).toBe(old === "#123456" ? 0x123456 : -1);
       value.dispose();
     }
-    const legacy = putItem(new SfxStringItem(999, "#123456"), color, input) as SfxStringItem;
-    expect(legacy.GetValue()).toBe("auto");
+    const highlight = putItem(createWriterHighlightItem("#123456"), color, input) as SvxBrushItem;
+    expect(writerHighlightColorValue(highlight)).toBe("transparent");
     const named = queryItem(new SwFormatPageDesc("Standard", 3), page);
     expect(stringValue(named)).toBe("Standard");
     named.dispose();
