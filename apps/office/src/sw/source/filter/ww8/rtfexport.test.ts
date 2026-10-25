@@ -25,6 +25,7 @@ import {
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -33,6 +34,7 @@ import {
   RES_KEEP,
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
+  RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -148,6 +150,63 @@ it("retains native spacing and keep properties on a named RTF paragraph style", 
     expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(160);
     expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
     expect((result?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("exports native relative tab stops as Word absolute positions with alignment and leaders", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Tabs");
+  paragraph.SetParagraphTextLeftMargin(360);
+  const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+  tabs.Insert(new SvxTabStop(720, SvxTabAdjust.Right, "\0", "."));
+  tabs.Insert(new SvxTabStop(1440, SvxTabAdjust.Decimal, "\0", "_"));
+  paragraph.SetAttr(tabs);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const encoded = new TextDecoder().decode(bytes);
+    expect(encoded).toContain("\\deftab1134");
+    expect(encoded).toContain("\\tldot\\tqr\\tx1080\\tlul\\tqdec\\tx1800");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")).toBe(false);
+    const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    expect(result.Count()).toBe(2);
+    expect(result.At(0).GetTabPos()).toBe(1080);
+    expect(result.At(0).GetAdjustment()).toBe(SvxTabAdjust.Right);
+    expect(result.At(0).GetFill()).toBe(".");
+    expect(result.At(1).GetTabPos()).toBe(1800);
+    expect(result.At(1).GetAdjustment()).toBe(SvxTabAdjust.Decimal);
+    expect(result.At(1).GetFill()).toBe("_");
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("retains explicit native tab stops in an RTF named paragraph style", () => {
+  const source = createWriterDocument();
+  const style = source.GetTextFormatColl("heading-2");
+  const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+  tabs.Insert(new SvxTabStop(900, SvxTabAdjust.Center, "\0", "."));
+  style.SetFormatAttr(tabs);
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Styled tabs");
+  paragraph.ChgFormatColl(style);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toMatch(/\\s\d+[^}]*\\tldot\\tqc\\tx900/u);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    expect(result.Count()).toBe(1);
+    expect(result.At(0).GetTabPos()).toBe(900);
+    expect(result.At(0).GetAdjustment()).toBe(SvxTabAdjust.Center);
   } finally {
     imported?.Dispose();
     source.Dispose();

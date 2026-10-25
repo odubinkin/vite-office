@@ -12,6 +12,7 @@ import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { getWriterParagraphAlignment } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -29,6 +30,7 @@ import {
   RES_KEEP,
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
+  RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
@@ -52,6 +54,10 @@ export class RtfAttributeOutput {
       paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
       paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
       paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
+      paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+      paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+        ? paragraph.GetParagraphTextLeftMargin()
+        : 0,
     );
   }
 
@@ -67,6 +73,10 @@ export class RtfAttributeOutput {
       items.Get(RES_KEEP) as SfxBoolItem,
       items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
       items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
+      items.Get(RES_PARATR_TABSTOP) as SvxTabStopItem,
+      items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+        ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
+        : 0,
     );
   }
 
@@ -80,6 +90,8 @@ export class RtfAttributeOutput {
     keep: SfxBoolItem,
     split: SfxBoolItem,
     widows: SfxInt16Item,
+    tabs: SvxTabStopItem,
+    tabOffset: number,
   ): string {
     let output =
       alignment === "center"
@@ -97,6 +109,20 @@ export class RtfAttributeOutput {
     if (keep.GetValue()) output += "\\keepn";
     if (!split.GetValue()) output += "\\keep";
     output += widows.GetValue() ? "\\widctlpar" : "\\nowidctlpar";
+    for (let index = 0; index < tabs.Count(); index++) {
+      const tab = tabs.At(index);
+      if (tab.GetAdjustment() === SvxTabAdjust.Default) continue;
+      const fill = tab.GetFill();
+      if (fill === ".") output += "\\tldot";
+      else if (fill === "_") output += "\\tlul";
+      else if (fill === "-") output += "\\tlth";
+      else if (fill === "=") output += "\\tleq";
+      const adjust = tab.GetAdjustment();
+      if (adjust === SvxTabAdjust.Right) output += "\\tqr";
+      else if (adjust === SvxTabAdjust.Center) output += "\\tqc";
+      else if (adjust === SvxTabAdjust.Decimal) output += "\\tqdec";
+      output += `\\tx${tab.GetTabPos() + tabOffset}`;
+    }
     return output;
   }
 

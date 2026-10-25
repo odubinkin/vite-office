@@ -14,7 +14,7 @@
       "RtfExport::WriteNumbering"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body text, character decoration/position, hyperlinks, point bookmarks, paragraph alignment/indentation, paragraph style references, table alignment/left offset/cell boundaries, row height/split and direct cell vertical orientation/border/padding controls derived from native items, plus list definitions including source-mapped level numbering formats, starts, bullet glyphs and paragraph listtext as RTF; uncounted paragraphs omit list controls."
+      "Writes represented Writer body text, character decoration/position, hyperlinks, point bookmarks, paragraph alignment/indentation and native default tab distance, paragraph style references, table alignment/left offset/cell boundaries, row height/split and direct cell vertical orientation/border/padding controls derived from native items, plus list definitions including source-mapped level numbering formats, starts, bullet glyphs and paragraph listtext as RTF; uncounted paragraphs omit list controls."
     ],
     "omittedResponsibilities": [
       "Upstream complete page, frame, picture, non-hyperlink field, header/footer, drawing, section and full style-property export paths remain unverified."
@@ -28,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "round trips native decoration"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "exports native relative tab stops"
         }
       ],
       "upstream": [

@@ -211,17 +211,18 @@ it("keeps native unknown-ID preconditions and unregistered zero-state early retu
       empty.SetUserDefaultItem(new SfxBoolItem(0, true)),
   ).toThrow("Missing original ItemInfo");
 });
-it("preserves the separate browser registry original lookup without inventing native user-default metadata", /** Checks existing Writer registry and original-getter preconditions. @returns Nothing. */ () => {
+it("preserves the bounded registry original while applying a user default", /** Checks existing Writer registry and original-getter preconditions. @returns Nothing. */ () => {
   const p = new SfxItemPool();
   p.RegisterDefaultItem(new SfxBoolItem(7, false));
   expect(p.GetPoolDefaultItem(7)).toBe(p.GetUserOrPoolDefaultItem(7));
   expect(
     /** Rejects an unknown original default. @returns Item. */ () => p.GetPoolDefaultItem(99),
   ).toThrow("Unknown pool default");
-  expect(
-    /** Registry entries do not create native Which ranges. @returns Nothing. */ () =>
-      p.SetUserDefaultItem(new SfxBoolItem(7, true)),
-  ).toThrow("Unknown WhichId");
+  p.SetUserDefaultItem(new SfxBoolItem(7, true));
+  expect(p.GetPoolDefaultItem(7).QueryValue()).toBe(false);
+  expect(p.GetUserOrPoolDefaultItem(7).QueryValue()).toBe(true);
+  p.ResetUserDefaultItem(7);
+  expect(p.GetUserOrPoolDefaultItem(7).QueryValue()).toBe(false);
   const native = pool().p;
   expect(
     /** Rejects unknown original native metadata. @returns Item. */ () =>

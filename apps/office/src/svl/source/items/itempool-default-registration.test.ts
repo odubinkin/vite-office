@@ -48,3 +48,23 @@ it("retains optional concrete factory restoration beside default-only entries", 
     "Pooled item factory changed the WhichId.",
   );
 });
+
+it("owns and resets a user default for bounded registered items", () => {
+  const pool = new SfxItemPool();
+  pool.RegisterDefaultItem(new SfxStringItem(1, "original"));
+  const caller = new SfxStringItem(1, "override");
+  pool.SetUserDefaultItem(caller);
+  expect(pool.GetPoolDefaultItem(1).QueryValue()).toBe("original");
+  expect(pool.GetUserDefaultItem(1)?.QueryValue()).toBe("override");
+  expect(pool.GetUserDefaultItem(1)).not.toBe(caller);
+  expect(pool.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("override");
+  const copy = pool.Clone();
+  expect(copy.GetUserDefaultItem(1)?.QueryValue()).toBe("override");
+  expect(copy.GetUserDefaultItem(1)).not.toBe(pool.GetUserDefaultItem(1));
+  copy.ResetUserDefaultItem(1);
+  expect(copy.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("original");
+  expect(pool.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("override");
+  pool.ResetUserDefaultItem(1);
+  expect(pool.GetUserDefaultItem(1)).toBeNull();
+  expect(pool.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("original");
+});

@@ -8,9 +8,16 @@ import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { RES_UL_SPACE, RES_KEEP, RES_PARATR_SPLIT, RES_PARATR_WIDOWS } from "../../../inc/hintids";
+import {
+  RES_UL_SPACE,
+  RES_KEEP,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
+  RES_PARATR_TABSTOP,
+} from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfTokenizer } from "./rtftokenizer";
@@ -40,6 +47,53 @@ it("imports paragraph spacing and keep controls into native item owners", () => 
     expect((second?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(0);
   } finally {
     document.Dispose();
+  }
+});
+
+it("imports RTF absolute tab positions and source leader mapping into native stops", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\tldot\\tqr\\tx720\\tlth\\tqc\\tx1440 First\\par\\pard\\tqdec\\tx2160 Second}",
+  );
+  try {
+    expect(document.GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")).toBe(false);
+    const first = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    expect(first.Count()).toBe(2);
+    expect([first.At(0).GetTabPos(), first.At(0).GetAdjustment(), first.At(0).GetFill()]).toEqual([
+      720,
+      SvxTabAdjust.Right,
+      ".",
+    ]);
+    expect([first.At(1).GetTabPos(), first.At(1).GetAdjustment(), first.At(1).GetFill()]).toEqual([
+      1440,
+      SvxTabAdjust.Center,
+      "_",
+    ]);
+    const second = document.paragraphs[1]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    expect(second.Count()).toBe(1);
+    expect(second.At(0).GetTabPos()).toBe(2160);
+    expect(second.At(0).GetAdjustment()).toBe(SvxTabAdjust.Decimal);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("applies the RTF default tab distance through the native document item pool", () => {
+  const explicit = read("{\\rtf1\\ansi\\deftab900 Text}");
+  const implicit = read("{\\rtf1\\ansi Text}");
+  try {
+    expect(
+      (explicit.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem)
+        .At(0)
+        .GetTabPos(),
+    ).toBe(900);
+    expect(
+      (implicit.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem)
+        .At(0)
+        .GetTabPos(),
+    ).toBe(720);
+  } finally {
+    explicit.Dispose();
+    implicit.Dispose();
   }
 });
 

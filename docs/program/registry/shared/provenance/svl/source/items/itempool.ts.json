@@ -24,6 +24,10 @@
         {
           "path": "apps/office/src/svl/source/items/itempool.ts",
           "marker": "sendShutdownHint"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itempool-default-registration.test.ts",
+          "marker": "owns and resets a user default for bounded registered items"
         }
       ],
       "upstream": [

@@ -19,6 +19,8 @@ import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport {
@@ -149,6 +151,11 @@ export class RtfExport {
         output += `{\\listoverride\\listid${list.id}\\listoverridecount0\\ls${list.id}}`;
       output += "}";
     }
+    const defaultTabs = document
+      .GetTextFormatColl("default")
+      .GetAttrSet()
+      .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    if (defaultTabs.Count() > 0) output += `\\deftab${defaultTabs.At(0).GetTabPos()}`;
     output += "\n";
     for (const block of blocks) {
       if (block instanceof SwTableNode) {

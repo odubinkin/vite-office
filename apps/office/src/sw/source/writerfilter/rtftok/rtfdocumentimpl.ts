@@ -8,6 +8,7 @@ import {
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -25,6 +26,7 @@ import {
   RES_KEEP,
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
+  RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
@@ -72,6 +74,9 @@ interface RtfParagraphState {
   keepNext: boolean;
   keepTogether: boolean;
   widowControl: boolean;
+  tabStops: readonly SvxTabStop[];
+  tabAdjustment: SvxTabAdjust;
+  tabFill: string;
   alignmentSet?: boolean;
   leftSet?: boolean;
   rightSet?: boolean;
@@ -82,6 +87,7 @@ interface RtfParagraphState {
   keepNextSet?: boolean;
   keepTogetherSet?: boolean;
   widowControlSet?: boolean;
+  tabStopsSet?: boolean;
   styleIndex?: number;
   listOverride?: number;
   listLevel: number;
@@ -176,6 +182,9 @@ const DEFAULT_PARAGRAPH: RtfParagraphState = {
   keepNext: false,
   keepTogether: false,
   widowControl: true,
+  tabStops: [],
+  tabAdjustment: SvxTabAdjust.Left,
+  tabFill: " ",
   listLevel: 0,
 };
 const SKIPPED_DESTINATIONS = new Set([
@@ -228,6 +237,7 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "keep",
   "widctlpar",
   "nowidctlpar",
+  "tx",
 ]);
 const CHARACTER_PROPERTY_CONTROLS = new Set([
   "b",
@@ -306,6 +316,7 @@ export class RtfDocumentImpl {
   private rowDefaultPaddings = new Map<SvxBoxItemLine, number>();
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
+  private defaultTabStop = 720;
 
   /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
@@ -319,6 +330,23 @@ export class RtfDocumentImpl {
       this.CommitParagraph();
     this.FlushTable();
     const document = new SwDoc(options);
+    // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
+    document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
+    const defaultTabs = (
+      document.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem
+    ).Clone();
+    if (defaultTabs.Count() > 0 && this.defaultTabStop > 0) {
+      const first = defaultTabs.At(0);
+      const replacement = new SvxTabStop(
+        this.defaultTabStop,
+        first.GetAdjustment(),
+        first.GetDecimal(),
+        first.GetFill(),
+      );
+      defaultTabs.Remove(0);
+      defaultTabs.Insert(replacement);
+      document.GetAttrPool().SetUserDefaultItem(defaultTabs);
+    }
     this.importedStyles.clear();
     for (const [index, definition] of this.styles) {
       const { name } = definition;
@@ -522,6 +550,7 @@ export class RtfDocumentImpl {
       collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.keepTogether));
     if (controls.has("widctlpar") || controls.has("nowidctlpar"))
       collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.widowControl ? 2 : 0));
+    if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
   }
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
@@ -560,6 +589,7 @@ export class RtfDocumentImpl {
       node.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.state.keepTogether));
     if (paragraph.state.widowControlSet)
       node.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.state.widowControl ? 2 : 0));
+    if (paragraph.state.tabStopsSet) node.SetAttr(createRtfTabStops(paragraph.state.tabStops));
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
@@ -802,6 +832,10 @@ export class RtfDocumentImpl {
   /** Applies one represented body control. @param name - RTF control. @param parameter - Optional value. @param state - Current group. */
   private DispatchBodyControl(name: string, parameter: number | undefined, state: RtfState): void {
     if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
+    if (name === "deftab" && parameter !== undefined) {
+      this.defaultTabStop = parameter;
+      return;
+    }
     if (name === "trowd") {
       this.inTable = true;
       this.rowBoundaries = [];
@@ -1064,6 +1098,33 @@ export class RtfDocumentImpl {
         widowControl: name === "widctlpar" && parameter !== 0,
         widowControlSet: true,
       };
+    else if (name === "tqr" || name === "tqc" || name === "tqdec")
+      state.paragraph = {
+        ...state.paragraph,
+        tabAdjustment:
+          name === "tqr"
+            ? SvxTabAdjust.Right
+            : name === "tqc"
+              ? SvxTabAdjust.Center
+              : SvxTabAdjust.Decimal,
+      };
+    else if (name === "tldot" || name === "tlul" || name === "tlth")
+      state.paragraph = {
+        ...state.paragraph,
+        // Pinned rtftok maps both tlul and tlth to the underscore leader.
+        tabFill: name === "tldot" ? "." : "_",
+      };
+    else if (name === "tx" && parameter !== undefined)
+      state.paragraph = {
+        ...state.paragraph,
+        tabStops: [
+          ...state.paragraph.tabStops,
+          new SvxTabStop(parameter, state.paragraph.tabAdjustment, "\0", state.paragraph.tabFill),
+        ],
+        tabStopsSet: true,
+        tabAdjustment: SvxTabAdjust.Left,
+        tabFill: " ",
+      };
   }
 
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */
@@ -1132,6 +1193,13 @@ export class RtfDocumentImpl {
         this.color = { red: 0, green: 0, blue: 0 };
       }
   }
+}
+
+/** Materializes absolute RTF tab positions through the native sorted item. */
+function createRtfTabStops(stops: readonly SvxTabStop[]): SvxTabStopItem {
+  const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+  for (const stop of stops) item.Insert(stop);
+  return item;
 }
 
 /** Compares complete direct character state. @param a - First. @param b - Second. @returns Equality. */
