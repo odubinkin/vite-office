@@ -1,0 +1,205 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "native OOXML fast export serializer and fragment factory",
+  "acceptance": "Partial prerequisite only. Writer task remains DOING and goal remains active.",
+  "parentCommit": "e564e0af0069d94bd50181bded630fb258f8398a",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "nativeEvidence": "Pinned clean source inspected; no compiled native differential or complete upstream QA is claimed.",
+  "sourceSha256": {
+    "sax/inc/fshelper.ts": "34c83105627333cb20d40b4c19f588bcc3cd3a8b9130efbe445381965055340a",
+    "sax/source/tools/CachedOutputStream.ts": "a33e68ab07eb660c6f890ac200286f503d6e84a3653cc8a80eef445268ea24e9",
+    "sax/source/tools/fastserializer.ts": "065b07ae3a503ed8bea36b80156acf3a6796f6c9723a01616f3ea68f1c16978f",
+    "oox/source/core/xmlfilterbase.ts": "3f876fafc427fc957dd18b7adbdc2629e7e035e21f8eaf12df5e7ee7ea03ff7e",
+    "sax/source/tools/fastserializer.test.ts": "69711ba5d7ff57346a0a1bc9702547e484d7c7508aba3198c419f1fc8c7094c8"
+  },
+  "tests": {
+    "command": "npm run test:coverage -- src/sax/source/tools/fastserializer.test.ts src/oox/source/core src/oox/source/token/tokenmap.test.ts --coverage.include=src/sax/source/tools/CachedOutputStream.ts --coverage.include=src/sax/source/tools/fastserializer.ts --coverage.include=src/sax/inc/fshelper.ts --coverage.include=src/oox/source/core/xmlfilterbase.ts --coverage.reportsDirectory=coverage/docx-fastserializer --maxWorkers=2",
+    "result": "pass",
+    "files": 5,
+    "cases": 59,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 270,
+          "covered": 270,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 291,
+          "covered": 291,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 78,
+          "covered": 78,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 171,
+          "covered": 171,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/core/xmlfilterbase.ts": {
+        "lines": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 69,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 56,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/inc/fshelper.ts": {
+        "lines": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 46,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/CachedOutputStream.ts": {
+        "lines": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/fastserializer.ts": {
+        "lines": {
+          "total": 141,
+          "covered": 141,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 149,
+          "covered": 149,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 87,
+          "covered": 87,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "checks": {
+    "npm run build": "pass; final tsc --noEmit and Vite build",
+    "node scripts/check-static-build.mjs": "pass; relative assets,3 JS bundles,no backend endpoints",
+    "scoped ESLint": "pass",
+    "scoped Prettier": "pass",
+    "npm run check:docs": "pass;3273 authored sources",
+    "npm run check:dependencies": "pass;1353 runtime sources,6941 imports,193 allowed edges",
+    "npm run check:source-provenance": "pass;1354 modules",
+    "npm run inventory:registry:check": "pass;339 capabilities,1354 modules,34 invariants,3110 records,0 semantic violations",
+    "npm run check:file-size": "pass",
+    "npm run check:source-tree": "pass;115 required paths,32 retired roots",
+    "node .agentplane/policy/check-routing.mjs": "pass",
+    "ap doctor": "pass;0 errors,pre-existing hook readiness warning",
+    "git diff --check": "pass"
+  },
+  "preservedContracts": [
+    "TokenValue nToken/pValue fields and borrowed UTF8 view ownership",
+    "Original 1MiB strict-greater-than cache threshold and oversized direct writes",
+    "Ordered token/value attributes; null omission versus empty-string emission",
+    "XML10 escaping and native literal/already-escaped x-pattern exceptions",
+    "APPEND/PREPEND/POSTPONE marks, sorted sticky buckets and supplied order",
+    "Separate original mark/cache flags and fallible-update order; getData precedes pop",
+    "Original XML/VML/no-header fragment factory predicate",
+    "Actual ZIP fragment/package commit and reopen"
+  ],
+  "suspectedIssues": [
+    "WRITER108",
+    "WRITER109",
+    "WRITER110",
+    "WRITER111",
+    "CALC-286",
+    "CALC-287",
+    "CALC-288",
+    "CALC-289"
+  ],
+  "initialChecks": "Initial host typed-array realm/type-inference and expected literal-escape issues were corrected. The borrowed TokenValue and independent native mark flag were restored after direct source review. Earlier8/57/58-case measurements and intermediate counters are superseded by final59-case evidence. Threshold/configuration unchanged.",
+  "unverifiedOrPending": [
+    "FastAttributeList/raw-VML attribute overloads",
+    "Numeric/double serializer overloads",
+    "Exact invalid-UTF16, native ABI/retained-sequence/COW behavior",
+    "DocxExport/DocxAttributeOutput traversal and supported parts",
+    "Writer native import cursor/section finalization and full document/style loading",
+    "DOCX/XLSX production Open/export/download/reopen UI workflows"
+  ],
+  "fullSuite": "Not due: Writer is the second task after the SWRD7X full checkpoint, below the10-task cadence."
+}

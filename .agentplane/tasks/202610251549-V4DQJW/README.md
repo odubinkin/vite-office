@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 24
+revision: 27
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T21:41:04.337Z"
+doc_updated_at: "2026-10-25T22:35:22.874Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -116,6 +116,18 @@ sections:
     - Observation: Final affected-owner closure passes: 22 files/137 tests, scoped coverage100 statements742/742, branches437/437, functions141/141, lines659/659 across Any, unostyle, unotxdoc, PropertyMap and DomainMapper_Impl. Native typed-family assertion maps to a host precondition error; UNO model lifetime checks still throw actual RuntimeException. German-locale document test confirms original section Letter defaults override the existing A4 descriptor.
       Impact: The section attachment/property prerequisite is verified on actual native owners; no file import/export completion is claimed. Final build/typecheck and static smoke pass, as do scoped ESLint/Prettier, dependencies, source tree/provenance, registry and policy routing. WRITER107 records preserved name reservation after UNO factory failure.
       Resolution: Continue this task with native SetStart/pre-start cursor ownership, CloseSectionGroup and parser section mapping, then real document/style loader and DOCX export/UI. Keep task DOING and goal active; do not record acceptance pass or run the full repository suite at this checkpoint.
+
+    - Observation: Native shared export serializer block implemented: CachedOutputStream, FastSaxSerializer, FastSerializerHelper and XmlFilterBase fragment factory. Native TokenValue nToken/pValue retains borrowed UTF8 views, including visible buffer changes before tag emission. Final5-file/58-case scoped closure passes100 statements277/277, branches169/169, functions76/76, lines255/255 across all four affected executable owners.
+      Impact: Provides original XML header/VML admission, token attributes, escaping,1MiB buffering and mark/sort semantics for upcoming DOCX/XLSX export. Genuine ZIP fragment/package commit/reopen is tested. This is prerequisite evidence only; DocxExport traversal and both application file workflows remain unimplemented.
+      Resolution: Preserve WRITER108/109 and CALC286/287 source behavior. Native service acquisition is bound by explicit actual token-handler injection; physical byte buffers and GC bind original ownership without a fake component provider. FastAttributeList/raw-VML and numeric/double overloads remain pending. Continue the same approved Writer task; no acceptance pass or full-suite run at this checkpoint.
+
+    - Observation: Final serializer source preserves original startFastElement, singleFastElement, writeTokenValueList, writeBytes and ForSort::sort boundaries. Final focused closure passes58 tests in5 files and scoped100 statements286/286, branches169/169, functions78/78, lines264/264. Null optional attributes are omitted while empty values are emitted; native TokenValue borrowed-view ownership is verified.
+      Impact: The native shared fragment-export path is ready for DocxExport integration over actual ZIP storage. Final build/typecheck/static smoke, scoped lint/format, source/docs/dependency/registry/routing checks pass. Vendor remains clean at pinned9bc445578031fecf56086729d8e4940c77e14d65; doctor retains only its pre-existing hook readiness warning.
+      Resolution: Keep the Writer task DOING and goal active. Next implement native DocxExport/DocxAttributeOutput traversal and supported OOXML parts, then application file UI; return to native SwUnoCursor/section finalization for import. The initial8-case and57-case measurements are historical; final58-case source closure supersedes their metrics. No full repository run is due.
+
+    - Observation: Final native serializer closure is59 tests/5 files, with unchanged scoped100: statements290/290, branches171/171, functions78/78, lines269/269. Native independent mark/cache flags and getData-before-pop order are preserved. A genuinely closed ZIP output tests failed mark setup leaving a nonempty stack with a true empty flag, subsequent merge no-op and start bypass. Earlier58-case metrics precede this source-error-contract addition.
+      Impact: WRITER108–111 and CALC-286–289 document preserved escaping, sorted buckets, native retained-buffer suspicion and mark failure asymmetry. Final build/typecheck/static smoke pass; this remains an export infrastructure prerequisite, not a DOCX/XLSX application feature acceptance.
+      Resolution: Retain source flag/error order without healing native state. Proceed to actual DocxExport/DocxAttributeOutput and part traversal; native import cursor/section completion and both application file UI workflows remain required. Keep task and goal active; no full suite is due.
 id_source: "generated"
 ---
 ## Summary
@@ -208,3 +220,15 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Final affected-owner closure passes: 22 files/137 tests, scoped coverage100 statements742/742, branches437/437, functions141/141, lines659/659 across Any, unostyle, unotxdoc, PropertyMap and DomainMapper_Impl. Native typed-family assertion maps to a host precondition error; UNO model lifetime checks still throw actual RuntimeException. German-locale document test confirms original section Letter defaults override the existing A4 descriptor.
   Impact: The section attachment/property prerequisite is verified on actual native owners; no file import/export completion is claimed. Final build/typecheck and static smoke pass, as do scoped ESLint/Prettier, dependencies, source tree/provenance, registry and policy routing. WRITER107 records preserved name reservation after UNO factory failure.
   Resolution: Continue this task with native SetStart/pre-start cursor ownership, CloseSectionGroup and parser section mapping, then real document/style loader and DOCX export/UI. Keep task DOING and goal active; do not record acceptance pass or run the full repository suite at this checkpoint.
+
+- Observation: Native shared export serializer block implemented: CachedOutputStream, FastSaxSerializer, FastSerializerHelper and XmlFilterBase fragment factory. Native TokenValue nToken/pValue retains borrowed UTF8 views, including visible buffer changes before tag emission. Final5-file/58-case scoped closure passes100 statements277/277, branches169/169, functions76/76, lines255/255 across all four affected executable owners.
+  Impact: Provides original XML header/VML admission, token attributes, escaping,1MiB buffering and mark/sort semantics for upcoming DOCX/XLSX export. Genuine ZIP fragment/package commit/reopen is tested. This is prerequisite evidence only; DocxExport traversal and both application file workflows remain unimplemented.
+  Resolution: Preserve WRITER108/109 and CALC286/287 source behavior. Native service acquisition is bound by explicit actual token-handler injection; physical byte buffers and GC bind original ownership without a fake component provider. FastAttributeList/raw-VML and numeric/double overloads remain pending. Continue the same approved Writer task; no acceptance pass or full-suite run at this checkpoint.
+
+- Observation: Final serializer source preserves original startFastElement, singleFastElement, writeTokenValueList, writeBytes and ForSort::sort boundaries. Final focused closure passes58 tests in5 files and scoped100 statements286/286, branches169/169, functions78/78, lines264/264. Null optional attributes are omitted while empty values are emitted; native TokenValue borrowed-view ownership is verified.
+  Impact: The native shared fragment-export path is ready for DocxExport integration over actual ZIP storage. Final build/typecheck/static smoke, scoped lint/format, source/docs/dependency/registry/routing checks pass. Vendor remains clean at pinned9bc445578031fecf56086729d8e4940c77e14d65; doctor retains only its pre-existing hook readiness warning.
+  Resolution: Keep the Writer task DOING and goal active. Next implement native DocxExport/DocxAttributeOutput traversal and supported OOXML parts, then application file UI; return to native SwUnoCursor/section finalization for import. The initial8-case and57-case measurements are historical; final58-case source closure supersedes their metrics. No full repository run is due.
+
+- Observation: Final native serializer closure is59 tests/5 files, with unchanged scoped100: statements290/290, branches171/171, functions78/78, lines269/269. Native independent mark/cache flags and getData-before-pop order are preserved. A genuinely closed ZIP output tests failed mark setup leaving a nonempty stack with a true empty flag, subsequent merge no-op and start bypass. Earlier58-case metrics precede this source-error-contract addition.
+  Impact: WRITER108–111 and CALC-286–289 document preserved escaping, sorted buckets, native retained-buffer suspicion and mark failure asymmetry. Final build/typecheck/static smoke pass; this remains an export infrastructure prerequisite, not a DOCX/XLSX application feature acceptance.
+  Resolution: Retain source flag/error order without healing native state. Proceed to actual DocxExport/DocxAttributeOutput and part traversal; native import cursor/section completion and both application file UI workflows remain required. Keep task and goal active; no full suite is due.
