@@ -14,7 +14,8 @@
       "aImplIBM860ByteCvtData",
       "aImplIBM861ByteCvtData",
       "aImplIBM863ByteCvtData",
-      "aImplIBM865ByteCvtData"
+      "aImplIBM865ByteCvtData",
+      "aImplISO885915ByteCvtData"
     ],
     "upstreamSymbols": [
       "aImplIBM437ByteCvtData",
@@ -24,12 +25,14 @@
       "aImplIBM860ByteCvtData",
       "aImplIBM861ByteCvtData",
       "aImplIBM863ByteCvtData",
-      "aImplIBM865ByteCvtData"
+      "aImplIBM865ByteCvtData",
+      "aImplISO885915ByteCvtData"
     ],
     "preservedResponsibilities": [
       "Preserves the pinned IBM 437/850 and Apple Roman forward, reverse and extension tables and their native byte-converter aggregates for the shared SAL converter.",
       "Preserves pinned Apple-code-page forward/reverse data and converter aggregates for native RTF decoding: aImplAPPLEICELANDByteCvtData.",
-      "Pins IBM 860, 861, 863, 865 forward/reverse tables and byte-converter aggregates for native RTF decoding."
+      "Pins IBM 860, 861, 863, 865 forward/reverse tables and byte-converter aggregates for native RTF decoding.",
+      "Pins ISO-8859-15 forward/reverse tables and byte-converter aggregates for native RTF decoding."
     ],
     "omittedResponsibilities": [
       "Other tcvtlat1.tab encodings and the full platform codec registry remain outside this module."

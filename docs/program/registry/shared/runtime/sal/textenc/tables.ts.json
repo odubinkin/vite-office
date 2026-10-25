@@ -19,7 +19,7 @@
         "apps/office/src/sal/textenc/tables.ts#getSingleByteConvertData",
         "vendor/libreoffice-reference/sal/textenc/tables.cxx#sal_getFullTextEncodingData"
       ],
-      "justification": "Selects represented SAL single-byte data and the distinct Symbol converter by rtl_TextEncoding; the full native encoding-data registry remains outside this slice. Broader SAL codec parity remains unverified. Selects the represented Apple Central European, Cyrillic, Greek and Icelandic data. Selects the pinned Apple Croatian, Romanian, Turkish and Ukrainian converter data. Selects thirteen additional pinned IBM single-byte converters.",
+      "justification": "Selects represented SAL single-byte data and the distinct Symbol converter by rtl_TextEncoding; the full native encoding-data registry remains outside this slice. Broader SAL codec parity remains unverified. Selects the represented Apple Central European, Cyrillic, Greek and Icelandic data. Selects the pinned Apple Croatian, Romanian, Turkish and Ukrainian converter data. Selects thirteen additional pinned IBM single-byte converters. Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding.",
       "knownViolations": [],
       "localSymbols": [
         "getSingleByteConvertData",

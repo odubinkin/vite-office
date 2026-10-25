@@ -119,6 +119,30 @@ it.each([
   }
 });
 
+it.each([
+  [20127, "80", "\u20AC"],
+  [20866, "a4", "\u2553"],
+  [21866, "a4", "\u0454"],
+  [28591, "80", "\u0080"],
+  [28592, "a1", "\u0104"],
+  [28593, "a1", "\u0126"],
+  [28594, "c0", "\u0100"],
+  [28595, "a1", "\u0401"],
+  [28596, "d0", "\u0630"],
+  [708, "e1", "\u0641"],
+  [28597, "e1", "\u03B1"],
+  [28598, "e1", "\u05D1"],
+  [28599, "d0", "\u011E"],
+  [28605, "a4", "\u20AC"],
+])("decodes pinned SAL ASCII, ISO-8859, and KOI8 code page %i", (codepage, byte, expected) => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}\'${byte}}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe(expected);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("uses pinned SAL Windows-1252 undefined-byte handling", () => {
   const document = read(String.raw`{\rtf1\ansi A\'81\'80\'8dB}`);
   try {

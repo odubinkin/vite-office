@@ -10,17 +10,22 @@
       "aImplMS1255ByteCvtData",
       "aImplMS1256ByteCvtData",
       "aImplIBM862ByteCvtData",
-      "aImplIBM864ByteCvtData"
+      "aImplIBM864ByteCvtData",
+      "aImplISO88596ByteCvtData",
+      "aImplISO88598ByteCvtData"
     ],
     "upstreamSymbols": [
       "aImplMS1255ByteCvtData",
       "aImplMS1256ByteCvtData",
       "aImplIBM862ByteCvtData",
-      "aImplIBM864ByteCvtData"
+      "aImplIBM864ByteCvtData",
+      "aImplISO88596ByteCvtData",
+      "aImplISO88598ByteCvtData"
     ],
     "preservedResponsibilities": [
       "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates.",
-      "Pins IBM 862, 864 forward/reverse tables and byte-converter aggregates for native RTF decoding."
+      "Pins IBM 862, 864 forward/reverse tables and byte-converter aggregates for native RTF decoding.",
+      "Pins ISO-8859-6 and ISO-8859-8 forward/reverse tables and byte-converter aggregates for native RTF decoding."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

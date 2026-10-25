@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts#RtfDocumentImpl",
         "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#RTFDocumentImpl"
       ],
-      "justification": "Represented native RTF import now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified.",
+      "justification": "Represented native RTF import now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified. RTF byte decoding now selects pinned SAL ASCII, ISO-8859 and KOI8 aggregates.",
       "knownViolations": [],
       "localSymbols": [
         "RtfDocumentImpl"

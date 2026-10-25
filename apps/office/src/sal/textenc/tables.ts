@@ -10,6 +10,7 @@ import {
   RTL_TEXTENCODING_APPLE_ROMANIAN,
   RTL_TEXTENCODING_APPLE_TURKISH,
   RTL_TEXTENCODING_APPLE_UKRAINIAN,
+  RTL_TEXTENCODING_ASCII_US,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_737,
   RTL_TEXTENCODING_IBM_775,
@@ -25,6 +26,18 @@ import {
   RTL_TEXTENCODING_IBM_865,
   RTL_TEXTENCODING_IBM_866,
   RTL_TEXTENCODING_IBM_869,
+  RTL_TEXTENCODING_ISO_8859_1,
+  RTL_TEXTENCODING_ISO_8859_2,
+  RTL_TEXTENCODING_ISO_8859_3,
+  RTL_TEXTENCODING_ISO_8859_4,
+  RTL_TEXTENCODING_ISO_8859_5,
+  RTL_TEXTENCODING_ISO_8859_6,
+  RTL_TEXTENCODING_ISO_8859_7,
+  RTL_TEXTENCODING_ISO_8859_8,
+  RTL_TEXTENCODING_ISO_8859_9,
+  RTL_TEXTENCODING_ISO_8859_15,
+  RTL_TEXTENCODING_KOI8_R,
+  RTL_TEXTENCODING_KOI8_U,
   RTL_TEXTENCODING_MS_874,
   RTL_TEXTENCODING_MS_1250,
   RTL_TEXTENCODING_MS_1251,
@@ -47,6 +60,7 @@ import {
   aImplIBM861ByteCvtData,
   aImplIBM863ByteCvtData,
   aImplIBM865ByteCvtData,
+  aImplISO885915ByteCvtData,
 } from "./tcvtlat1";
 import {
   aImplIBM737ByteCvtData,
@@ -76,11 +90,26 @@ import {
 import {
   aImplIBM862ByteCvtData,
   aImplIBM864ByteCvtData,
+  aImplISO88596ByteCvtData,
+  aImplISO88598ByteCvtData,
   aImplMS1255ByteCvtData,
   aImplMS1256ByteCvtData,
 } from "./tcvtarb1";
 import { aImplMS874ByteCvtData, aImplMS1258ByteCvtData } from "./tcvteas1";
-import { aImplMS1252ByteCvtData } from "./textenc";
+import {
+  aImplISO88591ByteCvtData,
+  aImplMS1252ByteCvtData,
+  aImplUSASCIIByteCvtData,
+} from "./textenc";
+import {
+  aImplISO88592ByteCvtData,
+  aImplISO88593ByteCvtData,
+  aImplISO88594ByteCvtData,
+  aImplISO88595ByteCvtData,
+  aImplISO88597ByteCvtData,
+  aImplISO88599ByteCvtData,
+} from "./tcvtest1.iso";
+import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
 
 /** Returns the existing single-byte converter data for the represented encoding. */
 export function getSingleByteConvertData(
@@ -105,6 +134,8 @@ export function getSingleByteConvertData(
       return aImplAPPLETURKISHByteCvtData;
     case RTL_TEXTENCODING_APPLE_UKRAINIAN:
       return aImplAPPLEUKRAINIANByteCvtData;
+    case RTL_TEXTENCODING_ASCII_US:
+      return aImplUSASCIIByteCvtData;
     case RTL_TEXTENCODING_IBM_437:
       return aImplIBM437ByteCvtData;
     case RTL_TEXTENCODING_IBM_737:
@@ -135,6 +166,30 @@ export function getSingleByteConvertData(
       return aImplIBM866ByteCvtData;
     case RTL_TEXTENCODING_IBM_869:
       return aImplIBM869ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_1:
+      return aImplISO88591ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_2:
+      return aImplISO88592ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_3:
+      return aImplISO88593ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_4:
+      return aImplISO88594ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_5:
+      return aImplISO88595ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_6:
+      return aImplISO88596ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_7:
+      return aImplISO88597ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_8:
+      return aImplISO88598ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_9:
+      return aImplISO88599ByteCvtData;
+    case RTL_TEXTENCODING_ISO_8859_15:
+      return aImplISO885915ByteCvtData;
+    case RTL_TEXTENCODING_KOI8_R:
+      return aImplKOI8RByteCvtData;
+    case RTL_TEXTENCODING_KOI8_U:
+      return aImplKOI8UByteCvtData;
     case RTL_TEXTENCODING_MS_874:
       return aImplMS874ByteCvtData;
     case RTL_TEXTENCODING_MS_1250:

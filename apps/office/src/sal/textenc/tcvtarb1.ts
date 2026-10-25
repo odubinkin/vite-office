@@ -1,5 +1,6 @@
-/** @fileoverview Windows and IBM code-page tables from sal/textenc/tcvtarb1.tab. */
+/** @fileoverview Arabic and Hebrew SAL tables, including ISO-8859-6/8. */
 import type { ImplByteConvertData, ImplUniCharTabData } from "./tenchelp";
+import { aImpl8090SameToCharTab, aImpl8090SameToUniTab } from "./textenc";
 
 /** Exact pinned aImplMS1255ToUniTab table. */
 export const aImplMS1255ToUniTab = Object.freeze([
@@ -89,7 +90,7 @@ export const aImplMS1255ByteCvtData: ImplByteConvertData = Object.freeze({
   mpToCharExTab: aImplMS1255ToCharTabEx,
   mnToUniStart1: 0x0080,
   mnToUniEnd1: 0x00ff,
-  mnToUniStart2: 0xffff,
+  mnToUniStart2: 0xff,
   mnToUniEnd2: 0x0000,
   mnToCharStart1: 0x05b0,
   mnToCharEnd1: 0x05f4,
@@ -212,7 +213,7 @@ export const aImplMS1256ByteCvtData: ImplByteConvertData = Object.freeze({
   mpToCharExTab: aImplMS1256ToCharTabEx,
   mnToUniStart1: 0x0080,
   mnToUniEnd1: 0x00ff,
-  mnToUniStart2: 0xffff,
+  mnToUniStart2: 0xff,
   mnToUniEnd2: 0x0000,
   mnToCharStart1: 0x061b,
   mnToCharEnd1: 0x0652,
@@ -357,7 +358,7 @@ export const aImplIBM862ByteCvtData: ImplByteConvertData = Object.freeze({
   mpToCharExTab: aImplIBM862ToCharTabEx,
   mnToUniStart1: 0x80,
   mnToUniEnd1: 0xff,
-  mnToUniStart2: 0xffff,
+  mnToUniStart2: 0xff,
   mnToUniEnd2: 0x0000,
   mnToCharStart1: 0x05d0,
   mnToCharEnd1: 0x05ea,
@@ -460,11 +461,133 @@ export const aImplIBM864ByteCvtData: ImplByteConvertData = Object.freeze({
   mpToCharExTab: aImplIBM864ToCharTabEx,
   mnToUniStart1: 0x80,
   mnToUniEnd1: 0xfe,
-  mnToUniStart2: 0xffff,
+  mnToUniStart2: 0xff,
   mnToUniEnd2: 0x0000,
   mnToCharStart1: 0xfe7d,
   mnToCharEnd1: 0xfefc,
   mnToCharStart2: 0xffff,
   mnToCharEnd2: 0x0000,
   mnToCharExCount: 51,
+});
+
+/** Exact pinned aImplISO88596ToUniTab table. */
+export const aImplISO88596ToUniTab = Object.freeze([
+  0x00a0, 0x0000, 0x0000, 0x0000, 0x00a4, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x060c, 0x00ad, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x061b, 0x0000, 0x0000, 0x0000, 0x061f, 0x0000, 0x0621, 0x0622, 0x0623,
+  0x0624, 0x0625, 0x0626, 0x0627, 0x0628, 0x0629, 0x062a, 0x062b, 0x062c, 0x062d, 0x062e, 0x062f,
+  0x0630, 0x0631, 0x0632, 0x0633, 0x0634, 0x0635, 0x0636, 0x0637, 0x0638, 0x0639, 0x063a, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0640, 0x0641, 0x0642, 0x0643, 0x0644, 0x0645, 0x0646, 0x0647,
+  0x0648, 0x0649, 0x064a, 0x064b, 0x064c, 0x064d, 0x064e, 0x064f, 0x0650, 0x0651, 0x0652,
+]);
+
+/** Exact pinned aImplISO88596ToCharTab table. */
+export const aImplISO88596ToCharTab = Object.freeze([
+  0x00bb, 0x0000, 0x0000, 0x0000, 0x00bf, 0x0000, 0x00c1, 0x00c2, 0x00c3, 0x00c4, 0x00c5, 0x00c6,
+  0x00c7, 0x00c8, 0x00c9, 0x00ca, 0x00cb, 0x00cc, 0x00cd, 0x00ce, 0x00cf, 0x00d0, 0x00d1, 0x00d2,
+  0x00d3, 0x00d4, 0x00d5, 0x00d6, 0x00d7, 0x00d8, 0x00d9, 0x00da, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x00e0, 0x00e1, 0x00e2, 0x00e3, 0x00e4, 0x00e5, 0x00e6, 0x00e7, 0x00e8, 0x00e9, 0x00ea,
+  0x00eb, 0x00ec, 0x00ed, 0x00ee, 0x00ef, 0x00f0, 0x00f1, 0x00f2, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0030, 0x0031, 0x0032,
+  0x0033, 0x0034, 0x0035, 0x0036, 0x0037, 0x0038, 0x0039,
+]);
+
+/** Exact pinned aImplISO88596ToCharTabEx table. */
+export const aImplISO88596ToCharTabEx: readonly ImplUniCharTabData[] = Object.freeze([
+  Object.freeze({ mnUniChar: 0x00a0, mnChar: 0xa0, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a4, mnChar: 0xa4, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00ad, mnChar: 0xad, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x060c, mnChar: 0xac, mnChar2: 0 }),
+]);
+
+/** Original aImplISO88596ByteCvtData pointer and range aggregate. */
+export const aImplISO88596ByteCvtData: ImplByteConvertData = Object.freeze({
+  mpToUniTab1: aImplISO88596ToUniTab,
+  mpToUniTab2: aImpl8090SameToUniTab,
+  mpToCharTab1: aImplISO88596ToCharTab,
+  mpToCharTab2: aImpl8090SameToCharTab,
+  mpToCharExTab: aImplISO88596ToCharTabEx,
+  mnToUniStart1: 0xa0,
+  mnToUniEnd1: 0xf2,
+  mnToUniStart2: 0x80,
+  mnToUniEnd2: 0x9f,
+  mnToCharStart1: 0x061b,
+  mnToCharEnd1: 0x0669,
+  mnToCharStart2: 0x80,
+  mnToCharEnd2: 0x9f,
+  mnToCharExCount: 4,
+});
+
+/** Exact pinned aImplISO88598ToUniTab table. */
+export const aImplISO88598ToUniTab = Object.freeze([
+  0x00a0, 0x0000, 0x00a2, 0x00a3, 0x00a4, 0x00a5, 0x00a6, 0x00a7, 0x00a8, 0x00a9, 0x00d7, 0x00ab,
+  0x00ac, 0x00ad, 0x00ae, 0x00af, 0x00b0, 0x00b1, 0x00b2, 0x00b3, 0x00b4, 0x00b5, 0x00b6, 0x00b7,
+  0x00b8, 0x00b9, 0x00f7, 0x00bb, 0x00bc, 0x00bd, 0x00be, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x2017, 0x05d0, 0x05d1, 0x05d2, 0x05d3, 0x05d4, 0x05d5, 0x05d6, 0x05d7,
+  0x05d8, 0x05d9, 0x05da, 0x05db, 0x05dc, 0x05dd, 0x05de, 0x05df, 0x05e0, 0x05e1, 0x05e2, 0x05e3,
+  0x05e4, 0x05e5, 0x05e6, 0x05e7, 0x05e8, 0x05e9, 0x05ea, 0x0000, 0x0000, 0x200e, 0x200f,
+]);
+
+/** Exact pinned aImplISO88598ToCharTab table. */
+export const aImplISO88598ToCharTab = Object.freeze([
+  0x00e0, 0x00e1, 0x00e2, 0x00e3, 0x00e4, 0x00e5, 0x00e6, 0x00e7, 0x00e8, 0x00e9, 0x00ea, 0x00eb,
+  0x00ec, 0x00ed, 0x00ee, 0x00ef, 0x00f0, 0x00f1, 0x00f2, 0x00f3, 0x00f4, 0x00f5, 0x00f6, 0x00f7,
+  0x00f8, 0x00f9, 0x00fa,
+]);
+
+/** Exact pinned aImplISO88598ToCharTabEx table. */
+export const aImplISO88598ToCharTabEx: readonly ImplUniCharTabData[] = Object.freeze([
+  Object.freeze({ mnUniChar: 0x00a0, mnChar: 0xa0, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a2, mnChar: 0xa2, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a3, mnChar: 0xa3, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a4, mnChar: 0xa4, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a5, mnChar: 0xa5, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a6, mnChar: 0xa6, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a7, mnChar: 0xa7, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a8, mnChar: 0xa8, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00a9, mnChar: 0xa9, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00ab, mnChar: 0xab, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00ac, mnChar: 0xac, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00ad, mnChar: 0xad, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00ae, mnChar: 0xae, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00af, mnChar: 0xaf, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b0, mnChar: 0xb0, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b1, mnChar: 0xb1, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b2, mnChar: 0xb2, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b3, mnChar: 0xb3, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b4, mnChar: 0xb4, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b5, mnChar: 0xb5, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b6, mnChar: 0xb6, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b7, mnChar: 0xb7, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b8, mnChar: 0xb8, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00b9, mnChar: 0xb9, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00bb, mnChar: 0xbb, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00bc, mnChar: 0xbc, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00bd, mnChar: 0xbd, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00be, mnChar: 0xbe, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00d7, mnChar: 0xaa, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x00f7, mnChar: 0xba, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x200e, mnChar: 0xfd, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x200f, mnChar: 0xfe, mnChar2: 0 }),
+  Object.freeze({ mnUniChar: 0x2017, mnChar: 0xdf, mnChar2: 0 }),
+]);
+
+/** Original aImplISO88598ByteCvtData pointer and range aggregate. */
+export const aImplISO88598ByteCvtData: ImplByteConvertData = Object.freeze({
+  mpToUniTab1: aImplISO88598ToUniTab,
+  mpToUniTab2: aImpl8090SameToUniTab,
+  mpToCharTab1: aImplISO88598ToCharTab,
+  mpToCharTab2: aImpl8090SameToCharTab,
+  mpToCharExTab: aImplISO88598ToCharTabEx,
+  mnToUniStart1: 0xa0,
+  mnToUniEnd1: 0xfe,
+  mnToUniStart2: 0x80,
+  mnToUniEnd2: 0x9f,
+  mnToCharStart1: 0x05d0,
+  mnToCharEnd1: 0x05ea,
+  mnToCharStart2: 0x80,
+  mnToCharEnd2: 0x9f,
+  mnToCharExCount: 33,
 });

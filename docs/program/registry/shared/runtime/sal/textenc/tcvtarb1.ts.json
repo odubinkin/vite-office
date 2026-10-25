@@ -21,13 +21,15 @@
         "apps/office/src/sal/textenc/tcvtarb1.ts#aImplIBM862ByteCvtData",
         "vendor/libreoffice-reference/sal/textenc/tcvtarb1.tab#aImplIBM862ByteCvtData"
       ],
-      "justification": "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates. Broader SAL codec parity remains unverified. Adds pinned IBM 862, 864 byte-converter data for native RTF decoding.",
+      "justification": "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates. Broader SAL codec parity remains unverified. Adds pinned IBM 862, 864 byte-converter data for native RTF decoding. Also selects pinned ISO-8859-6 and ISO-8859-8 data.",
       "knownViolations": [],
       "localSymbols": [
         "aImplMS1255ByteCvtData",
         "aImplMS1256ByteCvtData",
         "aImplIBM862ByteCvtData",
-        "aImplIBM864ByteCvtData"
+        "aImplIBM864ByteCvtData",
+        "aImplISO88596ByteCvtData",
+        "aImplISO88598ByteCvtData"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtarb1.tab",
@@ -35,7 +37,9 @@
         "aImplMS1255ByteCvtData",
         "aImplMS1256ByteCvtData",
         "aImplIBM862ByteCvtData",
-        "aImplIBM864ByteCvtData"
+        "aImplIBM864ByteCvtData",
+        "aImplISO88596ByteCvtData",
+        "aImplISO88598ByteCvtData"
       ]
     }
   }
