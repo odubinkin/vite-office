@@ -1,0 +1,129 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "Final acceptance gates pass;ready for recorded verify/quality/finish76 then74 and requested goal pause. Roadmap completion is not claimed.",
+  "sourceCommit": "ec4428e031c3f3faf53c184769b60d146cf72a6b",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sharedReference": {
+    "target": "../output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8",
+    "trackedSymlinkChanged": false,
+    "verifiedFiles": 20,
+    "method": "Original tracked symlink preserved. Only three existing byte-verified shared files copied inside ignored output;no download,archive extraction,outside write or reference-file Git addition.",
+    "copied": [
+      {
+        "path": "README",
+        "bytes": 2021,
+        "sha256": "cedbabb371d5e7dfc48b7b55714113be118e2d0d2f4f24f2a1aa3df9f46bd4d4"
+      },
+      {
+        "path": "liblangtag/lt-tag.h",
+        "bytes": 6054,
+        "sha256": "6c3b2386a3482702d2a2b8f0fd846d69db0f302517b55ac35207236002ea5860"
+      },
+      {
+        "path": "tests/check-lang.c",
+        "bytes": 2046,
+        "sha256": "5dba58f47c85e47304eb1bf2bd73f4f9bb75c217bf15179c4e98220d4342f7e0"
+      }
+    ]
+  },
+  "audit": [
+    {
+      "requirement": "Actual native clipboard/context/store compiled formula copy and paste Undo/defaults/mark boundaries;no alternate workbook/reparsed fill",
+      "evidence": "progress-native-block-input plus final-all-app-tests current raw/source proofs",
+      "result": "pass"
+    },
+    {
+      "requirement": "Visible shared Writer-style Sum/Formula actions,draft selection,grid/input focus,Undo/Redo,ODS persistence and fresh open",
+      "evidence": "task74 progress-visible-autosum;current actual Chromium7case recheck includes1280/390 Sum and5000row IO",
+      "result": "pass"
+    },
+    {
+      "requirement": "Full all-application run,repair initial failures and required strict100 current coverage",
+      "evidence": "final-all-app-tests full1280file19124cases;all7initial failures have passing current related rechecks. All current raw counters hit under unchanged thresholds. Full canonical500browser cases resolve2initial failures via current related7cases;tooling142/inventory124 similarly resolve documented initial failures. Initial commands are retained as failed,not rewritten as green.",
+      "result": "pass"
+    },
+    {
+      "requirement": "Calc,Writer and shared source-bound coverage",
+      "evidence": "fresh rerun of identical-source/map proof final74-shared-coverage-proof.log;current all-application S69844/B42892/F12749/L63360;inventory S1734/B1290/F437/L1670;no raw counter edits,threshold/exclusion changes or cross-version map merging",
+      "result": "pass"
+    },
+    {
+      "requirement": "All required type/build/lint/format/docs/size/boundaries/tree/resources/static/source/provenance/registry/routing/doctor gates",
+      "evidence": "final-all-app-tests preserved passing logs plus final shared-reference registry/invariants/provenance/doctor/routing logs",
+      "result": "pass"
+    },
+    {
+      "requirement": "Only calc checkout/branch,no merges or new planned tasks;final76/74 closure and goal pause",
+      "evidence": "git branch calc;all intentional implementation committed;remaining lifecycle to execute sequentially;only human DS_Store untracked",
+      "result": "ready-for-lifecycle"
+    }
+  ],
+  "coverage": {
+    "lines": {
+      "total": 63360,
+      "covered": 63360,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 69844,
+      "covered": 69844,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 12749,
+      "covered": 12749,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 42892,
+      "covered": 42892,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1670,
+      "covered": 1670,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1734,
+      "covered": 1734,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 437,
+      "covered": 437,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1290,
+      "covered": 1290,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "remainingFunctionalBoundaries": "Approved normal active/unprotected/non-scenario/enabled-Undo scalar/local-reference/aggregate/General slice. Cut,nondefault paste,filtered/SUBTOTAL,positive matrix/3D,rich/drawing,named database/native device services and complete Calc parity remain explicitly unported;these original scope boundaries are not new acceptance waivers.",
+  "stopRule": "After final required reference/registry acceptance,record verify/quality/commit/finish76 then74 and pause goal. No new tasks or feature families.",
+  "priorEvidence": "final-all-app-tests and progress-native-block-input are immutable historical results;the prior missing-reference condition is now resolved by actual existing shared files,without downloads/extraction or outside writes.",
+  "localReferenceCorrection": "The original proposed reference symlink was tracked. It was restored exactly;only three existing byte-verified shared files were copied into its original ignored target. No reference source or symlink changes enter Git."
+}
