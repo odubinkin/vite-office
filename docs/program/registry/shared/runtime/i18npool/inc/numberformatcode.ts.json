@@ -21,11 +21,9 @@
         "apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts",
         "vendor/libreoffice-reference/i18npool/inc/numberformatcode.hxx"
       ],
-      "justification": "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending.",
+      "justification": "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending. Final76 registry audit:the header explicitly re-exports NumberFormatCodeMapper from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged.",
       "knownViolations": [],
-      "localSymbols": [
-        "NumberFormatCodeMapper"
-      ],
+      "localSymbols": [],
       "sourceResponsibility": "divergent",
       "upstreamFile": "i18npool/inc/numberformatcode.hxx",
       "upstreamSymbols": [

@@ -21,14 +21,9 @@
         "vendor/libreoffice-reference/sc/inc/scopetools.hxx",
         "apps/office/src/sc/source/core/tool/native-autocalc-scope.test.ts"
       ],
-      "justification": "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending. TaskKVGGCR document-copy listening: DelayDeletingBroadcasters now exposes the actual document-wide scope owner alongside grouping/listening scopes. Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete.",
+      "justification": "Task76 native DelayFormulaGroupingSwitch and DelayStartListeningFormulaCells retain genuine document/column state,original disabled/explicit constructors,nested captured values,explicit reset/set and valid-owner managed scope restoration. Unsupported-service exceptions propagate at explicit Dispose;native destructor diagnostic exception suppression is not claimed. Remaining formatter,document paste/snapshot orchestration,Undo history and EnterBlock acceptance remain pending. TaskKVGGCR document-copy listening: DelayDeletingBroadcasters now exposes the actual document-wide scope owner alongside grouping/listening scopes. Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete. Final76 registry audit:the header explicitly re-exports AutoCalcSwitch,DelayDeletingBroadcasters,DelayFormulaGroupingSwitch,DelayStartListeningFormulaCells from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged.",
       "knownViolations": [],
-      "localSymbols": [
-        "DelayFormulaGroupingSwitch",
-        "DelayStartListeningFormulaCells",
-        "DelayDeletingBroadcasters",
-        "AutoCalcSwitch"
-      ],
+      "localSymbols": [],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/scopetools.hxx",
       "upstreamSymbols": [

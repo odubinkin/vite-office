@@ -1,11 +1,11 @@
-/** @fileoverview Exact source-backed search value imports leave module defaults and browser boundaries unchanged. */
+/** @fileoverview Exact source-backed search imports retain neighbor and browser restrictions alongside native published API module dependencies. */
 import { expect, it } from "vitest";
 import {
   isOriginalCharacterValueImport,
   isForbiddenModuleEdge,
 } from "./check-module-boundaries.mjs";
 
-it("admits only native search and character classification value edges", /** Preserves module defaults and reverse/browser restrictions while enabling exact source consumers. @returns Nothing. */ () => {
+it("admits only native search and character classification value edges", /** Preserves exact search consumers and browser restrictions alongside existing published API dependencies. @returns Nothing. */ () => {
   for (const [source, targets] of [
     ["sw/source/core/crsr/swcrsr.ts", ["i18nutil/inc/searchopt.ts"]],
     ["sw/source/core/crsr/findtxt.ts", ["i18nutil/inc/searchopt.ts"]],
@@ -49,8 +49,10 @@ it("admits only native search and character classification value edges", /** Pre
     );
   }
   expect(isForbiddenModuleEdge("unotools", "i18nutil")).toBe(true);
-  expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(true);
-  expect(isForbiddenModuleEdge("i18npool", "cppu")).toBe(true);
+  // Native number-format API owners use published offapi values and cppu Sequence.
+  expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(false);
+  expect(isForbiddenModuleEdge("i18npool", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("i18npool", "external")).toBe(true);
-  expect(isForbiddenModuleEdge("offapi", "udkapi")).toBe(true);
+  // Generated API structs retain the original UDK Locale dependency.
+  expect(isForbiddenModuleEdge("offapi", "udkapi")).toBe(false);
 });

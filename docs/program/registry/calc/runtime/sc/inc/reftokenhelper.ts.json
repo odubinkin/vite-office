@@ -19,20 +19,9 @@
         "apps/office/src/sc/source/core/tool/reftokenhelper.test.ts",
         "apps/office/e2e/calc/clipboard-copy.spec.ts"
       ],
-      "justification": "Task76 ports original reference-token extraction,range-list append/vector replacement,3D display flags,four local/external reference discriminators,endpoint normalization/borrowed identity,and file-ID/range intersection order using existing actual tokens/refdata/ranges. ScTokenRef reuses the project GC-held FormulaToken reference instead of inventing pointer counts. Relative flags and native default-range/external-name asymmetries are preserved (CALC-266/267). Named-expression resolution explicitly requires the unported native range-name owner;compileRangeRepresentation and join are not bound. Chart/Idle and full document paste/history remain incomplete.",
+      "justification": "Task76 ports original reference-token extraction,range-list append/vector replacement,3D display flags,four local/external reference discriminators,endpoint normalization/borrowed identity,and file-ID/range intersection order using existing actual tokens/refdata/ranges. ScTokenRef reuses the project GC-held FormulaToken reference instead of inventing pointer counts. Relative flags and native default-range/external-name asymmetries are preserved (CALC-266/267). Named-expression resolution explicitly requires the unported native range-name owner;compileRangeRepresentation and join are not bound. Chart/Idle and full document paste/history remain incomplete. Final76 registry audit:the header explicitly re-exports createRefToken,getDoubleRefDataFromToken,getRangeFromToken,getRangeListFromTokens,getSingleRef,getTokenFromRange,getTokensFromRangeList,intersects,isExternalRef,isRef from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged.",
       "knownViolations": [],
-      "localSymbols": [
-        "getRangeFromToken",
-        "getRangeListFromTokens",
-        "getTokenFromRange",
-        "getTokensFromRangeList",
-        "isRef",
-        "isExternalRef",
-        "intersects",
-        "getDoubleRefDataFromToken",
-        "createRefToken",
-        "getSingleRef"
-      ],
+      "localSymbols": [],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/reftokenhelper.hxx",
       "upstreamSymbols": [
