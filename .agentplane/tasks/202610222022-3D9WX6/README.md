@@ -4,7 +4,7 @@ title: "Connect native AutoSum and formula-bar input actions"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 35
+revision: 37
 origin:
   system: "manual"
 depends_on:
@@ -19,12 +19,14 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-25T05:22:51.375Z"
+  updated_by: "CODER"
+  note: "Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged."
   attempts: 0
-commit: null
+commit:
+  hash: "f60431bc26904df18137c2d578abf8faaf094aa2"
+  message: "✨ 3D9WX6 calc: connect native block AutoSum and retain input selection"
 comments:
   -
     author: "CODER"
@@ -38,6 +40,9 @@ comments:
   -
     author: "CODER"
     body: "Start: reuse existing three local reference files without changing tracked symlink;continue joint76/74 final acceptance and pause schedule."
+  -
+    author: "CODER"
+    body: "Start: record the existing committed native AutoSum/input implementation as the quality review target before final accepted closure."
 events:
   -
     type: "status"
@@ -67,8 +72,21 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: reuse existing three local reference files without changing tracked symlink;continue joint76/74 final acceptance and pause schedule."
+  -
+    type: "verify"
+    at: "2026-10-25T05:22:51.375Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged."
+  -
+    type: "status"
+    at: "2026-10-25T05:24:06.985Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: record the existing committed native AutoSum/input implementation as the quality review target before final accepted closure."
 doc_version: 3
-doc_updated_at: "2026-10-25T05:20:51.838Z"
+doc_updated_at: "2026-10-25T05:24:06.985Z"
 doc_updated_by: "CODER"
 description: "Block74 after73: implement original ordinary AutoSum classification/search/range construction and selected-block insertion through native token/view/input owners. Enable real Sum and correct StartFormula/SetFuncString source text selection in the shared-style Calc formula bar. Preserve native detection priorities,20-cell seek bound,sum-of-sums,empty-selection behavior,history and ODS persistence. No browser evaluator or ad-hoc range inference. Existing unported filtered/subtotal/group/3D services stay explicit and do not receive fabricated state. Scope up to80 source/test/registry/probe paths in Calc and any genuinely shared consumed owners. Require complete Calc raw100 and changed shared raw100,related tests,actual UI/browser/Worker checks and static/build/source/registry gates. Full all-app checkpoint80."
 sections:
@@ -104,6 +122,39 @@ sections:
     Final lifecycle:record verified/quality,commit this final packet,finish76 then74 and pause goal per human stop rule. Broader native/UI roadmap is not declared complete.
 
     Reference binding final state:original tracked symlink unchanged;only10121bytes in three already-present common-vendor files copied locally into its ignored target. Full actual parity/invariants/provenance pass again after this correction;no additional runtime or test changes.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-25T05:22:51.375Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:20:51.838Z, excerpt_hash=sha256:e4b5403602bcabde40b8240fc33d97dabb11c99e14ed781d9a8f06577fe229d2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222022-3D9WX6/blueprint/resolved-snapshot.json
+    - old_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+    - current_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222022-3D9WX6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610222022-3D9WX6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task-owned implementation commits only,preserving integrated user changes and completed prior work."
   Findings: |-
     Block74 remains DOING and unverified. Native ordinary AutoSum inference,20-position seek,sum-of-sums,relative range construction,nonempty selected-block totals and StartFormula text selection are implemented. Actual view/token/column/history owners are used;there is no browser evaluator or cell-copy substitute. Native SetFormulaOperation is connected for generated block formulas in the current normal enabled-recording profile. Browser availability rejects filtered SUBTOTAL and empty-marked clipboard-fill contexts while their native services are unavailable.
@@ -177,6 +228,39 @@ Command:npm run inventory:parity;npm run inventory:invariants;npm run check:sour
 Final lifecycle:record verified/quality,commit this final packet,finish76 then74 and pause goal per human stop rule. Broader native/UI roadmap is not declared complete.
 
 Reference binding final state:original tracked symlink unchanged;only10121bytes in three already-present common-vendor files copied locally into its ignored target. Full actual parity/invariants/provenance pass again after this correction;no additional runtime or test changes.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-25T05:22:51.375Z — VERIFY — ok
+
+By: CODER
+
+Note: Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:20:51.838Z, excerpt_hash=sha256:e4b5403602bcabde40b8240fc33d97dabb11c99e14ed781d9a8f06577fe229d2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222022-3D9WX6/blueprint/resolved-snapshot.json
+- old_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+- current_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222022-3D9WX6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610222022-3D9WX6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
