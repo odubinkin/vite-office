@@ -1,10 +1,11 @@
 ---
 id: "202610251643-F4JRT8"
 title: "Complete represented Writer RTF character links and paragraph indentation"
-status: "DOING"
+result_summary: "verified-202610251643-F4JRT8"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-25T16:52:35.032Z"
+  updated_at: "2026-10-25T16:53:04.199Z"
   updated_by: "CODER"
-  note: "Represented RTF character, hyperlink and first-line item contracts verified: 76 focused tests, typecheck, Prettier, ESLint, provenance, registry and dependencies; WRITER095 and remaining upstream gaps recorded."
+  note: "verified-202610251643-F4JRT8"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/source/core/attr/native-paragraph-first-line-indent.test.ts"
   findings:
     - "Reader/exporter carry native strikeout, escapement, HYPERLINK spans and authored first-line items; attribute output moved to upstream-shaped module. Final-root paragraph state and nonstandard upstream escapement branch are covered. Seventy-six focused tests and all declared static checks pass."
-commit: null
+commit:
+  hash: "973b1b38f499527c1a38867ed6b2822c67a26a06"
+  message: "🚧 F4JRT8 task: Record RTF closeout quality review"
 comments:
   -
     author: "CODER"
     body: "Start: close represented native RTF character, link and paragraph formatting gaps through canonical Writer owners."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610251643-F4JRT8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Represented RTF character, hyperlink and first-line item contracts verified: 76 focused tests, typecheck, Prettier, ESLint, provenance, registry and dependencies; WRITER095 and remaining upstream gaps recorded."
+  -
+    type: "verify"
+    at: "2026-10-25T16:53:04.199Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610251643-F4JRT8"
+  -
+    type: "status"
+    at: "2026-10-25T16:53:04.346Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610251643-F4JRT8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-25T16:52:35.115Z"
+doc_updated_at: "2026-10-25T16:53:04.346Z"
 doc_updated_by: "CODER"
 description: "Close gaps in the native RTF filter for currently modeled character decoration, hyperlink spans and first-line paragraph indentation, retaining upstream contracts and focused round-trip evidence."
 sections:
@@ -113,11 +132,45 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-25T16:53:04.199Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610251643-F4JRT8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:52:35.115Z, excerpt_hash=sha256:2972a57f1c5a72d2861143a4e1fe1efd3bf731f448c8fad5efb9dfaa0a4c3a40
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251643-F4JRT8/blueprint/resolved-snapshot.json
+    - old_digest: 594f8cb537a758b94712fa7b008cc0f26b757fdbfe34b33c928768d0d0ab5fc2
+    - current_digest: 594f8cb537a758b94712fa7b008cc0f26b757fdbfe34b33c928768d0d0ab5fc2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251643-F4JRT8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251643-F4JRT8 --result verified-202610251643-F4JRT8 --commit 973b1b38f499527c1a38867ed6b2822c67a26a06
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run focused checks to confirm rollback safety.
   Findings: "The represented native RTF filter now carries strikeout, super/sub and custom/automatic escapement, HYPERLINK field result spans, and authored first-line paragraph items through import/export. A missing final paragraph commit previously discarded root-group paragraph controls when input ended without explicit par; it is corrected. RtfAttributeOutput now owns paragraph/character emission at the upstream-shaped path. The existing browser shell/UI route remains unchanged. Other upstream field semantics, complete character and paragraph vocabularies, sections, pictures, drawings and desktop filter options remain unverified. Source behavior that suppresses nonstandard escapement at default proportional height is preserved and documented as WRITER095."
+extensions:
+  implementation_commit:
+    hash: "613d510a2929536bf32ef2f3e1b0d5b0db82b19f"
+    message: "🚧 F4JRT8 task: Complete represented Writer RTF formatting"
 id_source: "generated"
 ---
 ## Summary
@@ -178,6 +231,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-25T16:53:04.199Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610251643-F4JRT8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:52:35.115Z, excerpt_hash=sha256:2972a57f1c5a72d2861143a4e1fe1efd3bf731f448c8fad5efb9dfaa0a4c3a40
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251643-F4JRT8/blueprint/resolved-snapshot.json
+- old_digest: 594f8cb537a758b94712fa7b008cc0f26b757fdbfe34b33c928768d0d0ab5fc2
+- current_digest: 594f8cb537a758b94712fa7b008cc0f26b757fdbfe34b33c928768d0d0ab5fc2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251643-F4JRT8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251643-F4JRT8 --result verified-202610251643-F4JRT8 --commit 973b1b38f499527c1a38867ed6b2822c67a26a06
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
