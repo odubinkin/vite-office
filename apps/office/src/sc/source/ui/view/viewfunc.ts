@@ -1,4 +1,6 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import { PasteFromClip } from "./viewfun3";
+import { EnterBlock, EnterAutoSum } from "./viewfun2";
 import type { ScModule } from "../../../inc/scmod";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
@@ -120,6 +122,18 @@ export class ScViewFunc extends ScTabView {
     code: OpCode,
   ): boolean {
     return AutoSum(this, range, subtotal, setCursor, continueMarks, code);
+  }
+  /** Original aggregate block-input orchestration. @param args - Actual ranges,category,position and opcode. @returns Nothing. */
+  EnterAutoSum(...args: Parameters<typeof EnterAutoSum>): void {
+    EnterAutoSum.apply(this, args);
+  }
+  /** Original internal clipboard paste entry. @param args - Native flags,clipboard and original policy defaults. @returns Pasted. */
+  PasteFromClip(...args: Parameters<typeof PasteFromClip>): boolean {
+    return PasteFromClip.apply(this, args);
+  }
+  /** Original formula block input. @param source - Formula text. @param rich - Native absent rich object. @returns Nothing. */
+  EnterBlock(source: OUStringConstReference, rich: null): void {
+    EnterBlock.call(this, source, rich);
   }
   /** Consumed ordinary-formula EnterData path,using native concrete formula operations and per-cell list history. Nonformula/rich-edit/matrix processing remains unported here. @param col - Column. @param row - Row. @param tab - Source sheet. @param source - Formula text. @returns Nothing. */
   EnterData(col: number, row: number, tab: number, source: OUStringConstReference): void {

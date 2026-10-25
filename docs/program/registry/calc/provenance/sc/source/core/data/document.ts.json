@@ -38,7 +38,9 @@
       "ApplyFlagsTab",
       "RemoveFlagsTab",
       "RefreshAutoFilter",
-      "ExtendMerge"
+      "ExtendMerge",
+      "ApplyPatternIfNumberformatIncompatible",
+      "HasClipFilteredRows"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -53,7 +55,9 @@
       "ScDocument::ApplyFlagsTab",
       "ScDocument::RemoveFlagsTab",
       "ScDocument::RefreshAutoFilter",
-      "ScDocument::ExtendMerge"
+      "ScDocument::ExtendMerge",
+      "ScDocument::ApplyPatternIfNumberformatIncompatible",
+      "ScDocument::HasClipFilteredRows"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -78,7 +82,8 @@
       "Native document.cxx GetClipStart preserves caller coordinates for non-clip/empty range owners and reads the first actual clipboard range otherwise. ExtendMergeSel preserves source selected-sheet order,sparse table skips,table-count break and independent original-end envelope on every sheet;end outputs only grow. Refresh remains an explicit unported service. ValidNewTabName body moves unchanged onto the same instance to keep the facade below1000 lines. PasteFromClip/EnterBlock and task74 acceptance remain pending.",
       "Human removed numerical path caps for existing76/74 on2026-10-25;functional scope and final full-run/fixes/coverage/closure/pause rule stay unchanged. Native ScMarkType/GetSimpleArea overloads preserve copied versus explicit marks,coordinate outputs,merged cursor fallback,degenerate merge values,filtered classification and source MULTI override (CALC284). Actual ScViewData fill/paste admission retains23Mi-cell integer bound and exact-axis exceptions;OS clipboard lookup stays unrepresented. ScViewUtil HasFiltered and FitToUnfilteredRows use genuine compressed FilterData,including native whole-tail mutation/count behavior on failed fits (CALC283). FilterData span/last-row queries retain real domains and signed maximum;document dispatch preserves absent-sheet defaults. Valid initialized segment owners make the source failed getRangeData defensive branch unreachable in the admitted lifecycle;no segment provider is replaced. Scalar InsertTab moves unchanged to the same-instance partition for the facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
       "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
-      "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending."
+      "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -232,6 +237,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/merge-refresh.test.ts",
           "marker": "refreshes horizontal vertical and rectangular merges"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
         }
       ],
       "upstream": [
@@ -390,6 +399,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::ExtendMerge"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ApplyPatternIfNumberformatIncompatible"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::HasClipFilteredRows"
         }
       ]
     }

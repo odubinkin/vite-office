@@ -1,4 +1,5 @@
 /** @fileoverview Native Calc cell-pattern itemsets,borrowed style inheritance and canonical holder lifecycle;Calc style-pool resolution,VCL/font/number caches and hash prefilters remain unported. */
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { SfxStyleSheet } from "../../../../svl/inc/style";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
@@ -594,8 +595,8 @@ export class ScPatternAttr {
     }
     return this.mxLanguageType;
   }
-  /** Original null-formatter and context default-format branches. Language conversion requires the unported formatter owner. @param context - Actual interpreter context or native null formatter. @returns Effective format key. */
-  GetNumberFormat(context: ScInterpreterContext | null): number {
+  /** Original formatter/context default-format branches. Nondefault language conversion remains unported. @param context - Actual interpreter context,formatter or native null formatter. @returns Effective format key. */
+  GetNumberFormat(context: ScInterpreterContext | SvNumberFormatter | null): number {
     const key = this.GetNumberFormatKey(),
       language = this.GetLanguageType();
     if ((key < SV_COUNTRY_LANGUAGE_OFFSET && language === LANGUAGE_SYSTEM) || context === null)

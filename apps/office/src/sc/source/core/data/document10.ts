@@ -1,4 +1,5 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
+import type { ScPatternAttr } from "../../../inc/patattr";
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
@@ -790,4 +791,36 @@ export function IsBlockEmpty(
   tab: number,
 ): boolean {
   return this.FetchTable(tab)?.IsBlockEmpty(col1, row1, col2, row2) ?? false;
+}
+
+/** Original selected sparse-sheet format compatibility dispatch. @param this - Actual document. @param range - Destination. @param marks - Selected sheets. @param pattern - Format delta. @param type - New category. @returns Nothing. */
+export function ApplyPatternIfNumberformatIncompatible(
+  this: ScDocument,
+  range: ScRange,
+  marks: ScMarkData,
+  pattern: ScPatternAttr,
+  type: number,
+): void {
+  const count = this.GetTableCount();
+  for (const tab of marks.GetSelectedTabs()) {
+    if (tab >= count) break;
+    this.FetchTable(tab)?.ApplyPatternIfNumberformatIncompatible(range, pattern, type);
+  }
+}
+
+/** Original first-used-table clipboard filter query;the native positive table-count branch requires an existing table. No guessed size comparison replaces actual filter segments. @param this - Actual document. @returns Any filtered clipboard row. */
+export function HasClipFilteredRows(this: ScDocument): boolean {
+  let tab = 0;
+  while (tab < this.GetTableCount() && !this.FetchTable(tab)) ++tab;
+  const ranges = this.GetClipParam().maRanges;
+  if (ranges.empty()) return false;
+  if (this.GetTableCount() > 0)
+    for (const range of ranges)
+      if (
+        (this.FetchTable(tab) as ScTable)
+          .getFilterData()
+          .hasFilteredRows(range.aStart.Row(), range.aEnd.Row())
+      )
+        return true;
+  return false;
 }

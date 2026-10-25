@@ -1,4 +1,7 @@
 /** @fileoverview Original column3.cxx GroupFormulaCells functor and whole-column regrouping over actual typed storage. */
+import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import type { ScRange } from "../../../inc/address";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { string_value_type } from "../../../inc/mtvelements";
@@ -919,4 +922,52 @@ export function GetFormulaCell(this: ScColumn, row: number): ScFormulaCell | nul
   const output: [ScFormulaCell | null] = [null];
   this["maCells"].get(row, formula_element_callbacks, output);
   return output[0];
+}
+
+/** Original dirty marking,partitioned unchanged onto this same column. @param this - Actual column. @param context - Dirty context. @returns Nothing. */
+export function SetAllFormulasDirty(this: ScColumn, context: SetFormulaDirtyContext): void {
+  if (context.mbClearTabDeletedFlag)
+    throw new Error("Deleted-sheet flag clearing is not implemented");
+  ProcessFormula(
+    this["maCells"],
+    /** Marks the actual cell. @param row - Row. @param cell - Formula. @returns Nothing. */ (
+      row,
+      cell,
+    ) => {
+      void row;
+      cell.SetDirtyVar();
+      if (!this["rDocument"].IsInFormulaTree(cell)) this["rDocument"].PutInFormulaTree(cell);
+    },
+  );
+}
+
+/** Original format run walk over actual General-only formatter/attribute owners. The pure compatibility predicate already includes same-type equality,so its equivalent single call avoids an unreachable second-positive branch in this slice. @param this - Actual column. @param range - Destination. @param pattern - Input format delta. @param newType - New native category. @returns Nothing. */
+export function ApplyPatternIfNumberformatIncompatible(
+  this: ScColumn,
+  range: ScRange,
+  pattern: ScPatternAttr,
+  newType: number,
+): void {
+  const doc = this.GetDoc(),
+    cache = new ScItemPoolCache(doc.getCellAttributeHelper(), pattern.GetItemSet());
+  const formatter = doc.GetFormatTable(),
+    end = range.aEnd.Row();
+  try {
+    for (let row = range.aStart.Row(); row <= end; ++row) {
+      const first: [number] = [0],
+        last: [number] = [0];
+      const old = this["pAttrArray"].GetPatternRange(first, last, row) as ScPatternAttr;
+      const key = old.GetNumberFormat(formatter),
+        oldType = formatter.GetType(key);
+      if (SvNumberFormatter.IsCompatible(oldType, newType)) row = last[0];
+      else {
+        const startRow = Math.max(first[0], row),
+          endRow = Math.min(last[0], end);
+        this["pAttrArray"].ApplyCacheArea(startRow, endRow, cache);
+        row = endRow;
+      }
+    }
+  } finally {
+    cache.Dispose();
+  }
 }

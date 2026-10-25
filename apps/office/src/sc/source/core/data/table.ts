@@ -348,6 +348,12 @@ export class ScTable {
       ) => column.ChangeSelectionIndent(first, last, increment),
     );
   }
+  /** Original format compatibility application through existing column owners. @param args - Range,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof table2.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    table2.ApplyPatternIfNumberformatIncompatible.apply(this, args);
+  }
   /** Original flag addition on actual columns. @param args - Native rectangle and flags. @returns Changed. */
   ApplyFlags(...args: Parameters<typeof table2.ApplyFlags>): boolean {
     return table2.ApplyFlags.apply(this, args);

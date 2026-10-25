@@ -18,17 +18,22 @@
       "evidence": [
         "apps/office/src/sc/inc/globstr.ts",
         "apps/office/src/sc/source/core/tool/stylehelper.test.ts",
-        "apps/office/e2e/calc/style-naming-defaults.spec.ts"
+        "apps/office/e2e/calc/style-naming-defaults.spec.ts",
+        "apps/office/src/sc/source/ui/view/paste-block.test.ts#fills relative formulas over a rectangle"
       ],
-      "justification": "TaskB9WXKD ports original ScStyleNameConversion ordered cell/page/frame maps,stable programmatic constants,legacy alias priority,exact UTF16 user suffix escaping,suffix-first decoding,invalid-family fallthrough and independent native string returns. Default English resources are actual pinned globstr.hrc values at the existing English UI boundary;alternate resolved labels are explicit borrowed read-site values. Native default maps retain lazy static lifetime and scoped alternate map handles are released. No ScModule/gettext/locale/cache service is emulated. ScDocumentPool static metadata is extended contiguously from152 through176 with original Which/slot/flags and existing real native shared shadow,validation,conditional,hyperlink,spacing,page,tray,size,bool,object-mode and unsigned items. Earlier identities remain unchanged;rich-header177+ defaults are not fabricated. Source alias and pool-versus-style default asymmetries remain(CALC241). Actual ScStyleSheet/ScStyleSheetPool/ScPoolHelper,standard-style construction,full named-style UI/history/ODS,rich edit/header services and automatic wrapped-height remain required and unported. Full UI/global resource localization/device/UNO/ABI parity remains unverified.",
+      "justification": "TaskB9WXKD ports original ScStyleNameConversion ordered cell/page/frame maps,stable programmatic constants,legacy alias priority,exact UTF16 user suffix escaping,suffix-first decoding,invalid-family fallthrough and independent native string returns. Default English resources are actual pinned globstr.hrc values at the existing English UI boundary;alternate resolved labels are explicit borrowed read-site values. Native default maps retain lazy static lifetime and scoped alternate map handles are released. No ScModule/gettext/locale/cache service is emulated. ScDocumentPool static metadata is extended contiguously from152 through176 with original Which/slot/flags and existing real native shared shadow,validation,conditional,hyperlink,spacing,page,tray,size,bool,object-mode and unsigned items. Earlier identities remain unchanged;rich-header177+ defaults are not fabricated. Source alias and pool-versus-style default asymmetries remain(CALC241). Actual ScStyleSheet/ScStyleSheetPool/ScPoolHelper,standard-style construction,full named-style UI/history/ODS,rich edit/header services and automatic wrapped-height remain required and unported. Full UI/global resource localization/device/UNO/ABI parity remains unverified. Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
       "knownViolations": [],
       "localSymbols": [
-        "scStyleNameResourcesEnglish"
+        "scStyleNameResourcesEnglish",
+        "scPasteResourcesEnglish"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/inc/globstr.hrc",
       "upstreamSymbols": [
-        "STR_STYLENAME_STANDARD"
+        "STR_STYLENAME_STANDARD",
+        "STR_MSSG_PASTEFROMCLIP_0",
+        "STR_PROTECTIONERR",
+        "STR_PASTE_FULL"
       ]
     }
   }

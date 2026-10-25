@@ -1,7 +1,12 @@
 /** @fileoverview Consumed AdjustBlockHeight standard attribute path from viewfun2.cxx; device-based script and EditEngine layout remain unported. */
-import type { ScFormulaCell } from "../../../inc/formulacell";
+import { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScViewFunc } from "./viewfunc";
-import type { ScDocument } from "../../../inc/document";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { scPasteResourcesEnglish } from "../../../inc/globstr";
+import { InsertDeleteFlags, ScPasteFunc, InsCellCmd } from "../../../inc/global";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import type { SfxUInt32Item } from "../../../../svl/inc/intitem";
 import type { ScMarkData } from "../../../inc/markdata";
 import type { ScTable } from "../../../inc/table";
 import { ScDirection, CellType } from "../../../inc/global";
@@ -13,7 +18,7 @@ import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { ScCompiler } from "../../../inc/compiler";
 import { OpCode } from "../../../../formula/inc/opcode";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScViewData } from "../inc/viewdata";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
@@ -473,4 +478,75 @@ export function AutoSum(
   );
   if (setCursor) view.SetCursor(markEndCol, markEndRow);
   return true;
+}
+
+/** Original ordinary-formula EnterBlock through an actual one-cell clipboard and native paste Undo. Rich-edit/nonformula input remains unported,without reparsing copied formulas or repeated EnterData loops. @param this - Actual view. @param source - Formula source. @param rich - Native absent rich object. @returns Nothing. */
+export function EnterBlock(this: ScViewFunc, source: OUStringConstReference, rich: null): void {
+  if (rich !== null) throw Error("Native rich-edit EnterBlock services are not implemented");
+  const data = this.GetViewData(),
+    col = data.GetCurX(),
+    row = data.GetCurY(),
+    tab = data.CurrentTabForData();
+  const marks = data.GetMarkData();
+  if (marks.IsMultiMarked()) {
+    marks.MarkToSimple();
+    if (marks.IsMultiMarked()) {
+      this.ErrorMessage(scPasteResourcesEnglish.STR_MSSG_PASTEFROMCLIP_0);
+      this.EnterData(col, row, tab, source);
+      return;
+    }
+  }
+  if (data.SelectionForbidsCellFill()) return;
+  if (source.getStr()[0] !== 61)
+    throw Error("Native nonformula EnterBlock services are not implemented");
+  const doc = data.GetDocument(),
+    position = new ScAddress(col, row, tab),
+    clip = new ScDocument(ScDocumentMode.SCDOCMODE_CLIP);
+  try {
+    clip.ResetClip(doc, tab);
+    clip.SetFormulaCell(position, new ScFormulaCell(doc, position, source, doc.GetGrammar()));
+    clip.SetClipArea(new ScRange(position));
+    if (
+      !this.PasteFromClip(
+        InsertDeleteFlags.CONTENTS,
+        clip,
+        ScPasteFunc.NONE,
+        false,
+        false,
+        false,
+        InsCellCmd.INS_NONE,
+        InsertDeleteFlags.ATTRIB,
+      )
+    )
+      return;
+    const item = (clip.GetPattern(position) as ScPatternAttr).GetItem(
+      ATTR_VALUE_FORMAT,
+    ) as SfxUInt32Item;
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    try {
+      pattern.ItemSetPut(item);
+      const type = doc.GetFormatTable().GetType(item.GetValue());
+      doc.ApplyPatternIfNumberformatIncompatible(marks.GetMarkArea(), marks, pattern, type);
+    } finally {
+      pattern.Dispose();
+    }
+  } finally {
+    clip.Dispose();
+  }
+}
+
+/** Original EnterAutoSum constructs one formula for native block input. @param this - Actual view. @param ranges - Actual ordered references. @param subtotal - Native category. @param address - Result reference position. @param code - Function opcode. @returns Nothing. */
+export function EnterAutoSum(
+  this: ScViewFunc,
+  ranges: ScRangeList,
+  subtotal: boolean,
+  address: ScAddress,
+  code: OpCode,
+): void {
+  const formula = this.GetAutoSumFormula(ranges, subtotal, address, code);
+  try {
+    this.EnterBlock(formula, null);
+  } finally {
+    formula.dispose();
+  }
 }

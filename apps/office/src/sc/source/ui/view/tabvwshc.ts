@@ -1,4 +1,4 @@
-/** @fileoverview Consumed native DoAutoSum command orchestration from tabvwshc.cxx over actual view/mark owners. Named database filters and clipboard block-fill remain unported boundaries. */
+/** @fileoverview Consumed native DoAutoSum command orchestration from tabvwshc.cxx over actual view/mark owners. Named database filters remain an unported boundary. */
 import type { ScTabViewShell } from "./tabvwsh4";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScAddress } from "../../../inc/address";
@@ -24,7 +24,7 @@ export function UseSubTotal(view: ScTabViewShell, ranges: ScRangeList): boolean 
   }
   return subtotal;
 }
-/** Original marked/unmarked AutoSum orchestration. A marked empty range requiring EnterBlock/PasteFromClip fails explicitly until that native service is implemented. @param view - Actual view shell. @param rangeFinder - Native output. @param subtotal - Native output. @param code - Aggregate opcode. @returns Owned input-line formula or empty after block insertion. */
+/** Original marked/unmarked AutoSum orchestration. A marked empty range uses actual EnterAutoSum/EnterBlock/PasteFromClip. @param view - Actual view shell. @param rangeFinder - Native output. @param subtotal - Native output. @param code - Aggregate opcode. @returns Owned input-line formula or empty after block insertion. */
 export function DoAutoSum(
   view: ScTabViewShell,
   rangeFinder: [boolean],
@@ -54,8 +54,11 @@ export function DoAutoSum(
       }
     if (empty) {
       const ranges = new ScRangeList();
-      if (view.GetAutoSumArea(ranges))
-        throw new Error("Native EnterBlock/PasteFromClip block fill is not implemented");
+      if (view.GetAutoSumArea(ranges)) {
+        const address = new ScAddress(ranges.back().aEnd);
+        address.IncRow();
+        view.EnterAutoSum(ranges, view.UseSubTotal(ranges), address, code);
+      }
     } else {
       const useSubtotal = view.UseSubTotal(marked);
       for (let i = 0; i < marked.size(); i++) {

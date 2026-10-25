@@ -3,22 +3,26 @@ import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Actual compiled kernel exports. */
 type Fixture = typeof import("../../src/sc/inc/document") &
+  typeof import("../../src/sc/source/ui/docshell/docsh") &
+  typeof import("../../src/sc/source/ui/inc/tabvwsh") &
   typeof import("../../src/sc/inc/scitems") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/sc/inc/attrib") &
   typeof import("../../src/sc/inc/patattr") &
   typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
-test("refreshes actual merge geometry and filter flags in browser and Worker", /** Both runtimes run identical source owners. @param fixtures - Real page. @returns Completion. */ async ({
+test("fills real formula blocks and restores native paste history in browser and Worker", /** Both runtimes run identical source owners. @param fixtures - Real page. @returns Completion. */ async ({
   page,
 }) => {
   await page.goto("/");
   await installKernelFixture(page, "CalcPasteBlockFixture", [
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
+    { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
+    { module: "src/sc/source/ui/inc/tabvwsh.ts", names: ["ScTabViewShell"] },
     { module: "src/sc/inc/scitems.ts", names: ["ATTR_MERGE_FLAG"] },
-    { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
+    { module: "src/sc/inc/address.ts", names: ["ScAddress", "ScRange"] },
     { module: "src/sc/inc/attrib.ts", names: ["ScMergeAttr", "ScMF"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
-    { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
+    { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode", "text"] },
   ]);
   const result = await page.evaluate(
     /** Exercises real document ownership without any DOM calls. @returns Observations. */ async () => {
@@ -54,7 +58,32 @@ test("refreshes actual merge geometry and filter flags in browser and Worker", /
         const unchanged = doc.RefreshAutoFilter(1, 1, 3, 2, 0);
         pattern.Dispose();
         doc.Dispose();
-        return { found, extent: [col[0], row[0]], values, unchanged };
+        const shell = new n.ScDocShell(),
+          live = shell.GetDocument(),
+          view = new n.ScTabViewShell(shell),
+          data = view.GetViewData();
+        live.SetValue(new n.ScAddress(), 3);
+        live.SetValue(new n.ScAddress(1, 0, 0), 5);
+        data.SetCurY(1);
+        data.GetMarkData().SetMarkArea(new n.ScRange(0, 1, 0, 1, 2, 0));
+        view.EnterBlock(n.unicode("=A1+$A$1"), null);
+        const pasted = live.GetValue(new n.ScAddress(1, 2, 0)),
+          cell = live.GetFormulaCell(new n.ScAddress(1, 2, 0));
+        if (!cell) throw Error("Missing actual pasted formula");
+        const formula = n.text(cell.GetFormula(live.GetGrammar())),
+          actions = shell.GetUndoManager().GetUndoActionCount();
+        const undone = shell.Undo(),
+          removed = live.GetFormulaCell(new n.ScAddress(1, 2, 0)) === null;
+        const redone = shell.Redo(),
+          restored = live.GetValue(new n.ScAddress(1, 2, 0));
+        shell.Close();
+        return {
+          found,
+          extent: [col[0], row[0]],
+          values,
+          unchanged,
+          block: { pasted, formula, actions, undone, removed, redone, restored },
+        };
       }
       const script = Array.from(document.scripts).find(
         /** Locates compiled actual owners. @param item - Script. @returns Match. */ (item) =>
@@ -95,6 +124,20 @@ test("refreshes actual merge geometry and filter flags in browser and Worker", /
       }
     },
   );
-  const expected = { found: true, extent: [3, 2], values: [0, 1, 2, 3], unchanged: false };
+  const expected = {
+    found: true,
+    extent: [3, 2],
+    values: [0, 1, 2, 3],
+    unchanged: false,
+    block: {
+      pasted: 11,
+      formula: "=B2+$A$1",
+      actions: 1,
+      undone: true,
+      removed: true,
+      redone: true,
+      restored: 11,
+    },
+  };
   expect(result).toEqual({ main: expected, other: { value: expected, dom: "undefined" } });
 });

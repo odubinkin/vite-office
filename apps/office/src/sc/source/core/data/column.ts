@@ -184,6 +184,12 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original format compatibility application on real attribute runs. @param args - Range,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof column3.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    column3.ApplyPatternIfNumberformatIncompatible.apply(this, args);
+  }
   /** Original inline column flag addition. @param first - First row. @param last - Last row. @param flags - Added flags. @returns Changed. */
   ApplyFlags(first: number, last: number, flags: ScMF): boolean {
     return this.pAttrArray.ApplyFlags(first, last, flags);
@@ -781,19 +787,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Performs native default-context dirty marking and tree membership without tracking broadcasts. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
-    if (context.mbClearTabDeletedFlag)
-      throw new Error("Deleted-sheet flag clearing is not implemented");
-    ProcessFormula(
-      this.maCells,
-      /** Marks the actual cell. @param row - Row. @param cell - Formula. @returns Nothing. */ (
-        row,
-        cell,
-      ) => {
-        void row;
-        cell.SetDirtyVar();
-        if (!this.rDocument.IsInFormulaTree(cell)) this.rDocument.PutInFormulaTree(cell);
-      },
-    );
+    column3.SetAllFormulasDirty.call(this, context);
   }
   /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
   GetCellValue(row: number): ScRefCellValue {

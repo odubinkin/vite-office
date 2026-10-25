@@ -236,6 +236,10 @@ export class ScDocument {
   GetClipArea(...args: Parameters<typeof documen7.GetClipArea>): void {
     documen7.GetClipArea.apply(this, args);
   }
+  /** Original first-used-sheet clipboard filter query. @returns Any filtered clipboard row. */
+  HasClipFilteredRows(): boolean {
+    return document10.HasClipFilteredRows.call(this);
+  }
   /** Original clipboard start query retains caller outputs for an empty/non-clip owner. @param args - Column and row outputs. @returns Nothing. */
   GetClipStart(...args: Parameters<typeof document10.GetClipStart>): void {
     document10.GetClipStart.apply(this, args);
@@ -243,6 +247,12 @@ export class ScDocument {
   /** Original coordinate merge envelope. @param args - Native parameters. @returns Whether changed or found. */
   ExtendMerge(...args: Parameters<typeof document10.ExtendMerge>): boolean {
     return document10.ExtendMerge.apply(this, args);
+  }
+  /** Original selected-sheet format compatibility operation. @param args - Range,marks,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof document10.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    document10.ApplyPatternIfNumberformatIncompatible.apply(this, args);
   }
   /** Original sheet flag addition. @param args - Native parameters. @returns Whether changed or found. */
   ApplyFlagsTab(...args: Parameters<typeof document10.ApplyFlagsTab>): boolean {
@@ -689,16 +699,7 @@ export class ScDocument {
   }
   /** Borrows actual document pattern canonicalization. @returns Helper. */
   getCellAttributeHelper(): CellAttributeHelper {
-    if (!this.mpCellAttributeHelper) {
-      if (this.IsClipOrUndo())
-        throw new Error(
-          "CellAttributeHelper needs to be shared using SharePooledResources, not created",
-        );
-      const pool = this.GetPool();
-      if (!pool) throw new Error("No SfxItemPool for this ScDocument");
-      this.mpCellAttributeHelper = new CellAttributeHelper(pool);
-    }
-    return this.mpCellAttributeHelper;
+    return documen2.getCellAttributeHelper.call(this);
   }
   /** Borrows effective cell attributes through the sheet/column/default chain. @param position - Cell. @returns Pattern or null. */
   GetPattern(position: ScAddress): ScPatternAttr | null {

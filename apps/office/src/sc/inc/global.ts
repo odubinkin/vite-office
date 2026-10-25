@@ -134,3 +134,22 @@ export enum HasAttrFlags {
   NotOverlapped = 0x0800,
   RightOrCenter = 0x1000,
 }
+
+/** Original global.hxx paste arithmetic discriminator. */
+export enum ScPasteFunc {
+  NONE,
+  ADD,
+  SUB,
+  MUL,
+  DIV,
+}
+/** Original global.hxx insertion modes,including INS_NONE4. */
+export enum InsCellCmd {
+  INS_CELLSDOWN,
+  INS_CELLSRIGHT,
+  INS_INSROWS_BEFORE,
+  INS_INSCOLS_BEFORE,
+  INS_NONE,
+  INS_INSROWS_AFTER,
+  INS_INSCOLS_AFTER,
+}

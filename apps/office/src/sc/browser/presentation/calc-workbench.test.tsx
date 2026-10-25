@@ -207,7 +207,7 @@ it("uses native Sum reference selection,accept/cancel and live formula history i
   session.Close();
 });
 
-it("keeps grid focus after selected AutoSum and presents an unavailable block-fill command without document edits", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
+it("keeps grid focus after selected AutoSum and executes native empty-block formula fill", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
   const session = createCalcSession(),
     c = session.controller,
     doc = c.shell.GetDocument();
@@ -235,10 +235,9 @@ it("keeps grid focus after selected AutoSum and presents an unavailable block-fi
       expect(c.AutoSum()).toBeUndefined();
     },
   );
-  expect(screen.getByRole("alert")).toHaveTextContent(
-    "Native EnterBlock/PasteFromClip block fill is not implemented",
-  );
-  expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
   expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
   cleanup();
   session.Close();

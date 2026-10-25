@@ -443,6 +443,31 @@ export const SvNFEngine = {
 
 /** Original SvNumberFormatter owner for the admitted General/NatNum0 slice. Real provider,language,scanner and parsed table owners are composed through the source General initialization phase. Remaining builtin generation and all nonzero format keys are explicitly unavailable,not synthetic entries or silent General substitutes. Context lookup is bound to actual providers;UNO ABI,global registry and mutex scheduling are not claimed. */
 export class SvNumberFormatter {
+  /** Original pure format-category compatibility used by block input. @param oldType - Existing native category. @param newType - Inserted native category. @returns Whether the old format can be retained. */
+  static IsCompatible(oldType: number, newType: number): boolean {
+    if (oldType === newType) return true;
+    if (oldType === SvNumFormatType.DEFINED) return true;
+    switch (newType) {
+      case SvNumFormatType.NUMBER:
+        switch (oldType) {
+          case SvNumFormatType.PERCENT:
+          case SvNumFormatType.CURRENCY:
+          case SvNumFormatType.SCIENTIFIC:
+          case SvNumFormatType.FRACTION:
+            return true;
+          default:
+            return false;
+        }
+      case SvNumFormatType.DATE:
+      case SvNumFormatType.TIME:
+        return oldType === SvNumFormatType.DATETIME;
+      case SvNumFormatType.DATETIME:
+        return oldType === SvNumFormatType.TIME || oldType === SvNumFormatType.DATE;
+      case SvNumFormatType.DURATION:
+      default:
+        return false;
+    }
+  }
   private readonly IniLnge: number;
   private readonly mapper = createNumberFormatCodeMapper();
   private readonly m_aFormatData = new SvNFFormatData();

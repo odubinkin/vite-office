@@ -314,11 +314,13 @@ export class CalcViewController {
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
     this.viewShell = new ScTabViewShell(shell, this.scModule);
+    this.BindViewErrorMessage();
     this.viewData = this.viewShell.GetViewData();
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
           this.viewShell = new ScTabViewShell(shell, this.scModule);
+          this.BindViewErrorMessage();
           this.viewData = this.viewShell.GetViewData();
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
@@ -327,6 +329,18 @@ export class CalcViewController {
           this.addressText = "A1";
           this.error = "";
         }
+        this.Changed();
+      },
+    );
+  }
+  /** Projects native ErrorMessage through the existing browser error UI and actual pointer lifetime. @returns Nothing. */
+  private BindViewErrorMessage(): void {
+    this.viewShell.SetErrorMessageHandler(
+      /** Replaces physical grid/header StopMarking and message presentation with the active browser controls. @param message - Native resolved resource. @returns Nothing. */ (
+        message,
+      ) => {
+        this.EndPointer();
+        this.error = message;
         this.Changed();
       },
     );

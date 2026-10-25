@@ -449,11 +449,17 @@ it("retains directional unknown-function classification and marked text fallback
   view.GetMarkData().SetMarkArea(new ScRange(0, 1, 0, 0, 2, 0));
   view.SetCurX(0);
   view.SetCurY(1);
-  expect(
-    /** Requests the still-unported native clipboard fill through actual marks. @returns Formula or explicit unsupported boundary. */ () =>
-      functions.DoAutoSum(finder, subtotal, OpCode.ocSum),
-  ).toThrow("Native EnterBlock/PasteFromClip block fill is not implemented");
+  const inserted = functions.DoAutoSum(finder, subtotal, OpCode.ocSum);
+  expect(text(inserted)).toBe("");
+  inserted.dispose();
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(2);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(2);
+  expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(shell.Undo()).toBe(true);
   expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
+  expect(doc.GetFormulaCell(new ScAddress(0, 2, 0))).toBeNull();
+  expect(shell.Redo()).toBe(true);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(2);
   shell.Close();
 });
 

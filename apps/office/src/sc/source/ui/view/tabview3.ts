@@ -7,6 +7,15 @@ import { ScRange, ValidTab } from "../../../inc/address";
 import type { ScViewData } from "../inc/viewdata";
 /** Native view navigation,reference and selection owner for the represented visible/unmerged document slice. */
 export class ScTabView {
+  private errorMessageHandler: ((message: string) => void) | undefined;
+  /** Browser binding of the physical message/StopMarking presentation formerly owned by VCL windows. @param handler - Active host presentation or absent headless host. @returns Nothing. */
+  SetErrorMessageHandler(handler: ((message: string) => void) | undefined): void {
+    this.errorMessageHandler = handler;
+  }
+  /** Original ErrorMessage presentation entry at the existing resolved English resource boundary. Drop/read-only/weld window families are unrepresented;the browser host stops actual pointer tracking before displaying the message. @param message - Resolved native resource. @returns Nothing. */
+  ErrorMessage(message: string): void {
+    this.errorMessageHandler?.(message);
+  }
   private readonly aFunctionSet: ScViewFunctionSet;
   private readonly aHdrFunc: ScHeaderFunctionSet;
   /** Original borrowed cell selection function set. @returns Actual function set. */ GetFunctionSet(): ScViewFunctionSet {

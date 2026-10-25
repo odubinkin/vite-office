@@ -4,7 +4,7 @@ title: "Implement native internal clipboard fill and paste undo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 119
+revision: 121
 origin:
   system: "manual"
 depends_on:
@@ -118,7 +118,7 @@ events:
     to: "DOING"
     note: "Start: human removed numerical path caps for existing76/74 on2026-10-25;continue canonical paste/view dependencies and UI with unchanged functional scope and full-run/fixes/coverage/closure/pause stop rule."
 doc_version: 3
-doc_updated_at: "2026-10-25T02:26:29.284Z"
+doc_updated_at: "2026-10-25T03:05:37.958Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -127,27 +127,32 @@ sections:
   Plan: "Human approval2026-10-25 supersedes all earlier numerical path caps for existing tasks76 and74 only. Continue original viewdata/viewutil/viewfun2/viewfun3 and native editability dependencies required for actual PasteFromClip/EnterBlock,then complete74 AutoSum/formula-bar UI. Preserve the existing functional slice,no new feature families/tasks/network/reference restoration/branches/merges. All original fidelity,verification and stop criteria remain:finish76 and74,full all-application suites,fix failures/add missing scenarios,required100percent coverage,final closure,then pause the goal. Continue task76 in vite-office-calc branch calc:implement the original native number/cell formatting responsibilities consumed by CopyFromClip,CopyOneCellFromClip and EnterBlock,then complete native paste Undo/Redo and original mark/cursor rules. Preserve actual native owners,module boundaries,defaults,compiled formula tokens and original call paths;no fake formatter,alternate workbook,reparsed formula fill or single-row optimization bypass. Reuse the existing218-path foundation and original locale/rtl/shared modules;add only dependencies required for this clipboard/default-content profile and their tests,registry/resource records and browser/Worker evidence. No unrelated feature families,network,reference-cache restoration,branches,merges or planned78-80 work. Existing verification requirements remain unchanged:related tests,Calc and changed-shared raw100 S/B/F/L,actual browser/DOM-free Worker,ODS/history and all declared static/source/resource gates. Finish already-active76 then74;run the full all-application suites,fix failures/add missing scenarios,verify required100percent coverage,record final closure and pause the goal. Do not wait for ten tasks or start78-80."
   Verify Steps: "Verify original clipboard/reset/default/pool ownership and parameter values,real sparse sheet/source selection,relative/absolute formula copying and shared group behavior through the native context/store paths. Empty marked AutoSum must use actual EnterBlock/PasteFromClip and native paste undo,including multi-selection source fallback;no repeated EnterData loop,formula-source reparse or alternate workbook model. Test row/column/sheet bounds,empty/error content,default formats,style/geometry preservation,Undo/Redo and fresh ODS reopen. Complete Calc and changed shared raw100 S/B/F/L with unchanged thresholds,related consumers,actual Chromium/DOM-free Worker,production build and all type/lint/format/boundary/JSDoc/size/source/provenance/registry/resources/static/routing/doctor gates. Final74 acceptance remains required after this prerequisite. Human-approved stop schedule (2026-10-24):finish the already-active Calc tasks76 and74,then run the full all-application test suites,fix failures/add missing scenarios,verify required100percent coverage,record final task closure and pause the goal. Do not wait for the ten-task cadence or start planned78-80 before stopping."
   Verification: |-
-    Partial progress only;task remains DOING/unverified.
+    Native implementation verified within the approved normal active-view/enabled-Undo/default-format profile;task remains DOING/unverified because global source gates and final74/all-app acceptance are outstanding.
 
-    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-merge-coverage
-    Result:pass.
-    Evidence:232files/1002scenarios;initial raw100.
-    Scope:Calc only.
+    Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportOnFailure=true --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text-summary --coverage.reportsDirectory=../../output/playwright/task76-block-calc-final-coverage.
+    Result:235files/1014scenarios pass;branch gate initially99.99.
+    Evidence:one genuine SUBTOTAL Error branch added;two targeted host scenarios pass. node output/playwright/task76-block-aggregate.mjs asserts identical source hashes/maps and all raw hits;current Calc100 S18141/B10801/F3111/L16211.
+    Scope:1015 unique observed Calc cases;no inflation from focused reruns.
 
-    Command:final-source eight-owner related run recorded in task76-merge-owner-tests.log;node output/playwright/task76-merge-aggregate.mjs.
+    Command:npx vitest run --config vitest.shared.config.ts src/svl/source/numbers --coverage --coverage.include=src/svl/source/numbers/zforlist.ts --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text-summary --coverage.reportsDirectory=../../output/playwright/task76-block-shared-coverage.
     Result:pass.
-    Evidence:166files/769scenarios;modified-owner raw100 S2961/B1724/F526/L2614;audited current Calc raw100 S17917/B10703/F3088/L16001.
-    Scope:Final eight modified owners independently covered;unchanged full-Calc raw counters retained only after byte-identity checks.
+    Evidence:4files/20cases;whole changed shared owner raw100 S244/B102/F45/L222.
+    Scope:actual General formatter and native pure category compatibility.
 
-    Command:npm run build;node scripts/check-static-build.mjs;npx playwright test --config output/playwright/task76-chart-owner-playwright.mts paste-block.spec.ts clipboard-copy.spec.ts --project=calc.
+    Command:npm run build;npx playwright test --config output/playwright/task76-chart-owner-playwright.mts paste-block.spec.ts --project=calc.
     Result:pass.
-    Evidence:fresh production/static smoke;2browser/DOM-free Worker scenarios.
-    Scope:actual native merge refresh and clipboard owners.
+    Evidence:real native rectangle/relative+absolute references,one-action Undo/Redo and merge refresh run in actual Chromium and DOM-free Worker.
+    Scope:kernel/view ownership;task74 visible availability remains pending.
 
-    Command:app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,8-owner source provenance,routing,doctor,git diff --check.
+    Command:types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,19-owner provenance,Calc resources,static,routing,doctor,diff.
     Result:pass.
-    Evidence:immutable evidence/progress-native-merge-refresh.
-    Scope:changed owners and structural gates only;not final all-app certification.
+    Evidence:evidence/progress-native-block-input.
+    Scope:changed owners and structural gates.
+
+    Command:npm run check:source-provenance;npm run inventory:parity:calc.
+    Result:fail,unwaived.
+    Evidence:ENOENT vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c and vendor/liblangtag-reference/liblangtag/lt-error.h.
+    Scope:global source/registry gates. Approved scope forbids network/deleted-reference restoration;no restoration,waiver or final all-app pass is claimed.
   Rollback Plan: "Revert only task-owned clipboard/paste commits,preserving completed75 and the74 UI checkpoint."
   Findings: |-
     Task76 remains DOING and unverified;this is a source-bound implementation checkpoint,not final paste/UI acceptance.
@@ -484,6 +489,8 @@ sections:
     Native default-sheet paste editability progress (2026-10-25):ScEditableTester block factory,true/true defaults,cumulative failure and inline queries consume actual document/table/column paths. MatrixEdge values remain original. Actual typed stores and NONE-mode cells drive GetBlockMatrixEdges;positive matrix geometry explicitly rejects. HasBlockMatrixFragment preserves allocated-column clamp and left/right/body/top/bottom visitation;positive edge decisions are erased only under the proven return-Nothing-or-reject admission invariant. Normal unprotected/unlocked nonscenario document/table editability preserves actual end bounds,missing-sheet defaults and optional false matrix outputs. Read-only shell,protection,scenario/lock and positive matrix services remain unrepresented without fake getters/providers. Every admitted false document result writes matrixfalse,justifying native tester conditional flag-clearing reduction. ApplyPattern/DeleteTab bodies partition unchanged to retain size bounds. Compile errors repaired from actual IsColValid header and unused-import state;test accessor corrected to native GetDirty. Initial coverage gaps close via default arguments and a real uninitialized-column null-pattern/cache ownership case,without fabricated peers or exclusions. Scope numerical cap remains removed only for76/74. Native PasteFromClip/EnterBlock,merge/format dependencies and74 UI acceptance remain pending. Stop rule and unwaived final gates remain unchanged.
 
     Native merge refresh progress (2026-10-25):original ApplyFlags/RemoveFlags and ExtendMerge refresh now operate on genuine canonical attribute owners with native allocation/clamp,bitwise mutation,index re-search and changed booleans. Native RefreshAutoFilter orphan Auto removal is implemented for the represented no-database-range slice;positive database reconstruction remains unported without dummy collection services. GetFormulaCell and IsBlockEmpty bodies partition unchanged for strict source-size gates. Full Calc232files/1002scenarios passes;final eight modified owners rerun166files/769scenarios raw100 after source partition. Audited final raw coverage replacement asserts exact source hashes for changed owners and byte-identical HEAD for every remaining full-Calc owner;final S17917/B10703/F3088/L16001 all100. Actual final Chromium/Worker2/2 passes after fresh build. Source provenance8owners and type/lint/format/docs/size/boundary/tree/static/routing/doctor gates pass. Immutable evidence:evidence/progress-native-merge-refresh. No task closure or all-app completion claimed. Remaining native PasteFromClip/EnterBlock,format compatibility and74 UI acceptance must finish before full suites/fixes/required100coverage/final closure/goal pause.
+
+    Native block input progress (2026-10-25):actual EnterAutoSum/EnterBlock/default-content PasteFromClip now compile one formula at the native cursor into an actual clipboard,clone through original contexts/stores and own real content/attribute Undo documents under one shared Sfx Copy list action. Native disjoint-mark single-cell fallback is retained. Source bounds/selection/source-filter/editability/merge refresh/history ordering and original defaults remain;no repeated EnterData fill,reparse,alternate workbook or fake provider. Native IsCompatible and actual General formatter/canonical cached run application preserve format retention. HasClipFilteredRows queries actual first-used-sheet compressed segments,including one-cell all-filtered sources where dimension comparisons are insufficient. Pinned resolved English ErrorMessage resources bind actual browser EndPointer/error presentation and rebind on document replacement. Physical paint/OLE/UNO/window families and nondefault/cut/multi-range/filtered/merged-source/rich/positive matrix paste remain explicit boundaries. Existing helper/dirty bodies partition unchanged for source-size gates. Corrected stale refusal and edge-selection test expectations pass;complete baseline235files/1014scenarios then one genuine SUBTOTAL error scenario pass. Audited exact-source/exact-map standard Istanbul aggregation yields current Calc raw100 S18141/B10801/F3111/L16211;changed shared zforlist4files/20scenarios raw100 S244/B102/F45/L222. Actual final Chromium/DOM-free Worker native fill/history passes. Types,changed lint/format/docs/size/boundary/tree,19-owner provenance,resources/static/routing/doctor pass. Immutable evidence:evidence/progress-native-block-input. Global provenance and registry checks still fail on deleted vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c and liblangtag/lt-error.h;network/reference restoration remain forbidden and gates unwaived. Task76 stays DOING/unverified pending final gates;task74 visible availability and all-application final acceptance remain. Complete74,full suites/fixes/required100coverage,final closure,then pause;no new planned tasks.
 id_source: "generated"
 ---
 ## Summary
@@ -504,27 +511,32 @@ Verify original clipboard/reset/default/pool ownership and parameter values,real
 
 ## Verification
 
-Partial progress only;task remains DOING/unverified.
+Native implementation verified within the approved normal active-view/enabled-Undo/default-format profile;task remains DOING/unverified because global source gates and final74/all-app acceptance are outstanding.
 
-Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-merge-coverage
-Result:pass.
-Evidence:232files/1002scenarios;initial raw100.
-Scope:Calc only.
+Command:npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportOnFailure=true --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text-summary --coverage.reportsDirectory=../../output/playwright/task76-block-calc-final-coverage.
+Result:235files/1014scenarios pass;branch gate initially99.99.
+Evidence:one genuine SUBTOTAL Error branch added;two targeted host scenarios pass. node output/playwright/task76-block-aggregate.mjs asserts identical source hashes/maps and all raw hits;current Calc100 S18141/B10801/F3111/L16211.
+Scope:1015 unique observed Calc cases;no inflation from focused reruns.
 
-Command:final-source eight-owner related run recorded in task76-merge-owner-tests.log;node output/playwright/task76-merge-aggregate.mjs.
+Command:npx vitest run --config vitest.shared.config.ts src/svl/source/numbers --coverage --coverage.include=src/svl/source/numbers/zforlist.ts --coverage.reporter=json --coverage.reporter=json-summary --coverage.reporter=text-summary --coverage.reportsDirectory=../../output/playwright/task76-block-shared-coverage.
 Result:pass.
-Evidence:166files/769scenarios;modified-owner raw100 S2961/B1724/F526/L2614;audited current Calc raw100 S17917/B10703/F3088/L16001.
-Scope:Final eight modified owners independently covered;unchanged full-Calc raw counters retained only after byte-identity checks.
+Evidence:4files/20cases;whole changed shared owner raw100 S244/B102/F45/L222.
+Scope:actual General formatter and native pure category compatibility.
 
-Command:npm run build;node scripts/check-static-build.mjs;npx playwright test --config output/playwright/task76-chart-owner-playwright.mts paste-block.spec.ts clipboard-copy.spec.ts --project=calc.
+Command:npm run build;npx playwright test --config output/playwright/task76-chart-owner-playwright.mts paste-block.spec.ts --project=calc.
 Result:pass.
-Evidence:fresh production/static smoke;2browser/DOM-free Worker scenarios.
-Scope:actual native merge refresh and clipboard owners.
+Evidence:real native rectangle/relative+absolute references,one-action Undo/Redo and merge refresh run in actual Chromium and DOM-free Worker.
+Scope:kernel/view ownership;task74 visible availability remains pending.
 
-Command:app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,8-owner source provenance,routing,doctor,git diff --check.
+Command:types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,19-owner provenance,Calc resources,static,routing,doctor,diff.
 Result:pass.
-Evidence:immutable evidence/progress-native-merge-refresh.
-Scope:changed owners and structural gates only;not final all-app certification.
+Evidence:evidence/progress-native-block-input.
+Scope:changed owners and structural gates.
+
+Command:npm run check:source-provenance;npm run inventory:parity:calc.
+Result:fail,unwaived.
+Evidence:ENOENT vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c and vendor/liblangtag-reference/liblangtag/lt-error.h.
+Scope:global source/registry gates. Approved scope forbids network/deleted-reference restoration;no restoration,waiver or final all-app pass is claimed.
 
 ## Rollback Plan
 
@@ -866,3 +878,5 @@ Human confirmation2026-10-25 removes numerical path caps only for existing76/74;
 Native default-sheet paste editability progress (2026-10-25):ScEditableTester block factory,true/true defaults,cumulative failure and inline queries consume actual document/table/column paths. MatrixEdge values remain original. Actual typed stores and NONE-mode cells drive GetBlockMatrixEdges;positive matrix geometry explicitly rejects. HasBlockMatrixFragment preserves allocated-column clamp and left/right/body/top/bottom visitation;positive edge decisions are erased only under the proven return-Nothing-or-reject admission invariant. Normal unprotected/unlocked nonscenario document/table editability preserves actual end bounds,missing-sheet defaults and optional false matrix outputs. Read-only shell,protection,scenario/lock and positive matrix services remain unrepresented without fake getters/providers. Every admitted false document result writes matrixfalse,justifying native tester conditional flag-clearing reduction. ApplyPattern/DeleteTab bodies partition unchanged to retain size bounds. Compile errors repaired from actual IsColValid header and unused-import state;test accessor corrected to native GetDirty. Initial coverage gaps close via default arguments and a real uninitialized-column null-pattern/cache ownership case,without fabricated peers or exclusions. Scope numerical cap remains removed only for76/74. Native PasteFromClip/EnterBlock,merge/format dependencies and74 UI acceptance remain pending. Stop rule and unwaived final gates remain unchanged.
 
 Native merge refresh progress (2026-10-25):original ApplyFlags/RemoveFlags and ExtendMerge refresh now operate on genuine canonical attribute owners with native allocation/clamp,bitwise mutation,index re-search and changed booleans. Native RefreshAutoFilter orphan Auto removal is implemented for the represented no-database-range slice;positive database reconstruction remains unported without dummy collection services. GetFormulaCell and IsBlockEmpty bodies partition unchanged for strict source-size gates. Full Calc232files/1002scenarios passes;final eight modified owners rerun166files/769scenarios raw100 after source partition. Audited final raw coverage replacement asserts exact source hashes for changed owners and byte-identical HEAD for every remaining full-Calc owner;final S17917/B10703/F3088/L16001 all100. Actual final Chromium/Worker2/2 passes after fresh build. Source provenance8owners and type/lint/format/docs/size/boundary/tree/static/routing/doctor gates pass. Immutable evidence:evidence/progress-native-merge-refresh. No task closure or all-app completion claimed. Remaining native PasteFromClip/EnterBlock,format compatibility and74 UI acceptance must finish before full suites/fixes/required100coverage/final closure/goal pause.
+
+Native block input progress (2026-10-25):actual EnterAutoSum/EnterBlock/default-content PasteFromClip now compile one formula at the native cursor into an actual clipboard,clone through original contexts/stores and own real content/attribute Undo documents under one shared Sfx Copy list action. Native disjoint-mark single-cell fallback is retained. Source bounds/selection/source-filter/editability/merge refresh/history ordering and original defaults remain;no repeated EnterData fill,reparse,alternate workbook or fake provider. Native IsCompatible and actual General formatter/canonical cached run application preserve format retention. HasClipFilteredRows queries actual first-used-sheet compressed segments,including one-cell all-filtered sources where dimension comparisons are insufficient. Pinned resolved English ErrorMessage resources bind actual browser EndPointer/error presentation and rebind on document replacement. Physical paint/OLE/UNO/window families and nondefault/cut/multi-range/filtered/merged-source/rich/positive matrix paste remain explicit boundaries. Existing helper/dirty bodies partition unchanged for source-size gates. Corrected stale refusal and edge-selection test expectations pass;complete baseline235files/1014scenarios then one genuine SUBTOTAL error scenario pass. Audited exact-source/exact-map standard Istanbul aggregation yields current Calc raw100 S18141/B10801/F3111/L16211;changed shared zforlist4files/20scenarios raw100 S244/B102/F45/L222. Actual final Chromium/DOM-free Worker native fill/history passes. Types,changed lint/format/docs/size/boundary/tree,19-owner provenance,resources/static/routing/doctor pass. Immutable evidence:evidence/progress-native-block-input. Global provenance and registry checks still fail on deleted vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c and liblangtag/lt-error.h;network/reference restoration remain forbidden and gates unwaived. Task76 stays DOING/unverified pending final gates;task74 visible availability and all-application final acceptance remain. Complete74,full suites/fixes/required100coverage,final closure,then pause;no new planned tasks.

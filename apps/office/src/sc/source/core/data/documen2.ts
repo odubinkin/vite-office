@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native ScDocument observable destructor from documen2.cxx,running on its original instance before GC reclaims physical stores. */
+import { CellAttributeHelper } from "../../../inc/patattr";
 import { ScChartListenerCollection } from "../../../inc/chartlis";
 import { ScPoolHelper } from "../inc/poolhelp";
 import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
@@ -94,4 +95,18 @@ export function GetFormatTable(this: ScDocument): SvNumberFormatter {
   const helper = this["mxPoolHelper"];
   if (!helper) throw new Error("Document pool helper assertion");
   return helper.GetFormTable();
+}
+
+/** Original actual cell-attribute resource helper,partitioned unchanged from the facade. @param this - Actual document. @returns Borrowed canonical helper. */
+export function getCellAttributeHelper(this: ScDocument): CellAttributeHelper {
+  if (!this["mpCellAttributeHelper"]) {
+    if (this.IsClipOrUndo())
+      throw new Error(
+        "CellAttributeHelper needs to be shared using SharePooledResources, not created",
+      );
+    const pool = this.GetPool();
+    if (!pool) throw new Error("No SfxItemPool for this ScDocument");
+    this["mpCellAttributeHelper"] = new CellAttributeHelper(pool);
+  }
+  return this["mpCellAttributeHelper"];
 }

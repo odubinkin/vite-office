@@ -538,3 +538,18 @@ export function RemoveFlags(
     changed = (this.FetchColumn(col) as ScColumn).RemoveFlags(row1, row2, flags) || changed;
   return changed;
 }
+
+/** Original preallocated-column format compatibility dispatch. @param this - Actual table. @param range - Destination range. @param pattern - Format delta. @param type - New category. @returns Nothing. */
+export function ApplyPatternIfNumberformatIncompatible(
+  this: ScTable,
+  range: ScRange,
+  pattern: ScPatternAttr,
+  type: number,
+): void {
+  for (let col = range.aStart.Col(); col <= range.aEnd.Col(); ++col)
+    (this.FetchColumn(col) as ScColumn).ApplyPatternIfNumberformatIncompatible(
+      range,
+      pattern,
+      type,
+    );
+}

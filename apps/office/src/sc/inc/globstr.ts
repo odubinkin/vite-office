@@ -32,3 +32,10 @@ export const scStyleNameResourcesEnglish = Object.freeze({
 export type ScStyleNameResources = Readonly<
   Record<keyof typeof scStyleNameResourcesEnglish, string>
 >;
+
+/** Pinned resolved English paste/error resources at the same existing browser boundary;no gettext service is simulated. */
+export const scPasteResourcesEnglish = Object.freeze({
+  STR_MSSG_PASTEFROMCLIP_0: "Insert into multiple selection not possible",
+  STR_PROTECTIONERR: "Protected cells can not be modified.",
+  STR_PASTE_FULL: "There is not enough space on the sheet to insert here.",
+});

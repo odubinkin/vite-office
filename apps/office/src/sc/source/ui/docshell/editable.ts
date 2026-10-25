@@ -1,4 +1,5 @@
 /** @fileoverview Original ScEditableTester block admission and value state;selection/action/protection/matrix-positive service families remain separately unported. */
+import { scPasteResourcesEnglish } from "../../../inc/globstr";
 import type { ScDocument } from "../../../inc/document";
 /** Original editable.hxx tester starts editable with only-matrix true and accumulates actual block-test outcomes. */
 export class ScEditableTester {
@@ -36,6 +37,10 @@ export class ScEditableTester {
         this.mbOnlyMatrix = false;
       }
     }
+  }
+  /** Original editable/failed message selection at the resolved English resource boundary. Positive matrix geometry rejects before producing a tester result in this slice. @returns Empty for editable or native protection text. */
+  GetMessageId(): string {
+    return this.mbIsEditable ? "" : scPasteResourcesEnglish.STR_PROTECTIONERR;
   }
   /** Original inline editability query. @returns Actual state. */
   IsEditable(): boolean {
