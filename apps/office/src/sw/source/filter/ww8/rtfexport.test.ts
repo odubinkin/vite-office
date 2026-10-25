@@ -425,6 +425,76 @@ it("combines matching first/follow pages and advances the current section page",
   }
 });
 
+it("splits a text node at a soft page boundary only for a distinct follow section", () => {
+  const source = createWriterDocument();
+  let imported: SwDoc | undefined;
+  try {
+    const paragraph = source.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing first paragraph.");
+    const fragment = createWriterTextFragment(paragraph, [
+      { text: "Alpha", attributes: { bold: true }, hyperlink: { url: "https://example.test/a" } },
+      { text: "Beta", attributes: { italic: true }, hyperlink: { url: "https://example.test/a" } },
+    ]);
+    paragraph.SetText(fragment.text);
+    paragraph.SetTextHints(fragment.hints);
+    source.GetIDocumentMarkAccess().MakeMark(paragraph, 5, "Boundary");
+    source.GetIDocumentMarkAccess().AddSoftPageBreak(paragraph, 5);
+    const follow = source.MakePageDesc("Follow", source.GetPageDesc());
+    source.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
+    source.GetPageDesc().SetFollow(follow);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf.match(/\\pard/gu)?.length).toBe(2);
+    expect(rtf.match(/\\sect\\sectd/gu)?.length).toBe(1);
+    expect(rtf.match(/HYPERLINK/gu)?.length).toBe(2);
+    expect(rtf).toContain(String.raw`\pgwsxn15000`);
+    expect(rtf.indexOf("Alpha")).toBeLessThan(rtf.indexOf(String.raw`\sect\sectd`));
+    expect(rtf.indexOf(String.raw`\sect\sectd`)).toBeLessThan(rtf.indexOf("Beta"));
+    expect(rtf.indexOf("Boundary")).toBeGreaterThan(rtf.indexOf(String.raw`\sect\sectd`));
+    imported = new RtfDocumentImpl().Resolve(
+      new RtfTokenizer(new TextEncoder().encode(rtf)).Tokenize(),
+    );
+    expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Alpha", "Beta"]);
+    expect(imported.FindPageDesc("Converted1")?.GetValue().width).toBe(15000);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("ignores soft page positions without a distinct follow-style section", () => {
+  const source = createWriterDocument();
+  try {
+    const paragraph = source.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing first paragraph.");
+    paragraph.SetText("AlphaBeta");
+    source.GetIDocumentMarkAccess().AddSoftPageBreak(paragraph, 5);
+    const follow = source.MakePageDesc("Same Geometry", source.GetPageDesc());
+    source.GetPageDesc().SetFollow(follow);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf.match(/\\pard/gu)?.length).toBe(1);
+    expect(rtf).not.toContain(String.raw`\sect\sectd`);
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("preserves source RTF suppression for a soft split after a preceding text node", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("Lead");
+    const split = source.nodes.MakeTextNode("AlphaBeta");
+    source.GetIDocumentMarkAccess().AddSoftPageBreak(split, 5);
+    const follow = source.MakePageDesc("Follow", source.GetPageDesc());
+    source.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
+    source.GetPageDesc().SetFollow(follow);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf.match(/\\pard/gu)?.length).toBe(3);
+    expect(rtf).not.toContain(String.raw`\sect\sectd`);
+  } finally {
+    source.Dispose();
+  }
+});
+
 it("keeps the source RTF section suppression when a page follows the previous page", () => {
   const source = createWriterDocument();
   try {

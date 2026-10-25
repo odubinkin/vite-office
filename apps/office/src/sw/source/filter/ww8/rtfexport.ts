@@ -163,23 +163,17 @@ export class RtfExport {
     output += this.WriteInitialPageDescription(document, blocks[0]);
     output += "\n";
     let currentPage = this.ResolvePageDescription(document, blocks[0]);
+    let previousPageDesc: SwPageDesc | undefined;
     for (const [blockIndex, block] of blocks.entries()) {
       if (blockIndex > 0) {
         const item = this.GetDirectPageDescriptionItem(block);
         if (item !== undefined) {
           const page = document.FindPageDesc(item.GetPageDescName()) ?? currentPage;
           if (currentPage.GetFollow() !== page) {
-            const titlePage = this.IsSingleWordSectionPageChain(page);
-            output += "\\sect\\sectd\\sectunlocked1";
-            output += this.WriteSectionPageDescription(titlePage ? page.GetFollow() : page, false);
-            const restart = item.GetNumOffset();
-            if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
-            if (titlePage) output += "\\titlepg";
-            output += "\\sbkpage\n";
-            currentPage = titlePage ? page.GetFollow() : page;
-          } else {
-            currentPage = page;
-          }
+            const section = this.WriteLaterSection(page, item.GetNumOffset());
+            output += section.output;
+            currentPage = section.currentPage;
+          } else currentPage = page;
         }
       }
       if (block instanceof SwTableNode) {
@@ -258,7 +252,14 @@ export class RtfExport {
           }
           output += "\\row\n";
         }
-      } else output += `\\pard${this.WriteParagraph(block)}\\par\n`;
+      } else {
+        const result = this.WriteTextNode(document, block, currentPage, previousPageDesc);
+        output += result.output;
+        currentPage = result.currentPage;
+        const next = blocks[blockIndex + 1];
+        if (next !== undefined && !(next instanceof SwTableNode))
+          previousPageDesc = this.ResolvePageDescription(document, next);
+      }
     }
     output += "}";
     return new TextEncoder().encode(output);
@@ -308,6 +309,11 @@ export class RtfExport {
   private IsSingleWordSectionPageChain(page: SwPageDesc): boolean {
     const follow = page.GetFollow();
     if (follow === page || follow.GetFollow() !== follow) return false;
+    return this.IsPlausibleSingleWordSection(page, follow);
+  }
+
+  /** Projects the physical fields tested by the pinned section plausibility helper. */
+  private IsPlausibleSingleWordSection(page: SwPageDesc, follow: SwPageDesc): boolean {
     const first = page.GetValue(),
       next = follow.GetValue();
     return (
@@ -318,6 +324,60 @@ export class RtfExport {
       first.topMargin === next.topMargin &&
       first.bottomMargin === next.bottomMargin
     );
+  }
+
+  /** Emits section properties through the shared later-page path. */
+  private WriteLaterSection(
+    page: SwPageDesc,
+    restart?: number,
+  ): { output: string; currentPage: SwPageDesc } {
+    const titlePage = this.IsSingleWordSectionPageChain(page);
+    const currentPage = titlePage ? page.GetFollow() : page;
+    let output = "\\sect\\sectd\\sectunlocked1";
+    output += this.WriteSectionPageDescription(currentPage, false);
+    if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
+    if (titlePage) output += "\\titlepg";
+    output += "\\sbkpage\n";
+    return { output, currentPage };
+  }
+
+  /** Splits a native text node only for a real follow-style section transition. */
+  private WriteTextNode(
+    document: SwDoc,
+    paragraph: SwTextNode,
+    currentPage: SwPageDesc,
+    previousPageDesc: SwPageDesc | undefined,
+  ): { output: string; currentPage: SwPageDesc } {
+    const positions = [
+      ...new Set(
+        document
+          .GetIDocumentMarkAccess()
+          .GetSoftPageBreaks()
+          .filter((position) => position.GetNode() === paragraph)
+          .map((position) => position.GetContentIndex())
+          .filter((offset) => offset > 0 && offset < paragraph.GetText().length),
+      ),
+    ].sort((a, b) => a - b);
+    const follow = currentPage.GetFollow();
+    if (
+      positions.length === 0 ||
+      follow === currentPage ||
+      this.IsPlausibleSingleWordSection(currentPage, follow)
+    )
+      return { output: `\\pard${this.WriteParagraph(paragraph)}\\par\n`, currentPage };
+    let output = "";
+    let start = 0;
+    for (const offset of positions) {
+      const nextPage = currentPage.GetFollow();
+      if (nextPage === currentPage) break;
+      output += `\\pard${this.WriteParagraph(paragraph, start, offset)}\\par\n`;
+      if (previousPageDesc?.GetFollow() !== nextPage)
+        output += this.WriteLaterSection(nextPage).output;
+      currentPage = nextPage;
+      start = offset;
+    }
+    output += `\\pard${this.WriteParagraph(paragraph, start)}\\par\n`;
+    return { output, currentPage };
   }
 
   /** Reads the item set selected by upstream GetSwAttrSet for the initial page. */
@@ -353,7 +413,11 @@ export class RtfExport {
   }
 
   /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */
-  private WriteParagraph(paragraph: SwTextNode): string {
+  private WriteParagraph(
+    paragraph: SwTextNode,
+    start = 0,
+    end = paragraph.GetText().length,
+  ): string {
     let output = this.attributeOutput.WriteParagraphProperties(paragraph);
     const style = this.styles.get(paragraph.GetParagraphStyle());
     if (style !== undefined) output += `\\s${style.index}`;
@@ -376,7 +440,14 @@ export class RtfExport {
       .GetDoc()
       .GetIDocumentMarkAccess()
       .GetBookmarks()
-      .filter((mark) => mark.GetMarkPos().GetNode() === paragraph);
+      .filter((mark) => {
+        if (mark.GetMarkPos().GetNode() !== paragraph) return false;
+        const offset = mark.GetMarkPos().GetContentIndex();
+        return (
+          offset >= start &&
+          (offset < end || (offset === end && end === paragraph.GetText().length))
+        );
+      });
     let offset = 0;
     let markIndex = 0;
     let activeLink: WriterHyperlink | undefined;
@@ -390,20 +461,23 @@ export class RtfExport {
       output += this.WriteRun(run);
     };
     for (const run of projectWriterTextRuns(paragraph)) {
-      let localOffset = 0;
-      const end = offset + run.text.length;
+      const runStart = offset;
+      offset += run.text.length;
+      const sliceStart = Math.max(start, runStart);
+      const sliceEnd = Math.min(end, offset);
+      if (sliceEnd <= sliceStart) continue;
+      let cursor = sliceStart;
       while (markIndex < marks.length) {
         const mark = marks[markIndex];
         if (mark === undefined) break;
         const position = mark.GetMarkPos().GetContentIndex();
-        if (position >= end) break;
-        writeRun({ ...run, text: run.text.slice(localOffset, position - offset) });
+        if (position >= sliceEnd) break;
+        writeRun({ ...run, text: run.text.slice(cursor - runStart, position - runStart) });
         output += this.WriteBookmark(mark.GetName());
-        localOffset = position - offset;
+        cursor = position;
         markIndex++;
       }
-      writeRun({ ...run, text: run.text.slice(localOffset) });
-      offset = end;
+      writeRun({ ...run, text: run.text.slice(cursor - runStart, sliceEnd - runStart) });
     }
     if (activeLink !== undefined) output += "}}";
     for (; markIndex < marks.length; markIndex++)
