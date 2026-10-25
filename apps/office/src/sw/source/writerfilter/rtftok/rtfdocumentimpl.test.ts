@@ -141,6 +141,24 @@ it("uses pinned SAL Windows-874 Thai and undefined-byte mapping", () => {
   }
 });
 
+it("uses SAL Symbol and Apple Roman encodings in RTF text", () => {
+  const symbol = read(String.raw`{\rtf1\ansi\ansicpg42\'41}`);
+  const mac = read(String.raw`{\rtf1\mac\'80\'db\'f0}`);
+  const font = read(String.raw`{\rtf1\ansi{\fonttbl{\f0\fcharset77 Geneva;}}\f0\'80}`);
+  const symbolFont = read(String.raw`{\rtf1\ansi{\fonttbl{\f0\fcharset2 Symbol;}}\f0\'41}`);
+  try {
+    expect(symbol.paragraphs[0]?.GetText()).toBe("\uF041");
+    expect(mac.paragraphs[0]?.GetText()).toBe("Ä€\uF8FF");
+    expect(font.paragraphs[0]?.GetText()).toBe("Ä");
+    expect(symbolFont.paragraphs[0]?.GetText()).toBe("\uF041");
+  } finally {
+    symbol.Dispose();
+    mac.Dispose();
+    font.Dispose();
+    symbolFont.Dispose();
+  }
+});
+
 it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
   const prefix = new TextEncoder().encode(
     String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,

@@ -1,6 +1,7 @@
 /** @fileoverview Current single-byte data owners from sal/textenc/tables.cxx. */
 import type { ImplByteConvertData } from "./tenchelp";
 import {
+  RTL_TEXTENCODING_APPLE_ROMAN,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_850,
   RTL_TEXTENCODING_MS_874,
@@ -13,9 +14,14 @@ import {
   RTL_TEXTENCODING_MS_1256,
   RTL_TEXTENCODING_MS_1257,
   RTL_TEXTENCODING_MS_1258,
+  RTL_TEXTENCODING_SYMBOL,
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
-import { aImplIBM437ByteCvtData, aImplIBM850ByteCvtData } from "./tcvtlat1";
+import {
+  aImplAPPLEROMANByteCvtData,
+  aImplIBM437ByteCvtData,
+  aImplIBM850ByteCvtData,
+} from "./tcvtlat1";
 import {
   aImplMS1250ByteCvtData,
   aImplMS1251ByteCvtData,
@@ -32,6 +38,8 @@ export function getSingleByteConvertData(
   encoding: rtl_TextEncoding,
 ): ImplByteConvertData | undefined {
   switch (encoding) {
+    case RTL_TEXTENCODING_APPLE_ROMAN:
+      return aImplAPPLEROMANByteCvtData;
     case RTL_TEXTENCODING_IBM_437:
       return aImplIBM437ByteCvtData;
     case RTL_TEXTENCODING_IBM_850:
@@ -59,4 +67,16 @@ export function getSingleByteConvertData(
     default:
       return undefined;
   }
+}
+
+/** Preserves the distinct converter function for Symbol versus table codecs. */
+export function getTextToUnicodeData(
+  encoding: rtl_TextEncoding,
+):
+  | Readonly<{ kind: "symbol" }>
+  | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
+  | undefined {
+  if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
+  const data = getSingleByteConvertData(encoding);
+  return data === undefined ? undefined : { kind: "single-byte", data };
 }

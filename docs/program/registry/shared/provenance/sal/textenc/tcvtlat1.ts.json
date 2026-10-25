@@ -6,9 +6,9 @@
     "status": "mapped",
     "localPath": "apps/office/src/sal/textenc/tcvtlat1.ts",
     "upstreamPath": "sal/textenc/tcvtlat1.tab",
-    "localSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData"],
-    "upstreamSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData"],
-    "preservedResponsibilities": ["Preserves the pinned IBM 437 and 850 forward, reverse and extension tables and their native byte-converter aggregates for the shared SAL converter."],
+    "localSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData", "aImplAPPLEROMANByteCvtData"],
+    "upstreamSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData", "aImplAPPLEROMANByteCvtData"],
+    "preservedResponsibilities": ["Preserves the pinned IBM 437/850 and Apple Roman forward, reverse and extension tables and their native byte-converter aggregates for the shared SAL converter."],
     "omittedResponsibilities": ["Other tcvtlat1.tab encodings and the full platform codec registry remain outside this module."],
     "evidence": {
       "local": [{ "path": "apps/office/src/sal/textenc/tcvtlat1.ts", "marker": "aImplIBM850ToUniTab" }, { "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts", "marker": "pinned SAL IBM 437 and 850 tables" }],

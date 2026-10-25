@@ -68,8 +68,9 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, RtfTokenizer, type RtfToken } from "./rtftokenizer";
 import { RTF_CHARSET_CODEPAGE, RTF_FONT_SUFFIX_CODEPAGE, rtfDecoderLabel } from "./rtfcharsets";
 import { convertCharToUnicode } from "../../../../sal/textenc/convertsimple.hxx";
+import { ImplSymbolToUnicode } from "../../../../sal/textenc/tcvtbyte";
 import { rtl_getTextEncodingFromWindowsCodePage } from "../../../../sal/textenc/tencinfo";
-import { getSingleByteConvertData } from "../../../../sal/textenc/tables";
+import { getTextToUnicodeData } from "../../../../sal/textenc/tables";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
@@ -1459,22 +1460,35 @@ export class RtfDocumentImpl {
 
   /** Converts ANSI bytes only after the current group and selected font are known. */
   private DecodeBytes(bytes: Uint8Array, state: RtfState): string {
-    const data = getSingleByteConvertData(
+    const encoding = getTextToUnicodeData(
       rtl_getTextEncodingFromWindowsCodePage(state.currentCodepage),
     );
-    if (data !== undefined) {
+    if (encoding !== undefined) {
       const destination = new Uint16Array(bytes.length);
-      const written = convertCharToUnicode(
-        data,
-        null,
-        bytes,
-        bytes.length,
-        destination,
-        destination.length,
-        0,
-        [0],
-        [0],
-      );
+      const written =
+        encoding.kind === "symbol"
+          ? ImplSymbolToUnicode(
+              null,
+              null,
+              bytes,
+              bytes.length,
+              destination,
+              destination.length,
+              0,
+              [0],
+              [0],
+            )
+          : convertCharToUnicode(
+              encoding.data,
+              null,
+              bytes,
+              bytes.length,
+              destination,
+              destination.length,
+              0,
+              [0],
+              [0],
+            );
       let text = "";
       for (let offset = 0; offset < written; offset += 8192)
         text += String.fromCharCode(
