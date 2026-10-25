@@ -1244,3 +1244,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tencinfo.cxx`, `rtl_getTextEncodingFromWindowsCodePage`, maps Windows code pages 10004 and 10005 to `RTL_TEXTENCODING_APPLE_ARABIC` and `RTL_TEXTENCODING_APPLE_HEBREW`; pinned `sal/textenc/tables.cxx` records `nullptr` with `TODO!` for both entries. `sal/textenc/textcvt.cxx`, `rtl_convertTextToUnicode`, routes a missing converter to `ImplDummyToUnicode`.
 - Observation: RTF byte sequences marked with those code pages decode each byte as U+00xx rather than Arabic or Hebrew characters. The source explicitly marks the converter entries unfinished. Compiled desktop behavior remains unverified.
 - Preservation: the local RTF path dispatches missing converters to the same SAL dummy byte mapping and does not synthesize an Apple Arabic/Hebrew table.
+
+### WRITER116 — Empty leading Markdown code paragraph can leave an unmatched closing fence
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutMarkdown_SwTextNode`, enters its fence logic only for nonempty text. For a nonempty preformatted paragraph, it decides whether to open the fence by checking the preceding node's pool style, even when that preceding node was empty and wrote no fence.
+- Observation: an empty preformatted paragraph followed by a nonempty one emits no opening fence, but the last nonempty paragraph still emits a closing fence. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown writer makes the same independent text and neighboring-style decisions. A focused test pins the resulting unmatched fence.

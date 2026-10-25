@@ -13,7 +13,7 @@
       "SwMDWriter::WriteStream"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source numbering labels and parent-prefix indentation, one fenced block for consecutive preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions."
+      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source per-node paragraph and table separators, source numbering labels and parent-prefix indentation, source neighboring-style fence decisions for preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -27,6 +27,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
           "marker": "closest built-in heading ancestor"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "source paragraph spacing around empty paragraphs"
         },
         {
           "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
@@ -49,6 +53,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
           "marker": "GetAnyFormatColl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "Paragraphs separate by empty lines"
         },
         {
           "path": "vendor/libreoffice-reference/sw/inc/node.hxx",

@@ -40,37 +40,37 @@ export class SwMDWriter {
     const blocks = document.GetNodes().getBodyContent(),
       output: string[] = [];
     const listPrefixSizes = new Map<number, number>();
-    let previousList = false;
     for (let index = 0; index < blocks.length; index++) {
       const block = blocks[index];
       if (block === undefined) continue;
       if (block instanceof SwTableNode) {
-        if (output.length > 0) output.push("");
-        output.push(writeTable(block));
-        previousList = false;
+        output.push("\n", writeTable(block), "\n");
         continue;
       }
       if (block.GetParagraphStyle() === "preformatted-text") {
-        const code = [block.GetText()];
-        while (true) {
+        if (block.GetText().length > 0) {
+          if (index > 0) output.push("\n");
+          const previous = blocks[index - 1];
+          if (
+            !(previous instanceof SwTextNode) ||
+            previous.GetParagraphStyle() !== "preformatted-text"
+          )
+            output.push("```\n");
+          output.push(writeRuns(block, true));
           const next = blocks[index + 1];
           if (!(next instanceof SwTextNode) || next.GetParagraphStyle() !== "preformatted-text")
-            break;
-          index++;
-          code.push(next.GetText());
+            output.push("\n```");
         }
-        if (output.length > 0) output.push("");
-        output.push(`\`\`\`\n${code.join("\n")}\n\`\`\``);
-        previousList = false;
+        output.push("\n");
         continue;
       }
-      const text = writeParagraph(block, listPrefixSizes);
-      const list = block.GetNumRule() !== undefined;
-      if (output.length > 0 && !(list && previousList)) output.push("");
-      output.push(text);
-      previousList = list;
+      if (block.GetText().length > 0) {
+        if (index > 0) output.push("\n");
+        output.push(writeParagraph(block, listPrefixSizes));
+      }
+      output.push("\n");
     }
-    return new TextEncoder().encode(output.join("\n") + "\n");
+    return new TextEncoder().encode(output.join(""));
   }
 }
 
@@ -176,7 +176,7 @@ function shouldOpen(before: number, after: number): boolean {
 }
 
 /** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown. */
-function writeRuns(node: SwTextNode): string {
+function writeRuns(node: SwTextNode, codeBlock = false): string {
   const source = node.GetText();
   if (source.length === 0) return "";
   const codeFont = node
@@ -201,7 +201,7 @@ function writeRuns(node: SwTextNode): string {
     const position = sorted[index] as number;
     const next =
       position === source.length ? emptyFormattingStatus() : formattingAt(node, position, codeFont);
-    if (shouldClose(previous.code, next.code)) output += "`";
+    if (!codeBlock && shouldClose(previous.code, next.code)) output += "`";
     if (shouldClose(previous.strikeout, next.strikeout)) output += "~~";
     if (shouldClose(previous.italic, next.italic)) output += "*";
     if (shouldClose(previous.bold, next.bold)) output += "**";
@@ -214,11 +214,11 @@ function writeRuns(node: SwTextNode): string {
     if (shouldOpen(previous.bold, next.bold)) output += "**";
     for (const url of urls)
       if (shouldOpen(previous.links.get(url) ?? 0, next.links.get(url) ?? 0)) output += "[";
-    if (shouldOpen(previous.code, next.code)) output += "`";
+    if (!codeBlock && shouldOpen(previous.code, next.code)) output += "`";
     const end = sorted[index + 1];
     if (end !== undefined && end > position) {
       const chunk = source.slice(position, end);
-      output += next.code !== 0 ? chunk : escapeMarkdown(chunk);
+      output += codeBlock || next.code !== 0 ? chunk : escapeMarkdown(chunk);
     }
     previous = next;
   }

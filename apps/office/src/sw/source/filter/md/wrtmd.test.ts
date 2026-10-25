@@ -107,7 +107,7 @@ it("writes a Markdown table from actual Writer rows", /** Checks table writer an
   }
 });
 
-it("keeps consecutive preformatted paragraphs inside one native Markdown fence", () => {
+it("keeps the source paragraph separator inside one native Markdown code fence", () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];
   if (first === undefined) throw new Error("Missing paragraph.");
@@ -117,7 +117,59 @@ it("keeps consecutive preformatted paragraphs inside one native Markdown fence",
   second.ChgFormatColl(source.GetTextFormatColl("preformatted-text"));
   try {
     expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
-      "```\nfirst\nsecond\n```\n",
+      "```\nfirst\n\nsecond\n```\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("preserves the pinned unmatched fence after an empty leading code paragraph", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing body paragraph.");
+  first.ChgFormatColl(source.GetTextFormatColl("preformatted-text"));
+  const second = source.nodes.MakeTextNode("code");
+  second.ChgFormatColl(source.GetTextFormatColl("preformatted-text"));
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "\n\ncode\n```\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("writes source paragraph spacing around empty paragraphs and adjacent list items", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing body paragraph.");
+  first.SetText("Before");
+  source.nodes.MakeTextNode("");
+  const one = source.nodes.MakeTextNode("One");
+  const two = source.nodes.MakeTextNode("Two");
+  applyWriterParagraphList(one, { kind: "bullet", level: 0, listId: "Bullet" });
+  applyWriterParagraphList(two, { kind: "bullet", level: 0, listId: "Bullet" });
+  source.nodes.MakeTextNode("");
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "Before\n\n\n- One\n\n- Two\n\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("writes a source table separator even at the beginning of the body", () => {
+  const source = createWriterDocument();
+  const initial = source.paragraphs[0];
+  if (initial === undefined) throw new Error("Missing body paragraph.");
+  const table = source.nodes.InsertTable(initial, "First table", {});
+  const row = source.nodes.AppendTableRow(table, 1);
+  row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Value");
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "\n| Value |\n| - |\n\n",
     );
   } finally {
     source.Dispose();
@@ -278,6 +330,7 @@ it("uses native numbering labels and parent-prefix width for nested Markdown ite
     );
     imported = new MarkdownReader().Read(new TextEncoder().encode(markdown));
     expect(imported.paragraphs[1]?.GetAttrListLevel()).toBe(1);
+    expect(imported.paragraphs[0]?.GetListId()).toBe(imported.paragraphs[1]?.GetListId());
   } finally {
     imported?.Dispose();
     source.Dispose();

@@ -99,9 +99,16 @@ export class SwMarkdownParser {
     while (offset < lines.length) {
       const line = lines[offset] as string;
       if (line.trim().length === 0) {
+        const next = lines[offset + 1];
+        const continuesList =
+          activeRootListKind !== undefined &&
+          next !== undefined &&
+          /^(\s*)([-+*]|\d+[.)])\s+(.+)$/u.test(next);
         offset++;
-        activeListId = undefined;
-        activeRootListKind = undefined;
+        if (!continuesList) {
+          activeListId = undefined;
+          activeRootListKind = undefined;
+        }
         continue;
       }
       const fence = /^ {0,3}(`{3,}|~{3,})(.*)$/u.exec(line);

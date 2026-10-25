@@ -20,6 +20,14 @@ under `vendor/libreoffice-reference` are the source comparison points.
 | Bookmarks and soft page breaks | No structural text encoding | Point bookmarks map through `bkmkstart`/`bkmkend`. The RTF writer uses document-owned soft page positions to split a text node only when its follow page needs a distinct section, retaining character hints, hyperlinks and point marks at their source offsets. The pinned previous-page suppression can omit the section token for a later node (WRITER104). | No structural Markdown mapping | **Open:** compiled upstream differential behavior for the later-node suppression and deeper multi-page chains; table soft-break rows are outside the represented text-node path. |
 | Page descriptors and paragraph/page break items | No structural text encoding | The first page descriptor emits global paper dimensions, margins, landscape and first-section controls; import applies physical geometry through `SwDoc::ChgPageDesc`. Direct later paragraph/table page descriptors emit RTF sections, physical geometry and page-number restart, with source follow-page suppression. Later export combines a first/follow page chain only when its represented physical geometry matches, following `IsPlausableSingleWordSection`; otherwise it keeps the first page geometry. Later `\\sect`/`\\sectd` groups import physical geometry into document-owned `ConvertedN` page descriptors attached to the first block; global fields seed each reset. Direct page-before emits `\\pagebb`; incoming `\\page` and one-column `\\column` defer a `RES_BREAK` page-before item to the next paragraph or table, while an in-cell symbol is ignored | No structural Markdown mapping | **Open:** the pinned importer appears to discard the numeric `\\pgnstarts` value and map `\\pgnrestart` to 1 (WRITER103), preserved here. First-page/follow-page metadata beyond physical geometry, section types and page-style chains still need source comparison. Pinned RTF loses direct page-after/page-both without section metadata and column breaks in this one-column/default-setting model (WRITER099); no synthetic `\\page` is added on export. |
 
+The Markdown writer now follows pinned `OutMarkdown_SwTextNode` paragraph spacing:
+every nonempty body paragraph, including adjacent list items and code-block
+paragraphs, gets a preceding blank line after the first node; empty paragraphs
+write their own newline; tables write a leading separator even at the start of
+the body. The reader keeps one document-owned list across the single blank line
+emitted between loose list items. An empty leading preformatted paragraph can
+leave an unmatched closing fence under the pinned source conditions (WRITER116).
+
 The Markdown reader currently implements only selected md4c callback outcomes, including
 backslash and whitespace hard breaks, soft breaks, thematic-line blocks, recognized
 entity omission and null-character omission. The

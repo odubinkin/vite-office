@@ -87,6 +87,16 @@ it("imports ordered and bullet lists with native levels and identities", /** Che
   }
 });
 
+it("keeps one native list across a loose-list blank line", () => {
+  const document = read("- First\n\n- Second\n");
+  try {
+    expect(document.paragraphs.map((node) => node.GetText())).toEqual(["First", "Second"]);
+    expect(document.paragraphs[0]?.GetListId()).toBe(document.paragraphs[1]?.GetListId());
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("shares one native rule across mixed nested list callbacks and configures each used level", () => {
   const document = read("1. First\n   - Nested\n2. Second\n");
   try {

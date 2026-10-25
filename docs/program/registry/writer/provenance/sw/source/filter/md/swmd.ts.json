@@ -13,7 +13,7 @@
       "MarkdownReader::Read"
     ],
     "preservedResponsibilities": [
-      "Reads represented Markdown blocks, including setext headings, thematic lines, indented code, multiline quotations and list nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available."
+      "Reads represented Markdown blocks, including setext headings, thematic lines, indented code, multiline quotations and loose-list blank-line continuation with nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -31,6 +31,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "keeps md4c thematic breaks distinct"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "loose-list blank line"
         }
       ],
       "upstream": [
