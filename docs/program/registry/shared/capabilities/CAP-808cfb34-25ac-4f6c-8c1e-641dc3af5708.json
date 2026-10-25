@@ -1,0 +1,147 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+    "capabilityId": "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "type": "filter",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual OOXML ZIP fragments and relationships retain native lookup, context, metadata and output ownership contracts in the consumed XML package slice."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host byte arrays, strings and Promise-based ZIP/SAX bindings replace native component streams while keeping upstream package/filter responsibilities and tested contracts."
+    },
+    "capability": "Shared OOXML package and XML fragment infrastructure",
+    "gaps": [
+      "DOCX Writer and XLSX Calc document/model/UI integration follows in V4DQJW and J0Z0KF.",
+      "General UNO services, encrypted and ZIP64 packages, binary XLSB RecordParser and full native package hierarchy remain outside the consumed XML slice.",
+      "Source-backed tests and pinned fixture package probes do not establish complete native module or application parity."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/oox/source/core/relations.ts",
+          "marker": "Relation"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/relationshandler.ts",
+          "marker": "PACKAGE_RELATION_NAMESPACE"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fragmenthandler.ts",
+          "marker": "FragmentFilter"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.ts",
+          "marker": "XmlFilterBase"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.ts",
+          "marker": "ZipFragmentStream"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+          "marker": "StringPair"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.ts",
+          "marker": "decodeToIUri"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/core/relations.test.ts",
+          "marker": "preserves native defaults"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "exports a real package"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts",
+          "marker": "extension-first lookup"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/upstream-packages.test.ts",
+          "marker": "imports the actual pinned package"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER093"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-285"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "oox/source/core/relations.cxx",
+          "marker": "Relations::getFragmentPathFromRelation"
+        },
+        {
+          "path": "oox/source/core/relationshandler.cxx",
+          "marker": "RelationsFragment::createFastChildContext"
+        },
+        {
+          "path": "oox/source/core/fragmenthandler.cxx",
+          "marker": "FragmentHandler::createFastChildContext"
+        },
+        {
+          "path": "oox/source/core/xmlfilterbase.cxx",
+          "marker": "XmlFilterBase::importFragment"
+        },
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implOpenInputStream"
+        },
+        {
+          "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+          "marker": "ReadContentTypeSequence"
+        },
+        {
+          "path": "tools/source/fsys/urlobj.cxx",
+          "marker": "INetURLObject::decode"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+          "marker": "testStrict"
+        },
+        {
+          "path": "sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "universal-content-strict.xlsx"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/core/relations.hxx",
+          "marker": "getFragmentPathFromRelation"
+        },
+        {
+          "path": "include/comphelper/ofopxmlhelper.hxx",
+          "marker": "ReadContentTypeSequence"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-ooxml-xml-package-fragment-io",
+    "scopeLimitations": [
+      "The prerequisite implements consumed package contracts, not DOCX/XLSX application feature parity. Pinned fixture tests require the ignored local corpus and exercise package selection/XML only; deterministic core tests require no corpus."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

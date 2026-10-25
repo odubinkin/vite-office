@@ -66,8 +66,8 @@
     "apps/office/src/oox/source/helper/zipstorage.ts": "332755792a4a86ad6c0691e9a95f666e8576d92139d6d614fc4a8b39d51ed324",
     "apps/office/src/tools/source/fsys/urlobj.ts": "51e083f46ed4f23372b5d4b67c306859b412687858903872d48656a5d1c111e4",
     "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "86f35a4955fc3e0a705f88cfcfaff8a34231a5536913f9952eae3bdc4bf3169d",
-    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "1d35374d1d29888c7dc9003ffdb62822b94ed5d0329d1580b1fb0b53eb8afdf0",
-    "apps/office/src/package/source/zippackage/ZipPackage.ts": "31f944b1c30e91fc6438400aa5d45308a98fb36f3432b33fdabef731029193fe",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "f85af549d4aaba8c97fab8cbd45c52209de33a4f7edd841eb7e8209400013c1b",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "8b25ffd48feaffc3efa8c0e274ad9cd6ae01719a1a5a004194c8580e113e86c4",
     "scripts/check-module-boundaries.mjs": "753df3194897e1011bc5076806455a0558b37ed4186e6ace79e26b096d8a9007"
   },
   "tests": [
@@ -115,6 +115,7 @@
     "Pinned package checks validate fragment routing/parsing, not Writer/Calc feature import.",
     "Initial hello fixture assertion and JSDoc errors were corrected without changing fixtures or production behavior.",
     "Doctor passed with an existing managed hook readiness warning; hook installation is outside approved scope.",
-    "Full suite not due: first task after SWRD7X checkpoint. DOCX/XLSX model and UI integration remains in dependent tasks."
+    "Full suite not due: first task after SWRD7X checkpoint. DOCX/XLSX model and UI integration remains in dependent tasks.",
+    "Closure source review corrected native DirectoryHelper splitAtLastToken positive-offset handling for a root .xml filename; its exact PropertyValue regression and the entire ZipPackage owner were freshly remeasured: 40 tests, S118 B66 F6 L104 all 100 percent. Final build and scoped lint also passed after this correction."
   ]
 }

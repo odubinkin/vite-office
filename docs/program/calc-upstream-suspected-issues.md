@@ -3956,3 +3956,9 @@ Pinned `sc/source/ui/view/viewutil.cxx:257` sets the range end to `LastNonFilter
 ### CALC-284 — Filtered merged cursor can replace MULTI mark type in GetSimpleArea
 
 Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected marks,then resolves the cursor's merged rectangle. If that rectangle contains a filtered row,the later branch replaces MULTI with SIMPLE_FILTERED. The actual marks stay disconnected. Preserve this ordering and resulting fill/paste admission rather than retaining MULTI artificially.
+
+### CALC-285 — OOXML content-type helper searches extension defaults before full-part overrides
+
+- Source: pinned `comphelper/source/xml/ofopxmlhelper.cxx`, `OFOPXMLHelper::GetContentTypeByName`.
+- Observation: the helper searches the extension key in Overrides and Defaults before searching the full part key. Given default `xml = application/xml` and override `/xl/workbook.xml = document-main`, it returns `application/xml`. This is surprising relative to OPC override precedence. The separate `ZipPackage::parseContentType` applies defaults then overrides; no incorrect desktop document result or reachable consumer defect is established here.
+- Preservation: retain exact search order, case-sensitive matching and first duplicate. `apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts` pins this result. Main-part selection uses the native office-document relationship path rather than changing this helper to infer a format from an extension. Shared finding also appears in the other application's issue ledger.

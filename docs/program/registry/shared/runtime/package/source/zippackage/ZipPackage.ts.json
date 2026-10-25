@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "odf-manifest-import",
     "capabilityIds": [
-      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470"
+      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470",
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,18 +17,21 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/package/source/zippackage/ZipPackage.ts#applyPlainManifestMetadata"
+        "apps/office/src/package/source/zippackage/ZipPackage.ts#applyPlainManifestMetadata",
+        "apps/office/src/package/source/zippackage/ZipPackage.ts#WriteContentTypes"
       ],
-      "justification": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified.",
+      "justification": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified. R2DJ64 additionally implements native WriteContentTypes standard defaults and override omission using actual PropertyValue inputs and shared OFOPXMLHelper SAX output; whole-module status remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "applyPlainManifestMetadata",
-        "readPlainPackageManifest"
+        "readPlainPackageManifest",
+        "WriteContentTypes"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "package/source/zippackage/ZipPackage.cxx",
       "upstreamSymbols": [
-        "ZipPackage::parseManifest"
+        "ZipPackage::parseManifest",
+        "ZipPackage::WriteContentTypes"
       ]
     }
   }

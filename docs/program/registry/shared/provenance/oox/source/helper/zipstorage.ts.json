@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/helper/zipstorage.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host UTF16 strings, Uint8Array and asynchronous ZIP/SAX bindings replace native component streams and generated token transport at the consumed package boundary."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.ts",
+          "marker": "ZipFragmentStream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implOpenInputStream"
+        },
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implOpenOutputStream"
+        },
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implCommit"
+        }
+      ]
+    },
+    "upstreamPath": "oox/source/helper/zipstorage.cxx",
+    "localSymbols": [
+      "ZipFragmentStream",
+      "ZipStorage"
+    ],
+    "upstreamSymbols": [
+      "ZipStorage::implOpenInputStream",
+      "ZipStorage::implOpenOutputStream",
+      "ZipStorage::implCommit"
+    ],
+    "preservedResponsibilities": [
+      "ZIP stream/commit binding reuses actual ZIP32 owners. Typed output delegates standard content types to package; per-stream RelId follows OWriteStream_Impl::GetNewRelId."
+    ],
+    "omittedResponsibilities": [
+      "Ports only the consumed XML/package contract; native UNO services, general storage hierarchy, encrypted/ZIP64 packages, XLSB RecordParser and complete application document filters are outside this prerequisite. Strings/byte arrays and Promises bind host XML/ZIP transport; whole-module parity remains unverified."
+    ]
+  }
+}

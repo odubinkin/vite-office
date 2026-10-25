@@ -27,6 +27,7 @@ const moduleNames = [
   "i18nutil",
   "o3tl",
   "offapi",
+  "oox",
   "package",
   "sal",
   "salhelper",
@@ -48,7 +49,8 @@ const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
   // Original attributelist.hxx/cxx also owns actual OUString values.
-  ["comphelper", new Set(["cppu", "sal", "udkapi"])],
+  // Original OFOPXMLHelper uses the native SAX parser/writer services.
+  ["comphelper", new Set(["cppu", "sal", "sax", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
@@ -101,6 +103,8 @@ const allowedEdges = new Map([
   // Original generated enum getters use actual CPPU static enum metadata.
   // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
   ["offapi", new Set(["cppu", "sal", "udkapi"])],
+  // XmlFilterBase/ZipStorage use shared ZIP/SAX/OFOPXML helpers and INetURLObject::decode (Library_oox).
+  ["oox", new Set(["comphelper", "package", "sax", "tools"])],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
