@@ -37,6 +37,7 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
@@ -119,6 +120,7 @@ interface RtfTableRow {
   readonly left: number;
   readonly height: number;
   readonly split: boolean;
+  readonly verticals: readonly (VertOrientation | undefined)[];
 }
 
 const DEFAULT_CHARACTER: WriterCharacterAttributes = {
@@ -244,6 +246,8 @@ export class RtfDocumentImpl {
   private rowLeft = 0;
   private rowHeight = 0;
   private rowSplit = true;
+  private rowVerticals: (VertOrientation | undefined)[] = [];
+  private nextCellVertical: VertOrientation | undefined;
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
@@ -329,6 +333,12 @@ export class RtfDocumentImpl {
           for (const [index, cell] of row.cells.entries()) {
             const box = line.GetTabBoxes()[index];
             if (box === undefined) throw new Error("RTF table cell is missing.");
+            const vertical = row.verticals[index];
+            if (vertical !== undefined) {
+              const item = box.GetVertOrient();
+              item.SetVertOrient(vertical);
+              box.ClaimFrameFormat().SetFormatAttr(item);
+            }
             const right = row.boundaries[index];
             const left = index === 0 ? row.left : row.boundaries[index - 1];
             if (right !== undefined && left !== undefined && right > left) {
@@ -677,6 +687,17 @@ export class RtfDocumentImpl {
       this.rowLeft = 0;
       this.rowHeight = 0;
       this.rowSplit = true;
+      this.rowVerticals = [];
+      this.nextCellVertical = undefined;
+      return;
+    }
+    if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
+      this.nextCellVertical =
+        name === "clvertalc"
+          ? VertOrientation.CENTER
+          : name === "clvertalb"
+            ? VertOrientation.BOTTOM
+            : VertOrientation.TOP;
       return;
     }
     if (name === "trrh") {
@@ -696,7 +717,11 @@ export class RtfDocumentImpl {
       return;
     }
     if (name === "cellx") {
-      if (parameter !== undefined) this.rowBoundaries.push(parameter);
+      if (parameter !== undefined) {
+        this.rowBoundaries.push(parameter);
+        this.rowVerticals.push(this.nextCellVertical);
+        this.nextCellVertical = undefined;
+      }
       return;
     }
     if (name === "intbl") {
@@ -722,6 +747,7 @@ export class RtfDocumentImpl {
           left: this.rowLeft,
           height: this.rowHeight,
           split: this.rowSplit,
+          verticals: this.rowVerticals.splice(0),
         });
       this.inTable = false;
       this.terminatedParagraph = true;

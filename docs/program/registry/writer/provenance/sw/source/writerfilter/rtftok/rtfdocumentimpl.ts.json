@@ -13,7 +13,7 @@
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF group-scoped character and paragraph controls, built-in and named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths and row height/split controls, plus HYPERLINK field results into canonical Writer nodes and items; listtext fallback groups are skipped."
+      "Maps represented RTF group-scoped character and paragraph controls, built-in and named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and direct cell vertical alignment controls, plus HYPERLINK field results into canonical Writer nodes and items; listtext fallback groups are skipped."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, sections and embedded objects remain unverified."

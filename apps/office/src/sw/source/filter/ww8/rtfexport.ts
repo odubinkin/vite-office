@@ -3,6 +3,7 @@ import type { SwDoc } from "../../core/doc/doc";
 import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
@@ -155,7 +156,15 @@ export class RtfExport {
           const tableWidth = block.GetTable().GetFrameFormat().GetFrameSize().GetWidth();
           const widthRatio = hasNativeWidths && tableWidth > 0 ? tableWidth / baseWidth : 1;
           let right = 0;
-          for (const width of nativeWidths) {
+          for (const [index, width] of nativeWidths.entries()) {
+            const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
+            if (vertical !== undefined)
+              output +=
+                vertical === VertOrientation.CENTER
+                  ? "\\clvertalc"
+                  : vertical === VertOrientation.BOTTOM
+                    ? "\\clvertalb"
+                    : "\\clvertalt";
             right += hasNativeWidths ? width : 1440;
             output += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
           }

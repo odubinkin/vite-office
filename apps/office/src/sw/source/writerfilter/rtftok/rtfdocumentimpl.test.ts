@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { SwTableNode } from "../../core/docnode/node";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
@@ -74,6 +75,26 @@ it("imports at-least row height without changing the default split state", () =>
       expect(row?.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Minimum);
       expect(row?.GetRowSplit().GetValue()).toBe(true);
     }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("maps per-cell RTF vertical alignment before each cellx boundary", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\trowd\\clvertalt\\cellx1200\\clvertalb\\cellx2600\\intbl Top\\cell\\intbl Bottom\\cell\\row}",
+  );
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode)
+      expect(
+        block
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()
+          .map((box) => box.GetVertOrient().GetVertOrient()),
+      ).toEqual([VertOrientation.TOP, VertOrientation.BOTTOM]);
   } finally {
     document.Dispose();
   }

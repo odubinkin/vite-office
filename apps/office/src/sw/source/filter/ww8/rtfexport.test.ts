@@ -5,6 +5,7 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
@@ -136,12 +137,18 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   const firstSize = firstBox.GetFrameSize();
   firstSize.SetWidth(1800);
   firstBox.SetFrameSize(firstSize);
+  const firstVertical = firstBox.GetVertOrient();
+  firstVertical.SetVertOrient(VertOrientation.CENTER);
+  firstBox.ClaimFrameFormat().SetFormatAttr(firstVertical);
   source.nodes.AppendTableCellParagraph(firstBox).SetText("More");
   const secondBox = row.GetTabBoxes()[1];
   if (secondBox === undefined) throw new Error("Missing second table cell.");
   const secondSize = secondBox.GetFrameSize();
   secondSize.SetWidth(3000);
   secondBox.SetFrameSize(secondSize);
+  const secondVertical = secondBox.GetVertOrient();
+  secondVertical.SetVertOrient(VertOrientation.BOTTOM);
+  secondBox.ClaimFrameFormat().SetFormatAttr(secondVertical);
   secondBox.GetParagraphs()[0]?.SetText("Two");
   const frame = table.GetFrameFormat();
   const orientation = frame.GetHoriOrient().Clone();
@@ -155,7 +162,9 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   try {
     const bytes = new RtfExport().ExportDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\trowd\\trrh-720\\trkeep");
-    expect(new TextDecoder().decode(bytes)).toContain("\\trql\\trleft360\\cellx2160\\cellx5160");
+    expect(new TextDecoder().decode(bytes)).toContain(
+      "\\trql\\trleft360\\clvertalc\\cellx2160\\clvertalb\\cellx5160",
+    );
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Before", "After"]);
     const restored = imported.GetNodes().getBodyContent()[1];
@@ -183,6 +192,13 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
           ?.GetTabBoxes()
           .map((box) => box.GetFrameSize().GetWidth()),
       ).toEqual([1800, 3000]);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()
+          .map((box) => box.GetVertOrient().GetVertOrient()),
+      ).toEqual([VertOrientation.CENTER, VertOrientation.BOTTOM]);
     }
   } finally {
     imported?.Dispose();
