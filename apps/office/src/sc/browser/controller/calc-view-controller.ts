@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScMarkData } from "../../inc/markdata";
+import { ScViewUtil } from "../../source/ui/view/viewutil";
 import * as pointerInput from "./calc-pointer-selection";
 import type { CalcPointerKind } from "./calc-pointer-selection";
 import * as referenceInput from "./calc-reference-input";
@@ -610,7 +612,7 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
-  /** Browser availability boundary for native services already implemented in this kernel. Clipboard block-fill and SUBTOTAL remain unavailable;no replacement calculation is offered. @returns The represented native action can execute. */
+  /** Browser availability boundary over actual native inference and copied marks. Ordinary empty-block fill is available;SUBTOTAL and filtered paste services remain unported. @returns The represented native action can execute. */
   CanAutoSum(): boolean {
     const marks = this.viewData.GetMarkData(),
       ranges = new ScRangeList(),
@@ -626,13 +628,22 @@ export class CalcViewController {
             range.aEnd.Row(),
             range.aStart.Tab(),
           )
-        )
-          return false;
+        ) {
+          const inferred = new ScRangeList(),
+            targets = new ScMarkData(marks);
+          this.viewShell.GetAutoSumArea(inferred);
+          targets.MarkToSimple();
+          return (
+            (targets.IsMultiMarked() || !ScViewUtil.HasFiltered(targets.GetMarkArea(), doc)) &&
+            !this.viewShell.UseSubTotal(inferred)
+          );
+        }
     } else this.viewShell.GetAutoSumArea(ranges);
     return !this.viewShell.UseSubTotal(ranges);
   }
   /** Runs original AutoSum and SetFuncString caret selection through real view/input owners. @returns Native selection when an input-line draft was created. */
   AutoSum(): readonly [number, number] | undefined {
+    this.error = "";
     try {
       const rangeFinder: [boolean] = [false],
         subtotal: [boolean] = [false],

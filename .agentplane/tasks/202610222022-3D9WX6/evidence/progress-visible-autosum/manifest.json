@@ -1,0 +1,67 @@
+{
+  "task": "202610222022-3D9WX6",
+  "state": "DOING;visible implementation and related validation pass;all-application final coverage/closure still pending;global registry requires three separately requested reference files",
+  "sourceBaseline": "1f2175e78958b114151674045b99005756072256",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "changedPaths": [
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+    "apps/office/src/sc/browser/controller/autosum-availability.test.ts",
+    "apps/office/src/sc/browser/presentation/ScInputWindow.tsx",
+    "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+    "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+    "apps/office/e2e/calc/formula-bar.spec.ts",
+    "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/ScInputWindow.tsx.json",
+    "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+    "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/ScInputWindow.tsx.json",
+    "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json"
+  ],
+  "behavior": [
+    "Actual ordinary empty-block AutoSum uses native compiled-formula clipboard/context/store ownership and shared Sfx one-action paste history;no per-cell reparsing or second workbook.",
+    "Read-only availability uses real inference and copied ScMarkData;filtered paste and SUBTOTAL remain explicitly unavailable;native disjoint-mark error/single-cell fallback remains.",
+    "Actual browser-owned formula-line focus preserves native DOM selection;programmatic Formula/AutoSum/reference focus still projects native selection. Source ScTextWnd GetFocus does not reset the edit-view selection.",
+    "Existing shared Writer controls and visual style retained;grid focus,Undo/Redo,ODS browser-primary save and fresh open tested at1280/390px."
+  ],
+  "checks": {
+    "currentOwners": "54files227cases pass;additional mounted9case run includes one new filtered-source disabled Sum scenario;overlapping reruns are not new unique cases.",
+    "currentPresenterCoverage": {
+      "lines": {
+        "total": 226,
+        "covered": 226,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 241,
+        "covered": 241,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 57,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 288,
+        "covered": 288,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMethod": "Two complete current-source owner maps:standard Istanbul merge after exact source-hash and statement/function/branch-map equality assertions;every raw counter positive;unchanged strict100 thresholds. No old-source maps merged.",
+    "chromium": "Canonical500case all-app run retained498pass2fail. After actual select-all/input-focus fix,related7cases pass on fresh production build,including both original failures,5000x9 ODS import/save/reopen/export and new AutoSum1280/390;no timeout changes.",
+    "worker": "Native real-clipboard/Undo/Redo actual DOM-free Worker proof retained in task76 progress-native-block-input evidence.",
+    "other": "Fresh production build,app/tools types,current-owner lint and strict coverage pass. Final broad gates/results remain pending and are not claimed here."
+  },
+  "stopRule": "Finish existing76/74,full all-app tests/fixes/missing scenarios/required100coverage/final closure,then pause goal;no new planned tasks."
+}

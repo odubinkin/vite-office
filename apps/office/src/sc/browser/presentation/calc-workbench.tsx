@@ -101,7 +101,8 @@ export function CalcWorkbench({
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
-    previousModal = useRef(modal);
+    previousModal = useRef(modal),
+    browserTopFocus = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const cursorColumn = view.GetCurX(),
@@ -132,8 +133,10 @@ export function CalcWorkbench({
     [modal],
   );
   useLayoutEffect(
-    /** Applies original input-window text selection only after controlled text has rendered. @returns Nothing. */ () => {
-      if (controller.mode !== ScInputMode.SC_INPUT_NONE) {
+    /** Projects native selection requests after controlled text renders. Actual browser focus owns its initial caret/selection,as ScTextWnd GetFocus delegates to the edit view without moving it. @returns Nothing. */ () => {
+      const preserveBrowserSelection = browserTopFocus.current;
+      browserTopFocus.current = false;
+      if (controller.mode !== ScInputMode.SC_INPUT_NONE && !preserveBrowserSelection) {
         const input = (root.current as HTMLElement).querySelector(
           controller.mode === ScInputMode.SC_INPUT_TOP
             ? '[aria-label="Input line"]'
@@ -490,8 +493,15 @@ export function CalcWorkbench({
             }
           }
           onInputFocus={
-            /** Enters formula-line mode. @returns Nothing. */ () =>
-              controller.StartInput(ScInputMode.SC_INPUT_TOP)
+            /** Enters TOP without overriding the browser-owned focus selection. Programmatic native input has already selected TOP before its focus is projected. @param event - Actual edit view focus. @returns Nothing. */ (
+              event,
+            ) => {
+              if (controller.mode !== ScInputMode.SC_INPUT_TOP) {
+                browserTopFocus.current =
+                  event.currentTarget === event.currentTarget.ownerDocument.activeElement;
+                controller.StartInput(ScInputMode.SC_INPUT_TOP);
+              }
+            }
           }
           onInputCommand={inputCommand}
           onInputSelection={

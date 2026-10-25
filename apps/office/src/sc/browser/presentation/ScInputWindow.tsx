@@ -1,5 +1,5 @@
 /** @fileoverview Controlled browser composition of ScPosWnd and the ScInputWindow formula/OK-cancel input line. Draft and address transitions belong to the input/view controllers. */
-import type { SyntheticEvent } from "react";
+import type { SyntheticEvent, FocusEvent } from "react";
 import type { KeyboardEvent } from "react";
 import { FunctionSquare, Sigma, Equal, X, Check, ChevronDown, type LucideIcon } from "lucide-react";
 import {
@@ -20,7 +20,7 @@ export interface ScInputWindowProps {
   readonly onInput: (value: string, selection: readonly [number, number]) => void;
   readonly onInputCommand?: (event: SyntheticEvent<HTMLInputElement>) => void;
   readonly onInputSelection?: (start: number, end: number, text: string) => void;
-  readonly onInputFocus: () => void;
+  readonly onInputFocus: (event: FocusEvent<HTMLInputElement>) => void;
   readonly onInputKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   readonly onAction: (action: CalcInputAction) => void;
 }
