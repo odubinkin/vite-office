@@ -6,6 +6,7 @@ import {
   projectWriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
+import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -126,8 +127,8 @@ interface RtfState {
   paragraph: RtfParagraphState;
   fontIndex: number;
   colorIndex: number;
-  field?: { instruction: string; url?: string };
-  hyperlink?: string;
+  field?: { instruction: string; hyperlink?: WriterHyperlink };
+  hyperlink?: WriterHyperlink;
   styleIndex?: number;
   styleName?: string;
   styleControls: Set<string>;
@@ -693,9 +694,8 @@ export class RtfDocumentImpl {
       if (previous?.destination === "listoverride")
         this.listOverrides.set(this.currentOverrideIndex, this.currentOverrideListId);
       if (previous?.destination === "fldinst" && previous.field !== undefined) {
-        const match = /\bHYPERLINK\s+(?:"([^"]+)"|([^\s]+))/iu.exec(previous.field.instruction);
-        const url = match?.[1] ?? match?.[2];
-        if (url !== undefined) previous.field.url = url;
+        const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
+        if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
       }
       return;
     }
@@ -735,7 +735,7 @@ export class RtfDocumentImpl {
     }
     if (token.name === "fldrslt" && state.destination === "field") {
       state.destination = "body";
-      if (state.field?.url !== undefined) state.hyperlink = state.field.url;
+      if (state.field?.hyperlink !== undefined) state.hyperlink = state.field.hyperlink;
       else Reflect.deleteProperty(state, "hyperlink");
       return;
     }
@@ -1168,7 +1168,7 @@ export class RtfDocumentImpl {
     const previous = this.runs.at(-1);
     if (
       previous !== undefined &&
-      previous.hyperlink?.url === state.hyperlink &&
+      equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
       equalControls(previous.controls, state.characterControls) &&
       equalCharacter(previous.attributes, state.character)
     )
@@ -1178,7 +1178,7 @@ export class RtfDocumentImpl {
         text: value,
         attributes: { ...state.character },
         controls: new Set(state.characterControls),
-        ...(state.hyperlink === undefined ? {} : { hyperlink: { url: state.hyperlink } }),
+        ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
       });
     this.terminatedParagraph = false;
   }
@@ -1316,6 +1316,70 @@ function resolveRtfRunAttributes(
 /** Compares explicit-control sets before adjacent RTF runs are coalesced. */
 function equalControls(left: ReadonlySet<string>, right: ReadonlySet<string>): boolean {
   return left.size === right.size && [...left].every((name) => right.has(name));
+}
+
+/** Extracts Word field command parts with the quoted-space and screen-tip rules of FieldContext. */
+function getRtfFieldCommandParts(command: string): string[] {
+  const parts: string[] = [];
+  let inString = false;
+  let screenTip = false;
+  let part = "";
+  const tokens = command.split(" ").filter((token) => token.length > 0);
+  for (const [index, sourceToken] of tokens.entries()) {
+    let token = sourceToken;
+    let inStringNext: boolean = inString;
+    if (screenTip) {
+      let removeQuotation = true;
+      inStringNext = index < tokens.length - 1;
+      if (token.startsWith('"') && !inString) token = token.slice(1);
+      if (token.startsWith("\\")) {
+        removeQuotation = false;
+        token = token.replaceAll("\\", "");
+      }
+      if (!inStringNext && removeQuotation) token = token.slice(0, -1);
+    } else {
+      if (token.startsWith('"')) {
+        inStringNext = true;
+        token = token.slice(1);
+      }
+      if (token.endsWith('"')) {
+        inStringNext = false;
+        token = token.slice(0, -1);
+      }
+    }
+    if (token === "\\o") screenTip = true;
+    if (inString) {
+      part += ` ${token}`;
+      if (!inStringNext) parts.push(part);
+    } else if (inStringNext) part = token;
+    else parts.push(token);
+    inString = inStringNext;
+  }
+  return parts;
+}
+
+/** Applies the pinned DomainMapper HYPERLINK switches to one represented Writer link. */
+function parseRtfHyperlinkInstruction(instruction: string): WriterHyperlink | undefined {
+  const parts = getRtfFieldCommandParts(instruction);
+  if (parts[0]?.toUpperCase() !== "HYPERLINK") return undefined;
+  let url = "";
+  let targetFrame = "";
+  let name = "";
+  for (let index = 1; index < parts.length; index++) {
+    const part = parts[index];
+    if (part === "\\l") url += `#${parts[++index] ?? ""}`;
+    else if (part === "\\t") targetFrame = parts[++index] ?? "";
+    else if (part === "\\o") name = parts[++index] ?? "";
+    else if (part !== "\\m" && part !== "\\n" && part !== "\\h")
+      url = part?.replaceAll("\\\\", "\\") ?? "";
+  }
+  if (url.length === 0) return undefined;
+  if (url.startsWith("file:///")) url = url.replaceAll("\\", "/");
+  return {
+    url,
+    ...(targetFrame.length === 0 ? {} : { targetFrame }),
+    ...(name.length === 0 ? {} : { name }),
+  };
 }
 
 /** Resolves RTF list level formats accepted by the current native numbering model. */

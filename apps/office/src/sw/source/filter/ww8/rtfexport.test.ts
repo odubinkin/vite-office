@@ -719,6 +719,65 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
   }
 });
 
+it("exports source-escaped hyperlink URLs and target frames through native RTF fields", () => {
+  const source = createWriterDocument();
+  const node = source.paragraphs[0];
+  if (node === undefined) throw new Error("Missing paragraph.");
+  const url = "https://example.test/a\\b";
+  const runs = [
+    {
+      text: "link",
+      attributes: { bold: false, italic: false, underline: false },
+      hyperlink: { url, targetFrame: "New Window", name: "Omitted by source exporter" },
+    },
+  ];
+  const fragment = createWriterTextFragment(node, runs);
+  node.SetText(fragment.text);
+  node.SetTextHints(fragment.hints);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const rtf = new TextDecoder().decode(bytes);
+    expect(rtf).toContain(String.raw`HYPERLINK "https://example.test/a\\\\b" \\t "New Window"`);
+    expect(rtf).not.toContain(String.raw`\\o "Omitted by source exporter"`);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(projectWriterTextRuns(imported.paragraphs[0])[0]?.hyperlink).toEqual({
+      url,
+      targetFrame: "New Window",
+    });
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("keeps one native RTF hyperlink field across differently formatted text runs", () => {
+  const source = createWriterDocument();
+  const node = source.paragraphs[0];
+  if (node === undefined) throw new Error("Missing paragraph.");
+  const hyperlink = { url: "https://example.test", targetFrame: "_blank" };
+  const fragment = createWriterTextFragment(node, [
+    { text: "plain ", hyperlink, attributes: { bold: false, italic: false, underline: false } },
+    { text: "bold", hyperlink, attributes: { bold: true, italic: false, underline: false } },
+  ]);
+  node.SetText(fragment.text);
+  node.SetTextHints(fragment.hints);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes).match(/\\field\b/gu)).toHaveLength(1);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const runs = projectWriterTextRuns(imported.paragraphs[0]);
+    expect(runs.map((run) => [run.text, run.hyperlink, run.attributes.bold])).toEqual([
+      ["plain ", hyperlink, false],
+      ["bold", hyperlink, true],
+    ]);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
 it("retains upstream default-height escapement suppression", /** Checks the source branch that emits only conventional super/sub positions at height 58. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const node = source.paragraphs[0];

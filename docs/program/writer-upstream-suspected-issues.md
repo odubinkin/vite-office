@@ -1136,3 +1136,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::ParaTabStop`, emits `\\tlth` for a hyphen fill and `\\tleq` for an equals fill. Pinned `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` maps both `TLTH` and `TLUL` to the underscore leader and has no `TLEQ` case in the tab-leader switch.
 - Observation: exporting a tab with a hyphen or equals leader and importing the RTF through the source reader appears to change that leader to underscore or the default fill, respectively. This is a source-level inference, not a confirmed desktop round trip.
 - Preservation: retain the source writer controls and reader mapping in the current RTF path. Focused tests pin `\\tlth` import to underscore; do not silently reinterpret it as hyphen.
+
+### WRITER098 — RTF hyperlink export omits the hyperlink name
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::StartURL`, accepts `rName` but leaves it unused, while writing the URL and optional `\\t` target. Pinned `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx` accepts the `\\o` field switch and assigns it to the hyperlink name.
+- Observation: exporting a Writer hyperlink with a name and importing the RTF through the source reader appears to lose that name, while an incoming RTF `\\o` name is retained. This is a source-level inference; native desktop round-trip behavior is not independently confirmed.
+- Preservation: keep the current RTF exporter limited to the source URL and target controls. The importer accepts `\\o` into the existing native hyperlink item; focused tests distinguish import support from the source export omission.

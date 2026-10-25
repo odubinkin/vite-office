@@ -384,3 +384,23 @@ it("retains visible non-link field results without assigning a hyperlink", /** C
     document.Dispose();
   }
 });
+
+it("imports source HYPERLINK URL, target, name and fragment field switches", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi{\field{\*\fldinst HYPERLINK "https://example.test/a\\\\b" \\t "New Window"}{\fldrslt first}} {\field{\*\fldinst HYPERLINK "" \\l "chapter"}{\fldrslt second}} {\field{\*\fldinst HYPERLINK "https://example.test" \\o "Link Name"}{\fldrslt third}}}`,
+  );
+  try {
+    const runs = projectWriterTextRuns(document.paragraphs[0]);
+    expect(runs.find((run) => run.text === "first")?.hyperlink).toEqual({
+      url: "https://example.test/a\\b",
+      targetFrame: "New Window",
+    });
+    expect(runs.find((run) => run.text === "second")?.hyperlink?.url).toBe("#chapter");
+    expect(runs.find((run) => run.text === "third")?.hyperlink).toEqual({
+      url: "https://example.test",
+      name: "Link Name",
+    });
+  } finally {
+    document.Dispose();
+  }
+});

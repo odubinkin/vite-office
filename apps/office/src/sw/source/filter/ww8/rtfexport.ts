@@ -18,6 +18,7 @@ import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { WriterTextRun } from "../basflt/writer-transfer";
+import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
@@ -267,6 +268,16 @@ export class RtfExport {
       .filter((mark) => mark.GetMarkPos().GetNode() === paragraph);
     let offset = 0;
     let markIndex = 0;
+    let activeLink: WriterHyperlink | undefined;
+    const writeRun = (run: WriterTextRun): void => {
+      if (run.text.length === 0) return;
+      if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
+        if (activeLink !== undefined) output += "}}";
+        if (run.hyperlink !== undefined) output += this.StartURL(run.hyperlink);
+        activeLink = run.hyperlink;
+      }
+      output += this.WriteRun(run);
+    };
     for (const run of projectWriterTextRuns(paragraph)) {
       let localOffset = 0;
       const end = offset + run.text.length;
@@ -275,14 +286,15 @@ export class RtfExport {
         if (mark === undefined) break;
         const position = mark.GetMarkPos().GetContentIndex();
         if (position >= end) break;
-        output += this.WriteRun({ ...run, text: run.text.slice(localOffset, position - offset) });
+        writeRun({ ...run, text: run.text.slice(localOffset, position - offset) });
         output += this.WriteBookmark(mark.GetName());
         localOffset = position - offset;
         markIndex++;
       }
-      output += this.WriteRun({ ...run, text: run.text.slice(localOffset) });
+      writeRun({ ...run, text: run.text.slice(localOffset) });
       offset = end;
     }
+    if (activeLink !== undefined) output += "}}";
     for (; markIndex < marks.length; markIndex++)
       output += this.WriteBookmark(marks[markIndex]?.GetName() ?? "");
     return output;
@@ -293,14 +305,19 @@ export class RtfExport {
     return `{\\*\\bkmkstart ${escapeRtf(name)}}{\\*\\bkmkend ${escapeRtf(name)}}`;
   }
 
+  /** Begins one hyperlink field around its complete native text-hint range. */
+  private StartURL(hyperlink: WriterHyperlink): string {
+    const url = escapeRtf(hyperlink.url.replaceAll("\\", "\\\\"));
+    const target =
+      hyperlink.targetFrame === undefined ? "" : ` \\\\t "${escapeRtf(hyperlink.targetFrame)}"`;
+    return `{\\field{\\*\\fldinst HYPERLINK "${url}"${target} }{\\fldrslt `;
+  }
+
   /** Emits one native text run without crossing a bookmark position. */
   private WriteRun(run: WriterTextRun): string {
     if (run.text.length === 0) return "";
     const controls = this.attributeOutput.WriteCharacter(run.attributes);
-    const text = "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
-    return run.hyperlink === undefined
-      ? text
-      : `{\\field{\\*\\fldinst HYPERLINK "${escapeRtf(run.hyperlink.url).replaceAll('"', "\\u34?")}"}{\\fldrslt ${text}}}`;
+    return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
 
   /** Emits one native cell edge using the source RTF border style and width mapping. */
