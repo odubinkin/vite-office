@@ -7,7 +7,7 @@ import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertySta
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { text, unicode, stringValue } from "./unocrsrhelper";
 import { RES_CHRATR_COLOR } from "../../../inc/hintids";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 /** Reads a typed native color. @param value - Owned Any. @returns RGB integer. */
 function color(value: Any): number {
@@ -45,7 +45,7 @@ it("interns native style identities and keeps a full-span automatic style separa
       const handle = doc
         .GetIStyleAccess()
         .getByName(stringValue(name), SwAutoStyleFamily.AUTO_STYLE_CHAR);
-      expect(handle?.Get(RES_CHRATR_COLOR)).toBeInstanceOf(SfxStringItem);
+      expect(handle?.Get(RES_CHRATR_COLOR)).toBeInstanceOf(SvxColorItem);
       cursor.setPropertyValue(autoName, name);
       const applied = cursor.getPropertyValue(autoName);
       try {
@@ -58,9 +58,9 @@ it("interns native style identities and keeps a full-span automatic style separa
       otherName.dispose();
     }
     expect(color(cursor.getPropertyValue(colorName))).toBe(0xabcdef);
-    expect((doc.paragraphs[0]?.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue()).toBe(
-      "#123456",
-    );
+    expect(
+      (doc.paragraphs[0]?.GetAttr(RES_CHRATR_COLOR) as SvxColorItem).GetValue().toInt32(),
+    ).toBe(0x123456);
     expect(doc.paragraphs[0]?.GetpSwpHints()?.Count()).toBe(1);
     expect(text(cursor.getString())).toBe("Text");
   } finally {

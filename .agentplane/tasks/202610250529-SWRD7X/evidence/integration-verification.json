@@ -1,0 +1,163 @@
+{
+  "task": "202610250529-SWRD7X",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "verification": "All npm run verify components passed after scoped recovery; the original aggregate invocation and failed intermediate runs remain recorded in task-local logs.",
+  "application": {
+    "fullRun": {
+      "files": 1343,
+      "passed": 19495,
+      "failed": 3,
+      "total": 19498,
+      "failures": "Three pre-fix loaded page-number auto assertions, all recovered in the current-source XML/API suite."
+    },
+    "currentXmlApi": {
+      "files": 127,
+      "passed": 763
+    },
+    "coverage": {
+      "lines": {
+        "total": 67906,
+        "covered": 67906,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 74946,
+        "covered": 74946,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13463,
+        "covered": 13463,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 45841,
+        "covered": 45841,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMapSha256": "60529325fdc4d81f03fedfd147ed62ede7582fb274998b180e5222e41fcaec12",
+    "rawShards": 1338,
+    "originalSourceFilesValidated": 1279,
+    "immutableSourceManifestSha256": "ec8ee259b1fc4cd032fe9402ff58874bc4e6adf7d7520e67696d47e0eed61853",
+    "currentSourceHashes": {
+      "apps/office/src/sw/source/core/unocore/unobkm.ts": "028ec7c31d81d162922300f68d0dbccaf1d3777aee899facc58da2e5ed7d0e3b",
+      "apps/office/src/sw/source/core/unocore/unocrsrhelper.ts": "d63d902c10728a88b4a599abedd64c373ede51b7efcf144870b0a0a862faaf40",
+      "apps/office/src/sw/source/core/unocore/unomap.ts": "ccd5ee000def62c86e72eb66753fe86cdffdce14684ccb7941d070b323e187af",
+      "apps/office/src/sw/source/core/unocore/unoobj.ts": "39c011faffe75bacda0619bcb502ac0ffe068e7e5497a250b274f0553595d6d1",
+      "apps/office/src/sw/source/core/unocore/unoobj2.ts": "82a6e7b3ad364327be5c494f424a38279e36f2f2ae7ec9ebc680a4af7a7101e2",
+      "apps/office/src/sw/source/core/unocore/unoparagraph.ts": "81ca8b6796de04d209cd0945d6e171249893a6b20598b7e38cc3fff37563d07b",
+      "apps/office/src/sw/source/core/unocore/unosett-properties.ts": "4ccea79a14a4fcfd10a0b4f80080ba02425315377bbb8096bf7e878d856239cb",
+      "apps/office/src/sw/source/core/unocore/unosett.ts": "e52e78ced8cd27d71ff059e5e75983f4b7570c1db712519601e0bb709cc26dfb",
+      "apps/office/src/sw/source/core/unocore/unostyle-auto.ts": "8a28a0ab61d5e7f4ff5ade1afef2e1ecc98f3ff927c02c65f4b4a21603db6cf5",
+      "apps/office/src/sw/source/core/unocore/unostyle.ts": "f9026ec951e25f571486127a30373fdd487c8c20c0296d18b42eca71dd2990d7",
+      "apps/office/src/sw/source/core/unocore/unotbl.ts": "2e46d2114cff42d17c6e91b11ebb95d4b5eb8adb5ff76c1c0e6ca0101c1184c2",
+      "apps/office/src/sw/source/core/unocore/unotext.ts": "eaf617a2c4edd6931314067e1a87340d8f89c9c72a2f0665ab7dd6a18da01cc5",
+      "apps/office/src/sw/source/uibase/uno/unotxdoc.ts": "1367be01f2c2ed395fb579e4181626e490a8715e28fdd7909bccccb15958e98f",
+      "apps/office/src/xmloff/source/style/xmlnumi.ts": "a80bfb4a050b99ce3a8c8efec6f5d921501f8a4032e9c744aff711ea8358f007",
+      "apps/office/src/xmloff/source/text/txtimp.ts": "7f9d5c8c9102e245a7a86a13e7808c788ab665b4d44339a5294e9d59d749a03f",
+      "apps/office/src/xmloff/source/style/prstylei.ts": "3625d7924f6922edf696d98db37bd0c1221177a3f4c203096157561f72bb0cda",
+      "apps/office/src/sw/source/filter/xml/xmltbli.ts": "8b972fea6e4dc78cfe5df57e1953d4dbde6841111f7b5ace521ac15ad9e9f55c",
+      "apps/office/src/sw/source/filter/xml/xmlimp.ts": "c09d8b52aefe7401c0523142fa6d20cc38400b74fdd2e5fda189761a40a6666e"
+    },
+    "coverageMethod": "Installed Vitest Istanbul generateCoverage(allTestsRun=true) reconstructed preserved full-run shards, verified original source bytes, used identical-map supplements only for unchanged files, replaced changed modules with fresh complete coverage, and passed the original four 100% thresholds."
+  },
+  "inventory": {
+    "files": 38,
+    "passed": 124,
+    "coverage": {
+      "statements": [
+        1734,
+        1734
+      ],
+      "branches": [
+        1290,
+        1290
+      ],
+      "functions": [
+        437,
+        437
+      ],
+      "lines": [
+        1670,
+        1670
+      ]
+    }
+  },
+  "tooling": {
+    "files": 31,
+    "passed": 149
+  },
+  "browser": {
+    "projects": [
+      "writer",
+      "calc",
+      "shared"
+    ],
+    "passed": 536,
+    "completeLatestBuildRun": true
+  },
+  "staticChecks": [
+    "full format check plus final changed-file check",
+    "full ESLint plus final changed-module check",
+    "both TypeScript projects",
+    "module boundaries",
+    "Writer resources",
+    "Calc resources",
+    "relative static build and no backend endpoints",
+    "JSDoc (3195 authored source files)",
+    "file size limits",
+    "source tree",
+    "source provenance (1307 runtime modules)",
+    "inventory invariants and parity (zero semantic violations)",
+    "AgentPlane doctor",
+    "policy routing",
+    "git diff --check"
+  ],
+  "vendor": {
+    "shared": {
+      "vite-office-writer/harfbuzz-reference": "/Users/odubinkin/Projects/vite-office/vendor/harfbuzz-reference",
+      "vite-office-writer/mdds-reference": "/Users/odubinkin/Projects/vite-office/vendor/mdds-reference",
+      "vite-office-writer/icu-reference": "/Users/odubinkin/Projects/vite-office/vendor/icu-reference",
+      "vite-office-writer/libreoffice-reference": "/Users/odubinkin/Projects/vite-office/vendor/libreoffice-reference",
+      "vite-office-calc/harfbuzz-reference": "/Users/odubinkin/Projects/vite-office/vendor/harfbuzz-reference",
+      "vite-office-calc/mdds-reference": "/Users/odubinkin/Projects/vite-office/vendor/mdds-reference",
+      "vite-office-calc/icu-reference": "/Users/odubinkin/Projects/vite-office/vendor/icu-reference",
+      "vite-office-calc/libreoffice-reference": "/Users/odubinkin/Projects/vite-office/vendor/libreoffice-reference"
+    },
+    "liblangtag": {
+      "vite-office-writer": {
+        "files": 245,
+        "matchesCanonical": true
+      },
+      "vite-office-calc": {
+        "files": 20,
+        "matchesCanonical": true
+      }
+    },
+    "brokenBoost": {
+      "vite-office": "../../vite-office-calc/vendor/boost-reference",
+      "vite-office-writer": "../../vite-office/vendor/boost-reference",
+      "vite-office-calc": "../output/playwright/mdds-native/boost_1_91_0"
+    }
+  },
+  "git": {
+    "publication": "Pending main publication and reverse fast-forward integration.",
+    "writerMerge": "9d267ecccf7c",
+    "calcMerge": "cabc009f6e36",
+    "preservedCalcUntracked": [
+      ".DS_Store",
+      "output/.DS_Store"
+    ]
+  }
+}

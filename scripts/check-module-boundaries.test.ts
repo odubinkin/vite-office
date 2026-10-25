@@ -32,7 +32,6 @@ it("keeps XML reader byte values below application and browser owners", /** Admi
     ).toMatch(/browser adapters/u);
   }
 });
-
 it("keeps shared configuration nodes below application and browser owners", /** Verifies the exact new owner edges and existing reverse/browser restrictions. @returns Nothing. */ () => {
   for (const dependency of ["cppu", "o3tl", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(false);
@@ -48,7 +47,6 @@ it("keeps shared configuration nodes below application and browser owners", /** 
     /browser adapters/u,
   );
 });
-
 it("owns genuine CPPU type metadata and SAL comparison without browser dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
@@ -74,7 +72,6 @@ it("owns genuine CPPU type metadata and SAL comparison without browser dependenc
   for (const dependency of ["sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("cppu", dependency)).toBe(true);
 });
-
 it("accepts only the original SAL/o3tl source paths and named value imports", /** Checks all permitted witnesses and rejects alternate syntax, bindings and owners. @returns Nothing. */ () => {
   const specifier = "../../o3tl/inc/string_view";
   const original = `import { implIsWhitespace } from "${specifier}";`;
@@ -141,7 +138,6 @@ it("accepts only the original SAL/o3tl source paths and named value imports", /*
     isOriginalSalO3tlImport("sal/rtl/strtmpl.ts", "o3tl/inc/sorted_vector", original, specifier),
   ).toBe(false);
 });
-
 it("admits only the witnessed two-owner component while retaining longer and unrelated cycle failures", /** Protects strongly connected component scope before projecting the approved edge. @returns Nothing. */ () => {
   const original = new Map([
     ["sal", new Set(["o3tl"])],
@@ -192,7 +188,6 @@ it("admits only the witnessed two-owner component while retaining longer and unr
   ]);
   expect(findUnapprovedModuleCycle(new Map([["cppu", new Set(["sal"])]]), [])).toBeUndefined();
 });
-
 it("owns original locale and case-mapping dependencies without browser or reverse library edges", /** Enforces the actual shared string service dependency directions. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("udkapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "udkapi")).toBe(true);
@@ -235,14 +230,12 @@ it("owns original locale and case-mapping dependencies without browser or revers
     ).toEqual(["indexedDbKey", "indexeddb"]);
   }
 });
-
 it("admits original SVL string ownership in SAL without a reverse library edge", /** Checks the original svl library declaration and shared reference owner. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("svl", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "svl")).toBe(true);
   expect(getRuntimeOwnershipLayer("sal/inc/rtl/ustring.ts")).toBe("upstream-mechanism");
   expect(getRuntimeOwnershipLayer("svl/source/misc/sharedstring.ts")).toBe("upstream-mechanism");
 });
-
 it("owns SAL RTL algorithms and C headers without application or browser dependencies", /** Enforces original low-level string ownership. @returns Nothing. */ () => {
   for (const source of ["sal/rtl/strtmpl.ts", "sal/rtl/ustring.ts", "sal/inc/rtl/ustring.h.ts"]) {
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
@@ -254,7 +247,6 @@ it("owns SAL RTL algorithms and C headers without application or browser depende
   for (const target of ["sc", "sw", "framework", "vcl", "svl"])
     expect(isForbiddenModuleEdge("sal", target)).toBe(true);
 });
-
 it("permits native storage and shell map-unit dependencies while keeping shared owners independent", /** Protects shared external storage from app and browser dependencies. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("sc", "external")).toBe(false);
   expect(isForbiddenModuleEdge("sfx2", "tools")).toBe(false);

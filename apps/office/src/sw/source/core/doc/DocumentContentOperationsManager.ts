@@ -102,6 +102,23 @@ export class DocumentContentOperationsManager {
     return true;
   }
 
+  /** Deletes the represented single full paragraph without joining or transferring neighboring attributes. @param range - Paragraph cursor. @returns Whether a paragraph could be removed while retaining section content. */
+  public DelFullPara(range: SwPaM): boolean {
+    const node = this.GetTextNode(range.GetPoint(), "full paragraph deletion");
+    const section = node.StartOfSectionNode();
+    const paragraphs = this.document
+      .GetNodes()
+      .entries()
+      .filter(
+        /** Selects the actual content owners of this text section. @param candidate - Document node. @returns Whether in the section. */
+        (candidate) =>
+          candidate instanceof SwTextNode && candidate.StartOfSectionNode() === section,
+      );
+    if (paragraphs.length <= 1) return false;
+    this.document.GetNodes().removeTextNode(node);
+    return true;
+  }
+
   /** Deletes a registered body-text selection and joins its boundaries in native order. Nontext sections/redlines/marks and native Undo construction remain outside this kernel. @param range - Actual selected range. @returns Whether deleted. */
   public DeleteAndJoin(range: SwPaM): boolean {
     if (!range.HasMark()) return false;

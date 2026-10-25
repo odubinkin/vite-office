@@ -8,6 +8,10 @@
         {
           "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
           "marker": "SwStyleNameMapper"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-import-style-contracts.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -29,7 +33,8 @@
       "All other style families,localization,UI/programmatic conversions,custom style disambiguation and full native mapper architecture remain unverified."
     ],
     "preservedResponsibilities": [
-      "Bounded pool-ID GetUIName maps native1030/1031 to two English UI resources and retains fallback for unsupported IDs. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged."
+      "Bounded pool-ID GetUIName maps native1030/1031 to two English UI resources and retains fallback for unsupported IDs. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.",
+      "Task SWRD7X verifies native descriptor/property-state and bookmark lifetime scenarios. SwXBookmark delegates duplicate-name allocation to MarkManager and checks same-name/colliding renames before the core mutation, preserving the native RuntimeException boundary. Style parent/follow and family names use the existing paragraph pool and SwStyleNameMapper programmatic names, including Standard versus Default Paragraph Style, rather than treating programmatic names as raw UI strings. The mapper adds only English paragraph pool-ID lookups; localized/all-family mapping and custom user-suffix disambiguation remain unported. No broad semantic status promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/SwStyleNameMapper.cxx",

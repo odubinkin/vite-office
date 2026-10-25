@@ -13,7 +13,9 @@
       "SwXBookmark"
     ],
     "preservedResponsibilities": [
-      "Detached bookmark descriptor, name collision handling, attachment to canonical mark owner and lifetime."
+      "Detached bookmark descriptor, name collision handling, attachment to canonical mark owner and lifetime.",
+      "Task SWRD7X verifies native descriptor/property-state and bookmark lifetime scenarios. SwXBookmark delegates duplicate-name allocation to MarkManager and checks same-name/colliding renames before the core mutation, preserving the native RuntimeException boundary. Style parent/follow and family names use the existing paragraph pool and SwStyleNameMapper programmatic names, including Standard versus Default Paragraph Style, rather than treating programmatic names as raw UI strings. The mapper adds only English paragraph pool-ID lookups; localized/all-family mapping and custom user-suffix disambiguation remain unported. No broad semantic status promotion.",
+      "Task SWRD7X retains native owner and dispatch invariants: attached bookmark marks always retain their document/text owners; property metadata validates represented style keys before dispatch; a bounded cursor decrement stays inside the current node array; native generated numbering compounds share one addressed-copy path; an active import cell exists whenever its saved body cursor is present. Remove only redundant impossible alternatives, retaining public invalid-owner and unsupported-property failures. No coverage exclusions, thresholds, semantic statuses or broader parity claims change."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -27,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-import-api-states.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

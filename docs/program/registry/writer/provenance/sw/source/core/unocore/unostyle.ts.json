@@ -10,14 +10,18 @@
       "SwStyleFamily",
       "SwXStyle",
       "SwXStyleFamily",
-      "SwXStyleFamilies"
+      "SwXStyleFamilies",
+      "findParagraphStyle",
+      "programmaticStyleName"
     ],
     "upstreamSymbols": [
       "SwXStyle"
     ],
     "preservedResponsibilities": [
       "Paragraph/page/numbering style families, descriptors, canonical owner attachment, inheritance and typed properties.",
-      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
+      "Task SWRD7X verifies native descriptor/property-state and bookmark lifetime scenarios. SwXBookmark delegates duplicate-name allocation to MarkManager and checks same-name/colliding renames before the core mutation, preserving the native RuntimeException boundary. Style parent/follow and family names use the existing paragraph pool and SwStyleNameMapper programmatic names, including Standard versus Default Paragraph Style, rather than treating programmatic names as raw UI strings. The mapper adds only English paragraph pool-ID lookups; localized/all-family mapping and custom user-suffix disambiguation remain unported. No broad semantic status promotion.",
+      "Task SWRD7X retains native owner and dispatch invariants: attached bookmark marks always retain their document/text owners; property metadata validates represented style keys before dispatch; a bounded cursor decrement stays inside the current node array; native generated numbering compounds share one addressed-copy path; an active import cell exists whenever its saved body cursor is present. Remove only redundant impossible alternatives, retaining public invalid-owner and unsupported-property failures. No coverage exclusions, thresholds, semantic statuses or broader parity claims change."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -35,6 +39,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-import-style-contracts.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

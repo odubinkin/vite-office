@@ -341,12 +341,14 @@ export function applyTextImportProperties(
       if (paragraph[key] !== undefined) add(name, (paragraph[key] << 24) >> 24, "sal_Int8");
     if (paragraph.pageStyleName !== undefined)
       add("PageDescName", paragraph.pageStyleName, "OUString");
-    if (paragraph.pageNumber !== undefined)
-      add(
-        "PageNumberOffset",
-        paragraph.pageNumber === "auto" ? 0 : (paragraph.pageNumber << 16) >> 16,
-        "sal_Int16",
+    if (paragraph.pageNumber !== undefined) {
+      names.push(xmlTextString("PageNumberOffset"));
+      values.push(
+        paragraph.pageNumber === "auto"
+          ? new Any()
+          : new Any([(paragraph.pageNumber << 16) >> 16], "sal_Int16"),
       );
+    }
     if (paragraph.breakBefore !== undefined || paragraph.breakAfter !== undefined)
       add(
         "BreakType",

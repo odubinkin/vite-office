@@ -13,7 +13,8 @@
       "SwXParagraph"
     ],
     "preservedResponsibilities": [
-      "Paragraph identity and range bound to the existing text node."
+      "Paragraph identity and range bound to the existing text node.",
+      "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-odt-append-paragraph.test.ts",
+          "marker": "APPEND_PARAGRAPH"
         }
       ],
       "upstream": [

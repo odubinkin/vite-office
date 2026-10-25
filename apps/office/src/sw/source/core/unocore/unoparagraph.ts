@@ -4,6 +4,7 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 /** Paragraph API ranges reflect the complete current paragraph instead of retaining a stale terminal offset. */
 export class SwXParagraph extends SwXTextRange {
+  private componentDisposed = false;
   /** Binds the represented native owner and its declared inputs. @param node - Canonical text node. @param parent - Borrowed parent text owner. @returns Nothing. */
   constructor(
     private readonly node: SwTextNode,
@@ -24,5 +25,17 @@ export class SwXParagraph extends SwXTextRange {
     p.SetMark();
     p.GetMark().Assign(this.node, 0);
     return p;
+  }
+  /** Implements native XComponent paragraph deletion through DelFullPara, without joining adjacent formatting. @returns Nothing. */
+  override dispose(): void {
+    if (this.componentDisposed) return;
+    if (this.node.GetDoc().GetDocumentContentOperationsManager().DelFullPara(this.GetPaM())) {
+      this.componentDisposed = true;
+      super.dispose();
+    }
+  }
+  /** Releases host range positions when an API result is no longer borrowed; this does not invoke XComponent deletion. @returns Nothing. */
+  Release(): void {
+    super.dispose();
   }
 }

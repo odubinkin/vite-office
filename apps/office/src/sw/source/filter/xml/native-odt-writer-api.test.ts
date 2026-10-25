@@ -60,7 +60,7 @@ it("inserts text and paragraph controls through XText and applies native ranges 
       /** Executes this bounded native operation. @param value - Native operation input. @returns Native operation result. */ ([
         ,
         value,
-      ]) => value === 0,
+      ]) => value === 5,
     ),
   ).toHaveLength(3);
   expect(

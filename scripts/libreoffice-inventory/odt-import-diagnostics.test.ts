@@ -100,7 +100,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     expect(JSON.stringify(diagnostics)).not.toMatch(/PRIVATE|HIDDEN/u);
   });
 
-  it("recognizes synthetic bookmark and soft break markers in canonical Writer positions", /** Checks marker triage and model ownership. @returns Completion after import. */ async () => {
+  it("retains synthetic bookmarks and ignores soft breaks through the native text import API", /** Checks marker triage and source-owned model behavior. @returns Completion after import. */ async () => {
     const content = await new ZipFile(fixture).readTextEntry("content.xml");
     const changed = content.replace(
       "</text:p>",
@@ -121,7 +121,8 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     const imported = await readOdtDocument(bytes, { title: "Synthetic markers" });
     const marks = imported.document.GetIDocumentMarkAccess();
     expect(marks.FindMark("test-mark")?.GetMarkPos().GetContentIndex()).toBe(12);
-    expect(marks.GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(12);
+    // Native XMLParaContext recognizes this pagination hint without importing a model position.
+    expect(marks.GetSoftPageBreaks()).toHaveLength(0);
     const unknownAttribute = content.replace(
       "</text:p>",
       '<text:bookmark text:name="test-mark" xmlns:foreign="urn:foreign" foreign:extra="ignored"/></text:p>',

@@ -58,3 +58,6 @@ vendor/libreoffice-reference/
 /docs/program/parity/runtime-inventory.json
 /docs/program/source-provenance.json
 /docs/program/parity/upstream-invariants.json
+
+# Shared local upstream references; ignore both the directory and checkout symlinks.
+/vendor

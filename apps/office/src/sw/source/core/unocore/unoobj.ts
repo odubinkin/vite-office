@@ -18,8 +18,14 @@ import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "./unocrsrhelper";
 import { SelectPam, invalid, spans, queryItem, unknown } from "./unocrsrhelper";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwXParagraph } from "./unoparagraph";
+import { noSuchElement } from "./unocrsrhelper";
 /** Text cursor over one body or cell text domain. */
 export class SwXTextCursor extends SwXTextRange {
+  /** Enumerates actual selected paragraphs as native XComponent owners. @returns Paragraph enumeration. */
+  createEnumeration(): SwXParagraphEnumeration {
+    return new SwXParagraphEnumeration(this.GetPaM(), this.parent);
+  }
   /** Binds the represented native owner and its declared inputs. @param range - Registered canonical range. @param parent - Borrowed parent text owner. @returns Nothing. */
   constructor(range: SwPaM, parent: SwXTextOwner) {
     super(range, parent, false);
@@ -109,7 +115,7 @@ export class SwXTextCursor extends SwXTextRange {
         remaining--;
       } else if (index > 0) {
         index--;
-        offset = (nodes[index] ?? invalid("Cursor is outside text")).Len();
+        offset = (nodes[index] as SwTextNode).Len();
         remaining--;
       } else break;
     }
@@ -224,5 +230,30 @@ export class SwXTextCursor extends SwXTextRange {
   isEndOfParagraph(): boolean {
     const p = this.GetPaM().GetPoint();
     return p.GetContentIndex() === (p.GetNode() as SwTextNode).Len();
+  }
+}
+
+/** Represented SwXParagraphEnumeration for the original cursor's body or cell text domain. */
+export class SwXParagraphEnumeration {
+  private index = 0;
+  private readonly nodes: readonly SwTextNode[];
+  /** Captures ordered native paragraph identities, without copying their state. @param range - Selected cursor. @param parent - Owning text interface. @returns Enumeration. */
+  constructor(
+    range: SwPaM,
+    private readonly parent: SwXTextOwner,
+  ) {
+    this.nodes = spans(range).map(
+      /** Borrows each canonical paragraph owner. @param span - Paragraph-local range. @returns Node identity. */
+      (span) => span.node,
+    );
+  }
+  /** Reports whether another native paragraph remains. @returns Availability. */
+  hasMoreElements(): boolean {
+    return this.index < this.nodes.length;
+  }
+  /** Returns the next actual paragraph component. @returns Paragraph or native exhaustion exception. */
+  nextElement(): SwXParagraph {
+    const node = this.nodes[this.index++] ?? noSuchElement();
+    return new SwXParagraph(node, this.parent);
   }
 }

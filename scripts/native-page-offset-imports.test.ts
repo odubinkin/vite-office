@@ -14,5 +14,6 @@ it("admits only actual Any at represented XML pagination property owners", /** O
     expect(isOriginalCharacterValueImport(source, "vcl/browser/font-list.ts")).toBe(false);
   }
   expect(isOriginalCharacterValueImport("xmloff/source/text/other.ts", any)).toBe(false);
-  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(true);
+  // Original Library_xo links CPPU; neighboring source-path exceptions remain independently restricted.
+  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(false);
 });

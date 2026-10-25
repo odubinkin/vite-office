@@ -17,7 +17,9 @@
       "SwXTextTable"
     ],
     "preservedResponsibilities": [
-      "Text table/row/cell canonical wrappers, units and format item property routes."
+      "Text table/row/cell canonical wrappers, units and format item property routes.",
+      "Task SWRD7X preserves SwXTextTable::getSwCellByName null-result semantics for invalid or absent flat cell names; valid flat A1 names retain the canonical cell owner. Nested table-box name grammar and complete table API parity remain unported. Current statuses and registered deviations are unchanged.",
+      "Task SWRD7X delegates point/range attribute endpoints to the original GetAnyEnd owner, retains nonempty property-result guarantees after validated text spans, and preserves the original live split-boundary endpoint correction after first <= last admission. Unsupported properties and native item rejections retain typed failures. Existing semantic statuses and omitted native responsibilities are unchanged."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -31,12 +33,20 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-import-api-states.test.ts",
+          "marker": "AA1"
         }
       ],
       "upstream": [
         {
           "path": "sw/source/core/unocore/unotbl.cxx",
           "marker": "SwXTextTable"
+        },
+        {
+          "path": "sw/source/core/unocore/unotbl.cxx",
+          "marker": "SwXTextTable::getSwCellByName"
         }
       ]
     }

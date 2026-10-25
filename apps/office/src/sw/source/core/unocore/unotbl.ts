@@ -11,7 +11,7 @@ import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "./unocrsrhelper";
 import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
-import { scalar, stringValue, illegal, invalid, unknown } from "./unocrsrhelper";
+import { scalar, stringValue, illegal, unknown } from "./unocrsrhelper";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import {
@@ -68,14 +68,13 @@ export class SwXTextTable {
     };
   }
   /** Implements the represented native getCellByName operation. @param name - Native property or element name. @returns The represented native operation result. */
-  getCellByName(name: OUStringConstReference): SwXCell {
+  getCellByName(name: OUStringConstReference): SwXCell | null {
     const match = /^([A-Z]+)([1-9][0-9]*)$/u.exec(text(name));
-    if (!match) illegal("Invalid cell name");
+    if (!match) return null;
     let col = 0;
     for (const c of match[1] as string) col = col * 26 + c.charCodeAt(0) - 64;
     const box = this.table.GetTabLines()[Number(match[2]) - 1]?.GetTabBoxes()[col - 1];
-    if (!box) invalid("No such cell");
-    return new SwXCell(box);
+    return box ? new SwXCell(box) : null;
   }
   /** Applies a typed native property without duplicating model state. @param name - Native property or element name. @param value - Declared native value. @returns Nothing. */
   setPropertyValue(name: OUStringConstReference, value: Any): void {
@@ -184,8 +183,8 @@ export function convertToTable(
       if (end < node.Len()) {
         const tail = ops.SplitNode(last);
         last.Assign(node, node.Len());
-        if (first.GetNode() === tail && first.GetContentIndex() === 0 && first.compare(last) > 0)
-          first.Assign(node, 0);
+        // A validated first <= last can move into this tail only at the split boundary.
+        if (first.GetNode() === tail) first.Assign(node, 0);
       }
       const start = first.GetContentIndex();
       if (start > 0) {

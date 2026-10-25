@@ -36,8 +36,11 @@ function attrs(values: Record<string, string> = {}): FastAttributeList {
     ),
   );
 }
-/** Creates a paragraph-only target which records the exact shared native list projection. @param records - Actual paragraph list arguments. @returns Target. */
-function target(records: (XMLParagraphListState | undefined)[]): XMLTextImportTarget {
+/** Creates a paragraph-only target which records the exact shared native list projection. @param records - Actual paragraph list arguments. @param model - Actual Writer API supplier. @returns Target. */
+function target(
+  records: (XMLParagraphListState | undefined)[],
+  model = new SwXTextDocument(createWriterDocument()),
+): XMLTextImportTarget {
   const target: XMLTextImportTarget = {
     GetTextImport:
       /** Executes this bounded native operation. @returns Native operation result. */ () => helper,
@@ -50,7 +53,7 @@ function target(records: (XMLParagraphListState | undefined)[]): XMLTextImportTa
     getStyle: /** Has no named style definitions. @returns Nothing. */ () => undefined,
     getAutoStyle: /** Has no automatic style definitions. @returns Nothing. */ () => undefined,
   };
-  const helper = new XMLTextImportHelper(target, new SwXTextDocument(createWriterDocument()));
+  const helper = new XMLTextImportHelper(target, model);
   vi.spyOn(helper, "BeginParagraph").mockImplementation(
     /** Executes this bounded native operation. @param _style - Native operation input. @param _alignment - Native operation input. @param _left - Native operation input. @param _paragraph - Native operation input. @param _properties - Native operation input. @param list - Native operation input. @returns Native operation result. */ (
       _style,
@@ -113,6 +116,30 @@ it("shares native list roots across body cells and later body contexts", /** Che
   ) as XMLTextListBlockContext;
   expect(root.GetContinueListId()).toBe("");
   root.endFastElement();
+});
+
+it("uses the native deletion fallback only when paragraph enumeration has no component", /** Exercises the explicit upstream fallback with actual text cursors. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const model = new SwXTextDocument(document);
+  const cursor = model.getText().createTextCursor();
+  const helper = target([], model).GetTextImport();
+  helper.SetCursor(cursor);
+  const paragraphs = cursor.createEnumeration();
+  vi.spyOn(paragraphs, "hasMoreElements").mockReturnValue(false);
+  vi.spyOn(cursor, "createEnumeration").mockReturnValue(paragraphs);
+  try {
+    helper.DeleteParagraph();
+    expect(document.paragraphs).toHaveLength(1);
+    const paragraph = model.getText().finishParagraph([]);
+    paragraph.Release();
+    cursor.gotoEnd(false);
+    helper.DeleteParagraph();
+    expect(document.paragraphs).toHaveLength(1);
+  } finally {
+    helper.ResetCursor();
+    model.dispose();
+    document.Dispose();
+  }
 });
 
 it("keeps native body cell dispatch and explicit unimplemented structural boundaries", /** Verifies body/cell location, inert children and retained public standalone table entry. @returns Nothing. */ () => {

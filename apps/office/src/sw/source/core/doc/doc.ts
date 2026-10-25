@@ -90,7 +90,6 @@ export interface SwDocOptions {
   readonly locale?: string;
 }
 import { SetAttrMode } from "../../../inc/swtypes";
-
 /** Native SetNumRule operation flags from doc.hxx. */
 export enum SetNumRuleMode {
   Default = 0,
@@ -99,7 +98,6 @@ export enum SetNumRuleMode {
   ResetIndentAttrs = 4,
   DontSetIfAlreadyApplied = 8,
 }
-
 /** One package-backed Writer font face; bytes are attached only after manifest and ZIP validation. */
 export interface WriterEmbeddedFont {
   readonly faceName: string;
@@ -111,7 +109,6 @@ export interface WriterEmbeddedFont {
   readonly bytes?: Uint8Array;
   readonly canLoad?: boolean;
 }
-
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
   /** Applies native import/API item deltas through docfmt. @param range - Registered range. @param item - Actual pool item. @returns Nothing.  @param mode - Native operation input. */
@@ -122,7 +119,6 @@ export class SwDoc {
   ): void {
     InsertPoolItem(this, range, item, mode);
   }
-
   /** Renames a table through its native frame owner. @param format - Table frame. @param name - Requested name. @returns Nothing. */
   public SetTableName(format: SwFrameFormat, name: string): void {
     SetTableName(this, format, name);
@@ -153,7 +149,6 @@ export class SwDoc {
   public static GetTabRows(result: SwTabCols, frame: SwTabFrame, start: SwTableBox): boolean {
     return GetSwTabRows(result, frame, start);
   }
-
   /** Reads native row split from current or selected canonical boxes. @param cursor - Original shell cursor. @returns Common row item or no item. */
   public static GetRowSplit(cursor: SwCursor): SwFormatRowSplit | undefined {
     return GetSwCursorRowSplit(cursor);
@@ -230,7 +225,6 @@ export class SwDoc {
   private readonly pageDescs: SwPageDesc[];
   private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
   public readonly nodes: SwNodes;
-
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
   public constructor(createInitialTextNode: boolean | SwDocOptions = true) {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
@@ -248,7 +242,6 @@ export class SwDoc {
     if (options?.createInitialTextNode !== false && createInitialTextNode !== false)
       this.nodes.MakeTextNode();
   }
-
   /** Reads the document-owned default frame. @returns Native default format. */
   public GetDfltFrameFormat(): SwFrameFormat {
     return this.defaultFrameFormat;
@@ -370,12 +363,10 @@ export class SwDoc {
     this.NotifyModelChange({ kind: "page-descriptor-changed" });
     return true;
   }
-
   /** Returns the injected output-device font resolver. @returns Device or undefined. */
   public GetDefaultFontDevice(): DefaultFontDevice | undefined {
     return this.defaultFontDevice;
   }
-
   /** Returns Writer's complete node array. @returns Owned node array. */
   public GetNodes(): SwNodes {
     return this.nodes;
@@ -384,7 +375,6 @@ export class SwDoc {
   public GetAttrPool(): SwAttrPool {
     return this.attrPool;
   }
-
   /** Returns the document-owned automatic style manager. @returns Stable style access. */
   public GetIStyleAccess(): IStyleAccess {
     return this.styleAccess;
@@ -405,12 +395,10 @@ export class SwDoc {
   public MarkListLevel(listId: string, level: number, value: boolean): void {
     this.GetDocumentListsManager().GetListByName(listId)?.MarkListLevel(level, value);
   }
-
   /** Returns the source-owned shown numbered-item registry. @returns Document list items. */
   public getIDocumentListItems(): DocumentListItemsManager {
     return this.listItemsManager;
   }
-
   /** Returns settings ownership. @returns Settings manager. */
   public GetDocumentSettingManager(): DocumentSettingManager {
     return this.settingManager;
@@ -440,7 +428,6 @@ export class SwDoc {
     if (action !== undefined) this.GetUndoManager().AddUndoAction(action);
     moveLeftMargin(this, range, right, modulus, action?.GetHistory());
   }
-
   /** Returns Writer's document-owned undo manager. @returns Undo manager. */
   public GetUndoManager(): UndoManager {
     return this.undoManager;

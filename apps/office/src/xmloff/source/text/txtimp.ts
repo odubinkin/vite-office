@@ -14,7 +14,7 @@ import { cppu_detail_getUnoType as indexReplaceType } from "../../../cppu/inc/co
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { applyTextImportProperties, xmlTextString } from "./txtprmap";
-import { PARAGRAPH_BREAK } from "../../../offapi/com/sun/star/text/ControlCharacter";
+import { APPEND_PARAGRAPH } from "../../../offapi/com/sun/star/text/ControlCharacter";
 import { XMLParaContext, type XMLTextImportTarget } from "./txtparai";
 import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
@@ -190,7 +190,7 @@ export class XMLTextImportHelper {
       end = cursor.getStart(),
       start = this.start;
     if (!start) throw new RuntimeException();
-    text.insertControlCharacter(cursor, PARAGRAPH_BREAK, false);
+    text.insertControlCharacter(cursor, APPEND_PARAGRAPH, false);
     const selected = text.createTextCursorByRange(start);
     try {
       selected.gotoRange(end, true);
@@ -280,7 +280,12 @@ export class XMLTextImportHelper {
   /** Removes a trailing empty cell paragraph through the same text/cursor API. @returns Nothing. */
   public DeleteParagraph(): void {
     const cursor = this.GetCursor();
-    cursor.goLeft(1, true);
+    const paragraphs = cursor.createEnumeration();
+    if (paragraphs.hasMoreElements()) {
+      paragraphs.nextElement().dispose();
+      return;
+    }
+    if (!cursor.goLeft(1, true)) return;
     const empty = xmlTextString("");
     try {
       cursor.setString(empty);

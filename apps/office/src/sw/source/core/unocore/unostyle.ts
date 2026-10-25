@@ -10,13 +10,13 @@ import {
   getWriterMaterializedParagraphStyleDefinition,
 } from "../../../inc/poolfmt";
 import type { SwDoc } from "../doc/doc";
-import type { SwTextFormatColl } from "../doc/fmtcol";
+import { SwTextFormatColl } from "../doc/fmtcol";
 import type { SwPageDesc } from "../layout/pagedesc";
 import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Any as UnoAny } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "./unocrsrhelper";
-import { SwUnoPropertyMap, createPropertySetInfo } from "./unomap";
+import { SwUnoPropertyMap, createPropertySetInfo, type SwUnoPropertyEntry } from "./unomap";
 import {
   putItem,
   queryItem,
@@ -32,6 +32,7 @@ import {
 import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 /** Represented native style families. Character/table/conditional styles require their unported core owners. */
 export type SwStyleFamily = "ParagraphStyles" | "PageStyles" | "NumberingStyles";
 /** A style descriptor owns pending properties only until insertByName attaches its canonical format. */
@@ -75,9 +76,7 @@ export class SwXStyle {
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
     if (this.family !== "ParagraphStyles") return PropertyState.DIRECT_VALUE;
     if (n === "FollowStyle") return PropertyState.DIRECT_VALUE;
-    const entry = SwUnoPropertyMap.get(n);
-    if (!entry) unknown(n);
-    if (this.family !== "ParagraphStyles") return PropertyState.DEFAULT_VALUE;
+    const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
     return (this.owner as SwTextFormatColl).GetAttrSet().GetItemState(entry.which, false) ===
       SfxItemState.SET
       ? PropertyState.DIRECT_VALUE
@@ -120,12 +119,11 @@ export class SwXStyle {
     }
     const entry = SwUnoPropertyMap.get(n);
     if (!entry) unknown(n);
-    if (this.family === "ParagraphStyles")
-      (this.owner as SwTextFormatColl).ResetFormatAttr(entry.which);
+    (this.owner as SwTextFormatColl).ResetFormatAttr(entry.which);
   }
   /** Implements the represented native getName operation. @returns The represented native operation result. */
   getName(): OUString {
-    return unicode(this.owner?.GetName() ?? "");
+    return unicode(this.owner ? programmaticStyleName(this.owner) : "");
   }
   /** Renames the actual attached style while retaining its canonical identity. @param name - Native display name. @returns Nothing. */
   setName(name: OUStringConstReference): void {
@@ -139,19 +137,25 @@ export class SwXStyle {
   isUserDefined(): boolean {
     return (
       this.owner !== undefined &&
-      this.owner.GetName() !== "Standard" &&
+      programmaticStyleName(this.owner) !== "Standard" &&
       !WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.some(
         /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
-        (s) => s.name === this.owner?.GetName(),
+        (s) =>
+          s.name === programmaticStyleName(this.owner as SwTextFormatColl | SwPageDesc | SwNumRule),
       )
     );
   }
   /** Implements the represented native getParentStyle operation. @returns The represented native operation result. */
   getParentStyle(): OUStringConstReference {
+    const parent =
+      this.family === "ParagraphStyles"
+        ? (this.owner as SwTextFormatColl | undefined)?.DerivedFrom()
+        : undefined;
     return unicode(
       this.family === "ParagraphStyles"
-        ? ((this.owner as SwTextFormatColl | undefined)?.DerivedFrom()?.GetName() ??
-            this.parentName)
+        ? parent
+          ? programmaticStyleName(parent as SwTextFormatColl)
+          : this.parentName
         : "",
     );
   }
@@ -163,9 +167,7 @@ export class SwXStyle {
       this.parentName = value;
       return;
     }
-    const parent = value
-      ? this.doc.FindTextFormatCollByName(value)
-      : this.doc.GetDfltTextFormatColl();
+    const parent = value ? findParagraphStyle(this.doc, value) : this.doc.GetDfltTextFormatColl();
     if (!parent) illegal("Unknown parent style");
     for (
       let ancestor: import("../attr/format").SwFormat | undefined = parent;
@@ -180,7 +182,7 @@ export class SwXStyle {
     if (this.owner) invalid("Style is already attached");
     if (this.family === "ParagraphStyles") {
       const parent = this.parentName
-        ? this.doc.FindTextFormatCollByName(this.parentName)
+        ? findParagraphStyle(this.doc, this.parentName)
         : this.doc.GetDfltTextFormatColl();
       if (!parent) illegal("Unknown parent style");
       this.owner = this.doc.MakeTextFormatColl(name, parent);
@@ -214,7 +216,7 @@ export class SwXStyle {
     if (n === "FollowStyle")
       return stringAny(
         this.family === "ParagraphStyles"
-          ? (this.owner as SwTextFormatColl).GetNextTextFormatColl().GetName()
+          ? programmaticStyleName((this.owner as SwTextFormatColl).GetNextTextFormatColl())
           : (this.owner as SwPageDesc).GetFollow().GetName(),
       );
     if (this.family === "PageStyles") return this.pageValue(n);
@@ -252,7 +254,7 @@ export class SwXStyle {
     if (n === "FollowStyle") {
       const v = stringValue(value);
       if (this.family === "ParagraphStyles") {
-        const target = this.doc.FindTextFormatCollByName(v);
+        const target = findParagraphStyle(this.doc, v);
         if (!target) illegal("Unknown follow style");
         (this.owner as SwTextFormatColl).SetNextTextFormatColl(target);
       } else {
@@ -266,8 +268,7 @@ export class SwXStyle {
       this.setPageValue(n, value);
       return;
     }
-    const entry = SwUnoPropertyMap.get(n);
-    if (!entry) unknown(n);
+    const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
     const owner = this.owner as SwTextFormatColl;
     owner.SetFormatAttr(putItem(owner.GetAttrSet().Get(entry.which), entry, value));
   }
@@ -303,8 +304,7 @@ export class SwXStyle {
       old = page.GetValue();
     if (n === "IsLandscape") page.SetValue({ ...old, landscape: scalar(v, "bool") as boolean });
     else {
-      const key = pageFields[n];
-      if (!key) unknown(n);
+      const key = pageFields[n] as (typeof pageFields)[string];
       page.SetValue({
         ...old,
         [key]: Number(toTwips(BigInt(scalar(v, "sal_Int32") as number), Length.mm100)),
@@ -323,6 +323,26 @@ const pageFields: Record<
   TopMargin: "topMargin",
   BottomMargin: "bottomMargin",
 };
+/** Resolves the consumed programmatic paragraph-style name through the existing pool before materializing its actual format. @param doc - Owning document. @param name - Programmatic or custom name. @returns Canonical format, when supported. */
+function findParagraphStyle(doc: SwDoc, name: string): SwTextFormatColl | undefined {
+  const existing = doc.FindTextFormatCollByName(name) ?? doc.FindTextFormatColl(name);
+  if (existing) return existing;
+  const definition =
+    getWriterMaterializedParagraphStyleDefinition(name) ??
+    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
+      /** Resolves an original supported pool name. @param style - Native pool entry. @returns Whether matching. */
+      (style) => style.name === name || style.id === name,
+    );
+  return definition && getWriterMaterializedParagraphStyleDefinition(definition.id)
+    ? doc.GetTextFormatColl(definition.id)
+    : undefined;
+}
+/** Exposes native pool names at the UNO boundary while retaining custom and page/rule identities. @param owner - Actual style owner. @returns Programmatic name. */
+function programmaticStyleName(owner: SwTextFormatColl | SwPageDesc | SwNumRule): string {
+  return owner instanceof SwTextFormatColl
+    ? SwStyleNameMapper.GetProgName(owner.poolId, owner.GetName())
+    : owner.GetName();
+}
 /** Name access resolves canonical formats afresh, retaining no parallel style catalog. */
 export class SwXStyleFamily {
   /** Binds the represented native owner and its declared inputs. @param doc - Canonical document owner. @param family - Original family input. @returns Nothing. */
@@ -356,7 +376,7 @@ export class SwXStyleFamily {
               ),
               ...this.doc.GetTextFormatColls().map(
                 /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
-                (s) => s.GetName(),
+                (s) => programmaticStyleName(s),
               ),
             ]),
           ]
@@ -378,22 +398,7 @@ export class SwXStyleFamily {
         this.family === "NumberingStyles"
           ? this.doc.FindNumRulePtr(n)
           : this.family === "ParagraphStyles"
-            ? (this.doc.FindTextFormatCollByName(n) ??
-              this.doc.FindTextFormatColl(n) ??
-              (
-                /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
-                () => {
-                  const d =
-                    getWriterMaterializedParagraphStyleDefinition(n) ??
-                    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-                      /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
-                      (s) => s.name === n || s.id === n,
-                    );
-                  return d && getWriterMaterializedParagraphStyleDefinition(d.id)
-                    ? this.doc.GetTextFormatColl(d.id)
-                    : undefined;
-                }
-              )())
+            ? findParagraphStyle(this.doc, n)
             : this.doc.FindPageDesc(n);
     if (!owner) noSuchElement();
     return new SwXStyle(this.doc, this.family, owner);

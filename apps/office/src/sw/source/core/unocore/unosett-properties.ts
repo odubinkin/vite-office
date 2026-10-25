@@ -147,9 +147,7 @@ export function readNumberingProperty(
   sequence: Sequence<PropertyValue>,
   index: number,
 ): PropertyValue {
-  const entry = sequence.operatorIndex(index);
-  if (entry instanceof PropertyValue) return new PropertyValue(entry);
-  const address = entry as unknown as { get(offset: number): unknown };
+  const address = sequence.operatorIndex(index) as unknown as { get(offset: number): unknown };
   const name = new OUString((address.get(0) as [rtl_uString])[0]);
   const value = new Any(address.get(16) as Any);
   try {

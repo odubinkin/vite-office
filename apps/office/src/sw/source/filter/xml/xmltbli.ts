@@ -253,7 +253,8 @@ export class SwXMLTableImport extends SvXMLImport {
   /** Projects one canonical Writer table value.  @returns Callback result. */ public endTableCell(): void {
     if (this.textImport && this.oldCursor) {
       const cursor = this.textImport.GetCursor();
-      if ((this.activeCell?.GetParagraphs().length ?? 0) > 1) this.textImport.DeleteParagraph();
+      if ((this.activeCell as SwTableBox).GetParagraphs().length > 1)
+        this.textImport.DeleteParagraph();
       this.textImport.SetCursor(this.oldCursor);
       cursor.dispose();
       this.oldCursor = undefined;

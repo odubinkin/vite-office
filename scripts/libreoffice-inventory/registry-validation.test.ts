@@ -88,6 +88,8 @@ function activateCalc(registry: InventoryRegistry): void {
 /** Creates injected CLI boundaries using local source and synthetic upstream declarations. @param registry - Canonical registry. @param baseline - Baseline JSON. @returns Test-owned CLI boundaries. */
 function dependencies(registry: InventoryRegistry, baseline: string): RegistryCliDependencies {
   const markers = new Map<string, string>();
+  // Every scope validates the same immutable fixture snapshot; retain source bytes without repeating IO for each evidence reference.
+  const sourceText = new Map<string, Promise<string>>();
   for (const [path, text] of createMarkerEvidenceFixture([
     projectRegistryViews(registry),
     registry.records,
@@ -113,7 +115,12 @@ function dependencies(registry: InventoryRegistry, baseline: string): RegistryCl
       if (path.startsWith("vendor/libreoffice-reference/"))
         return required(markers.get(path.slice("vendor/libreoffice-reference/".length)));
       if (path.startsWith("vendor/")) return required(markers.get(path));
-      return readFile(path, "utf8");
+      let source = sourceText.get(path);
+      if (source === undefined) {
+        source = readFile(path, "utf8");
+        sourceText.set(path, source);
+      }
+      return source;
     },
     /** Lists local runtime files. @returns Relative entries. */ listRuntime: async () =>
       readdir("apps/office/src", { recursive: true }),

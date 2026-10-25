@@ -19,6 +19,10 @@ export interface XMLTextRange {
 }
 /** Consumed XTextCursor/XParagraphCursor contract. */
 export interface XMLTextCursor extends XMLTextRange, XMLPropertySet {
+  createEnumeration(): {
+    hasMoreElements(): boolean;
+    nextElement(): { dispose(): void };
+  };
   getText(): XMLText;
   gotoRange(range: XMLTextRange, expand: boolean): void;
   gotoEnd(expand: boolean): void;

@@ -341,8 +341,8 @@ it("converts imported body paragraphs into cells without copying nodes or regist
   expect(
     present(present(table.table.GetTabLines()[0]).GetTabBoxes()[0]).GetStartNode().GetIndex() + 1,
   ).toBe(original.GetIndex());
-  expect(text(table.getCellByName(unicode("A1")).getString())).toBe("First");
-  expect(text(table.getCellByName(unicode("B1")).getString())).toBe("Second");
+  expect(text(present(table.getCellByName(unicode("A1"))).getString())).toBe("First");
+  expect(text(present(table.getCellByName(unicode("B1"))).getString())).toBe("Second");
   expect(doc.GetNodes().entries()).toContain(original);
 });
 
@@ -462,8 +462,8 @@ it("splits partial paragraph cell ranges through canonical nodes and rejects gap
       [],
     ),
   );
-  expect(text(result.getCellByName(unicode("A1")).getString())).toBe("AB");
-  expect(text(result.getCellByName(unicode("B1")).getString())).toBe("CD");
+  expect(text(present(result.getCellByName(unicode("A1"))).getString())).toBe("AB");
+  expect(text(present(result.getCellByName(unicode("B1"))).getString())).toBe("CD");
   const other = new SwXTextDocument(createWriterDocument()).getText();
   other.appendTextPortion(unicode("XYZ"), []);
   const a = other.createTextCursor(),
@@ -656,11 +656,10 @@ it("keeps table import progressing past rejected properties while honoring nativ
     ),
   );
   expect(table.table.GetFormat().width).toBe(1440);
-  expect(text(table.getCellByName(unicode("A1")).getString())).toBe("Cell");
+  expect(text(present(table.getCellByName(unicode("A1"))).getString())).toBe("Cell");
   expect(
     number(
-      table
-        .getCellByName(unicode("A1"))
+      present(table.getCellByName(unicode("A1")))
         .createTextCursor()
         .getPropertyValue(unicode("ParaLeftMargin")),
     ),

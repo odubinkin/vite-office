@@ -10,6 +10,7 @@ import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
 import * as H from "../../../inc/hintids";
 import * as M from "../../../../editeng/inc/memberids";
+import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
 export interface SwUnoPropertyEntry {
   readonly which: number;
@@ -119,8 +120,11 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ],
   ["ParaLineNumberCount", { which: H.RES_LINENUMBER, member: 0, kind: "bool" }],
   ["BreakType", { which: H.RES_BREAK, member: 0, kind: "break" }],
-  ["PageDescName", { which: H.RES_PAGEDESC, member: 1, kind: "pagedesc" }],
-  ["PageNumberOffset", { which: H.RES_PAGEDESC, member: 0, kind: "pagedesc" }],
+  ["PageDescName", { which: H.RES_PAGEDESC, member: MID_PAGEDESC_PAGEDESCNAME, kind: "pagedesc" }],
+  [
+    "PageNumberOffset",
+    { which: H.RES_PAGEDESC, member: MID_PAGEDESC_PAGENUMOFFSET, kind: "pagedesc" },
+  ],
   ["NumberingStyleName", { which: H.RES_PARATR_NUMRULE, member: 0, kind: "string" }],
   ["VisitedCharStyleName", { which: H.RES_TXTATR_INETFMT, member: 6, kind: "hyperlink" }],
   ["UnvisitedCharStyleName", { which: H.RES_TXTATR_INETFMT, member: 7, kind: "hyperlink" }],
@@ -165,7 +169,7 @@ export function createPropertySetInfo(
       entry.kind === "break"
         ? breakType
         : entry.kind === "pagedesc"
-          ? entry.member === 1
+          ? entry.member === MID_PAGEDESC_PAGEDESCNAME
             ? "OUString"
             : "sal_Int16"
           : entry.kind === "string"

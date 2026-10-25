@@ -18,6 +18,8 @@ import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/Proper
 import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/container/NoSuchElementException";
 import { ElementExistException } from "../../../../cppu/inc/com/sun/star/container/ElementExistException";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -28,11 +30,13 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
+import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SwNumRuleItem } from "../para/paratr";
 import * as H from "../../../inc/hintids";
 import { setTextFormatCollAtNode } from "../doc/docfmt";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 import { SwUnoPropertyMap, type SwUnoPropertyEntry } from "./unomap";
 /** Native argument failure, with the real generated exception value. @param message - Original message input. @returns The represented native operation result. */
 export function illegal(message: string): never {
@@ -95,9 +99,10 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     return stringAny(StylePool.nameOf((item as SwFormatAutoFormat).GetStyleHandle()));
   if (entry.kind === "pagedesc") {
     const page = item as SwFormatPageDesc;
-    return entry.member === 1
-      ? stringAny(page.GetPageDescName())
-      : new Any([((page.GetNumOffset() ?? 0) << 16) >> 16], "sal_Int16");
+    if (entry.member === MID_PAGEDESC_PAGEDESCNAME) return stringAny(page.GetPageDescName());
+    const output = new Any();
+    page.QueryValue(output, entry.member);
+    return output;
   }
   if (entry.kind === "break") return new Any([(item as SfxInt16Item).GetValue()], breakType);
   if (entry.kind === "string") return stringAny((item as SfxStringItem).GetValue());
@@ -133,6 +138,10 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     return out;
   }
   if (entry.kind === "color") {
+    if (item instanceof SvxColorItem) {
+      out.insert([item.GetValue().toInt32()], "sal_Int32");
+      return out;
+    }
     const color = (item as SfxStringItem).GetValue();
     value =
       color === "auto" || color === "automatic" || color === "transparent"
@@ -161,13 +170,12 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
 /** Clones before applying a property; failed PutValue cannot mutate a pooled item. @param item - Original item input. @param entry - Original entry input. @param value - Declared native value. @returns The represented native operation result. */
 export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any): SfxPoolItem {
   if (entry.kind === "pagedesc") {
-    const page = item as SwFormatPageDesc,
-      offset =
-        entry.member === 0 ? (scalar(value, "sal_Int16") as number) & 0xffff : page.GetNumOffset();
-    return new SwFormatPageDesc(
-      entry.member === 1 ? stringValue(value) : page.GetPageDescName(),
-      offset === 0 ? undefined : offset,
-    );
+    const page = item as SwFormatPageDesc;
+    if (entry.member === MID_PAGEDESC_PAGEDESCNAME)
+      return new SwFormatPageDesc(stringValue(value), page.GetNumOffset());
+    const copy = page.Clone();
+    if (!copy.PutValue(value, entry.member)) illegal("Invalid page-number offset");
+    return copy;
   }
   if (entry.kind === "break") {
     const result: [number] = [0];
@@ -192,6 +200,10 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   if (copy === null) invalid("Invalid pooled item");
   if (entry.kind === "color") {
     const n = scalar(value, "sal_Int32") as number;
+    if (copy instanceof SvxColorItem) {
+      copy.SetValue(new Color(ColorTransparency, n, "ColorTransparencyTag"));
+      return copy;
+    }
     return new SfxStringItem(
       item.Which(),
       n === -1
@@ -346,7 +358,7 @@ export function SetPropertyValue(
 export function effectiveItem(node: SwTextNode, offset: number, which: number): SfxPoolItem {
   let result = node.GetAttr(which);
   for (const hint of node.GetpSwpHints()?.entries() ?? []) {
-    if (hint.GetStart() <= offset && offset < (hint.GetEnd() ?? hint.GetStart())) {
+    if (hint.GetStart() <= offset && offset < hint.GetAnyEnd()) {
       const attr = hint.GetAttr();
       if (attr instanceof SwFormatAutoFormat)
         result = attr.GetStyleHandle().GetItemIfSet(which, false) ?? result;
@@ -379,7 +391,7 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
           if (
             format instanceof SwFormatAutoFormat &&
             hint.GetStart() <= offset &&
-            offset < (hint.GetEnd() ?? hint.GetStart())
+            offset < hint.GetAnyEnd()
           )
             current = StylePool.nameOf(format.GetStyleHandle());
         }
@@ -387,7 +399,7 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
         nameValue = current;
       }
     }
-    return stringAny(nameValue ?? "");
+    return stringAny(nameValue as string);
   }
   if (name === "NumberingRules") {
     const rule = node.GetNumRule();
@@ -395,7 +407,11 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
       ? new Any([new SwXNumberingRules(new SwNumRule(rule))], ["Reference", indexReplaceType])
       : new Any();
   }
-  if (name === "ParaStyleName") return stringAny(node.GetTextFormatColl().GetName());
+  if (name === "ParaStyleName") {
+    const format = node.GetTextFormatColl();
+    for (const span of spans(pam)) if (span.node.GetTextFormatColl() !== format) return new Any();
+    return stringAny(SwStyleNameMapper.GetProgName(format.poolId, format.GetName()));
+  }
   if (name === "NumberingStyleName") return stringAny(node.GetNumRuleName());
   if (name === "PageDescName")
     return stringAny((node.GetAttr(H.RES_PAGEDESC) as SwFormatPageDesc).GetPageDescName());
@@ -439,7 +455,7 @@ export function GetPropertyValue(pam: SwPaM, name: string): Any {
     result?.dispose();
     result = value;
   }
-  return result ?? new Any();
+  return result as Any;
 }
 /** Ordered native multi-property setter. Callers own undo grouping and rollback. @param pam - Original pam input. @param properties - Ordered native property values. @returns The represented native operation result.  @param mode - Native operation input. */
 export function SetPropertyValues(

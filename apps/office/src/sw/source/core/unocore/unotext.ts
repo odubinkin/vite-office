@@ -178,8 +178,22 @@ export class SwXText implements SwXTextOwner {
         string.dispose();
       }
     } else if (control === ControlCharacter.APPEND_PARAGRAPH) {
+      const node = range.GetPaM().GetPoint().GetNode();
       const paragraph = this.finishParagraphInsert([], range);
-      paragraph.dispose();
+      const position = new SwPosition(
+        this.GetDoc()
+          .GetNodes()
+          .at(node.GetIndex() + 1),
+        0,
+      );
+      const appended = new SwPaM(position);
+      try {
+        range.SetPositions(appended);
+      } finally {
+        appended.Dispose();
+        position.Dispose();
+        paragraph.Release();
+      }
     } else illegal("Unsupported control character");
   }
   /** Import portions use NOHINTEXPAND so omitted properties cannot inherit the preceding run's direct formatting. @param value - Declared native value. @param properties - Ordered native property values. @returns The represented native operation result. */
@@ -243,7 +257,7 @@ export class SwXText implements SwXTextOwner {
     }
   }
   /** Implements the represented native finishParagraph operation. @param properties - Ordered native property values. @returns The represented native operation result. */
-  finishParagraph(properties: readonly PropertyValue[]): SwXTextRange {
+  finishParagraph(properties: readonly PropertyValue[]): SwXParagraph {
     const end = this.getEnd();
     try {
       return this.finishParagraphInsert(properties, end);
@@ -255,7 +269,7 @@ export class SwXText implements SwXTextOwner {
   finishParagraphInsert(
     properties: readonly PropertyValue[],
     position: SwXTextRange,
-  ): SwXTextRange {
+  ): SwXParagraph {
     this.check(position);
     const node = position.GetPaM().GetPoint().GetNode() as SwTextNode,
       doc = this.GetDoc(),
