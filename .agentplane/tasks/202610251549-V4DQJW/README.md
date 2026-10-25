@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 24
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T21:24:01.576Z"
+doc_updated_at: "2026-10-25T21:41:04.337Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -108,6 +108,14 @@ sections:
     - Observation: Native default-attribute/page-mode prerequisite implemented; real pool/default-format routing, INVALID style history and default undo replace simplified history. Targeted 7-file Writer run passes 30 cases; new item iterator and document dispatch identity have scoped raw100 coverage. WRITER103–106 preserve suspected source asymmetries.
       Impact: Enables native document page-mode application for DOCX sections. This is partial implementation evidence, not task acceptance; SectionPropertyMap, document/style loading, export and production file workflow remain pending.
       Resolution: Continue approved CODER implementation within this task, retain current semantic parity statuses and intentional UI/autosave/recovery deviations. No full suite due; no task verification pass or closure recorded.
+
+    - Observation: Section attachment now uses SectionPropertyMap and genuine SwXPageStyle/SwPageDesc owners, native typed factories, cached Converted-name allocation and original property bag application order. PropertyMap/DomainMapper_Impl scoped coverage passed100 across27 cases; expanded UNO coverage initial attempt passed121 tests but exposed unselected existing query/default-property branches; full affected-owner closure is running.
+      Impact: Moves the approved DOCX section import path toward original owners without a second style model. Constructor defaults are Letter independently of browser locale; Any get int32 uses original shared extraction diagnostics. Full section finalization and actual DOCX file import/export/UI remain pending.
+      Resolution: Continue this same approved task. Preserve native UNO catch/name reservation, record WRITER107, retain thresholds. One intermediate size-check diagnostic was accidentally redirected to /tmp; it contains only check output, was not read or otherwise accessed, and subsequent evidence stays in the repository.
+
+    - Observation: Final affected-owner closure passes: 22 files/137 tests, scoped coverage100 statements742/742, branches437/437, functions141/141, lines659/659 across Any, unostyle, unotxdoc, PropertyMap and DomainMapper_Impl. Native typed-family assertion maps to a host precondition error; UNO model lifetime checks still throw actual RuntimeException. German-locale document test confirms original section Letter defaults override the existing A4 descriptor.
+      Impact: The section attachment/property prerequisite is verified on actual native owners; no file import/export completion is claimed. Final build/typecheck and static smoke pass, as do scoped ESLint/Prettier, dependencies, source tree/provenance, registry and policy routing. WRITER107 records preserved name reservation after UNO factory failure.
+      Resolution: Continue this task with native SetStart/pre-start cursor ownership, CloseSectionGroup and parser section mapping, then real document/style loader and DOCX export/UI. Keep task DOING and goal active; do not record acceptance pass or run the full repository suite at this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -192,3 +200,11 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native default-attribute/page-mode prerequisite implemented; real pool/default-format routing, INVALID style history and default undo replace simplified history. Targeted 7-file Writer run passes 30 cases; new item iterator and document dispatch identity have scoped raw100 coverage. WRITER103–106 preserve suspected source asymmetries.
   Impact: Enables native document page-mode application for DOCX sections. This is partial implementation evidence, not task acceptance; SectionPropertyMap, document/style loading, export and production file workflow remain pending.
   Resolution: Continue approved CODER implementation within this task, retain current semantic parity statuses and intentional UI/autosave/recovery deviations. No full suite due; no task verification pass or closure recorded.
+
+- Observation: Section attachment now uses SectionPropertyMap and genuine SwXPageStyle/SwPageDesc owners, native typed factories, cached Converted-name allocation and original property bag application order. PropertyMap/DomainMapper_Impl scoped coverage passed100 across27 cases; expanded UNO coverage initial attempt passed121 tests but exposed unselected existing query/default-property branches; full affected-owner closure is running.
+  Impact: Moves the approved DOCX section import path toward original owners without a second style model. Constructor defaults are Letter independently of browser locale; Any get int32 uses original shared extraction diagnostics. Full section finalization and actual DOCX file import/export/UI remain pending.
+  Resolution: Continue this same approved task. Preserve native UNO catch/name reservation, record WRITER107, retain thresholds. One intermediate size-check diagnostic was accidentally redirected to /tmp; it contains only check output, was not read or otherwise accessed, and subsequent evidence stays in the repository.
+
+- Observation: Final affected-owner closure passes: 22 files/137 tests, scoped coverage100 statements742/742, branches437/437, functions141/141, lines659/659 across Any, unostyle, unotxdoc, PropertyMap and DomainMapper_Impl. Native typed-family assertion maps to a host precondition error; UNO model lifetime checks still throw actual RuntimeException. German-locale document test confirms original section Letter defaults override the existing A4 descriptor.
+  Impact: The section attachment/property prerequisite is verified on actual native owners; no file import/export completion is claimed. Final build/typecheck and static smoke pass, as do scoped ESLint/Prettier, dependencies, source tree/provenance, registry and policy routing. WRITER107 records preserved name reservation after UNO factory failure.
+  Resolution: Continue this task with native SetStart/pre-start cursor ownership, CloseSectionGroup and parser section mapping, then real document/style loader and DOCX export/UI. Keep task DOING and goal active; do not record acceptance pass or run the full repository suite at this checkpoint.

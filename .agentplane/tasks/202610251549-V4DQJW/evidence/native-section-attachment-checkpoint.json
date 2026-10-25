@@ -1,0 +1,219 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "native-section-attachment",
+  "acceptance": "partial prerequisite; Writer task and overall goal remain active",
+  "parentCommit": "79fccb6b1990d696963c7518c326a0df5c12039f",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "cppu/inc/com/sun/star/uno/Any.ts": "9a93d3febf5108e86269768c9a44e71448d46df1c909280d1880bae2947d2ebf",
+    "sw/source/core/unocore/unostyle.ts": "ecd22b7a7f1684c10edb5a7efb60ca03aeeda52ba512201d3a9fbb89300091b0",
+    "sw/source/uibase/uno/unotxdoc.ts": "94e51a423d9549584bc55e18dcda4ea177899d2bc24761b3bb736ab120689dd3",
+    "sw/source/writerfilter/dmapper/PropertyMap.ts": "046293c0e47d87251eba10d99039810b302733884c06307d0a38b47d50b8cc91",
+    "sw/source/writerfilter/dmapper/DomainMapper_Impl.ts": "fa8667e2e0bab60f9d56c0d8361e5a9da2634694a5d47c3cb6031c5ba4a92664",
+    "sw/source/writerfilter/dmapper/SectionPropertyMap.test.ts": "aac2d8d298980eebb303628f802c6072f8108eec11bf80ea5dc2c996362e5c60"
+  },
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 659,
+        "covered": 659,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 742,
+        "covered": 742,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 141,
+        "covered": 141,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 437,
+        "covered": 437,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/inc/com/sun/star/uno/Any.ts": {
+      "lines": {
+        "total": 94,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 30,
+        "covered": 30,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 104,
+        "covered": 104,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 63,
+        "covered": 63,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/unocore/unostyle.ts": {
+      "lines": {
+        "total": 220,
+        "covered": 220,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 44,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 258,
+        "covered": 258,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 196,
+        "covered": 196,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/uno/unotxdoc.ts": {
+      "lines": {
+        "total": 38,
+        "covered": 38,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts": {
+      "lines": {
+        "total": 107,
+        "covered": 107,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 21,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 125,
+        "covered": 125,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 77,
+        "covered": 77,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": {
+      "lines": {
+        "total": 200,
+        "covered": 200,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 216,
+        "covered": 216,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 87,
+        "covered": 87,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "tests": {
+    "result": "pass",
+    "files": 22,
+    "cases": 137,
+    "scope": [
+      "src/sw/source/core/unocore",
+      "src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+      "src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts",
+      "src/cppu/inc/com/sun/star/uno/Reference.test.ts",
+      "src/cppu/inc/com/sun/star/uno/Reference-query.test.ts",
+      "src/sw/source/core/doc/native-default-page-mode.test.ts",
+      "src/sw/source/writerfilter/dmapper"
+    ],
+    "command": "npm run test:coverage -- src/sw/source/core/unocore src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppu/inc/com/sun/star/uno/Reference.test.ts src/cppu/inc/com/sun/star/uno/Reference-query.test.ts src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/writerfilter/dmapper --coverage.include='src/sw/source/core/unocore/unostyle.ts' --coverage.include='src/sw/source/uibase/uno/unotxdoc.ts' --coverage.include='src/cppu/inc/com/sun/star/uno/Any.ts' --coverage.include='src/sw/source/writerfilter/dmapper/PropertyMap.ts' --coverage.include='src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts' --coverage.reportsDirectory=coverage/docx-section-api --maxWorkers=2"
+  },
+  "checks": {
+    "npm run build": "pass; includes final tsc --noEmit",
+    "node scripts/check-static-build.mjs": "pass",
+    "scoped ESLint": "pass",
+    "scoped Prettier": "pass",
+    "npm run check:dependencies": "pass; 1350 runtime sources, 6935 relative imports,193 edges",
+    "npm run check:docs": "pass;3269 authored sources",
+    "node scripts/check-file-size.mjs": "pass",
+    "npm run check:source-tree": "pass;115 required paths and32 retired roots",
+    "npm run check:source-provenance": "pass;1351 runtime modules",
+    "npm run inventory:registry:check": "pass;339 capabilities,1351 modules,34 invariants,3104 global records,0 semantic violations",
+    "node .agentplane/policy/check-routing.mjs": "pass",
+    "ap doctor": "pass;0 errors, pre-existing hook readiness warning"
+  },
+  "initialChecks": {
+    "coverageAttempt": "19 files/121 tests passed; scoped coverage below100 because existing query/default-property suites were not selected. Final22-file closure adds existing suites and genuine page-layout type rejection cases; no thresholds changed.",
+    "lint": "Three test non-null assertions replaced by required actual-owner guards."
+  },
+  "remaining": [
+    "Complete section field ownership and SetStart/pre-start cursor navigation",
+    "CloseSectionGroup and header/footer/column ownership",
+    "Section parser mappings",
+    "Actual DOCX document/style loading, export and production Open/download/reopen",
+    "Calc XLSX task remains TODO"
+  ]
+}
