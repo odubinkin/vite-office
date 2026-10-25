@@ -65,7 +65,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     expect(computerTab).toHaveAttribute("aria-selected", "true");
     expect(computerTab).toHaveFocus();
     const panel = screen.getByRole("tabpanel", { name: "On computer" });
-    expect(screen.getByText("ODT, TXT and RTF files are supported")).toBeVisible();
+    expect(screen.getByText("ODT, TXT, RTF and Markdown files are supported")).toBeVisible();
     fireEvent.dragEnter(panel);
     expect(panel).toHaveClass("border-indigo-500");
     fireEvent.dragLeave(panel);
@@ -99,7 +99,9 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     });
     await waitFor(
       /** Waits for the file validation error. @returns Nothing. */ () =>
-        expect(screen.getByRole("alert")).toHaveTextContent("Choose an ODT, TXT or RTF file."),
+        expect(screen.getByRole("alert")).toHaveTextContent(
+          "Choose an ODT, TXT, RTF or Markdown file.",
+        ),
     );
     expect(close).not.toHaveBeenCalled();
     documentShell.Close();
@@ -206,6 +208,61 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
         expect(close).toHaveBeenCalledOnce(),
     );
     expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
+    expect((await store.list()).map((record) => record.title)).toEqual(["Imported"]);
+    documentShell.Close();
+  });
+
+  it("exports Markdown from the native Writer model", /** Checks shell-owned Markdown output reaches the browser port. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const paragraph = documentShell.GetDoc().paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    paragraph.SetText("Native heading");
+    paragraph.ChgFormatColl(documentShell.GetDoc().GetTextFormatColl("heading-2"));
+    const exported = vi.fn();
+    render(
+      <WriterFileDialog
+        docShell={documentShell}
+        kind="export"
+        onClose={vi.fn()}
+        services={services(undefined, exported)}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Download Markdown" }));
+    await waitFor(
+      /** Waits for native Markdown output. @returns Nothing. */ () =>
+        expect(exported).toHaveBeenCalledOnce(),
+    );
+    const payload = exported.mock.calls[0]?.[0] as {
+      data: Uint8Array;
+      mediaType: string;
+      name: string;
+    };
+    expect(new TextDecoder().decode(payload.data)).toBe("## Native heading\n");
+    expect([payload.mediaType, payload.name]).toEqual(["text/markdown;charset=utf-8", "Draft.md"]);
+    documentShell.Close();
+  });
+
+  it("imports Markdown through the native shell and persists browser identity", /** Checks existing Open flow with Markdown content. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-markdown-import", new IDBFactory());
+    const close = vi.fn();
+    render(
+      <WriterFileDialog
+        docShell={documentShell}
+        kind="open"
+        onClose={close}
+        services={services(store)}
+      />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+    fireEvent.change(screen.getByLabelText("Browse"), {
+      target: { files: [new File(["# Imported"], "Imported.md")] },
+    });
+    await waitFor(
+      /** Waits for completed import. @returns Nothing. */ () =>
+        expect(close).toHaveBeenCalledOnce(),
+    );
+    expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
     expect((await store.list()).map((record) => record.title)).toEqual(["Imported"]);
     documentShell.Close();
   });

@@ -20,6 +20,30 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("opens Markdown atomically through the native reader", /** Checks invalid UTF-8 does not replace the current model. @returns Nothing. */ () => {
+    const shell = makeShell();
+    const original = shell.GetDoc();
+    const metadata = createDocument({ id: "markdown", suiteId: "writer", title: "Markdown" });
+    const medium = {
+      kind: "input" as const,
+      name: "file.md",
+      filterId: "Markdown",
+      mediaType: "text/markdown;charset=utf-8",
+      source: { kind: "external" as const, reference: {} },
+    };
+    try {
+      expect(() => shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium)).toThrow();
+      expect(shell.GetDoc()).toBe(original);
+      const loaded = shell.OpenMarkdown(new TextEncoder().encode("# Imported"), metadata, medium);
+      expect(loaded.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+      expect(shell.GetMedium().GetLastOperation()).toMatchObject({
+        operation: "open",
+        state: "succeeded",
+      });
+    } finally {
+      shell.Close();
+    }
+  });
   it("opens valid RTF atomically and preserves the old graph on malformed input", /** Checks native filter and shell lifecycle boundary. @returns Nothing. */ () => {
     const shell = makeShell();
     const original = shell.GetDoc();

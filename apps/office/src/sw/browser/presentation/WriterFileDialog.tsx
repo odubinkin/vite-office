@@ -15,6 +15,7 @@ import {
   saveWriterAsBrowserCopy,
 } from "../workflows/writer-odt-io";
 import {
+  exportWriterMarkdownToPort,
   exportWriterRtfToPort,
   exportWriterTextToPort,
   saveWriterOdtToPort,
@@ -51,14 +52,15 @@ export function WriterFileDialog({
       store={services.odtStore}
       modalAttributes={{ "data-writer-modal": "true" }}
       format={{
-        accept: ".odt,.txt,.rtf,application/vnd.oasis.opendocument.text,text/plain,application/rtf",
-        importDescription: "ODT, TXT and RTF files are supported",
-        invalidFileMessage: "Choose an ODT, TXT or RTF file.",
+        accept:
+          ".odt,.txt,.rtf,.md,.markdown,application/vnd.oasis.opendocument.text,text/plain,application/rtf,text/markdown",
+        importDescription: "ODT, TXT, RTF and Markdown files are supported",
+        invalidFileMessage: "Choose an ODT, TXT, RTF or Markdown file.",
         documentLabel: "ODT document",
         accepts:
           /** Matches Writer's supported import extensions. @param file - Source. @returns Supported. */ (
             file,
-          ) => /\.(odt|txt|rtf)$/i.test(file.name),
+          ) => /\.(odt|txt|rtf|md|markdown)$/i.test(file.name),
         importedTitle: getImportedWriterTitle,
       }}
       openImportedFile={
@@ -77,6 +79,18 @@ export function WriterFileDialog({
                 name: file.name,
                 filterId: "Rich Text Format",
                 mediaType: "application/rtf",
+                source: { kind: "external", reference: file },
+              },
+            );
+          else if (/\.(md|markdown)$/i.test(file.name))
+            docShell.OpenMarkdown(
+              bytes,
+              createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
+              {
+                kind: "input",
+                name: file.name,
+                filterId: "Markdown",
+                mediaType: "text/markdown;charset=utf-8",
                 source: { kind: "external", reference: file },
               },
             );
@@ -141,6 +155,17 @@ export function WriterFileDialog({
               docShell,
               services.documentExport,
               services.createDownloadFilename(docShell.GetTitle(), ".rtf"),
+            ),
+        },
+        {
+          label: "Markdown",
+          description: "Markdown text",
+          appearance: "indigo",
+          download: /** Downloads native Writer Markdown. @returns Completion. */ () =>
+            exportWriterMarkdownToPort(
+              docShell,
+              services.documentExport,
+              services.createDownloadFilename(docShell.GetTitle(), ".md"),
             ),
         },
       ]}

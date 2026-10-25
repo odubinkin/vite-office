@@ -60,3 +60,25 @@ export function exportWriterRtfToPort(
       }),
   );
 }
+
+/** Exports native Markdown through the browser port. @param docShell - Active shell. @param port - Browser adapter. @param filename - Download name. @returns Completion. */
+export function exportWriterMarkdownToPort(
+  docShell: SwDocShell,
+  port: DocumentExportPort,
+  filename: string,
+): Promise<void> {
+  return docShell.Export(
+    {
+      filterId: "Markdown",
+      kind: "export",
+      mediaType: "text/markdown;charset=utf-8",
+      name: filename,
+    },
+    /** Delivers native Markdown bytes. @returns Port completion. */ () =>
+      port.export({
+        data: docShell.SerializeMarkdown(),
+        mediaType: "text/markdown;charset=utf-8",
+        name: filename,
+      }),
+  );
+}

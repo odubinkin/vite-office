@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/md/mdcallbcks.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "markdown-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/md/mdcallbcks.ts#parseMarkdownSpans",
+        "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx#SwMarkdownParser::enter_span_callback"
+      ],
+      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "parseMarkdownSpans"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/md/mdcallbcks.cxx",
+      "upstreamSymbols": [
+        "SwMarkdownParser::enter_span_callback"
+      ]
+    }
+  }
+}

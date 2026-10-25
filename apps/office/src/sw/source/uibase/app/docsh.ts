@@ -34,6 +34,8 @@ import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
+import { MarkdownReader } from "../../filter/md/swmd";
+import { SwMDWriter } from "../../filter/md/wrtmd";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
@@ -102,6 +104,38 @@ export class SwDocShell extends SfxObjectShell {
   public SerializeRtf(): Uint8Array {
     this.EnsureOpen();
     return new RtfExport().ExportDocument(this.document);
+  }
+
+  /** Serializes the live Writer model through the native Markdown writer. @returns UTF-8 Markdown bytes. */
+  public SerializeMarkdown(): Uint8Array {
+    this.EnsureOpen();
+    return new SwMDWriter().WriteDocument(this.document);
+  }
+
+  /** Reads Markdown before atomically replacing the active model. @param bytes - Complete UTF-8 stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
+  public OpenMarkdown(
+    bytes: Uint8Array,
+    metadata: SfxObjectShellState,
+    medium: SfxMediumInput,
+  ): SwDoc {
+    this.EnsureOpen();
+    const document = new MarkdownReader().Read(bytes, {
+      ...(this.defaultFontDevice === undefined
+        ? {}
+        : { defaultFontDevice: this.defaultFontDevice }),
+      locale: this.defaultLocale,
+    });
+    const state: SfxObjectShellState = Object.freeze({
+      ...metadata,
+      isModified: false,
+      lifecycle: "saved",
+      recoveryGeneration: null,
+    });
+    return this.ReplaceDocument(
+      document,
+      state,
+      setMediumOperation(acquireSfxMedium(medium), "open", "succeeded", state.contentGeneration),
+    );
   }
 
   /** Reads an RTF candidate before atomically replacing the active model. @param bytes - Complete RTF stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */

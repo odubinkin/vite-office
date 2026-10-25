@@ -1112,3 +1112,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ascii/ascatr.cxx`, `OutASC_SwTextNode`, computes `bIsOneParagraph` solely from the original range endpoints and suppresses the list prefix when it is true. The complete document export range can also have endpoints in the same node.
 - Observation: exporting a document containing only one numbered paragraph omits its visible number, while adding a second paragraph causes the number to appear. The condition also serves clipboard selection, so whether full-document suppression was intended is unconfirmed.
 - Preservation: keep the upstream endpoint condition in `OutASC_SwTextNode`; `SwASCWriter.WriteDocument` passes the complete body block count. Native desktop behavior and the `SW_ASCII_COPY_NUMBERING` environment override remain unverified.
+
+### WRITER094 — Markdown table-cell pipes are not escaped by the writer
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutEscapedChars` and `OutMarkdown_SwTextNode`. The escape switch omits `|` and carries a TODO asking whether to escape it; table output uses the same escaping path.
+- Observation: a literal pipe in a table cell can be emitted as a column delimiter, so re-import may split or shift cells. This is a source-level inference; native desktop round-trip behavior is not independently confirmed.
+- Preservation: keep the upstream escape set in `SwMDWriter`, including the missing pipe escape. The Markdown reader recognizes escaped pipes in incoming files, but the export path does not silently correct the upstream behavior.
