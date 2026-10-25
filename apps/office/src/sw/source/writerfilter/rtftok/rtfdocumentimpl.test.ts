@@ -30,9 +30,7 @@ import { RtfExport } from "../../filter/ww8/rtfexport";
 
 /** Imports one RTF fixture. @param input - RTF source. @returns Writer document. */
 function read(input: string) {
-  return new RtfDocumentImpl().Resolve(
-    new RtfTokenizer(new TextEncoder().encode(input)).Tokenize(),
-  );
+  return new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(input));
 }
 
 it("decodes ANSI bytes after group and font encoding selection", () => {
@@ -76,6 +74,21 @@ it("plain restores the default font's encoded text state", () => {
   );
   try {
     expect(document.paragraphs[0]?.GetText()).toBe("ÆЖ");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
+  const prefix = new TextEncoder().encode(
+    String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,
+  );
+  const suffix = new TextEncoder().encode("}");
+  const document = new RtfDocumentImpl().ResolveBytes(
+    Uint8Array.from([...prefix, 0x83, 0x5c, 0x83, 0x7b, 0x83, 0x7d, ...suffix]),
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ソボマ");
   } finally {
     document.Dispose();
   }

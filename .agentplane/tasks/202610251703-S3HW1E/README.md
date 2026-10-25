@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 36
+revision: 38
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T19:51:59.639Z"
+doc_updated_at: "2026-10-25T19:56:53.145Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through ab092081185f cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels and RTF Unicode fallback/hex-break handling. This batch moves ANSI byte decoding from RtfTokenizer to group-scoped RtfDocumentImpl, ports the pinned rtfcharsets mapping and Word font suffix precedence, and handles selected/default font encoding, ansicpg/cpg/fcharset/plain and group restoration. Focused 94 RTF tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; Shift-JIS trailing delimiter bytes and browser-unsupported legacy code pages; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 3eeddd4243d8 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, RTF Unicode fallback/hex breaks, and document-owned ANSI code-page selection including font suffix precedence. This batch adds a streaming RTF tokenizer-to-document listener path for Shift-JIS trailing bytes that are backslashes or braces; the browser OpenRtf path uses it while standalone Tokenize remains for lexical checks. Focused 113 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through ab092081185f cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels and RTF Unicode fallback/hex-break handling. This batch moves ANSI byte decoding from RtfTokenizer to group-scoped RtfDocumentImpl, ports the pinned rtfcharsets mapping and Word font suffix precedence, and handles selected/default font encoding, ansicpg/cpg/fcharset/plain and group restoration. Focused 94 RTF tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; Shift-JIS trailing delimiter bytes and browser-unsupported legacy code pages; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 3eeddd4243d8 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, RTF Unicode fallback/hex breaks, and document-owned ANSI code-page selection including font suffix precedence. This batch adds a streaming RTF tokenizer-to-document listener path for Shift-JIS trailing bytes that are backslashes or braces; the browser OpenRtf path uses it while standalone Tokenize remains for lexical checks. Focused 113 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.

@@ -22,6 +22,8 @@ export class RtfSyntaxError extends Error {
 export class RtfTokenizer {
   private readonly source: Uint8Array;
   private readonly tokens: RtfToken[] = [];
+  private onToken?: (token: RtfToken) => void;
+  private currentCodepage?: () => number;
   private offset = 0;
   private depth = 0;
   private groupUnicodeSkip: number[] = [1];
@@ -45,6 +47,19 @@ export class RtfTokenizer {
 
   /** Returns ordered lexical events after validating group balance and header. @returns RTF events. */
   public Tokenize(): readonly RtfToken[] {
+    this.Scan();
+    return this.tokens;
+  }
+
+  /** Drives the document listener while its group/font encoding is still current. */
+  public Parse(onToken: (token: RtfToken) => void, currentCodepage: () => number): void {
+    this.onToken = onToken;
+    this.currentCodepage = currentCodepage;
+    this.Scan();
+  }
+
+  /** Reads the stream, dispatching each event before consuming later bytes. */
+  private Scan(): void {
     if (this.source[0] !== 0x7b || this.source[1] !== 0x5c || this.source[2] !== 0x72)
       throw new RtfSyntaxError("RTF document header is missing.");
     while (this.offset < this.source.length) {
@@ -55,25 +70,28 @@ export class RtfTokenizer {
         if (this.depth > 1024) throw new RtfSyntaxError("RTF group nesting is too deep.");
         this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) ?? 1);
         this.groupFallback.push(this.fallback);
-        this.tokens.push({ kind: "group-start" });
+        this.Emit({ kind: "group-start" });
       } else if (byte === 0x7d) {
         this.FlushText();
         if (this.depth === 0) throw new RtfSyntaxError("Unexpected RTF group end.");
         this.depth--;
         this.groupUnicodeSkip.pop();
         this.groupFallback.pop();
-        this.tokens.push({ kind: "group-end" });
+        this.Emit({ kind: "group-end" });
       } else if (byte === 0x5c) {
         this.ReadEscape();
       } else if (byte !== 0x0d && byte !== 0x0a && byte !== 0x00) {
         this.AppendByte(byte);
+        if (this.currentCodepage?.() === 932 && isShiftJisLead(byte)) {
+          const trail = this.source[this.offset++];
+          if (trail !== undefined) this.AppendByte(trail);
+        }
       }
     }
     this.FlushText();
     if (this.depth !== 0) throw new RtfSyntaxError("Unclosed RTF group.");
     if (this.tokens.at(-1)?.kind !== "group-end")
       throw new RtfSyntaxError("RTF document has trailing content.");
-    return this.tokens;
   }
 
   /** Reads one control word, escaped character or hex byte. */
@@ -92,7 +110,7 @@ export class RtfTokenizer {
         if (this.fallback !== 0) this.fallback--;
         else {
           this.FlushText();
-          this.tokens.push({ kind: "hex-break", value: value === 0x0d ? "\r" : "\n" });
+          this.Emit({ kind: "hex-break", value: value === 0x0d ? "\r" : "\n" });
         }
       } else this.AppendByte(value);
       return;
@@ -102,7 +120,7 @@ export class RtfTokenizer {
       else if (this.fallback !== 0) this.fallback--;
       else {
         this.FlushText();
-        this.tokens.push({ kind: "control", name: String.fromCharCode(first) });
+        this.Emit({ kind: "control", name: String.fromCharCode(first) });
       }
       return;
     }
@@ -134,13 +152,13 @@ export class RtfTokenizer {
       const codeUnit = parameter ?? 0;
       if (codeUnit >= -32768 && codeUnit <= 65535) {
         this.FlushText();
-        this.tokens.push({ kind: "text", value: String.fromCharCode(codeUnit & 0xffff) });
+        this.Emit({ kind: "text", value: String.fromCharCode(codeUnit & 0xffff) });
         this.fallback = this.groupUnicodeSkip.at(-1) ?? 1;
       }
     } else {
       // The native fallback counter is consumed by characters, not control words.
       this.FlushText();
-      this.tokens.push({
+      this.Emit({
         kind: "control",
         name,
         ...(parameter === undefined ? {} : { parameter }),
@@ -160,9 +178,20 @@ export class RtfTokenizer {
   /** Passes bytes to the document parser, which owns the active group and font encoding. */
   private FlushText(): void {
     if (this.bytes.length === 0) return;
-    this.tokens.push({ kind: "ansi-bytes", value: Uint8Array.from(this.bytes) });
+    this.Emit({ kind: "ansi-bytes", value: Uint8Array.from(this.bytes) });
     this.bytes = [];
   }
+
+  /** Publishes an event to the stream listener and lexical test buffer. */
+  private Emit(token: RtfToken): void {
+    this.tokens.push(token);
+    this.onToken?.(token);
+  }
+}
+
+/** Mirrors the pinned resolveChars Shift-JIS lead-byte range. */
+function isShiftJisLead(byte: number): boolean {
+  return (byte >= 0x80 && byte <= 0x9f) || byte >= 0xe0;
 }
 
 /** Tests ASCII control-letter syntax. @param byte - Candidate. @returns Whether a letter. */

@@ -65,7 +65,7 @@ import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingT
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
+import { RtfSyntaxError, RtfTokenizer, type RtfToken } from "./rtftokenizer";
 import { RTF_CHARSET_CODEPAGE, RTF_FONT_SUFFIX_CODEPAGE, rtfDecoderLabel } from "./rtfcharsets";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -359,9 +359,23 @@ export class RtfDocumentImpl {
   private readonly sectionPageRestarts = new Set<number>();
   private currentSection = 0;
 
-  /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
+  /** Resolves source bytes with live group/font encoding feedback to the tokenizer. */
+  public ResolveBytes(bytes: Uint8Array, options: SwDocOptions = {}): SwDoc {
+    new RtfTokenizer(bytes).Parse(
+      (token) => this.Dispatch(token),
+      () => this.states.at(-1)?.currentCodepage ?? this.defaultCodepage,
+    );
+    return this.Finish(options);
+  }
+
+  /** Resolves already-lexed events into a fresh Writer document. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
     for (const token of tokens) this.Dispatch(token);
+    return this.Finish(options);
+  }
+
+  /** Materializes the parsed blocks only after the complete stream is valid. */
+  private Finish(options: SwDocOptions): SwDoc {
     if (!this.sawHeader) throw new RtfSyntaxError("RTF version control is missing.");
     if (
       this.runs.length > 0 ||

@@ -33,7 +33,6 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
-import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import { MarkdownReader } from "../../filter/md/swmd";
 import { SwMDWriter } from "../../filter/md/wrtmd";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
@@ -145,7 +144,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Reads an RTF candidate before atomically replacing the active model. @param bytes - Complete RTF stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
   public OpenRtf(bytes: Uint8Array, metadata: SfxObjectShellState, medium: SfxMediumInput): SwDoc {
     this.EnsureOpen();
-    const document = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize(), {
+    const document = new RtfDocumentImpl().ResolveBytes(bytes, {
       ...(this.defaultFontDevice === undefined
         ? {}
         : { defaultFontDevice: this.defaultFontDevice }),
