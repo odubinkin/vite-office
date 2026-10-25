@@ -74,3 +74,14 @@ the sixteen fixed Word palette entries before document colors;
 the existing browser item codec preserves the native underline color across
 worker snapshots. The source's `NEEDSWORK` observation about underline color
 remains unverified (WRITER118), as do the other RTF rows listed above.
+
+RTF table `\\cellx` boundaries now use the pinned
+`AttributeOutputBase::GetTablePageSize` / `SwWriteTable::GetAbsWidthRatio`
+contract: the denominator is the table frame width, not the sum of cell widths.
+An absolute-width table retains the authored cell boundaries; a full-width or
+percentage table scales them against the resolved page text width in the
+current document model. Focused tests cover both paths with a row whose cells
+do not sum to the table frame width. The desktop layout rectangle, HTML table
+layout branch and expanded nested/merged table graph are outside the current
+portable model; remaining represented table properties still need the matrix
+audit above.

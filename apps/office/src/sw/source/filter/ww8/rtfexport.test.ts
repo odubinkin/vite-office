@@ -1027,6 +1027,33 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   }
 });
 
+it("uses the native table frame and page widths for fixed and relative RTF cell boundaries", () => {
+  const document = createWriterDocument();
+  const table = document.nodes.MakeTableNode("Uneven", {}, document.paragraphs[0]);
+  const row = document.nodes.AppendTableRow(table, 2);
+  const frameSize = table.GetFrameFormat().GetFrameSize().Clone();
+  frameSize.SetWidth(6000);
+  table.GetFrameFormat().SetFormatAttr(frameSize);
+  for (const [index, width] of [1800, 3000].entries()) {
+    const box = row.GetTabBoxes()[index];
+    if (box === undefined) throw new Error("Missing table cell.");
+    const size = box.GetFrameSize();
+    size.SetWidth(width);
+    box.SetFrameSize(size);
+  }
+  try {
+    const relative = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(relative).toMatch(/\\cellx2592\\cellx6912/);
+    const orientation = table.GetFrameFormat().GetHoriOrient().Clone();
+    orientation.SetHoriOrient(HoriOrientation.LEFT);
+    table.GetFrameFormat().SetFormatAttr(orientation);
+    const fixed = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(fixed).toMatch(/\\cellx1800\\cellx4800/);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("retains numbered list identity and levels through RTF list tables", /** Checks source-backed list and override controls. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];

@@ -252,9 +252,22 @@ export class RtfExport {
             output += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
           const nativeWidths = boxes.map((box) => box.GetFrameSize().GetWidth());
           const hasNativeWidths = nativeWidths.every((width) => width > 0);
-          const baseWidth = nativeWidths.reduce((total, width) => total + width, 0);
-          const tableWidth = block.GetTable().GetFrameFormat().GetFrameSize().GetWidth();
-          const widthRatio = hasNativeWidths && tableWidth > 0 ? tableWidth / baseWidth : 1;
+          const tableSize = tableFormat.GetFrameSize();
+          const tableWidth = tableSize.GetWidth();
+          // GetTablePageSize supplies SwWriteTable's target width; its base is
+          // the table frame width, not the sum of this row's cell widths.
+          let widthPercent = tableSize.GetWidthPercent();
+          if (orientation === HoriOrientation.FULL || orientation === HoriOrientation.NONE)
+            widthPercent = 100;
+          const relative = widthPercent !== 0 || (tableWidth > 32767 && widthPercent === 0);
+          const page = this.ResolvePageDescription(document, block).GetValue();
+          const pageWidth = page.width - page.leftMargin - page.rightMargin;
+          const targetWidth = relative
+            ? widthPercent === 0
+              ? pageWidth
+              : Math.trunc((pageWidth * widthPercent) / 100)
+            : tableWidth;
+          const widthRatio = hasNativeWidths && tableWidth > 0 ? targetWidth / tableWidth : 1;
           let right = 0;
           for (const [index, width] of nativeWidths.entries()) {
             const box = boxes[index]?.GetFormat().box;
