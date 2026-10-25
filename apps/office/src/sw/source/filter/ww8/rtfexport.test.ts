@@ -54,6 +54,43 @@ import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import { RtfExport } from "./rtfexport";
+import { RtfAttributeOutput } from "./rtfattributeoutput";
+
+it("writes source highlight palette indices independent of document color indices", () => {
+  const output = new RtfAttributeOutput(
+    () => 0,
+    () => 23,
+  );
+  const plain = { bold: false, italic: false, underline: false };
+  expect(output.WriteCharacter({ ...plain, highlight: "#6666ff" })).toContain("\\highlight2");
+  expect(output.WriteCharacter({ ...plain, highlight: "#ffcc00" })).toContain("\\highlight7");
+  expect(output.WriteCharacter({ ...plain, highlight: "transparent", color: "auto" })).toBe(
+    "\\cf0\\highlight0",
+  );
+});
+
+it("quantizes a native highlight through the fixed RTF palette on export and import", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  const attributes = { bold: false, italic: false, underline: false, highlight: "#6666ff" };
+  paragraph.SetText("highlight");
+  const hints = new SwpHints(source.GetAttrPool());
+  hints.setTextRuns([{ text: "highlight", attributes }], paragraph.GetSwAttrSet());
+  paragraph.SetTextHints(hints);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("\\highlight2");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(projectWriterTextRuns(imported.paragraphs[0]).at(0)?.attributes.highlight).toBe(
+      "#0000ff",
+    );
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
 
 it("writes native underline line styles with the pinned RTF controls", /** Checks source control mapping and round-trip item state. @returns Nothing. */ () => {
   const cases: readonly [FontLineStyle, string][] = [

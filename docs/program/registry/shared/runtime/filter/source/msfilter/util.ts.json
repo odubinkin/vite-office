@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/filter/source/msfilter/util.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "msfilter",
+    "capabilityIds": ["CAP-0121"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/filter/source/msfilter/util.test.ts#maps the fixed Word colors",
+        "vendor/libreoffice-reference/filter/source/msfilter/util.cxx#TransColToIco"
+      ],
+      "justification": "Pinned MS filter highlight palette conversion is used by RTF character output; the rest of the source utility file is outside this Writer filter slice.",
+      "knownViolations": [],
+      "localSymbols": ["TransColToIco"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "filter/source/msfilter/util.cxx",
+      "upstreamSymbols": ["TransColToIco"]
+    }
+  }
+}

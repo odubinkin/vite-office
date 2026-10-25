@@ -48,6 +48,15 @@ The registry check covers repository inventory, not behavioral parity of these
 filters. Closure requires explicit tests of each applicable row against the
 available native model and source decisions for unavoidable format loss.
 
+RTF highlight export now follows pinned
+`RtfAttributeOutput::OutputCharHighlight` and
+`msfilter::util::TransColToIco`: the fixed 16-color Word palette takes precedence
+over document-added colors, and nonpalette colors use the source chromatic-scheme
+and RGB-error search. A transparent highlight writes index zero; a direct
+automatic character color writes `\\cf0`. RTF import resolves the emitted
+palette index through the source-ordered color table, so nonpalette highlight
+colors are quantized on round trip by the format.
+
 RTF underline dispatch now follows pinned
 `sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx` and
 `rtfdispatchflag.cxx` for the represented style keywords, and

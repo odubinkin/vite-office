@@ -23,7 +23,8 @@
     ],
     "preservedResponsibilities": [
       "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
-      "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items."
+      "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items.",
+      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -49,6 +50,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "writes native underline line styles with the pinned RTF controls"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "writes source highlight palette indices"
         }
       ],
       "upstream": [
@@ -67,6 +72,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::OutputCharUnderline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharHighlight"
         }
       ]
     }

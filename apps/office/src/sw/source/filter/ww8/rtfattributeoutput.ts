@@ -1,5 +1,7 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
+import { Color } from "../../../../tools/inc/color";
+import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import {
   DFLT_ESC_AUTO_SUB,
   DFLT_ESC_AUTO_SUPER,
@@ -221,10 +223,10 @@ export class RtfAttributeOutput {
     if (attributes.fontSizeTwips !== undefined)
       result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
     if (attributes.escapement !== undefined) result += this.WriteEscapement(attributes);
-    if (attributes.color !== undefined && attributes.color !== "auto")
-      result += `\\cf${this.colorIndex(attributes.color)}`;
-    if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
-      result += `\\highlight${this.colorIndex(attributes.highlight)}`;
+    if (attributes.color !== undefined)
+      result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
+    if (attributes.highlight !== undefined)
+      result += `\\highlight${attributes.highlight === "transparent" ? 0 : TransColToIco(new Color(Number.parseInt(attributes.highlight.slice(1), 16)))}`;
     return result;
   }
 

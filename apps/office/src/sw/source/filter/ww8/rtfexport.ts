@@ -103,8 +103,6 @@ export class RtfExport {
           this.IndexColor(run.attributes.color);
         if (run.attributes.underlineColor !== undefined && run.attributes.underlineColor !== "auto")
           this.IndexColor(run.attributes.underlineColor);
-        if (run.attributes.highlight !== undefined && run.attributes.highlight !== "transparent")
-          this.IndexColor(run.attributes.highlight);
       }
       const paragraph = node as SwTextNode;
       const style = paragraph.GetTextFormatColl();
@@ -136,8 +134,6 @@ export class RtfExport {
         this.IndexColor(attributes.color);
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
         this.IndexColor(attributes.underlineColor);
-      if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
-        this.IndexColor(attributes.highlight);
     }
     for (const block of blocks) {
       if (!(block instanceof SwTableNode)) continue;

@@ -1,0 +1,47 @@
+/** @fileoverview MS filter color-index conversion from filter/source/msfilter/util.cxx. */
+import { Color } from "../../../tools/inc/color";
+
+/** The sixteen fixed MS Word colors in their RTF index order. */
+const WORD_COLORS = [
+  0x000000, 0x0000ff, 0x00ffff, 0x00ff00, 0xff00ff, 0xff0000, 0xffff00, 0xffffff, 0x000080,
+  0x008080, 0x008000, 0x800080, 0x800000, 0x808000, 0x808080, 0xc0c0c0,
+] as const;
+
+/** Calculates the source three-channel chromatic scheme at one variance. */
+function calculateScheme(color: Readonly<Color>, variance: number): readonly number[] {
+  const red = color.GetRed(),
+    green = color.GetGreen(),
+    blue = color.GetBlue();
+  return [
+    1 + Number(red < green + variance) + Number(red < blue + variance),
+    1 + Number(green < red + variance) + Number(green < blue + variance),
+    1 + Number(blue < red + variance) + Number(blue < green + variance),
+  ];
+}
+
+/** Source `msfilter::util::TransColToIco`: exact palette match, then scheme-aware nearest color. */
+export function TransColToIco(color: Readonly<Color>): number {
+  if (color.toUInt32() === 0xffffffff) return 0;
+  const exact = WORD_COLORS.indexOf(color.toUInt32() as (typeof WORD_COLORS)[number]);
+  if (exact >= 0) return exact + 1;
+  const palette = WORD_COLORS.map((value) => new Color(value));
+  for (let variance = 0; variance <= 255; variance++) {
+    const sourceScheme = calculateScheme(color, variance);
+    let best = -1,
+      bestError = 65535;
+    for (const [index, candidate] of palette.entries()) {
+      const candidateScheme = calculateScheme(candidate, variance);
+      if (!sourceScheme.every((value, channel) => value === candidateScheme[channel])) continue;
+      const error =
+        Math.abs(color.GetRed() - candidate.GetRed()) +
+        Math.abs(color.GetGreen() - candidate.GetGreen()) +
+        Math.abs(color.GetBlue() - candidate.GetBlue());
+      if (error < bestError) {
+        best = index;
+        bestError = error;
+      }
+    }
+    if (best >= 0) return best + 1;
+  }
+  return 1;
+}
