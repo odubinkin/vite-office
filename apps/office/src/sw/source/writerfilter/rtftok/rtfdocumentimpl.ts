@@ -154,7 +154,12 @@ interface RtfRun extends WriterTextRun {
 /** Ordered body content with native rows and cell paragraphs. */
 type RtfBlock =
   | Readonly<{ kind: "paragraph"; paragraph: RtfParagraph; section: number }>
-  | Readonly<{ kind: "table"; rows: readonly RtfTableRow[]; section: number }>;
+  | Readonly<{
+      kind: "table";
+      rows: readonly RtfTableRow[];
+      section: number;
+      pageBreakBefore: boolean;
+    }>;
 
 /** The represented physical subset of a tokenizer section-property group. */
 type RtfSectionPage = Partial<{
@@ -342,6 +347,7 @@ export class RtfDocumentImpl {
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
   private defaultTabStop = 720;
   private firstRun = true;
+  private pendingPageBreak = false;
   private readonly defaultSectionPage: RtfSectionPage = {};
   private readonly sectionPages: RtfSectionPage[] = [{}];
   private readonly sectionPageRestarts = new Set<number>();
@@ -354,7 +360,8 @@ export class RtfDocumentImpl {
     if (
       this.runs.length > 0 ||
       (this.blocks.length === 0 && this.tableRows.length === 0) ||
-      !this.terminatedParagraph
+      !this.terminatedParagraph ||
+      (this.pendingPageBreak && this.tableRows.length === 0)
     )
       this.CommitParagraph();
     this.FlushTable();
@@ -437,6 +444,8 @@ export class RtfDocumentImpl {
                 this.sectionPageRestarts.has(block.section) ? 1 : undefined,
               ),
             );
+        if (block.pageBreakBefore)
+          table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
         const firstRow = block.rows[0];
         if (firstRow !== undefined) {
           const format = table.GetFrameFormat();
@@ -989,6 +998,16 @@ export class RtfDocumentImpl {
         };
       return;
     }
+    if (name === "page" || name === "column") {
+      // The represented document has one column: pinned COLUMN dispatches PAGE.
+      // PAGE is ignored while the RTF table buffer owns the current row.
+      if (this.inTable) return;
+      if (this.runs.length > 0 || (this.pendingPageBreak && this.tableRows.length === 0))
+        this.CommitParagraph(state);
+      if (this.tableRows.length > 0) this.FlushTable();
+      this.pendingPageBreak = true;
+      return;
+    }
     if (name === "trowd") {
       this.inTable = true;
       this.rowBoundaries = [];
@@ -1318,11 +1337,19 @@ export class RtfDocumentImpl {
     this.firstRun = false;
     const paragraph: RtfParagraph = {
       runs: this.runs.splice(0),
-      state: { ...(state?.paragraph ?? DEFAULT_PARAGRAPH) },
+      state: {
+        ...(state?.paragraph ?? DEFAULT_PARAGRAPH),
+        ...(this.pendingPageBreak && !this.inTable
+          ? { pageBreakBefore: true, pageBreakBeforeSet: true }
+          : {}),
+      },
       marks: this.marks.splice(0),
     };
     if (this.inTable) this.tableCell.push(paragraph);
-    else this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
+    else {
+      this.blocks.push({ kind: "paragraph", paragraph, section: this.currentSection });
+      this.pendingPageBreak = false;
+    }
     this.terminatedParagraph = true;
   }
 
@@ -1333,7 +1360,9 @@ export class RtfDocumentImpl {
       kind: "table",
       rows: this.tableRows.splice(0),
       section: this.currentSection,
+      pageBreakBefore: this.pendingPageBreak,
     });
+    this.pendingPageBreak = false;
   }
 
   /** Adds one font-family table token. @param value - Font text. @param state - Current group. */

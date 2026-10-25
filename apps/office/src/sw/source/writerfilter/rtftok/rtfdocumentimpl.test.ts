@@ -158,6 +158,87 @@ it("imports RTF global paper and first-section geometry through the document pag
   }
 });
 
+it.each(["page", "column"])(
+  "imports a one-column RTF \\%s as the next paragraph page break",
+  (control) => {
+    const document = read(`{\\rtf1\\ansi First\\${control}\\pard Second}`);
+    try {
+      expect(document.paragraphs.map((paragraph) => paragraph.GetText())).toEqual([
+        "First",
+        "Second",
+      ]);
+      expect((document.paragraphs[1]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+      expect((document.paragraphs[0]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
+it("ignores an RTF page symbol inside a table cell", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\trowd\cellx1440\intbl Before\page After\cell\row\pard End}`,
+  );
+  try {
+    const table = document.GetNodes().getBodyContent()[0];
+    expect(table).toBeInstanceOf(SwTableNode);
+    if (!(table instanceof SwTableNode)) return;
+    expect(table.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
+      "BeforeAfter",
+    );
+    expect((document.paragraphs[0]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("assigns an RTF page symbol before a table to the table frame", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi Before\par\page\trowd\cellx1440\intbl Cell\cell\row}`,
+  );
+  try {
+    const table = document
+      .GetNodes()
+      .getBodyContent()
+      .find((block) => block instanceof SwTableNode);
+    expect(table).toBeInstanceOf(SwTableNode);
+    expect(
+      (table?.GetTable().GetFrameFormat().GetAttrSet().Get(RES_BREAK) as SfxInt16Item).GetValue(),
+    ).toBe(4);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("flushes a table before applying a following RTF page symbol", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\trowd\cellx1440\intbl Cell\cell\row\page\pard After}`,
+  );
+  try {
+    const table = document.GetNodes().getBodyContent()[0];
+    expect(table).toBeInstanceOf(SwTableNode);
+    expect(document.paragraphs.map((paragraph) => paragraph.GetText())).toEqual(["After"]);
+    expect((document.paragraphs[0]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains consecutive RTF page symbols as separate page breaks", () => {
+  const document = read(String.raw`{\rtf1\ansi First\page\page Second}`);
+  try {
+    expect(document.paragraphs.map((paragraph) => paragraph.GetText())).toEqual([
+      "First",
+      "",
+      "Second",
+    ]);
+    expect((document.paragraphs[1]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+    expect((document.paragraphs[2]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("materializes a later RTF page section on its first paragraph", () => {
   const document = read(
     String.raw`{\rtf1\ansi\paperw12000\paperh16000 First\par\sect\sectd\pgwsxn14000\marglsxn900\pgnstarts7\pgnrestart\sbkpage Second\par Third}`,
