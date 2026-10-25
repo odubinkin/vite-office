@@ -4,7 +4,7 @@ title: "Connect native AutoSum and formula-bar input actions"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 37
+revision: 38
 origin:
   system: "manual"
 depends_on:
@@ -24,6 +24,24 @@ verification:
   updated_by: "CODER"
   note: "Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-25T05:24:50.803Z"
+  updated_by: "EVALUATOR"
+  note: "Committed native AutoSum and formula-input slice accepted;all-app19124cases with successful related repairs,current raw100 and full actual source/registry gates verified."
+  evaluated_sha: "5fd168ba8d94c4eae1b836602cc9a42f5e31a310"
+  blueprint_digest: "3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469"
+  evidence_refs:
+    - ".agentplane/tasks/202610222022-3D9WX6/README.md"
+    - ".agentplane/tasks/202610222022-3D9WX6/quality/20261025-052450803-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610222022-3D9WX6/quality/20261025-052450803-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610222022-3D9WX6/quality/20261025-052450803-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610222022-3D9WX6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610222022-3D9WX6/evidence/progress-visible-autosum/manifest.json"
+    - ".agentplane/tasks/202610222108-KVGGCR/evidence/final-all-app-tests/manifest.json"
+    - ".agentplane/tasks/202610222108-KVGGCR/evidence/final-shared-reference-acceptance/manifest.json"
+  findings:
+    - "Current UI source matches committed f60431bc2690;actual shared-style Sum/Formula,rectangle/history/input selection and ODS browser/Worker evidence reviewed on completed76foundation. Strict source/map/counter100proof retained with original failures and successful rechecks;no changed thresholds or timeout limits."
 commit:
   hash: "f60431bc26904df18137c2d578abf8faaf094aa2"
   message: "✨ 3D9WX6 calc: connect native block AutoSum and retain input selection"
