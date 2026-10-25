@@ -22,6 +22,7 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import {
+  RES_BREAK,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -58,6 +59,8 @@ export class RtfAttributeOutput {
       paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
         ? paragraph.GetParagraphTextLeftMargin()
         : 0,
+      (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
+      false,
     );
   }
 
@@ -77,6 +80,8 @@ export class RtfAttributeOutput {
       items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
         ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
         : 0,
+      (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
+      true,
     );
   }
 
@@ -92,6 +97,8 @@ export class RtfAttributeOutput {
     widows: SfxInt16Item,
     tabs: SvxTabStopItem,
     tabOffset: number,
+    breakValue: number,
+    styleDefinition: boolean,
   ): string {
     let output =
       alignment === "center"
@@ -123,6 +130,7 @@ export class RtfAttributeOutput {
       else if (adjust === SvxTabAdjust.Decimal) output += "\\tqdec";
       output += `\\tx${tab.GetTabPos() + tabOffset}`;
     }
+    if (breakValue === 4 || (styleDefinition && breakValue === 6)) output += "\\pagebb";
     return output;
   }
 

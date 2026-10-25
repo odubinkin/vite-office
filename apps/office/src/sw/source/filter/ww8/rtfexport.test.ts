@@ -35,6 +35,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
+  RES_BREAK,
 } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -207,6 +208,27 @@ it("retains explicit native tab stops in an RTF named paragraph style", () => {
     expect(result.Count()).toBe(1);
     expect(result.At(0).GetTabPos()).toBe(900);
     expect(result.At(0).GetAdjustment()).toBe(SvxTabAdjust.Center);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("emits native page-before break controls and preserves the source first-run import rule", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing first paragraph.");
+  first.SetText("First");
+  first.SetAttr(new SfxInt16Item(RES_BREAK, 4));
+  const second = source.nodes.MakeTextNode("Second");
+  second.SetAttr(new SfxInt16Item(RES_BREAK, 4));
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes).match(/\\pagebb/gu)).toHaveLength(2);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect((imported.paragraphs[0]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
+    expect((imported.paragraphs[1]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
   } finally {
     imported?.Dispose();
     source.Dispose();

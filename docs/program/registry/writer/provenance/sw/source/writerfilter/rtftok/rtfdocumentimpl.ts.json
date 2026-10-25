@@ -13,7 +13,7 @@
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, keep/split/widow behavior, absolute tab-stop positions and document default tab distance, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and direct cell vertical alignment/border/padding controls, plus HYPERLINK field results into canonical Writer nodes and items; listtext fallback groups are skipped."
+      "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, keep/split/widow and page-before behavior, absolute tab-stop positions and document default tab distance, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and direct cell vertical alignment/border/padding controls, plus HYPERLINK field results into canonical Writer nodes and items; listtext fallback groups are skipped."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, sections and embedded objects remain unverified."
@@ -35,6 +35,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
           "marker": "imports RTF absolute tab positions"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses upstream flag presence"
         }
       ],
       "upstream": [

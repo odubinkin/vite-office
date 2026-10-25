@@ -17,10 +17,11 @@
       "RtfAttributeOutput::ParaSplit",
       "RtfAttributeOutput::ParaWidows",
       "RtfAttributeOutput::ParaTabStop",
+      "RtfAttributeOutput::PageBreakBefore",
       "RtfAttributeOutput::OutputCharCrossedOut"
     ],
     "preservedResponsibilities": [
-      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, keep/split/widow behavior, tab alignment/leader/position, strikeout and escapement."
+      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."

@@ -17,6 +17,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
+  RES_BREAK,
 } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
@@ -94,6 +95,24 @@ it("applies the RTF default tab distance through the native document item pool",
   } finally {
     explicit.Dispose();
     implicit.Dispose();
+  }
+});
+
+it("uses upstream flag presence for keep, spacing and page-before controls", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\pagebb0 Ignored\\par\\pard\\contextualspace0\\keepn0\\keep0\\widctlpar0\\pagebb0 Kept}",
+  );
+  try {
+    const first = document.paragraphs[0];
+    const second = document.paragraphs[1];
+    expect((first?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
+    expect((second?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
+    expect((second?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect((second?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
+    expect((second?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(2);
+    expect((second?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
+  } finally {
+    document.Dispose();
   }
 });
 

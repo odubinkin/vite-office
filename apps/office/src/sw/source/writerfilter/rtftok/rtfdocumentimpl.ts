@@ -18,6 +18,7 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import {
+  RES_BREAK,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -77,6 +78,7 @@ interface RtfParagraphState {
   tabStops: readonly SvxTabStop[];
   tabAdjustment: SvxTabAdjust;
   tabFill: string;
+  pageBreakBefore: boolean;
   alignmentSet?: boolean;
   leftSet?: boolean;
   rightSet?: boolean;
@@ -88,6 +90,7 @@ interface RtfParagraphState {
   keepTogetherSet?: boolean;
   widowControlSet?: boolean;
   tabStopsSet?: boolean;
+  pageBreakBeforeSet?: boolean;
   styleIndex?: number;
   listOverride?: number;
   listLevel: number;
@@ -185,6 +188,7 @@ const DEFAULT_PARAGRAPH: RtfParagraphState = {
   tabStops: [],
   tabAdjustment: SvxTabAdjust.Left,
   tabFill: " ",
+  pageBreakBefore: false,
   listLevel: 0,
 };
 const SKIPPED_DESTINATIONS = new Set([
@@ -317,6 +321,7 @@ export class RtfDocumentImpl {
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
   private defaultTabStop = 720;
+  private firstRun = true;
 
   /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
@@ -590,6 +595,8 @@ export class RtfDocumentImpl {
     if (paragraph.state.widowControlSet)
       node.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.state.widowControl ? 2 : 0));
     if (paragraph.state.tabStopsSet) node.SetAttr(createRtfTabStops(paragraph.state.tabStops));
+    if (paragraph.state.pageBreakBeforeSet)
+      node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
@@ -834,6 +841,15 @@ export class RtfDocumentImpl {
     if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
     if (name === "deftab" && parameter !== undefined) {
       this.defaultTabStop = parameter;
+      return;
+    }
+    if (name === "pagebb") {
+      if (!this.firstRun)
+        state.paragraph = {
+          ...state.paragraph,
+          pageBreakBefore: true,
+          pageBreakBeforeSet: true,
+        };
       return;
     }
     if (name === "trowd") {
@@ -1083,19 +1099,19 @@ export class RtfDocumentImpl {
     else if (name === "sa" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, after: Math.max(0, parameter), afterSet: true };
     else if (name === "contextualspace")
-      state.paragraph = { ...state.paragraph, contextual: parameter !== 0, contextualSet: true };
+      state.paragraph = { ...state.paragraph, contextual: true, contextualSet: true };
     else if (name === "keepn")
-      state.paragraph = { ...state.paragraph, keepNext: parameter !== 0, keepNextSet: true };
+      state.paragraph = { ...state.paragraph, keepNext: true, keepNextSet: true };
     else if (name === "keep")
       state.paragraph = {
         ...state.paragraph,
-        keepTogether: parameter !== 0,
+        keepTogether: true,
         keepTogetherSet: true,
       };
     else if (name === "widctlpar" || name === "nowidctlpar")
       state.paragraph = {
         ...state.paragraph,
-        widowControl: name === "widctlpar" && parameter !== 0,
+        widowControl: name === "widctlpar",
         widowControlSet: true,
       };
     else if (name === "tqr" || name === "tqc" || name === "tqdec")
@@ -1130,6 +1146,7 @@ export class RtfDocumentImpl {
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */
   private AppendText(value: string, state: RtfState): void {
     if (value.length === 0) return;
+    this.firstRun = false;
     if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
     const previous = this.runs.at(-1);
     if (
@@ -1151,6 +1168,7 @@ export class RtfDocumentImpl {
 
   /** Completes a paragraph at native \par or document end. @param state - Current group. */
   private CommitParagraph(state = this.states.at(-1)): void {
+    this.firstRun = false;
     const paragraph: RtfParagraph = {
       runs: this.runs.splice(0),
       state: { ...(state?.paragraph ?? DEFAULT_PARAGRAPH) },
