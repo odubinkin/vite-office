@@ -1,4 +1,6 @@
 /** @fileoverview Native document page-collection operations from docdesc.cxx; existing browser geometry ingress remains an explicit boundary. */
+import { SwTextGridItem } from "../../../inc/tgrditem";
+import { RES_TEXTGRID } from "../../../inc/hintids";
 import type { SwDoc } from "./doc";
 import {
   SwPageDesc,
@@ -62,4 +64,26 @@ export function ChgPageDesc(
   descriptor.SetValue(value);
   document.NotifyModelChange({ kind: "page-descriptor-changed" });
   return true;
+}
+
+/** Original document grid mode reads the real pool default. @param document - Owning document. @returns Squared mode. */
+export function IsSquaredPageMode(document: SwDoc): boolean {
+  return (document.GetDefault(RES_TEXTGRID) as SwTextGridItem).IsSquaredMode();
+}
+/** Original mode changes initialize the pool default, then only master and left page frames. Authored first-page frames are deliberately excluded. @param document - Owning document. @param squared - Target mode. @returns Nothing. */
+export function SetDefaultPageMode(document: SwDoc, squared: boolean): void {
+  if (!squared === !IsSquaredPageMode(document)) return;
+  const grid = new SwTextGridItem(document.GetDefault(RES_TEXTGRID) as SwTextGridItem);
+  grid.SetSquaredMode(squared);
+  grid.Init();
+  document.SetDefault(grid);
+  for (let index = 0; index < document.GetPageDescCnt(); ++index) {
+    const page = document.GetPageDesc(index),
+      master = page.GetMaster(),
+      left = page.GetLeft(),
+      item = new SwTextGridItem(master.GetTextGrid());
+    item.SwitchPaperMode(squared);
+    master.SetFormatAttr(item);
+    left.SetFormatAttr(item);
+  }
 }

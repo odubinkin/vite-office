@@ -1,5 +1,25 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import { SfxItemIter } from "../../../../svl/inc/itemiter";
+import { BroadcastingModify } from "../../../inc/calbck";
+import { SwAttrSet } from "../attr/swatrset";
+import { SwUndoFormatAttr, SwUndoDefaultAttr } from "../undo/unattr";
+import { AttrSetChangeHint, SwAttrSetChg, SwFormatChangeHint } from "../../../inc/hints";
+import { SwContentNode } from "../docnode/node";
+import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
+import {
+  isDrawingLayerAttribute,
+  RES_CHRATR_BEGIN,
+  RES_TXTATR_END,
+  RES_PARATR_BEGIN,
+  RES_PARATR_LIST_END,
+  RES_FRMATR_BEGIN,
+  RES_FRMATR_END,
+  RES_GRFATR_BEGIN,
+  RES_GRFATR_END,
+  RES_BOXATR_BEGIN,
+  RES_BOXATR_END,
+} from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
@@ -32,7 +52,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { SwNumRuleItem } from "../para/paratr";
 import type { SwFormatPageDesc } from "../attr/fmtpdsc";
-import type { SwTextFormatColl } from "./fmtcol";
+import { SwTextFormatColl, isWriterParagraphStyle } from "./fmtcol";
 import type { SwNumRule } from "./number";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -251,4 +271,174 @@ export function ResetPoolItem(document: SwDoc, range: SwPaM, which: number): voi
       );
     } else node.ResetAttr(which);
   }
+}
+
+/** Copies absent custom style ownership with native parent/follow/direct-item and manual-rule handling. @param document - Owning document. @param source - Source collection. @returns Destination collection; the existing builtin identity adapter is retained. */
+export function CopyTextColl(document: SwDoc, source: SwTextFormatColl): SwTextFormatColl {
+  if (isWriterParagraphStyle(source.id)) return document.GetTextFormatColl(source.id);
+  const existing = document.FindTextFormatCollByName(source.GetName());
+  if (existing !== undefined) return existing;
+  const sourceParent = source.DerivedFrom();
+  const parent =
+    sourceParent instanceof SwTextFormatColl
+      ? document.CopyTextColl(sourceParent)
+      : document.GetDfltTextFormatColl();
+  const completed = document.FindTextFormatCollByName(source.GetName());
+  if (completed !== undefined) return completed;
+  const copied = document.MakeTextFormatColl(source.GetName(), parent, source.id);
+  copied.SetFormatAttrSet(source.GetAttrSet());
+  if (source.IsAssignedToListLevelOfOutlineStyle())
+    copied.AssignToListLevelOfOutlineStyle(source.GetAssignedOutlineStyleLevel());
+  const follow = source.GetNextTextFormatColl();
+  if (follow !== source) copied.SetNextTextFormatColl(document.CopyTextColl(follow));
+  const ruleName = (
+    source.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as SwNumRuleItem | undefined
+  )?.GetValue();
+  const rule =
+    ruleName === undefined || ruleName === ""
+      ? undefined
+      : source.GetAttrSet().GetDoc().FindNumRulePtr(ruleName);
+  if (rule !== undefined && !rule.IsAutoRule() && source.GetAttrSet().GetDoc() !== document) {
+    const destinationRule = document.FindNumRulePtr(rule.GetName());
+    if (destinationRule === undefined) document.AddNumRule(rule);
+    else destinationRule.Invalidate();
+  }
+  return copied;
+}
+
+/** Original ChgFormat stores explicit INVALID markers for newly introduced identities before the format mutation. @param document - Owning document. @param format - Represented paragraph collection. @param set - Incoming set. @returns Nothing. */
+export function ChgFormat(document: SwDoc, format: SwTextFormatColl, set: SfxItemSet): void {
+  if (document.GetUndoManager().DoesUndo()) {
+    const added = new SfxItemSet(set);
+    added.Differentiate(format.GetAttrSet());
+    const old = new SfxItemSet(format.GetAttrSet());
+    old.PutSet(added);
+    for (const iterator = new SfxItemIter(added); !iterator.IsAtEnd(); iterator.Next())
+      old.InvalidateItem(iterator.GetCurItem().Which());
+    document.GetUndoManager().AddUndoAction(new SwUndoFormatAttr(old, format));
+  }
+  format.SetFormatAttrSet(set);
+}
+
+/** Native traversal visits inherited authored items too, first content-node order then style-table order; duplicate shared items are deliberately visited repeatedly. @param document - Owning document. @param callback - Native visitor with early-stop result. @returns Nothing. */
+export function ForEachParaAtrTabStopItem(
+  document: SwDoc,
+  callback: (item: SvxTabStopItem) => boolean,
+): void {
+  const count = document.GetNodes().entries().length;
+  for (let index = 0; index < count; ++index) {
+    const node = document.GetNodes().at(index);
+    if (node instanceof SwContentNode && node.HasSwAttrSet()) {
+      const item = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_TABSTOP) as
+        SvxTabStopItem | undefined;
+      if (item && !callback(item)) return;
+    }
+  }
+  for (const format of document.GetTextFormatColls()) {
+    const item = format.GetAttrSet().GetItemIfSet(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
+    if (item && !callback(item)) return;
+  }
+}
+
+/** Original default-tab-stop mutation keeps its strict increment/removal boundary and reports true for any nonempty unequal-width input. @param oldWidth - Previous default width. @param newWidth - New default width. @param tabs - Actual authored native item. @returns Native change flag. */
+export function lcl_SetNewDefTabStops(
+  oldWidth: number,
+  newWidth: number,
+  tabs: SvxTabStopItem,
+): boolean {
+  const count = tabs.Count();
+  if (!count || oldWidth === newWidth) return false;
+  let index = count;
+  for (; index; --index) if (tabs.At(index - 1).GetAdjustment() !== SvxTabAdjust.Default) break;
+  ++index;
+  if (index < count) tabs.Remove(index, count - index);
+  return true;
+}
+
+/** Original SetDefault updates real pool defaults, temporarily registers the real default formats and sends original old/new hints. @param document - Owning document. @param source - Borrowed item or set. @returns Nothing. */
+export function SetDefault(document: SwDoc, source: SfxPoolItem | SfxItemSet): void {
+  if (!(source instanceof SfxItemSet)) {
+    const set = new SfxItemSet(document.GetAttrPool(), [[source.Which(), source.Which()]]);
+    set.Put(source);
+    SetDefault(document, set);
+    return;
+  }
+  if (!source.Count()) return;
+  const notify = new BroadcastingModify(),
+    pool = document.GetAttrPool(),
+    old = new SwAttrSet(pool, source.GetRanges()),
+    next = new SwAttrSet(pool, source.GetRanges()),
+    secondary = pool.GetSecondaryPool();
+  try {
+    for (const iterator = new SfxItemIter(source); !iterator.IsAtEnd(); iterator.Next()) {
+      const item = iterator.GetCurItem(),
+        which = item.Which();
+      let checkSecondary = false;
+      old.Put(pool.GetUserOrPoolDefaultItem(which));
+      pool.SetUserDefaultItem(item);
+      next.Put(pool.GetUserOrPoolDefaultItem(which));
+      if (which >= RES_CHRATR_BEGIN && which < RES_TXTATR_END) {
+        notify.Add(document.GetDfltTextFormatColl());
+        notify.Add(document.GetDfltCharFormat());
+        checkSecondary = secondary !== null;
+      } else if (which >= RES_PARATR_BEGIN && which < RES_PARATR_LIST_END) {
+        notify.Add(document.GetDfltTextFormatColl());
+        checkSecondary = secondary !== null;
+      } else if (which >= RES_GRFATR_BEGIN && which < RES_GRFATR_END) {
+        notify.Add(document.GetDfltGrfFormatColl());
+      } else if (
+        (which >= RES_FRMATR_BEGIN && which < RES_FRMATR_END) ||
+        isDrawingLayerAttribute(which)
+      ) {
+        notify.Add(document.GetDfltGrfFormatColl());
+        notify.Add(document.GetDfltTextFormatColl());
+        notify.Add(document.GetDfltFrameFormat());
+      } else if (which >= RES_BOXATR_BEGIN && which < RES_BOXATR_END)
+        notify.Add(document.GetDfltFrameFormat());
+      if (checkSecondary) {
+        const slot = pool.GetSlotId(which);
+        if (slot !== 0 && slot !== which) {
+          const target = (secondary as NonNullable<typeof secondary>).GetWhichIDFromSlotID(slot);
+          if (target !== 0 && target !== slot) {
+            const copy = item.Clone() as SfxPoolItem;
+            copy.SetWhich(target);
+            (secondary as NonNullable<typeof secondary>).SetUserDefaultItem(copy);
+          }
+        }
+      }
+    }
+    if (next.Count() && notify.HasWriterListeners()) {
+      if (document.GetUndoManager().DoesUndo())
+        document.GetUndoManager().AddUndoAction(new SwUndoDefaultAttr(old, document));
+      const tabs = next.GetItemIfSet(RES_PARATR_TABSTOP, false) as SvxTabStopItem | undefined;
+      if (tabs && tabs.Count()) {
+        const newWidth = tabs.At(0).GetTabPos(),
+          oldWidth = (old.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos();
+        let changed = false;
+        ForEachParaAtrTabStopItem(
+          document,
+          /** Mutates each original visited item with native non-short-circuit accumulation. @param item - Borrowed item. @returns Continue. */ (
+            item,
+          ) => {
+            changed = lcl_SetNewDefTabStops(oldWidth, newWidth, item) || changed;
+            return true;
+          },
+        );
+        next.ClearItem(RES_PARATR_TABSTOP);
+        old.ClearItem(RES_PARATR_TABSTOP);
+        if (changed)
+          notify.CallSwClientNotify(
+            new SwFormatChangeHint(document.GetDfltCharFormat(), document.GetDfltCharFormat()),
+          );
+      }
+    }
+    if (next.Count() && notify.HasWriterListeners())
+      notify.CallSwClientNotify(
+        new AttrSetChangeHint(new SwAttrSetChg(old, old), new SwAttrSetChg(next, next)),
+      );
+  } finally {
+    notify.RemoveAllWriterListeners();
+    notify.DisposeModify();
+  }
+  document.GetDocumentStateManager().SetModified();
 }

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/unomap.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/unomap.ts",
+          "marker": "WID_DOC_DEFAULT_PAGE_MODE"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/unomap.hxx",
+          "marker": "WID_DOC_DEFAULT_PAGE_MODE"
+        }
+      ]
+    },
+    "upstreamPath": "sw/inc/unomap.hxx",
+    "localSymbols": [
+      "WID_DOC_DEFAULT_PAGE_MODE"
+    ],
+    "upstreamSymbols": [
+      "WID_DOC_DEFAULT_PAGE_MODE"
+    ],
+    "preservedResponsibilities": [
+      "Original WID_DOC_DEFAULT_PAGE_MODE1069 is a document UNO dispatch identity, separate from pooled Writer WhichIds. It selects actual document mode access without a fabricated pool item."
+    ],
+    "omittedResponsibilities": [
+      "Complete native ABI/debug bookkeeping and broader document/filter parity are not claimed."
+    ]
+  }
+}

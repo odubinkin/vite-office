@@ -1,4 +1,8 @@
 /** @fileoverview Consumed SwXTextDocument text/style/service suppliers from pinned sw/source/uibase/uno/unotxdoc.cxx. No browser/shell lifecycle state enters SwDoc. */
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
+import { SwUnoTextDocumentPropertyMap, createPropertySetInfo } from "../../core/unocore/unomap";
+import { unknown } from "../../core/unocore/unocrsrhelper";
 import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 
 import { SwXBookmark } from "../../core/unocore/unobkm";
@@ -21,6 +25,37 @@ export class SwXTextDocument {
   GetDoc(): SwDoc {
     if (!this.valid) invalid("Text document is disposed");
     return this.doc;
+  }
+  /** Publishes admitted native document properties, separately from paragraph/cursor maps. @returns Property metadata. */
+  getPropertySetInfo(): ReturnType<typeof createPropertySetInfo> {
+    this.GetDoc();
+    return createPropertySetInfo(
+      [...SwUnoTextDocumentPropertyMap].map(
+        /** Publishes original document property metadata. @param entry - Property and entry. @returns Metadata pair. */ ([
+          name,
+          entry,
+        ]) => [name, entry.type] as const,
+      ),
+      false,
+    );
+  }
+  /** Original document page-mode getter. @param name - Native property name. @returns Owned Any. */
+  getPropertyValue(name: OUStringConstReference): Any {
+    const doc = this.GetDoc(),
+      property = text(name);
+    if (SwUnoTextDocumentPropertyMap.get(property)?.which !== WID_DOC_DEFAULT_PAGE_MODE)
+      unknown(property);
+    return new Any(doc.IsSquaredPageMode());
+  }
+  /** Original page-mode setter intentionally ignores failed bool extraction and uses false. @param name - Native property name. @param value - Borrowed Any. @returns Nothing. */
+  setPropertyValue(name: OUStringConstReference, value: Any): void {
+    const doc = this.GetDoc(),
+      property = text(name);
+    if (SwUnoTextDocumentPropertyMap.get(property)?.which !== WID_DOC_DEFAULT_PAGE_MODE)
+      unknown(property);
+    const mode: [boolean] = [false];
+    value.extract(mode, "bool");
+    doc.SetDefaultPageMode(mode[0]);
   }
   /** Borrows the native parent text owner. @returns The represented native operation result. */
   getText(): SwXText {

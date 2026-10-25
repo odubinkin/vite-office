@@ -172,3 +172,11 @@ pinned-expression guard proves numeric identity; recorded native probes prove
 the represented behavioral sequences. Native pooled-default flags are asserted
 through pool ownership tests, while value comparisons use the items' native
 `equals` contracts rather than comparing allocation/default bookkeeping fields.
+
+### Document default attributes and page-mode prerequisite (V4DQJW)
+
+The real SwDoc now owns native GetDefault/SetDefault and SetDefaultPageMode paths. Updates retain original item-category routing, temporary default-format registrations, secondary pool slot translation, original node/style tab traversal and typed old/new hints. SwUndoDefaultAttr swaps captured defaults through the actual default text format; tab defaults retain their independent swap. ChgFormat uses original INVALID markers for new items and SwUndoFormatAttrHelper captures reverse deltas, replacing the earlier snapshot/reset-mask path. CopyTextColl resides in the original docfmt implementation responsibility.
+
+The admitted document UNO property is DefaultPageMode with original dispatch identity1069, independent of pooled WhichIds. Actual Any bool extraction, including its false fallback, is retained. New SfxItemIter reads the real direct item map including INVALID/DISABLED states; native unordered order is not promised. Browser Map iteration, exceptions for native invalid-iterator preconditions, GC ownership and shell modified-state forwarding are explicit host bindings. No duplicate default state or tab registry is introduced.
+
+WRITER103–105 document the preserved page-frame/undo asymmetry, tab-removal/change-report behavior and failed-bool fallback. Targeted actual-model tests cover these paths, typed defaults, repeated undo/redo and listener cleanup. This remains a prerequisite: SectionPropertyMap, document/style loading, DOCX export and production Open/download/reopen acceptance are pending. Anchor/drawing/table format undo and native style-pool operation broadcasts remain outside the current text-format admission; no complete native parity or functional DOCX import is claimed.

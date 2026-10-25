@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/itemiter.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/itemiter.ts",
+          "marker": "SfxItemIter"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/itemiter.hxx",
+          "marker": "SfxItemIter"
+        }
+      ]
+    },
+    "upstreamPath": "include/svl/itemiter.hxx",
+    "localSymbols": [
+      "SfxItemIter"
+    ],
+    "upstreamSymbols": [
+      "SfxItemIter",
+      "GetCurWhich",
+      "GetCurItem"
+    ],
+    "preservedResponsibilities": [
+      "Actual direct item map iteration includes SET/INVALID/DISABLED, native current key/item, next/null-at-end and optional output pointer state. JS MapIterator binds unordered native iteration; order is not promised. No copied item catalog, flattened parent projection or simulated debug iterator counter. Native invalid entry/end caller preconditions become explicit host errors."
+    ],
+    "omittedResponsibilities": [
+      "Complete native ABI/debug bookkeeping and broader document/filter parity are not claimed."
+    ]
+  }
+}

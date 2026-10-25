@@ -18,6 +18,11 @@ export class DocumentStateManager extends SwModify {
     this.CallSwClientNotify(hint);
   }
 
+  /** Native SetModified enters the existing document-to-shell lifecycle binding; the shell remains the sole browser modified-state owner. @returns Nothing. */
+  public SetModified(): void {
+    this.NotifyModelChange({ kind: "document-modified", modified: true });
+  }
+
   /** Runs one semantic Writer operation as a single notification transaction. @param mutation - Model mutation. @returns Mutation result. */
   public RunModelTransaction<Result>(mutation: () => Result): Result {
     return this.RunNotificationTransaction(mutation);

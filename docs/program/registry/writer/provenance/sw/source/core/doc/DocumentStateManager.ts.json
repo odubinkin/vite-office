@@ -8,6 +8,10 @@
         {
           "marker": "DocumentStateManager",
           "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+          "marker": "SetModified"
         }
       ],
       "upstream": [
@@ -19,13 +23,15 @@
     },
     "localPath": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
     "localSymbols": [
-      "DocumentStateManager"
+      "DocumentStateManager",
+      "SetModified"
     ],
     "omittedResponsibilities": [
       "Upstream responsibilities beyond the bounded DocumentStateManager implementation remain intentionally omitted."
     ],
     "preservedResponsibilities": [
-      "Owns Writer model revision state and batched SwModify notifications."
+      "Owns Writer model revision state and batched SwModify notifications.",
+      "V4DQJW document-default prerequisite ports native SetDefault/GetDefault, temporary real default-format listeners, secondary slot-copy admission, original tab-stop traversal/mutation, SetDefaultPageMode master/left conversion, and SwUndoDefaultAttr. ChgFormat now records actual INVALID deltas; SwUndoFormatAttrHelper captures reverse native notification sets, replacing the previous snapshot/reset mask. CopyTextColl moves unchanged to original docfmt responsibility. DefaultPageMode uses its document UNO dispatch identity1069 and original failed-bool-extraction false fallback, separately from pooled WhichIds. Native RAII cleanup binds to finally/actual client detach; Any uses actual typed source addresses. Shell modified state remains the existing browser lifecycle binding. Source-backed targeted tests are not compiled native differential evidence. Anchor/drawing/table format undo, style-pool operation broadcasts, complete default item families, SectionPropertyMap, document/style loading, DOCX export/Open/download and end-to-end parity remain pending. Prior semantic statuses and deliberate file UI/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/DocumentStateManager.cxx",

@@ -11,6 +11,7 @@ import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offap
 import * as H from "../../../inc/hintids";
 import * as M from "../../../../editeng/inc/memberids";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
+import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
 import * as Grid from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
 export interface SwUnoPropertyEntry {
@@ -30,6 +31,13 @@ export interface SwUnoPropertyEntry {
     | "pagedesc"
     | "break";
 }
+/** Original document-model property entry from unomap.cxx; special document dispatch never enters a pool item setter. */
+export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
+  string,
+  SwUnoPropertyEntry & { readonly type: UnoTypeArgument }
+> = new Map([
+  ["DefaultPageMode", { which: WID_DOC_DEFAULT_PAGE_MODE, member: 0, kind: "bool", type: "bool" }],
+]);
 /** Original page-style grid entries from unomap1.cxx, kept out of cursor/paragraph property maps. */
 export const SwUnoPageStylePropertyMap: ReadonlyMap<
   string,

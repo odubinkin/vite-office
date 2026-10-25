@@ -2,6 +2,8 @@
  * @fileoverview Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities.
  */
 
+import { XATTR_START, XATTR_END } from "../../svx/inc/xdef";
+
 /** First Writer character-format WhichId. */
 export const RES_CHRATR_BEGIN = 1 as const;
 
@@ -291,3 +293,14 @@ export const RES_PROTECT = 110 as const;
 
 /** Original cell number-format identity, RES_BOXATR_BEGIN. */
 export const RES_BOXATR_FORMAT = 160 as const;
+
+/** Original frame content index identity; undo never retains this potentially stale index. */
+export const RES_CNTNT = 105 as const;
+
+/** First identity after native pool attributes. */
+export const POOLATTR_END = 164 as const;
+
+/** Original drawing-layer admission deliberately uses the strict upper bound. @param which - Native identity. @returns Drawing-layer membership. */
+export function isDrawingLayerAttribute(which: number): boolean {
+  return XATTR_START <= which && XATTR_END > which;
+}

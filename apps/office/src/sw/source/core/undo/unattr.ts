@@ -1,4 +1,9 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
+import { SfxItemIter } from "../../../../svl/inc/itemiter";
+import { SwClient, type SwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { RES_PARATR_TABSTOP, RES_CNTNT, POOLATTR_END } from "../../../inc/hintids";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwTextFormatColl } from "../doc/fmtcol";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -434,42 +439,128 @@ export class SwUndoMoveLeftMargin extends SwUndo {
   }
 }
 
-/** Native ChgFormat history: old direct set plus newly introduced WhichIds, resolved by style name. */
+/** Native text-format history owns the old delta, including INVALID entries used by ChgFormat for newly authored items. */
 export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
-  private items: SfxItemSet;
-  private readonly which: readonly number[];
-  private readonly name: string;
-  /** Captures old direct items and the new-item reset mask. @param collection - Original format. @param set - Incoming direct set. @returns Nothing. */
-  public constructor(collection: SwTextFormatColl, set: SfxItemSet) {
+  public m_oOldSet: SfxItemSet | undefined;
+  private readonly m_sFormatName: string;
+  /** Original item-set rvalue or scalar constructor; the represented format family is paragraph collections. @param source - Transferred set or borrowed item. @param format - Original text collection. @returns Action. */
+  public constructor(source: SfxItemSet | SfxPoolItem, format: SwTextFormatColl) {
     super();
-    this.name = collection.GetName();
-    this.items = collection.GetAttrSet().Clone();
-    this.which = [
-      ...new Set(
-        [...this.items.entries(), ...set.entries()].map(
-          /** Retains complete native identity. @param item - Direct item. @returns WhichId. */
-          (item) => item.Which(),
-        ),
-      ),
-    ];
+    this.m_sFormatName = format.GetName();
+    this.m_oOldSet =
+      source instanceof SfxItemSet ? source : format.GetAttrSet().CloneAsValue(false);
+    if (!(source instanceof SfxItemSet)) this.m_oOldSet.Put(source);
+    // Original Init never retains a content-node index that can become stale.
+    this.m_oOldSet.ClearItem(RES_CNTNT);
   }
-  /** Returns the source operation label. @returns Label. */
+  /** Original PutAttr overwrites previously recorded values and excludes content indices. @param item - Borrowed old item. @param doc - Original owner. @returns Nothing. */
+  public PutAttr(item: SfxPoolItem, doc: SwDoc): void {
+    void doc;
+    if (item.Which() !== RES_CNTNT) this.m_oOldSet?.Put(item);
+  }
+  /** Retains the existing browser translation of this native undo operation. @returns Label. */
   public override GetComment(): string {
     return "Change Style Attributes";
   }
-  /** Swaps retained and live direct values like original UndoImpl. @param context - Current document. @returns Nothing. */
+  /** Applies the native old set and captures the reverse delta through original format notifications. @param context - Current document. @returns Nothing. */
   public override UndoWithContext(context: SwUndoRedoContext): void {
-    const collection = context.GetDoc().FindTextFormatCollByName(this.name);
-    if (collection === undefined) return;
-    const next = collection.GetAttrSet().Clone();
-    for (const which of this.which) {
-      const item = this.items.GetItemIfSet(which, false);
-      if (item === undefined) collection.ResetFormatAttr(which);
-      else collection.SetFormatAttr(item);
+    if (!this.m_oOldSet) return;
+    const format = context.GetDoc().FindTextFormatCollByName(this.m_sFormatName);
+    if (!format) return;
+    const helper = new SwUndoFormatAttrHelper(format);
+    try {
+      format.SetFormatAttrSet(this.m_oOldSet);
+      const undo = helper.GetUndo();
+      if (undo?.m_oOldSet) {
+        this.m_oOldSet = undo.m_oOldSet;
+        undo.m_oOldSet = undefined;
+      } else this.m_oOldSet.ClearItem();
+    } finally {
+      helper.Dispose();
     }
-    this.items = next;
   }
-  /** Original redo uses the same swap operation. @param context - Current document. @returns Nothing. */
+  /** Original redo calls the same operation. @param context - Current document. @returns Nothing. */
+  public override RedoWithContext(context: SwUndoRedoContext): void {
+    this.UndoWithContext(context);
+  }
+}
+
+/** Original text-format notification helper owns the captured SwUndoFormatAttr until its old set is transferred. */
+export class SwUndoFormatAttrHelper extends SwClient {
+  private m_pUndo: SwUndoFormatAttr | undefined;
+  /** Registers the actual client on the actual text collection. @param m_rFormat - Borrowed collection. @returns Helper. */
+  constructor(private readonly m_rFormat: SwTextFormatColl) {
+    super();
+    this.RegisterToModify(m_rFormat);
+  }
+  /** Borrows the captured native action. @returns Action or absence. */
+  GetUndo(): SwUndoFormatAttr | undefined {
+    return this.m_pUndo;
+  }
+  /** Original change and legacy-item callbacks retain native old-before-new admission. @param source - Notifying owner. @param hint - Original hint. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    void source;
+    if (hint.kind === "attr-set-change") {
+      if (!hint.m_pOld || !hint.m_pNew) return;
+      const set = hint.m_pOld.GetChgSet();
+      if (!this.m_pUndo) this.m_pUndo = new SwUndoFormatAttr(new SfxItemSet(set), this.m_rFormat);
+      else
+        for (const iterator = new SfxItemIter(set); !iterator.IsAtEnd(); iterator.Next())
+          this.m_pUndo.PutAttr(iterator.GetCurItem(), this.m_rFormat.GetDoc());
+      return;
+    }
+    if (hint.kind === "object-dying")
+      throw new Error("SwUndoFormatAttrHelper owner died during capture.");
+    if (hint.kind !== "legacy-modify" || !hint.m_pOld || !hint.m_pNew) return;
+    if (hint.m_pOld.Which() <= POOLATTR_END) {
+      if (!this.m_pUndo) this.m_pUndo = new SwUndoFormatAttr(hint.m_pOld, this.m_rFormat);
+      else this.m_pUndo.PutAttr(hint.m_pOld, this.m_rFormat.GetDoc());
+    }
+  }
+}
+
+/** Native default-attribute undo swaps via the default text collection's actual notification channel. */
+export class SwUndoDefaultAttr extends SfxUndoAction<SwUndoRedoContext> {
+  private m_oOldSet: SfxItemSet | undefined;
+  private m_pTabStop: SvxTabStopItem | undefined;
+  /** Original default undo captures tab stops separately because their values may be mutated in place. @param set - Old defaults. @param doc - Owning document. @returns Action. */
+  constructor(set: SfxItemSet, doc: SwDoc) {
+    super();
+    void doc;
+    const tabs = set.GetItemIfSet(RES_PARATR_TABSTOP, false) as SvxTabStopItem | undefined;
+    if (tabs) {
+      this.m_pTabStop = tabs.Clone();
+      if (set.Count() !== 1) this.m_oOldSet = new SfxItemSet(set);
+    } else this.m_oOldSet = new SfxItemSet(set);
+  }
+  /** Native default-attribute operation label. @returns Label. */
+  public override GetComment(): string {
+    return "Modify default values";
+  }
+  /** Original old-set notification transfer precedes the independent tab-stop swap. @param context - Current document. @returns Nothing. */
+  public override UndoWithContext(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc();
+    if (this.m_oOldSet) {
+      const helper = new SwUndoFormatAttrHelper(doc.GetDfltTextFormatColl());
+      try {
+        doc.SetDefault(this.m_oOldSet);
+        this.m_oOldSet = undefined;
+        const captured = helper.GetUndo();
+        if (captured?.m_oOldSet) {
+          this.m_oOldSet = captured.m_oOldSet;
+          captured.m_oOldSet = undefined;
+        }
+      } finally {
+        helper.Dispose();
+      }
+    }
+    if (this.m_pTabStop) {
+      const old = doc.GetDefault(RES_PARATR_TABSTOP).Clone() as SvxTabStopItem;
+      doc.SetDefault(this.m_pTabStop);
+      this.m_pTabStop = old;
+    }
+  }
+  /** Original redo reuses UndoImpl. @param context - Current document. @returns Nothing. */
   public override RedoWithContext(context: SwUndoRedoContext): void {
     this.UndoWithContext(context);
   }

@@ -1166,3 +1166,27 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sax/source/fastparser/fastparser.cxx`, `Entity::saveException`, `Entity::throwException` and `FastSaxParserImpl::parse`.
 - Observation: a consumer failure is saved without immediately stopping the remaining callbacks in the current16KiB block. Later failures are discarded, and the SAXParseException locator is read after the block, rather than captured at the first failing callback. The reported location may consequently differ from where the wrapped first failure arose. The continuation is explicitly intentional for fdo#81214; whether the diagnostic location causes a user-visible defect is unverified.
 - Preservation: retain first-failure selection, continued callbacks, null failed-start frames,16KiB checkpoints and current locator wrapping. Tests do not replace this behavior with immediate cancellation or the first-failure position.
+
+### WRITER103 — default page mode updates two frames and undo restores only the pool default
+
+- Source: pinned `sw/source/core/doc/docdesc.cxx`, `SwDoc::SetDefaultPageMode`; `sw/source/core/undo/unattr.cxx`, `SwUndoDefaultAttr::UndoImpl`.
+- Observation: the mode setter changes the pool default, then directly converts each descriptor's master and left grid. It does not convert first-master or first-left grids. Default-attribute undo restores the pool item through `SetDefault`, without rerunning the page-mode setter, leaving authored master/left grid conversions in place. Valid document impact in the desktop application remains unverified.
+- Preservation: retain all four actual frame owners, the two-frame conversion and pool-only undo. The actual-model test checks authored first-page grids and repeated undo/redo without extending the undo scope.
+
+### WRITER104 — default-tab mutation retains one trailing default and reports change without removal
+
+- Source: pinned `sw/source/core/doc/docfmt.cxx`, `lcl_SetNewDefTabStops` and `SwDoc::SetDefault`; `sw/source/core/doc/doc.cxx`, `SwDoc::ForEachParaAtrTabStopItem`.
+- Observation: after finding the last non-default tab, the helper increments its index before removal, retaining the first trailing default. For every nonempty item with unequal old/new widths it reports true, even when no stop was removed. Traversal can visit the same inherited item through a node and its style; upstream explicitly notes that mutation of shared pooled items needs further consideration. Desktop impact remains unverified.
+- Preservation: retain the exact increment, unconditional true result, shared-item traversal and non-short-circuit accumulation. Tests cover repeated visits and unchanged-but-true calls; no unique-item registry or corrected removal boundary is introduced.
+
+### WRITER105 — failed document page-mode bool extraction changes mode to false
+
+- Source: pinned `sw/source/uibase/uno/unotxdoc.cxx`, `SwXTextDocument::setPropertyValue`, `WID_DOC_DEFAULT_PAGE_MODE` case.
+- Observation: the setter initializes a bool to false, ignores the result of Any extraction and calls `SetDefaultPageMode`. An incompatible value therefore sets false instead of raising a type error. Whether this is intended API behavior remains unverified.
+- Preservation: retain the failed-extraction false fallback and the separate document property dispatch identity. Tests use real typed Any values and actual pool/page owners.
+
+### WRITER106 — drawing attribute membership excludes the inclusive final attribute
+
+- Source: pinned `sw/inc/hintids.hxx`, `isDrawingLayerAttribute`; `include/svx/xdef.hxx`, `XATTR_END`.
+- Observation: XATTR_END aliases the inclusive XATTR_TEXT_LAST (XATTR_FORMTXTSHDWTRANSP,1047), while the predicate requires WhichId strictly less than XATTR_END. The final drawing attribute is therefore excluded from this predicate, including its default-format notification branch. Desktop impact remains unverified.
+- Preservation: retain the strict upper comparison and the original constants in their SVX owner. Boundary tests explicitly reject1047; no inclusive-end correction is introduced.

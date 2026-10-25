@@ -1,6 +1,14 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
-import { MakePageDesc, DelPageDesc, ChgPageDesc } from "./docdesc";
-import { SwUndoFormatAttr } from "../undo/unattr";
+import {
+  MakePageDesc,
+  DelPageDesc,
+  ChgPageDesc,
+  IsSquaredPageMode,
+  SetDefaultPageMode,
+} from "./docdesc";
+import { CopyTextColl, ChgFormat, SetDefault, ForEachParaAtrTabStopItem } from "./docfmt";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SwCharFormat } from "../../../inc/charfmt";
 import { SwGrfFormatColl } from "../../../inc/fmtcol";
 import { SwAttrPool } from "../attr/swatrset";
@@ -57,7 +65,7 @@ import { DocumentStateManager } from "./DocumentStateManager";
 import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
 import { createStyleManager } from "./swstylemanager";
 import type { IStyleAccess } from "../../../inc/istyleaccess";
-import { SwTextFormatColl, isWriterParagraphStyle, type WriterParagraphStyle } from "./fmtcol";
+import { SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import {
   RES_PARATR_NUMRULE,
   RES_PARATR_LIST_ID,
@@ -341,6 +349,26 @@ export class SwDoc {
   public ChgPageDesc(value: WriterPageDescriptorValue, target: number | string = 0): boolean {
     return ChgPageDesc(this, value, target);
   }
+  /** Native effective document default. @param which - Attribute identity. @returns Pool-owned item. */
+  public GetDefault(which: number): SfxPoolItem {
+    return this.attrPool.GetUserOrPoolDefaultItem(which);
+  }
+  /** Native default-attribute mutation and notification ownership. @param value - Item or set. @returns Nothing. */
+  public SetDefault(value: SfxPoolItem | SfxItemSet): void {
+    SetDefault(this, value);
+  }
+  /** Original document squared-page-mode predicate. @returns Mode. */
+  public IsSquaredPageMode(): boolean {
+    return IsSquaredPageMode(this);
+  }
+  /** Original document-wide grid-mode mutation. @param squared - Mode. @returns Nothing. */
+  public SetDefaultPageMode(squared: boolean): void {
+    SetDefaultPageMode(this, squared);
+  }
+  /** Native node/style traversal for authored tab-stop items. @param callback - Original early-stop visitor. @returns Nothing. */
+  public ForEachParaAtrTabStopItem(callback: (item: SvxTabStopItem) => boolean): void {
+    ForEachParaAtrTabStopItem(this, callback);
+  }
   /** Returns the injected output-device font resolver. @returns Device or undefined. */
   public GetDefaultFontDevice(): DefaultFontDevice | undefined {
     return this.defaultFontDevice;
@@ -474,9 +502,7 @@ export class SwDoc {
 
   /** Changes represented paragraph-format attributes with original ChgFormat history ownership. @param collection - Actual named format. @param set - Incoming direct items. @returns Nothing. */
   public ChgFormat(collection: SwTextFormatColl, set: SfxItemSet): void {
-    if (this.undoManager.DoesUndo())
-      this.undoManager.AddUndoAction(new SwUndoFormatAttr(collection, set));
-    collection.SetFormatAttrSet(set);
+    ChgFormat(this, collection, set);
   }
 
   /** Removes a named collection and corrects follow links before original format death. Used by creation undo with recording suppressed. @param collection - Owned non-default collection. @returns Nothing. */
@@ -489,37 +515,9 @@ export class SwDoc {
     this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: collection.GetName() });
   }
 
-  /** Copies absent custom style ownership with native parent/follow/direct-item and manual-rule handling. @param source - Source collection. @returns Destination collection; the existing builtin identity adapter is retained. */
+  /** Copies a paragraph style through the original docfmt owner. @param source - Source collection. @returns Destination collection. */
   public CopyTextColl(source: SwTextFormatColl): SwTextFormatColl {
-    if (isWriterParagraphStyle(source.id)) return this.GetTextFormatColl(source.id);
-    const existing = this.FindTextFormatCollByName(source.GetName());
-    if (existing !== undefined) return existing;
-    const sourceParent = source.DerivedFrom();
-    const parent =
-      sourceParent instanceof SwTextFormatColl
-        ? this.CopyTextColl(sourceParent)
-        : this.GetDfltTextFormatColl();
-    const completed = this.FindTextFormatCollByName(source.GetName());
-    if (completed !== undefined) return completed;
-    const copied = this.MakeTextFormatColl(source.GetName(), parent, source.id);
-    copied.SetFormatAttrSet(source.GetAttrSet());
-    if (source.IsAssignedToListLevelOfOutlineStyle())
-      copied.AssignToListLevelOfOutlineStyle(source.GetAssignedOutlineStyleLevel());
-    const follow = source.GetNextTextFormatColl();
-    if (follow !== source) copied.SetNextTextFormatColl(this.CopyTextColl(follow));
-    const ruleName = (
-      source.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as SwNumRuleItem | undefined
-    )?.GetValue();
-    const rule =
-      ruleName === undefined || ruleName === ""
-        ? undefined
-        : source.GetAttrSet().GetDoc().FindNumRulePtr(ruleName);
-    if (rule !== undefined && !rule.IsAutoRule() && source.GetAttrSet().GetDoc() !== this) {
-      const destinationRule = this.FindNumRulePtr(rule.GetName());
-      if (destinationRule === undefined) this.AddNumRule(rule);
-      else destinationRule.Invalidate();
-    }
-    return copied;
+    return CopyTextColl(this, source);
   }
   /** Adds a numbering rule. @param rule - Source rule. @returns Stored rule. */
   public GetUniqueNumRuleName(): string {

@@ -140,6 +140,14 @@
         {
           "path": "apps/office/src/sw/inc/hintids.ts",
           "marker": "RES_CHRATR_WORDLINEMODE"
+        },
+        {
+          "path": "apps/office/src/sw/inc/hintids.ts",
+          "marker": "RES_CNTNT"
+        },
+        {
+          "path": "apps/office/src/sw/inc/hintids.ts",
+          "marker": "POOLATTR_END"
         }
       ],
       "upstream": [
@@ -234,7 +242,10 @@
       "WRITER_TEXT_NODE_WHICH_RANGES",
       "WRITER_TEXT_FORMAT_COLL_WHICH_RANGES",
       "RES_CHRATR_WORDLINEMODE",
-      "RES_CHRATR_AUTOKERN"
+      "RES_CHRATR_AUTOKERN",
+      "RES_CNTNT",
+      "POOLATTR_END",
+      "isDrawingLayerAttribute"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted.",
@@ -263,7 +274,8 @@
       "Task014VCW connects original32 scalable font sizes and consumed absolute FontSizeBox numeric conversion/bounds to a shared editable browser combo and original toolbox float/status/focus/acceptance lifecycle. Actual SvxFontHeightItem PutValue handles float rounding and independent zero admission. Writer Grow/Shrink keeps40twip increments,19998 maximum, exact-bound disabling, unsigned32 arithmetic and all-script SetHeight reset. Real layout-absent BreakIterator/script-language/Which queries and source-ordered node/automatic-hint GetItemWithPaM contributions feed explicit native PaM edits with grouped history, preserving current cursor ownership. Writer consumed height-default registration now carries the original three slot IDs through its existing bounded Sfx registration boundary; complete native ItemInfoPackage registration remains separate. Full native font/device/relative/named-size/LanguageTag/ApplicationSettings/ScriptInfo/field expansion/character-style/merged/redline/readonly/services remain unverified. No existing classification/status/default or deliberate browser I/O/recovery policy is promoted. Portable evidence:109 current focused tests;24 executable owner source identities audited at S1665/B1245/F396/L1485 all100, with fresh changed counters and exact unchanged-span carry only;18 current-build Chromium Writer/Calc desktop/mobile scenarios including hotkeys, grouped history and physical ODT/ODS reopen. Related source tests and local gates are recorded in task014VCW. Native binary and omitted services remain unverified.",
       "V4DQJW adds original Which16/17 and admits them in each consumed node, paragraph-style and character-automatic-style range. Existing identities are unchanged.",
       "Task V4DQJW page-frame prerequisite replaces the geometry-only SwPageDesc state with four document-pool-owned SwFrameFormat owners, native usage flags, registered-name uniqueness and copy/follow behavior. SwTextGridItem retains native eleven-field defaults, typed UNO members and paper-mode arithmetic; page UNO properties use actual pooled items. Browser graph records retain all four direct item sets, independent frame names and optional native user grid defaults; legacy geometry ingress remains explicit. Consumed ItemInfoStatic/User metadata now serves registered pool defaults without inventing contiguous ranges. Complete frame-size codec is shared with tables; LR browser transport copies original raw scalar fields including propLeft/propRight through explicit host field access, avoiding proportional setter rescaling. This host serialization binding is local infrastructure, not native semantic certification. SectionPropertyMap/default-page-mode/document/style loading, DOCX export/Open/download and ODT grid serialization remain pending. Existing statuses and intentional recovery/autosave/file UI deviations are preserved.",
-      "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved."
+      "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved.",
+      "V4DQJW document-default prerequisite ports native SetDefault/GetDefault, temporary real default-format listeners, secondary slot-copy admission, original tab-stop traversal/mutation, SetDefaultPageMode master/left conversion, and SwUndoDefaultAttr. ChgFormat now records actual INVALID deltas; SwUndoFormatAttrHelper captures reverse native notification sets, replacing the previous snapshot/reset mask. CopyTextColl moves unchanged to original docfmt responsibility. DefaultPageMode uses its document UNO dispatch identity1069 and original failed-bool-extraction false fallback, separately from pooled WhichIds. Native RAII cleanup binds to finally/actual client detach; Any uses actual typed source addresses. Shell modified state remains the existing browser lifecycle binding. Source-backed targeted tests are not compiled native differential evidence. Anchor/drawing/table format undo, style-pool operation broadcasts, complete default item families, SectionPropertyMap, document/style loading, DOCX export/Open/download and end-to-end parity remain pending. Prior semantic statuses and deliberate file UI/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/hintids.hxx",

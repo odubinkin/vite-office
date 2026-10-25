@@ -76,6 +76,14 @@
         {
           "path": "apps/office/src/sw/source/core/edit/native-character-shell.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+          "marker": "SwUndoFormatAttrHelper"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+          "marker": "SwUndoDefaultAttr"
         }
       ],
       "upstream": [
@@ -109,7 +117,9 @@
     "localSymbols": [
       "SwUndoAttr",
       "SwUndoParagraphFormat",
-      "SwUndoMoveLeftMargin"
+      "SwUndoMoveLeftMargin",
+      "SwUndoFormatAttrHelper",
+      "SwUndoDefaultAttr"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwUndoAttr, SwUndoFormatAttrHelper::SwUndoFormatAttrHelper, SwUndoFormatAttrHelper::SwClientNotify, SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard and the bounded SwUndoAttr, SwUndoParagraphFormat contract remain intentionally omitted."
@@ -125,7 +135,8 @@
       "Task202610111910-XHQWW2 removes SwUndoAttr text replacement for represented direct attribute replay. Native unattr.cxx Undo restores history and redo inserts item sets without replacing text; the bounded action now derives changed ranged Which families from independent snapshots, clips/replaces only those families and retains unrelated actual INET owners and text. This prerequisite prevents direct bold formatting from splitting a single original hyperlink and preserves adjacent equal original owners through Undo/Redo. Complete native SwHistory/InsertItemSet, redlines and UI selection policy remain unverified; no status/default/classification/exception promotion. Source-independent fresh core/React/Chromium tests plus unchanged old acceptance cover the represented behavior.",
       "Task202610112051-JZ2G62 moves the represented single-INET GetPaMAttr query into native edattr ownership, retaining original SfxItemSet SET/default/INVALID states until dialog projection. Selected Remove admits native INVALID, resets actual marked body/cell/node/ring ranges and groups history once. SwUndoAttr.ApplyExact uses the existing initial operation callback to preserve original ring identities without restoring history cursors during execution. Full generic GetCurAttr, readonly/style/redline/frame branches, native SwUndoResetAttr/SwHistory and unmarked-ring Default/word/Push-Pop fallback remain unverified; no status/default/classification or registered IO/recovery promotion.",
       "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
-      "TaskN700C9 follow-up replaces display-stack state aggregation by consumed native GetParaAttr/GetPaMAttr ring/node traversal: default versus SET/INVALID, source partial-hint adjacency and collapsed DontExpand boundaries, original10000 limits and label skip. Complete-node edits use native direct character values with selective hint reset, registered SwRegHistory old/reset deltas and unchanged action preservation. Empty selected table cells and explicit marked zero-width attributes participate; zero-attribute Undo removes only the changed original family and retains adjacent values. Ordinary browser caret typing continues to use the existing native-item pending owner; full BreakIterator word/URL-expansion, general GetParaAttr character-style/merged/graphic/OLE services and complete document InsertItemSet history remain unverified. No status/default/classification promotion."
+      "TaskN700C9 follow-up replaces display-stack state aggregation by consumed native GetParaAttr/GetPaMAttr ring/node traversal: default versus SET/INVALID, source partial-hint adjacency and collapsed DontExpand boundaries, original10000 limits and label skip. Complete-node edits use native direct character values with selective hint reset, registered SwRegHistory old/reset deltas and unchanged action preservation. Empty selected table cells and explicit marked zero-width attributes participate; zero-attribute Undo removes only the changed original family and retains adjacent values. Ordinary browser caret typing continues to use the existing native-item pending owner; full BreakIterator word/URL-expansion, general GetParaAttr character-style/merged/graphic/OLE services and complete document InsertItemSet history remain unverified. No status/default/classification promotion.",
+      "V4DQJW document-default prerequisite ports native SetDefault/GetDefault, temporary real default-format listeners, secondary slot-copy admission, original tab-stop traversal/mutation, SetDefaultPageMode master/left conversion, and SwUndoDefaultAttr. ChgFormat now records actual INVALID deltas; SwUndoFormatAttrHelper captures reverse native notification sets, replacing the previous snapshot/reset mask. CopyTextColl moves unchanged to original docfmt responsibility. DefaultPageMode uses its document UNO dispatch identity1069 and original failed-bool-extraction false fallback, separately from pooled WhichIds. Native RAII cleanup binds to finally/actual client detach; Any uses actual typed source addresses. Shell modified state remains the existing browser lifecycle binding. Source-backed targeted tests are not compiled native differential evidence. Anchor/drawing/table format undo, style-pool operation broadcasts, complete default item families, SectionPropertyMap, document/style loading, DOCX export/Open/download and end-to-end parity remain pending. Prior semantic statuses and deliberate file UI/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/undo/unattr.cxx",

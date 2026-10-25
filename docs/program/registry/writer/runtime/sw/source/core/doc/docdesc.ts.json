@@ -18,14 +18,17 @@
       "evidence": [
         "apps/office/src/sw/source/core/doc/docdesc.ts#MakePageDesc",
         "apps/office/src/sw/source/core/doc/native-page-owner-lifetimes.test.ts",
-        "apps/office/src/sw/browser/filter/xml/writer-which-id-migration.test.ts"
+        "apps/office/src/sw/browser/filter/xml/writer-which-id-migration.test.ts",
+        "apps/office/src/sw/source/core/doc/docdesc.ts"
       ],
-      "justification": "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved.",
+      "justification": "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved. V4DQJW document-default prerequisite ports native SetDefault/GetDefault, temporary real default-format listeners, secondary slot-copy admission, original tab-stop traversal/mutation, SetDefaultPageMode master/left conversion, and SwUndoDefaultAttr. ChgFormat now records actual INVALID deltas; SwUndoFormatAttrHelper captures reverse native notification sets, replacing the previous snapshot/reset mask. CopyTextColl moves unchanged to original docfmt responsibility. DefaultPageMode uses its document UNO dispatch identity1069 and original failed-bool-extraction false fallback, separately from pooled WhichIds. Native RAII cleanup binds to finally/actual client detach; Any uses actual typed source addresses. Shell modified state remains the existing browser lifecycle binding. Source-backed targeted tests are not compiled native differential evidence. Anchor/drawing/table format undo, style-pool operation broadcasts, complete default item families, SectionPropertyMap, document/style loading, DOCX export/Open/download and end-to-end parity remain pending. Prior semantic statuses and deliberate file UI/autosave/recovery deviations remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "MakePageDesc",
         "DelPageDesc",
-        "ChgPageDesc"
+        "ChgPageDesc",
+        "SetDefaultPageMode",
+        "IsSquaredPageMode"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/core/doc/docdesc.cxx",
