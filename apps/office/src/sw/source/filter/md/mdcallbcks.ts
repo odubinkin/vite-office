@@ -9,8 +9,19 @@ const DEFAULT_ATTRIBUTES: WriterCharacterAttributes = {
   underline: false,
 };
 
-/** Converts represented md4c span events into native Writer run inputs. @param source - One Markdown inline body. @returns Styled text portions. */
-export function parseMarkdownSpans(source: string): readonly WriterTextRun[] {
+/** Resolves the md4c hyperlink callback through the supplied document base URL. */
+function resolveMarkdownLink(baseURL: string, target: string): string {
+  if (target.length === 0 || target.startsWith("#")) return target;
+  try {
+    return new URL(target, baseURL || undefined).href;
+  } catch {
+    // INetURLObject::GetAbsURL returns the original relative text on conversion failure.
+    return target;
+  }
+}
+
+/** Converts represented md4c span events into native Writer run inputs. @param source - One Markdown inline body. @param baseURL - Source document URL when available. @returns Styled text portions. */
+export function parseMarkdownSpans(source: string, baseURL = ""): readonly WriterTextRun[] {
   const runs: WriterTextRun[] = [];
   /** Appends a text callback with the current span stack. @param text - Visible text. @param attributes - Active direct attributes. @param url - Active hyperlink. */
   function append(text: string, attributes: WriterCharacterAttributes, url?: string): void {
@@ -51,7 +62,11 @@ export function parseMarkdownSpans(source: string): readonly WriterTextRun[] {
           if (end >= 0) {
             const target = text.slice(close + 2, end).trim();
             if (target.length > 0) {
-              visit(text.slice(offset + 1, close), attributes, target);
+              visit(
+                text.slice(offset + 1, close),
+                attributes,
+                resolveMarkdownLink(baseURL, target),
+              );
               offset = end + 1;
               continue;
             }

@@ -388,6 +388,43 @@ it("writes a page section before a table with its own page descriptor", () => {
   }
 });
 
+it("keeps distinct follow-page geometry out of a combined later RTF section", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("Before");
+    const first = source.MakePageDesc("New First", source.GetPageDesc());
+    source.ChgPageDesc({ ...first.GetValue(), width: 15000 }, "New First");
+    const follow = source.MakePageDesc("New Follow", source.GetPageDesc());
+    source.ChgPageDesc({ ...follow.GetValue(), width: 13000 }, "New Follow");
+    first.SetFollow(follow);
+    source.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("New First"));
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const laterSection = rtf.slice(rtf.indexOf(String.raw`\sect\sectd`));
+    expect(laterSection).toContain(String.raw`\pgwsxn15000`);
+    expect(laterSection).not.toContain(String.raw`\pgwsxn13000`);
+    expect(laterSection).not.toContain(String.raw`\titlepg`);
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("combines matching first/follow pages and advances the current section page", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("Before");
+    const first = source.MakePageDesc("New First", source.GetPageDesc());
+    const follow = source.MakePageDesc("New Follow", source.GetPageDesc());
+    first.SetFollow(follow);
+    source.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("New First"));
+    source.nodes.MakeTextNode("Follow").SetAttr(new SwFormatPageDesc("New Follow"));
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf.match(/\\sect\\sectd/gu)).toHaveLength(1);
+    expect(rtf.slice(rtf.indexOf(String.raw`\sect\sectd`))).toContain(String.raw`\titlepg`);
+  } finally {
+    source.Dispose();
+  }
+});
+
 it("keeps the source RTF section suppression when a page follows the previous page", () => {
   const source = createWriterDocument();
   try {

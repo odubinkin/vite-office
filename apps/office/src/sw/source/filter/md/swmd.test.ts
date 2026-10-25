@@ -24,7 +24,40 @@ it("imports headings and nested emphasis as native paragraph styles and hints", 
     expect(
       runs.some((run) => run.text === "italic" && run.attributes.bold && run.attributes.italic),
     ).toBe(true);
-    expect(runs.find((run) => run.text === "link")?.hyperlink?.url).toBe("https://example.test");
+    expect(runs.find((run) => run.text === "link")?.hyperlink?.url).toBe("https://example.test/");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("resolves Markdown hyperlink callbacks against the source document URL", () => {
+  const document = new MarkdownReader().Read(
+    new TextEncoder().encode(
+      "[Relative](images/chart.png) [Fragment](#detail) [Absolute](https://else.test/p)",
+    ),
+    {},
+    "https://example.test/docs/report.md",
+  );
+  try {
+    const links = projectWriterTextRuns(document.paragraphs[0])
+      .filter((run) => run.hyperlink !== undefined)
+      .map((run) => run.hyperlink?.url);
+    expect(links).toEqual([
+      "https://example.test/docs/images/chart.png",
+      "#detail",
+      "https://else.test/p",
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps relative Markdown links when the source medium has no URL", () => {
+  const document = read("[Local](images/chart.png)");
+  try {
+    expect(projectWriterTextRuns(document.paragraphs[0])[0]?.hyperlink?.url).toBe(
+      "images/chart.png",
+    );
   } finally {
     document.Dispose();
   }

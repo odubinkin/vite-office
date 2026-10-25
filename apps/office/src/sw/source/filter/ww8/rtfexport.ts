@@ -169,14 +169,17 @@ export class RtfExport {
         if (item !== undefined) {
           const page = document.FindPageDesc(item.GetPageDescName()) ?? currentPage;
           if (currentPage.GetFollow() !== page) {
+            const titlePage = this.IsSingleWordSectionPageChain(page);
             output += "\\sect\\sectd\\sectunlocked1";
-            output += this.WriteSectionPageDescription(page, false);
+            output += this.WriteSectionPageDescription(titlePage ? page.GetFollow() : page, false);
             const restart = item.GetNumOffset();
             if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
-            if (page.GetFollow() !== page) output += "\\titlepg";
+            if (titlePage) output += "\\titlepg";
             output += "\\sbkpage\n";
+            currentPage = titlePage ? page.GetFollow() : page;
+          } else {
+            currentPage = page;
           }
-          currentPage = page;
         }
       }
       if (block instanceof SwTableNode) {
@@ -289,7 +292,7 @@ export class RtfExport {
   /** Mirrors OutPageDescription for the currently represented physical page fields. */
   private WriteSectionPageDescription(page: SwPageDesc, titlePage = true): string {
     const follow = page.GetFollow();
-    const value = follow.GetValue();
+    const value = titlePage ? follow.GetValue() : page.GetValue();
     let output = "";
     if (value.landscape) output += "\\lndscpsxn";
     output += `\\pgwsxn${value.width}\\pghsxn${value.height}`;
@@ -299,6 +302,22 @@ export class RtfExport {
     if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
     if (titlePage && follow !== page) output += "\\titlepg";
     return output;
+  }
+
+  /** Projects the represented physical tests in IsPlausableSingleWordSection. */
+  private IsSingleWordSectionPageChain(page: SwPageDesc): boolean {
+    const follow = page.GetFollow();
+    if (follow === page || follow.GetFollow() !== follow) return false;
+    const first = page.GetValue(),
+      next = follow.GetValue();
+    return (
+      first.width === next.width &&
+      first.height === next.height &&
+      first.leftMargin === next.leftMargin &&
+      first.rightMargin === next.rightMargin &&
+      first.topMargin === next.topMargin &&
+      first.bottomMargin === next.bottomMargin
+    );
   }
 
   /** Reads the item set selected by upstream GetSwAttrSet for the initial page. */

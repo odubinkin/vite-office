@@ -6,6 +6,7 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import {
   createOdtFilterDocument,
   createInlineOdtFilterService,
@@ -40,6 +41,26 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
         operation: "open",
         state: "succeeded",
       });
+    } finally {
+      shell.Close();
+    }
+  });
+  it("passes a URL-backed Markdown medium to native hyperlink resolution", () => {
+    const shell = makeShell();
+    try {
+      const document = shell.OpenMarkdown(
+        new TextEncoder().encode("[Chart](assets/chart.png)"),
+        createDocument({ id: "linked-markdown", suiteId: "writer", title: "Linked Markdown" }),
+        {
+          kind: "input",
+          name: "https://example.test/docs/report.md",
+          filterId: "Markdown",
+          source: { kind: "external", reference: {} },
+        },
+      );
+      expect(projectWriterTextRuns(document.paragraphs[0])[0]?.hyperlink?.url).toBe(
+        "https://example.test/docs/assets/chart.png",
+      );
     } finally {
       shell.Close();
     }

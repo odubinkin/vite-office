@@ -119,12 +119,16 @@ export class SwDocShell extends SfxObjectShell {
     medium: SfxMediumInput,
   ): SwDoc {
     this.EnsureOpen();
-    const document = new MarkdownReader().Read(bytes, {
-      ...(this.defaultFontDevice === undefined
-        ? {}
-        : { defaultFontDevice: this.defaultFontDevice }),
-      locale: this.defaultLocale,
-    });
+    const document = new MarkdownReader().Read(
+      bytes,
+      {
+        ...(this.defaultFontDevice === undefined
+          ? {}
+          : { defaultFontDevice: this.defaultFontDevice }),
+        locale: this.defaultLocale,
+      },
+      URL.canParse(medium.name) ? medium.name : "",
+    );
     const state: SfxObjectShellState = Object.freeze({
       ...metadata,
       isModified: false,

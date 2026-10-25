@@ -13,7 +13,7 @@
       "MarkdownReader::Read"
     ],
     "preservedResponsibilities": [
-      "Reads represented Markdown blocks, including setext headings, indented code, multiline quotations and list nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables."
+      "Reads represented Markdown blocks, including setext headings, indented code, multiline quotations and list nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -23,6 +23,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "imports headings"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "resolves Markdown hyperlink callbacks"
         }
       ],
       "upstream": [

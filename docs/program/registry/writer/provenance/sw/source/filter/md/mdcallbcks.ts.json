@@ -13,7 +13,7 @@
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Maps represented emphasis, code, hyperlink and strikeout span callbacks into Writer text runs."
+      "Maps represented emphasis, code, hyperlink and strikeout span callbacks into Writer text runs, resolving relative hyperlink targets against a supplied document base URL while preserving fragment-only targets."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -23,6 +23,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "imports headings"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "resolves Markdown hyperlink callbacks"
         }
       ],
       "upstream": [

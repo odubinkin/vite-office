@@ -27,13 +27,13 @@ type MarkdownBlock =
 
 /** Reads Markdown bytes and installs represented source blocks into canonical Writer nodes. */
 export class MarkdownReader {
-  /** Imports one UTF-8 Markdown document. @param bytes - Source stream. @param options - Writer document environment. @returns Imported model. */
-  public Read(bytes: Uint8Array, options: SwDocOptions = {}): SwDoc {
+  /** Imports one UTF-8 Markdown document. @param bytes - Source stream. @param options - Writer document environment. @param baseURL - Source document URL when known. @returns Imported model. */
+  public Read(bytes: Uint8Array, options: SwDocOptions = {}, baseURL = ""): SwDoc {
     const text = new TextDecoder("utf-8", { fatal: true })
       .decode(bytes)
       .replaceAll("\r\n", "\n")
       .replaceAll("\r", "\n");
-    const blocks = new SwMarkdownParser().CallParser(text);
+    const blocks = new SwMarkdownParser(baseURL).CallParser(text);
     const document = new SwDoc(options);
     let useFirstParagraph = true;
     for (const block of blocks) {
@@ -51,7 +51,7 @@ export class MarkdownReader {
           for (const [index, cell] of row.entries()) {
             const node = line.GetTabBoxes()[index]?.GetParagraphs()[0];
             if (node === undefined) throw new Error("Markdown table cell is missing.");
-            applyMarkdownParagraph(node, { runs: parseMarkdownSpans(cell.text) });
+            applyMarkdownParagraph(node, { runs: parseMarkdownSpans(cell.text, baseURL) });
             node.SetParagraphAlignment(cell.alignment);
           }
         }
@@ -79,6 +79,9 @@ function applyMarkdownParagraph(node: SwTextNode, value: MarkdownParagraph): voi
 
 /** Parses represented md4c block callbacks into ordered Writer body blocks. */
 export class SwMarkdownParser {
+  /** Retains the source medium URL for hyperlink span callbacks. */
+  public constructor(private readonly baseURL = "") {}
+
   /** Calls the block parser once for one normalized source. @param source - Markdown text. @returns Ordered blocks. */
   public CallParser(source: string): readonly MarkdownBlock[] {
     const lines = source.split("\n"),
@@ -123,7 +126,7 @@ export class SwMarkdownParser {
         blocks.push({
           kind: "paragraph",
           value: {
-            runs: parseMarkdownSpans(content),
+            runs: parseMarkdownSpans(content, this.baseURL),
             style: `heading-${(heading[1] as string).length}`,
           },
         });
@@ -138,7 +141,7 @@ export class SwMarkdownParser {
         blocks.push({
           kind: "paragraph",
           value: {
-            runs: parseMarkdownSpans(line.trim()),
+            runs: parseMarkdownSpans(line.trim(), this.baseURL),
             style: setext[1]?.startsWith("=") ? "heading-1" : "heading-2",
           },
         });
@@ -211,7 +214,7 @@ export class SwMarkdownParser {
         blocks.push({
           kind: "paragraph",
           value: {
-            runs: parseMarkdownSpans(list[3] as string),
+            runs: parseMarkdownSpans(list[3] as string, this.baseURL),
             list: {
               kind,
               level,
@@ -235,7 +238,10 @@ export class SwMarkdownParser {
         }
         blocks.push({
           kind: "paragraph",
-          value: { runs: parseMarkdownSpans(contents.join("\n")), style: "quotations" },
+          value: {
+            runs: parseMarkdownSpans(contents.join("\n"), this.baseURL),
+            style: "quotations",
+          },
         });
         continue;
       }
@@ -249,7 +255,7 @@ export class SwMarkdownParser {
         paragraph.push((lines[offset++] as string).trimStart());
       blocks.push({
         kind: "paragraph",
-        value: { runs: parseMarkdownSpans(paragraph.join("\n").trimEnd()) },
+        value: { runs: parseMarkdownSpans(paragraph.join("\n").trimEnd(), this.baseURL) },
       });
     }
     if (blocks.length === 0) blocks.push({ kind: "paragraph", value: { runs: [] } });
