@@ -37,6 +37,8 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
@@ -115,6 +117,8 @@ interface RtfTableRow {
   readonly boundaries: readonly number[];
   readonly alignment: "left" | "center" | "right";
   readonly left: number;
+  readonly height: number;
+  readonly split: boolean;
 }
 
 const DEFAULT_CHARACTER: WriterCharacterAttributes = {
@@ -238,6 +242,8 @@ export class RtfDocumentImpl {
   private rowBoundaries: number[] = [];
   private rowAlignment: "left" | "center" | "right" = "left";
   private rowLeft = 0;
+  private rowHeight = 0;
+  private rowSplit = true;
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
@@ -313,6 +319,13 @@ export class RtfDocumentImpl {
         }
         for (const row of block.rows) {
           const line = document.nodes.AppendTableRow(table, row.cells.length);
+          if (row.height !== 0) {
+            const size = line.GetFrameFormat().GetFrameSize().Clone();
+            size.SetHeight(Math.abs(row.height));
+            size.SetHeightSizeType(row.height < 0 ? SwFrameSize.Fixed : SwFrameSize.Minimum);
+            line.GetFrameFormat().SetFormatAttr(size);
+          }
+          if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
           for (const [index, cell] of row.cells.entries()) {
             const box = line.GetTabBoxes()[index];
             if (box === undefined) throw new Error("RTF table cell is missing.");
@@ -662,6 +675,16 @@ export class RtfDocumentImpl {
       this.rowBoundaries = [];
       this.rowAlignment = "left";
       this.rowLeft = 0;
+      this.rowHeight = 0;
+      this.rowSplit = true;
+      return;
+    }
+    if (name === "trrh") {
+      this.rowHeight = parameter ?? 0;
+      return;
+    }
+    if (name === "trkeep") {
+      this.rowSplit = false;
       return;
     }
     if (name === "trql" || name === "trqc" || name === "trqr") {
@@ -697,6 +720,8 @@ export class RtfDocumentImpl {
           boundaries: this.rowBoundaries.splice(0),
           alignment: this.rowAlignment,
           left: this.rowLeft,
+          height: this.rowHeight,
+          split: this.rowSplit,
         });
       this.inTable = false;
       this.terminatedParagraph = true;

@@ -5,6 +5,8 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
@@ -123,6 +125,11 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   first.SetText("Before");
   const table = source.nodes.MakeTableNode("Grid", {}, first);
   const row = source.nodes.AppendTableRow(table, 2);
+  const rowSize = row.GetFrameSize();
+  rowSize.SetHeight(720);
+  rowSize.SetHeightSizeType(SwFrameSize.Fixed);
+  row.GetFrameFormat().SetFormatAttr(rowSize);
+  row.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
   row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("One");
   const firstBox = row.GetTabBoxes()[0];
   if (firstBox === undefined) throw new Error("Missing table cell.");
@@ -147,12 +154,18 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   let imported;
   try {
     const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("\\trowd\\trrh-720\\trkeep");
     expect(new TextDecoder().decode(bytes)).toContain("\\trql\\trleft360\\cellx2160\\cellx5160");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Before", "After"]);
     const restored = imported.GetNodes().getBodyContent()[1];
     expect(restored).toBeInstanceOf(SwTableNode);
     if (restored instanceof SwTableNode) {
+      expect(restored.GetTable().GetTabLines()[0]?.GetFrameSize().GetHeight()).toBe(720);
+      expect(restored.GetTable().GetTabLines()[0]?.GetFrameSize().GetHeightSizeType()).toBe(
+        SwFrameSize.Fixed,
+      );
+      expect(restored.GetTable().GetTabLines()[0]?.GetRowSplit().GetValue()).toBe(false);
       expect(restored.GetTable().GetHoriOrient()).toBe(HoriOrientation.NONE);
       expect(restored.GetTable().GetFrameFormat().GetLRSpace().ResolveLeft()).toBe(360);
       expect(restored.GetTable().GetFrameFormat().GetFrameSize().GetWidth()).toBe(4800);

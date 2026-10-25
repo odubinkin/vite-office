@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { SwTableNode } from "../../core/docnode/node";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
@@ -57,6 +58,22 @@ it.each([
     const block = document.GetNodes().getBodyContent()[0];
     expect(block).toBeInstanceOf(SwTableNode);
     if (block instanceof SwTableNode) expect(block.GetTable().GetHoriOrient()).toBe(expected);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("imports at-least row height without changing the default split state", () => {
+  const document = read("{\\rtf1\\ansi\\trowd\\trrh480\\cellx1500\\intbl Cell\\cell\\row}");
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) {
+      const row = block.GetTable().GetTabLines()[0];
+      expect(row?.GetFrameSize().GetHeight()).toBe(480);
+      expect(row?.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Minimum);
+      expect(row?.GetRowSplit().GetValue()).toBe(true);
+    }
   } finally {
     document.Dispose();
   }

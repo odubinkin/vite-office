@@ -3,6 +3,7 @@ import type { SwDoc } from "../../core/doc/doc";
 import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -130,9 +131,14 @@ export class RtfExport {
         for (const row of block.GetTable().GetTabLines()) {
           const boxes = row.GetTabBoxes();
           const tableFormat = block.GetTable().GetFrameFormat();
+          const rowFormat = row.GetFrameFormat();
           const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
           const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
           output += "\\trowd";
+          const rowSize = rowFormat.GetFrameSize();
+          if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
+            output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
+          if (!rowFormat.GetRowSplit().GetValue()) output += "\\trkeep";
           if (orientation === HoriOrientation.CENTER) output += "\\trqc";
           else if (orientation === HoriOrientation.RIGHT) output += "\\trqr";
           else {
