@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/uibase/app/docst-by-example.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/uibase/app/docst-by-example.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  17 passed (17)
+   Start at  04:06:12
+   Duration  4.63s (transform 4.88s, setup 336ms, import 6.89s, tests 139ms, environment 1.57s)
+

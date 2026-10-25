@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- src/svl/source/items/native-item-iterator.test.ts --coverage.include=src/svl/inc/itemiter.ts --coverage.reportsDirectory=coverage/docx-item-iterator
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage src/svl/source/items/native-item-iterator.test.ts --coverage.include=src/svl/inc/itemiter.ts --coverage.reportsDirectory=coverage/docx-item-iterator
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  04:14:24
+   Duration  4.46s (transform 2.32s, setup 287ms, import 2.45s, tests 15ms, environment 1.38s)
+
+ % Coverage report from istanbul
+-------------|---------|----------|---------|---------|-------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------|---------|----------|---------|---------|-------------------
+-------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 21/21 )
+Branches     : 100% ( 11/11 )
+Functions    : 100% ( 7/7 )
+Lines        : 100% ( 17/17 )
+================================================================================
