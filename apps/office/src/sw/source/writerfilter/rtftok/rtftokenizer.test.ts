@@ -8,18 +8,20 @@ function tokenize(source: string) {
 }
 
 it("retains nested group boundaries and signed control parameters", /** Checks token ordering and syntax. @returns Nothing. */ () => {
-  expect(tokenize("{\\rtf1 A{\\b Bold}\\li-240 B}")).toEqual([
-    { kind: "group-start" },
-    { kind: "control", name: "rtf", parameter: 1 },
-    { kind: "text", value: "A" },
-    { kind: "group-start" },
-    { kind: "control", name: "b" },
-    { kind: "text", value: "Bold" },
-    { kind: "group-end" },
-    { kind: "control", name: "li", parameter: -240 },
-    { kind: "text", value: "B" },
-    { kind: "group-end" },
-  ]);
+  expect(JSON.stringify(tokenize("{\\rtf1 A{\\b Bold}\\li-240 B}"))).toBe(
+    JSON.stringify([
+      { kind: "group-start" },
+      { kind: "control", name: "rtf", parameter: 1 },
+      { kind: "ansi-bytes", value: Uint8Array.of(65) },
+      { kind: "group-start" },
+      { kind: "control", name: "b" },
+      { kind: "ansi-bytes", value: new TextEncoder().encode("Bold") },
+      { kind: "group-end" },
+      { kind: "control", name: "li", parameter: -240 },
+      { kind: "ansi-bytes", value: Uint8Array.of(66) },
+      { kind: "group-end" },
+    ]),
+  );
 });
 
 it("decodes Unicode and skips the configured ANSI fallback width", /** Checks native uc/u lexical ownership. @returns Nothing. */ () => {
@@ -33,10 +35,10 @@ it("decodes Unicode and skips the configured ANSI fallback width", /** Checks na
   });
 });
 
-it("decodes ANSI hex bytes with the declared code page", /** Checks cp1251 byte decoding. @returns Nothing. */ () => {
+it("leaves ANSI hex bytes for document-state decoding", () => {
   expect(tokenize("{\\rtf1\\ansicpg1251\\'c6}")).toContainEqual({
-    kind: "text",
-    value: "Ж",
+    kind: "ansi-bytes",
+    value: Uint8Array.of(0xc6),
   });
 });
 
@@ -44,18 +46,18 @@ it("keeps control words while a Unicode fallback character remains pending", () 
   expect(tokenize(String.raw`{\rtf1 A\u233\par?B}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
-    { kind: "text", value: "A" },
+    { kind: "ansi-bytes", value: Uint8Array.of(65) },
     { kind: "text", value: "é" },
     { kind: "control", name: "par" },
-    { kind: "text", value: "B" },
+    { kind: "ansi-bytes", value: Uint8Array.of(66) },
     { kind: "group-end" },
   ]);
 });
 
 it("restores the parent Unicode fallback count after an RTF group", () => {
   const text = tokenize(String.raw`{\rtf1\uc2\u233{??}??X}`)
-    .filter((token) => token.kind === "text")
-    .map((token) => token.value)
+    .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
+    .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
     .join("");
   expect(text).toBe("éX");
 });
@@ -63,20 +65,20 @@ it("restores the parent Unicode fallback count after an RTF group", () => {
 it("retains the pinned signed Unicode fallback width and bare uc default", () => {
   expect(
     tokenize(String.raw`{\rtf1\uc-1\u233ABC}`)
-      .filter((token) => token.kind === "text")
-      .map((token) => token.value)
+      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
+      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
       .join(""),
   ).toBe("é");
   expect(
     tokenize(String.raw`{\rtf1\uc0\uc\u233?X}`)
-      .filter((token) => token.kind === "text")
-      .map((token) => token.value)
+      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
+      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
       .join(""),
   ).toBe("éX");
   expect(
     tokenize(String.raw`{\rtf1\u65536?X}`)
-      .filter((token) => token.kind === "text")
-      .map((token) => token.value)
+      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
+      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
       .join(""),
   ).toBe("?X");
 });
@@ -85,20 +87,23 @@ it("keeps each escaped hex CR and LF for destination-aware paragraph dispatch", 
   expect(tokenize(String.raw`{\rtf1 A\'0d\'0aB}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
-    { kind: "text", value: "A" },
+    { kind: "ansi-bytes", value: Uint8Array.of(65) },
     { kind: "hex-break", value: "\r" },
     { kind: "hex-break", value: "\n" },
-    { kind: "text", value: "B" },
+    { kind: "ansi-bytes", value: Uint8Array.of(66) },
     { kind: "group-end" },
   ]);
   expect(tokenize(String.raw`{\rtf1\u233\'0dX}`)).toContainEqual({
-    kind: "text",
-    value: "X",
+    kind: "ansi-bytes",
+    value: Uint8Array.of(88),
   });
 });
 
 it("consumes binary payload without treating braces as groups", /** Checks native bin run lexical ownership. @returns Nothing. */ () => {
-  expect(tokenize("{\\rtf1 A\\bin3{}\\B}")).toContainEqual({ kind: "text", value: "B" });
+  expect(tokenize("{\\rtf1 A\\bin3{}\\B}")).toContainEqual({
+    kind: "ansi-bytes",
+    value: Uint8Array.of(66),
+  });
 });
 
 it.each(["text", "{\\rtf1", "{\\rtf1}", "{\\rtf1\\'zz}"])(

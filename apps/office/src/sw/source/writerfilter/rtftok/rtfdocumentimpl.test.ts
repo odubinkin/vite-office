@@ -35,6 +35,52 @@ function read(input: string) {
   );
 }
 
+it("decodes ANSI bytes after group and font encoding selection", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0\fnil Arial;}{\f1\fnil\fcharset204 Times New Roman;}}\f0\'c6{\f1\'c6}\'c6}`,
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ÆЖÆ");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("uses font code page and Word font-name suffix precedence", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0\fnil\cpg1252 Arial Cyr;}{\f1\fnil\cpg1251 Times;}}\f0\'c6\f1\'c6}`,
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ЖЖ");
+    const firstParagraph = document.paragraphs[0];
+    expect(firstParagraph).toBeDefined();
+    if (firstParagraph !== undefined)
+      expect(projectWriterTextRuns(firstParagraph)[0]?.attributes.fontFamily).toBe("Arial");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("restores group code page after local cpg control", () => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg1252\'c6{\cpg1251\'c6}\'c6}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ÆЖÆ");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("plain restores the default font's encoded text state", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\ansicpg1252\deff1{\fonttbl{\f0 Arial;}{\f1\fcharset204 Times;}}\f0\'c6\plain\'c6}`,
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ÆЖ");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("imports hex CR/LF and a control word after Unicode fallback as separate paragraphs", () => {
   const document = read(String.raw`{\rtf1\ansi A\'0d\'0aB\u233\par?C}`);
   try {

@@ -6,6 +6,7 @@ export type RtfToken =
   | Readonly<{ kind: "group-end" }>
   | Readonly<{ kind: "control"; name: string; parameter?: number }>
   | Readonly<{ kind: "hex-break"; value: "\r" | "\n" }>
+  | Readonly<{ kind: "ansi-bytes"; value: Uint8Array }>
   | Readonly<{ kind: "text"; value: string }>;
 
 /** Reports a malformed RTF stream before it can replace the active Writer model. */
@@ -21,7 +22,6 @@ export class RtfSyntaxError extends Error {
 export class RtfTokenizer {
   private readonly source: Uint8Array;
   private readonly tokens: RtfToken[] = [];
-  private decoder = new TextDecoder("windows-1252");
   private offset = 0;
   private depth = 0;
   private groupUnicodeSkip: number[] = [1];
@@ -126,14 +126,6 @@ export class RtfTokenizer {
       this.offset += parameter;
       return;
     }
-    if (name === "ansicpg" && parameter !== undefined) {
-      this.FlushText();
-      try {
-        this.decoder = new TextDecoder(`windows-${parameter}`);
-      } catch {
-        throw new RtfSyntaxError(`Unsupported RTF code page: ${parameter}.`);
-      }
-    }
     if (name === "uc") {
       const width = parameter ?? 1;
       if (width >= -32768 && width <= 32767)
@@ -165,10 +157,10 @@ export class RtfTokenizer {
     this.bytes.push(byte);
   }
 
-  /** Decodes one contiguous ANSI run. */
+  /** Passes bytes to the document parser, which owns the active group and font encoding. */
   private FlushText(): void {
     if (this.bytes.length === 0) return;
-    this.tokens.push({ kind: "text", value: this.decoder.decode(Uint8Array.from(this.bytes)) });
+    this.tokens.push({ kind: "ansi-bytes", value: Uint8Array.from(this.bytes) });
     this.bytes = [];
   }
 }

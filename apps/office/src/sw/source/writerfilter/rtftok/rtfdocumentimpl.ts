@@ -66,6 +66,7 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
+import { RTF_CHARSET_CODEPAGE, RTF_FONT_SUFFIX_CODEPAGE, rtfDecoderLabel } from "./rtfcharsets";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
@@ -128,6 +129,8 @@ interface RtfState {
   character: WriterCharacterAttributes;
   paragraph: RtfParagraphState;
   fontIndex: number;
+  currentCodepage: number;
+  fontCodepage?: number;
   colorIndex: number;
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
@@ -292,6 +295,9 @@ export class RtfDocumentImpl {
   private readonly runs: RtfRun[] = [];
   private readonly marks: { name: string; offset: number }[] = [];
   private readonly fonts = new Map<number, string>();
+  private readonly fontCodepages = new Map<number, number>();
+  private defaultCodepage = 1252;
+  private defaultFontIndex = -1;
   private readonly colors: string[] = [];
   private readonly listFormats = new Map<
     number,
@@ -712,6 +718,8 @@ export class RtfDocumentImpl {
         character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
         paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
         fontIndex: previous?.fontIndex ?? 0,
+        currentCodepage: previous?.currentCodepage ?? this.defaultCodepage,
+        ...(previous?.fontCodepage === undefined ? {} : { fontCodepage: previous.fontCodepage }),
         colorIndex: previous?.colorIndex ?? 0,
         ...(previous?.field === undefined ? {} : { field: previous.field }),
         ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
@@ -773,18 +781,18 @@ export class RtfDocumentImpl {
         state.levelText = (state.levelText ?? "") + token.value;
       return;
     }
-    if (token.kind === "text") {
-      if (state.destination === "fonttbl") this.ReadFontText(token.value, state);
+    if (token.kind === "text" || token.kind === "ansi-bytes") {
+      const value = token.kind === "text" ? token.value : this.DecodeBytes(token.value, state);
+      if (state.destination === "fonttbl") this.ReadFontText(value, state);
       else if (state.destination === "styleentry")
-        state.styleName = (state.styleName ?? "") + token.value;
+        state.styleName = (state.styleName ?? "") + value;
       else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
-        state.bookmarkName = (state.bookmarkName ?? "") + token.value;
-      else if (state.destination === "leveltext")
-        state.levelText = (state.levelText ?? "") + token.value;
-      else if (state.destination === "colortbl") this.ReadColorText(token.value);
+        state.bookmarkName = (state.bookmarkName ?? "") + value;
+      else if (state.destination === "leveltext") state.levelText = (state.levelText ?? "") + value;
+      else if (state.destination === "colortbl") this.ReadColorText(value);
       else if (state.destination === "fldinst" && state.field !== undefined)
-        state.field.instruction += token.value;
-      else if (state.destination === "body") this.AppendText(token.value, state);
+        state.field.instruction += value;
+      else if (state.destination === "body") this.AppendText(value, state);
       return;
     }
     if (token.name === "*") {
@@ -793,6 +801,37 @@ export class RtfDocumentImpl {
     }
     if (token.name === "rtf") {
       this.sawHeader = token.parameter === 1;
+      return;
+    }
+    if (token.name === "deff" && token.parameter !== undefined) {
+      this.defaultFontIndex = token.parameter;
+      return;
+    }
+    if (token.name === "ansi") {
+      state.currentCodepage = 1252;
+      return;
+    }
+    if (token.name === "mac" || token.name === "pc" || token.name === "pca") {
+      this.defaultCodepage = token.name === "mac" ? 10000 : token.name === "pc" ? 437 : 850;
+      state.currentCodepage = this.defaultCodepage;
+      return;
+    }
+    if (token.name === "ansicpg" && token.parameter !== undefined) {
+      this.defaultCodepage = token.parameter === 0 ? 1252 : token.parameter;
+      state.currentCodepage = this.defaultCodepage;
+      return;
+    }
+    if (token.name === "cpg" && token.parameter !== undefined) {
+      state.currentCodepage = token.parameter === 0 ? 1252 : token.parameter;
+      if (state.destination === "fonttbl") state.fontCodepage = state.currentCodepage;
+      return;
+    }
+    if (token.name === "fcharset" && token.parameter !== undefined) {
+      const codepage = RTF_CHARSET_CODEPAGE.get(token.parameter);
+      if (codepage !== undefined) {
+        state.currentCodepage = codepage === 0 ? this.defaultCodepage : codepage;
+        if (state.destination === "fonttbl") state.fontCodepage = state.currentCodepage;
+      }
       return;
     }
     if (token.name === "field" && state.destination === "body") {
@@ -886,6 +925,7 @@ export class RtfDocumentImpl {
       if (token.name === "f" && token.parameter !== undefined) {
         this.CommitFont(state);
         state.fontIndex = token.parameter;
+        Reflect.deleteProperty(state, "fontCodepage");
       }
       return;
     }
@@ -1176,6 +1216,7 @@ export class RtfDocumentImpl {
     if (name === "plain") {
       state.character = { ...DEFAULT_CHARACTER };
       state.characterControls.clear();
+      state.currentCodepage = this.fontCodepages.get(this.defaultFontIndex) ?? this.defaultCodepage;
       return;
     }
     if (name === "pard") {
@@ -1236,6 +1277,7 @@ export class RtfDocumentImpl {
       state.character = { ...state.character, fontSizeTwips: parameter * 10 };
     else if (name === "f" && parameter !== undefined) {
       state.fontIndex = parameter;
+      state.currentCodepage = this.fontCodepages.get(parameter) ?? this.defaultCodepage;
       const character = { ...state.character };
       Reflect.deleteProperty(character, "fontFamily");
       const fontFamily = this.fonts.get(parameter);
@@ -1384,8 +1426,27 @@ export class RtfDocumentImpl {
   /** Completes the current font table entry. @param state - Current group. */
   private CommitFont(state: RtfState): void {
     const name = this.fontName.trim();
-    if (name.length > 0) this.fonts.set(state.fontIndex, name);
+    if (name.length > 0) {
+      const lastSpace = name.lastIndexOf(" ");
+      const suffix =
+        lastSpace < 0 ? undefined : RTF_FONT_SUFFIX_CODEPAGE.get(name.slice(lastSpace + 1));
+      this.fonts.set(state.fontIndex, suffix === undefined ? name : name.slice(0, lastSpace));
+      if (suffix !== undefined || state.fontCodepage !== undefined)
+        this.fontCodepages.set(
+          state.fontIndex,
+          suffix ?? state.fontCodepage ?? this.defaultCodepage,
+        );
+    }
     this.fontName = "";
+  }
+
+  /** Converts ANSI bytes only after the current group and selected font are known. */
+  private DecodeBytes(bytes: Uint8Array, state: RtfState): string {
+    try {
+      return new TextDecoder(rtfDecoderLabel(state.currentCodepage)).decode(bytes);
+    } catch {
+      throw new RtfSyntaxError(`Unsupported RTF code page: ${state.currentCodepage}.`);
+    }
   }
 
   /** Adds color table entries separated by semicolons. @param value - Color table text. */
