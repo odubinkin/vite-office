@@ -1,10 +1,24 @@
 /** @fileoverview Writer Markdown output following sw/source/filter/md/wrtmd.cxx. */
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontItalic, FontStrikeout, FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import {
+  SvxFontItem,
+  SvxPostureItem,
+  SvxWeightItem,
+} from "../../../../editeng/source/items/textitem";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_FONT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+} from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
-import type { WriterTextRun } from "../basflt/writer-transfer";
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 
 /** Serializes the current Writer body through the native Markdown writer boundary. */
 export class SwMDWriter {
@@ -51,7 +65,7 @@ export class SwMDWriter {
 function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>): string {
   const style = node.GetParagraphStyle(),
     heading = /^heading-([1-6])$/u.exec(style);
-  const text = writeRuns(projectWriterTextRuns(node), heading !== null);
+  const text = writeRuns(node);
   if (heading !== null) return `${"#".repeat(Number(heading[1]))} ${text}`;
   if (style === "quotations") return `> ${text}`;
   if (node.GetNumRule() !== undefined) {
@@ -67,53 +81,126 @@ function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>):
   return text;
 }
 
-/** Emits direct character spans with source-supported Markdown delimiters. @param runs - Native projected text portions. @returns Inline Markdown. */
-function writeRuns(runs: readonly WriterTextRun[], inheritedBold = false): string {
-  /** Current source-supported Markdown delimiter state at one text offset. */
-  type State = Readonly<{
-    code: boolean;
-    strikeout: boolean;
-    italic: boolean;
-    bold: boolean;
-    url: string | undefined;
-  }>;
-  const empty: State = {
-    code: false,
-    strikeout: false,
-    italic: false,
-    bold: false,
-    url: undefined,
-  };
-  let previous = empty;
+/** Source formatting counters, including negative values from explicit none items. */
+interface MarkdownFormattingStatus {
+  code: number;
+  strikeout: number;
+  italic: number;
+  bold: number;
+  links: Map<string, number>;
+}
+
+/** Creates one independent source formatting status. @returns Empty counters. */
+function emptyFormattingStatus(): MarkdownFormattingStatus {
+  return { code: 0, strikeout: 0, italic: 0, bold: 0, links: new Map() };
+}
+
+/** Counts source-recognized direct items, recursively visiting auto-format handles. @param status - Target counters. @param item - Direct pool item. @param codeFont - HTML preformatted style font. @returns Nothing. */
+function applyFormattingItem(
+  status: MarkdownFormattingStatus,
+  item: SfxPoolItem,
+  codeFont: SfxPoolItem,
+): void {
+  if (item instanceof SwFormatAutoFormat) {
+    for (const nested of item.GetStyleHandle().entries())
+      applyFormattingItem(status, nested, codeFont);
+  } else if (item instanceof SwFormatINetFormat) {
+    const url = item.GetValue();
+    if (url.length > 0) status.links.set(url, (status.links.get(url) ?? 0) + 1);
+  } else if (item instanceof SvxCrossedOutItem && item.Which() === RES_CHRATR_CROSSEDOUT)
+    status.strikeout += item.GetStrikeout() === FontStrikeout.STRIKEOUT_NONE ? -1 : 1;
+  else if (item instanceof SvxPostureItem && item.Which() === RES_CHRATR_POSTURE)
+    status.italic += item.GetPosture() === FontItalic.ITALIC_NONE ? -1 : 1;
+  else if (item instanceof SvxWeightItem && item.Which() === RES_CHRATR_WEIGHT)
+    status.bold += item.GetWeight() === FontWeight.WEIGHT_DONTKNOW ? -1 : 1;
+  else if (item instanceof SvxFontItem && item.Which() === RES_CHRATR_FONT && item.equals(codeFont))
+    status.code++;
+}
+
+/** Adds only directly stored pool items, excluding inherited paragraph-style properties. @param status - Target counters. @param items - Direct item set. @param codeFont - HTML preformatted style font. @returns Nothing. */
+function applyFormattingSet(
+  status: MarkdownFormattingStatus,
+  items: SfxItemSet,
+  codeFont: SfxPoolItem,
+): void {
+  for (const item of items.entries()) applyFormattingItem(status, item, codeFont);
+}
+
+/** Recreates the pinned positive/negative formatting status at a native text offset. @param node - Text owner. @param offset - UTF-16 position. @param codeFont - HTML preformatted style font. @returns Source counters. */
+function formattingAt(
+  node: SwTextNode,
+  offset: number,
+  codeFont: SfxPoolItem,
+): MarkdownFormattingStatus {
+  const status = emptyFormattingStatus();
+  applyFormattingSet(status, node.GetSwAttrSet(), codeFont);
+  const hints = node.GetpSwpHints();
+  if (hints !== undefined)
+    for (let index = 0; index < hints.Count(); index++) {
+      const hint = hints.Get(index);
+      if (hint.GetStart() <= offset && offset < hint.GetAnyEnd())
+        applyFormattingItem(status, hint.GetAttr(), codeFont);
+    }
+  return status;
+}
+
+/** Tests the pinned transition from an active status to zero or below. @param before - Previous count. @param after - New count. @returns Whether to write closing markup. */
+function shouldClose(before: number, after: number): boolean {
+  return before !== after && before >= 0 && after <= 0;
+}
+
+/** Tests the pinned transition from zero or below to an active status. @param before - Previous count. @param after - New count. @returns Whether to write opening markup. */
+function shouldOpen(before: number, after: number): boolean {
+  return before !== after && before <= 0 && after > 0;
+}
+
+/** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown. */
+function writeRuns(node: SwTextNode): string {
+  const source = node.GetText();
+  if (source.length === 0) return "";
+  const codeFont = node
+    .GetDoc()
+    .GetTextFormatColl("preformatted-text")
+    .GetAttrSet()
+    .Get(RES_CHRATR_FONT);
+  const positions = new Set<number>([0, source.length]);
+  const hints = node.GetpSwpHints();
+  if (hints !== undefined)
+    for (let index = 0; index < hints.Count(); index++) {
+      const hint = hints.Get(index);
+      positions.add(hint.GetStart());
+      positions.add(hint.GetAnyEnd());
+    }
+  const sorted = [...positions]
+    .filter((position) => position >= 0 && position <= source.length)
+    .sort((a, b) => a - b);
+  let previous = emptyFormattingStatus();
   let output = "";
-  /** Emits the pinned OutFormattingChange close/open order at a text-run boundary. */
-  function transition(next: State): void {
-    if (previous.code && !next.code) output += "`";
-    if (previous.strikeout && !next.strikeout) output += "~~";
-    if (previous.italic && !next.italic) output += "*";
-    if (previous.bold && !next.bold) output += "**";
-    if (previous.url !== undefined && previous.url !== next.url) output += `](${previous.url})`;
-    if (!previous.strikeout && next.strikeout) output += "~~";
-    if (!previous.italic && next.italic) output += "*";
-    if (!previous.bold && next.bold) output += "**";
-    if (next.url !== undefined && previous.url !== next.url) output += "[";
-    if (!previous.code && next.code) output += "`";
+  for (let index = 0; index < sorted.length; index++) {
+    const position = sorted[index] as number;
+    const next =
+      position === source.length ? emptyFormattingStatus() : formattingAt(node, position, codeFont);
+    if (shouldClose(previous.code, next.code)) output += "`";
+    if (shouldClose(previous.strikeout, next.strikeout)) output += "~~";
+    if (shouldClose(previous.italic, next.italic)) output += "*";
+    if (shouldClose(previous.bold, next.bold)) output += "**";
+    const urls = [...new Set([...previous.links.keys(), ...next.links.keys()])].sort();
+    for (const url of urls)
+      if (shouldClose(previous.links.get(url) ?? 0, next.links.get(url) ?? 0))
+        output += `](${url})`;
+    if (shouldOpen(previous.strikeout, next.strikeout)) output += "~~";
+    if (shouldOpen(previous.italic, next.italic)) output += "*";
+    if (shouldOpen(previous.bold, next.bold)) output += "**";
+    for (const url of urls)
+      if (shouldOpen(previous.links.get(url) ?? 0, next.links.get(url) ?? 0)) output += "[";
+    if (shouldOpen(previous.code, next.code)) output += "`";
+    const end = sorted[index + 1];
+    if (end !== undefined && end > position) {
+      const chunk = source.slice(position, end);
+      output += next.code !== 0 ? chunk : escapeMarkdown(chunk);
+    }
     previous = next;
   }
-  for (const run of runs) {
-    const next: State = {
-      code: run.attributes.fontFamily === "Liberation Mono",
-      strikeout:
-        run.attributes.strikeout !== undefined &&
-        run.attributes.strikeout !== FontStrikeout.STRIKEOUT_NONE,
-      italic: run.attributes.italic,
-      bold: run.attributes.bold && !inheritedBold,
-      url: run.hyperlink?.url,
-    };
-    transition(next);
-    output += next.code ? run.text : escapeMarkdown(run.text);
-  }
-  transition(empty);
   return output;
 }
 
@@ -131,7 +218,7 @@ function writeTable(table: SwTableNode): string {
     const cells = row.GetTabBoxes().map((box) =>
       box
         .GetParagraphs()
-        .map((node) => writeRuns(projectWriterTextRuns(node)))
+        .map((node) => writeRuns(node))
         .join(" "),
     );
     output.push(`| ${cells.join(" | ")} |`);

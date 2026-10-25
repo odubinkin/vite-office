@@ -5,6 +5,10 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { FontWeight } from "../../../../tools/inc/fontenum";
+import { RES_CHRATR_CJK_WEIGHT, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
 
@@ -128,6 +132,60 @@ it("keeps Markdown emphasis open across runs split only by unsupported color", (
     expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("**RedBlue**\n");
   } finally {
     source.Dispose();
+  }
+});
+
+it("serializes the style item set when a paragraph has no direct item set", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  const style = source.GetTextFormatColl("text-body");
+  style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  paragraph.ChgFormatColl(style);
+  paragraph.SetText("Styled");
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("**Styled**\n");
+    paragraph.SetAttr(createWriterTextColorItem("#ff0000"));
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("Styled\n");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("preserves the source non-unknown weight test for a direct normal weight item", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Normal");
+  paragraph.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("**Normal**\n");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("ignores CJK-only weight in the pinned Markdown character-item switch", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("CJK");
+  paragraph.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT));
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe("CJK\n");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("writes imported native Markdown code spans through the preformatted font item", () => {
+  const document = new MarkdownReader().Read(new TextEncoder().encode("Before `code` after"));
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(document))).toBe(
+      "Before `code` after\n",
+    );
+  } finally {
+    document.Dispose();
   }
 });
 

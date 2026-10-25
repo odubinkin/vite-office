@@ -13,7 +13,7 @@
       "SwMDWriter::WriteStream"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body content and direct text formatting as Markdown, including source numbering labels and parent-prefix indentation, one fenced block for consecutive preformatted paragraphs, and source-ordered formatting and hyperlink transitions across adjacent native text runs."
+      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including source numbering labels and parent-prefix indentation, one fenced block for consecutive preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -27,6 +27,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
           "marker": "one upstream Markdown hyperlink across differently formatted text runs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "serializes the style item set when a paragraph has no direct item set"
         }
       ],
       "upstream": [
@@ -37,6 +41,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
           "marker": "OutFormattingChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/node.hxx",
+          "marker": "SwContentNode::GetSwAttrSet() const"
         }
       ]
     }
