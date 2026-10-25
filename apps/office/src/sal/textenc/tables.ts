@@ -2,10 +2,14 @@
 import type { ImplByteConvertData } from "./tenchelp";
 import {
   RTL_TEXTENCODING_APPLE_CENTEURO,
+  RTL_TEXTENCODING_APPLE_CROATIAN,
   RTL_TEXTENCODING_APPLE_CYRILLIC,
   RTL_TEXTENCODING_APPLE_GREEK,
   RTL_TEXTENCODING_APPLE_ICELAND,
   RTL_TEXTENCODING_APPLE_ROMAN,
+  RTL_TEXTENCODING_APPLE_ROMANIAN,
+  RTL_TEXTENCODING_APPLE_TURKISH,
+  RTL_TEXTENCODING_APPLE_UKRAINIAN,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_850,
   RTL_TEXTENCODING_MS_874,
@@ -28,15 +32,21 @@ import {
   aImplIBM850ByteCvtData,
 } from "./tcvtlat1";
 import {
-  aImplAPPLECENTEUROByteCvtData,
-  aImplAPPLECYRILLICByteCvtData,
-  aImplAPPLEGREEKByteCvtData,
   aImplMS1250ByteCvtData,
   aImplMS1251ByteCvtData,
   aImplMS1253ByteCvtData,
   aImplMS1254ByteCvtData,
   aImplMS1257ByteCvtData,
 } from "./tcvtest1";
+import {
+  aImplAPPLECENTEUROByteCvtData,
+  aImplAPPLECROATIANByteCvtData,
+  aImplAPPLECYRILLICByteCvtData,
+  aImplAPPLEGREEKByteCvtData,
+  aImplAPPLEROMANIANByteCvtData,
+  aImplAPPLETURKISHByteCvtData,
+  aImplAPPLEUKRAINIANByteCvtData,
+} from "./tcvtest1.apple";
 import { aImplMS1255ByteCvtData, aImplMS1256ByteCvtData } from "./tcvtarb1";
 import { aImplMS874ByteCvtData, aImplMS1258ByteCvtData } from "./tcvteas1";
 import { aImplMS1252ByteCvtData } from "./textenc";
@@ -48,6 +58,8 @@ export function getSingleByteConvertData(
   switch (encoding) {
     case RTL_TEXTENCODING_APPLE_CENTEURO:
       return aImplAPPLECENTEUROByteCvtData;
+    case RTL_TEXTENCODING_APPLE_CROATIAN:
+      return aImplAPPLECROATIANByteCvtData;
     case RTL_TEXTENCODING_APPLE_CYRILLIC:
       return aImplAPPLECYRILLICByteCvtData;
     case RTL_TEXTENCODING_APPLE_GREEK:
@@ -56,6 +68,12 @@ export function getSingleByteConvertData(
       return aImplAPPLEICELANDByteCvtData;
     case RTL_TEXTENCODING_APPLE_ROMAN:
       return aImplAPPLEROMANByteCvtData;
+    case RTL_TEXTENCODING_APPLE_ROMANIAN:
+      return aImplAPPLEROMANIANByteCvtData;
+    case RTL_TEXTENCODING_APPLE_TURKISH:
+      return aImplAPPLETURKISHByteCvtData;
+    case RTL_TEXTENCODING_APPLE_UKRAINIAN:
+      return aImplAPPLEUKRAINIANByteCvtData;
     case RTL_TEXTENCODING_IBM_437:
       return aImplIBM437ByteCvtData;
     case RTL_TEXTENCODING_IBM_850:

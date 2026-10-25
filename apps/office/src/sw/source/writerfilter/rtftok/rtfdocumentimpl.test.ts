@@ -164,6 +164,10 @@ it.each([
   [10029, "\u00C4\u0158\u016B"],
   [10007, "\u0410\u045F\u0440"],
   [10006, "\u00C4\u03AD\u03C0"],
+  [10082, "\u00C4\u00A4\u0111"],
+  [10010, "\u00C4\u00A4\uF8FF"],
+  [10081, "\u00C4\u011F\uF8FF"],
+  [10017, "\u0410\u045F\u0440"],
 ])("decodes pinned SAL Apple code page %i in RTF text", (codepage, expected) => {
   const doc = read(String.raw`{\rtf1\ansi\ansicpg${codepage}\'80\'db\'f0}`);
   try {

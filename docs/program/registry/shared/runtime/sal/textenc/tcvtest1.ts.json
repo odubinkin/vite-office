@@ -17,21 +17,16 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sal/textenc/tcvtest1.ts#aImplMS1250ByteCvtData",
-        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplMS1250ByteCvtData",
-        "apps/office/src/sal/textenc/tcvtest1.ts#aImplAPPLECENTEUROByteCvtData",
-        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplAPPLECENTEUROByteCvtData"
+        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplMS1250ByteCvtData"
       ],
-      "justification": "Pinned Windows-1250/1251/1253/1254/1257 forward and reverse tables and byte-converter aggregates. Adds the represented Apple code-page tables for native RTF decoding. Broader SAL codec parity remains unverified.",
+      "justification": "Pinned Windows-1250/1251/1253/1254/1257 forward/reverse tables and byte-converter aggregates. Other SAL codecs remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "aImplMS1250ByteCvtData",
         "aImplMS1251ByteCvtData",
         "aImplMS1253ByteCvtData",
         "aImplMS1254ByteCvtData",
-        "aImplMS1257ByteCvtData",
-        "aImplAPPLECENTEUROByteCvtData",
-        "aImplAPPLECYRILLICByteCvtData",
-        "aImplAPPLEGREEKByteCvtData"
+        "aImplMS1257ByteCvtData"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtest1.tab",
@@ -40,10 +35,7 @@
         "aImplMS1251ByteCvtData",
         "aImplMS1253ByteCvtData",
         "aImplMS1254ByteCvtData",
-        "aImplMS1257ByteCvtData",
-        "aImplAPPLECENTEUROByteCvtData",
-        "aImplAPPLECYRILLICByteCvtData",
-        "aImplAPPLEGREEKByteCvtData"
+        "aImplMS1257ByteCvtData"
       ]
     }
   }

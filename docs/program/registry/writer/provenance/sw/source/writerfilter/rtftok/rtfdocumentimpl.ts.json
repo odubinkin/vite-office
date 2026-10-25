@@ -17,7 +17,8 @@
       "Routes Windows-874/1250–1258 and IBM 437/850 text bytes through pinned SAL code-page lookup and converter tables, including native undefined-byte replacement instead of browser decoder control-code mapping.",
       "Routes RTF Symbol and Apple Roman bytes through their distinct pinned SAL converter and table owners, preserving private-use Symbol characters in the Writer text model.",
       "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, sl/slmult line-spacing modes, keep/split/widow, page-before and deferred page/one-column controls with in-table suppression, absolute tab-stop positions and document default tab distance, first and subsequent section paper dimensions/margins/landscape through SwDoc page descriptors, source ConvertedN style names, first-block section references and source restart-at-one dispatch, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and consecutive trhdr header rows with the source 10-row workaround, direct cell vertical alignment/border/padding controls, plus HYPERLINK field URL, target, name and fragment switches into canonical Writer nodes and items; listtext fallback groups are skipped.",
-      "Routes represented Apple Central European, Cyrillic, Greek and Icelandic RTF bytes through pinned SAL table owners."
+      "Routes represented Apple Central European, Cyrillic, Greek and Icelandic RTF bytes through pinned SAL table owners.",
+      "Routes represented Apple Croatian, Romanian, Turkish and Ukrainian RTF bytes through pinned SAL table owners."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
