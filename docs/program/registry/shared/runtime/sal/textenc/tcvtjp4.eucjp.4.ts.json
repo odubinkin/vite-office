@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtjp4.eucjp.4.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtjp4.eucjp.4.ts#aImplUniToDBCSTab_JIS0208_95",
+        "vendor/libreoffice-reference/sal/textenc/tcvtjp4.tab#aImplUniToDBCSTab_JIS0208_95",
+        "apps/office/src/sal/textenc/tcvtmb.test.ts#decodes pinned EUC-JP ASCII"
+      ],
+      "justification": "Pinned EUC-JP source-owned JIS reverse numeric tables and original pointer targets. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplUniToDBCSTab_JIS0208_95",
+        "aImplUniToDBCSTab_JIS0208_96",
+        "aImplUniToDBCSTab_JIS0208_97",
+        "aImplUniToDBCSTab_JIS0208_98",
+        "aImplUniToDBCSTab_JIS0208_99",
+        "aImplUniToDBCSTab_JIS0208_9A",
+        "aImplUniToDBCSTab_JIS0208_9B",
+        "aImplUniToDBCSTab_JIS0208_9C",
+        "aImplUniToDBCSTab_JIS0208_9D",
+        "aImplUniToDBCSTab_JIS0208_9E",
+        "aImplUniToDBCSTab_JIS0208_9F",
+        "aImplUniToDBCSTab_JIS0208_FF"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtjp4.tab",
+      "upstreamSymbols": [
+        "aImplUniToDBCSTab_JIS0208_95",
+        "aImplUniToDBCSTab_JIS0208_96",
+        "aImplUniToDBCSTab_JIS0208_97",
+        "aImplUniToDBCSTab_JIS0208_98",
+        "aImplUniToDBCSTab_JIS0208_99",
+        "aImplUniToDBCSTab_JIS0208_9A",
+        "aImplUniToDBCSTab_JIS0208_9B",
+        "aImplUniToDBCSTab_JIS0208_9C",
+        "aImplUniToDBCSTab_JIS0208_9D",
+        "aImplUniToDBCSTab_JIS0208_9E",
+        "aImplUniToDBCSTab_JIS0208_9F",
+        "aImplUniToDBCSTab_JIS0208_FF"
+      ]
+    }
+  }
+}

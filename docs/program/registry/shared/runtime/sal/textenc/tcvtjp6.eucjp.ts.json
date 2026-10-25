@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtjp6.eucjp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtjp6.eucjp.ts#aJIS0208UniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvtjp6.tab#aJIS0208UniLeadTab",
+        "apps/office/src/sal/textenc/tcvtmb.test.ts#decodes pinned EUC-JP ASCII"
+      ],
+      "justification": "Pinned EUC-JP JIS-0208/JIS-0212 lead, reverse-high and four-pointer converter aggregate. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aJIS0208UniLeadTab",
+        "aJIS0212UniLeadTab",
+        "aJIS0208DBCSHighTab",
+        "aJIS0212DBCSHighTab",
+        "aImplEUCJPCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtjp6.tab",
+      "upstreamSymbols": [
+        "aJIS0208UniLeadTab",
+        "aJIS0212UniLeadTab",
+        "aJIS0208DBCSHighTab",
+        "aJIS0212DBCSHighTab",
+        "aImplEUCJPCvtData"
+      ]
+    }
+  }
+}

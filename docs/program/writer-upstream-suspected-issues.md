@@ -1220,3 +1220,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplDBCSToUnicode`, computes the offset for a third EUDC trail range after reassigning `nTrailCount` to the second range length, rather than adding it to the first range length.
 - Observation: a three-range EUDC descriptor with unequal first and second range sizes would overlap or misplace Unicode points in its third range. The pinned `.tab` descriptors reviewed for this Writer RTF path declare at most two trail ranges, so this is a source-level conditional concern, not an observed failure in MS-932/936/949/950.
 - Preservation: the shared DBCS converter retains this calculation exactly. No corrective sum is applied without an upstream change.
+
+### WRITER112 — EUC-JP undefined-pair classification and source advancement
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplEUCJPToUnicode`, subtracts `JIS_EUC_LEAD_OFF` and `JIS_EUC_TRAIL_OFF` from a double-byte pair before testing those same variables against the offsets in the undefined-character branch. Its multibyte-undefined branch advances the source pointer before action handling, then the common output path advances it again; with `FLUSH`, it resets the pointer to the character start before the common advance.
+- Observation: an unmapped JIS double-byte pair whose original bytes are in range is classified as invalid after subtraction. An undefined SS2 pair can report a consumed-byte count different from its full byte width. These conclusions follow source control flow; compiled desktop behavior has not been compared.
+- Preservation: the local EUC-JP converter retains the branch order, classification and pointer updates exactly. Focused tests cover an invalid pair and the SS2 `FLUSH` path.

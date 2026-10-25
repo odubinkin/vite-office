@@ -1,5 +1,5 @@
 /** @fileoverview Current single-byte data owners from sal/textenc/tables.cxx. */
-import type { ImplByteConvertData, ImplDBCSConvertData } from "./tenchelp";
+import type { ImplByteConvertData, ImplDBCSConvertData, ImplEUCJPConvertData } from "./tenchelp";
 import {
   RTL_TEXTENCODING_APPLE_CENTEURO,
   RTL_TEXTENCODING_APPLE_CROATIAN,
@@ -16,6 +16,7 @@ import {
   RTL_TEXTENCODING_APPLE_UKRAINIAN,
   RTL_TEXTENCODING_ASCII_US,
   RTL_TEXTENCODING_EUC_CN,
+  RTL_TEXTENCODING_EUC_JP,
   RTL_TEXTENCODING_EUC_KR,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_737,
@@ -124,6 +125,7 @@ import {
 import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
 import { aImplAPPLEJAPANESEDBCSCvtData } from "./tcvtjp6.applejapanese";
+import { aImplEUCJPCvtData } from "./tcvtjp6.eucjp";
 import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
 import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
 import { aImplAPPLECHINSIMPDBCSCvtData } from "./tcvtscn6.applechinsimp";
@@ -242,11 +244,13 @@ export function getTextToUnicodeData(
 ):
   | Readonly<{ kind: "symbol" }>
   | Readonly<{ kind: "utf8" }>
+  | Readonly<{ kind: "eucjp"; data: ImplEUCJPConvertData }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
   | undefined {
   if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
   if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
+  if (encoding === RTL_TEXTENCODING_EUC_JP) return { kind: "eucjp", data: aImplEUCJPCvtData };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_JAPANESE)
     return { kind: "dbcs", data: aImplAPPLEJAPANESEDBCSCvtData };

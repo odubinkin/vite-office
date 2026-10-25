@@ -91,6 +91,14 @@ export interface ImplDBCSConvertData {
   readonly mnTrailStart: number;
   readonly mnTrailEnd: number;
 }
+
+/** Original EUC-JP aggregate binding both JIS forward and reverse tables. */
+export interface ImplEUCJPConvertData {
+  readonly mpJIS0208ToUniLeadTab: readonly ImplDBCSToUniLeadTab[];
+  readonly mpJIS0212ToUniLeadTab: readonly ImplDBCSToUniLeadTab[];
+  readonly mpUniToJIS0208HighTab: readonly ImplUniToDBCSHighTab[];
+  readonly mpUniToJIS0212HighTab: readonly ImplUniToDBCSHighTab[];
+}
 /** Original undefined-byte mapping;the other mask values select the replacement character here. @param character - Native unsigned byte. @param flags - Original unsigned32 flags. @returns Native Unicode unit. */
 export function ImplGetUndefinedUnicodeChar(character: number, flags: number): number {
   return (flags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) ===

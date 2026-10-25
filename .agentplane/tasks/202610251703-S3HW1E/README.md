@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 51
+revision: 52
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T21:18:52.557Z"
+doc_updated_at: "2026-10-25T21:26:42.833Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 1f2733596a6f cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950 and JOHAB/MS-1361, EUC-CN/KR and Apple Korean. This batch adds source-owned Apple Japanese, Simplified Chinese and Traditional Chinese DBCS aggregates for RTF. Pinned source comparison verified 15/3/3 new numeric arrays (2,284/400/401 values), all 512 lead/high pointers per encoding and 74 GBKOFF offsets in Apple Simplified Chinese. Focused RTF/SAL tests (94), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. Repository-wide check:docs has pre-existing JSDoc failures; changed source has no diagnostics. WRITER111 records a retained pinned third EUDC range calculation. Remaining current-model gaps include EUC-JP, ISO-2022, UTF-7 and ISCII RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 347978702308 cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950, JOHAB/MS-1361, EUC-CN/KR and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese. This batch ports the pinned separate EUC-JP converter, JIS-0208/JIS-0212 forward and reverse tables, SS2 half-width katakana and SS3 three-byte decoding, and RTF code page 51932 selection. Source comparison verified 330 numeric arrays (55,316 values) and 768 pointer entries. Focused RTF/SAL tests (97), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER112 records the pinned EUC-JP undefined-pair classification and pointer advancement; focused tests preserve them. Repository-wide check:docs has pre-existing JSDoc failures; changed source diagnostics were repaired. Remaining current-model gaps include ISO-2022, UTF-7 and ISCII RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 1f2733596a6f cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950 and JOHAB/MS-1361, EUC-CN/KR and Apple Korean. This batch adds source-owned Apple Japanese, Simplified Chinese and Traditional Chinese DBCS aggregates for RTF. Pinned source comparison verified 15/3/3 new numeric arrays (2,284/400/401 values), all 512 lead/high pointers per encoding and 74 GBKOFF offsets in Apple Simplified Chinese. Focused RTF/SAL tests (94), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. Repository-wide check:docs has pre-existing JSDoc failures; changed source has no diagnostics. WRITER111 records a retained pinned third EUDC range calculation. Remaining current-model gaps include EUC-JP, ISO-2022, UTF-7 and ISCII RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 347978702308 cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950, JOHAB/MS-1361, EUC-CN/KR and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese. This batch ports the pinned separate EUC-JP converter, JIS-0208/JIS-0212 forward and reverse tables, SS2 half-width katakana and SS3 three-byte decoding, and RTF code page 51932 selection. Source comparison verified 330 numeric arrays (55,316 values) and 768 pointer entries. Focused RTF/SAL tests (97), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER112 records the pinned EUC-JP undefined-pair classification and pointer advancement; focused tests preserve them. Repository-wide check:docs has pre-existing JSDoc failures; changed source diagnostics were repaired. Remaining current-model gaps include ISO-2022, UTF-7 and ISCII RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet.

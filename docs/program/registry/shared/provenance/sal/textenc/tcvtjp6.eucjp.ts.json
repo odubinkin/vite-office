@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp6.eucjp.ts",
+    "upstreamPath": "sal/textenc/tcvtjp6.tab",
+    "localSymbols": [
+      "aJIS0208UniLeadTab",
+      "aJIS0212UniLeadTab",
+      "aJIS0208DBCSHighTab",
+      "aJIS0212DBCSHighTab",
+      "aImplEUCJPCvtData"
+    ],
+    "upstreamSymbols": [
+      "aJIS0208UniLeadTab",
+      "aJIS0212UniLeadTab",
+      "aJIS0208DBCSHighTab",
+      "aJIS0212DBCSHighTab",
+      "aImplEUCJPCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned EUC-JP JIS-0208/JIS-0212 lead, reverse-high and four-pointer converter aggregate."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp6.eucjp.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp6.tab source owner is split by EUC-JP responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp6.eucjp.ts",
+          "marker": "aJIS0208UniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "decodes pinned EUC-JP ASCII"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp6.tab",
+          "marker": "aJIS0208UniLeadTab"
+        }
+      ]
+    }
+  }
+}

@@ -20,7 +20,7 @@
         "apps/office/src/sal/textenc/singlebyte.test.ts",
         "vendor/libreoffice-reference/sal/textenc/tenchelp.hxx"
       ],
-      "justification": "TaskHT3AFB ports the full original convertCharToUnicode body,actual undefined-byte helper,all original text-to-Unicode flag/info constants,complete fourteen-field byte descriptors and original core ASCII_US/MS1252/ISO8859_1 const tables including reverse data,null pointers and shared identities. Source ASCII import intentionally uses the MS1252 forward table. Original undefined/error/FLUSH/ignore/default ordering precedes destination checks;consumed and written counts,info reset and lack of automatic terminator remain unchanged. Typed byte/unit views and scalar output cells bind original borrowed pointers and size/output parameters;no host TextDecoder,synthetic table or generic codec provider is introduced. Genuine full original69normal+69ASanUBSan SAL/CPPU graph observations cover bounded initialized buffers,all byte values,all undefined masks and real additional descriptor range gaps. This does not implement the full registry,C factories,reverse converter,OUString byte construction,VCL font-tag serialization,item/pool/document/UI integration or certify native ABI and invalid pointer/capacity inputs. Broad parity remains unverified. Preserves complete DBCS lead, reverse-high, EUDC and aggregate data contracts.",
+      "justification": "TaskHT3AFB ports the full original convertCharToUnicode body,actual undefined-byte helper,all original text-to-Unicode flag/info constants,complete fourteen-field byte descriptors and original core ASCII_US/MS1252/ISO8859_1 const tables including reverse data,null pointers and shared identities. Source ASCII import intentionally uses the MS1252 forward table. Original undefined/error/FLUSH/ignore/default ordering precedes destination checks;consumed and written counts,info reset and lack of automatic terminator remain unchanged. Typed byte/unit views and scalar output cells bind original borrowed pointers and size/output parameters;no host TextDecoder,synthetic table or generic codec provider is introduced. Genuine full original69normal+69ASanUBSan SAL/CPPU graph observations cover bounded initialized buffers,all byte values,all undefined masks and real additional descriptor range gaps. This does not implement the full registry,C factories,reverse converter,OUString byte construction,VCL font-tag serialization,item/pool/document/UI integration or certify native ABI and invalid pointer/capacity inputs. Broad parity remains unverified. Preserves complete DBCS lead, reverse-high, EUDC and aggregate data contracts. Adds the original four-pointer ImplEUCJPConvertData structure.",
       "knownViolations": [],
       "localSymbols": [
         "RTL_TEXTCVT_BYTE_PRIVATE_START",
@@ -31,7 +31,8 @@
         "ImplDBCSEUDCData",
         "ImplDBCSToUniLeadTab",
         "ImplUniToDBCSHighTab",
-        "ImplDBCSConvertData"
+        "ImplDBCSConvertData",
+        "ImplEUCJPConvertData"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sal/textenc/tenchelp.hxx",
@@ -44,7 +45,8 @@
         "ImplDBCSEUDCData",
         "ImplDBCSToUniLeadTab",
         "ImplUniToDBCSHighTab",
-        "ImplDBCSConvertData"
+        "ImplDBCSConvertData",
+        "ImplEUCJPConvertData"
       ]
     }
   }

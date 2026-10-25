@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp4.eucjp.2.ts",
+    "upstreamPath": "sal/textenc/tcvtjp4.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_JIS0208_5D",
+      "aImplUniToDBCSTab_JIS0208_5E",
+      "aImplUniToDBCSTab_JIS0208_5F",
+      "aImplUniToDBCSTab_JIS0208_60",
+      "aImplUniToDBCSTab_JIS0208_61",
+      "aImplUniToDBCSTab_JIS0208_62",
+      "aImplUniToDBCSTab_JIS0208_63",
+      "aImplUniToDBCSTab_JIS0208_64",
+      "aImplUniToDBCSTab_JIS0208_65",
+      "aImplUniToDBCSTab_JIS0208_66",
+      "aImplUniToDBCSTab_JIS0208_67",
+      "aImplUniToDBCSTab_JIS0208_68",
+      "aImplUniToDBCSTab_JIS0208_69",
+      "aImplUniToDBCSTab_JIS0208_6A",
+      "aImplUniToDBCSTab_JIS0208_6B",
+      "aImplUniToDBCSTab_JIS0208_6C",
+      "aImplUniToDBCSTab_JIS0208_6D",
+      "aImplUniToDBCSTab_JIS0208_6E",
+      "aImplUniToDBCSTab_JIS0208_6F",
+      "aImplUniToDBCSTab_JIS0208_70",
+      "aImplUniToDBCSTab_JIS0208_71",
+      "aImplUniToDBCSTab_JIS0208_72",
+      "aImplUniToDBCSTab_JIS0208_73",
+      "aImplUniToDBCSTab_JIS0208_74",
+      "aImplUniToDBCSTab_JIS0208_75",
+      "aImplUniToDBCSTab_JIS0208_76",
+      "aImplUniToDBCSTab_JIS0208_77",
+      "aImplUniToDBCSTab_JIS0208_78"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_JIS0208_5D",
+      "aImplUniToDBCSTab_JIS0208_5E",
+      "aImplUniToDBCSTab_JIS0208_5F",
+      "aImplUniToDBCSTab_JIS0208_60",
+      "aImplUniToDBCSTab_JIS0208_61",
+      "aImplUniToDBCSTab_JIS0208_62",
+      "aImplUniToDBCSTab_JIS0208_63",
+      "aImplUniToDBCSTab_JIS0208_64",
+      "aImplUniToDBCSTab_JIS0208_65",
+      "aImplUniToDBCSTab_JIS0208_66",
+      "aImplUniToDBCSTab_JIS0208_67",
+      "aImplUniToDBCSTab_JIS0208_68",
+      "aImplUniToDBCSTab_JIS0208_69",
+      "aImplUniToDBCSTab_JIS0208_6A",
+      "aImplUniToDBCSTab_JIS0208_6B",
+      "aImplUniToDBCSTab_JIS0208_6C",
+      "aImplUniToDBCSTab_JIS0208_6D",
+      "aImplUniToDBCSTab_JIS0208_6E",
+      "aImplUniToDBCSTab_JIS0208_6F",
+      "aImplUniToDBCSTab_JIS0208_70",
+      "aImplUniToDBCSTab_JIS0208_71",
+      "aImplUniToDBCSTab_JIS0208_72",
+      "aImplUniToDBCSTab_JIS0208_73",
+      "aImplUniToDBCSTab_JIS0208_74",
+      "aImplUniToDBCSTab_JIS0208_75",
+      "aImplUniToDBCSTab_JIS0208_76",
+      "aImplUniToDBCSTab_JIS0208_77",
+      "aImplUniToDBCSTab_JIS0208_78"
+    ],
+    "preservedResponsibilities": [
+      "Pinned EUC-JP source-owned JIS reverse numeric tables and original pointer targets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp4.eucjp.2.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp4.tab source owner is split by EUC-JP responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp4.eucjp.2.ts",
+          "marker": "aImplUniToDBCSTab_JIS0208_5D"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "decodes pinned EUC-JP ASCII"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp4.tab",
+          "marker": "aImplUniToDBCSTab_JIS0208_5D"
+        }
+      ]
+    }
+  }
+}

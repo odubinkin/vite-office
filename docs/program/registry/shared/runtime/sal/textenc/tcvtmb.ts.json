@@ -20,15 +20,17 @@
         "vendor/libreoffice-reference/sal/textenc/tcvtmb.cxx#ImplDBCSToUnicode",
         "apps/office/src/sal/textenc/tcvtmb.test.ts#maps MS-932 single bytes"
       ],
-      "justification": "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "justification": "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order. Full multibyte SAL codec parity and compiled upstream differential remain unverified. Ports ImplEUCJPToUnicode including JIS-0208/JIS-0212, SS2, SS3 and source status/consumption ordering.",
       "knownViolations": [],
       "localSymbols": [
-        "ImplDBCSToUnicode"
+        "ImplDBCSToUnicode",
+        "ImplEUCJPToUnicode"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtmb.cxx",
       "upstreamSymbols": [
-        "ImplDBCSToUnicode"
+        "ImplDBCSToUnicode",
+        "ImplEUCJPToUnicode"
       ]
     }
   }

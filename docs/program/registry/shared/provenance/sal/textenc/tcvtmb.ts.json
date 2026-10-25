@@ -7,13 +7,16 @@
     "localPath": "apps/office/src/sal/textenc/tcvtmb.ts",
     "upstreamPath": "sal/textenc/tcvtmb.cxx",
     "localSymbols": [
-      "ImplDBCSToUnicode"
+      "ImplDBCSToUnicode",
+      "ImplEUCJPToUnicode"
     ],
     "upstreamSymbols": [
-      "ImplDBCSToUnicode"
+      "ImplDBCSToUnicode",
+      "ImplEUCJPToUnicode"
     ],
     "preservedResponsibilities": [
-      "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order."
+      "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order.",
+      "Ports ImplEUCJPToUnicode including JIS-0208/JIS-0212, SS2, SS3 and source status/consumption ordering."
     ],
     "omittedResponsibilities": [
       "Other source-owned encodings and complete SAL conversion factories remain outside this module."

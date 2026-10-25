@@ -24,7 +24,8 @@
       "Decodes RTF UTF-8 code page 65001 through the native SAL converter instead of the browser decoder.",
       "Uses OStringToOUString default conversion flags and FLUSH: undefined single bytes map to the pinned private-use range and incomplete UTF-8 is replaced.",
       "Routes MS-932 RTF code page 932 bytes through the source-owned SAL DBCS converter, including EUDC and undefined-byte semantics.",
-      "Routes RTF code pages 936, 949 and 950 through source-owned SAL DBCS tables and EUDC semantics."
+      "Routes RTF code pages 936, 949 and 950 through source-owned SAL DBCS tables and EUDC semantics.",
+      "Dispatches RTF EUC-JP bytes through the source-owned ImplEUCJPToUnicode path."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
