@@ -55,6 +55,62 @@ it("round trips text, Unicode, alignment and direct character runs", /** Checks 
   }
 });
 
+it("round trips represented paragraph styles through the RTF stylesheet", () => {
+  const source = createWriterDocument();
+  const heading = source.paragraphs[0];
+  if (heading === undefined) throw new Error("Missing paragraph.");
+  heading.SetText("Heading");
+  heading.ChgFormatColl(source.GetTextFormatColl("heading-2"));
+  const quote = source.nodes.MakeTextNode("Quote");
+  quote.ChgFormatColl(source.GetTextFormatColl("quotations"));
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const encoded = new TextDecoder().decode(bytes);
+    expect(encoded).toContain("\\stylesheet");
+    expect(encoded).toMatch(/\{\\s0[^}]*\\b[^}]*Heading 2;/u);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.paragraphs.map((node) => node.GetParagraphStyle())).toEqual([
+      "heading-2",
+      "quotations",
+    ]);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("round trips point bookmarks inside formatted text and table cells", () => {
+  const source = createWriterDocument();
+  const body = source.paragraphs[0];
+  if (body === undefined) throw new Error("Missing paragraph.");
+  body.SetText("BeforeAfter");
+  source.GetIDocumentMarkAccess().MakeMark(body, 6, "Midpoint");
+  const table = source.nodes.MakeTableNode("Grid", {}, body);
+  const cell = source.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetParagraphs()[0];
+  if (cell === undefined) throw new Error("Missing cell.");
+  cell.SetText("Cell");
+  source.GetIDocumentMarkAccess().MakeMark(cell, 2, "CellPoint");
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("\\bkmkstart Midpoint");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(
+      imported
+        .GetIDocumentMarkAccess()
+        .GetBookmarks()
+        .map((mark) => [mark.GetName(), mark.GetMarkPos().GetContentIndex()]),
+    ).toEqual([
+      ["Midpoint", 6],
+      ["CellPoint", 2],
+    ]);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
 it("round trips table rows and cell paragraph order", /** Checks native RTF row and cell controls against table owners. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];

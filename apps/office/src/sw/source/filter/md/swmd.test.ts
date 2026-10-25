@@ -91,6 +91,19 @@ it("keeps fenced code text and quote styles without interpreting inline markup",
   }
 });
 
+it("maps setext headings, indented code and one multi-line quote into native paragraphs", () => {
+  const document = read("Title\n=====\n\n    *literal*\n    second\n\n> first\n> second\n");
+  try {
+    expect(document.paragraphs.map((node) => [node.GetParagraphStyle(), node.GetText()])).toEqual([
+      ["heading-1", "Title"],
+      ["preformatted-text", "*literal*\nsecond"],
+      ["quotations", "first\u00a0second"],
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("maps strikeout and code spans to native character items", /** Checks represented span callbacks remain in text hints. @returns Nothing. */ () => {
   const document = read("Before ~~deleted~~ and `code`.");
   try {

@@ -13,7 +13,7 @@
       "MarkdownReader::Read"
     ],
     "preservedResponsibilities": [
-      "Reads Markdown blocks into native Writer paragraph styles, hints, lists and tables."
+      "Reads represented Markdown blocks, including setext headings, indented code and multiline quotations, into native Writer paragraph styles, hints, lists and tables."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."

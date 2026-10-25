@@ -10,6 +10,8 @@ import {
   DFLT_ESC_SUPER,
 } from "../../../../editeng/inc/escapementitem";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
+import { isWriterParagraphStyle } from "../../core/doc/fmtcol";
+import { getWriterParagraphStyleId } from "../../../inc/poolfmt";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
@@ -22,6 +24,7 @@ interface RtfParagraphState {
   left: number;
   right: number;
   firstLine: number;
+  styleIndex?: number;
   listOverride?: number;
   listLevel: number;
 }
@@ -31,6 +34,10 @@ interface RtfState {
   destination:
     | "body"
     | "fonttbl"
+    | "stylesheet"
+    | "styleentry"
+    | "bookmarkstart"
+    | "bookmarkend"
     | "colortbl"
     | "listtable"
     | "list"
@@ -47,12 +54,16 @@ interface RtfState {
   colorIndex: number;
   field?: { instruction: string; url?: string };
   hyperlink?: string;
+  styleIndex?: number;
+  styleName?: string;
+  bookmarkName?: string;
 }
 
 /** Parsed paragraph before the source graph is applied atomically. */
 interface RtfParagraph {
   readonly runs: readonly WriterTextRun[];
   readonly state: RtfParagraphState;
+  readonly marks: readonly Readonly<{ name: string; offset: number }>[];
 }
 
 /** Ordered body content with native rows and cell paragraphs. */
@@ -98,9 +109,11 @@ export class RtfDocumentImpl {
   private readonly states: RtfState[] = [];
   private readonly blocks: RtfBlock[] = [];
   private readonly runs: WriterTextRun[] = [];
+  private readonly marks: { name: string; offset: number }[] = [];
   private readonly fonts = new Map<number, string>();
   private readonly colors: string[] = [];
   private readonly listFormats = new Map<number, readonly ("bullet" | "numbered")[]>();
+  private readonly styles = new Map<number, string>();
   private readonly listOverrides = new Map<number, number>();
   private currentListId = 0;
   private currentListLevels: ("bullet" | "numbered")[] = [];
@@ -161,10 +174,24 @@ export class RtfDocumentImpl {
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
   private ApplyParagraph(node: SwTextNode, paragraph: RtfParagraph): void {
+    const styleName =
+      paragraph.state.styleIndex === undefined
+        ? undefined
+        : this.styles.get(paragraph.state.styleIndex);
+    const styleId =
+      styleName === undefined
+        ? undefined
+        : styleName === "Default Paragraph Style" || styleName === "Standard"
+          ? "default"
+          : getWriterParagraphStyleId(styleName);
+    if (styleId !== undefined && isWriterParagraphStyle(styleId))
+      node.ChgFormatColl(node.GetDoc().GetTextFormatColl(styleId));
     node.SetText(paragraph.runs.map((run) => run.text).join(""));
     const hints = new SwpHints(node.GetDoc().GetAttrPool());
     hints.setTextRuns(paragraph.runs, node.GetSwAttrSet());
     node.SetTextHints(hints);
+    for (const mark of paragraph.marks)
+      node.GetDoc().GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
     node.SetParagraphAlignment(paragraph.state.alignment);
     node.SetParagraphTextLeftMargin(paragraph.state.left);
     node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
@@ -198,6 +225,7 @@ export class RtfDocumentImpl {
         colorIndex: previous?.colorIndex ?? 0,
         ...(previous?.field === undefined ? {} : { field: previous.field }),
         ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
+        ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
       });
       return;
     }
@@ -205,6 +233,18 @@ export class RtfDocumentImpl {
       if (this.states.length === 1 && this.runs.length > 0) this.CommitParagraph(this.states[0]);
       const previous = this.states.pop();
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0) this.CommitFont(previous);
+      if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
+        const name = previous.styleName?.split(";")[0]?.trim();
+        if (name !== undefined && name.length > 0) this.styles.set(previous.styleIndex, name);
+      }
+      if (previous?.destination === "bookmarkstart") {
+        const name = previous.bookmarkName?.trim();
+        if (name !== undefined && name.length > 0)
+          this.marks.push({
+            name,
+            offset: this.runs.reduce((length, run) => length + run.text.length, 0),
+          });
+      }
       if (previous?.destination === "list")
         this.listFormats.set(this.currentListId, [...this.currentListLevels]);
       if (previous?.destination === "listoverride")
@@ -220,6 +260,10 @@ export class RtfDocumentImpl {
     if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
     if (token.kind === "text") {
       if (state.destination === "fonttbl") this.ReadFontText(token.value, state);
+      else if (state.destination === "styleentry")
+        state.styleName = (state.styleName ?? "") + token.value;
+      else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
+        state.bookmarkName = (state.bookmarkName ?? "") + token.value;
       else if (state.destination === "colortbl") this.ReadColorText(token.value);
       else if (state.destination === "fldinst" && state.field !== undefined)
         state.field.instruction += token.value;
@@ -258,9 +302,16 @@ export class RtfDocumentImpl {
       state.starred = false;
       return;
     }
+    if (state.destination === "body" && (token.name === "bkmkstart" || token.name === "bkmkend")) {
+      state.destination = token.name === "bkmkstart" ? "bookmarkstart" : "bookmarkend";
+      state.bookmarkName = "";
+      state.starred = false;
+      return;
+    }
     if (
       token.name === "fonttbl" ||
       token.name === "colortbl" ||
+      token.name === "stylesheet" ||
       token.name === "listtable" ||
       token.name === "listoverridetable"
     ) {
@@ -268,6 +319,13 @@ export class RtfDocumentImpl {
       state.starred = false;
       return;
     }
+    if (state.destination === "stylesheet" && token.name === "s") {
+      state.destination = "styleentry";
+      state.styleIndex = token.parameter ?? 0;
+      state.styleName = "";
+      return;
+    }
+    if (state.destination === "styleentry" || state.destination === "stylesheet") return;
     if (state.destination === "listtable" && token.name === "list") {
       state.destination = "list";
       this.currentListId = 0;
@@ -411,6 +469,8 @@ export class RtfDocumentImpl {
       this.pendingUpDn = undefined;
     } else if (name === "ls" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, listOverride: parameter };
+    else if (name === "s" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, styleIndex: parameter };
     else if (name === "ilvl" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
     else if (name === "fs" && parameter !== undefined && parameter > 0)
@@ -471,6 +531,7 @@ export class RtfDocumentImpl {
     const paragraph: RtfParagraph = {
       runs: this.runs.splice(0),
       state: { ...(state?.paragraph ?? DEFAULT_PARAGRAPH) },
+      marks: this.marks.splice(0),
     };
     if (this.inTable) this.tableCell.push(paragraph);
     else this.blocks.push({ kind: "paragraph", paragraph });

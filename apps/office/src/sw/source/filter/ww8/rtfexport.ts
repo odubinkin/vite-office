@@ -4,6 +4,9 @@ import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { WriterTextRun } from "../basflt/writer-transfer";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
@@ -18,12 +21,14 @@ export class RtfExport {
     string,
     { id: number; levels: readonly ("bullet" | "numbered")[] }
   >();
+  private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
 
   /** Exports a complete Writer document. @param document - Native model. @returns RTF bytes. */
   public ExportDocument(document: SwDoc): Uint8Array {
     this.fonts.clear();
     this.colors.clear();
     this.lists.clear();
+    this.styles.clear();
     const blocks = document.GetNodes().getBodyContent();
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
@@ -35,6 +40,8 @@ export class RtfExport {
           this.IndexColor(run.attributes.highlight);
       }
       const paragraph = node as SwTextNode;
+      const style = paragraph.GetTextFormatColl();
+      if (!this.styles.has(style.id)) this.styles.set(style.id, { index: this.styles.size, style });
       const rule = paragraph.GetNumRule();
       if (rule !== undefined && !this.lists.has(rule.GetName())) {
         const levels = Array.from(
@@ -46,6 +53,14 @@ export class RtfExport {
         );
         this.lists.set(rule.GetName(), { id: this.lists.size + 1, levels });
       }
+    }
+    for (const { style } of this.styles.values()) {
+      const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
+      if (attributes.fontFamily !== undefined) this.IndexFont(attributes.fontFamily);
+      if (attributes.color !== undefined && attributes.color !== "auto")
+        this.IndexColor(attributes.color);
+      if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
+        this.IndexColor(attributes.highlight);
     }
     let output = "{\\rtf1\\ansi\\ansicpg1252\\deff0";
     if (this.fonts.size > 0) {
@@ -60,6 +75,17 @@ export class RtfExport {
           green = Number.parseInt(color.slice(3, 5), 16),
           blue = Number.parseInt(color.slice(5, 7), 16);
         output += `\\red${red}\\green${green}\\blue${blue};`;
+      }
+      output += "}";
+    }
+    if (this.styles.size > 0) {
+      output += "{\\stylesheet";
+      for (const { index, style } of this.styles.values()) {
+        const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
+          character = this.attributeOutput.WriteCharacter(
+            projectWriterCharacterAttributes(style.GetAttrSet()),
+          );
+        output += `{\\s${index}${paragraph}${character} ${escapeRtf(style.GetName())};}`;
       }
       output += "}";
     }
@@ -111,21 +137,55 @@ export class RtfExport {
   /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */
   private WriteParagraph(paragraph: SwTextNode): string {
     let output = this.attributeOutput.WriteParagraphProperties(paragraph);
+    const style = this.styles.get(paragraph.GetParagraphStyle());
+    if (style !== undefined) output += `\\s${style.index}`;
     const rule = paragraph.GetNumRule();
     if (rule !== undefined) {
       const list = this.lists.get(rule.GetName());
       if (list !== undefined) output += `\\ls${list.id}\\ilvl${paragraph.GetAttrListLevel()}`;
     }
     output += " ";
+    const marks = paragraph
+      .GetDoc()
+      .GetIDocumentMarkAccess()
+      .GetBookmarks()
+      .filter((mark) => mark.GetMarkPos().GetNode() === paragraph);
+    let offset = 0;
+    let markIndex = 0;
     for (const run of projectWriterTextRuns(paragraph)) {
-      const controls = this.attributeOutput.WriteCharacter(run.attributes);
-      const text = "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
-      output +=
-        run.hyperlink === undefined
-          ? text
-          : `{\\field{\\*\\fldinst HYPERLINK "${escapeRtf(run.hyperlink.url).replaceAll('"', "\\u34?")}"}{\\fldrslt ${text}}}`;
+      let localOffset = 0;
+      const end = offset + run.text.length;
+      while (markIndex < marks.length) {
+        const mark = marks[markIndex];
+        if (mark === undefined) break;
+        const position = mark.GetMarkPos().GetContentIndex();
+        if (position >= end) break;
+        output += this.WriteRun({ ...run, text: run.text.slice(localOffset, position - offset) });
+        output += this.WriteBookmark(mark.GetName());
+        localOffset = position - offset;
+        markIndex++;
+      }
+      output += this.WriteRun({ ...run, text: run.text.slice(localOffset) });
+      offset = end;
     }
+    for (; markIndex < marks.length; markIndex++)
+      output += this.WriteBookmark(marks[markIndex]?.GetName() ?? "");
     return output;
+  }
+
+  /** Emits one Writer point mark at its source text offset. */
+  private WriteBookmark(name: string): string {
+    return `{\\*\\bkmkstart ${escapeRtf(name)}}{\\*\\bkmkend ${escapeRtf(name)}}`;
+  }
+
+  /** Emits one native text run without crossing a bookmark position. */
+  private WriteRun(run: WriterTextRun): string {
+    if (run.text.length === 0) return "";
+    const controls = this.attributeOutput.WriteCharacter(run.attributes);
+    const text = "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
+    return run.hyperlink === undefined
+      ? text
+      : `{\\field{\\*\\fldinst HYPERLINK "${escapeRtf(run.hyperlink.url).replaceAll('"', "\\u34?")}"}{\\fldrslt ${text}}}`;
   }
 
   /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */

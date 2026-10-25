@@ -61,3 +61,20 @@ it("writes a Markdown table from actual Writer rows", /** Checks table writer an
     source.Dispose();
   }
 });
+
+it("keeps consecutive preformatted paragraphs inside one native Markdown fence", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("first");
+  first.ChgFormatColl(source.GetTextFormatColl("preformatted-text"));
+  const second = source.nodes.MakeTextNode("second");
+  second.ChgFormatColl(source.GetTextFormatColl("preformatted-text"));
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "```\nfirst\nsecond\n```\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});

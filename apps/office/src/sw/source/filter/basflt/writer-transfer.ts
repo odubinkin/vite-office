@@ -1,6 +1,7 @@
 /** @fileoverview Normalizes browser and filter text-run transfer records at the Writer filter boundary. */
 
 import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtatr2";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SwpHints, type WriterTextRunLike } from "../../core/txtnode/ndhints";
 import type { SwTextFragment, SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -80,6 +81,15 @@ export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCh
     ...(isWriterColor(attributes.highlight, "transparent")
       ? { highlight: attributes.highlight }
       : {}),
+    ...(isWriterStrikeout(attributes.strikeout) ? { strikeout: attributes.strikeout } : {}),
+    ...(isWriterEscapement(attributes.escapement)
+      ? {
+          escapement: {
+            offset: attributes.escapement.offset,
+            height: attributes.escapement.height,
+          },
+        }
+      : {}),
     bold: attributes.bold === true,
     italic: attributes.italic === true,
     underline: attributes.underline === true,
@@ -125,7 +135,33 @@ function areWriterCharacterAttributesEqual(
     left.underline === right.underline &&
     left.fontFamily === right.fontFamily &&
     left.fontSizeTwips === right.fontSizeTwips &&
-    left.highlight === right.highlight
+    left.highlight === right.highlight &&
+    left.strikeout === right.strikeout &&
+    left.escapement?.offset === right.escapement?.offset &&
+    left.escapement?.height === right.escapement?.height
+  );
+}
+
+/** Accepts only native strikeout values represented by the current character item. */
+function isWriterStrikeout(value: unknown): value is FontStrikeout {
+  return (
+    typeof value === "number" &&
+    Number.isInteger(value) &&
+    value >= FontStrikeout.STRIKEOUT_NONE &&
+    value <= FontStrikeout.STRIKEOUT_X
+  );
+}
+
+/** Accepts the integer offset and relative height carried by SvxEscapementItem. */
+function isWriterEscapement(value: unknown): value is { offset: number; height: number } {
+  if (!isRecord(value)) return false;
+  return (
+    Number.isInteger(value.offset) &&
+    Number.isInteger(value.height) &&
+    Number(value.offset) >= -32768 &&
+    Number(value.offset) <= 32767 &&
+    Number(value.height) >= 0 &&
+    Number(value.height) <= 255
   );
 }
 

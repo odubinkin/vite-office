@@ -8,9 +8,21 @@ import {
   DFLT_ESC_SUPER,
 } from "../../../../editeng/inc/escapementitem";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { getWriterParagraphAlignment } from "../../core/txtnode/ndtxt-hints";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
+import {
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
+} from "../../../inc/hintids";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput {
@@ -22,7 +34,34 @@ export class RtfAttributeOutput {
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
-    const alignment = paragraph.GetParagraphAlignment();
+    return this.WriteParagraphValues(
+      paragraph.GetParagraphAlignment(),
+      paragraph.GetParagraphTextLeftMargin(),
+      paragraph.GetParagraphRightMargin(),
+      (
+        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+      ).ResolveTextFirstLineOffset(),
+    );
+  }
+
+  /** Emits effective paragraph values for one named Writer style definition. */
+  public WriteStyleParagraphProperties(style: SwTextFormatColl): string {
+    const items = style.GetAttrSet();
+    return this.WriteParagraphValues(
+      getWriterParagraphAlignment((items.Get(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()),
+      (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+      (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
+      (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+    );
+  }
+
+  /** Emits adjustment and margins shared by paragraph and stylesheet paths. */
+  private WriteParagraphValues(
+    alignment: "left" | "center" | "right" | "justify",
+    left: number,
+    right: number,
+    firstLine: number,
+  ): string {
     let output =
       alignment === "center"
         ? "\\qc"
@@ -31,11 +70,6 @@ export class RtfAttributeOutput {
           : alignment === "justify"
             ? "\\qj"
             : "\\ql";
-    const left = paragraph.GetParagraphTextLeftMargin(),
-      right = paragraph.GetParagraphRightMargin(),
-      firstLine = (
-        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-      ).ResolveTextFirstLineOffset();
     if (left !== 0) output += `\\li${left}`;
     if (right !== 0) output += `\\ri${right}`;
     if (firstLine !== 0) output += `\\fi${firstLine}`;

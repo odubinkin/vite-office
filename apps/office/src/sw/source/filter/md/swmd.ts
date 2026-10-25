@@ -132,6 +132,40 @@ export class SwMarkdownParser {
         continue;
       }
       const nextLine = lines[offset + 1];
+      const setext = nextLine === undefined ? null : /^ {0,3}(=+|-+)\s*$/u.exec(nextLine);
+      if (setext !== null && line.trim().length > 0) {
+        blocks.push({
+          kind: "paragraph",
+          value: {
+            runs: parseMarkdownSpans(line.trim()),
+            style: setext[1]?.startsWith("=") ? "heading-1" : "heading-2",
+          },
+        });
+        offset += 2;
+        activeListId = undefined;
+        activeListKind = undefined;
+        continue;
+      }
+      if (/^(?: {4}|\t)/u.test(line)) {
+        const code: string[] = [];
+        while (offset < lines.length) {
+          const current = lines[offset] as string;
+          if (/^(?: {4}|\t)/u.test(current)) {
+            code.push(current.startsWith("\t") ? current.slice(1) : current.slice(4));
+            offset++;
+          } else if (current.trim().length === 0 && /^(?: {4}|\t)/u.test(lines[offset + 1] ?? "")) {
+            code.push("");
+            offset++;
+          } else break;
+        }
+        blocks.push({
+          kind: "paragraph",
+          value: { runs: createWriterTextRuns(code.join("\n")), style: "preformatted-text" },
+        });
+        activeListId = undefined;
+        activeListKind = undefined;
+        continue;
+      }
       const alignment = nextLine === undefined ? undefined : readMarkdownTableAlignment(nextLine);
       if (
         line.includes("|") &&
@@ -175,11 +209,17 @@ export class SwMarkdownParser {
       activeListKind = undefined;
       const quote = /^ {0,3}> ?(.*)$/u.exec(line);
       if (quote !== null) {
+        const contents: string[] = [];
+        while (offset < lines.length) {
+          const current = /^ {0,3}> ?(.*)$/u.exec(lines[offset] as string);
+          if (current === null) break;
+          contents.push(current[1] as string);
+          offset++;
+        }
         blocks.push({
           kind: "paragraph",
-          value: { runs: parseMarkdownSpans(quote[1] as string), style: "quotations" },
+          value: { runs: parseMarkdownSpans(contents.join("\n")), style: "quotations" },
         });
-        offset++;
         continue;
       }
       const paragraph = [line.trimStart()];

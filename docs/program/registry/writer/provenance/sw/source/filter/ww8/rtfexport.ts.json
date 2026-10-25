@@ -14,10 +14,10 @@
       "RtfExport::WriteNumbering"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body text, character decoration/position, hyperlinks, paragraph alignment/indentation, tables and list definitions as RTF."
+      "Writes represented Writer body text, character decoration/position, hyperlinks, point bookmarks, paragraph alignment/indentation, built-in paragraph style references, tables and list definitions as RTF."
     ],
     "omittedResponsibilities": [
-      "Upstream complete page, frame, picture, non-hyperlink field, header/footer, drawing, section and style export paths remain unverified."
+      "Upstream complete page, frame, picture, non-hyperlink field, header/footer, drawing, section and full style-property export paths remain unverified."
     ],
     "evidence": {
       "local": [

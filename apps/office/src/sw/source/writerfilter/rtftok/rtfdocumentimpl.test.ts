@@ -64,6 +64,20 @@ it("resolves font and color tables into native character hints", /** Checks RTF 
   }
 });
 
+it("maps stylesheet paragraph controls to available Writer styles", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s0 Default Paragraph Style;}{\\s1 Heading 3;}}\\pard\\s1 Heading\\par\\pard\\s0 Body}",
+  );
+  try {
+    expect(document.paragraphs.map((node) => node.GetParagraphStyle())).toEqual([
+      "heading-3",
+      "default",
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("imports first-line indentation, strikeout, superscript and hyperlink field results", /** Checks represented RTF dispatch and native owners. @returns Nothing. */ () => {
   const document = read(
     '{\\rtf1\\ansi\\fi-120 Base {\\strike crossed} {\\super raised} {\\field{\\*\\fldinst HYPERLINK "https://example.test"}{\\fldrslt linked}}}',

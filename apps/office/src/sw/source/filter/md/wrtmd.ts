@@ -2,7 +2,7 @@
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 
@@ -13,10 +13,26 @@ export class SwMDWriter {
     const blocks = document.GetNodes().getBodyContent(),
       output: string[] = [];
     let previousList = false;
-    for (const block of blocks) {
+    for (let index = 0; index < blocks.length; index++) {
+      const block = blocks[index];
+      if (block === undefined) continue;
       if (block instanceof SwTableNode) {
         if (output.length > 0) output.push("");
         output.push(writeTable(block));
+        previousList = false;
+        continue;
+      }
+      if (block.GetParagraphStyle() === "preformatted-text") {
+        const code = [block.GetText()];
+        while (true) {
+          const next = blocks[index + 1];
+          if (!(next instanceof SwTextNode) || next.GetParagraphStyle() !== "preformatted-text")
+            break;
+          index++;
+          code.push(next.GetText());
+        }
+        if (output.length > 0) output.push("");
+        output.push(`\`\`\`\n${code.join("\n")}\n\`\`\``);
         previousList = false;
         continue;
       }
@@ -36,7 +52,6 @@ function writeParagraph(node: SwTextNode): string {
     heading = /^heading-([1-6])$/u.exec(style);
   const text = writeRuns(projectWriterTextRuns(node), heading !== null);
   if (heading !== null) return `${"#".repeat(Number(heading[1]))} ${text}`;
-  if (style === "preformatted-text") return `\`\`\`\n${node.GetText()}\n\`\`\``;
   if (style === "quotations") return `> ${text}`;
   const kind = node.GetListKind();
   if (kind !== "none") {
