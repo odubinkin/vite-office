@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/inc/fshelper.ts",
+    "status": "mapped",
+    "upstreamPath": "include/sax/fshelper.hxx",
+    "localSymbols": [
+      "FastSerializerHelper",
+      "MergeMarks",
+      "FSNS"
+    ],
+    "upstreamSymbols": [
+      "FastSerializerHelper",
+      "MergeMarks",
+      "FSNS"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/inc/fshelper.ts",
+          "marker": "FastSerializerHelper"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/sax/fshelper.hxx",
+          "marker": "FastSerializerHelper"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sax/source/tools/fshelper.cxx",
+          "marker": "FastSerializerHelper::endDocument"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "V4DQJW adds native FastSaxSerializer/FastSerializerHelper text/byte export, original1MiB cache, ordered token/value emission, XML10 and literal x-escape rules, APPEND/PREPEND/POSTPONE marks and original sorted buckets. XmlFilterBase now owns the native fragment-serializer factory with original no-header/VML/+xml predicate. Actual ZipFragmentStream/ZipStorage, OOXML token names and relationship/content-type owners are reused. Caller-provided actual FastTokenHandler replaces native component-service acquisition; no fake global context or token catalog is introduced. UTF16 host strings use the existing UTF8 byte transport binding; no exact claim is made for invalid UTF16 conversion or malformed UTF8 diagnostics. Physical buffers/refcounts/debug structural stacks are erased under GC; native output preconditions become host errors. File-local native invalidChar is exported only for source-scoped algorithm testing. FastAttributeList/VML raw-attribute overload, native numeric/double overloads and complete DOCX/XLSX export orchestration remain pending. No document/file UI behavior or whole-native parity is claimed; previous statuses and intentional file workflows remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "FastAttributeList/raw-VML attributes, numeric/double overloads, exact invalid-UTF16 encoding, native ABI/debug/allocator/service framework and complete format export are not certified."
+    ]
+  }
+}

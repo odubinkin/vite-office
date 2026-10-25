@@ -1196,3 +1196,27 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `SectionPropertyMap::GetPageStyle`.
 - Observation: the method stores an unused page-style name before calling the document factory. A UNO exception from that factory is caught while the name remains nonempty. A later call enters lookup for the retained name instead of trying creation again; when no style was inserted, lookup fails again. Reachability in supported desktop imports and user-visible impact remain unverified.
 - Preservation: retain name assignment order, the UNO-only catch and lookup-on-retry path. Tests inject a real UNO failure at the actual model factory and confirm the missing style is not created on retry. Host implementation errors remain visible.
+
+### WRITER108 — fast serializer assumes an existing x-escape prefix is already escaped
+
+- Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::write`.
+- Observation: an input matching `_x005F_xHHHH_` is emitted unchanged rather than escaping its leading underscore. `_x0020_` is also deliberately retained. The source explicitly assumes the first form was already escaped but not unescaped earlier. If it instead originated as literal document text and the consumer decodes that value as an OOXML basic string, literal content may change. Desktop reachability and impact remain unverified.
+- Preservation: retain exact hex/case checks, the blank exception and suppression positions for adjacent escapes. Byte-output tests pin the source behavior without normalizing all literal patterns.
+
+### WRITER109 — sorted serializer marks omit the initial unknown bucket
+
+- Source: pinned `sax/source/tools/fastserializer.hxx`, `ForSort` initialization; `fastserializer.cxx`, `ForSort::setCurrentElement`, `append` and `sort`.
+- Observation: the current token starts at zero and changes only for tokens present in the supplied order. Output before the first recognized token accumulates under zero and is omitted if zero is absent from that order. Later unrecognized elements stay in the preceding recognized bucket. Repeated order entries repeat their bucket. Whether valid Writer export paths reach unintended omissions remains unverified.
+- Preservation: retain the original buckets and supplied-order traversal, including sorted PREPEND acting as APPEND. Tests pin each behavior; no fallback bucket or order deduplication is added.
+
+### WRITER110 — cached SAX output reuses a sequence buffer after forwarding a shared sequence
+
+- Source: pinned `sax/source/tools/CachedOutputStream.hxx`, `flush` and `writeBytes`; `include/com/sun/star/uno/Sequence.hxx`, `toUnoSequence`.
+- Observation: flush changes the cached sequence length and passes its UNO reinterpretation to the output stream. Subsequent writes reuse the same raw buffer. A stream retaining a copied native Sequence may therefore observe changed content or length despite ordinary sequence value expectations. This is source-level suspicion; native retention/copy-on-write behavior and desktop impact have not been compiled or demonstrated.
+- Preservation: retain buffer reuse, flush order and synchronous output calls. Host byte views are explicitly borrowed and actual ZIP output copies them immediately; a simulated native allocator or copy-on-write layer is not introduced. Exact native ABI/retention behavior remains unverified.
+
+### WRITER111 — failed initial serializer mark setup leaves its empty flag inconsistent
+
+- Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element start methods.
+- Observation: mark pushes its object before switching cache output, and updates the separate empty-stack flag after that switch. If flushing the previous stream throws, the stack retains a mark while the flag remains true. Later merge calls return based on that flag and element starts bypass mark setup. The native end-document invariant fails. Desktop reachability and impact remain unverified.
+- Preservation: keep the separate flag and exact fallible-operation order. A real closed ZIP stream test confirms translated failure behavior. Do not derive the flag from stack length or roll back the pushed mark.

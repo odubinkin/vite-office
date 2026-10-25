@@ -1,4 +1,6 @@
 /** @fileoverview Ports consumed XmlFilterBase XML-fragment import, cached relationship ownership, output fragment MIME and relation export; ZIP and SAX adaptation remains below this boundary. */
+import { FastSerializerHelper } from "../../../sax/inc/fshelper";
+import { FastTokenHandler } from "./fasttokenhandler";
 import type { SaxesTagNS } from "saxes";
 import {
   parseFastXmlStream,
@@ -145,6 +147,19 @@ export class XmlFilterBase {
     if (external) entry.push({ First: "TargetMode", Second: "External" });
     output.entries.push(entry);
     return id;
+  }
+  /** Original XML serializer factory preserves no-header and VML media-type admission. The actual lexical token service is injected at this component boundary. @param name - Fragment path. @param mediaType - MIME. @param noHeader - Original caller override. @returns Owned serializer helper. */
+  openFragmentStreamWithSerializer(
+    name: string,
+    mediaType: string,
+    noHeader = false,
+  ): FastSerializerHelper {
+    const header = !noHeader && (!mediaType.includes("vml") || mediaType.includes("+xml"));
+    return new FastSerializerHelper(
+      this.openFragmentStream(name, mediaType),
+      header,
+      new FastTokenHandler(),
+    );
   }
   /** Commits original relationship streams before the storage transaction. @returns OOXML bytes. */
   commitStorage(): Uint8Array {
