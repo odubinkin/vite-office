@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sal/textenc/tcvtscn4.gb2312.3.ts#aImplUniToDBCSTab_GB_8E",
         "vendor/libreoffice-reference/sal/textenc/tcvtscn4.tab#aImplUniToDBCSTab_GB_8E",
-        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses the pinned SAL EUC and Apple Korean aggregates"
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
       ],
       "justification": "Pinned GB2312 source-owned reverse numeric tables with every value and original pointer target preserved. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
       "knownViolations": [],

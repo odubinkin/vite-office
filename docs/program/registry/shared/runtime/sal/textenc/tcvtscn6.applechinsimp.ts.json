@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtscn6.applechinsimp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtscn6.applechinsimp.ts#aAPPLECHINSIMPUniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvtscn6.tab#aAPPLECHINSIMPUniLeadTab",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
+      ],
+      "justification": "Pinned Apple Simplified Chinese lead, reverse-high and complete DBCS converter aggregate, including original pointer offsets. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aAPPLECHINSIMPUniLeadTab",
+        "aAPPLECHINSIMPDBCSHighTab",
+        "aImplAPPLECHINSIMPDBCSCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtscn6.tab",
+      "upstreamSymbols": [
+        "aAPPLECHINSIMPUniLeadTab",
+        "aAPPLECHINSIMPDBCSHighTab",
+        "aImplAPPLECHINSIMPDBCSCvtData"
+      ]
+    }
+  }
+}

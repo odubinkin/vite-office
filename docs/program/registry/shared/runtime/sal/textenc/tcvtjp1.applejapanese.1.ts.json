@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtjp1.applejapanese.1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtjp1.applejapanese.1.ts#aImplDBCSToUniTab_APPLEJAPANESE_85",
+        "vendor/libreoffice-reference/sal/textenc/tcvtjp1.tab#aImplDBCSToUniTab_APPLEJAPANESE_85",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
+      ],
+      "justification": "Pinned Apple Japanese source-owned forward numeric tables and original pointer targets. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplDBCSToUniTab_APPLEJAPANESE_85",
+        "aImplDBCSToUniTab_APPLEJAPANESE_86",
+        "aImplDBCSToUniTab_APPLEJAPANESE_87",
+        "aImplDBCSToUniTab_APPLEJAPANESE_88",
+        "aImplDBCSToUniTab_APPLEJAPANESE_EB"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtjp1.tab",
+      "upstreamSymbols": [
+        "aImplDBCSToUniTab_APPLEJAPANESE_85",
+        "aImplDBCSToUniTab_APPLEJAPANESE_86",
+        "aImplDBCSToUniTab_APPLEJAPANESE_87",
+        "aImplDBCSToUniTab_APPLEJAPANESE_88",
+        "aImplDBCSToUniTab_APPLEJAPANESE_EB"
+      ]
+    }
+  }
+}

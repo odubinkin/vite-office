@@ -24,7 +24,8 @@
       "Selects pinned MS-936, MS-949 and MS-950 DBCS aggregates for native Writer RTF byte decoding.",
       "Selects the pinned JOHAB/MS-1361 DBCS aggregate for native Writer RTF byte decoding.",
       "Selects the pinned EUC-KR aggregate and source-equivalent Apple Korean MS-949 aggregate by rtl_TextEncoding.",
-      "Selects the pinned GB2312 DBCS aggregate for EUC-CN RTF bytes."
+      "Selects the pinned GB2312 DBCS aggregate for EUC-CN RTF bytes.",
+      "Selects the pinned Apple Japanese, Simplified Chinese and Traditional Chinese DBCS aggregates for Writer RTF bytes."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

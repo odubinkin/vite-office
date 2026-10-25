@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts#aGB2312UniLeadTab",
         "vendor/libreoffice-reference/sal/textenc/tcvtscn6.tab#aGB2312UniLeadTab",
-        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses the pinned SAL EUC and Apple Korean aggregates"
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
       ],
       "justification": "Pinned GB2312 lead, reverse-high and DBCS aggregate with source pointer offsets preserved. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
       "knownViolations": [],

@@ -282,8 +282,11 @@ it.each([
   [51949, String.raw`\'a1\'a1\'81\'41`, "\u3000\uF181A"],
   [10003, String.raw`\'81\'41`, "\uAC02"],
   [51936, String.raw`\'a1\'a1\'81\'40`, "\u3000\uFFFD"],
+  [10001, String.raw`\'85\'40`, "\u2460"],
+  [10008, String.raw`\'a1\'a1`, "\u3000"],
+  [10002, String.raw`\'a1\'40`, "\u3000"],
 ])(
-  "uses the pinned SAL EUC and Apple Korean aggregates for code page %i",
+  "uses pinned SAL EUC and Apple DBCS aggregates for code page %i",
   (codepage, bytes, expected) => {
     const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}${bytes}}`);
     try {

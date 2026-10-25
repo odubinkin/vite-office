@@ -47,7 +47,7 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
-          "marker": "uses the pinned SAL EUC and Apple Korean aggregates"
+          "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
         }
       ],
       "upstream": [

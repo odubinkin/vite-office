@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtjp6.applejapanese.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtjp6.applejapanese.ts#aAPPLEJAPANESEUniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvtjp6.tab#aAPPLEJAPANESEUniLeadTab",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
+      ],
+      "justification": "Pinned Apple Japanese lead, reverse-high and complete DBCS converter aggregate, including original pointer offsets. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aAPPLEJAPANESEUniLeadTab",
+        "aAPPLEJAPANESEDBCSHighTab",
+        "aImplAPPLEJAPANESEDBCSCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtjp6.tab",
+      "upstreamSymbols": [
+        "aAPPLEJAPANESEUniLeadTab",
+        "aAPPLEJAPANESEDBCSHighTab",
+        "aImplAPPLEJAPANESEDBCSCvtData"
+      ]
+    }
+  }
+}

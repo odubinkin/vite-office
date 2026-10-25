@@ -6,7 +6,10 @@ import {
   RTL_TEXTENCODING_APPLE_CYRILLIC,
   RTL_TEXTENCODING_APPLE_GREEK,
   RTL_TEXTENCODING_APPLE_ICELAND,
+  RTL_TEXTENCODING_APPLE_JAPANESE,
   RTL_TEXTENCODING_APPLE_KOREAN,
+  RTL_TEXTENCODING_APPLE_CHINSIMP,
+  RTL_TEXTENCODING_APPLE_CHINTRAD,
   RTL_TEXTENCODING_APPLE_ROMAN,
   RTL_TEXTENCODING_APPLE_ROMANIAN,
   RTL_TEXTENCODING_APPLE_TURKISH,
@@ -120,11 +123,14 @@ import {
 } from "./tcvtest1.iso";
 import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
+import { aImplAPPLEJAPANESEDBCSCvtData } from "./tcvtjp6.applejapanese";
 import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
 import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
+import { aImplAPPLECHINSIMPDBCSCvtData } from "./tcvtscn6.applechinsimp";
 import { aImplKSC5601DBCSCvtData, aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
 import { aImplJOHABDBCSCvtData } from "./tcvtkr6.johab";
 import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
+import { aImplAPPLECHINTRADDBCSCvtData } from "./tcvttcn6.applechintrad";
 
 /** Returns the existing single-byte converter data for the represented encoding. */
 export function getSingleByteConvertData(
@@ -242,13 +248,19 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
   if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_APPLE_JAPANESE)
+    return { kind: "dbcs", data: aImplAPPLEJAPANESEDBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_936) return { kind: "dbcs", data: aImplMS936DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_EUC_CN) return { kind: "dbcs", data: aImplGB2312DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_APPLE_CHINSIMP)
+    return { kind: "dbcs", data: aImplAPPLECHINSIMPDBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_949) return { kind: "dbcs", data: aImplMS949DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_EUC_KR) return { kind: "dbcs", data: aImplKSC5601DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_KOREAN)
     return { kind: "dbcs", data: aImplMS949DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_950) return { kind: "dbcs", data: aImplMS950DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_APPLE_CHINTRAD)
+    return { kind: "dbcs", data: aImplAPPLECHINTRADDBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_1361) return { kind: "dbcs", data: aImplJOHABDBCSCvtData };
   const data = getSingleByteConvertData(encoding);
   return data === undefined ? undefined : { kind: "single-byte", data };
