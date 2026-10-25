@@ -1,10 +1,11 @@
 ---
 id: "202610222108-KVGGCR"
 title: "Implement native internal clipboard fill and paste undo"
-status: "DOING"
+result_summary: "verified-202610222108-KVGGCR"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 144
+revision: 146
 origin:
   system: "manual"
 depends_on:
@@ -20,7 +21,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-25T05:21:30.078Z"
+  updated_at: "2026-10-25T05:22:04.377Z"
   updated_by: "CODER"
   note: "verified-202610222108-KVGGCR"
   attempts: 0
@@ -42,7 +43,9 @@ quality_review:
     - ".agentplane/tasks/202610222022-3D9WX6/evidence/progress-visible-autosum/manifest.json"
   findings:
     - "Real native clipboard/context/store/compiled formula and Undo ownership/defaults retained. Full initial failures retained with current successful related rechecks;no timeout or coverage gate weakening. Original tracked reference link retained;only three local ignored reference files copied from existing common vendor."
-commit: null
+commit:
+  hash: "752cc2a27f94cee79a9834dd9a5b9b199e110629"
+  message: "✅ KVGGCR calc: persist verified quality before closeout"
 comments:
   -
     author: "CODER"
@@ -80,6 +83,9 @@ comments:
   -
     author: "CODER"
     body: "Start: preserve tracked symlink and reuse only three already-verified local shared reference files in ignored target;finish final gates and76/74closure/pause."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610222108-KVGGCR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -183,8 +189,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610222108-KVGGCR"
+  -
+    type: "verify"
+    at: "2026-10-25T05:22:04.377Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610222108-KVGGCR"
+  -
+    type: "status"
+    at: "2026-10-25T05:22:04.564Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610222108-KVGGCR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-25T05:21:30.149Z"
+doc_updated_at: "2026-10-25T05:22:04.566Z"
 doc_updated_by: "CODER"
 description: "Block76 depends on75 and completes the kernel path needed by74 empty-marked AutoSum. Implement real clipboard document/reset/shared pool lifetime,ScClipParam,source default content-only single-cell clipboard fill through native copy contexts/column/table/document routines,and original paste undo/redo and source selection rules. Consume actual grouped formula copying from75;do not loop browser EnterData,reparse formula text,flatten groups or use alternate document/storage models. Preserve scalar/local-reference/aggregate/default format behavior;external OS clipboard,rich edit,drawings,notes,3D/matrix/nondefault paste services remain explicit. Up to110 source/test/registry/probe paths. Calc and changed shared raw100,related native/browser/Worker/ODS/history evidence and all static/build/source gates. Full all-app checkpoint80;then complete74 against its unchanged final acceptance contract."
 sections:
@@ -303,6 +322,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610222108-KVGGCR --result verified-202610222108-KVGGCR --commit bc110524951b5d73abd078b8971791bca6f6458d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-25T05:22:04.377Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610222108-KVGGCR
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:21:30.149Z, excerpt_hash=sha256:346f9b3699f6a096fa7c1c2faa6592129028c147826e5f79b60ba6314ef59604
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222108-KVGGCR/blueprint/resolved-snapshot.json
+    - old_digest: 5834d1b8f349cba3230b89f4d1b2efa19838402dfffd058e51701e36094be465
+    - current_digest: 5834d1b8f349cba3230b89f4d1b2efa19838402dfffd058e51701e36094be465
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222108-KVGGCR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610222108-KVGGCR --result verified-202610222108-KVGGCR --commit 752cc2a27f94cee79a9834dd9a5b9b199e110629
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -659,6 +708,10 @@ sections:
     Final acceptance resolved2026-10-25:the user directed inspection of vite-office/vendor,where the three required reference files already existed. All20 consumed shared liblangtag files byte-match the pinned SHA256-verified0.6.8archive. Human instruction to continue authorizes retargeting only the ignored Calc reference link to ../../vite-office/vendor/liblangtag-reference. No additional download,extraction,outside write or reference-file Git addition occurred. Actual full inventory:parity and inventory:invariants now pass with semanticViolationCount0;full source provenance1237modules,routing and doctor pass. Fresh source/map-bound proof reconfirms all-application raw100 S69844/B42892/F12749/L63360;all Calc,Writer/shared counters hit. Initial full-suite failures and successful related rechecks remain recorded honestly in immutable final-all-app-tests;no full-suite repetition is needed for this reference-only binding change. Final audit in task76 evidence/final-shared-reference-acceptance covers approved functionality and every declared gate. Ready for recorded verification,quality review,commit and sequential finish76 then74,followed by the user-requested goal pause;the wider roadmap remains incomplete. The initial audit overlooked an already-existing shared reference and unnecessarily downloaded an archive;the actual final binding now reuses the common vendor as originally intended.
 
     Final local-reference correction:Git reports the existing vendor/liblangtag-reference symlink itself is tracked. Its original target was restored exactly. Instead,only README2021bytes,liblangtag/lt-tag.h6054bytes and tests/check-lang.c2046bytes were copied from the existing byte-verified common vendor into the original ignored target. All20consumed files match the pinned archive. Current full parity/invariants/provenance again pass. No source-reference files or symlink changes are staged or committed. The first evaluator attempt correctly rejected dirty tracked paths outside the active task subtree;commit the separate approved74documentation and76acceptance packet before recording quality. No review gate is bypassed.
+extensions:
+  implementation_commit:
+    hash: "bc110524951b5d73abd078b8971791bca6f6458d"
+    message: "✅ KVGGCR calc: record final shared-reference acceptance"
 id_source: "generated"
 ---
 ## Summary
@@ -787,6 +840,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610222108-KVGGCR --result verified-202610222108-KVGGCR --commit bc110524951b5d73abd078b8971791bca6f6458d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-25T05:22:04.377Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610222108-KVGGCR
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:21:30.149Z, excerpt_hash=sha256:346f9b3699f6a096fa7c1c2faa6592129028c147826e5f79b60ba6314ef59604
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222108-KVGGCR/blueprint/resolved-snapshot.json
+- old_digest: 5834d1b8f349cba3230b89f4d1b2efa19838402dfffd058e51701e36094be465
+- current_digest: 5834d1b8f349cba3230b89f4d1b2efa19838402dfffd058e51701e36094be465
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222108-KVGGCR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610222108-KVGGCR --result verified-202610222108-KVGGCR --commit 752cc2a27f94cee79a9834dd9a5b9b199e110629
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
