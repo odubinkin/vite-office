@@ -8,14 +8,19 @@
     "upstreamPath": "sal/textenc/tcvtarb1.tab",
     "localSymbols": [
       "aImplMS1255ByteCvtData",
-      "aImplMS1256ByteCvtData"
+      "aImplMS1256ByteCvtData",
+      "aImplIBM862ByteCvtData",
+      "aImplIBM864ByteCvtData"
     ],
     "upstreamSymbols": [
       "aImplMS1255ByteCvtData",
-      "aImplMS1256ByteCvtData"
+      "aImplMS1256ByteCvtData",
+      "aImplIBM862ByteCvtData",
+      "aImplIBM864ByteCvtData"
     ],
     "preservedResponsibilities": [
-      "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates."
+      "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates.",
+      "Pins IBM 862, 864 forward/reverse tables and byte-converter aggregates for native RTF decoding."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

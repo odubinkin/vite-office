@@ -11,7 +11,20 @@ import {
   RTL_TEXTENCODING_APPLE_TURKISH,
   RTL_TEXTENCODING_APPLE_UKRAINIAN,
   RTL_TEXTENCODING_IBM_437,
+  RTL_TEXTENCODING_IBM_737,
+  RTL_TEXTENCODING_IBM_775,
   RTL_TEXTENCODING_IBM_850,
+  RTL_TEXTENCODING_IBM_852,
+  RTL_TEXTENCODING_IBM_855,
+  RTL_TEXTENCODING_IBM_857,
+  RTL_TEXTENCODING_IBM_860,
+  RTL_TEXTENCODING_IBM_861,
+  RTL_TEXTENCODING_IBM_862,
+  RTL_TEXTENCODING_IBM_863,
+  RTL_TEXTENCODING_IBM_864,
+  RTL_TEXTENCODING_IBM_865,
+  RTL_TEXTENCODING_IBM_866,
+  RTL_TEXTENCODING_IBM_869,
   RTL_TEXTENCODING_MS_874,
   RTL_TEXTENCODING_MS_1250,
   RTL_TEXTENCODING_MS_1251,
@@ -30,7 +43,20 @@ import {
   aImplAPPLEROMANByteCvtData,
   aImplIBM437ByteCvtData,
   aImplIBM850ByteCvtData,
+  aImplIBM860ByteCvtData,
+  aImplIBM861ByteCvtData,
+  aImplIBM863ByteCvtData,
+  aImplIBM865ByteCvtData,
 } from "./tcvtlat1";
+import {
+  aImplIBM737ByteCvtData,
+  aImplIBM775ByteCvtData,
+  aImplIBM852ByteCvtData,
+  aImplIBM855ByteCvtData,
+  aImplIBM857ByteCvtData,
+  aImplIBM866ByteCvtData,
+  aImplIBM869ByteCvtData,
+} from "./tcvtest1.ibm";
 import {
   aImplMS1250ByteCvtData,
   aImplMS1251ByteCvtData,
@@ -47,7 +73,12 @@ import {
   aImplAPPLETURKISHByteCvtData,
   aImplAPPLEUKRAINIANByteCvtData,
 } from "./tcvtest1.apple";
-import { aImplMS1255ByteCvtData, aImplMS1256ByteCvtData } from "./tcvtarb1";
+import {
+  aImplIBM862ByteCvtData,
+  aImplIBM864ByteCvtData,
+  aImplMS1255ByteCvtData,
+  aImplMS1256ByteCvtData,
+} from "./tcvtarb1";
 import { aImplMS874ByteCvtData, aImplMS1258ByteCvtData } from "./tcvteas1";
 import { aImplMS1252ByteCvtData } from "./textenc";
 
@@ -76,8 +107,34 @@ export function getSingleByteConvertData(
       return aImplAPPLEUKRAINIANByteCvtData;
     case RTL_TEXTENCODING_IBM_437:
       return aImplIBM437ByteCvtData;
+    case RTL_TEXTENCODING_IBM_737:
+      return aImplIBM737ByteCvtData;
+    case RTL_TEXTENCODING_IBM_775:
+      return aImplIBM775ByteCvtData;
     case RTL_TEXTENCODING_IBM_850:
       return aImplIBM850ByteCvtData;
+    case RTL_TEXTENCODING_IBM_852:
+      return aImplIBM852ByteCvtData;
+    case RTL_TEXTENCODING_IBM_855:
+      return aImplIBM855ByteCvtData;
+    case RTL_TEXTENCODING_IBM_857:
+      return aImplIBM857ByteCvtData;
+    case RTL_TEXTENCODING_IBM_860:
+      return aImplIBM860ByteCvtData;
+    case RTL_TEXTENCODING_IBM_861:
+      return aImplIBM861ByteCvtData;
+    case RTL_TEXTENCODING_IBM_862:
+      return aImplIBM862ByteCvtData;
+    case RTL_TEXTENCODING_IBM_863:
+      return aImplIBM863ByteCvtData;
+    case RTL_TEXTENCODING_IBM_864:
+      return aImplIBM864ByteCvtData;
+    case RTL_TEXTENCODING_IBM_865:
+      return aImplIBM865ByteCvtData;
+    case RTL_TEXTENCODING_IBM_866:
+      return aImplIBM866ByteCvtData;
+    case RTL_TEXTENCODING_IBM_869:
+      return aImplIBM869ByteCvtData;
     case RTL_TEXTENCODING_MS_874:
       return aImplMS874ByteCvtData;
     case RTL_TEXTENCODING_MS_1250:

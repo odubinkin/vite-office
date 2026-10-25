@@ -96,6 +96,29 @@ it("uses pinned SAL IBM 437 and 850 tables for PC and font charsets", () => {
   }
 });
 
+it.each([
+  [737, "80", "\u0391\u2588\u038F"],
+  [775, "80", "\u0106\u2588\u00AD"],
+  [852, "80", "\u00C7\u2588\u00AD"],
+  [855, "80", "\u0452\u2588\u00AD"],
+  [857, "80", "\u00C7\u2588\u00AD"],
+  [860, "80", "\u00C7\u2588\u2261"],
+  [861, "80", "\u00C7\u2588\u2261"],
+  [862, "80", "\u05D0\u2588\u2261"],
+  [863, "80", "\u00C7\u2588\u2261"],
+  [864, "80", "\u00B0\u00A6\uFE7D"],
+  [865, "80", "\u00C7\u2588\u2261"],
+  [866, "80", "\u0410\u2588\u0401"],
+  [869, "86", "\u0386\u2588\u00AD"],
+])("decodes pinned SAL IBM code page %i in RTF text", (codepage, firstByte, expected) => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}\'${firstByte}\'db\'f0}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe(expected);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("uses pinned SAL Windows-1252 undefined-byte handling", () => {
   const document = read(String.raw`{\rtf1\ansi A\'81\'80\'8dB}`);
   try {

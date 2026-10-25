@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtest1.ibm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtest1.ibm.ts#aImplIBM737ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplIBM737ByteCvtData",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL IBM code page"
+      ],
+      "justification": "Seven pinned IBM single-byte forward/reverse tables and converter aggregates from tcvtest1.tab are selected for native RTF byte decoding. Broader SAL codec parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplIBM737ByteCvtData",
+        "aImplIBM775ByteCvtData",
+        "aImplIBM852ByteCvtData",
+        "aImplIBM855ByteCvtData",
+        "aImplIBM857ByteCvtData",
+        "aImplIBM866ByteCvtData",
+        "aImplIBM869ByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtest1.tab",
+      "upstreamSymbols": [
+        "aImplIBM737ByteCvtData",
+        "aImplIBM775ByteCvtData",
+        "aImplIBM852ByteCvtData",
+        "aImplIBM855ByteCvtData",
+        "aImplIBM857ByteCvtData",
+        "aImplIBM866ByteCvtData",
+        "aImplIBM869ByteCvtData"
+      ]
+    }
+  }
+}
