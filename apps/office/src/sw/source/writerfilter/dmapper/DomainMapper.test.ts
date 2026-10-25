@@ -205,6 +205,7 @@ it("retains original font attributes, unsupported hAnsi behavior, underline/colo
   }
   mapper.attribute(N.LN_CT_Underline_val, V.createInteger(N.LN_Value_ST_Underline_words));
   expect(scalar(map, P.PROP_CHAR_UNDERLINE)).toBe(U.SINGLE);
+  mapper.attribute(N.LN_CT_Underline_val, V.createInteger(N.LN_Value_ST_Underline_single));
   const word = map.getProperty(P.PROP_CHAR_WORD_MODE) as readonly [P, Any];
   try {
     const out: [boolean] = [false];

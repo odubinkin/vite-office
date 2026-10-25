@@ -282,7 +282,11 @@ const allowedEdges = new Map([
   ["tools", new Set(["o3tl", "cppu", "comphelper"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
-  ["xmloff", new Set(["udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
+  // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.
+  [
+    "xmloff",
+    new Set(["comphelper", "udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"]),
+  ],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);

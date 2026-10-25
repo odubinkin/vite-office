@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/token/namespacemap.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/token/namespacemap.ts",
+          "marker": "NamespaceMap"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "oox/source/token/namespacemap.cxx",
+          "marker": "NamespaceMap::NamespaceMap"
+        },
+        {
+          "path": "oox/source/token/namespacemap.cxx",
+          "marker": "StaticNamespaceMap"
+        }
+      ]
+    },
+    "upstreamPath": "oox/source/token/namespacemap.cxx",
+    "localSymbols": [
+      "NamespaceMap",
+      "StaticNamespaceMap",
+      "namespaceTokens"
+    ],
+    "upstreamSymbols": [
+      "NamespaceMap::NamespaceMap",
+      "StaticNamespaceMap"
+    ],
+    "preservedResponsibilities": [
+      "Original sorted-alias one-based shifted16 namespace identities, exact transitional/strict URI maps, separate per-instance map ownership and shared singleton. Canonical raw inputs remain byte-exact to native files and are checked against unchanged namespaces.py output. Host immutable URI strings bind the SAX boundary; native OUString storage, thread synchronization and ABI remain omitted."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ]
+  }
+}

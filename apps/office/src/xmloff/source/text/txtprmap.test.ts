@@ -21,6 +21,31 @@ function attributes(pairs: readonly (readonly [string, string])[]): FastAttribut
     ),
   );
 }
+it("preserves native line-mode merge order, named-token rejection and typed kerning bool transport", /** Checks the shared bool property map used by primary Writer storage. @returns Nothing. */ () => {
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-underline-mode", "skip-white-space"],
+        ["style:text-line-through-mode", "continuous"],
+        ["style:text-overline-mode", "invalid"],
+        ["style:letter-kerning", "true"],
+      ]),
+    ),
+  ).toEqual({ wordMode: false, autoKerning: true });
+  expect(
+    importTextCharacterProperties(
+      attributes([
+        ["style:text-underline-mode", "invalid"],
+        ["style:letter-kerning", "invalid"],
+      ]),
+    ),
+  ).toEqual({});
+  const xml = exportTextCharacterProperties({ wordMode: false, autoKerning: false });
+  expect(xml).toContain('style:text-underline-mode="continuous"');
+  expect(xml).toContain('style:text-overline-mode="continuous"');
+  expect(xml).toContain('style:text-line-through-mode="continuous"');
+  expect(xml).toContain('style:letter-kerning="false"');
+});
 it("transports all native independent script values without boolean normalization", /** Covers source maps,invalid conversion and original color filters. @returns Nothing. */ () => {
   const source = attributes([
     ["fo:font-weight", "600"],
@@ -102,7 +127,7 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(15);
+  expect(textCharacterPropertyTokens).toHaveLength(19);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
     XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
     XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,

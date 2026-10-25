@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T18:24:39.002676+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "runtimeModules": 10,
+  "coverage": {
+    "lines": {
+      "total": 392,
+      "covered": 392,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 421,
+      "covered": 421,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 58,
+      "covered": 58,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 347,
+      "covered": 347,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "coverageArgv": [
+    "npm",
+    "run",
+    "test:coverage",
+    "--",
+    "src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+    "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+    "src/oox/source/token/tokenmap.test.ts",
+    "src/xmloff/source/style/NamedBoolPropertyHdl.test.ts",
+    "src/comphelper/inc/extract.test.ts",
+    "src/sw/source/writerfilter/dmapper/DomainMapper.test.ts",
+    "src/sw/source/writerfilter/dmapper/PropertyMap.test.ts",
+    "src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts",
+    "src/sw/source/core/unocore/native-docx-bool-properties.test.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory*.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+    "--coverage.include=src/oox/source/token/*.ts",
+    "--coverage.include=src/oox/source/core/fasttokenhandler.ts",
+    "--coverage.include=src/xmloff/source/style/NamedBoolPropertyHdl.ts",
+    "--coverage.include=src/comphelper/inc/extract.ts",
+    "--coverage.include=src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+    "--coverage.reportsDirectory=coverage/docx-native-factory"
+  ],
+  "selectedTestFiles": 9,
+  "selectedTestsPassed": 58,
+  "runtimeSha256": {
+    "apps/office/src/comphelper/inc/extract.ts": "ed0746929bb95646ff98019fa89f980988304c82499f602015d4eba1fa441fdc",
+    "apps/office/src/oox/source/core/fasttokenhandler.ts": "4cb3863bdae674728f8f29558c4083606c6c7e82c1cf1470154c433c72c6c35a",
+    "apps/office/src/oox/source/token/namespacemap.ts": "580712c24555f09ba3f9c2a1ac4b9ec7f7c8440f3166f1ef8e82c9cad8da1072",
+    "apps/office/src/oox/source/token/tokenmap.ts": "853b092950a44b6103cd692fee486cbd2929c8b301b3eae770b0a9712ef644dd",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts": "991a4321e14b29d76625d5d5e8a1545fb17d0f7cffc1115f9e2218ec71fbcbb6",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts": "51ab01163cb193e8f4f44af82fad176628df5a6767a450e6bb76d56bc02d405b",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "3cb79bad042a941ef622df4dfbfaa36693ff4cb01c544eefd67e4fee45462842",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": "26d5492e1462a3c8eeca3329af322ce657735228c805d19597cef4acc06a4428",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "973185c130e6e1c19723728cafe3be192ad59bb9c34847c18f1a9b212c0301a6",
+    "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts": "d3af31ff94fb5a69d267f23cba4a1068e5658d28febf838a9e1f0b846e07ab20"
+  },
+  "changedTestSha256": {
+    "apps/office/src/oox/source/token/tokenmap.test.ts": "9e19912f72e32a95ad126a24c7861c807a4b9ca08058d8c04d9f7d3c96193394",
+    "apps/office/src/sw/source/core/unocore/native-docx-bool-properties.test.ts": "ba0afb5cd06c55a7e48593e2c6baa1b2d13916e0984022aababa6a3fe133c49b",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "0d98f2ee960ccc01bb01fd673fb34b75a875084310da7a4c237d1e6de518271a",
+    "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.test.ts": "a603e6056a3f386f3a262d1e28dc2dd5c52cb645e7e8d12f769d21c9388acf03",
+    "apps/office/src/sw/source/core/attr/native-character-slots.test.ts": "bba890337bb88acd065b7d9b223789aa9938dbb4429c602e3996f7bea2aeb884",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.test.ts": "e28c398fb11827ca04693e5ee249865946bf8aa305f55b9c2f532e87751b1697",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "e2172ba3fc22bc6b0bec23d173c408cc84ba5b40804a51a25d6633694e87fd81",
+    "apps/office/src/xmloff/source/text/txtprmap.test.ts": "16b83cd2a9caae9f9d8527185844a30d8bbd61bc83a783a6b0d3bcc86b8dad37"
+  },
+  "generatorSha256": "112e7c17c84e7d90f2d5209adf5da2c217d1393bfbffe12ba32d8a4ab9e65c75",
+  "nativeTables": {
+    "tokens": 6079,
+    "namespaces": 1,
+    "defines": 33,
+    "attributes": 59,
+    "elements": 231,
+    "resources": 253,
+    "lists": 82,
+    "actions": 25
+  },
+  "nativeTableVerification": "python3 scripts/writer-ooxml/generate-factory.py --check invokes unchanged pinned generators; tests compare every table and all token IDs with original source. Native numeric IDs and fallback behavior are preserved.",
+  "additionalChecks": [
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "testsPassed": 48
+    },
+    {
+      "command": "npm run test:writer -- src/sw/source/filter/xml/odt-property-roundtrip.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts src/sw/source/core/attr/native-character-slots.test.ts",
+      "result": "pass",
+      "testsPassed": 52
+    },
+    {
+      "command": "npm run test:shared -- src/xmloff/source/text/txtprmap.test.ts",
+      "result": "pass",
+      "testsPassed": 3
+    }
+  ],
+  "checksPassed": [
+    "npm run build (includes application typecheck)",
+    "npm run typecheck:tools",
+    "scoped ESLint --max-warnings 0",
+    "scoped Prettier",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:source-provenance (1336 modules)",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run inventory:registry:build",
+    "npm run inventory:registry:check",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "node scripts/check-static-build.mjs",
+    "git diff --check"
+  ],
+  "doctorResidual": "Existing managed hook shim readiness warning; zero errors; no hook changes.",
+  "actualGraphEvidence": "Generated attribute dispatch reaches native DomainMapper/SwDoc indentation. CharWordMode and CharAutoKerning retain concrete SfxPoolItem classes through UNO and worker codecs and survive actual SwDoc ODT save/reopen.",
+  "coverageBoundary": "100 percent applies to the ten listed measured runtime owners, including seven new owners. Legacy kernel/ODT modules have focused regression coverage; no whole-module parity or task acceptance claim.",
+  "remaining": [
+    "Native fast-context/parser/document dispatch",
+    "Canonical style/list/table/section application and import fixtures",
+    "DOCX canonical graph export/reopen",
+    "Existing shell/filter/Open/download production UI integration and Chromium scenarios",
+    "Task-wide verification/evaluator/finish"
+  ],
+  "fullSuite": "Not due: second task since SWRD7X full-suite checkpoint; this task remains DOING."
+}

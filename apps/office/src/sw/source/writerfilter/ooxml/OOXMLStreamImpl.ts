@@ -4,6 +4,7 @@ import {
   type StringPair,
 } from "../../../../comphelper/source/xml/ofopxmlhelper";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
+import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import {
   UriReferenceFactory,
   RelativeUriExcessParentSegments as Excess,
@@ -51,6 +52,7 @@ export class OOXMLStreamImpl {
   private msPath = "";
   private msTarget = "";
   private document: Uint8Array | null = null;
+  private fastTokenHandler: FastTokenHandler | null = null;
   private relationships: readonly (readonly StringPair[])[] = [];
   /** Borrows storage; createStream supplies async native constructor initialization. @param storage - Package. @returns Stream. */
   private constructor(readonly storage: ZipStorage) {}
@@ -103,6 +105,11 @@ export class OOXMLStreamImpl {
   }
   /** Original lexical target getter. @returns Target. */ getTarget(): string {
     return this.msTarget;
+  }
+  /** Native stream lazily owns the token handler shared by its parser contexts. @returns Handler. */
+  getFastTokenHandler(): FastTokenHandler {
+    this.fastTokenHandler ??= new FastTokenHandler();
+    return this.fastTokenHandler;
   }
   /** Borrows the immutable opened input part. @returns Bytes or missing stream. */ getDocumentStream(): Uint8Array | null {
     return this.document;

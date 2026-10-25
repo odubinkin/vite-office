@@ -259,9 +259,17 @@ export enum XMLToken {
   STYLE_DIAGONAL_BL_TR_WIDTH,
   STYLE_DIAGONAL_BL_TR_WIDTHS,
   FO_WRAP_OPTION,
+  STYLE_TEXT_UNDERLINE_MODE,
+  STYLE_TEXT_OVERLINE_MODE,
+  STYLE_TEXT_LINE_THROUGH_MODE,
+  STYLE_LETTER_KERNING,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.style, "text-underline-mode", XMLToken.STYLE_TEXT_UNDERLINE_MODE],
+  [ODF_NAMESPACES.style, "text-overline-mode", XMLToken.STYLE_TEXT_OVERLINE_MODE],
+  [ODF_NAMESPACES.style, "text-line-through-mode", XMLToken.STYLE_TEXT_LINE_THROUGH_MODE],
+  [ODF_NAMESPACES.style, "letter-kerning", XMLToken.STYLE_LETTER_KERNING],
   [ODF_NAMESPACES.fo, "text-shadow", XMLToken.FO_TEXT_SHADOW],
   [ODF_NAMESPACES.style, "font-relief", XMLToken.STYLE_FONT_RELIEF],
   [ODF_NAMESPACES.fo, "wrap-option", XMLToken.FO_WRAP_OPTION],

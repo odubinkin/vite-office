@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts#OOXMLFactory",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLFactory.cxx#OOXMLFactory::attributes"
+      ],
+      "justification": "Native schema-ordered attributes, exact ResourceType declaration order/AttributeInfo fields, actual numeric namespace/fast-token/definition identities, first attribute lookup and typed OOXMLValue conversion. Unknown list values remain empty, Integer reuses exact o3tl signed prefix/overflow rules, and negative zero-mode twips become0. Generated attribute actions execute in their native namespace owner. Context creation and generic start/characters/end dispatch remain pending; the complete OOXMLFactory interface is not claimed. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLFactory",
+        "ResourceType",
+        "AttributeInfo",
+        "OOXMLFactory_ns",
+        "FastAttribute",
+        "FactoryAttributeHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+      "upstreamSymbols": [
+        "OOXMLFactory::attributes",
+        "ResourceType::Boolean",
+        "ResourceType::TwipsMeasure_asZero"
+      ]
+    }
+  }
+}

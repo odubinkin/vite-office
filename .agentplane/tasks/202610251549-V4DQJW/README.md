@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T17:10:00.979Z"
+doc_updated_at: "2026-10-25T18:24:40.894Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -72,6 +72,18 @@ sections:
     - Observation: Full pinned-source table comparison caught eight omitted META_PROP_* name bindings in the new local PropertyIds table. The original has385 enum declarations and382 UNO name bindings; prior spot checks and branch coverage did not establish completeness of static data.
       Impact: The omitted names would have produced the native empty-string fallback for represented table metadata despite valid resource identities.
       Resolution: Regenerate all382 bindings including META_PROP_* from the original source. Add live source-contract tests for all385 IDs,382 names and439 native style-name pairs. Both focused files now pass13 cases. This is a local implementation correction, not an upstream suspected issue.
+
+    - Observation: The native factory uses exact numeric XML/NMSP/definition/resource identities and generated schema-array order. Unknown XML names differ from known tokens outside the current grammar, so a local QName-numbering shortcut would lose parser behavior. Native leaf definitions without child cases also use the start-element fallback (WRITER097).
+      Impact: Writer needs the original shared TokenMap/NamespaceMap/FastTokenHandler before full SAX context dispatch. Schema/list/resource mappings must come from original model collectors, not hand-maintained tag tables.
+      Resolution: Port all6079 native token IDs and both namespace maps, compare every ID against unchanged generators, and generate the consumed24 complex definitions through original namespaces/modelpreprocess/factoryinc/resourceids/generate-tokens/factoryimpl_ns code. Preserve59 attributes,231 elements,253 resource mappings,82 list values and25 action records, native output-cell failure behavior and actual typed attribute dispatch into SwDoc. Selected tests cover six new runtime owners at unchanged scoped100. Document/context/model/export/UI acceptance remains pending; this is progress within the same approved task, not task completion.
+
+    - Observation: Native DOCX style defaults and words underline require CharAutoKerning/CharWordMode. Both original concrete editeng items already existed, but Writer lacked their Which/slot registrations, all three item-set ranges and UNO map entries. The generic bool PutValue bridge also discarded the concrete item type by reconstructing SfxBoolItem.
+      Impact: A registered property alone was insufficient: automatic-style filtering initially dropped both new Which values, and primary ODT storage needed the original xmloff named-bool/boolean associations to preserve imported values. The Word kerning threshold and words-to-single behavior intentionally follow upstream limitations (WRITER098/099).
+      Resolution: Register native Which16/17, slots10011/10067 and false defaults, extend node/style/auto-style ranges, preserve concrete Clone/PutValue ownership, and port XMLNamedBoolPropertyHdl plus original cppu::any2bool. Add primary ODT mappings and actual graph/worker/ODT roundtrip tests for0/2/28 kerning thresholds. Scoped factory/named-bool/mapper coverage passes36 tests at S319/B240/F47/L301 all100. Related native UNO/ODT/character-slot regressions pass52 cases; dependency guard tests pass48. Full DOCX parsing, export and UI acceptance remain pending within the same task.
+
+    - Observation: Native factory checkpoint: 58 tests in 9 files pass; S421/B347/F58/L392 all100 across 10 measured owners, including all 7 new runtime modules. Native stream now lazily owns FastTokenHandler. Boundary guard48, primary ODT/core regression52 and shared txtprmap3 pass. Full evidence and exact argv/hashes: evidence/native-factory-checkpoint.json.
+      Impact: Native schema numeric identity, ordered attribute conversion and bool handoff are verified, including actual SwDoc ODT reopen; full DOCX import/export/UI acceptance is still pending. Full suite is not due.
+      Resolution: Build/typechecks, scoped lint/format, docs/dependencies/source-tree/provenance1336/size/registry/static/routing/diff pass. Doctor has only the existing hook readiness warning. Continue native contexts, document/style/section parsing and canonical export/UI in the same approved task.
 id_source: "generated"
 ---
 ## Summary
@@ -120,3 +132,15 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Full pinned-source table comparison caught eight omitted META_PROP_* name bindings in the new local PropertyIds table. The original has385 enum declarations and382 UNO name bindings; prior spot checks and branch coverage did not establish completeness of static data.
   Impact: The omitted names would have produced the native empty-string fallback for represented table metadata despite valid resource identities.
   Resolution: Regenerate all382 bindings including META_PROP_* from the original source. Add live source-contract tests for all385 IDs,382 names and439 native style-name pairs. Both focused files now pass13 cases. This is a local implementation correction, not an upstream suspected issue.
+
+- Observation: The native factory uses exact numeric XML/NMSP/definition/resource identities and generated schema-array order. Unknown XML names differ from known tokens outside the current grammar, so a local QName-numbering shortcut would lose parser behavior. Native leaf definitions without child cases also use the start-element fallback (WRITER097).
+  Impact: Writer needs the original shared TokenMap/NamespaceMap/FastTokenHandler before full SAX context dispatch. Schema/list/resource mappings must come from original model collectors, not hand-maintained tag tables.
+  Resolution: Port all6079 native token IDs and both namespace maps, compare every ID against unchanged generators, and generate the consumed24 complex definitions through original namespaces/modelpreprocess/factoryinc/resourceids/generate-tokens/factoryimpl_ns code. Preserve59 attributes,231 elements,253 resource mappings,82 list values and25 action records, native output-cell failure behavior and actual typed attribute dispatch into SwDoc. Selected tests cover six new runtime owners at unchanged scoped100. Document/context/model/export/UI acceptance remains pending; this is progress within the same approved task, not task completion.
+
+- Observation: Native DOCX style defaults and words underline require CharAutoKerning/CharWordMode. Both original concrete editeng items already existed, but Writer lacked their Which/slot registrations, all three item-set ranges and UNO map entries. The generic bool PutValue bridge also discarded the concrete item type by reconstructing SfxBoolItem.
+  Impact: A registered property alone was insufficient: automatic-style filtering initially dropped both new Which values, and primary ODT storage needed the original xmloff named-bool/boolean associations to preserve imported values. The Word kerning threshold and words-to-single behavior intentionally follow upstream limitations (WRITER098/099).
+  Resolution: Register native Which16/17, slots10011/10067 and false defaults, extend node/style/auto-style ranges, preserve concrete Clone/PutValue ownership, and port XMLNamedBoolPropertyHdl plus original cppu::any2bool. Add primary ODT mappings and actual graph/worker/ODT roundtrip tests for0/2/28 kerning thresholds. Scoped factory/named-bool/mapper coverage passes36 tests at S319/B240/F47/L301 all100. Related native UNO/ODT/character-slot regressions pass52 cases; dependency guard tests pass48. Full DOCX parsing, export and UI acceptance remain pending within the same task.
+
+- Observation: Native factory checkpoint: 58 tests in 9 files pass; S421/B347/F58/L392 all100 across 10 measured owners, including all 7 new runtime modules. Native stream now lazily owns FastTokenHandler. Boundary guard48, primary ODT/core regression52 and shared txtprmap3 pass. Full evidence and exact argv/hashes: evidence/native-factory-checkpoint.json.
+  Impact: Native schema numeric identity, ordered attribute conversion and bool handoff are verified, including actual SwDoc ODT reopen; full DOCX import/export/UI acceptance is still pending. Full suite is not due.
+  Resolution: Build/typechecks, scoped lint/format, docs/dependencies/source-tree/provenance1336/size/registry/static/routing/diff pass. Doctor has only the existing hook readiness warning. Continue native contexts, document/style/section parsing and canonical export/UI in the same approved task.

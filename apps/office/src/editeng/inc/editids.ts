@@ -24,6 +24,11 @@ export const SID_ATTR_CHAR_POSTURE = 10008 as const;
 /** Native character weight slot from editids.hrc. */
 export const SID_ATTR_CHAR_WEIGHT = 10009 as const;
 
+/** Native word-only decoration slot, SID_SVX_START +11. */
+export const SID_ATTR_CHAR_WORDLINEMODE = 10011 as const;
+/** Native automatic kerning slot, SID_SVX_START +67. */
+export const SID_ATTR_CHAR_AUTOKERN = 10067 as const;
+
 /** Native character strikeout slot from editids.hrc. */
 export const SID_ATTR_CHAR_STRIKEOUT = 10013 as const;
 

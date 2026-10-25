@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/token/tokenmap.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/token/tokenmap.ts#getTokenFromUtf8",
+        "vendor/libreoffice-reference/oox/source/token/tokenmap.cxx#TokenMap::getTokenFromUtf8"
+      ],
+      "justification": "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getTokenFromUtf8",
+        "getUtf8TokenName",
+        "XML_TOKEN_INVALID",
+        "XML_TOKEN_COUNT"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/token/tokenmap.cxx",
+      "upstreamSymbols": [
+        "TokenMap::getTokenFromUtf8",
+        "TokenMap::getUtf8TokenName"
+      ]
+    }
+  }
+}

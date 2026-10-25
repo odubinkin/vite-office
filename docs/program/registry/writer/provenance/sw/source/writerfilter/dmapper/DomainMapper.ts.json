@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
           "marker": "DomainMapper"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+          "marker": "DomainMapper"
         }
       ],
       "upstream": [
@@ -41,7 +45,8 @@
       "DomainMapper::lcl_attribute"
     ],
     "preservedResponsibilities": [
-      "Consumed paragraph/run groups, native CR finish protocol, three script families, typed character/paragraph properties and style toggle semantics. Imported-style values are read through DomainMapper_Impl, not Writer pooled-style UNO defaults. The represented non-numbered paragraph/run slice is partial; style application, numbering/table/section/theme managers and unconsumed property cases remain pending."
+      "Consumed paragraph/run groups, native CR finish protocol, three script families, typed character/paragraph properties and style toggle semantics. Imported-style values are read through DomainMapper_Impl, not Writer pooled-style UNO defaults. The represented non-numbered paragraph/run slice is partial; style application, numbering/table/section/theme managers and unconsumed property cases remain pending.",
+      "V4DQJW adds original kern modifier boolean projection nIntValue !=0, preserving the native minimum-size-threshold collapse (WRITER098). Word-only underline retains its separate true-only insertion and later-type behavior (WRITER099). The actual native item pool/UNO/primary storage path is now supported for these two bool properties."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

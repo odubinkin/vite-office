@@ -1130,3 +1130,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `GetPropertyFromStyleSheet` and `lcl_getParent`.
 - Observation: lookup walks base style IDs until a property is found, no parent exists, or the next entry equals the current entry. A two-entry cycle with the requested property absent satisfies none of those conditions. Whether earlier style admission guarantees a cycle-free graph for every caller is unverified; this is not a confirmed desktop defect.
 - Preservation: keep the direct-self guard and lookup order. Tests cover direct-self termination, missing parents, inherited properties and paragraph-before-character DocDefaults. They do not execute a nonterminating cycle or silently introduce a visited-set repair.
+
+### WRITER097 — a factory definition without generated child cases uses the root/start fallback
+
+- Source: pinned `sw/source/writerfilter/ooxml/factoryimpl_ns.py`, `factoryCreateElementMap`, `factoryCreateElementMapFromStart` and `factoryGetResourceId`; `factoryimpl.py`, `createFastChildContextFromFactory`.
+- Observation: only definitions with child cases appear in the generated element switch. Its default branch searches namespace start elements. Therefore the known leaf definition `CT_OnOff` can resolve a `w:document` child through the same fallback as the initial context. This is outside the WordprocessingML schema and may be intentional permissive parser behavior. No incorrect desktop result on a valid document is established.
+- Preservation: retain case-versus-default selection and unchanged failure output cells. Factory tests distinguish a paragraph context with generated cases, which rejects a document child, from the no-child-case leaf and initial contexts, which use the original start fallback. No schema-tightening repair is introduced.
+
+### WRITER098 — Word kerning minimum-size thresholds collapse to one boolean
+
+- Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_kern`; `sw/source/core/bastyp/init.cxx`, `RES_CHRATR_AUTOKERN`.
+- Observation: the importer assigns `CharAutoKerning = (nIntValue != 0)` and explicitly notes that Writer does not bind automatic kerning to Word's minimum font size. Thus positive thresholds 2 and 28 have the same native model value. This is a known format/model limitation rather than a newly confirmed upstream defect.
+- Preservation: keep the boolean projection and original concrete `SvxAutoKernItem` with false pool default, Which17 and slot10067. Actual-model and primary ODT roundtrips test zero and multiple nonzero thresholds. Do not add a font-size-dependent substitute or raw-threshold document DTO.
+
+### WRITER099 — underline type mapping sets word-only mode for words but does not clear it for other types
+
+- Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `handleUnderlineType`.
+- Observation: `words` inserts `CharWordMode = true` before selecting single underline. The other underline cases update `CharUnderline` without inserting a false word-mode value. On the same property context, `words` followed by `single` therefore retains true word mode. The effect on every style-inheritance path and whether a valid desktop document exposes an unintended result remain unverified.
+- Preservation: keep the separate property writes. Tests pin word mode remaining true after a later single underline; they do not normalize that update into a false word-mode reset.

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/token/namespacemap.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/token/namespacemap.ts#NamespaceMap",
+        "vendor/libreoffice-reference/oox/source/token/namespacemap.cxx#NamespaceMap::NamespaceMap"
+      ],
+      "justification": "Original sorted-alias one-based shifted16 namespace identities, exact transitional/strict URI maps, separate per-instance map ownership and shared singleton. Canonical raw inputs remain byte-exact to native files and are checked against unchanged namespaces.py output. Host immutable URI strings bind the SAX boundary; native OUString storage, thread synchronization and ABI remain omitted. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NamespaceMap",
+        "StaticNamespaceMap",
+        "namespaceTokens"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/token/namespacemap.cxx",
+      "upstreamSymbols": [
+        "NamespaceMap::NamespaceMap",
+        "StaticNamespaceMap"
+      ]
+    }
+  }
+}

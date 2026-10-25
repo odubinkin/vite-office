@@ -300,6 +300,9 @@ export class DomainMapper implements Properties {
         if (id === N.LN_EG_RPrBase_sz)
           this.insert(context, P.PROP_CHAR_HEIGHT_ASIAN, new Any([n / 2], "double"));
         break;
+      case N.LN_EG_RPrBase_kern:
+        this.insert(context, P.PROP_CHAR_AUTO_KERNING, new Any([n !== 0], "bool"));
+        break;
       case N.LN_EG_RPrBase_highlight: {
         const color = highlights[n - N.LN_Value_ST_HighlightColor_black];
         if (color !== undefined)

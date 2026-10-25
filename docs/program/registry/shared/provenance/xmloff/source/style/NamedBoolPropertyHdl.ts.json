@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host UTF16 strings, Uint8Array and asynchronous ZIP/SAX bindings replace native component streams and generated token transport at the consumed package boundary."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts",
+          "marker": "XMLNamedBoolPropertyHdl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
+          "marker": "XMLNamedBoolPropertyHdl::importXML"
+        },
+        {
+          "path": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
+          "marker": "XMLNamedBoolPropertyHdl::exportXML"
+        }
+      ]
+    },
+    "upstreamPath": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
+    "localSymbols": [
+      "XMLNamedBoolPropertyHdl"
+    ],
+    "upstreamSymbols": [
+      "XMLNamedBoolPropertyHdl::importXML",
+      "XMLNamedBoolPropertyHdl::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Native exact named true/false import leaves Any unchanged on invalid lexemes. Export always uses cppu::any2bool, including genuine bool, signed32-compatible numeric fallback and default typed IllegalArgumentException on other types. XML lexical strings and existing SvXMLUnitConverter bind the parser boundary; no substitute UNO values are introduced."
+    ],
+    "omittedResponsibilities": [
+      "Native C++ ABI and OUString backing/thread lifetime are not claimed.",
+      "Complete document DOCX parsing/export and existing UI integration remain pending in V4DQJW."
+    ]
+  }
+}

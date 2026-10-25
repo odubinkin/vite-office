@@ -47,11 +47,46 @@ is `06a4c723d3b6699f098769caa31df70c99bf4e4b`.
   including three native 10pt heights and disabled auto-kerning. The full
   439-pair name map, reserved-name suffix and first duplicate ID are preserved.
   This owner does not yet parse/apply the complete stylesheet resource stream.
+- DOCX-needed `CharAutoKerning` and `CharWordMode` now use original concrete
+  pool items, Which IDs, slots, false defaults and typed UNO transport. Bool
+  updates retain the concrete cloned item. Worker restoration and primary ODT
+  save/reopen preserve both fields through the original xmloff named-bool and
+  boolean mappings. Native kerning-threshold collapse and true-only word-mode
+  insertion remain as documented in the suspected-issue ledger.
 - `OOXMLStreamImpl` follows the Writer `XRelationshipAccess` sequence contract,
   exact strict/transitional types, external-ID cache, native custom-target and
   VBA nesting behavior. The consumed `stoc` generic URI owner preserves dot
   segments, escapes and excessive-parent policies through the native algorithm.
   This deliberately differs from the separate `oox::Relations` lookup contract.
+- Shared `TokenMap` and `NamespaceMap` retain all 6079 original local token IDs,
+  original sorted namespace IDs and both strict/transitional URI sets. The
+  consumed `FastTokenHandler` methods delegate to that original shared owner.
+  Host maps and UTF8 byte arrays bind native gperf and component transport;
+  complete UNO services and native performance/lifetime parity are not claimed.
+- The consumed WordprocessingML factory uses original numeric definition and
+  fast-token IDs, schema attribute order, typed values and list admission.
+  Unknown list values remain empty; switch/default and output-cell behavior are
+  retained. Factory attribute dispatch is tested through actual `DomainMapper`
+  and `SwDoc` paragraph APIs. This does not yet parse the full document stream.
+
+## Native factory generation
+
+Run `python3 scripts/writer-ooxml/generate-factory.py` to regenerate the
+consumed `OOXMLFactory_wml.tables.ts` and synchronize the three byte-exact native
+token/namespace inputs. Use `--check` to verify without changing those outputs.
+The script invokes unchanged pinned `namespaces.py`, `modelpreprocess.py`,
+`factoryinc.py`, `resourceids.py` and `generate-tokens.py`, then uses original
+`factoryimpl_ns.py` schema collectors. Native temporary outputs stay inside an
+owned, automatically removed repository-local coverage directory.
+
+The current data slice contains 24 complex definitions plus their referenced
+list definitions: 59 attributes, 231 element mappings, 253 resource mappings,
+82 list spellings and 25 action records. Omitted definitions never renumber
+admitted IDs. Attribute actions are executed by the namespace factory; the
+remaining stream action records are metadata for the pending context pipeline.
+The original generated header/implementation contracts share the existing
+`OOXMLFactory.ts` owner; generated namespace lookup and constant tables retain
+their `OOXMLFactory_wml` owner names. No schema DTO replaces the Writer graph.
 
 Native binary/drawing/service variants are not advertised by this resource
 slice. Native undefined floating-to-int casts and null attribute dereferences

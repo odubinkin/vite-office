@@ -82,6 +82,34 @@
         {
           "path": "apps/office/src/comphelper/source/misc/types.ts",
           "marker": "getEnumAsINT32"
+        },
+        {
+          "path": "apps/office/src/oox/source/token/tokenmap.ts",
+          "marker": "getTokenFromUtf8"
+        },
+        {
+          "path": "apps/office/src/oox/source/token/namespacemap.ts",
+          "marker": "NamespaceMap"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+          "marker": "FastTokenHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts",
+          "marker": "OOXMLFactory"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts",
+          "marker": "OOXMLFactory_wml"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts",
+          "marker": "namespaces"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts",
+          "marker": "XMLNamedBoolPropertyHdl"
         }
       ],
       "tests": [
@@ -108,6 +136,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
           "marker": "opens pinned native strict"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+          "marker": "dispatches attributes in native schema order"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-docx-bool-properties.test.ts",
+          "marker": "maps native DOCX kerning threshold"
         }
       ],
       "docs": [
@@ -178,6 +214,34 @@
         {
           "path": "comphelper/source/misc/types.cxx",
           "marker": "getEnumAsINT32"
+        },
+        {
+          "path": "oox/source/token/tokenmap.cxx",
+          "marker": "TokenMap::getTokenFromUtf8"
+        },
+        {
+          "path": "oox/source/token/namespacemap.cxx",
+          "marker": "NamespaceMap::NamespaceMap"
+        },
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getUTF8Identifier"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+          "marker": "OOXMLFactory::attributes"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryAttributeToResourceMap"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "collectAttributeToResource"
+        },
+        {
+          "path": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
+          "marker": "XMLNamedBoolPropertyHdl::importXML"
         }
       ],
       "tests": [

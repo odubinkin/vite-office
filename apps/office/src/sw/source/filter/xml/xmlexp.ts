@@ -8,6 +8,9 @@ import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
+import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
+import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import {
   SvxFontItem,
   SvxFontHeightItem,
@@ -591,6 +594,8 @@ function assertSupportedItems(
     RES_CHRATR_ESCAPEMENT,
     RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_WEIGHT,
+    RES_CHRATR_WORDLINEMODE,
+    RES_CHRATR_AUTOKERN,
     RES_CHRATR_CJK_POSTURE,
     RES_CHRATR_CJK_FONT,
     RES_CHRATR_CJK_FONTSIZE,
@@ -836,6 +841,8 @@ export function getCharacterProperties(
   );
   const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
   const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
+  const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
+    autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
   const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
   const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
@@ -860,7 +867,9 @@ export function getCharacterProperties(
     highlight === undefined &&
     font === undefined &&
     asianFont === undefined &&
-    complexFont === undefined
+    complexFont === undefined &&
+    wordMode === undefined &&
+    autoKerning === undefined
   )
     return undefined;
   const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
@@ -957,6 +966,8 @@ export function getCharacterProperties(
       ? { escapement: escapement.GetEsc(), escapementHeight: escapement.GetProportionalHeight() }
       : {}),
     ...(crossedOut instanceof SvxCrossedOutItem ? { strikeout: crossedOut.GetStrikeout() } : {}),
+    ...(wordMode instanceof SvxWordLineModeItem ? { wordMode: wordMode.GetValue() } : {}),
+    ...(autoKerning instanceof SvxAutoKernItem ? { autoKerning: autoKerning.GetValue() } : {}),
     ...(inherited || directUnderline
       ? {
           underlineStyle: underline.GetLineStyle(),

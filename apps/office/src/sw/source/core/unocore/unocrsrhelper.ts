@@ -221,8 +221,10 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
     return copy;
   }
-  if (copy instanceof SfxBoolItem)
-    return new SfxBoolItem(item.Which(), scalar(value, "bool") as boolean);
+  if (copy instanceof SfxBoolItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Expected bool");
+    return copy;
+  }
   if (copy instanceof SfxInt16Item && entry.kind === "byte")
     return new SfxInt16Item(item.Which(), (scalar(value, "sal_Int8") as number) & 0xff);
   if (copy instanceof SfxInt16Item)

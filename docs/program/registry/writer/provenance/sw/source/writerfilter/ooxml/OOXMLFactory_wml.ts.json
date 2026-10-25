@@ -1,0 +1,72 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts",
+          "marker": "OOXMLFactory_wml"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+          "marker": "regenerates every consumed table through unchanged pinned native generators"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryAttributeToResourceMap"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryCreateElementMap"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryGetListValue"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryGetResourceId"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryAttributeAction"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+    "localSymbols": [
+      "OOXMLFactory_wml",
+      "FactoryAction",
+      "nativeToken"
+    ],
+    "upstreamSymbols": [
+      "factoryAttributeToResourceMap",
+      "factoryCreateElementMap",
+      "factoryGetListValue",
+      "factoryGetResourceId",
+      "factoryAttributeAction"
+    ],
+    "preservedResponsibilities": [
+      "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER097. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts",
+      "rationale": "The native OOXMLFactory_wml.cxx is a build-generated product of factoryimpl_ns.py rather than an authored corpus file. The runtime namespace owner and its constant records are separated at the generated-resource boundary; both remain traced directly to the unchanged native generator and model.",
+      "stackNecessity": "generated-resource-boundary"
+    }
+  }
+}

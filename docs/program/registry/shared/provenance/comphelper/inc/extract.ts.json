@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "include/comphelper/extract.hxx",
     "localSymbols": [
-      "enum2int"
+      "enum2int",
+      "any2bool"
     ],
     "upstreamSymbols": [
-      "enum2int"
+      "enum2int",
+      "any2bool"
     ],
     "preservedResponsibilities": [
-      "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next."
+      "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next.",
+      "V4DQJW adds original cppu::any2bool: bool extraction, then signed32-compatible extraction, then default generated IllegalArgumentException. Native named-bool property export reuses this owner."
     ],
     "omittedResponsibilities": [
       "Task114 excludes localized presentation/diagnostics/native caches/debug/invalid-type and enum domains/ABI/full document/UI/ODS integration; other comphelper extraction families remain pending."
@@ -23,12 +26,20 @@
         {
           "path": "apps/office/src/comphelper/inc/extract.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/extract.ts",
+          "marker": "any2bool"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/comphelper/extract.hxx",
           "marker": "enum2int"
+        },
+        {
+          "path": "include/comphelper/extract.hxx",
+          "marker": "any2bool"
         }
       ]
     }

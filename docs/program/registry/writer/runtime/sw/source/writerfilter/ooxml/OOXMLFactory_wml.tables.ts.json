@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts#namespaces",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/factoryimpl_ns.py#collectAttributeToResource"
+      ],
+      "justification": "Generated records for24 consumed complex definitions plus referenced list definitions use unchanged original namespaces.py, modelpreprocess.py, factoryinc.py, resourceids.py, generate-tokens.py and factoryimpl_ns.py helpers. Records retain original native numeric definition/resource IDs and exact lexical constant bindings; omitted definitions never renumber the slice. Current counts:33 define/name bindings including start,59 attributes,231 element entries,253 resource mappings,82 list values,25 action records. Stream-action metadata is not yet a complete context-dispatch implementation. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "namespaces",
+        "defines",
+        "attributes",
+        "elements",
+        "resources",
+        "lists",
+        "actions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+      "upstreamSymbols": [
+        "collectAttributeToResource",
+        "factoryCreateElementMapInner",
+        "collectTokenToId",
+        "factoryGetListValue",
+        "factoryActions"
+      ]
+    }
+  }
+}

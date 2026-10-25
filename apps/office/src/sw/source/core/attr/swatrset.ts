@@ -10,6 +10,8 @@ import {
   SID_ATTR_CHAR_FONT,
   SID_ATTR_CHAR_POSTURE,
   SID_ATTR_CHAR_WEIGHT,
+  SID_ATTR_CHAR_WORDLINEMODE,
+  SID_ATTR_CHAR_AUTOKERN,
   SID_ATTR_CHAR_STRIKEOUT,
   SID_ATTR_CHAR_UNDERLINE,
   SID_ATTR_CHAR_FONTHEIGHT,
@@ -23,6 +25,8 @@ import {
   SID_ATTR_CHAR_CTL_WEIGHT,
 } from "../../../../editeng/inc/editids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
@@ -80,6 +84,8 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_CHRATR_WORDLINEMODE,
+  RES_CHRATR_AUTOKERN,
   RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
@@ -320,6 +326,18 @@ export class SwAttrPool extends SfxItemPool {
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
         slot,
       );
+    this.RegisterDefaultItem(
+      new SvxWordLineModeItem(false, RES_CHRATR_WORDLINEMODE),
+      /** Restores the concrete native bool item. @param value - Persisted bool. @returns Item. */
+      (value) => new SvxWordLineModeItem(Boolean(value), RES_CHRATR_WORDLINEMODE),
+      SID_ATTR_CHAR_WORDLINEMODE,
+    );
+    this.RegisterDefaultItem(
+      new SvxAutoKernItem(false, RES_CHRATR_AUTOKERN),
+      /** Restores the concrete native bool item. @param value - Persisted bool. @returns Item. */
+      (value) => new SvxAutoKernItem(Boolean(value), RES_CHRATR_AUTOKERN),
+      SID_ATTR_CHAR_AUTOKERN,
+    );
     this.RegisterDefaultItem(
       new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT),
       /** Restores the complete native strikeout enum. @param value - Stored enum. @returns Item. */

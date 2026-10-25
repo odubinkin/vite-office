@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/token/tokenmap.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/token/tokenmap.ts",
+          "marker": "getTokenFromUtf8"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "oox/source/token/tokenmap.cxx",
+          "marker": "TokenMap::getTokenFromUtf8"
+        },
+        {
+          "path": "oox/source/token/tokenmap.cxx",
+          "marker": "TokenMap::getUtf8TokenName"
+        }
+      ]
+    },
+    "upstreamPath": "oox/source/token/tokenmap.cxx",
+    "localSymbols": [
+      "getTokenFromUtf8",
+      "getUtf8TokenName",
+      "XML_TOKEN_INVALID",
+      "XML_TOKEN_COUNT"
+    ],
+    "upstreamSymbols": [
+      "TokenMap::getTokenFromUtf8",
+      "TokenMap::getUtf8TokenName"
+    ],
+    "preservedResponsibilities": [
+      "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ]
+  }
+}

@@ -41,6 +41,9 @@ export interface OdfCharacterProperties {
   readonly underlineStyle?: number;
   readonly underlineColor?: number;
   readonly underlineHasColor?: boolean;
+  /** Original shared line-decoration mode and automatic kerning bool properties. */
+  readonly wordMode?: boolean;
+  readonly autoKerning?: boolean;
 }
 
 /** Resolves a complete font declaration to its document-local ODF name. */

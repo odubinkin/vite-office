@@ -11,6 +11,8 @@ import {
   SvxUnderlineItem,
 } from "../../../../editeng/source/items/textitem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import {
   FontItalic,
   FontWeight,
@@ -69,6 +71,8 @@ it("resolves every represented character preview slot in both directions with it
       [S.SID_ATTR_CHAR_CTL_WEIGHT, 10896, H.RES_CHRATR_CTL_WEIGHT, SvxWeightItem],
       [S.SID_ATTR_CHAR_UNDERLINE, 10014, H.RES_CHRATR_UNDERLINE, SvxUnderlineItem],
       [S.SID_ATTR_CHAR_STRIKEOUT, 10013, H.RES_CHRATR_CROSSEDOUT, SvxCrossedOutItem],
+      [S.SID_ATTR_CHAR_WORDLINEMODE, 10011, H.RES_CHRATR_WORDLINEMODE, SvxWordLineModeItem],
+      [S.SID_ATTR_CHAR_AUTOKERN, 10067, H.RES_CHRATR_AUTOKERN, SvxAutoKernItem],
     ] as const) {
       expect(declared).toBe(slot);
       expect(pool.GetWhichIDFromSlotID(slot)).toBe(which);

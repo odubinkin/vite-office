@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts",
+          "marker": "OOXMLFactory"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+          "marker": "OOXMLFactory::attributes"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+          "marker": "ResourceType::Boolean"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+          "marker": "ResourceType::TwipsMeasure_asZero"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLFactory.hxx",
+          "marker": "enum class ResourceType"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/OOXMLFactory.cxx",
+    "localSymbols": [
+      "OOXMLFactory",
+      "ResourceType",
+      "AttributeInfo",
+      "OOXMLFactory_ns",
+      "FastAttribute",
+      "FactoryAttributeHandler"
+    ],
+    "upstreamSymbols": [
+      "OOXMLFactory::attributes",
+      "ResourceType::Boolean",
+      "ResourceType::TwipsMeasure_asZero"
+    ],
+    "preservedResponsibilities": [
+      "Native schema-ordered attributes, exact ResourceType declaration order/AttributeInfo fields, actual numeric namespace/fast-token/definition identities, first attribute lookup and typed OOXMLValue conversion. Unknown list values remain empty, Integer reuses exact o3tl signed prefix/overflow rules, and negative zero-mode twips become0. Generated attribute actions execute in their native namespace owner. Context creation and generic start/characters/end dispatch remain pending; the complete OOXMLFactory interface is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ]
+  }
+}

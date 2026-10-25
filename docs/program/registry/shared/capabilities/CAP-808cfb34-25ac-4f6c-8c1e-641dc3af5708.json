@@ -50,6 +50,18 @@
         {
           "path": "apps/office/src/tools/source/fsys/urlobj.ts",
           "marker": "decodeToIUri"
+        },
+        {
+          "path": "apps/office/src/oox/source/token/tokenmap.ts",
+          "marker": "getTokenFromUtf8"
+        },
+        {
+          "path": "apps/office/src/oox/source/token/namespacemap.ts",
+          "marker": "NamespaceMap"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+          "marker": "FastTokenHandler"
         }
       ],
       "tests": [
@@ -68,6 +80,10 @@
         {
           "path": "apps/office/src/oox/source/core/upstream-packages.test.ts",
           "marker": "imports the actual pinned package"
+        },
+        {
+          "path": "apps/office/src/oox/source/token/tokenmap.test.ts",
+          "marker": "matches byte-exact pinned inputs"
         }
       ],
       "docs": [
@@ -110,6 +126,18 @@
         {
           "path": "tools/source/fsys/urlobj.cxx",
           "marker": "INetURLObject::decode"
+        },
+        {
+          "path": "oox/source/token/tokenmap.cxx",
+          "marker": "TokenMap::getTokenFromUtf8"
+        },
+        {
+          "path": "oox/source/token/namespacemap.cxx",
+          "marker": "NamespaceMap::NamespaceMap"
+        },
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getUTF8Identifier"
         }
       ],
       "tests": [

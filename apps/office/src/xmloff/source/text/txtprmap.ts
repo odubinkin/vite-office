@@ -20,6 +20,8 @@ import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import { XMLColorTransparentPropHdl, XMLIsTransparentPropHdl } from "../style/xmlbahdl";
 import { XMLFontWeightPropHdl } from "../style/weighhdl";
+import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
+import { XMLBoolPropHdl } from "../style/xmlbahdl";
 import { XMLPosturePropHdl } from "../style/postuhdl";
 import {
   XMLUnderlineStylePropHdl,
@@ -71,6 +73,15 @@ const strikeoutProperties = [
   ],
   [T.STYLE_TEXT_LINE_THROUGH_TEXT, "style:text-line-through-text", new XMLCrossedOutTextPropHdl()],
 ] as const;
+/** Native merged CharWordMode map and exact XML_TYPE_BOOL association. */
+const wordMode = new XMLNamedBoolPropertyHdl("skip-white-space", "continuous"),
+  autoKerning = new XMLBoolPropHdl();
+const boolProperties = [
+  [T.STYLE_TEXT_UNDERLINE_MODE, "style:text-underline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_OVERLINE_MODE, "style:text-overline-mode", "wordMode", wordMode],
+  [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
+  [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
+] as const;
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -87,6 +98,10 @@ export const textCharacterPropertyTokens = [
   ),
   T.STYLE_TEXT_UNDERLINE_COLOR,
   T.STYLE_TEXT_POSITION,
+  ...boolProperties.map(
+    /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
+      token,
+  ),
 ];
 /** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
 export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
@@ -94,6 +109,13 @@ export function exportTextCharacterProperties(properties: OdfCharacterProperties
     output: [string] = [""];
   let result = "";
   try {
+    for (const [, name, key, handler] of boolProperties) {
+      if (properties[key] !== undefined) {
+        value.insert([properties[key]], "bool");
+        handler.exportXML(output, value, converter);
+        result += ` ${name}="${output[0]}"`;
+      }
+    }
     for (const [, name, key, handler, type] of scriptProperties) {
       const scalar = properties[key];
       if (scalar === undefined) continue;
@@ -151,6 +173,18 @@ export function importTextCharacterProperties(
     crossedOut = new Any();
   try {
     for (const [token, text] of attributes) {
+      const boolean = boolProperties.find(
+        /** Reads the original bool mapping. @param entry - Entry. @returns Match. */ ([item]) =>
+          item === token,
+      );
+      if (boolean !== undefined) {
+        if (boolean[3].importXML(text, value, converter)) {
+          const scalar: [boolean] = [false];
+          value.extract(scalar, "bool");
+          result[boolean[2]] = scalar[0];
+        }
+        continue;
+      }
       const script = scriptProperties.find(
         /** Finds one source property entry. @param entry - Mapping. @returns Token equality. */ ([
           item,
@@ -310,6 +344,8 @@ export function applyTextImportProperties(
       ["underlineStyle", "CharUnderline", "sal_Int16"],
       ["underlineColor", "CharUnderlineColor", "sal_Int32"],
       ["underlineHasColor", "CharUnderlineHasColor", "bool"],
+      ["wordMode", "CharWordMode", "bool"],
+      ["autoKerning", "CharAutoKerning", "bool"],
     ] as const)
       if (character[key] !== undefined) add(name, character[key], type);
     if (alignment !== undefined)

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/NamedBoolPropertyHdl.ts#XMLNamedBoolPropertyHdl",
+        "vendor/libreoffice-reference/xmloff/source/style/NamedBoolPropertyHdl.cxx#XMLNamedBoolPropertyHdl::importXML"
+      ],
+      "justification": "Native exact named true/false import leaves Any unchanged on invalid lexemes. Export always uses cppu::any2bool, including genuine bool, signed32-compatible numeric fallback and default typed IllegalArgumentException on other types. XML lexical strings and existing SvXMLUnitConverter bind the parser boundary; no substitute UNO values are introduced. Whole-module parity remains unverified; application DOCX import/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLNamedBoolPropertyHdl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
+      "upstreamSymbols": [
+        "XMLNamedBoolPropertyHdl::importXML",
+        "XMLNamedBoolPropertyHdl::exportXML"
+      ]
+    }
+  }
+}

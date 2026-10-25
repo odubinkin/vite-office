@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/fasttokenhandler.ts#FastTokenHandler",
+        "vendor/libreoffice-reference/oox/source/core/fasttokenhandler.cxx#FastTokenHandler::getUTF8Identifier"
+      ],
+      "justification": "Original three consumed XFastTokenHandler lexical operations delegate to the shared original TokenMap owner and return exact native token IDs. Byte arrays bind UTF8 input/output values. Complete service information/registration and generated UNO interface/lifetime are omitted, not simulated. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastTokenHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/fasttokenhandler.cxx",
+      "upstreamSymbols": [
+        "FastTokenHandler::getUTF8Identifier",
+        "FastTokenHandler::getTokenFromUTF8",
+        "FastTokenHandler::getTokenDirect"
+      ]
+    }
+  }
+}

@@ -130,6 +130,8 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["UnvisitedCharStyleName", { which: H.RES_TXTATR_INETFMT, member: 7, kind: "hyperlink" }],
   ["CharUnderline", { which: H.RES_CHRATR_UNDERLINE, member: M.MID_TL_STYLE, kind: "short" }],
   ["CharStrikeout", { which: H.RES_CHRATR_CROSSEDOUT, member: M.MID_CROSS_OUT, kind: "any" }],
+  ["CharWordMode", { which: H.RES_CHRATR_WORDLINEMODE, member: 0, kind: "bool" }],
+  ["CharAutoKerning", { which: H.RES_CHRATR_AUTOKERN, member: 0, kind: "bool" }],
   ["CharEscapement", { which: H.RES_CHRATR_ESCAPEMENT, member: 0, kind: "any" }],
   ["CharEscapementHeight", { which: H.RES_CHRATR_ESCAPEMENT, member: 1, kind: "any" }],
   ["CharColor", { which: H.RES_CHRATR_COLOR, member: 0, kind: "color" }],

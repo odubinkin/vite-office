@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native owner boundaries, complete token/namespace identities and original factory generators are retained. Browser maps, immutable lexical URI strings and byte arrays bind generated gperf/UTF8/component transport; actual existing OOXMLValue/UNO/RTL/SAX owners provide typed conversions and model dispatch."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+          "marker": "FastTokenHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getUTF8Identifier"
+        },
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getTokenFromUTF8"
+        },
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getTokenDirect"
+        }
+      ]
+    },
+    "upstreamPath": "oox/source/core/fasttokenhandler.cxx",
+    "localSymbols": [
+      "FastTokenHandler"
+    ],
+    "upstreamSymbols": [
+      "FastTokenHandler::getUTF8Identifier",
+      "FastTokenHandler::getTokenFromUTF8",
+      "FastTokenHandler::getTokenDirect"
+    ],
+    "preservedResponsibilities": [
+      "Original three consumed XFastTokenHandler lexical operations delegate to the shared original TokenMap owner and return exact native token IDs. Byte arrays bind UTF8 input/output values. Complete service information/registration and generated UNO interface/lifetime are omitted, not simulated."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",
+      "Document/style/list/table/section/theme SAX contexts, complete canonical DOCX model import/export and existing UI integration remain pending in V4DQJW."
+    ]
+  }
+}
